@@ -4,6 +4,7 @@ namespace Acquia\Blt\Custom\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Robo\Contract\VerbosityThresholdInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -451,6 +452,85 @@ class CustomCommand extends BltTasks {
       ->run();
 
     return $result;
+  }
+
+  /**
+   * Wrapper to get folders which require compiling.
+   *
+   * @return array
+   *   Folders containing webpack.config.js file.
+   */
+  private function getFoldersWithJs() {
+    $folders = [];
+
+    $finder = new Finder();
+
+    // Find all the folders containing the file used to specify entry points.
+    $finder->name('webpack.config.js');
+
+    // We need to find inside custom code only.
+    $files = $finder->in($this->getConfigValue('repo.root') . '/docroot/modules/custom');
+
+    foreach ($files as $file) {
+      $dir = str_replace('webpack.config.js', '', $file->getRealPath());
+
+      // Ignore webpack.config.js found inside node_modules.
+      if (strpos($dir, 'node_modules') > -1) {
+        continue;
+      }
+
+      $folders[] = $dir;
+    }
+
+    return $folders;
+  }
+
+  /**
+   * Compile all the JS for development use.
+   *
+   * @command source:build:js-assets-dev
+   * @aliases js:build:dev
+   */
+  public function assetsBuildDev() {
+    foreach ($this->getFoldersWithJs() as $dir) {
+      // Print the directory path to for user.
+      $this->say($dir);
+
+      // Build the files.
+      $this->taskExec('npm run build:dev')
+        ->dir($dir)
+        ->run();
+    }
+  }
+
+  /**
+   * Compile all the JS for production use.
+   *
+   * @command source:build:js-assets
+   * @aliases js:build
+   */
+  public function assetsBuild() {
+    foreach ($this->getFoldersWithJs() as $dir) {
+      // Print the directory path to for user.
+      $this->say($dir);
+
+      // Build the files.
+      $this->taskExec('npm run build')
+        ->dir($dir)
+        ->run();
+    }
+  }
+
+  /**
+   * Install the npm packages.
+   *
+   * @command source:setup:js-assets
+   * @aliases js:setup
+   */
+  public function assetsSetup() {
+    $this->taskExec('npm install')
+      ->dir($this->getConfigValue('repo.root') . '/docroot/modules/custom')
+      ->run();
   }
 
 }
