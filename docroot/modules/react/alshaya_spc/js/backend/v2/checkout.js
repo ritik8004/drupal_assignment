@@ -274,10 +274,15 @@ const selectHd = (address, method, billing, shippingMethods) => {
  *   The data.
  */
 const applyDefaults = (data, uid) => {
+  // @todo Update this function to return data after processing with user inputs.
+  if (_.isEmpty(data.shipping)) {
+    return data;
+  }
   logger.info(`${data}${uid}`);
   getHomeDeliveryShippingMethods({});
   getDefaultAddress(data);
   selectHd({}, {}, {}, {});
+  return data;
 };
 
 /**
@@ -578,7 +583,7 @@ const getProcessedCheckoutData = async (cartData) => {
 
   // If payment method is not available in the list, we set the first
   // available payment method.
-  if (typeof response.payment !== 'undefined') {
+  if (typeof response.payment !== 'undefined' && typeof response.payment.methods !== 'undefined') {
     const codes = response.payment.methods.map((el) => el.code);
     if (typeof response.payment.method !== 'undefined' && typeof codes[response.payment.method] === 'undefined') {
       delete (response.payment.method);
@@ -613,7 +618,7 @@ window.commerceBackend.getCartForCheckout = () => {
     return new Promise((resolve) => resolve({ error: true }));
   }
 
-  getCart()
+  const cart = getCart()
     .then(async (response) => {
       if (_.isEmpty(response.data) || !_.isEmpty(response.data.error_message)) {
         logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
@@ -634,8 +639,8 @@ window.commerceBackend.getCartForCheckout = () => {
         return new Promise((resolve) => resolve(error));
       }
 
-      const processedData = await getProcessedCheckoutData(response.data);
-      return new Promise((resolve) => resolve(processedData));
+      response.data = await getProcessedCheckoutData(response.data);
+      return response;
     })
     .catch((response) => {
       logger.error(`Error while getCartForCheckout controller. Error: ${response.message}. Code: ${response.status}`);
@@ -649,7 +654,7 @@ window.commerceBackend.getCartForCheckout = () => {
       };
       return new Promise((resolve) => resolve(error));
     });
-  return null;
+  return cart;
 };
 
 export {
