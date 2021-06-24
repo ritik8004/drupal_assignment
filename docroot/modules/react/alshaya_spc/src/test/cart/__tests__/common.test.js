@@ -132,18 +132,18 @@ describe('Common', () => {
       const validateRequestData = utilsRewire.__get__('validateRequestData');
 
       each`
-       input                                                      | expectedResult
-       ${null}                                                    | ${500}
-       ${{}}                                                      | ${500}
-       ${{ cart_id: 555, action: 'foo' }}                         | ${200}
-       ${{ cart_id: 555, action: 'add item' }}                    | ${400}
-       ${{ cart_id: 555, action: 'add item', sku: 1, qty: 1 }}    | ${200}
-       ${{ cart_id: 555, action: 'add item', sku: '1', qty: 1 }}  | ${200}
-       ${{ cart_id: null, action: 'add item', sku: 1, qty: 1 }}   | ${200}
-       ${{ cart_id: 555, action: 'remove item' }}                 | ${400}
-       ${{ cart_id: 555, action: 'remove item', sku: '1' }}       | ${200}
-       ${{ cart_id: 555, action: 'remove item', sku: 1 }}         | ${200}
-       ${{ cart_id: 555, action: 'remove item', sku: 1 }}         | ${200}
+       input                                                            | expectedResult
+       ${null}                                                          | ${500}
+       ${{}}                                                            | ${500}
+       ${{ cart_id: 555, action: 'foo' }}                               | ${200}
+       ${{ cart_id: 555, action: 'add item' }}                          | ${400}
+       ${{ cart_id: 555, action: 'add item', sku: 1, quantity: 1 }}     | ${200}
+       ${{ cart_id: 555, action: 'add item', sku: '1', quantity: 1 }}   | ${200}
+       ${{ cart_id: null, action: 'add item', sku: 1, quantity: 1 }}    | ${200}
+       ${{ cart_id: 555, action: 'remove item' }}                       | ${400}
+       ${{ cart_id: 555, action: 'remove item', sku: '1' }}             | ${200}
+       ${{ cart_id: 555, action: 'remove item', sku: 1 }}               | ${200}
+       ${{ cart_id: 555, action: 'remove item', sku: 1 }}               | ${200}
      `.test('Test that validateRequestData($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
         axios.mockResolvedValue({
           data: {

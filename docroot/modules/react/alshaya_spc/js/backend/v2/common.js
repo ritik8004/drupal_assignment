@@ -576,7 +576,7 @@ const validateRequestData = async (request) => {
     cartActions.cartAddItem,
     cartActions.cartUpdateItem,
   ];
-  if (actions.includes(request.action) && _.isUndefined(request.qty)) {
+  if (actions.includes(request.action) && _.isUndefined(request.quantity)) {
     const logData = JSON.stringify(request);
     logger.error(`Cart update operation not containing any quantity. Data: ${logData}`);
     return 400;
