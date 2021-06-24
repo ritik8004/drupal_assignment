@@ -1,11 +1,83 @@
 <?php
 
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_theme($existing, $type, $theme, $path) {
+  return [
+    'node__rcs_product__full' => [
+      'variables' => [],
+    ],
+    'node__rcs_product__full_magazine' => [
+      'variables' => [
+        'price_block' => [],
+      ],
+    ],
+    'node__rcs_product__full_magazine_v2' => [
+      'variables' => [],
+    ],
+    'rcs_commerce_price' => [
+      'variables' => [
+        'price' => '',
+        'currency_format' => '',
+        'currency_code_position' => '',
+      ],
+    ],
+  ];
+}
+
 /**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_rcs_page_attachments_alter(array &$attachments) {
   $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
-  if ($backend_version == 2) {
-    $attachments['#attached']['library'][] = 'alshaya_rcs/main';
+  if ($backend_version != 2) {
+    return;
   }
+
+  $attachments['#attached']['library'][] = 'alshaya_rcs/main';
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  $build['price_block'] = [
+    '#theme' => 'rcs_commerce_price',
+  ];
+}
+
+function template_preprocess_rcs_commerce_price(array &$variables) {
+  if (!isset($append)) {
+    $acm_settings = \Drupal::config('alshaya_acm.settings');
+    $append = $acm_settings->get('show_crosssell_as_matchback') && $acm_settings->get('append_each_to_price');
+  }
+
+  // With matchback enabled, we will have 'each' word added to price
+  // based on the quantity for main product as well as matchback products
+  // following the host site implementation.
+  if ($append) {
+    $variables['append_each_to_price'] = TRUE;
+  }
+
+  $current_language = \Drupal::languageManager()
+    ->getConfigOverrideLanguage()
+    ->getId();
+
+  if (empty($config_data[$current_language])) {
+    $config = \Drupal::configFactory()->get('acq_commerce.currency');
+    $config_data[$current_language]['currency_format'] = $config->get('currency_code');
+    $config_data[$current_language]['currency_code_position'] = $config->get('currency_code_position');
+    $config_data[$current_language]['decimal_points'] = $config->get('decimal_points');
+  }
+
+  $variables['currency_format'] = $config_data[$current_language]['currency_format'];
+  $variables['currency_code_position'] = $config_data[$current_language]['currency_code_position'];
 }
