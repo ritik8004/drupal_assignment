@@ -462,6 +462,9 @@ const getProcessedCartData = (cartData) => {
 /**
  * Calls the cart get API.
  *
+ * @param {boolean} force
+ *   Flag for static/fresh cartData.
+ *
  * @returns {Promise}
  *   A promise object.
  */
