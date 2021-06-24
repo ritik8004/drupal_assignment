@@ -26,7 +26,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    Then the element ".delivery-information-preview" should exist
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -65,7 +65,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    Then the element ".delivery-information-preview" should exist
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -104,7 +104,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    Then the element ".delivery-information-preview" should exist
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -140,7 +140,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    Then the element ".delivery-information-preview" should exist
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -179,7 +179,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    Then the element ".delivery-information-preview" should exist
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -218,7 +218,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    Then the element ".delivery-information-preview" should exist
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish

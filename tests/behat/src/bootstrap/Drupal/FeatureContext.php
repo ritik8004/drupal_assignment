@@ -2625,7 +2625,13 @@ JS;
         $script = <<<JS
         jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
         jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
-        jQuery(".spc-address-form-guest-overlay input[name=\"mobile\"]").val("556677889");
+        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var value = "55667788";
+        if (maxlength == 9) {
+            value = value + "9";
+        }
+        jQuery("input[name=\"mobile\"]").val(value);
+        jQuery(".spc-address-form-guest-overlay input#locality").val("Block 1");
         jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
         jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
         jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
