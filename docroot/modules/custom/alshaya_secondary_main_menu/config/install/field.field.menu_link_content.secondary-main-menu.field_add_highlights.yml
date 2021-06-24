@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.menu_link_content.field_add_highlights
+    - system.menu.secondary-main-menu
+id: menu_link_content.secondary-main-menu.field_add_highlights
+field_name: field_add_highlights
+entity_type: menu_link_content
+bundle: secondary-main-menu
+label: 'If creating a Level 1 menu item, please check this box when you like to have a highlighted image on it. If checked a highlight image must be added and optionally a link, title and subtitle. When creating a Level 2 or Level 3 menu item this should not be checked'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

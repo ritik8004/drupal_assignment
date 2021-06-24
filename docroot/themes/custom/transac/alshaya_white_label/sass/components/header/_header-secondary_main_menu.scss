@@ -33,7 +33,7 @@
           height: 1.25rem;
           min-width: 0;
 
-          .menu__link-wrapper {
+          > .menu__link-wrapper {
             margin: 0 0.9375rem;
           }
 
@@ -57,6 +57,36 @@
             padding: 0;
             margin-top: 0.625rem;
             box-shadow: 0 0.125rem 0.375rem 0 rgba(0, 0, 0, 0.24);
+
+            .highlights {
+              margin-bottom: 1.875rem;
+              margin-#{$right}: 0;
+
+              img {
+                width: 15.812rem;
+                height: 15.812rem;
+              }
+
+              &_subtitle {
+                margin: 1rem 0 0.625rem;
+                font-size: 0.875rem;
+                color: $hfd-menu-link-color;
+              }
+
+              &_title {
+                font-size: 1rem;
+                font-weight: bold;
+                line-height: 1.13;
+                letter-spacing: 0.75px;
+                color: $hfd-menu-heighlight-title;
+              }
+
+              &:hover {
+                .highlights_title {
+                  text-decoration: underline;
+                }
+              }
+            }
 
             .menu__links__wrapper {
               padding: 1.875rem;
@@ -172,14 +202,21 @@
         position: relative;
 
         &::after {
+          content: '';
+          width: 0;
+          height: 0;
+          border-left: 0.4rem solid transparent;
+          border-right: 0.4rem solid transparent;
+          border-top: 0.4rem solid;
           position: absolute;
-          content: '\25b2';
-          #{$right}: 1.4rem;
+          right: 23px;
+          margin-top: 5px;
+          transform: rotate(180deg);
         }
 
         &.closed {
           &::after {
-            content: '\25bc';
+            transform: rotate(0deg);
           }
         }
       }
@@ -221,7 +258,11 @@
     }
 
     li.not-active {
-      & + .secondary--main--menu {
+      & ~ .promo--button-wrapper {
+        display: none;
+      }
+
+      & ~ .secondary--main--menu {
         > .secondary-main-menu-header {
           display: none;
         }
