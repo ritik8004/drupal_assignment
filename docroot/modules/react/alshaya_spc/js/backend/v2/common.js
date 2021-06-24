@@ -542,8 +542,8 @@ const getCartCustomerId = async () => {
  * @param {object} request
  *  The request data.
  *
- * @returns {int}
- *   The error code.
+ * @returns {promise}
+ *   Promise containing the error code.
  */
 const validateRequestData = async (request) => {
   // If action info or cart id not available.
