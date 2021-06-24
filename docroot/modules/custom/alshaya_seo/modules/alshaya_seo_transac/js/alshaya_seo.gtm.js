@@ -1181,7 +1181,7 @@ const productRecommendationsSuffix = 'pr-';
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
+        if ((eventType === 'load' || eventType === 'plp-results-updated') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
           // This is to break out from the .each() function.
           return false;
         }
