@@ -14,7 +14,9 @@ BLUE="\033[34m"
 
 service rsyslog restart
 
+sleep 1
+
 echo
 echo -e "${YELLOW}Tailing logs...${NORMAL}"
 echo
-tail -f /var/log/syslog
+tail -f /var/log/syslog | grep drupal
