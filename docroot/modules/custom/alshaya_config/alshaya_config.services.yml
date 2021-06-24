@@ -10,7 +10,6 @@ services:
       - '@logger.factory'
     tags:
       - {name: event_subscriber}
-
   alshaya_config.manager:
     class: Drupal\alshaya_config\AlshayaConfigManager
     arguments:

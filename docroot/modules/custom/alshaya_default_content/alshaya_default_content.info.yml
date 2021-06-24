@@ -4,9 +4,6 @@ description: 'Default content to be created during install.'
 package: 'Alshaya'
 core: 8.x
 dependencies:
-  - lightning_workflow:lightning_workflow
-  - alshaya_advanced_page:alshaya_advanced_page
-  - alshaya_config:alshaya_config
   - alshaya_master:alshaya_master
   - alshaya_menus:alshaya_menus
   - alshaya_permissions:alshaya_permissions
