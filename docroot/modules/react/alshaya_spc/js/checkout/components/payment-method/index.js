@@ -144,14 +144,21 @@ export default class PaymentMethod extends React.Component {
     if (method.code === 'checkout_com_upapi_applepay' && !(CheckoutComUpapiApplePay.isAvailable())) {
       return (null);
     }
-    let postpayModeClass = '';
+    let additionalClasses = '';
+
+    // Hide by default if AB Testing is enabled and method not selected already.
+    if (method.ab_testing && !(isSelected)) {
+      additionalClasses = 'ab-testing-hidden';
+    }
+
+    // @todo make this work with generic way added now above.
     if (method.code === 'postpay') {
-      postpayModeClass = drupalSettings.postpay_widget_info.postpay_mode_class;
+      additionalClasses = drupalSettings.postpay_widget_info.postpay_mode_class;
     }
 
     return (
       <>
-        <div className={`payment-method fadeInUp payment-method-${method.code} ${postpayModeClass}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
+        <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
           <div className="payment-method-top-panel">
             <input
               id={`payment-method-${method.code}`}
