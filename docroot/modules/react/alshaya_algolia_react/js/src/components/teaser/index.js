@@ -147,6 +147,7 @@ const Teaser = ({
           sku={hit.sku}
           stockQty={hit.stock_quantity}
           productData={attribute.atb_product_data}
+          isBuyable={attribute.is_buyable}
         />
       </article>
     </div>
