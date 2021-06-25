@@ -1,3 +1,28 @@
+html {
+  &::before {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    box-shadow: 0 9999px 0 9999px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 12;
+    background-color: rgba(0, 0, 0, 0.48);
+    transition: opacity 300ms ease-in;
+  }
+
+  &.all-filters-overlay {
+    overflow: hidden;
+
+    &::before {
+      opacity: 1;
+      transition: opacity 300ms ease-in;
+      height: 100%;
+      pointer-events: unset;
+    }
+  }
+}
+
 // All filters Height / overflow issues - all brands
 $all-filter-height-mobile: calc(100vh - 3.75rem - 7.375rem);
 $all-filter-height-tablet: calc(100vh - 5.3125rem - 9.375rem);
