@@ -1,6 +1,6 @@
 <div class="promo-wrapper" style="display: none">
   {% for promo_button in promo %}
-    <a class="promo--button-wrapper" href="{{ promo_button.link }}">
+    <a class="promo--button-wrapper" href="{{ promo_button.link }}" target="_blank">
       <div class="promo--button">
         <div class="promo--button-image">
           <img src="{{ file_url(promo_button.imgurl) }}">

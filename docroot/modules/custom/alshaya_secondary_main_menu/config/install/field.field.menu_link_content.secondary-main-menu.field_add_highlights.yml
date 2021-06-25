@@ -8,8 +8,8 @@ id: menu_link_content.secondary-main-menu.field_add_highlights
 field_name: field_add_highlights
 entity_type: menu_link_content
 bundle: secondary-main-menu
-label: 'If creating a Level 1 menu item, please check this box when you like to have a highlighted image on it. If checked a highlight image must be added and optionally a link, title and subtitle. When creating a Level 2 or Level 3 menu item this should not be checked'
-description: ''
+label: 'Add highlights if it is Level1 menu'
+description: 'This is not applicable for Level2 and Level3'
 required: false
 translatable: false
 skip_translation_check: 0
