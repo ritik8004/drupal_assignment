@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import parse from 'html-react-parser';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import DescriptionContent from '../pdp-desc-popup-content';
 import ProductDetailSVG from '../../../svg-component/product-detail-svg';
-import { closeModalHelper, addOverlayClass, removeOverlayClass } from '../../../utilities/pdp_layout';
-
 
 const PpdDescription = (props) => {
   const {
@@ -14,7 +12,7 @@ const PpdDescription = (props) => {
   } = props;
 
   const closeModal = () => {
-    removeOverlayClass('desc-overlay');
+    document.querySelector('body').classList.remove('overlay-desc');
     setTimeout(() => {
       removePanelData();
     }, 400);
@@ -23,8 +21,9 @@ const PpdDescription = (props) => {
   const openModal = () => {
     // to make sure that markup is present in DOM.
     setTimeout(() => {
-      addOverlayClass('desc-overlay');
+      document.querySelector('body').classList.add('overlay-desc');
     }, 150);
+
     return (
       <DescriptionContent
         closeModal={closeModal}
@@ -33,14 +32,10 @@ const PpdDescription = (props) => {
         finalPrice={finalPrice}
         skuCode={skuCode}
         pdpDescription={pdpDescription}
+        overlayClass="overlay-desc"
       />
     );
   };
-
-  useEffect(() => {
-    closeModalHelper('desc-overlay', 'magv2-desc-popup-container', closeModal);
-  },
-  []);
 
   return (
     <div className="magv2-pdp-description-wrapper card fadeInUp" style={{ animationDelay: '0.8s' }}>
