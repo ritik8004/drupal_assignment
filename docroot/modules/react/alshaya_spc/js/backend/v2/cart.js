@@ -156,7 +156,11 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       }
     }
     requestMethod = 'DELETE';
-    requestUrl = getApiEndpoint('removeItems', cartId, cartItem.item_id);
+    const params = {
+      cartId,
+      itemId: cartItem.item_id,
+    };
+    requestUrl = getApiEndpoint('removeItems', params);
   }
 
   if (data.action === 'add item') {
@@ -174,7 +178,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
   if (data.action === 'add item' || data.action === 'update item') {
     requestMethod = 'POST';
-    requestUrl = getApiEndpoint('addUpdateItems', cartId);
+    requestUrl = getApiEndpoint('addUpdateItems', { cartId });
     // Executed for Add and Update case.
     if (typeof data.options !== 'undefined' && data.options.length > 0) {
       productOptions = {

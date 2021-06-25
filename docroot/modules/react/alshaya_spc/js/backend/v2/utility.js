@@ -39,15 +39,13 @@ const isUserAuthenticated = () => Boolean(drupalSettings.user.uid);
  *
  * @param {string} action
  *   Callname for the API.
- * @param {string} cartId
- *   The Cart id.
- * @param {string} itemId
- *   The product item id.
+ * @param {object} params
+ *   The object with cartId, itemId.
  *
  * @returns {*}
  *   The api endpoint.
  */
-const getApiEndpoint = (action, cartId = '', itemId = '') => {
+const getApiEndpoint = (action, params = {}) => {
   const type = isUserAuthenticated() ? 'authenticated' : 'anonymous';
   const apis = {
     createCart: {
@@ -56,15 +54,19 @@ const getApiEndpoint = (action, cartId = '', itemId = '') => {
     },
     getCart: {
       authenticated: '/rest/V1/carts/mine/getCart',
-      anonymous: `/rest/V1/guest-carts/${cartId}/getCart`,
+      anonymous: `/rest/V1/guest-carts/${params.cartId}/getCart`,
     },
     addUpdateItems: {
       authenticated: '/rest/V1/carts/mine/items',
-      anonymous: `/rest/V1/guest-carts/${cartId}/items`,
+      anonymous: `/rest/V1/guest-carts/${params.cartId}/items`,
     },
     removeItems: {
-      authenticated: `/rest/V1/carts/mine/items/${itemId}`,
-      anonymous: `/rest/V1/guest-carts/${cartId}/items/${itemId}`,
+      authenticated: `/rest/V1/carts/mine/items/${params.itemId}`,
+      anonymous: `/rest/V1/guest-carts/${params.cartId}/items/${params.itemId}`,
+    },
+    updateCart: {
+      authenticated: 'rest/V1/carts/mine/updateCart',
+      anonymous: `/rest/V1/guest-carts/${params.cartId}/updateCart`,
     },
   };
   return apis[action][type];

@@ -501,7 +501,7 @@ const getCart = async (force = false) => {
     return new Promise((resolve) => resolve(cartId));
   }
 
-  const response = await callMagentoApi(getApiEndpoint('getCart', cartId), 'GET', {});
+  const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
 
   if (typeof response.data.error !== 'undefined' && response.data.error === true) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
@@ -686,7 +686,7 @@ const updateCart = async (data) => {
     logger.notice(`Billing / Shipping address data: ${logData}. CartId: ${cartId}`);
   }
 
-  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
       if (typeof response.data.error !== 'undefined' && response.data.error) {
         return response;
