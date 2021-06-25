@@ -1,4 +1,4 @@
-@javascript @smoke @desktop @newPdp @flsauat @flkwprod @flkwuat @flsauat
+@javascript @smoke @desktop @newPdp
 Feature: Testing new PDP page for desktop
 
   Background:
