@@ -8,6 +8,7 @@ dependencies:
   - drupal:taxonomy
   - metatag:metatag
   - redirect:redirect
+  - config_rewrite:config_rewrite
 
 # @todo: views.view.taxonomy_term.yml has been removed because of conflicts
 # with the existing view in the site.
