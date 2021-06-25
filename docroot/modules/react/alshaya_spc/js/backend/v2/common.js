@@ -550,13 +550,13 @@ const validateRequestData = async (request) => {
   // Setting custom error code for bad response so that
   // we could distinguish this error.
   if (_.isEmpty(request)) {
-    logger.error('Cart update operation not containing any data.');
+    logger.error('Cart update operation not containing any data. Error 500.');
     return 500;
   }
 
   // If action info or cart id not available.
   if (_.isEmpty(request.action)) {
-    logger.error('Cart update operation not containing any action.');
+    logger.error('Cart update operation not containing any action. Error 400.');
     return 400;
   }
 
