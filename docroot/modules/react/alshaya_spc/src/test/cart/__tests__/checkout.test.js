@@ -9,6 +9,7 @@ import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMC
 import cncStoreList from '../data/cnc_stores_list.js';
 import { getCart } from '../../../../js/backend/v2/common';
 import * as productStatus from '../data/product_status.json';
+import paymentMethods from "../data/paymentMethods";
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -18,7 +19,9 @@ describe('Checkout', () => {
     });
 
     afterEach(() => {
+      // Clear and reset any mocks set by other tests.
       jest.clearAllMocks();
+      jest.resetAllMocks();
     });
 
     const getMethodCodeForFrontend = utilsRewire.__get__('getMethodCodeForFrontend');
@@ -251,19 +254,21 @@ describe('Checkout', () => {
     describe('Tests getCncStatusForCart()', () => {
       it('Without cart data', async () => {
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        window.commerceBackend.setRawCartDataInStorage(null);
         const result = await getCncStatusForCart();
         expect(result).toEqual(null);
       });
 
       it('With CNC Enabled', async () => {
         axios.mockResolvedValue(productStatus);
-        window.commerceBackend.setCartDataInStorage(cartData);
+        window.commerceBackend.setRawCartDataInStorage(cartData);
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
         const result = await getCncStatusForCart();
         expect(result).toEqual(true);
       });
 
       it('With CNC Disabled', async () => {
+        window.commerceBackend.setRawCartDataInStorage(cartData);
         axios.mockResolvedValue({
           cnc_enabled: false,
           in_stock: true,
@@ -469,6 +474,57 @@ describe('Checkout', () => {
 
         expect(axios.mock.calls.length).toEqual(1);
         expect(result.length).toEqual(0);
+      });
+    });
+
+    describe('Test getPaymentMethods()', () => {
+      const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
+
+      it('With Shipping type for getPaymentMethods', async () => {
+        const data = paymentMethods;
+        window.commerceBackend.setRawCartDataInStorage(null);
+        cartData.shipping = {
+          method: {
+            type: 'home_delivery',
+          },
+        };
+
+        axios
+          .mockResolvedValueOnce({data: cartData, status: 200 })
+          .mockResolvedValueOnce({data, status: 200});
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        let result = await getPaymentMethods();
+
+        expect(axios).toHaveBeenCalled();
+        expect(result.length).toEqual(6);
+        expect(result[0].code).toEqual('checkout_com_upapi_vault');
+        expect(result[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
+        expect(result[5].code).toEqual('cashondelivery');
+        expect(result[5].title).toEqual('Cash On Delivery');
+      });
+
+      it('With null value when shipping method is not provided', async () => {
+        const data = {};
+        window.commerceBackend.setRawCartDataInStorage(null);
+        cartData.shipping = {
+          method: {
+            type: {},
+          },
+        };
+
+        axios
+          .mockResolvedValueOnce({data: cartData, status: 200 })
+          .mockResolvedValueOnce({data, status: 200});
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        let result = await getPaymentMethods();
+        expect(result).toEqual({});
       });
     });
   });

@@ -462,10 +462,17 @@ const getProcessedCartData = (cartData) => {
 /**
  * Calls the cart get API.
  *
+ * @param {boolean} force
+ *   Flag for static/fresh cartData.
+ *
  * @returns {Promise}
  *   A promise object.
  */
-const getCart = async () => {
+const getCart = async (force = false) => {
+  if (window.commerceBackend.getRawCartDataFromStorage() !== null && !force) {
+    return { data: window.commerceBackend.getRawCartDataFromStorage() };
+  }
+
   const cartId = window.commerceBackend.getCartId();
   if (cartId === null) {
     return new Promise((resolve) => resolve(cartId));
@@ -496,10 +503,10 @@ const getCart = async () => {
   response.data = formatCart(response.data);
 
   // Store the formatted data.
-  window.commerceBackend.setRawCartDataInStorage(formatCart(response.data));
+  window.commerceBackend.setRawCartDataInStorage(response.data);
 
   // Return formatted cart.
-  return new Promise((resolve) => resolve(response));
+  return response;
 };
 
 /**

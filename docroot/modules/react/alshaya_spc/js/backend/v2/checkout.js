@@ -44,7 +44,7 @@ const getProductStatus = async (sku) => {
  * Get CnC status for cart based on skus in cart.
  */
 const getCncStatusForCart = async () => {
-  const cart = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getRawCartDataFromStorage();
   if (!cart || typeof cart === 'undefined') {
     return null;
   }
@@ -283,11 +283,23 @@ const applyDefaults = (data, uid) => {
 /**
  * Gets payment methods.
  *
- * @return {array}.
- *   The method list.
+ * @return {Promise}.
+ *   The method list if available.
  */
-const getPaymentMethods = () => {
-  // @todo implement this
+const getPaymentMethods = async () => {
+  const response = await getCart();
+  const cartData = response.data;
+
+  if (_.isEmpty(cartData.shipping) || _.isEmpty(cartData.shipping.method)) {
+    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartData.cartId}`);
+    return null;
+  }
+
+  // @todo Update endpoint for authenticated user.
+  // Get payment methods from MDC.
+  const result = await callMagentoApi(`/rest/V1/guest-carts/${window.commerceBackend.getCartId()}/payment-methods`);
+
+  return result.data;
 };
 
 /**
