@@ -24,7 +24,12 @@ function alshaya_rcs_theme($existing, $type, $theme, $path) {
         'price' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'decimal_points' => '',
+        'append_each_to_price' => '',
       ],
+    ],
+    'rcs_price_block' => [
+      'variables' => [],
     ],
   ];
 }
@@ -80,4 +85,39 @@ function template_preprocess_rcs_commerce_price(array &$variables) {
 
   $variables['currency_format'] = $config_data[$current_language]['currency_format'];
   $variables['currency_code_position'] = $config_data[$current_language]['currency_code_position'];
+}
+
+function alshaya_rcs_preprocess_html(array &$variables) {
+  $variables['rcs_templates'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => 'hidden',
+    ],
+  ];
+
+  $price_template = [
+    '#theme' => 'rcs_commerce_price',
+  ];
+
+  $price_block_template = [
+    '#theme' => 'rcs_price_block'
+  ];
+
+  $variables['rcs_templates']['price'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($price_template),
+    '#attributes' => [
+      'class' => 'rcs-templates--price',
+    ],
+  ];
+
+  $variables['rcs_templates']['price_block'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($price_block_template),
+    '#attributes' => [
+      'class' => 'rcs-templates--price_block',
+    ],
+  ];
 }

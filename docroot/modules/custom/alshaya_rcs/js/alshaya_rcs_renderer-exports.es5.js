@@ -311,7 +311,32 @@ globalThis.rcsPhRenderingEngine.computePhFilters = function (input, filter) {
       break;
 
     case 'price':
-      value = 1234;
+      const priceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.regularPrice.amount.value);
+      const finalPriceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.maximalPrice.amount.value);
+      const discountVal = globalThis.rcsCommerceBackend.calculateDiscount(priceVal, finalPriceVal);
+
+      const price = jQuery('.rcs-templates--price').clone();
+      jQuery('.price-amount', price).html(priceVal);
+
+      const priceBlock = jQuery('.rcs-templates--price_block').clone();
+
+      if (finalPriceVal !== priceVal) {
+        const finalPrice = jQuery('.rcs-templates--price').clone();
+        jQuery('.price-amount', finalPrice).html(finalPriceVal);
+
+        jQuery('.has--special--price', priceBlock).html(price.html());
+        jQuery('.special--price', priceBlock).html(finalPrice.html());
+
+        let discount = jQuery('.price--discount').html();
+        discount = discount.replace('@discount', discountVal);
+        jQuery('.price--discount', priceBlock).html(discount);
+      }
+      else {
+        // Replace the entire price block html with this one.
+        priceBlock.html(price);
+      }
+
+      value = jQuery(priceBlock).html();
       break;
 
     case 'add_to_cart':

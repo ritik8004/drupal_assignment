@@ -75,10 +75,6 @@
 {% extends 'node--acq-product--full.html.twig' %}
 {% set attributes = attributes.addClass('magazine-layout-node') %}
 {% block mainContent %}
-V2 magazine
-{# <pre>
-  {{ dump(elements.price_block) }}
-</pre> #}
   <div class="content__main">
     {% if content.gallery is not null %}
       {{ content.gallery }}
@@ -110,8 +106,7 @@ V2 magazine
 
         <div class="info-wrapper">
           <div class="price-block {{ content.price_block_identifier }}">
-            {{ elements.price_block }}
-            {# {% include "@alshaya_rcs/acq-commerce-price.html.twig" %} #}
+            #rcs.product._self|price#
           </div>
 
           {% if content.postpay %}
