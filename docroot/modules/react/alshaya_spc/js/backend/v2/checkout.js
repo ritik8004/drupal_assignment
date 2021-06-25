@@ -652,7 +652,7 @@ window.commerceBackend.getCartForCheckout = () => {
           error_message: getDefaultErrorMessage(),
         },
       };
-      return new Promise((resolve) => resolve(error));
+      return error;
     });
 };
 
