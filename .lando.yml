@@ -115,13 +115,13 @@ tooling:
       - /app/.lando/scripts/logs-drupal.sh
     user: root
 
+# Exclude those directories which we write a lot on server.
+# Content of these directories are usually not required by dev.
 excludes:
-  - docroot/themes/custom/transac/node_modules
-  - docroot/themes/custom/non_transac/node_modules
-  - docroot/themes/custom/amp/node_modules
-  - docroot/themes/custom/transac_lite/node_modules
-  - docroot/modules/react/node_modules
-  - docroot/libraries
+  - docroot/sites/g/files
+  - docroot/middleware/var
+  - docroot/appointment/var
+  - files-private
 
 events:
   post-start:
