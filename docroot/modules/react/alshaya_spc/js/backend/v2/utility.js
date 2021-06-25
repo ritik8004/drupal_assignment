@@ -46,30 +46,42 @@ const isUserAuthenticated = () => Boolean(drupalSettings.user.uid);
  *   The api endpoint.
  */
 const getApiEndpoint = (action, params = {}) => {
-  const type = isUserAuthenticated() ? 'authenticated' : 'anonymous';
-  const apis = {
-    createCart: {
-      authenticated: '/rest/V1/carts/mine',
-      anonymous: '/rest/V1/guest-carts',
-    },
-    getCart: {
-      authenticated: '/rest/V1/carts/mine/getCart',
-      anonymous: `/rest/V1/guest-carts/${params.cartId}/getCart`,
-    },
-    addUpdateItems: {
-      authenticated: '/rest/V1/carts/mine/items',
-      anonymous: `/rest/V1/guest-carts/${params.cartId}/items`,
-    },
-    removeItems: {
-      authenticated: `/rest/V1/carts/mine/items/${params.itemId}`,
-      anonymous: `/rest/V1/guest-carts/${params.cartId}/items/${params.itemId}`,
-    },
-    updateCart: {
-      authenticated: 'rest/V1/carts/mine/updateCart',
-      anonymous: `/rest/V1/guest-carts/${params.cartId}/updateCart`,
-    },
-  };
-  return apis[action][type];
+  let endpoint = '';
+  switch (action) {
+    case 'createCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine'
+        : '/rest/V1/guest-carts';
+      break;
+
+    case 'getCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/getCart'
+        : `/rest/V1/guest-carts/${params.cartId}/getCart`;
+      break;
+
+    case 'addUpdateItems':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/items'
+        : `/rest/V1/guest-carts/${params.cartId}/items`;
+      break;
+
+    case 'removeItems':
+      endpoint = isUserAuthenticated()
+        ? `/rest/V1/carts/mine/items/${params.itemId}`
+        : `/rest/V1/guest-carts/${params.cartId}/items/${params.itemId}`;
+      break;
+
+    case 'updateCart':
+      endpoint = isUserAuthenticated()
+        ? 'rest/V1/carts/mine/updateCart'
+        : `/rest/V1/guest-carts/${params.cartId}/updateCart`;
+      break;
+
+    // no default
+  }
+
+  return endpoint;
 };
 
 /* eslint-disable import/prefer-default-export */
