@@ -739,6 +739,9 @@ class AlshayaPromoLabelManager {
         ]
       );
 
+      // Generate promo url.
+      $url_obj = $url->toString(TRUE);
+      $promo_url = $url_obj->getGeneratedUrl();
       $link = Link::fromTextAndUrl($free_gift_promotion['text'], $url)->toString();
 
       $message = $this->t('One item of choice from @link with this product', [
@@ -770,7 +773,7 @@ class AlshayaPromoLabelManager {
           '#type' => 'markup',
           '#markup' => $free_gift_box_title ?? $this->t('Free Gift'),
         ],
-        '#promo_url' => $url,
+        '#promo_url' => $promo_url,
         '#promo_code' => $coupon,
         '#free_sku_code' => $free_sku->getSku(),
         '#free_sku_type' => $free_sku->bundle(),
