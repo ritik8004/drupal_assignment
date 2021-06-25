@@ -15,6 +15,6 @@ const cartActions = {
   cartPaymentFinalise: 'finalise payment',
 };
 
-export {
+export default {
   cartActions,
 };
