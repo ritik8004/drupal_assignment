@@ -39,7 +39,7 @@
 .cloudzoom {
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
-      width: calc(100% - (6.375rem + 0.25rem));
+      width: calc(100% - 6.625rem);
     }
 
     .cloudzoom__image {
