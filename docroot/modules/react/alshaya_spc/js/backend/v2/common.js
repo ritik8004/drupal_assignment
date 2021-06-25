@@ -599,6 +599,7 @@ const validateRequestData = async (request) => {
   }
 
   // Backend validation.
+  // @todo check utility function from another pr.
   const cartCustomerId = await getCartCustomerId();
   const uid = (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0;
   if (uid > 0) {
