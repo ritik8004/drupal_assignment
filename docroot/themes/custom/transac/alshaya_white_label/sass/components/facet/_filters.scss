@@ -114,6 +114,14 @@
     display: none;
   }
 
+  &.hide-sort-by-block {
+    display: none;
+  }
+
+  &.hide-block-category-block {
+    display: none;
+  }
+
   &.block-facet-blockcategory-facet-plp:not(.algolia-plp-category-facet),
   &.block-facet-blockcategory-facet-promo {
     @include breakpoint($desktop) {
