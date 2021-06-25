@@ -12,7 +12,6 @@ import {
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
-import { addOverlayClass } from '../../../utilities/pdp_layout';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -39,7 +38,7 @@ class CrossellPopupContent extends React.Component {
             relatedProductData: response.data,
             variantSelected: configurable ? configurable[relatedSku].firstChild : relatedSku,
           }, () => {
-            addOverlayClass('overlay-crossel');
+            document.querySelector('body').classList.add('overlay-crossel');
           });
 
           // Remove loader.
