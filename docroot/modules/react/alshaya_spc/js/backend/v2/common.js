@@ -585,10 +585,9 @@ const validateRequestData = async (request) => {
   // For new cart request, we don't need any further validations.
   // Or if request has cart id but cart not exist in session,
   // create new cart for the user.
-  if (request.action === cartActions.cartAddItem) {
-    if (_.isUndefined(request.cart_id) || window.commerceBackend.getCartId() === null) {
-      return 200;
-    }
+  if (request.action === cartActions.cartAddItem
+    && (_.isUndefined(request.cart_id) || window.commerceBackend.getCartId() === null)) {
+    return 200;
   }
 
   // For any cart update operation, cart should be available in session.
@@ -599,10 +598,8 @@ const validateRequestData = async (request) => {
   }
 
   // Backend validation.
-  // @todo check utility function from another pr.
   const cartCustomerId = await getCartCustomerId();
-  const uid = (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0;
-  if (uid > 0) {
+  if (window.drupalSettings.userDetails.customerId > 0) {
     if (_.isNull(cartCustomerId)) {
       return 400;
     }
@@ -610,8 +607,8 @@ const validateRequestData = async (request) => {
     // This is serious.
     if (cartCustomerId !== window.drupalSettings.userDetails.customerId) {
       logger.error(`Mismatch session customer id:${window.drupalSettings.userDetails.customerId} and card customer id:${cartCustomerId}.`);
+      return 400;
     }
-    return 400;
   }
 
   return 200;
