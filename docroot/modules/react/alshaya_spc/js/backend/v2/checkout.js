@@ -618,7 +618,7 @@ window.commerceBackend.getCartForCheckout = () => {
     return new Promise((resolve) => resolve({ error: true }));
   }
 
-  const cart = getCart()
+  return getCart()
     .then(async (response) => {
       if (_.isEmpty(response.data) || !_.isEmpty(response.data.error_message)) {
         logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
@@ -654,7 +654,6 @@ window.commerceBackend.getCartForCheckout = () => {
       };
       return new Promise((resolve) => resolve(error));
     });
-  return cart;
 };
 
 export {
