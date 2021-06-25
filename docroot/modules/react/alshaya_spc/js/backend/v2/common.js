@@ -609,7 +609,7 @@ const validateRequestData = async (request) => {
 
     // This is serious.
     if (cartCustomerId !== window.drupalSettings.userDetails.customerId) {
-      logger.error(`Mismatch session customer id:${window.drupalSettings.user.customerId} and card customer id:${cartCustomerId}.`);
+      logger.error(`Mismatch session customer id:${window.drupalSettings.userDetails.customerId} and card customer id:${cartCustomerId}.`);
     }
     return 400;
   }
