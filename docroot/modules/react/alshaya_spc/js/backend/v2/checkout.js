@@ -118,6 +118,7 @@ const formatShippingEstimatesAddress = (address) => {
  */
 const getHomeDeliveryShippingMethods = (shipping) => {
   formatShippingEstimatesAddress(shipping.address);
+  return null;
 };
 
 /**
@@ -263,8 +264,37 @@ const selectHd = (address, method, billing, shippingMethods) => {
 };
 
 /**
- * Apply defaults to cart for customer.
+ * Get last order of the customer.
+ * @todo implement this.
+ */
+const getLastOrder = () => [];
+
+/**
+ * Apply shipping from last order.
+ * @todo implement this.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @return {*}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = () => false;
+
+/**
+ * Get payment method from last order.
  * @todo implement this
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @return {*}
+ *   FALSE if something went wrong, payment method name otherwise.
+ */
+const getDefaultPaymentFromOrder = () => null;
+
+/**
+ * Apply defaults to cart for customer.
  *
  * @param {object} cartData
  *   The cart data object.
@@ -275,13 +305,47 @@ const selectHd = (address, method, billing, shippingMethods) => {
  */
 const applyDefaults = (data, uid) => {
   // @todo Update this function to return data after processing with user inputs.
-  if (_.isEmpty(data.shipping)) {
+  if (!_.isEmpty(data.shipping.method)) {
     return data;
   }
-  logger.info(`${data}${uid}`);
-  getHomeDeliveryShippingMethods({});
-  getDefaultAddress(data);
-  selectHd({}, {}, {}, {});
+
+  // Get last order only for Drupal Customers.
+  const order = uid > 0
+    ? getLastOrder(uid) : [];
+
+  // Try to apply defaults from last order.
+  if (typeof order !== 'undefined' && !_.isEmpty(order)) {
+    // If cnc order but cnc is disabled.
+    if (_.includes(order.shipping.method, 'click_and_collect') && !getCncStatusForCart()) {
+      return data;
+    }
+
+    const response = applyDefaultShipping(order);
+    if (response) {
+      response.payment.default = getDefaultPaymentFromOrder(order);
+      return response;
+    }
+  }
+
+  // Select default address from address book if available.
+  const address = getDefaultAddress(data);
+  if (address) {
+    const methods = getHomeDeliveryShippingMethods(data.shipping);
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+      return selectHd(address, methods[0], data.billing_address, methods);
+    }
+  }
+
+  // If address already available in cart, use it.
+  if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
+    const methods = getHomeDeliveryShippingMethods(data.shipping);
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+      return selectHd(address, methods[0], data.billing_address, methods);
+    }
+  }
+
   return data;
 };
 
