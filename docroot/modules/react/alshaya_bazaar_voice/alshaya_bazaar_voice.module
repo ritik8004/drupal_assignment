@@ -224,10 +224,3 @@ function alshaya_bazaar_voice_preprocess_node(&$variables) {
     ];
   }
 }
-
-/**
- * Implements hook_alshaya_product_list_exclude_attribute_alter().
- */
-function alshaya_bazaar_voice_alshaya_product_list_exclude_attribute_alter(array &$excludedAttributes) {
-  $excludedAttributes[] = 'attr_bv_rating';
-}

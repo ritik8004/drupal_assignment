@@ -17,7 +17,6 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
 
 /**
  * Class AlshayaAlogoliaReactConfig.
@@ -80,13 +79,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $alshayaOptionsService;
 
   /**
-   * The algolia index helper.
-   *
-   * @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper
-   */
-  protected $algoliaIndexHelper;
-
-  /**
    * Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -107,8 +99,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Alshaya Request Context Manager.
    * @param \Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya Options List service.
-   * @param \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index_helper
-   *   The algolia index helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -119,8 +109,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     AlshayaPlpSortLabelsService $plp_sort_labels,
     AlshayaPlpSortOptionsService $plp_sort_options,
     AlshayaRequestContextManager $alshayaRequestContextManager,
-    AlshayaOptionsListHelper $alshaya_options_service,
-    AlshayaAlgoliaIndexHelper $algolia_index_helper
+    AlshayaOptionsListHelper $alshaya_options_service
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -131,7 +120,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->plpSortOptions = $plp_sort_options;
     $this->requestContextManager = $alshayaRequestContextManager;
     $this->alshayaOptionsService = $alshaya_options_service;
-    $this->algoliaIndexHelper = $algolia_index_helper;
   }
 
   /**
@@ -498,7 +486,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected function identifireSuffixUpdate($fieldIdentifier, $page_type) {
     $identifier = $fieldIdentifier;
     // Change Identifier based on Page Type.
-    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index') && !in_array($fieldIdentifier, $this->algoliaIndexHelper->getExcludedAttributeList())) {
+    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
       $identifier = $fieldIdentifier . '.'
         . $this->languageManager->getCurrentLanguage()->getId();
     }
