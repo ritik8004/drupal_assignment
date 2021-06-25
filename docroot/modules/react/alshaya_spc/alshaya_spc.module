@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Asset\AttachedAssetsInterface;
 
 /**
  * Implements hook_theme().
@@ -234,6 +235,23 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
     return $key['timeout'];
   }, $timeout_settings['middleware']);
+}
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $assets) {
+  // Add Magento Customer Id to drupal settings.
+  $settings['userDetails']['customerId'] = 0;
+  $current_user = \Drupal::currentUser();
+  if ($current_user->isAuthenticated()) {
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $user = $entity_type_manager
+      ->getStorage('user')
+      ->load($current_user->id());
+
+    $settings['userDetails']['customerId']= $user->get('acq_customer_id')->getString();
+  }
 }
 
 /**

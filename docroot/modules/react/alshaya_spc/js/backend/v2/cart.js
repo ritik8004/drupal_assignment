@@ -1,9 +1,12 @@
+import _ from 'lodash';
 import {
   callDrupalApi,
   callMagentoApi,
   getCartSettings,
   isAnonymousUserWithoutCart,
+  preUpdateValidation,
   updateCart,
+  getProcessedCartData,
   getCartWithProcessedData,
 } from './common';
 import { logger } from './utility';
@@ -265,16 +268,29 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.applyRemovePromo = (data) => {
+window.commerceBackend.applyRemovePromo = async (data) => {
   const params = {
     extension: {
       action: data.action,
     },
   };
+
   if (typeof data.promo !== 'undefined' && data.promo) {
     params.coupon = data.promo;
   }
-  return updateCart(params);
+
+  // Validate params before updating the cart.
+  const validationResult = await preUpdateValidation(params);
+  if (_.has(validationResult, 'error')) {
+    return validationResult;
+  }
+
+  return updateCart(params)
+    .then((response) => {
+      // Process cart data.
+      response.data = getProcessedCartData(response.data);
+      return response;
+    });
 };
 
 /**
@@ -298,7 +314,12 @@ window.commerceBackend.refreshCart = (data) => {
     postData = data.postData;
   }
 
-  return updateCart(postData);
+  return updateCart(postData)
+    .then((response) => {
+      // Process cart data.
+      response.data = getProcessedCartData(response.data);
+      return response;
+    });
 };
 
 /**
