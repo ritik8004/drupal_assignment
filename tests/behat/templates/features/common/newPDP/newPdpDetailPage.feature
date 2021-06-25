@@ -37,7 +37,6 @@ Feature: Testing new PDP page for desktop
   Scenario: To verify user is able to see product details
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     Then I should see a ".magv2-pdp-description-wrapper .magv2-pdp-section-title" element on page
-    And I should see "product details"
     And the element ".magv2-pdp-description-wrapper .magv2-pdp-section-text.short-desc" should exist
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
@@ -128,7 +127,6 @@ Feature: Testing new PDP page for desktop
     And I wait for AJAX to finish
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     Then I should see a ".magv2-pdp-description-wrapper .magv2-pdp-section-title" element on page
-    And I should see "product details"
     And the element ".magv2-pdp-description-wrapper .magv2-pdp-section-text.short-desc" should exist
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
