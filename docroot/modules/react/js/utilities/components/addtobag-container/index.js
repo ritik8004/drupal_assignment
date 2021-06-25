@@ -3,7 +3,7 @@ import { isAddToBagEnabled } from '../../addToBagHelper';
 import EmptyErrorBoundary from '../empty-error-boundary/EmptyErrorBoundary';
 
 function AddToBagContainer(props) {
-  const { productData } = props;
+  const { productData, isBuyable } = props;
 
   // Return if product data is undefined or empty.
   if (typeof productData === 'undefined' || !productData) {
@@ -21,6 +21,7 @@ function AddToBagContainer(props) {
             sku={props.sku}
             stockQty={props.stockQty}
             productData={productData}
+            isBuyable={isBuyable}
           />
         </Suspense>
       </EmptyErrorBoundary>

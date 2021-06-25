@@ -404,7 +404,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           }
           elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
             $context = $this->requestContextManager->getContext();
-            $identifier = $this->identifireSuffixUpdate("field_acq_promotion_label.$context", $page_type);
+            $identifier = $this->identifireSuffixUpdate("field_acq_promotion_label", $page_type) . '.' . $context;
           }
 
           $facet_values = [];

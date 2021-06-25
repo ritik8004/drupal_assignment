@@ -54,11 +54,6 @@ class AddToBagIndexHelper {
     // Set SKU type.
     $data['sku_type'] = $sku->bundle();
 
-    // Set the buyable status for the product. The config holding the
-    // buyable status, i.e. alshaya_acm_product.settings attr_is_buyable will
-    // be sent via Drupal Settings to front-end.
-    $data['is_buyable'] = (bool) $sku->get('attr_is_buyable')->getString();
-
     if ($data['sku_type'] === 'simple') {
       // Set cart title.
       $data['cart_title'] = $this->skuInfoHelper->getCartTitle($sku);
