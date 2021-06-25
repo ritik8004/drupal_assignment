@@ -13,6 +13,22 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * [6.2.4] Add new configuration for AB Testing.
+ */
+function alshaya_acm_checkout_update_8010() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.ab_testing'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update checkout config to include refund details and added translations.
  */
 function alshaya_acm_checkout_update_8009() {
