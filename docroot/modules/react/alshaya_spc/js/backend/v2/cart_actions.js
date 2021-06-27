@@ -1,5 +1,5 @@
 /**
- * Class contains al the actions performed on the cart.
+ * Class contains all the actions performed on the cart.
  */
 const cartActions = {
   cartAddItem: 'add item',
@@ -15,6 +15,4 @@ const cartActions = {
   cartPaymentFinalise: 'finalise payment',
 };
 
-export {
-  cartActions,
-};
+export default cartActions;

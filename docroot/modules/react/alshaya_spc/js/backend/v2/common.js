@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
-import { cartActions } from './cart_actions';
+import cartActions from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -562,39 +562,9 @@ const validateRequestData = async (request) => {
   }
 
   // If action info or cart id not available.
-  if (_.isEmpty(request.action)) {
+  if (_.isEmpty(request.extension) || _.isUndefined(request.extension.action)) {
     logger.error('Cart update operation not containing any action. Error 400.');
     return 400;
-  }
-
-  let actions = [
-    cartActions.cartAddItem,
-    cartActions.cartUpdateItem,
-    cartActions.cartRemoveItem,
-  ];
-  if (actions.includes(request.action) && _.isUndefined(request.sku)) {
-    const logData = JSON.stringify(request);
-    logger.error(`Cart update operation not containing any sku. Data: ${logData}`);
-    return 400;
-  }
-
-  // @todo test request data on the browser.
-  actions = [
-    cartActions.cartAddItem,
-    cartActions.cartUpdateItem,
-  ];
-  if (actions.includes(request.action) && _.isUndefined(request.quantity)) {
-    const logData = JSON.stringify(request);
-    logger.error(`Cart update operation not containing any quantity. Data: ${logData}`);
-    return 400;
-  }
-
-  // For new cart request, we don't need any further validations.
-  // Or if request has cart id but cart not exist in session,
-  // create new cart for the user.
-  if (request.action === cartActions.cartAddItem
-    && (_.isUndefined(request.cart_id) || window.commerceBackend.getCartId() === null)) {
-    return 200;
   }
 
   // For any cart update operation, cart should be available in session.
@@ -608,6 +578,7 @@ const validateRequestData = async (request) => {
   const cartCustomerId = await getCartCustomerId();
   if (window.drupalSettings.userDetails.customerId > 0) {
     if (_.isNull(cartCustomerId)) {
+      logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
       return 400;
     }
 
