@@ -33,13 +33,9 @@ body {
   }
 }
 
-// top haeder links
+// top header links
 .c-menu-secondary {
   text-transform: none;
-
-  @include breakpoint($only-tablet) {
-    width: 20rem;
-  }
 
   a {
     @include breakpoint($upto-desktop) {
