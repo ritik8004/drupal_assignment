@@ -604,14 +604,17 @@ const validateRequestData = async (request) => {
 const preUpdateValidation = async (request) => {
   const validationResponse = await validateRequestData(request);
   if (validationResponse !== 200) {
-    const error = {
+    return {
       data: {
         error: true,
         error_code: validationResponse,
         error_message: getDefaultErrorMessage(),
+        response_message: {
+          status: '',
+          msg: getDefaultErrorMessage(),
+        },
       },
     };
-    return new Promise((resolve) => resolve(error));
   }
   return true;
 };
@@ -631,6 +634,12 @@ const updateCart = async (data) => {
   let action = '';
   if (!_.isEmpty(data.extension) && !_.isEmpty(data.extension.action)) {
     action = data.extension.action;
+  }
+
+  // Validate params before updating the cart.
+  const validationResult = await preUpdateValidation(data);
+  if (_.has(validationResult.data, 'error')) {
+    return new Promise((resolve, reject) => reject(validationResult));
   }
 
   // Log the shipping / billing address we pass to magento.

@@ -1,10 +1,8 @@
-import _ from 'lodash';
 import {
   callDrupalApi,
   callMagentoApi,
   getCartSettings,
   isAnonymousUserWithoutCart,
-  preUpdateValidation,
   updateCart,
   getProcessedCartData,
   getCartWithProcessedData,
@@ -279,17 +277,17 @@ window.commerceBackend.applyRemovePromo = async (data) => {
     params.coupon = data.promo;
   }
 
-  // Validate params before updating the cart.
-  const validationResult = await preUpdateValidation(params);
-  if (_.has(validationResult, 'error')) {
-    return validationResult;
-  }
-
   return updateCart(params)
     .then((response) => {
       // Process cart data.
       response.data = getProcessedCartData(response.data);
       return response;
+    })
+    .catch((response) => {
+      const error = { ...response };
+      // Setting status will make validateCartResponse() show error when adding coupon code.
+      error.data.response_message.status = 'error_coupon';
+      return error;
     });
 };
 
