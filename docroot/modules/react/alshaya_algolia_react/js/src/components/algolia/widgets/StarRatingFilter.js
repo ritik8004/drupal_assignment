@@ -24,21 +24,26 @@ function StarRatingFilter(props) {
   }
   const ratingItems = [];
   const data = {};
-  Object.entries(items).forEach(([key, values]) => {
-    ratingItems[key] = values;
-    const label = values.label.split('_');
+  const { currentLanguage } = drupalSettings.path;
+  Object.entries(items).forEach(([key, item]) => {
+    ratingItems[key] = item;
+    const label = item.label.split('_');
     const star = label[1];
     ratingItems[key].label = (star > 1) ? `${star} ${Drupal.t('stars')}` : `${star} ${Drupal.t('star')}`;
     ratingItems[key].star = star;
     // Prepare dataset to build pretty path url.
-    const value = values.value[0];
-    if (values.value.length > 0) {
+    const value = item.value[0];
+    if (item.value.length > 0) {
       data[value] = (star > 1) ? `${star}_stars` : `${star}_star`;
     }
   });
 
   // Store dataset in local storage to be used for pretty path.
-  const facetName = attribute.replace('attr_', '');
+  let facetName = attribute.replace('attr_', '');
+  if (facetName.includes(`.${currentLanguage}`)) {
+    facetName = facetName.replace(`.${currentLanguage}`, '');
+  }
+
   if (Object.entries(data).length > 0
     && (getFacetStorage(facetName) === null
     || Object.entries(getFacetStorage(facetName)).length === 0)) {

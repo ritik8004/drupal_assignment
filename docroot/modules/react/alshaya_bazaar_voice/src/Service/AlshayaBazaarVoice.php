@@ -144,11 +144,13 @@ class AlshayaBazaarVoice {
    *
    * @param array $skus
    *   batch of Skus.
+   * @param int $limit
+   *   Limit the result response.
    *
    * @return array|null
    *   BV attributes data to be indexed in algolia.
    */
-  public function getDataFromBvReviewFeeds(array $skus) {
+  public function getDataFromBvReviewFeeds(array $skus, $limit) {
     $sanitized_sku = [];
     foreach ($skus as $sku) {
       $sanitized_sku[] = $this->skuManager->getSanitizedSku($sku);
@@ -157,6 +159,7 @@ class AlshayaBazaarVoice {
     $extra_params = [
       'filter' => 'id:' . $skus,
       'stats' => 'reviews',
+      'limit' => $limit,
     ];
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
     $url = $request['url'];

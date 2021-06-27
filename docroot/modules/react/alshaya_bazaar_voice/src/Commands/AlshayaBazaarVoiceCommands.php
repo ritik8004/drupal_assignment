@@ -120,7 +120,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
 
     $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
     $skus = $alshaya_bazaar_voice->getSkusByNodeIds($nids);
-    $data = $alshaya_bazaar_voice->getDataFromBvReviewFeeds($skus);
+    $data = $alshaya_bazaar_voice->getDataFromBvReviewFeeds($skus, count($nids));
 
     if (empty($data)) {
       return;

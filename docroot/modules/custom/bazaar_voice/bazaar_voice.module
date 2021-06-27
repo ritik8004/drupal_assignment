@@ -38,7 +38,7 @@ function bazaar_voice_page_attachments(array &$page) {
 		],
 		'bvpath',
 		];
-	}
+  }
 }
 
 /**
