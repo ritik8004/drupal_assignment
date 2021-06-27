@@ -9,11 +9,16 @@ import {
   checkoutComVaultMethod,
   callDrupalApi,
   callMagentoApi,
+  getCartCustomerEmail,
+  getCartCustomerId,
+  associateCartToCustomer,
 } from './common';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
 
 window.commerceBackend = window.commerceBackend || {};
+
+const invisibleCharacter = '&#8203;';
 
 /**
  * Check if user is anonymous and without cart.
@@ -313,19 +318,6 @@ const getPaymentMethodSetOnCart = () => {
 };
 
 /**
- * Helper function to get clean customer data.
- *
- * @param {array} data
- *   Customer data.
- * @return {array}.
- *   Customer data.
- */
-const getCustomerPublicData = (data) => {
-  // @todo implement this
-  logger.info(`${data}`);
-};
-
-/**
  * Gets the data for a particular store.
  *
  * @param {string} store
@@ -471,6 +463,52 @@ const formatAddressForFrontend = (address) => {
 };
 
 /**
+ * Helper function to get clean customer data.
+ *
+ * @param {array} customer
+ *   Customer data.
+ * @return {object}.
+ *   Customer data.
+ */
+const getCustomerPublicData = (customer) => {
+  if (_.isEmpty(customer)) {
+    return {};
+  }
+
+  const data = {
+    id: 0,
+    firstname: '',
+    lastname: '',
+    email: '',
+    addresses: [],
+  };
+
+  if (!_.isUndefined(customer.id)) {
+    data.id = customer.id;
+  }
+
+  if (!_.isUndefined(customer.firstname) && customer.firstname !== invisibleCharacter) {
+    data.firstname = customer.firstname;
+  }
+
+  if (!_.isUndefined(customer.lastname) && customer.lastname !== invisibleCharacter) {
+    data.lastname = customer.lastname;
+  }
+
+  if (!_.isUndefined(customer.email)) {
+    data.email = customer.email;
+  }
+
+  if (!_.isEmpty(customer.addresses)) {
+    customer.addresses.forEach((key) => {
+      data.addresses.push(formatAddressForFrontend(customer.addresses[key]));
+    });
+  }
+
+  return data;
+};
+
+/**
  * Get Method Code.
  *
  * @param {array} code
@@ -578,7 +616,7 @@ const getProcessedCheckoutData = async (cartData) => {
 
   // If payment method is not available in the list, we set the first
   // available payment method.
-  if (typeof response.payment !== 'undefined') {
+  if (typeof response.payment !== 'undefined' && typeof response.payment.methods !== 'undefined') {
     const codes = response.payment.methods.map((el) => el.code);
     if (typeof response.payment.method !== 'undefined' && typeof codes[response.payment.method] === 'undefined') {
       delete (response.payment.method);
@@ -652,6 +690,156 @@ window.commerceBackend.getCartForCheckout = () => {
       return new Promise((resolve) => resolve(error));
     });
   return null;
+};
+
+/**
+ * Get customer by email.
+ * @todo implement this
+ *
+ * @param {string} email
+ *   Email address.
+ *
+ * @return {object|null}
+ *   Customer data if API call is successful else and array containing the
+ *   error message.
+ */
+const getCustomerByMail = (email) => {
+  logger.info(`${email}`);
+};
+
+/**
+ * Create customer in magento.
+ * @todo implement this
+ *
+ * @param {string} email
+ *   E-Mail address.
+ * @param {string} firstname
+ *   First name.
+ * @param {string} lastname
+ *   Last name.
+ *
+ * @return {object}
+ *   Customer data if API call is successful else an array containing the
+ *   error message.
+ */
+const createCustomer = (email, firstname, lastname) => {
+  logger.info(`${email}${firstname}${lastname}`);
+};
+
+/**
+ * Add click n collect shipping on the cart.
+ * @todo implement this
+ *
+ * @param {object} shippingData
+ *   Shipping address info.
+ * @param {string} action
+ *   Action to perform.
+ * @param {bool} updateBillingData
+ *   Whether billing needs to update or not.
+ *
+ * @return {object}
+ *   Cart data.
+ * */
+const addCncShippingInfo = (shippingData, action, updateBillingData) => {
+  logger.info(`${shippingData}${action}${updateBillingData}`);
+};
+
+/**
+ * Format shipping info for api call.
+ * @todo implement this
+ *
+ * @param {object} $shipping_info
+ *   Shipping info.
+ *
+ * @return {object}
+ *   Formatted shipping info for api.
+ */
+const prepareShippingData = (shippingInfo) => {
+  logger.info(`${shippingInfo}`);
+};
+
+/**
+ * Adds shipping method to the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addShippingMethod = async (data) => {
+  const params = {
+    extension: data,
+  };
+
+  const shippingInfo = data.shipping_info;
+  const updateBillingData = data.update_billing;
+  const emailAddress = shippingInfo.static.email;
+
+  // Cart customer validations.
+  const customerId = { ...window.drupalSettings.userDetails.customerId };
+  const cartCustomerId = await getCartCustomerId();
+  if (customerId === 0 && (_.isNull(cartCustomerId) || (getCartCustomerEmail() !== emailAddress))) {
+    let customer = getCustomerByMail();
+
+    if (_.has(customer, 'error')) {
+      return new Promise((resolve, reject) => reject(customer));
+    }
+
+    if (_.isEmpty(customer)) {
+      customer = createCustomer(emailAddress, shippingInfo.firstname, shippingInfo.lastname);
+      if (_.has(customer, 'error')) {
+        return new Promise((resolve, reject) => reject(customer));
+      }
+    }
+
+    if (!_.isEmpty(customer) && _.has(customer, 'id)')) {
+      const result = associateCartToCustomer(customer.id);
+      if (!_.isEmpty(result) && !_.has(result, 'error')) {
+        return result;
+      }
+    }
+  }
+
+  const type = (_.has(shippingInfo, 'shipping_type')) ? shippingInfo.shipping_type : 'home_delivery';
+  if (type === 'click_and_collect') {
+    // Unset as not needed in further processing.
+    delete (shippingInfo.shipping_type);
+    const logAddress = JSON.stringify(shippingInfo);
+    const logData = JSON.stringify(data);
+    const cartId = await window.commerceBackend.getCartId();
+    logger.notice(`Shipping update manual for CNC. Data: ${logData} Address: ${logAddress} Cart: ${cartId}.`);
+    const cart = addCncShippingInfo(shippingInfo, data.action, updateBillingData);
+  } else {
+    const shippinMethods = [];
+    let carrierInfo = [];
+    if (!_.isEmpty(shippingInfo.carrier_info)) {
+      carrierInfo = shippingInfo.carrier_info;
+      delete shippingInfo.carrier_info;
+    }
+
+    const shippingData = prepareShippingData(shippingInfo);
+
+    // If carrier info available in request, use that
+    // instead getting shipping methods.
+  }
+
+  logger.log(`Continue ${cart}${shippinMethods}${carrierInfo}${shippingData}`);
+
+  // aaa ---
+
+  //console.log(params);
+  return updateCart(params)
+    .then((response) => {
+      // Process cart data.
+      response.data = getProcessedCheckoutData(response.data);
+      return response;
+    })
+    .catch((response) => {
+      // @todo test error
+      const error = { ...response };
+      return error;
+    });
 };
 
 export {

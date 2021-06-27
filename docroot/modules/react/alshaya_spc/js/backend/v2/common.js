@@ -544,6 +544,22 @@ const getCartCustomerId = async () => {
 };
 
 /**
+ * Adds a customer to cart.
+ * @todo implement associateCartToCustomer()
+ *
+ * @param {int} customerId
+ *   Customer id.
+ * @param {bool} resetCart
+ *   True to Reset cart, otherwise false.
+ *
+ * @return {mixed}
+ *   Response.
+ */
+const associateCartToCustomer = (customerId, resetCart = false) => {
+  logger.info(`Use ${customerId} and ${resetCart}`);
+};
+
+/**
  * Validate arguments and returns the respective error code.
  *
  * @param {object} request
@@ -584,7 +600,7 @@ const validateRequestData = async (request) => {
 
     // This is serious.
     if (cartCustomerId !== window.drupalSettings.userDetails.customerId) {
-      logger.error(`Mismatch session customer id:${window.drupalSettings.userDetails.customerId} and card customer id:${cartCustomerId}.`);
+      logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
       return 400;
     }
   }
@@ -667,6 +683,21 @@ const updateCart = async (data) => {
 };
 
 /**
+ * Return customer email from cart in session.
+ *
+ * @return {string|null}
+ *   Return customer email or null.
+ */
+const getCartCustomerEmail = async () => {
+  const cart = await getCart();
+  if (!_.isUndefined(cart.customer) && !_.isUndefined(cart.customer.email)
+    && _.isString(cart.customer.email && cart.customer.email !== '')) {
+    return cart.customer.email;
+  }
+  return null;
+};
+
+/**
  * Formats the error message as required for cart.
  *
  * @param {int} code
@@ -694,4 +725,7 @@ export {
   checkoutComVaultMethod,
   getCartSettings,
   getFormattedError,
+  getCartCustomerEmail,
+  getCartCustomerId,
+  associateCartToCustomer,
 };
