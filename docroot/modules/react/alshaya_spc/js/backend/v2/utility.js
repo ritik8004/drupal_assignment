@@ -26,7 +26,67 @@ const logger = {
 };
 /* eslint-enable no-unused-vars */
 
+/**
+ * Get user role authenticated or anonymous.
+ *
+ * @returns {boolean}
+ *   True if user is authenticated.
+ */
+const isUserAuthenticated = () => Boolean(drupalSettings.userDetails.customerId);
+
+/**
+ * Gets magento api endpoint by user role.
+ *
+ * @param {string} action
+ *   Callname for the API.
+ * @param {object} params
+ *   The object with cartId, itemId.
+ *
+ * @returns {*}
+ *   The api endpoint.
+ */
+const getApiEndpoint = (action, params = {}) => {
+  let endpoint = '';
+  switch (action) {
+    case 'createCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine'
+        : '/rest/V1/guest-carts';
+      break;
+
+    case 'getCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/getCart'
+        : `/rest/V1/guest-carts/${params.cartId}/getCart`;
+      break;
+
+    case 'addUpdateItems':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/items'
+        : `/rest/V1/guest-carts/${params.cartId}/items`;
+      break;
+
+    case 'removeItems':
+      endpoint = isUserAuthenticated()
+        ? `/rest/V1/carts/mine/items/${params.itemId}`
+        : `/rest/V1/guest-carts/${params.cartId}/items/${params.itemId}`;
+      break;
+
+    case 'updateCart':
+      endpoint = isUserAuthenticated()
+        ? 'rest/V1/carts/mine/updateCart'
+        : `/rest/V1/guest-carts/${params.cartId}/updateCart`;
+      break;
+
+    // no default
+  }
+
+  return endpoint;
+};
+
 /* eslint-disable import/prefer-default-export */
 export {
   logger,
+  getApiEndpoint,
+  isUserAuthenticated,
 };

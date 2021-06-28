@@ -229,7 +229,11 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $timeout_settings = Settings::get('alshaya_backend_calls_options');
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-  $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
+  // Adding proxy on local env to avoid CORS issue.
+  $page['#attached']['drupalSettings']['cart']['url'] = ($api_settings['alshaya_proxy']) ?
+    '/proxy/?url=' . $api_settings['magento_host'] :
+    $api_settings['magento_host'];
+
   $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
   $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];
   $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
