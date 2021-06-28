@@ -323,6 +323,7 @@ const applyDefaults = (data, uid) => {
 
     const response = applyDefaultShipping(order);
     if (response) {
+      // @todo Check if returns empty string for anonyous (CORE-31245).
       response.payment.default = getDefaultPaymentFromOrder(order);
       return response;
     }
