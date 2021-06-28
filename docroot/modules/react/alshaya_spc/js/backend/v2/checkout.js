@@ -334,7 +334,7 @@ const applyDefaults = (data, uid) => {
     const methods = getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
-      return selectHd(address, methods[0], data.billing_address, methods);
+      return selectHd(address, methods[0], address, methods);
     }
   }
 
@@ -343,7 +343,7 @@ const applyDefaults = (data, uid) => {
     const methods = getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
-      return selectHd(address, methods[0], data.billing_address, methods);
+      return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
   }
 
