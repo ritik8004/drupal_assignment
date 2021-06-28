@@ -775,7 +775,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
   };
 
   let cart = {};
-  let shippingInfo = { ...data.shipping_info };
+  const shippingInfo = { ...data.shipping_info };
   const billingData = { ...data.update_billing };
   const email = { ...shippingInfo.static.email };
 
@@ -807,10 +807,12 @@ window.commerceBackend.addShippingMethod = async (data) => {
   if (type === 'click_and_collect') {
     // Unset as not needed in further processing.
     delete (shippingInfo.shipping_type);
+
     const logAddress = JSON.stringify(shippingInfo);
     const logData = JSON.stringify(data);
     const cartId = await window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for CNC. Data: ${logData} Address: ${logAddress} Cart: ${cartId}.`);
+
     cart = addCncShippingInfo(shippingInfo, data.action, billingData);
   } else {
     let shippingMethods = [];
@@ -844,7 +846,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     }
 
     if (!_.isEmpty(shippingMethods)) {
-      shippingInfo = {
+      shippingInfo.carrier_info = {
         code: shippingMethods[0].carrier_code,
         method: shippingMethods[0].method_code,
       };
