@@ -946,19 +946,6 @@ const prepareShippingData = (shippingInfo) => {
   }
 
   return result;
-
-  // return [{
-  //   carrier_code: 'alphabeted',
-  //   method_code: 'armx_s01',
-  //   carrier_title: 'Standard Delivery',
-  //   method_title: 'Standard delivery 2-3 days',
-  //   amount: 2,
-  //   base_amount: 2,
-  //   available: true,
-  //   error_message: '',
-  //   price_excl_tax: 2,
-  //   price_incl_tax: 2,
-  // }];
 };
 
 /**
