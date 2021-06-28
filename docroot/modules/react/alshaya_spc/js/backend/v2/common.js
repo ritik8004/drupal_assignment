@@ -575,6 +575,8 @@ const getCartCustomerId = async () => {
  */
 const associateCartToCustomer = (customerId, resetCart = false) => {
   logger.info(`Use ${customerId} and ${resetCart}`);
+  // Temporary return;
+  return true;
 };
 
 /**
@@ -672,6 +674,7 @@ const updateCart = async (data) => {
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
+
   if (_.has(validationResult.data, 'error')) {
     return new Promise((resolve, reject) => reject(validationResult));
   }

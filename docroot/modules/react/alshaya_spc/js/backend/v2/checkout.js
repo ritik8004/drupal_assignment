@@ -15,6 +15,7 @@ import {
 } from './common';
 import { getDefaultErrorMessage } from './error';
 import { isUserAuthenticated, logger } from './utility';
+import cartActions from "./cart_actions";
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -123,7 +124,19 @@ const formatShippingEstimatesAddress = (address) => {
  */
 const getHomeDeliveryShippingMethods = (address) => {
   formatShippingEstimatesAddress(address);
-  return null;
+  // Temporary return.
+  return [{
+    carrier_code: 'alshayadelivery',
+    method_code: 'armx_s01',
+    carrier_title: 'Standard Delivery',
+    method_title: 'Standard delivery 2-3 days',
+    amount: 2,
+    base_amount: 2,
+    available: true,
+    error_message: '',
+    price_excl_tax: 2,
+    price_incl_tax: 2,
+  }];
 };
 
 /**
@@ -162,7 +175,11 @@ const getDefaultAddress = (data) => {
  *   Formatted address object.
  */
 const formatAddressForShippingBilling = (address) => {
-  const data = { ...address };
+  if (_.isEmpty(address)) {
+    return {};
+  }
+
+  const data = _.cloneDeep(address);
 
   const staticFields = {};
   if (!_.isEmpty(data.static)) {
@@ -176,17 +193,16 @@ const formatAddressForShippingBilling = (address) => {
     delete data.carrier_info;
   }
 
-  if (!_.isEmpty(data)) {
-    data.customAttributes = [];
-    Object.keys(data).forEach((key) => {
-      data.customAttributes.push(
-        {
-          attributeCode: key,
-          value: (!Array.isArray(data[key]) && _.isNull(data[key])) ? '' : data[key],
-        },
-      );
-    });
-  }
+  const customAttribures = [];
+  Object.keys(data).forEach((key) => {
+    customAttribures.push(
+      {
+        attributeCode: key,
+        value: (!Array.isArray(data[key]) && _.isNull(data[key])) ? '' : data[key],
+      },
+    );
+  });
+  data.customAttributes = customAttribures;
 
   if (_.isString(data.street)) {
     data.street = [data.street];
@@ -200,7 +216,6 @@ const formatAddressForShippingBilling = (address) => {
 
 /**
  * Update billing info on cart.
- * @todo implement this
  *
  * @param {object} billingData
  *   Billing data.
@@ -208,8 +223,19 @@ const formatAddressForShippingBilling = (address) => {
  * @return {object}
  *   Response data.
  */
-const updateBilling = (billingData) => {
-  logger.info(`${billingData}`);
+const updateBilling = async (billingData) => {
+  const params = {
+    extension: {
+      action: cartActions.cartBillingUpdate,
+    },
+    billing: billingData,
+  };
+
+  if (!_.isUndefined(params.billing.id)) {
+    delete params.billing.id;
+  }
+
+  return updateCart(params);
 };
 
 /**
@@ -524,16 +550,18 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  *   Shipping address info.
  * @param {string} action
  *   Action to perform.
- * @param {bool} updateBillingData
+ * @param {bool} updateBillingDetails
  *   Whether billing needs to be updated or not.
  *
  * @return {object}
  *   Cart data.
  */
-const addShippingInfo = async (shippingData, action, updateBillingData) => {
+const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   const params = {
     shipping: {},
-    extension: action,
+    extension: {
+      action,
+    },
   };
 
   const carrierInfo = (!_.isEmpty(shippingData.carrier_info))
@@ -548,26 +576,21 @@ const addShippingInfo = async (shippingData, action, updateBillingData) => {
   params.shipping.shipping_carrier_code = carrierInfo.code;
   params.shipping.shipping_method_code = carrierInfo.method;
 
-  let cart = updateCart(params)
-    .then((response) => response.data)
-    .catch((response) => {
-      // @todo test error
-      const error = { ...response };
-      return error;
-    });
+  let cart = await updateCart(params);
+  const cartData = cart.data;
 
   // If cart update has error.
-  if (_.has(cart.data, 'error')) {
-    return cart;
+  if (_.has(cartData, 'error')) {
+    return cartData;
   }
 
   // If billing needs to updated or billing is not available added at all
   // in the cart. Assuming if name is not set in billing means billing is
   // not set. City with value 'NONE' means, that this was added in CnC
   // by default and not changed by user.
-  if (updateBillingData
-    || _.isEmpty(cart.billing_address) || _.isEmpty(cart.billing_address.firstname)
-    || cart.billing_address.city === 'NONE') {
+  if (updateBillingDetails
+    || _.isEmpty(cartData.billing_address) || _.isEmpty(cartData.billing_address.firstname)
+    || cartData.billing_address.city === 'NONE') {
     cart = await updateBilling(params.shipping.shipping_address);
   }
 
@@ -590,9 +613,9 @@ const addShippingInfo = async (shippingData, action, updateBillingData) => {
  * @return {object|bool}
  *   FALSE if something went wrong, updated cart data otherwise.
  */
-const selectHd = (address, method, billing, shippingMethods) => {
-  addShippingInfo({}, '', false);
-  updateBilling({});
+const selectHd = async (address, method, billing, shippingMethods) => {
+  await addShippingInfo({}, '', false);
+  await updateBilling({});
   validateAddressAreaCity({});
   logger.info(`${address}${method}${billing}${shippingMethods}`);
 };
@@ -607,7 +630,7 @@ const selectHd = (address, method, billing, shippingMethods) => {
  * @return {object}.
  *   The data.
  */
-const applyDefaults = (data, uid) => {
+const applyDefaults = async (data, uid) => {
   // @todo Update this function to return data after processing with user inputs.
   if (!_.isEmpty(data.shipping.method)) {
     return data;
@@ -677,7 +700,7 @@ const getProcessedCheckoutData = async (cartData) => {
   const cncStatus = await getCncStatusForCart();
 
   // Here we will do the processing of cart to make it in required format.
-  const updated = applyDefaults(data, window.drupalSettings.user.uid);
+  const updated = await applyDefaults(data, window.drupalSettings.user.uid);
   if (updated !== false) {
     data = updated;
   }
@@ -815,6 +838,8 @@ window.commerceBackend.getCartForCheckout = () => {
  */
 const getCustomerByMail = (email) => {
   logger.info(`${email}`);
+  // Temporary return.
+  return [];
 };
 
 /**
@@ -834,6 +859,31 @@ const getCustomerByMail = (email) => {
  */
 const createCustomer = (email, firstname, lastname) => {
   logger.info(`${email}${firstname}${lastname}`);
+  // Temporary return.
+  return {
+    id: 492,
+    group_id: 1,
+    created_at: '2021-06-28 10:04:46',
+    updated_at: '2021-06-28 10:04:46',
+    created_in: 'AE English',
+    email: 'test@example.com',
+    firstname: 'test',
+    lastname: 'test',
+    store_id: 4,
+    website_id: 3,
+    addresses: [],
+    disable_auto_group_change: 0,
+    extension_attributes: {
+      is_subscribed: false,
+    },
+    custom_attributes: [
+      {
+        attribute_code: 'channel',
+        value: 'web',
+        name: 'channel',
+      },
+    ],
+  };
 };
 
 /**
@@ -844,14 +894,14 @@ const createCustomer = (email, firstname, lastname) => {
  *   Shipping address info.
  * @param {string} action
  *   Action to perform.
- * @param {bool} updateBillingData
+ * @param {bool} updateBillingDetails
  *   Whether billing needs to update or not.
  *
  * @return {object}
  *   Cart data.
  * */
-const addCncShippingInfo = (shippingData, action, updateBillingData) => {
-  logger.info(`${shippingData}${action}${updateBillingData}`);
+const addCncShippingInfo = (shippingData, action, updateBillingDetails) => {
+  logger.info(`${shippingData}${action}${updateBillingDetails}`);
 };
 
 /**
@@ -866,6 +916,19 @@ const addCncShippingInfo = (shippingData, action, updateBillingData) => {
  */
 const prepareShippingData = (shippingInfo) => {
   logger.info(`${shippingInfo}`);
+  // Temporary return.
+  return [{
+    carrier_code: 'alphabeted',
+    method_code: 'armx_s01',
+    carrier_title: 'Standard Delivery',
+    method_title: 'Standard delivery 2-3 days',
+    amount: 2,
+    base_amount: 2,
+    available: true,
+    error_message: '',
+    price_excl_tax: 2,
+    price_incl_tax: 2,
+  }];
 };
 
 /**
@@ -878,23 +941,23 @@ const prepareShippingData = (shippingInfo) => {
  *   A promise object.
  */
 window.commerceBackend.addShippingMethod = async (data) => {
-  // console.log(data);
   let cart = null;
-  const shippingInfo = { ...data.shipping_info };
-  const billingData = { ...data.update_billing };
-  const email = { ...shippingInfo.static.email };
+  let cartData = null;
+  const shippingInfo = data.shipping_info;
+  const updateBillingInfo = data.update_billing;
+  const shippingEmail = shippingInfo.static.email;
 
   // Cart customer validations.
   if (window.drupalSettings.userDetails.customerId === 0
-    && (_.isNull(await getCartCustomerId()) || (getCartCustomerEmail() !== email))) {
-    let customer = getCustomerByMail(email);
+    && (_.isNull(await getCartCustomerId()) || (getCartCustomerEmail() !== shippingEmail))) {
+    let customer = getCustomerByMail(shippingEmail);
 
     if (_.has(customer, 'error')) {
       return customer;
     }
 
     if (_.isEmpty(customer)) {
-      customer = createCustomer(email, shippingInfo.firstname, shippingInfo.lastname);
+      customer = createCustomer(shippingEmail, shippingInfo.static.firstname, shippingInfo.static.lastname);
       if (_.has(customer, 'error')) {
         return customer;
       }
@@ -918,7 +981,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     const cartId = await window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for CNC. Data: ${logData} Address: ${logAddress} Cart: ${cartId}.`);
 
-    cart = addCncShippingInfo(shippingInfo, data.action, billingData);
+    cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
   } else {
     let shippingMethods = [];
     let carrierInfo = [];
@@ -962,16 +1025,18 @@ window.commerceBackend.addShippingMethod = async (data) => {
     const cartId = await window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for HD. Data: ${logData} Address: ${logAddress} Cart: ${cartId}`);
 
-    cart = addShippingInfo(shippingInfo, data.action, billingData);
-    if (!_.isEmpty(cart) && !_.isEmpty(cart.shipping) && !_.isEmpty(hdshippingMethods)) {
-      cart.shipping.methods = hdshippingMethods;
+    cart = await addShippingInfo(shippingInfo, data.action, updateBillingInfo);
+    cartData = cart.data;
+
+    if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(hdshippingMethods)) {
+      cartData.shipping.methods = hdshippingMethods;
     }
   }
 
   // Process cart data.
-  cart = getProcessedCheckoutData(cart);
+  cartData = getProcessedCheckoutData(cartData);
 
-  return cart;
+  return cartData;
 };
 
 export {

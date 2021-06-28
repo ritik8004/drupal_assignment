@@ -235,19 +235,25 @@ describe('Checkout', () => {
           },
           address_region_segment: '1025',
           street: '1 London Rd',
-          carrier_info: { code: 'alshayadelivery', method: 'qd2_qd002' },
+          carrier_info: {
+            code: 'alshayadelivery',
+            method: 'qd2_qd002',
+          },
+          foo: '',
         };
         const result = formatAddressForShippingBilling(address);
 
-        expect(result.firstname).toEqual('John');
-        expect(result.lastname).toEqual('Smith');
         expect(result.static).toEqual(undefined);
         expect(result.carrier_info).toEqual(undefined);
+        expect(result.firstname).toEqual('John');
+        expect(result.lastname).toEqual('Smith');
         expect(result.street).toEqual(['1 London Rd']);
         expect(result.customAttributes[0].attributeCode).toEqual('address_region_segment');
         expect(result.customAttributes[0].value).toEqual('1025');
         expect(result.customAttributes[1].attributeCode).toEqual('street');
         expect(result.customAttributes[1].value).toEqual('1 London Rd');
+        expect(result.customAttributes[2].value).toEqual('');
+        expect(result.customAttributes.length).toEqual(3);
       });
     });
 
