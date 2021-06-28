@@ -216,8 +216,8 @@
           border-right: 0.4rem solid transparent;
           border-top: 0.4rem solid;
           position: absolute;
-          right: 23px;
-          margin-top: 5px;
+          #{$right}: 1.4375rem;
+          margin-top: 0.3125rem;
           transform: rotate(180deg);
         }
 
