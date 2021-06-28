@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b660eb2e9f16b5f4d06fe154fe5513d",
+    "content-hash": "1efdbbef762a91dac23faf1e62758a66",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1134,7 +1134,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:fengyuanchen/cropper.git",
+                "url": "https://github.com/fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -1152,7 +1152,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -7893,6 +7893,14 @@
                 {
                     "name": "borisson_",
                     "homepage": "https://www.drupal.org/user/2393360"
+                },
+                {
+                    "name": "drunken monkey",
+                    "homepage": "https://www.drupal.org/user/205582"
+                },
+                {
+                    "name": "mkalkbrenner",
+                    "homepage": "https://www.drupal.org/user/124705"
                 }
             ],
             "description": "The Facet module allows site builders to easily create and manage faceted search interfaces.",
@@ -10652,6 +10660,10 @@
             ],
             "authors": [
                 {
+                    "name": "jcnventura",
+                    "homepage": "https://www.drupal.org/user/122464"
+                },
+                {
                     "name": "yannickoo",
                     "homepage": "https://www.drupal.org/user/531118"
                 }
@@ -12644,6 +12656,10 @@
                     "homepage": "https://www.drupal.org/node/147903/committers"
                 },
                 {
+                    "name": "amykhailova",
+                    "homepage": "https://www.drupal.org/user/2892725"
+                },
+                {
                     "name": "diolan",
                     "homepage": "https://www.drupal.org/user/2336786"
                 },
@@ -12658,6 +12674,18 @@
                 {
                     "name": "kim.pepper",
                     "homepage": "https://www.drupal.org/user/370574"
+                },
+                {
+                    "name": "rfay",
+                    "homepage": "https://www.drupal.org/user/30906"
+                },
+                {
+                    "name": "soxofaan",
+                    "homepage": "https://www.drupal.org/user/41478"
+                },
+                {
+                    "name": "wundo",
+                    "homepage": "https://www.drupal.org/user/25523"
                 }
             ],
             "description": "Protect your website from spam and abuse while letting real people pass through with ease.",
@@ -13118,12 +13146,20 @@
                     "homepage": "https://www.drupal.org/u/jansete"
                 },
                 {
+                    "name": "cmlara",
+                    "homepage": "https://www.drupal.org/user/1790054"
+                },
+                {
                     "name": "jansete",
                     "homepage": "https://www.drupal.org/user/1358146"
                 },
                 {
                     "name": "naveenvalecha",
                     "homepage": "https://www.drupal.org/user/2665733"
+                },
+                {
+                    "name": "ram4nd",
+                    "homepage": "https://www.drupal.org/user/601534"
                 }
             ],
             "description": "Adds an Amazon Simple Storage Service-based remote file system to Drupal.",
@@ -14631,6 +14667,10 @@
                 {
                     "name": "himanshu-dixit",
                     "homepage": "https://www.drupal.org/user/3513954"
+                },
+                {
+                    "name": "wells",
+                    "homepage": "https://www.drupal.org/user/2452278"
                 }
             ],
             "description": "Social Auth integration for Facebook.",
@@ -14690,6 +14730,10 @@
                     "name": "Himanshu Dixit (himanshu-dixit)",
                     "homepage": "https://www.drupal.org/user/3513954",
                     "email": "hudixt@gmail.com"
+                },
+                {
+                    "name": "wells",
+                    "homepage": "https://www.drupal.org/user/2452278"
                 }
             ],
             "description": "Social Auth integration for Google.",
@@ -15505,7 +15549,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-5.22",
-                    "datestamp": "1601919522",
+                    "datestamp": "1614791857",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -15541,28 +15585,8 @@
                     "role": "Contributor"
                 },
                 {
-                    "name": "fenstrat",
-                    "homepage": "https://www.drupal.org/user/362649"
-                },
-                {
-                    "name": "jrockowitz",
-                    "homepage": "https://www.drupal.org/user/371407"
-                },
-                {
-                    "name": "podarok",
-                    "homepage": "https://www.drupal.org/user/116002"
-                },
-                {
                     "name": "quicksketch",
                     "homepage": "https://www.drupal.org/user/35821"
-                },
-                {
-                    "name": "sanchiz",
-                    "homepage": "https://www.drupal.org/user/1671246"
-                },
-                {
-                    "name": "tedbow",
-                    "homepage": "https://www.drupal.org/user/240860"
                 },
                 {
                     "name": "torotil",
@@ -15603,7 +15627,7 @@
                     "datestamp": "1543288980",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
