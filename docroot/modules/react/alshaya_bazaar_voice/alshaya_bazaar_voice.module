@@ -67,7 +67,7 @@ function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
   return [
     'alshaya_strings' => [
       'variables' => [
-        'strings' => [],
+        'bazaarvoice_strings' => [],
       ],
       'template' => 'alshaya-bazaar-voice-strings',
     ],
@@ -219,7 +219,7 @@ function alshaya_bazaar_voice_preprocess_node(&$variables) {
     /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Add bazaavoice related strings.
-    $variables['bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+    $variables['bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
 }
 
@@ -246,8 +246,8 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
-  if (!isset($build['strings'])) {
-    $build['strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+  if (!isset($build['bazaarvoice_strings'])) {
+    $build['bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
 }
@@ -277,7 +277,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
       $build['#products'][$key]['parent_sku'] = $parent_sku_id;
     }
   }
-  $build['#strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+  $build['#bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
 }
 
