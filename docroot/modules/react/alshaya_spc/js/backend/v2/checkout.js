@@ -116,8 +116,8 @@ const formatShippingEstimatesAddress = (address) => {
  * @return {object}.
  *   The data.
  */
-const getHomeDeliveryShippingMethods = (shipping) => {
-  formatShippingEstimatesAddress(shipping.address);
+const getHomeDeliveryShippingMethods = (address) => {
+  formatShippingEstimatesAddress(address);
   return null;
 };
 
@@ -330,7 +330,7 @@ const applyDefaults = (data, uid) => {
   // Select default address from address book if available.
   const address = getDefaultAddress(data);
   if (address) {
-    const methods = getHomeDeliveryShippingMethods(data.shipping);
+    const methods = getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], data.billing_address, methods);
@@ -339,7 +339,7 @@ const applyDefaults = (data, uid) => {
 
   // If address already available in cart, use it.
   if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
-    const methods = getHomeDeliveryShippingMethods(data.shipping);
+    const methods = getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], data.billing_address, methods);
@@ -601,7 +601,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   if (typeof data.shipping.methods === 'undefined' && typeof data.shipping.address !== 'undefined' && data.shipping.type !== 'click_and_collect') {
-    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping);
+    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping.address);
     if (typeof shippingMethods.error !== 'undefined') {
       return shippingMethods;
     }
