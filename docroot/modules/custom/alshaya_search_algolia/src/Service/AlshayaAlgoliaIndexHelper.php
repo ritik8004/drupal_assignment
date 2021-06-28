@@ -962,7 +962,8 @@ class AlshayaAlgoliaIndexHelper {
             $this->logger->error("The attribute $attribute_name is already added to the index.");
             continue;
           }
-
+          // Update Custom Facet attribute
+          // for Product list index and its replicas.
           $settings['attributesForFaceting'][] = $attribute_name;
           $updated = TRUE;
         }
@@ -979,6 +980,7 @@ class AlshayaAlgoliaIndexHelper {
             ]);
           }
         }
+
       }
 
       $this->logger->notice('Added attribute(s) for faceting: @attributes', [
