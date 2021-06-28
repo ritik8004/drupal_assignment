@@ -9,7 +9,7 @@ import {
   getProcessedCartData,
   getCartWithProcessedData,
 } from './common';
-import { logger } from './utility';
+import { getApiEndpoint, logger } from './utility';
 import { getExceptionMessageType } from './error';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
@@ -156,7 +156,11 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       }
     }
     requestMethod = 'DELETE';
-    requestUrl = `/rest/V1/guest-carts/${cartId}/items/${cartItem.item_id}`;
+    const params = {
+      cartId,
+      itemId: cartItem.item_id,
+    };
+    requestUrl = getApiEndpoint('removeItems', params);
   }
 
   if (data.action === 'add item') {
@@ -174,7 +178,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
   if (data.action === 'add item' || data.action === 'update item') {
     requestMethod = 'POST';
-    requestUrl = `/rest/V1/guest-carts/${cartId}/items`;
+    requestUrl = getApiEndpoint('addUpdateItems', { cartId });
     // Executed for Add and Update case.
     if (typeof data.options !== 'undefined' && data.options.length > 0) {
       productOptions = {
@@ -200,7 +204,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       return window.commerceBackend.getCart();
     }
     // Set the cart item id to ensure we set new quantity instead of adding it.
-    itemData.cartItem.item_id = cartItem.id;
+    itemData.cartItem.item_id = cartItem.item_id;
   }
 
   // Do a sanity check before proceeding since an item can be removed in above processes.
@@ -212,7 +216,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   let apiCallAttempts = 1;
-
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (response.data.error === true) {
@@ -329,7 +332,7 @@ window.commerceBackend.refreshCart = (data) => {
  *   A promise object.
  */
 window.commerceBackend.createCart = async () => {
-  const response = await callMagentoApi('/rest/V1/guest-carts', 'POST', {});
+  const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
   if (typeof response.data.error !== 'undefined') {
     return response.data;
   }

@@ -34,9 +34,9 @@ class RadioButton extends React.Component {
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="switch-button">
+        <div id={id} className="switch-button">
           <div className="switch-text query">
             <label htmlFor={label}>
               {label}
@@ -61,8 +61,6 @@ class RadioButton extends React.Component {
             })}
           </div>
           <input type="hidden" id={id} name={id} required={required} value={activeId || ''} />
-          <div className="c-input__bar" />
-          <div id="bv-error" className="error" />
         </div>
       </>
     );

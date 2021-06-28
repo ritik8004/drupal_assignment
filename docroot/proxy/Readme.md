@@ -11,6 +11,6 @@ File: /factory-hooks/post-settings-php/zzz_proxy.php
 <?php
   // Use proxy.
   if (isset($settings['alshaya_api.settings']['magento_host'])) {
-    $settings['alshaya_api.settings']['magento_host'] = '/proxy/?url=' . $settings['alshaya_api.settings']['magento_host'];
+    $settings['alshaya_api.settings']['alshaya_proxy'] = TRUE;
   }
 ```

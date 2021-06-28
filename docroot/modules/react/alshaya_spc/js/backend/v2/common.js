@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { logger } from './utility';
+import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
 import cartActions from './cart_actions';
@@ -185,6 +185,19 @@ const handleResponse = (apiResponse) => {
 };
 
 /**
+ * Get magento customer token.
+ *
+ * @returns {string}
+ */
+const getCustomerToken = () => {
+  const token = localStorage.getItem('magento_customer_token');
+  if (typeof token === 'undefined' || token === false || token === '') {
+    logger.error(`Magento customer token is not set for user ${drupalSettings.user.uid}`);
+  }
+  return token;
+};
+
+/**
  * Make an AJAX call to Magento API.
  *
  * @param {string} url
@@ -206,6 +219,10 @@ const callMagentoApi = (url, method, data) => {
       'Alshaya-Channel': 'web',
     },
   };
+
+  if (isUserAuthenticated()) {
+    params.headers.Authorization = `Bearer ${getCustomerToken()}`;
+  }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
     params.data = data;
@@ -484,7 +501,8 @@ const getCart = async (force = false) => {
     return new Promise((resolve) => resolve(cartId));
   }
 
-  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
+  const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
+
   if (typeof response.data.error !== 'undefined' && response.data.error === true) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
       // Remove the cart from storage.
@@ -639,7 +657,7 @@ const updateCart = async (data) => {
     logger.notice(`Billing / Shipping address data: ${logData}. CartId: ${cartId}`);
   }
 
-  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
       if (typeof response.data.error !== 'undefined' && response.data.error) {
         return response;
