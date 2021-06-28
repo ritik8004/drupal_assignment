@@ -11,7 +11,7 @@ import {
   callMagentoApi,
 } from './common';
 import { getDefaultErrorMessage } from './error';
-import { logger } from './utility';
+import { isUserAuthenticated, logger } from './utility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -116,8 +116,9 @@ const formatShippingEstimatesAddress = (address) => {
  * @return {object}.
  *   The data.
  */
-const getHomeDeliveryShippingMethods = (shipping) => {
-  formatShippingEstimatesAddress(shipping.address);
+const getHomeDeliveryShippingMethods = (address) => {
+  formatShippingEstimatesAddress(address);
+  return null;
 };
 
 /**
@@ -263,8 +264,37 @@ const selectHd = (address, method, billing, shippingMethods) => {
 };
 
 /**
- * Apply defaults to cart for customer.
+ * Get last order of the customer.
+ * @todo implement this.
+ */
+const getLastOrder = () => [];
+
+/**
+ * Apply shipping from last order.
+ * @todo implement this.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @return {*}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = () => false;
+
+/**
+ * Get payment method from last order.
  * @todo implement this
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @return {*}
+ *   FALSE if something went wrong, payment method name otherwise.
+ */
+const getDefaultPaymentFromOrder = () => null;
+
+/**
+ * Apply defaults to cart for customer.
  *
  * @param {object} cartData
  *   The cart data object.
@@ -274,10 +304,51 @@ const selectHd = (address, method, billing, shippingMethods) => {
  *   The data.
  */
 const applyDefaults = (data, uid) => {
-  logger.info(`${data}${uid}`);
-  getHomeDeliveryShippingMethods({});
-  getDefaultAddress(data);
-  selectHd({}, {}, {}, {});
+  // @todo Update this function to return data after processing with user inputs.
+  if (!_.isEmpty(data.shipping.method)) {
+    return data;
+  }
+
+  // Get last order only for Drupal Customers.
+  const order = isUserAuthenticated()
+    ? getLastOrder(uid)
+    : [];
+
+  // Try to apply defaults from last order.
+  if (!_.isEmpty(order)) {
+    // If cnc order but cnc is disabled.
+    if (_.includes(order.shipping.method, 'click_and_collect') && !getCncStatusForCart()) {
+      return data;
+    }
+
+    const response = applyDefaultShipping(order);
+    if (response) {
+      // @todo Check if returns empty string for anonyous (CORE-31245).
+      response.payment.default = getDefaultPaymentFromOrder(order);
+      return response;
+    }
+  }
+
+  // If address already available in cart, use it.
+  if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
+    const methods = getHomeDeliveryShippingMethods(data.shipping.address);
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+      logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
+      return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
+    }
+  }
+
+  // Select default address from address book if available.
+  const address = getDefaultAddress(data);
+  if (address) {
+    const methods = getHomeDeliveryShippingMethods(address);
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+      return selectHd(address, methods[0], address, methods);
+    }
+  }
+
+  return data;
 };
 
 /**
@@ -532,7 +603,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   if (typeof data.shipping.methods === 'undefined' && typeof data.shipping.address !== 'undefined' && data.shipping.type !== 'click_and_collect') {
-    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping);
+    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping.address);
     if (typeof shippingMethods.error !== 'undefined') {
       return shippingMethods;
     }
@@ -578,7 +649,7 @@ const getProcessedCheckoutData = async (cartData) => {
 
   // If payment method is not available in the list, we set the first
   // available payment method.
-  if (typeof response.payment !== 'undefined') {
+  if (typeof response.payment !== 'undefined' && typeof response.payment.methods !== 'undefined') {
     const codes = response.payment.methods.map((el) => el.code);
     if (typeof response.payment.method !== 'undefined' && typeof codes[response.payment.method] === 'undefined') {
       delete (response.payment.method);
@@ -613,15 +684,14 @@ window.commerceBackend.getCartForCheckout = () => {
     return new Promise((resolve) => resolve({ error: true }));
   }
 
-  getCart()
-    .then((response) => {
-      if (typeof response.data === 'undefined' || response.data.length === 0) {
-        if (typeof response.data.error_message !== 'undefined') {
-          logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
-        }
+  return getCart()
+    .then(async (response) => {
+      if (_.isEmpty(response.data) || !_.isEmpty(response.data.error_message)) {
+        logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
+        return new Promise((resolve) => resolve(response.data));
       }
 
-      if (typeof response.data.items === 'undefined' || response.data.items.length === 0) {
+      if (_.isEmpty(response.data.cart) || _.isEmpty(response.data.cart.items)) {
         logger.error(`Checkout accessed without items in cart for id:${cartId}`);
 
         const error = {
@@ -635,9 +705,8 @@ window.commerceBackend.getCartForCheckout = () => {
         return new Promise((resolve) => resolve(error));
       }
 
-      const processedData = getProcessedCheckoutData(response);
-
-      return new Promise((resolve) => resolve(processedData));
+      response.data = await getProcessedCheckoutData(response.data);
+      return response;
     })
     .catch((response) => {
       logger.error(`Error while getCartForCheckout controller. Error: ${response.message}. Code: ${response.status}`);
@@ -649,9 +718,8 @@ window.commerceBackend.getCartForCheckout = () => {
           error_message: getDefaultErrorMessage(),
         },
       };
-      return new Promise((resolve) => resolve(error));
+      return error;
     });
-  return null;
 };
 
 export {
