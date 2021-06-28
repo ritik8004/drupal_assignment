@@ -15,7 +15,7 @@ import {
 } from './common';
 import { getDefaultErrorMessage } from './error';
 import { isUserAuthenticated, logger } from './utility';
-import cartActions from "./cart_actions";
+import cartActions from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -193,16 +193,16 @@ const formatAddressForShippingBilling = (address) => {
     delete data.carrier_info;
   }
 
-  const customAttribures = [];
+  const customAttributes = [];
   Object.keys(data).forEach((key) => {
-    customAttribures.push(
+    customAttributes.push(
       {
         attributeCode: key,
         value: (!Array.isArray(data[key]) && _.isNull(data[key])) ? '' : data[key],
       },
     );
   });
-  data.customAttributes = customAttribures;
+  data.customAttributes = customAttributes;
 
   if (_.isString(data.street)) {
     data.street = [data.street];
@@ -906,7 +906,6 @@ const addCncShippingInfo = (shippingData, action, updateBillingDetails) => {
 
 /**
  * Format shipping info for api call.
- * @todo implement this
  *
  * @param {object} $shipping_info
  *   Shipping info.
@@ -915,20 +914,51 @@ const addCncShippingInfo = (shippingData, action, updateBillingDetails) => {
  *   Formatted shipping info for api.
  */
 const prepareShippingData = (shippingInfo) => {
-  logger.info(`${shippingInfo}`);
-  // Temporary return.
-  return [{
-    carrier_code: 'alphabeted',
-    method_code: 'armx_s01',
-    carrier_title: 'Standard Delivery',
-    method_title: 'Standard delivery 2-3 days',
-    amount: 2,
-    base_amount: 2,
-    available: true,
-    error_message: '',
-    price_excl_tax: 2,
-    price_incl_tax: 2,
-  }];
+  let result = {};
+
+  if (_.isEmpty(shippingInfo)) {
+    return result;
+  }
+
+  // If address id available.
+  if (!_.isEmpty(shippingInfo.address_id)) {
+    result.address_id = shippingInfo.address_id;
+  } else {
+    const data = _.cloneDeep(shippingInfo);
+    const staticFields = data.static;
+    delete data.static;
+    let customAttributes = [];
+    Object.keys(data).forEach((key) => {
+      customAttributes.push(
+        {
+          attributeCode: key,
+          value: data[key],
+        },
+      );
+    });
+    customAttributes = { customAttributes };
+    result = {
+      address: {
+        ...staticFields,
+        ...customAttributes,
+      },
+    };
+  }
+
+  return result;
+
+  // return [{
+  //   carrier_code: 'alphabeted',
+  //   method_code: 'armx_s01',
+  //   carrier_title: 'Standard Delivery',
+  //   method_title: 'Standard delivery 2-3 days',
+  //   amount: 2,
+  //   base_amount: 2,
+  //   available: true,
+  //   error_message: '',
+  //   price_excl_tax: 2,
+  //   price_incl_tax: 2,
+  // }];
 };
 
 /**
@@ -957,7 +987,11 @@ window.commerceBackend.addShippingMethod = async (data) => {
     }
 
     if (_.isEmpty(customer)) {
-      customer = createCustomer(shippingEmail, shippingInfo.static.firstname, shippingInfo.static.lastname);
+      customer = createCustomer(
+        shippingEmail,
+        shippingInfo.static.firstname,
+        shippingInfo.static.lastname,
+      );
       if (_.has(customer, 'error')) {
         return customer;
       }

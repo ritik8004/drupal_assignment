@@ -206,6 +206,56 @@ describe('Checkout', () => {
       });
     });
 
+    describe('Test prepareShippingData()', () => {
+      const prepareShippingData = utilsRewire.__get__('prepareShippingData');
+
+      it('With empty value', async () => {
+        const result = prepareShippingData({});
+        expect(result).toEqual({});
+      });
+
+      it('With null value', async () => {
+        const result = prepareShippingData(null);
+        expect(result).toEqual({});
+      });
+
+      it('With address_id value', async () => {
+        const result = prepareShippingData({ address_id: 1 });
+        expect(result.address.customAttributes[0].attributeCode).toEqual('address_id');
+      });
+
+      it('Without static data', async () => {
+        const address = {
+          address_region_segment: '1025',
+        };
+        const result = prepareShippingData(address);
+        expect(result.address.firstname).toEqual(undefined);
+        expect(result.address.customAttributes[0].value).toEqual('1025');
+      });
+
+      it('With address data', async () => {
+        const address = {
+          static: {
+            firstname: 'John',
+            lastname: 'Smith',
+          },
+          address_region_segment: '1025',
+          street: '1 London Rd',
+        };
+        const result = prepareShippingData(address);
+
+        expect(result.static).toEqual(undefined);
+        expect(result.address.static).toEqual(undefined);
+        expect(result.address.firstname).toEqual('John');
+        expect(result.address.lastname).toEqual('Smith');
+        expect(result.address.customAttributes[0].attributeCode).toEqual('address_region_segment');
+        expect(result.address.customAttributes[0].value).toEqual('1025');
+        expect(result.address.customAttributes[1].attributeCode).toEqual('street');
+        expect(result.address.customAttributes[1].value).toEqual('1 London Rd');
+        expect(result.address.customAttributes.length).toEqual(2);
+      });
+    });
+
     describe('Test formatAddressForShippingBilling()', () => {
       const formatAddressForShippingBilling = utilsRewire.__get__('formatAddressForShippingBilling');
 
