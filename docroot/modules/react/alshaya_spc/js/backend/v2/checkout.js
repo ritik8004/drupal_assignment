@@ -11,7 +11,7 @@ import {
   callMagentoApi,
 } from './common';
 import { getDefaultErrorMessage } from './error';
-import { logger } from './utility';
+import { isUserAuthenticated, logger } from './utility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -310,11 +310,12 @@ const applyDefaults = (data, uid) => {
   }
 
   // Get last order only for Drupal Customers.
-  const order = uid > 0
-    ? getLastOrder(uid) : [];
+  const order = isUserAuthenticated()
+    ? getLastOrder(uid)
+    : [];
 
   // Try to apply defaults from last order.
-  if (typeof order !== 'undefined' && !_.isEmpty(order)) {
+  if (!_.isEmpty(order)) {
     // If cnc order but cnc is disabled.
     if (_.includes(order.shipping.method, 'click_and_collect') && !getCncStatusForCart()) {
       return data;
