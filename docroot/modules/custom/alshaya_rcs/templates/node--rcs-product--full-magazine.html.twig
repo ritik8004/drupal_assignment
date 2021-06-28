@@ -157,7 +157,9 @@
         {% endif %}
 
         <div class="basic-details-wrapper">
-          {{ content.field_skus }}
+          <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
+            {% include "@alshaya_rcs/rcs-sku-base-form.html.twig" %}
+          </div>
           <div class="modal-share-this">
             <span class="share-icon">{{  'Share'|t }}</span>
             <div class="sharethis-container">

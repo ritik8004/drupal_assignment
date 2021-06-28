@@ -1,0 +1,8 @@
+{# @todo Check for condition where add to bag is disabled. #}
+<form class="sku-base-form">
+  <div class="js-form-item form-item js-form-type-select form-type-select js-form-item-quantity form-item-quantity">
+    <select name="quantity" class="edit-quantity form-select">#rcs.product._self|quantity#</select>
+  </div>
+  {# @todo: Add the SKU values to the attributes. #}
+  <button name="add_to_cart_SKUVAL" id="edit-add-to-cart-SKUVAL" class='cv-validate-before-ajax edit-add-to-cart add-to-cart-button ladda-button' data-twig-suggestion="addtocart" type="submit">{{ "add to cart" | t }}</button>
+</form>

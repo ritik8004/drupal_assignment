@@ -1,3 +1,8 @@
+// @codingStandardsIgnoreFile
+// This is because the linter is throwing errors where we use backticks here.
+// Once we enable webapack for the custom modules directory, we should look into
+// removing the above ignore line.
+
 globalThis.rcsPhRenderingEngine = globalThis.rcsPhRenderingEngine || {};
 
 globalThis.rcsPhRenderingEngine.render = function render(
@@ -337,6 +342,23 @@ globalThis.rcsPhRenderingEngine.computePhFilters = function (input, filter) {
       }
 
       value = jQuery(priceBlock).html();
+      break;
+
+    case 'quantity':
+      // @todo Check for how to fetch the max sale quantity.
+      const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
+      const quantityDroprown = jQuery('.edit-quantity');
+      // Remove the quantity filter.
+      quantityDroprown.html('');
+
+      for (let i = 1; i <= quantity; i++) {
+        if (i === 1) {
+          quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
+          continue;
+        }
+        quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+      }
+      value = quantityDroprown.html();
       break;
 
     case 'add_to_cart':

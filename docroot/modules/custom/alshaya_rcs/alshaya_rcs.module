@@ -31,6 +31,9 @@ function alshaya_rcs_theme($existing, $type, $theme, $path) {
     'rcs_price_block' => [
       'variables' => [],
     ],
+    'rcs_sku_base_form' => [
+      'variables' => [],
+    ],
   ];
 }
 
