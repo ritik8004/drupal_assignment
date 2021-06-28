@@ -121,7 +121,7 @@ const formatShippingEstimatesAddress = (address) => {
  * @return {object}.
  *   The data.
  */
-const getHomeDeliveryShippingMethods = (shipping) => {
+const getHomeDeliveryshippingMethods = (shipping) => {
   formatShippingEstimatesAddress(shipping.address);
 };
 
@@ -280,9 +280,10 @@ const selectHd = (address, method, billing, shippingMethods) => {
  */
 const applyDefaults = (data, uid) => {
   logger.info(`${data}${uid}`);
-  getHomeDeliveryShippingMethods({});
+  getHomeDeliveryshippingMethods({});
   getDefaultAddress(data);
   selectHd({}, {}, {}, {});
+  return false;
 };
 
 /**
@@ -570,7 +571,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   if (typeof data.shipping.methods === 'undefined' && typeof data.shipping.address !== 'undefined' && data.shipping.type !== 'click_and_collect') {
-    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping);
+    const shippingMethods = getHomeDeliveryshippingMethods(data.shipping);
     if (typeof shippingMethods.error !== 'undefined') {
       return shippingMethods;
     }
@@ -768,28 +769,29 @@ const prepareShippingData = (shippingInfo) => {
  *   A promise object.
  */
 window.commerceBackend.addShippingMethod = async (data) => {
+  // console.log(data);
   const params = {
     extension: data,
   };
 
-  const shippingInfo = data.shipping_info;
-  const updateBillingData = data.update_billing;
-  const emailAddress = shippingInfo.static.email;
+  let cart = {};
+  let shippingInfo = { ...data.shipping_info };
+  const billingData = { ...data.update_billing };
+  const email = { ...shippingInfo.static.email };
 
   // Cart customer validations.
-  const customerId = { ...window.drupalSettings.userDetails.customerId };
-  const cartCustomerId = await getCartCustomerId();
-  if (customerId === 0 && (_.isNull(cartCustomerId) || (getCartCustomerEmail() !== emailAddress))) {
-    let customer = getCustomerByMail();
+  if (window.drupalSettings.userDetails.customerId === 0
+    && (_.isNull(await getCartCustomerId()) || (getCartCustomerEmail() !== email))) {
+    let customer = getCustomerByMail(email);
 
     if (_.has(customer, 'error')) {
-      return new Promise((resolve, reject) => reject(customer));
+      return customer;
     }
 
     if (_.isEmpty(customer)) {
-      customer = createCustomer(emailAddress, shippingInfo.firstname, shippingInfo.lastname);
+      customer = createCustomer(email, shippingInfo.firstname, shippingInfo.lastname);
       if (_.has(customer, 'error')) {
-        return new Promise((resolve, reject) => reject(customer));
+        return customer;
       }
     }
 
@@ -809,9 +811,9 @@ window.commerceBackend.addShippingMethod = async (data) => {
     const logData = JSON.stringify(data);
     const cartId = await window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for CNC. Data: ${logData} Address: ${logAddress} Cart: ${cartId}.`);
-    const cart = addCncShippingInfo(shippingInfo, data.action, updateBillingData);
+    cart = addCncShippingInfo(shippingInfo, data.action, billingData);
   } else {
-    const shippinMethods = [];
+    let shippingMethods = [];
     let carrierInfo = [];
     if (!_.isEmpty(shippingInfo.carrier_info)) {
       carrierInfo = shippingInfo.carrier_info;
@@ -822,13 +824,44 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
     // If carrier info available in request, use that
     // instead getting shipping methods.
+    let hdshippingMethods = [];
+    if (!_.isEmpty(carrierInfo)) {
+      shippingMethods.push({
+        carrier_code: carrierInfo.carrier,
+        method_code: carrierInfo.method,
+      });
+    } else {
+      shippingMethods = getHomeDeliveryshippingMethods(shippingData);
+      hdshippingMethods = shippingMethods;
+    }
+
+    // If no shipping method.
+    if (_.has(shippingMethods, 'error')) {
+      const logData = JSON.stringify(data);
+      const cartId = await window.commerceBackend.getCartId();
+      logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${shippingMethods.error_message}`);
+      return shippingMethods;
+    }
+
+    if (!_.isEmpty(shippingMethods)) {
+      shippingInfo = {
+        code: shippingMethods[0].carrier_code,
+        method: shippingMethods[0].method_code,
+      };
+    }
+
+    const logAddress = JSON.stringify(shippingInfo);
+    const logData = JSON.stringify(data);
+    const cartId = await window.commerceBackend.getCartId();
+    logger.notice(`Shipping update manual for HD. Data: ${logData} Address: ${logAddress} Cart: ${cartId}`);
+
+    cart = addCncShippingInfo(shippingInfo, data.action, billingData);
+    if (!_.isEmpty(cart) && !_.isEmpty(cart.shipping) && !_.isEmpty(hdshippingMethods)) {
+      cart.shipping.methods = hdshippingMethods;
+    }
   }
 
-  logger.log(`Continue ${cart}${shippinMethods}${carrierInfo}${shippingData}`);
-
-  // aaa ---
-
-  //console.log(params);
+  // console.log(params);
   return updateCart(params)
     .then((response) => {
       // Process cart data.
