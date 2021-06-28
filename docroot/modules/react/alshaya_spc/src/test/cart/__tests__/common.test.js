@@ -1,9 +1,10 @@
 jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
-import utilsRewire, { updateCart } from '../../../../js/backend/v2/common';
+import utilsRewire from '../../../../js/backend/v2/common';
 import { drupalSettings } from '../globals';
 import * as cartData from '../data/cart.json';
+import cartActions from '../../../../js/backend/v2/cart_actions';
 import _ from 'lodash';
 
 describe('Common', () => {
@@ -14,6 +15,7 @@ describe('Common', () => {
     });
 
     afterEach(() => {
+      // Clear all mocks.
       jest.clearAllMocks();
     });
 
@@ -121,6 +123,9 @@ describe('Common', () => {
           status: 200,
         });
 
+        // Reset the static cache used in getCart().
+        window.commerceBackend.setRawCartDataInStorage(null);
+
         const result = await getCartCustomerId();
         expect(axios).toHaveBeenCalled();
         expect(result).toEqual(expectedResult);
@@ -134,15 +139,8 @@ describe('Common', () => {
        input                                                            | expectedResult
        ${null}                                                          | ${500}
        ${{}}                                                            | ${500}
-       ${{ cart_id: 555, action: 'foo' }}                               | ${200}
-       ${{ cart_id: 555, action: 'add item' }}                          | ${400}
-       ${{ cart_id: 555, action: 'add item', sku: 1, quantity: 1 }}     | ${200}
-       ${{ cart_id: 555, action: 'add item', sku: '1', quantity: 1 }}   | ${200}
-       ${{ cart_id: null, action: 'add item', sku: 1, quantity: 1 }}    | ${200}
-       ${{ cart_id: 555, action: 'remove item' }}                       | ${400}
-       ${{ cart_id: 555, action: 'remove item', sku: '1' }}             | ${200}
-       ${{ cart_id: 555, action: 'remove item', sku: 1 }}               | ${200}
-       ${{ cart_id: 555, action: 'remove item', sku: 1 }}               | ${200}
+       ${{ cart_id: 555, action: 'foo' }}                               | ${400}
+       ${{ cart_id: 555, extension: { action: 'foo' }}}                 | ${200}
      `.test('Test that validateRequestData($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
         axios.mockResolvedValue({
           data: {
@@ -161,19 +159,20 @@ describe('Common', () => {
         expect(result).toBe(expectedResult);
       });
 
-      it('With authenticated user but without customer Id', async () => {
+      it('Authenticated user with Cart missing Customer Id', async () => {
         axios.mockResolvedValue({
           data: {},
           status: 200,
         });
 
-        window.drupalSettings.user.uid = 1;
+        window.drupalSettings.userDetails.customerId = 1;
 
         const data = {
           cart_id: 555,
-          action: 'add item',
-          sku: 1,
-          qty: 1,
+          extension: {
+            action: cartActions.cartApplyCoupon,
+          },
+          coupon: 1,
         };
 
         const result = await validateRequestData(data);
@@ -190,14 +189,14 @@ describe('Common', () => {
           status: 200,
         });
 
-        window.drupalSettings.user.uid = 1;
         window.drupalSettings.userDetails.customerId = 789;
 
         const data = {
           cart_id: 555,
-          action: 'add item',
-          sku: 1,
-          qty: 1,
+          extension: {
+            action: cartActions.cartRemoveCoupon,
+          },
+          coupon: 1,
         };
 
         const result = await validateRequestData(data);

@@ -10,7 +10,7 @@ export const drupalSettings = {
     uid: 0,
   },
   userDetails: {
-    customerId: null,
+    customerId: 0,
   },
 };
 
