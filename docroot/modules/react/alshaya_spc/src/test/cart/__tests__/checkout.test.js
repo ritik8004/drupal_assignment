@@ -9,7 +9,7 @@ import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMC
 import cncStoreList from '../data/cnc_stores_list.js';
 import { getCart } from '../../../../js/backend/v2/common';
 import * as productStatus from '../data/product_status.json';
-import paymentMethods from "../data/paymentMethods";
+import paymentMethods from '../data/paymentMethods';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -500,11 +500,11 @@ describe('Checkout', () => {
         let result = await getPaymentMethods();
 
         expect(axios).toHaveBeenCalled();
-        expect(result.length).toEqual(6);
+        expect(result.length).toEqual(4);
         expect(result[0].code).toEqual('checkout_com_upapi_vault');
         expect(result[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
-        expect(result[5].code).toEqual('cashondelivery');
-        expect(result[5].title).toEqual('Cash On Delivery');
+        expect(result[3].code).toEqual('cashondelivery');
+        expect(result[3].title).toEqual('Cash On Delivery');
       });
 
       it('With null value when shipping method is not provided', async () => {
