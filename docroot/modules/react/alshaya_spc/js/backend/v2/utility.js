@@ -78,7 +78,8 @@ const getApiEndpoint = (action, params = {}) => {
         : `/rest/V1/guest-carts/${params.cartId}/updateCart`;
       break;
 
-    // no default
+    default:
+      logger.error(`Endpoint does not exist for action : ${action}`);
   }
 
   return endpoint;
