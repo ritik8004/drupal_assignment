@@ -96,6 +96,13 @@ export default class PaymentMethod extends React.Component {
             // Cart no longer available, redirect user to basket.
             Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
             window.location = Drupal.url('cart');
+          } else if (result.error_code === 'bin_validation_error' && result.error_message !== undefined) {
+            Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.PAYMENT_ERRORS);
+
+            dispatchCustomEvent('spcCheckoutMessageUpdate', {
+              type: 'error',
+              message: result.error_message,
+            });
           } else {
             const errorMessage = result.message === undefined
               ? result.error_message

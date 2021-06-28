@@ -27,4 +27,9 @@ final class CartErrorCodes {
    */
   const CART_CHECKOUT_QUANTITY_MISMATCH = 9010;
 
+  /**
+   * Error code on bin validation.
+   */
+  const CART_BIN_VALIDATION_ERROR = 'bin_validation_error';
+
 }
