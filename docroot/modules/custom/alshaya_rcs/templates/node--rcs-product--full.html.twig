@@ -104,7 +104,9 @@ set classes = [
 
           <div class="mobile-content-wrapper">
             <div class="basic-details-wrapper">
-              {{ content.field_skus }}
+              <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
+                {% include "@alshaya_rcs/rcs-sku-base-form.html.twig" %}
+              </div>
               {% if quantity_limit_enabled == true %}
                 <div class="order-quantity-limit-message"></div>
               {% endif %}
