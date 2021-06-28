@@ -94,7 +94,7 @@
           if (typeof drupalSettings.rcsPage !== 'undefined') {
             // Hard coded list of html attributes which we need to parse to
             // find field placeholders.
-            const attributes = ['href', 'src', 'alt', 'about', 'content', 'title'];
+            const attributes = ['href', 'src', 'alt', 'about', 'content', 'title', 'data-sku', 'data-sku-type'];
 
             // Identify all the field placeholders and get the replacement
             // value. Parse the html to find all occurrences at apply the

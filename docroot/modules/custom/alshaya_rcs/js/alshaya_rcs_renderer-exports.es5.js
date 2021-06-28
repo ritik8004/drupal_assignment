@@ -361,6 +361,14 @@ globalThis.rcsPhRenderingEngine.computePhFilters = function (input, filter) {
       value = quantityDroprown.html();
       break;
 
+    case 'data-sku':
+      value = input.sku;
+      break;
+
+    case 'data-sku-type':
+      value = input.type_id;
+      break;
+
     case 'add_to_cart':
       value = '';
 
