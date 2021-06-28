@@ -7,6 +7,12 @@
 
   ul {
     margin-#{$left}: -0.75rem;
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        margin-right: -0.5rem;
+      }
+    }
   }
 }
 

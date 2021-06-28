@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @guest @bpaeuat
+@javascript @plp-addtocart @smoke @guest @bpaeuat @mckwuat
 Feature: Testing new PLP-Add to cart functionality for Guest user on simple product
 
   @desktop @plp-addtocart

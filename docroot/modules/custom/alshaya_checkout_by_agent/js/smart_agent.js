@@ -56,6 +56,13 @@
 
           $('nav.menu--account').addClass('smart-agent-login');
           $('nav.menu--account').after(loggedInMessageMarkup);
+
+          // Check for case when both customer and agent are logged in.
+          // We use a different menu for mobile.
+          var loggedInMenu = $('#block-alshayamyaccountlinks-2');
+          if (loggedInMenu.length > 0) {
+            loggedInMenu.append(loggedInMessageMarkup);
+          }
         }
 
         // On click on smart agent logout, remove cookie and logged-in message.

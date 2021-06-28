@@ -159,7 +159,7 @@ class AlshayaConfigManager {
    * @param array $options
    *   Array of keys to replace when using MODE_REPLACE_KEY.
    */
-  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_REPLACE, array $options = []) {
+  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_ADD_MISSING, array $options = []) {
     if (empty($configs)) {
       return;
     }

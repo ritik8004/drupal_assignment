@@ -225,9 +225,9 @@ body.sub-brand-logo {
         position: relative;
         margin-#{$left}: 0;
         margin-top: 0;
+        max-width: 5.3125rem;
 
         @include breakpoint($only-tablet) {
-          max-width: 5.3125rem;
           margin: 0;
 
           img {
@@ -236,10 +236,6 @@ body.sub-brand-logo {
         }
 
         @include aerieSeparator();
-
-        @include breakpoint($desktop) {
-          max-width: 5.3125rem;
-        }
       }
     }
   }

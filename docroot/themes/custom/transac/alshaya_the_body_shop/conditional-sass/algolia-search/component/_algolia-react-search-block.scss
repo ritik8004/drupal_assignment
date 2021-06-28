@@ -32,8 +32,12 @@
 
     .react-autosuggest__suggestions-container {
       &--open {
-        border: none;
+        border: 1px solid $algolia-trending-title-border;
         background-color: $algolia-search-bar-suggestion-background;
+
+        @include breakpoint($only-mobile) {
+          border: none;
+        }
       }
     }
   }

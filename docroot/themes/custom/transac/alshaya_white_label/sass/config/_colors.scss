@@ -46,6 +46,7 @@ $scarlet-two: #d0011b;
 $pale-grey: #e8eff5;
 $tomato: #e6591a;
 $medium-green: #3ab549;
+$badge-green: #2d9921;
 // Mother care custom colors
 $white-smoke: #f4f4f4;
 $white-smoke-light: #f2f2f2;
@@ -155,6 +156,7 @@ $_postpay_blue: #8abbd5;
 $blueberri_boy: #0078ff;
 $_plp-add-to-cart-disabled-qty: #aeaeb2;
 $_smart_agent_banner: rgb(12, 161, 77);
+$_plp_cta_hover: #e85d17;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1616,14 +1618,8 @@ $rr-review-count: $brownish-grey;
 $rr-review-summary-txt: $black-two;
 $rr-recommendation-icon: $white-five;
 $rr-recommendation-icon-bg: $marine-blue;
-$rr-select-text: $grey-light;
 $rr-select-arrow-bg: $white-five;
 $rr-select-border: $warm-grey-two;
-$rr-select-area-bg: $white-smoke-light;
-$rr-select-bg: $white-five;
-$rr-select-bg-hover: $white-four;
-$rr-select-option-bg: $white-five;
-$rr-select-hover-border: $warm-grey-two;
 $rr-switchOn-active-bg: $marine-blue;
 $rr-switchOn-active-txt: $white-five;
 $rr-switch-bg: $white;
@@ -1689,6 +1685,10 @@ $rr-form-head-row-border: $marine-blue-two;
 $rr-thumbnail-img-bg: $white-smoke-light;
 $rr-write-review-disabled-btn: $light-greyish;
 $rr-write-review-disabled-border: $light-greyish;
+$rr-badges-text: $black-two;
+$rr-verified-purchaser-text: $badge-green;
+$rr-verified-purchaser-icon-bg: $badge-green;
+$rr-verified-purchaser-icon: $white-five;
 
 // Fawry colors.
 $fawry-desc-prefix: $_gray_222;
@@ -1699,6 +1699,7 @@ $fawry-banner: $blueberri_boy;
 $plp-disabled-qty-bg: $_plp-add-to-cart-disabled-qty;
 $plp-hover-slider-dot-color: $_gray;
 $plp-hover-slider-dot-container-bg-color: $white-five;
+$plp-primary-cta-hover-bg: $_plp_cta_hover;
 
 // PLP Quick view drawer.
 $plp-quick-view-background: $white-five;
@@ -1709,6 +1710,7 @@ $plp-quick-view-product-size-border-hover: $marine-blue;
 $plp-quick-view-product-size-active-bg: $marine-blue;
 $plp-quick-view-product-size-text-disabled: $marine-blue;
 $plp-quick-view-product-success: $_spc-radio-filled;
+$plp-quick-view-product-group-size-active: $primary_link-active;
 
 // Smart Agent colors.
 $smart-agent-banner-bg: $_smart_agent_banner;

@@ -244,7 +244,7 @@ export default class AddToBagSimple extends React.Component {
 
   render() {
     const {
-      sku, productData, url,
+      sku, isBuyable, url,
     } = this.props;
 
     const {
@@ -254,7 +254,7 @@ export default class AddToBagSimple extends React.Component {
     let { qtyLimitMessage } = this.state;
 
     // Early return if product is not buyable.
-    if (!isProductBuyable(productData.is_buyable)) {
+    if (!isProductBuyable(isBuyable)) {
       return (
         <NotBuyableButton url={url} />
       );

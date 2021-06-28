@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1e730aa6936bad7583d52d8dc1bb677",
+    "content-hash": "1b660eb2e9f16b5f4d06fe154fe5513d",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13400,7 +13400,8 @@
                     }
                 },
                 "patches_applied": {
-                    "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
+                    "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
+                    "CORE-31034: Make the wait during delete configurable": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

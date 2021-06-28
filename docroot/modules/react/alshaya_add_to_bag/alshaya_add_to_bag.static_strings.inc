@@ -50,6 +50,10 @@ function _alshaya_add_to_bag_strings() {
       'key' => 'purchase_limit_error_msg',
       'value' => t('Purchase limit has been reached'),
     ],
+    [
+      'key' => 'view_more',
+      'value' => t('view more'),
+    ],
   ];
 }
 
@@ -70,6 +74,9 @@ function _alshaya_add_to_bag_translations() {
       ],
       'add to cart' => [
         'ar' => 'أضيفي إلى الحقيب',
+      ],
+      'view more' => [
+        'ar' => 'عرض التفاصيل',
       ],
     ],
   ];

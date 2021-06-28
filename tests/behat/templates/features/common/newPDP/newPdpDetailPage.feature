@@ -1,4 +1,4 @@
-@javascript @smoke @desktop @newPdp @flsauat @flkwprod
+@javascript @smoke @desktop @newPdp
 Feature: Testing new PDP page for desktop
 
   Background:
@@ -9,13 +9,42 @@ Feature: Testing new PDP page for desktop
     And I wait 10 seconds
     And I wait for the page to load
 
+  Scenario: To verify user is able to see the Product info with size drawer
+    Then I should see a ".magv2-main .magv2-pdp-title-wrapper" element on page
+    Then I should see a ".magv2-sidebar .magv2-pdp-price .magv2-pdp-price-container" element on page
+    Then I should see a ".magv2-size-btn-wrapper" element on page
+    And I should see a ".magv2-qty-container .magv2-qty-btn--up" element on page
+    And I click jQuery ".magv2-qty-container .magv2-qty-btn--up" element on page
+    And I wait 10 seconds
+    And I click jQuery ".magv2-qty-container .magv2-qty-btn--down" element on page
+    And I wait 10 seconds
+    And I click the element ".magv2-size-btn-wrapper" on page
+    And I wait for AJAX to finish
+    Then I should see a ".overlay-select" element on page
+    And I should see a ".overlay-select .size-guide" element on page
+    And I click jQuery ".magv2-select-popup-content-wrapper .size-guide a" element on page
+    And I wait for AJAX to finish
+    And I wait 2 seconds
+    Then I should see a ".ui-dialog-content .modal-content" element on page
+    And I click jQuery ".ui-dialog-titlebar-close" element on page
+    And I wait for AJAX to finish
+    And I wait 2 seconds
+    And I should see a ".overlay-select .magv2-confirm-size-btn" element on page
+    And I click jQuery ".magv2-select-popup-content-wrapper .magv2-confirm-size-btn" element on page
+    And I wait for AJAX to finish
+    Then I should see a ".magv2-qty-container" element on page
+
   Scenario: To verify user is able to see product details
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     Then I should see a ".magv2-pdp-description-wrapper .magv2-pdp-section-title" element on page
-    And I should see "product details"
     And the element ".magv2-pdp-description-wrapper .magv2-pdp-section-text.short-desc" should exist
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
-    And I should see "read more"
+    And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
+    And I wait for AJAX to finish
+    Then I should see a ".desc-overlay" element on page
+    Then I should see a ".desc-overlay .desc-label-text-wrapper" element on page
+    Then I should see a ".desc-overlay .magv2-desc-popup-pdp-item-code-attribute" element on page
+
 
   Scenario: To verify user is able to see product details when clicking on read more link
     Then I should see a ".magv2-pdp-description-wrapper" element on page
@@ -56,7 +85,6 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".sharethis-wrapper" element on page
     Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
     Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
-    Then I should see the link for ".sharethis-wrapper .st_instagram_custom"
     And I click on ".copy-button" element
     And I navigate to the copied URL
     And I wait for the page to load
@@ -69,16 +97,43 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-pdp-sticky-header .magv2-header-wrapper #sticky-header-btn #add-to-cart-sticky" element on page
 
   @language
-  Scenario: To verify user is able to see product details
+  Scenario: To verify user is able to see the Product info with size drawer
+    When I follow "{language_link}"
+    And I wait for the page to load
+    And I wait for AJAX to finish
+    Then I should see a ".magv2-main .magv2-pdp-title-wrapper" element on page
+    Then I should see a ".magv2-sidebar .magv2-pdp-price .magv2-pdp-price-container" element on page
+    Then I should see a ".magv2-size-btn-wrapper" element on page
+    And I click the element ".magv2-size-btn-wrapper" on page
+    And I wait for AJAX to finish
+    Then I should see a ".overlay-select" element on page
+    And I should see a ".overlay-select .size-guide" element on page
+    And I click jQuery ".magv2-select-popup-content-wrapper .size-guide a" element on page
+    And I wait for AJAX to finish
+    And I wait 2 seconds
+    Then I should see a ".ui-dialog-content .modal-content" element on page
+    And I click jQuery ".ui-dialog-titlebar-close" element on page
+    And I wait for AJAX to finish
+    And I wait 2 seconds
+    And I should see a ".overlay-select .magv2-confirm-size-btn" element on page
+    And I click jQuery ".magv2-select-popup-content-wrapper .magv2-confirm-size-btn" element on page
+    And I wait for AJAX to finish
+    Then I should see a ".magv2-qty-container" element on page
+
+  @language
+  Scenario: To verify user is able to see product details with Read More
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     Then I should see a ".magv2-pdp-description-wrapper .magv2-pdp-section-title" element on page
-    And I should see "product details"
     And the element ".magv2-pdp-description-wrapper .magv2-pdp-section-text.short-desc" should exist
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
-    And I should see "اقرأ المزيد"
+    And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
+    And I wait for AJAX to finish
+    Then I should see a ".desc-overlay" element on page
+    Then I should see a ".desc-overlay .desc-label-text-wrapper" element on page
+    Then I should see a ".desc-overlay .magv2-desc-popup-pdp-item-code-attribute" element on page
 
   @language
   Scenario: To verify user is able to see product details when clicking on read more link
@@ -129,7 +184,6 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".sharethis-wrapper" element on page
     Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
     Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
-    Then I should see the link for ".sharethis-wrapper .st_instagram_custom"
     And I click on ".copy-button" element
     And I navigate to the copied URL
     And I wait for the page to load
