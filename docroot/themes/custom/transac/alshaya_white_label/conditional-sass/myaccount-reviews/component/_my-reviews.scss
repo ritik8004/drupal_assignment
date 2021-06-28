@@ -78,25 +78,12 @@
     }
   }
 
-  .thumbnail-img-block {
-    display: flex;
-    overflow-y: auto;
-
-    @include breakpoint($tablet) {
-      position: relative;
-    }
-
-    .thumbnail-img {
-      @include bv-photo-upload-container ();
-
-      img {
-        @include bv-photo-upload-image ();
-      }
-    }
-  }
-
   .user-reviews {
     display: flex;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
 
     .user-desc {
       width: 66%;
@@ -181,6 +168,27 @@
         width: 100%;
         margin: 0 0.5rem;
       }
+    }
+  }
+}
+
+.thumbnail-img-block {
+  display: flex;
+  overflow-y: auto;
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.25rem;
+  }
+
+  @include breakpoint($tablet) {
+    position: relative;
+  }
+
+  .thumbnail-img {
+    @include bv-photo-upload-container ();
+
+    img {
+      @include bv-photo-upload-image ();
     }
   }
 }
