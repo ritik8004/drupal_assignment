@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b660eb2e9f16b5f4d06fe154fe5513d",
+    "content-hash": "c45074df9f91e1fd1992aa11428fe41d",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1134,7 +1134,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:fengyuanchen/cropper.git",
+                "url": "https://github.com/fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -1152,7 +1152,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -13227,11 +13227,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "dev-3.0.x",
+            "version": "3.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "70f3afd4163cefff5355c5ebc99b68a9de688250"
+                "reference": "3.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-alpha1.zip",
+                "reference": "3.0.0-alpha1",
+                "shasum": "851bc886e6f9b859873d7c35cd9db4cbfe04af56"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -13243,15 +13249,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.0.x": "3.0.x-dev"
-                },
                 "drupal": {
-                    "version": "3.0.x-dev",
-                    "datestamp": "1618663392",
+                    "version": "3.0.0-alpha1",
+                    "datestamp": "1622784382",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
@@ -13294,8 +13297,7 @@
             "support": {
                 "source": "https://git.drupal.org/project/search_api_algolia.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_algolia"
-            },
-            "time": "2021-04-17T12:38:18+00:00"
+            }
         },
         {
             "name": "drupal/search_api_autocomplete",
@@ -21811,6 +21813,7 @@
                 "symfony",
                 "words"
             ],
+            "abandoned": "use `EnglishInflector` from the String component instead",
             "time": "2019-05-30T09:28:08+00:00"
         },
         {
@@ -24991,7 +24994,6 @@
                 }
             ],
             "description": "Command line tool to detect usage of deprecated code",
-            "abandoned": true,
             "time": "2017-09-06T12:14:01+00:00"
         },
         {
@@ -25622,7 +25624,7 @@
         "drupal/redirect": 15,
         "drupal/role_delegation": 15,
         "drupal/s3fs": 15,
-        "drupal/search_api_algolia": 20,
+        "drupal/search_api_algolia": 15,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
         "drupal/sessions_expire": 20,
