@@ -60,6 +60,9 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
   ];
+
+  $cart_config = \Drupal::config('alshaya_acm.cart_config');
+  $page['#attached']['drupalSettings']['alshaya_spc']['cart_config']['max_cart_qty'] = $cart_config->get('max_cart_qty');
 }
 
 function template_preprocess_rcs_commerce_price(array &$variables) {
