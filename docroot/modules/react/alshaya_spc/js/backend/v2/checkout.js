@@ -14,7 +14,7 @@ import {
   associateCartToCustomer,
 } from './common';
 import { getDefaultErrorMessage } from './error';
-import { logger } from './utility';
+import { isUserAuthenticated, logger } from './utility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -121,8 +121,9 @@ const formatShippingEstimatesAddress = (address) => {
  * @return {object}.
  *   The data.
  */
-const getHomeDeliveryshippingMethods = (shipping) => {
-  formatShippingEstimatesAddress(shipping.address);
+const getHomeDeliveryShippingMethods = (address) => {
+  formatShippingEstimatesAddress(address);
+  return null;
 };
 
 /**
@@ -224,6 +225,36 @@ const updateBilling = (billingData) => {
 const validateAddressAreaCity = (address) => {
   logger.info(`${address}`);
 };
+
+/**
+ * Get last order of the customer.
+ * @todo implement this.
+ */
+const getLastOrder = () => [];
+
+/**
+ * Apply shipping from last order.
+ * @todo implement this.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @return {*}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = () => false;
+
+/**
+ * Get payment method from last order.
+ * @todo implement this
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @return {*}
+ *   FALSE if something went wrong, payment method name otherwise.
+ */
+const getDefaultPaymentFromOrder = () => null;
 
 /**
  * Gets payment methods.
@@ -488,7 +519,6 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
 
 /**
  * Adding shipping on the cart.
- * @todo implement this
  *
  * @param {object} shippingData
  *   Shipping address info.
@@ -569,7 +599,6 @@ const selectHd = (address, method, billing, shippingMethods) => {
 
 /**
  * Apply defaults to cart for customer.
- * @todo implement this
  *
  * @param {object} cartData
  *   The cart data object.
@@ -579,13 +608,52 @@ const selectHd = (address, method, billing, shippingMethods) => {
  *   The data.
  */
 const applyDefaults = (data, uid) => {
-  logger.info(`${data}${uid}`);
-  getHomeDeliveryshippingMethods({});
-  getDefaultAddress(data);
-  selectHd({}, {}, {}, {});
-  return false;
-};
+  // @todo Update this function to return data after processing with user inputs.
+  if (!_.isEmpty(data.shipping.method)) {
+    return data;
+  }
 
+  // Get last order only for Drupal Customers.
+  const order = isUserAuthenticated()
+    ? getLastOrder(uid)
+    : [];
+
+  // Try to apply defaults from last order.
+  if (!_.isEmpty(order)) {
+    // If cnc order but cnc is disabled.
+    if (_.includes(order.shipping.method, 'click_and_collect') && !getCncStatusForCart()) {
+      return data;
+    }
+
+    const response = applyDefaultShipping(order);
+    if (response) {
+      // @todo Check if returns empty string for anonyous (CORE-31245).
+      response.payment.default = getDefaultPaymentFromOrder(order);
+      return response;
+    }
+  }
+
+  // Select default address from address book if available.
+  const address = getDefaultAddress(data);
+  if (address) {
+    const methods = getHomeDeliveryShippingMethods(address);
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+      return selectHd(address, methods[0], address, methods);
+    }
+  }
+
+  // If address already available in cart, use it.
+  if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
+    const methods = getHomeDeliveryShippingMethods(data.shipping.address);
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+      return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
+    }
+  }
+
+  return data;
+};
 
 /**
  * Process cart data for checkout.
@@ -615,7 +683,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   if (typeof data.shipping.methods === 'undefined' && typeof data.shipping.address !== 'undefined' && data.shipping.type !== 'click_and_collect') {
-    const shippingMethods = getHomeDeliveryshippingMethods(data.shipping);
+    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping.address);
     if (typeof shippingMethods.error !== 'undefined') {
       return shippingMethods;
     }
@@ -696,15 +764,14 @@ window.commerceBackend.getCartForCheckout = () => {
     return new Promise((resolve) => resolve({ error: true }));
   }
 
-  getCart()
-    .then((response) => {
-      if (typeof response.data === 'undefined' || response.data.length === 0) {
-        if (typeof response.data.error_message !== 'undefined') {
-          logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
-        }
+  return getCart()
+    .then(async (response) => {
+      if (_.isEmpty(response.data) || !_.isEmpty(response.data.error_message)) {
+        logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
+        return new Promise((resolve) => resolve(response.data));
       }
 
-      if (typeof response.data.items === 'undefined' || response.data.items.length === 0) {
+      if (_.isEmpty(response.data.cart) || _.isEmpty(response.data.cart.items)) {
         logger.error(`Checkout accessed without items in cart for id:${cartId}`);
 
         const error = {
@@ -718,9 +785,8 @@ window.commerceBackend.getCartForCheckout = () => {
         return new Promise((resolve) => resolve(error));
       }
 
-      const processedData = getProcessedCheckoutData(response);
-
-      return new Promise((resolve) => resolve(processedData));
+      response.data = await getProcessedCheckoutData(response.data);
+      return response;
     })
     .catch((response) => {
       logger.error(`Error while getCartForCheckout controller. Error: ${response.message}. Code: ${response.status}`);
@@ -732,9 +798,8 @@ window.commerceBackend.getCartForCheckout = () => {
           error_message: getDefaultErrorMessage(),
         },
       };
-      return new Promise((resolve) => resolve(error));
+      return error;
     });
-  return null;
 };
 
 /**
@@ -873,7 +938,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
         method_code: carrierInfo.method,
       });
     } else {
-      shippingMethods = getHomeDeliveryshippingMethods(shippingData);
+      shippingMethods = getHomeDeliveryShippingMethods(shippingData);
       hdshippingMethods = shippingMethods;
     }
 
