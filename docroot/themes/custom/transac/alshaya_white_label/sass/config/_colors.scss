@@ -46,6 +46,7 @@ $scarlet-two: #d0011b;
 $pale-grey: #e8eff5;
 $tomato: #e6591a;
 $medium-green: #3ab549;
+$badge-green: #2d9921;
 // Mother care custom colors
 $white-smoke: #f4f4f4;
 $white-smoke-light: #f2f2f2;
@@ -1617,14 +1618,8 @@ $rr-review-count: $brownish-grey;
 $rr-review-summary-txt: $black-two;
 $rr-recommendation-icon: $white-five;
 $rr-recommendation-icon-bg: $marine-blue;
-$rr-select-text: $grey-light;
 $rr-select-arrow-bg: $white-five;
 $rr-select-border: $warm-grey-two;
-$rr-select-area-bg: $white-smoke-light;
-$rr-select-bg: $white-five;
-$rr-select-bg-hover: $white-four;
-$rr-select-option-bg: $white-five;
-$rr-select-hover-border: $warm-grey-two;
 $rr-switchOn-active-bg: $marine-blue;
 $rr-switchOn-active-txt: $white-five;
 $rr-switch-bg: $white;
@@ -1690,6 +1685,10 @@ $rr-form-head-row-border: $marine-blue-two;
 $rr-thumbnail-img-bg: $white-smoke-light;
 $rr-write-review-disabled-btn: $light-greyish;
 $rr-write-review-disabled-border: $light-greyish;
+$rr-badges-text: $black-two;
+$rr-verified-purchaser-text: $badge-green;
+$rr-verified-purchaser-icon-bg: $badge-green;
+$rr-verified-purchaser-icon: $white-five;
 
 // Fawry colors.
 $fawry-desc-prefix: $_gray_222;
