@@ -1,9 +1,8 @@
-import { getbazaarVoiceSettings } from './api/request';
+import { getbazaarVoiceSettings, getUserDetails } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 import { getStorageInfo } from './storage';
-import smoothScrollTo from './smoothScroll';
-
-const bazaarVoiceSettings = getbazaarVoiceSettings();
+import { smoothScrollTo } from './smoothScroll';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 /**
  * Email address validation.
@@ -26,11 +25,11 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const prepareRequest = (elements, fieldsConfig) => {
+export const prepareRequest = (elements, fieldsConfig, productId) => {
   let params = '';
-  const userId = bazaarVoiceSettings.reviews.user.user_id;
-  const userStorage = getStorageInfo(`bvuser_${userId}`);
-
+  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+  const userDetails = getUserDetails(productId);
+  const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
@@ -38,7 +37,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
     try {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
-          if (userId === 0 && userStorage !== null) {
+          if (userDetails.user.userId === 0 && userStorage !== null) {
             // Add email value to anonymous user storage.
             if (userStorage.email === undefined
               || (userStorage.email !== undefined
@@ -57,11 +56,11 @@ export const prepareRequest = (elements, fieldsConfig) => {
             if (userStorage.nickname === undefined
               || (userStorage.nickname !== undefined
               && userStorage.nickname !== elements[id].value)) {
-              userStorage.nickname = elements[id].value;
+              userStorage.nickname = encodeURIComponent(elements[id].value);
             }
           }
         }
-        params += `&${id}=${elements[id].value}`;
+        params += `&${id}=${encodeURIComponent(elements[id].value)}`;
       }
     } catch (e) { return null; }
 
@@ -81,9 +80,9 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (bazaarVoiceSettings.reviews.user.user_id !== 0 && userStorage.uasToken !== undefined) {
+    if (userDetails.user.userId !== 0 && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
-    } else if (userId === 0 && userStorage.bvUserId !== undefined) {
+    } else if (userDetails.user.userId === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;
     }
   }
@@ -111,7 +110,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const validateRequest = (elements, fieldsConfig, e) => {
+export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
   let isError = false;
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
@@ -158,6 +157,9 @@ export const validateRequest = (elements, fieldsConfig, e) => {
             document.getElementById(`${id}-error`).classList.add('error');
             isError = true;
           }
+          if (!isError) {
+            document.getElementById(`${id}-error`).classList.remove('error');
+          }
         } else {
           if (groupType === 'textfield'
            || groupType === 'textarea'
@@ -169,8 +171,10 @@ export const validateRequest = (elements, fieldsConfig, e) => {
           document.getElementById(`${id}-error`).classList.remove('rating-error');
         }
         // Scroll to error message.
-        if (isError) {
-          smoothScrollTo(e, '.error');
+        if (isError && newPdp) {
+          smoothScrollTo(e, '#reviews-section .error', newPdp, 'write_review');
+        } else if (isError) {
+          smoothScrollTo(e, '.error', '', 'write_review');
         }
       }
     } catch (exception) { return null; }
@@ -186,11 +190,5 @@ export const validateRequest = (elements, fieldsConfig, e) => {
  */
 export const onReviewPost = (e) => {
   // Dispatch event so that other can use this.
-  const event = new CustomEvent('reviewPosted', {
-    bubbles: true,
-    detail: {
-      formElement: () => e.target.elements,
-    },
-  });
-  document.dispatchEvent(event);
+  dispatchCustomEvent('reviewPosted', { formElement: () => e.target.elements });
 };

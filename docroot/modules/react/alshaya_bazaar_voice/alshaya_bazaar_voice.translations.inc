@@ -133,5 +133,29 @@ function _alshaya_bazaar_voice_translations() {
     'Tell others what you think. Be the first to review this product.' => [
       'ar' => 'أخبر الآخرين عن رأيك. كن أول من يراجع هذا المنتج.',
     ],
+    'View review' => [
+      'ar' => 'عرض المراجعة',
+    ],
+    'Featured' => [
+      'ar' => 'أهم المراجعات',
+    ],
+    'Top' => [
+      'ar' => 'أفضل',
+    ],
+    'Contributor' => [
+      'ar' => 'المراجعين',
+    ],
+    'Verified Purchaser' => [
+      'ar' => 'مشترٍ معتمد',
+    ],
+    'Expert' => [
+      'ar' => 'خبير',
+    ],
+    'Staff' => [
+      'ar' => 'موظف',
+    ],
+    'Original posted on' => [
+      'ar' => 'تم نشرها في الأصل على',
+    ],
   ];
 }
