@@ -332,7 +332,7 @@ const applyDefaults = (data, uid) => {
   // Select default address from address book if available.
   const address = getDefaultAddress(data);
   if (address) {
-    const methods = getHomeDeliveryShippingMethods(data.shipping.address);
+    const methods = getHomeDeliveryShippingMethods(address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], address, methods);
