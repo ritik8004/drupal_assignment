@@ -198,25 +198,6 @@ const formatAddressForShippingBilling = (address) => {
 };
 
 /**
- * Adding shipping on the cart.
- * @todo implement this
- *
- * @param {object} shippingData
- *   Shipping address info.
- * @param {string} action
- *   Action to perform.
- * @param {bool} updateBilling
- *   Whether billing needs to be updated or not.
- *
- * @return {object}
- *   Cart data.
- */
-const addShippingInfo = (shippingData, action, updateBilling) => {
-  logger.info(`${shippingData}${action}${updateBilling}`);
-  formatAddressForShippingBilling({});
-};
-
-/**
  * Update billing info on cart.
  * @todo implement this
  *
@@ -242,48 +223,6 @@ const updateBilling = (billingData) => {
  */
 const validateAddressAreaCity = (address) => {
   logger.info(`${address}`);
-};
-
-/**
- * Select HD address and method from possible defaults.
- * @todo implement this
- *
- * @param {object} address
- *   Address object.
- * @param {object} method
- *   Payment method.
- * @param {objecty} billing
- *   Billing address.
- * @param {object} shippingMethods
- *   Shipping methods.
- *
- * @return {object|bool}
- *   FALSE if something went wrong, updated cart data otherwise.
- */
-const selectHd = (address, method, billing, shippingMethods) => {
-  addShippingInfo({}, '', false);
-  updateBilling({});
-  validateAddressAreaCity({});
-  logger.info(`${address}${method}${billing}${shippingMethods}`);
-};
-
-/**
- * Apply defaults to cart for customer.
- * @todo implement this
- *
- * @param {object} cartData
- *   The cart data object.
- * @param {integer} uid
- *   Drupal User ID.
- * @return {object}.
- *   The data.
- */
-const applyDefaults = (data, uid) => {
-  logger.info(`${data}${uid}`);
-  getHomeDeliveryshippingMethods({});
-  getDefaultAddress(data);
-  selectHd({}, {}, {}, {});
-  return false;
 };
 
 /**
@@ -548,6 +487,107 @@ const getMethodCodeForFrontend = (code) => {
 window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
 
 /**
+ * Adding shipping on the cart.
+ * @todo implement this
+ *
+ * @param {object} shippingData
+ *   Shipping address info.
+ * @param {string} action
+ *   Action to perform.
+ * @param {bool} updateBillingData
+ *   Whether billing needs to be updated or not.
+ *
+ * @return {object}
+ *   Cart data.
+ */
+const addShippingInfo = async (shippingData, action, updateBillingData) => {
+  const params = {
+    shipping: {},
+    extension: action,
+  };
+
+  const carrierInfo = (!_.isEmpty(shippingData.carrier_info))
+    ? shippingData.carrier_info
+    : null;
+
+  const fieldsData = (!_.isEmpty(shippingData.customer_address_id))
+    ? shippingData.address
+    : formatAddressForShippingBilling(shippingData);
+
+  params.shipping.shipping_address = fieldsData;
+  params.shipping.shipping_carrier_code = carrierInfo.code;
+  params.shipping.shipping_method_code = carrierInfo.method;
+
+  let cart = updateCart(params)
+    .then((response) => response.data)
+    .catch((response) => {
+      // @todo test error
+      const error = { ...response };
+      return error;
+    });
+
+  // If cart update has error.
+  if (_.has(cart.data, 'error')) {
+    return cart;
+  }
+
+  // If billing needs to updated or billing is not available added at all
+  // in the cart. Assuming if name is not set in billing means billing is
+  // not set. City with value 'NONE' means, that this was added in CnC
+  // by default and not changed by user.
+  if (updateBillingData
+    || _.isEmpty(cart.billing_address) || _.isEmpty(cart.billing_address.firstname)
+    || cart.billing_address.city === 'NONE') {
+    cart = await updateBilling(params.shipping.shipping_address);
+  }
+
+  return cart;
+};
+
+/**
+ * Select HD address and method from possible defaults.
+ * @todo implement this
+ *
+ * @param {object} address
+ *   Address object.
+ * @param {object} method
+ *   Payment method.
+ * @param {objecty} billing
+ *   Billing address.
+ * @param {object} shippingMethods
+ *   Shipping methods.
+ *
+ * @return {object|bool}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const selectHd = (address, method, billing, shippingMethods) => {
+  addShippingInfo({}, '', false);
+  updateBilling({});
+  validateAddressAreaCity({});
+  logger.info(`${address}${method}${billing}${shippingMethods}`);
+};
+
+/**
+ * Apply defaults to cart for customer.
+ * @todo implement this
+ *
+ * @param {object} cartData
+ *   The cart data object.
+ * @param {integer} uid
+ *   Drupal User ID.
+ * @return {object}.
+ *   The data.
+ */
+const applyDefaults = (data, uid) => {
+  logger.info(`${data}${uid}`);
+  getHomeDeliveryshippingMethods({});
+  getDefaultAddress(data);
+  selectHd({}, {}, {}, {});
+  return false;
+};
+
+
+/**
  * Process cart data for checkout.
  *
  * @param {object} cartData
@@ -556,6 +596,10 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
+  if (cartData === null) {
+    return cartData;
+  }
+
   let data = _.cloneDeep(cartData);
   if (typeof data.error !== 'undefined' && data.error === true) {
     return data;
@@ -770,11 +814,7 @@ const prepareShippingData = (shippingInfo) => {
  */
 window.commerceBackend.addShippingMethod = async (data) => {
   // console.log(data);
-  const params = {
-    extension: data,
-  };
-
-  let cart = {};
+  let cart = null;
   const shippingInfo = { ...data.shipping_info };
   const billingData = { ...data.update_billing };
   const email = { ...shippingInfo.static.email };
@@ -857,24 +897,16 @@ window.commerceBackend.addShippingMethod = async (data) => {
     const cartId = await window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for HD. Data: ${logData} Address: ${logAddress} Cart: ${cartId}`);
 
-    cart = addCncShippingInfo(shippingInfo, data.action, billingData);
+    cart = addShippingInfo(shippingInfo, data.action, billingData);
     if (!_.isEmpty(cart) && !_.isEmpty(cart.shipping) && !_.isEmpty(hdshippingMethods)) {
       cart.shipping.methods = hdshippingMethods;
     }
   }
 
-  // console.log(params);
-  return updateCart(params)
-    .then((response) => {
-      // Process cart data.
-      response.data = getProcessedCheckoutData(response.data);
-      return response;
-    })
-    .catch((response) => {
-      // @todo test error
-      const error = { ...response };
-      return error;
-    });
+  // Process cart data.
+  cart = getProcessedCheckoutData(cart);
+
+  return cart;
 };
 
 export {

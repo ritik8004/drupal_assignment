@@ -687,8 +687,13 @@ const updateCart = async (data) => {
       if (typeof response.data.error !== 'undefined' && response.data.error) {
         return response;
       }
+
+      // Format data.
+      response.data = formatCart(response.data);
+
       // Update the cart data in storage.
       window.commerceBackend.setRawCartDataInStorage(response.data);
+
       return response;
     })
     .catch((response) => {
