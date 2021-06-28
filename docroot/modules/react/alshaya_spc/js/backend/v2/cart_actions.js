@@ -2,9 +2,6 @@
  * Class contains al the actions performed on the cart.
  */
 const cartActions = {
-  cartAddItem: 'add item',
-  cartUpdateItem: 'update item',
-  cartRemoveItem: 'remove item',
   cartApplyCoupon: 'apply coupon',
   cartRemoveCoupon: 'remove coupon',
   cartShippingUpdate: 'update shipping',
