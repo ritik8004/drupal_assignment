@@ -69,24 +69,29 @@ const ReviewDescription = ({
                   </div>
                 </ConditionalView>
               </div>
-              {!reviewDescriptionData.IsSyndicated
-                && (
+              <ConditionalView condition={!reviewDescriptionData.IsSyndicated
+                && bazaarVoiceSettings.reviews.bazaar_voice.comment_submission}
+              >
                 <ReviewCommentForm
                   ReviewId={reviewDescriptionData.Id}
                 />
-                )}
+              </ConditionalView>
               <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
                 <ReviewResponseDisplay
                   reviewId={reviewDescriptionData.Id}
                   reviewResponses={reviewDescriptionData.ClientResponses}
                 />
               </ConditionalView>
-              <div className="review-comment-display">
-                <ReviewCommentDisplay
-                  reviewId={reviewDescriptionData.Id}
-                  reviewsComment={reviewsComment}
-                />
-              </div>
+              <ConditionalView
+                condition={bazaarVoiceSettings.reviews.bazaar_voice.comment_submission}
+              >
+                <div className="review-comment-display">
+                  <ReviewCommentDisplay
+                    reviewId={reviewDescriptionData.Id}
+                    reviewsComment={reviewsComment}
+                  />
+                </div>
+              </ConditionalView>
             </div>
           </ConditionalView>
           {reviewDescriptionData.IsSyndicated
@@ -101,29 +106,6 @@ const ReviewDescription = ({
               </div>
             </div>
             )}
-          <ConditionalView
-            condition={bazaarVoiceSettings.reviews.bazaar_voice.comment_submission}
-          >
-            <ReviewCommentForm
-              ReviewId={reviewDescriptionData.Id}
-            />
-          </ConditionalView>
-          <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
-            <ReviewResponseDisplay
-              reviewId={reviewDescriptionData.Id}
-              reviewResponses={reviewDescriptionData.ClientResponses}
-            />
-          </ConditionalView>
-          <ConditionalView
-            condition={bazaarVoiceSettings.reviews.bazaar_voice.comment_submission}
-          >
-            <div className="review-comment-display">
-              <ReviewCommentDisplay
-                reviewId={reviewDescriptionData.Id}
-                reviewsComment={reviewsComment}
-              />
-            </div>
-          </ConditionalView>
         </div>
       </div>
     );

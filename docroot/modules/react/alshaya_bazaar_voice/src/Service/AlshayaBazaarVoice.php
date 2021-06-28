@@ -386,6 +386,7 @@ class AlshayaBazaarVoice {
     $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
     $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
     $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
+    $basic_configs['comment_submission'] = $config->get('comment_submission');
 
     return $basic_configs;
   }
@@ -574,7 +575,7 @@ class AlshayaBazaarVoice {
     $this->moduleHandler->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
     $strings = [
       '#theme' => 'alshaya_strings',
-      '#strings' => _alshaya_bazaar_voice_static_strings(),
+      '#bazaarvoice_strings' => _alshaya_bazaar_voice_static_strings(),
     ];
     return $strings;
   }
