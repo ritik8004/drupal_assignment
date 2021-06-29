@@ -74,8 +74,14 @@ const getApiEndpoint = (action, params = {}) => {
 
     case 'updateCart':
       endpoint = isUserAuthenticated()
-        ? 'rest/V1/carts/mine/updateCart'
+        ? '/rest/V1/carts/mine/updateCart'
         : `/rest/V1/guest-carts/${params.cartId}/updateCart`;
+      break;
+
+    case 'estimateShippingMethods':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/estimate-shipping-methods'
+        : `/rest/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
       break;
 
     default:
