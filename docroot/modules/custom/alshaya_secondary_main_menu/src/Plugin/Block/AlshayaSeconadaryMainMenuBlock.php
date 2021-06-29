@@ -101,7 +101,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
     return [
       '#theme' => 'alshaya_secondary_main_menu_level1',
       '#settings' => [
-        'Desktop_Secondary_Main_Menu_Highlight_Timing' => $desktop_secondary_main_menu_highlight_timing,
+        'desktopSecondaryMainMenuHighlightTiming' => $desktop_secondary_main_menu_highlight_timing,
       ],
       '#items' => $menu,
       '#column_tree' => $columns_tree,
