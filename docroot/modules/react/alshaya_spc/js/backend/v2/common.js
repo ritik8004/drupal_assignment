@@ -264,9 +264,7 @@ const callDrupalApi = (url, method, requestOptions) => {
     url: `/${window.drupalSettings.path.currentLanguage}${url}`,
     method,
   };
-  //
-  // params.email = "eumermo@example.com";
-  // console.log(params);
+
   if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
     Object.keys(requestOptions).forEach((optionName) => {
       if (optionName === 'form_params') {

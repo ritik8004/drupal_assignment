@@ -500,8 +500,6 @@ const getCustomerPublicData = (customer) => {
 
   if (!_.isEmpty(customer.addresses)) {
     customer.addresses.forEach((item) => {
-      // console.log(item);
-      // console.log(formatAddressForFrontend(item));
       data.addresses.push(formatAddressForFrontend(item));
     });
   }
@@ -641,12 +639,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Validate address.
-  console.log('check valid address');
-  //@todo temporary hack
-  shippingData.address.email = 'aaaaa@example.com';
-
   const validAddress = await validateAddressAreaCity(shippingData.address);
-  console.log(validAddress);
 
   // If address is not valid.
   if (_.isEmpty(validAddress) || _.isEmpty(validAddress.address)) {
@@ -1048,7 +1041,6 @@ const prepareShippingData = (shippingInfo) => {
 window.commerceBackend.addShippingMethod = async (data) => {
   let cart = null;
   let cartData = null;
-  console.log('Shipping method', data);
   const shippingInfo = data.shipping_info;
   const updateBillingInfo = data.update_billing;
   const shippingEmail = shippingInfo.static.email;
@@ -1135,10 +1127,8 @@ window.commerceBackend.addShippingMethod = async (data) => {
     const cartId = window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for HD. Data: ${logData} Address: ${logAddress} Cart: ${cartId}`);
 
-    console.log('calling addShippingInfo with', shippingInfo);
     cart = await addShippingInfo(shippingInfo, data.action, updateBillingInfo);
     cartData = cart.data;
-    console.log('cartData', cartData);
 
     if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(hdshippingMethods)) {
       cartData.shipping.methods = hdshippingMethods;
