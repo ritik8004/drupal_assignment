@@ -303,7 +303,7 @@ window.commerceBackend.applyRemovePromo = async (data) => {
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.refreshCart = (data) => {
+window.commerceBackend.refreshCart = async (data) => {
   const checkoutSettings = getCartSettings('checkout_settings');
   let postData = {
     extension: {

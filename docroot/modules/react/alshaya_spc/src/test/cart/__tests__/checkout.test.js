@@ -166,6 +166,10 @@ describe('Checkout', () => {
       ]);
     });
 
+    describe('Test selectHd()', () => {
+      console.log('todo');
+    });
+
     describe('Test formatAddressForFrontend()', () => {
       const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
       each`
@@ -203,6 +207,50 @@ describe('Checkout', () => {
         expect(result.area).toEqual('13');
         expect(result.country_id).toEqual('AE');
         expect(result.custom_attributes).toEqual(undefined);
+      });
+    });
+
+    //aaa
+    describe('Test getCustomerPublicData()', () => {
+      const getCustomerPublicData = utilsRewire.__get__('getCustomerPublicData');
+
+      it('With empty data', async () => {
+        const result = getCustomerPublicData({});
+        expect(result).toEqual({});
+      });
+
+      it('With invisible characters', () => {
+        const data = {
+          firstname: 'Foo',
+          lastname: '&#8203;',
+        };
+        const result = getCustomerPublicData(data);
+        expect(result.firstname).toEqual('Foo');
+        expect(result.lastname).toEqual('');
+      });
+
+      it('With customer data', async () => {
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        const response = await getCart();
+        const data = response.data.customer;
+        const result = getCustomerPublicData(data);
+
+        expect(result.id).toEqual('478');
+        expect(result.firstname).toEqual('Osmar');
+        expect(result.lastname).toEqual('Wado');
+        expect(result.email).toEqual('osmarwado@gmail.com');
+        expect(result.addresses.length).toEqual(2);
+        expect(result.addresses[0].id).toEqual(undefined);
+        expect(result.addresses[0].customer_address_id).toEqual('69');
+        expect(result.addresses[0].region).toEqual('0');
+        expect(result.addresses[0].region_id).toEqual('0');
+        expect(result.addresses[1].address_city_segment).toEqual('2');
+        expect(result.addresses[1].area).toEqual('207');
       });
     });
 

@@ -237,7 +237,7 @@ const updateBilling = async (billingData) => {
 
   const logAddress = JSON.stringify(params.billing);
   const logData = JSON.stringify(billingData);
-  const cartId = await window.commerceBackend.getCartId();
+  const cartId = window.commerceBackend.getCartId();
   logger.notice(`Billing update manual. Address: ${logAddress} Data: ${logData} Cart: ${cartId}`);
 
   return updateCart(params);
@@ -245,17 +245,14 @@ const updateBilling = async (billingData) => {
 
 /**
  * Validate area/city of address.
- * @todo implement this
  *
  * @param {object} address
  *   Address object.
  *
- * @return {object}
+ * @return {mixed}
  *   Address validation response.
  */
-const validateAddressAreaCity = (address) => {
-  logger.info(`${address}`);
-};
+const validateAddressAreaCity = (address) => callDrupalApi('/spc/validate-info', 'POST', address);
 
 /**
  * Get last order of the customer.
@@ -502,8 +499,10 @@ const getCustomerPublicData = (customer) => {
   }
 
   if (!_.isEmpty(customer.addresses)) {
-    customer.addresses.forEach((key) => {
-      data.addresses.push(formatAddressForFrontend(customer.addresses[key]));
+    customer.addresses.forEach((item) => {
+      // console.log(item);
+      // console.log(formatAddressForFrontend(item));
+      data.addresses.push(formatAddressForFrontend(item));
     });
   }
 
@@ -558,8 +557,8 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  * @param {bool} updateBillingDetails
  *   Whether billing needs to be updated or not.
  *
- * @return {object}
- *   Cart data.
+ * @return {object|null}
+ *   Cart data or null.
  */
 const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   const params = {
@@ -569,17 +568,22 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
     },
   };
 
-  const carrierInfo = (!_.isEmpty(shippingData.carrier_info))
-    ? shippingData.carrier_info
-    : null;
+  if (_.isEmpty(shippingData)) {
+    return null;
+  }
 
-  const fieldsData = (!_.isEmpty(shippingData.customer_address_id))
-    ? shippingData.address
-    : formatAddressForShippingBilling(shippingData);
+  // Add carrier info.
+  if (!_.isEmpty(shippingData.carrier_info)) {
+    params.shipping.shipping_carrier_code = shippingData.carrier_info.code;
+    params.shipping.shipping_method_code = shippingData.carrier_info.method;
+  }
 
-  params.shipping.shipping_address = fieldsData;
-  params.shipping.shipping_carrier_code = carrierInfo.code;
-  params.shipping.shipping_method_code = carrierInfo.method;
+  // Add customer address info.
+  if (!_.isEmpty(shippingData.customer_address_id)) {
+    params.shipping.shipping_address = shippingData.address;
+  } else {
+    params.shipping.shipping_address = formatAddressForShippingBilling(shippingData);
+  }
 
   let cart = await updateCart(params);
   const cartData = cart.data;
@@ -619,10 +623,89 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
  *   FALSE if something went wrong, updated cart data otherwise.
  */
 const selectHd = async (address, method, billing, shippingMethods) => {
-  await addShippingInfo({}, '', false);
-  await updateBilling({});
-  validateAddressAreaCity({});
-  logger.info(`${address}${method}${billing}${shippingMethods}`);
+  const cartId = window.commerceBackend.getCartId();
+  const shippingData = {
+    customer_address_id: null,
+    address,
+    carrier_info: {
+      code: method.carrier_code,
+      method: method.method_code,
+    },
+  };
+
+  // Set customer address id.
+  if (!_.isEmpty(address.id)) {
+    shippingData.customer_address_id = address.id;
+  } else if (!_.isEmpty(address.customer_address_id)) {
+    shippingData.customer_address_id = address.customer_address_id;
+  }
+
+  // Validate address.
+  console.log('check valid address');
+  //@todo temporary hack
+  shippingData.address.email = 'aaaaa@example.com';
+
+  const validAddress = await validateAddressAreaCity(shippingData.address);
+  console.log(validAddress);
+
+  // If address is not valid.
+  if (_.isEmpty(validAddress) || _.isEmpty(validAddress.address)) {
+    return false;
+  }
+
+  // Add log for shipping data we pass to magento update cart.
+  const logData = JSON.stringify(shippingData);
+  logger.notice(`Shipping update default for HD. Data: ${logData} Cart: ${cartId}`);
+
+  // If shipping address not contains proper address, don't process further.
+  if (_.isEmpty(shippingData.address.extension_attributes)
+    && _.isEmpty(shippingData.address.custom_attributes)
+  ) {
+    return false;
+  }
+
+  let updated = await addShippingInfo(shippingData, cartActions.cartShippingUpdate, false);
+  if (_.has(updated, 'error')) {
+    return false;
+  }
+
+  let cartData = updated.data;
+
+  // Set shipping methods.
+  if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(shippingMethods)) {
+    cartData.shipping.methods = shippingMethods;
+  }
+
+  // Not use/assign default billing address if customer_address_id
+  // is not available.
+  if (_.isEmpty(billing.customer_address_id)) {
+    return cartData;
+  }
+
+  // Add log for billing data we pass to magento update cart.
+  const logAddress = JSON.stringify(billing);
+  logger.notice(`Billing update default for HD. Address: ${logAddress} Cart: ${cartId}`);
+
+  // If billing address not contains proper address, don't process further.
+  if (_.isEmpty(billing.extension_attributes)
+    && _.isEmpty(billing.custom_attributes)
+  ) {
+    return cartData;
+  }
+
+  updated = await updateBilling(billing);
+  if (_.has(updated, 'error')) {
+    return false;
+  }
+
+  cartData = updated.data;
+
+  // Set shipping methods.
+  if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(shippingMethods)) {
+    cartData.shipping.methods = shippingMethods;
+  }
+
+  return cartData;
 };
 
 /**
@@ -965,6 +1048,7 @@ const prepareShippingData = (shippingInfo) => {
 window.commerceBackend.addShippingMethod = async (data) => {
   let cart = null;
   let cartData = null;
+  console.log('Shipping method', data);
   const shippingInfo = data.shipping_info;
   const updateBillingInfo = data.update_billing;
   const shippingEmail = shippingInfo.static.email;
@@ -1004,7 +1088,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
     const logAddress = JSON.stringify(shippingInfo);
     const logData = JSON.stringify(data);
-    const cartId = await window.commerceBackend.getCartId();
+    const cartId = window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for CNC. Data: ${logData} Address: ${logAddress} Cart: ${cartId}.`);
 
     cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
@@ -1034,7 +1118,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     // If no shipping method.
     if (_.has(shippingMethods, 'error')) {
       const logData = JSON.stringify(data);
-      const cartId = await window.commerceBackend.getCartId();
+      const cartId = window.commerceBackend.getCartId();
       logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${shippingMethods.error_message}`);
       return shippingMethods;
     }
@@ -1048,11 +1132,13 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
     const logAddress = JSON.stringify(shippingInfo);
     const logData = JSON.stringify(data);
-    const cartId = await window.commerceBackend.getCartId();
+    const cartId = window.commerceBackend.getCartId();
     logger.notice(`Shipping update manual for HD. Data: ${logData} Address: ${logAddress} Cart: ${cartId}`);
 
+    console.log('calling addShippingInfo with', shippingInfo);
     cart = await addShippingInfo(shippingInfo, data.action, updateBillingInfo);
     cartData = cart.data;
+    console.log('cartData', cartData);
 
     if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(hdshippingMethods)) {
       cartData.shipping.methods = hdshippingMethods;

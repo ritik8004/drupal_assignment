@@ -143,7 +143,6 @@ class AlshayaSpcCustomerController extends ControllerBase {
   public function getCustomerToken() {
     $token = '';
     if ($this->currentUser()->isAuthenticated()) {
-      $token = $this->session->get('magento_customer_token');
       if (empty($token) || !is_string($token)) {
         $mail = $this->currentUser()->getEmail();
         $token = $this->spcCustomerHelper->getCustomerTokenBySocialDetail($mail);
