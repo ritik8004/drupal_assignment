@@ -62,7 +62,12 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
   ];
 
   $cart_config = \Drupal::config('alshaya_acm.cart_config');
-  $page['#attached']['drupalSettings']['alshaya_spc']['cart_config']['max_cart_qty'] = $cart_config->get('max_cart_qty');
+  $build['#attached']['drupalSettings']['alshaya_spc']['cart_config']['max_cart_qty'] = $cart_config->get('max_cart_qty');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $cart_config->getCacheTags());
+
+  $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $build['#attached']['drupalSettings']['vat_text'] = $product_settings->get('vat_text');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
 }
 
 function template_preprocess_rcs_commerce_price(array &$variables) {

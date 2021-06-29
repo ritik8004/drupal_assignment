@@ -369,6 +369,13 @@ globalThis.rcsPhRenderingEngine.computePhFilters = function (input, filter) {
       value = input.type_id;
       break;
 
+    case 'vat_text':
+      if (drupalSettings.vat_text === '' || drupalSettings.vat_text === null) {
+        $('.vat-text').remove();
+      }
+      value = drupalSettings.vat_text;
+      break;
+
     case 'add_to_cart':
       value = '';
 

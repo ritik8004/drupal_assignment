@@ -58,16 +58,12 @@ set classes = [
 
           <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
-          {% if vat_text %}
-            <div class="vat-text">
-              {{ vat_text }}
-            </div>
-          {% endif %}
+          <div class="vat-text">#rcs.product._self|vat_text#</div>
 
           {% block itemCode %}
             <div class="content--item-code">
               <span class="field__label">{{ 'Item Code'|t }}:</span>
-              <span class="field__value">{{ content.item_code }}</span>
+              <span class="field__value">#rcs.product._self|data-sku#</span>
             </div>
           {% endblock %}
 
