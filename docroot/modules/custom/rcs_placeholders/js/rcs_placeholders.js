@@ -23,7 +23,7 @@
       globalThis.rcs_ph_context = 'browser';
 
       // @todo make this configurable.
-      const langcode = 'en';
+      const langcode = drupalSettings.path.currentLanguage;
 
       // Retrieve overall page details if needed.
       globalThis.rcsPhCommerceBackend
