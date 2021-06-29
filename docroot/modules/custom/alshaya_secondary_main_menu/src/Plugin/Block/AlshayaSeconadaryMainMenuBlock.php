@@ -8,7 +8,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -29,12 +28,6 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
-  /**
-   * Module Handler service object.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
   /**
    * The menu link tree service.
    *
@@ -61,16 +54,13 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    *   The factory for configuration objects.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_tree
    *   The menu tree service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module Handler service object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, ModuleHandlerInterface $module_handler, EntityRepositoryInterface $entityRepository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, EntityRepositoryInterface $entityRepository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
-    $this->moduleHandler = $module_handler;
     $this->entityRepository = $entityRepository;
   }
 
@@ -84,7 +74,6 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('menu.link_tree'),
-      $container->get('module_handler'),
       $container->get('entity.repository')
     );
   }
@@ -93,8 +82,9 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function build() {
-    $desktop_secondary_main_menu_layout = $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
-    $desktop_secondary_main_menu_highlight_timing = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_highlight_timing');
+    $desktop_config = $this->configFactory->get('alshaya_secondary_main_menu.settings');
+    $desktop_secondary_main_menu_layout = $desktop_config->get('desktop_secondary_main_menu_layout');
+    $desktop_secondary_main_menu_highlight_timing = (int) $desktop_config->get('desktop_secondary_main_menu_highlight_timing');
     $menu_name = 'secondary-main-menu';
     $subtree = $this->getSubTree($menu_name);
     $manipulators = [
@@ -111,7 +101,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
     return [
       '#theme' => 'alshaya_secondary_main_menu_level1',
       '#settings' => [
-        'desktop_secondary_main_menu_highlight_timing' => $desktop_secondary_main_menu_highlight_timing,
+        'Desktop_Secondary_Main_Menu_Highlight_Timing' => $desktop_secondary_main_menu_highlight_timing,
       ],
       '#items' => $menu,
       '#column_tree' => $columns_tree,
@@ -134,7 +124,6 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * Column data after menu algo is applied.
    */
   public function getColumnDataMenuAlgo($menu) {
-
     $columns_tree = [];
     foreach ($menu['#items'] as $l2s) {
       if ($l2s['original_link'] instanceof MenuLinkContent) {

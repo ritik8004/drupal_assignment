@@ -12,9 +12,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *
  * Update type of Social ID to string_textfield.
  *
- * To fix bug while using Menu Item Extra module.
- *
- * Error: Invaldid Plugin ID found.
+ * As field widget plugins for field type string has been changed from string to string_textfield.
  */
 function alshaya_menus_update_8003() {
   $base_definition = \Drupal::entityDefinitionUpdateManager()->getFieldStorageDefinition('social_id', 'menu_link_content');
