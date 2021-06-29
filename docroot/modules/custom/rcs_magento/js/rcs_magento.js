@@ -14,6 +14,7 @@ globalThis.rcsCommerceBackend = globalThis.rcsCommerceBackend || {};
  */
 globalThis.rcsCommerceBackend.invokeApi = async function (request) {
   const headers = {};
+  const langcode = drupalSettings.backend_language_prefix[request.language];
 
   if (typeof request.headers !== 'undefined') {
     request.headers.forEach(function (header) {
@@ -22,8 +23,7 @@ globalThis.rcsCommerceBackend.invokeApi = async function (request) {
   }
 
   return jQuery.ajax({
-    // @todo: Remove the hardcoded domain.
-    url: 'https://mcmena.store.alshaya.com/kwt_en' + '/' + request.uri,
+    url: drupalSettings.cart.url + '/' + langcode + '/' + request.uri,
     method: request.method,
     headers,
     data: request.data,

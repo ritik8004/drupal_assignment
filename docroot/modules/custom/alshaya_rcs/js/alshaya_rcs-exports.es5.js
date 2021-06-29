@@ -1,6 +1,6 @@
 globalThis.rcsPhCommerceBackend = globalThis.rcsPhCommerceBackend || {};
 
-globalThis.rcsPhCommerceBackend.getEntity = async function getEntity() {
+globalThis.rcsPhCommerceBackend.getEntity = async function getEntity(langcode) {
   if (typeof drupalSettings.rcsPage === 'undefined') {
     return null;
   }
@@ -19,6 +19,8 @@ globalThis.rcsPhCommerceBackend.getEntity = async function getEntity() {
         request.uri += "graphql";
         request.method = "POST",
         request.headers.push(["Content-Type", "application/json"]);
+        request.language = langcode;
+
         const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
         // @todo: Make a config for this query and pass it from the backend.
         request.data = JSON.stringify({
