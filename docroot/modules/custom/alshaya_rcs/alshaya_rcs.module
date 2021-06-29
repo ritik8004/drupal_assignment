@@ -35,6 +35,9 @@ function alshaya_rcs_theme($existing, $type, $theme, $path) {
     'rcs_sku_base_form' => [
       'variables' => [],
     ],
+    'page__rcs_pdp' => [
+      'variable'
+    ],
   ];
 }
 
@@ -136,4 +139,16 @@ function alshaya_rcs_preprocess_html(array &$variables) {
       'class' => 'rcs-templates--price_block',
     ],
   ];
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_rcs_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    $node = \Drupal::request()->attributes->get('node');
+    if ($node->bundle() == 'rcs_product') {
+      $suggestions[] = 'page__rcs_pdp';
+    }
+  }
 }
