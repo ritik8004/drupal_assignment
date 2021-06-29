@@ -19,10 +19,10 @@ globalThis.rcsPhCommerceBackend.getEntity = async function getEntity() {
         request.uri += "graphql";
         request.method = "POST",
         request.headers.push(["Content-Type", "application/json"]);
-        // @todo: Filter by the product URL.
+        const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
         // @todo: Make a config for this query and pass it from the backend.
         request.data = JSON.stringify({
-          query: `{products(filter: {sku: {eq: "M21417135"}}) {
+          query: `{products(filter: {url_key: {eq: "${productUrlKey[1]}"}}) {
             total_count
             items {
                 sku
