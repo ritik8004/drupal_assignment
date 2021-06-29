@@ -962,13 +962,10 @@ class AlshayaAlgoliaIndexHelper {
             $this->logger->error("The attribute $attribute_name is already added to the index.");
             continue;
           }
-          // Update Custom Facet attribute with langguage
-          // suffix for Product list index and its replicas.
-          foreach ($this->languageManager->getLanguages() as $lang) {
-            $attribute_name_lang = $attribute_name . '_' . $lang->getId();
-            $settings['attributesForFaceting'][] = $attribute_name_lang;
-            $updated = TRUE;
-          }
+          // Update Custom Facet attribute
+          // for Product list index and its replicas.
+          $settings['attributesForFaceting'][] = $attribute_name;
+          $updated = TRUE;
         }
 
         if ($updated) {
