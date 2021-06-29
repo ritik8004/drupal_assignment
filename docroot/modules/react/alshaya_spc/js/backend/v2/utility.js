@@ -74,12 +74,12 @@ const getApiEndpoint = (action, params = {}) => {
 
     case 'updateCart':
       endpoint = isUserAuthenticated()
-        ? 'rest/V1/carts/mine/updateCart'
+        ? '/rest/V1/carts/mine/updateCart'
         : `/rest/V1/guest-carts/${params.cartId}/updateCart`;
       break;
 
     default:
-      logger.error(`Endpoint does not exist for action : ${action}`);
+      logger.critical(`Endpoint does not exist for action : ${action}`);
   }
 
   return endpoint;
