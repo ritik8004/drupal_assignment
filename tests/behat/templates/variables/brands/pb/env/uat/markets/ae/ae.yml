@@ -1,4 +1,4 @@
 variables:
-  product_listing_page_url: '/shop-bedding/'
-  spc_product_listing_page: '/shop-bedding/'
-  spc_basket_page: '/shop-bedding/'
+  product_listing_page_url: '/shop-furniture/living-room/armchairs/'
+  spc_product_listing_page: '/shop-furniture/living-room/armchairs/'
+  spc_basket_page: '/shop-furniture/living-room/armchairs/'
