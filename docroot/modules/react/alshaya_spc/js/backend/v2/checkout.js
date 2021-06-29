@@ -14,7 +14,11 @@ import {
   associateCartToCustomer,
 } from './common';
 import { getDefaultErrorMessage } from './error';
-import { isUserAuthenticated, logger } from './utility';
+import {
+  getApiEndpoint,
+  isUserAuthenticated,
+  logger,
+} from './utility';
 import cartActions from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
@@ -291,19 +295,18 @@ const getDefaultPaymentFromOrder = () => null;
  *   The method list if available.
  */
 const getPaymentMethods = async () => {
+  const cartId = window.commerceBackend.getCartId();
   const response = await getCart();
   const cartData = response.data;
 
   if (_.isEmpty(cartData.shipping) || _.isEmpty(cartData.shipping.method)) {
-    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartData.cartId}`);
+    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
     return null;
   }
 
-  // @todo Update endpoint for authenticated user.
   // Get payment methods from MDC.
-  const result = await callMagentoApi(`/rest/V1/guest-carts/${window.commerceBackend.getCartId()}/payment-methods`);
-
-  return result.data;
+  const url = getApiEndpoint('getPaymentMethods', { cartId });
+  return callMagentoApi(url, 'GET', {});
 };
 
 /**
@@ -588,7 +591,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
 
   // If cart update has error.
   if (_.has(cartData, 'error')) {
-    return cartData;
+    return cart;
   }
 
   // If billing needs to updated or billing is not available added at all
@@ -658,21 +661,20 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   let updated = await addShippingInfo(shippingData, cartActions.cartShippingUpdate, false);
-  if (_.has(updated, 'error')) {
+  if (_.has(updated.data, 'error')) {
     return false;
   }
 
-  let cartData = updated.data;
-
   // Set shipping methods.
-  if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(shippingMethods)) {
-    cartData.shipping.methods = shippingMethods;
+  if (!_.isEmpty(updated.data) && !_.isEmpty(updated.data.shipping)
+    && !_.isEmpty(shippingMethods)) {
+    updated.data.shipping.methods = shippingMethods;
   }
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
   if (_.isEmpty(billing.customer_address_id)) {
-    return cartData;
+    return updated;
   }
 
   // Add log for billing data we pass to magento update cart.
@@ -683,22 +685,21 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   if (_.isEmpty(billing.extension_attributes)
     && _.isEmpty(billing.custom_attributes)
   ) {
-    return cartData;
+    return updated;
   }
 
   updated = await updateBilling(billing);
-  if (_.has(updated, 'error')) {
+  if (_.has(updated.data, 'error')) {
     return false;
   }
 
-  cartData = updated.data;
-
   // Set shipping methods.
-  if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(shippingMethods)) {
-    cartData.shipping.methods = shippingMethods;
+  if (!_.isEmpty(updated.data) && !_.isEmpty(updated.data.shipping)
+    && !_.isEmpty(shippingMethods)) {
+    updated.data.shipping.methods = shippingMethods;
   }
 
-  return cartData;
+  return updated;
 };
 
 /**
@@ -764,12 +765,12 @@ const applyDefaults = async (data, uid) => {
  *
  * @param {object} cartData
  *   The cart data object.
- * @returns {Promise}
+ * @returns {Promise|null}
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
-  if (cartData === null) {
-    return cartData;
+  if (_.isEmpty(cartData)) {
+    return null;
   }
 
   let data = _.cloneDeep(cartData);
@@ -786,18 +787,23 @@ const getProcessedCheckoutData = async (cartData) => {
     data = updated;
   }
 
-  if (typeof data.shipping.methods === 'undefined' && typeof data.shipping.address !== 'undefined' && data.shipping.type !== 'click_and_collect') {
-    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping.address);
-    if (typeof shippingMethods.error !== 'undefined') {
+  if (_.isUndefined(data.shipping.methods)
+    && !_.isUndefined(data.shipping.address)
+    && !_.isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
+  ) {
+    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping);
+    if (_.has(shippingMethods, 'error')) {
       return shippingMethods;
     }
     data.shipping.methods = shippingMethods;
   }
 
-  if (typeof data.payment.methods === 'undefined' && typeof data.payment.method !== 'undefined') {
-    const paymentMethods = getPaymentMethods();
-    if (typeof paymentMethods !== 'undefined') {
-      data.payment.methods = paymentMethods;
+  if (_.isUndefined(data.payment.methods)
+    && !_.isUndefined(data.shipping.method)
+  ) {
+    const paymentMethods = await getPaymentMethods();
+    if (!_.isUndefined(paymentMethods.data)) {
+      data.payment.methods = paymentMethods.data;
       data.payment.method = getPaymentMethodSetOnCart();
     }
   }
@@ -1040,7 +1046,6 @@ const prepareShippingData = (shippingInfo) => {
  */
 window.commerceBackend.addShippingMethod = async (data) => {
   let cart = null;
-  let cartData = null;
   const shippingInfo = data.shipping_info;
   const updateBillingInfo = data.update_billing;
   const shippingEmail = shippingInfo.static.email;
@@ -1128,17 +1133,16 @@ window.commerceBackend.addShippingMethod = async (data) => {
     logger.notice(`Shipping update manual for HD. Data: ${logData} Address: ${logAddress} Cart: ${cartId}`);
 
     cart = await addShippingInfo(shippingInfo, data.action, updateBillingInfo);
-    cartData = cart.data;
 
-    if (!_.isEmpty(cartData) && !_.isEmpty(cartData.shipping) && !_.isEmpty(hdshippingMethods)) {
-      cartData.shipping.methods = hdshippingMethods;
+    if (!_.isEmpty(cart.data) && !_.isEmpty(cart.data.shipping) && !_.isEmpty(hdshippingMethods)) {
+      cart.data.shipping.methods = hdshippingMethods;
     }
   }
 
   // Process cart data.
-  cartData = getProcessedCheckoutData(cartData);
+  cart.data = await getProcessedCheckoutData(cart.data);
 
-  return cartData;
+  return cart;
 };
 
 /**
