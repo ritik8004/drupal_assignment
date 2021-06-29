@@ -42,13 +42,13 @@ set classes = [
           {% block productBrand %}
           {% endblock %}
 
-          <h1>{{ label }}</h1>
+          <h1>#rcs.product.name#</h1>
 
           {% block pricePrefix %}
           {% endblock %}
 
           <div class="price-block {{ content.price_block_identifier }}">
-            {{ content.price_block }}
+            #rcs.product._self|price#
           </div>
 
           {% if content.postpay %}
