@@ -360,22 +360,22 @@ const applyDefaults = async (data, uid) => {
     }
   }
 
+  // Select default address from address book if available.
+  const address = getDefaultAddress(data);
+  if (address) {
+    const methods = await getHomeDeliveryShippingMethods({ address });
+    if (!_.isEmpty(methods.data) && typeof methods.data.error === 'undefined') {
+      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+      return selectHd(address, methods.data[0], address, methods.data);
+    }
+  }
+
   // If address already available in cart, use it.
   if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_.isEmpty(methods.data) && typeof methods.data.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(data.shipping.address, methods.data[0], data.shipping.address, methods.data);
-    }
-  }
-
-  // Select default address from address book if available.
-  const address = getDefaultAddress(data);
-  if (address) {
-    const methods = await getHomeDeliveryShippingMethods(address);
-    if (!_.isEmpty(methods.data) && typeof methods.data.error === 'undefined') {
-      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
-      return selectHd(address, methods.data[0], address, methods.data);
     }
   }
 
