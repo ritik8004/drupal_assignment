@@ -27,11 +27,9 @@ globalThis.rcsPhCommerceBackend.getEntity = async function getEntity() {
             items {
                 sku
                 id
+                type_id
                 name
-                meta_title
-                special_price
                 url_key
-                url_path
                 price {
                     regularPrice {
                         amount {
