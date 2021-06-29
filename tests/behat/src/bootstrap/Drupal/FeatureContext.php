@@ -2602,7 +2602,7 @@ JS;
       $this->selectOptionAddress($field_name, $val);
     }
   }
-
+  
   /**
    * @Then /^I select the home delivery address$/
    */
@@ -2642,12 +2642,18 @@ JS;
           $city->click();
           $this->iWaitSeconds('5');
           $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-        }
-          else {
+          $area_value = $this->getSession()->evaluateScript('return jQuery(\'#spc-area-select-selected\').text()');
+          if ($area_value == 'Select Area' or 'Choose a region') {
             $page->find('css', '#spc-area-select-selected')->click();
             $this->iWaitSeconds('5');
             $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
           }
+        }
+        else {
+          $page->find('css', '#spc-area-select-selected')->click();
+          $this->iWaitSeconds('5');
+          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+        }
         $page->find('css', 'button#save-address')->click();
         $this->iWaitForAjaxToFinish();
         $this->iWaitSeconds('20');
