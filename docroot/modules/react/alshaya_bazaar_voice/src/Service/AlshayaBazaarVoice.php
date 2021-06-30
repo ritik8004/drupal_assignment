@@ -773,7 +773,7 @@ class AlshayaBazaarVoice {
     $request_options['query'] = $request['query'];
 
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
-    if (!$result['HasErrors'] && isset($result['Results'])) {
+    if (!$result['HasErrors'] && isset($result['Results']) && !empty($result['Results'])) {
       $response[$product_id]['productData'] = $result['Results'][0];
       if (isset($result['Includes']['Reviews'])) {
         foreach ($result['Includes']['Reviews'] as $review) {

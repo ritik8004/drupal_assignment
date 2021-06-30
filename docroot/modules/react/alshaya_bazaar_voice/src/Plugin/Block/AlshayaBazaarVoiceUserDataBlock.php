@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_bazaar_voice\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,12 +19,6 @@ use Drupal\node\NodeInterface;
  * )
  */
 class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFactoryPluginInterface {
-  /**
-   * Array of cache tags.
-   *
-   * @var array
-   */
-  protected $cacheTags = [];
 
   /**
    * The current user service.
@@ -107,27 +100,8 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
-    if ($this->routeMatch->getRouteName() === 'entity.node.canonical') {
-      $node = $this->routeMatch->getParameter('node');
-      if ($node->bundle() === 'acq_product') {
-        $this->cacheTags[] = 'node:' . $node->id();
-      }
-    }
-    if ($this->currentUser->isAuthenticated()) {
-      $this->cacheTags[] = 'user:' . $this->currentUser->id();
-    }
-    return Cache::mergeTags(
-      parent::getCacheTags(),
-      $this->cacheTags
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
+  public function getCacheMaxAge() {
+    return 0;
   }
 
 }
