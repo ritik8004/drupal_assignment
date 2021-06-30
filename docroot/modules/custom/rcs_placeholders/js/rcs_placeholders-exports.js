@@ -130,7 +130,7 @@ rcsPhStorageGet = (key) => {
 rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
   let replacements = [];
 
-  const entityPhRegex = new RegExp('\\#rcs.(' + entityType + '\\.[^"]+)\\#', 'g');
+  const entityPhRegex = new RegExp('\\#rcs\\.product\\.(.*?)(\\|(.*?))?\\#', 'g');
   const entityPhMatches = sourceHtml.match(entityPhRegex);
 
   if (entityPhMatches && entityPhMatches.length !== 0) {
