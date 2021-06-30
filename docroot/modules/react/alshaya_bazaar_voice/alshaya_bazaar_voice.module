@@ -9,8 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
