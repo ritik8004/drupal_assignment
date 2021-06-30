@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a block for bazaarvoice user data.
@@ -102,6 +103,13 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
    */
   public function getCacheMaxAge() {
     return 0;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['user.roles:authenticated']);
   }
 
 }
