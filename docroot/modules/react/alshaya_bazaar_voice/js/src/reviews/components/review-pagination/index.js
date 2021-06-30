@@ -1,6 +1,7 @@
 import React from 'react';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 export default class Pagination extends React.Component {
   constructor(props) {
@@ -23,13 +24,7 @@ export default class Pagination extends React.Component {
   }
 
   navigatePage = (buttonValue) => {
-    const event = new CustomEvent('handlePagination', {
-      bubbles: true,
-      detail: {
-        buttonValue,
-      },
-    });
-    document.dispatchEvent(event);
+    dispatchCustomEvent('handlePagination', buttonValue);
   }
 
   render() {

@@ -16,6 +16,12 @@ myaccount:
   dependencies:
     - alshaya_react/react
 
+myorders:
+  js:
+    dist/myorders.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
 bvpixel_tracking:
   js:
     js/assets/bvpixel-tracking.js: {}

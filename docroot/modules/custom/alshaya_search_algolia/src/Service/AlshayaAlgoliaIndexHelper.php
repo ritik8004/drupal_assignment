@@ -962,13 +962,10 @@ class AlshayaAlgoliaIndexHelper {
             $this->logger->error("The attribute $attribute_name is already added to the index.");
             continue;
           }
-          // Update Custom Facet attribute with langguage
-          // suffix for Product list index and its replicas.
-          foreach ($this->languageManager->getLanguages() as $lang) {
-            $attribute_name_lang = $attribute_name . '_' . $lang->getId();
-            $settings['attributesForFaceting'][] = $attribute_name_lang;
-            $updated = TRUE;
-          }
+          // Update Custom Facet attribute
+          // for Product list index and its replicas.
+          $settings['attributesForFaceting'][] = $attribute_name;
+          $updated = TRUE;
         }
 
         if ($updated) {
@@ -1003,36 +1000,71 @@ class AlshayaAlgoliaIndexHelper {
   public function updateReplicaIndex(array $sorts, int $req_attempts = 0) {
     try {
       $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
-      $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
       $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
-      $index_name = $client_config['algolia_index_name'];
+      $index_names = $this->getAlgoliaIndexNames();
 
-      foreach ($this->languageManager->getLanguages() as $language) {
-        $index = $client->initIndex($index_name . '_' . $language->getId());
-        $name = $index_name . '_' . $language->getId();
-        $settings = $index->getSettings();
-        unset($settings['replicas']);
-        $ranking = $settings['ranking'];
+      foreach ($index_names as $index) {
+        $search_api_index = 'search_api.index.' . $index;
+        $index_name = $this->configFactory->get($search_api_index)->get('options.algolia_index_name');
+        // Get value for algolia_index_apply_suffix in search Api backend.
+        $algolia_index_apply_suffix = $this->configFactory->get($search_api_index)->get('options.algolia_index_apply_suffix');
+        if ($algolia_index_apply_suffix == 1) {
+          foreach ($this->languageManager->getLanguages() as $language) {
+            $name = $index_name . '_' . $language->getId();
+            $index = $client->initIndex($name);
+            $settings = $index->getSettings();
+            unset($settings['replicas']);
+            $ranking = $settings['ranking'];
 
-        foreach ($sorts as $sort) {
-          $replica = $name . '_' . implode('_', $sort);
-          $settings['replicas'][] = $replica;
+            foreach ($sorts as $sort) {
+              $replica = $name . '_' . implode('_', $sort);
+              $settings['replicas'][] = $replica;
+            }
+            $index->setSettings($settings, [
+              'forwardToReplicas' => TRUE,
+            ]);
+            foreach ($sorts as $sort) {
+              $replica = $name . '_' . implode('_', $sort);
+              $replica_index = $client->initIndex($replica);
+              $replica_settings = $replica_index->getSettings();
+              $replica_settings['ranking'] = [
+                'desc(stock)',
+                $sort['direction'] . '(' . $sort['field'] . ')',
+              ] + $ranking;
+              $replica_index->setSettings($replica_settings, [
+                'forwardToReplicas' => TRUE,
+              ]);
+            }
+          }
         }
-
-        $index->setSettings($settings, [
-          'forwardToReplicas' => TRUE,
-        ]);
-        foreach ($sorts as $sort) {
-          $replica = $name . '_' . implode('_', $sort);
-          $replica_index = $client->initIndex($replica);
-          $replica_settings = $replica_index->getSettings();
-          $replica_settings['ranking'] = [
-            'desc(stock)',
-            $sort['direction'] . '(' . $sort['field'] . ')',
-          ] + $ranking;
-          $replica_index->setSettings($replica_settings, [
+        else {
+          $index = $client->initIndex($index_name);
+          $settings = $index->getSettings();
+          $ranking = $settings['ranking'];
+          unset($settings['replicas']);
+          foreach ($sorts as $sort) {
+            foreach ($this->languageManager->getLanguages() as $language) {
+              $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
+              $settings['replicas'][] = $replica;
+            }
+          }
+          $index->setSettings($settings, [
             'forwardToReplicas' => TRUE,
           ]);
+          foreach ($sorts as $sort) {
+            foreach ($this->languageManager->getLanguages() as $language) {
+              $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
+              $replica_index = $client->initIndex($replica);
+              $replica_settings = $replica_index->getSettings();
+              $replica_settings['ranking'] = [
+                'desc(stock)',
+                $sort['direction'] . '(' . $sort['field'] . '.' . $language->getId() . ')',
+              ] + $ranking;
+              $replica_index->setSettings($replica_settings, [
+                'forwardToReplicas' => TRUE,
+              ]);
+            }
+          }
         }
       }
       sleep(3);

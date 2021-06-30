@@ -107,4 +107,19 @@ class AlshayaBazaarVoiceController extends ControllerBase {
     return $response;
   }
 
+  /**
+   * Returns review stats of a product.
+   *
+   * @param string $productId
+   *   Product id or sanitized sku id.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function getProductReviewStatistics(string $productId) {
+    // Add user review of current product in user settings.
+    $reviewStatsData = $this->alshayaBazaarVoice->getProductReviewStatistics($productId);
+    return new JsonResponse(!empty($reviewStatsData) ? reset($reviewStatsData) : []);
+  }
+
 }
