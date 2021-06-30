@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.node.rcs_product.body
     - field.field.node.rcs_product.field_product_slug
+    # - field.field.node.rcs_product.field_select_pdp_layout
     - node.type.rcs_product
   module:
     - path
@@ -26,6 +27,12 @@ content:
       size: 255
       placeholder: ''
     third_party_settings: {  }
+  field_select_pdp_layout:
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   path:
     type: path
     weight: 6

@@ -5,6 +5,7 @@ dependencies:
     - core.entity_view_mode.node.full
     - field.field.node.rcs_product.body
     - field.field.node.rcs_product.field_product_slug
+    # - field.field.node.rcs_product.field_select_pdp_layout
     - node.type.rcs_product
   module:
     - user
@@ -21,3 +22,4 @@ content:
 hidden:
   body: true
   field_product_slug: true
+  field_select_pdp_layout: true
