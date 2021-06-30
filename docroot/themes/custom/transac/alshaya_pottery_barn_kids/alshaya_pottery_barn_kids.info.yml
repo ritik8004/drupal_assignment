@@ -74,3 +74,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/smart-agent/smart-agent.ltr.css: css/conditional-sass/smart-agent/smart-agent.ltr.css
+
+  alshaya_white_label/secondary-menu:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/secondary-menu/secondary-menu.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/secondary-menu/secondary-menu.ltr.css

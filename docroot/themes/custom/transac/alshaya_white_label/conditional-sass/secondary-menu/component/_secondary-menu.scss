@@ -236,8 +236,11 @@
         background: $hfd-menu-background;
 
         .menu__in {
-          #{$left}: -0.8rem;
-          margin-top: -2.25rem;
+          #{$right}: -0.8rem;
+
+          html[lang=en] & {
+            margin-top: -2.25rem;
+          }
         }
 
         li.menu--one__list-item {
@@ -262,6 +265,12 @@
           font-size: 1rem;
         }
       }
+
+      ul.menu--two__list {
+        .menu__in {
+          #{$right}: 0;
+        }
+      }
     }
 
     li.not-active {
@@ -272,6 +281,241 @@
       & ~ .secondary--main--menu {
         > .secondary-main-menu-header {
           display: none;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-secondary-main-menu {
+    position: relative;
+    z-index: 3;
+    max-width: 80.25rem;
+    margin: 0 auto;
+
+    @include breakpoint($upto-desktop) {
+      .secondary--main--menu {
+        display: none;
+      }
+    }
+
+    li {
+      list-style: none;
+    }
+
+    ul.menu--one__list {
+      display: table !important;
+      width: 100%;
+      margin: 0;
+      background: $mm_bg;
+      padding: 0 calc((100% - 1284px) / 2);
+
+      .menu-backdrop {
+        display: none;
+
+        @include breakpoint($desktop) {
+          display: block;
+          padding-top: 9px;
+          border-bottom: 1px solid $mm_l1_border;
+          position: absolute;
+          width: 100%;
+          top: 100%;
+          #{$left}: 0;
+          #{$right}: 0;
+          z-index: 1;
+          opacity: 0;
+          visibility: hidden;
+          overflow: hidden;
+          background: #fff;
+          // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+          transition: all var(--menuTiming) ease-in 0.3s;
+        }
+      }
+
+      &:hover {
+        .menu-backdrop {
+          @include breakpoint($desktop) {
+            visibility: visible;
+            opacity: 1;
+            // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+            transition: all var(--menuTiming) ease-in 0.3s;
+          }
+        }
+      }
+
+      &.active--menu--without__child {
+        .menu-backdrop {
+          @include breakpoint($desktop) {
+            display: none;
+          }
+        }
+      }
+    }
+
+    li.menu--one__list-item {
+      display: table-cell;
+      vertical-align: top;
+      list-style: none;
+      text-align: center;
+      text-transform: lowercase;
+      height: 2.6875rem;
+
+      .menu--one__link {
+        padding: 0.625rem;
+        padding-bottom: 0.6rem;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
+        height: 2.75rem;
+        border-bottom: 1px solid $mm_l1_border;
+        border-top: 2px solid transparent;
+        position: relative;
+        z-index: 100;
+        margin-top: -1px;
+        font-size: 0.75rem;
+        font-family: $alshaya-thin;
+
+        &.active {
+          color: $mm_l1_link_hover;
+          border-top: 2px solid $mm_l1_link_active_border;
+          border-bottom: 1px solid $mm_l1_border;
+        }
+      }
+
+      &.active {
+        .menu--one__link {
+          background: $mm_bg;
+          border-top: 2px solid $mm_l1_link_active_border;
+        }
+      }
+
+      &:hover {
+        & > ul.menu--two__list {
+          visibility: visible;
+          opacity: 1;
+          // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+          transition: all var(--menuTiming) ease-in 0.3s;
+
+          .highlights {
+            img {
+              opacity: 1;
+              transition: all 300ms ease-in 0.3s;
+            }
+          }
+        }
+
+        .menu--one__link {
+          border-bottom: 1px solid $mm_l1_link_hover_border_to_fill_space;
+          color: $mm_l1_link_hover;
+          border-top: 2px solid $mm_l1_link_active_border;
+        }
+      }
+
+      .menu__link {
+        font-size: 0.75rem;
+        font-family: $alshaya-thin;
+        color: $mm_l1_link;
+        text-decoration: none;
+      }
+
+      ul ul {
+        display: none;
+      }
+
+      ul.menu--two__list {
+        max-width: 80.25rem;
+        margin: auto;
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        top: 100%;
+        #{$left}: 0;
+        #{$right}: 0;
+        width: 100%;
+        font-size: 0;
+        z-index: 1;
+        // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+        transition: all var(--menuTiming) ease-in 0.3s;
+
+        .highlights {
+          img {
+            opacity: 0;
+            transition: all 300ms ease-in 0.3s;
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    &:not(.megamenu-inline-layout) {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          #{$right}: inherit;
+          display: flex;
+          max-width: none;
+          justify-content: space-between;
+          overflow-y: auto;
+          overflow-x: hidden;
+
+          .menu--two__list-item {
+            padding-bottom: 1.563rem;
+          }
+        }
+
+        .menu__links__wrapper {
+          padding: 0 1rem;
+          display: flex;
+          float: none;
+          min-height: auto;
+          flex-shrink: 0;
+        }
+      }
+
+      ul.menu--one__list .menu-backdrop {
+        display: none !important;
+      }
+
+      .term-image__wrapper {
+        background: $mm_bg;
+        flex-shrink: 0;
+        max-width: none;
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .secondary--main--menu {
+    display: none;
+
+    ul.menu--one__list {
+      background: $mm_bg;
+      width: 84.375%;
+      height: 100%;
+      position: fixed;
+      top: 2.9rem;
+      bottom: 0;
+      z-index: 20;
+      overflow-y: auto;
+      margin-top: 0;
+      padding-bottom: 3.125rem;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .main--menu {
+    &.menu--active {
+      .mobile--close {
+        #{$right}: calc((100% - 19.6875rem) / 2);
+        #{$left}: auto;
+        transform: translateX(50%);
+
+        html[lang=ar] & {
+          transform: translateX(-50%);
         }
       }
     }
