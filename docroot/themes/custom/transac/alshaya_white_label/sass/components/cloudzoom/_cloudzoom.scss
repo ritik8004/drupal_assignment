@@ -47,7 +47,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: calc(100% - (5.75rem + 1rem));
+      width: calc(100% - 6.75rem);
       float: $right;
       margin-bottom: 5rem;
     }
