@@ -46,6 +46,7 @@ globalThis.rcsPhCommerceBackend.getEntity = async function getEntity(langcode) {
                         }
                     }
                 }
+                brand_logo
             }
           }}`
         });
