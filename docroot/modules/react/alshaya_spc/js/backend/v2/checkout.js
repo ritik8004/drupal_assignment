@@ -1129,7 +1129,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
         method_code: carrierInfo.method,
       });
     } else {
-      shippingMethods = getHomeDeliveryShippingMethods(shippingData);
+      shippingMethods = await getHomeDeliveryShippingMethods(shippingData.address);
       hdshippingMethods = shippingMethods;
     }
 
