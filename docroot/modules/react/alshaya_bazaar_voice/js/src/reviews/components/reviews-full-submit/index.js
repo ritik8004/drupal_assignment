@@ -60,7 +60,6 @@ export default class WriteReviewButton extends React.Component {
     setStorageInfo(false, 'openPopup');
 
     if (e.detail.HasErrors !== undefined && !e.detail.HasErrors) {
-      console.log(context);
       if (context !== 'myaccount') {
         smoothScrollTo(e, '#post-review-message');
       } else {
