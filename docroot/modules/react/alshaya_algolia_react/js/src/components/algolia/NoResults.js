@@ -1,7 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { connectStateResults } from 'react-instantsearch-dom';
-import { toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
+import { toggleSearchResultsContainer, toggleSortByFilter, toggleBlockCategoryFilter } from '../../utils';
 
 const NoResults = ({
   searchResults, isSearchStalled, searching, searchingForFacetValues,
@@ -13,6 +13,7 @@ const NoResults = ({
   if (!searching && !isSearchStalled && !searchingForFacetValues) {
     toggleSearchResultsContainer();
     toggleSortByFilter('hide');
+    toggleBlockCategoryFilter('hide');
   }
 
   // Trigger GTM for no results found.

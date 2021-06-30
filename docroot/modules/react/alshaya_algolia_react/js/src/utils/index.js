@@ -22,6 +22,7 @@ export {
   toggleSortByFilter,
   showLoader,
   removeLoader,
+  toggleBlockCategoryFilter,
 } from './SearchUtility';
 
 export {
