@@ -112,10 +112,10 @@ const staticShippingMethods = [];
 /**
  * Gets shipping methods.
  *
- * @param {object} shipping
- *   The shipping data.
- * @return {object}.
- *   The data.
+ * @param data
+ *   The shipping address.
+ * @returns {Promise<null|*>}
+ *   HD Shipping methods or null.
  */
 const getHomeDeliveryShippingMethods = async (data) => {
   if (_.isEmpty(data.country_id)) {
@@ -131,9 +131,10 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
   // Get shipping methods from static.
   if (!_.isEmpty(staticShippingMethods[key])) {
-    return { data: staticShippingMethods[key] };
+    return staticShippingMethods[key];
   }
 
+  staticShippingMethods[key] = null;
   const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
   const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
   if (!_.isEmpty(response.data)) {
@@ -149,7 +150,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
     logger.error(`Error in getting shipping methods for HD. Data: ${JSON.stringify(data)}`);
   }
 
-  return response;
+  return staticShippingMethods[key];
 };
 
 /**
@@ -364,18 +365,18 @@ const applyDefaults = async (data, uid) => {
   const address = getDefaultAddress(data);
   if (address) {
     const methods = await getHomeDeliveryShippingMethods({ address });
-    if (!_.isEmpty(methods.data) && typeof methods.data.error === 'undefined') {
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
-      return selectHd(address, methods.data[0], address, methods.data);
+      return selectHd(address, methods[0], address, methods);
     }
   }
 
   // If address already available in cart, use it.
   if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (!_.isEmpty(methods.data) && typeof methods.data.error === 'undefined') {
+    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
-      return selectHd(data.shipping.address, methods.data[0], data.shipping.address, methods.data);
+      return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
   }
 
