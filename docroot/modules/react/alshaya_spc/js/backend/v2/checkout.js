@@ -319,7 +319,6 @@ const getPaymentMethods = async () => {
   const cartId = window.commerceBackend.getCartId();
   const response = await getCart();
   const cartData = response.data;
-
   if (_.isEmpty(cartData.shipping) || _.isEmpty(cartData.shipping.method)) {
     logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
     return null;
@@ -630,7 +629,6 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
 
 /**
  * Select HD address and method from possible defaults.
- * @todo implement this
  *
  * @param {object} address
  *   Address object.

@@ -255,6 +255,102 @@ describe('Checkout', () => {
       });
     });
 
+    describe('Test addShippingInfo()', () => {
+      const addShippingInfo = utilsRewire.__get__('addShippingInfo');
+
+      jest
+        .spyOn(window.commerceBackend, 'getCartId')
+        .mockImplementation(() => '1234');
+
+      it('With empty data', async () => {
+        const result = await addShippingInfo({}, 'update shipping', true);
+        expect(result).toEqual(null);
+        expect(axios).not.toHaveBeenCalled();
+      });
+
+      it('With address data', async () => {
+        // Mock for updateCart().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        // Mock for updateBilling().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        const data = {
+          static: {
+            firstname: 'Johnny',
+          },
+          street: '1 Long st',
+          carrier_info: {
+            code: 300,
+            method: 'foo',
+          },
+        };
+        // Call addShippingInfo();
+        await addShippingInfo(data, 'update shipping', true);
+
+        // We cannot check the result of updateCart() but we can check if it
+        // is being called with the correct parameters provided by addShippingInfo().
+        expect(axios).toHaveBeenNthCalledWith(
+          1,
+          {
+            data: '{"shipping":{"shipping_carrier_code":300,"shipping_method_code":"foo","shipping_address":{"firstname":"Johnny","street":["1 Long st"],"customAttributes":[{"attributeCode":"street","value":"1 Long st"}]}},"extension":{"action":"update shipping"}}',
+            headers: {
+              'Alshaya-Channel': 'web',
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+          },
+        );
+      });
+
+      it('With address data and customer_address_id', async () => {
+        // Mock for updateCart().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        // Mock for updateBilling().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        const data = {
+          customer_address_id: '461',
+          address: {
+            city: 'London',
+            street: '1 Long st',
+          },
+        };
+        // Call addShippingInfo();
+        await addShippingInfo(data, 'update shipping', true);
+
+        // We cannot check the result of updateCart() but we can check if it
+        // is being called with the correct parameters provided by addShippingInfo().
+        expect(axios).toHaveBeenNthCalledWith(
+          1,
+          {
+            data: '{"shipping":{"shipping_address":{"city":"London","street":"1 Long st"}},"extension":{"action":"update shipping"}}',
+            headers: {
+              'Alshaya-Channel': 'web',
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+          },
+        );
+
+        // We cannot check the result of updateBilling() but we can check if it
+        // is being called with the correct parameters provided by addShippingInfo().
+        expect(axios).toHaveBeenNthCalledWith(
+          2,
+          {
+            data: '{"extension":{"action":"update billing"},"billing":{"city":"London","street":["1 Long st"],"customAttributes":[{"attributeCode":"city","value":"London"},{"attributeCode":"street","value":"1 Long st"}]}}',
+            headers: {
+              'Alshaya-Channel': 'web',
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+          },
+        );
+      });
+    });
+
     describe('Test prepareShippingData()', () => {
       const prepareShippingData = utilsRewire.__get__('prepareShippingData');
 
@@ -586,50 +682,43 @@ describe('Checkout', () => {
       const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
 
       it('With Shipping type for getPaymentMethods', async () => {
-        const data = paymentMethods;
         window.commerceBackend.setRawCartDataInStorage(null);
-        cartData.shipping = {
-          method: {
-            type: 'home_delivery',
-          },
-        };
 
         axios
-          .mockResolvedValueOnce({data: cartData, status: 200 })
-          .mockResolvedValueOnce({data, status: 200});
+          .mockResolvedValueOnce({ data: cartData, status: 200 })
+          .mockResolvedValueOnce({ data: paymentMethods, status: 200 });
 
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
-        let result = await getPaymentMethods();
+        const result = await getPaymentMethods();
 
         expect(axios).toHaveBeenCalled();
-        expect(result.length).toEqual(4);
-        expect(result[0].code).toEqual('checkout_com_upapi_vault');
-        expect(result[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
-        expect(result[3].code).toEqual('cashondelivery');
-        expect(result[3].title).toEqual('Cash On Delivery');
+        expect(result.data.length).toEqual(4);
+        expect(result.data[0].code).toEqual('checkout_com_upapi_vault');
+        expect(result.data[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
+        expect(result.data[3].code).toEqual('cashondelivery');
+        expect(result.data[3].title).toEqual('Cash On Delivery');
       });
 
       it('With null value when shipping method is not provided', async () => {
-        const data = {};
         window.commerceBackend.setRawCartDataInStorage(null);
         cartData.shipping = {
           method: {
-            type: {},
+            method: {},
           },
         };
 
         axios
-          .mockResolvedValueOnce({data: cartData, status: 200 })
-          .mockResolvedValueOnce({data, status: 200});
+          .mockResolvedValueOnce({ data: cartData, status: 200 })
+          .mockResolvedValueOnce({ data: {}, status: 200 });
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
-        let result = await getPaymentMethods();
-        expect(result).toEqual({});
+        const result = await getPaymentMethods();
+        expect(result.data).toEqual({});
       });
     });
 
