@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
   getCart,
@@ -127,7 +128,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
   const formattedAddress = formatShippingEstimatesAddress(data);
 
   // Create a key for static store;
-  const key = formattedAddress.country_id;
+  const key = md5(JSON.stringify(formattedAddress));
 
   // Get shipping methods from static.
   if (!_.isEmpty(staticShippingMethods[key])) {
