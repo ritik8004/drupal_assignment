@@ -18,6 +18,10 @@
     .c-accordion {
       display: table;
       width: 100%;
+
+      &.hide-block-category-block {
+        display: none;
+      }
     }
 
     @include breakpoint($desktop) {
