@@ -45,12 +45,13 @@ class NewCard extends React.Component {
   handleCardNumberChange = (event, handler) => {
     const { labelEffect } = this.props;
     const cardNumber = event.target.rawValue;
-    const { enabled } = getBinValidationConfig();
 
     labelEffect(event, handler);
 
     // Validate bin if bin validation is enabled else just validate card number.
-    if (enabled === true && cardNumber.length >= 6) {
+    const { cardBinValidationEnabled } = getBinValidationConfig();
+
+    if (cardBinValidationEnabled === true && cardNumber.length >= 6) {
       this.handleBinValidation(cardNumber);
     } else {
       this.handleCardNumberValidation(cardNumber);
@@ -87,14 +88,14 @@ class NewCard extends React.Component {
 
   // Bin validation - First 6 digits of a card is the bin number.
   handleBinValidation = (cardNumber) => {
-    let errorKey = 'invalid_card';
-    const { paymentMethods } = getBinValidationConfig();
-    const validation = binValidation(cardNumber.substring(0, 6), paymentMethods);
+    const { binValidationSupportedPaymentMethods } = getBinValidationConfig();
+    const cardBin = cardNumber.substring(0, 6);
+    const validation = binValidation(cardBin, binValidationSupportedPaymentMethods);
 
     if (validation instanceof Promise) {
       validation.then((response) => {
         if (response.error !== undefined) {
-          errorKey = response.error_message || errorKey;
+          const errorKey = response.error_message || 'invalid_card';
 
           handleValidationMessage(
             'spc-cc-number-error',

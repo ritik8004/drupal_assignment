@@ -143,18 +143,17 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
 
     // Add bin validation config in drupalSettings if it is enabled.
-    $bin_validation_enabled = $checkout_settings->get('bin_validation_enabled') ?? FALSE;
+    $bin_validation_enabled = $checkout_settings->get('card_bin_validation_enabled') ?? FALSE;
+    $bin_validation_supported_payment_methods = $checkout_settings->get('bin_validation_supported_payment_methods') ?? '';
 
-    if ($bin_validation_enabled) {
-      $payment_methods = $checkout_settings->get('bin_validation_payment_methods') ?? '';
-
+    if ($bin_validation_enabled == TRUE && !empty($bin_validation_supported_payment_methods)) {
       $build['#attached']['drupalSettings']['checkoutComUpapi']['binValidation'] = [
-        'enabled' => $bin_validation_enabled,
-        'paymentMethods' => $payment_methods,
+        'cardBinValidationEnabled' => $bin_validation_enabled,
+        'binValidationSupportedPaymentMethods' => $bin_validation_supported_payment_methods,
       ];
 
       // Add payment method specific error message in strings.
-      if (in_array('qpay', explode(',', $payment_methods))) {
+      if (in_array('qpay', explode(',', $bin_validation_supported_payment_methods))) {
         $build['#strings']['bin_validation_error_qpay'] = [
           'key' => 'bin_validation_error_qpay',
           'value' => $this->t('Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.'),

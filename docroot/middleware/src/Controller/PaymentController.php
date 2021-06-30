@@ -10,8 +10,6 @@ use App\Service\Config\SystemSettings;
 use App\Service\Orders;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Service\CheckoutCom\BinValidator;
 
 /**
  * PaymentController Class for UPAPI callbacks.
@@ -69,13 +67,6 @@ class PaymentController {
   protected $order;
 
   /**
-   * Bin Validator.
-   *
-   * @var \App\Service\CheckoutCom\BinValidator
-   */
-  protected $binValidator;
-
-  /**
    * PaymentController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -86,19 +77,15 @@ class PaymentController {
    *   Cart service.
    * @param \App\Service\Orders $order
    *   Order service.
-   * @param \App\Service\CheckoutCom\BinValidator $bin_validator
-   *   Bin Validator.
    */
   public function __construct(LoggerInterface $logger,
                               SystemSettings $settings,
                               Cart $cart,
-                              Orders $order,
-                              BinValidator $bin_validator) {
+                              Orders $order) {
     $this->logger = $logger;
     $this->settings = $settings;
     $this->cart = $cart;
     $this->order = $order;
-    $this->binValidator = $bin_validator;
   }
 
   /**
@@ -277,48 +264,6 @@ class PaymentController {
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
 
     return $response;
-  }
-
-  /**
-   * Bin validation.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Current request.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Validation status or error.
-   */
-  public function handleBinValidation(Request $request) {
-    $request_content = json_decode($request->getContent(), TRUE);
-    $bin = $request_content['bin'];
-    $payment_methods_string = $request_content['paymentMethods'];
-
-    if (empty($bin) || empty($payment_methods_string)) {
-      $message = 'BIN validation failed. Bin number and Payment method is required for validation.';
-      $this->logger->error($message . 'Request Data: @data.', [
-        '@data' => $request_content,
-      ]);
-
-      return new JsonResponse([
-        'error' => TRUE,
-      ]);
-    }
-
-    // Convert payment_methods string to array to validate for each of them.
-    $payment_methods = explode(',', $payment_methods_string);
-
-    foreach ($payment_methods ?? [] as $payment_method) {
-      if ($this->binValidator->binMatchesPaymentMethod($bin, $payment_method)) {
-        return new JsonResponse([
-          'error' => TRUE,
-          'error_message' => 'bin_validation_error_' . $payment_method,
-        ]);
-      }
-    }
-
-    return new JsonResponse([
-      'status' => TRUE,
-    ]);
   }
 
 }

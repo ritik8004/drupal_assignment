@@ -73,9 +73,9 @@ payment.payment_error:
   controller: App\Controller\PaymentController::handlePaymentFail
   methods: GET
 
-payment.bin_validation:
-  path: /payment/bin-validation
-  controller: App\Controller\PaymentController::handleBinValidation
+card.bin_validation:
+  path: /card/bin-validation
+  controller: App\Controller\BinValidationController::handleBinValidation
   methods: POST
 
 freegift.select_free_gift:

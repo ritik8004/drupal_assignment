@@ -25,6 +25,6 @@ place_order_double_check_after_exception: true
 same_day_shipping_method_code: ''
 refund_exclude_payment_methods:
   cashondelivery: cashondelivery
-bin_validation_enabled: false
-bin_validation_payment_methods: '' # Comma seperated list of payment methods. eg. `qpay,knet`.
+card_bin_validation_enabled: false
+bin_validation_supported_payment_methods: '' # Comma seperated list of payment methods. eg. `qpay,knet`.
 langcode: en

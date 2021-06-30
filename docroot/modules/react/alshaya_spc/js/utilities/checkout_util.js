@@ -622,7 +622,7 @@ export const getUpapiApplePayConfig = () => checkoutComUpapiApplePayConfig;
  * @param {*} paymentMethods
  */
 export const binValidation = (bin, paymentMethods) => {
-  const apiUrl = i18nMiddleWareUrl('payment/bin-validation');
+  const apiUrl = i18nMiddleWareUrl('card/bin-validation');
   return axios
     .post(apiUrl, {
       bin,
