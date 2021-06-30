@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c45074df9f91e1fd1992aa11428fe41d",
+    "content-hash": "8281685648c08bedb0ce10f4e5ba0b60",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13227,17 +13227,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "3.0.0-alpha1",
+            "version": "3.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "3.0.0-alpha1"
+                "reference": "3.0.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-alpha1.zip",
-                "reference": "3.0.0-alpha1",
-                "shasum": "851bc886e6f9b859873d7c35cd9db4cbfe04af56"
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta1.zip",
+                "reference": "3.0.0-beta1",
+                "shasum": "242350c2676b61aebc066ac7eaefa9ddd26de6f3"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -13250,16 +13250,15 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-alpha1",
-                    "datestamp": "1622784382",
+                    "version": "3.0.0-beta1",
+                    "datestamp": "1624863519",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
-                    "CORE-31034: Make the wait during delete configurable": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/5.patch"
+                    "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -24994,6 +24993,7 @@
                 }
             ],
             "description": "Command line tool to detect usage of deprecated code",
+            "abandoned": true,
             "time": "2017-09-06T12:14:01+00:00"
         },
         {
@@ -25624,7 +25624,7 @@
         "drupal/redirect": 15,
         "drupal/role_delegation": 15,
         "drupal/s3fs": 15,
-        "drupal/search_api_algolia": 15,
+        "drupal/search_api_algolia": 10,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
         "drupal/sessions_expire": 20,
