@@ -538,7 +538,7 @@ describe('Checkout', () => {
         axios
           .mockResolvedValueOnce({data, status: 200});
 
-        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG'});
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
         expect(result.length).toEqual(1);
         expect(result[0].carrier_code).toEqual('alshayadelivery');
         expect(result[0].carrier_title).toEqual('Standard Delivery');
@@ -551,8 +551,8 @@ describe('Checkout', () => {
         axios
           .mockResolvedValueOnce({data, status: 200});
 
-        let response = await getHomeDeliveryShippingMethods({ country_id: 'EG'});
-        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG'});
+        let response = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
         expect(axios).toBeCalledTimes(0);
         expect(result.length).toEqual(1);
       });
