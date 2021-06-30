@@ -4,11 +4,10 @@
 <div class="alshaya_search_gallery">
 {% endif %}
   <div class="alshaya_search_mainimage" data-sku-image="{{ file_url(mainImage['#uri']) }}">
-    <div class="img-wrapper">
-      {{ mainImage }}
-
-      {# Hover images #}
-      {% if thumbnails|length > 0 %}
+    {# Hover images #}
+    {% if thumbnails|length > 0 %}
+      <div class="img-wrapper">
+        {{ mainImage }}
         <div class="alshaya_search_slider">
           <ul class="search-lightSlider">
             {% for key,thumbs in thumbnails %}
@@ -18,8 +17,10 @@
             {% endfor %}
           </ul>
         </div>
-      {% endif %}
-    </div>
+      </div>
+    {% else %}
+      {{ mainImage }}
+    {% endif %}
     {# Product lozenges #}
     {{ losanges }}
   </div>
