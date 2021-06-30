@@ -47,7 +47,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: calc(100% - (5.75rem + 1rem));
+      width: calc(100% - 6.75rem);
       float: $right;
       margin-bottom: 5rem;
     }
@@ -262,12 +262,6 @@
       height: 6.375rem !important;
       padding: 0.125rem;
       border: 1px solid transparent;
-
-      img {
-        width: auto;
-        height: 100%;
-        margin: 0 auto;
-      }
     }
   }
 
@@ -337,12 +331,6 @@
       height: 5.0625rem !important;
       margin: 0.3125rem 0;
       padding: 2px;
-
-      img {
-        width: auto;
-        height: 100%;
-        margin: 0 auto;
-      }
     }
   }
 }
@@ -566,4 +554,14 @@
       background-color: $product-image-zoom-placeholder-bg;
     }
   }
+}
+
+#lightSlider .slick-slide > a.cloud-zoom-gallery {
+  // Now that we have fixed the box for thumbnail,
+  // we can allow image to fill the box and align center if it is small.
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
