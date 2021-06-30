@@ -191,14 +191,11 @@
   }
 }
 
-html,
-body {
-  &.overlay-select {
-    .magv2-select-popup-container {
-      transition: transform 400ms cubic-bezier(0, 0, 0.2, 1), opacity 400ms cubic-bezier(0, 0, 0.2, 1);
-      transform: translateX(0) !important;
-      opacity: 1;
-    }
+body.overlay-select {
+  .magv2-select-popup-container {
+    transition: transform 400ms cubic-bezier(0, 0, 0.2, 1), opacity 400ms cubic-bezier(0, 0, 0.2, 1);
+    transform: translateX(0) !important;
+    opacity: 1;
   }
 }
 
