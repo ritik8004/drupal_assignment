@@ -10,6 +10,7 @@ import cncStoreList from '../data/cnc_stores_list.js';
 import { getCart } from '../../../../js/backend/v2/common';
 import * as productStatus from '../data/product_status.json';
 import paymentMethods from '../data/paymentMethods';
+import homeDeliveryShippingMethods from '../data/homeDeliveryShippingMethods';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -525,6 +526,46 @@ describe('Checkout', () => {
 
         let result = await getPaymentMethods();
         expect(result).toEqual({});
+      });
+    });
+
+    describe('Test getHomeDeliveryShippingMethods()', () => {
+      const getHomeDeliveryShippingMethods = utilsRewire.__get__('getHomeDeliveryShippingMethods');
+      it('With static value from getHomeDeliveryShippingMethods', async () => {
+        const data = homeDeliveryShippingMethods;
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({data, status: 200});
+
+        let response = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        expect(axios).toBeCalledTimes(1);
+        expect(result.length).toEqual(1);
+      });
+
+      it('With country_id for getHomeDeliveryShippingMethods', async () => {
+        const data = homeDeliveryShippingMethods;
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({data, status: 200});
+
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        expect(result.length).toEqual(1);
+        expect(result[0].carrier_code).toEqual('alshayadelivery');
+        expect(result[0].carrier_title).toEqual('Standard Delivery');
+      });
+
+      it('With null for getHomeDeliveryShippingMethods when country_id not provided', async () => {
+        const data = null;
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({data, status: 200});
+
+        let result = await getHomeDeliveryShippingMethods({});
+        expect(result).toEqual(null);
       });
     });
   });

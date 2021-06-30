@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
   getCart,
@@ -11,7 +12,7 @@ import {
   callMagentoApi,
 } from './common';
 import { getDefaultErrorMessage } from './error';
-import { isUserAuthenticated, logger } from './utility';
+import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -107,18 +108,50 @@ const formatShippingEstimatesAddress = (address) => {
   return data;
 };
 
+const staticShippingMethods = [];
+
 /**
  * Gets shipping methods.
- * @todo implement this
  *
- * @param {object} shipping
- *   The shipping data.
- * @return {object}.
- *   The data.
+ * @param data
+ *   The shipping address.
+ * @returns {Promise<null|*>}
+ *   HD Shipping methods or null.
  */
-const getHomeDeliveryShippingMethods = (address) => {
-  formatShippingEstimatesAddress(address);
-  return null;
+const getHomeDeliveryShippingMethods = async (data) => {
+  if (_.isEmpty(data.country_id)) {
+    logger.error(`Error in getting shipping methods for HD as country id not available. Data: ${JSON.stringify(data)}`);
+    return null;
+  }
+
+  // Prepare address data for api call.
+  const formattedAddress = formatShippingEstimatesAddress(data);
+
+  // Create a key for static store;
+  const key = md5(JSON.stringify(formattedAddress));
+
+  // Get shipping methods from static.
+  if (!_.isEmpty(staticShippingMethods[key])) {
+    return staticShippingMethods[key];
+  }
+
+  staticShippingMethods[key] = null;
+  const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
+  const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
+  if (!_.isEmpty(response.data)) {
+    const methods = response.data;
+    for (let i = 0; i < methods.length; i++) {
+      if (methods[i].carrier_code === 'click_and_collect') {
+        delete methods[i];
+      }
+    }
+    // Set shipping methods in static.
+    staticShippingMethods[key] = methods;
+  } else {
+    logger.error(`Error in getting shipping methods for HD. Data: ${JSON.stringify(data)}`);
+  }
+
+  return staticShippingMethods[key];
 };
 
 /**
@@ -303,7 +336,7 @@ const getDefaultPaymentFromOrder = () => null;
  * @return {object}.
  *   The data.
  */
-const applyDefaults = (data, uid) => {
+const applyDefaults = async (data, uid) => {
   // @todo Update this function to return data after processing with user inputs.
   if (!_.isEmpty(data.shipping.method)) {
     return data;
@@ -332,7 +365,7 @@ const applyDefaults = (data, uid) => {
   // Select default address from address book if available.
   const address = getDefaultAddress(data);
   if (address) {
-    const methods = getHomeDeliveryShippingMethods(address);
+    const methods = await getHomeDeliveryShippingMethods({ address });
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], address, methods);
@@ -341,7 +374,7 @@ const applyDefaults = (data, uid) => {
 
   // If address already available in cart, use it.
   if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
-    const methods = getHomeDeliveryShippingMethods(data.shipping.address);
+    const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
@@ -597,13 +630,13 @@ const getProcessedCheckoutData = async (cartData) => {
   const cncStatus = await getCncStatusForCart();
 
   // Here we will do the processing of cart to make it in required format.
-  const updated = applyDefaults(data, window.drupalSettings.user.uid);
+  const updated = await applyDefaults(data, window.drupalSettings.user.uid);
   if (updated !== false) {
     data = updated;
   }
 
   if (typeof data.shipping.methods === 'undefined' && typeof data.shipping.address !== 'undefined' && data.shipping.type !== 'click_and_collect') {
-    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping.address);
+    const shippingMethods = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (typeof shippingMethods.error !== 'undefined') {
       return shippingMethods;
     }
