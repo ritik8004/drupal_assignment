@@ -93,7 +93,7 @@ export default class WriteReviewForm extends React.Component {
           }
           // Dispatch event after review submit.
           dispatchCustomEvent('reviewPosted', result.data);
-          // Process sort click data as user clicks on sort option.
+          // Process review submit data as user submits the review.
           const analyticsData = {
             type: 'Used',
             name: 'submit',

@@ -193,7 +193,7 @@ class CartSelectOption extends React.Component {
     );
 
     const selectOption = (!swatchStatus) ? (
-      <div className="non-grouped-attr">
+      <div className="non-grouped-attr" onClick={(e) => (e.target.classList.contains('non-grouped-attr') ? this.closeModal(e) : null)}>
         <NonGroupSelectOption
           key={attributeKey}
           keyId={attributeKey}
@@ -212,7 +212,7 @@ class CartSelectOption extends React.Component {
     ) : swatchSelectOption;
 
     return (groupStatus) ? (
-      <div className="grouped-attr">
+      <div className="grouped-attr" onClick={(e) => (e.target.classList.contains('grouped-attr') ? this.closeModal(e) : null)}>
         <GroupSelectOption
           key={attributeKey}
           keyId={attributeKey}

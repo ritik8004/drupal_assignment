@@ -197,6 +197,33 @@ body.overlay-select {
     transform: translateX(0) !important;
     opacity: 1;
   }
+
+  .grouped-attr,
+  .non-grouped-attr {
+    &::before {
+      opacity: 1;
+      height: 100%;
+      transition: opacity 300ms ease-in;
+    }
+  }
+}
+
+.pdp-cart-form {
+  .grouped-attr,
+  .non-grouped-attr {
+    &::before {
+      content: '';
+      position: fixed;
+      width: 100vw;
+      background-color: rgba(0, 0, 0, 0.48);
+      box-shadow: 0 9999px 0 9999px rgba(0, 0, 0, 0.5);
+      z-index: 1;
+      opacity: 0;
+      top: 0;
+      #{$left}: 0;
+      transition: opacity 300ms ease-in;
+    }
+  }
 }
 
 .non-grouped-attr {
