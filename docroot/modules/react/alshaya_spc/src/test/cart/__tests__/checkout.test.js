@@ -531,6 +531,19 @@ describe('Checkout', () => {
 
     describe('Test getHomeDeliveryShippingMethods()', () => {
       const getHomeDeliveryShippingMethods = utilsRewire.__get__('getHomeDeliveryShippingMethods');
+      it('With static value from getHomeDeliveryShippingMethods', async () => {
+        const data = homeDeliveryShippingMethods;
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({data, status: 200});
+
+        let response = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        expect(axios).toBeCalledTimes(1);
+        expect(result.length).toEqual(1);
+      });
+
       it('With country_id for getHomeDeliveryShippingMethods', async () => {
         const data = homeDeliveryShippingMethods;
         window.commerceBackend.setRawCartDataInStorage(null);
@@ -542,19 +555,6 @@ describe('Checkout', () => {
         expect(result.length).toEqual(1);
         expect(result[0].carrier_code).toEqual('alshayadelivery');
         expect(result[0].carrier_title).toEqual('Standard Delivery');
-      });
-
-      it('With static value from getHomeDeliveryShippingMethods', async () => {
-        const data = homeDeliveryShippingMethods;
-        window.commerceBackend.setRawCartDataInStorage(null);
-
-        axios
-          .mockResolvedValueOnce({data, status: 200});
-
-        let response = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
-        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
-        expect(axios).toBeCalledTimes(0);
-        expect(result.length).toEqual(1);
       });
 
       it('With null for getHomeDeliveryShippingMethods when country_id not provided', async () => {
