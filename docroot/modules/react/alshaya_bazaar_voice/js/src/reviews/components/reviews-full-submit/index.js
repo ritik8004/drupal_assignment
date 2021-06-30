@@ -69,6 +69,11 @@ export default class WriteReviewButton extends React.Component {
           buttonClass: 'myaccount_review',
         });
       }
+    } else if (context === 'myaccount' && e.detail === 1) {
+      this.setState({
+        myAccountReview: '',
+        buttonClass: 'write_review',
+      });
     }
   };
 
