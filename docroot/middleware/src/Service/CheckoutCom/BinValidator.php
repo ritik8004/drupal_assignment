@@ -29,37 +29,35 @@ class BinValidator {
   }
 
   /**
-   * Checks if the given bin is valid.
+   * Get bin numbers.
    *
-   * @param string $bin
-   *   The card bin to verify.
+   * @param string $payment_method
+   *   The payment method for which we need to get the list of bin.
    *
-   * @return bool
-   *   Return true if valid, false otherwise.
+   * @return array
+   *   List of bin numbers.
    */
-  public function isValidBin(string $bin) {
-    $country_code = $this->settings->getSettings('alshaya_site_country_code')['country_code'];
-    $validBins = !empty($country_code) ? $this->settings->getSettings('valid_bins')[$country_code] : '';
+  public function getBinNumbers($payment_method) {
+    $bin_numbers = $this->settings->getSettings('bins')[$payment_method] ?? [];
 
-    return in_array($bin, $validBins);
+    return $bin_numbers;
   }
 
   /**
-   * Error message for bin validation.
+   * Checks if the given bin is in the list of bins for given payment method.
    *
-   * @return string
-   *   Return Error message.
+   * @param string $bin
+   *   The card bin to verify.
+   * @param string $payment_method
+   *   The payment method to which we compare the given bin.
+   *
+   * @return bool
+   *   Return true if matches, false otherwise.
    */
-  public function getBinValidationErrorMessage() {
-    $country_code = $this->settings->getSettings('alshaya_site_country_code')['country_code'];
+  public function binMatchesPaymentMethod(string $bin, string $payment_method) {
+    $bin_numbers = $this->getBinNumbers($payment_method);
 
-    if ($country_code === 'kw') {
-      return 'Your card details are valid for K-NET. Please select K-NET as a payment method or enter different credit/debit card details to proceed.';
-    }
-
-    if ($country_code === 'qa') {
-      return 'Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.';
-    }
+    return in_array($bin, $bin_numbers);
   }
 
 }

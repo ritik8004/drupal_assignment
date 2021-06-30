@@ -8,6 +8,7 @@ import CVVToolTipText from '../../cvv-text';
 import getStringMessage from '../../../../utilities/strings';
 import { handleValidationMessage } from '../../../../utilities/form_item_helper';
 import { CheckoutComUpapiContext } from '../../../../context/CheckoutComUpapi';
+import { getBinValidationConfig, binValidation } from '../../../../utilities/checkout_util';
 
 class NewCard extends React.Component {
   static contextType = CheckoutComUpapiContext;
@@ -43,11 +44,21 @@ class NewCard extends React.Component {
 
   handleCardNumberChange = (event, handler) => {
     const { labelEffect } = this.props;
-    const { numberValid } = this.context;
     const cardNumber = event.target.rawValue;
+    const { enabled } = getBinValidationConfig();
 
     labelEffect(event, handler);
 
+    // Validate bin if bin validation is enabled else just validate card number.
+    if (enabled === true && cardNumber.length >= 6) {
+      this.handleBinValidation(cardNumber);
+    } else {
+      this.handleCardNumberValidation(cardNumber);
+    }
+  };
+
+  handleCardNumberValidation = (cardNumber) => {
+    const { numberValid } = this.context;
     let valid = true;
     const type = document.getElementById('payment-card-type').value;
 
@@ -59,7 +70,7 @@ class NewCard extends React.Component {
 
     handleValidationMessage(
       'spc-cc-number-error',
-      event.target.rawValue,
+      cardNumber,
       valid,
       getStringMessage('invalid_card'),
     );
@@ -71,6 +82,34 @@ class NewCard extends React.Component {
 
     if (numberValid !== valid && valid) {
       this.ccExpiry.focus();
+    }
+  };
+
+  // Bin validation - First 6 digits of a card is the bin number.
+  handleBinValidation = (cardNumber) => {
+    let errorKey = 'invalid_card';
+    const { paymentMethods } = getBinValidationConfig();
+    const validation = binValidation(cardNumber.substring(0, 6), paymentMethods);
+
+    if (validation instanceof Promise) {
+      validation.then((response) => {
+        if (response.error !== undefined) {
+          errorKey = response.error_message || errorKey;
+
+          handleValidationMessage(
+            'spc-cc-number-error',
+            cardNumber,
+            false,
+            getStringMessage(errorKey),
+          );
+          return;
+        }
+
+        if (response.status !== undefined && response.status === true) {
+          // Validate full card number if bin is valid.
+          this.handleCardNumberValidation(cardNumber);
+        }
+      });
     }
   };
 

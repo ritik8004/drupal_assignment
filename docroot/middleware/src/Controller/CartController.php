@@ -93,13 +93,6 @@ class CartController {
   protected $settings;
 
   /**
-   * Checkout.com API Wrapper.
-   *
-   * @var \App\Service\CheckoutCom\APIWrapper
-   */
-  protected $checkoutComApi;
-
-  /**
    * CartController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -120,8 +113,6 @@ class CartController {
    *   Utility Service.
    * @param \App\Service\Config\SystemSettings $settings
    *   System Settings service.
-   * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
-   *   Checkout.com API Wrapper.
    */
   public function __construct(RequestStack $request,
                               Cart $cart,
@@ -131,8 +122,7 @@ class CartController {
                               LoggerInterface $logger,
                               CheckoutDefaults $checkout_defaults,
                               Utility $utility,
-                              SystemSettings $settings,
-                              APIWrapper $checkout_com_api) {
+                              SystemSettings $settings) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
@@ -142,7 +132,6 @@ class CartController {
     $this->checkoutDefaults = $checkout_defaults;
     $this->utility = $utility;
     $this->settings = $settings;
-    $this->checkoutComApi = $checkout_com_api;
   }
 
   /**
@@ -738,17 +727,6 @@ class CartController {
           $this->logger->error('Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: @cart.', [
             '@cart' => json_encode($cart),
           ]);
-        }
-
-        // BIN Validation.
-        $bin_validation = $this->checkoutComApi->validateBin($request_content['payment_info']['payment']['additional_data']['bin']);
-
-        if (!empty($bin_validation['error'])) {
-          $this->logger->error('Error while finalizing payment. BIN is invalid for the given card details. Cart: @cart.', [
-            '@cart' => json_encode($cart),
-          ]);
-
-          return new JsonResponse($bin_validation);
         }
 
         // If error.

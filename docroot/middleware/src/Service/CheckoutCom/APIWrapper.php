@@ -5,7 +5,6 @@ namespace App\Service\CheckoutCom;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use App\Service\CartErrorCodes;
 
 /**
  * API Wrapper for checkout_com payment method.
@@ -99,13 +98,6 @@ class APIWrapper {
   protected $madaValidator;
 
   /**
-   * Bin Validator.
-   *
-   * @var \App\Service\CheckoutCom\BinValidator
-   */
-  protected $binValidator;
-
-  /**
    * APIWrapper constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -114,17 +106,13 @@ class APIWrapper {
    *   Checkout.com Helper.
    * @param \App\Service\CheckoutCom\MadaValidator $mada_validator
    *   Mada Validator.
-   * @param \App\Service\CheckoutCom\BinValidator $bin_validator
-   *   Bin Validator.
    */
   public function __construct(RequestStack $request,
                               Helper $helper,
-                              MadaValidator $mada_validator,
-                              BinValidator $bin_validator) {
+                              MadaValidator $mada_validator) {
     $this->request = $request->getCurrentRequest();
     $this->helper = $helper;
     $this->madaValidator = $mada_validator;
-    $this->binValidator = $bin_validator;
   }
 
   /**
@@ -487,27 +475,6 @@ class APIWrapper {
   public function isUpapiCvvCheckRequired() {
     $config = $this->helper->getCheckoutComUpapiConfig();
     return $config['cvv_check'] ?? TRUE;
-  }
-
-  /**
-   * Validate bin.
-   *
-   * @param string $bin
-   *   Card bin.
-   *
-   * @return array
-   *   Verified TRUE if bin is valid else error code and message.
-   */
-  public function validateBin(string $bin) {
-    if ($this->binValidator->isValidBin($bin)) {
-      return ['valid' => TRUE];
-    }
-
-    return [
-      'error' => TRUE,
-      'error_code' => CartErrorCodes::CART_BIN_VALIDATION_ERROR,
-      'error_message' => $this->binValidator->getBinValidationErrorMessage(),
-    ];
   }
 
 }
