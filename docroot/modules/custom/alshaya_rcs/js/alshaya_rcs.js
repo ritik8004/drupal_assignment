@@ -45,7 +45,7 @@
         // @todo For configurable products.
         // We pass configurable options if product is not available in cart
         // and of configurable variant.
-        // var options = new Array();
+        var options = new Array();
         // if (isConfigurable) {
         //   currentSelectedVariant = $(form).find('.selected-parent-sku').val();
         //   Object.keys(settings.configurableCombinations[pageMainSku].configurables).forEach(function(key) {
