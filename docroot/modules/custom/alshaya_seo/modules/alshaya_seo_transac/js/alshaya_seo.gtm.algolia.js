@@ -93,10 +93,12 @@
     if (!$(this).hasClass('is-active')) {
       var selectedVal = document.createElement('div');
       var facetTitle = $(this).attr('datadrupalfacetlabel');
-      selectedVal.innerHTML = $(this).find('span.facet-item__value, a.facet-item__value').html();
-      selectedVal.querySelectorAll('span.facet-item__count').forEach(function (item, index) {
-        item.parentNode.removeChild(item);
-      });
+      // span.facet-item__label is added due to the regression in the code
+      // in RefinementList.js
+      // in the PR - https://github.com/acquia-pso/alshaya/pull/20764
+      // removal of span.facet-item__count is not required as we are
+      // fetching the label directly.
+      selectedVal.innerHTML = $(this).find('span.facet-item__value span.facet-item__label, a.facet-item__value').html();
       var data = {
         event: 'filter',
         siteSection: 'search results',
