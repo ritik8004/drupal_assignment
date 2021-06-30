@@ -120,11 +120,7 @@
             <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
           </div>
 
-          {% if vat_text %}
-            <div class="vat-text">
-              {{ vat_text }}
-            </div>
-          {% endif %}
+          <div class="vat-text">#rcs.product._self|vat_text#</div>
         </div>
 
         {% if content.same_day_delivery_text %}
