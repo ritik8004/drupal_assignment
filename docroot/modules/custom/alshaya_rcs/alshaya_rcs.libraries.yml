@@ -2,7 +2,9 @@ main:
   js:
     js/alshaya_rcs_renderer-exports.es5.js: {}
     js/alshaya_rcs-exports.es5.js: {}
+    js/alshaya_rcs.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
     - rcs_magento/main
+    - alshaya_acm_cart_notification/cart_notification_js
