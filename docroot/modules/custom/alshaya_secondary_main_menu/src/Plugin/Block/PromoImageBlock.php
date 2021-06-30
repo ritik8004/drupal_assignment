@@ -22,6 +22,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
  * )
  */
 class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterface {
+  const MENU_NAME = 'promo-menu';
   /**
    * Stores the configuration factory.
    *
@@ -82,9 +83,8 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
-    $menu_name = 'promo-menu';
-    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
-    $tree = $this->menuTree->load($menu_name, $parameters);
+    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters(self::MENU_NAME);
+    $tree = $this->menuTree->load(self::MENU_NAME, $parameters);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
     ];
@@ -136,13 +136,7 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    // ::build() uses MenuLinkTreeInterface::getCurrentRouteMenuTreeParameters()
-    // to generate menu tree parameters, and those take the active menu trail
-    // into account. Therefore, we must vary the rendered menu by the active
-    // trail of the rendered menu.
-    // Additional cache contexts, e.g. those that determine link text or
-    // accessibility of a menu, will be bubbled automatically.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:' . 'promo-menu']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }

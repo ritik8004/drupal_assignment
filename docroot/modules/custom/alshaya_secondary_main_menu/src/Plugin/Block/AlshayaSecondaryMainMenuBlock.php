@@ -21,7 +21,8 @@ use Drupal\Core\Url;
  *   admin_label = @Translation("Alshaya secondary main menu")
  * )
  */
-class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactoryPluginInterface {
+  const MENU_NAME = 'secondary-main-menu';
   /**
    * Stores the configuration factory.
    *
@@ -85,8 +86,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
     $desktop_config = $this->configFactory->get('alshaya_secondary_main_menu.settings');
     $desktop_secondary_main_menu_layout = $desktop_config->get('desktop_secondary_main_menu_layout');
     $desktop_secondary_main_menu_highlight_timing = (int) $desktop_config->get('desktop_secondary_main_menu_highlight_timing');
-    $menu_name = 'secondary-main-menu';
-    $subtree = $this->getSubTree($menu_name);
+    $subtree = $this->getSubTree(self::MENU_NAME);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
@@ -112,11 +112,11 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
   /**
    * Logic to get menu tree.
    */
-  public function getSubTree($menu_name) {
-    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
+  public function getSubTree() {
+    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters(self::MENU_NAME);
     $parameters->expandedParents = [];
     $parameters->setMinDepth(1);
-    $tree = $this->menuTree->load($menu_name, $parameters);
+    $tree = $this->menuTree->load(self::MENU_NAME, $parameters);
     return($tree);
   }
 
@@ -198,13 +198,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    // ::build() uses MenuLinkTreeInterface::getCurrentRouteMenuTreeParameters()
-    // to generate menu tree parameters, and those take the active menu trail
-    // into account. Therefore, we must vary the rendered menu by the active
-    // trail of the rendered menu.
-    // Additional cache contexts, e.g. those that determine link text or
-    // accessibility of a menu, will be bubbled automatically.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:' . 'secondary-main-menu']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }
