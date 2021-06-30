@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
   getCart,
@@ -117,30 +118,50 @@ const formatShippingEstimatesAddress = (address) => {
   return data;
 };
 
+const staticShippingMethods = [];
+
 /**
  * Gets shipping methods.
- * @todo implement this
  *
- * @param {object} shipping
- *   The shipping data.
- * @return {object}.
- *   The data.
+ * @param data
+ *   The shipping address.
+ * @returns {Promise<null|*>}
+ *   HD Shipping methods or null.
  */
-const getHomeDeliveryShippingMethods = (address) => {
-  formatShippingEstimatesAddress(address);
-  // Temporary return.
-  return [{
-    carrier_code: 'alshayadelivery',
-    method_code: 'armx_s01',
-    carrier_title: 'Standard Delivery',
-    method_title: 'Standard delivery 2-3 days',
-    amount: 2,
-    base_amount: 2,
-    available: true,
-    error_message: '',
-    price_excl_tax: 2,
-    price_incl_tax: 2,
-  }];
+const getHomeDeliveryShippingMethods = async (data) => {
+  if (_.isEmpty(data.country_id)) {
+    logger.error(`Error in getting shipping methods for HD as country id not available. Data: ${JSON.stringify(data)}`);
+    return null;
+  }
+
+  // Prepare address data for api call.
+  const formattedAddress = formatShippingEstimatesAddress(data);
+
+  // Create a key for static store;
+  const key = md5(JSON.stringify(formattedAddress));
+
+  // Get shipping methods from static.
+  if (!_.isEmpty(staticShippingMethods[key])) {
+    return staticShippingMethods[key];
+  }
+
+  staticShippingMethods[key] = null;
+  const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
+  const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
+  if (!_.isEmpty(response.data)) {
+    const methods = response.data;
+    for (let i = 0; i < methods.length; i++) {
+      if (methods[i].carrier_code === 'click_and_collect') {
+        delete methods[i];
+      }
+    }
+    // Set shipping methods in static.
+    staticShippingMethods[key] = methods;
+  } else {
+    logger.error(`Error in getting shipping methods for HD. Data: ${JSON.stringify(data)}`);
+  }
+
+  return staticShippingMethods[key];
 };
 
 /**
@@ -741,7 +762,7 @@ const applyDefaults = async (data, uid) => {
   // Select default address from address book if available.
   const address = getDefaultAddress(data);
   if (address) {
-    const methods = getHomeDeliveryShippingMethods(address);
+    const methods = await getHomeDeliveryShippingMethods(address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], address, methods);
@@ -750,7 +771,7 @@ const applyDefaults = async (data, uid) => {
 
   // If address already available in cart, use it.
   if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
-    const methods = getHomeDeliveryShippingMethods(data.shipping.address);
+    const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
@@ -791,7 +812,7 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_.isUndefined(data.shipping.address)
     && !_.isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
-    const shippingMethods = getHomeDeliveryShippingMethods(data.shipping);
+    const shippingMethods = await getHomeDeliveryShippingMethods(data.shipping);
     if (_.has(shippingMethods, 'error')) {
       return shippingMethods;
     }

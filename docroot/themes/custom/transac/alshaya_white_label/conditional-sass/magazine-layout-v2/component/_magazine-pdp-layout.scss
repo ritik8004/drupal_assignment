@@ -90,7 +90,7 @@
   #pdp-layout {
     @include breakpoint($only-mobile) {
       background: $pdp_background;
-      margin-top: -3.5rem;
+      margin-top: -2.0625rem;
     }
   }
 
