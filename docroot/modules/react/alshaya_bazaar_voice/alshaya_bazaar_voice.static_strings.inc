@@ -266,5 +266,35 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'user_age',
       'value' => t('years'),
     ],
+    [
+      'key' => 'review_syndicated_text',
+      'value' => t('Original posted on'),
+      'key' => 'view_review',
+      'value' => t('View review'),
+    ],
+    [
+      'key' => 'featured',
+      'value' => t('Featured'),
+    ],
+    [
+      'key' => 'top',
+      'value' => t('Top'),
+    ],
+    [
+      'key' => 'contributor',
+      'value' => t('Contributor'),
+    ],
+    [
+      'key' => 'verifiedPurchaser',
+      'value' => t('Verified Purchaser'),
+    ],
+    [
+      'key' => 'Expert',
+      'value' => t('Expert'),
+    ],
+    [
+      'key' => 'Staff',
+      'value' => t('Staff'),
+    ],
   ];
 }

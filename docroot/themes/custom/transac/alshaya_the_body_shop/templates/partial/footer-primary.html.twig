@@ -5,19 +5,7 @@
     {{ page.footer_primary.languageswitcher_2 }}
     <span class="language-switcher-close"></span>
   </div>
-  <div class="language--switcher mobile-only-block">  
-    {{ page.footer_primary.languageswitcher_2 }}
-  </div>
-
-  <div class="above-mobile-block">
-    {{ page.footer_primary.alshayanewslettersubscription }}
-  </div>
-
-  <div class="footer--social above-mobile-block">
-    {{ page.footer_primary.sociallinks }}
-  </div>
-
-  <div class="language--switcher tablet-only-block">
+  <div class="language--switcher mobile-only-block">
     {{ page.footer_primary.languageswitcher_2 }}
   </div>
 
@@ -42,10 +30,20 @@
   </div>
   {% endif %}
 </div>
-<div class="mobile-only-block">
-  {{ page.footer_primary.alshayanewslettersubscription }}
+
+<div class="footer-right primary--footer--right">
+
+  <div class="newsletter-block">
+    {{ page.footer_primary.alshayanewslettersubscription }}
+  </div>
+
+  <div class="footer--social">
+    {{ page.footer_primary.sociallinks }}
+  </div>
+
+  <div class="language--switcher tablet-only-block">
+    {{ page.footer_primary.languageswitcher_2 }}
+  </div>
 </div>
-<div class="footer--social mobile-only-block">
-  {{ page.footer_primary.sociallinks }}
-</div>
+
 {% endblock %}

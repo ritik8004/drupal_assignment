@@ -1,7 +1,4 @@
 import axios from 'axios';
-import {
-  getStorageInfo,
-} from './storage';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
@@ -360,7 +357,7 @@ export const cleanMobileNumber = (mobile) => {
  * @param {*} newCart
  */
 export const cartLocalStorageHasSameItems = (newCart) => {
-  const currentCart = getStorageInfo();
+  const currentCart = window.commerceBackend.getCartDataFromStorage();
   const currentTotalItems = Object.keys(currentCart.cart.items).length;
   const newCartItems = Object.keys(newCart.items).length;
   if (newCartItems !== currentTotalItems) {

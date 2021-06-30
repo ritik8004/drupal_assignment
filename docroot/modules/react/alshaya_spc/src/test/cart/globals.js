@@ -6,6 +6,12 @@ export const drupalSettings = {
   path: {
     currentLanguage: 'en',
   },
+  user: {
+    uid: 0,
+  },
+  userDetails: {
+    customerId: 0,
+  },
 };
 
 export default {

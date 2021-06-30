@@ -49,9 +49,6 @@ then
 
   ignoredDirs=( "node_modules" "alshaya_react" "js" "dist" )
 
-  # Run Unit tests.
-  npm test
-
   # Validate utility files.
   npm run lint $docrootDir/modules/react/js/
 
@@ -81,6 +78,10 @@ then
       npm run lint $subdir/js/
     fi
   done
+
+  # Run Unit tests.
+  npm test
+
 else
   echo -en "No need to setup REACT. There is no change in any modules/react."
 fi

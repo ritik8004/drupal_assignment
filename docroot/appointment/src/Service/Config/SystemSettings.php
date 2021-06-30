@@ -48,7 +48,7 @@ class SystemSettings {
     // Get host_site_code or acsf_site_name based on environment.
     if ($env === 'local') {
       // Require local_sites.php file for host site code.
-      require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
+      require_once DRUPAL_ROOT . '/../factory-hooks/pre-sites-php/local_sites.php';
     }
     else {
       // Require sites.inc and post-sites-php/includes.php for ACSF site_name.

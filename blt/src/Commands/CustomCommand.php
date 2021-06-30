@@ -4,6 +4,7 @@ namespace Acquia\Blt\Custom\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Robo\Contract\VerbosityThresholdInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -254,7 +255,9 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+    $uri = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -301,7 +304,9 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site:, ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+    $uri = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -358,8 +363,7 @@ class CustomCommand extends BltTasks {
       $app_root = '/app';
 
       // Flush memcache.
-      $this->_exec('echo "flush_all" | nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache2 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
     else {
       $app_root = '/var/www/alshaya';
@@ -451,6 +455,85 @@ class CustomCommand extends BltTasks {
       ->run();
 
     return $result;
+  }
+
+  /**
+   * Wrapper to get folders which require compiling.
+   *
+   * @return array
+   *   Folders containing webpack.config.js file.
+   */
+  private function getFoldersWithJs() {
+    $folders = [];
+
+    $finder = new Finder();
+
+    // Find all the folders containing the file used to specify entry points.
+    $finder->name('webpack.config.js');
+
+    // We need to find inside custom code only.
+    $files = $finder->in($this->getConfigValue('repo.root') . '/docroot/modules/custom');
+
+    foreach ($files as $file) {
+      $dir = str_replace('webpack.config.js', '', $file->getRealPath());
+
+      // Ignore webpack.config.js found inside node_modules.
+      if (strpos($dir, 'node_modules') > -1) {
+        continue;
+      }
+
+      $folders[] = $dir;
+    }
+
+    return $folders;
+  }
+
+  /**
+   * Compile all the JS for development use.
+   *
+   * @command source:build:js-assets-dev
+   * @aliases js:build:dev
+   */
+  public function assetsBuildDev() {
+    foreach ($this->getFoldersWithJs() as $dir) {
+      // Print the directory path to for user.
+      $this->say($dir);
+
+      // Build the files.
+      $this->taskExec('npm run build:dev')
+        ->dir($dir)
+        ->run();
+    }
+  }
+
+  /**
+   * Compile all the JS for production use.
+   *
+   * @command source:build:js-assets
+   * @aliases js:build
+   */
+  public function assetsBuild() {
+    foreach ($this->getFoldersWithJs() as $dir) {
+      // Print the directory path to for user.
+      $this->say($dir);
+
+      // Build the files.
+      $this->taskExec('npm run build')
+        ->dir($dir)
+        ->run();
+    }
+  }
+
+  /**
+   * Install the npm packages.
+   *
+   * @command source:setup:js-assets
+   * @aliases js:setup
+   */
+  public function assetsSetup() {
+    $this->taskExec('npm install')
+      ->dir($this->getConfigValue('repo.root') . '/docroot/modules/custom')
+      ->run();
   }
 
 }

@@ -27,6 +27,7 @@ const ReviewHistogram = ({
               <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
                 <WriteReviewButton
                   reviewedByCurrentUser={reviewedByCurrentUser}
+                  newPdp={newPdp}
                 />
               </ConditionalView>
               <DisplayStar
