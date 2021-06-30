@@ -642,9 +642,8 @@ const productRecommendationsSuffix = 'pr-';
             // title, use the h1 tag inside '#block-page-title' context.
             section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase();
           }
-
           // Track facet filters.
-          $('li.facet-item', $('#block-facets-ajax')).once('js-event').on('click', function () {
+          $('li.facet-item', $('.block-facets-ajax')).once('js-event').on('click', function () {
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
