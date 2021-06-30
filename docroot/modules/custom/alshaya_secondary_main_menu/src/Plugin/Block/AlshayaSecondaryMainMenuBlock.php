@@ -198,7 +198,7 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:secondary-main-menu']);
   }
 
 }
