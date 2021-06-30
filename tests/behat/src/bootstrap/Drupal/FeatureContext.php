@@ -2721,4 +2721,58 @@ JS;
     $this->pageurl = $this->getSession()->getCurrentUrl();
   }
 
+  /**
+   * @Then /^ Get element by css$/
+   */
+  public function getElementByCss($selector)
+  {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $element = $page->find('css', $selector);
+    return $element;
+  }
+
+  /**
+   * @Then /^I should see an iframe window$/
+   */
+  public function iShouldSeeAnIframeWindow()
+  {
+    $this->switchToIFrame();
+    $this->iWaitForAjaxToFinish();
+    $this->iWaitSeconds('20');
+    $this->getSession()->getPage()->find('css', 'body > div:nth-child(4) > button')->click();
+    $this->iWaitSeconds('30');
+    $this->getSession()->getDriver()->switchToIFrame(null);
+  }
+
+
+  /**
+   * @Then I switch To IFrame$/
+   */
+  public function switchToIFrame(){
+    $function = <<<JS
+            (function(){
+                 var iframe = document.querySelector("div.postpay-iframe-container .postpay-iframe");
+                 iframe.name = "iframeToSwitchTo";
+            })()
+JS;
+    try{
+      $this->getSession()->executeScript($function);
+    }catch (Exception $e){
+      print_r($e->getMessage());
+      throw new \Exception("Element was NOT found.".PHP_EOL . $e->getMessage());
+    }
+    $this->getSession()->getDriver()->switchToIFrame("iframeToSwitchTo");
+  }
+
+  /**
+   * @Given /^I click on the checkout button$/
+   */
+  public function iClickOnTheCheckoutButton1()
+  {
+    $checkoutButton = $this->getElementByCss('#spc-checkout .spc-content .checkout-link');
+    $checkoutButton->click();
+    $this->iWaitSeconds('30');
+  }
+
 }
