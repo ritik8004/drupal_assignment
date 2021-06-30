@@ -78,6 +78,9 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
   $build['#attached']['drupalSettings']['backend_language_prefix'] = Settings::get('magento_lang_prefix');
 }
 
+/**
+ * Implements template_preprocess_HOOK().
+ */
 function template_preprocess_rcs_commerce_price(array &$variables) {
   if (!isset($append)) {
     $acm_settings = \Drupal::config('alshaya_acm.settings');
@@ -106,6 +109,9 @@ function template_preprocess_rcs_commerce_price(array &$variables) {
   $variables['currency_code_position'] = $config_data[$current_language]['currency_code_position'];
 }
 
+/**
+ * Implements hook_preprocess_html().
+ */
 function alshaya_rcs_preprocess_html(array &$variables) {
   $variables['rcs_templates'] = [
     '#type' => 'container',
