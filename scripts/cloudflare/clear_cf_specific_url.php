@@ -15,7 +15,7 @@ if (empty($domain)) {
 $zone = get_zone_for_domain($domain);
 
 if ($zone) {
-  print_r(clear_cache_for_url($zone, $domain, $url));
+  print_r(clear_cache_for_url($zone, $url));
 }
 else {
   print 'Error occurred';
