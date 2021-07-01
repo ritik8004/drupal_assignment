@@ -3,5 +3,5 @@ status: true
 dependencies: {  }
 id: promo-menu
 label: 'Promo Menu'
-description: ''
+description: 'We would recommend no more than 3 promo links should be added.'
 locked: false
