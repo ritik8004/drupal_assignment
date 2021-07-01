@@ -486,7 +486,7 @@ describe('Checkout', () => {
             stock: 978,
           },
         });
-        // window.commerceBackend.setCartDataInStorage(cartData);
+
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
         const result = await getCncStatusForCart();
         expect(result).toEqual(false);
