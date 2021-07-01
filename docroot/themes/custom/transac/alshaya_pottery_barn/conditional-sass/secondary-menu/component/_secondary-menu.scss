@@ -1,0 +1,15 @@
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    .secondary--main--menu {
+      ul.menu--one__list {
+        .back--link {
+          &::before {
+            html[lang=en] & {
+              top: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
