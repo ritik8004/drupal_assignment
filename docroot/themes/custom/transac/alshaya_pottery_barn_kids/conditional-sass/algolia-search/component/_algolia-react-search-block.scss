@@ -5,10 +5,14 @@
 
   #alshaya-algolia-autocomplete {
     .react-autosuggest__container::after {
-      background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0 0 no-repeat;
+      content: '';
+      background: $primary_search_btn_icon url('../../../imgs/icons/search.svg') 0 0 no-repeat !important;
+      background-position: center;
       background-size: 2.1rem 2.1rem;
       width: 2.125rem;
       height: 2.125rem;
+      margin-#{$left}: 0.5rem;
+      #{$left}: 0;
     }
 
     .react-autosuggest__suggestions-container--open {
@@ -18,7 +22,7 @@
 
   .algolia-search-cleartext-icon {
     @include breakpoint($tablet) {
-      #{$right}: 1.7rem;
+      #{$right}: 0;
     }
   }
 }

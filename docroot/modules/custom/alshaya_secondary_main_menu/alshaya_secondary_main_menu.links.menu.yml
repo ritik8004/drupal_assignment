@@ -1,0 +1,6 @@
+alshaya_secondary_main_menu.secondary_main_menu:
+  title: 'Secondary main menu Settings'
+  parent: alshaya_master.alshaya_admin
+  description: 'Administer the secondary_main menu configuration.'
+  route_name: alshaya_secondary_main_menu.secondary_main_menu
+  weight: 1

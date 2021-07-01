@@ -483,3 +483,8 @@ smart-agent:
   css:
     theme:
       css/conditional-sass/smart-agent/smart-agent.ltr.css: {}
+
+secondary-menu:
+  css:
+    theme:
+      css/conditional-sass/secondary-menu/secondary-menu.ltr.css: {}
