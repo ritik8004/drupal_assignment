@@ -41,3 +41,15 @@
     }
   }
 }
+
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    .secondary--main--menu {
+      ul.menu--one__list {
+        .menu__in {
+          margin-top: -2.25rem;
+        }
+      }
+    }
+  }
+}

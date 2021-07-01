@@ -604,16 +604,14 @@ header {
 }
 
 @include breakpoint($desktop) {
-  .block-alshaya-main-menu,
-  .block-alshaya-secondary-main-menu {
+  .block-alshaya-main-menu {
     position: relative;
     z-index: 3;
     max-width: 80.25rem;
     margin: 0 auto;
 
     @include breakpoint($upto-desktop) {
-      .main--menu,
-      .secondary--main--menu {
+      .main--menu {
         display: none;
       }
     }
@@ -1179,8 +1177,7 @@ header {
     }
   }
 
-  .main--menu,
-  .secondary--main--menu {
+  .main--menu {
     display: none;
 
     ul.menu--one__list {
