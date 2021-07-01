@@ -13,7 +13,8 @@ class ReviewCommentDisplay extends React.Component {
     const { reviewId, reviewsComment } = this.props;
     if (reviewsComment !== undefined && reviewsComment !== null) {
       const reviewCommentsDisplay = Object.values(reviewsComment).map((comment) => {
-        if (reviewId !== null && reviewId === comment.ReviewId && comment.ModerationStatus === 'APPROVED') {
+        if (reviewId !== null && reviewId === comment.ReviewId
+          && comment.ModerationStatus === 'APPROVED' && comment.UserNickname !== null) {
           return ([
             <div className="comment-submission-details" key={comment.Id}>
               <div className="comment-submission-wrapper">

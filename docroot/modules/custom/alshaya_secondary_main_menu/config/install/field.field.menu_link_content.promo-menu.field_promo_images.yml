@@ -1,0 +1,124 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.menu_link_content.field_promo_images
+    - paragraphs.paragraphs_type.secondary_promo_images
+    - system.menu.promo-menu
+  module:
+    - entity_reference_revisions
+id: menu_link_content.promo-menu.field_promo_images
+field_name: field_promo_images
+entity_type: menu_link_content
+bundle: promo-menu
+label: 'Promo images'
+description: ''
+required: true
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      secondary_promo_images: secondary_promo_images
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        weight: 33
+        enabled: false
+      1_row_1_col:
+        weight: 34
+        enabled: false
+      1_row_1_col_dept:
+        weight: 35
+        enabled: false
+      1_row_2_col:
+        weight: 36
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 37
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 38
+        enabled: false
+      1_row_2_col_dept:
+        weight: 39
+        enabled: false
+      1_row_3_col:
+        weight: 40
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 41
+        enabled: false
+      1_row_3_col_dept:
+        weight: 42
+        enabled: false
+      1_row_3_col_flex:
+        weight: 43
+        enabled: false
+      1_row_3_col_text:
+        weight: 44
+        enabled: false
+      1_row_4_col:
+        weight: 45
+        enabled: false
+      banner:
+        weight: 46
+        enabled: false
+      banner_full_width:
+        weight: 47
+        enabled: false
+      block_reference:
+        weight: 48
+        enabled: false
+      delivery_usp_block:
+        weight: 49
+        enabled: false
+      image_title_subtitle:
+        weight: 50
+        enabled: false
+      main_menu_highlight:
+        weight: 51
+        enabled: false
+      offers_bordered:
+        weight: 52
+        enabled: false
+      product_carousel_category:
+        weight: 53
+        enabled: false
+      promo_block:
+        weight: 54
+        enabled: false
+      promo_block_button:
+        weight: 55
+        enabled: false
+      promo_block_text:
+        weight: 56
+        enabled: false
+      related_info_one_column:
+        weight: 57
+        enabled: false
+      secondary_promo_images:
+        enabled: true
+        weight: 58
+      section_divider:
+        weight: 59
+        enabled: false
+      slug_banner:
+        weight: 60
+        enabled: false
+      text_links:
+        weight: 61
+        enabled: false
+      title_textarea:
+        weight: 62
+        enabled: false
+      video:
+        weight: 63
+        enabled: false
+      views_reference:
+        weight: 64
+        enabled: false
+field_type: entity_reference_revisions

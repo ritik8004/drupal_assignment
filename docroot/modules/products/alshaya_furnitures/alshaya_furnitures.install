@@ -5,6 +5,19 @@
  * The module file for alshaya_furnitures.
  */
 
+ use Drupal\block\Entity\Block;
+ use Drupal\block\BlockInterface;
+
+ /**
+  * Implements hook_update_N().
+  * Add settings for Promo Menu block.
+  * Add settings for Secondary Menu block.
+  * Enable the module alshaya_secondary_main_menu.
+  */
+ function alshaya_furnitures_update_8005() {
+   \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
+ }
+
 /**
  * Implements hook_update_N().
  *

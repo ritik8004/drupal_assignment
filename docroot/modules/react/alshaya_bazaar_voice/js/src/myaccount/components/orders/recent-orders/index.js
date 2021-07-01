@@ -20,7 +20,7 @@ export default class RecentOrders extends React.Component {
     createUserStorage(userDetails.user.userId, userDetails.user.emailId);
     if (userDetails.productReview !== null) {
       this.setState({
-        rating: userDetails.productReview.rating,
+        rating: userDetails.productReview.user_rating,
         reviewData: userDetails.productReview.review_data,
       });
     }
