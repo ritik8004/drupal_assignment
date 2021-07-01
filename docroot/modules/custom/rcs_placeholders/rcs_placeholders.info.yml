@@ -9,7 +9,3 @@ dependencies:
   - metatag:metatag
   - redirect:redirect
   - config_rewrite:config_rewrite
-
-# @todo: views.view.taxonomy_term.yml has been removed because of conflicts
-# with the existing view in the site.
-# We need to add it back.
