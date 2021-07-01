@@ -29,8 +29,6 @@ docroot/modules/custom/node_modules
 docroot/modules/react/node_modules
 docroot/modules/react/*/node_modules
 docroot/modules/react/*/dist
-docroot/modules/custom/*/node_modules
-docroot/modules/custom/*/dist
 
 # Ignore custom theme build artifacts
 docroot/themes/custom/*/node_modules
