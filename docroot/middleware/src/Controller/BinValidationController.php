@@ -71,7 +71,7 @@ class BinValidationController {
       if ($this->binValidator->binMatchesPaymentMethod($request_content['bin'], $payment_method)) {
         return new JsonResponse([
           'error' => TRUE,
-          'error_message' => 'bin_validation_error_' . $payment_method,
+          'error_message' => 'card_bin_validation_error_message_' . $payment_method,
         ]);
       }
     }

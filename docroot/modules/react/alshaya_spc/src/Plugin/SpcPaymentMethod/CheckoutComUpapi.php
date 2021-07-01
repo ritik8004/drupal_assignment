@@ -153,10 +153,10 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       ];
 
       // Add payment method specific error message in strings.
-      if (in_array('qpay', explode(',', $bin_validation_supported_payment_methods))) {
-        $build['#strings']['bin_validation_error_qpay'] = [
-          'key' => 'bin_validation_error_qpay',
-          'value' => $this->t('Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.'),
+      foreach (explode(',', $bin_validation_supported_payment_methods) ?? [] as $payment_method) {
+        $build['#strings']['card_bin_validation_error_message_' . $payment_method] = [
+          'key' => 'card_bin_validation_error_message_' . $payment_method,
+          'value' => $this->t('Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.', [], ['context' => $payment_method]),
         ];
       }
     }
