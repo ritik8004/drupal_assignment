@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_rcs module.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_install().
+ *
+ * Adds new pdp layout selection field for rcs content type.
+ */
+function alshaya_rcs_install() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $config_manager = \Drupal::service('alshaya_config.manager');
+
+  $config_manager->updateConfigs(
+    [
+      'field.field.node.rcs_product.field_select_pdp_layout',
+    ],
+    'alshaya_rcs',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+
+  $config_manager->updateConfigs(
+    [
+      'core.entity_form_display.node.rcs_product.default',
+      'core.entity_view_display.node.rcs_product.default',
+      'core.entity_view_display.node.rcs_product.full',
+      'core.entity_view_display.node.rcs_product.teaser',
+    ],
+    'rcs_placeholders',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
