@@ -219,6 +219,9 @@ class AlshayaSpcController extends ControllerBase {
     $cc_config = $this->config('alshaya_click_collect.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
 
+    $ab_testing = $this->config('alshaya_acm_checkout.ab_testing');
+    $cache_tags = Cache::mergeTags($cache_tags, $ab_testing->getCacheTags());
+
     $checkout_settings = $this->config('alshaya_acm_checkout.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
@@ -504,6 +507,7 @@ class AlshayaSpcController extends ControllerBase {
       '#strings' => $strings,
       '#attached' => [
         'library' => [
+          'alshaya_acm_checkout/ab_testing',
           'alshaya_spc/googlemapapi',
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
@@ -540,6 +544,7 @@ class AlshayaSpcController extends ControllerBase {
     // Get payment methods.
     $payment_methods = [];
     $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
+
     foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
       $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
       // Avoid displaying the excluded methods.
@@ -562,6 +567,7 @@ class AlshayaSpcController extends ControllerBase {
         'code' => $payment_method_term->get('field_payment_code')->getString(),
         'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
         'weight' => $payment_method_term->getWeight(),
+        'ab_testing' => $ab_testing->get($payment_method['id']) ?? FALSE,
       ];
 
       if ($this->languageManager->getCurrentLanguage()->getId() !== 'en') {
