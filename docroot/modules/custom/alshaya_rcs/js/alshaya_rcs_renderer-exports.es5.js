@@ -2,10 +2,7 @@
 // This is because the linter is throwing errors where we use backticks here.
 // Once we enable webapack for the custom modules directory, we should look into
 // removing the above ignore line.
-
-globalThis.rcsPhRenderingEngine = globalThis.rcsPhRenderingEngine || {};
-
-globalThis.rcsPhRenderingEngine.render = function render(
+exports.render = function render(
   settings,
   placeholder,
   params,
@@ -271,7 +268,7 @@ globalThis.rcsPhRenderingEngine.render = function render(
   return html;
 };
 
-globalThis.rcsPhRenderingEngine.computePhFilters = function (input, filter) {
+exports.computePhFilters = function (input, filter) {
   let value = input;
   let attributeName = '';
 
@@ -428,7 +425,7 @@ globalThis.rcsPhRenderingEngine.computePhFilters = function (input, filter) {
  * @param {string} value
  *   The filter value.
  */
-globalThis.rcsPhRenderingEngine.onFilterRepalce = function (html, filter, value) {
+exports.onFilterRepalce = function (html, filter, value) {
   switch (filter) {
     case 'currency_code':
       const currency_codes = html.matchAll('(class="price-currency[^"]*")');

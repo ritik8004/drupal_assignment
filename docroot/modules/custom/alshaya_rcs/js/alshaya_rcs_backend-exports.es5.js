@@ -1,6 +1,4 @@
-globalThis.rcsPhCommerceBackend = globalThis.rcsPhCommerceBackend || {};
-
-globalThis.rcsPhCommerceBackend.getEntity = async function getEntity(langcode) {
+exports.getEntity = async function getEntity(langcode) {
   if (typeof drupalSettings.rcsPage === 'undefined') {
     return null;
   }
