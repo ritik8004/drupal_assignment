@@ -93,11 +93,6 @@
     if (!$(this).hasClass('is-active')) {
       var selectedVal = document.createElement('div');
       var facetTitle = $(this).attr('datadrupalfacetlabel');
-      // span.facet-item__label is added due to the regression in the code
-      // in RefinementList.js
-      // in the PR - https://github.com/acquia-pso/alshaya/pull/20764
-      // removal of span.facet-item__count is not required as we are
-      // fetching the label directly.
       selectedVal.innerHTML = $(this).find('span.facet-item__value span.facet-item__label, a.facet-item__value').html();
       var data = {
         event: 'filter',
