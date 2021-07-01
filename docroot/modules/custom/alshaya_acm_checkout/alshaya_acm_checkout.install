@@ -25,7 +25,7 @@ function alshaya_acm_checkout_update_8011() {
     AlshayaConfigManager::MODE_ADD_MISSING,
   );
 
-  // Add string for tranlsation for each payment method with context.
+  // Add string for tranlsation of bin validation error.
   $strings['Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.'] = [
     'ar' => 'بيانات بطاقتك صالحة للدفع باستخدام بطاقات السحب الآلي NAPS. يُرجى اختيار بطاقات السحب الآلي NAPS كطريقة دفع أو إدخال تفاصيل بطاقة ائتمان / سحب آلي مختلفة للمتابعة.',
     'context' => 'qpay',
