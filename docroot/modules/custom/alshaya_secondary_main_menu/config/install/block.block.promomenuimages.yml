@@ -3,7 +3,6 @@ status: true
 dependencies:
   module:
     - alshaya_secondary_main_menu
-    - alshaya_super_category
   theme:
     - alshaya_white_label
 id: promomenuimages
