@@ -189,8 +189,11 @@
 
           $(this).on('mouseout', function () {
             $(this).removeClass('product-image-zoomed');
+            // Reset the zoom effect so improper images are not an issue.
             $(this).find('.product-image-zoom-placeholder-content').css({
-              'transform': 'scale(1)'
+              'transform': 'scale(1)',
+              'transform-origin': 'initial',
+              'background-image': 'none'
             });
           });
 
