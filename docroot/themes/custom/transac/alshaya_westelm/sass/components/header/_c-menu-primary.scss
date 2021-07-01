@@ -99,13 +99,13 @@
 .toggle--sign,
 .main--menu ul.menu--one__list {
   @include breakpoint($upto-desktop) {
-    width: 16.8125rem;
+    width: 19.6875rem;
   }
 }
 
 .c-my-account-nav {
   @include breakpoint($upto-desktop) {
-    width: 16.8125rem !important;
+    width: 19.6875rem !important;
   }
 
   h3 {
@@ -123,9 +123,22 @@
   }
 }
 
-.menu--active .mobile--close {
-  @include breakpoint($upto-desktop) {
-    #{$left}: 17.25rem;
+.main--menu {
+  .mobile--close {
+    display: none;
+    top: 50%;
+
+    span {
+      background: url('../imgs/icons/ic-close-transparent.svg') center center no-repeat;
+    }
+  }
+
+  &.menu--active {
+    .mobile--close {
+      display: inline-block;
+      top: 50%;
+      background: transparent;
+    }
   }
 }
 
