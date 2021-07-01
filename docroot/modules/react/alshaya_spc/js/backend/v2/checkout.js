@@ -570,17 +570,6 @@ const getMethodCodeForFrontend = (code) => {
 };
 
 /**
- * Adds payment method in the cart and returns the cart.
- *
- * @param {object} data
- *   The data object to send in the API call.
- *
- * @returns {Promise}
- *   A promise object.
- */
-window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
-
-/**
  * Adding shipping on the cart.
  *
  * @param {object} shippingData
@@ -894,6 +883,128 @@ const getProcessedCheckoutData = async (cartData) => {
     }
   }
   return response;
+};
+
+/**
+ * Checks if upapi payment method (payment method via checkout.com).
+ *
+ * @param {string} paymentMethod
+ *   Payment method code.
+ *
+ * @return {bool}
+ *   TRUE if payment methods from checkout.com
+ */
+const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('checkout_com_upapi', 0) !== -1;
+
+/**
+ * Checks if postpay payment method.
+ *
+ * @param {string} paymentMethod
+ *   Payment method code.
+ *
+ * @return {bool}
+ *   TRUE if payment methods from postpay
+ */
+const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay', 0) !== -1;
+
+/**
+ * Prepare message to log when API fail after payment successful.
+ * @todo implement this
+ *
+ * @param {array} cart
+ *   Cart Data.
+ * @param {array} data
+ *   Payment data.
+ * @param {string} exceptionMessage
+ *   Exception message.
+ * @param {string} api
+ *   API identifier which failed.
+ * @param {string} doubleCheckDone
+ *   Flag to say if double check was done or not.
+ *
+ * @return {string}
+ *   Prepared error message.
+ */
+const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
+  console.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
+};
+
+/**
+ * Adds payment method in the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addPaymentMethod = async (data) => {
+  const paymentData = data.payment_info.payment;
+  const params = {
+    extension: {
+      action: data.action,
+    },
+    payment: {
+      method: paymentData.method,
+      additional_data: (!_.isUndefined(paymentData.additional_data))
+        ? paymentData.additional_data
+        : [],
+    },
+  };
+
+  // If upapi payment method (payment method via checkout.com).
+  if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
+    // Add success and fail redirect url to additional data.
+    params.payment.additional_data = {
+      // @todo add urls.
+      successUrl: '???',
+      failUrl: 'failUrl',
+    };
+  }
+
+  if (!_.isUndefined(data.payment_info)
+    && !_.isUndefined(data.payment_info.payment)
+    && !_.isUndefined(data.payment_info.payment.analytics)
+  ) {
+    const analyticsData = data.payment_info.payment.analytics;
+    params.extension.ga_client_id = (!_.isUndefined(analyticsData.clientID))
+      ? analyticsData.clientID
+      : '';
+
+    params.extension.tracking_id = (!_.isUndefined(analyticsData.trackingId))
+      ? analyticsData.trackingId
+      : '';
+
+    params.extension.user_id = (window.drupalSettings.userDetails.customerId > 0)
+      ? window.drupalSettings.userDetails.customerId
+      : 0;
+
+    params.extension.user_type = (window.drupalSettings.userDetails.customerId > 0)
+      ? 'Logged in User'
+      : 'Guest User';
+
+    params.extension.user_agent = navigator.userAgent;
+
+    // @todo maybe we could use some geolocation service.
+    params.extension.client_ip = '0.0.0.0';
+
+    params.extension.attempted_payment = 1;
+  }
+
+  const logData = JSON.stringify(paymentData);
+  const cartId = window.commerceBackend.getCartId();
+  logger.notice(`Calling update payment for payment_update. Cart id: ${cartId} Method: ${paymentData.method} Data: ${logData}`);
+
+  const oldCart = await getCart();
+  const cart = await updateCart(params);
+  if (_.isEmpty(cart.data) || (!_.isUndefined(cart.data.error) && cart.data.error)) {
+    const errorMessage = (cart.data.error.code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
+    const message = prepareOrderFailedMessage(oldCart, data, errorMessage, 'update cart', 'NA');
+    logger.error(`Error occurred while placing order. ${message}`);
+  }
+
+  cart.data = await getProcessedCheckoutData(cart.data);
+  return cart;
 };
 
 /**
