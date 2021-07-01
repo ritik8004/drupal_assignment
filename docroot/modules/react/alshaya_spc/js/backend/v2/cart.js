@@ -103,10 +103,12 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 /**
  * Applies transformations to the structure of cart data.
  *
+ * @param {boolean} force
+ *   Force refresh cart data from magento.
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.getCart = () => getCartWithProcessedData();
+window.commerceBackend.getCart = (force = false) => getCartWithProcessedData(force);
 
 /**
  * Calls the cart restore API.
@@ -259,7 +261,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
   }
 
-  return window.commerceBackend.getCart();
+  return window.commerceBackend.getCart(true);
 };
 
 /**
