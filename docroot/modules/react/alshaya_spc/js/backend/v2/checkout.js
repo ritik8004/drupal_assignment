@@ -926,7 +926,7 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
  *   Prepared error message.
  */
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
-  console.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
+  logger.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
 };
 
 /**
