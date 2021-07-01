@@ -636,7 +636,7 @@ class AlshayaPromoLabelManager {
       $free_promotion += [
         'coupon' => $coupon,
         'promo_title' => $free_promotion['#free_sku_title_raw'] ?? $this->renderer->renderPlain($free_promotion['#title']),
-        'promo_web_url' => $free_promotion['#promo_url']->toString(TRUE)->getGeneratedUrl(),
+        'promo_web_url' => $free_promotion['#promo_url'],
       ];
 
       unset($free_promotion['#promo_url']);
