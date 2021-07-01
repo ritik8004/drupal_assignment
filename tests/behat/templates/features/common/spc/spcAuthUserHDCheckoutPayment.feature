@@ -9,7 +9,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait for the page to load
 
   @cc @hd @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com)
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com)
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
@@ -34,7 +34,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -71,7 +71,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -143,7 +143,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I should see "{language_continue_shopping_text}"
 
   @cc @hd @language @mobile @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
