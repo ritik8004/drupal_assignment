@@ -16,16 +16,6 @@ class AlshayaSecondaryMainMenuConfigForm extends ConfigFormBase {
   const SECONDARY_MAIN_MENU_DEFAULT_LAYOUT = 'default';
 
   /**
-   * Inline secondary_main menu layout.
-   */
-  const SECONDARY_MAIN_MENU_INLINE_LAYOUT = 'menu_inline_display';
-
-  /**
-   * Dynamic width secondary_main menu layout.
-   */
-  const SECONDARY_MAIN_MENU_DYNAMIC_LAYOUT = 'menu_dynamic_display';
-
-  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -50,8 +40,6 @@ class AlshayaSecondaryMainMenuConfigForm extends ConfigFormBase {
       '#type' => 'select',
       '#options' => [
         self::SECONDARY_MAIN_MENU_DEFAULT_LAYOUT => $this->t('Default menu display'),
-        self::SECONDARY_MAIN_MENU_INLINE_LAYOUT => $this->t('Inline menu display'),
-        self::SECONDARY_MAIN_MENU_DYNAMIC_LAYOUT => $this->t('Dynamic width Mega Menu'),
       ],
       '#default_value' => $config->get('desktop_secondary_main_menu_layout'),
       '#title' => $this->t('secondary main menu display on desktop'),

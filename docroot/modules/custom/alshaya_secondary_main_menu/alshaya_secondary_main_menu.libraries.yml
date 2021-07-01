@@ -4,4 +4,4 @@ secondary_main_menu:
   dependencies:
     - core/drupal
     - core/jquery
-    - core/jquery.once
+
