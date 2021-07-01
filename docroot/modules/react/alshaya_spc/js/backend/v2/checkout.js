@@ -41,7 +41,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  */
 const getProductStatus = async (sku) => {
   if (typeof sku === 'undefined' || !sku) {
-    return new Promise((resolve) => resolve(null));
+    return null;
   }
 
   // Bypass CloudFlare to get fresh stock data.
@@ -53,11 +53,14 @@ const getProductStatus = async (sku) => {
 
 /**
  * Get CnC status for cart based on skus in cart.
+ *
+ * @returns {boolean}.
+ *    The CNC status.
  */
 const getCncStatusForCart = async () => {
   const cart = window.commerceBackend.getRawCartDataFromStorage();
-  if (!cart || typeof cart === 'undefined') {
-    return null;
+  if (typeof cart === 'undefined' || !cart) {
+    return false;
   }
 
   for (let i = 0; i < cart.cart.items.length; i++) {
@@ -66,8 +69,8 @@ const getCncStatusForCart = async () => {
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.
     // eslint-disable-next-line no-await-in-loop
-    const productStatus = await getProductStatus(item.sku);
-    if (typeof productStatus.cnc_enabled !== 'undefined' && !productStatus.cnc_enabled) {
+    const response = await getProductStatus(item.sku);
+    if (typeof response.data.cnc_enabled !== 'undefined' && !response.data.cnc_enabled) {
       return false;
     }
   }
@@ -125,13 +128,13 @@ const staticShippingMethods = [];
  *
  * @param data
  *   The shipping address.
- * @returns {Promise<null|*>}
- *   HD Shipping methods or null.
+ * @returns {Promise}
+ *   HD Shipping methods.
  */
 const getHomeDeliveryShippingMethods = async (data) => {
   if (_.isEmpty(data.country_id)) {
     logger.error(`Error in getting shipping methods for HD as country id not available. Data: ${JSON.stringify(data)}`);
-    return null;
+    return [];
   }
 
   // Prepare address data for api call.
@@ -148,20 +151,25 @@ const getHomeDeliveryShippingMethods = async (data) => {
   staticShippingMethods[key] = null;
   const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
   const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
-  if (!_.isEmpty(response.data)) {
-    const methods = response.data;
-    for (let i = 0; i < methods.length; i++) {
-      if (methods[i].carrier_code === 'click_and_collect') {
-        delete methods[i];
-      }
+  if (_.isEmpty(response.data)
+    || (!_.isUndefined(response.data.error) && response.data.error)
+  ) {
+    logger.error(`Error in getting shipping methods for HD. Data: ${response.data.error_message}`);
+    return response;
+  }
+  const methods = response.data;
+
+  for (let i = 0; i < methods.length; i++) {
+    if (methods[i].carrier_code === 'click_and_collect') {
+      delete methods[i];
     }
-    // Set shipping methods in static.
-    staticShippingMethods[key] = methods;
-  } else {
-    logger.error(`Error in getting shipping methods for HD. Data: ${JSON.stringify(data)}`);
   }
 
-  return staticShippingMethods[key];
+  // Set shipping methods in static.
+  staticShippingMethods[key] = methods;
+
+  // Return methods.
+  return methods;
 };
 
 /**
@@ -318,8 +326,11 @@ const getDefaultPaymentFromOrder = () => null;
 const getPaymentMethods = async () => {
   const cartId = window.commerceBackend.getCartId();
   const response = await getCart();
-  const cartData = response.data;
-  if (_.isEmpty(cartData.shipping) || _.isEmpty(cartData.shipping.method)) {
+  if (_.isEmpty(response.data)
+    || _.isEmpty(response.data.shipping)
+    || _.isEmpty(response.data.shipping.method)
+    || (!_.isUndefined(response.data.error) && response.data.error)
+  ) {
     logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
     return null;
   }
@@ -331,13 +342,12 @@ const getPaymentMethods = async () => {
 
 /**
  * Get the payment method set on cart.
+ * @todo implement this
  *
  * @return {string}.
  *   Payment method set on cart.
  */
-const getPaymentMethodSetOnCart = () => {
-  // @todo implement this
-};
+const getPaymentMethodSetOnCart = () => 'todo';
 
 /**
  * Gets the data for a particular store.
@@ -357,12 +367,13 @@ const getStoreInfo = async (storeData) => {
   }
 
   // Fetch store info from Drupal.
-  let storeInfo = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  storeInfo = storeInfo.data;
-
-  if (!storeInfo || (!Array.isArray(storeInfo) && storeInfo.length === 0)) {
+  const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
+  if (_.isEmpty(response.data)
+    || (!_.isUndefined(response.data.error) && response.data.error)
+  ) {
     return null;
   }
+  const storeInfo = response.data;
 
   // Get the complete data about the store by combining the received data from
   // Magento with the processed store data stored in Drupal.
@@ -394,20 +405,22 @@ const getStoreInfo = async (storeData) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
+ *
+ * @returns {array}
+ *   The list of stores.
  */
 const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   let stores = [];
 
-  stores = await callMagentoApi(`/rest/V1/click-and-collect/stores/guest-cart/${cartId}/lat/${lat}/lon/${lon}`);
-
-  if (typeof stores.data.error !== 'undefined' && stores.data.error) {
-    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${stores.data.error_message}`);
-    return [];
+  const response = await callMagentoApi(`/rest/V1/click-and-collect/stores/guest-cart/${cartId}/lat/${lat}/lon/${lon}`);
+  if (_.isEmpty(response.data)
+    || (!_.isUndefined(response.data.error) && response.data.error)
+  ) {
+    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${response.data.error_message}`);
+    return response;
   }
-
-  stores = stores.data;
-
+  stores = response.data;
   if (!stores || (Array.isArray(stores) && stores.length === 0)) {
     return [];
   }
@@ -419,12 +432,13 @@ const getCartStores = async (lat, lon) => {
 
   try {
     stores = await Promise.all(storeInfoPromises);
+
+    // Remove null values.
     // Sort the stores first by distance and then by name.
-    stores = stores
+    return stores
+      .filter((value) => value != null)
       .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
       .sort((store1, store2) => store1.distance - store2.distance);
-
-    return stores;
   } catch (error) {
     logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
   }
@@ -452,9 +466,7 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  const stores = await getCartStores(lat, lon);
-
-  return stores;
+  return getCartStores(lat, lon);
 };
 
 /**
@@ -607,12 +619,11 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   }
 
   let cart = await updateCart(params);
-  const cartData = cart.data;
-
   // If cart update has error.
-  if (_.has(cartData, 'error')) {
+  if (_.isEmpty(cart.data) || (!_.isUndefined(cart.data.error) && cart.data.error)) {
     return cart;
   }
+  const cartData = cart.data;
 
   // If billing needs to updated or billing is not available added at all
   // in the cart. Assuming if name is not set in billing means billing is
@@ -661,10 +672,11 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Validate address.
-  const validAddress = await validateAddressAreaCity(shippingData.address);
-
-  // If address is not valid.
-  if (_.isEmpty(validAddress) || _.isEmpty(validAddress.address)) {
+  const response = await validateAddressAreaCity(shippingData.address);
+  if (_.isEmpty(response.data)
+    || _.isEmpty(response.data.address)
+    || (!_.isUndefined(response.data.error) && response.data.error)
+  ) {
     return false;
   }
 
@@ -680,7 +692,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   let updated = await addShippingInfo(shippingData, cartActions.cartShippingUpdate, false);
-  if (_.has(updated.data, 'error')) {
+  if (_.isEmpty(updated.data) || (!_.isUndefined(updated.data.error) && updated.data.error)) {
     return false;
   }
 
@@ -708,7 +720,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   updated = await updateBilling(billing);
-  if (_.has(updated.data, 'error')) {
+  if (_.isEmpty(updated.data) || (!_.isUndefined(updated.data.error) && updated.data.error)) {
     return false;
   }
 
@@ -761,7 +773,7 @@ const applyDefaults = async (data, uid) => {
   const address = getDefaultAddress(data);
   if (address) {
     const methods = await getHomeDeliveryShippingMethods(address);
-    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+    if (!_.isEmpty(methods) && _.isArray(methods)) {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], address, methods);
     }
@@ -770,7 +782,7 @@ const applyDefaults = async (data, uid) => {
   // If address already available in cart, use it.
   if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (!_.isEmpty(methods) && typeof methods.error === 'undefined') {
+    if (!_.isEmpty(methods) && _.isArray(methods)) {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
@@ -801,8 +813,9 @@ const getProcessedCheckoutData = async (cartData) => {
   const cncStatus = await getCncStatusForCart();
 
   // Here we will do the processing of cart to make it in required format.
+  // @todo check if we need to use user.uid or userDetails.customerId.
   const updated = await applyDefaults(data, window.drupalSettings.user.uid);
-  if (updated !== false) {
+  if (updated !== false && !_.isEmpty(updated.cart)) {
     data = updated;
   }
 
@@ -810,11 +823,13 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_.isUndefined(data.shipping.address)
     && !_.isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
-    const shippingMethods = await getHomeDeliveryShippingMethods(data.shipping);
-    if (_.has(shippingMethods, 'error')) {
-      return shippingMethods;
+    const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
+    if (_.isEmpty(methods)
+      || (!_.isUndefined(methods.data) && !_.isUndefined(methods.data.error) && methods.data.error)
+    ) {
+      return methods;
     }
-    data.shipping.methods = shippingMethods;
+    data.shipping.methods = methods;
   }
 
   if (_.isUndefined(data.payment.methods)
@@ -942,10 +957,10 @@ window.commerceBackend.getCartForCheckout = () => {
  *   Customer data if API call is successful else and array containing the
  *   error message.
  */
-const getCustomerByMail = (email) => {
+const getCustomerByMail = async (email) => {
   logger.info(`${email}`);
   // Temporary return.
-  return [];
+  return { data: {} };
 };
 
 /**
@@ -963,32 +978,34 @@ const getCustomerByMail = (email) => {
  *   Customer data if API call is successful else an array containing the
  *   error message.
  */
-const createCustomer = (email, firstname, lastname) => {
+const createCustomer = async (email, firstname, lastname) => {
   logger.info(`${email}${firstname}${lastname}`);
   // Temporary return.
   return {
-    id: 492,
-    group_id: 1,
-    created_at: '2021-06-28 10:04:46',
-    updated_at: '2021-06-28 10:04:46',
-    created_in: 'AE English',
-    email: 'test@example.com',
-    firstname: 'test',
-    lastname: 'test',
-    store_id: 4,
-    website_id: 3,
-    addresses: [],
-    disable_auto_group_change: 0,
-    extension_attributes: {
-      is_subscribed: false,
-    },
-    custom_attributes: [
-      {
-        attribute_code: 'channel',
-        value: 'web',
-        name: 'channel',
+    data: {
+      id: 492,
+      group_id: 1,
+      created_at: '2021-06-28 10:04:46',
+      updated_at: '2021-06-28 10:04:46',
+      created_in: 'AE English',
+      email: 'test@example.com',
+      firstname: 'test',
+      lastname: 'test',
+      store_id: 4,
+      website_id: 3,
+      addresses: [],
+      disable_auto_group_change: 0,
+      extension_attributes: {
+        is_subscribed: false,
       },
-    ],
+      custom_attributes: [
+        {
+          attribute_code: 'channel',
+          value: 'web',
+          name: 'channel',
+        },
+      ],
+    },
   };
 };
 
@@ -1071,33 +1088,47 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
   // Cart customer validations.
   if (window.drupalSettings.userDetails.customerId === 0
-    && (_.isNull(await getCartCustomerId()) || (getCartCustomerEmail() !== shippingEmail))) {
-    let customer = getCustomerByMail(shippingEmail);
-
-    if (_.has(customer, 'error')) {
+    && (_.isNull(await getCartCustomerId()) || (await getCartCustomerEmail() !== shippingEmail))
+  ) {
+    // Get customer by email.
+    let customer = await getCustomerByMail(shippingEmail);
+    if (!_.isUndefined(customer.data)
+      && (!_.isUndefined(customer.data.error) && customer.data.error)
+    ) {
       return customer;
     }
+    customer = customer.data;
 
+    // Create new customer.
     if (_.isEmpty(customer)) {
-      customer = createCustomer(
+      customer = await createCustomer(
         shippingEmail,
         shippingInfo.static.firstname,
         shippingInfo.static.lastname,
       );
-      if (_.has(customer, 'error')) {
+      if (!_.isUndefined(customer.data)
+      && (!_.isUndefined(customer.data.error) && customer.data.error)
+      ) {
         return customer;
       }
+      customer = customer.data;
     }
 
-    if (!_.isEmpty(customer) && _.has(customer, 'id)')) {
-      const result = associateCartToCustomer(customer.id);
-      if (!_.isEmpty(result) && !_.has(result, 'error')) {
-        return result;
+    // Associate cart to customer.
+    if (!_.isEmpty(customer) && !_.isUndefined(customer.id)) {
+      const response = await associateCartToCustomer(customer.id);
+      if (!_.isUndefined(response.data)
+        && (!_.isUndefined(response.data.error) && response.data.error)
+      ) {
+        return response;
       }
     }
   }
 
-  const type = (_.has(shippingInfo, 'shipping_type')) ? shippingInfo.shipping_type : 'home_delivery';
+  const type = (!_.isUndefined(shippingInfo.shipping_type))
+    ? shippingInfo.shipping_type
+    : 'home_delivery';
+
   if (type === 'click_and_collect') {
     // Unset as not needed in further processing.
     delete (shippingInfo.shipping_type);
@@ -1123,20 +1154,23 @@ window.commerceBackend.addShippingMethod = async (data) => {
     let hdshippingMethods = [];
     if (!_.isEmpty(carrierInfo)) {
       shippingMethods.push({
-        carrier_code: carrierInfo.carrier,
+        carrier_code: carrierInfo.code,
         method_code: carrierInfo.method,
       });
     } else {
-      shippingMethods = await getHomeDeliveryShippingMethods(shippingData.address);
-      hdshippingMethods = shippingMethods;
-    }
-
-    // If no shipping method.
-    if (_.has(shippingMethods, 'error')) {
-      const logData = JSON.stringify(data);
-      const cartId = window.commerceBackend.getCartId();
-      logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${shippingMethods.error_message}`);
-      return shippingMethods;
+      const methods = await getHomeDeliveryShippingMethods(shippingData.address);
+      // If no shipping method.
+      if (_.isEmpty(methods)
+        || (!_.isUndefined(methods.data)
+        && !_.isUndefined(methods.data.error) && methods.data.error)
+      ) {
+        const logData = JSON.stringify(data);
+        const cartId = window.commerceBackend.getCartId();
+        logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${methods.error_message}`);
+        return methods;
+      }
+      shippingMethods = methods;
+      hdshippingMethods = methods;
     }
 
     if (!_.isEmpty(shippingMethods)) {

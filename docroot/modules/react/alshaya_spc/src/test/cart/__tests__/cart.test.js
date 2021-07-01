@@ -4,16 +4,15 @@ import { callMagentoApi } from '../../../../js/backend/v2/common';
 import { drupalSettings } from '../globals';
 
 describe('Cart', () => {
+  beforeEach(() => {
+    window.drupalSettings = drupalSettings;
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('Calls to Magento API', () => {
-
-    beforeEach(() => {
-      window.drupalSettings = drupalSettings;
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     it('Test empty response data', async () => {
       axios.mockResolvedValue({ status: 200 });
       const result = await callMagentoApi('/cart', 'POST', {});
@@ -40,7 +39,7 @@ describe('Cart', () => {
     });
 
     it('Test response for 200 status', async () => {
-      axios.mockResolvedValue({ data: { cart: { cart_id: 1234 } }, status: 200 });
+      axios.mockResolvedValue({ data: { cart: { cart_id: 1234 } }, status: 200});
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
@@ -88,7 +87,7 @@ describe('Cart', () => {
     });
 
     it('Test response for 404 error', async () => {
-      axios.mockResolvedValue({ data: { message: 'Not found' }, status: 404 });
+      axios.mockResolvedValue({ data: { message: 'Not found' }, status: 404});
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {

@@ -3,7 +3,6 @@ import qs from 'qs';
 import _ from 'lodash';
 import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
-import { removeStorageInfo } from '../../utilities/storage';
 import cartActions from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
@@ -11,8 +10,8 @@ window.commerceBackend = window.commerceBackend || {};
 /**
  * Gets the cart ID for existing cart.
  *
- * @returns {string}
- *   The cart id.
+ * @returns {string|integer|null}
+ *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
   const cartId = localStorage.getItem('cart_id');
@@ -502,14 +501,13 @@ const getCart = async (force = false) => {
   }
 
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
-
-  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
+  if (_.isEmpty(response.data)
+    || (!_.isUndefined(response.data.error) && response.data.error)
+  ) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
-      // Remove the cart from storage.
-      removeStorageInfo('cart_id');
       logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
-      // Get new cart.
-      window.commerceBackend.getCartId();
+      // Get a new cart.
+      await window.commerceBackend.createCart();
     }
 
     const error = {
@@ -542,7 +540,11 @@ const getCart = async (force = false) => {
 const getCartWithProcessedData = async () => {
   // @todo implement missing logic, see CartController:getCart().
   const response = await getCart();
-  response.data = getProcessedCartData(response.data);
+
+  // If we don't have any errors, process the cart data.
+  if (!_.isEmpty(response.data) && _.isUndefined(response.data.error)) {
+    response.data = getProcessedCartData(response.data);
+  }
   return response;
 };
 
@@ -573,7 +575,7 @@ const getCartCustomerId = async () => {
  * @return {mixed}
  *   Response.
  */
-const associateCartToCustomer = (customerId, resetCart = false) => {
+const associateCartToCustomer = async (customerId, resetCart = false) => {
   logger.info(`Use ${customerId} and ${resetCart}`);
   // Temporary return;
   return true;
@@ -585,7 +587,7 @@ const associateCartToCustomer = (customerId, resetCart = false) => {
  * @param {object} request
  *  The request data.
  *
- * @returns {promise}
+ * @returns {integer}
  *   Promise containing the error code.
  */
 const validateRequestData = async (request) => {
@@ -599,7 +601,8 @@ const validateRequestData = async (request) => {
 
   // If action info or cart id not available.
   if (_.isEmpty(request.extension) || _.isUndefined(request.extension.action)) {
-    logger.error('Cart update operation not containing any action. Error 400.');
+    const logData = JSON.stringify(request);
+    logger.error(`Cart update operation not containing any action. Error: 400. Data: ${logData}`);
     return 400;
   }
 
@@ -634,8 +637,8 @@ const validateRequestData = async (request) => {
  * @param {object} request
  *  The request data.
  *
- * @returns {int|object}
- *   Returns true if the data is valid or an object containing the error.
+ * @returns {promise|boolean}
+ *   Returns true if the data is valid or an object in case of error.
  */
 const preUpdateValidation = async (request) => {
   const validationResponse = await validateRequestData(request);
@@ -674,8 +677,9 @@ const updateCart = async (data) => {
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
-
-  if (_.has(validationResult.data, 'error')) {
+  if (!_.isUndefined(validationResult.data)
+    && !_.isUndefined(validationResult.data.error) && validationResult.data.error
+  ) {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
@@ -687,7 +691,8 @@ const updateCart = async (data) => {
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
-      if (typeof response.data.error !== 'undefined' && response.data.error) {
+      if (_.isEmpty(response.data)
+        || (!_.isUndefined(response.data.error) && response.data.error)) {
         return response;
       }
 
@@ -715,10 +720,10 @@ const updateCart = async (data) => {
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
-  const cart = await getCart();
-  if (!_.isUndefined(cart.customer) && !_.isUndefined(cart.customer.email)
-    && _.isString(cart.customer.email && cart.customer.email !== '')) {
-    return cart.customer.email;
+  const response = await getCart();
+  if (!_.isUndefined(response.data.customer)
+    && _.isString(response.data.customer.email)) {
+    return response.data.customer.email;
   }
   return null;
 };

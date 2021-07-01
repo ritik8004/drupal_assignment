@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   callDrupalApi,
   callMagentoApi,
@@ -165,11 +166,14 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     // If we try to add item while we don't have anything or corrupt
     // session, we create the cart object.
     cartId = window.commerceBackend.getCartId();
-    if (!cartId) {
+    if (_.isNull(cartId)) {
       cartId = await window.commerceBackend.createCart();
-    }
-    if (typeof cartId.error !== 'undefined') {
-      return cartId;
+      if (!_.isUndefined(cartId.data)
+        && !_.isUndefined(cartId.data.error)
+        && cartId.data.error
+      ) {
+        return cartId;
+      }
     }
     // @todo: Associate cart to the customer.
   }
@@ -232,18 +236,21 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
           10,
         ) > apiCallAttempts
       ) {
+        // @todo test attempts.
         apiCallAttempts += 1;
+
         // Create a new cart.
         cartId = await window.commerceBackend.createCart();
-        if (typeof cartId.error !== 'undefined') {
+        if (!_.isUndefined(cartId.data)
+          && !_.isUndefined(cartId.data.error)
+          && cartId.data.error
+        ) {
           return cartId;
         }
-        setStorageInfo('cart_id', cartId);
         const cartData = await window.commerceBackend.getCart();
         window.commerceBackend.setCartDataInStorage(cartData);
         return window.commerceBackend.addUpdateRemoveCartItem(data);
       }
-
       return response;
     }
 
@@ -326,14 +333,23 @@ window.commerceBackend.refreshCart = async (data) => {
 /**
  * Creates a new cart and stores cart Id in the local storage.
  *
- * @returns {Promise}
- *   A promise object.
+ * @returns {promise}
+ *   The cart id.
  */
 window.commerceBackend.createCart = async () => {
+  // Remove cart_id from storage.
+  removeStorageInfo('cart_id');
+
+  // Create new cart.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
-  if (typeof response.data.error !== 'undefined') {
-    return response.data;
+  if (!_.isUndefined(response.data)
+    && !_.isUndefined(response.data.error)
+    && response.data.error
+  ) {
+    // Return response containing the error.
+    return response;
   }
+  // If no errors occurred, keep on local storage and return the cart id.
   setStorageInfo(response.data, 'cart_id');
   return response.data;
 };
