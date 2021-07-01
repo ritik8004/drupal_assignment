@@ -74,7 +74,10 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
 
   $api_settings = Settings::get('alshaya_api.settings');
-  $build['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
+  $build['#attached']['drupalSettings']['cart']['url'] = ($api_settings['alshaya_proxy']) ?
+  '/proxy/?url=' . $api_settings['magento_host'] :
+  $api_settings['magento_host'];
+
   $build['#attached']['drupalSettings']['backend_language_prefix'] = Settings::get('magento_lang_prefix');
 }
 
