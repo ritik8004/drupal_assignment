@@ -1,7 +1,7 @@
 var path = require("path");
 const buildPath = './dist/';
 
-module.exports = {
+const config = {
   entry: {
     main: './js/alshaya_rcs.es5.js',
     alshaya_rcs: './js/alshaya_rcs.js',
@@ -15,13 +15,12 @@ module.exports = {
     contentBase: './',
     publicPath: buildPath
   },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /(node_modules|bower_components)/,
-        use: ['babel-loader']
-      }
-    ]
-  },
+};
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    config.devtool = 'source-map';
+    config.externals = {};
+  }
+  return config;
 };
