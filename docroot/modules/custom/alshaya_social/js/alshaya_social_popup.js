@@ -20,6 +20,10 @@
             } else {
               window.location.reload();
             }
+            // Get the social login name from authlink
+            // to store in localStorage for further use.
+            var socialType = authLink.substr(authLink.lastIndexOf('/') + 1);
+            localStorage.setItem('socialType', socialType);
           }
         });
       });
