@@ -273,6 +273,7 @@ const updateBilling = async (billingData) => {
   const logData = JSON.stringify(billingData);
   const cartId = window.commerceBackend.getCartId();
   logger.notice(`Billing update manual. Address: ${logAddress} Data: ${logData} Cart: ${cartId}`);
+  logger.notice(`Billing update manual. Address: ${JSON.stringify(params.billing)} Data: ${JSON.stringify(billingData)} Cart: ${window.commerceBackend.getCartId()}`);
 
   return updateCart(params);
 };
