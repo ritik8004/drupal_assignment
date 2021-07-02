@@ -1,5 +1,6 @@
-{% if data.highlight_paragraph is not empty %}
-  <div class="highlights">
+{% if data.highlight_paragraph.ishighlight.value == '1' %}
+  {% if data.highlight_paragraph is not empty %}
+    <div class="highlights">
     {#For other paragraphs.#}
     {#Render highlight image and other data.#}
     {#Even if title is empty, we need to render the empty div to set the min height.#}
@@ -23,5 +24,6 @@
         </div>
       {% endif %}
     </div>
-  </div>
+   </div>
+  {% endif %}
 {% endif %}
