@@ -32,7 +32,6 @@
   &.magv2-pdp-sticky-header {
     opacity: 1;
     pointer-events: unset;
-    z-index: 4;
 
     @include breakpoint($only-mobile) {
       background: $magv2-sticky-header-bg;
