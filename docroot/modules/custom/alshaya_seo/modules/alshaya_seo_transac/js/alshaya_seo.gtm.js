@@ -235,12 +235,19 @@ const productRecommendationsSuffix = 'pr-';
         // Check if social login window opened to avoid GTM push from
         // social login window.
         var socialWindow = false;
-        if(window.name == 'ConnectWithSocialAuth'){
+        if (window.name == 'ConnectWithSocialAuth') {
           var socialWindow = true;
+        }
+
+        var loginType = localStorage.getItem('socialType');
+        // Check for socialtype in localstorage.
+        if (drupalSettings.user.uid && loginType === null) {
+          Drupal.alshaya_seo_gtm_push_login_type('Self Login');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
         if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
+          Drupal.alshaya_seo_gtm_push_login_type(loginType);
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           localStorage.setItem('userID', userDetails.userID);
         }
@@ -1345,5 +1352,20 @@ const productRecommendationsSuffix = 'pr-';
       return true;
     };
   }
+
+  /**
+   * Helper function to push events when user logins.
+   *
+   * @param loginType
+   */
+  Drupal.alshaya_seo_gtm_push_login_type = function (loginType) {
+    dataLayer.push({
+      event: 'Login',
+      eventCategory: 'Login Success',
+      eventLabel: loginType,
+    });
+
+    localStorage.removeItem('socialType');
+  };
 
 })(jQuery, Drupal, dataLayer);
