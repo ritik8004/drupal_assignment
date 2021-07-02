@@ -97,6 +97,7 @@ $smoky-white: #1f1f1f;
 $light-white: #fdf1f5;
 $dark-pink: #fc45b2;
 $pink-hover:  #d84e82;
+$_plp_secondary_cta_hover: rgba(239, 95, 150, 0.1);
 
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
@@ -521,6 +522,7 @@ $plp_item_label: $black;
 $plp_promotion_description: $ash-triplet;
 $plp_facet_filter_count_background: $brilliant-rose;
 $plp-primary-cta-hover-bg: $pink-hover;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
 
 // PLP Filter bar.
 $plp_filterbar_filter_bg: $nero;
