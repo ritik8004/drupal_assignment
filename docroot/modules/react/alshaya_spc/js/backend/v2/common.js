@@ -718,8 +718,10 @@ const updateCart = async (data) => {
  */
 const getCartCustomerEmail = async () => {
   const cart = await getCart();
-  if (!_.isUndefined(cart.customer) && !_.isUndefined(cart.customer.email)
-    && _.isString(cart.customer.email && cart.customer.email !== '')) {
+  if (!_.isUndefined(cart.customer)
+    && !_.isUndefined(cart.customer.email)
+    && !_.isEmpty(cart.customer.email)
+  ) {
     return cart.customer.email;
   }
   return null;
