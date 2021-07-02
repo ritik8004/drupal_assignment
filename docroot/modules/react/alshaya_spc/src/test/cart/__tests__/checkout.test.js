@@ -411,16 +411,6 @@ describe('Checkout', () => {
     describe('Test formatAddressForShippingBilling()', () => {
       const formatAddressForShippingBilling = utilsRewire.__get__('formatAddressForShippingBilling');
 
-      it('With empty value', async () => {
-        const result = formatAddressForShippingBilling({});
-        expect(result).toEqual({});
-      });
-
-      it('With null value', async () => {
-        const result = formatAddressForShippingBilling(null);
-        expect(result).toEqual({});
-      });
-
       it('Without static data', async () => {
         const address = {
           address_region_segment: '1025',

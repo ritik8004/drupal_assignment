@@ -208,10 +208,6 @@ const getDefaultAddress = (data) => {
  *   Formatted address object.
  */
 const formatAddressForShippingBilling = (address) => {
-  if (_.isEmpty(address)) {
-    return {};
-  }
-
   const data = _.cloneDeep(address);
 
   const staticFields = {};
