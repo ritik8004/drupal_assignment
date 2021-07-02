@@ -9,7 +9,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -23,18 +22,13 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
  * )
  */
 class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterface {
+  const MENU_NAME = 'promo-menu';
   /**
    * Stores the configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
-  /**
-   * Module Handler service object.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
   /**
    * The menu link tree service.
    *
@@ -61,16 +55,13 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
    *   The factory for configuration objects.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_tree
    *   The menu tree service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module Handler service object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, ModuleHandlerInterface $module_handler, EntityRepositoryInterface $entityRepository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, EntityRepositoryInterface $entityRepository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
-    $this->moduleHandler = $module_handler;
     $this->entityRepository = $entityRepository;
   }
 
@@ -84,7 +75,6 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('menu.link_tree'),
-      $container->get('module_handler'),
       $container->get('entity.repository')
     );
   }
@@ -93,9 +83,8 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
-    $menu_name = 'promo-menu';
-    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
-    $tree = $this->menuTree->load($menu_name, $parameters);
+    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters(self::MENU_NAME);
+    $tree = $this->menuTree->load(self::MENU_NAME, $parameters);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
     ];
@@ -147,13 +136,7 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    // ::build() uses MenuLinkTreeInterface::getCurrentRouteMenuTreeParameters()
-    // to generate menu tree parameters, and those take the active menu trail
-    // into account. Therefore, we must vary the rendered menu by the active
-    // trail of the rendered menu.
-    // Additional cache contexts, e.g. those that determine link text or
-    // accessibility of a menu, will be bubbled automatically.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:' . 'promo-menu']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:promo-menu']);
   }
 
 }
