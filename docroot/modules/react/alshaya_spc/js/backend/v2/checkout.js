@@ -342,12 +342,18 @@ const getPaymentMethods = async () => {
 
 /**
  * Get the payment method set on cart.
- * @todo implement this
  *
  * @return {string}.
  *   Payment method set on cart.
  */
-const getPaymentMethodSetOnCart = () => null;
+const getPaymentMethodSetOnCart = async () => {
+  const params = {
+    cartId: window.commerceBackend.getCartId(),
+  };
+  const response = await callMagentoApi(getApiEndpoint('SelectedPaymentMethod', params), 'GET', {});
+
+  return response.data.method;
+};
 
 /**
  * Gets the data for a particular store.
@@ -827,7 +833,7 @@ const getProcessedCheckoutData = async (cartData) => {
     const paymentMethods = await getPaymentMethods();
     if (!_.isUndefined(paymentMethods.data)) {
       data.payment.methods = paymentMethods.data;
-      data.payment.method = getPaymentMethodSetOnCart();
+      data.payment.method = await getPaymentMethodSetOnCart();
     }
   }
 
@@ -864,7 +870,7 @@ const getProcessedCheckoutData = async (cartData) => {
   // available payment method.
   if (typeof response.payment !== 'undefined' && typeof response.payment.methods !== 'undefined') {
     const codes = response.payment.methods.map((el) => el.code);
-    if (typeof response.payment.method !== 'undefined' && typeof codes[response.payment.method] === 'undefined') {
+    if (typeof response.payment.method !== 'undefined' && !_.isEmpty(codes) && !codes.includes(response.payment.method)) {
       delete (response.payment.method);
     }
 
