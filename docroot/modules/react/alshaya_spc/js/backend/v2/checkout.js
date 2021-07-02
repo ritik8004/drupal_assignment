@@ -24,6 +24,11 @@ import cartActions from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
+/**
+ * This variable is used to check if field values have invisible characters.
+ *
+ * @type {string}
+ */
 const invisibleCharacter = '&#8203;';
 
 /**
