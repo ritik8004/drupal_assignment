@@ -33,6 +33,7 @@
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
         "drupal/conditional_fields": "^4.0@alpha",
+        "drupal/config_rewrite": "^1.4",
         "drupal/core": "^8.8.12",
         "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",

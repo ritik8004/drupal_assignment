@@ -534,12 +534,14 @@ const getCart = async (force = false) => {
  * Format the cart data to have better structured array.
  * This is the equivalent to CartController:getCart().
  *
+ * @param {boolean} force
+ *   Force refresh cart data from magento.
  * @returns {Promise}
  *   A promise object.
  */
-const getCartWithProcessedData = async () => {
+const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
-  const response = await getCart();
+  const response = await getCart(force);
 
   // If we don't have any errors, process the cart data.
   if (!_.isEmpty(response.data) && _.isUndefined(response.data.error)) {

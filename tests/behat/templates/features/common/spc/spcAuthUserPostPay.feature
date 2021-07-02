@@ -30,7 +30,7 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for A
     And I wait for AJAX to finish
     And I select the home delivery address
     And I should see an "#spc-payment-methods" element
-    And I click jQuery "#payment-method-postpay" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-postpay" element on page
     And I wait 30 seconds
     And I wait for AJAX to finish
     Then the element "div.postpay-widget" should exist
@@ -67,7 +67,7 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for A
     And I wait for AJAX to finish
     And I select the home delivery address
     And I should see an "#spc-payment-methods" element
-    And I click jQuery "#payment-method-postpay" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-postpay" element on page
     And I wait 30 seconds
     And I wait for AJAX to finish
     Then the element "div.postpay-widget" should exist

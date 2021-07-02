@@ -17,6 +17,7 @@ $info-blue: #4285f4;
 $cerulean-two: #0084cc;
 $new-pdp-blue: #007aff;
 $new-pdp-nero: #1a1a1a;
+$_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
 
 // Header color.
 $dark-brown: #504a4a;
@@ -606,3 +607,4 @@ $plp-quick-view-product-group-size-active: $primary_link-active;
 
 // PLP add to cart.
 $plp-primary-cta-hover-bg: rgba(0, 0, 0, 0.8);
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;

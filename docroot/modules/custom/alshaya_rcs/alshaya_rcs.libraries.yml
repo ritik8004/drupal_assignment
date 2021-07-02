@@ -1,0 +1,9 @@
+main:
+  js:
+    dist/main.js: {}
+    dist/alshaya_rcs.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - rcs_magento/main
+    - alshaya_acm_cart_notification/cart_notification_js

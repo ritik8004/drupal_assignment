@@ -8,18 +8,8 @@
  */
 
 /**
- * Implements hook_uninstall().
- *
- * Reset config. We need to ensure all the configuration added in the module
- * is deleted to allow the ON/OFF code to work.
- */
-function alshaya_secondary_main_menu_uninstall() {
-  Drupal::configFactory()->getEditable('block.block.alshayasecondarymainmenu')->delete();
-  \Drupal::configFactory()->getEditable('system.menu.secondary-main-menu')->delete();
-}
-
-/**
  * Implements hook_install().
+ *
  * Adusting block weight to match design.
  */
 function alshaya_secondary_main_menu_install() {
@@ -29,23 +19,23 @@ function alshaya_secondary_main_menu_install() {
     alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
   }
   $algolia_block = Block::load('alshayaalgoliareactautocomplete');
-  if (($current_theme == 'alshaya_pottery_barn') || ($current_theme == 'alshaya_westelm')) {
-    if ($algolia_block instanceof BlockInterface) {
-      Block::load('branding')->setWeight(($algolia_block->getWeight())+3)->save();
-    }
-  }
-  elseif ($current_theme == 'alshaya_pottery_barn_kids') {
-    if ($algolia_block instanceof BlockInterface) {
-      Block::load('branding')->setWeight(($algolia_block->getWeight())+20)->save();
-    }
-  }
-  $branding_block = Block::load('branding');
-  if ($branding_block instanceof BlockInterface) {
-    Block::load('alshayasecondarymainmenu')->setWeight(($branding_block->getWeight())+8)->save();
+  if ($algolia_block instanceof BlockInterface) {
+    Block::load('branding')->setWeight(($algolia_block->getWeight())+1)->save();
+    Block::load('alshayasecondarymainmenu')->setWeight(($algolia_block->getWeight())+2)->save();
   }
   $main_block = Block::load('alshayamainmenu');
   if ($main_block instanceof BlockInterface) {
-    Block::load('promomenuimages')->setWeight(($main_block->getWeight())+5)->save();
+    Block::load('promomenuimages')->setWeight(($main_block->getWeight())+1)->save();
   }
 }
 
+/**
+ * Implements hook_uninstall().
+ *
+ * Reset config. We need to ensure all the configuration added in the module
+ * is deleted to allow the ON/OFF code to work.
+ */
+function alshaya_secondary_main_menu_uninstall() {
+  \Drupal::configFactory()->getEditable('block.block.alshayasecondarymainmenu')->delete();
+  \Drupal::configFactory()->getEditable('system.menu.secondary-main-menu')->delete();
+}

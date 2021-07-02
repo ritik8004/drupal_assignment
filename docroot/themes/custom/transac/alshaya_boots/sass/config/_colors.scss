@@ -27,6 +27,7 @@ $white-smoke-light: #f2f2f2;
 $white: #fff;
 $dark-sand: #ac8e54;
 $_plp_cta_hover: #0b3d6f;
+$_plp_secondary_cta_hover: rgba(0, 73, 144, 0.1);
 
 // Global elements.
 $primary_text: $black-two;
@@ -574,3 +575,4 @@ $rr-form-head-row-border: $drakish-blue;
 
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $_plp_cta_hover;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;

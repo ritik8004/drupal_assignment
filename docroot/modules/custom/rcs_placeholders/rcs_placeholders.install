@@ -1,0 +1,105 @@
+<?php
+
+use Drupal\taxonomy\Entity\Term;
+use Drupal\node\Entity\Node;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_install().
+ *
+ * Create the placeholder category term, product node and main menu links.
+ */
+function rcs_placeholders_install() {
+  $config = \Drupal::service('config.factory')->getEditable('rcs_placeholders.settings');
+
+  // Placeholder category term.
+  $term = Term::create(array(
+    'parent' => array(),
+    'name' => '#rcs.category.name#',
+    'vid' => 'rcs_category',
+  ));
+  $term->save();
+
+  $config->set('category.placeholder_tid', $term->id())->save();
+
+
+  // Placeholder product node.
+  $node = Node::create(array(
+    'type' => 'rcs_product',
+    'title' => '#rcs.product.name#',
+  ));
+  $node->save();
+
+  $config->set('product.placeholder_nid', $node->id())->save();
+
+
+  // Placeholder main menu items (depth 1 to 3).
+  $level1 = MenuLinkContent::create([
+    'menu_name' => 'rcs-navigation',
+    'title' => '#title',
+    'link' => ['uri' => Url::fromUserInput('#link')->toUriString()],
+    'expanded' => TRUE,
+  ]);
+  $level1->save();
+
+  $level2 = MenuLinkContent::create([
+    'menu_name' => 'rcs-navigation',
+    'title' => '#title',
+    'link' => ['uri' => Url::fromUserInput('#link')->toUriString()],
+    'expanded' => TRUE,
+    'parent' => 'menu_link_content:' . $level1->uuid(),
+  ]);
+  $level2->save();
+
+  $level3 = MenuLinkContent::create([
+    'menu_name' => 'rcs-navigation',
+    'title' => '#title',
+    'link' => ['uri' => Url::fromUserInput('#link')->toUriString()],
+    'expanded' => TRUE,
+    'parent' => 'menu_link_content:' . $level2->uuid(),
+  ]);
+  $level3->save();
+
+  // Add index for product slug field.
+  $index = 'node__field_product_slug';
+  $data = [
+    'table' => 'node__field_product_slug',
+    'fields' => [
+      'field_product_slug_value',
+    ],
+    'spec' => [
+      'fields' => [
+        'field_product_slug_value' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+  \Drupal::database()
+    ->schema()
+    ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+
+  // Add index for category slug field.
+  $index = 'taxonomy_term__field_category_slug';
+  $data = [
+    'table' => 'taxonomy_term__field_category_slug',
+    'fields' => [
+      'field_category_slug_value',
+    ],
+    'spec' => [
+      'fields' => [
+        'field_category_slug_value' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+  \Drupal::database()
+    ->schema()
+    ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+}
