@@ -219,7 +219,6 @@ describe('Checkout', () => {
       });
     });
 
-    //aaa
     describe('Test getCustomerPublicData()', () => {
       const getCustomerPublicData = utilsRewire.__get__('getCustomerPublicData');
 
