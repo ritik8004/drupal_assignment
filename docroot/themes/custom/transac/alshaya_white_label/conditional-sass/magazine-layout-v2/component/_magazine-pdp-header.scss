@@ -18,11 +18,11 @@
   background: $magv2-sticky-header-bg;
   opacity: 0;
   box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+  z-index: 4;
 
   @include breakpoint($only-mobile) {
     opacity: initial;
     box-shadow: none;
-    z-index: 4;
   }
 
   .postpay {
