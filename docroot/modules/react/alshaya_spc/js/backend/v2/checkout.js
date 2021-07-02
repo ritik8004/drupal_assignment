@@ -347,7 +347,7 @@ const getPaymentMethods = async () => {
  * @return {string}.
  *   Payment method set on cart.
  */
-const getPaymentMethodSetOnCart = () => 'todo';
+const getPaymentMethodSetOnCart = () => null;
 
 /**
  * Gets the data for a particular store.
@@ -956,9 +956,9 @@ window.commerceBackend.addPaymentMethod = async (data) => {
   if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
     params.payment.additional_data = {
-      // @todo add urls.
-      successUrl: '???',
-      failUrl: 'failUrl',
+      // @todo update these urls.
+      successUrl: '/middleware/public/payment/success/en',
+      failUrl: '/middleware/public/payment/error/en',
     };
   }
 
