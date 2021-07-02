@@ -1,15 +1,13 @@
-@javascript @auth @PostPay @homeDelivery @pbaeuat @bbwaeuat @flaeuat
-Feature: SPC Checkout Home Delivery using Installments with PostPay method for Authenticated user
+@javascript @guest @PostPay @homeDelivery @flaeuat @pbaeuat
+Feature: SPC Checkout Home Delivery using Installments with PostPay method for Guest user
 
   Background:
-    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
-    When I am on "{spc_basket_page}"
+    Given I am on "{spc_basket_page}"
+    And I wait 5 seconds
     And I wait for the page to load
 
   @cc @hd @checkout_com
-  Scenario: As an Authenticated user, I should be able to checkout using PostPay method
+  Scenario: As a Guest user, I should be able to checkout using PostPay method
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
@@ -24,6 +22,10 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for A
     And the element "div.block-content .postpay" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
+    And I wait for the page to load
+    Then I should be on "/cart/login" page
+    When I click the anchor link ".edit-checkout-as-guest" on page
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
@@ -43,7 +45,7 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for A
     Then I should see "Your postpay order has been cancelled"
 
   @language
-  Scenario: As an Authenticated user, I should be able to checkout using PostPay method in second language
+  Scenario: As a Guest user, I should be able to checkout using PostPay method in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -61,6 +63,10 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for A
     And the element "div.block-content .postpay" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
+    And I wait for the page to load
+    Then I should be on "/cart/login" page
+    When I click the anchor link ".edit-checkout-as-guest" on page
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
