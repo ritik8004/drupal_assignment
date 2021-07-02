@@ -554,7 +554,7 @@ const getCartWithProcessedData = async (force = false) => {
 /**
  * Return customer id from current session.
  *
- * @return {Promise<integer|null>}
+ * @returns {Promise<integer|null>}
  *   Return customer id or null.
  */
 const getCartCustomerId = async () => {
@@ -575,7 +575,7 @@ const getCartCustomerId = async () => {
  * @param {bool} resetCart
  *   True to Reset cart, otherwise false.
  *
- * @return {Promise<object|boolean>}
+ * @returns {Promise<object|boolean>}
  *   Response.
  */
 const associateCartToCustomer = async (customerId, resetCart = false) => {
@@ -719,7 +719,7 @@ const updateCart = async (data) => {
 /**
  * Return customer email from cart in session.
  *
- * @return {Promise<string|null>}
+ * @returns {Promise<string|null>}
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {

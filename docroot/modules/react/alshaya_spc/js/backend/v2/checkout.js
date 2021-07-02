@@ -254,7 +254,7 @@ const formatAddressForShippingBilling = (address) => {
  * @param {object} billingData
  *   Billing data.
  *
- * @return {Promise<object>}
+ * @returns {Promise<object>}
  *   Response data.
  */
 const updateBilling = async (billingData) => {
@@ -301,7 +301,7 @@ const getLastOrder = () => [];
  * @param {object} order
  *   Last Order details.
  *
- * @return {Promise<object|boolean>}
+ * @returns {Promise<object|boolean>}
  *   FALSE if something went wrong, updated cart data otherwise.
  */
 const applyDefaultShipping = async () => false;
@@ -313,7 +313,7 @@ const applyDefaultShipping = async () => false;
  * @param {object} order
  *   Last Order details.
  *
- * @return {Promise<object|boolean>}
+ * @returns {Promise<object|boolean>}
  *   FALSE if something went wrong, payment method name otherwise.
  */
 const getDefaultPaymentFromOrder = async () => null;
@@ -321,7 +321,7 @@ const getDefaultPaymentFromOrder = async () => null;
 /**
  * Gets payment methods.
  *
- * @return {Promise<object|null>}.
+ * @returns {Promise<object|null>}.
  *   The method list if available.
  */
 const getPaymentMethods = async () => {
@@ -591,7 +591,7 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  * @param {bool} updateBillingDetails
  *   Whether billing needs to be updated or not.
  *
- * @return {Promise<object|null>}
+ * @returns {Promise<object|null>}
  *   Cart data or null.
  */
 const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
@@ -954,7 +954,7 @@ window.commerceBackend.getCartForCheckout = () => {
  * @param {string} email
  *   Email address.
  *
- * @return {Promise<object>}
+ * @returns {Promise<object>}
  *   Customer data if API call is successful else and array containing the
  *   error message.
  */
@@ -975,7 +975,7 @@ const getCustomerByMail = async (email) => {
  * @param {string} lastname
  *   Last name.
  *
- * @return {Promise<object>}
+ * @returns {Promise<object>}
  *   Customer data if API call is successful else an array containing the
  *   error message.
  */
@@ -1021,7 +1021,7 @@ const createCustomer = async (email, firstname, lastname) => {
  * @param {bool} updateBillingDetails
  *   Whether billing needs to update or not.
  *
- * @return {Promise<object>}
+ * @returns {Promise<object>}
  *   Cart data.
  * */
 const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
