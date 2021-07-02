@@ -256,6 +256,7 @@ const productRecommendationsSuffix = 'pr-';
         if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           localStorage.setItem('userID', userDetails.userID);
+          localStorage.removeItem('socialType');
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -1365,7 +1366,6 @@ const productRecommendationsSuffix = 'pr-';
       eventLabel: loginType,
     });
 
-    localStorage.removeItem('socialType');
   };
 
 })(jQuery, Drupal, dataLayer);
