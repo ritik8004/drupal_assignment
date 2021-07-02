@@ -50,7 +50,16 @@ function alshaya_rcs_page_attachments_alter(array &$attachments) {
     return;
   }
 
-  $attachments['#attached']['library'][] = 'alshaya_rcs/main';
+  $route_match = \Drupal::routeMatch();
+
+  if ($route_match->getRouteName() === 'entity.node.canonical') {
+    $node = $route_match->getParameter('node');
+    if ($node->bundle() === 'rcs_product') {
+      $attachments['#attached']['library'][] = 'alshaya_rcs/add_to_cart';
+      $attachments['#attached']['library'][] = 'alshaya_rcs/backend';
+      $attachments['#attached']['library'][] = 'alshaya_rcs/renderer';
+    }
+  }
 }
 
 /**
@@ -160,4 +169,12 @@ function alshaya_rcs_theme_suggestions_page_alter(array &$suggestions, array $va
       $suggestions[] = 'page__rcs_pdp';
     }
   }
+}
+
+function alshaya_rcs_library_info_alter(&$libraries, $extension) {
+  if ($extension !== 'alshaya_rcs') {
+    return;
+  }
+  global $acsf_site_code;
+  $libraries['main']['dependencies'][] = "alshaya_$acsf_site_code/rcs_product";
 }

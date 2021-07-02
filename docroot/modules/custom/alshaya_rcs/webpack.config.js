@@ -3,12 +3,12 @@ const buildPath = './dist/';
 
 const config = {
   entry: {
-    main: './js/alshaya_rcs.es5.js',
-    alshaya_rcs: './js/alshaya_rcs.js',
+    alshaya_rcs_renderer: './js/alshaya_rcs_renderer.es5.js',
+    alshaya_rcs_backend: './js/alshaya_rcs_backend.es5.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    filename: '[name].bundle.js',
     publicPath: buildPath
   },
   devServer: {
