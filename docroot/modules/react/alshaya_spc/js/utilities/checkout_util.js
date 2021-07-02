@@ -7,6 +7,7 @@ import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
+import i18nMiddleWareUrl from './i18n_url';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -613,3 +614,41 @@ export const setUpapiApplePayCofig = () => {
 };
 
 export const getUpapiApplePayConfig = () => checkoutComUpapiApplePayConfig;
+
+/**
+ * Bin validation.
+ *
+ * @param {*} bin
+ * @param {*} paymentMethods
+ */
+export const binValidation = (bin, paymentMethods) => {
+  const apiUrl = i18nMiddleWareUrl('card/bin-validation');
+  return axios
+    .post(apiUrl, {
+      bin,
+      paymentMethods,
+    })
+    .then(
+      (response) => response.data,
+      () => ({
+        error: true,
+        error_message: 'global_error',
+      }),
+    )
+    .catch((error) => {
+      Drupal.logJavascriptError('bin-validation', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+    });
+};
+
+/**
+ * Helper function to get bin validation config.
+ */
+export const getBinValidationConfig = () => {
+  let config = {};
+  if (typeof drupalSettings.checkoutComUpapi !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.checkoutComUpapi, 'binValidation')) {
+    config = drupalSettings.checkoutComUpapi.binValidation || {};
+  }
+
+  return config;
+};
