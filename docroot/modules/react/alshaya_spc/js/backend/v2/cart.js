@@ -76,6 +76,8 @@ const returnExistingCartWithError = (code, message) => ({
  *
  * @param {object} data
  *   Data containing sku and stock quantity information.
+ *
+ * @returns {Promise<object>}
  */
 const triggerStockRefresh = (data) => callDrupalApi(
   '/spc/checkout-event',
@@ -104,7 +106,8 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
- * @returns {Promise}
+ *
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.getCart = (force = false) => getCartWithProcessedData(force);
@@ -113,7 +116,7 @@ window.commerceBackend.getCart = (force = false) => getCartWithProcessedData(for
  * Calls the cart restore API.
  * @todo Implement restoreCart()
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
@@ -124,7 +127,7 @@ window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
@@ -309,7 +312,7 @@ window.commerceBackend.applyRemovePromo = async (data) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.refreshCart = async (data) => {

@@ -59,7 +59,7 @@ const getProductStatus = async (sku) => {
 /**
  * Get CnC status for cart based on skus in cart.
  *
- * @returns {boolean}.
+ * @returns {Promise<boolean>}.
  *    The CNC status.
  */
 const getCncStatusForCart = async () => {
@@ -133,7 +133,7 @@ const staticShippingMethods = [];
  *
  * @param data
  *   The shipping address.
- * @returns {Promise}
+ * @returns {Promise<array>}
  *   HD Shipping methods.
  */
 const getHomeDeliveryShippingMethods = async (data) => {
@@ -254,7 +254,7 @@ const formatAddressForShippingBilling = (address) => {
  * @param {object} billingData
  *   Billing data.
  *
- * @return {object}
+ * @return {Promise<object>}
  *   Response data.
  */
 const updateBilling = async (billingData) => {
@@ -283,7 +283,7 @@ const updateBilling = async (billingData) => {
  * @param {object} address
  *   Address object.
  *
- * @return {mixed}
+ * @return  {Promise<AxiosPromise<object>>}
  *   Address validation response.
  */
 const validateAddressAreaCity = (address) => callDrupalApi('/spc/validate-info', 'POST', address);
@@ -301,10 +301,10 @@ const getLastOrder = () => [];
  * @param {object} order
  *   Last Order details.
  *
- * @return {*}
+ * @return {Promise<object|boolean>}
  *   FALSE if something went wrong, updated cart data otherwise.
  */
-const applyDefaultShipping = () => false;
+const applyDefaultShipping = async () => false;
 
 /**
  * Get payment method from last order.
@@ -313,15 +313,15 @@ const applyDefaultShipping = () => false;
  * @param {object} order
  *   Last Order details.
  *
- * @return {*}
+ * @return {Promise<object|boolean>}
  *   FALSE if something went wrong, payment method name otherwise.
  */
-const getDefaultPaymentFromOrder = () => null;
+const getDefaultPaymentFromOrder = async () => null;
 
 /**
  * Gets payment methods.
  *
- * @return {Promise}.
+ * @return {Promise<object|null>}.
  *   The method list if available.
  */
 const getPaymentMethods = async () => {
@@ -503,7 +503,7 @@ const formatAddressForFrontend = (address) => {
  * @param {array} customer
  *   Customer data.
  * @return {object}.
- *   Customer data.
+ *   Cleared customer data.
  */
 const getCustomerPublicData = (customer) => {
   if (_.isEmpty(customer)) {
@@ -591,7 +591,7 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  * @param {bool} updateBillingDetails
  *   Whether billing needs to be updated or not.
  *
- * @return {object|null}
+ * @return {Promise<object|null>}
  *   Cart data or null.
  */
 const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
@@ -651,7 +651,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
  * @param {object} shippingMethods
  *   Shipping methods.
  *
- * @return {object|bool}
+ * @returns {Promise<object|boolean>}
  *   FALSE if something went wrong, updated cart data otherwise.
  */
 const selectHd = async (address, method, billing, shippingMethods) => {
@@ -741,7 +741,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
  *   The cart data object.
  * @param {integer} uid
  *   Drupal User ID.
- * @return {object}.
+ * @returns {Promise<object>}.
  *   The data.
  */
 const applyDefaults = async (data, uid) => {
@@ -758,14 +758,14 @@ const applyDefaults = async (data, uid) => {
   // Try to apply defaults from last order.
   if (!_.isEmpty(order)) {
     // If cnc order but cnc is disabled.
-    if (_.includes(order.shipping.method, 'click_and_collect') && !getCncStatusForCart()) {
+    if (_.includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart() !== true) {
       return data;
     }
 
-    const response = applyDefaultShipping(order);
+    const response = await applyDefaultShipping(order);
     if (response) {
-      // @todo Check if returns empty string for anonyous (CORE-31245).
-      response.payment.default = getDefaultPaymentFromOrder(order);
+      // @todo Check if returns empty string for anonymous (CORE-31245).
+      response.payment.default = await getDefaultPaymentFromOrder(order);
       return response;
     }
   }
@@ -797,7 +797,7 @@ const applyDefaults = async (data, uid) => {
  *
  * @param {object} cartData
  *   The cart data object.
- * @returns {Promise|null}
+ * @returns {Promise<object|null>}
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
@@ -900,7 +900,7 @@ const getProcessedCheckoutData = async (cartData) => {
 /**
  * Get cart data for checkout.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.getCartForCheckout = () => {
@@ -954,7 +954,7 @@ window.commerceBackend.getCartForCheckout = () => {
  * @param {string} email
  *   Email address.
  *
- * @return {object|null}
+ * @return {Promise<object>}
  *   Customer data if API call is successful else and array containing the
  *   error message.
  */
@@ -975,7 +975,7 @@ const getCustomerByMail = async (email) => {
  * @param {string} lastname
  *   Last name.
  *
- * @return {object}
+ * @return {Promise<object>}
  *   Customer data if API call is successful else an array containing the
  *   error message.
  */
@@ -1021,10 +1021,10 @@ const createCustomer = async (email, firstname, lastname) => {
  * @param {bool} updateBillingDetails
  *   Whether billing needs to update or not.
  *
- * @return {object}
+ * @return {Promise<object>}
  *   Cart data.
  * */
-const addCncShippingInfo = (shippingData, action, updateBillingDetails) => {
+const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
   logger.info(`${shippingData}${action}${updateBillingDetails}`);
 };
 
@@ -1078,7 +1078,7 @@ const prepareShippingData = (shippingInfo) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.addShippingMethod = async (data) => {
@@ -1205,7 +1205,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.addBillingMethod = (data) => updateBilling(data);

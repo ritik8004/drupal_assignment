@@ -536,7 +536,8 @@ const getCart = async (force = false) => {
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
- * @returns {Promise}
+ *
+ * @returns {Promise<object>}
  *   A promise object.
  */
 const getCartWithProcessedData = async (force = false) => {
@@ -553,7 +554,7 @@ const getCartWithProcessedData = async (force = false) => {
 /**
  * Return customer id from current session.
  *
- * @return {int|null}
+ * @return {Promise<integer|null>}
  *   Return customer id or null.
  */
 const getCartCustomerId = async () => {
@@ -574,7 +575,7 @@ const getCartCustomerId = async () => {
  * @param {bool} resetCart
  *   True to Reset cart, otherwise false.
  *
- * @return {mixed}
+ * @return {Promise<object|boolean>}
  *   Response.
  */
 const associateCartToCustomer = async (customerId, resetCart = false) => {
@@ -589,7 +590,7 @@ const associateCartToCustomer = async (customerId, resetCart = false) => {
  * @param {object} request
  *  The request data.
  *
- * @returns {integer}
+ * @returns {Promise<integer>}
  *   Promise containing the error code.
  */
 const validateRequestData = async (request) => {
@@ -718,7 +719,7 @@ const updateCart = async (data) => {
 /**
  * Return customer email from cart in session.
  *
- * @return {string|null}
+ * @return {Promise<string|null>}
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
