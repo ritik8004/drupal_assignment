@@ -312,10 +312,6 @@ exports.computePhFilters = function (input, filter) {
       value = rcsCommerceBackend.getProductImageStyled(value, imageStyle);
       break;
 
-    case 'title':
-      value = rcsProduct.getTitle();
-      break;
-
     case 'price':
       const priceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.regularPrice.amount.value);
       const finalPriceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.maximalPrice.amount.value);
