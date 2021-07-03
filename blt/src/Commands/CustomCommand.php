@@ -354,8 +354,7 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('local:reset-local-settings');
 
-    $devel_env = getenv('DEVEL_ENV');
-    $is_lando = !empty($devel_env) && $devel_env == 'lando';
+    $is_lando = getenv('LANDO') ?? FALSE;
     $sudo_prefix = '';
 
     if ($is_lando) {
