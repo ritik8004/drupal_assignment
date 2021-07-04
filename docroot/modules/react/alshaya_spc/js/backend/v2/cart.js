@@ -172,13 +172,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     // session, we create the cart object.
     cartId = window.commerceBackend.getCartId();
     if (_.isNull(cartId)) {
-      cartId = await window.commerceBackend.createCart();
-      if (!_.isUndefined(cartId.data)
-        && !_.isUndefined(cartId.data.error)
-        && cartId.data.error
-      ) {
-        return cartId;
-      }
+      return window.commerceBackend.createCart();
     }
     // @todo: Associate cart to the customer.
   }
@@ -246,10 +240,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
         // Create a new cart.
         cartId = await window.commerceBackend.createCart();
-        if (!_.isUndefined(cartId.data)
-          && !_.isUndefined(cartId.data.error)
-          && cartId.data.error
-        ) {
+        if (_.isNull(cartId)) {
           return cartId;
         }
         const cartData = await window.commerceBackend.getCart();
@@ -338,23 +329,18 @@ window.commerceBackend.refreshCart = async (data) => {
 /**
  * Creates a new cart and stores cart Id in the local storage.
  *
- * @returns {promise}
- *   The cart id.
+ * @returns {promise<integer|null>}
+ *   The cart id or null.
  */
 window.commerceBackend.createCart = async () => {
   // Remove cart_id from storage.
   removeStorageInfo('cart_id');
 
-  // Create new cart.
+  // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
-  if (!_.isUndefined(response.data)
-    && !_.isUndefined(response.data.error)
-    && response.data.error
-  ) {
-    // Return response containing the error.
-    return response;
+  if (!_.isUndefined(response.data)) {
+    setStorageInfo(response.data, 'cart_id');
+    return response.data;
   }
-  // If no errors occurred, keep on local storage and return the cart id.
-  setStorageInfo(response.data, 'cart_id');
-  return response.data;
+  return null;
 };
