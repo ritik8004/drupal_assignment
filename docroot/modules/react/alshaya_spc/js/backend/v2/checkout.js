@@ -41,7 +41,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 /**
  * Get data related to product status.
  *
- * @param {string} sku
+ * @param {Promise<string|null>}
  *  The sku for which the status is required.
  */
 const getProductStatus = async (sku) => {
@@ -53,7 +53,11 @@ const getProductStatus = async (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  if (!_.isUndefined(response.data)) {
+    return response.data;
+  }
+  return null;
 };
 
 /**
@@ -74,8 +78,9 @@ const getCncStatusForCart = async () => {
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.
     // eslint-disable-next-line no-await-in-loop
-    const response = await getProductStatus(item.sku);
-    if (typeof response.data.cnc_enabled !== 'undefined' && !response.data.cnc_enabled) {
+    const productStatus = await getProductStatus(item.sku);
+    if (!_.isEmpty(productStatus)
+      && _.isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled) {
       return false;
     }
   }
@@ -153,28 +158,31 @@ const getHomeDeliveryShippingMethods = async (data) => {
     return staticShippingMethods[key];
   }
 
-  staticShippingMethods[key] = null;
+  staticShippingMethods[key] = [];
   const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
   const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
-  if (_.isEmpty(response.data)
-    || (!_.isUndefined(response.data.error) && response.data.error)
-  ) {
-    logger.error(`Error in getting shipping methods for HD. Data: ${response.data.error_message}`);
-    return response;
-  }
-  const methods = response.data;
+  if (!_.isEmpty(response.data)) {
+    const methods = response.data;
 
-  for (let i = 0; i < methods.length; i++) {
-    if (methods[i].carrier_code === 'click_and_collect') {
-      delete methods[i];
+    // Check for errors.
+    if (!_.isUndefined(methods.error) && methods.error) {
+      logger.error(`Error in getting shipping methods for HD. Data: ${methods.error_message}`);
+      return methods;
     }
-  }
 
-  // Set shipping methods in static.
-  staticShippingMethods[key] = methods;
+    // Delete CNC from methods.
+    for (let i = 0; i < methods.length; i++) {
+      if (methods[i].carrier_code === 'click_and_collect') {
+        delete methods[i];
+      }
+    }
+
+    // Set shipping methods in static.
+    staticShippingMethods[key] = methods;
+  }
 
   // Return methods.
-  return methods;
+  return staticShippingMethods[key];
 };
 
 /**
@@ -826,9 +834,7 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_.isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (_.isEmpty(methods)
-      || (!_.isUndefined(methods.data) && !_.isUndefined(methods.data.error) && methods.data.error)
-    ) {
+    if (_.isEmpty(methods) || (!_.isUndefined(methods.error) && methods.error)) {
       return methods;
     }
     data.shipping.methods = methods;
@@ -1162,10 +1168,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     } else {
       const methods = await getHomeDeliveryShippingMethods(shippingData.address);
       // If no shipping method.
-      if (_.isEmpty(methods)
-        || (!_.isUndefined(methods.data)
-        && !_.isUndefined(methods.data.error) && methods.data.error)
-      ) {
+      if (_.isEmpty(methods) || (!_.isUndefined(methods.error) && methods.error)) {
         const logData = JSON.stringify(data);
         const cartId = window.commerceBackend.getCartId();
         logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${methods.error_message}`);

@@ -269,7 +269,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.applyRemovePromo = async (data) => {

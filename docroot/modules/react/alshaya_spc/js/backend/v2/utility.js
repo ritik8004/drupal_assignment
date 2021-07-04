@@ -42,7 +42,7 @@ const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.cust
  * @param {object} params
  *   The object with cartId, itemId.
  *
- * @returns {*}
+ * @returns {string}
  *   The api endpoint.
  */
 const getApiEndpoint = (action, params = {}) => {
