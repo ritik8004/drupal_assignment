@@ -254,7 +254,7 @@ const callMagentoApi = (url, method, data) => {
  * @param {string} requestOptions
  *   The request options.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
 const callDrupalApi = (url, method, requestOptions) => {
@@ -365,6 +365,9 @@ const formatCart = (cartData) => {
  *
  * @param {object} cartData
  *   The cart data object.
+ *
+ * @returns {object}
+ *   The processed cart data.
  */
 const getProcessedCartData = (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
@@ -537,7 +540,7 @@ const getCart = async (force = false) => {
  * @param {boolean} force
  *   Force refresh cart data from magento.
  *
- * @returns {Promise<object>}
+ * @returns {Promise<AxiosPromise<object>>}
  *   A promise object.
  */
 const getCartWithProcessedData = async (force = false) => {
@@ -640,21 +643,19 @@ const validateRequestData = async (request) => {
  * @param {object} request
  *  The request data.
  *
- * @returns {promise|boolean}
+ * @returns {Promise<object|boolean>}
  *   Returns true if the data is valid or an object in case of error.
  */
 const preUpdateValidation = async (request) => {
   const validationResponse = await validateRequestData(request);
   if (validationResponse !== 200) {
     return {
-      data: {
-        error: true,
-        error_code: validationResponse,
-        error_message: getDefaultErrorMessage(),
-        response_message: {
-          status: '',
-          msg: getDefaultErrorMessage(),
-        },
+      error: true,
+      error_code: validationResponse,
+      error_message: getDefaultErrorMessage(),
+      response_message: {
+        status: '',
+        msg: getDefaultErrorMessage(),
       },
     };
   }
@@ -680,9 +681,7 @@ const updateCart = async (data) => {
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
-  if (!_.isUndefined(validationResult.data)
-    && !_.isUndefined(validationResult.data.error) && validationResult.data.error
-  ) {
+  if (!_.isUndefined(validationResult.error) && validationResult.error) {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 

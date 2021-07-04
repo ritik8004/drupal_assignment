@@ -817,7 +817,7 @@ const applyDefaults = async (data, uid) => {
  *
  * @param {object} cartData
  *   The cart data object.
- * @returns {Promise<object|null>}
+ * @returns {Promise<AxiosPromise<object>|null>}
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
@@ -979,7 +979,7 @@ window.commerceBackend.getCartForCheckout = () => {
 const getCustomerByMail = async (email) => {
   logger.info(`${email}`);
   // Temporary return.
-  return { data: {} };
+  return {};
 };
 
 /**
@@ -1111,12 +1111,9 @@ window.commerceBackend.addShippingMethod = async (data) => {
   ) {
     // Get customer by email.
     let customer = await getCustomerByMail(shippingEmail);
-    if (!_.isUndefined(customer.data)
-      && (!_.isUndefined(customer.data.error) && customer.data.error)
-    ) {
+    if (!_.isUndefined(customer.error) && customer.error) {
       return customer;
     }
-    customer = customer.data;
 
     // Create new customer.
     if (_.isEmpty(customer)) {
@@ -1125,20 +1122,15 @@ window.commerceBackend.addShippingMethod = async (data) => {
         shippingInfo.static.firstname,
         shippingInfo.static.lastname,
       );
-      if (!_.isUndefined(customer.data)
-      && (!_.isUndefined(customer.data.error) && customer.data.error)
-      ) {
+      if (!_.isUndefined(customer.error) && customer.error) {
         return customer;
       }
-      customer = customer.data;
     }
 
     // Associate cart to customer.
     if (!_.isEmpty(customer) && !_.isUndefined(customer.id)) {
       const response = await associateCartToCustomer(customer.id);
-      if (!_.isUndefined(response.data)
-        && (!_.isUndefined(response.data.error) && response.data.error)
-      ) {
+      if (!_.isUndefined(response.error) && response.error) {
         return response;
       }
     }
