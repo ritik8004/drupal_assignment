@@ -67,13 +67,14 @@ const getProductStatus = async (sku) => {
  *    The CNC status.
  */
 const getCncStatusForCart = async () => {
-  const cart = window.commerceBackend.getRawCartDataFromStorage();
-  if (typeof cart === 'undefined' || !cart) {
+  const response = window.commerceBackend.getRawCartDataFromStorage();
+  if (_.isEmpty(response) || _.isEmpty(response.cart)) {
     return false;
   }
+  const cart = { ...response.cart };
 
-  for (let i = 0; i < cart.cart.items.length; i++) {
-    const item = cart.cart.items[i];
+  for (let i = 0; i < cart.items.length; i++) {
+    const item = cart.items[i];
     // We should ideally have ony one call to an endpoint and pass
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.

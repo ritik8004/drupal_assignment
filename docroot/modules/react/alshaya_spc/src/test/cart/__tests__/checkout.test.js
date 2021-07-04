@@ -491,7 +491,7 @@ describe('Checkout', () => {
       });
 
       it('With SKU', async () => {
-        axios.mockResolvedValue(productStatus);
+        axios.mockResolvedValue({ data: productStatus });
         const getProductStatus = utilsRewire.__get__('getProductStatus');
         const result = await getProductStatus('WZBOWZ107');
         expect(result).toEqual(productStatus);
@@ -690,11 +690,11 @@ describe('Checkout', () => {
         const result = await getPaymentMethods();
 
         expect(axios).toHaveBeenCalled();
-        expect(result.data.length).toEqual(4);
-        expect(result.data[0].code).toEqual('checkout_com_upapi_vault');
-        expect(result.data[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
-        expect(result.data[3].code).toEqual('cashondelivery');
-        expect(result.data[3].title).toEqual('Cash On Delivery');
+        expect(result.length).toEqual(4);
+        expect(result[0].code).toEqual('checkout_com_upapi_vault');
+        expect(result[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
+        expect(result[3].code).toEqual('cashondelivery');
+        expect(result[3].title).toEqual('Cash On Delivery');
       });
 
       it('With null value when shipping method is not provided', async () => {
@@ -713,7 +713,7 @@ describe('Checkout', () => {
           .mockImplementation(() => '1234');
 
         const result = await getPaymentMethods();
-        expect(result.data).toEqual({});
+        expect(result).toEqual({});
       });
     });
 

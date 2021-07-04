@@ -134,7 +134,18 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   let requestMethod = null;
   let requestUrl = null;
   let itemData = null;
+
   let cartId = window.commerceBackend.getCartId();
+  // If we try to add/remove item while we don't have anything or corrupt
+  // session, we create the cart object.
+  if (_.isNull(cartId)) {
+    cartId = await window.commerceBackend.createCart();
+    // If we still don't have a cart, we cannot continue.
+    if (_.isNull(cartId)) {
+      return new Promise((resolve, reject) => reject(data));
+    }
+  }
+
   let productOptions = {};
   const quantity = typeof data.quantity !== 'undefined' && data.quantity
     ? data.quantity
@@ -168,12 +179,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   if (data.action === 'add item') {
-    // If we try to add item while we don't have anything or corrupt
-    // session, we create the cart object.
-    cartId = window.commerceBackend.getCartId();
-    if (_.isNull(cartId)) {
-      return window.commerceBackend.createCart();
-    }
     // @todo: Associate cart to the customer.
   }
 
