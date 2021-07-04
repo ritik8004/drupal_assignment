@@ -335,19 +335,26 @@ const getDefaultPaymentFromOrder = async () => null;
  */
 const getPaymentMethods = async () => {
   const cartId = window.commerceBackend.getCartId();
-  const response = await getCart();
-  if (_.isEmpty(response.data)
-    || _.isEmpty(response.data.shipping)
-    || _.isEmpty(response.data.shipping.method)
-    || (!_.isUndefined(response.data.error) && response.data.error)
-  ) {
-    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
-    return null;
-  }
+  return getCart()
+    .then(async (response) => {
+      if (_.isEmpty(response.data)
+        || _.isEmpty(response.data.shipping)
+        || _.isEmpty(response.data.shipping.method)
+        || (!_.isUndefined(response.data.error) && response.data.error)
+      ) {
+        logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
+        return null;
+      }
 
-  // Get payment methods from MDC.
-  const url = getApiEndpoint('getPaymentMethods', { cartId });
-  return callMagentoApi(url, 'GET', {});
+      // Get payment methods from MDC.
+      return callMagentoApi(getApiEndpoint('getPaymentMethods', { cartId }), 'GET', {})
+        .then(async (paymentMethods) => {
+          if (!_.isEmpty(response.data)) {
+            return paymentMethods.data;
+          }
+          return null;
+        });
+    });
 };
 
 /**
@@ -844,10 +851,10 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_.isUndefined(data.shipping.method)
   ) {
     const paymentMethods = await getPaymentMethods();
-    if (!_.isUndefined(paymentMethods.data)) {
-      data.payment.methods = paymentMethods.data;
-      data.payment.method = getPaymentMethodSetOnCart();
+    if (!_.isEmpty(paymentMethods)) {
+      data.payment.methods = paymentMethods;
     }
+    data.payment.method = getPaymentMethodSetOnCart();
   }
 
   // Re-use the processing done for cart page.
