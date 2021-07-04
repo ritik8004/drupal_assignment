@@ -262,7 +262,7 @@ const formatAddressForShippingBilling = (address) => {
  * @param {object} billingData
  *   Billing data.
  *
- * @returns {Promise<object>}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Response data.
  */
 const updateBilling = async (billingData) => {
@@ -292,10 +292,16 @@ const updateBilling = async (billingData) => {
  * @param {object} address
  *   Address object.
  *
- * @return  {Promise<AxiosPromise<object>>}
- *   Address validation response.
+ * @return  {Promise<object|boolean>}
+ *   Address validation response or false in case of errors.
  */
-const validateAddressAreaCity = (address) => callDrupalApi('/spc/validate-info', 'POST', address);
+const validateAddressAreaCity = async (address) => {
+  const response = callDrupalApi('/spc/validate-info', 'POST', address);
+  if (_.isEmpty(response.data) || (!_.isUndefined(response.data.error) && response.data.error)) {
+    return false;
+  }
+  return response.data;
+};
 
 /**
  * Get last order of the customer.
@@ -607,7 +613,7 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  * @param {bool} updateBillingDetails
  *   Whether billing needs to be updated or not.
  *
- * @returns {Promise<object|null>}
+ * @returns {Promise<AxiosPromise<object>|null>}
  *   Cart data or null.
  */
 const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
@@ -689,11 +695,9 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Validate address.
-  const response = await validateAddressAreaCity(shippingData.address);
-  if (_.isEmpty(response.data)
-    || _.isEmpty(response.data.address)
-    || (!_.isUndefined(response.data.error) && response.data.error)
-  ) {
+  const validAddress = await validateAddressAreaCity(shippingData.address);
+  if (_.isEmpty(validAddress)
+    || _.isUndefined(validAddress.address) || validAddress.address !== true) {
     return false;
   }
 
