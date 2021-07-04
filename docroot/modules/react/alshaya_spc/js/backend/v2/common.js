@@ -206,7 +206,7 @@ const getCustomerToken = () => {
  * @param {object} data
  *   The object to send for POST request.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
 const callMagentoApi = (url, method, data) => {
@@ -254,7 +254,7 @@ const callMagentoApi = (url, method, data) => {
  * @param {string} requestOptions
  *   The request options.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
 const callDrupalApi = (url, method, requestOptions) => {
@@ -365,6 +365,9 @@ const formatCart = (cartData) => {
  *
  * @param {object} cartData
  *   The cart data object.
+ *
+ * @returns {object}
+ *   The processed cart data.
  */
 const getProcessedCartData = (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
@@ -487,8 +490,8 @@ const getProcessedCartData = (cartData) => {
  * @param {boolean} force
  *   Flag for static/fresh cartData.
  *
- * @returns {Promise}
- *   A promise object.
+ * @returns {Promise<AxiosPromise<object>>|null}
+ *   A promise object containing the cart or null.
  */
 const getCart = async (force = false) => {
   if (window.commerceBackend.getRawCartDataFromStorage() !== null && !force) {
@@ -497,7 +500,7 @@ const getCart = async (force = false) => {
 
   const cartId = window.commerceBackend.getCartId();
   if (cartId === null) {
-    return new Promise((resolve) => resolve(cartId));
+    return null;
   }
 
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
@@ -536,7 +539,8 @@ const getCart = async (force = false) => {
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
- * @returns {Promise}
+ *
+ * @returns {Promise<AxiosPromise<object>>}
  *   A promise object.
  */
 const getCartWithProcessedData = async (force = false) => {
@@ -553,7 +557,7 @@ const getCartWithProcessedData = async (force = false) => {
 /**
  * Return customer id from current session.
  *
- * @return {int|null}
+ * @returns {Promise<integer|null>}
  *   Return customer id or null.
  */
 const getCartCustomerId = async () => {
@@ -574,7 +578,7 @@ const getCartCustomerId = async () => {
  * @param {bool} resetCart
  *   True to Reset cart, otherwise false.
  *
- * @return {mixed}
+ * @returns {Promise<object|boolean>}
  *   Response.
  */
 const associateCartToCustomer = async (customerId, resetCart = false) => {
@@ -589,7 +593,7 @@ const associateCartToCustomer = async (customerId, resetCart = false) => {
  * @param {object} request
  *  The request data.
  *
- * @returns {integer}
+ * @returns {Promise<integer>}
  *   Promise containing the error code.
  */
 const validateRequestData = async (request) => {
@@ -639,21 +643,19 @@ const validateRequestData = async (request) => {
  * @param {object} request
  *  The request data.
  *
- * @returns {promise|boolean}
+ * @returns {Promise<object|boolean>}
  *   Returns true if the data is valid or an object in case of error.
  */
 const preUpdateValidation = async (request) => {
   const validationResponse = await validateRequestData(request);
   if (validationResponse !== 200) {
     return {
-      data: {
-        error: true,
-        error_code: validationResponse,
-        error_message: getDefaultErrorMessage(),
-        response_message: {
-          status: '',
-          msg: getDefaultErrorMessage(),
-        },
+      error: true,
+      error_code: validationResponse,
+      error_message: getDefaultErrorMessage(),
+      response_message: {
+        status: '',
+        msg: getDefaultErrorMessage(),
       },
     };
   }
@@ -666,7 +668,7 @@ const preUpdateValidation = async (request) => {
  * @param {object} data
  *  The data to send.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   A promise object with cart data.
  */
 const updateCart = async (data) => {
@@ -679,9 +681,7 @@ const updateCart = async (data) => {
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
-  if (!_.isUndefined(validationResult.data)
-    && !_.isUndefined(validationResult.data.error) && validationResult.data.error
-  ) {
+  if (!_.isUndefined(validationResult.error) && validationResult.error) {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
@@ -718,14 +718,17 @@ const updateCart = async (data) => {
 /**
  * Return customer email from cart in session.
  *
- * @return {string|null}
+ * @returns {Promise<string|null>}
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
   const response = await getCart();
-  if (!_.isUndefined(response.data.customer)
-    && _.isString(response.data.customer.email)) {
-    return response.data.customer.email;
+  const cart = response.data;
+  if (!_.isUndefined(cart.customer)
+    && !_.isUndefined(cart.customer.email)
+    && !_.isEmpty(cart.customer.email)
+  ) {
+    return cart.customer.email;
   }
   return null;
 };

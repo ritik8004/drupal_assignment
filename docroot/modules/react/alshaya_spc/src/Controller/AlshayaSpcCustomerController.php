@@ -143,10 +143,16 @@ class AlshayaSpcCustomerController extends ControllerBase {
   public function getCustomerToken() {
     $token = '';
     if ($this->currentUser()->isAuthenticated()) {
-      if (empty($token) || !is_string($token)) {
-        $mail = $this->currentUser()->getEmail();
-        $token = $this->spcCustomerHelper->getCustomerTokenBySocialDetail($mail);
-      }
+      /*
+      Temporarily disabling session caching for token
+      We will fix the way we cache tokens on another ticket.
+      @todo change the way we cache tokens, see CORE-31154
+       */
+      // $token = $this->session->get('magento_customer_token');
+      // if (empty($token) || !is_string($token)) {
+      $mail = $this->currentUser()->getEmail();
+      $token = $this->spcCustomerHelper->getCustomerTokenBySocialDetail($mail);
+      // }
     }
 
     if (empty($token)) {

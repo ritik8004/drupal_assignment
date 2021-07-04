@@ -1,11 +1,3 @@
-.c-menu-secondary,
-.toggle--sign,
-.main--menu ul.menu--one__list {
-  @include breakpoint($upto-desktop) {
-    width: 19.6875rem;
-  }
-}
-
 .block-alshaya-main-menu {
   .main--menu {
     .mobile--close {

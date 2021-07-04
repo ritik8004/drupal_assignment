@@ -24,6 +24,11 @@ import cartActions from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
+/**
+ * This variable is used to check if field values have invisible characters.
+ *
+ * @type {string}
+ */
 const invisibleCharacter = '&#8203;';
 
 /**
@@ -36,7 +41,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 /**
  * Get data related to product status.
  *
- * @param {string} sku
+ * @param {Promise<string|null>}
  *  The sku for which the status is required.
  */
 const getProductStatus = async (sku) => {
@@ -48,29 +53,35 @@ const getProductStatus = async (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  if (!_.isUndefined(response.data)) {
+    return response.data;
+  }
+  return null;
 };
 
 /**
  * Get CnC status for cart based on skus in cart.
  *
- * @returns {boolean}.
+ * @returns {Promise<boolean>}.
  *    The CNC status.
  */
 const getCncStatusForCart = async () => {
-  const cart = window.commerceBackend.getRawCartDataFromStorage();
-  if (typeof cart === 'undefined' || !cart) {
+  const response = window.commerceBackend.getRawCartDataFromStorage();
+  if (_.isEmpty(response) || _.isEmpty(response.cart)) {
     return false;
   }
+  const cart = { ...response.cart };
 
-  for (let i = 0; i < cart.cart.items.length; i++) {
-    const item = cart.cart.items[i];
+  for (let i = 0; i < cart.items.length; i++) {
+    const item = cart.items[i];
     // We should ideally have ony one call to an endpoint and pass
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.
     // eslint-disable-next-line no-await-in-loop
-    const response = await getProductStatus(item.sku);
-    if (typeof response.data.cnc_enabled !== 'undefined' && !response.data.cnc_enabled) {
+    const productStatus = await getProductStatus(item.sku);
+    if (!_.isEmpty(productStatus)
+      && _.isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled) {
       return false;
     }
   }
@@ -128,7 +139,7 @@ const staticShippingMethods = [];
  *
  * @param data
  *   The shipping address.
- * @returns {Promise}
+ * @returns {Promise<array>}
  *   HD Shipping methods.
  */
 const getHomeDeliveryShippingMethods = async (data) => {
@@ -148,28 +159,31 @@ const getHomeDeliveryShippingMethods = async (data) => {
     return staticShippingMethods[key];
   }
 
-  staticShippingMethods[key] = null;
+  staticShippingMethods[key] = [];
   const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
   const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
-  if (_.isEmpty(response.data)
-    || (!_.isUndefined(response.data.error) && response.data.error)
-  ) {
-    logger.error(`Error in getting shipping methods for HD. Data: ${response.data.error_message}`);
-    return response;
-  }
-  const methods = response.data;
+  if (!_.isEmpty(response.data)) {
+    const methods = response.data;
 
-  for (let i = 0; i < methods.length; i++) {
-    if (methods[i].carrier_code === 'click_and_collect') {
-      delete methods[i];
+    // Check for errors.
+    if (!_.isUndefined(methods.error) && methods.error) {
+      logger.error(`Error in getting shipping methods for HD. Data: ${methods.error_message}`);
+      return methods;
     }
-  }
 
-  // Set shipping methods in static.
-  staticShippingMethods[key] = methods;
+    // Delete CNC from methods.
+    for (let i = 0; i < methods.length; i++) {
+      if (methods[i].carrier_code === 'click_and_collect') {
+        delete methods[i];
+      }
+    }
+
+    // Set shipping methods in static.
+    staticShippingMethods[key] = methods;
+  }
 
   // Return methods.
-  return methods;
+  return staticShippingMethods[key];
 };
 
 /**
@@ -208,10 +222,6 @@ const getDefaultAddress = (data) => {
  *   Formatted address object.
  */
 const formatAddressForShippingBilling = (address) => {
-  if (_.isEmpty(address)) {
-    return {};
-  }
-
   const data = _.cloneDeep(address);
 
   const staticFields = {};
@@ -253,7 +263,7 @@ const formatAddressForShippingBilling = (address) => {
  * @param {object} billingData
  *   Billing data.
  *
- * @return {object}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Response data.
  */
 const updateBilling = async (billingData) => {
@@ -272,6 +282,7 @@ const updateBilling = async (billingData) => {
   const logData = JSON.stringify(billingData);
   const cartId = window.commerceBackend.getCartId();
   logger.notice(`Billing update manual. Address: ${logAddress} Data: ${logData} Cart: ${cartId}`);
+  logger.notice(`Billing update manual. Address: ${JSON.stringify(params.billing)} Data: ${JSON.stringify(billingData)} Cart: ${window.commerceBackend.getCartId()}`);
 
   return updateCart(params);
 };
@@ -282,10 +293,16 @@ const updateBilling = async (billingData) => {
  * @param {object} address
  *   Address object.
  *
- * @return {mixed}
- *   Address validation response.
+ * @return  {Promise<object|boolean>}
+ *   Address validation response or false in case of errors.
  */
-const validateAddressAreaCity = (address) => callDrupalApi('/spc/validate-info', 'POST', address);
+const validateAddressAreaCity = async (address) => {
+  const response = callDrupalApi('/spc/validate-info', 'POST', address);
+  if (_.isEmpty(response.data) || (!_.isUndefined(response.data.error) && response.data.error)) {
+    return false;
+  }
+  return response.data;
+};
 
 /**
  * Get last order of the customer.
@@ -300,10 +317,10 @@ const getLastOrder = () => [];
  * @param {object} order
  *   Last Order details.
  *
- * @return {*}
+ * @returns {Promise<object|boolean>}
  *   FALSE if something went wrong, updated cart data otherwise.
  */
-const applyDefaultShipping = () => false;
+const applyDefaultShipping = async () => false;
 
 /**
  * Get payment method from last order.
@@ -312,32 +329,39 @@ const applyDefaultShipping = () => false;
  * @param {object} order
  *   Last Order details.
  *
- * @return {*}
+ * @returns {Promise<object|boolean>}
  *   FALSE if something went wrong, payment method name otherwise.
  */
-const getDefaultPaymentFromOrder = () => null;
+const getDefaultPaymentFromOrder = async () => null;
 
 /**
  * Gets payment methods.
  *
- * @return {Promise}.
+ * @returns {Promise<object|null>}.
  *   The method list if available.
  */
 const getPaymentMethods = async () => {
   const cartId = window.commerceBackend.getCartId();
-  const response = await getCart();
-  if (_.isEmpty(response.data)
-    || _.isEmpty(response.data.shipping)
-    || _.isEmpty(response.data.shipping.method)
-    || (!_.isUndefined(response.data.error) && response.data.error)
-  ) {
-    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
-    return null;
-  }
+  return getCart()
+    .then(async (response) => {
+      if (_.isEmpty(response.data)
+        || _.isEmpty(response.data.shipping)
+        || _.isEmpty(response.data.shipping.method)
+        || (!_.isUndefined(response.data.error) && response.data.error)
+      ) {
+        logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
+        return null;
+      }
 
-  // Get payment methods from MDC.
-  const url = getApiEndpoint('getPaymentMethods', { cartId });
-  return callMagentoApi(url, 'GET', {});
+      // Get payment methods from MDC.
+      return callMagentoApi(getApiEndpoint('getPaymentMethods', { cartId }), 'GET', {})
+        .then(async (paymentMethods) => {
+          if (!_.isEmpty(response.data)) {
+            return paymentMethods.data;
+          }
+          return null;
+        });
+    });
 };
 
 /**
@@ -355,7 +379,7 @@ const getPaymentMethodSetOnCart = () => null;
  * @param {string} store
  *   The store ID.
  *
- * @returns {Promise}
+ * @returns {Promise<object|null>}
  *   Returns a promise which resolves to an array of data for the given store or
  * an empty array in case of any issue.
  */
@@ -406,7 +430,7 @@ const getStoreInfo = async (storeData) => {
  * @param {string} lon
  *   The longitude value.
  *
- * @returns {array}
+ * @returns {Promise<array>}
  *   The list of stores.
  */
 const getCartStores = async (lat, lon) => {
@@ -502,7 +526,7 @@ const formatAddressForFrontend = (address) => {
  * @param {array} customer
  *   Customer data.
  * @return {object}.
- *   Customer data.
+ *   Cleared customer data.
  */
 const getCustomerPublicData = (customer) => {
   if (_.isEmpty(customer)) {
@@ -579,7 +603,7 @@ const getMethodCodeForFrontend = (code) => {
  * @param {bool} updateBillingDetails
  *   Whether billing needs to be updated or not.
  *
- * @return {object|null}
+ * @returns {Promise<AxiosPromise<object>|null>}
  *   Cart data or null.
  */
 const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
@@ -639,7 +663,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
  * @param {object} shippingMethods
  *   Shipping methods.
  *
- * @return {object|bool}
+ * @returns {Promise<object|boolean>}
  *   FALSE if something went wrong, updated cart data otherwise.
  */
 const selectHd = async (address, method, billing, shippingMethods) => {
@@ -661,11 +685,9 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Validate address.
-  const response = await validateAddressAreaCity(shippingData.address);
-  if (_.isEmpty(response.data)
-    || _.isEmpty(response.data.address)
-    || (!_.isUndefined(response.data.error) && response.data.error)
-  ) {
+  const validAddress = await validateAddressAreaCity(shippingData.address);
+  if (_.isEmpty(validAddress)
+    || _.isUndefined(validAddress.address) || validAddress.address !== true) {
     return false;
   }
 
@@ -729,7 +751,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
  *   The cart data object.
  * @param {integer} uid
  *   Drupal User ID.
- * @return {object}.
+ * @returns {Promise<object>}.
  *   The data.
  */
 const applyDefaults = async (data, uid) => {
@@ -746,14 +768,14 @@ const applyDefaults = async (data, uid) => {
   // Try to apply defaults from last order.
   if (!_.isEmpty(order)) {
     // If cnc order but cnc is disabled.
-    if (_.includes(order.shipping.method, 'click_and_collect') && !getCncStatusForCart()) {
+    if (_.includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart() !== true) {
       return data;
     }
 
-    const response = applyDefaultShipping(order);
+    const response = await applyDefaultShipping(order);
     if (response) {
-      // @todo Check if returns empty string for anonyous (CORE-31245).
-      response.payment.default = getDefaultPaymentFromOrder(order);
+      // @todo Check if returns empty string for anonymous (CORE-31245).
+      response.payment.default = await getDefaultPaymentFromOrder(order);
       return response;
     }
   }
@@ -785,7 +807,7 @@ const applyDefaults = async (data, uid) => {
  *
  * @param {object} cartData
  *   The cart data object.
- * @returns {Promise|null}
+ * @returns {Promise<AxiosPromise<object>|null>}
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
@@ -813,9 +835,7 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_.isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (_.isEmpty(methods)
-      || (!_.isUndefined(methods.data) && !_.isUndefined(methods.data.error) && methods.data.error)
-    ) {
+    if (_.isEmpty(methods) || (!_.isUndefined(methods.error) && methods.error)) {
       return methods;
     }
     data.shipping.methods = methods;
@@ -825,10 +845,10 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_.isUndefined(data.shipping.method)
   ) {
     const paymentMethods = await getPaymentMethods();
-    if (!_.isUndefined(paymentMethods.data)) {
-      data.payment.methods = paymentMethods.data;
-      data.payment.method = getPaymentMethodSetOnCart();
+    if (!_.isEmpty(paymentMethods)) {
+      data.payment.methods = paymentMethods;
     }
+    data.payment.method = getPaymentMethodSetOnCart();
   }
 
   // Re-use the processing done for cart page.
@@ -1010,7 +1030,7 @@ window.commerceBackend.addPaymentMethod = async (data) => {
 /**
  * Get cart data for checkout.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.getCartForCheckout = () => {
@@ -1064,14 +1084,14 @@ window.commerceBackend.getCartForCheckout = () => {
  * @param {string} email
  *   Email address.
  *
- * @return {object|null}
+ * @returns {Promise<object>}
  *   Customer data if API call is successful else and array containing the
  *   error message.
  */
 const getCustomerByMail = async (email) => {
   logger.info(`${email}`);
   // Temporary return.
-  return { data: {} };
+  return {};
 };
 
 /**
@@ -1085,7 +1105,7 @@ const getCustomerByMail = async (email) => {
  * @param {string} lastname
  *   Last name.
  *
- * @return {object}
+ * @returns {Promise<object>}
  *   Customer data if API call is successful else an array containing the
  *   error message.
  */
@@ -1131,10 +1151,10 @@ const createCustomer = async (email, firstname, lastname) => {
  * @param {bool} updateBillingDetails
  *   Whether billing needs to update or not.
  *
- * @return {object}
+ * @returns {Promise<object>}
  *   Cart data.
  * */
-const addCncShippingInfo = (shippingData, action, updateBillingDetails) => {
+const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
   logger.info(`${shippingData}${action}${updateBillingDetails}`);
 };
 
@@ -1188,7 +1208,7 @@ const prepareShippingData = (shippingInfo) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.addShippingMethod = async (data) => {
@@ -1203,12 +1223,9 @@ window.commerceBackend.addShippingMethod = async (data) => {
   ) {
     // Get customer by email.
     let customer = await getCustomerByMail(shippingEmail);
-    if (!_.isUndefined(customer.data)
-      && (!_.isUndefined(customer.data.error) && customer.data.error)
-    ) {
+    if (!_.isUndefined(customer.error) && customer.error) {
       return customer;
     }
-    customer = customer.data;
 
     // Create new customer.
     if (_.isEmpty(customer)) {
@@ -1217,20 +1234,15 @@ window.commerceBackend.addShippingMethod = async (data) => {
         shippingInfo.static.firstname,
         shippingInfo.static.lastname,
       );
-      if (!_.isUndefined(customer.data)
-      && (!_.isUndefined(customer.data.error) && customer.data.error)
-      ) {
+      if (!_.isUndefined(customer.error) && customer.error) {
         return customer;
       }
-      customer = customer.data;
     }
 
     // Associate cart to customer.
     if (!_.isEmpty(customer) && !_.isUndefined(customer.id)) {
       const response = await associateCartToCustomer(customer.id);
-      if (!_.isUndefined(response.data)
-        && (!_.isUndefined(response.data.error) && response.data.error)
-      ) {
+      if (!_.isUndefined(response.error) && response.error) {
         return response;
       }
     }
@@ -1271,10 +1283,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     } else {
       const methods = await getHomeDeliveryShippingMethods(shippingData.address);
       // If no shipping method.
-      if (_.isEmpty(methods)
-        || (!_.isUndefined(methods.data)
-        && !_.isUndefined(methods.data.error) && methods.data.error)
-      ) {
+      if (_.isEmpty(methods) || (!_.isUndefined(methods.error) && methods.error)) {
         const logData = JSON.stringify(data);
         const cartId = window.commerceBackend.getCartId();
         logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${methods.error_message}`);
@@ -1315,7 +1324,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.addBillingMethod = (data) => updateBilling(data);

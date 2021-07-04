@@ -228,6 +228,12 @@
         }
       }
 
+      ul.menu__list--active {
+        position: absolute;
+        top: 0;
+        #{$left}: 0;
+      }
+
       ul.menu--one__list {
         display: none;
         position: inherit;
@@ -489,20 +495,6 @@
 @include breakpoint($upto-desktop) {
   .secondary--main--menu {
     display: none;
-
-    ul.menu--one__list {
-      background: $mm_bg;
-      width: 84.375%;
-      height: 100%;
-      position: fixed;
-      top: 2.9rem;
-      bottom: 0;
-      z-index: 20;
-      overflow-y: auto;
-      margin-top: 0;
-      padding-bottom: 3.125rem;
-      transform: translate3d(0, 0, 0);
-    }
   }
 }
 
