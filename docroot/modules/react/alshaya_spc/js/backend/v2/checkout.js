@@ -366,12 +366,20 @@ const getPaymentMethods = async () => {
 
 /**
  * Get the payment method set on cart.
- * @todo implement this
  *
- * @return {string}.
+ * @return {Promise<string|null>}.
  *   Payment method set on cart.
  */
-const getPaymentMethodSetOnCart = () => null;
+const getPaymentMethodSetOnCart = async () => {
+  const params = {
+    cartId: window.commerceBackend.getCartId(),
+  };
+  const response = await callMagentoApi(getApiEndpoint('SelectedPaymentMethod', params), 'GET', {});
+  if (!_.isEmpty(response) && !_.isEmpty(response.data) && !_.isEmpty(response.data.method)) {
+    return response.data.method;
+  }
+  return null;
+};
 
 /**
  * Gets the data for a particular store.
@@ -848,7 +856,7 @@ const getProcessedCheckoutData = async (cartData) => {
     if (!_.isEmpty(paymentMethods)) {
       data.payment.methods = paymentMethods;
     }
-    data.payment.method = getPaymentMethodSetOnCart();
+    data.payment.method = await getPaymentMethodSetOnCart();
   }
 
   // Re-use the processing done for cart page.
@@ -884,7 +892,7 @@ const getProcessedCheckoutData = async (cartData) => {
   // available payment method.
   if (typeof response.payment !== 'undefined' && typeof response.payment.methods !== 'undefined') {
     const codes = response.payment.methods.map((el) => el.code);
-    if (typeof response.payment.method !== 'undefined' && typeof codes[response.payment.method] === 'undefined') {
+    if (typeof response.payment.method !== 'undefined' && !_.isEmpty(codes) && !codes.includes(response.payment.method)) {
       delete (response.payment.method);
     }
 

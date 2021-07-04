@@ -90,6 +90,12 @@ const getApiEndpoint = (action, params = {}) => {
         : `/rest/V1/guest-carts/${params.cartId}/payment-methods`;
       break;
 
+    case 'SelectedPaymentMethod':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/selected-payment-method'
+        : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;
+      break;
+
     default:
       logger.critical(`Endpoint does not exist for action : ${action}`);
   }
