@@ -372,7 +372,7 @@ const getPaymentMethodSetOnCart = () => 'todo';
  * @param {string} store
  *   The store ID.
  *
- * @returns {Promise}
+ * @returns {Promise<object|null>}
  *   Returns a promise which resolves to an array of data for the given store or
  * an empty array in case of any issue.
  */
@@ -423,7 +423,7 @@ const getStoreInfo = async (storeData) => {
  * @param {string} lon
  *   The longitude value.
  *
- * @returns {array}
+ * @returns {Promise<array>}
  *   The list of stores.
  */
 const getCartStores = async (lat, lon) => {

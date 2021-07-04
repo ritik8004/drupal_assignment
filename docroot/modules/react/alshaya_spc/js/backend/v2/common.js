@@ -206,7 +206,7 @@ const getCustomerToken = () => {
  * @param {object} data
  *   The object to send for POST request.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
 const callMagentoApi = (url, method, data) => {
@@ -667,7 +667,7 @@ const preUpdateValidation = async (request) => {
  * @param {object} data
  *  The data to send.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   A promise object with cart data.
  */
 const updateCart = async (data) => {
