@@ -487,8 +487,8 @@ const getProcessedCartData = (cartData) => {
  * @param {boolean} force
  *   Flag for static/fresh cartData.
  *
- * @returns {Promise}
- *   A promise object.
+ * @returns {Promise<AxiosPromise<object>>|null}
+ *   A promise object containing the cart or null.
  */
 const getCart = async (force = false) => {
   if (window.commerceBackend.getRawCartDataFromStorage() !== null && !force) {
@@ -497,7 +497,7 @@ const getCart = async (force = false) => {
 
   const cartId = window.commerceBackend.getCartId();
   if (cartId === null) {
-    return new Promise((resolve) => resolve(cartId));
+    return null;
   }
 
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
