@@ -20,25 +20,20 @@ services:
     type: php:7.3
     composer_version: 1-latest
     build_as_root:
+      - bash /app/.lando/scripts/configure-syslog.sh
+      - bash /app/.lando/scripts/configure-xhprof.sh
       # Note that you will want to use the script for the major version of node you want to install
       # See: https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
       - curl -sL https://deb.nodesource.com/setup_8.x | bash -
       - apt-get update -y
       - apt-get install nodejs -y
       - apt-get install netcat -y
-      - apt-get install vim -y
-      # We want to remove drupal.log so it doesn't get too big,
-      # but we want to allow rsyslog to create it so it has correct permissions.
-      - rm -f /var/logs/drupal.log
-      - apt-get install rsyslog -y
-      - cat /app/.lando/config/rsyslog.conf > /etc/rsyslog.d/50-default.conf
     run_as_root:
       # By default disable XDEBUG, we need it enabled to ensure all configurations are loaded.
       # Post this to enable disable lando xdebug-on and lando xdebug-off can be used.
       - rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && service apache2 reload
     overrides:
       environment:
-        DEVEL_ENV: lando
         PHP_IDE_CONFIG: "serverName=alshaya"
   edge:
     app_mount: disabled
@@ -47,7 +42,7 @@ services:
       - appserver
     ssl: true
     config:
-      vcl: .lando/config/varnish-4.vcl
+      vcl: architecture/varnish/varnish-4-lando.vcl
   memcache:
     app_mount: disabled
     type: memcached:1.5.11
@@ -78,16 +73,11 @@ proxy:
     - "mail-alshaya.lndo.site"
 
 tooling:
+  vim:
+    service: myservice
   blt:
     service: appserver
     cmd: /app/vendor/acquia/blt/bin/blt
-  blt-init:
-    service: appserver
-    description: Initialize BLT aliases, git hooks and settings.
-    cmd:
-      - appserver: composer blt-alias
-      - appserver: blt blt:init:git-hooks
-      - appserver: blt blt:init:settings
   xdebug-on:
     service: appserver
     description: Enable xdebug for Apache.
