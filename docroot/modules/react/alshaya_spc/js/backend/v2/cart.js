@@ -343,7 +343,9 @@ window.commerceBackend.createCart = async () => {
 
   // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
-  if (!_.isUndefined(response.data)) {
+  if (response.status === 200 && !_.isUndefined(response.data)
+    && (_.isString(response.data) || _.isNumber(response.data))
+  ) {
     setStorageInfo(response.data, 'cart_id');
     return response.data;
   }

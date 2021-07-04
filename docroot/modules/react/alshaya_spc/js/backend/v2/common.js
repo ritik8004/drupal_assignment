@@ -150,6 +150,14 @@ const handleResponse = (apiResponse) => {
     response.data.error_code = 600;
     response.data.error_message = 'Back-end system is down';
     //
+  } else if (response.status === 401) {
+    // Customer Token expired.
+    // @todo see ticket CORE-31154.
+    response.data.error = true;
+    response.data.error_code = 404;
+    response.data.error_message = getDefaultErrorMessage();
+    logger.notice(`The customer token has expired. Message: ${response.data.message}`);
+    //
   } else if (response.status === 404) {
     // Client error responses.
     response.data.error = true;
