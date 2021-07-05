@@ -352,8 +352,6 @@ Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modu
   Drush command to set config to all: drush -l <site-url> cset acq_checkoutcom.settings apple_pay_allowed_in 'all' --input-format=yaml
 
 ### Installing drupal-check (Deprecated code).
-* Install drupal-check in your project using Composer as a development dependency like so: composer require mglaman/drupal-check
-* You can also install this globally using Composer like so: composer global require mglaman/drupal-check
 * Command format: drupal-check [OPTIONS] [DIRS]
 
 * Options:
