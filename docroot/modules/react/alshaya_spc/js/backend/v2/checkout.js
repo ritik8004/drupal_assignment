@@ -399,7 +399,7 @@ const getStoreInfo = async (storeData) => {
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_.isEmpty(response.data)
+  if (_.isEmpty(response.data) || !_.isArray(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
     return null;
