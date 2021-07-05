@@ -90,7 +90,7 @@ const getApiEndpoint = (action, params = {}) => {
         : `/rest/V1/guest-carts/${params.cartId}/payment-methods`;
       break;
 
-    case 'SelectedPaymentMethod':
+    case 'selectedPaymentMethod':
       endpoint = isUserAuthenticated()
         ? '/rest/V1/carts/mine/selected-payment-method'
         : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;

@@ -166,6 +166,7 @@ const staticShippingMethods = [];
  *
  * @param data
  *   The shipping address.
+ *
  * @returns {Promise<array>}
  *   HD Shipping methods.
  */
@@ -370,7 +371,7 @@ const getPaymentMethodSetOnCart = async () => {
   const params = {
     cartId: window.commerceBackend.getCartId(),
   };
-  const response = await callMagentoApi(getApiEndpoint('SelectedPaymentMethod', params), 'GET', {});
+  const response = await callMagentoApi(getApiEndpoint('selectedPaymentMethod', params), 'GET', {});
   if (!_.isEmpty(response) && !_.isEmpty(response.data) && !_.isEmpty(response.data.method)) {
     return response.data.method;
   }
