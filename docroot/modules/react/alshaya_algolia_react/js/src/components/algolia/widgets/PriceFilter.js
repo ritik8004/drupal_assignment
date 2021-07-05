@@ -31,8 +31,8 @@ const PriceFilter = (props) => {
             refine(item.value);
           }}
         >
-          <span className="facet-item__value">
-            {getPriceRangeLabel(item.label)}
+          <span className="facet-item__value" data-drupal-facet-item-value={getPriceRangeLabel(item.label)}>
+            <span className="facet-item__label">{getPriceRangeLabel(item.label)}</span>
             <span className="facet-item__count">
               (
               {item.count}
