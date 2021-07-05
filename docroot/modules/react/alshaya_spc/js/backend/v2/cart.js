@@ -251,7 +251,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         if (_.isNull(cartId)) {
           return cartId;
         }
-        const cartData = await window.commerceBackend.getCart();
+        const cartData = await window.commerceBackend.getCart(true);
         window.commerceBackend.setCartDataInStorage(cartData);
         return window.commerceBackend.addUpdateRemoveCartItem(data);
       }
