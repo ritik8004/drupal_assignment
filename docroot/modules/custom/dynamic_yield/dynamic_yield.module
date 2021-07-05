@@ -15,6 +15,13 @@ use Drupal\Component\Serialization\Json;
  * Implements hook_page_attachments().
  */
 function dynamic_yield_page_attachments(array &$page) {
+  // For performance testing & debugging purposes adding a quick bypass for
+  // escaping DY JS on a page.
+  // Usage: ?DY=BLOCK
+  $param = \Drupal::request()->get('DY');
+  if ($param === 'BLOCK') {
+    return;
+  }
 
   /** @var \Drupal\dynamic_yield\DynamicYieldService $dynamic_yield */
   $dynamic_yield = \Drupal::service('dynamic_yield.dynamic_yield');
