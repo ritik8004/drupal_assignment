@@ -7,6 +7,7 @@ import {
   updateCart,
   getProcessedCartData,
   getCartWithProcessedData,
+  associateCartToCustomer,
 } from './common';
 import { getApiEndpoint, logger } from './utility';
 import { getExceptionMessageType } from './error';
@@ -146,6 +147,12 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     }
   }
 
+  // Associate cart to customer.
+  const Id = window.drupalSettings.userDetails.customerId;
+  if (Id > 0) {
+    associateCartToCustomer(Id);
+  }
+
   let productOptions = {};
   const quantity = typeof data.quantity !== 'undefined' && data.quantity
     ? data.quantity
@@ -176,10 +183,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       itemId: cartItem.item_id,
     };
     requestUrl = getApiEndpoint('removeItems', params);
-  }
-
-  if (data.action === 'add item') {
-    // @todo: Associate cart to the customer.
   }
 
   if (data.action === 'add item' || data.action === 'update item') {
