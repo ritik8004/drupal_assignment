@@ -49,17 +49,6 @@ function alshaya_rcs_page_attachments_alter(array &$attachments) {
   if ($backend_version != 2) {
     return;
   }
-
-  $route_match = \Drupal::routeMatch();
-
-  if ($route_match->getRouteName() === 'entity.node.canonical') {
-    $node = $route_match->getParameter('node');
-    if ($node->bundle() === 'rcs_product') {
-      $attachments['#attached']['library'][] = 'alshaya_rcs/add_to_cart';
-      $attachments['#attached']['library'][] = 'alshaya_rcs/backend';
-      $attachments['#attached']['library'][] = 'alshaya_rcs/renderer';
-    }
-  }
 }
 
 /**
@@ -69,6 +58,8 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
   if ($entity->bundle() !== 'rcs_product') {
     return;
   }
+
+  $build['#attached']['library'][] = 'alshaya_rcs/add_to_cart';
 
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',

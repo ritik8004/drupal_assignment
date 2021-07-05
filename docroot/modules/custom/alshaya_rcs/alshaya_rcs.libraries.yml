@@ -19,4 +19,6 @@ add_to_cart:
   dependencies:
     - core/jquery
     - core/drupalSettings
+    - alshaya_rcs/renderer
+    - alshaya_rcs/backend
     - alshaya_acm_cart_notification/cart_notification_js
