@@ -103,7 +103,7 @@ const triggerStockRefresh = (data) => callDrupalApi(
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
- * Applies transformations to the structure of cart data.
+ * Returns the processed cart data.
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
