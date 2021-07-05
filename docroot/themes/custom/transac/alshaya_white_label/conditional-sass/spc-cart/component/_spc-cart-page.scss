@@ -83,7 +83,6 @@ body.alias--cart {
     &.l-two--sf {
       &.l-container {
         background: $algolia-react-search-result-page-bg;
-        max-width: 100%;
 
         .show-algolia-result {
           max-width: 80.25rem;
@@ -96,6 +95,12 @@ body.alias--cart {
             padding-#{$right}: 1.5rem;
           }
         }
+      }
+    }
+
+    &.l-container {
+      &:not(.l-two--sf) {
+        max-width: 100%;
       }
     }
   }
