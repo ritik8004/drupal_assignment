@@ -339,7 +339,7 @@ const getDefaultPaymentFromOrder = async () => null;
  *   The method list if available.
  */
 const getPaymentMethods = async () => getCart()
-  .then(async (response) => {
+  .then((response) => {
     const cartId = window.commerceBackend.getCartId();
 
     if (_.isEmpty(response.data)
@@ -353,7 +353,7 @@ const getPaymentMethods = async () => getCart()
 
     // Get payment methods from MDC.
     return callMagentoApi(getApiEndpoint('getPaymentMethods', { cartId }), 'GET', {})
-      .then(async (paymentMethods) => {
+      .then((paymentMethods) => {
         if (!_.isEmpty(response.data)) {
           return paymentMethods.data;
         }
