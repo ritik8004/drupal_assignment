@@ -27,22 +27,29 @@
 
   // Push Filter event to GTM.
   $('#alshaya-algolia-plp').once('bind-facet-item-click').on('click','.facet-item', function (event) {
-
     var section = $('body').attr('gtm-list-name');
     if (section.indexOf('PLP') > -1) {
       section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase().trim();
     }
 
     if (!$(this).hasClass('is-active')) {
-      var selectedText = $(this).find('span.facet-item__value').length > 0 ? $(this).find('span.facet-item__value').html() : $(this).find('a.facet-item__value').html();
+      var selectedText = '';
+      var eventName = '';
+      if ($(this).find('span.facet-item__value').length > 0) {
+        selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
+        eventName = 'filter';
+      }
+      else {
+        selectedText = $(this).find('a.facet-item__value').html();
+        eventName = 'sort';
+      }
       var facetTitle = $(this).attr('datadrupalfacetlabel');
-      var selectedVal = selectedText.split(/<(.*?)>/)
 
       var data = {
-        event: 'filter',
+        event: eventName,
         siteSection: section,
         filterType: facetTitle,
-        filterValue: selectedVal.length > 0 ? selectedVal[0] : '',
+        filterValue: selectedText,
       };
       dataLayer.push(data);
     }
