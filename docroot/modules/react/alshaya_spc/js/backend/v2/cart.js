@@ -148,9 +148,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   // Associate cart to customer.
-  const Id = window.drupalSettings.userDetails.customerId;
-  if (Id > 0) {
-    associateCartToCustomer(Id);
+  const id = window.drupalSettings.userDetails.customerId;
+  if (id > 0) {
+    associateCartToCustomer(id);
   }
 
   let productOptions = {};
