@@ -2,11 +2,7 @@
 Feature: Test the adding address to existing user account
 
   Background:
-    Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait 10 seconds
     Then I should be on "/user" page
 
@@ -33,6 +29,6 @@ Feature: Test the adding address to existing user account
       | field_address[0][address][address_line2]             | {floor}       |
     And I press "op"
     When I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 5 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 

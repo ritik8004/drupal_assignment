@@ -96,5 +96,10 @@
     delete storage_value.grid_type;
     localStorage.setItem(storageKey, JSON.stringify(storage_value));
   }
+ // Adding to use global.
+  Drupal.algoliaGetActualPageNumber = function () {
+    var resultsCount = $('.node--view-mode-search-result:visible').length;
+    return Math.ceil(resultsCount / drupalSettings.algoliaSearch.itemsPerPage);
+  }
 
 })(jQuery, Drupal);

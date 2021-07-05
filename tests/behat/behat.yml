@@ -26,6 +26,9 @@ default:
             selenium2:
                 wd_host: http://127.0.0.1:4444/wd/hub
                 capabilities:
+#                  extra_capabilities:
+#                    goog:chromeOptions:
+#                      w3c: false
                     chrome:
                         switches:
                             - "--headless"

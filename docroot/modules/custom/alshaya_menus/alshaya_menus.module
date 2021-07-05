@@ -19,7 +19,7 @@ function alshaya_menus_entity_base_field_info(EntityTypeInterface $entity_type) 
       ->setLabel(t('Social ID'))
       ->setDescription(t('Enter the value for Social ID.'))
       ->setDisplayOptions('form', [
-        'type' => 'string',
+        'type' => 'string_textfield',
         'weight' => 21,
       ]);
   }

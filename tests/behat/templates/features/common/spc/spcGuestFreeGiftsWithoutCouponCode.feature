@@ -21,7 +21,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I wait 5 seconds
     And I click on ".ui-dialog-titlebar-close" element
     And I wait 5 seconds
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -110,7 +110,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I wait 5 seconds
     And I click on ".ui-dialog-titlebar-close" element
     And I wait 5 seconds
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -180,7 +180,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I wait 5 seconds
     And I click on ".ui-dialog-titlebar-close" element
     And I wait 5 seconds
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
