@@ -143,7 +143,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     cartId = await window.commerceBackend.createCart();
     // If we still don't have a cart, we cannot continue.
     if (_.isNull(cartId)) {
-      return new Promise((resolve, reject) => reject(data));
+      return new Promise((resolve, reject) => reject(cartId));
     }
   }
 

@@ -512,6 +512,11 @@ const getCart = async (force = false) => {
   }
 
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
+
+  // Check customer email And check drupal session customer id to validate,
+  // if current cart is associated with logged in user or not.
+  // @todo associateCartToCustomer.
+
   if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
