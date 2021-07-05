@@ -61,18 +61,44 @@ const getProductStatus = async (sku) => {
 };
 
 /**
+ * Static cache for getCncStatusForCart().
+ *
+ * @type {null}
+ */
+let staticCncEnabled = null;
+
+/**
  * Get CnC status for cart based on skus in cart.
+ *
+ * @param {object} data
+ *    The cart data.
+ * @param {boolean} reset
+ *    Reset static cache.
  *
  * @returns {Promise<boolean>}.
  *    The CNC status.
  */
-const getCncStatusForCart = async () => {
-  const response = window.commerceBackend.getRawCartDataFromStorage();
-  if (_.isEmpty(response) || _.isEmpty(response.cart)) {
-    return false;
+const getCncStatusForCart = async (data, reset = false) => {
+  // Validate data.
+  if (_.isEmpty(data) || _.isEmpty(data.cart)) {
+    return true;
   }
-  const cart = { ...response.cart };
 
+  // Reset static cache.
+  if (reset) {
+    staticCncEnabled = null;
+  }
+
+  // Return from static, if available.
+  if (!_.isNull(staticCncEnabled)) {
+    return staticCncEnabled;
+  }
+
+  // Default return value;
+  staticCncEnabled = true;
+
+  // Process items.
+  const cart = { ...data.cart };
   for (let i = 0; i < cart.items.length; i++) {
     const item = cart.items[i];
     // We should ideally have ony one call to an endpoint and pass
@@ -82,10 +108,11 @@ const getCncStatusForCart = async () => {
     const productStatus = await getProductStatus(item.sku);
     if (!_.isEmpty(productStatus)
       && _.isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled) {
-      return false;
+      staticCncEnabled = false;
     }
   }
-  return true;
+
+  return staticCncEnabled;
 };
 
 /**
@@ -776,7 +803,7 @@ const applyDefaults = async (data, uid) => {
   // Try to apply defaults from last order.
   if (!_.isEmpty(order)) {
     // If cnc order but cnc is disabled.
-    if (_.includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart() !== true) {
+    if (_.includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
       return data;
     }
 
@@ -829,7 +856,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   // Check whether CnC enabled or not.
-  const cncStatus = await getCncStatusForCart();
+  const cncStatus = await getCncStatusForCart(data);
 
   // Here we will do the processing of cart to make it in required format.
   // @todo check if we need to use user.uid or userDetails.customerId.

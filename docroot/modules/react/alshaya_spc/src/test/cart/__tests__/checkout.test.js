@@ -450,23 +450,21 @@ describe('Checkout', () => {
     });
 
     describe('Tests getCncStatusForCart()', () => {
+      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+
       it('Without cart data', async () => {
-        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-        window.commerceBackend.setRawCartDataInStorage(null);
-        const result = await getCncStatusForCart();
-        expect(result).toEqual(false);
+        const result = await getCncStatusForCart(null, false);
+        expect(result).toEqual(true);
       });
 
       it('With CNC Enabled', async () => {
         axios.mockResolvedValue({ data: productStatus });
-        window.commerceBackend.setRawCartDataInStorage(cartData);
-        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-        const result = await getCncStatusForCart();
+
+        const result = await getCncStatusForCart(cartData, true);
         expect(result).toEqual(true);
       });
 
       it('With CNC Disabled', async () => {
-        window.commerceBackend.setRawCartDataInStorage(cartData);
         axios.mockResolvedValue({
           data: {
             cnc_enabled: false,
@@ -476,8 +474,7 @@ describe('Checkout', () => {
           },
         });
 
-        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-        const result = await getCncStatusForCart();
+        const result = await getCncStatusForCart(cartData, true);
         expect(result).toEqual(false);
       });
     });
