@@ -59,10 +59,8 @@ const SizeGroupFilter = (
                   refine(item.value);
                 }}
               >
-                <span
-                  className="facet-item__value"
-                >
-                  {item.label.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop().trim()}
+                <span className="facet-item__value" data-drupal-facet-item-value={item.label.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop().trim()}>
+                  <span className="facet-item__label">{item.label.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop().trim()}</span>
                   <span className="facet-item__count">
                     (
                     {item.count}
