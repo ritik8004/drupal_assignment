@@ -1017,13 +1017,16 @@ window.commerceBackend.addPaymentMethod = async (data) => {
     && !_.isUndefined(data.payment_info.payment.analytics)
   ) {
     const analyticsData = data.payment_info.payment.analytics;
-    params.extension.ga_client_id = (!_.isUndefined(analyticsData.clientID))
-      ? analyticsData.clientID
-      : '';
 
-    params.extension.tracking_id = (!_.isUndefined(analyticsData.trackingId))
-      ? analyticsData.trackingId
-      : '';
+    params.extension.ga_client_id = '';
+    if (!_.isUndefined(analyticsData.clientID) && !_.isNull(analyticsData.clientID)) {
+      params.extension.ga_client_id = analyticsData.clientID;
+    }
+
+    params.extension.tracking_id = '';
+    if (!_.isUndefined(analyticsData.trackingId) && !_.isNull(analyticsData.trackingId)) {
+      params.extension.tracking_id = analyticsData.trackingId;
+    }
 
     params.extension.user_id = (window.drupalSettings.userDetails.customerId > 0)
       ? window.drupalSettings.userDetails.customerId
