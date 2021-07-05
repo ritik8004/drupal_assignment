@@ -820,7 +820,7 @@ const applyDefaults = async (data, uid) => {
   const address = getDefaultAddress(data);
   if (address) {
     const methods = await getHomeDeliveryShippingMethods(address);
-    if (!_.isEmpty(methods) && _.isArray(methods)) {
+    if (!_.isEmpty(methods) && _.isArray(methods) && _.isUndefined(methods.error)) {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], address, methods);
     }
@@ -829,7 +829,7 @@ const applyDefaults = async (data, uid) => {
   // If address already available in cart, use it.
   if (!_.isEmpty(data.shipping.address) && !_.isEmpty(data.shipping.address.country_id)) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (!_.isEmpty(methods) && _.isArray(methods)) {
+    if (!_.isEmpty(methods) && _.isArray(methods) && _.isUndefined(methods.error)) {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
