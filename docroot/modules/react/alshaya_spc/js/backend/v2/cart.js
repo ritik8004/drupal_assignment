@@ -349,8 +349,16 @@ window.commerceBackend.createCart = async () => {
   if (response.status === 200 && !_.isUndefined(response.data)
     && (_.isString(response.data) || _.isNumber(response.data))
   ) {
+    const Id = window.drupalSettings.userDetails.customerId;
+    logger.notice(`New cart created: ${response.data}, customer_id: ${Id}`);
+
     setStorageInfo(response.data, 'cart_id');
     return response.data;
   }
+
+  const errorMessage = (!_.isUndefined(response.data.error_message))
+    ? response.data.error_message
+    : '';
+  logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
   return null;
 };
