@@ -270,48 +270,8 @@ exports.render = function render(
 
 exports.computePhFilters = function (input, filter) {
   let value = input;
-  let attributeName = '';
-
-  // Attributes are coming in EAV mode so it's all in single array
-  // and we have both code (name) and value in both an array item.
-  // This makes it difficult to access so we use filters but we need
-  // the filter also to say which attribute to load so we expect it like
-  // #rcs.product.masterVariant.attributes|attribute.size#.
-  if (filter.indexOf('attribute') > -1) {
-    const filterData = filter.split('.');
-    filter = filterData[0];
-    attributeName = filterData[1];
-  }
-  // To apply image styles we need to use filter and also need to specify
-  // the style to use like imageurl|style.large.
-  else if (filter.indexOf('style') > -1) {
-    const filterData = filter.split('.');
-    filter = filterData[0];
-    imageStyle = filterData[1];
-  }
 
   switch(filter) {
-    case 'attribute':
-      let product = value;
-
-      // For PDP we would get the product for which we need
-      // to use masterVariant.
-      if (typeof value.masterVariant !== "undefined") {
-        product = value.masterVariant;
-      }
-      // For Cart Items we would get the product for which we need
-      // to use variant.
-      else if (typeof value.variant !== "undefined") {
-        product = value.variant;
-      }
-
-      value = rcsCommerceBackend.extractProductAttribute(product, attributeName);
-      break;
-
-    case 'style':
-      value = rcsCommerceBackend.getProductImageStyled(value, imageStyle);
-      break;
-
     case 'price':
       const priceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.regularPrice.amount.value);
       const finalPriceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.maximalPrice.amount.value);
@@ -371,43 +331,6 @@ exports.computePhFilters = function (input, filter) {
         $('.vat-text').remove();
       }
       value = drupalSettings.vat_text;
-      break;
-
-    case 'add_to_cart':
-      value = '';
-
-      // For configurable products with variants add the select list for
-      // variants too.
-      if (input.variants !== undefined && input.variants.length > 0) {
-        // Get the values for size from each variant.
-        const attributeValues = {};
-        let attributeOptions = '';
-
-        input.variants.forEach((variant) => {
-          const attributeValue = rcsCommerceBackend.extractProductAttribute(
-            variant,
-            drupalSettings.rcsCartSettings.configurableAttribute.code
-          );
-
-          if (attributeValue) {
-            attributeValues[variant.id] = attributeValue;
-            attributeOptions += `<option value="${variant.id}">${attributeValues[variant.id]}</option>`;
-          }
-        });
-
-        if (Object.values(attributeValues).length > 0) {
-          // @todo use Drupal.theme for this.
-          value += '<div class="configurable-attribute-wrapper">';
-          value += `<label>${drupalSettings.rcsCartSettings.configurableAttribute.label}</label>`;
-          value += `<select class="configurable-attribute configurable-attribute-size" data-attribute-id="size">${attributeOptions}</select>`;
-          value += '</div>';
-        }
-      }
-
-      const textAddToBag = rcsTranslatedText('Add to Cart');
-
-      // @todo use Drupal.theme for this.
-      value += `<button class="coh-button add-to-cart-button" data-product-id="${input.id}">${textAddToBag}</button>`;
       break;
 
     default:
