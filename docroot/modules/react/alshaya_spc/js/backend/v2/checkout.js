@@ -1258,6 +1258,7 @@ const prepareShippingData = (shippingInfo) => {
       );
     });
     customAttributes = { customAttributes };
+
     result = {
       address: {
         ...staticFields,
