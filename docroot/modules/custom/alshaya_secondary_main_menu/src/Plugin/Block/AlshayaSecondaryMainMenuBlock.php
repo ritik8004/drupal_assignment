@@ -103,6 +103,11 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
       '#settings' => [
         'desktopSecondaryMainMenuHighlightTiming' => $desktop_secondary_main_menu_highlight_timing,
       ],
+      '#attributes' => [
+        'class' => [
+          'megamenu-dynamic-layout',
+        ],
+      ],
       '#items' => $menu,
       '#column_tree' => $columns_tree,
       '#menu_type' => $desktop_secondary_main_menu_layout,
