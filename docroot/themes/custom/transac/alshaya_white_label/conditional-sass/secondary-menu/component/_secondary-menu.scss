@@ -111,6 +111,15 @@
                 line-height: 1.125rem;
                 display: inline-block;
               }
+
+              .menu--two__list-item {
+                > div a {
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: block;
+                }
+              }
             }
 
             &-item {
