@@ -57,8 +57,8 @@ const ColorFilter = ({
               }}
             >
               <SwatchList label={label} swatch={swatchInfo} />
-              <span className="facet-item__value">
-                {label}
+              <span className="facet-item__value" data-drupal-facet-item-value={label}>
+                <span className="facet-item__label">{label}</span>
                 <span className="facet-item__count">
                   (
                   {item.count}
