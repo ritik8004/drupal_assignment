@@ -22,7 +22,13 @@
             }
             // Get the social login name from authlink
             // to store in localStorage for further use.
-            var socialType = authLink.substr(authLink.lastIndexOf('/') + 1);
+            if (authLink.includes('google')) {
+              var socialType = 'Google';
+             }
+             else if (authLink.includes('facebook')) {
+              var socialType = 'Facebook';
+            }
+
             localStorage.setItem('socialType', socialType);
           }
         });
