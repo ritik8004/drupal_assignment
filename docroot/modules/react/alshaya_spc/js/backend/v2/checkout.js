@@ -847,6 +847,10 @@ const applyDefaults = async (data, uid) => {
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
+  if (!_.isUndefined(cartData.error)) {
+    return cartData;
+  }
+
   if (_.isEmpty(cartData)) {
     return null;
   }
