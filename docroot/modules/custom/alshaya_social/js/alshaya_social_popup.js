@@ -28,6 +28,7 @@
              else if (authLink.includes('facebook')) {
               var socialType = 'Facebook';
             }
+
             localStorage.setItem('socialType', socialType);
           }
         });
