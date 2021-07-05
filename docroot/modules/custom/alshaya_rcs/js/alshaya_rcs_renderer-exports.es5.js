@@ -11,7 +11,7 @@ exports.render = function render(
   langcode,
   innerHtml
 ) {
-  let  html = "";
+  let html = "";
   switch (placeholder) {
     case "navigation_menu":
       break;
