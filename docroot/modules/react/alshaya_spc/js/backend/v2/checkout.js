@@ -1246,10 +1246,14 @@ const prepareShippingData = (shippingInfo) => {
     delete data.static;
     let customAttributes = [];
     Object.keys(data).forEach((key) => {
+      const val = (!_.isArray(data[key]) && _.isNull(data[key]))
+        ? ''
+        : data[key];
+
       customAttributes.push(
         {
           attributeCode: key,
-          value: data[key],
+          value: val,
         },
       );
     });
