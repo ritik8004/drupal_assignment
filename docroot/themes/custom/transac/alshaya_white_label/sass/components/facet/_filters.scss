@@ -73,6 +73,10 @@
   margin-#{$left}: 0.5rem;
   position: relative;
 
+  &:first-child {
+    margin-#{$left}: 0;
+  }
+
   @include breakpoint($only-tablet) {
     margin: 0;
   }

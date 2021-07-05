@@ -458,6 +458,7 @@
     "scripts": {
         "blt-alias": "blt blt:init:shell-alias -y --ansi",
         "post-drupal-scaffold-cmd": [
+            "cd docroot && patch -p1 <../patches/htaccess-ttf-gzip-compression.patch",
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-ssl-exception.patch",
