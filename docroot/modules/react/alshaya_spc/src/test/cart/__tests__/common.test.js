@@ -1,8 +1,10 @@
 jest.mock('axios');
 import axios from 'axios';
-import utilsRewire from "../../../../js/backend/v2/common";
+import each from 'jest-each'
+import utilsRewire from '../../../../js/backend/v2/common';
 import { drupalSettings } from '../globals';
 import * as cartData from '../data/cart.json';
+import cartActions from '../../../../js/backend/v2/cart_actions';
 import _ from 'lodash';
 
 describe('Common', () => {
@@ -13,6 +15,7 @@ describe('Common', () => {
     });
 
     afterEach(() => {
+      // Clear all mocks.
       jest.clearAllMocks();
     });
 
@@ -94,6 +97,110 @@ describe('Common', () => {
         data.cart.extension_attributes.shipping_assignments[0].shipping.extension_attributes.store_code = '1234';
         const result = formatCart(data);
         expect(result.shipping.storeCode).toEqual('1234');
+      });
+    });
+
+    describe('Test getCartCustomerId()', () => {
+      const getCartCustomerId = utilsRewire.__get__('getCartCustomerId');
+
+      beforeEach(async () => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '111');
+      });
+
+      each`
+       input                                                    | expectedResult
+       ${''}                                                    | ${null}
+       ${{}}                                                    | ${null}
+       ${{ cart: 'foo' }}                                       | ${null}
+       ${{ cart: { customer: 'foo' }}}                          | ${null}
+       ${{ cart: { customer: { id: 'foo' }}}}                   | ${'foo'}
+       ${{ cart: { customer: { id: 1234 }}}}                    | ${1234}
+     `.test('Test that getCartCustomerId($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
+        axios.mockResolvedValue({
+          data: input,
+          status: 200,
+        });
+
+        // Reset the static cache used in getCart().
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        const result = await getCartCustomerId();
+        expect(axios).toHaveBeenCalled();
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    describe('Test validateRequestData()', () => {
+      const validateRequestData = utilsRewire.__get__('validateRequestData');
+
+      each`
+       input                                                            | expectedResult
+       ${null}                                                          | ${500}
+       ${{}}                                                            | ${500}
+       ${{ cart_id: 555, action: 'foo' }}                               | ${400}
+       ${{ cart_id: 555, extension: { action: 'foo' }}}                 | ${200}
+     `.test('Test that validateRequestData($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
+        axios.mockResolvedValue({
+          data: {
+            customer: {
+              id: 987,
+            },
+            status: 200,
+          },
+        });
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => input.cart_id);
+
+        const result = await validateRequestData(input);
+        expect(result).toBe(expectedResult);
+      });
+
+      it('Authenticated user with Cart missing Customer Id', async () => {
+        axios.mockResolvedValue({
+          data: {},
+          status: 200,
+        });
+
+        window.drupalSettings.userDetails.customerId = 1;
+
+        const data = {
+          cart_id: 555,
+          extension: {
+            action: cartActions.cartApplyCoupon,
+          },
+          coupon: 1,
+        };
+
+        const result = await validateRequestData(data);
+        expect(result).toEqual(400);
+      });
+
+      it('With authenticated user and different customer Id', async () => {
+        axios.mockResolvedValue({
+          data: {
+            customer: {
+              id: 987,
+            },
+          },
+          status: 200,
+        });
+
+        window.drupalSettings.userDetails.customerId = 789;
+
+        const data = {
+          cart_id: 555,
+          extension: {
+            action: cartActions.cartRemoveCoupon,
+          },
+          coupon: 1,
+        };
+
+        const result = await validateRequestData(data);
+        expect(result).toEqual(400);
       });
     });
   });

@@ -15,10 +15,10 @@
   width: 100%;
   top: 0;
   #{$left}: 0;
-  z-index: 4;
   background: $magv2-sticky-header-bg;
   opacity: 0;
   box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+  z-index: 4;
 
   @include breakpoint($only-mobile) {
     opacity: initial;
@@ -31,6 +31,7 @@
 
   &.magv2-pdp-sticky-header {
     opacity: 1;
+    pointer-events: unset;
 
     @include breakpoint($only-mobile) {
       background: $magv2-sticky-header-bg;
@@ -43,6 +44,7 @@
 
   &.magv2-pdp-non-sticky-header {
     opacity: 0;
+    pointer-events: none;
 
     @include breakpoint($only-mobile) {
       transform: translateY(-100%);
@@ -250,6 +252,7 @@
         transform: translateY(-50%);
         height: 2.875rem;
         width: 2.875rem;
+        margin-top: 0;
 
         html[lang=ar] & {
           margin-top: 0;

@@ -666,9 +666,15 @@ class MobileAppUtility {
         'display_view_all' => isset($term->display_view_all) ? (int) $term->display_view_all : NULL,
       ];
 
+      // Get all brand logo image data.
+      $brand_logos = $this->productCategoryTree->getBrandIcons($term->tid);
+      // Check for brand logos.
+      if (!empty($brand_logos)) {
+        $record['brand_logos'] = $brand_logos;
+      }
+
       if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))
-        && !empty($file->field_promotion_banner_mobile_target_id)
-      ) {
+        && !empty($file->field_promotion_banner_mobile_target_id)) {
         $image = $this->fileStorage->load($file->field_promotion_banner_mobile_target_id);
         $record['banner'] = [
           'url' => file_create_url($image->getFileUri()),
@@ -1024,16 +1030,21 @@ class MobileAppUtility {
       'clickable',
       'child',
       'deep_link',
-      'lhn',
     ];
     foreach ($term_data as $parent_id => $parent_value) {
       $term_data[$parent_id] = $parent_value;
       foreach ($parent_value as $key => $value) {
-        if (!in_array($key, $used_keys)) {
-          unset($term_data[$parent_id][$key]);
+        // Show category and tree only when `lhn` is enabled.
+        if ($key == 'lhn' && empty($value)) {
+          unset($term_data[$parent_id]);
         }
-        if ($key == 'child' && !empty($value)) {
-          $this->excludeUnusedKeysMobile($term_data[$parent_id][$key]);
+        else {
+          if (!in_array($key, $used_keys)) {
+            unset($term_data[$parent_id][$key]);
+          }
+          if ($key == 'child' && !empty($term_data[$parent_id][$key])) {
+            $this->excludeUnusedKeysMobile($term_data[$parent_id][$key]);
+          }
         }
       }
     }

@@ -1,0 +1,7 @@
+secondary_main_menu:
+  js:
+    js/secondary_main_menu.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+

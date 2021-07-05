@@ -1,10 +1,7 @@
 /**
- * Class contains al the actions performed on the cart.
+ * Class contains all the actions performed on the cart.
  */
 const cartActions = {
-  cartAddItem: 'add item',
-  cartUpdateItem: 'update item',
-  cartRemoveItem: 'remove item',
   cartApplyCoupon: 'apply coupon',
   cartRemoveCoupon: 'remove coupon',
   cartShippingUpdate: 'update shipping',
@@ -15,7 +12,4 @@ const cartActions = {
   cartPaymentFinalise: 'finalise payment',
 };
 
-/* eslint-disable import/prefer-default-export */
-export {
-  cartActions,
-};
+export default cartActions;

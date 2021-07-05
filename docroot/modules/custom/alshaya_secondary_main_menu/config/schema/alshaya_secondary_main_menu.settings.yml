@@ -1,0 +1,15 @@
+# Schema for the configuration files of the alshaya secondary_main menu settings.
+
+alshaya_secondary_main_menu.settings:
+  type: config_object
+  label: 'secondary_main menu settings'
+  mapping:
+    desktop_secondary_main_menu_layout:
+      type: string
+      label: 'secondary_main menu display on desktop'
+    max_nb_col:
+      type: integer
+      label: 'Maximum number of columns to show'
+    ideal_max_col_length:
+      type: integer
+      label: 'Ideal length of the column'

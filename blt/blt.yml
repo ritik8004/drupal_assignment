@@ -26,7 +26,7 @@ drush:
   default_alias: '${drush.aliases.local}'
 modules:
   local:
-    enable: [dblog, devel, seckit, views_ui]
+    enable: [views_ui]
     uninstall: [acsf, acquia_connector, shield]
   ci:
     enable: {  }
@@ -55,10 +55,10 @@ command-hooks:
     command: 'bash frontend-validate.sh ${docroot}'
   frontend-reqs:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-setup.sh ${docroot}; bash react-setup.sh ${docroot}'
+    command: 'bash frontend-setup.sh ${docroot}; bash react-setup.sh ${docroot}; cd ${docroot} && ../vendor/bin/blt js:setup'
   frontend-assets:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-build.sh ${docroot}; bash react-build.sh ${docroot}'
+    command: 'bash frontend-build.sh ${docroot}; bash react-build.sh ${docroot}; cd ${docroot} && ../vendor/bin/blt js:build'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
@@ -83,7 +83,7 @@ cm:
   strategy: none
 validate:
   twig:
-    functions: [alshaya_main_menu]
+    functions: [alshaya_main_menu, alshaya_secondary_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
 # We must disable security checks for module updates until

@@ -149,6 +149,14 @@
     button.slick-arrow {
       display: none !important;
     }
+
+    li.slick-slide {
+      @include breakpoint($only-mobile) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 }
 

@@ -235,12 +235,19 @@ const productRecommendationsSuffix = 'pr-';
         // Check if social login window opened to avoid GTM push from
         // social login window.
         var socialWindow = false;
-        if(window.name == 'ConnectWithSocialAuth'){
+        if (window.name == 'ConnectWithSocialAuth') {
           var socialWindow = true;
+        }
+
+        var loginType = localStorage.getItem('socialType');
+        // Check for socialtype in localstorage.
+        if (drupalSettings.user.uid && loginType === null) {
+          Drupal.alshaya_seo_gtm_push_login_type('Self Login');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
         if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
+          Drupal.alshaya_seo_gtm_push_login_type(loginType);
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           localStorage.setItem('userID', userDetails.userID);
         }
@@ -249,6 +256,7 @@ const productRecommendationsSuffix = 'pr-';
         if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           localStorage.setItem('userID', userDetails.userID);
+          localStorage.removeItem('socialType');
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -642,9 +650,8 @@ const productRecommendationsSuffix = 'pr-';
             // title, use the h1 tag inside '#block-page-title' context.
             section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase();
           }
-
           // Track facet filters.
-          $('li.facet-item', $('#block-facets-ajax')).once('js-event').on('click', function () {
+          $('li.facet-item', $('.block-facets-ajax')).once('js-event').on('click', function () {
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
@@ -1181,7 +1188,7 @@ const productRecommendationsSuffix = 'pr-';
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
+        if ((eventType === 'load' || eventType === 'plp-results-updated') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
           // This is to break out from the .each() function.
           return false;
         }
@@ -1346,5 +1353,19 @@ const productRecommendationsSuffix = 'pr-';
       return true;
     };
   }
+
+  /**
+   * Helper function to push events when user logins.
+   *
+   * @param loginType
+   */
+  Drupal.alshaya_seo_gtm_push_login_type = function (loginType) {
+    dataLayer.push({
+      event: 'Login',
+      eventCategory: 'Login Success',
+      eventLabel: loginType,
+    });
+
+  };
 
 })(jQuery, Drupal, dataLayer);

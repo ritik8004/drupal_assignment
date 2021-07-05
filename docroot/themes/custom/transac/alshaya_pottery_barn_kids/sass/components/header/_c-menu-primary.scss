@@ -1,0 +1,20 @@
+.block-alshaya-main-menu {
+  .main--menu {
+    .mobile--close {
+      display: none;
+      top: 50%;
+
+      span {
+        background: url('../imgs/icons/ic-close-transparent.svg') center center no-repeat;
+      }
+    }
+
+    &.menu--active {
+      .mobile--close {
+        display: inline-block;
+        top: 50%;
+        background: transparent;
+      }
+    }
+  }
+}

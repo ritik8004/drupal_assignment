@@ -18,7 +18,7 @@ class ReviewFeedback extends React.Component {
 
   handleFeedbackState = (event) => {
     event.preventDefault();
-    const { contentId } = event.detail;
+    const contentId = event.detail;
     if (contentId !== undefined) {
       this.setState({ votedContentId: contentId });
     }

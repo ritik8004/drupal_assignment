@@ -13,7 +13,7 @@
 /* eslint-disable no-unused-vars */
 const logger = {
   send: (level, message, context) => {
-    // console.log('Error ' + message);
+    // console.log(`${level}: ${message}`);
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
@@ -26,7 +26,86 @@ const logger = {
 };
 /* eslint-enable no-unused-vars */
 
+/**
+ * Get user role authenticated or anonymous.
+ *
+ * @returns {boolean}
+ *   True if user is authenticated.
+ */
+const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);
+
+/**
+ * Gets magento api endpoint by user role.
+ *
+ * @param {string} action
+ *   Callname for the API.
+ * @param {object} params
+ *   The object with cartId, itemId.
+ *
+ * @returns {string}
+ *   The api endpoint.
+ */
+const getApiEndpoint = (action, params = {}) => {
+  let endpoint = '';
+  switch (action) {
+    case 'createCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine'
+        : '/rest/V1/guest-carts';
+      break;
+
+    case 'getCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/getCart'
+        : `/rest/V1/guest-carts/${params.cartId}/getCart`;
+      break;
+
+    case 'addUpdateItems':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/items'
+        : `/rest/V1/guest-carts/${params.cartId}/items`;
+      break;
+
+    case 'removeItems':
+      endpoint = isUserAuthenticated()
+        ? `/rest/V1/carts/mine/items/${params.itemId}`
+        : `/rest/V1/guest-carts/${params.cartId}/items/${params.itemId}`;
+      break;
+
+    case 'updateCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/updateCart'
+        : `/rest/V1/guest-carts/${params.cartId}/updateCart`;
+      break;
+
+    case 'estimateShippingMethods':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/estimate-shipping-methods'
+        : `/rest/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
+      break;
+
+    case 'getPaymentMethods':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/payment-methods'
+        : `/rest/V1/guest-carts/${params.cartId}/payment-methods`;
+      break;
+
+    case 'selectedPaymentMethod':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/selected-payment-method'
+        : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;
+      break;
+
+    default:
+      logger.critical(`Endpoint does not exist for action : ${action}`);
+  }
+
+  return endpoint;
+};
+
 /* eslint-disable import/prefer-default-export */
 export {
   logger,
+  getApiEndpoint,
+  isUserAuthenticated,
 };

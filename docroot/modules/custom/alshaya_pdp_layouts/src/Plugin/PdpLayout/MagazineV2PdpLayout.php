@@ -104,8 +104,16 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
   /**
    * {@inheritdoc}
    */
-  public function getTemplateName(array &$suggestions) {
-    $suggestions[] = 'node__acq_product__full_magazine_v2';
+  public function getTemplateName(array &$suggestions, string $bundle) {
+    switch ($bundle) {
+      case 'rcs_product':
+        $suggestions[] = 'node__rcs_product__full_magazine_v2';
+        break;
+
+      default:
+        $suggestions[] = 'node__acq_product__full_magazine_v2';
+        break;
+    }
   }
 
   /**
@@ -117,7 +125,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['library'][] = 'alshaya_white_label/magazine-layout-v2';
     $vars['#attached']['library'][] = 'alshaya_spc/googlemapapi';
     $vars['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_magazine_v2';
-    $vars['#cache']['contexts'][] = 'user';
 
     $entity = $vars['node'];
     $sku = $this->skuManager->getSkuForNode($entity);

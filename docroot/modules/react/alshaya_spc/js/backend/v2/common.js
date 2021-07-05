@@ -1,17 +1,17 @@
 import Axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { logger } from './utility';
+import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
-import { removeStorageInfo } from '../../utilities/storage';
+import cartActions from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
 /**
  * Gets the cart ID for existing cart.
  *
- * @returns {string}
- *   The cart id.
+ * @returns {string|integer|null}
+ *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
   const cartId = localStorage.getItem('cart_id');
@@ -150,6 +150,14 @@ const handleResponse = (apiResponse) => {
     response.data.error_code = 600;
     response.data.error_message = 'Back-end system is down';
     //
+  } else if (response.status === 401) {
+    // Customer Token expired.
+    // @todo see ticket CORE-31154.
+    response.data.error = true;
+    response.data.error_code = 404;
+    response.data.error_message = getDefaultErrorMessage();
+    logger.notice(`The customer token has expired. Message: ${response.data.message}`);
+    //
   } else if (response.status === 404) {
     // Client error responses.
     response.data.error = true;
@@ -184,6 +192,19 @@ const handleResponse = (apiResponse) => {
 };
 
 /**
+ * Get magento customer token.
+ *
+ * @returns {string}
+ */
+const getCustomerToken = () => {
+  const token = localStorage.getItem('magento_customer_token');
+  if (typeof token === 'undefined' || token === false || token === '') {
+    logger.error(`Magento customer token is not set for user ${drupalSettings.user.uid}`);
+  }
+  return token;
+};
+
+/**
  * Make an AJAX call to Magento API.
  *
  * @param {string} url
@@ -191,14 +212,12 @@ const handleResponse = (apiResponse) => {
  * @param {string} method
  *   The request method.
  * @param {object} data
- *   The data to send with the request.
- * @param {object} headers
- *   Extra headers to be sent.
+ *   The object to send for POST request.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callMagentoApi = (url, method, data, headers) => {
+const callMagentoApi = (url, method, data) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -208,8 +227,8 @@ const callMagentoApi = (url, method, data, headers) => {
     },
   };
 
-  if (typeof headers !== 'undefined' && headers && Object.keys(headers).length > 0) {
-    params.headers = { ...params.headers, ...headers };
+  if (isUserAuthenticated()) {
+    params.headers.Authorization = `Bearer ${getCustomerToken()}`;
   }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
@@ -240,26 +259,27 @@ const callMagentoApi = (url, method, data, headers) => {
  *   The url to send the request to.
  * @param {string} method
  *   The request method.
- * @param {string} data
- *   The data to send with the request.
+ * @param {string} requestOptions
+ *   The request options.
  *
- * @returns {Promise}
+ * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callDrupalApi = (url, method, data) => {
+const callDrupalApi = (url, method, requestOptions) => {
   const headers = {};
   const params = {
     url: `/${window.drupalSettings.path.currentLanguage}${url}`,
     method,
-    data,
   };
 
-  if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
-    Object.keys(data).forEach((optionName) => {
+  if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
+    Object.keys(requestOptions).forEach((optionName) => {
       if (optionName === 'form_params') {
         headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        params.data = qs.stringify(data[optionName]);
+        params.data = qs.stringify(requestOptions[optionName]);
+        return;
       }
+      params[optionName] = requestOptions[optionName];
     });
   }
 
@@ -277,6 +297,11 @@ const callDrupalApi = (url, method, data) => {
  */
 const formatCart = (cartData) => {
   const data = _.cloneDeep(cartData);
+
+  // Check if there is no cart data.
+  if (_.isUndefined(data.cart) || !_.isObject(data.cart)) {
+    return data;
+  }
 
   // Move customer data to root level.
   if (!_.isEmpty(data.cart.customer)) {
@@ -348,6 +373,9 @@ const formatCart = (cartData) => {
  *
  * @param {object} cartData
  *   The cart data object.
+ *
+ * @returns {object}
+ *   The processed cart data.
  */
 const getProcessedCartData = (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
@@ -467,24 +495,35 @@ const getProcessedCartData = (cartData) => {
 /**
  * Calls the cart get API.
  *
- * @returns {Promise}
- *   A promise object.
+ * @param {boolean} force
+ *   Flag for static/fresh cartData.
+ *
+ * @returns {Promise<AxiosPromise<object>>|null}
+ *   A promise object containing the cart or null.
  */
-const getCart = async () => {
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
-    return new Promise((resolve) => resolve(cartId));
+const getCart = async (force = false) => {
+  if (window.commerceBackend.getRawCartDataFromStorage() !== null && !force) {
+    return { data: window.commerceBackend.getRawCartDataFromStorage() };
   }
 
-  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null) {
+    return null;
+  }
 
-  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
+  const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
+
+  // Check customer email And check drupal session customer id to validate,
+  // if current cart is associated with logged in user or not.
+  // @todo associateCartToCustomer.
+
+  if (_.isEmpty(response.data)
+    || (!_.isUndefined(response.data.error) && response.data.error)
+  ) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
-      // Remove the cart from storage.
-      removeStorageInfo('cart_id');
       logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
-      // Get new cart.
-      window.commerceBackend.getCartId();
+      // Get a new cart.
+      await window.commerceBackend.createCart();
     }
 
     const error = {
@@ -501,46 +540,210 @@ const getCart = async () => {
   response.data = formatCart(response.data);
 
   // Store the formatted data.
-  window.commerceBackend.setRawCartDataInStorage(formatCart(response.data));
+  window.commerceBackend.setRawCartDataInStorage(response.data);
 
   // Return formatted cart.
-  return new Promise((resolve) => resolve(response));
-};
-
-/**
- * Format the cart data to have better structured array.
- *
- * @returns {Promise}
- *   A promise object.
- */
-const getCartWithProcessedData = async () => {
-  const response = await getCart();
-  response.data = getProcessedCartData(response.data);
   return response;
 };
 
 /**
+ * Format the cart data to have better structured array.
+ * This is the equivalent to CartController:getCart().
+ *
+ * @param {boolean} force
+ *   Force refresh cart data from magento.
+ *
+ * @returns {Promise<AxiosPromise<object>>}
+ *   A promise object.
+ */
+const getCartWithProcessedData = async (force = false) => {
+  // @todo implement missing logic, see CartController:getCart().
+  const response = await getCart(force);
+
+  // If we don't have any errors, process the cart data.
+  if (!_.isEmpty(response.data) && _.isUndefined(response.data.error)) {
+    response.data = getProcessedCartData(response.data);
+  }
+  return response;
+};
+
+/**
+ * Return customer id from current session.
+ *
+ * @returns {Promise<integer|null>}
+ *   Return customer id or null.
+ */
+const getCartCustomerId = async () => {
+  const response = await getCart();
+  const cart = response.data;
+  if (!_.isEmpty(cart) && !_.isEmpty(cart.customer) && !_.isUndefined(cart.customer.id)) {
+    return cart.customer.id;
+  }
+  return null;
+};
+
+/**
+ * Adds a customer to cart.
+ * @todo implement associateCartToCustomer()
+ *
+ * @param {int} customerId
+ *   Customer id.
+ * @param {bool} resetCart
+ *   True to Reset cart, otherwise false.
+ *
+ * @returns {Promise<object|boolean>}
+ *   Response.
+ */
+const associateCartToCustomer = async (customerId, resetCart = false) => {
+  logger.info(`Use ${customerId} and ${resetCart}`);
+  // Temporary return;
+  return true;
+};
+
+/**
+ * Validate arguments and returns the respective error code.
+ *
+ * @param {object} request
+ *  The request data.
+ *
+ * @returns {Promise<integer>}
+ *   Promise containing the error code.
+ */
+const validateRequestData = async (request) => {
+  // Return error response if not valid data.
+  // Setting custom error code for bad response so that
+  // we could distinguish this error.
+  if (_.isEmpty(request)) {
+    logger.error('Cart update operation not containing any data. Error 500.');
+    return 500;
+  }
+
+  // If action info or cart id not available.
+  if (_.isEmpty(request.extension) || _.isUndefined(request.extension.action)) {
+    const logData = JSON.stringify(request);
+    logger.error(`Cart update operation not containing any action. Error: 400. Data: ${logData}`);
+    return 400;
+  }
+
+  // For any cart update operation, cart should be available in session.
+  if (window.commerceBackend.getCartId() === null) {
+    const logData = JSON.stringify(request);
+    logger.error(`Trying to do cart update operation while cart is not available in session. Data: ${logData}`);
+    return 404;
+  }
+
+  // Backend validation.
+  const cartCustomerId = await getCartCustomerId();
+  if (window.drupalSettings.userDetails.customerId > 0) {
+    if (_.isNull(cartCustomerId)) {
+      logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
+      return 400;
+    }
+
+    // This is serious.
+    if (cartCustomerId !== window.drupalSettings.userDetails.customerId) {
+      logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
+      return 400;
+    }
+  }
+
+  return 200;
+};
+
+/**
+ * Runs validations before updating cart.
+ *
+ * @param {object} request
+ *  The request data.
+ *
+ * @returns {Promise<object|boolean>}
+ *   Returns true if the data is valid or an object in case of error.
+ */
+const preUpdateValidation = async (request) => {
+  const validationResponse = await validateRequestData(request);
+  if (validationResponse !== 200) {
+    return {
+      error: true,
+      error_code: validationResponse,
+      error_message: getDefaultErrorMessage(),
+      response_message: {
+        status: '',
+        msg: getDefaultErrorMessage(),
+      },
+    };
+  }
+  return true;
+};
+
+/**
  * Calls the update cart API and returns the updated cart.
- * @todo Implement this function fully while working on the checkout page.
  *
  * @param {object} data
  *  The data to send.
+ *
+ * @returns {Promise<AxiosPromise<object>>}
+ *   A promise object with cart data.
  */
-const updateCart = (data) => {
+const updateCart = async (data) => {
   const cartId = window.commerceBackend.getCartId();
 
-  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
+  let action = '';
+  if (!_.isEmpty(data.extension) && !_.isEmpty(data.extension.action)) {
+    action = data.extension.action;
+  }
+
+  // Validate params before updating the cart.
+  const validationResult = await preUpdateValidation(data);
+  if (!_.isUndefined(validationResult.error) && validationResult.error) {
+    return new Promise((resolve, reject) => reject(validationResult));
+  }
+
+  // Log the shipping / billing address we pass to magento.
+  if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
+    const logData = JSON.stringify(data);
+    logger.notice(`Billing / Shipping address data: ${logData}. CartId: ${cartId}`);
+  }
+
+  return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
-      if (typeof response.data.error !== 'undefined' && response.data.error) {
+      if (_.isEmpty(response.data)
+        || (!_.isUndefined(response.data.error) && response.data.error)) {
         return response;
       }
+
+      // Format data.
+      response.data = formatCart(response.data);
+
       // Update the cart data in storage.
       window.commerceBackend.setRawCartDataInStorage(response.data);
-      // Process the cart data.
-      response.data = getProcessedCartData(response.data);
 
       return response;
+    })
+    .catch((response) => {
+      const errorCode = response.error.error_code;
+      const errorMessage = response.error.message;
+      logger.error(`Error while updating cart on MDC for action ${action}. Error message: ${errorMessage}, Code: ${errorCode}`);
+      // @todo add error handling, see try/catch block in Cart:updateCart().
+      return response;
     });
+};
+
+/**
+ * Return customer email from cart in session.
+ *
+ * @returns {Promise<string|null>}
+ *   Return customer email or null.
+ */
+const getCartCustomerEmail = async () => {
+  const response = await getCart();
+  const cart = response.data;
+  if (!_.isUndefined(cart.customer)
+    && !_.isUndefined(cart.customer.email)
+    && !_.isEmpty(cart.customer.email)
+  ) {
+    return cart.customer.email;
+  }
+  return null;
 };
 
 /**
@@ -562,6 +765,7 @@ export {
   isAnonymousUserWithoutCart,
   callDrupalApi,
   callMagentoApi,
+  preUpdateValidation,
   getCart,
   getCartWithProcessedData,
   updateCart,
@@ -570,4 +774,7 @@ export {
   checkoutComVaultMethod,
   getCartSettings,
   getFormattedError,
+  getCartCustomerEmail,
+  getCartCustomerId,
+  associateCartToCustomer,
 };
