@@ -41,7 +41,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 /**
  * Get data related to product status.
  *
- * @param {Promise<string|null>}
+ * @param {Promise<string|null>} sku
  *  The sku for which the status is required.
  */
 const getProductStatus = async (sku) => {
