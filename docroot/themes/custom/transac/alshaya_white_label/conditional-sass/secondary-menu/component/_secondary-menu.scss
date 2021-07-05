@@ -438,8 +438,7 @@
         position: absolute;
         top: 100%;
         #{$left}: 0;
-        #{$right}: 0;
-        width: 100%;
+        width: auto;
         font-size: 0;
         z-index: 1;
         // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
