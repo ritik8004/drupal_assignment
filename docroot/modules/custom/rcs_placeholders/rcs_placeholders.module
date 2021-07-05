@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function rcs_placeholders_theme($existing, $type, $theme, $path) {
+  return [
+    'taxonomy_term__rcs_category' => [
+      'variables' => [],
+    ],
+    'node__rcs_product' => [
+      'variables' => [],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function rcs_placeholders_preprocess_html(&$variables) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  // Attach required JS. We must be cautious to only add new values or replace
+  // on purpose as some previous hooks may have already set some values.
+  $variables['#attached']['library'][] = 'rcs_placeholders/rcs_placeholders';
+  $variables['#attached']['drupalSettings']['rcsPhSettings']['categoryPathPrefix'] = $config->get('category.path_prefix');
+  $variables['#attached']['drupalSettings']['rcsPhSettings']['productPathPrefix'] = $config->get('product.path_prefix');
+
+  // Attach additional JS settings based on the current page type and
+  // enrichment.
+  $type = \Drupal::request()->server->get('rcs_entity_type');
+  if (!empty($type)) {
+    $variables['#attached']['drupalSettings']['rcsPage']['type'] = $type;
+    $variables['#attached']['drupalSettings']['rcsPage']['path'] = \Drupal::request()->server->get('rcs_entity_path');
+
+    if($config->get($type . '.enrichment')) {
+      $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = \Drupal::request()->server->get('rcs_entity_data');
+    }
+  }
+
+  // We need to override default cache context as we use the placeholder term
+  // for different categories.
+  $variables['#cache']['contexts'][] = 'url';
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function rcs_placeholders_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  switch ($variables['view_mode']) {
+    case 'full':
+      $token = '#rcs.product.slug#';
+      break;
+
+    case 'teaser':
+      $token = '#rcs.productItem.slug#';
+      break;
+
+    default:
+      return;
+  }
+
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  // RDF module is adding an "about" attribute based on the "url" variable.
+  // If we don't set it, all the products will have "node/1" as "about".
+  $variables['url'] = '/' . $config->get('product.path_prefix') . $token;
+}
+
+/**
+ * Implements hook_preprocess_taxonomy_term().
+ */
+function rcs_placeholders_preprocess_taxonomy_term(&$variables) {
+  if ($variables['term']->bundle() == 'rcs_category') {
+    $config = \Drupal::config('rcs_placeholders.settings');
+
+    // RDF module is adding an "about" attribute based on the "url" variable.
+    // If we don't set it, all the categories will have "taxonomy/term/1" as
+    // "about".
+    $variables['url'] = '/' . $config->get('category.path_prefix') . '#rcs.category.slug#';
+  }
+}
+
+/**
+ * Wrapper function to get template for view mode of specific entity type.
+ *
+ * @param string $entity_type
+ *   Entity Type.
+ * @param string $view_mode
+ *   View Mode.
+ *
+ * @return string|null
+ *   Rendered entity template if entity type supported.
+ */
+function _rcs_placeholders_get_placeholder_entity_view(string $entity_type, string $view_mode) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  switch ($entity_type) {
+    case 'node':
+      $id = $config->get('product.placeholder_nid');
+      break;
+
+    default:
+      return null;
+  }
+
+  $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load($id);
+  $entity_view = \Drupal::entityTypeManager()->getViewBuilder($entity_type)->view($entity, $view_mode);
+  return render($entity_view);
+}
