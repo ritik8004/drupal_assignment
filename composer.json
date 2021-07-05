@@ -117,6 +117,7 @@
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
+        "mglaman/drupal-check": "^1.1",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
         "symfony/lock": "4.3.*"
