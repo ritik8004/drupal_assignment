@@ -7,6 +7,10 @@
 
   @include breakpoint($only-tablet) {
     bottom: -3.1875rem;
+
+    html[lang=ar] & {
+      bottom: -2.1875rem;
+    }
   }
 
   .algolia-search-cleartext-icon {
@@ -60,10 +64,6 @@
 
     @include breakpoint($only-tablet) {
       width: 13.25rem;
-
-      html[lang=ar] & {
-        margin-bottom: 0.5625rem;
-      }
     }
 
     @include breakpoint($desktop) {
