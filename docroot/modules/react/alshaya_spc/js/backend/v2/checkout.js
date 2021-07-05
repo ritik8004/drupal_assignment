@@ -1012,16 +1012,6 @@ window.commerceBackend.addPaymentMethod = async (data) => {
     },
   };
 
-  // If upapi payment method (payment method via checkout.com).
-  if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
-    // Add success and fail redirect url to additional data.
-    params.payment.additional_data = {
-      // @todo update these urls.
-      successUrl: '/middleware/public/payment/success/en',
-      failUrl: '/middleware/public/payment/error/en',
-    };
-  }
-
   if (!_.isUndefined(data.payment_info)
     && !_.isUndefined(data.payment_info.payment)
     && !_.isUndefined(data.payment_info.payment.analytics)
@@ -1049,6 +1039,16 @@ window.commerceBackend.addPaymentMethod = async (data) => {
     params.extension.client_ip = '0.0.0.0';
 
     params.extension.attempted_payment = 1;
+  }
+
+  // If upapi payment method (payment method via checkout.com).
+  if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
+    // Add success and fail redirect url to additional data.
+    params.payment.additional_data = {
+      // @todo update these urls.
+      successUrl: '/middleware/public/payment/success/en',
+      failUrl: '/middleware/public/payment/error/en',
+    };
   }
 
   const logData = JSON.stringify(paymentData);
