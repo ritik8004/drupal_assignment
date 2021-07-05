@@ -705,7 +705,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
 const selectHd = async (address, method, billing, shippingMethods) => {
   const cartId = window.commerceBackend.getCartId();
   const shippingData = {
-    customer_address_id: null,
+    customer_address_id: 0,
     address,
     carrier_info: {
       code: method.carrier_code,
