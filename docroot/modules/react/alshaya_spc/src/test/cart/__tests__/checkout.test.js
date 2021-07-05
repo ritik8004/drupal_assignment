@@ -346,7 +346,7 @@ describe('Checkout', () => {
         expect(axios).toHaveBeenNthCalledWith(
           2,
           {
-            data: '{"extension":{"action":"update billing"},"billing":{"city":"London","street":["1 Long st"],"customAttributes":[{"attributeCode":"city","value":"London"},{"attributeCode":"street","value":"1 Long st"}]}}',
+            data: '{"extension":{"action":"update billing"},"billing":{"city":"London","street":"1 Long st"}}',
             headers: {
               'Alshaya-Channel': 'web',
               'Content-Type': 'application/json',
