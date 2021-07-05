@@ -1313,14 +1313,24 @@ const productRecommendationsSuffix = 'pr-';
     if ($.type(message) !== 'string') {
       message = JSON.stringify(message);
     }
-
+    var getCartId = localStorage.getItem('last_selected_payment');
+    var cartObject = localStorage.getItem('cart_data');
+    var cartId = 0;
+    if (category && getCartId) {
+      var extractCartId = getCartId.split(':');
+      cartId = extractCartId[1];
+    }
+    else if (category && cartObject) {
+      cartObject = JSON.parse(cartObject);
+      cartId = cartObject.cart.cart_id;
+    }
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
       eventAction: message,
       eventPlace: 'Error occurred on ' + window.location.href,
-      eventValue: 0,
+      eventValue: cartId,
       nonInteraction: 0,
     };
 
