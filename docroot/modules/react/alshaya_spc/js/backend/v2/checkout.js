@@ -285,36 +285,6 @@ const formatAddressForShippingBilling = (address) => {
 };
 
 /**
- * Update billing info on cart.
- *
- * @param {object} billingData
- *   Billing data.
- *
- * @returns {Promise<AxiosPromise<object>>}
- *   Response data.
- */
-const updateBilling = async (billingData) => {
-  const params = {
-    extension: {
-      action: cartActions.cartBillingUpdate,
-    },
-    billing: formatAddressForShippingBilling(billingData),
-  };
-
-  if (!_.isUndefined(params.billing.id)) {
-    delete params.billing.id;
-  }
-
-  const logAddress = JSON.stringify(params.billing);
-  const logData = JSON.stringify(billingData);
-  const cartId = window.commerceBackend.getCartId();
-  logger.notice(`Billing update manual. Address: ${logAddress} Data: ${logData} Cart: ${cartId}`);
-  logger.notice(`Billing update manual. Address: ${JSON.stringify(params.billing)} Data: ${JSON.stringify(billingData)} Cart: ${window.commerceBackend.getCartId()}`);
-
-  return updateCart(params);
-};
-
-/**
  * Validate area/city of address.
  *
  * @param {object} address
@@ -627,6 +597,30 @@ const getMethodCodeForFrontend = (code) => {
   }
 
   return method;
+};
+
+/**
+ * Update billing info on cart.
+ *
+ * @param {object} data
+ *   Billing data.
+ *
+ * @returns {Promise<AxiosPromise<object>>}
+ *   Response data.
+ */
+const updateBilling = async (data) => {
+  const params = {
+    extension: {
+      action: cartActions.cartBillingUpdate,
+    },
+    billing: { ...data },
+  };
+
+  if (!_.isUndefined(params.billing.id)) {
+    delete params.billing.id;
+  }
+
+  return updateCart(params);
 };
 
 /**
@@ -943,6 +937,32 @@ const getProcessedCheckoutData = async (cartData) => {
     }
   }
   return response;
+};
+
+/**
+ * Adds billing method to the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+window.commerceBackend.addBillingMethod = async (data) => {
+  const billingInfo = data.billing_info;
+  const billingData = formatAddressForShippingBilling(billingInfo);
+
+  const logAddress = JSON.stringify(billingData);
+  const logData = JSON.stringify(billingInfo);
+  const cartId = window.commerceBackend.getCartId();
+  logger.notice(`Billing update manual. Address: ${logAddress} Data: ${logData} Cart: ${cartId}`);
+
+  const cart = await updateBilling(billingData);
+
+  // Process cart data.
+  cart.data = await getProcessedCheckoutData(cart.data);
+
+  return cart;
 };
 
 /**
@@ -1360,17 +1380,6 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
   return cart;
 };
-
-/**
- * Adds billing method to the cart and returns the cart.
- *
- * @param {object} data
- *   The data object to send in the API call.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-window.commerceBackend.addBillingMethod = (data) => updateBilling(data);
 
 export {
   getProcessedCheckoutData,
