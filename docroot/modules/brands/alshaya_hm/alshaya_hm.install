@@ -254,7 +254,7 @@ function alshaya_hm_update_8049() {
  */
 function alshaya_hm_update_8048() {
   $logo_file_name = 'h-m-logo-bw.svg';
-  $logo_updated_file_name = 'h-m-logo-bw.svg?' . REQUEST_TIME;
+  $logo_updated_file_name = 'h-m-logo-bw.svg?' . \Drupal::time()->getRequestTime();
 
   /* @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
   $footer_logo_block = \Drupal::service('entity.repository')
@@ -592,7 +592,7 @@ function alshaya_hm_update_8031() {
  * Update the currency_code to DHS.
  */
 function alshaya_hm_update_8030() {
-  $country_code = Unicode::strtolower(Settings::get('country_code'));
+  $country_code = Unicode::mb_strtolower(Settings::get('country_code'));
   if ($country_code === 'ae') {
     \Drupal::configFactory()->getEditable('acq_commerce.currency')
       ->set('currency_code', 'DHS')
