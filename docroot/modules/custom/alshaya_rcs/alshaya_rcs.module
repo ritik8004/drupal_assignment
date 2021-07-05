@@ -94,17 +94,14 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_rcs_commerce_price(array &$variables) {
-  if (!isset($append)) {
-    $acm_settings = \Drupal::config('alshaya_acm.settings');
-    $append = $acm_settings->get('show_crosssell_as_matchback') && $acm_settings->get('append_each_to_price');
-  }
+  $acm_settings = \Drupal::config('alshaya_acm.settings');
 
   // With matchback enabled, we will have 'each' word added to price
   // based on the quantity for main product as well as matchback products
   // following the host site implementation.
-  if ($append) {
-    $variables['append_each_to_price'] = TRUE;
-  }
+  $variables['append_each_to_price'] = $acm_settings->get('show_crosssell_as_matchback') && $acm_settings->get('append_each_to_price')
+    ? TRUE
+    : FALSE;
 
   $current_language = \Drupal::languageManager()
     ->getConfigOverrideLanguage()
