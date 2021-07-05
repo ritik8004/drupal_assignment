@@ -367,29 +367,28 @@ const getDefaultPaymentFromOrder = async () => null;
  * @returns {Promise<object|null>}.
  *   The method list if available.
  */
-const getPaymentMethods = async () => {
-  const cartId = window.commerceBackend.getCartId();
-  return getCart()
-    .then(async (response) => {
-      if (_.isEmpty(response.data)
-        || _.isEmpty(response.data.shipping)
-        || _.isEmpty(response.data.shipping.method)
-        || (!_.isUndefined(response.data.error) && response.data.error)
-      ) {
-        logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
-        return null;
-      }
+const getPaymentMethods = async () => getCart()
+  .then(async (response) => {
+    const cartId = window.commerceBackend.getCartId();
 
-      // Get payment methods from MDC.
-      return callMagentoApi(getApiEndpoint('getPaymentMethods', { cartId }), 'GET', {})
-        .then(async (paymentMethods) => {
-          if (!_.isEmpty(response.data)) {
-            return paymentMethods.data;
-          }
-          return null;
-        });
-    });
-};
+    if (_.isEmpty(response.data)
+      || _.isEmpty(response.data.shipping)
+      || _.isEmpty(response.data.shipping.method)
+      || (!_.isUndefined(response.data.error) && response.data.error)
+    ) {
+      logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
+      return null;
+    }
+
+    // Get payment methods from MDC.
+    return callMagentoApi(getApiEndpoint('getPaymentMethods', { cartId }), 'GET', {})
+      .then(async (paymentMethods) => {
+        if (!_.isEmpty(response.data)) {
+          return paymentMethods.data;
+        }
+        return null;
+      });
+  });
 
 /**
  * Get the payment method set on cart.
@@ -405,6 +404,8 @@ const getPaymentMethodSetOnCart = async () => {
   if (!_.isEmpty(response) && !_.isEmpty(response.data) && !_.isEmpty(response.data.method)) {
     return response.data.method;
   }
+
+  logger.error(`Error while getting payment set on cart. Error message: ${response.data.error_message}`);
   return null;
 };
 
