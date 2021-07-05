@@ -504,11 +504,18 @@
   }
 }
 
-@include breakpoint($only-mobile) {
-  .main--menu {
-    &.menu--active {
-      .mobile--close {
+.main--menu {
+  &.menu--active {
+    .mobile--close {
+      @include breakpoint($only-mobile) {
         #{$right}: calc((100% - 19.6875rem) / 2);
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$right}: calc((100% - 84.375%) / 2);
+      }
+
+      @include breakpoint($upto-desktop) {
         #{$left}: auto;
         transform: translateX(50%);
 
