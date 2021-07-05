@@ -1081,7 +1081,7 @@ window.commerceBackend.addPaymentMethod = async (data) => {
   const oldCart = await getCart();
   const cart = await updateCart(params);
   if (_.isEmpty(cart.data) || (!_.isUndefined(cart.data.error) && cart.data.error)) {
-    const errorMessage = (cart.data.error.code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
+    const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
     const message = prepareOrderFailedMessage(oldCart, data, errorMessage, 'update cart', 'NA');
     logger.error(`Error occurred while placing order. ${message}`);
   }
