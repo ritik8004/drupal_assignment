@@ -74,3 +74,6 @@ fields:
   white_glove_delivery:
     label: 'White Glove Delivery'
     type: 'string'
+  season_code:
+    label: 'Season Code'
+    type: 'string'
