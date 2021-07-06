@@ -593,7 +593,6 @@ const getMethodCodeForFrontend = (code) => {
       break;
 
     default:
-      logger.info(`Invalid Method code: ${method}`);
       break;
   }
 
@@ -1016,10 +1015,10 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
-window.commerceBackend.addPaymentMethod = async (data) => {
+const paymentUpdate = async (data) => {
   const paymentData = data.payment_info.payment;
   const params = {
     extension: {
@@ -1089,6 +1088,42 @@ window.commerceBackend.addPaymentMethod = async (data) => {
 
   cart.data = await getProcessedCheckoutData(cart.data);
   return cart;
+};
+
+/**
+ * Finalises the payment on the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+const paymentFinalise = async (data) => {
+  logger.notice(`${data}`);
+};
+
+/**
+ * Used to add payment methods to the cart and to finalise payment.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+window.commerceBackend.addPaymentMethod = (data) => {
+  // Add payment methods to the cart.
+  if (data.action === cartActions.cartPaymentUpdate) {
+    return paymentUpdate(data);
+  }
+
+  // Finalise payment.
+  if (data.action === cartActions.cartPaymentFinalise) {
+    return paymentFinalise(data);
+  }
+
+  return null;
 };
 
 /**
