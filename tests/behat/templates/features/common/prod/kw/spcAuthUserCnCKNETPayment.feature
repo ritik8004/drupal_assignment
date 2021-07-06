@@ -26,8 +26,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I select the collection store
-    And I scroll to the "#spc-payment-methods" element
-    And I select the Knet payment method
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -63,8 +62,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I select the collection store
-    And I scroll to the "#spc-payment-methods" element
-    And I select the Knet payment method
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -96,8 +94,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I select the collection store
-    And I scroll to the "#spc-payment-methods" element
-    And I select the Knet payment method
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
