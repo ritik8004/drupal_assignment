@@ -12,6 +12,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides the default laypout for PDP.
@@ -124,7 +125,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['sku'] = $sku_entity;
 
     if (!($sku_entity instanceof SKUInterface)) {
-      return;
+      throw new NotFoundHttpException();
     }
 
     // Get gallery data for the main product.
