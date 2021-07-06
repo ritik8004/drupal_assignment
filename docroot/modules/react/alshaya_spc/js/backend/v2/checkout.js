@@ -12,7 +12,6 @@ import {
   callMagentoApi,
   getCartCustomerEmail,
   getCartCustomerId,
-  associateCartToCustomer,
   matchStockQuantity,
 } from './common';
 import {
@@ -212,7 +211,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
     }
 
     // Set shipping methods in static.
-    staticShippingMethods[key] = methods;
+    staticShippingMethods[key] = Object.values(methods);
   }
 
   // Return methods.
@@ -1233,69 +1232,6 @@ window.commerceBackend.getCartForCheckout = () => {
 };
 
 /**
- * Get customer by email.
- * @todo implement this
- *
- * @param {string} email
- *   Email address.
- *
- * @returns {Promise<object>}
- *   Customer data if API call is successful else and array containing the
- *   error message.
- */
-const getCustomerByMail = async (email) => {
-  logger.info(`${email}`);
-  // Temporary return.
-  return {};
-};
-
-/**
- * Create customer in magento.
- * @todo implement this
- *
- * @param {string} email
- *   E-Mail address.
- * @param {string} firstname
- *   First name.
- * @param {string} lastname
- *   Last name.
- *
- * @returns {Promise<object>}
- *   Customer data if API call is successful else an array containing the
- *   error message.
- */
-const createCustomer = async (email, firstname, lastname) => {
-  logger.info(`${email}${firstname}${lastname}`);
-  // Temporary return.
-  return {
-    data: {
-      id: 492,
-      group_id: 1,
-      created_at: '2021-06-28 10:04:46',
-      updated_at: '2021-06-28 10:04:46',
-      created_in: 'AE English',
-      email: 'test@example.com',
-      firstname: 'test',
-      lastname: 'test',
-      store_id: 4,
-      website_id: 3,
-      addresses: [],
-      disable_auto_group_change: 0,
-      extension_attributes: {
-        is_subscribed: false,
-      },
-      custom_attributes: [
-        {
-          attribute_code: 'channel',
-          value: 'web',
-          name: 'channel',
-        },
-      ],
-    },
-  };
-};
-
-/**
  * Add click n collect shipping on the cart.
  * @todo implement this
  *
@@ -1378,33 +1314,17 @@ window.commerceBackend.addShippingMethod = async (data) => {
   const shippingEmail = shippingInfo.static.email;
 
   // Cart customer validations.
-  if (window.drupalSettings.userDetails.customerId === 0
-    && (_.isNull(await getCartCustomerId()) || (await getCartCustomerEmail() !== shippingEmail))
-  ) {
-    // Get customer by email.
-    let customer = await getCustomerByMail(shippingEmail);
-    if (!_.isUndefined(customer.error) && customer.error) {
-      return customer;
+  if (window.drupalSettings.userDetails.customerId === 0) {
+    const customerId = await getCartCustomerId();
+    if (customerId > 0) {
+      // @todo handle exception when user is guest but cart is of customer.
+      throw new Error('Cart is associated to customer.');
     }
-
-    // Create new customer.
-    if (_.isEmpty(customer)) {
-      customer = await createCustomer(
-        shippingEmail,
-        shippingInfo.static.firstname,
-        shippingInfo.static.lastname,
-      );
-      if (!_.isUndefined(customer.error) && customer.error) {
-        return customer;
-      }
-    }
-
-    // Associate cart to customer.
-    if (!_.isEmpty(customer) && !_.isUndefined(customer.id)) {
-      const response = await associateCartToCustomer(customer.id);
-      if (!_.isUndefined(response.error) && response.error) {
-        return response;
-      }
+  } else {
+    const customerEmail = await getCartCustomerEmail();
+    if (customerEmail !== shippingEmail) {
+      // @todo handle exception when cart is of different customer than the one logged in.
+      throw new Error('Cart is associated to different customer.');
     }
   }
 
@@ -1423,37 +1343,27 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
     cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
   } else {
-    let shippingMethods = [];
+    const shippingData = prepareShippingData(shippingInfo);
+    const shippingMethods = await getHomeDeliveryShippingMethods(shippingData.address);
+
+    // If no shipping method.
+    if (_.isEmpty(shippingMethods)
+      || (!_.isUndefined(shippingMethods.error) && shippingMethods.error)) {
+      const logData = JSON.stringify(data);
+      const cartId = window.commerceBackend.getCartId();
+      logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${shippingMethods.error_message}`);
+      return shippingMethods;
+    }
+
+
     let carrierInfo = [];
     if (!_.isEmpty(shippingInfo.carrier_info)) {
+      // @todo check if method in cart is still available in shippingMethods.
       carrierInfo = shippingInfo.carrier_info;
       delete shippingInfo.carrier_info;
     }
 
-    const shippingData = prepareShippingData(shippingInfo);
-
-    // If carrier info available in request, use that
-    // instead getting shipping methods.
-    let hdshippingMethods = [];
-    if (!_.isEmpty(carrierInfo)) {
-      shippingMethods.push({
-        carrier_code: carrierInfo.code,
-        method_code: carrierInfo.method,
-      });
-    } else {
-      const methods = await getHomeDeliveryShippingMethods(shippingData.address);
-      // If no shipping method.
-      if (_.isEmpty(methods) || (!_.isUndefined(methods.error) && methods.error)) {
-        const logData = JSON.stringify(data);
-        const cartId = window.commerceBackend.getCartId();
-        logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${methods.error_message}`);
-        return methods;
-      }
-      shippingMethods = methods;
-      hdshippingMethods = methods;
-    }
-
-    if (!_.isEmpty(shippingMethods)) {
+    if (_.isEmpty(carrierInfo)) {
       shippingInfo.carrier_info = {
         code: shippingMethods[0].carrier_code,
         method: shippingMethods[0].method_code,
@@ -1467,8 +1377,8 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
     cart = await addShippingInfo(shippingInfo, data.action, updateBillingInfo);
 
-    if (!_.isEmpty(cart.data) && !_.isEmpty(cart.data.shipping) && !_.isEmpty(hdshippingMethods)) {
-      cart.data.shipping.methods = hdshippingMethods;
+    if (!_.isEmpty(cart.data) && !_.isEmpty(cart.data.shipping) && !_.isEmpty(shippingMethods)) {
+      cart.data.shipping.methods = shippingMethods;
     }
   }
 
