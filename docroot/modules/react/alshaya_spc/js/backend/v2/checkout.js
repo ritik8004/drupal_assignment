@@ -314,113 +314,7 @@ const getLastOrder = () => [];
  * @return {promise}
  *   Address ids of customer or empty array.
  */
-const getCustomerAddressIds = () => callMagentoApi('/rest/V1/customers/me', 'GET', {});
-
-/**
- * Select Click and Collect store and method from possible defaults.
- *
- * @param {object} store
- *   Store info.
- * @param {object} address
- *   Shipping address from last order.
- * @param {object} billing
- *   Billing address.
- *
- * @return {promise}
- *   Updated cart.
- */
-const selectCnc = async (store, address, billing) => {
-  const data = {
-    extension: {
-      action: cartActions.cartShippingUpdate,
-    },
-    shipping: {
-      shipping_address: address,
-      shipping_carrier_code: 'click_and_collect',
-      shipping_method_code: 'click_and_collect',
-      custom_attributes: [],
-      extension_attributes: {
-        click_and_collect_type: (!_.isEmpty(store.rnc_available)) ? 'reserve_and_collect' : 'ship_to_store',
-        store_code: store.code,
-      },
-    },
-  };
-
-  const extensionAttributes = data.shipping.shipping_address.extension_attributes;
-  Object.keys(extensionAttributes).forEach((key) => {
-    data.shipping.shipping_address.custom_attributes.push(
-      {
-        attributeCode: key,
-        value: extensionAttributes[key],
-      },
-    );
-  });
-
-  // Validate address.
-  const valid = await validateAddressAreaCity(billing);
-  if (!valid || valid.address === false) {
-    return new Promise((resolve) => resolve(false));
-  }
-
-  const logData = JSON.stringify(data);
-  const logAddress = JSON.stringify(address);
-  const logStore = JSON.stringify(store);
-  const logCartId = window.commerceBackend.getCartId();
-  logger.notice(`Shipping update default for CNC. Data: ${logData} Address: ${logAddress} Store: ${logStore} Cart: ${logCartId}`);
-
-  // If shipping address not contains proper data (extension info).
-  if (_.isEmpty(data.shipping.shipping_address.extension_attributes)) {
-    return new Promise((resolve) => resolve(false));
-  }
-
-  const updated = updateCart(data);
-  if (_.has(updated, 'error') && updated.error) {
-    return new Promise((resolve) => resolve(false));
-  }
-
-  // Not use/assign default billing address if customer_address_id
-  // is not available.
-  if (_.isEmpty(billing.customer_address_id)) {
-    return new Promise((resolve) => resolve(updated));
-  }
-
-  // Add log for billing data we pass to magento update cart.
-  const logBilling = JSON.stringify(billing);
-  logger.notice(`Billing update default for CNC. Address: ${logBilling} Cart: ${logCartId}`);
-
-  // If billing address not contains proper data (extension info).
-  if (typeof billing.extension_attributes === 'undefined') {
-    return new Promise((resolve) => resolve(false));
-  }
-
-  const customerAddressIds = getCustomerAddressIds(billing.customer_id);
-
-  // Return if address id from last order doesn't
-  // exist in customer's address id list.
-  if (_.findIndex(customerAddressIds, { id: billing.customer_address_id }) !== -1) {
-    return new Promise((resolve) => resolve(updated));
-  }
-
-  const updatedBilling = updateBilling(billing);
-
-  // If billing update has error.
-  if (_.has(updated, 'error') && updated.error) {
-    return new Promise((resolve) => resolve(false));
-  }
-  return new Promise((resolve) => resolve(updatedBilling));
-};
-
-/**
- * Apply shipping from last order.
- * @todo implement this.
- *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, updated cart data otherwise.
- */
-const applyDefaultShipping = async () => false;
+const getCustomerAddressIds = () => callMagentoApi(getApiEndpoint('getCustomerAddressIds'), 'GET', {});
 
 /**
  * Get payment method from last order.
@@ -501,7 +395,7 @@ const getStoreInfo = async (storeData) => {
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_.isEmpty(response.data) || !_.isArray(response.data)
+  if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
     return null;
@@ -546,7 +440,8 @@ const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   let stores = [];
 
-  const response = await callMagentoApi(`/rest/V1/click-and-collect/stores/guest-cart/${cartId}/lat/${lat}/lon/${lon}`);
+  const url = getApiEndpoint('getCartStores', { cartId, lat, lon });
+  const response = await callMagentoApi(url, 'GET', {});
   if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
@@ -567,16 +462,19 @@ const getCartStores = async (lat, lon) => {
     stores = await Promise.all(storeInfoPromises);
 
     // Remove null values.
+    stores = stores.filter((value) => value != null);
+
     // Sort the stores first by distance and then by name.
-    return stores
-      .filter((value) => value != null)
-      .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
-      .sort((store1, store2) => store1.distance - store2.distance);
+    if (stores.length > 1) {
+      stores = stores
+        .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
+        .sort((store1, store2) => store1.distance - store2.distance);
+    }
   } catch (error) {
     logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
   }
 
-  return [];
+  return stores;
 };
 
 /**
@@ -782,6 +680,118 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   }
 
   return cart;
+};
+
+/**
+ * Select Click and Collect store and method from possible defaults.
+ *
+ * @param {object} store
+ *   Store info.
+ * @param {object} address
+ *   Shipping address from last order.
+ * @param {object} billing
+ *   Billing address.
+ *
+ * @return {promise}
+ *   Updated cart.
+ */
+const selectCnc = async (store, address, billing) => {
+  const data = {
+    extension: {
+      action: cartActions.cartShippingUpdate,
+    },
+    shipping: {
+      shipping_address: address,
+      shipping_carrier_code: 'click_and_collect',
+      shipping_method_code: 'click_and_collect',
+      custom_attributes: [],
+      extension_attributes: {
+        click_and_collect_type: (!_.isEmpty(store.rnc_available)) ? 'reserve_and_collect' : 'ship_to_store',
+        store_code: store.code,
+      },
+    },
+  };
+
+  const extensionAttributes = data.shipping.shipping_address.extension_attributes;
+  Object.keys(extensionAttributes).forEach((key) => {
+    data.shipping.shipping_address.custom_attributes.push(
+      {
+        attributeCode: key,
+        value: extensionAttributes[key],
+      },
+    );
+  });
+
+  // Validate address.
+  const valid = await validateAddressAreaCity(billing);
+  if (!valid || valid.address === false) {
+    return new Promise((resolve) => resolve(false));
+  }
+
+  const logData = JSON.stringify(data);
+  const logAddress = JSON.stringify(address);
+  const logStore = JSON.stringify(store);
+  const logCartId = window.commerceBackend.getCartId();
+  logger.notice(`Shipping update default for CNC. Data: ${logData} Address: ${logAddress} Store: ${logStore} Cart: ${logCartId}`);
+
+  // If shipping address not contains proper data (extension info).
+  if (_.isEmpty(data.shipping.shipping_address.extension_attributes)) {
+    return new Promise((resolve) => resolve(false));
+  }
+
+  const updated = updateCart(data);
+  if (_.has(updated, 'error') && updated.error) {
+    return new Promise((resolve) => resolve(false));
+  }
+
+  // Not use/assign default billing address if customer_address_id
+  // is not available.
+  if (_.isEmpty(billing.customer_address_id)) {
+    return new Promise((resolve) => resolve(updated));
+  }
+
+  // Add log for billing data we pass to magento update cart.
+  const logBilling = JSON.stringify(billing);
+  logger.notice(`Billing update default for CNC. Address: ${logBilling} Cart: ${logCartId}`);
+
+  // If billing address not contains proper data (extension info).
+  if (typeof billing.extension_attributes === 'undefined') {
+    return new Promise((resolve) => resolve(false));
+  }
+
+  const customerAddressIds = getCustomerAddressIds(billing.customer_id);
+
+  // Return if address id from last order doesn't
+  // exist in customer's address id list.
+  if (_.findIndex(customerAddressIds, { id: billing.customer_address_id }) !== -1) {
+    return new Promise((resolve) => resolve(updated));
+  }
+
+  const updatedBilling = updateBilling(billing);
+
+  // If billing update has error.
+  if (_.has(updated, 'error') && updated.error) {
+    return new Promise((resolve) => resolve(false));
+  }
+  return new Promise((resolve) => resolve(updatedBilling));
+};
+
+
+/**
+ * Apply shipping from last order.
+ * @todo implement this.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|boolean>}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = async (order) => {
+  const address = order.shipping.commerce_address;
+  // @todo finish the implementation of applyDefaultShipping() on CORE-30722
+  selectCnc(0, address, order.billing_commerce_address);
+  return false;
 };
 
 /**
@@ -1111,6 +1121,17 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
   logger.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
 };
+
+/**
+ * Fetches the list of click and collect stores.
+ *
+ * @param {object} coords
+ *   The co-ordinates data.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
 
 /**
  * Adds payment method in the cart and returns the cart.

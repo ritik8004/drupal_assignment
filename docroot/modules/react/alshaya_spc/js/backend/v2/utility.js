@@ -96,6 +96,18 @@ const getApiEndpoint = (action, params = {}) => {
         : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;
       break;
 
+    case 'getCartStores':
+      endpoint = isUserAuthenticated()
+        ? `/rest/V1/click-and-collect/stores/cart/mine/lat/${params.lat}/lon/${params.lon}`
+        : `/rest/V1/click-and-collect/stores/guest-cart/${params.cartId}/lat/${params.lat}/lon/${params.lon}`;
+      break;
+
+    case 'getCustomerAddressIds':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/customers/me'
+        : '';
+      break;
+
     default:
       logger.critical(`Endpoint does not exist for action : ${action}`);
   }
