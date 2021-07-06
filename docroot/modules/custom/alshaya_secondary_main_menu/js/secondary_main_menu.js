@@ -7,7 +7,7 @@
   Drupal.behaviors.alshayaSecondaryMainMenu = {
     attach: function (context) {
       if ($('#block-alshayasecondarymainmenu').length && $('secondary-main-menu-wrapper').length == 0) {
-        if ($(window).width() > 768) {
+        if ($(window).width() > 1024) {
           $('#block-branding, #block-alshayasecondarymainmenu')
             .wrapAll('<div class="secondary-main-menu-wrapper"></div>');
           $('.secondary--main--menu .column').each(function (index) {
