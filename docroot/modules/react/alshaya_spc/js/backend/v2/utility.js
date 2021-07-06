@@ -13,7 +13,7 @@
 /* eslint-disable no-unused-vars */
 const logger = {
   send: (level, message, context) => {
-    // console.log(`${level}: ${message}`);
+    console.log(`${level}: ${message}`);
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),

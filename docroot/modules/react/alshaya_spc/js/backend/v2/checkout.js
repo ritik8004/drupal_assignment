@@ -14,7 +14,10 @@ import {
   getCartCustomerId,
   associateCartToCustomer,
 } from './common';
-import { getDefaultErrorMessage } from './error';
+import {
+  cartErrorCodes,
+  getDefaultErrorMessage,
+} from './error';
 import {
   getApiEndpoint,
   isUserAuthenticated,
@@ -1091,6 +1094,35 @@ const paymentUpdate = async (data) => {
 };
 
 /**
+ * Checks if cart has OOS item or not by item level attribute.
+ *
+ * @param {object} cart
+ *   Cart data.
+ *
+ * @return {bool}
+ *   TRUE if cart has an OOS item.
+ */
+const isCartHasOosItem = (cartData) => {
+  if (!_.isEmpty(cartData.items)) {
+    for (let i = 0; i < cartData.items.length; i++) {
+      const item = cartData.items[i];
+      // If error at item level.
+      if (!_.isUndefined(item.extension_attributes)
+        && !_.isUndefined(item.extension_attributes.error_message)
+      ) {
+        // @todo do we need to expose the exception types via drupal settings?
+        const exceptionType = '';
+        // If OOS error message.
+        if (!_.isEmpty(exceptionType) && exceptionType === 'OOS') {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+};
+
+/**
  * Finalises the payment on the cart.
  *
  * @param {object} data
@@ -1100,7 +1132,20 @@ const paymentUpdate = async (data) => {
  *   A promise object.
  */
 const paymentFinalise = async (data) => {
-  logger.notice(`${data}`);
+  // Fetch fresh cart from magento.
+  const response = await getCart(true);
+  const cartData = response.data;
+
+  let isError = false;
+  const errorMessage = 'Delivery Information is incomplete. Please update and try again.';
+  const errorCode = cartErrorCodes.cartOrderPlacementError;
+
+  if (_.isObject(cartData) && isCartHasOosItem(cartData)) {
+    isError = true;
+    logger.error(`Error while finalizing payment. Cart has an OOS item. Cart: ${JSON.stringify(cartData)}.`);
+  }
+  // aaa ---
+  logger.error(`${data}${isError}${errorCode}${errorMessage}`);
 };
 
 /**
