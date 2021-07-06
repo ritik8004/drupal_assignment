@@ -351,9 +351,7 @@ Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modu
 * The Apple-Pay payment method appears on desktop view if "apple_pay_allowed_in" key from configuration acq_checkoutcom.settings is set to 'all'
   Drush command to set config to all: drush -l <site-url> cset acq_checkoutcom.settings apple_pay_allowed_in 'all' --input-format=yaml
 
-### Installing drupal-check (Deprecated code).
-* Install drupal-check in your project using Composer as a development dependency like so: composer require mglaman/drupal-check
-* You can also install this globally using Composer like so: composer global require mglaman/drupal-check
+### Finding deprecated code (using drupal-check)
 * Command format: drupal-check [OPTIONS] [DIRS]
 
 * Options:
