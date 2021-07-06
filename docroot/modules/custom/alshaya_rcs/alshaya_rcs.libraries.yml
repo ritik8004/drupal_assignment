@@ -5,14 +5,6 @@ renderer:
     - core/jquery
     - core/drupalSettings
 
-backend:
-  js:
-    dist/alshaya_rcs_backend.bundle.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupalSettings
-    - rcs_magento/backend
-
 add_to_cart:
   js:
     js/alshaya_rcs_add_to_cart.js: {}
@@ -20,5 +12,5 @@ add_to_cart:
     - core/jquery
     - core/drupalSettings
     - alshaya_rcs/renderer
-    - alshaya_rcs/backend
+    - rcs_magento_placeholders/rcs_magento_placeholders
     - alshaya_acm_cart_notification/cart_notification_js
