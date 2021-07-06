@@ -46,6 +46,23 @@ window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
 let staticCartData = null;
 
 /**
+ * Stores skus and quantities.
+ */
+const staticStockMismatchSkusData = [];
+
+/**
+ * Sets the static array so that it can be processed later.
+ *
+ * @param {string} sku
+ *   The SKU value.
+ * @param {integer} quantity
+ *   The quantity of the SKU.
+ */
+const matchStockQuantity = (sku, quantity = 0) => {
+  staticStockMismatchSkusData[sku] = quantity;
+};
+
+/**
  * Gets the cart data.
  *
  * @returns {object|null}
@@ -777,4 +794,5 @@ export {
   getCartCustomerEmail,
   getCartCustomerId,
   associateCartToCustomer,
+  matchStockQuantity,
 };

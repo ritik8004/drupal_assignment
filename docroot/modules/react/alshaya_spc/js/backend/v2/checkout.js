@@ -13,10 +13,12 @@ import {
   getCartCustomerEmail,
   getCartCustomerId,
   associateCartToCustomer,
+  matchStockQuantity,
 } from './common';
 import {
   cartErrorCodes,
   getDefaultErrorMessage,
+  getExceptionMessageType,
 } from './error';
 import {
   getApiEndpoint,
@@ -1103,16 +1105,14 @@ const paymentUpdate = async (data) => {
  *   TRUE if cart has an OOS item.
  */
 const isCartHasOosItem = (cartData) => {
-  if (!_.isEmpty(cartData.items)) {
-    for (let i = 0; i < cartData.items.length; i++) {
-      const item = cartData.items[i];
+  if (!_.isEmpty(cartData.cart.items)) {
+    for (let i = 0; i < cartData.cart.items.length; i++) {
+      const item = cartData.cart.items[i];
       // If error at item level.
       if (!_.isUndefined(item.extension_attributes)
         && !_.isUndefined(item.extension_attributes.error_message)
       ) {
-        // @todo do we need to expose the exception types via drupal settings?
-        const exceptionType = '';
-        // If OOS error message.
+        const exceptionType = getExceptionMessageType(item.extension_attributes.error_message);
         if (!_.isEmpty(exceptionType) && exceptionType === 'OOS') {
           return true;
         }
@@ -1137,13 +1137,21 @@ const paymentFinalise = async (data) => {
   const cartData = response.data;
 
   let isError = false;
-  const errorMessage = 'Delivery Information is incomplete. Please update and try again.';
-  const errorCode = cartErrorCodes.cartOrderPlacementError;
+  let errorMessage = 'Delivery Information is incomplete. Please update and try again.';
+  let errorCode = cartErrorCodes.cartOrderPlacementError;
 
   if (_.isObject(cartData) && isCartHasOosItem(cartData)) {
     isError = true;
     logger.error(`Error while finalizing payment. Cart has an OOS item. Cart: ${JSON.stringify(cartData)}.`);
+
+    Object.keys(cartData.cart.items).forEach((key) => {
+      matchStockQuantity(cartData.cart.items[key].sku);
+    });
+
+    errorMessage = 'Cart contains some items which are not in stock.';
+    errorCode = cartErrorCodes.cartHasOOSItem;
   }
+
   // aaa ---
   logger.error(`${data}${isError}${errorCode}${errorMessage}`);
 };
@@ -1158,6 +1166,9 @@ const paymentFinalise = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.addPaymentMethod = (data) => {
+  // @todo TEST: remove this.
+  paymentFinalise(data);
+
   // Add payment methods to the cart.
   if (data.action === cartActions.cartPaymentUpdate) {
     return paymentUpdate(data);
