@@ -4,10 +4,10 @@ import {
   callMagentoApi,
   getCartSettings,
   isAnonymousUserWithoutCart,
-  preUpdateValidation,
   updateCart,
   getProcessedCartData,
   getCartWithProcessedData,
+  associateCartToCustomer,
 } from './common';
 import { getApiEndpoint, logger } from './utility';
 import { getExceptionMessageType } from './error';
@@ -77,6 +77,8 @@ const returnExistingCartWithError = (code, message) => ({
  *
  * @param {object} data
  *   Data containing sku and stock quantity information.
+ *
+ * @returns {Promise<object>}
  */
 const triggerStockRefresh = (data) => callDrupalApi(
   '/spc/checkout-event',
@@ -101,11 +103,12 @@ const triggerStockRefresh = (data) => callDrupalApi(
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
- * Applies transformations to the structure of cart data.
+ * Returns the processed cart data.
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
- * @returns {Promise}
+ *
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.getCart = (force = false) => getCartWithProcessedData(force);
@@ -114,7 +117,7 @@ window.commerceBackend.getCart = (force = false) => getCartWithProcessedData(for
  * Calls the cart restore API.
  * @todo Implement restoreCart()
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
@@ -125,14 +128,31 @@ window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   let requestMethod = null;
   let requestUrl = null;
   let itemData = null;
+
   let cartId = window.commerceBackend.getCartId();
+  // If we try to add/remove item while we don't have anything or corrupt
+  // session, we create the cart object.
+  if (_.isNull(cartId)) {
+    cartId = await window.commerceBackend.createCart();
+    // If we still don't have a cart, we cannot continue.
+    if (_.isNull(cartId)) {
+      return new Promise((resolve, reject) => reject(cartId));
+    }
+  }
+
+  // Associate cart to customer.
+  const id = window.drupalSettings.userDetails.customerId;
+  if (id > 0) {
+    associateCartToCustomer(id);
+  }
+
   let productOptions = {};
   const quantity = typeof data.quantity !== 'undefined' && data.quantity
     ? data.quantity
@@ -163,19 +183,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       itemId: cartItem.item_id,
     };
     requestUrl = getApiEndpoint('removeItems', params);
-  }
-
-  if (data.action === 'add item') {
-    // If we try to add item while we don't have anything or corrupt
-    // session, we create the cart object.
-    cartId = window.commerceBackend.getCartId();
-    if (!cartId) {
-      cartId = await window.commerceBackend.createCart();
-    }
-    if (typeof cartId.error !== 'undefined') {
-      return cartId;
-    }
-    // @todo: Associate cart to the customer.
   }
 
   if (data.action === 'add item' || data.action === 'update item') {
@@ -236,18 +243,18 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
           10,
         ) > apiCallAttempts
       ) {
+        // @todo test attempts.
         apiCallAttempts += 1;
+
         // Create a new cart.
         cartId = await window.commerceBackend.createCart();
-        if (typeof cartId.error !== 'undefined') {
+        if (_.isNull(cartId)) {
           return cartId;
         }
-        setStorageInfo('cart_id', cartId);
-        const cartData = await window.commerceBackend.getCart();
+        const cartData = await window.commerceBackend.getCart(true);
         window.commerceBackend.setCartDataInStorage(cartData);
         return window.commerceBackend.addUpdateRemoveCartItem(data);
       }
-
       return response;
     }
 
@@ -270,7 +277,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
 window.commerceBackend.applyRemovePromo = async (data) => {
@@ -284,17 +291,17 @@ window.commerceBackend.applyRemovePromo = async (data) => {
     params.coupon = data.promo;
   }
 
-  // Validate params before updating the cart.
-  const validationResult = await preUpdateValidation(params);
-  if (_.has(validationResult, 'error')) {
-    return validationResult;
-  }
-
   return updateCart(params)
     .then((response) => {
       // Process cart data.
       response.data = getProcessedCartData(response.data);
       return response;
+    })
+    .catch((response) => {
+      const error = { ...response };
+      // Setting status will make validateCartResponse() show error when adding coupon code.
+      error.data.response_message.status = 'error_coupon';
+      return error;
     });
 };
 
@@ -304,10 +311,10 @@ window.commerceBackend.applyRemovePromo = async (data) => {
  * @param {object} data
  *   The data object to send in the API call.
  *
- * @returns {Promise}
+ * @returns {Promise<object>}
  *   A promise object.
  */
-window.commerceBackend.refreshCart = (data) => {
+window.commerceBackend.refreshCart = async (data) => {
   const checkoutSettings = getCartSettings('checkout_settings');
   let postData = {
     extension: {
@@ -330,14 +337,28 @@ window.commerceBackend.refreshCart = (data) => {
 /**
  * Creates a new cart and stores cart Id in the local storage.
  *
- * @returns {Promise}
- *   A promise object.
+ * @returns {promise<integer|null>}
+ *   The cart id or null.
  */
 window.commerceBackend.createCart = async () => {
+  // Remove cart_id from storage.
+  removeStorageInfo('cart_id');
+
+  // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
-  if (typeof response.data.error !== 'undefined') {
+  if (response.status === 200 && !_.isUndefined(response.data)
+    && (_.isString(response.data) || _.isNumber(response.data))
+  ) {
+    const Id = window.drupalSettings.userDetails.customerId;
+    logger.notice(`New cart created: ${response.data}, customer_id: ${Id}`);
+
+    setStorageInfo(response.data, 'cart_id');
     return response.data;
   }
-  setStorageInfo(response.data, 'cart_id');
-  return response.data;
+
+  const errorMessage = (!_.isUndefined(response.data.error_message))
+    ? response.data.error_message
+    : '';
+  logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
+  return null;
 };

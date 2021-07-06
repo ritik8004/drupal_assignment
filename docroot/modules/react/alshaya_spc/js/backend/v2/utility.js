@@ -13,7 +13,7 @@
 /* eslint-disable no-unused-vars */
 const logger = {
   send: (level, message, context) => {
-    // console.log('Error ' + message);
+    // console.log(`${level}: ${message}`);
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
@@ -32,7 +32,7 @@ const logger = {
  * @returns {boolean}
  *   True if user is authenticated.
  */
-const isUserAuthenticated = () => Boolean(drupalSettings.userDetails.customerId);
+const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);
 
 /**
  * Gets magento api endpoint by user role.
@@ -42,7 +42,7 @@ const isUserAuthenticated = () => Boolean(drupalSettings.userDetails.customerId)
  * @param {object} params
  *   The object with cartId, itemId.
  *
- * @returns {*}
+ * @returns {string}
  *   The api endpoint.
  */
 const getApiEndpoint = (action, params = {}) => {
@@ -84,8 +84,20 @@ const getApiEndpoint = (action, params = {}) => {
         : `/rest/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
       break;
 
+    case 'getPaymentMethods':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/payment-methods'
+        : `/rest/V1/guest-carts/${params.cartId}/payment-methods`;
+      break;
+
+    case 'selectedPaymentMethod':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/selected-payment-method'
+        : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;
+      break;
+
     default:
-      logger.error(`Endpoint does not exist for action : ${action}`);
+      logger.critical(`Endpoint does not exist for action : ${action}`);
   }
 
   return endpoint;

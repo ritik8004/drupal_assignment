@@ -167,6 +167,18 @@ describe('Checkout', () => {
       ]);
     });
 
+    it('Test getCartCustomerEmail()', async () => {
+      const getCartCustomerEmail = utilsRewire.__get__('getCartCustomerEmail');
+
+      axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+      jest
+        .spyOn(window.commerceBackend, 'getCartId')
+        .mockImplementation(() => '1234');
+
+      expect(await getCartCustomerEmail()).toEqual('osmarwado@gmail.com');
+    });
+
     describe('Test formatAddressForFrontend()', () => {
       const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
       each`
@@ -207,18 +219,197 @@ describe('Checkout', () => {
       });
     });
 
-    describe('Test formatAddressForShippingBilling()', () => {
-      const formatAddressForShippingBilling = utilsRewire.__get__('formatAddressForShippingBilling');
+    describe('Test getCustomerPublicData()', () => {
+      const getCustomerPublicData = utilsRewire.__get__('getCustomerPublicData');
+
+      it('With empty data', async () => {
+        const result = getCustomerPublicData({});
+        expect(result).toEqual({});
+      });
+
+      it('With invisible characters', () => {
+        const data = {
+          firstname: 'Foo',
+          lastname: '&#8203;',
+        };
+        const result = getCustomerPublicData(data);
+        expect(result.firstname).toEqual('Foo');
+        expect(result.lastname).toEqual('');
+      });
+
+      it('With customer data', async () => {
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        const response = await getCart();
+        const data = response.data.customer;
+        const result = getCustomerPublicData(data);
+
+        expect(result.id).toEqual('478');
+        expect(result.firstname).toEqual('Osmar');
+        expect(result.lastname).toEqual('Wado');
+        expect(result.email).toEqual('osmarwado@gmail.com');
+        expect(result.addresses.length).toEqual(2);
+        expect(result.addresses[0].id).toEqual(undefined);
+        expect(result.addresses[0].customer_address_id).toEqual('69');
+        expect(result.addresses[0].region).toEqual('0');
+        expect(result.addresses[0].region_id).toEqual('0');
+        expect(result.addresses[1].address_city_segment).toEqual('2');
+        expect(result.addresses[1].area).toEqual('207');
+      });
+    });
+
+    describe('Test addShippingInfo()', () => {
+      const addShippingInfo = utilsRewire.__get__('addShippingInfo');
+
+      jest
+        .spyOn(window.commerceBackend, 'getCartId')
+        .mockImplementation(() => '1234');
+
+      it('With empty data', async () => {
+        const result = await addShippingInfo({}, 'update shipping', true);
+        expect(result).toEqual(null);
+        expect(axios).not.toHaveBeenCalled();
+      });
+
+      it('With address data', async () => {
+        // Mock for updateCart().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        // Mock for updateBilling().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        const data = {
+          static: {
+            firstname: 'Johnny',
+          },
+          street: '1 Long st',
+          carrier_info: {
+            code: 300,
+            method: 'foo',
+          },
+        };
+        // Call addShippingInfo();
+        await addShippingInfo(data, 'update shipping', true);
+
+        // We cannot check the result of updateCart() but we can check if it
+        // is being called with the correct parameters provided by addShippingInfo().
+        expect(axios).toHaveBeenNthCalledWith(
+          1,
+          {
+            data: '{"shipping":{"shipping_carrier_code":300,"shipping_method_code":"foo","shipping_address":{"firstname":"Johnny","street":["1 Long st"],"customAttributes":[{"attributeCode":"street","value":"1 Long st"}]}},"extension":{"action":"update shipping"}}',
+            headers: {
+              'Alshaya-Channel': 'web',
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+          },
+        );
+      });
+
+      it('With address data and customer_address_id', async () => {
+        // Mock for updateCart().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        // Mock for updateBilling().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        const data = {
+          customer_address_id: '461',
+          address: {
+            city: 'London',
+            street: '1 Long st',
+          },
+        };
+        // Call addShippingInfo();
+        await addShippingInfo(data, 'update shipping', true);
+
+        // We cannot check the result of updateCart() but we can check if it
+        // is being called with the correct parameters provided by addShippingInfo().
+        expect(axios).toHaveBeenNthCalledWith(
+          1,
+          {
+            data: '{"shipping":{"shipping_address":{"city":"London","street":"1 Long st"}},"extension":{"action":"update shipping"}}',
+            headers: {
+              'Alshaya-Channel': 'web',
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+          },
+        );
+
+        // We cannot check the result of updateBilling() but we can check if it
+        // is being called with the correct parameters provided by addShippingInfo().
+        expect(axios).toHaveBeenNthCalledWith(
+          2,
+          {
+            data: '{"extension":{"action":"update billing"},"billing":{"city":"London","street":"1 Long st"}}',
+            headers: {
+              'Alshaya-Channel': 'web',
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+          },
+        );
+      });
+    });
+
+    describe('Test prepareShippingData()', () => {
+      const prepareShippingData = utilsRewire.__get__('prepareShippingData');
 
       it('With empty value', async () => {
-        const result = formatAddressForShippingBilling({});
+        const result = prepareShippingData({});
         expect(result).toEqual({});
       });
 
       it('With null value', async () => {
-        const result = formatAddressForShippingBilling(null);
+        const result = prepareShippingData(null);
         expect(result).toEqual({});
       });
+
+      it('With address_id value', async () => {
+        const result = prepareShippingData({ address_id: 1 });
+        expect(result.address.customAttributes[0].attributeCode).toEqual('address_id');
+      });
+
+      it('Without static data', async () => {
+        const address = {
+          address_region_segment: '1025',
+        };
+        const result = prepareShippingData(address);
+        expect(result.address.firstname).toEqual(undefined);
+        expect(result.address.customAttributes[0].value).toEqual('1025');
+      });
+
+      it('With address data', async () => {
+        const address = {
+          static: {
+            firstname: 'John',
+            lastname: 'Smith',
+          },
+          address_region_segment: '1025',
+          street: '1 London Rd',
+        };
+        const result = prepareShippingData(address);
+
+        expect(result.static).toEqual(undefined);
+        expect(result.address.static).toEqual(undefined);
+        expect(result.address.firstname).toEqual('John');
+        expect(result.address.lastname).toEqual('Smith');
+        expect(result.address.customAttributes[0].attributeCode).toEqual('address_region_segment');
+        expect(result.address.customAttributes[0].value).toEqual('1025');
+        expect(result.address.customAttributes[1].attributeCode).toEqual('street');
+        expect(result.address.customAttributes[1].value).toEqual('1 London Rd');
+        expect(result.address.customAttributes.length).toEqual(2);
+      });
+    });
+
+    describe('Test formatAddressForShippingBilling()', () => {
+      const formatAddressForShippingBilling = utilsRewire.__get__('formatAddressForShippingBilling');
 
       it('Without static data', async () => {
         const address = {
@@ -236,49 +427,54 @@ describe('Checkout', () => {
           },
           address_region_segment: '1025',
           street: '1 London Rd',
-          carrier_info: { code: 'alshayadelivery', method: 'qd2_qd002' },
+          carrier_info: {
+            code: 'alshayadelivery',
+            method: 'qd2_qd002',
+          },
+          foo: '',
         };
         const result = formatAddressForShippingBilling(address);
 
-        expect(result.firstname).toEqual('John');
-        expect(result.lastname).toEqual('Smith');
         expect(result.static).toEqual(undefined);
         expect(result.carrier_info).toEqual(undefined);
+        expect(result.firstname).toEqual('John');
+        expect(result.lastname).toEqual('Smith');
         expect(result.street).toEqual(['1 London Rd']);
         expect(result.customAttributes[0].attributeCode).toEqual('address_region_segment');
         expect(result.customAttributes[0].value).toEqual('1025');
         expect(result.customAttributes[1].attributeCode).toEqual('street');
         expect(result.customAttributes[1].value).toEqual('1 London Rd');
+        expect(result.customAttributes[2].value).toEqual('');
+        expect(result.customAttributes.length).toEqual(3);
       });
     });
 
     describe('Tests getCncStatusForCart()', () => {
+      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+
       it('Without cart data', async () => {
-        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-        window.commerceBackend.setRawCartDataInStorage(null);
-        const result = await getCncStatusForCart();
-        expect(result).toEqual(null);
+        const result = await getCncStatusForCart(null, false);
+        expect(result).toEqual(true);
       });
 
       it('With CNC Enabled', async () => {
-        axios.mockResolvedValue(productStatus);
-        window.commerceBackend.setRawCartDataInStorage(cartData);
-        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-        const result = await getCncStatusForCart();
+        axios.mockResolvedValue({ data: productStatus });
+
+        const result = await getCncStatusForCart(cartData, true);
         expect(result).toEqual(true);
       });
 
       it('With CNC Disabled', async () => {
-        window.commerceBackend.setRawCartDataInStorage(cartData);
         axios.mockResolvedValue({
-          cnc_enabled: false,
-          in_stock: true,
-          max_sale_qty: 0,
-          stock: 978,
+          data: {
+            cnc_enabled: false,
+            in_stock: true,
+            max_sale_qty: 0,
+            stock: 978,
+          },
         });
-        window.commerceBackend.setCartDataInStorage(cartData);
-        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-        const result = await getCncStatusForCart();
+
+        const result = await getCncStatusForCart(cartData, true);
         expect(result).toEqual(false);
       });
     });
@@ -292,7 +488,7 @@ describe('Checkout', () => {
       });
 
       it('With SKU', async () => {
-        axios.mockResolvedValue(productStatus);
+        axios.mockResolvedValue({ data: productStatus });
         const getProductStatus = utilsRewire.__get__('getProductStatus');
         const result = await getProductStatus('WZBOWZ107');
         expect(result).toEqual(productStatus);
@@ -351,29 +547,28 @@ describe('Checkout', () => {
       });
 
       it('When fetching 1 store info fails', async () => {
+        const getCartStores = utilsRewire.__get__('getCartStores');
+
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
           .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
-          .mockResolvedValueOnce({ data: [], status: 200 })
+          .mockResolvedValueOnce({ data: [], status: 200 });
 
-        const getCartStores = utilsRewire.__get__('getCartStores');
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
-        let result = await getCartStores(10, 20);
+        const result = await getCartStores(10, 20);
 
         expect(axios.mock.calls.length).toEqual(3);
-        expect(result.length).toEqual(2);
+        expect(result.length).toEqual(1);
         expect(result[0].code).toEqual('RE1-4429-VIF');
         expect(result[0].formatted_distance).toEqual(25.77);
-        expect(result[1].code).toEqual('QATESTSOURCE_MMCSP-740');
-        expect(result[1].address).toBeUndefined();
       });
 
       it('When fetching the cnc store list fails', async () => {
         axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 500 })
+          .mockResolvedValueOnce({ data: cncStoreList, status: 500 });
 
         const getCartStores = utilsRewire.__get__('getCartStores');
         jest
@@ -381,9 +576,8 @@ describe('Checkout', () => {
           .mockImplementation(() => '1234');
 
         let result = await getCartStores(10, 20);
-
         expect(axios.mock.calls.length).toEqual(1);
-        expect(result.length).toEqual(0);
+        expect(result.data.error).toEqual(true);
       });
     });
 
@@ -456,16 +650,14 @@ describe('Checkout', () => {
         let result = await getCncStores(10, 20);
 
         expect(axios.mock.calls.length).toEqual(3);
-        expect(result.length).toEqual(2);
+        expect(result.length).toEqual(1);
         expect(result[0].code).toEqual('RE1-4429-VIF');
         expect(result[0].formatted_distance).toEqual(25.77);
-        expect(result[1].code).toEqual('QATESTSOURCE_MMCSP-740');
-        expect(result[1].address).toBeUndefined();
       });
 
       it('When fetching the cnc store list fails', async () => {
         axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 500 })
+          .mockResolvedValueOnce({ data: cncStoreList, status: 500 });
 
         jest
           .spyOn(window.commerceBackend, 'getCartId')
@@ -474,7 +666,7 @@ describe('Checkout', () => {
         let result = await getCncStores(10, 20);
 
         expect(axios.mock.calls.length).toEqual(1);
-        expect(result.length).toEqual(0);
+        expect(result.data.error).toEqual(true);
       });
     });
 
@@ -482,23 +674,17 @@ describe('Checkout', () => {
       const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
 
       it('With Shipping type for getPaymentMethods', async () => {
-        const data = paymentMethods;
         window.commerceBackend.setRawCartDataInStorage(null);
-        cartData.shipping = {
-          method: {
-            type: 'home_delivery',
-          },
-        };
 
         axios
-          .mockResolvedValueOnce({data: cartData, status: 200 })
-          .mockResolvedValueOnce({data, status: 200});
+          .mockResolvedValueOnce({ data: cartData, status: 200 })
+          .mockResolvedValueOnce({ data: paymentMethods, status: 200 });
 
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
-        let result = await getPaymentMethods();
+        const result = await getPaymentMethods();
 
         expect(axios).toHaveBeenCalled();
         expect(result.length).toEqual(4);
@@ -509,22 +695,21 @@ describe('Checkout', () => {
       });
 
       it('With null value when shipping method is not provided', async () => {
-        const data = {};
         window.commerceBackend.setRawCartDataInStorage(null);
         cartData.shipping = {
           method: {
-            type: {},
+            method: {},
           },
         };
 
         axios
-          .mockResolvedValueOnce({data: cartData, status: 200 })
-          .mockResolvedValueOnce({data, status: 200});
+          .mockResolvedValueOnce({ data: cartData, status: 200 })
+          .mockResolvedValueOnce({ data: {}, status: 200 });
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
-        let result = await getPaymentMethods();
+        const result = await getPaymentMethods();
         expect(result).toEqual({});
       });
     });
@@ -538,7 +723,8 @@ describe('Checkout', () => {
         axios
           .mockResolvedValueOnce({data, status: 200});
 
-        let response = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        // Call the function for the second time to test the static data.
         let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
         expect(axios).toBeCalledTimes(1);
         expect(result.length).toEqual(1);
@@ -565,7 +751,7 @@ describe('Checkout', () => {
           .mockResolvedValueOnce({data, status: 200});
 
         let result = await getHomeDeliveryShippingMethods({});
-        expect(result).toEqual(null);
+        expect(result).toEqual([]);
       });
     });
   });

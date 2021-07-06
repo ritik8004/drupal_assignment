@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Laminas\Diactoros\ServerRequestFactory;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * The proxy controller.
@@ -42,8 +43,14 @@ class ProxyController {
     // Apply proxy filters.
     $proxy->filter(new ProxyFilter($url));
 
-    // Forward the request and get the response.
-    $response = $proxy->forward($request)->to($url);
+    try {
+      // Forward the request and get the response.
+      $response = $proxy->forward($request)->to($url);
+    }
+    catch (ClientException $e) {
+      // In case of errors, return the error response.
+      $response = $e->getResponse();
+    }
 
     return new Response(
       $response->getBody(),
