@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @auth @vssauat @pbsauat @pbkwuat
+@javascript @returnUser @madaPayment @auth @vssauat @pbsauat @pbkwuat @tbskwuat
 Feature: SPC Checkout using Click & Collect store for returning customer
 
   Background:
