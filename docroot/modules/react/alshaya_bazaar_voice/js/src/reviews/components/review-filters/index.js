@@ -22,11 +22,14 @@ export default class ReviewFilters extends React.Component {
       if (isOptionNew) {
         processingCallback(selectedOption);
         // Process filter details click data as user clicks on filter option.
+        const filterName = selectedOption.value.split(':')[0];
+        const filterVal = selectedOption.value.split(':')[1];
+        const trimmedFilterName = filterName.substring(filterName.indexOf('_') + '_'.length);
         const analyticsData = {
           type: 'Used',
           name: 'filter',
-          detail1: 'stars',
-          detail2: selectedOption.value,
+          detail1: trimmedFilterName,
+          detail2: filterVal,
         };
         trackFeaturedAnalytics(analyticsData);
       }
