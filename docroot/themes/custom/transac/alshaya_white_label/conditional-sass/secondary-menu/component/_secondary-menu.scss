@@ -134,7 +134,7 @@
           &.wrap-link-text {
             min-width: 0;
 
-            .menu__link-wrapper {
+            > div.menu__link-wrapper {
               max-width: 6rem;
             }
 
@@ -181,7 +181,7 @@
           &:hover {
             .menu--one__link {
               padding-top: 0.125rem;
-              padding-bottom: 1px;
+              padding-bottom: 0.0625rem;
               border-top: 0;
               border-bottom: 1px solid $hfd-menu-link-color-hover;
               cursor: pointer;
