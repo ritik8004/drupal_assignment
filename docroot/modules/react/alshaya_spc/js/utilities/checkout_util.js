@@ -2,7 +2,6 @@ import axios from 'axios';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-import i18nMiddleWareUrl from './i18n_url';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -601,7 +600,8 @@ export const getUpapiApplePayConfig = () => checkoutComUpapiApplePayConfig;
  * @param {*} paymentMethods
  */
 export const binValidation = (bin, paymentMethods) => {
-  const apiUrl = i18nMiddleWareUrl('card/bin-validation');
+  // @todo implement this properly for V2 in CORE-31402.
+  const apiUrl = 'card/bin-validation';
   return axios
     .post(apiUrl, {
       bin,
