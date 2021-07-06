@@ -63,6 +63,18 @@
   }
 }
 
+.c-footer__logo--mada {
+  background-image: url('../imgs/cards/mada-sa-logo-en.png');
+  width: 8.125rem;
+  height: 2rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+
+  html[lang=ar] & {
+    background-image: url('../imgs/cards/mada-sa-logo-ar.png');
+  }
+}
+
 #block-footerhnmlogo {
   line-height: 1;
   padding-bottom: 1.1875rem;
@@ -80,6 +92,24 @@
 
   .l-container {
     max-width: none;
+  }
+
+  ul.menu {
+    li {
+      &:nth-last-child(2) {
+        margin-#{$right}: 0;
+      }
+
+      &:last-child {
+        display: block;
+        width: 8.125rem;
+        margin: 0.9375rem auto 0;
+
+        @include breakpoint($only-tablet) {
+          max-width: 100%;
+        }
+      }
+    }
   }
 }
 
