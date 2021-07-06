@@ -1,5 +1,0 @@
-main:
-  js:
-    dist/rcs_magento.bundle.js: {}
-  dependencies:
-    - core/jquery

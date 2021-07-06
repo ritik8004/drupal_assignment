@@ -1,6 +1,6 @@
 variables:
-  url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  product_listing_page_url: "/shop-hand-soaps-sanitizers/hand-soaps-offers/hand-soaps-special-offers/"
-  spc_product_listing_page: '/shop-hand-soaps-sanitizers/hand-soaps-offers/hand-soaps-special-offers/'
-  spc_basket_page: '/shop-hand-soaps-sanitizers/hand-soaps-offers/hand-soaps-special-offers/'
-  spc_promotion_listing_page: '/buy-stars-mini-gift-box-set.html/'
+  url_product_page: 'buy-cactus-long-handle-brush.html'
+  product_listing_page_url: '/shop-bestsellers/'
+  spc_product_listing_page: '/shop-bestsellers/'
+  spc_basket_page: '/shop-bestsellers/'
+

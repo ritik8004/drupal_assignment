@@ -103,6 +103,11 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
       '#settings' => [
         'desktopSecondaryMainMenuHighlightTiming' => $desktop_secondary_main_menu_highlight_timing,
       ],
+      '#attributes' => [
+        'class' => [
+          'megamenu-dynamic-layout',
+        ],
+      ],
       '#items' => $menu,
       '#column_tree' => $columns_tree,
       '#menu_type' => $desktop_secondary_main_menu_layout,
@@ -141,6 +146,7 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
           }
           $l2s['highlight_paragraph']['title'] = $paragraph->get('field_highlight_title')->value;
           $l2s['highlight_paragraph']['subtitle'] = $paragraph->get('field_highlight_subtitle')->value;
+          $l2s['highlight_paragraph']['ishighlight'] = $entity->get('field_add_highlights');
         }
       }
       $max_nb_col = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('max_nb_col');

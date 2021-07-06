@@ -26,7 +26,7 @@ abstract class PdpLayoutBase extends PluginBase implements PdpLayoutInterface {
   /**
    * {@inheritdoc}
    */
-  public function getTemplateName(array &$suggestions, string $bundle) {
+  public function getTemplateName(array &$suggestions) {
     return 'node__acq_product__full';
   }
 

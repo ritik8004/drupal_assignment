@@ -26,7 +26,6 @@ drush/Commands
 
 # Ignore custom module build artifacts
 docroot/modules/custom/node_modules
-docroot/modules/custom/*/dist
 docroot/modules/react/node_modules
 docroot/modules/react/*/node_modules
 docroot/modules/react/*/dist
