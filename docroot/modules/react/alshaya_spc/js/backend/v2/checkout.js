@@ -776,7 +776,6 @@ const selectCnc = async (store, address, billing) => {
   return new Promise((resolve) => resolve(updatedBilling));
 };
 
-
 /**
  * Apply shipping from last order.
  * @todo implement this.
