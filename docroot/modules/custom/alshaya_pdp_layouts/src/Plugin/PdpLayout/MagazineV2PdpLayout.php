@@ -12,6 +12,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides the default laypout for PDP.
@@ -131,39 +132,41 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $sku_entity = SKU::loadFromSku($sku);
     $vars['sku'] = $sku_entity;
 
-    // Get gallery data for the main product.
-    if ($sku_entity instanceof SKUInterface) {
-      $gallery = $this->getGalleryVariables($sku_entity);
-      if (!empty($gallery)) {
-        $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $gallery;
-      }
-      $max_sale_qty = 0;
-      if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
-        // We will take lower value for quantity options from
-        // available quantity and order limit.
-        $plugin = $sku_entity->getPluginInstance();
-        $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
-      }
-      $quantity = $this->skuManager->getStockQuantity($sku_entity);
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
-
-      // Get the product's buyable status.
-      $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
-
-      // Set delivery options only if product is buyable.
-      if ($is_product_buyable) {
-        // Check if home delivery is available for this product.
-        if (alshaya_acm_product_available_home_delivery($sku)) {
-          $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
-          $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
-        }
-      }
-
-      // Check if product is in stock.
-      $stock_status = $this->skuManager->isProductInStock($sku_entity);
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $stock_status;
+    if (!($sku_entity instanceof SKUInterface)) {
+      throw new NotFoundHttpException();
     }
+
+    // Get gallery data for the main product.
+    $gallery = $this->getGalleryVariables($sku_entity);
+    if (!empty($gallery)) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $gallery;
+    }
+    $max_sale_qty = 0;
+    if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+      // We will take lower value for quantity options from
+      // available quantity and order limit.
+      $plugin = $sku_entity->getPluginInstance();
+      $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
+    }
+    $quantity = $this->skuManager->getStockQuantity($sku_entity);
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
+
+    // Get the product's buyable status.
+    $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
+
+    // Set delivery options only if product is buyable.
+    if ($is_product_buyable) {
+      // Check if home delivery is available for this product.
+      if (alshaya_acm_product_available_home_delivery($sku)) {
+        $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
+        $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
+      }
+    }
+
+    // Check if product is in stock.
+    $stock_status = $this->skuManager->isProductInStock($sku_entity);
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $stock_status;
 
     // Get share this settings.
     if (isset($vars['elements']['sharethis'])) {
