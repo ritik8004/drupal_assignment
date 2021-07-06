@@ -593,7 +593,6 @@ const getMethodCodeForFrontend = (code) => {
       break;
 
     default:
-      logger.info(`Invalid Method code: ${method}`);
       break;
   }
 
@@ -1114,7 +1113,7 @@ const paymentFinalise = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.addPaymentMethod = (data) => {
-  // Add payments to the cart.
+  // Add payment methods to the cart.
   if (data.action === cartActions.cartPaymentUpdate) {
     return paymentUpdate(data);
   }
