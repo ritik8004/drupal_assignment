@@ -111,6 +111,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    *  Kept empty as it is a mandatory function to implement.
    */
   public function evaluate() {
+    return TRUE;
   }
 
   /**
