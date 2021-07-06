@@ -269,3 +269,14 @@ function alshaya_bp_transac_views_query_alter(ViewExecutable $view, QueryPluginB
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_search_api_facet_block_data_alter().
+ */
+function alshaya_bp_transac_alshaya_search_api_facet_block_data_alter(&$block_data) {
+  if ($block_data['id'] === 'brandcategory') {
+    $block_data['visibility']['alshaya_listing_page_types']['id'] = 'alshaya_listing_page_types';
+    $block_data['visibility']['alshaya_listing_page_types']['page_types']['product_option_list'] = 1;
+    $block_data['visibility']['alshaya_listing_page_types']['show_on_selected_pages'] = '1';
+  }
+}

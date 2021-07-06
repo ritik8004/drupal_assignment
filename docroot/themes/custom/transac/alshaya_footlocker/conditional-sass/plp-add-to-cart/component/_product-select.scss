@@ -1,0 +1,17 @@
+.alshaya-select {
+  .alshayaSelect__control {
+    border-color: $primary_dropdown_border;
+
+    > div:nth-child(2) {
+      .alshayaSelect__indicator {
+        background: transparent;
+      }
+    }
+  }
+
+  &-wrapper {
+    label {
+      font-size: 0.875rem;
+    }
+  }
+}

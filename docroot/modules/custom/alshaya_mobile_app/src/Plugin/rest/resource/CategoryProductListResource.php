@@ -20,7 +20,7 @@ use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\Views;
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 
 /**
  * Class Category Product List Resource.
@@ -239,7 +239,7 @@ class CategoryProductListResource extends ResourceBase {
       $result_set = $result_set['plp_data'];
     }
 
-    AlshayaPromoContextManager::updateDefaultContext('app');
+    AlshayaRequestContextManager::updateDefaultContext('app');
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');

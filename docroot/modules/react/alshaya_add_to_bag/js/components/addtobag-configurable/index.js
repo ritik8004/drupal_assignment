@@ -94,10 +94,10 @@ export default class AddToBagConfigurable extends React.Component {
 
   render() {
     const { drawerStatus, productInfo } = this.state;
-    const { sku, productData, url } = this.props;
+    const { sku, isBuyable, url } = this.props;
 
     // Early return if product is not buyable.
-    if (!isProductBuyable(productData.is_buyable)) {
+    if (!isProductBuyable(isBuyable)) {
       return (
         <NotBuyableButton url={url} />
       );

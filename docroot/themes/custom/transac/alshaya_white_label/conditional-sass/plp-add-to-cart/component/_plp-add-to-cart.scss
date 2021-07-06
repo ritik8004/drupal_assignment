@@ -62,7 +62,6 @@
   border: 1px solid $primary_btn_bg;
   z-index: 1;
   text-align: center;
-  text-transform: uppercase;
   padding: 0.5rem 1.25rem;
   margin: 1.5rem 1.25rem 0;
 
@@ -76,4 +75,11 @@
 
 .is-not-buyable:hover {
   color: $primary_btn_bg;
+}
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  &:hover {
+    background: $plp-primary-cta-hover-bg;
+  }
 }

@@ -557,11 +557,11 @@ export const checkoutAddressProcess = (e) => {
     const cartInfo = addShippingInCart('update shipping', formData);
     if (cartInfo instanceof Promise) {
       cartInfo.then((cartResult) => {
+        // Remove the loader.
+        removeFullScreenLoader();
         if (!cartResult) {
           return;
         }
-        // Remove the loader.
-        removeFullScreenLoader();
 
         // If any error, don't process further.
         if (cartResult.error !== undefined) {

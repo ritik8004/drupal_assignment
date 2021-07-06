@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { closeModalHelper } from '../../../utilities/pdp_layout';
 import Rating from '../../../../../alshaya_bazaar_voice/js/src/rating/components/rating';
 import ReviewSummary from '../../../../../alshaya_bazaar_voice/js/src/reviews/components/review-summary';
 import { setStorageInfo } from '../../../../../alshaya_bazaar_voice/js/src/utilities/storage';
@@ -44,7 +43,6 @@ const PpdRatingsReviews = (props) => {
   };
 
   useEffect(() => {
-    closeModalHelper('ratings-reviews-overlay', 'reviews-wrapper', closeModal);
     // To open write a review on page load.
     if (isOpenWriteReviewForm()) {
       getPanelData(openModal());

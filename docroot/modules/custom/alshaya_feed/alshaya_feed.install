@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Contains install/update/schema hooks for alshaya_feed.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create the new table for storing OOS product SKUs.
+ */
+function alshaya_feed_update_8001() {
+  $schema = alshaya_feed_schema();
+  \Drupal::database()->schema()->createTable('alshaya_feed_oos_product_skus', $schema['alshaya_feed_oos_product_skus']);
+}
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_feed_schema() {
+  $schema['alshaya_feed_oos_product_skus'] = [
+    'description' => 'Stores OOS product SKUs.',
+    'fields' => [
+      'sku' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Product SKU.',
+      ],
+    ],
+    'primary key' => ['sku'],
+  ];
+
+  return $schema;
+}
