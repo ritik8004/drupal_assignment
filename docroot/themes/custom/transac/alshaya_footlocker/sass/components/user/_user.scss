@@ -10,6 +10,15 @@
     .form-item-privilege-card-number2 label:not(.error) {
       font-size: 0.875rem;
     }
+
+    .form-submit {
+      min-width: 11.5rem;
+      width: auto;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
   }
 
   .form-item input:focus ~ label:not(.error),
@@ -101,22 +110,6 @@
     .field--name-body p {
       @include breakpoint($desktop) {
         font-size: 0.875rem;
-      }
-    }
-  }
-}
-
-.user-page {
-  .user-form,
-  .user-login-form,
-  .user-pass,
-  .multistep-checkout {
-    .form-submit {
-      min-width: 11.5rem;
-      width: auto;
-
-      @include breakpoint($only-mobile) {
-        width: 100%;
       }
     }
   }

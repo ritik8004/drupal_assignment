@@ -15,7 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 
 /**
  * Class Alshaya Promo Label Manager.
@@ -94,11 +94,11 @@ class AlshayaPromoLabelManager {
   protected $languageManager;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
-   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
-  protected $promoContextManager;
+  protected $requestContextManager;
 
   /**
    * AlshayaPromoLabelManager constructor.
@@ -119,8 +119,8 @@ class AlshayaPromoLabelManager {
    *   Renderer.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
-   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
-   *   Alshaya Promo Context Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
+   *   Alshaya Request Context Manager.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
@@ -130,7 +130,7 @@ class AlshayaPromoLabelManager {
                               AlshayaPromotionsManager $promotions_manager,
                               RendererInterface $renderer,
                               LanguageManagerInterface $language_manager,
-                              AlshayaPromoContextManager $alshayaPromoContextManager) {
+                              AlshayaRequestContextManager $alshayaRequestContextManager) {
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->entityTypeManager = $entity_type_manager;
@@ -139,7 +139,7 @@ class AlshayaPromoLabelManager {
     $this->promoManager = $promotions_manager;
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
-    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->requestContextManager = $alshayaRequestContextManager;
   }
 
   /**
@@ -261,7 +261,7 @@ class AlshayaPromoLabelManager {
    */
   public function getCurrentSkuPromos(SKU $sku, $view_mode) {
     $promos = [];
-    $context = $this->promoContextManager->getPromotionContext();
+    $context = $this->requestContextManager->getContext();
 
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
 
@@ -740,6 +740,11 @@ class AlshayaPromoLabelManager {
       );
 
       $link = Link::fromTextAndUrl($free_gift_promotion['text'], $url)->toString();
+      if ($context == 'app') {
+        // Generate promo url.
+        $url_obj = $url->toString(TRUE);
+        $url = $url_obj->getGeneratedUrl();
+      }
 
       $message = $this->t('One item of choice from @link with this product', [
         '@link' => $link,

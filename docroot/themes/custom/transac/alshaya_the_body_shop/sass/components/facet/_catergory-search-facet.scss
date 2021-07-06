@@ -1,0 +1,10 @@
+.c-content__region {
+  .filter-fixed-top {
+    .block-facet-blockcategory-facet-search,
+    .algolia-plp-category-facet {
+      h3.active {
+        background: $search_facet_active_title_bg_sticky;
+      }
+    }
+  }
+}

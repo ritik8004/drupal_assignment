@@ -15,6 +15,11 @@
       @include breakpoint($tablet) {
         height: auto;
         overflow: auto;
+        min-height: 20rem;
+      }
+
+      @include breakpoint($desktop) {
+        min-height: 31.5rem;
       }
     }
   }

@@ -66,7 +66,7 @@ To prepare your local env:
   * `vagrant plugin install vagrant-vbguest`
   * `vagrant plugin install vagrant-hostsupdater`
 * Install Yarn `npm i -g yarn`.
-* Install Ansible: `brew install ansible`
+* Install Ansible: `pip3 install ansible-base ansible`
 * Run:
   * From outside VM:
     * `composer clear-cache`
@@ -350,3 +350,17 @@ Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modu
 * Download / Copy SSL (merchant_id.key and merchant_id.pem files) from Cloud dev/test environment of any brand and place them in local environment folder as per paths (usually /var/www/apple-pay-resources) defined in factory-hooks/pre-settings-php/apple_pay.php
 * The Apple-Pay payment method appears on desktop view if "apple_pay_allowed_in" key from configuration acq_checkoutcom.settings is set to 'all'
   Drush command to set config to all: drush -l <site-url> cset acq_checkoutcom.settings apple_pay_allowed_in 'all' --input-format=yaml
+
+### Finding deprecated code (using drupal-check)
+* Command format: drupal-check [OPTIONS] [DIRS]
+
+* Options:
+    -a Check analysis
+    -d Check deprecations (default)
+    -e Exclude directories. Wildcards work. Separate multiple excluded directories with commas, no spaces. e.g.: */tests/codeception/acceptance/*.php
+    --drupal-root Path to Drupal root. Fallback option if drupal-check could not identify Drupal root from the provided path(s).
+
+* Deprecations.
+  - vendor/mglaman/drupal-check/drupal-check -d docroot/modules/custom
+* Analysis.
+  - vendor/mglaman/drupal-check/drupal-check -a docroot/modules/custom

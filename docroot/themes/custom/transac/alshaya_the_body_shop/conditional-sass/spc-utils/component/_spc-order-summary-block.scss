@@ -10,7 +10,7 @@
       .spc-product-title {
         a {
           font-size: 0.8125rem;
-          font-family: $alshaya-medium;
+          font-family: $tbs-medium;
         }
       }
     }
@@ -18,5 +18,9 @@
 
   .total-line-item {
     text-transform: capitalize;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.875rem;
+    }
   }
 }

@@ -1,0 +1,62 @@
+.magazine-layout-v2 {
+  .aggregate-rating {
+    padding: 0;
+    margin: 1rem 0;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.5rem;
+    }
+  }
+
+  .bv-select {
+    .bvSelect__control {
+      > div:nth-child(2) {
+        .bvSelect__indicator {
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .review-detail-right {
+    .review-feedback {
+      .review-feedback-vote {
+        .feedback-positive button {
+          padding-#{$left}: 0;
+        }
+      }
+    }
+  }
+
+  .non-groupped-attr {
+    .select-attribute {
+      @include breakpoint($desktop) {
+        margin-top: 0.625rem;
+      }
+    }
+  }
+}
+
+#reviews-section {
+  .magv2-ratings-reviews-popup-content-wrapper {
+    .histogram-data-section {
+      .rating-wrapper {
+        .overall-summary {
+          .histogram-wrapper {
+            .histogram-data {
+              .histogram-title {
+                &::before {
+                  top: -0.125rem;
+
+                  html[lang=ar] & {
+                    top: -0.25rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

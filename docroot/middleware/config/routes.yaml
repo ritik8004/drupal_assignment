@@ -53,16 +53,6 @@ payment.checkout_com_apple_pay_save:
     controller: App\Controller\CheckoutComPaymentController::saveApplePayPayment
     methods: POST
 
-payment.cybersource_payment_token:
-    path: /payment/cybersource/get-token
-    controller: App\Controller\CyberSourcePaymentController::getCybersourceToken
-    methods: POST
-
-payment.cybersource_payment_finalise:
-    path: /payment/cybersource/finalise
-    controller: App\Controller\CyberSourcePaymentController::finaliseCybersource
-    methods: POST
-
 payment.payment_success:
   path: /payment/success/{langcode}
   controller: App\Controller\PaymentController::handlePaymentSuccess
@@ -77,7 +67,17 @@ loyalty_club_routes:
   # Contains all loyalty club related routes.
   resource: './loyalty_club_routes.yaml'
 
+card.bin_validation:
+  path: /card/bin-validation
+  controller: App\Controller\BinValidationController::handleBinValidation
+  methods: POST
+
 freegift.select_free_gift:
     path: /select-free-gift
     controller: App\Controller\FreeGiftController::selectFreeGift
     methods: POST
+
+cart.smart_agent_resume_cart:
+  path: /cart/smart-agent-cart-resume
+  controller: App\Controller\CartController::smartAgentResumeCart
+  methods: GET

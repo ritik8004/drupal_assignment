@@ -1,10 +1,8 @@
-import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
-} from './user_util';
-import { getbazaarVoiceSettings } from './api/request';
+import { getbazaarVoiceSettings, getUserDetails } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
-
-const bazaarVoiceSettings = getbazaarVoiceSettings();
+import { getStorageInfo } from './storage';
+import { smoothScrollTo } from './smoothScroll';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 /**
  * Email address validation.
@@ -27,8 +25,11 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const prepareRequest = (elements, fieldsConfig) => {
+export const prepareRequest = (elements, fieldsConfig, productId) => {
   let params = '';
+  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+  const userDetails = getUserDetails(productId);
+  const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
@@ -36,27 +37,30 @@ export const prepareRequest = (elements, fieldsConfig) => {
     try {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
-          if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
-            const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
-            deleteSessionCookie(cookieValues);
-          } else if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
-            params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
+          if (userDetails.user.userId === 0 && userStorage !== null) {
+            // Add email value to anonymous user storage.
+            if (userStorage.email === undefined
+              || (userStorage.email !== undefined
+              && userStorage.email !== elements[id].value)) {
+              userStorage.email = elements[id].value;
+            }
+            if (userStorage.bvUserId === undefined
+              || (userStorage.email !== undefined
+              && userStorage.email !== elements[id].value)) {
+              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+            }
           }
         } else if (id === 'usernickname') {
-          if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
-            && getSessionCookie('BvUserNickname') !== null && getCurrentUserEmail() === null) {
-            if (getSessionCookie('BvUserNickname') !== elements[id].value) {
-              params += `&${id}=${elements[id].value}`;
-              setSessionCookie('BvUserNickname', elements[id].value);
+          // Add nickname value to user storage.
+          if (userStorage !== null) {
+            if (userStorage.nickname === undefined
+              || (userStorage.nickname !== undefined
+              && userStorage.nickname !== elements[id].value)) {
+              userStorage.nickname = encodeURIComponent(elements[id].value);
             }
-            params += `&User=${getSessionCookie('BvUserId')}`;
-          } else {
-            params += `&${id}=${elements[id].value}`;
-            setSessionCookie('BvUserNickname', elements[id].value);
           }
-        } else {
-          params += `&${id}=${elements[id].value}`;
         }
+        params += `&${id}=${encodeURIComponent(elements[id].value)}`;
       }
     } catch (e) { return null; }
 
@@ -64,7 +68,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
   });
 
   // Add photo urls uploaded from photo upload.
-  if (elements.photoCount.value > 0) {
+  if (elements.photoCount !== undefined && elements.photoCount.value > 0) {
     const count = Number(elements.photoCount.value);
     [...Array(count)].map((key, index) => {
       const photoId = `photourl_${(index + 1)}`;
@@ -74,27 +78,30 @@ export const prepareRequest = (elements, fieldsConfig) => {
     });
   }
 
-  if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
-    params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
-  }
-  const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie(currentUserKey);
-  if (getCurrentUserEmail() !== null && userToken !== undefined) {
-    params += `&user=${userToken}`;
+  if (userStorage !== null) {
+    if (userDetails.user.userId !== 0 && userStorage.uasToken !== undefined) {
+      params += `&user=${userStorage.uasToken}`;
+    } else if (userDetails.user.userId === 0 && userStorage.bvUserId !== undefined) {
+      params += `&User=${userStorage.bvUserId}`;
+    }
   }
   // Set product id
   params += `&productid=${bazaarVoiceSettings.productid}`;
   // Add device finger printing string.
   if (elements.blackBox.value !== '') {
-    params += `&fp=${elements.blackBox.value}`;
+    params += `&fp=${encodeURIComponent(elements.blackBox.value)}`;
   }
   // Add tnc status and it must be true only.
   params += `&agreedtotermsandconditions=${true}`;
   // Set action type.
   params += '&action=submit';
 
-  return params;
+  const requestParams = {
+    params,
+    userStorage,
+  };
+  return requestParams;
 };
 
 /**
@@ -103,7 +110,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const validateRequest = (elements, fieldsConfig) => {
+export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
   let isError = false;
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
@@ -129,10 +136,12 @@ export const validateRequest = (elements, fieldsConfig) => {
               break;
             case 'ratings':
               document.getElementById(`${id}-error`).classList.add('rating-error');
+              document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
               break;
             default:
               document.getElementById(`${id}-error`).classList.add('radio-error');
+              document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
           }
         } else if (id === 'reviewtext'
@@ -148,6 +157,9 @@ export const validateRequest = (elements, fieldsConfig) => {
             document.getElementById(`${id}-error`).classList.add('error');
             isError = true;
           }
+          if (!isError) {
+            document.getElementById(`${id}-error`).classList.remove('error');
+          }
         } else {
           if (groupType === 'textfield'
            || groupType === 'textarea'
@@ -158,8 +170,14 @@ export const validateRequest = (elements, fieldsConfig) => {
           document.getElementById(`${id}-error`).classList.remove('radio-error');
           document.getElementById(`${id}-error`).classList.remove('rating-error');
         }
+        // Scroll to error message.
+        if (isError && newPdp) {
+          smoothScrollTo(e, '#reviews-section .error', newPdp, 'write_review');
+        } else if (isError) {
+          smoothScrollTo(e, '.error', '', 'write_review');
+        }
       }
-    } catch (e) { return null; }
+    } catch (exception) { return null; }
 
     return field;
   });
@@ -172,11 +190,5 @@ export const validateRequest = (elements, fieldsConfig) => {
  */
 export const onReviewPost = (e) => {
   // Dispatch event so that other can use this.
-  const event = new CustomEvent('reviewPosted', {
-    bubbles: true,
-    detail: {
-      formElement: () => e.target.elements,
-    },
-  });
-  document.dispatchEvent(event);
+  dispatchCustomEvent('reviewPosted', { formElement: () => e.target.elements });
 };

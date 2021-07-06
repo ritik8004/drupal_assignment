@@ -10,6 +10,10 @@ import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import { smoothScrollTo } from '../../../../utilities/smoothScroll';
+import { setStorageInfo } from '../../../../utilities/storage';
+import dispatchCustomEvent from '../../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../../utilities/analytics';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -18,7 +22,6 @@ export default class WriteReviewForm extends React.Component {
     super(props);
     this.state = {
       fieldsConfig: '',
-      bazaarVoiceSettings: getbazaarVoiceSettings(),
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,7 +33,10 @@ export default class WriteReviewForm extends React.Component {
     document.addEventListener('reviewPosted', this.eventListener, false);
     // Load and display write a review form.
     showFullScreenLoader();
-    const { bazaarVoiceSettings } = this.state;
+    const {
+      productId,
+    } = this.props;
+    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const apiUri = `/${getLanguageCode()}/get-write-review-fields-configs`;
     const apiData = doRequest(apiUri);
     if (apiData instanceof Promise) {
@@ -57,29 +63,44 @@ export default class WriteReviewForm extends React.Component {
   componentWillUnmount() {
     this.isComponentMounted = false;
     document.removeEventListener('reviewPosted', this.eventListener, false);
+    // Fix Warning: Can't perform a React state update on an unmounted component.
+    this.setState = () => {};
   }
 
   handleSubmit = (e) => {
     const { fieldsConfig } = this.state;
+    const { productId, newPdp } = this.props;
     e.preventDefault();
 
-    const isError = validateRequest(e.target.elements, fieldsConfig);
+    const isError = validateRequest(e.target.elements, fieldsConfig, e, newPdp);
     if (isError) {
       return;
     }
     showFullScreenLoader();
-    const request = prepareRequest(e.target.elements, fieldsConfig);
+    const request = prepareRequest(e.target.elements, fieldsConfig, productId);
     const apiUri = '/data/submitreview.json';
 
     // Post the review data to BazaarVoice.
-    const apiData = postAPIData(apiUri, request);
+    const apiData = postAPIData(apiUri, request.params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
+          if (result.data.HasErrors && result.data.FormErrors !== null) {
+            smoothScrollTo(e, '.write-review-form', 'post_review');
+          } else if (request.userStorage !== null) {
+            setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
+          }
           // Dispatch event after review submit.
-          const event = new CustomEvent('reviewPosted', { detail: result.data });
-          document.dispatchEvent(event);
+          dispatchCustomEvent('reviewPosted', result.data);
+          // Process review submit data as user submits the review.
+          const analyticsData = {
+            type: 'Used',
+            name: 'submit',
+            detail1: 'review',
+            detail2: 'pdp',
+          };
+          trackFeaturedAnalytics(analyticsData);
         } else {
           removeFullScreenLoader();
           Drupal.logJavascriptError('review-write-review-form', result.error);
@@ -93,7 +114,6 @@ export default class WriteReviewForm extends React.Component {
     if (!this.isComponentMounted) {
       return;
     }
-
     if (!e.detail.HasErrors) {
       closeModal(e);
     }
@@ -121,12 +141,11 @@ export default class WriteReviewForm extends React.Component {
   render() {
     const dynamicFields = [];
     const {
-      closeModal,
+      closeModal, productId,
     } = this.props;
 
     const {
       fieldsConfig,
-      bazaarVoiceSettings,
     } = this.state;
 
     Object.entries(fieldsConfig).forEach(
@@ -136,63 +155,67 @@ export default class WriteReviewForm extends React.Component {
             key={key}
             field_key={key}
             field={field}
+            productId={productId}
           />,
         );
       },
     );
-
+    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     return (
-      <div className="write-review-form">
-        <div className="title-block">
-          <SectionTitle>{getStringMessage('write_a_review')}</SectionTitle>
-          <a className="close-modal" onClick={(e) => closeModal(e)} />
-        </div>
-        <BazaarVoiceMessages />
-        <div className="product-block">
-          <div className="product-image-block">
-            <img src={bazaarVoiceSettings.reviews.product.image_url} />
+      <>
+        <div className="write-review-form">
+          <div className="title-block">
+            <SectionTitle>{getStringMessage('write_a_review')}</SectionTitle>
+            <a className="close-modal" onClick={(e) => closeModal(e)} />
           </div>
-          <div className="product-title">
-            <span>{bazaarVoiceSettings.reviews.product.title}</span>
-          </div>
-        </div>
-        <div className="write-review-form-sidebar">
-          <ConditionalView condition={dynamicFields.length > 0}>
-            <div className="write-review-form-wrapper">
-              <form className="write-review-form-add" onSubmit={this.handleSubmit} noValidate>
-                <div className="write-review-fields clearfix">
-                  {dynamicFields}
-                  <input type="hidden" name="blackBox" id="ioBlackBox" />
-                </div>
-                <br />
-                <div className="write-review-form-actions" id="review-form-action">
-                  <button
-                    id="cancel-write-review"
-                    className="write-review-form-cancel"
-                    type="button"
-                    name="cancel"
-                    onClick={(e) => closeModal(e)}
-                  >
-                    {getStringMessage('cancel')}
-                  </button>
-                  <button
-                    id="preview-write-review"
-                    className="write-review-form-preview"
-                    name="submit"
-                    type="submit"
-                  >
-                    {getStringMessage('post_review')}
-                  </button>
-                </div>
-                <FormLinks
-                  tnc={getStringMessage('terms_and_condition')}
-                  reviewGuide={getStringMessage('review_guidelines')}
-                />
-              </form>
+          <BazaarVoiceMessages />
+          <div id="product-block" className="product-block">
+            <div className="product-image-block">
+              <img src={bazaarVoiceSettings.reviews.product.image_url} />
             </div>
-          </ConditionalView>
+            <div className="product-title">
+              <span>{bazaarVoiceSettings.reviews.product.title}</span>
+            </div>
+          </div>
+          <div className="write-review-form-sidebar">
+            <ConditionalView condition={dynamicFields.length > 0}>
+              <div className="write-review-form-wrapper">
+                <form className="write-review-form-add" onSubmit={this.handleSubmit} noValidate>
+                  <div className="write-review-fields clearfix">
+                    {dynamicFields}
+                    <input type="hidden" name="blackBox" id="ioBlackBox" />
+                  </div>
+                  <br />
+                  <div className="write-review-form-actions" id="review-form-action">
+                    <button
+                      id="cancel-write-review"
+                      className="write-review-form-cancel"
+                      type="button"
+                      name="cancel"
+                      onClick={(e) => closeModal(e)}
+                    >
+                      {getStringMessage('cancel')}
+                    </button>
+                    <button
+                      id="preview-write-review"
+                      className="write-review-form-preview"
+                      name="submit"
+                      type="submit"
+                    >
+                      {getStringMessage('post_review')}
+                    </button>
+                  </div>
+                  <FormLinks
+                    tnc={getStringMessage('terms_and_condition')}
+                    reviewGuide={getStringMessage('review_guidelines')}
+                    productId={productId}
+                  />
+                </form>
+              </div>
+            </ConditionalView>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }

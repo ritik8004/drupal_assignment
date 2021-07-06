@@ -1,0 +1,41 @@
+<?php
+ use Drupal\block\Entity\Block;
+ use Drupal\block\BlockInterface;
+
+/**
+ * @file
+ * Install, update and uninstall functions for the alshaya_secondary_main_menu module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Adusting block weight to match design.
+ */
+function alshaya_secondary_main_menu_install() {
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+  $algolia_block = Block::load('alshayaalgoliareactautocomplete');
+  if ($algolia_block instanceof BlockInterface) {
+    Block::load('branding')->setWeight(($algolia_block->getWeight())+1)->save();
+    Block::load('alshayasecondarymainmenu')->setWeight(($algolia_block->getWeight())+2)->save();
+  }
+  $main_block = Block::load('alshayamainmenu');
+  if ($main_block instanceof BlockInterface) {
+    Block::load('promomenuimages')->setWeight(($main_block->getWeight())+1)->save();
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Reset config. We need to ensure all the configuration added in the module
+ * is deleted to allow the ON/OFF code to work.
+ */
+function alshaya_secondary_main_menu_uninstall() {
+  \Drupal::configFactory()->getEditable('block.block.alshayasecondarymainmenu')->delete();
+  \Drupal::configFactory()->getEditable('system.menu.secondary-main-menu')->delete();
+}

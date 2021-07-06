@@ -1,5 +1,10 @@
-.alias--checkout-confirmation {
+.alias--checkout-confirmation,
+.alias--checkout {
   .c-post-content {
     background-color: $spc-post-content-checkout-bg;
+  }
+
+  .c-footer {
+    border-top: 0.0625rem solid $checkout_footer_border;
   }
 }

@@ -2,59 +2,21 @@
   .c-products__item {
     .alshaya_search_gallery {
       .alshaya_search_slider {
-        width: 12.3125rem !important;
         margin: 0 auto;
-        position: relative;
-        margin-top: 0.625rem;
 
         .slick-slider {
           padding-#{$left}: 0;
 
           .slick-slide {
-            width: auto !important;
-            margin: 0.1875rem;
             position: relative;
-            max-width: 3.75rem;
 
             img {
               width: 100%;
               height: auto;
-              max-width: 4.75rem;
-              max-height: 6.3125rem;
               margin: 0 auto;
               display: block !important;
             }
           }
-        }
-
-        .slick-prev,
-        .slick-next {
-          z-index: 99;
-          top: calc(50% - 1rem);
-
-          &::before {
-            background-color: transparent;
-          }
-        }
-
-        .slick-prev {
-          left: -1.5rem;
-
-          .product-small & {
-            left: -1.8125rem;
-          }
-        }
-
-        .slick-next {
-          right: -1.5rem;
-
-          .product-small & {
-            right: -1.8125rem;
-          }
-        }
-
-        .search-lightSlider {
-          height: 6.6875rem !important;
         }
       }
     }

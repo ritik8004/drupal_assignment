@@ -16,6 +16,8 @@ use Drupal\Core\Utility\Token;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Entity\EntityRepository;
 
 /**
  * Provides alshaya super category menu block.
@@ -77,6 +79,20 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
   protected $entityTypeManager;
 
   /**
+   * Entity type manager.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $request;
+
+  /**
+   * Entity repository.
+   *
+   * @var Drupal\Core\Entity\EntityRepository
+   */
+  protected $entityRepository;
+
+  /**
    * AlshayaSuperCategoryBlock constructor.
    *
    * @param array $configuration
@@ -97,8 +113,12 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    *   Token manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param Symfony\Component\HttpFoundation\RequestStack $request
+   *   Entity type manager.
+   * @param Drupal\Core\Entity\EntityRepository $entityRepository
+   *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager, RequestStack $request, EntityRepository $entityRepository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
@@ -106,6 +126,8 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     $this->metaTagManager = $metatag_manager;
     $this->tokenManager = $token_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->request = $request;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -121,7 +143,9 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $container->get('config.factory'),
       $container->get('metatag.manager'),
       $container->get('token'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('request_stack'),
+      $container->get('entity.repository'),
     );
   }
 
@@ -144,6 +168,9 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     }
 
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
+
+    // Get current term from route.
+    $current_term = $this->productCategoryTree->getCategoryTermRequired();
 
     // Get all the terms data in English for preparing label.
     $term_data_en = ($current_language !== 'en')
@@ -171,6 +198,19 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
 
       $term_info_en = $term_data_en[$term_id];
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
+      if ($term_id == $current_term['id']) {
+        $term_info['class'] .= ' active';
+      }
+
+      // Get brand icons of supercategory.
+      $brand_icons = $this->productCategoryTree->getBrandIcons($term_id);
+      if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
+      && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
+        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE)
+        ? $brand_icons['active_image']
+        : $brand_icons['inactive_image'];
+        $term_info['inactive_path'] = $brand_icons['active_image'];
+      }
     }
 
     // Set the default parent from settings.
@@ -180,12 +220,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     // Default category is set to active, while we are on home page.
     if (isset($term_data[$parent_id])) {
       $term_data[$parent_id]['path'] = Url::fromRoute('<front>')->toString();
-    }
-
-    // Get current term from route.
-    $term = $this->productCategoryTree->getCategoryTermRequired();
-    if (!empty($term) && isset($term_data[$term['id']])) {
-      $term_data[$term['id']]['class'] .= ' active';
     }
 
     return [

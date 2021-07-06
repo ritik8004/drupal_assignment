@@ -41,11 +41,11 @@ if ($env != '01live') {
   die();
 }
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 
-$clientSource = new Client($app_id, $app_secret_admin);
-$sandboxClient = new Client($sandbox_app_id, $sandbox_app_secret_admin);
-$client = new Client($app_id, $app_secret_admin);
+$clientSource = SearchClient::create($app_id, $app_secret_admin);
+$sandboxClient = SearchClient::create($sandbox_app_id, $sandbox_app_secret_admin);
+$client = SearchClient::create($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $source_name = '01live_' . $brand . '_' . $language;

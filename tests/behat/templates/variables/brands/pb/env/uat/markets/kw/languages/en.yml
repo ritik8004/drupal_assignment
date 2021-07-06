@@ -15,6 +15,7 @@ variables:
   add_to_cart_link: 'add to cart'
   vat: ''
   checkout_link: 'continue to checkout'
+  spc_search_byname: ''
   language_collection_filter: ''
   language_sort_filter: 'رتب حسب'
   language_price_filter: 'السعر'
@@ -32,3 +33,8 @@ variables:
   create_account: 'Create An Account'
   sign_in: 'Sign In'
   find_store: 'Find A Store'
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
+

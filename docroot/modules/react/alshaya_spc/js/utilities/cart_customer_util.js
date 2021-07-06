@@ -72,7 +72,7 @@ export const extractFirstAndLastName = (name) => {
   // if user has enters only firstname lastname should be empty.
   return {
     firstname: splitName[0],
-    lastname: splitName[1] ? name.substring(name.indexOf(' ') + 1) : '',
+    lastname: splitName.length > 1 ? name.substring(name.indexOf(' ') + 1).trim() : '',
   };
 };
 

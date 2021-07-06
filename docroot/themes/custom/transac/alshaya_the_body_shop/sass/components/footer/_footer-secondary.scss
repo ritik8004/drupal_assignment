@@ -15,11 +15,22 @@
 
   @include breakpoint($tablet) {
     height: 3.375rem;
+
+    .c-footer-secondary & {
+      .country-ae & {
+        float: $left;
+        padding: 1.25rem 0;
+      }
+    }
   }
 
   .field--name-body {
     p {
       font-size: 0.875rem;
+    }
+
+    @include breakpoint($tablet) {
+      padding: 1.25rem 0;
     }
   }
 }

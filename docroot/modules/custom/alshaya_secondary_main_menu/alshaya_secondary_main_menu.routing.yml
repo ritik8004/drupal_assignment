@@ -1,0 +1,7 @@
+alshaya_secondary_main_menu.secondary_main_menu:
+  path: 'admin/config/alshaya/alshaya_secondary_main_menu'
+  defaults:
+    _form: '\Drupal\alshaya_secondary_main_menu\Form\AlshayaSecondaryMainMenuConfigForm'
+    _title: 'secondary_main menu Settings'
+  requirements:
+    _permission: 'administer site configuration'

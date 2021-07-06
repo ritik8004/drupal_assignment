@@ -124,4 +124,31 @@ class MagentoCustomer {
     return empty($result['items']) ? [] : reset($result['items']);
   }
 
+  /**
+   * Get customer by customer id.
+   *
+   * @param string $customer_id
+   *   Customer Id.
+   *
+   * @return array|null
+   *   Customer data if API call is successful else an array containing the
+   *   error message.
+   */
+  public function getCustomerById(string $customer_id) {
+    $url = sprintf('customers/%d', $customer_id);
+
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('customer_details'),
+    ];
+
+    try {
+      $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
+    }
+    catch (\Exception $e) {
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+
+    return $result;
+  }
+
 }

@@ -9,7 +9,7 @@ const RecommendedProduct = ({ item, itemKey }) => {
   const itemUrl = `product-quick-view/${item.nid}/nojs`;
   return (
     <>
-      <div className="spc-product-recommended-wrapper">
+      <div className="spc-product-recommended-wrapper" key={itemKey}>
         <a href={Drupal.url(itemUrl)} className="use-ajax above-mobile-block recommended-product" data-dialog-type="modal" data-sku={itemKey}>
           <div className="spc-product-recommended-image">
             {item.extra_data.cart_image !== undefined
@@ -29,7 +29,7 @@ const RecommendedProduct = ({ item, itemKey }) => {
           </div>
         </a>
         <div className="spc-promotions">
-          {item.promo.map((key) => <CartPromotion key={key} promo={key} link />)}
+          {item.promo.map((key) => <CartPromotion key={key.text} promo={key} link />)}
         </div>
       </div>
     </>

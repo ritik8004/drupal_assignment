@@ -1,8 +1,8 @@
 import React from 'react';
-import {
-  getStorageInfo,
-} from '../../../utilities/storage';
-import { handleFeedbackSubmit } from '../../../utilities/feedback_util';
+import { handleFeedbackSubmit, getFeedbackInfo } from '../../../utilities/feedback_util';
+import getStringMessage from '../../../../../../js/utilities/strings';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 class ReviewFeedbackPositive extends React.Component {
   constructor(props) {
@@ -17,29 +17,32 @@ class ReviewFeedbackPositive extends React.Component {
     e.preventDefault();
     const { positiveCount, negativeCount } = this.state;
     handleFeedbackSubmit(contentId, voteText, contentType, positiveCount, negativeCount);
-    const event = new CustomEvent('handleFeedbackState', {
-      bubbles: true,
-      detail: {
-        contentId,
-      },
-    });
-    document.dispatchEvent(event);
+    dispatchCustomEvent('handleFeedbackState', contentId);
     this.setState({ positiveCount: positiveCount + 1 });
+
+    // Process positive feedback click data as user clicks on yes.
+    const analyticsData = {
+      type: 'Used',
+      name: 'helpfulness',
+      detail1: 'positive',
+      detail2: contentType,
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   render() {
     const { positiveCount } = this.state;
     const { contentId, contentType, btnStatus } = this.props;
     const positiveText = 'Positive';
-    const retrievedContentVote = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
+    const feedbackStorage = getFeedbackInfo(contentType, contentId, 'positiveCount');
     if (contentId !== undefined && positiveText !== undefined) {
       return (
         <span className="feedback-positive">
           <button value={positiveText} type="button" onClick={this.handlePositiveCount(contentId, positiveText, contentType)} disabled={btnStatus !== 'active'}>
-            <span className="feedback-option-label">{Drupal.t('yes')}</span>
+            <span className="feedback-option-label">{getStringMessage('yes')}</span>
             <span className="feedback-count">
               (
-              {retrievedContentVote !== null ? retrievedContentVote.positiveCount : positiveCount}
+              {feedbackStorage !== null ? feedbackStorage.positiveCount : positiveCount}
               )
             </span>
           </button>

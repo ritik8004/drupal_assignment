@@ -4,11 +4,12 @@ import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 class TextArea extends React.Component {
   handleChange = (e) => {
+    const { label } = this.props;
     const { value, minLength, id } = e.currentTarget;
 
     if (value.length > 0) {
       document.getElementById(`${id}-error`).innerHTML = value.length < minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength })
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label })
         : '';
     }
   };
@@ -28,9 +29,9 @@ class TextArea extends React.Component {
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="write-review-type-textarea">
+        <div id={id} className="write-review-type-textarea">
           <label>
             {label}
             {' '}
@@ -47,7 +48,7 @@ class TextArea extends React.Component {
             {defaultValue}
           </textarea>
           <div className="c-input__bar" />
-          <div id={`${id}-error`} className="error" />
+          <div id={`${id}-error`} className={(required) ? 'error' : ''} />
         </div>
       </>
     );

@@ -60,13 +60,35 @@
     padding: 0;
     margin: 0;
 
+    .slick-track,
+    li.slick-slide {
+      min-height: 50vh;
+    }
+
     li.slick-slide {
       width: 100%;
       height: auto;
+      position: relative;
 
       img {
         height: auto;
         width: 100%;
+
+        &.b-lazy {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          max-width: 1rem;
+        }
+
+        &.b-lazy.b-loaded {
+          max-width: initial;
+          position: initial;
+          top: initial;
+          left: initial;
+          transform: initial;
+        }
       }
     }
 

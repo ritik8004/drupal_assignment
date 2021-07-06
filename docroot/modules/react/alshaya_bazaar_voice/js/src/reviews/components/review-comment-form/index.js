@@ -1,14 +1,16 @@
 import React from 'react';
+import TextareaAutosize from 'react-autosize-textarea';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie, getCurrentUserName,
-} from '../../../utilities/user_util';
-import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getLanguageCode, getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+
+const bazaarVoiceSettings = getbazaarVoiceSettings();
+const userDetails = getUserDetails();
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -26,22 +28,23 @@ class ReviewCommentForm extends React.Component {
 
   showCommentForm = () => {
     const { commentbox, nickname, email } = this.state;
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
+    const commentTncUri = `/${getLanguageCode()}/${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
         <form id="comment-form" onSubmit={this.handleSubmit} noValidate>
           <div className="comment-form-title">
             {getStringMessage('post_a_comment')}
           </div>
+          <BazaarVoiceMessages />
           <div className="comment-form-fields">
             <input type="hidden" name="blackBox" id="ioBlackBox" />
             <div className="form-item">
-              <input
+              <TextareaAutosize
                 type="text"
                 id="commentbox"
                 name="commentbox"
-                minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length}
+                minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_min_length}
+                maxLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_max_length}
                 onChange={this.handleCommentboxChange}
                 className="form-input"
                 defaultValue={commentbox}
@@ -60,6 +63,7 @@ class ReviewCommentForm extends React.Component {
                   type="text"
                   id="nickname"
                   name="nickname"
+                  minLength={bazaarVoiceSettings.reviews.bazaar_voice.screen_name_min_length}
                   onChange={this.handleNicknameChange}
                   className="form-input"
                   defaultValue={nickname}
@@ -80,7 +84,7 @@ class ReviewCommentForm extends React.Component {
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
-                  readOnly={(getCurrentUserEmail() !== null) ? 1 : 0}
+                  readOnly={userDetails.user.emailId !== null ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
@@ -122,37 +126,44 @@ class ReviewCommentForm extends React.Component {
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
-      const bazaarVoiceSettings = getbazaarVoiceSettings();
-      if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== email) {
-        const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
-        deleteSessionCookie(cookieValues);
-      }
+      const notifications = bazaarVoiceSettings.reviews.bazaar_voice.notify_comment_published;
+      const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
+      let storageUpdated = false;
       let authParams = '';
-      if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
-        authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
-      }
-      const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
-      // Set user authenticated string (UAS).
-      if (getCurrentUserEmail() !== null && getSessionCookie(currentUserKey) !== undefined) {
-        authParams += `&user=${getSessionCookie(currentUserKey)}`;
-        setSessionCookie('BvUserNickname', nickname);
-      }
-
-      if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
-        && getSessionCookie('BvUserNickname') !== null) {
-        if (getSessionCookie('BvUserNickname') !== nickname) {
-          authParams += `&UserNickname=${nickname}`;
-          setSessionCookie('BvUserNickname', nickname);
+      // Set auth paramters for anonymous users.
+      if (userDetails.user.userId === 0 && userStorage !== null) {
+        if (userStorage.bvUserId === undefined
+          || (userStorage.email !== undefined && userStorage.email !== email)) {
+          authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
         }
-        authParams += `&User=${getSessionCookie('BvUserId')}`;
+      }
+      // Set user authenticated string (UAS).
+      if (userStorage !== null) {
+        if (userDetails.user.userId !== 0 && userStorage.uasToken !== undefined) {
+          authParams += `&user=${userStorage.uasToken}&UserNickname=${nickname}`;
+          // Update current user in storage.
+          userStorage.nickname = nickname;
+          storageUpdated = true;
+        } else if (userDetails.user.userId === 0 && userStorage.email !== undefined
+          && userStorage.bvUserId !== undefined
+          && userStorage.nickname !== undefined) {
+          if (userStorage.nickname !== nickname) {
+            authParams += `&UserNickname=${nickname}`;
+            userStorage.nickname = nickname;
+            storageUpdated = true;
+          }
+          authParams += `&User=${userStorage.bvUserId}`;
+        } else {
+          authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
+        }
       } else {
         authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
       }
       // Add device finger printing string.
       if (e.target.elements.blackBox.value !== '') {
-        authParams += `&fp=${e.target.elements.blackBox.value}`;
+        authParams += `&fp=${encodeURIComponent(e.target.elements.blackBox.value)}`;
       }
-      const params = `&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
+      const params = `&sendemailalertwhenpublished=${notifications}&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -174,6 +185,9 @@ class ReviewCommentForm extends React.Component {
                 showCommentSubmission: true,
                 showCommentForm: false,
               });
+              if (storageUpdated) {
+                setStorageInfo(userStorage, `bvuser_${userDetails.user.userId}`);
+              }
             }
           } else {
             Drupal.logJavascriptError('review-comment-submit', result.error);
@@ -194,13 +208,22 @@ class ReviewCommentForm extends React.Component {
   }
 
   handleNicknameChange = (e) => {
+    if (e.target.value.length > 0) {
+      const label = getStringMessage('screen_name');
+      document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label })
+        : '';
+    } else {
+      document.getElementById(`${e.target.id}-error`).innerHTML = '';
+    }
     this.setState({ nickname: e.target.value });
   }
 
   handleCommentboxChange = (e) => {
     if (e.target.value.length > 0) {
+      const label = getStringMessage('comment');
       document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength })
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label })
         : '';
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
@@ -211,21 +234,14 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
-    let emailValue = '';
+    const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
+    let emailValue = userDetails.user.emailId;
     let nicknameValue = '';
-    // Set default value for user email.
-    if (getCurrentUserEmail() !== null) {
-      emailValue = getCurrentUserEmail();
-    } else if (getSessionCookie('BvUserEmail') !== null) {
-      emailValue = getSessionCookie('BvUserEmail');
+    // Set default value for user email and nickname.
+    if (userStorage !== null) {
+      emailValue = userStorage.email !== undefined && emailValue !== '' ? userStorage.email : '';
+      nicknameValue = userStorage.nickname !== undefined ? userStorage.nickname : '';
     }
-    // Set default value for user nickname.
-    if (getSessionCookie('BvUserNickname') !== null) {
-      nicknameValue = getSessionCookie('BvUserNickname');
-    } else if (getCurrentUserName() !== null) {
-      nicknameValue = getCurrentUserName();
-    }
-
     if (ReviewId !== undefined) {
       return (
         <>
@@ -245,8 +261,6 @@ class ReviewCommentForm extends React.Component {
           </div>
           {showCommentForm ? this.showCommentForm() : null}
           {showCommentSubmission ? this.showCommentSubmission() : null}
-          {showCommentForm
-           && (<BazaarVoiceMessages />)}
         </>
       );
     }

@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_checkout_by_agent
+    - serialization
+    - user
+id: share_cart
+plugin_id: share_cart
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

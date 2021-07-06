@@ -5,6 +5,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -259,6 +260,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
     // Allow other modules to alter product data.
+    // For simple sku this hook is called where
+    // process_swatch_for_grouping_attributes is checked
+    // to process the grouped_variants.
     $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity, $with_parent_details);
     if (isset($data['grouping_attribute_with_swatch'])) {
       $data['grouped_variants'] = $this->getGroupedVariants($data, $with_parent_details);
@@ -297,6 +301,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
   private function getSkuData(SKUInterface $sku, string $link = '', bool $with_parent_details = FALSE): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
+    AlshayaRequestContextManager::updateDefaultContext('app');
 
     $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $sku->getCacheTags());
     $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $sku->getCacheContexts());
@@ -377,7 +382,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
       $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
-
       foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
         $child = SKU::loadFromSku($values['sku']);
         if (!$child instanceof SKUInterface) {
@@ -530,6 +534,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
 
     $size_labels = $this->skuInfoHelper->getSizeLabels($sku);
+
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
       $combinations['attribute_sku'][$attribute_code] = [
         'attribute_code' => $attribute_code,
@@ -541,18 +546,11 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'skus' => $skus,
         ];
 
-        if ($attribute_code == 'size') {
-          if (!empty($size_labels[$value])) {
-            $attr_value['label'] = $size_labels[$value];
-          }
-          elseif (
-            ($term = $this->productOptionsManager->loadProductOptionByOptionId(
-              $attribute_code,
-              $value,
-              $this->mobileAppUtility->currentLanguage())
-            )
-            && $term instanceof TermInterface
-          ) {
+        // Labels for all attribute codes.
+        $attr_value['label'] = $size_labels[$value] ?? '';
+        if (empty($attr_value['label'])) {
+          $term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $value, $this->mobileAppUtility->currentLanguage());
+          if ($term instanceof TermInterface) {
             $attr_value['label'] = $term->label();
           }
         }

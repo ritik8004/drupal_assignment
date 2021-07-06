@@ -33,6 +33,8 @@
         @include breakpoint($tablet) {
           display: block;
         }
+
+        @include arabic-letter-spacing;
       }
     }
 
@@ -61,6 +63,8 @@
         &:hover {
           color: $fit-calc-link;
         }
+
+        @include arabic-letter-spacing;
       }
     }
   }
@@ -123,6 +127,8 @@
           margin-top: 1.25rem;
           margin-bottom: 1.875rem;
         }
+
+        @include arabic-letter-spacing;
       }
 
       &-input-wrapper {
@@ -179,6 +185,8 @@
           font-size: 0.75rem;
           line-height: 1rem;
         }
+
+        @include arabic-letter-spacing;
       }
 
       &-unit-wrapper {
@@ -203,6 +211,8 @@
             font-size: 0.75rem;
             line-height: 1rem;
           }
+
+          @include arabic-letter-spacing;
         }
       }
 
@@ -213,9 +223,7 @@
 
       &-measurement-container {
         margin: 0.9375rem 0 0.625rem;
-      }
 
-      &-measurement-container {
         @include breakpoint($tablet) {
           display: flex;
           align-items: center;

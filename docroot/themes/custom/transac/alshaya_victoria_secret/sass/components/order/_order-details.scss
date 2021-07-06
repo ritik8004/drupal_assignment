@@ -71,9 +71,12 @@
 
   .address--contact {
     font-size: 0.75rem;
+    line-height: 1.4;
+    margin-top: 0.625rem;
 
     .no-direction {
       font-size: 0.875rem;
+      font-family: $vs-regular;
     }
   }
 
@@ -88,15 +91,6 @@
   .address--contact,
   .delivery-method {
     font-family: $vs-bold;
-  }
-
-  .address--contact {
-    line-height: 1.4;
-    margin-top: 0.625rem;
-
-    .no-direction {
-      font-family: $vs-regular;
-    }
   }
 
   .sub-total-row {

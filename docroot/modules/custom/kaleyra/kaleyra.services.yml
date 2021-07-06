@@ -1,0 +1,10 @@
+services:
+  kaleyra.sms_api_adapter:
+    class: Drupal\kaleyra\MessageApiAdapter
+    arguments: ['@http_client', '@config.factory', '@logger.factory']
+  kaleyra.whatsapp_api_adapter:
+    class: Drupal\kaleyra\WhatsAppApiAdapter
+    arguments: ['@http_client', '@config.factory', '@logger.factory']
+  kaleyra.shorten_url_api_adapter:
+    class: Drupal\kaleyra\ShortenUrlApiAdapter
+    arguments: ['@http_client', '@config.factory', '@logger.factory']

@@ -18,6 +18,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Drupal\acq_sku\ConductorCategorySyncHelper;
@@ -313,6 +314,18 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   public function syncCategories() {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
+
+    // Conditionally increase memory limit to double the current limit.
+    $new_limit = (((int) ini_get('memory_limit')) * 2) . 'M';
+
+    // We still let that be overridden via settings.
+    $new_limit = Settings::get('acq_sku_sync_commerce_cats_memory_limit', $new_limit);
+
+    ini_set('memory_limit', $new_limit);
+    $this->drupalLogger->notice('Memory limit increased for sync-commerce-cats to @limit', [
+      '@limit' => ini_get('memory_limit'),
+    ]);
+
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
 
     // We trigger delete only if there is any term update/create.
@@ -695,9 +708,9 @@ class AcqSkuDrushCommands extends DrushCommands {
         ];
       }
 
+      $context_results = &$context['sandbox']['results'];
       // Allow other modules to add data to be deleted when cleaning up.
-      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context);
-
+      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context_results);
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
       $context['sandbox']['max'] = count($context['sandbox']['results']);
@@ -984,6 +997,25 @@ class AcqSkuDrushCommands extends DrushCommands {
   public function processBlacklistedProduct() {
     $event = new ProcessBlackListedProductsEvent();
     $this->dispatcher->dispatch(ProcessBlackListedProductsEvent::EVENT_NAME, $event);
+  }
+
+  /**
+   * Drush command to get the item count we need to delete.
+   *
+   * Get the items count we need to delete during commerce data cleanup.
+   *
+   * @validate-module-enabled acq_sku
+   *
+   * @command acq_sku:get-item-delete-count
+   *
+   * @usage drush acq_sku:get-item-delete-count
+   *   Get the items count we need to delete during commerce data cleanup.
+   */
+  public function getItemCountTodelete() {
+    $result = $this->connection->query("select nid as entity_id, 'node' as type from node where type in ('acq_product', 'acq_promotion', 'store') union select id as entity_id, 'acq_sku' as type from acq_sku union select tid as entity_id, 'taxonomy_term' as type from taxonomy_term_data where vid='acq_product_category'");
+    $data = $result->fetchAll(\PDO::FETCH_ASSOC);
+    $this->moduleHandler->alter('acq_sku_clean_synced_data', $data);
+    print count($data);
   }
 
 }

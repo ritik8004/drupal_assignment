@@ -36,7 +36,7 @@
     padding: 0;
     padding-bottom: 1.25rem;
     padding-#{$left}: 1.25rem;
-    z-index: 8;
+    z-index: 13;
     width: 25rem !important;
 
     html[lang=ar] & {
@@ -49,8 +49,15 @@
     }
 
     .ui-dialog-buttonpane {
+      margin: 0;
+      padding: 0;
+
       button.dialog-cancel {
         display: none;
+      }
+
+      button {
+        margin: 0;
       }
     }
 
@@ -63,15 +70,6 @@
 
     .ui-dialog-buttonpane .ui-dialog-buttonset {
       float: $left;
-    }
-
-    .ui-dialog-buttonpane {
-      margin: 0;
-      padding: 0;
-
-      button {
-        margin: 0;
-      }
     }
 
     .ui-button {
@@ -154,9 +152,7 @@
       }
     }
   }
-}
 
-.path--user {
   &.header--fixed {
     &.modal-overlay::before {
       z-index: 1000;

@@ -23,6 +23,9 @@ $languages = [
   'ar',
 ];
 
+// Product List Index suffix.
+$product_list_suffix = 'product_list';
+
 $sorts = [
 //  [
 //    'field' => 'search_api_relevance',

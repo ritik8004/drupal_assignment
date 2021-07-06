@@ -31,8 +31,6 @@ variables:
   excluding_delivery: 'قبل التوصيل'
   language_vat: ''
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
   language_short: 'en'
   ar_collection_filter: ''
@@ -66,3 +64,7 @@ variables:
   order_detail: 'تفاصيل الطلبية'
   delivery_type_text: 'التوصيل متوقع خلال:'
   payment_type_text: 'طريقة الدفع:'
+  empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
+  language_empty_bag: 'Your shopping bag is empty'
+  continue_shopping: 'إليك منتجاتنا المفضلة'
+  language_continue_shopping: 'Here are some of our favorites'

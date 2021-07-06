@@ -5,6 +5,14 @@
     padding: 0 !important;
   }
 
+  @include breakpoint($only-tablet) {
+    bottom: -3.1875rem;
+
+    html[lang=ar] & {
+      bottom: -2.1875rem;
+    }
+  }
+
   .algolia-search-cleartext-icon {
     @include breakpoint($tablet) {
       #{$right}: 2.3rem;
@@ -16,7 +24,7 @@
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 2.7rem;
+      #{$right}: 0;
     }
   }
 
@@ -56,14 +64,10 @@
 
     @include breakpoint($only-tablet) {
       width: 13.25rem;
-
-      html[lang=ar] & {
-        margin-bottom: 1.5625rem;
-      }
     }
 
     @include breakpoint($desktop) {
-      width: 17rem;
+      width: 14.813rem;
     }
 
     .react-autosuggest__input {
@@ -82,7 +86,9 @@
 
       @include breakpoint($tablet) {
         border: 0.0625rem solid $algolia-auto-complete-border;
-        height: 2.1875rem;
+        height: 2.8125rem;
+        padding-#{$left}: 3.125rem;
+        border-bottom: 1px solid $black;
       }
 
       border-radius: 0;
@@ -110,24 +116,30 @@
 
       &::after {
         @include breakpoint($only-mobile) {
-          top: 0.5rem;
+          width: 2.125rem;
+          height: 2.125rem;
+          background: transparent url('../../../imgs/assets/search.svg') no-repeat;
+          background-position: center;
           #{$right}: unset;
-          #{$left}: 0.25rem;
+          #{$left}: 0.5rem;
           opacity: 1;
           transition: opacity 0.2s;
+          top: 0.9rem;
+          content: '';
         }
 
         @include breakpoint($tablet) {
           display: block;
-          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0.625rem 0.4375rem no-repeat;
+          background: transparent url('../../../imgs/assets/search.svg') no-repeat;
           background-position: center;
           border: none;
           text-indent: -9999px;
           top: 50%;
           transform: translateY(-50%);
-          #{$right}: 0;
-          height: 2.1875rem;
-          width: 2.625rem;
+          #{$left}: 0;
+          width: 2.125rem;
+          height: 2.125rem;
+          margin-#{$left}: 0.5rem;
 
           html[lang=ar] & {
             transform: translateY(-52%);
@@ -135,11 +147,6 @@
         }
 
         @include breakpoint($desktop) {
-          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0.625rem 0.4375rem no-repeat;
-          #{$right}: 0;
-          height: 2.1875rem;
-          width: 2.625rem;
-
           html[lang=ar] & {
             transform: translateY(-50%);
           }

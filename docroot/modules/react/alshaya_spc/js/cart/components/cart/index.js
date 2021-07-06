@@ -1,6 +1,5 @@
 import React from 'react';
 import Cookies from 'js-cookie';
-
 import '../../../utilities/interceptor/interceptor';
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
@@ -24,6 +23,11 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
 import Postpay from '../../../utilities/postpay';
+import PostpayEligiblityMessage from '../postpay/postpay-eligiblity-message';
+import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
+import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
+import ConditionalView
+  from '../../../../../js/utilities/components/conditional-view';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -198,6 +202,29 @@ export default class Cart extends React.Component {
     }
   };
 
+  preparePostpayMessage = (totals) => {
+    let postpay = null;
+    let postpayEligibilityMessage = null;
+    if (Postpay.isPostpayEnabled()) {
+      postpay = (
+        <PostpayCart
+          amount={totals.base_grand_total}
+          pageType="cart"
+          classNames="spc-postpay-mobile-preview"
+          mobileOnly
+        />
+      );
+      postpayEligibilityMessage = (
+        <PostpayEligiblityMessage
+          text={drupalSettings.alshaya_spc.postpay_eligibility_message}
+        />
+      );
+    }
+    return {
+      postpay,
+      postpayEligibilityMessage,
+    };
+  }
 
   render() {
     const {
@@ -240,20 +267,21 @@ export default class Cart extends React.Component {
         </>
       );
     }
-    let postpay;
-    let postpayEligibilityMessage;
-    if (Postpay.isPostpayEnabled()) {
-      postpay = (
-        <PostpayCart
-          amount={totals.base_grand_total}
-          isCartPage
-          classNames="spc-postpay-mobile-preview"
-          mobileOnly
-        />
-      );
-      postpayEligibilityMessage = <div className={`${drupalSettings.postpay_widget_info.postpay_mode_class}`}><div id="postpay-eligibility-message" style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: drupalSettings.alshaya_spc.postpay_eligibility_message }} /></div>;
+
+    const postPayData = this.preparePostpayMessage(totals);
+    if (postPayData.postpayEligibilityMessage !== null) {
       preContentActive = 'visible';
     }
+
+    // Get Smart Agent Info if available.
+    const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
+      ? Drupal.smartAgent.getInfo()
+      : false;
+
+    if (smartAgentInfo) {
+      preContentActive = 'visible';
+    }
+
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -267,11 +295,18 @@ export default class Cart extends React.Component {
           </CheckoutMessage>
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
-          {postpayEligibilityMessage}
+          {postPayData.postpayEligibilityMessage}
+
+          <ConditionalView condition={smartAgentInfo !== false}>
+            <>
+              <SASessionBanner agentName={smartAgentInfo.name} />
+              <SAShareStrip />
+            </>
+          </ConditionalView>
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
-          {postpay}
+          {postPayData.postpay}
         </div>
         <div className="spc-main">
           <div className="spc-content">

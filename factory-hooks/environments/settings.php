@@ -339,6 +339,20 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'tbs' => [
+      'default' => [
+        'default' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9877876',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9877879',
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
@@ -385,6 +399,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
   }
   if (isset($mapping[$site_code][$country_code]['default'])) {
     $settings = array_replace_recursive($settings, $mapping[$site_code][$country_code]['default']);
+  }
+  if (isset($mapping[$site_code]['default'][$env])) {
+    $settings = array_replace_recursive($settings, $mapping[$site_code]['default'][$env]);
   }
   if (isset($mapping[$site_code][$country_code][$env])) {
     $settings = array_replace_recursive($settings, $mapping[$site_code][$country_code][$env]);

@@ -7,7 +7,7 @@ use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 
 /**
  * Customer controller to add front page.
@@ -67,14 +67,14 @@ class AlgoliaController extends ControllerBase {
    *   Settings as JSON.
    */
   public function getSettings() {
-    AlshayaPromoContextManager::updateDefaultContext('app');
+    AlshayaRequestContextManager::updateDefaultContext('app');
     $config = $this->configHelper->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactAutocomplete::PAGE_TYPE);
 
     $settings = [];
     $settings['application_id'] = $config['commonAlgoliaSearch']['application_id'];
     $settings['api_key'] = $config['commonAlgoliaSearch']['api_key'];
-    $settings['indexName'] = $config['commonAlgoliaSearch']['indexName'];
-    $settings['filters'] = $config['search']['filters'];
+    $settings['indexName'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['indexName'];
+    $settings['filters'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['filters'];
     $settings['gallery']['showHoverImage'] = $config['commonReactTeaserView']['gallery']['showHoverImage'];
     $settings['gallery']['showThumbnails'] = $config['commonReactTeaserView']['gallery']['showThumbnails'];
     $settings['swatches'] = $config['commonReactTeaserView']['swatches'];

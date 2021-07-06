@@ -7,8 +7,18 @@
       align-items: initial;
 
       a {
+        #{$left}: calc(50% - 1.156rem);
+
         img {
           margin-#{$left}: 0;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      a {
+        img {
+          max-width: 3.3125rem;
         }
       }
     }

@@ -187,6 +187,8 @@ class AlshayaSearchApiFacetsManager {
     $block_data['settings']['id'] = $block_data['plugin'];
     $block_data['settings']['label'] = $data['name'];
 
+    // Invoke alter hook to alter block_data from other modules.
+    \Drupal::moduleHandler()->alter('alshaya_search_api_facet_block_data', $block_data);
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
 
     // Translate facet block titles.

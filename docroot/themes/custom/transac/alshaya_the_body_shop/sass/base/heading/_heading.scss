@@ -6,4 +6,10 @@
 
 .c-page-title {
   @extend %page-title;
+
+  font-size: 1.875rem;
+
+  @include breakpoint($only-mobile) {
+    font-size: 1.5rem;
+  }
 }

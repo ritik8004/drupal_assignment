@@ -9,13 +9,14 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
-import { getCurrentUserEmail, getSessionCookie, getCurrentUserName } from '../../../../utilities/user_util';
+import { getUserDetails } from '../../../../utilities/api/request';
+import { getStorageInfo } from '../../../../utilities/storage';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
   let readonly = false;
 
-  const { field: defField } = props;
+  const { field: defField, productId } = props;
   if (defField.length !== 0
     && defField.length !== 'undefined') {
     Object.entries(defField).forEach(
@@ -28,19 +29,21 @@ const DynamicFormField = (props) => {
 
   // Set default value for user nickname and email.
   // For anonymous user, default value is from user cookies.
+  const userDetails = getUserDetails(productId);
+  const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
-      if (getCurrentUserEmail() !== null) {
-        fieldProperty.defaultVal = getCurrentUserEmail();
+      if (userDetails.user.emailId !== null) {
+        fieldProperty.default_value = userDetails.user.emailId;
         readonly = true;
-      } else if (getSessionCookie('BvUserEmail') !== null) {
-        fieldProperty.defaultVal = getSessionCookie('BvUserEmail');
+      } else if (userStorage !== null) {
+        if (userStorage.email !== undefined) {
+          fieldProperty.default_value = userStorage.email;
+        }
       }
-    } else if (fieldProperty.id === 'usernickname') {
-      if (getSessionCookie('BvUserNickname') !== null) {
-        fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
-      } else if (getCurrentUserName() !== null) {
-        fieldProperty.defaultVal = getCurrentUserName();
+    } else if (fieldProperty.id === 'usernickname' && userStorage !== null) {
+      if (userStorage.nickname !== undefined) {
+        fieldProperty.default_value = userStorage.nickname;
       }
     }
   }
@@ -52,7 +55,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -65,9 +68,9 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
-        question={fieldProperty.question}
+        placeholder={fieldProperty.placeholder}
       />
     );
   }
@@ -80,7 +83,7 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         options={fieldProperty.options}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -92,7 +95,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -105,7 +108,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         options={fieldProperty.options}
         visible={fieldProperty.visible}
         text={fieldProperty.text}
@@ -120,7 +123,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         maxLength={fieldProperty.maxlength}
         minLength={fieldProperty.minlength}
         text={fieldProperty.text}
@@ -145,7 +148,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -159,7 +162,7 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         maxLength={fieldProperty.maxlength}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -170,7 +173,7 @@ const DynamicFormField = (props) => {
       required={fieldProperty.required}
       id={fieldProperty.id}
       label={fieldProperty.title}
-      defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+      defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
       maxLength={fieldProperty.maxlength}
       minLength={fieldProperty.minlength}
       visible={fieldProperty.visible}

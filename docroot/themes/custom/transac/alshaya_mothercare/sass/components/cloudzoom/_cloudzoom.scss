@@ -1,0 +1,7 @@
+#lightSlider {
+  .slick-slide {
+    @include breakpoint($tablet) {
+      overflow: hidden;
+    }
+  }
+}

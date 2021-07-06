@@ -11,6 +11,7 @@ services:
       - '@path.current'
       - '@database'
       - '@alshaya_acm_product.category_helper'
+      - '@module_handler'
 
   cache.product_category_tree:
     class: Drupal\Core\Cache\CacheBackendInterface
@@ -103,3 +104,11 @@ services:
       - '@module_handler'
       - '@alshaya_api.api'
       - '@logger.factory'
+
+  alshaya_acm_product_category.helper:
+    class: Drupal\alshaya_acm_product_category\ProductCategoryHelper
+    arguments:
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@language_manager'
+      - '@current_route_match'
+      - '@module_handler'

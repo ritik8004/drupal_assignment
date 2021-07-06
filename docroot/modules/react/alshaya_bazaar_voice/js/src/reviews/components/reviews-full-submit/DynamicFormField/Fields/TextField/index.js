@@ -12,11 +12,12 @@ class TextField extends React.Component {
   }
 
   handleChange = (e) => {
+    const { label } = this.props;
     const { value, minLength, id } = e.currentTarget;
     let activeClass = '';
     if (value.length > 0) {
       document.getElementById(`${id}-error`).innerHTML = value.length < minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength })
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label })
         : '';
       activeClass = 'active-label';
     }
@@ -49,9 +50,9 @@ class TextField extends React.Component {
       return (
         <>
           <ConditionalView condition={text !== undefined}>
-            <div className="head-row">{text}</div>
+            <div id={`${id}-head-row`} className="head-row">{text}</div>
           </ConditionalView>
-          <div className={`write-review-type-textfield ${(classLable !== undefined) ? classLable : ''}`}>
+          <div id={id} className={`write-review-type-textfield ${(classLable !== undefined) ? classLable : ''}`}>
             <input
               type="text"
               id={id}
@@ -68,7 +69,7 @@ class TextField extends React.Component {
               {' '}
               {(required) ? '*' : '' }
             </label>
-            <div id={`${id}-error`} className="error" />
+            <div id={`${id}-error`} className={(required) ? 'error' : ''} />
           </div>
         </>
       );
@@ -78,6 +79,7 @@ class TextField extends React.Component {
         type="text"
         id={id}
         name={id}
+        defaultValue={defaultValue}
         hidden
       />
     );

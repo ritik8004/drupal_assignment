@@ -32,9 +32,11 @@
     }
 
     h1 {
-      margin: 0;
-      font-size: 1rem;
-      line-height: 1.25rem;
+      @include breakpoint($tablet) {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.25rem;
+      }
     }
 
     .matchback-prod-collection-label,
@@ -60,18 +62,22 @@
     .price-block {
       .price-wrapper {
         .price {
-          margin-top: 0.625rem;
-          font-size: 1rem;
-          line-height: 1.25rem;
+          @include breakpoint($tablet) {
+            margin-top: 0.625rem;
+            font-size: 1rem;
+            line-height: 1.25rem;
+          }
         }
       }
     }
 
     .content--item-code {
-      font-size: 0.625rem;
-      line-height: 0.75rem;
-      color: $matchback_item_code_color;
-      margin-top: 0.625rem;
+      @include breakpoint($tablet) {
+        font-size: 0.625rem;
+        line-height: 0.75rem;
+        color: $matchback_item_code_color;
+        margin-top: 0.625rem;
+      }
     }
   }
 
@@ -253,7 +259,7 @@
     letter-spacing: normal;
     text-align: center;
     color: $grey-light;
-    margin-top: 1.3125rem;
+    margin-top: 2.3125rem;
   }
 }
 
@@ -275,5 +281,18 @@
   #block-alshayareactcartminicartblock {
     display: block !important;
     z-index: 10 !important;
+  }
+}
+
+.cloudzoom__thumbnails-matchback_gallery {
+  @include breakpoint($tablet) {
+    position: relative;
+    max-height: 18.625rem;
+  }
+}
+
+.matchback-image-wrapper {
+  @include breakpoint($only-mobile) {
+    min-height: 10rem;
   }
 }

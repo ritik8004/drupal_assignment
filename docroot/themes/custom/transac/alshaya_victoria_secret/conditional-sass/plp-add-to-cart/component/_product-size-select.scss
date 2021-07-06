@@ -1,0 +1,5 @@
+.form-select-wrapper {
+  @include breakpoint($upto-desktop) {
+    width: 100%;
+  }
+}

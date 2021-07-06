@@ -251,6 +251,22 @@ class Cart {
   }
 
   /**
+   * Wrapper function to get cart amount.
+   *
+   * @return int|string
+   *   Cart amount (base_grand_total from totals).
+   */
+  public function getCartAmount() {
+    $cart = $this->getCart();
+
+    if (empty($cart) || empty($cart['totals'])) {
+      return '';
+    }
+
+    return $cart['totals']['base_grand_total'] ?? 0;
+  }
+
+  /**
    * Wrapper function to set cart id in session.
    *
    * @param int $cart_id
@@ -1237,6 +1253,13 @@ class Cart {
       unset($data['items'][$key]['variant_sku']);
     }
 
+    // JIRA Ticket No.: CORE-29691
+    // Add smart agent details in extension attribute to track
+    // orders by in-store devices.
+    if (!empty($cart_id)) {
+      $data['extension'] = $this->addSmartAgentDetails((array) $data['extension'] ?? [], $cart_id);
+    }
+
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),
       'json' => (object) $data,
@@ -1730,7 +1753,7 @@ class Cart {
       $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
       $doubleCheckEnabled = $checkout_settings['place_order_double_check_after_exception'];
-      if ($doubleCheckEnabled) {
+      if ($doubleCheckEnabled && !$this->isUpapiPaymentMethod($data['paymentMethod']['method']) && !$this->isPostpayPaymentMethod($data['paymentMethod']['method'])) {
         $double_check_done = 'yes';
         try {
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
@@ -1882,6 +1905,7 @@ class Cart {
   public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
     $email = $this->getCartCustomerEmail();
+    $customer_id = $this->getCartCustomerId();
 
     // Remove cart id and other caches from session.
     $this->removeCartFromSession();
@@ -1897,6 +1921,7 @@ class Cart {
       'order_id' => (int) $order_id,
       'cart' => $cart['cart'],
       'payment_method' => $payment_method,
+      'customer_id' => $customer_id,
     ];
 
     $this->drupal->triggerCheckoutEvent('place order success', $data);
@@ -2524,6 +2549,90 @@ class Cart {
     }
 
     return $info[$key] ?? NULL;
+  }
+
+  /**
+   * Add smart agent details in extension.
+   *
+   * @param array $data_extension
+   *   Data extension.
+   * @param string $cart_id
+   *   Cart ID.
+   *
+   * @return array
+   *   Data extension with smart agent details.
+   */
+  public function addSmartAgentDetails(array $data_extension, string $cart_id) {
+    $smart_agent_cookie = $this->request->cookies->get('smart_agent_cookie');
+
+    if (empty($smart_agent_cookie)) {
+      return $data_extension;
+    }
+
+    $decoded_cookies = base64_decode($smart_agent_cookie);
+    $decoded_cookies_array = json_decode($decoded_cookies, TRUE);
+    $data_extension = array_merge($data_extension, $this->formatSmartAgentDetails($decoded_cookies_array));
+
+    // Logging data sent to updateCart API call.
+    $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Action: @action, Smart Agent Email: @smart_agent_email, Smart Agent User: @smart_agent_user_agent, Smart Agent Client IP: @smart_agent_client_ip.', [
+      '@cart_id' => $cart_id,
+      '@action' => $data_extension['action'],
+      '@smart_agent_email' => $data_extension['smart_agent_email'],
+      '@smart_agent_user_agent' => $data_extension['smart_agent_user_agent'],
+      '@smart_agent_client_ip' => $data_extension['smart_agent_client_ip'],
+    ]);
+
+    return $data_extension;
+  }
+
+  /**
+   * Format smart agent details.
+   *
+   * @param array $data
+   *   Smart agent details array.
+   *
+   * @return array
+   *   Formatted smart agent details array.
+   */
+  public function formatSmartAgentDetails(array $data) {
+    $name = $data['name'] ?? '';
+    $email = $data['email'] ?? '';
+    $storeCode = $data['storeCode'] ?? '';
+    $clientIP = $data['clientIP'] ?? '';
+    $lat = $data['lat'] ?? '';
+    $lng = $data['lng'] ?? '';
+
+    // @todo remove all the concatenated one's after individual fields are
+    // created in Magento.
+    $formatted_details = [
+      'smart_agent_email' => $name . ';' . $email . ';' . $storeCode,
+      'smart_agent_mail' => $email,
+      'smart_agent_name' => $name,
+      'smart_agent_store' => $storeCode,
+      'smart_agent_user_agent' => $data['userAgent'] ?? '',
+      'smart_agent_client_ip' => $clientIP . ';' . $lat . ';' . $lng,
+      'smart_agent_ip' => $clientIP,
+      'smart_agent_location' => $lat . ';' . $lng,
+    ];
+
+    if (!empty($data['shared_via'])) {
+      $formatted_details['smart_agent_shared_channel'] = $data['shared_via'];
+      $formatted_details['smart_agent_url_shared_via'] = $data['shared_via'];
+
+      $formatted_details['smart_agent_shared_amount'] = $this->getCartAmount();
+      $formatted_details['smart_agent_url_shared_via'] .= ';' . $formatted_details['smart_agent_shared_amount'];
+
+      if (!empty($data['shared_to'])) {
+        $formatted_details['smart_agent_shared_to'] = $data['shared_to'];
+        $formatted_details['smart_agent_url_shared_via'] .= ';' . $data['shared_to'];
+      }
+    }
+
+    if (!empty($data['shared_on'])) {
+      $formatted_details['smart_agent_url_shared_on'] = $data['shared_on'];
+    }
+
+    return $formatted_details;
   }
 
 }

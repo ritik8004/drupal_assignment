@@ -1,0 +1,8 @@
+.tooltip-anchor {
+  &.question {
+    &::before {
+      color: $spc_tooltip_question_icon;
+      border-color: $spc_tooltip_question_icon;
+    }
+  }
+}

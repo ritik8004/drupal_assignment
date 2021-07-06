@@ -54,6 +54,10 @@ class ContactInfoForm extends React.Component {
   processShippingUpdate = (formData) => {
     const validationData = {
       mobile: formData.static.telephone,
+      fullname: {
+        firstname: formData.static.firstname,
+        lastname: formData.static.lastname,
+      },
     };
     const { contactInfo } = this.context;
 
@@ -71,6 +75,17 @@ class ContactInfoForm extends React.Component {
         // Show errors if any, else call update cart api to update shipping address.
         // Flag to determine if there any error.
         let isError = false;
+
+        // If invalid full name.
+        if (result.data.fullname === false) {
+          document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+          document.getElementById('fullname-error').classList.add('error');
+          isError = true;
+        } else {
+          // Remove error class and any error message.
+          document.getElementById('fullname-error').innerHTML = '';
+          document.getElementById('fullname-error').classList.remove('error');
+        }
 
         // If invalid mobile number.
         if (result.data.mobile === false) {

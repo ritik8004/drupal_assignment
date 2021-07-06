@@ -57,3 +57,11 @@ alshaya_acm_checkout.settings:
       type: sequence
       sequence:
         type: string
+
+alshaya_acm_checkout.ab_testing:
+  type: config_object
+  label: 'Checkout AB Testing Settings'
+  mapping:
+    cashondelivery:
+      type: boolean
+      label: 'AB Testing Status for Cash on Delivery'

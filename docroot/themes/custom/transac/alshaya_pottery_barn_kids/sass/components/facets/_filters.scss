@@ -55,6 +55,43 @@
       }
     }
   }
+
+  // search facets horizontal content region.
+  #alshaya-algolia-search .c-content__region .sticky-filter-wrapper .c-collapse-item {
+    &:first-of-type {
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0;
+      }
+    }
+
+    .c-collapse__title {
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+      padding-#{$right}: 1.9875rem;
+    }
+  }
+
+  // filter list label which says - selected filters
+  .block-facets-summary-blockfilter-bar-promotions .filter-list-label,
+  .block-facets-summary-blockfilter-bar-plp .filter-list-label,
+  .block-facets-summary-blockfilter-bar .filter-list-label {
+    font-size: 0.8125rem;
+  }
+
+  // filters list with min height in mobile.
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar {
+    @include breakpoint($only-mobile) {
+      ul {
+        .applied-filter {
+          &.max-height {
+            overflow: hidden;
+          }
+        }
+      }
+    }
+  }
 }
 
 // Legend or facet lablel text
@@ -98,23 +135,6 @@
   }
 }
 
-// search facets horizontal content region.
-.c-plp {
-  #alshaya-algolia-search .c-content__region .sticky-filter-wrapper .c-collapse-item {
-    &:first-of-type {
-      @include breakpoint($desktop) {
-        margin-#{$left}: 0;
-      }
-    }
-
-    .c-collapse__title {
-      text-transform: uppercase;
-      font-size: 0.8125rem;
-      padding-#{$right}: 1.9875rem;
-    }
-  }
-}
-
 // Show all filters link.
 .show-all-filters,
 .show-all-filters-algolia {
@@ -142,32 +162,6 @@
   .c-facet__title.c-accordion__title.c-collapse__title {
     @include breakpoint($only-mobile) {
       font-weight: 700;
-    }
-  }
-}
-
-// filter list label which says - selected filters
-.c-plp {
-  .block-facets-summary-blockfilter-bar-promotions .filter-list-label,
-  .block-facets-summary-blockfilter-bar-plp .filter-list-label,
-  .block-facets-summary-blockfilter-bar .filter-list-label {
-    font-size: 0.8125rem;
-  }
-}
-
-// filters list with min height in mobile.
-.c-plp {
-  .block-facets-summary-blockfilter-bar-promotions,
-  .block-facets-summary-blockfilter-bar-plp,
-  .block-facets-summary-blockfilter-bar {
-    @include breakpoint($only-mobile) {
-      ul {
-        .applied-filter {
-          &.max-height {
-            overflow: hidden;
-          }
-        }
-      }
     }
   }
 }

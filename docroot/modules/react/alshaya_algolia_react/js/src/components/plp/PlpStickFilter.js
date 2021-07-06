@@ -5,9 +5,8 @@ import StickyFilterWrapper from '../base/StickyFilterWrapper';
 /**
  * Sticky filters.
  */
-const PlpStickyFilter = ({ children }) => {
+const PlpStickyFilter = ({ children, pageType = null }) => {
   const stickyFiltersRef = useRef();
-
   useEffect(() => {
     const stickyFilterWrapper = stickyFiltersRef.current.parentNode;
     if (!isMobile() && stickyFilterWrapper.querySelector('.site-brand-home') === null) {
@@ -16,7 +15,7 @@ const PlpStickyFilter = ({ children }) => {
     }
   }, [children]);
 
-  return <StickyFilterWrapper callback={children} ref={stickyFiltersRef} />;
+  return <StickyFilterWrapper callback={children} ref={stickyFiltersRef} pageType={pageType} />;
 };
 
 export default PlpStickyFilter;

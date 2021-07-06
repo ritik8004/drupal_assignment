@@ -13,6 +13,7 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
@@ -154,13 +155,20 @@ function alshaya_super_category_preprocess_block(&$variables) {
       // Current active theme object.
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
       // Set the logo path based on term name and current language.
+      if ($super_category->hasField('field_logo_header_image') && !empty($super_category->field_logo_header_image->getValue())) {
+        $file = File::load($super_category->field_logo_header_image->getValue()[0]['target_id']);
+        $header_logo = file_create_url($file->getFileUri());
+      }
       $logo_path = '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo';
-      $logo_relative_path = DRUPAL_ROOT . $logo_path;
+      $logo_absolute_path = DRUPAL_ROOT . $logo_path;
       // Check logo fallback.
-      if (file_exists($logo_relative_path . $langcode . '.svg')) {
+      if (!empty($header_logo)) {
+        $variables['content']['site_logo']['#uri'] = $header_logo;
+      }
+      elseif (file_exists($logo_absolute_path . $langcode . '.svg')) {
         $variables['content']['site_logo']['#uri'] = $logo_path . $langcode . '.svg';
       }
-      elseif (file_exists($logo_relative_path . '.svg')) {
+      elseif (file_exists($logo_absolute_path . '.svg')) {
         $variables['content']['site_logo']['#uri'] = $logo_path . '.svg';
       }
       // Set image Alt based on current brand.
@@ -622,7 +630,18 @@ function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alt
   // Only for the term edit page.
   if (isset($form['tid']) && !empty($form['tid']['#value'])) {
     if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      // Hide the super category logo fields if the feature is not enabled.
+      $form['field_logo_active_image']['#access'] = FALSE;
+      $form['field_logo_inactive_image']['#access'] = FALSE;
+      $form['field_logo_header_image']['#access'] = FALSE;
       return;
+    }
+    $termDepth = taxonomy_term_depth_get_by_tid($form['tid']['#value']);
+    if ($termDepth != 1) {
+      // Hide the super category logo fields since it is not required for children categories.
+      $form['field_logo_active_image']['#access'] = FALSE;
+      $form['field_logo_inactive_image']['#access'] = FALSE;
+      $form['field_logo_header_image']['#access'] = FALSE;
     }
 
     if ($term = Term::load($form['tid']['#value'])) {

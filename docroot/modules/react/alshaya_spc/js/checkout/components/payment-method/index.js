@@ -10,7 +10,6 @@ import {
   setUpapiApplePayCofig,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
-import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
@@ -22,6 +21,8 @@ import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi'
 import PaymentMethodCheckoutComUpapiApplePay from '../payment-method-checkout-com-upapi-apple-pay';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import PaymentMethodCheckoutComUpapiFawry
+  from '../payment-method-checkout-com-upapi-fawry';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -31,7 +32,6 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodPostpay = React.createRef();
-    this.paymentMethodCybersource = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
   }
 
@@ -58,16 +58,14 @@ export default class PaymentMethod extends React.Component {
       return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
     }
 
-    if (method.code === 'cybersource') {
-      return this.paymentMethodCybersource.current.validateBeforePlaceOrder();
-    }
-
     return true;
   };
 
   finalisePayment = (paymentData) => {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (!result) {
+        // If validation fails, addPaymentMethodInCart(), returns null.
+        removeFullScreenLoader();
         return;
       }
       if (result.error !== undefined && result.error) {
@@ -99,6 +97,11 @@ export default class PaymentMethod extends React.Component {
 
             Drupal.logJavascriptError('finalise payment', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
           }
+
+          // Enable the 'place order' CTA.
+          dispatchCustomEvent('updatePlaceOrderCTA', {
+            status: true,
+          });
         }
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
@@ -141,14 +144,21 @@ export default class PaymentMethod extends React.Component {
     if (method.code === 'checkout_com_upapi_applepay' && !(CheckoutComUpapiApplePay.isAvailable())) {
       return (null);
     }
-    let postpayModeClass = '';
+    let additionalClasses = '';
+
+    // Hide by default if AB Testing is enabled and method not selected already.
+    if (method.ab_testing && !(isSelected)) {
+      additionalClasses = 'ab-testing-hidden';
+    }
+
+    // @todo make this work with generic way added now above.
     if (method.code === 'postpay') {
-      postpayModeClass = drupalSettings.postpay_widget_info.postpay_mode_class;
+      additionalClasses = drupalSettings.postpay_widget_info.postpay_mode_class;
     }
 
     return (
       <>
-        <div className={`payment-method fadeInUp payment-method-${method.code} ${postpayModeClass}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
+        <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
           <div className="payment-method-top-panel">
             <input
               id={`payment-method-${method.code}`}
@@ -222,16 +232,6 @@ export default class PaymentMethod extends React.Component {
             </div>
           </ConditionalView>
 
-          <ConditionalView condition={(isSelected && method.code === 'cybersource')}>
-            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
-              <PaymentMethodCybersource
-                ref={this.paymentMethodCybersource}
-                cart={cart}
-                finalisePayment={this.finalisePayment}
-              />
-            </div>
-          </ConditionalView>
-
           <ConditionalView condition={isSelected && method.code === 'checkout_com_applepay'}>
             <PaymentMethodApplePay
               ref={this.paymentMethodApplePay}
@@ -246,6 +246,14 @@ export default class PaymentMethod extends React.Component {
               cart={cart}
               finalisePayment={this.finalisePayment}
             />
+          </ConditionalView>
+
+          <ConditionalView condition={isSelected && method.code === 'checkout_com_upapi_fawry'}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodCheckoutComUpapiFawry
+                cart={cart}
+              />
+            </div>
           </ConditionalView>
         </div>
       </>

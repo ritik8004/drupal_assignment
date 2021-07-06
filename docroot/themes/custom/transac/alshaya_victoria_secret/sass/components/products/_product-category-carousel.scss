@@ -19,8 +19,11 @@
       .views-row {
         a > img {
           @include breakpoint($upto-desktop) {
-            max-width: 8.875rem;
-            max-height: none;
+            &:not(.b-lazy) {
+              max-width: 8.875rem;
+              max-height: none;
+            }
+
             height: auto;
           }
         }

@@ -5,6 +5,12 @@
       position: unset;
     }
   }
+
+  &.thumbnail-count-1 {
+    #cloud-zoom-big {
+      #{$left}: 146.5% !important;
+    }
+  }
 }
 
 .cloudzoom__image {
@@ -24,14 +30,6 @@
 
   @include if-ltr {
     left: 132.5% !important;
-  }
-}
-
-.cloudzoom {
-  &.thumbnail-count-1 {
-    #cloud-zoom-big {
-      #{$left}: 146.5% !important;
-    }
   }
 }
 

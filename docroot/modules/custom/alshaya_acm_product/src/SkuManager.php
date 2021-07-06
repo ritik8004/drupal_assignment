@@ -251,11 +251,11 @@ class SkuManager {
   protected $productProcessedManager;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
-   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
-  protected $promoContextManager;
+  protected $requestContextManager;
 
   /**
    * SkuManager constructor.
@@ -304,8 +304,8 @@ class SkuManager {
    *   Alshaya array utility service.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
-   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
-   *   Alshaya Promo Context Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
+   *   Alshaya Request Context Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -329,7 +329,7 @@ class SkuManager {
                               ProductCacheManager $product_cache_manager,
                               AlshayaArrayUtils $alshayaArrayUtils,
                               ProductProcessedManager $product_processed_manager,
-                              AlshayaPromoContextManager $alshayaPromoContextManager) {
+                              AlshayaRequestContextManager $alshayaRequestContextManager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -355,7 +355,7 @@ class SkuManager {
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
     $this->productProcessedManager = $product_processed_manager;
-    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->requestContextManager = $alshayaRequestContextManager;
   }
 
   /**
@@ -477,18 +477,12 @@ class SkuManager {
    *   SKU Entity.
    * @param string $color
    *   Color value to limit the scope of skus to get price.
-   * @param bool $specialPrice
-   *   Boolean flag to indicate if we want to load with specialPrice.
    *
    * @return array
    *   Minimum final price and associated initial price.
    */
-  public function getMinPrices(SKU $sku_entity, string $color = '', $specialPrice = FALSE) {
-    $cache_key = implode(':', array_filter([
-      'product_price',
-      $color,
-      $specialPrice,
-    ]));
+  public function getMinPrices(SKU $sku_entity, string $color = '') {
+    $cache_key = implode(':', array_filter(['product_price', $color]));
     $cache = $this->productCacheManager->get($sku_entity, $cache_key);
 
     // Do not process the same thing again and again.
@@ -500,15 +494,9 @@ class SkuManager {
       'price' => 0,
       'final_price' => 0,
     ];
-    if ($specialPrice) {
-      $prices['special_price'] = 0;
-    }
     if ($sku_entity->bundle() == 'simple') {
       $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
       $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
-      if ($specialPrice) {
-        $special_price = (float) acq_commerce_get_clean_price($sku_entity->get('special_price')->getString());
-      }
       if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
         $price = $final_price;
       }
@@ -520,9 +508,6 @@ class SkuManager {
         'price' => $price,
         'final_price' => $final_price,
       ];
-      if ($specialPrice) {
-        $prices['special_price'] = $special_price;
-      }
       $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
     }
@@ -546,12 +531,9 @@ class SkuManager {
         $child_sku_entity = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
 
         if ($child_sku_entity instanceof SKU) {
-          $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity, '', $specialPrice);
+          $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity);
           $price = $prices['children'][$child_sku_code]['price'];
           $final_price = $prices['children'][$child_sku_code]['final_price'];
-          if ($specialPrice) {
-            $special_price = $prices['children'][$child_sku_code]['special_price'];
-          }
           if ($prices['children'][$child_sku_code]['final_price'] == $price) {
             $prices['children'][$child_sku_code]['final_price'] = 0;
           }
@@ -573,9 +555,6 @@ class SkuManager {
               $sku_price = $new_sku_price;
               $prices['price'] = $price;
               $prices['final_price'] = $final_price;
-              if ($specialPrice) {
-                $prices['special_price'] = $special_price;
-              }
             }
             // Is the difference between initial an final bigger?
             elseif ($price != 0
@@ -1129,7 +1108,7 @@ class SkuManager {
                                          $context = '') {
     $promos = [];
     if (empty($context)) {
-      $context = $this->promoContextManager->getPromotionContext();
+      $context = $this->requestContextManager->getContext();
     }
     $promotion_nodes = $this->getSkuPromotions($sku, $types, $context);
     if (!empty($promotion_nodes)) {
@@ -2372,8 +2351,8 @@ class SkuManager {
 
       if ($sku->hasField($fieldKey)) {
         $value = $sku->get($fieldKey)->getString();
-
-        if ($remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
+        $context = $this->requestContextManager->getContext();
+        if ($context != 'app' && $remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
           continue;
         }
 
@@ -2448,7 +2427,21 @@ class SkuManager {
    *   TRUE if value matches options value to exclude.
    */
   public function isAttributeOptionToExclude($value) {
-    return in_array($value, $this->getConfig('alshaya_acm_product.settings')->get('excluded_attribute_options'));
+    return in_array($value, $this->attributeOptionToExclude());
+  }
+
+  /**
+   * Wrapper function to get options value to exclude.
+   *
+   * @return array
+   *   Array of values to exclude.
+   */
+  public function attributeOptionToExclude() {
+    $static = &drupal_static(__METHOD__, []);
+    if (!isset($static['excluded_attribute_options'])) {
+      $static['excluded_attribute_options'] = $this->getConfig('alshaya_acm_product.settings')->get('excluded_attribute_options');
+    }
+    return $static['excluded_attribute_options'];
   }
 
   /**
@@ -3828,6 +3821,24 @@ class SkuManager {
 
         urldecode($skuId)
       );
+  }
+
+  /**
+   * To validate EAN 13 digit barcode.
+   *
+   * @param bool $barcode
+   *   Barcode number.
+   *
+   * @return bool
+   *   Return a boolean value.
+   */
+  public function validateEanBarcode($barcode) {
+    // Check to see if barcode is 13 digits long.
+    if (!preg_match("/^[0-9]{13}$/", $barcode)) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }

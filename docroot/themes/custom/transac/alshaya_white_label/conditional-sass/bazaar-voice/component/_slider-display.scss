@@ -44,6 +44,38 @@
       position: absolute;
       top: -0.25rem;
       margin-#{$left}: -0.1875rem;
+
+      &.dot-1 {
+        #{$left}: 0;
+      }
+
+      &.slide-range-3 {
+        &.dot-2 {
+          #{$left}: 50%;
+        }
+
+        &.dot-3 {
+          #{$left}: 100%;
+        }
+      }
+
+      &.slide-range-5 {
+        &.dot-2 {
+          #{$left}: 25%;
+        }
+
+        &.dot-3 {
+          #{$left}: 50%;
+        }
+
+        &.dot-4 {
+          #{$left}: 75%;
+        }
+
+        &.dot-5 {
+          #{$left}: 100%;
+        }
+      }
     }
   }
 }

@@ -1,0 +1,14 @@
+.c-plp.l-one--w {
+  #plp-hits,
+  #hits,
+  .view-alshaya-product-list {
+    .c-products__item {
+      img {
+        @include breakpoint($desktop) {
+          height: 100%;
+          width: auto;
+        }
+      }
+    }
+  }
+}
