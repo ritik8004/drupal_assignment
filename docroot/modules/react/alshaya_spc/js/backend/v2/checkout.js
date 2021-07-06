@@ -19,7 +19,7 @@ import {
   isUserAuthenticated,
   logger,
 } from './utility';
-import cartActions from './cart_actions';
+import cartActions from '../../utilities/cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -1021,7 +1021,7 @@ const paymentUpdate = async (data) => {
   const paymentData = data.payment_info.payment;
   const params = {
     extension: {
-      action: data.action,
+      action: cartActions.cartPaymentUpdate,
     },
     payment: {
       method: paymentData.method,
@@ -1066,12 +1066,12 @@ const paymentUpdate = async (data) => {
   // If upapi payment method (payment method via checkout.com).
   if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
-    params.payment.additional_data = {
-      // @todo update these urls.
-      successUrl: '/middleware/public/payment/success/en',
-      failUrl: '/middleware/public/payment/error/en',
-    };
+    params.payment.additional_data.successUrl = Drupal.url('spc/payment-callback/success');
+    params.payment.additional_data.failUrl = Drupal.url(`spc/payment-callback/${paymentData.method}/error`);
   }
+
+  // @todo implement the processing for checkout_com_upapi for Cart::processPaymentData().
+  // @todo update payment method to checkout_com_upapi_vault if using a saved card.
 
   const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
@@ -1090,19 +1090,6 @@ const paymentUpdate = async (data) => {
 };
 
 /**
- * Finalises the payment on the cart.
- *
- * @param {object} data
- *   The data object to send in the API call.
- *
- * @returns {Promise<object>}
- *   A promise object.
- */
-const paymentFinalise = async (data) => {
-  logger.notice(`${data}`);
-};
-
-/**
  * Used to add payment methods to the cart and to finalise payment.
  *
  * @param {object} data
@@ -1112,17 +1099,12 @@ const paymentFinalise = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.addPaymentMethod = (data) => {
-  // Add payment methods to the cart.
-  if (data.action === cartActions.cartPaymentUpdate) {
-    return paymentUpdate(data);
-  }
-
   // Finalise payment.
   if (data.action === cartActions.cartPaymentFinalise) {
-    return paymentFinalise(data);
+    // @todo implement all the validations.
   }
 
-  return null;
+  return paymentUpdate(data);
 };
 
 /**
@@ -1330,6 +1312,81 @@ window.commerceBackend.addShippingMethod = async (data) => {
   cart.data = await getProcessedCheckoutData(cart.data);
 
   return cart;
+};
+
+/**
+ * Places an order.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.placeOrder = async (data) => {
+  const cart = await getCart();
+
+  // @todo stock check.
+  // @todo Check if shipping method is present else throw error.
+  // @todo Check if shipping address not have custom attributes.
+  // @todo If address extension attributes doesn't contain all the required fields
+  // or required field value is empty, not process/place order.
+  // @todo If first/last name not available in shipping address.
+  // @todo If first/last name not available in billing address.
+  // @todo Check if cart total is valid return with an error message.
+  const params = {
+    cartId: window.commerceBackend.getCartId(),
+  };
+
+  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
+    .then((response) => {
+      console.log(response);
+
+      const result = {
+        success: true,
+        isAbsoluteUrl: false,
+      };
+
+      if (typeof response.redirectUrl !== 'undefined') {
+        result.redirectUrl = response.result;
+        result.isAbsoluteUrl = true;
+
+        // This is postpay specific. In future if any other payment gateway sends
+        // token, we will have to add a condition here.
+        if (typeof response.token !== 'undefined') {
+          result.token = response.token;
+        }
+
+        logger.notice('Place order returned redirect url. Cart: @cart Response: @response.', {
+          '@cart': JSON.stringify(cart),
+          '@response': JSON.stringify(response),
+        });
+
+        return result;
+      }
+
+      const orderId = parseInt(response.replace('"', ''), 10);
+      const secureOrderId = btoa(orderId);
+      // @todo implement the code in middleware/src/Service/Cart.php::processPostOrderPlaced().
+      result.redirectUrl = `checkout/confirmation?id=${secureOrderId}}`;
+
+      logger.notice('Order placed successfully. Cart: @cart OrderId: @order_id, Payment Method: @method.', {
+        '@cart': JSON.stringify(cart),
+        '@order_id': orderId,
+        '@method': data.paymentMethod.method,
+      });
+
+      return result;
+    })
+    .catch((response) => {
+      logger.error('Error while placing order. Error message: @message, Code: @code.', {
+        '@message': response.error.error_code,
+        '@code': response.error.message,
+      });
+
+      // @todo all the error handling.
+      return response;
+    });
 };
 
 export {

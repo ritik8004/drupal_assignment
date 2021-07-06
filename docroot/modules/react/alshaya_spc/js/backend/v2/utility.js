@@ -10,10 +10,9 @@
  * @param {string} context
  *   The context.
  */
-/* eslint-disable no-unused-vars */
 const logger = {
   send: (level, message, context) => {
-    // console.log(`${level}: ${message}`);
+    console.log(level, Drupal.formatString(message, context));
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
@@ -24,7 +23,6 @@ const logger = {
   info: (message, context) => logger.send('info', message, context),
   debug: (message, context) => logger.send('debug', message, context),
 };
-/* eslint-enable no-unused-vars */
 
 /**
  * Get user role authenticated or anonymous.
@@ -94,6 +92,12 @@ const getApiEndpoint = (action, params = {}) => {
       endpoint = isUserAuthenticated()
         ? '/rest/V1/carts/mine/selected-payment-method'
         : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;
+      break;
+
+    case 'placeOrder':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/order'
+        : `/rest/V1/guest-carts/${params.cartId}/order`;
       break;
 
     default:
