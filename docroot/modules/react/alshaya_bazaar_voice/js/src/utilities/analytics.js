@@ -30,6 +30,7 @@ function pushContentToBVAnalytics(content, contentType, productData) {
     contentId: content.Id,
     productId: productData.Id,
     categoryId: productData.CategoryId,
+    categoryName: drupalSettings.productInfo[productData.Id].gtm_attributes.category,
     contentType,
     bvProduct: 'RatingsAndReviews',
     brand: productData.Brand.Name,
@@ -47,13 +48,14 @@ function trackPageView(productData) {
     brand: productData.Brand.Name,
     type: 'Product',
     categoryId: productData.CategoryId,
+    categoryName: drupalSettings.productInfo[productData.Id].gtm_attributes.category,
     numReviews: productData.ReviewStatistics.TotalReviewCount,
-    avgRating: productData.ReviewStatistics.AverageOverallRating,
-    percentRecommended: (productData.ReviewStatistics.RecommendedCount
-        / productData.ReviewStatistics.TotalReviewCount) * 100,
+    avgRating: Math.round(productData.ReviewStatistics.AverageOverallRating * 100) / 100,
+    percentRecommended: Math.round((productData.ReviewStatistics.RecommendedCount
+        / productData.ReviewStatistics.TotalReviewCount) * 100),
   };
   bvPixelUtility.trackPageView(pageViewData);
-  pushContentToDataLayer('trackPageView', pageViewData);
+  pushContentToDataLayer('BV_trackPageView', pageViewData);
 }
 
 /**
@@ -85,7 +87,7 @@ function trackInView(inViewData, containerId) {
     minPixels: 250,
     containerId,
   });
-  pushContentToDataLayer('trackInView', inViewData);
+  pushContentToDataLayer('BV_trackInView', inViewData);
 }
 
 /**
@@ -100,7 +102,7 @@ function trackViewedCGC(inViewData, containerId) {
     minTime: 2500,
     containerId,
   });
-  pushContentToDataLayer('trackViewedCGC', inViewData);
+  pushContentToDataLayer('BV_trackViewedCGC', inViewData);
 }
 
 /**
@@ -152,11 +154,12 @@ export const trackFeaturedAnalytics = (analyticsData) => {
       productId: productData.Id,
       bvProduct: 'RatingsAndReviews',
       categoryId: productData.CategoryId,
+      categoryName: drupalSettings.productInfo[productData.Id].gtm_attributes.category,
       detail1: analyticsData.detail1,
       detail2: analyticsData.detail2,
     };
     bvPixelUtility.trackEvent('Feature', eventData);
-    pushContentToDataLayer(`bvFeature-${analyticsData.name}-click`, eventData);
+    pushContentToDataLayer(`BV_feature${analyticsData.name}Click`, eventData);
   }
 };
 
