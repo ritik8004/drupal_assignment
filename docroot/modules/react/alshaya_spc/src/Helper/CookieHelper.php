@@ -6,8 +6,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Cookie Helper class.
- *
- * @package App\Helper
  */
 class CookieHelper {
 
@@ -25,7 +23,7 @@ class CookieHelper {
    *   Cookie.
    */
   public static function create(string $name, string $value = NULL, $expiry = 0) {
-    return Cookie::create(
+    return new Cookie(
       $name,
       $value,
       $expiry,
