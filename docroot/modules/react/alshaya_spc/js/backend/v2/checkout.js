@@ -1257,17 +1257,12 @@ const paymentFinalise = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.addPaymentMethod = (data) => {
-  // Add payment methods to the cart.
-  if (data.action === cartActions.cartPaymentUpdate) {
-    return paymentUpdate(data);
-  }
-
   // Finalise payment.
   if (data.action === cartActions.cartPaymentFinalise) {
-    return paymentFinalise(data);
+    paymentFinalise(data);
   }
 
-  return null;
+  return paymentUpdate(data);
 };
 
 /**
