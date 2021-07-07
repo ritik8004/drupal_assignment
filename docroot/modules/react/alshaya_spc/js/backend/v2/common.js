@@ -208,6 +208,13 @@ const handleResponse = (apiResponse) => {
     response.data.error_message = error.message;
     //
     logger.error(`Error while doing MDC api call. Error message: ${error.message}`);
+  } else if (_.isArray(response.data.response_message) && !_.isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
+    response.data.error = true;
+    response.data.error_code = 400;
+    [response.data.error_message] = response.data.response_message;
+    logger.error('Error while doing MDC api call. Error: @error_message', {
+      '@error_message': JSON.stringify(response.data.response_message),
+    });
   }
   return response;
 };
@@ -523,7 +530,7 @@ const getProcessedCartData = (cartData) => {
  *   A promise object containing the cart or null.
  */
 const getCart = async (force = false) => {
-  if (window.commerceBackend.getRawCartDataFromStorage() !== null && !force) {
+  if (!force && window.commerceBackend.getRawCartDataFromStorage() !== null) {
     return { data: window.commerceBackend.getRawCartDataFromStorage() };
   }
 
