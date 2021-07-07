@@ -1112,7 +1112,7 @@ function alshaya_white_label_preprocess_mimemail_message(&$variables) {
   // with different env.
   $uuid = '340b823b-e16c-457a-bc03-4a096f8ae171';
   // Get copyright block based on language.
-  $copyright_block = \Drupal::entityTypeManager()->loadEntityByUuid('block_content', $uuid);
+  $copyright_block = \Drupal::service('entity.repository')->loadEntityByUuid('block_content', $uuid);
   if ($copyright_block) {
     $block_view = \Drupal::entityTypeManager()
       ->getViewBuilder('block_content')
@@ -1178,7 +1178,7 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
     dynamic_yield_page_attachments($variables);
   }
   if (!empty($image)) {
-    if ($file = \Drupal\file\Entity\File::load($image)) {
+    if ($file = File::load($image)) {
       $variables['maintenance_image'] = file_create_url($file->getFileUri());
     }
   }
@@ -1216,7 +1216,7 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
   ];
   $variables['image_404'] = '';
   if (!empty($image)) {
-    if ($file = \Drupal\file\Entity\File::load($image)) {
+    if ($file = File::load($image)) {
       $variables['image_404'] = file_create_url($file->getFileUri());
     }
   }
