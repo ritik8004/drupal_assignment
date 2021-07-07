@@ -1253,7 +1253,9 @@ window.commerceBackend.addPaymentMethod = async (data) => {
   // Validate cart.
   if (data.action === cartActions.cartPaymentFinalise) {
     const response = await validateBeforePaymentFinalise();
-    if (!_.isUndefined(response.data.error) && response.data.error) {
+    if (!_.isUndefined(response.data)
+      && !_.isUndefined(response.data.error) && response.data.error
+    ) {
       return response;
     }
   }
