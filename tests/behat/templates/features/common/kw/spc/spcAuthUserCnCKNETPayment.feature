@@ -40,8 +40,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I select "{spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "Submit"
     And I wait 2 seconds
@@ -81,8 +80,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds
@@ -119,8 +117,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I select "{spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "Submit"
     And I wait 2 seconds
