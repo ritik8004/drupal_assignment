@@ -13,7 +13,7 @@ import {
   getCartCustomerEmail,
   getCartCustomerId,
 } from './common';
-import { getDefaultErrorMessage } from './error';
+import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import {
   getApiEndpoint,
   isUserAuthenticated,
@@ -1327,21 +1327,76 @@ window.commerceBackend.placeOrder = async (data) => {
   const cart = await getCart();
 
   // @todo stock check.
-  // @todo Check if shipping method is present else throw error.
-  // @todo Check if shipping address not have custom attributes.
+
+  // Check if shipping method is present else throw error.
+  if (_.isEmpty(cart.data.shipping.method)) {
+    logger.error('Error while placing order. No shipping method available. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
+  // Check if shipping address not have custom attributes.
+  if (_.isEmpty(cart.data.shipping.address.custom_attributes)) {
+    logger.error('Error while placing order. Shipping address not contains all info. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
   // @todo If address extension attributes doesn't contain all the required fields
   // or required field value is empty, not process/place order.
-  // @todo If first/last name not available in shipping address.
+
+  // If first/last name not available in shipping address.
+  if (_.isEmpty(cart.data.shipping.address.firstname)
+    || _.isEmpty(cart.data.shipping.address.lastname)) {
+    logger.error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
   // @todo If first/last name not available in billing address.
+  if (_.isEmpty(cart.data.cart.billing_address.firstname)
+    || _.isEmpty(cart.data.cart.billing_address.lastname)) {
+    logger.error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
   // @todo Check if cart total is valid return with an error message.
+
   const params = {
     cartId: window.commerceBackend.getCartId(),
   };
 
   return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
     .then((response) => {
-      console.log(response);
-
       const result = {
         success: true,
         isAbsoluteUrl: false,
@@ -1362,26 +1417,29 @@ window.commerceBackend.placeOrder = async (data) => {
           '@response': JSON.stringify(response),
         });
 
-        return result;
+        return { data: result };
       }
 
-      const orderId = parseInt(response.replace('"', ''), 10);
-      const secureOrderId = btoa(orderId);
+      const orderId = parseInt(response.data.replace('"', ''), 10);
+      const secureOrderId = btoa(JSON.stringify({
+        id: orderId,
+        mail: cart.data.cart.billing_address.email,
+      }));
       // @todo implement the code in middleware/src/Service/Cart.php::processPostOrderPlaced().
-      result.redirectUrl = `checkout/confirmation?id=${secureOrderId}}`;
+      result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
       logger.notice('Order placed successfully. Cart: @cart OrderId: @order_id, Payment Method: @method.', {
         '@cart': JSON.stringify(cart),
         '@order_id': orderId,
-        '@method': data.paymentMethod.method,
+        '@method': data.data.paymentMethod.method,
       });
 
       return result;
     })
     .catch((response) => {
       logger.error('Error while placing order. Error message: @message, Code: @code.', {
-        '@message': response.error.error_code,
-        '@code': response.error.message,
+        '@message': !_.isEmpty(response.error) ? response.error.message : response,
+        '@code': !_.isEmpty(response.error) ? response.error.error_code : '',
       });
 
       // @todo all the error handling.
