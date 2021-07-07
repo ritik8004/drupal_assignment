@@ -12,8 +12,13 @@ import {
   callMagentoApi,
   getCartCustomerEmail,
   getCartCustomerId,
+  matchStockQuantity,
+  isCartHasOosItem,
 } from './common';
-import { cartErrorCodes, getDefaultErrorMessage } from './error';
+import {
+  cartErrorCodes,
+  getDefaultErrorMessage,
+} from './error';
 import {
   getApiEndpoint,
   isUserAuthenticated,
@@ -1090,6 +1095,152 @@ const paymentUpdate = async (data) => {
 };
 
 /**
+ * Get address fields to validate from drupal settings.
+ *
+ * @return {object}
+ *   Fields to validate.
+ */
+const cartAddressFieldsToValidate = () => {
+  let addressFieldsToValidate = [];
+
+  // Get the address fields based on site/country code
+  // from the drupal settings.
+  const siteCountryCode = window.drupalSettings.cart.site_country_code;
+  const addressFields = window.drupalSettings.cart.address_fields;
+
+  // Use default value first if available.
+  if (!_.isUndefined(siteCountryCode.country_code)) {
+    const countryCode = siteCountryCode.country_code;
+    if (!_.isUndefined(addressFields.default[countryCode])) {
+      addressFieldsToValidate = addressFields.default[countryCode];
+    }
+    if (!_.isUndefined(siteCountryCode.site_code)) {
+      const siteCode = siteCountryCode.site_code;
+      // If brand specific value available/override.
+      if (!_.isUndefined(addressFields[siteCode])
+        && !_.isUndefined(addressFields[siteCode][countryCode])
+      ) {
+        addressFieldsToValidate = addressFields[siteCode][countryCode];
+      }
+    }
+  }
+  return addressFieldsToValidate;
+};
+
+/**
+ * Validates the extension attributes of the address of the cart.
+ *
+ * @param {object} data
+ *   Cart data.
+ *
+ * @return {bool}
+ *   FALSE if empty field value.
+ */
+const isAddressExtensionAttributesValid = (data) => {
+  let isValid = true;
+  // If there are address fields available for validation
+  // in drupal settings.
+  const addressFieldsToValidate = cartAddressFieldsToValidate();
+  if (!_.isEmpty(addressFieldsToValidate)) {
+    const cartAddressCustom = [];
+    // Prepare cart address field data.
+    data.shipping.address.custom_attributes.forEach((item) => {
+      cartAddressCustom[item.attribute_code] = item.value;
+    });
+
+    // Check each required field in custom attributes available in cart
+    // shipping address or not.
+    addressFieldsToValidate.forEach((field) => {
+      // If field not exists or empty.
+      if (_.isEmpty(cartAddressCustom[field])) {
+        const cartId = window.commerceBackend.getCartId();
+        logger.error(`Field: ${field} not available in cart shipping address. Cart id: ${cartId}`);
+      }
+      isValid = false;
+      return isValid;
+    });
+  }
+  return isValid;
+};
+
+/**
+ * Finalises the payment on the cart.
+ *
+ * @returns {Promise<boolean|object>}
+ *   A promise object with true or the error object.
+ */
+const validateBeforePaymentFinalise = async () => {
+  // Fetch fresh cart from magento.
+  const cart = await getCart(true);
+  const cartData = cart.data;
+
+  let isError = false;
+  let errorMessage = 'Delivery Information is incomplete. Please update and try again.';
+  let errorCode = cartErrorCodes.cartOrderPlacementError;
+
+  if (_.isObject(cartData) && isCartHasOosItem(cartData)) {
+    isError = true;
+    logger.error(`Error while finalizing payment. Cart has an OOS item. Cart: ${JSON.stringify(cartData)}.`);
+
+    Object.keys(cartData.cart.items).forEach((key) => {
+      matchStockQuantity(cartData.cart.items[key].sku);
+    });
+
+    errorMessage = 'Cart contains some items which are not in stock.';
+    errorCode = cartErrorCodes.cartHasOOSItem;
+  } else if (_.isUndefined(cartData.shipping.method)
+    || _.isEmpty(cartData.shipping.method)
+  ) {
+    // Check if shipping method is present else throw error.
+    isError = true;
+    const logData = JSON.stringify(cartData);
+    logger.error(`Error while finalizing payment. No shipping method available. Cart: ${logData}.`);
+    //
+  } else if (_.isUndefined(cartData.shipping.address)
+    || _.isUndefined(cartData.shipping.address.custom_attributes)
+    || _.isEmpty(cartData.shipping.address.custom_attributes)
+  ) {
+    // If shipping address not have custom attributes.
+    isError = true;
+    const logData = JSON.stringify(cartData);
+    logger.error(`Error while finalizing payment. Shipping address not contains all info. Cart: ${logData}.`);
+    //
+  } else if (!isAddressExtensionAttributesValid(cartData)) {
+    // If address extension attributes doesn't contain all the required
+    // fields or required field value is empty, not process/place order.
+    isError = true;
+    const logData = JSON.stringify(cartData);
+    logger.error(`Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: ${logData}.`);
+  } else if (_.isUndefined(cartData.shipping.address.firstname)
+    || _.isUndefined(cartData.shipping.address.lastname)
+  ) {
+    // If first/last name not available in shipping address.
+    isError = true;
+    const logData = JSON.stringify(cartData);
+    logger.error(`Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: ${logData}.`);
+  } else if (_.isUndefined(cartData.cart.billing_address.firstname)
+    || _.isUndefined(cartData.cart.billing_address.lastname)
+  ) {
+    // If first/last name not available in billing address.
+    isError = true;
+    const logData = JSON.stringify(cartData);
+    logger.error(`Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: ${logData}.`);
+  }
+
+  if (isError) {
+    return {
+      data: {
+        error: true,
+        error_code: errorCode,
+        error_message: errorMessage,
+      },
+    };
+  }
+
+  return true;
+};
+
+/**
  * Used to add payment methods to the cart and to finalise payment.
  *
  * @param {object} data
@@ -1098,10 +1249,13 @@ const paymentUpdate = async (data) => {
  * @returns {Promise<object>}
  *   A promise object.
  */
-window.commerceBackend.addPaymentMethod = (data) => {
-  // Finalise payment.
+window.commerceBackend.addPaymentMethod = async (data) => {
+  // Validate cart.
   if (data.action === cartActions.cartPaymentFinalise) {
-    // @todo implement all the validations.
+    const response = await validateBeforePaymentFinalise();
+    if (!_.isUndefined(response.data.error) && response.data.error) {
+      return response;
+    }
   }
 
   return paymentUpdate(data);
