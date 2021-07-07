@@ -1538,7 +1538,23 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
 window.commerceBackend.placeOrder = async (data) => {
   const cart = await getCart(true);
 
-  // @todo stock check.
+  if (_.isObject(cart) && isCartHasOosItem(cart.data)) {
+    logger.error('Error while finalizing payment. Cart has an OOS item. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+
+    Object.keys(cart.data.cart.items).forEach((key) => {
+      matchStockQuantity(cart.data.cart.items[key].sku);
+    });
+
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartHasOOSItem,
+        error_message: 'Cart contains some items which are not in stock.',
+      },
+    };
+  }
 
   // Check if shipping method is present else throw error.
   if (_.isEmpty(cart.data.shipping.method)) {
@@ -1568,8 +1584,20 @@ window.commerceBackend.placeOrder = async (data) => {
     };
   }
 
-  // @todo If address extension attributes doesn't contain all the required fields
-  // or required field value is empty, not process/place order.
+  if (!isAddressExtensionAttributesValid(cart.data)) {
+    // If address extension attributes doesn't contain all the required
+    // fields or required field value is empty, not process/place order.
+    logger.error('Error while placing order. Shipping address not contains all required extension attributes. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
 
   // If first/last name not available in shipping address.
   if (_.isEmpty(cart.data.shipping.address.firstname)
