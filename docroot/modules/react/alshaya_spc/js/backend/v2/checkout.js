@@ -1169,7 +1169,7 @@ const isAddressExtensionAttributesValid = (data) => {
  * @returns {Promise<object>}
  *   A promise object containing cart data or error.
  */
-const paymentFinalise = async () => {
+const validateBeforePaymentFinalise = async () => {
   // Fetch fresh cart from magento.
   const cart = await getCart(true);
   const cartData = cart.data;
@@ -1254,7 +1254,7 @@ const paymentFinalise = async () => {
 window.commerceBackend.addPaymentMethod = async (data) => {
   // Validate cart.
   if (data.action === cartActions.cartPaymentFinalise) {
-    const response = await paymentFinalise();
+    const response = await validateBeforePaymentFinalise();
     if (!_.isUndefined(response.data.error) && response.data.error) {
       return response;
     }
