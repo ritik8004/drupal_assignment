@@ -61,7 +61,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_spc.order_helper'),
+      $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('logger.factory')->get('AlshayaSpcUpapiPaymentController')
     );
   }
@@ -129,11 +129,13 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
       );
 
       // Redirect user to confirmation page.
-      $redirect->setTargetUrl(Url::fromRoute(
-        'alshaya_spc.checkout.confirmation',
-        [],
-        ['query' => ['id' => $order['secure_order_id']]]
-      ));
+      $redirect->setTargetUrl(
+        Url::fromRoute(
+          'alshaya_spc.checkout.confirmation',
+          [],
+          ['query' => ['id' => $order['secure_order_id']]]
+        )->toString()
+      );
 
       $redirect->headers->setCookie(CookieHelper::create('middleware_order_placed', 1, strtotime('+1 year')));
 
@@ -159,15 +161,15 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    *
    * @param \GuzzleHttp\Psr7\Request $request
    *   Request object.
-   * @param string $payment_method
+   * @param string $method
    *   Payment Method used for this callback.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Response to redirect to cart or confirmation page.
    */
-  public function error(Request $request, string $payment_method) {
+  public function error(Request $request, string $method) {
     $this->logger->error('UPAPI Payment failed for Payment Method: @payment_method, Type: @type.', [
-      '@payment_method' => $payment_method,
+      '@payment_method' => $method,
       '@type' => $request->query->get('type'),
     ]);
 
@@ -175,7 +177,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
     $payment_data = [
       'status' => self::PAYMENT_DECLINED_VALUE,
-      'payment_method' => $payment_method,
+      'payment_method' => $method,
       'message' => $request->query->get('message'),
     ];
 
