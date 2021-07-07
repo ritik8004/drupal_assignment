@@ -113,9 +113,9 @@ describe('Common', () => {
        input                                                    | expectedResult
        ${''}                                                    | ${null}
        ${{}}                                                    | ${null}
-       ${{ cart: 'foo' }}                                       | ${null}
-       ${{ cart: { customer: 'foo' }}}                          | ${null}
-       ${{ cart: { customer: { id: 'foo' }}}}                   | ${'foo'}
+       ${{ cart: '123' }}                                       | ${null}
+       ${{ cart: { customer: '123' }}}                          | ${null}
+       ${{ cart: { customer: { id: '1234' }}}}                  | ${1234}
        ${{ cart: { customer: { id: 1234 }}}}                    | ${1234}
      `.test('Test that getCartCustomerId($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
         axios.mockResolvedValue({

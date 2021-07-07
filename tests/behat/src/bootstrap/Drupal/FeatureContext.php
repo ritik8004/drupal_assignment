@@ -2775,4 +2775,38 @@ JS;
     $this->iWaitSeconds('30');
   }
 
+  /**
+   * @Given /^I select date and month in the form$/
+   */
+  public function iSelectDateAndMonthInTheForm()
+  {
+    $page = $this->getSession()->getPage();
+    $knet_expiration = $page->find('css', '#cardExpdate .col:nth-child(2) select:first-child');
+    if ($knet_expiration != null) {
+      $this->getSession()->executeScript("jQuery('#debitMonthSelect').val(9)");
+      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2021)");
+      $this->iWaitSeconds('20');
+    }
+    else {
+      throw new \Exception(sprintf('Month-year not found.'));
+    }
+  }
+
+  /**
+   * @Given /^I select date and month in the form for arabic$/
+   */
+  public function iSelectDateAndMonthInTheFormForArabic()
+  {
+    $page = $this->getSession()->getPage();
+    $knet_expiration = $page->find('css', '#cardExpdate .col:nth-child(1) select:first-child');
+    if ($knet_expiration != null) {
+      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2021)");
+      $this->getSession()->executeScript("jQuery('#debitMonthSelect').val(9)");
+      $this->iWaitSeconds('20');
+    }
+    else {
+      throw new \Exception(sprintf('Month-year not found.'));
+    }
+  }
+
 }

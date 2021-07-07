@@ -7,6 +7,7 @@ import {
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
 import { addPaymentMethodInCart } from './update_cart';
+import cartActions from './cart_actions';
 
 let applePaySessionObject;
 
@@ -112,7 +113,7 @@ const CheckoutComUpapiApplePay = {
         };
 
         // Update payment method with token data.
-        addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
+        addPaymentMethodInCart(cartActions.cartPaymentFinalise, paymentData).then((result) => {
           if (!result) {
             // Something wrong, throw error.
             throw (new Error(response.data.error_message));

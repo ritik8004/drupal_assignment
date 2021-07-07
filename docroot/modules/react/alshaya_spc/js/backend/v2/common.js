@@ -3,7 +3,7 @@ import qs from 'qs';
 import _ from 'lodash';
 import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
-import cartActions from './cart_actions';
+import cartActions from '../../utilities/cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -577,7 +577,7 @@ const getCartCustomerId = async () => {
   const response = await getCart();
   const cart = response.data;
   if (!_.isEmpty(cart) && !_.isEmpty(cart.customer) && !_.isUndefined(cart.customer.id)) {
-    return cart.customer.id;
+    return parseInt(cart.customer.id, 10);
   }
   return null;
 };
