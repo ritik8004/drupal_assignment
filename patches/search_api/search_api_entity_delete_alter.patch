@@ -1,8 +1,17 @@
 diff --git a/search_api.api.php b/search_api.api.php
-index 9e36b45c..3cb88a6a 100644
+index 9e36b45c..14592f24 100644
 --- a/search_api.api.php
 +++ b/search_api.api.php
-@@ -432,6 +432,34 @@ function hook_search_api_index_reindex(\Drupal\search_api\IndexInterface $index,
+@@ -5,6 +5,8 @@
+  * Hooks provided by the Search API module.
+  */
+ 
++use Drupal\Core\Entity\EntityInterface;
++
+ /**
+  * @addtogroup hooks
+  * @{
+@@ -432,6 +434,34 @@ function hook_search_api_index_reindex(\Drupal\search_api\IndexInterface $index,
      ->execute();
  }
  
