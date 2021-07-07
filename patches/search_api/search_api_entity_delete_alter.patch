@@ -1,0 +1,24 @@
+diff --git a/src/Entity/Index.php b/src/Entity/Index.php
+index 090131de..9f0ed373 100644
+--- a/src/Entity/Index.php
++++ b/src/Entity/Index.php
+@@ -1105,6 +1105,7 @@ class Index extends ConfigEntityBase implements IndexInterface {
+     foreach ($ids as $id) {
+       $item_ids[] = Utility::createCombinedId($datasource_id, $id);
+     }
++    \Drupal::moduleHandler()->alter('alshaya_search_api_track_items', $item_ids, $this, $id);
+     if ($this->hasValidTracker()) {
+       $this->getTrackerInstance()->trackItemsDeleted($item_ids);
+     }
+diff --git a/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php b/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
+index 551d2116..90069aa1 100644
+--- a/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
++++ b/src/Plugin/search_api/datasource/ContentEntityTrackingManager.php
+@@ -202,6 +202,7 @@ class ContentEntityTrackingManager {
+     }
+     $datasource_id = 'entity:' . $entity->getEntityTypeId();
+     foreach ($indexes as $index) {
++      \Drupal::moduleHandler()->alter('alshaya_search_api_entity_delete', $item_ids, $index, $entity);
+       $index->trackItemsDeleted($datasource_id, $item_ids);
+     }
+   }
