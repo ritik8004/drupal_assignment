@@ -81,11 +81,17 @@ function toggleSortByFilter(action, context = 'alshaya-algolia-search') {
 // Show or hide blockcategory filter, when no results found.
 function toggleBlockCategoryFilter(action, context = 'alshaya-algolia-search') {
   const searchWrapper = document.getElementById(context);
+  // To get the list of blocks in sidebar first region.
+  const list = searchWrapper.querySelectorAll('.block-facet-blockcategory-facet-search');
   if (action === 'hide') {
     // hide-block-category-block class is added to hide facet when no result.
-    searchWrapper.querySelector('.block-facet-blockcategory-facet-search').classList.add('hide-block-category-block');
+    for (let i = 0; i < list.length; ++i) {
+      list[i].classList.add('hide-block-category-block');
+    }
   } else {
-    searchWrapper.querySelector('.block-facet-blockcategory-facet-search').classList.remove('hide-block-category-block');
+    for (let i = 0; i < list.length; ++i) {
+      list[i].classList.remove('hide-block-category-block');
+    }
   }
 }
 
