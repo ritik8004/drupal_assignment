@@ -17,4 +17,12 @@
       #{$right}: 0;
     }
   }
+
+  @include breakpoint($tablet) {
+    html[lang=ar] & {
+      &::after {
+        right: 2.1875rem;
+      }
+    }
+  }
 }

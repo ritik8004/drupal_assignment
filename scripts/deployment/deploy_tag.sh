@@ -35,7 +35,7 @@ then
 fi
 
 stack=`whoami`
-repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
+repo="$stack@svn-5975.enterprise-g1.hosting.acquia.com:$stack.git"
 
 server_root="/var/www/html/$AH_SITE_NAME"
 docroot="${server_root}/docroot"

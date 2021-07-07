@@ -7,5 +7,6 @@ dependencies:
   - alshaya_vs:alshaya_vs
   - alshaya_vs:alshaya_vs_search
   - alshaya_color_split:alshaya_color_split
+  - alshaya_mobile_app:alshaya_mobile_app
 themes:
   - alshaya_victoria_secret

@@ -109,6 +109,17 @@ header.c-header {
       }
     }
   }
+
+  .block-alshaya-react-mini-cart {
+    .cart-link {
+      @include breakpoint($only-mobile) {
+        html[lang=ar] & {
+          top: 0.125rem;
+          margin-top: 0;
+        }
+      }
+    }
+  }
 }
 
 .c-menu-primary {
@@ -188,6 +199,14 @@ body {
       }
     }
   }
+
+  &.mobile--overlay {
+    .branding__menu {
+      @include breakpoint($upto-desktop) {
+        box-shadow: 0 1px 0 0 $lhn_sticky-header-shadow;
+      }
+    }
+  }
 }
 
 // Box shadow to main menu after removing the overlay.
@@ -199,16 +218,6 @@ body {
           box-shadow: 0 0.1875rem 0.3125rem 0 $PBK_box_shadow_gray;
           border: 1px solid $mm_l2_border;
         }
-      }
-    }
-  }
-}
-
-body {
-  &.mobile--overlay {
-    .branding__menu {
-      @include breakpoint($upto-desktop) {
-        box-shadow: 0 1px 0 0 $lhn_sticky-header-shadow;
       }
     }
   }

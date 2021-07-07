@@ -1,0 +1,10 @@
+.paragraph--type--section-divider {
+  .field--name-field-section-divider-text {
+    font-family: $tbs-recoleta-medium;
+    font-size: 1.875rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 1.5rem;
+    }
+  }
+}

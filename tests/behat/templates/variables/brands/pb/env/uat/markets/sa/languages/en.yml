@@ -16,6 +16,8 @@ variables:
   vat: ''
   city_option: 'Abu Arish'
   area_option: 'Abu Arish'
+  spc_search_byname: 'Raylan'
+  spc_search_byID: 'PBSASSA000'
   language_city_option: 'ابو عريش'
   language_area_option: 'ابو عريش'
   checkout_link: 'continue to checkout'
@@ -38,4 +40,8 @@ variables:
   create_account: 'Create An Account'
   sign_in: 'Sign In'
   find_store: 'Find A Store'
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
 

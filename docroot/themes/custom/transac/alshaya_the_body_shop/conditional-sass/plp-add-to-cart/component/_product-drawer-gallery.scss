@@ -1,0 +1,26 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    .slick-slider {
+      .slick-next,
+      .slick-prev {
+        @include icon(ic-arrow-left, before) {
+          font-size: 1.125rem;
+        }
+      }
+
+      html[lang=ar] & {
+        .slick-next {
+          &::before {
+            transform: rotate(360deg);
+          }
+        }
+
+        .slick-prev {
+          &::before {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,74 +1,86 @@
-import Cookies from 'js-cookie';
-import { doRequest, getbazaarVoiceSettings } from './api/request';
+import { doRequest, getUserDetails } from './api/request';
+import { setStorageInfo, getStorageInfo } from './storage';
 
-const bazaarVoiceSettings = getbazaarVoiceSettings();
+export const getUasToken = () => {
+  const requestUrl = '/get-uas-token';
+  const request = doRequest(requestUrl);
+  if (request instanceof Promise) {
+    return request
+      .then((result) => {
+        if (result.status === 200) {
+          return result.data;
+        }
+        return null;
+      })
+      .catch((error) => error);
+  }
+  return null;
+};
 
-/**
- * Get email address of current user.
- *
- * @returns {email}
- */
-export const getCurrentUserEmail = () => {
-  const email = bazaarVoiceSettings.reviews.user.user_email;
-  return email;
+export const getProductReviewStats = (productId) => {
+  const requestUrl = `/get-product-review-stats/${productId}`;
+  const request = doRequest(requestUrl);
+  if (request instanceof Promise) {
+    return request
+      .then((result) => {
+        if (result.status === 200) {
+          return result.data;
+        }
+        return null;
+      })
+      .catch((error) => error);
+  }
+  return null;
 };
 
 /**
- * Get username of current user.
+ * Validate to open writa a review form on page load.
  *
- * @returns {userName}
+ * @returns {boolean}
  */
-export const getCurrentUserName = () => {
-  const userName = bazaarVoiceSettings.reviews.user.user_name;
-  return userName;
+export const isOpenWriteReviewForm = (productId) => {
+  const userDetails = getUserDetails(productId);
+  const query = new URLSearchParams(document.referrer);
+  const openPopup = query.get('openPopup');
+  if (userDetails !== undefined
+    && userDetails.user.userId > 0
+    && getStorageInfo('openPopup')
+    && openPopup !== null
+    && userDetails.productReview === null) {
+    return true;
+  }
+  return false;
 };
 
-export const setSessionCookie = (key, value) => {
-  Cookies.remove(key);
-  Cookies.set(key, value, { expires: bazaarVoiceSettings.reviews.bazaar_voice.max_age });
-};
-
-/**
- * Get UAS Token of current user.
- *
- * @returns {uasToken}
- */
-export const getSessionCookie = (key) => {
-  let sessionCookie = Cookies.get(key);
-
-  if (sessionCookie === undefined) {
-    const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
-    if (key === currentUserKey) {
-      const requestUrl = '/get-uas-token';
-      const request = doRequest(requestUrl);
-
-      if (request instanceof Promise) {
-        request.then((result) => {
-          if (result.status === 200) {
-            setSessionCookie(key, result.data);
-            sessionCookie = Cookies.get(key);
-          } else {
-            Drupal.logJavascriptError('user-session', result.error);
-          }
-        });
-      }
+export const createUserStorage = (userId, email) => {
+  const userStorage = getStorageInfo(`bvuser_${userId}`);
+  // Set uas token if user not found in storage.
+  if (userStorage === null) {
+    let currentUserObj = null;
+    // Initliaze user object for anonmymous user.
+    if (userId === 0) {
+      currentUserObj = {
+        id: userId,
+      };
+      setStorageInfo(currentUserObj, `bvuser_${userId}`);
     } else {
-      return null;
+      getUasToken().then((uasTokenValue) => {
+        if (uasTokenValue !== null) {
+          currentUserObj = {
+            id: userId,
+            uasToken: uasTokenValue,
+            email,
+          };
+          setStorageInfo(currentUserObj, `bvuser_${userId}`);
+        }
+      });
     }
   }
-
-  return sessionCookie;
-};
-
-export const deleteSessionCookie = (keys) => {
-  keys.forEach((item) => {
-    Cookies.remove(item);
-  });
 };
 
 export default {
-  getCurrentUserEmail,
-  setSessionCookie,
-  getSessionCookie,
-  deleteSessionCookie,
+  getUasToken,
+  isOpenWriteReviewForm,
+  createUserStorage,
+  getProductReviewStats,
 };

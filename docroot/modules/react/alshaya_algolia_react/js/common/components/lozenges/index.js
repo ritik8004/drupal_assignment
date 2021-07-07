@@ -1,4 +1,6 @@
 import React from 'react';
+import ImageElement
+  from '../../../src/components/gallery/imageHelper/ImageElement';
 
 // Supported label positions.
 const ALLOWED_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
@@ -30,6 +32,7 @@ const Lozenges = ({ labels, sku }) => {
           <div className="labels-wrapper" data-type="plp" data-sku={sku} data-main-sku={sku}>
             {
               bifercatedLabelsList.map((key) => {
+                // Only render labels in supported positions.
                 if (ALLOWED_POSITIONS.includes(key)) {
                   return (
                     <div
@@ -57,14 +60,13 @@ const Lozenges = ({ labels, sku }) => {
 const LabelItems = ({ bifercatedLabels, directionKey }) => (
   <>
     {
-      bifercatedLabels[directionKey].map((labelItem) => (
+      bifercatedLabels[directionKey].map((labelItem, index) => (
         // BE to provide and add a unique key here.
-        <div className="label testing" key={labelItem.image}>
-          <img
-            src={labelItem.image}
-            alt={labelItem.text || ''}
-            title={labelItem.text || ''}
-            loading="lazy"
+        <div className="label" key={`label-${index}`}>
+          <ImageElement
+            src={labelItem.image.url}
+            alt={labelItem.image.alt}
+            title={labelItem.image.title}
           />
         </div>
       ))

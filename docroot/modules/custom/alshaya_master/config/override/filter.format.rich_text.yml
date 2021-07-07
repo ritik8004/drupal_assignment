@@ -1,4 +1,0 @@
-filters:
-  filter_html:
-    settings:
-      allowed_html: '<a href hreflang _target target class data-dialog-options data-dialog-type> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h2 class> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <p class> <br> <h1> <h1 class> <pre> <drupal-entity data-*> <i class> <span class> <style> <div class>'

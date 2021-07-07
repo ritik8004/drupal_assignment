@@ -1,8 +1,8 @@
 import React from 'react';
-import {
-  getStorageInfo,
-} from '../../../utilities/storage';
-import { handleFeedbackSubmit } from '../../../utilities/feedback_util';
+import { getFeedbackInfo, handleFeedbackSubmit } from '../../../utilities/feedback_util';
+import getStringMessage from '../../../../../../js/utilities/strings';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 class ReviewFeedbackNegative extends React.Component {
   constructor(props) {
@@ -17,29 +17,32 @@ class ReviewFeedbackNegative extends React.Component {
     e.preventDefault();
     const { positiveCount, negativeCount } = this.state;
     handleFeedbackSubmit(contentId, voteText, contentType, positiveCount, negativeCount);
-    const event = new CustomEvent('handleFeedbackState', {
-      bubbles: true,
-      detail: {
-        contentId,
-      },
-    });
-    document.dispatchEvent(event);
+    dispatchCustomEvent('handleFeedbackState', contentId);
     this.setState({ negativeCount: negativeCount + 1 });
+
+    // Process negative feedback click data as user clicks on yes.
+    const analyticsData = {
+      type: 'Used',
+      name: 'helpfulness',
+      detail1: 'negative',
+      detail2: contentType,
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   render() {
     const { negativeCount } = this.state;
     const { contentId, contentType, btnStatus } = this.props;
     const negativeText = 'Negative';
-    const retrievedContentVote = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
+    const feedbackStorage = getFeedbackInfo(contentType, contentId, 'negativeCount');
     if (contentId !== undefined && negativeText !== undefined) {
       return (
         <span className="feedback-negative">
           <button value={negativeText} type="button" onClick={this.handleNegativeCount(contentId, negativeText, contentType)} disabled={btnStatus !== 'active'}>
-            <span className="feedback-option-label">{Drupal.t('no')}</span>
+            <span className="feedback-option-label">{getStringMessage('no')}</span>
             <span className="feedback-count">
               (
-              {retrievedContentVote !== null ? retrievedContentVote.negativeCount : negativeCount}
+              {feedbackStorage !== null ? feedbackStorage.negativeCount : negativeCount}
               )
             </span>
           </button>

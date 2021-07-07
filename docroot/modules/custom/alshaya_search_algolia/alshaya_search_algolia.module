@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 
@@ -16,11 +17,11 @@ use Drupal\search_api\IndexInterface;
  * Implements hook_module_implements_alter().
  */
 function alshaya_search_algolia_module_implements_alter(&$implementations, $hook) {
-  // Call the alshaya_search_algolia_search_api_algolia_objects_alter first.
+  // Call the alshaya_search_algolia_search_api_algolia_objects_alter last.
   if ($hook == 'search_api_algolia_objects_alter') {
     $group = $implementations['alshaya_search_algolia'];
     unset($implementations['alshaya_search_algolia']);
-    $implementations = ['alshaya_search_algolia' => $group] + $implementations;
+    $implementations['alshaya_search_algolia'] = $group;
   }
 }
 
@@ -73,7 +74,10 @@ function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op =
  * assumes the indexing is finished and won't process further.
  */
 function alshaya_search_algolia_search_api_index_items_alter(IndexInterface $index, array &$items) {
-  if ($index->id() !== 'alshaya_algolia_index') {
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
+  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
+  $index_name = $algolia_index->getAlgoliaIndexNames();
+  if (!in_array($index->id(), $index_name)) {
     return;
   }
 
@@ -117,12 +121,15 @@ function alshaya_search_algolia_search_api_index_items_alter(IndexInterface $ind
  * Implements hook_search_api_algolia_objects_alter().
  */
 function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
-  if ($index->id() !== 'alshaya_algolia_index') {
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
+  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
+  $index_names = $algolia_index->getAlgoliaIndexNames();
+  $excludedAttributes = $algolia_index->getExcludedAttributeList();
+
+  if (!in_array($index->id(), $index_names)) {
     return;
   }
   $logger = \Drupal::logger('alshaya_search_algolia');
-  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
-  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
   foreach ($objects as $id => &$object) {
     $node = $items[$id]->getOriginalObject()->getValue();
 
@@ -131,12 +138,40 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
     }
 
     try {
-      $algolia_index->processIndexItem($object, $node);
+      // Process index object for product list index.
+      if ($index->id() == AlshayaAlgoliaIndexHelper::PRODUCT_LIST_INDEX) {
+        // Get all node langges.
+        $nodeLanguages = $node->getTranslationLanguages();
+        $object['objectID'] = $object['sku'];
+        $ob = [];
+        foreach ($nodeLanguages as $lan_key => $lan_value) {
+          $object['search_api_language'] = $lan_key;
+          $node_object = $node->getTranslation($lan_key);
+          $object['title'] = $node_object->getTitle();
+          $algolia_index->processIndexItem($object, $node_object);
+          $ob[$lan_key] = $object;
+        }
+        $lang_object = [];
+        foreach ($object as $key => $value) {
+          // Skip language suffix for these attributes.
+          if (in_array($key, $excludedAttributes)) {
+            continue;
+          }
+          foreach ($nodeLanguages as $lanCode => $lanValues) {
+            $lang_object[$lanCode] = $ob[$lanCode][$key];
+            $object[$key] = $lang_object;
+          }
+        }
+      }
+      else {
+        $algolia_index->processIndexItem($object, $node);
+      }
     }
     catch (\Throwable $e) {
-      $logger->warning('Indexing failed for the node:@nid message:@message', [
+      $logger->warning('Indexing failed for the node:@nid message:@message index:@index', [
         '@nid' => $object['nid'],
         '@message' => $e->getMessage(),
+        '@index' => $index->id(),
       ]);
       unset($objects[$id]);
     }

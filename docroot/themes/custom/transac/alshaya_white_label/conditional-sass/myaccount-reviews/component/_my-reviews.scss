@@ -78,40 +78,12 @@
     }
   }
 
-  .thumbnail-img-block {
-    display: flex;
-    overflow-y: auto;
-
-    @include breakpoint($tablet) {
-      position: relative;
-    }
-
-    .thumbnail-img {
-      border: 0;
-      background: #fff;
-      box-sizing: border-box;
-      vertical-align: top;
-      margin: 0;
-      margin-bottom: 1%;
-      margin-#{$right}: 1%;
-      height: 8.75rem;
-      width: 8.75rem;
-      overflow: hidden;
-      zoom: 1;
-      flex-shrink: 0;
-
-      img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        object-position: center;
-        zoom: 1;
-      }
-    }
-  }
-
   .user-reviews {
     display: flex;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
 
     .user-desc {
       width: 66%;
@@ -176,6 +148,49 @@
       }
     }
   }
+
+  .load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 4.5rem;
+
+    .load-more {
+      width: 10.625rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-border;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1;
+      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin: 0 0.5rem;
+      }
+    }
+  }
+}
+
+.thumbnail-img-block {
+  display: flex;
+  overflow-y: auto;
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.25rem;
+  }
+
+  @include breakpoint($tablet) {
+    position: relative;
+  }
+
+  .thumbnail-img {
+    @include bv-photo-upload-container ();
+
+    img {
+      @include bv-photo-upload-image ();
+    }
+  }
 }
 
 body[class*="reviews"] {
@@ -186,9 +201,7 @@ body[class*="reviews"] {
           display: none;
         }
       }
-    }
 
-    .c-user--node {
       main {
         #block-page-title {
           display: block;

@@ -2,7 +2,8 @@
 
 namespace Drupal\alshaya_algolia_react\Services;
 
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
@@ -16,6 +17,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class AlshayaAlogoliaReactConfig.
@@ -64,11 +66,11 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $entityTypeManager;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
-   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
-  protected $promoContextManager;
+  protected $requestContextManager;
 
   /**
    * Alshaya Options List Service.
@@ -76,6 +78,13 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    * @var \Drupal\alshaya_options_list\AlshayaOptionsListHelper
    */
   protected $alshayaOptionsService;
+
+  /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * Constructor.
@@ -94,10 +103,12 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Service to get sort options for PLP.
    * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $plp_sort_options
    *   Service to get sort option labels for PLP.
-   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
-   *   Alshaya Promo Context Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
+   *   Alshaya Request Context Manager.
    * @param \Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya Options List service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -107,8 +118,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaPlpSortLabelsService $plp_sort_labels,
     AlshayaPlpSortOptionsService $plp_sort_options,
-    AlshayaPromoContextManager $alshayaPromoContextManager,
-    AlshayaOptionsListHelper $alshaya_options_service
+    AlshayaRequestContextManager $alshayaRequestContextManager,
+    AlshayaOptionsListHelper $alshaya_options_service,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -117,8 +129,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->entityTypeManager = $entity_type_manager;
     $this->plpSortLabels = $plp_sort_labels;
     $this->plpSortOptions = $plp_sort_options;
-    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->requestContextManager = $alshayaRequestContextManager;
     $this->alshayaOptionsService = $alshaya_options_service;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -130,19 +143,27 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $container->get('language_manager'),
       $container->get('facets.manager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('module_handler')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getAlgoliaReactCommonConfig(string $page_type) {
+  public function getAlgoliaReactCommonConfig(string $page_type, string $sub_page = '') {
     $lang = $this->languageManager->getCurrentLanguage()->getId();
 
-    // Get current index name.
     $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+    // Set Algolia index name from Drupal index eg: 01live_bbwae_en.
     $index_name = $index['algolia_index_name'] . '_' . $lang;
+    // Get current index name based on page type.
+    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $index = $this->configFactory->get('search_api.index.alshaya_algolia_product_list_index')->get('options');
+      // Set Algolia index name from Drupal index
+      // eg: 01live_bbwae_product_list.
+      $index_name = $index['algolia_index_name'];
+    }
 
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     $currency = $this->configFactory->get('acq_commerce.currency');
@@ -177,16 +198,16 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $response['commonAlgoliaSearch'] = [
       'application_id' => $alshaya_algolia_react_setting_values->get('application_id'),
       'api_key' => $alshaya_algolia_react_setting_values->get('search_api_key'),
-      'indexName' => $index_name,
       'filterOos' => $listing->get('filter_oos_product'),
       'itemsPerPage' => $alshaya_algolia_react_setting_values->get('items_per_page') ?? 36,
       'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/algolia/search-insights@1.3.0.min.js',
       'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
       'category_facet_label' => $this->t('Category'),
       'sizeGroupSeparator' => SkuManager::SIZE_GROUP_SEPARATOR,
+      'productListIndexStatus' => AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index'),
     ];
 
-    $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type);
+    $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
 
     $response['autocomplete'] = [
       'hits' => $alshaya_algolia_react_setting_values->get('hits') ?? 4,
@@ -222,6 +243,13 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
       ],
     ];
+    // Allow other modules to alter or add extra configs
+    // in agolia react common configurations.
+    $this->moduleHandler->alter('algolia_react_common_configs', $response);
+
+    // Add Index name eg: 01live_bbwae_en or 01live_bbwae_product_list
+    // for corresponding page-type search / listing.
+    $response[$page_type]['indexName'] = $index_name;
 
     return $response;
   }
@@ -284,6 +312,15 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       }
       elseif (in_array($sort_key, $enabled_sorts)) {
         $sort_index_key = $index_name . '_' . $index_sort_key . '_' . strtolower($sort_order);
+        // Get index name by page type.
+        if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+          // Get sort index name for listing
+          // eg: 01live_bbwae_product_list_en_title_asc.
+          $sort_index_key = $index_name . '_'
+            . $this->languageManager->getCurrentLanguage()->getId() . '_'
+            . $index_sort_key . '_'
+            . strtolower($sort_order);
+        }
       }
 
       if (!empty($sort_index_key)) {
@@ -309,6 +346,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   The current algolia index.
    * @param string $page_type
    *   Page Type.
+   * @param string $sub_page_type
+   *   Sub Page Type.
    *
    * @return array
    *   Return array of filters.
@@ -316,7 +355,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    * @todo this is temporary way to get filters, work on it to make something
    * solid on which we can rely.
    */
-  protected function getFilters($index_name, $page_type) {
+  protected function getFilters($index_name, $page_type, $sub_page_type) {
     $filter_facets = [
       'sort_by' => [
         'identifier' => 'sort_by',
@@ -343,20 +382,33 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         if (isset($visibility['request_path']['pages']) && stripos($visibility['request_path']['pages'], '/search') === FALSE) {
           continue;
         }
-
+        // Checks for alshaya_listing_page_types in the config.
+        // Checks if $sub_page_type has value.
+        if (isset($visibility['alshaya_listing_page_types']) && !empty($sub_page_type)) {
+          // Returns to the beginning if
+          // show_on_selected_pages is null or not set to 1.
+          // sub_page_type is not available.
+          // the sub_page_type is not selected.
+          $show_on_pages = $visibility['alshaya_listing_page_types']['show_on_selected_pages'];
+          $sub_page_type_selected = $visibility['alshaya_listing_page_types']['page_types'][$sub_page_type];
+          if (($show_on_pages === '1' && $sub_page_type_selected !== 1)
+            || ($show_on_pages !== '1' && $sub_page_type_selected === 1)) {
+            continue;
+          }
+        }
         if (!in_array($facet->getFieldIdentifier(), ['attr_selling_price'])) {
-          $identifier = $facet->getFieldIdentifier();
+          $identifier = $this->identifireSuffixUpdate($facet->getFieldIdentifier(), $page_type);
           $widget = $facet->getWidget();
 
           if ($facet->getFieldIdentifier() === 'field_category') {
             // For category we have index hierarchy in field_category
             // so, updating field_name and type for react.
-            $identifier = 'field_category';
+            $identifier = $this->identifireSuffixUpdate('field_category', $page_type);
             $widget['type'] = 'hierarchy';
           }
           elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
-            $context = $this->promoContextManager->getPromotionContext();
-            $identifier = "field_acq_promotion_label.$context";
+            $context = $this->requestContextManager->getContext();
+            $identifier = $this->identifireSuffixUpdate("field_acq_promotion_label", $page_type) . '.' . $context;
           }
 
           $facet_values = [];
@@ -434,6 +486,27 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     }
 
     return $facet_values[$attribute] ?? [];
+  }
+
+  /**
+   * Function to update idensitfier with language suffix.
+   *
+   * @param string $fieldIdentifier
+   *   Attribute to identify FieldIdentifier.
+   * @param string $page_type
+   *   Attribute to indentify page Type.
+   *
+   * @return string
+   *   Facet identifier.
+   */
+  protected function identifireSuffixUpdate($fieldIdentifier, $page_type) {
+    $identifier = $fieldIdentifier;
+    // Change Identifier based on Page Type.
+    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $identifier = $fieldIdentifier . '.'
+        . $this->languageManager->getCurrentLanguage()->getId();
+    }
+    return $identifier;
   }
 
 }

@@ -8,7 +8,6 @@ use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\alshaya_admin\QueueHelper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_stores_finder_transac\StoresFinderManager;
@@ -456,20 +455,18 @@ class SyncForm extends FormBase {
       ],
     ];
 
-    if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      // Areas.
-      $form['areas_fieldset'] = [
-        '#type' => 'fieldset',
-        '#title' => $this->t('Areas'),
-        'areas' => [
-          '#type' => 'actions',
-          'stores_action' => [
-            '#type' => 'submit',
-            '#value' => $this->t('Synchronize areas'),
-          ],
+    // Areas.
+    $form['areas_fieldset'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Areas'),
+      'areas' => [
+        '#type' => 'actions',
+        'stores_action' => [
+          '#type' => 'submit',
+          '#value' => $this->t('Synchronize areas'),
         ],
-      ];
-    }
+      ],
+    ];
 
     $form['#attached']['library'][] = 'alshaya_acm/alshaya_acm.sync_form';
 

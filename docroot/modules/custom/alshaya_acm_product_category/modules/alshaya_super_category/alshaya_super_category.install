@@ -5,6 +5,39 @@
  * Super category install file.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Added Super category logo fields to product category terms.
+ */
+function alshaya_super_category_update_8007() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'field.storage.taxonomy_term.field_logo_active_image',
+        'field.storage.taxonomy_term.field_logo_header_image',
+        'field.storage.taxonomy_term.field_logo_inactive_image',
+        'field.field.taxonomy_term.acq_product_category.field_logo_active_image',
+        'field.field.taxonomy_term.acq_product_category.field_logo_header_image',
+        'field.field.taxonomy_term.acq_product_category.field_logo_inactive_image',
+      ],
+      'alshaya_super_category',
+      'install'
+    );
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'core.entity_form_display.taxonomy_term.acq_product_category.default',
+        'core.entity_view_display.taxonomy_term.acq_product_category.default',
+      ],
+      'alshaya_acm_product_category',
+      'install',
+      AlshayaConfigManager::MODE_RESAVE
+    );
+}
+
 /**
  * Implements hook_update_N().
  *

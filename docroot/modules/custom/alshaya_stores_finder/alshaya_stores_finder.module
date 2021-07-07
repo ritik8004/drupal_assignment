@@ -16,13 +16,13 @@ use Drupal\Core\Session\AccountInterface;
 /**
  * Implements hook_acq_sku_clean_synced_data_alter().
  */
-function alshaya_stores_finder_acq_sku_clean_synced_data_alter(&$context) {
+function alshaya_stores_finder_acq_sku_clean_synced_data_alter(&$context_results) {
   $query = \Drupal::entityQuery('node');
   $query->addTag('node');
   $query->condition('type', 'store');
   $entities = $query->execute();
   foreach ($entities as $entity_id) {
-    $context['sandbox']['results'][] = [
+    $context_results[] = [
       'type' => 'node',
       'entity_id' => $entity_id,
     ];

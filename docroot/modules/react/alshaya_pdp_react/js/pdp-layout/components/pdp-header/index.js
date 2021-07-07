@@ -55,7 +55,7 @@ export default class PdpHeader extends React.PureComponent {
           <div id="block-alshayareactcartminicartblock" dataBlockPluginId="alshaya_react_mini_cart" className="block block-alshaya-spc block-alshaya-react-mini-cart">
             <div id="mini-cart-wrapper">
               <div className="acq-mini-cart">
-                <a className="cart-link" href="/en/cart">
+                <a className="cart-link" href={Drupal.url('cart')}>
                   {(cartQty)
                     ? <span className="quantity">{cartQty}</span>
                     : null }
@@ -80,7 +80,7 @@ export default class PdpHeader extends React.PureComponent {
               <div className="magv2-add-to-basket-container" ref={this.button}>
                 {(configurableCombinations) ? (
                   <button
-                    className="magv2-button"
+                    className="magv2-button add-to-cart-button"
                     type="submit"
                     id="add-to-cart-sticky"
                     onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo, pdpLabelRefresh, context, null)}
@@ -89,7 +89,7 @@ export default class PdpHeader extends React.PureComponent {
                   </button>
                 ) : (
                   <button
-                    className="magv2-button"
+                    className="magv2-button add-to-cart-button"
                     type="submit"
                     id="add-to-cart-sticky"
                     onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo, pdpLabelRefresh, context, null)}

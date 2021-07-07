@@ -333,3 +333,13 @@ export function addQueryID(hits, queryID) {
     __queryID: queryID,
   }));
 }
+
+// Helper function to return the status of productListIndexStatus
+// if alshaya_algolia_product_list_index is enabled in Drupal
+// this will return true else false
+export function productListIndexStatus() {
+  if (drupalSettings.algoliaSearch.productListIndexStatus === true) {
+    return true;
+  }
+  return false;
+}

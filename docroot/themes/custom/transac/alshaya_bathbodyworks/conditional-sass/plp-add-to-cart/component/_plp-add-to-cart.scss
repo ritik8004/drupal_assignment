@@ -1,0 +1,11 @@
+.addtobag-button {
+  padding: 0.75rem 1.25rem 0.5rem;
+  text-transform: uppercase;
+}
+
+.addtobag-button,
+.is-not-buyable,
+.addtobag-config-button,
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  font-family: $alshaya-thin;
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 class RadioButton extends React.Component {
   constructor(props) {
@@ -26,16 +27,16 @@ class RadioButton extends React.Component {
     } = this.props;
     const { activeId } = this.state;
     const recommend = {
-      0: Drupal.t('no'),
-      1: Drupal.t('yes'),
+      0: getStringMessage('no'),
+      1: getStringMessage('yes'),
     };
 
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="switch-button">
+        <div id={id} className="switch-button">
           <div className="switch-text query">
             <label htmlFor={label}>
               {label}
@@ -60,8 +61,6 @@ class RadioButton extends React.Component {
             })}
           </div>
           <input type="hidden" id={id} name={id} required={required} value={activeId || ''} />
-          <div className="c-input__bar" />
-          <div id="bv-error" className="error" />
         </div>
       </>
     );

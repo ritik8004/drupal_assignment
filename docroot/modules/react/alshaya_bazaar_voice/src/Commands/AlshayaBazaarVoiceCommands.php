@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_bazaar_voice\Commands;
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 use Drupal\alshaya_master\Service\AlshayaEntityHelper;
 use Drush\Commands\DrushCommands;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
@@ -85,7 +85,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
       ];
     }
     // Prepare the output of processed items and show.
-    $batch['operations'][] = [[__CLASS__, 'batchGenerate'], []];
     batch_set($batch);
     drush_backend_batch_process();
   }
@@ -101,7 +100,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
   public static function batchStart($total, &$context) {
     $context['results']['total'] = $total;
     $context['results']['count'] = 0;
-    $context['results']['items'] = [];
     $context['results']['timestart'] = microtime(TRUE);
   }
 
@@ -122,7 +120,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
 
     $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
     $skus = $alshaya_bazaar_voice->getSkusByNodeIds($nids);
-    $data = $alshaya_bazaar_voice->getDataFromBvReviewFeeds($skus);
+    $data = $alshaya_bazaar_voice->getDataFromBvReviewFeeds($skus, count($nids));
 
     if (empty($data)) {
       return;
@@ -134,39 +132,74 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     $app_id = $backend_config['application_id'];
     $app_secret_admin = $backend_config['api_key'];
 
-    $client = new Client($app_id, $app_secret_admin);
-    $index_name = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
+    $client = SearchClient::create($app_id, $app_secret_admin);
+    // Get Multiple algolia Index names.
+    $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
+    $index_names = $algolia_index->getAlgoliaIndexNames();
     $languages = \Drupal::languageManager()->getLanguages();
-    foreach ($languages as $language) {
-      $bv_objects = [];
-      $name = $index_name . '_' . $language->getId();
-      $index = $client->initIndex($name);
+    foreach ($index_names as $index) {
+      $search_api_index = 'search_api.index.' . $index;
+      $index_name = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_name');
+      // Get value for algolia_index_apply_suffix in search Api backend.
+      $algolia_index_apply_suffix = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_apply_suffix');
+      if ($algolia_index_apply_suffix == 1) {
+        // If algolia_index_apply_suffix enabled append language to index name.
+        foreach ($languages as $language) {
+          $bv_objects = [];
+          $name = $index_name . '_' . $language->getId();
+          $index = $client->initIndex($name);
 
-      // Create object ids from node id and language to fetch results from
-      // algolia.
-      $objectIDs = array_map(function ($nid) use ($language) {
-        return "entity:node/{$nid}:{$language->getId()}";
-      }, $nids);
+          // Create object ids from node id and language to fetch results from
+          // algolia.
+          $objectIDs = array_map(function ($nid) use ($language) {
+            return "entity:node/{$nid}:{$language->getId()}";
+          }, $nids);
 
-      try {
-        $objects = $index->getObjects($objectIDs);
-        foreach ($objects['results'] as $object) {
-          if (empty($data['ReviewStatistics'][$object['sku']])) {
+          try {
+            $objects = $index->getObjects($objectIDs);
+            foreach ($objects['results'] as $object) {
+              if (empty($data['ReviewStatistics'][$object['sku']])) {
+                continue;
+              }
+              $object['attr_bv_average_overall_rating'] = $data['ReviewStatistics'][$object['sku']]['AverageOverallRating'];
+              $object['attr_bv_total_review_count'] = $data['ReviewStatistics'][$object['sku']]['TotalReviewCount'];
+              $object['attr_bv_rating_distribution'] = $data['ReviewStatistics'][$object['sku']]['RatingDistribution'];
+              $object['attr_bv_rating'] = $data['ReviewStatistics'][$object['sku']]['RatingStars'];
+              $bv_objects['results'][] = $object;
+            }
+
+            // Save and update objects with BazaarVoice attributes in algolia.
+            $index->saveObjects($bv_objects['results']);
+          }
+          catch (\Exception $e) {
             continue;
           }
-          $object['attr_bv_average_overall_rating'] = $data['ReviewStatistics'][$object['sku']]['AverageOverallRating'];
-          $object['attr_bv_total_review_count'] = $data['ReviewStatistics'][$object['sku']]['TotalReviewCount'];
-          $object['attr_bv_rating_distribution'] = $data['ReviewStatistics'][$object['sku']]['RatingDistribution'];
-          $object['attr_bv_rating'] = $data['ReviewStatistics'][$object['sku']]['RatingStars'];
-          $bv_objects['results'][] = $object;
         }
-
-        // Save and update objects with bBazaarVoicev attributes in algolia.
-        $result = $index->saveObjects($bv_objects['results']);
-        $context['results']['items'][] = $result;
       }
-      catch (\Exception $e) {
-        continue;
+      else {
+        $bv_objects = [];
+        $index = $client->initIndex($index_name);
+        // Skus will be the object ids in case of product list algolia index.
+        try {
+          foreach ($data['ReviewStatistics'] as $sku_id => $statistics) {
+            $object = $index->getObject($sku_id);
+            if (empty($object)) {
+              continue;
+            }
+            $object['attr_bv_total_review_count'] = $statistics['TotalReviewCount'];
+            $object['attr_bv_rating_distribution'] = $statistics['RatingDistribution'];
+            foreach ($languages as $language) {
+              $object['attr_bv_average_overall_rating'][$language->getId()] = $statistics['AverageOverallRating'];
+              $object['attr_bv_rating'][$language->getId()] = $statistics['RatingStars'];
+            }
+            $bv_objects['results'][] = $object;
+          }
+          // Save and update objects with BazaarVoice attributes in algolia.
+          $index->saveObjects($bv_objects['results']);
+        }
+        catch (\Exception $e) {
+          continue;
+        }
       }
     }
 
@@ -174,20 +207,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
       '@count' => $context['results']['count'],
       '@total' => $context['results']['total'],
     ]);
-  }
-
-  /**
-   * Batch API callback; Write output in message.
-   *
-   * @param mixed|array $context
-   *   The batch current context.
-   */
-  public static function batchGenerate(&$context) {
-    if (empty($context['results']['items'])) {
-      return;
-    }
-
-    $context['message'] = json_encode($context['results']['items']);
   }
 
   /**

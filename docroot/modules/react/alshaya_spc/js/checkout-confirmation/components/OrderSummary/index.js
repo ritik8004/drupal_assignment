@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
 import AuraEarnOrderSummaryItem
@@ -6,6 +7,9 @@ import AuraEarnOrderSummaryItem
 import AuraRedeemOrderSummaryItem
   from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
 import isAuraEnabled from '../../../../../js/utilities/helper';
+import OrderSummaryFawryBanner from './order-summary-fawry-banner';
+import PriceElement from '../../../utilities/special-price/PriceElement';
+import getStringMessage from '../../../utilities/strings';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -71,7 +75,7 @@ const OrderSummary = (props) => {
   }
 
   const {
-    method, transactionId, paymentId, resultCode, bankDetails, orderDate,
+    method, transactionId, paymentId, resultCode, bankDetails, orderDate, methodCode,
   } = drupalSettings.order_details.payment;
 
   // Get Billing info.
@@ -107,10 +111,33 @@ const OrderSummary = (props) => {
   } = drupalSettings.order_details;
 
   const { context } = props;
+  // Fawry details.
+  const {
+    payment: {
+      referenceNumber,
+      paymentExpiryTime,
+    },
+    totals: {
+      base_grand_total: baseGrandTotal,
+    },
+  } = drupalSettings.order_details;
+  const priceTotal = <PriceElement amount={baseGrandTotal} />;
+
+  // Set language for datetime translation.
+  const { currentLanguage } = drupalSettings.path;
+  if (currentLanguage !== undefined) {
+    moment.locale(currentLanguage);
+  }
 
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
+        <ConditionalView condition={methodCode !== undefined && methodCode === 'checkout_com_upapi_fawry'}>
+          <OrderSummaryFawryBanner animationDelay="0.5s" />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_amount_due')} value={priceTotal} />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_reference_number')} value={referenceNumber} />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_complete_payment_by')} value={moment(paymentExpiryTime).format('DD MMMM YYYY, HH:mm a')} />
+        </ConditionalView>
         <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('confirmation email sent to')} value={customEmail} />
         <OrderSummaryItem animationDelay="0.6s" label={Drupal.t('order number')} value={orderNumber} />
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const UserPersonalDetails = ({
   userNickname,
@@ -10,17 +11,15 @@ const UserPersonalDetails = ({
     return (
       <div className="user-personal-details">
         <div className="user-attributes">
-          <span className="user-name">{`${userNickname}: `}</span>
-          <ConditionalView condition={userAge !== ''}>
-            <span className="user-attribute-value">{userAge.ValueLabel}</span>
+          <ConditionalView condition={userGender !== ''}>
+            <div className="user-attributes">
+              <span className="user-attribute-value">{`${userGender.ValueLabel},`}</span>
+              <ConditionalView condition={userAge !== ''}>
+                <span className="user-attribute-value">{`${userAge.ValueLabel} ${getStringMessage('user_age')}`}</span>
+              </ConditionalView>
+            </div>
           </ConditionalView>
         </div>
-        <ConditionalView condition={userGender !== ''}>
-          <div className="user-attributes">
-            <span className="user-name">{`${userGender.DimensionLabel}: `}</span>
-            <span className="user-attribute-value">{userGender.ValueLabel}</span>
-          </div>
-        </ConditionalView>
       </div>
     );
   }

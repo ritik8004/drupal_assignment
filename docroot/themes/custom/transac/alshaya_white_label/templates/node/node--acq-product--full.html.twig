@@ -13,11 +13,18 @@ set classes = [
         {% if content.gallery is not empty %}
           {{ content.gallery }}
         {% else %}
-          <div id="product-zoom-container"></div>
+          <div class="gallery-wrapper empty-gallery">
+            <div id="product-zoom-container">
+              <div class="cloudzoom"></div>
+              <div class="mobilegallery"></div>
+              <div id="product-full-screen-gallery-container" style="display: none;"></div>
+            </div>
+          </div>
         {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
+
         {% if show_crosssell_as_matchback == false %}
           {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
         {% endif %}
@@ -210,6 +217,9 @@ set classes = [
 
           </div>
 
+          {% block productPostContentMobile %}
+          {% endblock %}
+
           {% include directory ~ '/../alshaya_white_label/templates/partial/mobile-product-related.html.twig' %}
 
         </div>
@@ -224,10 +234,16 @@ set classes = [
     {% endif %}
 
   </div>
+
+  {% block productPostContent %}
+  {% endblock %}
+
 </article>
 <div id="dy-recommendation"></div>
 
 {% if content.reviews_section %}
-  {{ content.bazaar_voice_strings }}
-  {{content.reviews_section}}
+  {% if bazaarvoice_strings %}
+    {{ bazaarvoice_strings }}
+  {% endif %}
+  {{ content.reviews_section }}
 {% endif %}

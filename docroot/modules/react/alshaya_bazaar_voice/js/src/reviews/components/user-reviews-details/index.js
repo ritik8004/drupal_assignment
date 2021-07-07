@@ -7,7 +7,7 @@ const UserReviewsDetails = ({
 }) => {
   if (totalReviewCount !== undefined) {
     return (
-      <div className="user-reviews-details">
+      <>
         <div className="review-count">
           <div className="label">{getStringMessage('review')}</div>
           <div className="value">{totalReviewCount}</div>
@@ -16,7 +16,7 @@ const UserReviewsDetails = ({
           <div className="label">{getStringMessage('vote')}</div>
           <div className="value">{helpfulVoteCount}</div>
         </div>
-      </div>
+      </>
     );
   }
   return (null);

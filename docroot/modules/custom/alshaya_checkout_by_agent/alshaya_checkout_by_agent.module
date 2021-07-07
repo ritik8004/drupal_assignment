@@ -1,0 +1,124 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Url;
+use Drupal\user\UserInterface;
+use Symfony\Component\HttpFoundation\IpUtils;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_checkout_by_agent_user_login(UserInterface $account) {
+  // Return if user doesn't have 'smartagent' role.
+  if (!in_array('smartagent', $account->getRoles())) {
+    return;
+  }
+
+  $request = \Drupal::request();
+  $current_user_agent = $request->headers->get('User-Agent');
+  $current_client_ip = $request->getClientIP();
+  $smart_agent_config = \Drupal::config('alshaya_checkout_by_agent.settings');
+  $smart_user_agents = $smart_agent_config->get('smart_user_agents');
+  $smart_agent_ips_config_value = $smart_agent_config->get('smart_agent_ips');
+  $smart_agent_ips =  !empty($smart_agent_ips_config_value)
+    ? explode(";", $smart_agent_ips_config_value)
+    : '';
+  $is_smart_user_agent = !empty($smart_user_agents) ? FALSE : TRUE;
+
+  // Check if current user agent is in the list of smart user agents.
+  foreach ($smart_user_agents ?? [] as $smart_agent) {
+    if (stripos($current_user_agent, $smart_agent) !== FALSE) {
+      $is_smart_user_agent = TRUE;
+      break;
+    }
+  }
+
+  $is_smart_client_ip = !empty($smart_agent_ips) ? FALSE : TRUE;
+  // Check the client ip with the list of smart agent IPs.
+  if (IpUtils::checkIp($current_client_ip, $smart_agent_ips)) {
+    // IP found to be of smart agent.
+    $is_smart_client_ip = TRUE;
+  }
+
+  // Return if user agent and IP is not in the config.
+  if (!$is_smart_user_agent || !$is_smart_client_ip) {
+    return;
+  }
+
+  // Get smart agent store info.
+  $storeCode = '';
+  $storeField = $account->get('field_agent_store')->first();
+  if (!empty($storeField)) {
+    $store = $storeField->get('entity')->getValue();
+    $storeCode = $store->get('field_store_locator_id')->getString();
+  }
+
+  $user_details = [
+    'name' => $account->get('field_first_name')->getString() . ' ' . $account->get('field_last_name')->getString() ,
+    'email' => $account->getEmail(),
+    'userAgent' => $current_user_agent,
+    'clientIP' => $current_client_ip,
+    'storeCode' => $storeCode,
+  ];
+
+  setcookie('smart_agent_cookie', base64_encode(json_encode($user_details)), ['path' => '/', 'secure' => TRUE]);
+  user_logout();
+
+  // Redirect to home page after smart agent login.
+  $response = new RedirectResponse(Url::fromRoute('<front>')->toString());
+  $response->send();
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_checkout_by_agent_page_attachments(array &$attachments) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+  $attachments['#attached']['library'][] = 'alshaya_checkout_by_agent/smart_agent';
+
+  $settings = \Drupal::config('alshaya_checkout_by_agent.settings');
+
+  if ($settings->get('restrict_agent_login') == TRUE) {
+    $attachments['#attached']['library'][] = 'alshaya_checkout_by_agent/restrict_agent_login';
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_checkout_by_agent_alshaya_spc_cart_build_alter(array &$build) {
+  $build['#attached']['library'][] = 'alshaya_white_label/smart-agent';
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_checkout_by_agent_alshaya_spc_checkout_build_alter(array &$build) {
+  $build['#attached']['library'][] = 'alshaya_white_label/smart-agent';
+}
+
+/*
+ * Implements hook_mail().
+ */
+function alshaya_checkout_by_agent_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'share_cart':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('Complete your order at @site_name', [
+        '@site_name' => \Drupal::config('system.site')->get('name'),
+      ]);
+      $body = \Drupal::config('alshaya_checkout_by_agent.settings')->get('email_template');
+      $body = str_replace('@cart_url', $params['cart_url'], $body);
+      $body = \Drupal::token()->replace($body);
+      $message['body'][] = $body;
+      break;
+  }
+}

@@ -32,6 +32,7 @@ export default connectCurrentRefinements(({
                             <FiltersLabels
                               value={nested.label}
                               attribute={item.attribute}
+                              pageType={pageType}
                             />
                           </a>
                         </li>
@@ -47,7 +48,11 @@ export default connectCurrentRefinements(({
                     refine(item.value);
                   }}
                 >
-                  <FiltersLabels value={item.label} attribute={item.attribute} />
+                  <FiltersLabels
+                    value={item.label}
+                    attribute={item.attribute}
+                    pageType={pageType}
+                  />
                 </a>
               </li>
             )}

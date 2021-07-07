@@ -84,11 +84,11 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'valid_email_error',
-      'value' => t('The email address %mail is not valid.'),
+      'value' => t('The email address %mail is not valid. Please enter a valid email address.'),
     ],
     [
       'key' => 'text_min_chars_limit_error',
-      'value' => t('Minimum characters limit for this field is %minLength characters.'),
+      'value' => t('Please enter a minimum of %minLength characters for %fieldTitle.'),
     ],
     [
       'key' => 'reviews',
@@ -128,7 +128,11 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'review_comment_submission',
-      'value' => t('Thank you for submitting a comment! Your comment is being moderated and may take up to a few days to appear.'),
+      'value' => t('Thanks for submitting your comment! It is currently being moderated and will be visible shortly.'),
+    ],
+    [
+      'key' => 'write_review_submission',
+      'value' => t('Thanks for submitting your review! It is currently being moderated and will be visible shortly.'),
     ],
     [
       'key' => 'review_recommendation_text',
@@ -203,10 +207,6 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('I would like to recommend this product.'),
     ],
     [
-      'key' => 'comment_moderation_text',
-      'value' => t('Thanks for submitting a review. Your review is being moderated and may take few days to appear.'),
-    ],
-    [
       'key' => 'post_review',
       'value' => t('Post review'),
     ],
@@ -232,11 +232,11 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'no_reviews_yet',
-      'value' => t('No reviews yet'),
+      'value' => t('No reviews yet.'),
     ],
     [
       'key' => 'first_to_review',
-      'value' => t('Tell others what you think. Be the first to review this product!'),
+      'value' => t('Tell others what you think. Be the first to review this product.'),
     ],
     [
       'key' => 'load_more',
@@ -245,6 +245,56 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'selectlist_placeholder',
       'value' => t('Select...'),
+    ],
+    [
+      'key' => 'commentbox',
+      'value' => t('Comment'),
+    ],
+    [
+      'key' => 'nickname',
+      'value' => t('Screen name'),
+    ],
+    [
+      'key' => 'email',
+      'value' => t('Email address'),
+    ],
+    [
+      'key' => 'already_reviewed_message',
+      'value' => t('You have already reviewed the product.'),
+    ],
+    [
+      'key' => 'user_age',
+      'value' => t('years'),
+    ],
+    [
+      'key' => 'review_syndicated_text',
+      'value' => t('Original posted on'),
+      'key' => 'view_review',
+      'value' => t('View review'),
+    ],
+    [
+      'key' => 'featured',
+      'value' => t('Featured'),
+    ],
+    [
+      'key' => 'top',
+      'value' => t('Top'),
+    ],
+    [
+      'key' => 'contributor',
+      'value' => t('Contributor'),
+    ],
+    [
+      'key' => 'verifiedPurchaser',
+      'value' => t('Verified Purchaser'),
+    ],
+    [
+      'key' => 'Expert',
+      'value' => t('Expert'),
+    ],
+    [
+      'key' => 'Staff',
+      'value' => t('Staff'),
     ],
   ];
 }

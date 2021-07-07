@@ -65,6 +65,10 @@ sites:
     module: alshaya_vs
     type: alshaya_transac
     country: ae
+  vsqa:
+    module: alshaya_vs
+    type: alshaya_transac
+    country: qa
   vssa:
     module: alshaya_vs
     type: alshaya_transac

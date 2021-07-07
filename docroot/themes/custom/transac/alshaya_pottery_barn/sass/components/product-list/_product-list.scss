@@ -74,6 +74,10 @@
             height: 10.25rem;
           }
         }
+
+        @include breakpoint($desktop) {
+          height: 16.375rem;
+        }
       }
     }
   }
@@ -133,10 +137,26 @@
 
     @include breakpoint($desktop) {
       .alshaya_search_gallery {
-        max-height: none;
+        height: 22.8125rem;
+      }
+    }
+  }
 
-        .alshaya_search_mainimage {
-          height: auto;
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 13.125rem;
+          }
+        }
+      }
+
+      &.product-large {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 17.8125rem;
+          }
         }
       }
     }

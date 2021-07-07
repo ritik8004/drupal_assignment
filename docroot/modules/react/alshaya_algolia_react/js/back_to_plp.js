@@ -6,11 +6,6 @@
 (function ($) {
   'use strict';
 
-  Drupal.algoliaGetActualPageNumber = function () {
-    var resultsCount = $('.node--view-mode-search-result:visible').length;
-    return Math.ceil(resultsCount / drupalSettings.algoliaSearch.itemsPerPage);
-  }
-
   Drupal.processBackToPLP = function () {
     // On page load, apply filter/sort if any.
     $('html').once('back-to-list').each(function () {

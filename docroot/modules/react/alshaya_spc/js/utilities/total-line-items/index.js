@@ -99,7 +99,7 @@ class TotalLineItems extends React.Component {
       postpay = (
         <PostpayCart
           amount={totals.base_grand_total}
-          isCartPage={isCartPage}
+          pageType={isCartPage ? 'cart' : ''}
           classNames="spc-postpay"
           mobileOnly={false}
         />

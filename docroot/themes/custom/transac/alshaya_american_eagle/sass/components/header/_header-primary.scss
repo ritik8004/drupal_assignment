@@ -690,21 +690,7 @@ header {
             visibility: visible;
           }
         }
-      }
 
-      .menu--one__link {
-        &.active {
-          border-bottom: none;
-          color: $mm_l1_link;
-
-          &::after {
-            background-color: $primary_link-hover;
-            visibility: visible;
-          }
-        }
-      }
-
-      &:hover {
         & > ul.menu--two__list {
           border-bottom: 2px solid $mm_l1_border;
           transform: none;
@@ -720,6 +706,18 @@ header {
             opacity: 0.24;
             transition: all 0.3s ease-out;
             #{$left}: 0;
+          }
+        }
+      }
+
+      .menu--one__link {
+        &.active {
+          border-bottom: none;
+          color: $mm_l1_link;
+
+          &::after {
+            background-color: $primary_link-hover;
+            visibility: visible;
           }
         }
       }
@@ -802,9 +800,7 @@ header {
         width: 20rem;
       }
     }
-  }
 
-  .main--menu {
     .menu__link {
       font-size: 0.875rem;
       color: $mm_l1_link;
@@ -884,6 +880,8 @@ header {
 
 .mobile--close {
   span {
+    background: none;
+
     @include icon(close) {
       width: 1.563rem;
       height: 1.563rem;

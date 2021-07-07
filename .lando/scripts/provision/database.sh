@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-# Script to create databases within the mysql instance running in the database container.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmkw; GRANT ALL PRIVILEGES ON drupal_alshaya_hmkw.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmae; GRANT ALL PRIVILEGES ON drupal_alshaya_hmae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_hmsa; GRANT ALL PRIVILEGES ON drupal_alshaya_hmsa.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_dhuae; GRANT ALL PRIVILEGES ON drupal_alshaya_dhuae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_flae; GRANT ALL PRIVILEGES ON drupal_alshaya_flae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_flkw; GRANT ALL PRIVILEGES ON drupal_alshaya_flkw.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
-mysql -uroot -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_bbwae; GRANT ALL PRIVILEGES ON drupal_alshaya_bbwae.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+cd $SCRIPT_DIR;
+
+# Script to create databases within the mysql instance running in the database container.
+for site in $(php db_names.php)
+do
+  mysql -u root -h database -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_$site;"
+done
+
+mysql -u root -h database -e "GRANT ALL PRIVILEGES ON *.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"

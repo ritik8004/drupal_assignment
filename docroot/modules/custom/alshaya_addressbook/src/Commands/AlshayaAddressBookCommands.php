@@ -50,12 +50,6 @@ class AlshayaAddressBookCommands extends DrushCommands {
    * @aliases aasa,sync-areas,alshaya-addressbook-sync-areas
    */
   public function syncAreas() {
-    // DM Version check.
-    if ($this->alshayaAddressBookManager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $this->drupalLogger->error('Incorrect DM version for this command.');
-      return;
-    }
-
     // Update the area list.
     $this->drupalLogger->notice('Synchronizing all areas, please wait...');
 
@@ -73,12 +67,6 @@ class AlshayaAddressBookCommands extends DrushCommands {
    * @aliases aasff,sync-form-fields,alshaya-addressbook-sync-form-fields
    */
   public function syncFormFields() {
-    // DM Version check.
-    if ($this->alshayaAddressBookManager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $this->drupalLogger->error('Incorrect DM version for this command.');
-      return;
-    }
-
     // Reset magento form fields cache.
     $this->alshayaAddressBookManager->resetMagentoFormFields();
     // Invalidate checkout page cache.

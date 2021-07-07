@@ -31,27 +31,18 @@ class Connection extends DoctrineConnection {
   public function __construct(array $params, Driver $driver, ?Configuration $config = NULL, ?EventManager $eventManager = NULL) {
     // Get site environment.
     require_once $params['path'] . '/../factory-hooks/environments/environments.php';
+    require_once $params['path'] . '/../factory-hooks/pre-sites-php/local_sites.php';
+
     $env = alshaya_get_site_environment();
     if ($env === 'local' || $env === 'travis') {
-      if (!empty($_SERVER['HTTP_HOST'])) {
-        $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
-        $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
-      }
-      else {
-        $host_site_code = 'default_local';
-        foreach ($_SERVER['argv'] as $arg) {
-          preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
-          if (!empty($matches)) {
-            $host_site_code = $matches[1];
-            break;
-          }
-        }
-      }
+      global $host_site_code;
 
-      // @todo: Configure acsf database, same as configured for drupal.
+      // @todo Configure acsf database, same as configured for drupal.
       // We set "drupal" as a default database if no domain found. This assures
       // it won't throw errors on empty --uri parameter
       $params['dbname'] = $host_site_code == 'default_local' ? 'drupal' : 'drupal_alshaya_' . str_replace('-', '_', $host_site_code);
+
+      $params['host'] = getenv('LANDO') ? 'database' : 'localhost';
     }
     else {
       // Get database settings for acsf.

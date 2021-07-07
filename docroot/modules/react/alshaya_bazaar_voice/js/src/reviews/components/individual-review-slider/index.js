@@ -1,19 +1,20 @@
 import React from 'react';
-import isRTL from '../../../utilities/rtl';
+import DynamicDot from '../dynamic-dot';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const IndividualReviewSlider = ({
   sliderData,
+  secondaryRatingsOrder,
 }) => {
-  const direction = isRTL() === true ? 'rtl' : 'ltr';
   if (sliderData === null) {
     return null;
   }
   return (
     <>
-      {Object.keys(sliderData).map((item) => (((sliderData[item].DisplayType) === 'SLIDER') === true
-        ? (
-          <div className="attribute-list" key={item}>
+      {secondaryRatingsOrder.map((item) => (
+        <ConditionalView key={sliderData[item].Id} condition={sliderData[item].DisplayType === 'SLIDER'}>
+          <div className="attribute-list">
             <div className="slider-header">
               <span>
                 {sliderData[item].Label}
@@ -48,27 +49,17 @@ const IndividualReviewSlider = ({
                       </>
                     )
                 }
-                {
-                  (direction === 'rtl')
-                    ? (
-                      <div
-                        className="dynamic-dot"
-                        style={{ right: `${((((sliderData[item].Value > 0) ? sliderData[item].Value : sliderData[item].AverageRating) / sliderData[item].ValueRange).toFixed(1)) * 100}%` }}
-                      />
-                    )
-                    : (
-                      <div
-                        className="dynamic-dot"
-                        style={{ left: `${((((sliderData[item].Value > 0) ? sliderData[item].Value : sliderData[item].AverageRating) / sliderData[item].ValueRange).toFixed(1)) * 100}%` }}
-                      />
-                    )
-                }
+                <DynamicDot
+                  sliderValue={sliderData[item].Value}
+                  sliderValueRange={sliderData[item].ValueRange}
+                  sliderAverageRating={sliderData[item].AverageRating}
+                />
               </div>
               <div className="slider-label">{sliderData[item].MaxLabel}</div>
             </div>
           </div>
-        )
-        : null))}
+        </ConditionalView>
+      ))}
     </>
   );
 };

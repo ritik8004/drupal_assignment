@@ -16,7 +16,13 @@ if (!class_exists(Dotenv::class)) {
 // Load all the .env files.
 (new Dotenv(FALSE))->loadEnv(dirname(__DIR__) . '/.env');
 
-$home = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_SERVER['HOME'] : '/home/vagrant';
+$home = '/home/vagrant';
+if (getenv('AH_SITE_ENVIRONMENT')) {
+  $home = $_SERVER['HOME'];
+}
+elseif (getenv('LANDO')) {
+  $home = '/app/local_home';
+}
 
 $env = 'local';
 

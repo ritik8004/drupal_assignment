@@ -3,7 +3,6 @@ import Slider from 'react-slick';
 import { crossellUpsellSliderSettings } from '../../../common/components/utilities/slider_settings';
 import PdpCrossellUpsellImage from '../pdp-crossell-upsell-images';
 import CrossellPopupContent from '../pdp-crossel-popup';
-import { closeModalHelper } from '../../../utilities/pdp_layout';
 
 export default class PdpCrossellUpsell extends React.PureComponent {
   constructor(props) {
@@ -20,9 +19,6 @@ export default class PdpCrossellUpsell extends React.PureComponent {
 
   componentDidMount = () => {
     const sliderProps = this.slider.innerSlider.props;
-
-    const currentContext = this;
-
     const totalPagers = Math.ceil(sliderProps.children.length / sliderProps.slidesToScroll);
     const currentPage = Math.ceil((sliderProps.initialSlide + 1) / sliderProps.slidesToScroll);
 
@@ -40,8 +36,6 @@ export default class PdpCrossellUpsell extends React.PureComponent {
         next: totalPagers === currentPage,
       },
     });
-
-    closeModalHelper('overlay-crossel', 'magv2-crossell-popup-container', currentContext.closeModal);
   }
 
   beforeChange = (current, next) => {
@@ -69,6 +63,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     <CrossellPopupContent
       closeModal={this.closeModal}
       relatedSku={relatedSku}
+      overlayClass="overlay-crossel"
     />
   );
 

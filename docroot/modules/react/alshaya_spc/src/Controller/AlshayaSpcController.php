@@ -5,6 +5,7 @@ namespace Drupal\alshaya_spc\Controller;
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
+use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CheckoutComUpapiFawry;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
@@ -165,6 +166,9 @@ class AlshayaSpcController extends ControllerBase {
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
+
     $build = [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -179,6 +183,8 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+          'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
           'global_error_message' => _alshaya_spc_global_error_message(),
           'alshaya_spc' => [
@@ -212,6 +218,9 @@ class AlshayaSpcController extends ControllerBase {
 
     $cc_config = $this->config('alshaya_click_collect.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
+
+    $ab_testing = $this->config('alshaya_acm_checkout.ab_testing');
+    $cache_tags = Cache::mergeTags($cache_tags, $ab_testing->getCacheTags());
 
     $checkout_settings = $this->config('alshaya_acm_checkout.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
@@ -498,6 +507,7 @@ class AlshayaSpcController extends ControllerBase {
       '#strings' => $strings,
       '#attached' => [
         'library' => [
+          'alshaya_acm_checkout/ab_testing',
           'alshaya_spc/googlemapapi',
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
@@ -534,6 +544,7 @@ class AlshayaSpcController extends ControllerBase {
     // Get payment methods.
     $payment_methods = [];
     $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
+
     foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
       $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
       // Avoid displaying the excluded methods.
@@ -556,6 +567,7 @@ class AlshayaSpcController extends ControllerBase {
         'code' => $payment_method_term->get('field_payment_code')->getString(),
         'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
         'weight' => $payment_method_term->getWeight(),
+        'ab_testing' => $ab_testing->get($payment_method['id']) ?? FALSE,
       ];
 
       if ($this->languageManager->getCurrentLanguage()->getId() !== 'en') {
@@ -572,9 +584,10 @@ class AlshayaSpcController extends ControllerBase {
     array_multisort(array_column($payment_methods, 'weight'), SORT_ASC, $payment_methods);
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
-    $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
+    $build = $this->addCheckoutConfigSettings($build);
 
-    return $this->addCheckoutConfigSettings($build);
+    $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
+    return $build;
   }
 
   /**
@@ -652,6 +665,11 @@ class AlshayaSpcController extends ControllerBase {
       $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
     }
 
+    // Get static text for Fawry payment.
+    if ($orderDetails['payment']['methodCode'] === 'checkout_com_upapi_fawry') {
+      $strings = array_merge($strings, CheckoutComUpapiFawry::getFawryStaticText());
+    }
+
     $cache_tags = [];
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
@@ -721,6 +739,13 @@ class AlshayaSpcController extends ControllerBase {
       $status[$key] = FALSE;
 
       switch ($key) {
+        case 'fullname':
+          // If full name is not empty.
+          if (!empty($value) && !empty(trim($value['firstname'])) && !empty(trim($value['lastname']))) {
+            $status[$key] = TRUE;
+          }
+          break;
+
         case 'mobile':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);

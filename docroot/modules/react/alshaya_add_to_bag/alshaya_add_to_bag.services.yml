@@ -1,0 +1,10 @@
+services:
+  alshaya_add_to_bag.helper:
+    class: Drupal\alshaya_add_to_bag\Services\AddToBagHelper
+    arguments:
+      - '@config.factory'
+
+  alshaya_add_to_bag.index_helper:
+    class: Drupal\alshaya_add_to_bag\Services\AddToBagIndexHelper
+    arguments:
+      - '@alshaya_acm_product.sku_info'

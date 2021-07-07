@@ -156,14 +156,26 @@
     font-family: $alshaya-bold;
     transition: all 0.3s ease-in-out;
 
-    @include breakpoint($desktop) {
-      height: 1.5rem;
+    html[lang=ar] & {
+      @include breakpoint($only-tablet) {
+        max-height: 2.25rem;
+      }
     }
 
     &:hover,
     &.copied {
       background: $magv2-share-btn;
       color: $magv2-share-btn-txt;
+    }
+  }
+
+  .sharethis-wrapper.out-of-stock {
+    background: none;
+    opacity: 0.5;
+    pointer-events: none;
+
+    &::before {
+      display: none;
     }
   }
 }

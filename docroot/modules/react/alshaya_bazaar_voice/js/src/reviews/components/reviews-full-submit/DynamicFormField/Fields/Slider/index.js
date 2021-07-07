@@ -33,14 +33,13 @@ class Slider extends React.Component {
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="write-review-type-slider">
+        <div id={id} className="write-review-type-slider">
           <div className="select-slider__wrap">
             <div className="selectedValue">
               <span>
                 {label}
-                {' '}
                 {(required) ? '*' : '' }
                 {':'}
               </span>

@@ -19,24 +19,26 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'parse_args.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 
-$client = new Client($app_id, $app_secret_admin);
+$client = SearchClient::create($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $prefix . '_' . $language;
 
   $query = $name . '_query';
   algolia_delete_query_suggestion($app_id, $app_secret_admin, $query);
-  $client->deleteIndex($query);
+  $queryIndex = $client->initIndex($query);
+  $queryIndex->delete();
 
   $index = $client->initIndex($name);
   $settings = $index->getSettings();
-  $client->deleteIndex($name);
+  $index->delete();
   sleep(10);
 
   foreach ($settings['replicas'] ?? [] as $replica) {
-    $client->deleteIndex($replica);
+    $replicaIndex = $client->initIndex($replica);
+    $replicaIndex->delete();
   }
 
   print $name . PHP_EOL;
