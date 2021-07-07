@@ -1468,13 +1468,23 @@ window.commerceBackend.addShippingMethod = async (data) => {
   return cart;
 };
 
+/**
+ * Triggers the checkout event post order placed.
+ *
+ * @param {string} event
+ *   The action.
+ * @param {object} data
+ *   The params for checkout event.
+ *
+ * @returns {Promise<AxiosPromise<Object>>}
+ */
 const triggerCheckoutEvent = (event, data) => callDrupalApi(
   '/spc/checkout-event',
   'POST',
   {
     form_params: {
+      ...data,
       action: event,
-      data,
     },
   },
 ).catch((error) => {
@@ -1484,6 +1494,16 @@ const triggerCheckoutEvent = (event, data) => callDrupalApi(
   });
 });
 
+/**
+ * Process operations post order placed.
+ *
+ * @param {object} cart
+ *   Cart details.
+ * @param {int} orderId
+ *   Order id.
+ * @param {string} paymentMethod
+ *   Payment Method.
+ */
 const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
   let customerId = '';
   if (!_.isEmpty(cart.data.cart.customer)
@@ -1494,9 +1514,6 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
   // Remove cart id and other caches from session.
   window.commerceBackend.removeCartDataFromStorage();
   localStorage.removeItem('cart_id');
-
-  // @todo Set order and cart id in session for later use.
-  // This is required for some payment methods.
 
   // Post order id and cart data to Drupal.
   const data = {
@@ -1583,8 +1600,6 @@ window.commerceBackend.placeOrder = async (data) => {
       },
     };
   }
-
-  // @todo Check if cart total is valid return with an error message.
 
   const params = {
     cartId: window.commerceBackend.getCartId(),
