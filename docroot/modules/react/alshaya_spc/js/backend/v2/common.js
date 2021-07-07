@@ -3,7 +3,7 @@ import qs from 'qs';
 import _ from 'lodash';
 import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
-import cartActions from './cart_actions';
+import cartActions from '../../utilities/cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
