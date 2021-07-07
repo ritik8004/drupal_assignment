@@ -249,14 +249,22 @@ class AlshayaSpcOrderHelper {
     }
 
     $id = $this->request->query->get('id');
-    if (empty($id)) {
-      throw new NotFoundHttpException();
+    if (!empty($id)) {
+      $data = json_decode(SecureText::decrypt(
+        $id,
+        Settings::get('alshaya_api.settings')['consumer_secret']
+      ), TRUE);
     }
 
-    $data = json_decode(SecureText::decrypt(
-      $id,
-      Settings::get('alshaya_api.settings')['consumer_secret']
-    ), TRUE);
+    // Parameter used for V2.
+    $oid = $this->request->query->get('oid');
+    if (!empty($oid)) {
+      $data = json_decode(base64_decode($oid));
+    }
+
+    if (empty($data)) {
+      throw new NotFoundHttpException();
+    }
 
     $data_email = strtolower(trim($data['email'] ?? ''));
     if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data_email)) {
