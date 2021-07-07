@@ -386,6 +386,7 @@ class AlshayaBazaarVoice {
     $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
     $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
     $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
+    $basic_configs['show_location_filter'] = $config->get('show_location_filter');
     $basic_configs['comment_submission'] = $config->get('comment_submission');
 
     return $basic_configs;
