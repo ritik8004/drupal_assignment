@@ -1237,9 +1237,7 @@ const validateBeforePaymentFinalise = async () => {
     };
   }
 
-  cart.data = await getProcessedCheckoutData(cart.data);
-
-  return cart;
+  return true;
 };
 
 /**
