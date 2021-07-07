@@ -1166,8 +1166,8 @@ const isAddressExtensionAttributesValid = (data) => {
 /**
  * Finalises the payment on the cart.
  *
- * @returns {Promise<object>}
- *   A promise object containing cart data or error.
+ * @returns {Promise<boolean|object>}
+ *   A promise object with true or the error object.
  */
 const validateBeforePaymentFinalise = async () => {
   // Fetch fresh cart from magento.
