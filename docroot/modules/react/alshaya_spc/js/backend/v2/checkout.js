@@ -1166,16 +1166,13 @@ const isAddressExtensionAttributesValid = (data) => {
 /**
  * Finalises the payment on the cart.
  *
- * @param {object} data
- *   The data object to send in the API call.
- *
  * @returns {Promise<object>}
- *   A promise object.
+ *   A promise object containing cart data or error.
  */
-const paymentFinalise = async (data) => {
+const paymentFinalise = async () => {
   // Fetch fresh cart from magento.
-  const response = await getCart(true);
-  const cartData = response.data;
+  const cart = await getCart(true);
+  const cartData = cart.data;
 
   let isError = false;
   let errorMessage = 'Delivery Information is incomplete. Please update and try again.';
@@ -1232,19 +1229,17 @@ const paymentFinalise = async (data) => {
 
   if (isError) {
     return {
-      error: true,
-      error_code: errorCode,
-      error_message: errorMessage,
+      data: {
+        error: true,
+        error_code: errorCode,
+        error_message: errorMessage,
+      },
     };
   }
 
-  // const extension = {
-  //   attempted_payment: 1,
-  // };
-  logger.error(`${data}`);
+  cart.data = await getProcessedCheckoutData(cart.data);
 
-  // aaa ----
-  return null;
+  return cart;
 };
 
 /**
@@ -1256,10 +1251,13 @@ const paymentFinalise = async (data) => {
  * @returns {Promise<object>}
  *   A promise object.
  */
-window.commerceBackend.addPaymentMethod = (data) => {
-  // Finalise payment.
+window.commerceBackend.addPaymentMethod = async (data) => {
+  // Validate cart.
   if (data.action === cartActions.cartPaymentFinalise) {
-    paymentFinalise(data);
+    const response = await paymentFinalise();
+    if (!_.isUndefined(response.data.error) && response.data.error) {
+      return response;
+    }
   }
 
   return paymentUpdate(data);
