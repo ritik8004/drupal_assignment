@@ -1684,6 +1684,10 @@ window.commerceBackend.placeOrder = async (data) => {
       });
 
       // @todo all the error handling.
+      // @todo Fraud check.
+      // @todo cancel reservation.
+      // @todo upapi and postpay double check.
+
       return response;
     });
 };
