@@ -1191,17 +1191,17 @@ const paymentFinalise = async (data) => {
 
     errorMessage = 'Cart contains some items which are not in stock.';
     errorCode = cartErrorCodes.cartHasOOSItem;
-  } else if (_.isUndefined(cartData.cart.shipping.method)
-    || _.isEmpty(cartData.cart.shipping.method)
+  } else if (_.isUndefined(cartData.shipping.method)
+    || _.isEmpty(cartData.shipping.method)
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
     const logData = JSON.stringify(cartData);
     logger.error(`Error while finalizing payment. No shipping method available. Cart: ${logData}.`);
     //
-  } else if (_.isUndefined(cartData.cart.shipping.address)
-    || _.isUndefined(cartData.cart.shipping.address.custom_attributes)
-    || _.isEmpty(cartData.cart.shipping.address.custom_attributes)
+  } else if (_.isUndefined(cartData.shipping.address)
+    || _.isUndefined(cartData.shipping.address.custom_attributes)
+    || _.isEmpty(cartData.shipping.address.custom_attributes)
   ) {
     // If shipping address not have custom attributes.
     isError = true;
@@ -1214,8 +1214,8 @@ const paymentFinalise = async (data) => {
     isError = true;
     const logData = JSON.stringify(cartData);
     logger.error(`Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: ${logData}.`);
-  } else if (_.isUndefined(cartData.cart.shipping.address.firstname)
-    || _.isUndefined(cartData.cart.shipping.address.lastname)
+  } else if (_.isUndefined(cartData.shipping.address.firstname)
+    || _.isUndefined(cartData.shipping.address.lastname)
   ) {
     // If first/last name not available in shipping address.
     isError = true;
