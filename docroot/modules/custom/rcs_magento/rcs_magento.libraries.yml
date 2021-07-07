@@ -1,4 +1,4 @@
-main:
+backend:
   js:
     dist/rcs_magento.bundle.js: {}
   dependencies:

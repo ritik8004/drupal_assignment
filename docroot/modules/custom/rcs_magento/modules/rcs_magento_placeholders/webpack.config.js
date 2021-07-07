@@ -3,7 +3,7 @@ const buildPath = './dist/';
 
 const config = {
   entry: {
-    alshaya_rcs_renderer: './js/alshaya_rcs_renderer.es5.js',
+    rcs_magento_placeholders: './js/rcs_magento_placeholders.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

@@ -887,8 +887,8 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
     if (\Drupal::service('path.matcher')->isFrontPage() && $node->getType() == 'advanced_page') {
       $suggestions[] = 'node__advanced_page_front';
     }
-    elseif (($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full')
-      || $node->getType() === 'rcs_product') {
+    elseif ($variables['elements']['#view_mode'] == 'full'
+      && in_array($node->getType(), ['rcs_product', 'acq_product'])) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');

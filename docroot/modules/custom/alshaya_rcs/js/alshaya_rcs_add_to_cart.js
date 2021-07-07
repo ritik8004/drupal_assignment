@@ -1,14 +1,8 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.alshayaRcsBehavior = {
+  Drupal.behaviors.alshayaRcsAddToCartBehavior = {
     attach: function (context, settings) {
-      $('.sku-base-form').on('submit.validate', function (event) {
-        // Stop submitting form via normal process as this refreshes/redirects
-        // the page on submit button click.
-        return false;
-      });
-
       $('.edit-add-to-cart', context).once('add-to-cart').on('mousedown', function (e) {
         e.preventDefault();
         var that = this;
