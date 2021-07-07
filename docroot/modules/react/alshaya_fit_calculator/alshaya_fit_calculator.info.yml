@@ -3,3 +3,4 @@ type: module
 description: 'Provides a block for Fit calculator.'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
