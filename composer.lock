@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b279c8a52d4bf8ce14444f5b94cbffb9",
+    "content-hash": "4747ed76a4e1e9c4894336c68f14c609",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1152,7 +1152,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -13341,7 +13341,8 @@
                     }
                 },
                 "patches_applied": {
-                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
+                    "CORE-31041 disabled skus not deleted for product list index": "patches/search_api/search_api_entity_delete_alter.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
