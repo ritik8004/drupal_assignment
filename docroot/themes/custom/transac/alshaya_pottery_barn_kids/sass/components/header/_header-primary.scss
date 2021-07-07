@@ -105,7 +105,7 @@ header.c-header {
       }
 
       @include breakpoint($desktop) {
-        margin-bottom: -0.75rem;
+        margin-bottom: -0.35rem;
       }
     }
   }
@@ -143,6 +143,7 @@ header.c-header {
 .region.region__pre-content {
   @include breakpoint($desktop) {
     border-bottom: 0.0625rem solid $primary_search_border;
+    border-top: 0.0625rem solid $primary_search_border;
     background-color: $pre_content_region_bg;
     padding-bottom: 0.125rem;
   }
