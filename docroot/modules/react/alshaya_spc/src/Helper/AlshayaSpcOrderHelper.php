@@ -256,10 +256,10 @@ class AlshayaSpcOrderHelper {
       ), TRUE);
     }
 
-    // Parameter used for V2.
+    // Parameter used for V2 from browser.
     $oid = $this->request->query->get('oid');
     if (!empty($oid)) {
-      $data = json_decode(base64_decode($oid));
+      $data = (array) json_decode(base64_decode($oid));
     }
 
     if (empty($data)) {

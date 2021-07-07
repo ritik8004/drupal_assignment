@@ -1468,6 +1468,47 @@ window.commerceBackend.addShippingMethod = async (data) => {
   return cart;
 };
 
+const triggerCheckoutEvent = (event, data) => callDrupalApi(
+  '/spc/checkout-event',
+  'POST',
+  {
+    form_params: {
+      action: event,
+      data,
+    },
+  },
+).catch((error) => {
+  logger.error('Error occurred while triggering checkout event @event. Message: @message', {
+    '@event': event,
+    '@message': error.message,
+  });
+});
+
+const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
+  let customerId = '';
+  if (!_.isEmpty(cart.data.cart.customer)
+    && !_.isEmpty(cart.data.cart.customer.id)) {
+    customerId = cart.data.cart.customer.id;
+  }
+
+  // Remove cart id and other caches from session.
+  window.commerceBackend.removeCartDataFromStorage();
+  localStorage.removeItem('cart_id');
+
+  // @todo Set order and cart id in session for later use.
+  // This is required for some payment methods.
+
+  // Post order id and cart data to Drupal.
+  const data = {
+    order_id: orderId,
+    cart: cart.data.cart,
+    payment_method: paymentMethod,
+    customer_id: customerId,
+  };
+
+  triggerCheckoutEvent('place order success', data);
+};
+
 /**
  * Places an order.
  *
@@ -1478,7 +1519,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.placeOrder = async (data) => {
-  const cart = await getCart();
+  const cart = await getCart(true);
 
   // @todo stock check.
 
@@ -1528,7 +1569,7 @@ window.commerceBackend.placeOrder = async (data) => {
     };
   }
 
-  // @todo If first/last name not available in billing address.
+  // Check If first/last name not available in billing address.
   if (_.isEmpty(cart.data.cart.billing_address.firstname)
     || _.isEmpty(cart.data.cart.billing_address.lastname)) {
     logger.error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
@@ -1574,12 +1615,15 @@ window.commerceBackend.placeOrder = async (data) => {
         return { data: result };
       }
 
-      const orderId = parseInt(response.data.replace('"', ''), 10);
+      const orderId = parseInt(response.data, 10);
       const secureOrderId = btoa(JSON.stringify({
-        id: orderId,
-        mail: cart.data.cart.billing_address.email,
+        order_id: orderId,
+        email: cart.data.cart.billing_address.email,
       }));
-      // @todo implement the code in middleware/src/Service/Cart.php::processPostOrderPlaced().
+
+      // Operations post order placed.
+      processPostOrderPlaced(cart, orderId, data.data.paymentMethod.method);
+
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
       logger.notice('Order placed successfully. Cart: @cart OrderId: @order_id, Payment Method: @method.', {
@@ -1588,7 +1632,7 @@ window.commerceBackend.placeOrder = async (data) => {
         '@method': data.data.paymentMethod.method,
       });
 
-      return result;
+      return { data: result };
     })
     .catch((response) => {
       logger.error('Error while placing order. Error message: @message, Code: @code.', {
