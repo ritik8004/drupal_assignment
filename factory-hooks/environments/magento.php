@@ -10,21 +10,21 @@ global $magentos;
 $magentos = [
   // The body shop.
   'tbs_qa' => [
-    'url' => 'https://integration-5ojmyuq-ra3jd2klmoqgs.eu-3.magentosite.cloud',
+    'url' => 'https://tbs-uat.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => '53dlfc44b8ga4on8by7401k7vn0nz4l6',
-      'consumer_secret' => '7k08zg0h0dholkzjbdmes6ubfj9ecjvn',
-      'access_token' => '2i3ku2zwq3sllmpyw8jyw5k3esvh0q60',
-      'access_token_secret' => 'gqp42hhiw8haztjqlmwwrkn5q7tg5upz',
+      'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
+      'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
+      'access_token' => 'oiy66ouu8mpeorbu47cke2xsdhfku3jg',
+      'access_token_secret' => '2ovq0ccau2cd60a2xfterr2y2fi711w4',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
+      'store_id' => ['en' => 1, 'ar' => 2],
     ],
     'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
+      'store_id' => ['en' => 3, 'ar' => 4],
     ],
     'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
+      'store_id' => ['en' => 5, 'ar' => 6],
     ],
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
