@@ -199,8 +199,9 @@ function alshaya_spc_user_logout(AccountInterface $account) {
   // Expire the cookie set by middleware on logout, So spc can not fetch
   // existing cart related info.
   if (isset($cookies['PHPSESSID'])) {
-    setrawcookie('PHPSESSID', '', REQUEST_TIME - 3600, '/');
-    setrawcookie('PHPSESSID-legacy', '', REQUEST_TIME - 3600, '/');
+    $requestTime = \Drupal::time()->getRequestTime();
+    setrawcookie('PHPSESSID', '', $requestTime - 3600, '/');
+    setrawcookie('PHPSESSID-legacy', '', $requestTime - 3600, '/');
   }
 }
 
