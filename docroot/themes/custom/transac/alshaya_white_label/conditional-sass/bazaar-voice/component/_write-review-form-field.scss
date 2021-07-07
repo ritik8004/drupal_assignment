@@ -110,6 +110,12 @@
     }
   }
 
+  .hide-field-select {
+    &.dropdown-conatiner {
+      display: none;
+    }
+  }
+
   .dropdown-conatiner {
     display: flex;
     align-items: center;
