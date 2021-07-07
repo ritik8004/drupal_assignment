@@ -1,3 +1,42 @@
+diff --git a/search_api.api.php b/search_api.api.php
+index 9e36b45c..3cb88a6a 100644
+--- a/search_api.api.php
++++ b/search_api.api.php
+@@ -432,6 +432,34 @@ function hook_search_api_index_reindex(\Drupal\search_api\IndexInterface $index,
+     ->execute();
+ }
+ 
++/**
++ * Alter the item_ids for entity delete.
++ *
++ * @param array $item_ids
++ *   Array of query parameters.
++ * @param object $index
++ *   Object of index.
++ * @param \Drupal\Core\Entity\EntityInterface $entity
++ *   EntityInterface of entity.
++ */
++function hook_alshaya_search_api_entity_delete_alter(array &$item_ids, $index, EntityInterface $entity) {
++
++}
++
++/**
++ * Alter the item_ids for entity delete.
++ *
++ * @param array $item_ids
++ *   Array of query parameters.
++ * @param object $index
++ *   Object of index.
++ * @param string $id
++ *   String of query parameters.
++ */
++function hook_alshaya_search_api_track_items_alter(array &$item_ids, $index, $id) {
++
++}
++
+ /**
+  * @} End of "addtogroup hooks".
+  */
 diff --git a/src/Entity/Index.php b/src/Entity/Index.php
 index 090131de..9f0ed373 100644
 --- a/src/Entity/Index.php
