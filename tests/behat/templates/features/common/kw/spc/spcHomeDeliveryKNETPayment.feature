@@ -40,14 +40,10 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I select "{spc_knet_option}" from dropdown ".paymentselect.bank"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I wait 10 seconds
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I wait 10 seconds
-    And I select "{spc_Knet_year}" from "debitYearSelect"
-    And I wait 10 seconds
+    And I select date and month in the form
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "Submit"
-    And I wait 2 seconds
+    And I wait 5 seconds
     And I press "Confirm"
     And I wait 5 seconds
     And I wait for the page to load
@@ -120,8 +116,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds
@@ -166,8 +161,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds

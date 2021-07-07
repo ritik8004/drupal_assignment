@@ -2,8 +2,12 @@ import Axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
 import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
-import { cartErrorCodes, getDefaultErrorMessage } from './error';
-import cartActions from './cart_actions';
+import {
+  cartErrorCodes,
+  getDefaultErrorMessage,
+  getExceptionMessageType,
+} from './error';
+import cartActions from '../../utilities/cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -764,6 +768,33 @@ const getCartCustomerEmail = async () => {
 };
 
 /**
+ * Checks if cart has OOS item or not by item level attribute.
+ *
+ * @param {object} cart
+ *   Cart data.
+ *
+ * @return {bool}
+ *   TRUE if cart has an OOS item.
+ */
+const isCartHasOosItem = (cartData) => {
+  if (!_.isEmpty(cartData.cart.items)) {
+    for (let i = 0; i < cartData.cart.items.length; i++) {
+      const item = cartData.cart.items[i];
+      // If error at item level.
+      if (!_.isUndefined(item.extension_attributes)
+        && !_.isUndefined(item.extension_attributes.error_message)
+      ) {
+        const exceptionType = getExceptionMessageType(item.extension_attributes.error_message);
+        if (!_.isEmpty(exceptionType) && exceptionType === 'OOS') {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+};
+
+/**
  * Formats the error message as required for cart.
  *
  * @param {int} code
@@ -795,4 +826,5 @@ export {
   getCartCustomerId,
   associateCartToCustomer,
   matchStockQuantity,
+  isCartHasOosItem,
 };

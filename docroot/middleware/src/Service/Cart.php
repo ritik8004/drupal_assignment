@@ -1625,7 +1625,7 @@ class Cart {
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
     }
 
-    // Check if shiping method is present else throw error.
+    // Check if shipping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
         '@cart' => json_encode($cart),

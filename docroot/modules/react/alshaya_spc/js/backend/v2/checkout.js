@@ -13,18 +13,18 @@ import {
   getCartCustomerEmail,
   getCartCustomerId,
   matchStockQuantity,
+  isCartHasOosItem,
 } from './common';
 import {
   cartErrorCodes,
   getDefaultErrorMessage,
-  getExceptionMessageType,
 } from './error';
 import {
   getApiEndpoint,
   isUserAuthenticated,
   logger,
 } from './utility';
-import cartActions from './cart_actions';
+import cartActions from '../../utilities/cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -1026,7 +1026,7 @@ const paymentUpdate = async (data) => {
   const paymentData = data.payment_info.payment;
   const params = {
     extension: {
-      action: data.action,
+      action: cartActions.cartPaymentUpdate,
     },
     payment: {
       method: paymentData.method,
@@ -1071,12 +1071,12 @@ const paymentUpdate = async (data) => {
   // If upapi payment method (payment method via checkout.com).
   if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
-    params.payment.additional_data = {
-      // @todo update these urls.
-      successUrl: '/middleware/public/payment/success/en',
-      failUrl: '/middleware/public/payment/error/en',
-    };
+    params.payment.additional_data.successUrl = Drupal.url('spc/payment-callback/success');
+    params.payment.additional_data.failUrl = Drupal.url(`spc/payment-callback/${paymentData.method}/error`);
   }
+
+  // @todo implement the processing for checkout_com_upapi for Cart::processPaymentData().
+  // @todo update payment method to checkout_com_upapi_vault if using a saved card.
 
   const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
@@ -1092,33 +1092,6 @@ const paymentUpdate = async (data) => {
 
   cart.data = await getProcessedCheckoutData(cart.data);
   return cart;
-};
-
-/**
- * Checks if cart has OOS item or not by item level attribute.
- *
- * @param {object} cart
- *   Cart data.
- *
- * @return {bool}
- *   TRUE if cart has an OOS item.
- */
-const isCartHasOosItem = (cartData) => {
-  if (!_.isEmpty(cartData.cart.items)) {
-    for (let i = 0; i < cartData.cart.items.length; i++) {
-      const item = cartData.cart.items[i];
-      // If error at item level.
-      if (!_.isUndefined(item.extension_attributes)
-        && !_.isUndefined(item.extension_attributes.error_message)
-      ) {
-        const exceptionType = getExceptionMessageType(item.extension_attributes.error_message);
-        if (!_.isEmpty(exceptionType) && exceptionType === 'OOS') {
-          return true;
-        }
-      }
-    }
-  }
-  return false;
 };
 
 /**
@@ -1270,7 +1243,7 @@ const paymentFinalise = async (data) => {
   // };
   logger.error(`${data}`);
 
-  // aaa ---
+  // aaa ----
   return null;
 };
 
@@ -1284,9 +1257,6 @@ const paymentFinalise = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.addPaymentMethod = (data) => {
-  // @todo TEST: remove this.
-  paymentFinalise(data);
-
   // Add payment methods to the cart.
   if (data.action === cartActions.cartPaymentUpdate) {
     return paymentUpdate(data);
@@ -1505,6 +1475,139 @@ window.commerceBackend.addShippingMethod = async (data) => {
   cart.data = await getProcessedCheckoutData(cart.data);
 
   return cart;
+};
+
+/**
+ * Places an order.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.placeOrder = async (data) => {
+  const cart = await getCart();
+
+  // @todo stock check.
+
+  // Check if shipping method is present else throw error.
+  if (_.isEmpty(cart.data.shipping.method)) {
+    logger.error('Error while placing order. No shipping method available. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
+  // Check if shipping address not have custom attributes.
+  if (_.isEmpty(cart.data.shipping.address.custom_attributes)) {
+    logger.error('Error while placing order. Shipping address not contains all info. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
+  // @todo If address extension attributes doesn't contain all the required fields
+  // or required field value is empty, not process/place order.
+
+  // If first/last name not available in shipping address.
+  if (_.isEmpty(cart.data.shipping.address.firstname)
+    || _.isEmpty(cart.data.shipping.address.lastname)) {
+    logger.error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
+  // @todo If first/last name not available in billing address.
+  if (_.isEmpty(cart.data.cart.billing_address.firstname)
+    || _.isEmpty(cart.data.cart.billing_address.lastname)) {
+    logger.error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
+
+  // @todo Check if cart total is valid return with an error message.
+
+  const params = {
+    cartId: window.commerceBackend.getCartId(),
+  };
+
+  return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
+    .then((response) => {
+      const result = {
+        success: true,
+        isAbsoluteUrl: false,
+      };
+
+      if (typeof response.redirectUrl !== 'undefined') {
+        result.redirectUrl = response.result;
+        result.isAbsoluteUrl = true;
+
+        // This is postpay specific. In future if any other payment gateway sends
+        // token, we will have to add a condition here.
+        if (typeof response.token !== 'undefined') {
+          result.token = response.token;
+        }
+
+        logger.notice('Place order returned redirect url. Cart: @cart Response: @response.', {
+          '@cart': JSON.stringify(cart),
+          '@response': JSON.stringify(response),
+        });
+
+        return { data: result };
+      }
+
+      const orderId = parseInt(response.data.replace('"', ''), 10);
+      const secureOrderId = btoa(JSON.stringify({
+        id: orderId,
+        mail: cart.data.cart.billing_address.email,
+      }));
+      // @todo implement the code in middleware/src/Service/Cart.php::processPostOrderPlaced().
+      result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
+
+      logger.notice('Order placed successfully. Cart: @cart OrderId: @order_id, Payment Method: @method.', {
+        '@cart': JSON.stringify(cart),
+        '@order_id': orderId,
+        '@method': data.data.paymentMethod.method,
+      });
+
+      return result;
+    })
+    .catch((response) => {
+      logger.error('Error while placing order. Error message: @message, Code: @code.', {
+        '@message': !_.isEmpty(response.error) ? response.error.message : response,
+        '@code': !_.isEmpty(response.error) ? response.error.error_code : '',
+      });
+
+      // @todo all the error handling.
+      return response;
+    });
 };
 
 export {
