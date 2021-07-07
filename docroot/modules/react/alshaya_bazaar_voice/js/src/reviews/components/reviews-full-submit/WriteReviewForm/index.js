@@ -141,9 +141,10 @@ export default class WriteReviewForm extends React.Component {
   render() {
     const dynamicFields = [];
     const {
-      closeModal, productId,
+      closeModal,
+      productId,
     } = this.props;
-
+    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const {
       fieldsConfig,
     } = this.state;
@@ -156,11 +157,12 @@ export default class WriteReviewForm extends React.Component {
             field_key={key}
             field={field}
             productId={productId}
+            countryCode={bazaarVoiceSettings.reviews.bazaar_voice.country_code}
           />,
         );
       },
     );
-    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+
     return (
       <>
         <div className="write-review-form">
