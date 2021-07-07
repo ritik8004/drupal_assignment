@@ -166,7 +166,7 @@ function alshaya_vs_transac_update_8006() {
  * Update the currency_code to DHS.
  */
 function alshaya_vs_transac_update_8005() {
-  $country_code = Unicode::mb_strtolower(Settings::get('country_code'));
+  $country_code = Unicode::strtolower(Settings::get('country_code'));
   if ($country_code === 'ae') {
     \Drupal::configFactory()->getEditable('acq_commerce.currency')
       ->set('currency_code', 'DHS')
