@@ -1349,7 +1349,76 @@ window.commerceBackend.getCartForCheckout = () => {
  *   Cart data.
  * */
 const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
-  logger.info(`${shippingData}${action}${updateBillingDetails}`);
+  const data = {
+    extension: {
+      action,
+    },
+    shipping: {
+      shipping_address: {},
+      shipping_carrier_code: {},
+      shipping_method_code: {},
+      extension_attributes: {},
+    },
+  };
+  const { store } = shippingData;
+  const staticFields = Object.assign(shippingData.store.cart_address, shippingData.static);
+  // Unset as not needed in further processing.
+  delete staticFields.extension;
+  const carrierInfo = shippingData.carrier_info;
+
+  const shippingInfo = Object.assign(shippingData, shippingData.store.cart_address.extension);
+  const customAttributes = [];
+  Object.keys(shippingInfo).forEach((key) => {
+    if (key === 'carrier_info' || key === 'static' || key === 'store') {
+      return;
+    }
+
+    customAttributes.push({
+      attribute_code: key,
+      value: shippingInfo[key],
+    });
+  });
+
+  let fieldsData = {};
+  if (!_.isEmpty(staticFields.street)) {
+    fieldsData = _.isString(staticFields.street)
+      ? [staticFields.street]
+      : staticFields.street;
+  }
+
+  Object.keys(staticFields).forEach((key) => {
+    if (key === 'street') {
+      return;
+    }
+    fieldsData[key] = staticFields[key];
+  });
+
+  fieldsData = Object.assign(fieldsData, { custom_attributes: customAttributes });
+  data.shipping.shipping_address = fieldsData;
+  data.shipping.shipping_carrier_code = carrierInfo.code;
+  data.shipping.shipping_method_code = carrierInfo.method;
+  data.shipping.extension_attributes = {
+    click_and_collect_type: !_.isEmpty(store.rnc_available) ? 'reserve_and_collect' : 'ship_to_store',
+    store_code: store.code,
+  };
+
+  let cart = await updateCart(data);
+
+  if (!_.isEmpty(cart.error) || (!_.isEmpty(cart.response_message) && cart.response_message[1] === 'json_error')) {
+    return cart;
+  }
+
+  // If billing needs to updated or billing is not available added at all
+  // in the cart. Assuming if name is not set in billing means billing is
+  // not set. City with value 'NONE' means, that this was added in CnC
+  // by default and not changed by user.
+  if (updateBillingDetails
+    || (_.isEmpty(cart.cart.billing_address.firstname)
+      || cart.cart.billing_address.city === 'NONE')) {
+    cart = await updateBilling(data.shipping.shipping_address);
+  }
+
+  return cart;
 };
 
 /**
