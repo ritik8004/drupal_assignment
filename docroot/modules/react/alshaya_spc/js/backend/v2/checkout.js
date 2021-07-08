@@ -488,6 +488,9 @@ const getCartStores = async (lat, lon) => {
  *   The latitude value.
  * @param {string} lon
  *   The longiture value.
+ *
+ * @returns {Promise<array>}
+ *   The list of stores.
  */
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
@@ -501,7 +504,9 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  return getCartStores(lat, lon);
+  return {
+    data: await getCartStores(lat, lon),
+  };
 };
 
 /**
