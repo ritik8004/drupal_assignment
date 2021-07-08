@@ -1,3 +1,5 @@
+import Axios from 'axios';
+
 /**
  * Logs messages in the backend.
  *
@@ -107,9 +109,27 @@ const getApiEndpoint = (action, params = {}) => {
   return endpoint;
 };
 
+/**
+ * Gets the ip address of the client.
+ *
+ * @returns {string}
+ *   Thge ip address.
+ */
+const getIp = () => Axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
+  .then((response) => {
+    if (typeof response.data === 'undefined' || response.data === '') {
+      return '';
+    }
+    return response.data.trim().split('\n').map((e) => {
+      const item = e.split('=');
+      return (item[0] === 'ip') ? item[1] : null;
+    }).filter((value) => value != null)[0];
+  });
+
 /* eslint-disable import/prefer-default-export */
 export {
   logger,
   getApiEndpoint,
   isUserAuthenticated,
+  getIp,
 };
