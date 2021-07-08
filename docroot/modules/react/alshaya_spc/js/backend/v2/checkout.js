@@ -517,9 +517,13 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  return {
-    data: await getCartStores(lat, lon),
-  };
+  const response = await getCartStores(lat, lon);
+  if (!_.isUndefined(response.data) && !_.isUndefined(response.data.error)) {
+    // In case of errors, return the response with error.
+    return response;
+  }
+
+  return { data: response };
 };
 
 /**

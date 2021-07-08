@@ -577,11 +577,11 @@ describe('Checkout', () => {
 
         expect(axios).toHaveBeenCalled();
         expect(axios.mock.calls.length).toEqual(3);
-        expect(result.length).toEqual(2);
-        expect(result[0].code).toEqual('RE1-4429-VIF');
-        expect(result[0].formatted_distance).toEqual(25.77);
-        expect(result[1].code).toEqual('QATESTSOURCE_MMCSP-740');
-        expect(result[1].formatted_distance).toEqual(25.77);
+        expect(result.data.length).toEqual(2);
+        expect(result.data[0].code).toEqual('RE1-4429-VIF');
+        expect(result.data[0].formatted_distance).toEqual(25.77);
+        expect(result.data[1].code).toEqual('QATESTSOURCE_MMCSP-740');
+        expect(result.data[1].formatted_distance).toEqual(25.77);
       });
 
       it('When lat is not provided', async () => {
@@ -631,20 +631,21 @@ describe('Checkout', () => {
         let result = await getCncStores(10, 20);
 
         expect(axios.mock.calls.length).toEqual(3);
-        expect(result.length).toEqual(1);
-        expect(result[0].code).toEqual('RE1-4429-VIF');
-        expect(result[0].formatted_distance).toEqual(25.77);
+        expect(result.data.length).toEqual(1);
+        expect(result.data[0].code).toEqual('RE1-4429-VIF');
+        expect(result.data[0].formatted_distance).toEqual(25.77);
       });
 
       it('When fetching the cnc store list fails', async () => {
         axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 500 });
+          .mockResolvedValueOnce({ data: {}, status: 500 });
 
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
         let result = await getCncStores(10, 20);
+        console.log(result.data);
 
         expect(axios.mock.calls.length).toEqual(1);
         expect(result.data.error).toEqual(true);
