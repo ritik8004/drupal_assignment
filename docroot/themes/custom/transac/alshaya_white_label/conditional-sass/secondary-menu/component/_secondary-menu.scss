@@ -61,6 +61,7 @@
             .highlights {
               margin-bottom: 1.875rem;
               margin-#{$right}: 0;
+              margin-#{$left}: 0.625rem;
               max-width: 17.6875rem;
               font-family: $open-sans;
 
@@ -75,7 +76,7 @@
                   width: 15.813rem;
                   height: 15.813rem;
                   display: inline-flex;
-                  justify-content: center;
+                  justify-content: flex-start;
                   align-items: center;
                 }
               }
@@ -162,6 +163,8 @@
             .level-three__wrapper {
               li.menu__list-item {
                 padding: 0;
+                margin-#{$right}: 0;
+                width: auto;
 
                 &:last-child {
                   .menu__link {
@@ -476,6 +479,17 @@
             width: 100%;
           }
         }
+
+        .menu__links__wrapper .column {
+          &:nth-child(n+3) {
+            margin-#{$left}: 3.75rem;
+          }
+        }
+
+        .menu--three__list-item {
+          margin-#{$right}: 0;
+          min-width: 0;
+        }
       }
     }
 
@@ -491,6 +505,10 @@
 
           .menu--two__list-item {
             padding-bottom: 1.563rem;
+
+            > .menu-two__link-wrapper {
+              width: auto;
+            }
           }
         }
 
