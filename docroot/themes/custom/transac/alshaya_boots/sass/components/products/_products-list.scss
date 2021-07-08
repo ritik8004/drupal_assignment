@@ -220,6 +220,10 @@
       & > img {
         height: 100%;
         width: auto;
+        // To prevent wrong boots images from getting squeezed.
+        // And help maintain them their original shape when they fill the container.
+        // Does not affect right images.
+        object-fit: scale-down;
       }
     }
   }
