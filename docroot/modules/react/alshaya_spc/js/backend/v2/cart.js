@@ -289,12 +289,6 @@ window.commerceBackend.applyRemovePromo = async (data) => {
       // Process cart data.
       response.data = getProcessedCartData(response.data);
       return response;
-    })
-    .catch((response) => {
-      const error = { ...response };
-      // Setting status will make validateCartResponse() show error when adding coupon code.
-      error.data.response_message.status = 'error_coupon';
-      return error;
     });
 };
 
