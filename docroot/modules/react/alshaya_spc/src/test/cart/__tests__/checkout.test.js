@@ -268,9 +268,14 @@ describe('Checkout', () => {
     describe('Test addShippingInfo()', () => {
       const addShippingInfo = utilsRewire.__get__('addShippingInfo');
 
-      jest
-        .spyOn(window.commerceBackend, 'getCartId')
-        .mockImplementation(() => '1234');
+      beforeEach(() => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        // Reset static cache to allow Axios to get called.
+        window.commerceBackend.setRawCartDataInStorage(null);
+      });
 
       it('With empty data', async () => {
         const result = await addShippingInfo({}, 'update shipping', true);
@@ -279,7 +284,6 @@ describe('Checkout', () => {
       });
 
       it('With address data', async () => {
-        window.commerceBackend.setRawCartDataInStorage(null);
         // Mock for getCart().
         axios.mockResolvedValue({ data: cartData, status: 200 });
         // Mock for update shipping.
@@ -321,7 +325,6 @@ describe('Checkout', () => {
       });
 
       it('With address data and customer_address_id', async () => {
-        window.commerceBackend.setRawCartDataInStorage(null);
         // Mock for getCart().
         axios.mockResolvedValue({ data: cartData, status: 200 });
         // Mock for update shipping.
