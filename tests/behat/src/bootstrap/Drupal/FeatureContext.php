@@ -2431,9 +2431,9 @@ JS;
   public function iSelectKnetPaymentMethod()
   {
     $page = $this->getSession()->getPage();
-    $newCheckoutKnet = $page->find('css', '#payment-method-checkout_com_upapi_knet');
+    $newCheckoutKnet = $page->find('css', '#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet');
     if (!empty($newCheckoutKnet)) {
-      $element = '#payment-method-checkout_com_upapi_knet';
+      $element = '#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet';
     } else {
       $element = '#payment-method-knet';
     }
