@@ -322,7 +322,7 @@ $magentos = [
     ],
   ],
   'hm_apc' => [
-    'url' => 'https://apc-7vc7xgy-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'url' => 'http://apc-7vc7xgy-zbrr3sobrsb3o.eu.magentosite.cloud',
     'pims_base_url' => 'http://34.249.182.88:3010',
     'magento_secrets' => [
       'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
@@ -632,7 +632,7 @@ $magentos = [
     ],
   ],
   'bbw_apc' => [
-    'url' => 'https://apc-7vc7xgy-bbk3lvknero4c.eu-3.magentosite.cloud',
+    'url' => 'http://apc-7vc7xgy-bbk3lvknero4c.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
       'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
@@ -769,7 +769,7 @@ $magentos = [
     ],
   ],
   'fl_apc' => [
-    'url' => 'https://apc-7vc7xgy-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
+    'url' => 'http://apc-7vc7xgy-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'f0er5posi7oc9e2p96195mb20e2hh05q',
       'consumer_secret' => 'f0h2pwyren0ooppm6ix50705l5iouekj',
