@@ -541,10 +541,6 @@ const getCart = async (force = false) => {
 
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
 
-  // Check customer email And check drupal session customer id to validate,
-  // if current cart is associated with logged in user or not.
-  // @todo associateCartToCustomer.
-
   if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
@@ -608,24 +604,6 @@ const getCartCustomerId = async () => {
     return parseInt(cart.customer.id, 10);
   }
   return null;
-};
-
-/**
- * Adds a customer to cart.
- * @todo implement associateCartToCustomer()
- *
- * @param {int} customerId
- *   Customer id.
- * @param {bool} resetCart
- *   True to Reset cart, otherwise false.
- *
- * @returns {Promise<object|boolean>}
- *   Response.
- */
-const associateCartToCustomer = async (customerId, resetCart = false) => {
-  logger.info(`Use ${customerId} and ${resetCart}`);
-  // Temporary return;
-  return true;
 };
 
 /**
@@ -831,7 +809,6 @@ export {
   getFormattedError,
   getCartCustomerEmail,
   getCartCustomerId,
-  associateCartToCustomer,
   matchStockQuantity,
   isCartHasOosItem,
 };

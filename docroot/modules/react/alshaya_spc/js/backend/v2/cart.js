@@ -7,7 +7,6 @@ import {
   updateCart,
   getProcessedCartData,
   getCartWithProcessedData,
-  associateCartToCustomer,
 } from './common';
 import { getApiEndpoint, logger } from './utility';
 import { getExceptionMessageType } from './error';
@@ -145,12 +144,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     if (_.isNull(cartId)) {
       return new Promise((resolve, reject) => reject(cartId));
     }
-  }
-
-  // Associate cart to customer.
-  const id = window.drupalSettings.userDetails.customerId;
-  if (id > 0) {
-    associateCartToCustomer(id);
   }
 
   let productOptions = {};
