@@ -1359,73 +1359,61 @@ window.commerceBackend.getCartForCheckout = () => {
  *   Cart data.
  * */
 const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
-  const data = {
+  const { store } = { ...shippingData };
+
+  // Create the address object with static data and store cart address.
+  let address = {
+    static: {
+      ...shippingData.static,
+      ...shippingData.store.cart_address,
+    },
+  };
+
+  // Move extension data to static fields.
+  if (!_.isUndefined(address.static.extension)) {
+    address = { ...address, ...address.static.extension };
+    delete address.static.extension;
+  }
+
+  // Move street to the root.
+  if (!_.isUndefined(address.static.street)) {
+    address.street = address.static.street;
+    delete address.static.street;
+  }
+
+  const params = {
     extension: {
       action,
     },
     shipping: {
-      shipping_address: {},
-      shipping_carrier_code: {},
-      shipping_method_code: {},
-      extension_attributes: {},
+      shipping_address: formatAddressForShippingBilling(address),
+      shipping_carrier_code: shippingData.carrier_info.code,
+      shipping_method_code: shippingData.carrier_info.method,
+      extension_attributes: {
+        click_and_collect_type: !_.isEmpty(store.rnc_available) ? 'reserve_and_collect' : 'ship_to_store',
+        store_code: store.code,
+      },
     },
   };
-  const { store } = shippingData;
-  const staticFields = Object.assign(shippingData.store.cart_address, shippingData.static);
-  // Unset as not needed in further processing.
-  delete staticFields.extension;
-  const carrierInfo = shippingData.carrier_info;
 
-  const shippingInfo = Object.assign(shippingData, shippingData.store.cart_address.extension);
-  const customAttributes = [];
-  Object.keys(shippingInfo).forEach((key) => {
-    if (key === 'carrier_info' || key === 'static' || key === 'store') {
-      return;
-    }
-
-    customAttributes.push({
-      attribute_code: key,
-      value: shippingInfo[key],
-    });
-  });
-
-  let fieldsData = {};
-  if (!_.isEmpty(staticFields.street)) {
-    fieldsData = _.isString(staticFields.street)
-      ? [staticFields.street]
-      : staticFields.street;
-  }
-
-  Object.keys(staticFields).forEach((key) => {
-    if (key === 'street') {
-      return;
-    }
-    fieldsData[key] = staticFields[key];
-  });
-
-  fieldsData = Object.assign(fieldsData, { custom_attributes: customAttributes });
-  data.shipping.shipping_address = fieldsData;
-  data.shipping.shipping_carrier_code = carrierInfo.code;
-  data.shipping.shipping_method_code = carrierInfo.method;
-  data.shipping.extension_attributes = {
-    click_and_collect_type: !_.isEmpty(store.rnc_available) ? 'reserve_and_collect' : 'ship_to_store',
-    store_code: store.code,
-  };
-
-  let cart = await updateCart(data);
-
-  if (!_.isEmpty(cart.error) || (!_.isEmpty(cart.response_message) && cart.response_message[1] === 'json_error')) {
+  let cart = await updateCart(params);
+  // If cart update has error.
+  if (_.isEmpty(cart.data)
+    || (!_.isUndefined(cart.data.error) && cart.data.error)
+    || (!_.isUndefined(cart.data.response_message) && cart.data.response_message === 'json_error')
+  ) {
     return cart;
   }
+  const cartData = cart.data;
 
   // If billing needs to updated or billing is not available added at all
   // in the cart. Assuming if name is not set in billing means billing is
   // not set. City with value 'NONE' means, that this was added in CnC
   // by default and not changed by user.
   if (updateBillingDetails
-    || (_.isEmpty(cart.cart.billing_address.firstname)
-      || cart.cart.billing_address.city === 'NONE')) {
-    cart = await updateBilling(data.shipping.shipping_address);
+    || _.isEmpty(cartData.billing_address) || _.isEmpty(cartData.billing_address.firstname)
+    || cartData.billing_address.city === 'NONE') {
+    cart = await updateBilling(params.shipping.shipping_address);
   }
 
   return cart;

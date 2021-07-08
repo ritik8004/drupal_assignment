@@ -461,6 +461,74 @@ describe('Checkout', () => {
       });
     });
 
+    describe('Test addCncShippingInfo()', () => {
+      const addCncShippingInfo = utilsRewire.__get__('addCncShippingInfo');
+
+      const shippingData = {
+        static: {
+          firstname: 'Foo',
+          lastname: 'Bar',
+          email: 'FooBar@example.com',
+          telephone: '+971555666777',
+          country_id: 'AE',
+        },
+        store: {
+          name: 'DUBAI FESTIVAL CITY MALL',
+          code: 'RE1-3763-BOO',
+          rnc_available: false,
+          cart_address: {
+            city: 'Abu Hail',
+            country_id: 'AE',
+            telephone: '+99999999',
+            street: 'Crescent Rd-Dubai Festival City-Dubai',
+            extension: {
+              address_apartment_segment: '',
+              address_building_segment: '',
+              area: '9',
+              address_city_segment: '1',
+            },
+          },
+        },
+        carrier_info: {
+          code: 'alshaya1',
+          method: 'click_and_collect',
+        },
+      };
+
+      axios
+        // Mocks for update with shipping data.
+        .mockResolvedValueOnce({ data: cartData, status: 200 })
+        // Mocks for update with billing data.
+        .mockResolvedValueOnce({ data: cartData, status: 200 });
+
+      jest
+        .spyOn(window.commerceBackend, 'getCartId')
+        .mockImplementation(() => '1234');
+
+      it('When shipping data', async () => {
+        // Pre-populate static cart.
+        window.commerceBackend.setRawCartDataInStorage(cartData);
+
+        await addCncShippingInfo(shippingData, 'update shipping', false);
+        expect(axios.mock.calls.length).toBe(2);
+
+        // We cannot check the result of updateCart() but we can check if it
+        // is being called with the correct parameters provided by addShippingInfo().
+        expect(axios).toHaveBeenNthCalledWith(
+          1,
+          {
+            data: '{"extension":{"action":"update shipping"},"shipping":{"shipping_address":{"firstname":"Foo","lastname":"Bar","email":"FooBar@example.com","telephone":"+99999999","country_id":"AE","city":"Abu Hail","street":["Crescent Rd-Dubai Festival City-Dubai"],"custom_attributes":[{"attribute_code":"area","value":"9"},{"attribute_code":"address_city_segment","value":"1"}]},"shipping_carrier_code":"alshaya1","shipping_method_code":"click_and_collect","extension_attributes":{"click_and_collect_type":"ship_to_store","store_code":"RE1-3763-BOO"}}}',
+            headers: {
+              'Alshaya-Channel': 'web',
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
+          },
+        );
+      });
+    });
+
     describe('Test getStoreInfo()', () => {
       it('When proper store data parameter is provided', async () => {
         axios.mockResolvedValue({ data: storeData_re1_4429_vif, status: 200 });
