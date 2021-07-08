@@ -5,10 +5,12 @@ namespace Drupal\alshaya_spc\Controller;
 use Drupal\alshaya_spc\Helper\CookieHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_spc\Helper\SecureText;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -121,8 +123,8 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     $email = trim(strtolower($order['email']));
 
     try {
-      // @todo post processing on success which involves cleaning
-      // cache and session.
+      $this->processPostPlaceOrder($order, $payment_method);
+
       $order['secure_order_id'] = SecureText::encrypt(
         json_encode(['order_id' => $order_id, 'email' => $email]),
         Settings::get('alshaya_api.settings')['consumer_secret']
@@ -138,11 +140,6 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
       );
 
       $redirect->headers->setCookie(CookieHelper::create('middleware_order_placed', 1, strtotime('+1 year')));
-
-      $this->logger->notice('Order placed successfully. Payment Method: @payment_method OrderId: @order_id', [
-        '@payment_method' => $payment_method,
-        '@order_id' => $order_id,
-      ]);
     }
     catch (\Exception $e) {
       // If any error/exception encountered while order was placed from
@@ -210,7 +207,47 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     ));
 
     return $response;
+  }
 
+  /**
+   * Process post order is placed.
+   *
+   * @param array $order
+   *   Order array.
+   * @param string $payment_method
+   *   Processed payment method.
+   */
+  protected function processPostPlaceOrder(array $order, string $payment_method) {
+    $customer = user_load_by_mail($order['email']);
+
+    // Add success message in logs.
+    $this->logger->info('Placed order. Order id: @order_id. Payment method: @method', [
+      '@order_id' => $order['order_id'],
+      '@method' => $payment_method,
+    ]);
+
+    if ($customer instanceof UserInterface) {
+      if (empty($customer->get('field_mobile_number')->getString())) {
+        $customer->get('field_mobile_number')->setValue($order['billing']['telephone']);
+        $customer->save();
+      }
+      else {
+        // Invalidate the user cache when order is placed to reflect the
+        // user specific data changes like saved payment cards.
+        Cache::invalidateTags($customer->getCacheTags());
+      }
+
+      $customer_id = (int) $customer->get('acq_customer_id')->getString();
+      $account_id = $customer->id();
+    }
+
+    // Clear the customer order cache.
+    if (!empty($customer_id)) {
+      $this->ordersManager->clearOrderCache($customer_id, $account_id);
+    }
+
+    // Reset stock cache and Drupal cache of products in last order.
+    $this->ordersManager->clearLastOrderRelatedProductsCache($order);
   }
 
 }

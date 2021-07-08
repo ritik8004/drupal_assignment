@@ -791,15 +791,14 @@ class AlshayaSpcController extends ControllerBase {
           // 1. email domain is valid
           // 2. email is not of an existing customer.
           $domain = explode('@', $value)[1];
-          $dns_records = dns_get_record($domain);
-          if (empty($dns_records)) {
+          $host = gethostbyname($domain);
+          if (empty($host) || $host === $domain) {
             $status[$key] = 'invalid';
           }
           else {
             $user = user_load_by_mail($value);
             $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
           }
-
           break;
 
         case 'address':
