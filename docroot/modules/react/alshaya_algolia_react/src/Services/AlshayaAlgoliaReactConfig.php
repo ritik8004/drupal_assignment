@@ -413,7 +413,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
 
           $facet_values = [];
           if ($widget['type'] === 'swatch_list') {
-            $facet_values = $this->loadFacetValues($identifier);
+            $facet_values = $this->loadFacetValues($identifier, $page_type);
           }
 
           // For HNM we are using "size_group_list" widget type
@@ -466,12 +466,19 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *
    * @param string $attribute
    *   Attribute to load the facet values for.
+   * @param string $page_type
+   *   Attribute to indentify page Type.
    *
    * @return array
    *   Facet values.
    */
-  protected function loadFacetValues(string $attribute) {
+  protected function loadFacetValues(string $attribute, $page_type = '') {
     static $facet_values;
+    // Remove language suffix of attribute based on Page Type
+    // to get attribute codes from acquia_search_index.
+    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $attribute = explode('.', $attribute)[0];
+    }
 
     if (empty($facet_values[$attribute])) {
       $result = $this->alshayaOptionsService->loadFacetsData([
