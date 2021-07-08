@@ -261,6 +261,10 @@
           &::after {
             transform: rotate(0deg);
           }
+
+          ~ ul {
+            display: none;
+          }
         }
       }
 
@@ -271,7 +275,6 @@
       }
 
       ul.menu--one__list {
-        display: none;
         position: inherit;
         padding: 0 1.25rem 1.25rem;
         width: 100%;
@@ -321,8 +324,13 @@
       }
 
       & ~ .secondary--main--menu {
-        > .secondary-main-menu-header {
-          display: none;
+        margin: 0;
+
+        > .secondary-main-menu-header,
+        > ul {
+          height: 0;
+          overflow: hidden;
+          padding: 0;
         }
       }
     }
