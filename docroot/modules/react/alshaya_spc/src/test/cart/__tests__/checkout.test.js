@@ -2,7 +2,7 @@ jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
 import utilsRewire, { getCncStores } from "../../../../js/backend/v2/checkout";
-import { drupalSettings } from '../globals';
+import { drupalSettings, Drupal } from '../globals';
 import * as cartData from '../data/cart.json';
 import * as storeData_re1_4429_vif from '../data/store_RE1-4429-VIF.json';
 import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMCSP-740.json';
@@ -48,6 +48,9 @@ describe('Checkout', () => {
         email: 'osmarwado@gmail.com',
         firstname: 'Osmar',
         lastname: 'Wado',
+        street: [
+          '1 London Rd',
+        ],
         telephone: '+971555666777',
         country_id: 'AE',
         city: 'Al Awir',
@@ -265,9 +268,14 @@ describe('Checkout', () => {
     describe('Test addShippingInfo()', () => {
       const addShippingInfo = utilsRewire.__get__('addShippingInfo');
 
-      jest
-        .spyOn(window.commerceBackend, 'getCartId')
-        .mockImplementation(() => '1234');
+      beforeEach(() => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        // Reset static cache to allow Axios to get called.
+        window.commerceBackend.setRawCartDataInStorage(null);
+      });
 
       it('With empty data', async () => {
         const result = await addShippingInfo({}, 'update shipping', true);
@@ -276,45 +284,53 @@ describe('Checkout', () => {
       });
 
       it('With address data', async () => {
-        // Mock for updateCart().
-        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
-        // Mock for updateBilling().
-        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        // Mock for getCart().
+        axios.mockResolvedValue({ data: cartData, status: 200 });
+        // Mock for update shipping.
+        axios.mockResolvedValue({ data: cartData, status: 200 });
+        // Mock for update billing.
+        axios.mockResolvedValue({ data: cartData, status: 200 });
 
         const data = {
-          static: {
-            firstname: 'Johnny',
-          },
-          street: '1 Long st',
-          carrier_info: {
-            code: 300,
-            method: 'foo',
+          address: {
+            static: {
+              firstname: 'Johnny',
+            },
+            street: '1 Long st',
+            carrier_info: {
+              code: 300,
+              method: 'foo',
+            },
           },
         };
         // Call addShippingInfo();
         await addShippingInfo(data, 'update shipping', true);
 
+        expect(axios.mock.calls.length).toBe(3);
+
         // We cannot check the result of updateCart() but we can check if it
         // is being called with the correct parameters provided by addShippingInfo().
         expect(axios).toHaveBeenNthCalledWith(
-          1,
+          2,
           {
-            data: '{"shipping":{"shipping_carrier_code":300,"shipping_method_code":"foo","shipping_address":{"firstname":"Johnny","street":["1 Long st"],"customAttributes":[{"attributeCode":"street","value":"1 Long st"}]}},"extension":{"action":"update shipping"}}',
+            data: '{"shipping":{"shipping_address":{"firstname":"Johnny","street":["1 Long st"],"custom_attributes":[]}},"extension":{"action":"update shipping"}}',
             headers: {
               'Alshaya-Channel': 'web',
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
           },
         );
       });
 
       it('With address data and customer_address_id', async () => {
-        // Mock for updateCart().
-        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
-        // Mock for updateBilling().
-        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        // Mock for getCart().
+        axios.mockResolvedValue({ data: cartData, status: 200 });
+        // Mock for update shipping.
+        axios.mockResolvedValue({ data: cartData, status: 200 });
+        // Mock for update billing.
+        axios.mockResolvedValue({ data: cartData, status: 200 });
 
         const data = {
           customer_address_id: '461',
@@ -326,10 +342,12 @@ describe('Checkout', () => {
         // Call addShippingInfo();
         await addShippingInfo(data, 'update shipping', true);
 
+        expect(axios.mock.calls.length).toBe(3);
+
         // We cannot check the result of updateCart() but we can check if it
         // is being called with the correct parameters provided by addShippingInfo().
         expect(axios).toHaveBeenNthCalledWith(
-          1,
+          2,
           {
             data: '{"shipping":{"shipping_address":{"city":"London","street":"1 Long st"}},"extension":{"action":"update shipping"}}',
             headers: {
@@ -337,14 +355,14 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
           },
         );
 
         // We cannot check the result of updateBilling() but we can check if it
         // is being called with the correct parameters provided by addShippingInfo().
         expect(axios).toHaveBeenNthCalledWith(
-          2,
+          3,
           {
             data: '{"extension":{"action":"update billing"},"billing":{"city":"London","street":"1 Long st"}}',
             headers: {
@@ -352,59 +370,9 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'v1/en_gb/rest/V1/guest-carts/undefined/updateCart',
+            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
           },
         );
-      });
-    });
-
-    describe('Test prepareShippingData()', () => {
-      const prepareShippingData = utilsRewire.__get__('prepareShippingData');
-
-      it('With empty value', async () => {
-        const result = prepareShippingData({});
-        expect(result).toEqual({});
-      });
-
-      it('With null value', async () => {
-        const result = prepareShippingData(null);
-        expect(result).toEqual({});
-      });
-
-      it('With address_id value', async () => {
-        const result = prepareShippingData({ address_id: 1 });
-        expect(result.address.customAttributes[0].attributeCode).toEqual('address_id');
-      });
-
-      it('Without static data', async () => {
-        const address = {
-          address_region_segment: '1025',
-        };
-        const result = prepareShippingData(address);
-        expect(result.address.firstname).toEqual(undefined);
-        expect(result.address.customAttributes[0].value).toEqual('1025');
-      });
-
-      it('With address data', async () => {
-        const address = {
-          static: {
-            firstname: 'John',
-            lastname: 'Smith',
-          },
-          address_region_segment: '1025',
-          street: '1 London Rd',
-        };
-        const result = prepareShippingData(address);
-
-        expect(result.static).toEqual(undefined);
-        expect(result.address.static).toEqual(undefined);
-        expect(result.address.firstname).toEqual('John');
-        expect(result.address.lastname).toEqual('Smith');
-        expect(result.address.customAttributes[0].attributeCode).toEqual('address_region_segment');
-        expect(result.address.customAttributes[0].value).toEqual('1025');
-        expect(result.address.customAttributes[1].attributeCode).toEqual('street');
-        expect(result.address.customAttributes[1].value).toEqual('1 London Rd');
-        expect(result.address.customAttributes.length).toEqual(2);
       });
     });
 
@@ -440,12 +408,9 @@ describe('Checkout', () => {
         expect(result.firstname).toEqual('John');
         expect(result.lastname).toEqual('Smith');
         expect(result.street).toEqual(['1 London Rd']);
-        expect(result.customAttributes[0].attributeCode).toEqual('address_region_segment');
-        expect(result.customAttributes[0].value).toEqual('1025');
-        expect(result.customAttributes[1].attributeCode).toEqual('street');
-        expect(result.customAttributes[1].value).toEqual('1 London Rd');
-        expect(result.customAttributes[2].value).toEqual('');
-        expect(result.customAttributes.length).toEqual(3);
+        expect(result.custom_attributes[0].attribute_code).toEqual('address_region_segment');
+        expect(result.custom_attributes[0].value).toEqual('1025');
+        expect(result.custom_attributes.length).toEqual(1);
       });
     });
 
