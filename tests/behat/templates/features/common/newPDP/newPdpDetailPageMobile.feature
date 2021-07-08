@@ -1,4 +1,4 @@
-@javascript @smoke @newPdp @mobile
+@javascript @smoke @newPdp @mobile @flkwprod @flaeprod @flsaprod
 Feature: Testing new PDP page for Mobile
 
   Background:
