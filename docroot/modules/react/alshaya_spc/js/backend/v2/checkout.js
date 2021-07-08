@@ -416,7 +416,7 @@ const getStoreInfo = async (storeData) => {
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_.isEmpty(response.data) || !_.isArray(response.data)
+  if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
     return null;
@@ -461,7 +461,8 @@ const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   let stores = [];
 
-  const response = await callMagentoApi(`/rest/V1/click-and-collect/stores/guest-cart/${cartId}/lat/${lat}/lon/${lon}`);
+  const url = getApiEndpoint('getCartStores', { cartId, lat, lon });
+  const response = await callMagentoApi(url, 'GET', {});
   if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
@@ -482,16 +483,19 @@ const getCartStores = async (lat, lon) => {
     stores = await Promise.all(storeInfoPromises);
 
     // Remove null values.
+    stores = stores.filter((value) => value != null);
+
     // Sort the stores first by distance and then by name.
-    return stores
-      .filter((value) => value != null)
-      .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
-      .sort((store1, store2) => store1.distance - store2.distance);
+    if (stores.length > 1) {
+      stores = stores
+        .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
+        .sort((store1, store2) => store1.distance - store2.distance);
+    }
   } catch (error) {
     logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
   }
 
-  return [];
+  return stores;
 };
 
 /**
@@ -514,7 +518,13 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  return getCartStores(lat, lon);
+  const response = await getCartStores(lat, lon);
+  if (!_.isUndefined(response.data) && !_.isUndefined(response.data.error)) {
+    // In case of errors, return the response with error.
+    return response;
+  }
+
+  return { data: response };
 };
 
 /**
