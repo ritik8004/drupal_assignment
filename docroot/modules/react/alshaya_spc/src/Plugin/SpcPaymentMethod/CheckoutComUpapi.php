@@ -145,11 +145,15 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
     // Add bin validation config in drupalSettings if it is enabled.
     $bin_validation_enabled = $checkout_settings->get('card_bin_validation_enabled') ?? FALSE;
     $bin_validation_supported_payment_methods = $checkout_settings->get('bin_validation_supported_payment_methods') ?? '';
+    $card_bin_numbers = $checkout_settings->get('card_bin_numbers') ?? [];
 
-    if ($bin_validation_enabled == TRUE && !empty($bin_validation_supported_payment_methods)) {
+    if ($bin_validation_enabled == TRUE
+      && !empty($bin_validation_supported_payment_methods)
+      && !empty($card_bin_numbers)) {
       $build['#attached']['drupalSettings']['checkoutComUpapi']['binValidation'] = [
         'cardBinValidationEnabled' => $bin_validation_enabled,
-        'binValidationSupportedPaymentMethods' => $bin_validation_supported_payment_methods,
+        'binValidationSupportedPaymentMethods' => explode(',', $bin_validation_supported_payment_methods),
+        'cardBinNumbers' => $card_bin_numbers,
       ];
 
       // Add payment method specific error message in strings.

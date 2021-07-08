@@ -88,29 +88,24 @@ class NewCard extends React.Component {
 
   // Bin validation - First 6 digits of a card is the bin number.
   handleBinValidation = (cardNumber) => {
-    const { binValidationSupportedPaymentMethods } = getBinValidationConfig();
     const cardBin = cardNumber.substring(0, 6);
-    const validation = binValidation(cardBin, binValidationSupportedPaymentMethods);
+    const validation = binValidation(parseInt(cardBin, 10));
 
-    if (validation instanceof Promise) {
-      validation.then((response) => {
-        if (response.error !== undefined) {
-          const errorKey = response.error_message || 'invalid_card';
+    if (validation.error !== undefined) {
+      const errorKey = validation.error_message || 'invalid_card';
 
-          handleValidationMessage(
-            'spc-cc-number-error',
-            cardNumber,
-            false,
-            getStringMessage(errorKey),
-          );
-          return;
-        }
+      handleValidationMessage(
+        'spc-cc-number-error',
+        cardNumber,
+        false,
+        getStringMessage(errorKey),
+      );
+      return;
+    }
 
-        if (response.status !== undefined && response.status === true) {
-          // Validate full card number if bin is valid.
-          this.handleCardNumberValidation(cardNumber);
-        }
-      });
+    if (validation === true) {
+      // Validate full card number if bin is valid.
+      this.handleCardNumberValidation(cardNumber);
     }
   };
 
