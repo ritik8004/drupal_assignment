@@ -1,4 +1,4 @@
-@javascript @smoke @desktop @newPdp @flkwprod @flaeprod @flsaprod
+@javascript @smoke @desktop @newPdp @flkwprod @flaeprod @flsaprod @mckwprod @mcsaprod @mcaeprod
 Feature: Testing new PDP CNC Block for desktop
 
   Background:
