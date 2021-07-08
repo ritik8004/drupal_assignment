@@ -2,9 +2,9 @@ jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
 import utilsRewire from '../../../../js/backend/v2/common';
-import { drupalSettings } from '../globals';
+import { drupalSettings, Drupal } from '../globals';
 import * as cartData from '../data/cart.json';
-import cartActions from '../../../../js/backend/v2/cart_actions';
+import cartActions from '../../../../js/utilities/cart_actions';
 import _ from 'lodash';
 
 describe('Common', () => {

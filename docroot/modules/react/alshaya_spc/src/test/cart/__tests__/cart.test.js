@@ -2,7 +2,7 @@ jest.mock('axios');
 import axios from 'axios';
 import * as cart from '../../../../js/backend/v2/cart';
 import { callMagentoApi } from '../../../../js/backend/v2/common';
-import { drupalSettings } from '../globals';
+import { drupalSettings, Drupal } from '../globals';
 import { getStorageInfo } from '../../../../js/utilities/storage';
 
 describe('Cart', () => {

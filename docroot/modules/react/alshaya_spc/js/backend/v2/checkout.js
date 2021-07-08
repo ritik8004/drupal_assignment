@@ -136,6 +136,10 @@ const formatShippingEstimatesAddress = (address) => {
   data.city = (typeof address.city !== 'undefined') ? address.city : '';
   data.telephone = (typeof address.telephone !== 'undefined') ? address.telephone : '';
 
+  data.street = _.isString(address.street)
+    ? [address.street]
+    : address.street;
+
   data.custom_attributes = [];
   if (typeof address.custom_attributes !== 'undefined' && address.custom_attributes.length > 0) {
     data.custom_attributes = address.custom_attributes.map((item) => {
@@ -160,6 +164,7 @@ const formatShippingEstimatesAddress = (address) => {
       );
     });
   }
+
   return data;
 };
 
@@ -254,39 +259,41 @@ const getDefaultAddress = (data) => {
  *   Formatted address object.
  */
 const formatAddressForShippingBilling = (address) => {
-  const data = _.cloneDeep(address);
+  // Return as is if custom_attributes already set.
+  if (typeof address.custom_attributes !== 'undefined') {
+    return address;
+  }
 
-  const staticFields = {};
-  if (!_.isEmpty(data.static)) {
-    Object.keys(data.static).forEach((key) => {
-      staticFields[key] = data.static[key];
+  const data = {};
+
+  if (!_.isEmpty(address.static)) {
+    Object.keys(address.static).forEach((key) => {
+      data[key] = address.static[key];
     });
-    delete data.static;
   }
 
-  if (!_.isEmpty(data.carrier_info)) {
-    delete data.carrier_info;
-  }
+  data.street = _.isString(address.street)
+    ? [address.street]
+    : address.street;
 
   const customAttributes = [];
-  Object.keys(data).forEach((key) => {
-    customAttributes.push(
-      {
-        attributeCode: key,
-        value: (!Array.isArray(data[key]) && _.isNull(data[key])) ? '' : data[key],
-      },
-    );
+  Object.keys(address).forEach((key) => {
+    if (typeof data[key] !== 'undefined' || key === 'carrier_info' || key === 'static') {
+      return;
+    }
+
+    if (_.isEmpty(address[key])) {
+      return;
+    }
+
+    customAttributes.push({
+      attribute_code: key,
+      value: address[key],
+    });
   });
-  data.customAttributes = customAttributes;
 
-  if (_.isString(data.street)) {
-    data.street = [data.street];
-  }
-
-  return {
-    ...staticFields,
-    ...data,
-  };
+  data.custom_attributes = customAttributes;
+  return data;
 };
 
 /**
@@ -376,7 +383,13 @@ const getPaymentMethodSetOnCart = async () => {
     return response.data.method;
   }
 
-  logger.error(`Error while getting payment set on cart. Error message: ${response.data.error_message}`);
+  // Log if there is an error.
+  if (!_.isEmpty(response.data.error)) {
+    logger.error('Error while getting payment set on cart. Response: @response', {
+      '@response': JSON.stringify(response.data),
+    });
+  }
+
   return null;
 };
 
@@ -532,6 +545,11 @@ const formatAddressForFrontend = (address) => {
       result[key] = val;
     });
   }
+
+  if (_.isArray(result.street)) {
+    [result.street] = result.street;
+  }
+
   delete result.custom_attributes;
   return result;
 };
@@ -667,7 +685,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   if (!_.isEmpty(shippingData.customer_address_id)) {
     params.shipping.shipping_address = shippingData.address;
   } else {
-    params.shipping.shipping_address = formatAddressForShippingBilling(shippingData);
+    params.shipping.shipping_address = formatAddressForShippingBilling(shippingData.address);
   }
 
   let cart = await updateCart(params);
@@ -870,8 +888,10 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Add log for billing data we pass to magento update cart.
-  const logAddress = JSON.stringify(billing);
-  logger.notice(`Billing update default for HD. Address: ${logAddress} Cart: ${cartId}`);
+  logger.notice('Billing update default for HD. Address: @address Cart: @cartId', {
+    '@address': JSON.stringify(billing),
+    '@cartId': cartId,
+  });
 
   // If billing address not contains proper address, don't process further.
   if (_.isEmpty(billing.extension_attributes)
@@ -1198,12 +1218,13 @@ const paymentUpdate = async (data) => {
   // If upapi payment method (payment method via checkout.com).
   if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
-    params.payment.additional_data.successUrl = Drupal.url('spc/payment-callback/success');
-    params.payment.additional_data.failUrl = Drupal.url(`spc/payment-callback/${paymentData.method}/error`);
+    params.payment.additional_data.successUrl = `${window.location.origin}${Drupal.url('spc/payment-callback/success')}`;
+    params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
   }
 
   // @todo implement the processing for checkout_com_upapi for Cart::processPaymentData().
   // @todo update payment method to checkout_com_upapi_vault if using a saved card.
+  // Both the points above are for authenticated users so still pending.
 
   const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
@@ -1380,7 +1401,9 @@ window.commerceBackend.addPaymentMethod = async (data) => {
   // Validate cart.
   if (data.action === cartActions.cartPaymentFinalise) {
     const response = await validateBeforePaymentFinalise();
-    if (!_.isUndefined(response.data.error) && response.data.error) {
+    if (!_.isUndefined(response.data)
+      && !_.isUndefined(response.data.error) && response.data.error
+    ) {
       return response;
     }
   }
@@ -1457,55 +1480,6 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
 };
 
 /**
- * Format shipping info for api call.
- *
- * @param {object} $shipping_info
- *   Shipping info.
- *
- * @return {object}
- *   Formatted shipping info for api.
- */
-const prepareShippingData = (shippingInfo) => {
-  let result = {};
-
-  if (_.isEmpty(shippingInfo)) {
-    return result;
-  }
-
-  // If address id available.
-  if (!_.isEmpty(shippingInfo.address_id)) {
-    result.address_id = shippingInfo.address_id;
-  } else {
-    const data = _.cloneDeep(shippingInfo);
-    const staticFields = data.static;
-    delete data.static;
-    let customAttributes = [];
-    Object.keys(data).forEach((key) => {
-      const val = (!_.isArray(data[key]) && _.isNull(data[key]))
-        ? ''
-        : data[key];
-
-      customAttributes.push(
-        {
-          attributeCode: key,
-          value: val,
-        },
-      );
-    });
-    customAttributes = { customAttributes };
-
-    result = {
-      address: {
-        ...staticFields,
-        ...customAttributes,
-      },
-    };
-  }
-
-  return result;
-};
-
-/**
  * Adds shipping method to the cart and returns the cart.
  *
  * @param {object} data
@@ -1535,6 +1509,8 @@ window.commerceBackend.addShippingMethod = async (data) => {
     }
   }
 
+  const cartId = window.commerceBackend.getCartId();
+
   const type = (!_.isUndefined(shippingInfo.shipping_type))
     ? shippingInfo.shipping_type
     : 'home_delivery';
@@ -1543,56 +1519,125 @@ window.commerceBackend.addShippingMethod = async (data) => {
     // Unset as not needed in further processing.
     delete (shippingInfo.shipping_type);
 
-    const logAddress = JSON.stringify(shippingInfo);
-    const logData = JSON.stringify(data);
-    const cartId = window.commerceBackend.getCartId();
-    logger.notice(`Shipping update manual for CNC. Data: ${logData} Address: ${logAddress} Cart: ${cartId}.`);
+    logger.notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cart_id', {
+      '@data': JSON.stringify(data),
+      '@address': JSON.stringify(shippingInfo),
+      '@cart_id': cartId,
+    });
 
     cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
-  } else {
-    const shippingData = prepareShippingData(shippingInfo);
-    const shippingMethods = await getHomeDeliveryShippingMethods(shippingData.address);
 
-    // If no shipping method.
-    if (_.isEmpty(shippingMethods)
-      || (!_.isUndefined(shippingMethods.error) && shippingMethods.error)) {
-      const logData = JSON.stringify(data);
-      const cartId = window.commerceBackend.getCartId();
-      logger.notice(`Error while shipping update manual for HD. Data: ${logData} Cart: ${cartId} Error message: ${shippingMethods.error_message}`);
-      return shippingMethods;
-    }
+    // Process cart data.
+    cart.data = await getProcessedCheckoutData(cart.data);
 
+    return cart;
+  }
 
-    let carrierInfo = [];
-    if (!_.isEmpty(shippingInfo.carrier_info)) {
-      // @todo check if method in cart is still available in shippingMethods.
-      carrierInfo = shippingInfo.carrier_info;
-      delete shippingInfo.carrier_info;
-    }
+  const shippingAddress = formatAddressForShippingBilling(shippingInfo);
+  const shippingMethods = await getHomeDeliveryShippingMethods(shippingAddress);
 
-    if (_.isEmpty(carrierInfo)) {
-      shippingInfo.carrier_info = {
-        code: shippingMethods[0].carrier_code,
-        method: shippingMethods[0].method_code,
-      };
-    }
+  // If no shipping method.
+  if (_.isEmpty(shippingMethods)
+    || (!_.isUndefined(shippingMethods.error) && shippingMethods.error)) {
+    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', {
+      '@data': JSON.stringify(data),
+      '@cart_id': cartId,
+      '@error_message': shippingMethods.error_message,
+    });
 
-    const logAddress = JSON.stringify(shippingInfo);
-    const logData = JSON.stringify(data);
-    const cartId = window.commerceBackend.getCartId();
-    logger.notice(`Shipping update manual for HD. Data: ${logData} Address: ${logAddress} Cart: ${cartId}`);
+    return shippingMethods;
+  }
 
-    cart = await addShippingInfo(shippingInfo, data.action, updateBillingInfo);
+  let carrierInfo = {};
+  if (!_.isEmpty(shippingInfo.carrier_info)) {
+    carrierInfo = shippingInfo.carrier_info;
+  }
 
-    if (!_.isEmpty(cart.data) && !_.isEmpty(cart.data.shipping) && !_.isEmpty(shippingMethods)) {
-      cart.data.shipping.methods = shippingMethods;
-    }
+  if (_.isEmpty(carrierInfo)) {
+    carrierInfo = {
+      code: shippingMethods[0].carrier_code,
+      method: shippingMethods[0].method_code,
+    };
+  }
+
+  const params = {
+    address: shippingAddress,
+    carrier_info: carrierInfo,
+  };
+
+  logger.notice('Shipping update manual for HD. Data: @params. Cart: @cartId', {
+    '@params': JSON.stringify(params),
+    '@cartId': window.commerceBackend.getCartId(),
+  });
+
+  cart = await addShippingInfo(params, data.action, updateBillingInfo);
+
+  if (!_.isEmpty(cart.data) && !_.isEmpty(cart.data.shipping) && !_.isEmpty(shippingMethods)) {
+    cart.data.shipping.methods = shippingMethods;
   }
 
   // Process cart data.
   cart.data = await getProcessedCheckoutData(cart.data);
 
   return cart;
+};
+
+/**
+ * Triggers the checkout event post order placed.
+ *
+ * @param {string} event
+ *   The action.
+ * @param {object} data
+ *   The params for checkout event.
+ *
+ * @returns {Promise<AxiosPromise<Object>>}
+ */
+const triggerCheckoutEvent = (event, data) => callDrupalApi(
+  '/spc/checkout-event',
+  'POST',
+  {
+    form_params: {
+      ...data,
+      action: event,
+    },
+  },
+).catch((error) => {
+  logger.error('Error occurred while triggering checkout event @event. Message: @message', {
+    '@event': event,
+    '@message': error.message,
+  });
+});
+
+/**
+ * Process operations post order placed.
+ *
+ * @param {object} cart
+ *   Cart details.
+ * @param {int} orderId
+ *   Order id.
+ * @param {string} paymentMethod
+ *   Payment Method.
+ */
+const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
+  let customerId = '';
+  if (!_.isEmpty(cart.data.cart.customer)
+    && !_.isEmpty(cart.data.cart.customer.id)) {
+    customerId = cart.data.cart.customer.id;
+  }
+
+  // Remove cart id and other caches from session.
+  window.commerceBackend.removeCartDataFromStorage();
+  localStorage.removeItem('cart_id');
+
+  // Post order id and cart data to Drupal.
+  const data = {
+    order_id: orderId,
+    cart: cart.data.cart,
+    payment_method: paymentMethod,
+    customer_id: customerId,
+  };
+
+  triggerCheckoutEvent('place order success', data);
 };
 
 /**
@@ -1605,9 +1650,25 @@ window.commerceBackend.addShippingMethod = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.placeOrder = async (data) => {
-  const cart = await getCart();
+  const cart = await getCart(true);
 
-  // @todo stock check.
+  if (_.isObject(cart) && isCartHasOosItem(cart.data)) {
+    logger.error('Error while finalizing payment. Cart has an OOS item. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+
+    Object.keys(cart.data.cart.items).forEach((key) => {
+      matchStockQuantity(cart.data.cart.items[key].sku);
+    });
+
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartHasOOSItem,
+        error_message: 'Cart contains some items which are not in stock.',
+      },
+    };
+  }
 
   // Check if shipping method is present else throw error.
   if (_.isEmpty(cart.data.shipping.method)) {
@@ -1637,8 +1698,20 @@ window.commerceBackend.placeOrder = async (data) => {
     };
   }
 
-  // @todo If address extension attributes doesn't contain all the required fields
-  // or required field value is empty, not process/place order.
+  if (!isAddressExtensionAttributesValid(cart.data)) {
+    // If address extension attributes doesn't contain all the required
+    // fields or required field value is empty, not process/place order.
+    logger.error('Error while placing order. Shipping address not contains all required extension attributes. Cart: @cart', {
+      '@cart': JSON.stringify(cart),
+    });
+    return {
+      data: {
+        error: true,
+        error_code: cartErrorCodes.cartOrderPlacementError,
+        error_message: 'Delivery Information is incomplete. Please update and try again.',
+      },
+    };
+  }
 
   // If first/last name not available in shipping address.
   if (_.isEmpty(cart.data.shipping.address.firstname)
@@ -1655,7 +1728,7 @@ window.commerceBackend.placeOrder = async (data) => {
     };
   }
 
-  // @todo If first/last name not available in billing address.
+  // Check If first/last name not available in billing address.
   if (_.isEmpty(cart.data.cart.billing_address.firstname)
     || _.isEmpty(cart.data.cart.billing_address.lastname)) {
     logger.error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
@@ -1670,8 +1743,6 @@ window.commerceBackend.placeOrder = async (data) => {
     };
   }
 
-  // @todo Check if cart total is valid return with an error message.
-
   const params = {
     cartId: window.commerceBackend.getCartId(),
   };
@@ -1683,30 +1754,35 @@ window.commerceBackend.placeOrder = async (data) => {
         isAbsoluteUrl: false,
       };
 
-      if (typeof response.redirectUrl !== 'undefined') {
-        result.redirectUrl = response.result;
+      if (typeof response.data.redirect_url !== 'undefined') {
+        result.error = true;
+        result.success = false;
+        result.redirectUrl = response.data.redirect_url;
         result.isAbsoluteUrl = true;
 
         // This is postpay specific. In future if any other payment gateway sends
         // token, we will have to add a condition here.
-        if (typeof response.token !== 'undefined') {
-          result.token = response.token;
+        if (typeof response.data.token !== 'undefined') {
+          result.token = response.data.token;
         }
 
         logger.notice('Place order returned redirect url. Cart: @cart Response: @response.', {
           '@cart': JSON.stringify(cart),
-          '@response': JSON.stringify(response),
+          '@response': JSON.stringify(response.data),
         });
 
         return { data: result };
       }
 
-      const orderId = parseInt(response.data.replace('"', ''), 10);
+      const orderId = parseInt(response.data, 10);
       const secureOrderId = btoa(JSON.stringify({
-        id: orderId,
-        mail: cart.data.cart.billing_address.email,
+        order_id: orderId,
+        email: cart.data.cart.billing_address.email,
       }));
-      // @todo implement the code in middleware/src/Service/Cart.php::processPostOrderPlaced().
+
+      // Operations post order placed.
+      processPostOrderPlaced(cart, orderId, data.data.paymentMethod.method);
+
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
       logger.notice('Order placed successfully. Cart: @cart OrderId: @order_id, Payment Method: @method.', {
@@ -1715,7 +1791,7 @@ window.commerceBackend.placeOrder = async (data) => {
         '@method': data.data.paymentMethod.method,
       });
 
-      return result;
+      return { data: result };
     })
     .catch((response) => {
       logger.error('Error while placing order. Error message: @message, Code: @code.', {
@@ -1724,6 +1800,8 @@ window.commerceBackend.placeOrder = async (data) => {
       });
 
       // @todo all the error handling.
+      // @todo cancel reservation.
+
       return response;
     });
 };
