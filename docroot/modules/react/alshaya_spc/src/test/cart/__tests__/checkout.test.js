@@ -414,21 +414,16 @@ describe('Checkout', () => {
       });
     });
 
-    it('Test selectCnc()', async () => {
-      // @todo finish tests.
-      // const selectCnc = utilsRewire.__get__('selectCnc');
-      // axios.mockResolvedValueOnce({ data: cartData, status: 200 });
-      // jest
-      //   .spyOn(window.commerceBackend, 'getCartId')
-      //   .mockImplementation(() => '1234');
-      //
-      // const response = await getCart();
-      // const address = { ...response.data.shipping.address};
-      //
-      // axios.mockResolvedValue(productStatus);
-      // const result = selectCnc(address);
-      // expect(result).toEqual({ status: true, address: true });
-    });
+    // describe('Test selectCnc()', () => {
+    //   const selectCnc = utilsRewire.__get__('selectCnc');
+    //   it('With invalid address', async () => {
+    //     // Mock for validateAddressAreaCity().
+    //     axios.mockResolvedValueOnce({ data: false, status: 200 });
+    //
+    //     const result = await selectCnc({}, {}, {});
+    //     expect(result).toEqual(false);
+    //   });
+    // });
 
     describe('Tests getCncStatusForCart()', () => {
       const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');

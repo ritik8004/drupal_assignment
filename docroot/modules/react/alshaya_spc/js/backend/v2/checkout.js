@@ -755,7 +755,7 @@ const selectCnc = async (store, address, billing) => {
   // Validate address.
   const valid = await validateAddressAreaCity(billing);
   if (!valid || valid.address === false) {
-    return new Promise((resolve) => resolve(false));
+    return false;
   }
 
   const logData = JSON.stringify(data);
@@ -766,18 +766,18 @@ const selectCnc = async (store, address, billing) => {
 
   // If shipping address not contains proper data (extension info).
   if (_.isEmpty(data.shipping.shipping_address.extension_attributes)) {
-    return new Promise((resolve) => resolve(false));
+    return false;
   }
 
-  const updated = updateCart(data);
+  const updated = await updateCart(data);
   if (_.has(updated, 'error') && updated.error) {
-    return new Promise((resolve) => resolve(false));
+    return false;
   }
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
   if (_.isEmpty(billing.customer_address_id)) {
-    return new Promise((resolve) => resolve(updated));
+    return updated;
   }
 
   // Add log for billing data we pass to magento update cart.
@@ -786,24 +786,24 @@ const selectCnc = async (store, address, billing) => {
 
   // If billing address not contains proper data (extension info).
   if (typeof billing.extension_attributes === 'undefined') {
-    return new Promise((resolve) => resolve(false));
+    return false;
   }
 
-  const customerAddressIds = getCustomerAddressIds(billing.customer_id);
+  const customerAddressIds = await getCustomerAddressIds(billing.customer_id);
 
   // Return if address id from last order doesn't
   // exist in customer's address id list.
   if (_.findIndex(customerAddressIds, { id: billing.customer_address_id }) !== -1) {
-    return new Promise((resolve) => resolve(updated));
+    return updated;
   }
 
-  const updatedBilling = updateBilling(billing);
+  const updatedBilling = await updateBilling(billing);
 
   // If billing update has error.
   if (_.has(updated, 'error') && updated.error) {
-    return new Promise((resolve) => resolve(false));
+    return false;
   }
-  return new Promise((resolve) => resolve(updatedBilling));
+  return updatedBilling;
 };
 
 /**
