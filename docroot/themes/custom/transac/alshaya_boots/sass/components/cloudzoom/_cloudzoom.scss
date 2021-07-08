@@ -79,6 +79,10 @@
       }
     }
   }
+
+  #cloud-zoom-wrap img {
+    object-fit: scale-down;
+  }
 }
 
 .acq-content-product-modal {
