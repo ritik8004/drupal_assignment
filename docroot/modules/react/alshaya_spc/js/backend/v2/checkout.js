@@ -23,6 +23,7 @@ import {
   getApiEndpoint,
   isUserAuthenticated,
   logger,
+  getIp,
 } from './utility';
 import cartActions from '../../utilities/cart_actions';
 
@@ -1083,7 +1084,7 @@ const paymentUpdate = async (data) => {
     params.extension.user_agent = navigator.userAgent;
 
     // @todo maybe we could use some geolocation service.
-    params.extension.client_ip = '0.0.0.0';
+    params.extension.client_ip = await getIp();
 
     params.extension.attempted_payment = 1;
   }
