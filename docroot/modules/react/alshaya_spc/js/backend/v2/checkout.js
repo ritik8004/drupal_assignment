@@ -1369,8 +1369,8 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
   // Create the address object with static data and store cart address.
   let address = {
     static: {
-      ...shippingData.static,
       ...shippingData.store.cart_address,
+      ...shippingData.static,
     },
   };
 
@@ -1411,13 +1411,14 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
   }
   const cartData = cart.data;
 
-  // If billing needs to updated or billing is not available added at all
-  // in the cart. Assuming if name is not set in billing means billing is
-  // not set. City with value 'NONE' means, that this was added in CnC
-  // by default and not changed by user.
+  // Setting city value as 'NONE' so that, we can
+  // identify if billing address added is default one and
+  // not actually added by the customer on FE.
   if (updateBillingDetails
-    || _.isEmpty(cartData.billing_address) || _.isEmpty(cartData.billing_address.firstname)
+    || _.isEmpty(cartData.billing_address) || _.isEmpty(cartData.billing_address.city)
     || cartData.billing_address.city === 'NONE') {
+    params.shipping.shipping_address.city = 'NONE';
+    // Adding billing address.
     cart = await updateBilling(params.shipping.shipping_address);
   }
 
