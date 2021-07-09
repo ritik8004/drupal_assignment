@@ -418,17 +418,24 @@ const getStoreInfo = async (storeData) => {
   // Get the complete data about the store by combining the received data from
   // Magento with the processed store data stored in Drupal.
   store = Object.assign(store, storeInfo);
-  store.formatted_distance = store.distance
-    .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    .replace(/,/g, '');
-  store.formatted_distance = parseFloat(store.formatted_distance);
 
-  store.delivery_time = store.sts_delivery_time_label;
+  if (!_.isUndefined(store.distance)) {
+    store.formatted_distance = store.distance
+      .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace(/,/g, '');
+    store.formatted_distance = parseFloat(store.formatted_distance);
+  }
+
+  if (!_.isUndefined(store.sts_delivery_time_label)) {
+    store.delivery_time = store.sts_delivery_time_label;
+  }
+
   if (typeof store.rnc_available !== 'undefined'
     && store.rnc_available
     && typeof store.rnc_config !== 'undefined') {
     store.delivery_time = store.rnc_config;
   }
+
   // If rnc is available the the value of rnc_config is already fetched above.
   // Or rnc is not available at all. So in both cases, we do not need the value
   // of rnc_config anymore and so we remove it.
@@ -923,7 +930,7 @@ const getProcessedCheckoutData = async (cartData) => {
     : [];
 
   if (typeof response.shipping.storeCode !== 'undefined') {
-    response.shipping.storeInfo = await getStoreInfo(response.shipping.storeCode);
+    response.shipping.storeInfo = await getStoreInfo({ code: response.shipping.storeCode });
     // Set the CnC type (rnc or sts) if not already set.
     if (typeof response.shipping.storeInfo.rnc_available === 'undefined' && typeof response.shipping.clickCollectType !== 'undefined') {
       response.shipping.storeInfo.rnc_available = (response.shipping.clickCollectType === 'reserve_and_collect');
