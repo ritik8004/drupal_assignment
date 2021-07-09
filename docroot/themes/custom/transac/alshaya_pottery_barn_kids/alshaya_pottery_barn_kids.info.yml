@@ -2,6 +2,7 @@ name: Alshaya Pottery Barn Kids
 type: theme
 description: 'Theme for Alshaya Pottery Barn Kids Brand.'
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: alshaya_pottery_barn
 alshaya_theme_type: transac
 
