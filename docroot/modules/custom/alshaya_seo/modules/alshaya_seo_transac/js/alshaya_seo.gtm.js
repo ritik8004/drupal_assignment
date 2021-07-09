@@ -643,7 +643,7 @@ const productRecommendationsSuffix = 'pr-';
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page' || listName === 'Promotion') {
           var section = listName;
           if (listName.indexOf('PLP') > -1) {
             // As we have used the same markup to display search results page
@@ -655,6 +655,11 @@ const productRecommendationsSuffix = 'pr-';
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
+            // For promotion page.
+            if (listName === 'Promotion') {
+              facetTitle = $(this).parent('ul').attr('data-drupal-facet-alias').replaceAll("_", " ");
+              selectedVal = $(this).find('a').attr('data-drupal-facet-item-value');
+            }
             var data = {
               event: 'filter',
               siteSection: section.trim(),
