@@ -13,6 +13,11 @@ class AlshayaGoogleAuthController extends GoogleAuthController {
    * {@inheritdoc}
    */
   public function callback() {
+    // Checks if there was an authentication error.
+    $redirect = $this->checkAuthError();
+    if ($redirect) {
+      return $redirect;
+    }
     /** @var \League\OAuth2\Client\Provider\GoogleUser|null $profile */
     $profile = $this->processCallback();
 
