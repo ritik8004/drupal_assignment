@@ -496,7 +496,10 @@ const getCartStores = async (lat, lon) => {
  * @param {string} lat
  *   The latitude value.
  * @param {string} lon
- *   The longiture value.
+ *   The longitude value.
+ *
+ * @returns {Promise<array>}
+ *   The list of stores.
  */
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
@@ -1034,6 +1037,17 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
   logger.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
 };
+
+/**
+ * Fetches the list of click and collect stores.
+ *
+ * @param {object} coords
+ *   The co-ordinates data.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
 
 /**
  * Adds payment method in the cart and returns the cart.
