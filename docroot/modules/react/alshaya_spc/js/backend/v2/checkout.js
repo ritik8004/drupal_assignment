@@ -1098,6 +1098,7 @@ const paymentUpdate = async (data) => {
 
   const oldCart = await getCart();
   const cart = await updateCart(params);
+  console.log(cart);
   if (_.isEmpty(cart.data) || (!_.isUndefined(cart.data.error) && cart.data.error)) {
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
     const message = prepareOrderFailedMessage(oldCart, data, errorMessage, 'update cart', 'NA');
@@ -1709,13 +1710,14 @@ window.commerceBackend.saveApplePayPayment = (data) => {
       };
     }
 
-    return {
-      data: {
-        error: true,
-        error_code: cartErrorCodes,
-        error_message: 'Error while finalizing payment.',
-      },
-    };
+    return response;
+  }).catch((response) => {
+    logger.error('Error while finalizing payment. Error message: @message, Code: @code.', {
+      '@message': !_.isEmpty(response.error) ? response.error.message : response,
+      '@code': !_.isEmpty(response.error) ? response.error.error_code : '',
+    });
+
+    return response;
   });
 };
 
