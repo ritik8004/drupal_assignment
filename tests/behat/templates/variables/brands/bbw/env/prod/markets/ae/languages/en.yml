@@ -15,6 +15,7 @@ variables:
   language_size_filter: 'فئة العطر'
   language_promotional_filter: ''
   filters: 'all filters'
+  spc_search_keyword: 'candle'
   language_filters: 'جميع اختياراتك'
   create_account: 'create an account'
   sign_in: 'Sign in'

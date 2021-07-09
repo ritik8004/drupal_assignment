@@ -254,7 +254,9 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+    $uri = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -301,7 +303,9 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site:, ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+    $uri = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -350,16 +354,14 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('local:reset-local-settings');
 
-    $devel_env = getenv('DEVEL_ENV');
-    $is_lando = !empty($devel_env) && $devel_env == 'lando';
+    $is_lando = getenv('LANDO') ?? FALSE;
     $sudo_prefix = '';
 
     if ($is_lando) {
       $app_root = '/app';
 
       // Flush memcache.
-      $this->_exec('echo "flush_all" | nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache2 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
     else {
       $app_root = '/var/www/alshaya';

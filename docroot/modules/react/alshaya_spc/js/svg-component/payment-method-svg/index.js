@@ -36,8 +36,7 @@ const PaymentMethodIcon = (props) => {
     );
   }
   if (methodName === 'checkout_com'
-    || methodName === 'checkout_com_upapi'
-    || methodName === 'cybersource') {
+    || methodName === 'checkout_com_upapi') {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
         <defs>

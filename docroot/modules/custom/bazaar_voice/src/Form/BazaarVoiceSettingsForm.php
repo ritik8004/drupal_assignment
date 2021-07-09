@@ -135,11 +135,39 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('The deployment environment of BazaarVoice where we implement BazaarVoice Pixel.'),
     ];
 
+    $form['basic_settings']['notify_comment_published'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable email notifications for comments.'),
+      '#default_value' => $config->get('notify_comment_published'),
+      '#description' => $this->t('This option should be checked to notify user whenever his/her comment is published.'),
+    ];
+
     $form['basic_settings']['pdp_rating_reviews'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable ratings and reviews in PDP.'),
       '#default_value' => $config->get('pdp_rating_reviews'),
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in PDP.'),
+    ];
+
+    $form['basic_settings']['myaccount_rating_reviews'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable ratings and reviews in My Account.'),
+      '#default_value' => $config->get('myaccount_rating_reviews'),
+      '#description' => $this->t('This option should be checked to disable the ratings and reviews in My Account.'),
+    ];
+
+    $form['basic_settings']['myaccount_reviews_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Total number of reviews in my reviews page.'),
+      '#default_value' => $config->get('myaccount_reviews_limit'),
+      '#description' => $this->t('Enter limit for number of reviews to be shown under my account section.'),
+    ];
+
+    $form['basic_settings']['plp_rating_reviews'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable ratings and reviews in listing page.'),
+      '#default_value' => $config->get('plp_rating_reviews'),
+      '#description' => $this->t('This option should be checked to disable the ratings and reviews in plp/slp.'),
     ];
 
     $form['basic_settings']['write_review_submission'] = [
@@ -163,11 +191,29 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('URL of Write Review Guidelines. URL format should be an alias e.g write-review-guidelines.'),
     ];
 
+    $form['basic_settings']['comment_submission'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Comments Submission'),
+      '#description' => $this->t('Select Enabled to let users comment on reviews. Users will be able to read the comments along with the reviews.'),
+      '#options' => [
+        0 => $this->t('Disabled'),
+        1 => $this->t('Enabled'),
+      ],
+      '#default_value' => $config->get('comment_submission'),
+    ];
+
     $form['basic_settings']['comment_form_tnc'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Comments T&C url'),
       '#default_value' => $config->get('comment_form_tnc'),
       '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be an alias e.g comments-terms-conditions.'),
+      '#states' => [
+        'visible' => [
+          'input[name="comment_submission"]' => [
+            'value' => 1,
+          ],
+        ],
+      ],
     ];
 
     $form['basic_settings']['comment_box_min_length'] = [
@@ -175,6 +221,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Comment minimum character length'),
       '#default_value' => $config->get('comment_box_min_length'),
       '#description' => $this->t('Enter minimum character length for comment box text in comment form.'),
+      '#states' => [
+        'visible' => [
+          'input[name="comment_submission"]' => [
+            'value' => 1,
+          ],
+        ],
+      ],
     ];
 
     $form['basic_settings']['screen_name_min_length'] = [
@@ -189,6 +242,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Comment maximum character length'),
       '#default_value' => $config->get('comment_box_max_length'),
       '#description' => $this->t('Enter maximum character length for comment box text in comment form.'),
+      '#states' => [
+        'visible' => [
+          'input[name="comment_submission"]' => [
+            'value' => 1,
+          ],
+        ],
+      ],
     ];
 
     $form['basic_settings']['bv_routes_list'] = [
@@ -251,6 +311,12 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
+    $form['basic_settings']['pdp_reviews_seo_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of reviews on PDP for SEO.'),
+      '#default_value' => $config->get('pdp_reviews_seo_limit'),
+      '#description' => $this->t('Enter total number of reviews to be captured for SEO on PDP.'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -271,7 +337,11 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('client_name', $values['client_name'])
       ->set('site_id', $values['site_id'])
       ->set('environment', $values['environment'])
+      ->set('notify_comment_published', $values['notify_comment_published'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
+      ->set('myaccount_rating_reviews', $values['myaccount_rating_reviews'])
+      ->set('myaccount_reviews_limit', $values['myaccount_reviews_limit'])
+      ->set('plp_rating_reviews', $values['plp_rating_reviews'])
       ->set('write_review_submission', $values['write_review_submission'])
       ->set('write_review_tnc', $values['write_review_tnc'])
       ->set('write_review_guidlines', $values['write_review_guidlines'])
@@ -285,6 +355,8 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('reviews_initial_load', $values['reviews_initial_load'])
       ->set('reviews_on_loadmore', $values['reviews_on_loadmore'])
       ->set('reviews_per_page', $values['reviews_per_page'])
+      ->set('comment_submission', $values['comment_submission'])
+      ->set('pdp_reviews_seo_limit', $values['pdp_reviews_seo_limit'])
       ->save();
 
     parent::submitForm($form, $form_state);

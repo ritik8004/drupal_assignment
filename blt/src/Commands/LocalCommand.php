@@ -94,14 +94,11 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $devel_env = getenv('DEVEL_ENV');
-
-    if (!empty($devel_env) && $devel_env === 'lando') {
+    if (getenv('LANDO')) {
       // If we're running Lando, our best option is to flush our memcache
       // services.
       $this->say('Flushing memcache servers.');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache2 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
     else {
       $this->say('Restarting memcache service');
@@ -112,6 +109,13 @@ class LocalCommand extends BltTasks {
         ->uri($info['local']['url'])
         ->run();
     }
+
+    $this->taskDrush()
+      ->drush('status')
+      ->alias($info['local']['alias'])
+      ->uri($info['local']['url'])
+      ->printOutput(FALSE)
+      ->run();
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
@@ -149,7 +153,9 @@ class LocalCommand extends BltTasks {
       ->run();
 
     // Now the last thing, dev script, I love it :).
-    $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
+    $dev_script_path = getenv('LANDO')
+      ? '/app/scripts/install-site-dev.sh'
+      : '/var/www/alshaya/scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
       $this->_exec('sh ' . $dev_script_path . ' ' . $info['local']['url']);
     }
@@ -236,7 +242,7 @@ class LocalCommand extends BltTasks {
     if (!isset($path)) {
       $path = '/var/www/alshaya/files-private';
 
-      if (getenv('DEVEL_ENV') == 'lando') {
+      if (getenv('LANDO')) {
         $path = '/app/files-private';
       }
 
@@ -290,7 +296,9 @@ class LocalCommand extends BltTasks {
 
     $info['profile'] = $site_data['type'];
 
-    $info['local']['url'] = 'local.alshaya-' . $site . '.com';
+    $info['local']['url'] = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $info['local']['alias'] = 'self';
 
     foreach ($this->stacks as $alias_prefix) {
@@ -473,6 +481,31 @@ class LocalCommand extends BltTasks {
         ->printOutput(TRUE);
       $result = $task->run();
       $this->io()->writeln($result->getMessage());
+    }
+  }
+
+  /**
+   * Add new QA account.
+   *
+   * @param string $mail
+   *   Mail address of QA.
+   *
+   * @command local:add-qa-account
+   *
+   * @description Add QA account for creation on restaging on all non-prod envs.
+   */
+  public function addQaAccount(string $mail) {
+    foreach ($this->envs as $env) {
+      foreach ($this->stacks as $stack) {
+        $this->io()->writeln("$env - $stack");
+        $task = $this->taskDrush();
+        $task->interactive(FALSE);
+        $task->drush('ssh "echo ' . $mail . ' >> ~/qa_accounts.txt"')
+          ->alias($stack . $env)
+          ->printOutput(TRUE);
+        $result = $task->run();
+        $this->io()->writeln($result->getMessage());
+      }
     }
   }
 

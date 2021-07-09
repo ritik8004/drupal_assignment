@@ -1180,7 +1180,7 @@ header {
   .main--menu {
     display: none;
 
-    ul.menu--one__list {
+    ul.menu--one__list:not(.secondary--main--menu__list) {
       background: $mm_bg;
       width: 84.375%;
       height: 100%;

@@ -1,10 +1,9 @@
-@javascript @account @smoke @auth @pbsauat @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
+@javascript @account @smoke @auth @search @pbsauat @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
 Feature: Test search functionality
 
   Background:
     Given I am on "{spc_basket_page}"
     And I wait 10 seconds
-    And I wait for the page to load
 
   Scenario: As a Guest, I should be able to see the header and the footer on SRP
     When I fill in "search" with "{spc_search_keyword}"

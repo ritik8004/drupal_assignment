@@ -1,4 +1,4 @@
-@javascript @smoke @desktop @newPdp @mcaeuat @flsauat @aeoaeuat
+@javascript @smoke @desktop @newPdp
 Feature: Testing new PDP CNC Block for desktop
 
   Background:

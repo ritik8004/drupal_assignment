@@ -18,6 +18,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Drupal\acq_sku\ConductorCategorySyncHelper;
@@ -313,6 +314,18 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   public function syncCategories() {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
+
+    // Conditionally increase memory limit to double the current limit.
+    $new_limit = (((int) ini_get('memory_limit')) * 2) . 'M';
+
+    // We still let that be overridden via settings.
+    $new_limit = Settings::get('acq_sku_sync_commerce_cats_memory_limit', $new_limit);
+
+    ini_set('memory_limit', $new_limit);
+    $this->drupalLogger->notice('Memory limit increased for sync-commerce-cats to @limit', [
+      '@limit' => ini_get('memory_limit'),
+    ]);
+
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
 
     // We trigger delete only if there is any term update/create.

@@ -42,9 +42,9 @@ class StarRating extends React.Component {
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="write-review-type-star-rating">
+        <div id={id} className="write-review-type-star-rating">
           <div className={`select-star__wrap ${id}`}>
             <label className="star-rating-label" htmlFor={label}>
               {label}

@@ -40,6 +40,12 @@ class FeatureContext extends CustomMinkContext
 
   private $parameters;
 
+  /**
+   * Storing URL of page.
+   * @var
+   */
+  public $pageurl;
+
   public function __construct(array $parameters = [])
   {
     $this->parameters = $parameters;
@@ -168,11 +174,12 @@ class FeatureContext extends CustomMinkContext
   public function iAmLoggedInAsAnAuthenticatedUserWithPassword($arg1, $arg2)
   {
     $this->visitPath('/user/login');
-    $this->iWaitSeconds('5');
+    $this->iWaitSeconds('10');
     $this->getSession()->getPage()->fillField('edit-name', $arg1);
     $this->getSession()->getPage()->fillField('edit-pass', $arg2);
+    $this->iWaitSeconds('10');
+    $this->getSession()->executeScript('jQuery("#edit-submit").click()');
     $this->iWaitSeconds('5');
-    $this->getSession()->getPage()->pressButton('sign in');
   }
 
   /**
@@ -1879,7 +1886,6 @@ class FeatureContext extends CustomMinkContext
    * Example: Then url should contain "/" page
    * Example: And I should be on "/bats" page
    * Example: And I should be on "http://google.com" page
-   *
    * @Then /^(?:|I )should be on "(?P<page>[^"]+)" page$/
    */
   public function assertPageLocate($path)
@@ -2511,24 +2517,32 @@ JS;
     }
   }
 
-
   /**
-   * @Given /^the quantity "([^"]*)" should be "([^"]*)"$/
+   * @Given /^the product quantity should be "([^"]*)"$/
    */
-  public function theQuantityShouldBe($element, $value) {
+  public function theQuantityShouldBe($value) {
     $page = $this->getSession()->getPage();
-    $page->find('css', '.addtobag-button')->click();
-    $this->iWaitForAjaxToFinish();
-    $qty_before_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
-    $page->find('css', $element)->click();
-    $this->iWaitForAjaxToFinish();
-    $qty_after_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
+    $qty_before_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
     if ($value == 'increased') {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--up').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
       if ($qty_after_click != $qty_before_click + 1) {
-        throw new \Exception(sprintf('Quantity doesn\'t match'));
+        $script = <<<JS
+            return jQuery('#cart_notification .notification.error-notification').text();
+JS;
+        $error_msg = $this->getSession()->evaluateScript($script);
+        if ($error_msg != 'The product that was requested doesn\'t exist. Verify the product and try again.') {
+          throw new \Exception(sprintf('Quantity doesn\'t match'));
+        }
       }
     }
     else {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--down').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
       if ($qty_after_click != $qty_before_click - 1) {
         throw new \Exception(sprintf('Quantity doesn\'t match'));
       }
@@ -2539,7 +2553,7 @@ JS;
    * Wait for AJAX to finish.
    */
   public function iWaitForAjaxToFinish() {
-    $this->getSession()->wait(50000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    $this->getSession()->wait(80000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
   }
 
   /**
@@ -2552,17 +2566,29 @@ JS;
     if ($empty_delivery_info !== null) {
       $empty_delivery_info->click();
       $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
       $this->theElementShouldExist('.spc-cnc-stores-list-map');
+      $this->iWaitSeconds('20');
       $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
       $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
       $page->find('css', 'button.select-store')->click();
-      $this->getSession()->executeScript('jQuery("input#fullname").val("Test User")');
-      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("555233224")');
+      $script = <<<JS
+        jQuery("input#fullname").val("Test User");
+        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var value = "55667788";
+        if (maxlength == 9) {
+            value = value + "9";
+        }
+        jQuery("input[name=\"mobile\"]").val(value);
+JS;
+      $this->getSession()->executeScript($script);
       if ($page->find('css', 'input[name="email"]')) {
         $this->getSession()->executeScript('jQuery("input[name=\"email\"]").val("user@test.com")');
       }
       $page->find('css', 'button#save-address')->click();
       $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
     }
     $this->theElementShouldExist('.delivery-information-preview');
   }
@@ -2575,6 +2601,178 @@ JS;
       $val = $this->getSession()->evaluateScript("return document.querySelector('select[name=\"{$field_name}\"] option:nth-child(2)').value");
       $this->selectOptionAddress($field_name, $val);
     }
+  }
+  
+  /**
+   * @Then /^I select the home delivery address$/
+   */
+  public function iSelectTheHomeDeliveryAddress()
+  {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
+    if ($empty_delivery_info !== null) {
+      $empty_delivery_info->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      if ($page->find('css', 'header.spc-change-address') !== null) {
+        if ($page->find('css', 'div.spc-address-tile:first-child button')) {
+          $page->find('css', 'div.spc-address-tile:first-child button')->click();
+          $this->iWaitForAjaxToFinish();
+          $this->iWaitSeconds('20');
+        }
+      } else {
+        $script = <<<JS
+        jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
+        jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
+        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var value = "55667788";
+        if (maxlength == 9) {
+            value = value + "9";
+        }
+        jQuery("input[name=\"mobile\"]").val(value);
+        jQuery(".spc-address-form-guest-overlay input#locality").val("Block 1");
+        jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
+        jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
+        jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
+JS;
+        $session->executeScript($script);
+        $city = $page->find('css', '#spc-area-select-selected-city');
+        if ($city !== null) {
+          $city->click();
+          $this->iWaitSeconds('5');
+          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+          $area_value = $this->getSession()->evaluateScript('return jQuery(\'#spc-area-select-selected\').text()');
+          if ($area_value == 'Select Area' or 'Choose a region') {
+            $page->find('css', '#spc-area-select-selected')->click();
+            $this->iWaitSeconds('5');
+            $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+          }
+        }
+        else {
+          $page->find('css', '#spc-area-select-selected')->click();
+          $this->iWaitSeconds('5');
+          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+        }
+        $page->find('css', 'button#save-address')->click();
+        $this->iWaitForAjaxToFinish();
+        $this->iWaitSeconds('20');
+      }
+    }
+    $this->theElementShouldExist('.delivery-information-preview');
+  }
+
+  /**
+   * @Given /^the cart quantity should be "([^"]*)"$/
+   */
+  public function theCartQuantityShouldBe($value){
+    $page = $this->getSession()->getPage();
+    $qty_before_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+    if ($value == 'increased') {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--up').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+      if ($qty_after_click != $qty_before_click + 1) {
+        $this->iWaitSeconds('10');
+        $script = <<<JS
+            return jQuery('#cart_notification .notification.error-notification').text();
+JS;
+        $error_msg = $this->getSession()->evaluateScript($script);
+        if ($error_msg != 'The product that was requested doesn\'t exist. Verify the product and try again.') {
+          throw new \Exception(sprintf('Quantity doesn\'t match'));
+        }
+      }
+    }
+    else {
+
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--down').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+      if ($qty_after_click != $qty_before_click - 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+  }
+
+  /**
+   * @Given /^I click on Add-to-cart button$/
+   */
+  public function iClickOnAddToCartButton() {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('css', '#add-to-cart-main');
+    $element2 = $page->find('css', "[id^='edit-add-to-cart-']");
+    if ($element !== NULL) {
+      $element->click();
+    }
+    elseif ($element2 !== NULL) {
+      $element2->click();
+    }
+    else {
+      throw new \Exception(sprintf('Add to cart button not found.'));
+    }
+  }
+
+  /**
+   * @Given /^I navigate to the copied URL$/
+   */
+  public function iNavigateUrl() {
+    $this->pageurl = $this->getSession()->getCurrentUrl();
+  }
+
+  /**
+   * @Then /^ Get element by css$/
+   */
+  public function getElementByCss($selector)
+  {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $element = $page->find('css', $selector);
+    return $element;
+  }
+
+  /**
+   * @Then /^I should see an iframe window$/
+   */
+  public function iShouldSeeAnIframeWindow()
+  {
+    $this->switchToIFrame();
+    $this->iWaitForAjaxToFinish();
+    $this->iWaitSeconds('20');
+    $this->getSession()->getPage()->find('css', 'body > div:nth-child(4) > button')->click();
+    $this->iWaitSeconds('30');
+    $this->getSession()->getDriver()->switchToIFrame(null);
+  }
+
+
+  /**
+   * @Then I switch To IFrame$/
+   */
+  public function switchToIFrame(){
+    $function = <<<JS
+            (function(){
+                 var iframe = document.querySelector("div.postpay-iframe-container .postpay-iframe");
+                 iframe.name = "iframeToSwitchTo";
+            })()
+JS;
+    try{
+      $this->getSession()->executeScript($function);
+    }catch (Exception $e){
+      print_r($e->getMessage());
+      throw new \Exception("Element was NOT found.".PHP_EOL . $e->getMessage());
+    }
+    $this->getSession()->getDriver()->switchToIFrame("iframeToSwitchTo");
+  }
+
+  /**
+   * @Given /^I click on the checkout button$/
+   */
+  public function iClickOnTheCheckoutButton1()
+  {
+    $checkoutButton = $this->getElementByCss('#spc-checkout .spc-content .checkout-link');
+    $checkoutButton->click();
+    $this->iWaitSeconds('30');
   }
 
 }
