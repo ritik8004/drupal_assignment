@@ -152,7 +152,7 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       && !empty($card_bin_numbers)) {
       $build['#attached']['drupalSettings']['checkoutComUpapi']['binValidation'] = [
         'cardBinValidationEnabled' => $bin_validation_enabled,
-        'binValidationSupportedPaymentMethods' => explode(',', $bin_validation_supported_payment_methods),
+        'binValidationSupportedPaymentMethods' => $bin_validation_supported_payment_methods,
         'cardBinNumbers' => $card_bin_numbers,
       ];
 
