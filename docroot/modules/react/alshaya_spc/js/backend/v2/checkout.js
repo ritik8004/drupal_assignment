@@ -1346,7 +1346,6 @@ window.commerceBackend.getCartForCheckout = () => {
 
 /**
  * Add click n collect shipping on the cart.
- * @todo implement this
  *
  * @param {object} shippingData
  *   Shipping address info.

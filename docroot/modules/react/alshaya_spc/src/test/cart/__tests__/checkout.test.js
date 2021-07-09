@@ -1,4 +1,5 @@
 jest.mock('axios');
+import _ from 'lodash';
 import axios from 'axios';
 import each from 'jest-each'
 import utilsRewire, { getCncStores } from "../../../../js/backend/v2/checkout";
@@ -495,21 +496,29 @@ describe('Checkout', () => {
         },
       };
 
-      axios
-        // Mocks for update with shipping data.
-        .mockResolvedValueOnce({ data: cartData, status: 200 })
-        // Mocks for update with billing data.
-        .mockResolvedValueOnce({ data: cartData, status: 200 });
+      beforeEach(() => {
+        axios
+          // Mocks for update with shipping data.
+          .mockResolvedValue({data: cartData, status: 200})
+          // Mocks for update with billing data.
+          .mockResolvedValue({data: cartData, status: 200});
 
-      jest
-        .spyOn(window.commerceBackend, 'getCartId')
-        .mockImplementation(() => '1234');
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
 
-      it('When shipping data', async () => {
         // Pre-populate static cart.
         window.commerceBackend.setRawCartDataInStorage(cartData);
+      });
 
+      it('With shipping data', async () => {
+        // Keep a copy of original.
+        const original = _.cloneDeep(shippingData);
         await addCncShippingInfo(shippingData, 'update shipping', false);
+
+        // Make sure the original object was not changed.
+        expect(original).toEqual(shippingData);
+
         expect(axios.mock.calls.length).toBe(2);
 
         // We cannot check the result of updateCart() but we can check if it
