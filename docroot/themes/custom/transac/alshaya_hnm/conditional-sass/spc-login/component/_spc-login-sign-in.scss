@@ -28,7 +28,7 @@
 
     .edit-checkout-as-guest {
       letter-spacing: 1px;
-      font-family: $hnm-regular;
+      font-family: $alshaya-thin;
       border: 1px solid $spc_checkout_as_guest_border;
 
       @include arabic-letter-spacing;
@@ -51,7 +51,7 @@
       }
 
       .request-password-link {
-        font-family: $hnm-regular;
+        font-family: $alshaya-thin;
         font-weight: 400;
         font-size: 0.8125rem;
 
