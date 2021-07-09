@@ -466,7 +466,7 @@ describe('Checkout', () => {
       it('With SKU', async () => {
         axios.mockResolvedValue({ data: productStatus });
         const getProductStatus = utilsRewire.__get__('getProductStatus');
-        const result = await getProductStatus('WZBOWZ107');
+        const result = await getProductStatus('WZBOWZ777');
         expect(result).toEqual(productStatus);
         expect(axios).toHaveBeenCalled();
       });
@@ -536,7 +536,7 @@ describe('Checkout', () => {
         expect(axios).toHaveBeenNthCalledWith(
           1,
           {
-            data: '{"extension":{"action":"update shipping"},"shipping":{"shipping_address":{"firstname":"Foo","lastname":"Bar","email":"FooBar@example.com","telephone":"+99999999","country_id":"AE","city":"Abu Hail","street":["Crescent Rd-Dubai Festival City-Dubai"],"custom_attributes":[{"attribute_code":"area","value":"9"},{"attribute_code":"address_city_segment","value":"1"}]},"shipping_carrier_code":"alshaya1","shipping_method_code":"click_and_collect","extension_attributes":{"click_and_collect_type":"ship_to_store","store_code":"RE1-3763-BOO"}}}',
+            data: '{"extension":{"action":"update shipping"},"shipping":{"shipping_address":{"city":"Abu Hail","country_id":"AE","telephone":"+971555666777","firstname":"Foo","lastname":"Bar","email":"FooBar@example.com","street":["Crescent Rd-Dubai Festival City-Dubai"],"custom_attributes":[{"attribute_code":"area","value":"9"},{"attribute_code":"address_city_segment","value":"1"}]},"shipping_carrier_code":"alshaya1","shipping_method_code":"click_and_collect","extension_attributes":{"click_and_collect_type":"ship_to_store","store_code":"RE1-3763-BOO"}}}',
             headers: {
               'Alshaya-Channel': 'web',
               'Content-Type': 'application/json',
