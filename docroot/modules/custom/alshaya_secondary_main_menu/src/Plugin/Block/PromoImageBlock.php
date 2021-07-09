@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides a 'PromoMenu' block.
@@ -41,6 +42,12 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * @var Drupal\Core\Entity\EntityRepositoryInterface
    */
   protected $entityRepository;
+  /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
 
   /**
    * AlshayaSecondaryMenuBlock constructor.
@@ -57,12 +64,15 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
    *   The menu tree service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity repository.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, EntityRepositoryInterface $entityRepository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, EntityRepositoryInterface $entityRepository, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
     $this->entityRepository = $entityRepository;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -75,7 +85,8 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('menu.link_tree'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('language_manager')
     );
   }
 
@@ -99,8 +110,11 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
         $uuid = $item['original_link']->getDerivativeId();
         $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
         $item['promo_paragraph'] = $entity->get('field_promo_images')->getValue();
+        $language = $this->languageManager->getCurrentLanguage()->getId();
         foreach ($item['promo_paragraph'] as $tr) {
           $paragraph = Paragraph::load($tr['target_id']);
+          $language = ($paragraph->hasTranslation($language)) ? $language : 'en';
+          $paragraph = $paragraph->getTranslation($language);
           $link_to_image = $paragraph->field_link_to_image->getValue();
           $img_title = $paragraph->get('field_image_title')->value;
           $promo_menu['#items']['promo_buttons'][] =

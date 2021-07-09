@@ -12,6 +12,7 @@ use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides alshaya secondary main menu block.
@@ -41,6 +42,12 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
    * @var Drupal\Core\Entity\EntityRepositoryInterface
    */
   protected $entityRepository;
+  /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
 
   /**
    * AlshayaSecondaryMenuBlock constructor.
@@ -57,12 +64,15 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
    *   The menu tree service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity repository.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, EntityRepositoryInterface $entityRepository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, EntityRepositoryInterface $entityRepository, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
     $this->entityRepository = $entityRepository;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -75,7 +85,8 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('menu.link_tree'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('language_manager')
     );
   }
 
@@ -135,8 +146,11 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
         $uuid = $l2s['original_link']->getDerivativeId();
         $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
         $l2s['highlight_paragraph'] = $entity->get('field_secondary_menu_highlight')->getValue();
+        $language = $this->languageManager->getCurrentLanguage()->getId();
         foreach ($l2s['highlight_paragraph'] as $tr) {
           $paragraph = Paragraph::load($tr['target_id']);
+          $language = ($paragraph->hasTranslation($language)) ? $language : 'en';
+          $paragraph = $paragraph->getTranslation($language);
           $l2s['highlight_paragraph']['paragraph_type'] = $paragraph->getParagraphType()->id();
           $l2s['highlight_paragraph']['img'] = $paragraph->field_highlight_image->getValue();
           $l2s['highlight_paragraph']['imageUrl'] = $paragraph->get('field_highlight_image')->entity->uri->value;
