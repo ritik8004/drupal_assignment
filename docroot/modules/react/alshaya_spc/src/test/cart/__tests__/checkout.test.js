@@ -3,15 +3,16 @@ import _ from 'lodash';
 import axios from 'axios';
 import each from 'jest-each'
 import utilsRewire, { getCncStores } from "../../../../js/backend/v2/checkout";
-import { drupalSettings, Drupal } from '../globals';
-import * as cartData from '../data/cart.json';
-import * as storeData_re1_4429_vif from '../data/store_RE1-4429-VIF.json';
-import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMCSP-740.json';
-import cncStoreList from '../data/cnc_stores_list.js';
 import { getCart } from '../../../../js/backend/v2/common';
-import * as productStatus from '../data/product_status.json';
+import { drupalSettings, Drupal } from '../globals';
 import paymentMethods from '../data/paymentMethods';
 import homeDeliveryShippingMethods from '../data/homeDeliveryShippingMethods';
+import cncStoreList from '../data/stores/cnc_stores_list.js';
+import * as cartData from '../data/cart.json';
+import * as RA1_Q314_HEN_001 from '../data/stores/RA1-Q314-HEN-001.json';
+import * as RA1_Q314_HEN_002 from '../data/stores/RA1-Q314-HEN-002.json';
+import * as RA1_Q314_HEN_003 from '../data/stores/RA1-Q314-HEN-003.json';
+import * as productStatus from '../data/product_status.json';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -549,83 +550,75 @@ describe('Checkout', () => {
     });
 
     describe('Test getStoreInfo()', () => {
+      const getStoreInfo = utilsRewire.__get__('getStoreInfo');
+
       it('When proper store data parameter is provided', async () => {
-        axios.mockResolvedValue({ data: storeData_re1_4429_vif, status: 200 });
-        const getStoreInfo = utilsRewire.__get__('getStoreInfo');
+        axios.mockResolvedValue({ data: RA1_Q314_HEN_001, status: 200 });
+
         const store = cncStoreList[0];
         const result = await getStoreInfo(store);
 
-        expect(result.phone_number).toEqual('044190246 / 044190247');
-        expect(result.code).toEqual(storeData_re1_4429_vif.code);
-        expect(result.delivery_time).toEqual('1-2 days');
-        expect(result.formatted_distance).toEqual(25.77);
+        expect(result.phone_number).toEqual(RA1_Q314_HEN_001.phone_number);
+        expect(result.code).toEqual(RA1_Q314_HEN_001.code);
+        expect(result.delivery_time).toEqual(RA1_Q314_HEN_001.delivery_time);
+        expect(result.formatted_distance).toEqual(8.8);
         expect(axios).toHaveBeenCalled();
       });
 
       it('When provided store code is empty', async () => {
-        axios.mockResolvedValue({ data: storeData_re1_4429_vif, status: 200 });
-        const getStoreInfo = utilsRewire.__get__('getStoreInfo');
-        // Create a deep copy so as to not modify the original variable.
-        const storeList = JSON.parse(JSON.stringify(cncStoreList));
-        const store = storeList[0];
-        store.code = '';
-        const result = await getStoreInfo(store);
-
+        axios.mockResolvedValue({ data: RA1_Q314_HEN_001, status: 200 });
+        const result = await getStoreInfo({});
         expect(result).toEqual(null);
       });
     });
 
     describe('Test getCartStores()', () => {
-      it('When proper store data parameter is provided', async () => {
-        axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
-          .mockResolvedValueOnce({ data: store_qatestsourcemap_mmcsp_740, status: 200 })
+      const getCartStores = utilsRewire.__get__('getCartStores');
 
-        const getCartStores = utilsRewire.__get__('getCartStores');
+      beforeEach(() => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
+      });
+
+      it('When proper store data parameter is provided', async () => {
+        axios
+          .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
+          .mockResolvedValueOnce({ data: RA1_Q314_HEN_001, status: 200 })
+          .mockResolvedValueOnce({ data: RA1_Q314_HEN_002, status: 200 })
+          .mockResolvedValueOnce({ data: RA1_Q314_HEN_003, status: 200 });
 
         let result = await getCartStores(10, 20);
 
         expect(axios).toHaveBeenCalled();
-        expect(axios.mock.calls.length).toEqual(3);
-        expect(result.length).toEqual(2);
-        expect(result[0].code).toEqual('RE1-4429-VIF');
-        expect(result[0].formatted_distance).toEqual(25.77);
-        expect(result[1].code).toEqual('QATESTSOURCE_MMCSP-740');
-        expect(result[1].formatted_distance).toEqual(25.77);
+        expect(axios.mock.calls.length).toEqual(4);
+        expect(result.length).toEqual(3);
+        expect(result[0].code).toEqual('RA1-Q314-HEN-002');
+        expect(result[0].formatted_distance).toEqual(8.75);
+        expect(result[1].code).toEqual('RA1-Q314-HEN-003');
+        expect(result[1].formatted_distance).toEqual(7.22);
+        expect(result[2].code).toEqual('RA1-Q314-HEN-001');
+        expect(result[2].formatted_distance).toEqual(8.8);
       });
 
       it('When fetching 1 store info fails', async () => {
-        const getCartStores = utilsRewire.__get__('getCartStores');
-
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
+          .mockResolvedValueOnce({ data: RA1_Q314_HEN_001, status: 200 })
+          .mockResolvedValueOnce({ data: RA1_Q314_HEN_002, status: 200 })
           .mockResolvedValueOnce({ data: [], status: 200 });
-
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
 
         const result = await getCartStores(10, 20);
 
-        expect(axios.mock.calls.length).toEqual(3);
-        expect(result.length).toEqual(1);
-        expect(result[0].code).toEqual('RE1-4429-VIF');
-        expect(result[0].formatted_distance).toEqual(25.77);
+        expect(axios.mock.calls.length).toEqual(4);
+        expect(result.length).toEqual(2);
+        expect(result[0].code).toEqual('RA1-Q314-HEN-002');
+        expect(result[0].formatted_distance).toEqual(8.75);
       });
 
       it('When fetching the cnc store list fails', async () => {
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 500 });
-
-        const getCartStores = utilsRewire.__get__('getCartStores');
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
 
         let result = await getCartStores(10, 20);
         expect(axios.mock.calls.length).toEqual(1);
@@ -634,52 +627,9 @@ describe('Checkout', () => {
     });
 
     describe('Test getCncStores()', () => {
-      it('When proper lat lon parameters is provided', async () => {
-        axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
-          .mockResolvedValueOnce({ data: store_qatestsourcemap_mmcsp_740, status: 200 })
-
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        let result = await getCncStores(10, 20);
-
-        expect(axios).toHaveBeenCalled();
-        expect(axios.mock.calls.length).toEqual(3);
-        expect(result.data.length).toEqual(2);
-        expect(result.data[0].code).toEqual('RE1-4429-VIF');
-        expect(result.data[0].formatted_distance).toEqual(25.77);
-        expect(result.data[1].code).toEqual('QATESTSOURCE_MMCSP-740');
-        expect(result.data[1].formatted_distance).toEqual(25.77);
-      });
-
-      it('When lat is not provided', async () => {
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        let result = await getCncStores(null, 20);
-
-        expect(result).toEqual([]);
-      });
-
-      it('When lon is not provided', async () => {
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        let result = await getCncStores(10, null);
-
-        expect(result).toEqual([]);
-      });
+      const getCncStores = utilsRewire.__get__('getCncStores');
 
       it('When cart ID is not provided', async () => {
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => null);
-
         let result = await getCncStores(10, 20);
 
         expect(axios.mock.calls.length).toEqual(0);
@@ -689,31 +639,31 @@ describe('Checkout', () => {
         }));
       });
 
-      it('When fetching 1 store info fails', async () => {
-        axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
-          .mockResolvedValueOnce({ data: [], status: 200 })
-
+      it('When lat is not provided', async () => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
-        let result = await getCncStores(10, 20);
-
-        expect(axios.mock.calls.length).toEqual(3);
-        expect(result.data.length).toEqual(1);
-        expect(result.data[0].code).toEqual('RE1-4429-VIF');
-        expect(result.data[0].formatted_distance).toEqual(25.77);
+        let result = await getCncStores(null, 20);
+        expect(result).toEqual([]);
       });
 
-      it('When fetching the cnc store list fails', async () => {
-        axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 500 });
-
+      it('When lon is not provided', async () => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
+
+        let result = await getCncStores(10, null);
+        expect(result).toEqual([]);
+      });
+
+      it('When fetching the cart stores fails', async () => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        axios
+          .mockResolvedValueOnce({ data: {}, status: 500 });
 
         let result = await getCncStores(10, 20);
 

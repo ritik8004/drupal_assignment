@@ -458,6 +458,10 @@ const getStoreInfo = async (storeData) => {
  */
 const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
+  if (!cartId) {
+    logger.error('Error while fetching click and collect stores. No cart available in session');
+    return getFormattedError(404, 'No cart in session');
+  }
   let stores = [];
 
   const url = getApiEndpoint('getCartStores', { cartId, lat, lon });
@@ -484,11 +488,11 @@ const getCartStores = async (lat, lon) => {
     // Remove null values.
     stores = stores.filter((value) => value != null);
 
-    // Sort the stores first by distance and then by name.
+    // Sort the stores first by distance and then by rnc.
     if (stores.length > 1) {
       stores = stores
-        .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
-        .sort((store1, store2) => store1.distance - store2.distance);
+        .sort((store1, store2) => store1.distance - store2.distance)
+        .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
     }
   } catch (error) {
     logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
