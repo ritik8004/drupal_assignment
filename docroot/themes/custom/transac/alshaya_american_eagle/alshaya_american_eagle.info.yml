@@ -2,6 +2,7 @@ name: Alshaya American Eagle Online
 type: theme
 description: 'Theme for American Eagle Online (Transactional).'
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: alshaya_white_label
 alshaya_theme_type: transac
 
