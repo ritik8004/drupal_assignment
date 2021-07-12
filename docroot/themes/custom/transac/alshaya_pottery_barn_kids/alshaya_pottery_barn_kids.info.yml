@@ -26,6 +26,8 @@ libraries:
   - alshaya_pottery_barn_kids/global_styles
 
 libraries-override:
+  alshaya_white_label/font-face: alshaya_pottery_barn_kids/font-face
+
   alshaya_white_label/algolia_search:
     css:
       theme:
