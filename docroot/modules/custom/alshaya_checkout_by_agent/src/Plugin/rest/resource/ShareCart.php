@@ -223,8 +223,13 @@ class ShareCart extends ResourceBase {
       throw new AccessDeniedHttpException();
     }
 
-    // Check request is invalid due to flood control.
-    $this->floodControl();
+    $settings = $this->configFactory->get('alshaya_checkout_by_agent.settings');
+    // Check if request is a flood request.
+    if ($this->isFloodRequest()) {
+      // Block the request and show the error message.
+      $error_message = sprintf('The request is blocked because you have crossed %s request per min API call limit. Please try after some time.', $settings->get('api_request_limit'));
+      throw new AccessDeniedHttpException($error_message, NULL, ResourceResponse::HTTP_TOO_MANY_REQUESTS);
+    }
 
     // Check request has required parameters.
     if (empty($data['type']) || empty($data['value']) || empty($data['cartId'])) {
@@ -237,8 +242,6 @@ class ShareCart extends ResourceBase {
       return $response;
     }
 
-    $settings = $this->configFactory->get('alshaya_checkout_by_agent.settings');
-
     $context = $data['type'];
 
     // @todo validate the mobile number of mail.
@@ -247,23 +250,26 @@ class ShareCart extends ResourceBase {
     $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
     /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($smart_agent_details_array['email']);
-    if (FALSE == $user || $user->isBlocked() || !$user->hasRole('smartagent')) {
-      $responseData = [
-        'success' => FALSE,
-        'error_message' => 'Agent account is blocked or does not exist.',
-      ];
-
-      $response = new ResourceResponse($responseData);
-      return $response;
+    if (!$user || $user->isBlocked() || !$user->hasRole('smartagent')) {
+      $error_message = 'Agent account is blocked or does not exist.';
+      return $this->prepareResourceResponse($error_message);
     }
 
     // Validating the SmartAgent info with the user object info.
     $storeCode = '';
     $storeField = $user->get('field_agent_store')->first();
-    if (!empty($storeField)) {
-      $store = $storeField->get('entity')->getValue();
-      $storeCode = $store->get('field_store_locator_id')->getString();
+    // Validate if there is value in store field.
+    if (empty($storeField)) {
+      $error_message = 'Agent store is empty.';
+      return $this->prepareResourceResponse($error_message);
     }
+
+    $store = $storeField->get('entity')->getValue();
+    if (empty($store)) {
+      $error_message = 'The store that is assigned is missing or deleted.';
+      return $this->prepareResourceResponse($error_message);
+    }
+    $storeCode = $store->get('field_store_locator_id')->getString();
     // Flag value to track update status.
     $updated = FALSE;
     if (!empty($storeCode) && $smart_agent_details_array['storeCode'] != $storeCode) {
@@ -404,19 +410,47 @@ class ShareCart extends ResourceBase {
   }
 
   /**
-   * Enforces flood control for the current API Request.
+   * Check if the request is a flood request or not.
+   *
+   * @return bool
+   *   TRUE if flood request else FALSE.
    */
-  protected function floodControl() {
+  protected function isFloodRequest() {
     $api_request_limit = $this->configFactory->get('alshaya_checkout_by_agent.settings')->get('api_request_limit');
     if (!$this->flood->isAllowed('alshaya_checkout_by_agent.requested_api', $api_request_limit, 60)) {
-      // Block the request and show the error message.
-      $error_message = sprintf('The request is blocked because you have crossed %s request per min API call limit. Please try after some time.', $api_request_limit);
-      throw new AccessDeniedHttpException($error_message, NULL, ResourceResponse::HTTP_TOO_MANY_REQUESTS);
+      return TRUE;
     }
-    else {
-      // Register the API call request.
-      $this->flood->register('alshaya_checkout_by_agent.requested_api', 60);
-    }
+    // Register the Request.
+    $this->registerFlood();
+
+    return FALSE;
+  }
+
+  /**
+   * Register request for flood control.
+   */
+  protected function registerFlood() {
+    // Register the API call request.
+    $this->flood->register('alshaya_checkout_by_agent.requested_api', 60);
+  }
+
+  /**
+   * Log and Prepare ResourceResponse object.
+   *
+   * @param string $error_message
+   *   Error message to log and return in response.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   Return ResourceRequest object.
+   */
+  protected function prepareResourceResponse(string $error_message) {
+    $responseData = [
+      'success' => FALSE,
+      'error_message' => $error_message,
+    ];
+    // Log the error message.
+    $this->logger->error($error_message);
+    return new ResourceResponse($responseData);
   }
 
 }
