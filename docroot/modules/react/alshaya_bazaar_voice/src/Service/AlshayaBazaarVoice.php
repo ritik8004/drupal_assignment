@@ -554,10 +554,11 @@ class AlshayaBazaarVoice {
     $maxAge = $config->get('max_age');
     $userId = $this->currentUser->id();
     $mail = $this->currentUser->getEmail();
+    $productId = $this->currentRequest->get('product');
 
     // URL-encoded query string.
-    $userStr = "date=" . urlencode(date('Ymd')) . "&userid=" . urlencode($userId) . "&EmailAddress=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
-    // Encode the signature using HMAC SHA-256.
+    $uasStr = "date=" . urlencode(date('Ymd')) . "&userid=" . urlencode($userId) . "&EmailAddress=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
+    $userStr = ($productId !== NULL) ? $uasStr . '&verifiedpurchaser=True&subjectids=' . $productId : $uasStr;
     $signature = hash_hmac('sha256', $userStr, $sharedKey);
     // Concatenate the signature and hex-encoded string of parameters.
     $uas = $signature . bin2hex($userStr);

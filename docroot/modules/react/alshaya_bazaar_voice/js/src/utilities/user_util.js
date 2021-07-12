@@ -1,8 +1,12 @@
 import { doRequest, getUserDetails } from './api/request';
-import { setStorageInfo, getStorageInfo } from './storage';
+import { setStorageInfo, getStorageInfo, removeStorageInfo } from './storage';
+import { convertHex2aString } from './write_review_util';
 
-export const getUasToken = () => {
-  const requestUrl = '/get-uas-token';
+export const getUasToken = (productId) => {
+  let requestUrl = '/get-uas-token';
+  if (productId !== undefined) {
+    requestUrl += `?product=${productId}`;
+  }
   const request = doRequest(requestUrl);
   if (request instanceof Promise) {
     return request
@@ -49,11 +53,36 @@ export const isOpenWriteReviewForm = (productId) => {
     && userDetails.productReview === null) {
     return true;
   }
+  const path = decodeURIComponent(window.location.search);
+  const params = new URLSearchParams(path);
+  if (params.get('messageType') === 'PIE' && params.get('userToken') !== null) {
+    return true;
+  }
   return false;
 };
 
-export const createUserStorage = (userId, email) => {
+export const getEmailFromTokenParams = (params) => {
+  let emailAddress = '';
+  const userTokenRaw = convertHex2aString(params.get('userToken'));
+  const tokenParamsArr = userTokenRaw.split('&');
+  for (let i = 0; i < tokenParamsArr.length; i++) {
+    const parameterValue = tokenParamsArr[i].split('=');
+    if (decodeURIComponent(parameterValue[0]).toLowerCase() === 'emailaddress') {
+      emailAddress = decodeURIComponent(parameterValue[1]);
+      return emailAddress;
+    }
+  }
+  return emailAddress;
+};
+
+export const createUserStorage = (userId, email, productId) => {
+  // Clear user storage for anonmymous user.
+  if (userId === 0) {
+    removeStorageInfo(`bvuser_${userId}`);
+  }
   const userStorage = getStorageInfo(`bvuser_${userId}`);
+  const path = decodeURIComponent(window.location.search);
+  const params = new URLSearchParams(path);
   // Set uas token if user not found in storage.
   if (userStorage === null) {
     let currentUserObj = null;
@@ -61,10 +90,19 @@ export const createUserStorage = (userId, email) => {
     if (userId === 0) {
       currentUserObj = {
         id: userId,
+        uasToken: params.get('userToken'),
+        email: params.get('userToken') !== null ? getEmailFromTokenParams(params) : '',
+      };
+      setStorageInfo(currentUserObj, `bvuser_${userId}`);
+    } else if (params.get('messageType') === 'PIE' && params.get('userToken') !== null) {
+      currentUserObj = {
+        id: userId,
+        uasToken: params.get('userToken'),
+        email,
       };
       setStorageInfo(currentUserObj, `bvuser_${userId}`);
     } else {
-      getUasToken().then((uasTokenValue) => {
+      getUasToken(productId).then((uasTokenValue) => {
         if (uasTokenValue !== null) {
           currentUserObj = {
             id: userId,
@@ -75,6 +113,16 @@ export const createUserStorage = (userId, email) => {
         }
       });
     }
+  } else if (params.get('userToken') !== null) {
+    userStorage.uasToken = params.get('userToken');
+    setStorageInfo(userStorage, `bvuser_${userId}`);
+  } else {
+    getUasToken(productId).then((uasTokenValue) => {
+      if (uasTokenValue !== null) {
+        userStorage.uasToken = uasTokenValue;
+        setStorageInfo(userStorage, `bvuser_${userId}`);
+      }
+    });
   }
 };
 
@@ -83,4 +131,5 @@ export default {
   isOpenWriteReviewForm,
   createUserStorage,
   getProductReviewStats,
+  getEmailFromTokenParams,
 };
