@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @search @flsaprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
+@javascript @account @smoke @auth @search @flsaprod @vsaeprod @vssaprod @tbskwprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
 Feature: Test search functionality
 
   Scenario: Verify user should be able to search with valid keyword and see relevant results
