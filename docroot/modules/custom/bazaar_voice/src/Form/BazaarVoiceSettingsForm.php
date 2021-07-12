@@ -174,7 +174,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Closed submission for unauthorized user.'),
       '#default_value' => $config->get('write_review_submission'),
-      '#description' => $this->t('This option should be checked to enable closed submission for unauthorized user on the site.'),
+      '#description' => $this->t('This option should be checked to allow write a review for logged in users only.'),
     ];
 
     $form['basic_settings']['myaccount_reviews_limit'] = [
