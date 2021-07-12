@@ -39,11 +39,19 @@
           font-size: 1.75rem;
           width: 2.1875rem;
           height: 2.1875rem;
+          border: 0.0625rem solid $contact-form-select-dropdown-border;
+          border-#{$left}: none;
         }
 
         @include breakpoint($desktop) {
           content: '';
         }
+      }
+    }
+
+    .select2-container {
+      .select2-selection__arrow {
+        z-index: 1;
       }
     }
   }
