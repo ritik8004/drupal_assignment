@@ -188,6 +188,12 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
   // Set data layer userUid as customer id only for logged in users.
   if ($data_layer['userUid'] > 0) {
     $data_layer['userUid'] = _alshaya_seo_transac_datalayer_user_id($data_layer['userUid']);
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    // On cart page add cart id for datalayer.
+    if ($route_name == 'acq_cart.cart' || $route_name == 'alshaya_spc.checkout') {
+      $cart_manager = \Drupal::service('acq_cart.cart_storage');
+      $data_layer['cartId'] = $cart_manager->getCartId();
+    }
   }
 
   if (!_alshaya_seo_process_gtm()) {
