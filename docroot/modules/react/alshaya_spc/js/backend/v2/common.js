@@ -293,21 +293,20 @@ const callMagentoApi = (url, method, data) => {
  * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callDrupalApi = (url, method, requestOptions) => {
+const callDrupalApi = (url, method, data) => {
   const headers = {};
   const params = {
     url: `/${window.drupalSettings.path.currentLanguage}${url}`,
     method,
+    data,
   };
 
-  if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
-    Object.keys(requestOptions).forEach((optionName) => {
+  if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
+    Object.keys(data).forEach((optionName) => {
       if (optionName === 'form_params') {
         headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        params.data = qs.stringify(requestOptions[optionName]);
-        return;
+        params.data = qs.stringify(data[optionName]);
       }
-      params[optionName] = requestOptions[optionName];
     });
   }
 

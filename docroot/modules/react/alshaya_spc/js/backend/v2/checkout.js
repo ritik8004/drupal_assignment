@@ -71,7 +71,7 @@ const getProductStatus = async (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { _cf_cache_bypass: '1' });
   if (!_.isUndefined(response.data)) {
     staticProductStatus[sku] = response.data;
   }
@@ -299,8 +299,7 @@ const formatAddressForShippingBilling = (address) => {
  *   Address validation response or false in case of errors.
  */
 const validateAddressAreaCity = async (address) => {
-  // @TODO check response on browser.
-  const response = await callDrupalApi('/spc/validate-info', 'POST', address);
+  const response = await callDrupalApi('/spc/validate-info', 'POST', { address });
   if (!_.isUndefined(response.data) && !_.isUndefined(response.data.address)) {
     return response.data.address;
   }
@@ -834,7 +833,7 @@ const selectCnc = async (store, address, billing) => {
 const applyDefaultShipping = async (order) => {
   const address = order.shipping.commerce_address;
   // @todo finish the implementation of applyDefaultShipping() on CORE-30722
-  selectCnc(0, address, order.billing_commerce_address);
+  selectCnc({ code: 'RA1-Q314-HEN-001' }, address, order.billing_commerce_address);
   return false;
 };
 

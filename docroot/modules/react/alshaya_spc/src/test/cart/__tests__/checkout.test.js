@@ -435,7 +435,7 @@ describe('Checkout', () => {
         // Mock for validateAddressAreaCity().
         axios.mockResolvedValueOnce({ data: false, status: 200 });
         const result = await selectCnc({ code: 1234 }, address, address);
-        expect(axios.mock.calls.length).toBe(2);
+        expect(axios.mock.calls.length).toBe(1);
         expect(result).toEqual(false);
       });
 
