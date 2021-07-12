@@ -64,14 +64,14 @@
 }
 
 .c-footer__logo--mada {
-  background-image: url('../imgs/cards/mada-sa-logo-en.png');
+  background-image: url('../imgs/cards/mada-logo-en.png');
   width: 8.125rem;
   height: 2rem;
   background-size: 100%;
   background-repeat: no-repeat;
 
   html[lang=ar] & {
-    background-image: url('../imgs/cards/mada-sa-logo-ar.png');
+    background-image: url('../imgs/cards/mada-logo-ar.png');
   }
 }
 
