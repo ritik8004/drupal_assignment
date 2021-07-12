@@ -313,12 +313,22 @@ const validateAddressAreaCity = async (address) => {
 const getLastOrder = () => lastOrder;
 
 /**
- * Get customer's addresses.
+ * Get customer's address Id.
  *
  * @returns {Promise<object>}
  *   Customer address ids.
  */
-const getCustomerAddressIds = () => callMagentoApi(getApiEndpoint('getCustomerAddressIds'), 'GET', {});
+const getCustomerAddressIds = async () => {
+  const url = getApiEndpoint('getCustomerAddressIds');
+  const response = await callMagentoApi(url, 'GET', {});
+  if (!_.isUndefined(response.data)
+    && !_.isUndefined(response.data.addresses)
+    && _.isArray(response.data.addresses)
+  ) {
+    return response.data.addresses;
+  }
+  return response;
+};
 
 /**
  * Get payment method from last order.
@@ -806,7 +816,6 @@ const selectCnc = async (store, address, billing) => {
 
   // Return if address id from last order doesn't
   // exist in customer's address id list.
-  // @TODO test this on the browser.
   if (_.findIndex(customerAddressIds, { id: billing.customer_address_id }) !== -1) {
     return cart;
   }
