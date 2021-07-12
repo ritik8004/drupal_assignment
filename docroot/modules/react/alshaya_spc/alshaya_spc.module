@@ -233,10 +233,14 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $site_country_code = Settings::get('alshaya_site_country_code') ?? '';
   $address_fields = Settings::get('alshaya_address_fields') ?? [];
 
-  // Adding proxy on local env to avoid CORS issue.
-  $page['#attached']['drupalSettings']['cart']['url'] = ($api_settings['alshaya_proxy']) ?
-    '/proxy/?url=' . $api_settings['magento_host'] :
-    $api_settings['magento_host'];
+  // We proxy the requests via cloudflare, so we use the current domain as is
+  // without any language suffix so HTTP_HOST is enough.
+  $page['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
+
+  // Use proxy on local env as here we don't have Cloudflare.
+  if (Settings::get('env') === 'local') {
+    $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
+  }
 
   $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
   $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];

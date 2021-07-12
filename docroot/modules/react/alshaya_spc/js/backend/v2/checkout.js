@@ -23,6 +23,7 @@ import {
   getApiEndpoint,
   isUserAuthenticated,
   logger,
+  getIp,
 } from './utility';
 import cartActions from '../../utilities/cart_actions';
 
@@ -43,6 +44,13 @@ const invisibleCharacter = '&#8203;';
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
+ * Static cache for getProductStatus().
+ *
+ * @type {null}
+ */
+const staticProductStatus = [];
+
+/**
  * Get data related to product status.
  *
  * @param {Promise<string|null>} sku
@@ -53,70 +61,54 @@ const getProductStatus = async (sku) => {
     return null;
   }
 
+  // Return from static, if available.
+  if (!_.isUndefined(staticProductStatus[sku])) {
+    return staticProductStatus[sku];
+  }
+
   // Bypass CloudFlare to get fresh stock data.
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
   const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
   if (!_.isUndefined(response.data)) {
-    return response.data;
+    staticProductStatus[sku] = response.data;
   }
-  return null;
-};
 
-/**
- * Static cache for getCncStatusForCart().
- *
- * @type {null}
- */
-let staticCncEnabled = null;
+  return staticProductStatus[sku];
+};
 
 /**
  * Get CnC status for cart based on skus in cart.
  *
  * @param {object} data
  *    The cart data.
- * @param {boolean} reset
- *    Reset static cache.
  *
  * @returns {Promise<boolean>}.
  *    The CNC status.
  */
-const getCncStatusForCart = async (data, reset = false) => {
+const getCncStatusForCart = async (data) => {
   // Validate data.
   if (_.isEmpty(data) || _.isEmpty(data.cart)) {
     return true;
   }
 
-  // Reset static cache.
-  if (reset) {
-    staticCncEnabled = null;
-  }
-
-  // Return from static, if available.
-  if (!_.isNull(staticCncEnabled)) {
-    return staticCncEnabled;
-  }
-
-  // Default return value;
-  staticCncEnabled = true;
-
   // Process items.
-  const cart = { ...data.cart };
-  for (let i = 0; i < cart.items.length; i++) {
-    const item = cart.items[i];
+  for (let i = 0; i < data.cart.items.length; i++) {
+    const item = data.cart.items[i];
     // We should ideally have ony one call to an endpoint and pass
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.
     // eslint-disable-next-line no-await-in-loop
     const productStatus = await getProductStatus(item.sku);
     if (!_.isEmpty(productStatus)
-      && _.isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled) {
-      staticCncEnabled = false;
+      && _.isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
+    ) {
+      return false;
     }
   }
 
-  return staticCncEnabled;
+  return true;
 };
 
 /**
@@ -1214,7 +1206,7 @@ const paymentUpdate = async (data) => {
     params.extension.user_agent = navigator.userAgent;
 
     // @todo maybe we could use some geolocation service.
-    params.extension.client_ip = '0.0.0.0';
+    params.extension.client_ip = await getIp();
 
     params.extension.attempted_payment = 1;
   }

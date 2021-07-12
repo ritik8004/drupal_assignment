@@ -14,6 +14,14 @@
   .block-alshaya-secondary-main-menu {
     z-index: 4;
     margin: 0.9375rem 0 1.125rem;
+
+    @include breakpoint($desktop) {
+      margin-bottom: -0.125rem;
+
+      html[lang=ar] & {
+        margin-bottom: -0.675rem;
+      }
+    }
   }
 
   @include breakpoint($desktop) {
@@ -61,6 +69,7 @@
             .highlights {
               margin-bottom: 1.875rem;
               margin-#{$right}: 0;
+              margin-#{$left}: 0.625rem;
               max-width: 17.6875rem;
               font-family: $open-sans;
 
@@ -75,7 +84,7 @@
                   width: 15.813rem;
                   height: 15.813rem;
                   display: inline-flex;
-                  justify-content: center;
+                  justify-content: flex-start;
                   align-items: center;
                 }
               }
@@ -162,6 +171,8 @@
             .level-three__wrapper {
               li.menu__list-item {
                 padding: 0;
+                margin-#{$right}: 0;
+                width: auto;
 
                 &:last-child {
                   .menu__link {
@@ -250,6 +261,10 @@
           &::after {
             transform: rotate(0deg);
           }
+
+          ~ ul {
+            display: none;
+          }
         }
       }
 
@@ -260,7 +275,6 @@
       }
 
       ul.menu--one__list {
-        display: none;
         position: inherit;
         padding: 0 1.25rem 1.25rem;
         width: 100%;
@@ -310,8 +324,13 @@
       }
 
       & ~ .secondary--main--menu {
-        > .secondary-main-menu-header {
-          display: none;
+        margin: 0;
+
+        > .secondary-main-menu-header,
+        > ul {
+          height: 0;
+          overflow: hidden;
+          padding: 0;
         }
       }
     }
@@ -476,6 +495,17 @@
             width: 100%;
           }
         }
+
+        .menu__links__wrapper .column {
+          &:nth-child(n+3) {
+            margin-#{$left}: 3.75rem;
+          }
+        }
+
+        .menu--three__list-item {
+          margin-#{$right}: 0;
+          min-width: 0;
+        }
       }
     }
 
@@ -491,6 +521,10 @@
 
           .menu--two__list-item {
             padding-bottom: 1.563rem;
+
+            > .menu-two__link-wrapper {
+              width: auto;
+            }
           }
         }
 

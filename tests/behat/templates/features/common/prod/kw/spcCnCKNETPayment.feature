@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod
+@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @tbskwprod
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
@@ -29,9 +29,8 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I select the collection store
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait for AJAX to finish
-    Then the Knet payment checkbox should be checked
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
     And I wait 5 seconds
@@ -86,7 +85,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I select the collection store
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -137,7 +136,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I select the collection store
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element

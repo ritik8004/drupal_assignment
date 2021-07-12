@@ -7,7 +7,6 @@ import {
   updateCart,
   getProcessedCartData,
   getCartWithProcessedData,
-  associateCartToCustomer,
 } from './common';
 import { getApiEndpoint, logger } from './utility';
 import { getExceptionMessageType } from './error';
@@ -143,14 +142,8 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     cartId = await window.commerceBackend.createCart();
     // If we still don't have a cart, we cannot continue.
     if (_.isNull(cartId)) {
-      return new Promise((resolve, reject) => reject(cartId));
+      throw new Error('Error creating cart when adding/removing item.');
     }
-  }
-
-  // Associate cart to customer.
-  const id = window.drupalSettings.userDetails.customerId;
-  if (id > 0) {
-    associateCartToCustomer(id);
   }
 
   let productOptions = {};
@@ -296,12 +289,6 @@ window.commerceBackend.applyRemovePromo = async (data) => {
       // Process cart data.
       response.data = getProcessedCartData(response.data);
       return response;
-    })
-    .catch((response) => {
-      const error = { ...response };
-      // Setting status will make validateCartResponse() show error when adding coupon code.
-      error.data.response_message.status = 'error_coupon';
-      return error;
     });
 };
 

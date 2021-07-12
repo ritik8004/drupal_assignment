@@ -429,14 +429,14 @@ describe('Checkout', () => {
       const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
 
       it('Without cart data', async () => {
-        const result = await getCncStatusForCart(null, false);
+        const result = await getCncStatusForCart(null);
         expect(result).toEqual(true);
       });
 
       it('With CNC Enabled', async () => {
         axios.mockResolvedValue({ data: productStatus });
 
-        const result = await getCncStatusForCart(cartData, true);
+        const result = await getCncStatusForCart(cartData);
         expect(result).toEqual(true);
       });
 
@@ -450,7 +450,17 @@ describe('Checkout', () => {
           },
         });
 
-        const result = await getCncStatusForCart(cartData, true);
+        const data = {
+          cart: {
+            items: [
+              {
+                sku: 'WZBOWZ108',
+              },
+            ],
+          }
+        };
+
+        const result = await getCncStatusForCart(data);
         expect(result).toEqual(false);
       });
     });

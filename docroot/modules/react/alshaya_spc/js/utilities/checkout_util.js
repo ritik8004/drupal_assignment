@@ -594,32 +594,6 @@ export const setUpapiApplePayCofig = () => {
 export const getUpapiApplePayConfig = () => checkoutComUpapiApplePayConfig;
 
 /**
- * Bin validation.
- *
- * @param {*} bin
- * @param {*} paymentMethods
- */
-export const binValidation = (bin, paymentMethods) => {
-  // @todo implement this properly for V2 in CORE-31402.
-  const apiUrl = 'card/bin-validation';
-  return axios
-    .post(apiUrl, {
-      bin,
-      paymentMethods,
-    })
-    .then(
-      (response) => response.data,
-      () => ({
-        error: true,
-        error_message: 'global_error',
-      }),
-    )
-    .catch((error) => {
-      Drupal.logJavascriptError('bin-validation', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-    });
-};
-
-/**
  * Helper function to get bin validation config.
  */
 export const getBinValidationConfig = () => {
@@ -630,4 +604,36 @@ export const getBinValidationConfig = () => {
   }
 
   return config;
+};
+
+/**
+ * Bin validation.
+ *
+ * @param {*} bin
+ */
+export const binValidation = (bin) => {
+  const { binValidationSupportedPaymentMethods, cardBinNumbers } = getBinValidationConfig();
+  let valid = true;
+  let errorMessage = 'invalid_card';
+
+  binValidationSupportedPaymentMethods.split(',').every((paymentMethod) => {
+    // If the given bin number matches with the bins of given payment method
+    // then this card belongs to that payment method, so throw an error
+    // asking user to use that payment method.
+    const paymentMethodBinNumbers = cardBinNumbers[paymentMethod];
+
+    if (paymentMethodBinNumbers !== undefined
+      && Object.values(paymentMethodBinNumbers.split(',')).includes(bin)) {
+      valid = false;
+      errorMessage = `card_bin_validation_error_message_${paymentMethod}`;
+      return false;
+    }
+    return true;
+  });
+
+  if (valid === false) {
+    return ({ error: true, error_message: errorMessage });
+  }
+
+  return valid;
 };

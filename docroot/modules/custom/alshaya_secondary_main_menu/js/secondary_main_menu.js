@@ -34,7 +34,6 @@
           $('#block-alshayamainmenu .secondary--main--menu').show();
           $('.main--menu .promo-wrapper').show();
           $('.secondary-main-menu-header').on('click', function () {
-            $('.secondary--main--menu > ul').toggle();
             $('.secondary-main-menu-header').toggleClass('closed');
           })
         }
