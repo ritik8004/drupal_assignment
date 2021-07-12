@@ -147,9 +147,10 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
         $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
         $l2s['highlight_paragraph'] = $entity->get('field_secondary_menu_highlight')->getValue();
         $language = $this->languageManager->getCurrentLanguage()->getId();
+        $default_lang = $this->languageManager->getDefaultLanguage()->getId();
         foreach ($l2s['highlight_paragraph'] as $tr) {
           $paragraph = Paragraph::load($tr['target_id']);
-          $language = ($paragraph->hasTranslation($language)) ? $language : 'en';
+          $language = ($paragraph->hasTranslation($language)) ? $language : $default_lang;
           $paragraph = $paragraph->getTranslation($language);
           $l2s['highlight_paragraph']['paragraph_type'] = $paragraph->getParagraphType()->id();
           $l2s['highlight_paragraph']['img'] = $paragraph->field_highlight_image->getValue();
