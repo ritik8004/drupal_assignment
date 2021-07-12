@@ -298,11 +298,12 @@ const formatAddressForShippingBilling = (address) => {
  *   Address validation response or false in case of errors.
  */
 const validateAddressAreaCity = async (address) => {
-  const response = callDrupalApi('/spc/validate-info', 'POST', address);
-  if (_.isEmpty(response.data) || (!_.isUndefined(response.data.error) && response.data.error)) {
-    return false;
+  // @TODO check response on browser.
+  const response = await callDrupalApi('/spc/validate-info', 'POST', address);
+  if (!_.isUndefined(response.data) && !_.isUndefined(response.data.address)) {
+    return response.data.address;
   }
-  return response.data;
+  return false;
 };
 
 /**
@@ -314,8 +315,8 @@ const getLastOrder = () => [];
 /**
  * Get customer's addresses.
  *
- * @return {promise}
- *   Address ids of customer or empty array.
+ * @returns {Promise<object>}
+ *   Customer address ids.
  */
 const getCustomerAddressIds = () => callMagentoApi(getApiEndpoint('getCustomerAddressIds'), 'GET', {});
 
@@ -734,50 +735,59 @@ const selectCnc = async (store, address, billing) => {
     },
   };
 
-  const extensionAttributes = data.shipping.shipping_address.extension_attributes;
-  Object.keys(extensionAttributes).forEach((key) => {
-    data.shipping.shipping_address.custom_attributes.push(
-      {
-        attributeCode: key,
-        value: extensionAttributes[key],
-      },
-    );
-  });
+  if (_.isUndefined(data.shipping.shipping_address.custom_attributes)
+    && !_.isUndefined(data.shipping.shipping_address.extension_attributes)
+    && !_.isEmpty(data.shipping.shipping_address.extension_attributes)
+  ) {
+    const extensionAttributes = data.shipping.shipping_address.extension_attributes;
+    data.shipping.shipping_address.custom_attributes = [];
+    Object.keys(extensionAttributes).forEach((key) => {
+      data.shipping.shipping_address.custom_attributes.push(
+        {
+          attributeCode: key,
+          value: extensionAttributes[key],
+        },
+      );
+    });
+  }
 
   // Validate address.
   const valid = await validateAddressAreaCity(billing);
-  if (!valid || valid.address === false) {
+  if (!valid) {
     return false;
   }
 
-  const logData = JSON.stringify(data);
-  const logAddress = JSON.stringify(address);
-  const logStore = JSON.stringify(store);
-  const logCartId = window.commerceBackend.getCartId();
-  logger.notice(`Shipping update default for CNC. Data: ${logData} Address: ${logAddress} Store: ${logStore} Cart: ${logCartId}`);
+  logger.notice('Shipping update default for CNC. Data: @data Address: @address Store: @store Cart: @cartId', {
+    '@data': JSON.stringify(data),
+    '@address': JSON.stringify(address),
+    '@store': JSON.stringify(store),
+    '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+  });
 
   // If shipping address not contains proper data (extension info).
   if (_.isEmpty(data.shipping.shipping_address.extension_attributes)) {
     return false;
   }
 
-  const updated = await updateCart(data);
-  if (_.has(updated, 'error') && updated.error) {
+  let cart = await updateCart(data);
+  if (!_.isUndefined(cart.data.error) && cart.data.error) {
     return false;
   }
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
-  if (_.isEmpty(billing.customer_address_id)) {
-    return updated;
+  if (_.isUndefined(billing.customer_address_id)) {
+    return cart;
   }
 
   // Add log for billing data we pass to magento update cart.
-  const logBilling = JSON.stringify(billing);
-  logger.notice(`Billing update default for CNC. Address: ${logBilling} Cart: ${logCartId}`);
+  logger.notice('Billing update default for CNC. Address: @address Cart: @cartId', {
+    '@address': JSON.stringify(billing),
+    '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+  });
 
   // If billing address not contains proper data (extension info).
-  if (typeof billing.extension_attributes === 'undefined') {
+  if (_.isUndefined(billing.extension_attributes) || _.isEmpty(billing.extension_attributes)) {
     return false;
   }
 
@@ -785,17 +795,18 @@ const selectCnc = async (store, address, billing) => {
 
   // Return if address id from last order doesn't
   // exist in customer's address id list.
+  // @TODO test this on the browser.
   if (_.findIndex(customerAddressIds, { id: billing.customer_address_id }) !== -1) {
-    return updated;
+    return cart;
   }
 
-  const updatedBilling = await updateBilling(billing);
-
+  cart = await updateBilling(billing);
   // If billing update has error.
-  if (_.has(updated, 'error') && updated.error) {
+  if (!_.isUndefined(cart.data.error) && cart.data.error) {
     return false;
   }
-  return updatedBilling;
+
+  return cart;
 };
 
 /**
@@ -849,9 +860,8 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Validate address.
-  const validAddress = await validateAddressAreaCity(shippingData.address);
-  if (_.isEmpty(validAddress)
-    || _.isUndefined(validAddress.address) || validAddress.address !== true) {
+  const valid = await validateAddressAreaCity(shippingData.address);
+  if (!valid) {
     return false;
   }
 
