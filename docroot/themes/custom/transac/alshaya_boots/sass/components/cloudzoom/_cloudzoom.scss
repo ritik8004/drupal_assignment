@@ -110,3 +110,15 @@
     }
   }
 }
+
+.mobilegallery {
+  #product-image-gallery-mobile {
+    li.slick-slide {
+      @include breakpoint($only-mobile) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
