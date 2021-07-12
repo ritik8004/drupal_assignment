@@ -31,6 +31,11 @@ ckeditor_stylesheets:
   - css/ckeditor.css
 
 libraries-override:
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
+
   alshaya_white_label/convert_to_select2:
     js:
       js/convert_to_select2.js: js/convert_to_select2.js
