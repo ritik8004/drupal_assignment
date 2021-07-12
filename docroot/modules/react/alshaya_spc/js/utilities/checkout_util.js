@@ -616,14 +616,14 @@ export const binValidation = (bin) => {
   let valid = true;
   let errorMessage = 'invalid_card';
 
-  binValidationSupportedPaymentMethods.every((paymentMethod) => {
+  binValidationSupportedPaymentMethods.split(',').every((paymentMethod) => {
     // If the given bin number matches with the bins of given payment method
     // then this card belongs to that payment method, so throw an error
     // asking user to use that payment method.
     const paymentMethodBinNumbers = cardBinNumbers[paymentMethod];
 
     if (paymentMethodBinNumbers !== undefined
-      && Object.values(paymentMethodBinNumbers).includes(bin)) {
+      && Object.values(paymentMethodBinNumbers.split(',')).includes(bin)) {
       valid = false;
       errorMessage = `card_bin_validation_error_message_${paymentMethod}`;
       return false;

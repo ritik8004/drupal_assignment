@@ -89,7 +89,7 @@ class NewCard extends React.Component {
   // Bin validation - First 6 digits of a card is the bin number.
   handleBinValidation = (cardNumber) => {
     const cardBin = cardNumber.substring(0, 6);
-    const validation = binValidation(parseInt(cardBin, 10));
+    const validation = binValidation(cardBin);
 
     if (validation.error !== undefined) {
       const errorKey = validation.error_message || 'invalid_card';
