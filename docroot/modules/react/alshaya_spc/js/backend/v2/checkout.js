@@ -408,7 +408,7 @@ const getStoreInfo = async (storeData) => {
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_.isEmpty(response.data) || !_.isArray(response.data)
+  if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
     return null;
@@ -418,17 +418,24 @@ const getStoreInfo = async (storeData) => {
   // Get the complete data about the store by combining the received data from
   // Magento with the processed store data stored in Drupal.
   store = Object.assign(store, storeInfo);
-  store.formatted_distance = store.distance
-    .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    .replace(/,/g, '');
-  store.formatted_distance = parseFloat(store.formatted_distance);
 
-  store.delivery_time = store.sts_delivery_time_label;
+  if (!_.isUndefined(store.distance)) {
+    store.formatted_distance = store.distance
+      .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      .replace(/,/g, '');
+    store.formatted_distance = parseFloat(store.formatted_distance);
+  }
+
+  if (!_.isUndefined(store.sts_delivery_time_label)) {
+    store.delivery_time = store.sts_delivery_time_label;
+  }
+
   if (typeof store.rnc_available !== 'undefined'
     && store.rnc_available
     && typeof store.rnc_config !== 'undefined') {
     store.delivery_time = store.rnc_config;
   }
+
   // If rnc is available the the value of rnc_config is already fetched above.
   // Or rnc is not available at all. So in both cases, we do not need the value
   // of rnc_config anymore and so we remove it.
@@ -451,9 +458,14 @@ const getStoreInfo = async (storeData) => {
  */
 const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
+  if (!cartId) {
+    logger.error('Error while fetching click and collect stores. No cart available in session');
+    return getFormattedError(404, 'No cart in session');
+  }
   let stores = [];
 
-  const response = await callMagentoApi(`/rest/V1/click-and-collect/stores/guest-cart/${cartId}/lat/${lat}/lon/${lon}`);
+  const url = getApiEndpoint('getCartStores', { cartId, lat, lon });
+  const response = await callMagentoApi(url, 'GET', {});
   if (_.isEmpty(response.data)
     || (!_.isUndefined(response.data.error) && response.data.error)
   ) {
@@ -474,16 +486,19 @@ const getCartStores = async (lat, lon) => {
     stores = await Promise.all(storeInfoPromises);
 
     // Remove null values.
-    // Sort the stores first by distance and then by name.
-    return stores
-      .filter((value) => value != null)
-      .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
-      .sort((store1, store2) => store1.distance - store2.distance);
+    stores = stores.filter((value) => value != null);
+
+    // Sort the stores first by distance and then by rnc.
+    if (stores.length > 1) {
+      stores = stores
+        .sort((store1, store2) => store1.distance - store2.distance)
+        .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
+    }
   } catch (error) {
     logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
   }
 
-  return [];
+  return stores;
 };
 
 /**
@@ -492,7 +507,10 @@ const getCartStores = async (lat, lon) => {
  * @param {string} lat
  *   The latitude value.
  * @param {string} lon
- *   The longiture value.
+ *   The longitude value.
+ *
+ * @returns {Promise<array>}
+ *   The list of stores.
  */
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
@@ -506,7 +524,13 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  return getCartStores(lat, lon);
+  const response = await getCartStores(lat, lon);
+  if (!_.isUndefined(response.data) && !_.isUndefined(response.data.error)) {
+    // In case of errors, return the response with error.
+    return response;
+  }
+
+  return { data: response };
 };
 
 /**
@@ -910,7 +934,7 @@ const getProcessedCheckoutData = async (cartData) => {
     : [];
 
   if (typeof response.shipping.storeCode !== 'undefined') {
-    response.shipping.storeInfo = await getStoreInfo(response.shipping.storeCode);
+    response.shipping.storeInfo = await getStoreInfo({ code: response.shipping.storeCode });
     // Set the CnC type (rnc or sts) if not already set.
     if (typeof response.shipping.storeInfo.rnc_available === 'undefined' && typeof response.shipping.clickCollectType !== 'undefined') {
       response.shipping.storeInfo.rnc_available = (response.shipping.clickCollectType === 'reserve_and_collect');
@@ -1024,6 +1048,17 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
   logger.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
 };
+
+/**
+ * Fetches the list of click and collect stores.
+ *
+ * @param {object} coords
+ *   The co-ordinates data.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
 
 /**
  * Adds payment method in the cart and returns the cart.
@@ -1328,7 +1363,6 @@ window.commerceBackend.getCartForCheckout = () => {
 
 /**
  * Add click n collect shipping on the cart.
- * @todo implement this
  *
  * @param {object} shippingData
  *   Shipping address info.
@@ -1341,7 +1375,65 @@ window.commerceBackend.getCartForCheckout = () => {
  *   Cart data.
  * */
 const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
-  logger.info(`${shippingData}${action}${updateBillingDetails}`);
+  const { store } = { ...shippingData };
+
+  // Create the address object with static data and store cart address.
+  let address = {
+    static: {
+      ...shippingData.store.cart_address,
+      ...shippingData.static,
+    },
+  };
+
+  // Move extension data to static fields.
+  if (!_.isUndefined(address.static.extension)) {
+    address = { ...address, ...address.static.extension };
+    delete address.static.extension;
+  }
+
+  // Move street to the root.
+  if (!_.isUndefined(address.static.street)) {
+    address.street = address.static.street;
+    delete address.static.street;
+  }
+
+  const params = {
+    extension: {
+      action,
+    },
+    shipping: {
+      shipping_address: formatAddressForShippingBilling(address),
+      shipping_carrier_code: shippingData.carrier_info.code,
+      shipping_method_code: shippingData.carrier_info.method,
+      extension_attributes: {
+        click_and_collect_type: !_.isEmpty(store.rnc_available) ? 'reserve_and_collect' : 'ship_to_store',
+        store_code: store.code,
+      },
+    },
+  };
+
+  let cart = await updateCart(params);
+  // If cart update has error.
+  if (_.isEmpty(cart.data)
+    || (!_.isUndefined(cart.data.error) && cart.data.error)
+    || (!_.isUndefined(cart.data.response_message) && cart.data.response_message === 'json_error')
+  ) {
+    return cart;
+  }
+  const cartData = cart.data;
+
+  // Setting city value as 'NONE' so that, we can
+  // identify if billing address added is default one and
+  // not actually added by the customer on FE.
+  if (updateBillingDetails
+    || _.isEmpty(cartData.billing_address) || _.isEmpty(cartData.billing_address.city)
+    || cartData.billing_address.city === 'NONE') {
+    params.shipping.shipping_address.city = 'NONE';
+    // Adding billing address.
+    cart = await updateBilling(params.shipping.shipping_address);
+  }
+
+  return cart;
 };
 
 /**
