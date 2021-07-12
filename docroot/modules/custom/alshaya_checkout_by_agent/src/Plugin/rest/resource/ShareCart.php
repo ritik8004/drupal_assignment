@@ -22,6 +22,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Component\Datetime\Time;
+use Drupal\Core\Flood\FloodInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Provides a resource to cart URL with smart agent info.
@@ -109,6 +111,13 @@ class ShareCart extends ResourceBase {
   protected $token;
 
   /**
+   * The flood service.
+   *
+   * @var \Drupal\Core\Flood\FloodInterface
+   */
+  protected $flood;
+
+  /**
    * ShareCart constructor.
    *
    * @param array $configuration
@@ -141,6 +150,8 @@ class ShareCart extends ResourceBase {
    *   Injecting time service.
    * @param \Drupal\token\TokenInterface $token
    *   Token service.
+   * @param \Drupal\Core\Flood\FloodInterface $flood
+   *   The flood service.
    */
   public function __construct(
     array $configuration,
@@ -157,7 +168,8 @@ class ShareCart extends ResourceBase {
     MobileNumberUtilInterface $mobile_util,
     ConfigFactoryInterface $config_factory,
     Time $time,
-    TokenInterface $token
+    TokenInterface $token,
+    FloodInterface $flood
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->messageApiAdapter = $message_api_adapter;
@@ -170,6 +182,7 @@ class ShareCart extends ResourceBase {
     $this->configFactory = $config_factory;
     $this->time = $time;
     $this->token = $token;
+    $this->flood = $flood;
   }
 
   /**
@@ -191,7 +204,8 @@ class ShareCart extends ResourceBase {
       $container->get('mobile_number.util'),
       $container->get('config.factory'),
       $container->get('datetime.time'),
-      $container->get('token')
+      $container->get('token'),
+      $container->get('flood'),
     );
   }
 
@@ -208,6 +222,9 @@ class ShareCart extends ResourceBase {
     if (empty($smart_agent)) {
       throw new AccessDeniedHttpException();
     }
+
+    // Check request is invalid due to flood control.
+    $this->floodControl();
 
     // Check request has required parameters.
     if (empty($data['type']) || empty($data['value']) || empty($data['cartId'])) {
@@ -227,12 +244,41 @@ class ShareCart extends ResourceBase {
     // @todo validate the mobile number of mail.
     $to = $data['value'];
 
+    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($smart_agent_details_array['email']);
+    if (FALSE == $user || $user->isBlocked() || !$user->hasRole('smartagent')) {
+      $responseData = [
+        'success' => FALSE,
+        'error_message' => 'Agent account is blocked or does not exist.',
+      ];
+
+      $response = new ResourceResponse($responseData);
+      return $response;
+    }
+
+    // Validating the SmartAgent info with the user object info.
+    $storeCode = '';
+    $storeField = $user->get('field_agent_store')->first();
+    if (!empty($storeField)) {
+      $store = $storeField->get('entity')->getValue();
+      $storeCode = $store->get('field_store_locator_id')->getString();
+    }
+    // Flag value to track update status.
+    $updated = FALSE;
+    if (!empty($storeCode) && $smart_agent_details_array['storeCode'] != $storeCode) {
+      $smart_agent_details_array['storeCode'] = $storeCode;
+      $updated = TRUE;
+    }
+    $user_name = $user->get('field_first_name')->getString() . ' ' . $user->get('field_last_name')->getString();
+    if (!empty($user_name) && $smart_agent_details_array['name'] != $user_name) {
+      $smart_agent_details_array['name'] = $user_name;
+      $updated = TRUE;
+    }
     // @todo basic validation of cart id.
     $cartId = $data['cartId'];
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
 
     // Add sharing channel and time with agent details.
     $smart_agent_details_array['shared_via'] = $context;
@@ -323,7 +369,16 @@ class ShareCart extends ResourceBase {
       '@smart_agent' => json_encode($data),
     ]);
 
-    return (new JsonResponse($responseData));
+    $json_response = new JsonResponse($responseData);
+    // Update cookie only if the data is outdated.
+    if ($updated) {
+      $cookie = new Cookie(
+        'smart_agent_cookie',
+        base64_encode(json_encode($smart_agent_details_array)), 0, '/', NULL, TRUE, FALSE);
+      $json_response->headers->setCookie($cookie);
+    }
+
+    return $json_response;
   }
 
   /**
@@ -346,6 +401,22 @@ class ShareCart extends ResourceBase {
     }
 
     return $value;
+  }
+
+  /**
+   * Enforces flood control for the current API Request.
+   */
+  protected function floodControl() {
+    $api_request_limit = $this->configFactory->get('alshaya_checkout_by_agent.settings')->get('api_request_limit');
+    if (!$this->flood->isAllowed('alshaya_checkout_by_agent.requested_api', $api_request_limit, 60)) {
+      // Block the request and show the error message.
+      $error_message = sprintf('The request is blocked because you have crossed %s request per min API call limit. Please try after some time.', $api_request_limit);
+      throw new AccessDeniedHttpException($error_message, NULL, ResourceResponse::HTTP_TOO_MANY_REQUESTS);
+    }
+    else {
+      // Register the API call request.
+      $this->flood->register('alshaya_checkout_by_agent.requested_api', 60);
+    }
   }
 
 }
