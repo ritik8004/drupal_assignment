@@ -242,15 +242,12 @@ const productRecommendationsSuffix = 'pr-';
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
         if (drupalSettings.user.uid && loginType === null) {
-          Drupal.alshaya_seo_gtm_push_login_type('Self Login');
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Self Login');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
         if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
-          if (loginType !== undefined) {
-            Drupal.alshaya_seo_gtm_push_login_type(loginType);
-          }
-          Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           localStorage.setItem('userID', userDetails.userID);
         }
 
@@ -1035,12 +1032,14 @@ const productRecommendationsSuffix = 'pr-';
    * Helper funciton to push Login & Register events.
    *
    * @param eventAction
+   * @param loginType
    */
-  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction) {
+  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction, loginType = null) {
     dataLayer.push({
       event: 'eventTracker',
       eventCategory: 'Login & Register',
       eventAction: eventAction,
+      eventLabel: loginType,
       eventValue: 0,
       nonInteraction: 0
     });
@@ -1360,19 +1359,5 @@ const productRecommendationsSuffix = 'pr-';
       return true;
     };
   }
-
-  /**
-   * Helper function to push events when user logins.
-   *
-   * @param loginType
-   */
-  Drupal.alshaya_seo_gtm_push_login_type = function (loginType) {
-    dataLayer.push({
-      event: 'Login',
-      eventCategory: 'Login Success',
-      eventLabel: loginType,
-    });
-
-  };
 
 })(jQuery, Drupal, dataLayer);
