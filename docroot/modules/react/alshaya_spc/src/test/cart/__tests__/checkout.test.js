@@ -454,8 +454,6 @@ describe('Checkout', () => {
         axios.mockResolvedValueOnce({ data: { address: true }, status: 200 });
         // Mock for updateCart().
         axios.mockResolvedValueOnce({ data: cartData, status: 200 });
-        // Mock for getCustomerAddressIds().
-        axios.mockResolvedValueOnce({ data: [1, 2, 3], status: 200 });
         // Mock for updateCart().
         axios.mockResolvedValueOnce({ data: cartData, status: 200 });
 
@@ -463,10 +461,10 @@ describe('Checkout', () => {
         address.extension_attributes = {
           foo: 'bar',
         };
-        address.customer_address_id = 1;
+        address.customer_address_id = '1';
 
         const result = await selectCnc({ code: 1234 }, address, address);
-        expect(axios.mock.calls.length).toBe(4);
+        expect(axios.mock.calls.length).toBe(3);
         const data = result.data.cart;
         expect(data.billing_address.city).toEqual('Al Awir');
         expect(data.billing_address.customer_address_id).toEqual('69');

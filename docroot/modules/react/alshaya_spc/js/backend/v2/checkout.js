@@ -300,7 +300,10 @@ const formatAddressForShippingBilling = (address) => {
  */
 const validateAddressAreaCity = async (address) => {
   const response = await callDrupalApi('/spc/validate-info', 'POST', { address });
-  if (!_.isUndefined(response.data) && !_.isUndefined(response.data.address)) {
+  if (!_.isUndefined(response)
+    && !_.isUndefined(response.data)
+    && !_.isUndefined(response.data.address)
+  ) {
     return response.data.address;
   }
   return false;
@@ -311,24 +314,6 @@ const validateAddressAreaCity = async (address) => {
  * @todo implement this.
  */
 const getLastOrder = () => lastOrder;
-
-/**
- * Get customer's address Id.
- *
- * @returns {Promise<object>}
- *   Customer address ids.
- */
-const getCustomerAddressIds = async () => {
-  const url = getApiEndpoint('getCustomerAddressIds');
-  const response = await callMagentoApi(url, 'GET', {});
-  if (!_.isUndefined(response.data)
-    && !_.isUndefined(response.data.addresses)
-    && _.isArray(response.data.addresses)
-  ) {
-    return response.data.addresses;
-  }
-  return response;
-};
 
 /**
  * Get payment method from last order.
@@ -812,11 +797,10 @@ const selectCnc = async (store, address, billing) => {
     return false;
   }
 
-  const customerAddressIds = await getCustomerAddressIds(billing.customer_id);
-
   // Return if address id from last order doesn't
   // exist in customer's address id list.
-  if (_.findIndex(customerAddressIds, { id: billing.customer_address_id }) !== -1) {
+  const item = { customer_address_id: billing.customer_address_id };
+  if (_.findIndex(cart.data.customer.addresses, item) !== -1) {
     return cart;
   }
 

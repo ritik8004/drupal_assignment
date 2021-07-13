@@ -287,8 +287,8 @@ const callMagentoApi = (url, method, data) => {
  *   The url to send the request to.
  * @param {string} method
  *   The request method.
- * @param {string} requestOptions
- *   The request options.
+ * @param {string} data
+ *   The object to send with the request.
  *
  * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
