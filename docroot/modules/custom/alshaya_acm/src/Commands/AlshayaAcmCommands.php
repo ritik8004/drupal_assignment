@@ -384,8 +384,8 @@ class AlshayaAcmCommands extends DrushCommands {
         drupal_static_reset();
 
         // Entity storage can blow up with caches so clear them out.
-        foreach ($this->entityManager->getDefinitions() as $id => $definition) {
-          $this->entityManager->getStorage($id)->resetCache();
+        foreach ($this->entityTypeManager->getDefinitions() as $id => $definition) {
+          $this->entityTypeManager->getStorage($id)->resetCache();
         }
 
         // Process chunk.
