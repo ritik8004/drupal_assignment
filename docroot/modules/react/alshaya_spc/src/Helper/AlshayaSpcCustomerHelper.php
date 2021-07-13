@@ -372,16 +372,16 @@ class AlshayaSpcCustomerHelper {
    *   The token or null.
    */
   public function getCustomerTokenBySocialDetail($mail) {
-    $response = $this->apiWrapper->getCustomerTokenBySocialDetail($mail);
-    if ($token = json_decode($response)) {
+    $token = $this->session->get('magento_customer_token');
+    if (empty($token) || !is_string($token)) {
+      $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail));
+      if ($token === FALSE) {
+        $token = NULL;
+      }
       $this->session->set('magento_customer_token', $token);
-      return $token;
-    }
-    else {
-      $this->session->set('magento_customer_token', NULL);
     }
 
-    return NULL;
+    return $token;
   }
 
 }
