@@ -240,6 +240,8 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
@@ -251,8 +253,9 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     foreach ($build['recent_order'][$key]['#order']['items'] as $item_key => $item) {
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
-      $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $parent_sku_id;
-      $bazaarvoiceSettings[$parent_sku_id] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
+      $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
+      $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $sanitized_parent_sku;
+      $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
@@ -269,6 +272,8 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
@@ -277,14 +282,16 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   $bazaarvoiceSettings = [];
   foreach ($order['items'] as $key => $item) {
     $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
-    $bazaarvoiceSettings[$parent_sku_id] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
+    $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
+    $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
   }
   if (!empty($bazaarvoiceSettings)) {
     $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
     foreach(array_keys($build['#products']) as $key) {
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($build['#products'][$key]['sku']);
+      $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
       $build['#products'][$key]['bazaarvoice_link'] = TRUE;
-      $build['#products'][$key]['parent_sku'] = $parent_sku_id;
+      $build['#products'][$key]['parent_sku'] = $sanitized_parent_sku;
     }
   }
   $build['#bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();

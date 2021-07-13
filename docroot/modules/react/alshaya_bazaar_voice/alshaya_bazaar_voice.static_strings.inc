@@ -269,6 +269,8 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'review_syndicated_text',
       'value' => t('Original posted on'),
+    ],
+    [
       'key' => 'view_review',
       'value' => t('View review'),
     ],
@@ -295,6 +297,11 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'Staff',
       'value' => t('Staff'),
+    ],
+    [
+      'key' => 'invalid_pie_user_details',
+      'value' => t('Logged in e-mail address does not matches with the email address used to purchase the product. 
+      To write a review on this product, please logout and login with same email address you have used for the purchase.'),
     ],
   ];
 }
