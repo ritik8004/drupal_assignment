@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4747ed76a4e1e9c4894336c68f14c609",
+    "content-hash": "42b4821c7ee28edd350e2e91c64c176f",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13342,7 +13342,7 @@
                 },
                 "patches_applied": {
                     "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                    "CORE-31041 disabled skus not deleted for product list index": "patches/search_api/search_api_entity_delete_alter.patch"
+                    "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
