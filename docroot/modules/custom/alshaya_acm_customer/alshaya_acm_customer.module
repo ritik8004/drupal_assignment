@@ -16,7 +16,6 @@ use Drupal\user\UserInterface;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Url;
-use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Implements hook_module_implements_alter().
