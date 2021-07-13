@@ -25,3 +25,6 @@ alshaya_checkout_by_agent.settings:
     restrict_agent_login:
       type: boolean
       label: 'Config to enable/disable retricting agent login when location is not shared.'
+    api_request_limit:
+      type: integer
+      label: 'Config to set limit on number of request per min for the API.'
