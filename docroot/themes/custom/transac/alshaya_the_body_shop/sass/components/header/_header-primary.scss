@@ -189,12 +189,14 @@ header {
   .back--link {
     font-family: $tbs-medium;
     font-size: 0.875rem;
-    text-transform: capitalize;
+    text-transform: none;
   }
 
-  .main--menu {
-    ul.menu--one__list {
-      background: $mm_bg_tbs;
+  .block-alshaya-main-menu:not(.megamenu-inline-layout) {
+    .main--menu {
+      ul.menu--one__list {
+        background: $mm_bg_tbs;
+      }
     }
   }
 
@@ -232,7 +234,7 @@ header {
     li.menu--one__list-item {
       .menu--one__link {
         padding: 1rem 1.25rem;
-        text-transform: capitalize;
+        text-transform: none;
       }
     }
   }
@@ -381,12 +383,13 @@ html[lang='ar'] {
 
     li.menu--one__list-item {
       padding: 0 1.625rem;
+      text-transform: none;
 
       .menu--one__link {
         font-size: 1rem;
         font-family: $tbs-medium;
         border-color: $menu-border-desktop;
-        text-transform: uppercase;
+        text-transform: none;
         padding: 0;
       }
     }
