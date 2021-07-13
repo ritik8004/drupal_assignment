@@ -1,58 +1,5 @@
 // Mothercare fonts are indentical to the fonts in whitelabel.
-// However for conditional overriding system to work consistently and
-// avoid unnecessary Mothercare fonts in whitelabel (base theme) to be
-// available in other brands, we keep declare them here as well.
-
-// We have the default 5 fonts for mothercare and then the DY fonts.
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fonts';
-
-@font-face {
-  font-family: 'Mothercare';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'MothercareThin';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Cairo-300';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Cairo-bold';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5iT') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+// Hence we declare only additional fonts here.
 
 // Define extra DY Fonts for Mothercare.
 $mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts';
