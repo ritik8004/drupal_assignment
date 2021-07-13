@@ -220,8 +220,8 @@ function _alshaya_search_algolia_sort_settings_submit(&$form, FormStateInterface
 /**
  * Implements hook_alshaya_search_api_entity_delete_alter().
  */
-function alshaya_search_algolia_alshaya_search_api_entity_delete_alter(array &$item_ids, $index, EntityInterface $entity) {
-  
+function alshaya_search_algolia_search_api_entity_delete_alter(array &$item_ids, $index, EntityInterface $entity) {
+
   if ($index->id() === 'alshaya_algolia_product_list_index') {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -235,11 +235,11 @@ function alshaya_search_algolia_alshaya_search_api_entity_delete_alter(array &$i
 /**
  * Implements hook_alshaya_search_api_track_items_alter().
  */
-function alshaya_search_algolia_alshaya_search_api_track_items_alter(array &$item_ids, $index, $id) {
+function alshaya_search_algolia_search_api_track_items_alter(array &$item_ids, $index, $id) {
   if ($index->id() === 'alshaya_algolia_product_list_index') {
-  $item_ids = [];
-  // Set items id as SKU instead of enityt/node/nid:lancode which will be used as.
-  // objectID for deleting items in algolia _product_list_index.
-  $item_ids[] = $id;
+    $item_ids = [];
+    // Set items id as SKU instead of enityt/node/nid:lancode which will be used as.
+    // objectID for deleting items in algolia _product_list_index.
+    $item_ids[] = $id;
   }
 }
