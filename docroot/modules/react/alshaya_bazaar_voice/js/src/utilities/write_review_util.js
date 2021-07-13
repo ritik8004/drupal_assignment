@@ -82,7 +82,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (userStorage.uasToken !== null) {
+    if (userStorage.uasToken !== null && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
     } else if (userDetails.user.userId === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;

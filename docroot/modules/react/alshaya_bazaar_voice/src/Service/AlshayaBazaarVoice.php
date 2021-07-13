@@ -616,13 +616,13 @@ class AlshayaBazaarVoice {
    */
   public function getMyAccountProductSettings($sku_id, array $basic_configs) {
     $productNode = $this->skuManager->getDisplayNode($sku_id);
-    $productArray = new \stdClass();
+    $productObj = new \stdClass();
     if ($productNode instanceof NodeInterface) {
-      $productArray->alshaya_bazaar_voice = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $basic_configs);
+      $productObj->alshaya_bazaar_voice = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $basic_configs);
       // Add current user details.
-      $productArray->productReview = $this->getProductReviewForCurrentUser($productNode);
+      $productObj->productReview = $this->getProductReviewForCurrentUser($productNode);
     }
-    return $productArray;
+    return $productObj;
   }
 
   /**
