@@ -277,7 +277,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       }
     }
     catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger()->addMessage($e->getMessage(), 'error');
       $form_state->setErrorByName('address', $e->getMessage());
     }
   }
