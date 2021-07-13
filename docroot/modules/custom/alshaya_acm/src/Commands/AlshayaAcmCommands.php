@@ -342,7 +342,7 @@ class AlshayaAcmCommands extends DrushCommands {
         continue;
       }
 
-      $this->moduleHandler->loadInclude($brand_module, 'data', 'data/products_\' . $country_code . \'_\' . $langcode');
+      $this->moduleHandler->loadInclude($brand_module, 'data', 'data/products_' . $country_code . '_' . $langcode);
 
       // Check if we need to import only specific SKUs.
       if ($query) {
