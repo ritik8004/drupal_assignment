@@ -69,6 +69,7 @@ services:
       - '@state'
       - '@alshaya_custom.alshaya_country_manager'
       - '@alshaya_config.manager'
+      - '@extension.list.module'
 
   cache.alshaya_api:
     class: Drupal\Core\Cache\CacheBackendInterface
