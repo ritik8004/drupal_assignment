@@ -2580,7 +2580,11 @@ JS;
         if (maxlength == 9) {
             value = value + "9";
         }
+        else if (maxlength == 10) {
+            value = 1255557111;
+        }
         jQuery("input[name=\"mobile\"]").val(value);
+        
 JS;
       $this->getSession()->executeScript($script);
       if ($page->find('css', 'input[name="email"]')) {
