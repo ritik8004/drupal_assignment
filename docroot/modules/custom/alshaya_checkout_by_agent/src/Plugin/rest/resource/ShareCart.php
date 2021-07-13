@@ -223,9 +223,17 @@ class ShareCart extends ResourceBase {
       throw new AccessDeniedHttpException();
     }
 
+    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($smart_agent_details_array['email']);
+    if (!$user || $user->isBlocked() || !$user->hasRole('smartagent')) {
+      $error_message = 'Agent account is blocked or does not exist.';
+      return $this->prepareResourceResponse($error_message);
+    }
+
     $settings = $this->configFactory->get('alshaya_checkout_by_agent.settings');
     // Check if request is a flood request.
-    if ($this->isFloodRequest()) {
+    if ($this->isFloodRequest($user->id())) {
       // Block the request and show the error message.
       $error_message = sprintf('The request is blocked because you have crossed %s request per min API call limit. Please try after some time.', $settings->get('api_request_limit'));
       throw new AccessDeniedHttpException($error_message, NULL, ResourceResponse::HTTP_TOO_MANY_REQUESTS);
@@ -246,14 +254,6 @@ class ShareCart extends ResourceBase {
 
     // @todo validate the mobile number of mail.
     $to = $data['value'];
-
-    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
-    /** @var \Drupal\user\Entity\User $user */
-    $user = user_load_by_mail($smart_agent_details_array['email']);
-    if (!$user || $user->isBlocked() || !$user->hasRole('smartagent')) {
-      $error_message = 'Agent account is blocked or does not exist.';
-      return $this->prepareResourceResponse($error_message);
-    }
 
     // Validating the SmartAgent info with the user object info.
     $storeCode = '';
@@ -412,26 +412,32 @@ class ShareCart extends ResourceBase {
   /**
    * Check if the request is a flood request or not.
    *
+   * @param string $user_id
+   *   The user id.
+   *
    * @return bool
    *   TRUE if flood request else FALSE.
    */
-  protected function isFloodRequest() {
+  protected function isFloodRequest(string $user_id) {
     $api_request_limit = $this->configFactory->get('alshaya_checkout_by_agent.settings')->get('api_request_limit');
-    if (!$this->flood->isAllowed('alshaya_checkout_by_agent.requested_api', $api_request_limit, 60)) {
+    if (!$this->flood->isAllowed('alshaya_checkout_by_agent.requested_api', $api_request_limit, 60, $this->getIdentifier($user_id))) {
       return TRUE;
     }
     // Register the Request.
-    $this->registerFlood();
+    $this->registerFlood($user_id);
 
     return FALSE;
   }
 
   /**
    * Register request for flood control.
+   *
+   * @param string $user_id
+   *   The user id.
    */
-  protected function registerFlood() {
+  protected function registerFlood(string $user_id) {
     // Register the API call request.
-    $this->flood->register('alshaya_checkout_by_agent.requested_api', 60);
+    $this->flood->register('alshaya_checkout_by_agent.requested_api', 60, $this->getIdentifier($user_id));
   }
 
   /**
@@ -451,6 +457,19 @@ class ShareCart extends ResourceBase {
     // Log the error message.
     $this->logger->error($error_message);
     return new ResourceResponse($responseData);
+  }
+
+  /**
+   * Provides identifier for smart agent user.
+   *
+   * @param string $user_id
+   *   The user id.
+   *
+   * @return string
+   *   A unique identifier for the smart agent.
+   */
+  protected function getIdentifier(string $user_id) {
+    return 'smart_agent_' . $user_id;
   }
 
 }
