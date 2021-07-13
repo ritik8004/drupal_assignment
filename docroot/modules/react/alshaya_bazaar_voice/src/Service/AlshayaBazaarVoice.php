@@ -172,7 +172,7 @@ class AlshayaBazaarVoice {
         $rating_distribution = $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution']);
         if ($value['ReviewStatistics']['TotalReviewCount'] > 0) {
           $response['ReviewStatistics'][$value['Id']] = [
-            'AverageOverallRating' => $value['ReviewStatistics']['AverageOverallRating'],
+            'AverageOverallRating' => $this->truncate($value['ReviewStatistics']['AverageOverallRating'], 1),
             'TotalReviewCount' => $value['ReviewStatistics']['TotalReviewCount'],
             'RatingDistribution' => $rating_distribution['rating_distribution'],
             'RatingStars' => ['rating_' . round($value['ReviewStatistics']['AverageOverallRating'])],
@@ -184,6 +184,24 @@ class AlshayaBazaarVoice {
     }
 
     return NULL;
+  }
+
+  /**
+   * Truncate a float number.
+   *
+   * @param float $val
+   *   Float number to be truncate.
+   * @param int $f
+   *   Number of precision.
+   *
+   * @return float
+   *   Return a float value.
+   */
+  public function truncate($val, $f = 0) {
+    if (($p = strpos($val, '.')) !== FALSE) {
+      $val = floatval(substr($val, 0, $p + 1 + $f));
+    }
+    return $val;
   }
 
   /**

@@ -27,7 +27,6 @@ class SitelinkSearchConfigForm extends ConfigFormBase {
    */
   public function __construct(ModuleHandlerInterface $module_handler) {
     $this->moduleHandler = $module_handler;
-    ;
   }
 
   /**

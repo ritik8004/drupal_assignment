@@ -93,3 +93,23 @@
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "Cairo-Regular";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-Regular.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo-SemiBold";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-SemiBold.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-SemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
