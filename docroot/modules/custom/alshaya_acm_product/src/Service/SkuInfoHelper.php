@@ -275,7 +275,7 @@ class SkuInfoHelper {
       unset($row['description']);
       $attributes[] = $row;
       $this->moduleHandler->alter('sku_product_attribute', $attributes, $sku, $field_name);
-    };
+    }
 
     return $attributes;
   }
