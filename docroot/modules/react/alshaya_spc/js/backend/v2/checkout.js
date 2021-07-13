@@ -70,7 +70,7 @@ const getProductStatus = async (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { _cf_cache_bypass: '1' });
   if (!_.isUndefined(response.data)) {
     staticProductStatus[sku] = response.data;
   }
@@ -298,11 +298,14 @@ const formatAddressForShippingBilling = (address) => {
  *   Address validation response or false in case of errors.
  */
 const validateAddressAreaCity = async (address) => {
-  const response = callDrupalApi('/spc/validate-info', 'POST', address);
-  if (_.isEmpty(response.data) || (!_.isUndefined(response.data.error) && response.data.error)) {
-    return false;
+  const response = await callDrupalApi('/spc/validate-info', 'POST', { address });
+  if (!_.isUndefined(response)
+    && !_.isUndefined(response.data)
+    && !_.isUndefined(response.data.address)
+  ) {
+    return response.data.address;
   }
-  return response.data;
+  return false;
 };
 
 /**
@@ -310,18 +313,6 @@ const validateAddressAreaCity = async (address) => {
  * @todo implement this.
  */
 const getLastOrder = () => [];
-
-/**
- * Apply shipping from last order.
- * @todo implement this.
- *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, updated cart data otherwise.
- */
-const applyDefaultShipping = async () => false;
 
 /**
  * Get payment method from last order.
@@ -720,6 +711,125 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
 };
 
 /**
+ * Select Click and Collect store and method from possible defaults.
+ *
+ * @param {object} store
+ *   Store info.
+ * @param {object} address
+ *   Shipping address from last order.
+ * @param {object} billing
+ *   Billing address.
+ *
+ * @return {promise}
+ *   Updated cart.
+ */
+const selectCnc = async (store, address, billing) => {
+  const data = {
+    extension: {
+      action: cartActions.cartShippingUpdate,
+    },
+    shipping: {
+      shipping_address: address,
+      shipping_carrier_code: 'click_and_collect',
+      shipping_method_code: 'click_and_collect',
+      custom_attributes: [],
+      extension_attributes: {
+        click_and_collect_type: (!_.isEmpty(store.rnc_available)) ? 'reserve_and_collect' : 'ship_to_store',
+        store_code: store.code,
+      },
+    },
+  };
+
+  if (_.isUndefined(data.shipping.shipping_address.custom_attributes)
+    && !_.isUndefined(data.shipping.shipping_address.extension_attributes)
+    && !_.isEmpty(data.shipping.shipping_address.extension_attributes)
+  ) {
+    const extensionAttributes = data.shipping.shipping_address.extension_attributes;
+    data.shipping.shipping_address.custom_attributes = [];
+    Object.keys(extensionAttributes).forEach((key) => {
+      data.shipping.shipping_address.custom_attributes.push(
+        {
+          attributeCode: key,
+          value: extensionAttributes[key],
+        },
+      );
+    });
+  }
+
+  // Validate address.
+  const valid = await validateAddressAreaCity(billing);
+  if (!valid) {
+    return false;
+  }
+
+  logger.notice('Shipping update default for CNC. Data: @data Address: @address Store: @store Cart: @cartId', {
+    '@data': JSON.stringify(data),
+    '@address': JSON.stringify(address),
+    '@store': JSON.stringify(store),
+    '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+  });
+
+  // If shipping address not contains proper data (extension info).
+  if (_.isEmpty(data.shipping.shipping_address.extension_attributes)) {
+    return false;
+  }
+
+  let cart = await updateCart(data);
+  if (!_.isUndefined(cart.data.error) && cart.data.error) {
+    return false;
+  }
+
+  // Not use/assign default billing address if customer_address_id
+  // is not available.
+  if (_.isUndefined(billing.customer_address_id)) {
+    return cart;
+  }
+
+  // Add log for billing data we pass to magento update cart.
+  logger.notice('Billing update default for CNC. Address: @address Cart: @cartId', {
+    '@address': JSON.stringify(billing),
+    '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+  });
+
+  // If billing address not contains proper data (extension info).
+  if (_.isUndefined(billing.extension_attributes) || _.isEmpty(billing.extension_attributes)) {
+    return false;
+  }
+
+  // Return if address id from last order doesn't
+  // exist in customer's address id list.
+  const item = { customer_address_id: billing.customer_address_id };
+  if (_.findIndex(cart.data.customer.addresses, item) !== -1) {
+    return cart;
+  }
+
+  cart = await updateBilling(billing);
+  // If billing update has error.
+  if (!_.isUndefined(cart.data.error) && cart.data.error) {
+    return false;
+  }
+
+  return cart;
+};
+
+/**
+ * Apply shipping from last order.
+ * @todo implement this.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|boolean>}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = async (order) => {
+  const address = order.shipping.commerce_address;
+  // @todo finish the implementation of applyDefaultShipping() on CORE-30722
+  selectCnc({ code: 'RA1-Q314-HEN-001' }, address, order.billing_commerce_address);
+  return false;
+};
+
+/**
  * Select HD address and method from possible defaults.
  *
  * @param {object} address
@@ -753,9 +863,8 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Validate address.
-  const validAddress = await validateAddressAreaCity(shippingData.address);
-  if (_.isEmpty(validAddress)
-    || _.isUndefined(validAddress.address) || validAddress.address !== true) {
+  const valid = await validateAddressAreaCity(shippingData.address);
+  if (!valid) {
     return false;
   }
 

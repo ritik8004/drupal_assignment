@@ -416,6 +416,63 @@ describe('Checkout', () => {
       });
     });
 
+    describe('Test selectCnc()', () => {
+      const selectCnc = utilsRewire.__get__('selectCnc');
+      let address = null;
+
+      axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+      beforeEach(async () => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        const response = await getCart();
+        address = response.data.shipping.address;
+      });
+
+      it('With invalid address area', async () => {
+        // Mock for validateAddressAreaCity().
+        axios.mockResolvedValueOnce({ data: false, status: 200 });
+        const result = await selectCnc({ code: 1234 }, address, address);
+        expect(axios.mock.calls.length).toBe(1);
+        expect(result).toEqual(false);
+      });
+
+      it('With no extension_attributes', async () => {
+        // Mock for validateAddressAreaCity().
+        axios.mockResolvedValueOnce({ data: { address: true }, status: 200 });
+        delete address.custom_attributes;
+        delete address.extension_attributes;
+        const result = await selectCnc({ code: 1234 }, address, address);
+        expect(axios.mock.calls.length).toBe(1);
+        expect(result).toEqual(false);
+      });
+
+      it('With address data', async () => {
+        // Mock for validateAddressAreaCity().
+        axios.mockResolvedValueOnce({ data: { address: true }, status: 200 });
+        // Mock for updateCart().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        // Mock for updateCart().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        delete address.custom_attributes;
+        address.extension_attributes = {
+          foo: 'bar',
+        };
+        address.customer_address_id = '1';
+
+        const result = await selectCnc({ code: 1234 }, address, address);
+        expect(axios.mock.calls.length).toBe(3);
+        const data = result.data.cart;
+        expect(data.billing_address.city).toEqual('Al Awir');
+        expect(data.billing_address.customer_address_id).toEqual('69');
+        expect(data.billing_address.custom_attributes[0].attribute_code).toEqual('address_city_segment');
+        // @todo check calling params for axios
+      });
+    });
+
     describe('Tests getCncStatusForCart()', () => {
       const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
 
