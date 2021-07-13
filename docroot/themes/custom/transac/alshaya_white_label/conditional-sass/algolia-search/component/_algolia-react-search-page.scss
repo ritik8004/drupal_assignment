@@ -141,6 +141,15 @@
 
       .rating-label {
         margin-#{$right}: 0.5rem;
+        width: 10%;
+
+        @include breakpoint($only-mobile) {
+          width: 14%;
+        }
+      }
+
+      .facet-item__count {
+        padding-#{$left}: 0.125rem;
       }
 
       .star-ratings-wrapper {
@@ -226,6 +235,16 @@
         &.active {
           &::after {
             transform: translateY(-50%) rotate(180deg);
+          }
+        }
+      }
+
+      ul {
+        .facet-item {
+          .listing-inline-star {
+            .rating-label {
+              width: 17%;
+            }
           }
         }
       }

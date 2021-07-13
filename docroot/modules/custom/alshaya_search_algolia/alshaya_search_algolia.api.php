@@ -21,5 +21,19 @@ function hook_alshaya_product_list_exclude_attribute_alter(array &$excludedAttri
 }
 
 /**
+ * Add/Alter ranking & sorting for any indexable attribute.
+ *
+ * @param array $replica_settings
+ *   Array of replica settings.
+ * @param array $sort
+ *   Array of fields to be sorted.
+ * @param array $ranking
+ *   Array of fields with ranking.
+ */
+function hook_alshaya_search_algolia_ranking_sorting_alter(array &$replica_settings, array $sort, array &$ranking) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

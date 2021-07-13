@@ -38,6 +38,9 @@ function StarRatingFilter(props) {
     }
   });
 
+  // Sort filter values by top ratings.
+  ratingItems.sort((a, b) => (b.star - a.star));
+
   // Store dataset in local storage to be used for pretty path.
   let facetName = attribute.replace('attr_', '');
   if (facetName.includes(`.${currentLanguage}`)) {
