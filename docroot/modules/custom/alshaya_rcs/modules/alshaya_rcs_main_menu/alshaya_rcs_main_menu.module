@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_rcs_main_menu.
+ */
+
+use Drupal\Core\Cache\Cache;
+
+ /**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_rcs_main_menu_page_attachments_alter(array &$page) {
+  // Get the alshaya rcs main menu config object.
+  $rcsMainMenuSettings = \Drupal::config('alshaya_rcs_main_menu.settings');
+
+  // Pass configs to drupal settings to avail in JS.
+  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['root_category'] = $rcsMainMenuSettings->get('root_category');
+  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['menu_max_depth'] = $rcsMainMenuSettings->get('menu_max_depth');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $rcsMainMenuSettings->getCacheTags());
+}
