@@ -97,7 +97,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
     $acm_dashboard_settings = $this->config('alshaya_acm_dashboard.settings');
     $mdc_queues = $acm_dashboard_settings->get('queues');
     $mdc_queue_stats = [];
-    $requestTime = $this->currentTime->getRequestTime();
+    $request_time = $this->currentTime->getRequestTime();
     foreach ($mdc_queues as $queue_machine_name => $label) {
       $mdc_queue_result = $this->mdcQueueManager->getMdcQueueStats($queue_machine_name);
       if (!$mdc_queue_result) {
@@ -124,7 +124,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
       $build['mdc_stats']['#rows'][] = [
         $queue_stat['label'],
         $queue_stat['stats']->messages,
-        $this->dateFormatter->format($requestTime + (($queue_stat['stats']->messages * $queue_processing_rate) / 1000), 'custom', 'D M j G:i:s T Y'),
+        $this->dateFormatter->format($request_time + (($queue_stat['stats']->messages * $queue_processing_rate) / 1000), 'custom', 'D M j G:i:s T Y'),
       ];
     }
 
@@ -140,7 +140,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
       '#rows' => [
         [
           $acm_queue_stats,
-          $this->dateFormatter->format($requestTime + (($acm_queue_stats * $acm_dashboard_settings->get('processing_rate_acm_queue')) / 1000), 'custom', 'D M j G:i:s T Y'),
+          $this->dateFormatter->format($request_time + (($acm_queue_stats * $acm_dashboard_settings->get('processing_rate_acm_queue')) / 1000), 'custom', 'D M j G:i:s T Y'),
         ],
       ],
     ];
