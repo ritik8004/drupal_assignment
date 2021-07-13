@@ -1,4 +1,8 @@
 header {
+  @include breakpoint($desktop) {
+    border-bottom: 0.0625rem solid $mm_l1_border;
+  }
+
   &.c-header {
     .block-views-exposed-filter-blocksearch-page {
       .form-text {
