@@ -88,7 +88,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $payment_methods = array_intersect($payment_methods, array_keys($plugins));
     }
     catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger()->addMessage($e->getMessage(), 'error');
       $form_state->setErrorByName('custom', $e->getMessage());
       return $pane_form;
     }

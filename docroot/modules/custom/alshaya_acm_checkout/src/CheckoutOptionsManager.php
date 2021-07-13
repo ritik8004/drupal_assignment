@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Class Checkout Options Manager.
@@ -55,6 +56,13 @@ class CheckoutOptionsManager {
   protected $languageManager;
 
   /**
+   * Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * CheckoutOptionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -69,19 +77,23 @@ class CheckoutOptionsManager {
    *   LoggerFactory object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Messenger service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
                               ApiHelper $api_helper,
                               CartStorageInterface $cart_storage,
                               LoggerChannelFactoryInterface $logger_factory,
-                              LanguageManagerInterface $languageManager) {
+                              LanguageManagerInterface $languageManager,
+                              MessengerInterface $messenger) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
     $this->apiHelper = $api_helper;
     $this->cartStorage = $cart_storage;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
     $this->languageManager = $languageManager;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -470,7 +482,7 @@ class CheckoutOptionsManager {
     }
     catch (\Exception $e) {
       if (acq_commerce_is_exception_api_down_exception($e)) {
-        drupal_set_message($e->getMessage(), 'error');
+        $this->messenger->addMessage($e->getMessage(), 'error');
       }
     }
 
