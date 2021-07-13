@@ -26,7 +26,6 @@ import {
   getIp,
 } from './utility';
 import cartActions from '../../utilities/cart_actions';
-import lastOrder from '../../../src/test/cart/data/lastOrder';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -313,7 +312,7 @@ const validateAddressAreaCity = async (address) => {
  * Get last order of the customer.
  * @todo implement this.
  */
-const getLastOrder = () => lastOrder;
+const getLastOrder = () => [];
 
 /**
  * Get payment method from last order.
