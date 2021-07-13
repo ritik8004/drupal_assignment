@@ -180,7 +180,7 @@ export default class WriteReviewButton extends React.Component {
                 <div className="title-block">
                   <a className="close-modal" onClick={(e) => this.closeModal(e)} />
                 </div>
-                <div className="already-reviewed-text">WRONG USER DETAILS</div>
+                <div className="already-reviewed-text">{getStringMessage('invalid_pie_user_details')}</div>
               </div>
             </>
           </Popup>
