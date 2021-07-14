@@ -215,9 +215,11 @@
 
   <file>blt/src</file>
   <file>docroot/modules/custom</file>
+  <file>docroot/modules/brands</file>
   <file>docroot/modules/react</file>
   <file>docroot/modules/products</file>
   <file>docroot/themes/custom</file>
+  <file>docroot/profiles/custom</file>
   <file>tests</file>
 
   <exclude-pattern>*/behat</exclude-pattern>
