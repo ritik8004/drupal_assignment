@@ -41,6 +41,8 @@ use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Plugin\rest\resource\StockResource;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Class Sku Manager.
@@ -258,6 +260,20 @@ class SkuManager {
   protected $requestContextManager;
 
   /**
+   * File system object.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
+   * Current time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $currentTime;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -306,6 +322,10 @@ class SkuManager {
    *   Product Processed Manager.
    * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
    *   Alshaya Request Context Manager.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The filesystem service.
+   * @param \Drupal\Component\Datetime\TimeInterface $current_time
+   *   Current time service.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -329,7 +349,9 @@ class SkuManager {
                               ProductCacheManager $product_cache_manager,
                               AlshayaArrayUtils $alshayaArrayUtils,
                               ProductProcessedManager $product_processed_manager,
-                              AlshayaRequestContextManager $alshayaRequestContextManager) {
+                              AlshayaRequestContextManager $alshayaRequestContextManager,
+                              FileSystemInterface $fileSystem,
+                              TimeInterface $current_time) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -356,6 +378,8 @@ class SkuManager {
     $this->alshayaArrayUtils = $alshayaArrayUtils;
     $this->productProcessedManager = $product_processed_manager;
     $this->requestContextManager = $alshayaRequestContextManager;
+    $this->fileSystem = $fileSystem;
+    $this->currentTime = $current_time;
   }
 
   /**
@@ -1166,7 +1190,7 @@ class SkuManager {
 
         // First check if we have date filter.
         if ($from > 0 && $to > 0) {
-          $now = REQUEST_TIME;
+          $now = $this->currentTime->getRequestTime();
 
           // Now, check if current date lies between from and to dates.
           if ($from > $now || $to < $now) {
@@ -1260,7 +1284,7 @@ class SkuManager {
 
       // First check if we have date filter.
       if ($from > 0 && $to > 0) {
-        $now = REQUEST_TIME;
+        $now = $this->currentTime->getRequestTime();
 
         // Now, check if current date lies between from and to dates.
         if ($from > $now || $to < $now) {
@@ -1393,13 +1417,13 @@ class SkuManager {
     $directory = 'public://labels/' . str_replace('/' . $file_name, '', $path);
 
     // Prepare the directory.
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
 
     // Save the file as file entity.
     // @todo Check for a way to remove old files and file objects.
     // To be done here and in SKU.php both.
     /** @var \Drupal\file\Entity\File $file */
-    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FileSystemInterface::EXISTS_REPLACE)) {
       return $file->id();
     }
     else {
