@@ -14,6 +14,8 @@ variables:
   filters: 'all filters'
   spc_search_byname: 'Tie-collar shirt'
   spc_search_byID: 'HMSASSA'
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   promotional_filter: ''
   language_collection_filter: 'المجموعة'
   language_sort_filter: 'رتب حسب'
