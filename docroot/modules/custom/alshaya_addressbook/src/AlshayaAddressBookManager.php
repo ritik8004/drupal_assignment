@@ -17,6 +17,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Class Alshaya Address Book Manager.
@@ -114,6 +115,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   protected $cartHelper;
 
   /**
+   * Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * AlshayaAddressBookManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -138,6 +146,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   AddressBook Areas Terms helper service.
    * @param \Drupal\alshaya_acm\CartHelper $cart_helper
    *   Cart Helper service object.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Messenger service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
@@ -149,7 +159,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
                               CacheBackendInterface $cache,
                               ModuleHandlerInterface $module_handler,
                               AddressBookAreasTermsHelper $areas_terms_helper,
-                              CartHelper $cart_helper) {
+                              CartHelper $cart_helper,
+                              MessengerInterface $messenger) {
     $this->entityRepository = $entity_repository;
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
@@ -163,6 +174,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $this->moduleHandler = $module_handler;
     $this->areasTermsHelper = $areas_terms_helper;
     $this->cartHelper = $cart_helper;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -266,7 +278,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $customer = $this->alshayaApiWrapper->getCustomer($account->getEmail());
     }
     catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger->addMessage($e->getMessage(), 'error');
       return FALSE;
     }
 
@@ -339,7 +351,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
     catch (\Exception $e) {
       $this->logger->warning('Error while saving address: @message', ['@message' => $e->getMessage()]);
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger->addMessage($e->getMessage(), 'error');
     }
 
     return FALSE;
@@ -387,7 +399,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
     catch (\Exception $e) {
       $this->logger->warning('Error while deleting address: @message', ['@message' => $e->getMessage()]);
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger->addMessage($e->getMessage(), 'error');
     }
 
     return FALSE;
