@@ -618,6 +618,7 @@ class AlshayaAlgoliaIndexHelper {
    * Create term hierarchy to index for Algolia.
    *
    * Prepares the array structure as shown below.
+   * @codingStandardsIgnoreStart
    * @code
    * [
    *   [
@@ -654,6 +655,7 @@ class AlshayaAlgoliaIndexHelper {
    *   ]
    * }
    * @endcode
+   * @codingStandardsIgnoreEnd
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node object for which we need to prepare hierarchy.
