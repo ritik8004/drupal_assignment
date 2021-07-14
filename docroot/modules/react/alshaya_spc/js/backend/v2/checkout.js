@@ -1148,7 +1148,6 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 
 /**
  * Prepare message to log when API fail after payment successful.
- * @todo implement this
  *
  * @param {array} cart
  *   Cart Data.
@@ -1165,7 +1164,48 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
  *   Prepared error message.
  */
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
-  logger.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
+  let orderId = '';
+
+  if (!_.isEmpty(cart.cart)
+    && !_.isEmpty(cart.cart.extension_attributes)
+    && !_.isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
+    orderId = cart.cart.extension_attributes.real_reserved_order_id;
+  }
+
+  const message = [];
+  message.push(`exception:${exceptionMessage}`);
+  message.push(`api:${api}`);
+  message.push(`double_check_done:${doubleCheckDone}`);
+  message.push(`order_id:${orderId}`);
+
+  if (!_.isEmpty(cart.cart)) {
+    message.push(`cart_id:${cart.cart.id}`);
+    message.push(`amount_paid:${cart.totals.base_grand_total}`);
+  }
+
+  if (!_.isEmpty(data.paymentMethod)) {
+    const paymentMethod = !_.isEmpty(data.paymentMethod.method)
+      ? data.paymentMethod.method
+      : data.method;
+    message.push(`payment_method:.${paymentMethod}`);
+  }
+
+  let additionalInfo = '';
+  if (!_.isEmpty(data.paymentMethod) && !_.isEmpty(data.paymentMethod.additional_data)) {
+    additionalInfo = JSON.stringify(data.paymentMethod.additional_data);
+  } else if (!_.isEmpty(data.additional_data)) {
+    additionalInfo = JSON.stringify(data.additional_data);
+  }
+  message.push(`additional_information:${additionalInfo}`);
+
+  if (!_.isEmpty(cart.shipping)) {
+    message.push(`shipping_method:${cart.shipping.method}`);
+    _.each(cart.shipping.custom_attributes, (value) => {
+      message.push(`${value.attribute_code}:${value.value}`);
+    });
+  }
+
+  return !_.isEmpty(message) ? message.join('||') : '';
 };
 
 /**
@@ -1252,9 +1292,11 @@ const paymentUpdate = async (data) => {
   const oldCart = await getCart();
   const cart = await updateCart(params);
   if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
+    // Handle Error on cart update.
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
     const message = prepareOrderFailedMessage(oldCart, data, errorMessage, 'update cart', 'NA');
     logger.error(`Error occurred while placing order. ${message}`);
+    return cart;
   }
 
   cart.data = await getProcessedCheckoutData(cart.data);
@@ -1874,9 +1916,14 @@ window.commerceBackend.placeOrder = async (data) => {
         '@message': !_isEmpty(response.error) ? response.error.message : response,
         '@code': !_isEmpty(response.error) ? response.error.error_code : '',
       });
-
+      
       // @todo all the error handling.
       // @todo cancel reservation.
+
+      const message = prepareOrderFailedMessage(cart.data, data.data, response, 'place order', 'no');
+      logger.error('Error while placing order. Error message: @message', {
+        '@message': message,
+      });
 
       return response;
     });
