@@ -55,7 +55,7 @@ export const isOpenWriteReviewForm = (productId) => {
   }
   const path = decodeURIComponent(window.location.search);
   const params = new URLSearchParams(path);
-  if (params.get('messageType') === 'PIE' && params.get('userToken') !== null) {
+  if ((params.get('messageType') === 'PIE' || params.get('messageType') === 'PIE_FOLLOWUP') && params.get('userToken') !== null) {
     return true;
   }
   return false;
@@ -94,7 +94,7 @@ export const createUserStorage = (userId, email, productId) => {
         email: params.get('userToken') !== null ? getEmailFromTokenParams(params) : '',
       };
       setStorageInfo(currentUserObj, `bvuser_${userId}`);
-    } else if (params.get('messageType') === 'PIE' && params.get('userToken') !== null) {
+    } else if ((params.get('messageType') === 'PIE' || params.get('messageType') === 'PIE_FOLLOWUP') && params.get('userToken') !== null) {
       currentUserObj = {
         id: userId,
         uasToken: params.get('userToken'),
