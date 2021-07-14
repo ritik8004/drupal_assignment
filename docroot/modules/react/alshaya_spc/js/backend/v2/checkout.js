@@ -24,6 +24,7 @@ import {
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
+  getProductStatus,
 } from './common';
 import {
   cartErrorCodes,
@@ -54,6 +55,7 @@ const invisibleCharacter = '&#8203;';
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
+<<<<<<< HEAD
  * Static cache for getProductStatus().
  *
  * @type {null}
@@ -89,6 +91,8 @@ const getProductStatus = async (sku) => {
 };
 
 /**
+=======
+>>>>>>> CORE-30158: Added stock info to processed cart data.
  * Get CnC status for cart based on skus in cart.
  *
  * @param {object} data
@@ -1728,8 +1732,8 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
 window.commerceBackend.placeOrder = async (data) => {
   const cart = await getCart(true);
 
-  if (_isObject(cart) && isCartHasOosItem(cart.data)) {
-    logger.error('Error while finalizing payment. Cart has an OOS item. Cart: @cart', {
+  if (_.isObject(cart) && isCartHasOosItem(cart.data)) {
+    logger.error('Error while placing order. Cart has an OOS item. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
 

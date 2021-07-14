@@ -390,6 +390,41 @@ const formatCart = (cartData) => {
 };
 
 /**
+ * Static cache for getProductStatus().
+ *
+ * @type {null}
+ */
+const staticProductStatus = [];
+
+/**
+ * Get data related to product status.
+ *
+ * @param {Promise<string|null>} sku
+ *  The sku for which the status is required.
+ */
+const getProductStatus = async (sku) => {
+  if (typeof sku === 'undefined' || !sku) {
+    return null;
+  }
+
+  // Return from static, if available.
+  if (!_.isUndefined(staticProductStatus[sku])) {
+    return staticProductStatus[sku];
+  }
+
+  // Bypass CloudFlare to get fresh stock data.
+  // Rules are added in CF to disable caching for urls having the following
+  // query string.
+  // The query string is added since same APIs are used by MAPP also.
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  if (!_.isUndefined(response.data)) {
+    staticProductStatus[sku] = response.data;
+  }
+
+  return staticProductStatus[sku];
+};
+
+/**
  * Transforms cart data to match the data structure from middleware.
  *
  * @param {object} cartData
@@ -470,9 +505,12 @@ const getProcessedCartData = (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
-        in_stock: true, // @todo get stock information
-        stock: 99999, // @todo get stock information
       };
+
+      // Get stock data.
+      const stockInfo = getProductStatus(item.sku);
+      data.items[item.sku].in_stock = stockInfo.in_stock;
+      data.items[item.sku].stock = stockInfo.in_stock;
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
@@ -505,7 +543,10 @@ const getProcessedCartData = (cartData) => {
         }
       });
 
-      // @todo Get stock data.
+      // If any item is OOS.
+      if (_.isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
+        data.in_stock = false;
+      }
     });
   } else {
     data.items = [];
@@ -804,4 +845,5 @@ export {
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
+  getProductStatus,
 };
