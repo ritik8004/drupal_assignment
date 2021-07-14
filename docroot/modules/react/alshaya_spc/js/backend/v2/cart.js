@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
+import isString from 'lodash/isString';
+import isNumber from 'lodash/isNumber';
 import {
   callDrupalApi,
   callMagentoApi,
@@ -138,10 +141,10 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   let cartId = window.commerceBackend.getCartId();
   // If we try to add/remove item while we don't have anything or corrupt
   // session, we create the cart object.
-  if (_.isNull(cartId)) {
+  if (isNull(cartId)) {
     cartId = await window.commerceBackend.createCart();
     // If we still don't have a cart, we cannot continue.
-    if (_.isNull(cartId)) {
+    if (isNull(cartId)) {
       throw new Error('Error creating cart when adding/removing item.');
     }
   }
@@ -241,7 +244,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
         // Create a new cart.
         cartId = await window.commerceBackend.createCart();
-        if (_.isNull(cartId)) {
+        if (isNull(cartId)) {
           return cartId;
         }
         const cartData = await window.commerceBackend.getCart(true);
@@ -333,8 +336,8 @@ window.commerceBackend.createCart = async () => {
 
   // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
-  if (response.status === 200 && !_.isUndefined(response.data)
-    && (_.isString(response.data) || _.isNumber(response.data))
+  if (response.status === 200 && !isUndefined(response.data)
+    && (isString(response.data) || isNumber(response.data))
   ) {
     const Id = window.drupalSettings.userDetails.customerId;
     logger.notice(`New cart created: ${response.data}, customer_id: ${Id}`);
@@ -343,7 +346,7 @@ window.commerceBackend.createCart = async () => {
     return response.data;
   }
 
-  const errorMessage = (!_.isUndefined(response.data.error_message))
+  const errorMessage = (!isUndefined(response.data.error_message))
     ? response.data.error_message
     : '';
   logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
