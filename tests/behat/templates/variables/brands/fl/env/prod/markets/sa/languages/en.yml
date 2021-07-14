@@ -17,6 +17,8 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: 'الجنس'
   language_add_to_cart_link: 'add-to-cart-main'
+  np_plp_store: 'Jeddah Saudi Arabia'
+  np_plp_language_store: 'دبي - الإمارات العربية المتحدة'
   add_to_cart_link: 'add-to-cart-main'
   empty_bag: 'Your shopping bag is empty'
   language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'

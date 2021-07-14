@@ -19,7 +19,7 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
-import { trackPassiveAnalytics } from '../../../utilities/analytics';
+import { trackPassiveAnalytics, trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 const userDetails = getUserDetails();
@@ -280,6 +280,14 @@ export default class ReviewSummary extends React.Component {
         this.changePaginationButtonStatus(currentPage, numberOfPages);
       });
     });
+    // Process paginate click data as user clicks on next link.
+    const analyticsData = {
+      type: 'Used',
+      name: 'paginate',
+      detail1: 'next',
+      detail2: '',
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   /**
@@ -296,6 +304,14 @@ export default class ReviewSummary extends React.Component {
         this.changePaginationButtonStatus(currentPage, numberOfPages);
       });
     });
+    // Process paginate click data as user clicks on previous link.
+    const analyticsData = {
+      type: 'Used',
+      name: 'paginate',
+      detail1: 'previous',
+      detail2: '',
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   /**
@@ -321,6 +337,14 @@ export default class ReviewSummary extends React.Component {
     this.setState((prev) => ({ loadMoreLimit: prev.loadMoreLimit + initialLimit }), () => {
       this.processSortAndFilters();
     });
+    // Process load more click data as user clicks on load more link.
+    const analyticsData = {
+      type: 'Used',
+      name: 'loadmore',
+      detail1: 'reviews',
+      detail2: '',
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   render() {
@@ -437,6 +461,8 @@ export default class ReviewSummary extends React.Component {
                       reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
                         .AuthorId].ReviewStatistics}
                       isNewPdpLayout={isNewPdpLayout}
+                      showLocationFilter={bazaarVoiceSettings.reviews
+                        .bazaar_voice.show_location_filter}
                     />
                     <ReviewDescription
                       reviewDescriptionData={reviewsSummary[item]}

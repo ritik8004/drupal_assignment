@@ -35,3 +35,7 @@ services:
     tags:
       - { name: path_processor_inbound, priority: 500 }
       - { name: path_processor_outbound, priority: 500 }
+  alshaya_seo_transac.route_subscriber:
+    class: Drupal\alshaya_seo_transac\Routing\AlshayaSeoRouteSubscriber
+    tags:
+      - { name: event_subscriber }

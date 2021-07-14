@@ -117,7 +117,6 @@
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
-        "mglaman/drupal-check": "^1.1",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
         "symfony/lock": "4.3.*"
@@ -127,7 +126,8 @@
         "drupal/core-dev": "^8.8.11",
         "drupal/devel": "^2.0.0",
         "geerlingguy/drupal-vm": "^5.2.0",
-        "jakoch/phantomjs-installer": "^2.1.1-p07"
+        "jakoch/phantomjs-installer": "^2.1.1-p07",
+        "mglaman/drupal-check": "^1.1"
     },
     "repositories": {
         "drupal": {
@@ -221,7 +221,8 @@
                 "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
             },
             "drupal/search_api": {
-                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
+                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
+                "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
             },
             "drupal/facets": {
                 "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",

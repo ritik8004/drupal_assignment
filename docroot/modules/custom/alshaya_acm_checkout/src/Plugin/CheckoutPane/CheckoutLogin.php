@@ -123,7 +123,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     // If not valid email address.
     if (!\Drupal::service('email.validator')->isValid($mail)) {
-      drupal_set_message($this->t('Username does not contain a valid email.'), 'error');
+      $this->messenger()->addMessage($this->t('Username does not contain a valid email.'), 'error');
       $form_state->setErrorByName('custom', $this->t('Username does not contain a valid email.'));
       return;
     }
@@ -142,12 +142,12 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
           user_login_finalize($account);
         }
         else {
-          drupal_set_message($this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']), 'error');
+          $this->messenger()->addMessage($this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']), 'error');
           $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']));
         }
       }
       else {
-        drupal_set_message($this->t('Unrecognized email address or password.'), 'error');
+        $this->messenger()->addMessage($this->t('Unrecognized email address or password.'), 'error');
         $form_state->setErrorByName('custom', $this->t('Unrecognized email address or password.'));
       }
     }

@@ -131,9 +131,14 @@ class OrdersManager {
 
   /**
    * Reset stock cache and Drupal cache of products in last order.
+   *
+   * @param array|null $order
+   *   Order if already available in calling function.
    */
-  public function clearLastOrderRelatedProductsCache() {
-    $order = _alshaya_acm_checkout_get_last_order_from_session();
+  public function clearLastOrderRelatedProductsCache(array $order = NULL) {
+    if (empty($order)) {
+      $order = _alshaya_acm_checkout_get_last_order_from_session();
+    }
 
     foreach ($order['items'] as $item) {
       if ($sku_entity = SKU::loadFromSku($item['sku'])) {

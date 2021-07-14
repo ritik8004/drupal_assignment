@@ -13,7 +13,7 @@
       var winWidth = $(window).width();
 
       $('.menu--one__list-item').once().on('mouseover', function () {
-        if(winWidth >= 1024){
+        if(winWidth > 1024){
           MegaMenuDynamicLayout($(this));
         }
       });

@@ -84,6 +84,14 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('sms_template') ?? '',
     ];
 
+    $form['api_request_limit'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Request per minute'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('api_request_limit'),
+      '#description' => $this->t('Set the limit on number of request per min for the SmartAgent API.'),
+    ];
+
     return $form;
   }
 
@@ -102,6 +110,7 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
     $config->set('whatsapp_mode', $form_state->getValue('whatsapp_mode'));
     $config->set('email_template', $form_state->getValue('email_template')['value']);
     $config->set('sms_template', $form_state->getValue('sms_template')['value']);
+    $config->set('api_request_limit', $form_state->getValue('api_request_limit'));
     $config->save();
     parent::submitForm($form, $form_state);
   }

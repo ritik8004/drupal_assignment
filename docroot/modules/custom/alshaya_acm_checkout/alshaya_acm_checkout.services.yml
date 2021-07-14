@@ -12,6 +12,7 @@ services:
       - '@acq_cart.cart_storage'
       - '@logger.factory'
       - '@language_manager'
+      - '@messenger'
   alshaya_acm_checkout.checkout_helper:
     class: Drupal\alshaya_acm_checkout\CheckoutHelper
     arguments:

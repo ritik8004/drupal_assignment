@@ -468,7 +468,7 @@ class MobileAppUtility {
     $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
     if (empty($params)) {
       return FALSE;
-    };
+    }
 
     if (!empty($params['taxonomy_term'])) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);

@@ -17,8 +17,8 @@ export default class ReviewSorting extends React.Component {
       const analyticsData = {
         type: 'Used',
         name: 'sort',
-        detail1: selectedOption.value.split(':')[0],
-        detail2: '',
+        detail1: selectedOption.label,
+        detail2: selectedOption.value,
       };
       trackFeaturedAnalytics(analyticsData);
     }
