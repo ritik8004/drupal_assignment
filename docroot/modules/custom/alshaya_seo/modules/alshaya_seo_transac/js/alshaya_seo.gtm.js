@@ -1020,7 +1020,7 @@ const productRecommendationsSuffix = 'pr-';
 
     // Trigger Product Details View
     var quickView = 'yes';
-    Drupal.alshayaSeoGtmPushProductDetailView(element, quickView);
+    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView);
   };
   /**
    * Helper function to push lead events.
@@ -1214,7 +1214,7 @@ const productRecommendationsSuffix = 'pr-';
    * @param {string} quickView
    *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, quickView = '') {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
@@ -1229,7 +1229,6 @@ const productRecommendationsSuffix = 'pr-';
       }
     };
     if (quickView) {
-      var listName = $('body').attr('gtm-list-name');
       data = {
         event: 'productDetailView',
         ecommerce: {
@@ -1260,7 +1259,10 @@ const productRecommendationsSuffix = 'pr-';
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
-    var listName = $('body').attr('gtm-list-name');
+    var listName = $('body').attr('gtm-list-name') ? $('body').attr('gtm-list-name') : drupalSettings.path.currentPath;
+    if (listName === 'search') {
+      listName = 'Search Results Page';
+    }
     var productData = {
       event: 'addToCart',
       ecommerce: {
