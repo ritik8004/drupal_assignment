@@ -24,6 +24,10 @@ function alshaya_vs_transac_update_8017() {
     'install',
     AlshayaConfigManager::MODE_MERGE
   );
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
+  // Queue all products to re-index.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
