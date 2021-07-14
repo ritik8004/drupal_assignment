@@ -13,7 +13,7 @@ variables:
   checkout_link: 'إتمام الشراء بأمان'
   language_create_account: 'تسجيل مستخدم جديد'
   language_sign_in: 'تسجيل الدخول'
-  language_find_store: 'Find a Store'
+  language_find_store: 'Find Store'
   language_add_to_cart_link: 'add to basket'
   language_subtotal: 'subtotal'
   language_order_total: 'order total'

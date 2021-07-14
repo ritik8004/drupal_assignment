@@ -39,7 +39,6 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I press "Cancel"
     And I wait for AJAX to finish
     And I wait 30 seconds
-    Then I should be on "/checkout"
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
