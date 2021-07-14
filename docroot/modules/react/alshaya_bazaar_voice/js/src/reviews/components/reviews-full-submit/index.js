@@ -33,7 +33,7 @@ export default class WriteReviewButton extends React.Component {
 
     const path = decodeURIComponent(window.location.search);
     const params = new URLSearchParams(path);
-    if (params.get('messageType') === 'PIE' && reviewedByCurrentUser) {
+    if ((params.get('messageType') === 'PIE' || params.get('messageType') === 'PIE_FOLLOWUP') && reviewedByCurrentUser) {
       this.setState({
         buttonClass: 'myaccount_review',
       });

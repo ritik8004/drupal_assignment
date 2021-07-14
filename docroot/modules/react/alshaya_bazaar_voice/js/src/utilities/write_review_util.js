@@ -97,7 +97,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
   // Add verified purchaser context value.
   const path = decodeURIComponent(window.location.search);
   const queryParams = new URLSearchParams(path);
-  if (productId !== undefined || (queryParams.get('messageType') === 'PIE'
+  if (productId !== undefined || ((queryParams.get('messageType') === 'PIE' || queryParams.get('messageType') === 'PIE_FOLLOWUP')
     && bazaarVoiceSettings.productid === queryParams.get('productId'))) {
     params += `&contextdatavalue_VerifiedPurchaser=${true}`;
   }
