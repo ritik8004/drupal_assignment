@@ -103,7 +103,6 @@ class AlshayaCustomerPortalHelper {
     return [
       'p_li_passwd' => $key,
       'p_userid' => $user->getEmail(),
-      // 'p_passwd' => 'null',
       'p_email.addr' => $user->getEmail(),
       'p_name.first' => $user->get('field_first_name')->getString(),
       'p_name.last' => $user->get('field_last_name')->getString(),

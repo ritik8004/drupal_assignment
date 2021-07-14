@@ -38,16 +38,18 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
           if (userDetails.user.userId === 0 && userStorage !== null) {
-            // Add email value to anonymous user storage.
-            if (userStorage.email === undefined
-              || (userStorage.email !== undefined
-              && userStorage.email !== elements[id].value)) {
-              userStorage.email = elements[id].value;
-            }
-            if (userStorage.bvUserId === undefined
-              || (userStorage.email !== undefined
-              && userStorage.email !== elements[id].value)) {
-              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+            if (userStorage.uasToken === null) {
+              // Add email value to anonymous user storage.
+              if (userStorage.email === undefined
+                || (userStorage.email !== undefined
+                && userStorage.email !== elements[id].value)) {
+                userStorage.email = elements[id].value;
+              }
+              if (userStorage.bvUserId === undefined
+                || (userStorage.email !== undefined
+                && userStorage.email !== elements[id].value)) {
+                params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+              }
             }
           }
         } else if (id === 'usernickname') {
@@ -80,7 +82,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (userDetails.user.userId !== 0 && userStorage.uasToken !== undefined) {
+    if (userStorage.uasToken !== null && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
     } else if (userDetails.user.userId === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;
@@ -91,6 +93,13 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
   // Add device finger printing string.
   if (elements.blackBox.value !== '') {
     params += `&fp=${encodeURIComponent(elements.blackBox.value)}`;
+  }
+  // Add verified purchaser context value.
+  const path = decodeURIComponent(window.location.search);
+  const queryParams = new URLSearchParams(path);
+  if (productId !== undefined || (queryParams.get('messageType') === 'PIE'
+    && bazaarVoiceSettings.productid === queryParams.get('productId'))) {
+    params += `&contextdatavalue_VerifiedPurchaser=${true}`;
   }
   // Add tnc status and it must be true only.
   params += `&agreedtotermsandconditions=${true}`;
@@ -191,4 +200,12 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
 export const onReviewPost = (e) => {
   // Dispatch event so that other can use this.
   dispatchCustomEvent('reviewPosted', { formElement: () => e.target.elements });
+};
+
+export const convertHex2aString = (hex) => {
+  let str = '';
+  for (let i = 0; i < hex.length; i += 2) {
+    str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+  }
+  return str;
 };

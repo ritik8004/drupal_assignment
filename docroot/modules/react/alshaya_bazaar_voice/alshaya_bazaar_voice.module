@@ -196,6 +196,19 @@ function _alshaya_bazaar_voice_plp_rating_reviews($form, FormStateInterface $for
 }
 
 /**
+ * Implements hook_alshaya_search_algolia_ranking_sorting_alter().
+ */
+function alshaya_bazaar_voice_alshaya_search_algolia_ranking_sorting_alter(&$replica_settings, $sort, &$ranking) {
+  if ($sort['field'] === 'attr_bv_average_overall_rating') {
+    $review_count = [
+      $sort['direction'] . '(attr_bv_total_review_count)',
+    ];
+    $replica_settings['ranking'] = array_merge($replica_settings['ranking'], $review_count);
+    $ranking = array_merge($review_count, $ranking);
+  }
+}
+
+/**
  * Implements hook_algolia_react_common_configs_alter().
  */
 function alshaya_bazaar_voice_algolia_react_common_configs_alter(&$response) {
@@ -227,6 +240,8 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
@@ -238,8 +253,9 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     foreach ($build['recent_order'][$key]['#order']['items'] as $item_key => $item) {
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
-      $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $parent_sku_id;
-      $bazaarvoiceSettings[$parent_sku_id] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
+      $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
+      $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $sanitized_parent_sku;
+      $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
@@ -256,6 +272,8 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
@@ -264,14 +282,16 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   $bazaarvoiceSettings = [];
   foreach ($order['items'] as $key => $item) {
     $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
-    $bazaarvoiceSettings[$parent_sku_id] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
+    $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
+    $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
   }
   if (!empty($bazaarvoiceSettings)) {
     $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
     foreach(array_keys($build['#products']) as $key) {
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($build['#products'][$key]['sku']);
+      $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
       $build['#products'][$key]['bazaarvoice_link'] = TRUE;
-      $build['#products'][$key]['parent_sku'] = $parent_sku_id;
+      $build['#products'][$key]['parent_sku'] = $sanitized_parent_sku;
     }
   }
   $build['#bazaarvoice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
@@ -308,7 +328,7 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
       // Adding product and review data for SEO.
       $product_schema_data['aggregateRating'] = [
         '@type' => 'AggregateRating',
-        'ratingValue' => $productData['ReviewStatistics']['AverageOverallRating'] ?? NULL,
+        'ratingValue' => number_format((float)$productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
         'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
       ];
       if ($productReviewStats !== NULL && isset($productReviewStats[$sanitized_sku]['reviews'])) {

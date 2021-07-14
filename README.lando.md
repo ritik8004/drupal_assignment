@@ -87,6 +87,16 @@ running some scripts from our `blt/scripts` folder.
 
 This is not ideal since it means we could get out of date if the blt code in that area changes.
 
+### NPM
+
+To execute all the NPM commands inside VM, use lando npm ...
+
+For example to compile the JS for alshaya_spc:
+```
+$ cd docroot/modules/react/alshaya_spc
+$ lando npm run build:dev
+```
+
 ### Xdebug
 
 Xdebug can be enabled/disabled quickly by using the `lando xdebug-on` and `lando xdebug-off` commands.

@@ -2,9 +2,9 @@ jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
 import utilsRewire from '../../../../js/backend/v2/common';
-import { drupalSettings } from '../globals';
+import { drupalSettings, Drupal } from '../globals';
 import * as cartData from '../data/cart.json';
-import cartActions from '../../../../js/backend/v2/cart_actions';
+import cartActions from '../../../../js/utilities/cart_actions';
 import _ from 'lodash';
 
 describe('Common', () => {
@@ -113,9 +113,9 @@ describe('Common', () => {
        input                                                    | expectedResult
        ${''}                                                    | ${null}
        ${{}}                                                    | ${null}
-       ${{ cart: 'foo' }}                                       | ${null}
-       ${{ cart: { customer: 'foo' }}}                          | ${null}
-       ${{ cart: { customer: { id: 'foo' }}}}                   | ${'foo'}
+       ${{ cart: '123' }}                                       | ${null}
+       ${{ cart: { customer: '123' }}}                          | ${null}
+       ${{ cart: { customer: { id: '1234' }}}}                  | ${1234}
        ${{ cart: { customer: { id: 1234 }}}}                    | ${1234}
      `.test('Test that getCartCustomerId($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
         axios.mockResolvedValue({

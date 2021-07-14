@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'CustomerServiceBlock' block.
@@ -64,6 +65,21 @@ class CustomerServiceBlock extends BlockBase implements ContainerFactoryPluginIn
     $build['content']['#markup'] = $checkout_customer_service->get('checkout_customer_service.value');
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $cache_tags = parent::getCacheTags();
+
+    // Add cache tags related to checkout config.
+    $cache_tags = Cache::mergeTags(
+      $cache_tags,
+      $this->configFactory->get('alshaya_acm_checkout.settings')->getCacheTags()
+    );
+
+    return $cache_tags;
   }
 
 }

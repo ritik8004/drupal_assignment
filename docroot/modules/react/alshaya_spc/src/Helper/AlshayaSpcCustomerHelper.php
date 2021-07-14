@@ -375,8 +375,10 @@ class AlshayaSpcCustomerHelper {
     $response = $this->apiWrapper->getCustomerTokenBySocialDetail($mail);
     if ($token = json_decode($response)) {
       $this->session->set('magento_customer_token', $token);
-
       return $token;
+    }
+    else {
+      $this->session->set('magento_customer_token', NULL);
     }
 
     return NULL;

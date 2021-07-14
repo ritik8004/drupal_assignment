@@ -1,3 +1,5 @@
+import Axios from 'axios';
+
 /**
  * Logs messages in the backend.
  *
@@ -10,10 +12,9 @@
  * @param {string} context
  *   The context.
  */
-/* eslint-disable no-unused-vars */
 const logger = {
   send: (level, message, context) => {
-    // console.log('Error ' + message);
+    console.log(level, Drupal.formatString(message, context));
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
@@ -24,7 +25,6 @@ const logger = {
   info: (message, context) => logger.send('info', message, context),
   debug: (message, context) => logger.send('debug', message, context),
 };
-/* eslint-enable no-unused-vars */
 
 /**
  * Get user role authenticated or anonymous.
@@ -32,7 +32,7 @@ const logger = {
  * @returns {boolean}
  *   True if user is authenticated.
  */
-const isUserAuthenticated = () => Boolean(drupalSettings.userDetails.customerId);
+const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);
 
 /**
  * Gets magento api endpoint by user role.
@@ -42,7 +42,7 @@ const isUserAuthenticated = () => Boolean(drupalSettings.userDetails.customerId)
  * @param {object} params
  *   The object with cartId, itemId.
  *
- * @returns {*}
+ * @returns {string}
  *   The api endpoint.
  */
 const getApiEndpoint = (action, params = {}) => {
@@ -84,16 +84,58 @@ const getApiEndpoint = (action, params = {}) => {
         : `/rest/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
       break;
 
+    case 'getPaymentMethods':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/payment-methods'
+        : `/rest/V1/guest-carts/${params.cartId}/payment-methods`;
+      break;
+
+    case 'selectedPaymentMethod':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/selected-payment-method'
+        : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;
+      break;
+
+    case 'placeOrder':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine/order'
+        : `/rest/V1/guest-carts/${params.cartId}/order`;
+      break;
+
+    case 'getCartStores':
+      endpoint = isUserAuthenticated()
+        ? `/rest/V1/click-and-collect/stores/cart/mine/lat/${params.lat}/lon/${params.lon}`
+        : `/rest/V1/click-and-collect/stores/guest-cart/${params.cartId}/lat/${params.lat}/lon/${params.lon}`;
+      break;
+
     default:
-      logger.error(`Endpoint does not exist for action : ${action}`);
+      logger.critical(`Endpoint does not exist for action : ${action}`);
   }
 
   return endpoint;
 };
+
+/**
+ * Gets the ip address of the client.
+ *
+ * @returns {string}
+ *   Thge ip address.
+ */
+const getIp = () => Axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
+  .then((response) => {
+    if (typeof response.data === 'undefined' || response.data === '') {
+      return '';
+    }
+    return response.data.trim().split('\n').map((e) => {
+      const item = e.split('=');
+      return (item[0] === 'ip') ? item[1] : null;
+    }).filter((value) => value != null)[0];
+  });
 
 /* eslint-disable import/prefer-default-export */
 export {
   logger,
   getApiEndpoint,
   isUserAuthenticated,
+  getIp,
 };

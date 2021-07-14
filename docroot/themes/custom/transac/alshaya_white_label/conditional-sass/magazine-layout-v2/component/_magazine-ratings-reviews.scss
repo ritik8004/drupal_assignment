@@ -503,16 +503,19 @@ body.ratings-reviews-overlay {
                 z-index: 3;
                 background: none;
                 top: 0.5rem;
-                #{$right}: 0.625rem;
+                #{$right}: auto;
+                #{$left}: 0;
 
                 html[lang=ar] & {
                   top: 0.3125rem;
-                  left: 0.8125rem;
                 }
 
-                &::before {
+                @include icon(chevron#{$left}, before) {
                   color: $magv2-panel-close-icon;
                   font-size: 2.5rem;
+                  width: 2rem;
+                  cursor: pointer;
+                  pointer-events: none;
                 }
               }
 

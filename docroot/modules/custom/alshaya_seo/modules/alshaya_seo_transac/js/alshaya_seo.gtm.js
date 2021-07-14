@@ -239,16 +239,15 @@ const productRecommendationsSuffix = 'pr-';
           var socialWindow = true;
         }
 
-        var loginType = localStorage.getItem('socialType');
-        // Check for socialtype in localstorage.
-        if (drupalSettings.user.uid && loginType === null) {
-          Drupal.alshaya_seo_gtm_push_login_type('Self Login');
+        // Check for user login type in cookies.
+        var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
+        if (drupalSettings.user.uid && loginType === undefined) {
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , drupalSettings.userDetails.userEmailID);
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
-        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
-          Drupal.alshaya_seo_gtm_push_login_type(loginType);
-          Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID && loginType !== undefined) {
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           localStorage.setItem('userID', userDetails.userID);
         }
 
@@ -256,7 +255,7 @@ const productRecommendationsSuffix = 'pr-';
         if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           localStorage.setItem('userID', userDetails.userID);
-          localStorage.removeItem('socialType');
+          $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -643,7 +642,7 @@ const productRecommendationsSuffix = 'pr-';
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page' || listName === 'Promotion') {
           var section = listName;
           if (listName.indexOf('PLP') > -1) {
             // As we have used the same markup to display search results page
@@ -655,6 +654,11 @@ const productRecommendationsSuffix = 'pr-';
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
+            // For promotion page.
+            if (listName === 'Promotion') {
+              facetTitle = $(this).parent('ul').attr('data-drupal-facet-alias').replaceAll("_", " ");
+              selectedVal = $(this).find('a').attr('data-drupal-facet-item-value');
+            }
             var data = {
               event: 'filter',
               siteSection: section.trim(),
@@ -1028,12 +1032,14 @@ const productRecommendationsSuffix = 'pr-';
    * Helper funciton to push Login & Register events.
    *
    * @param eventAction
+   * @param loginType
    */
-  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction) {
+  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction, loginType = null) {
     dataLayer.push({
       event: 'eventTracker',
       eventCategory: 'Login & Register',
       eventAction: eventAction,
+      eventLabel: loginType,
       eventValue: 0,
       nonInteraction: 0
     });
@@ -1313,14 +1319,24 @@ const productRecommendationsSuffix = 'pr-';
     if ($.type(message) !== 'string') {
       message = JSON.stringify(message);
     }
-
+    var getCartId = localStorage.getItem('last_selected_payment');
+    var cartObject = localStorage.getItem('cart_data');
+    var cartId = 0;
+    if (category && getCartId) {
+      var extractCartId = getCartId.split(':');
+      cartId = extractCartId[1];
+    }
+    else if (category && cartObject) {
+      cartObject = JSON.parse(cartObject);
+      cartId = cartObject.cart.cart_id;
+    }
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
       eventAction: message,
       eventPlace: 'Error occurred on ' + window.location.href,
-      eventValue: 0,
+      eventValue: cartId,
       nonInteraction: 0,
     };
 
@@ -1353,19 +1369,5 @@ const productRecommendationsSuffix = 'pr-';
       return true;
     };
   }
-
-  /**
-   * Helper function to push events when user logins.
-   *
-   * @param loginType
-   */
-  Drupal.alshaya_seo_gtm_push_login_type = function (loginType) {
-    dataLayer.push({
-      event: 'Login',
-      eventCategory: 'Login Success',
-      eventLabel: loginType,
-    });
-
-  };
 
 })(jQuery, Drupal, dataLayer);
