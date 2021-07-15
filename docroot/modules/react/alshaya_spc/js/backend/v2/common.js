@@ -176,7 +176,7 @@ const handleResponse = (apiResponse) => {
     logger.notice(`Message: ${response.data.message}. Redirecting to user/logout.`);
 
     // Log the user out and redirect to the login page.
-    window.location = Drupal.url('user/logout?destination=user/login');
+    window.location = Drupal.url('user/logout');
 
     // Throw an error to prevent further javascript execution.
     throw new Error('The customer token is invalid.');
