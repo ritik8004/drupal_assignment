@@ -1,11 +1,11 @@
 import Axios from 'axios';
 import qs from 'qs';
-import isArray from 'lodash/isArray';
-import cloneDeep from 'lodash/cloneDeep';
-import isUndefined from 'lodash/isUndefined';
-import isObject from 'lodash/isObject';
-import isEmpty from 'lodash/isEmpty';
-import isNull from 'lodash/isNull';
+import _isArray from 'lodash/isArray';
+import _cloneDeep from 'lodash/cloneDeep';
+import _isUndefined from 'lodash/isUndefined';
+import _isObject from 'lodash/isObject';
+import _isEmpty from 'lodash/isEmpty';
+import _isNull from 'lodash/isNull';
 import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import {
   cartErrorCodes,
@@ -213,7 +213,7 @@ const handleResponse = (apiResponse) => {
     response.data.error_message = error.message;
     //
     logger.error(`Error while doing MDC api call. Error message: ${error.message}`);
-  } else if (isArray(response.data.response_message) && !isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
+  } else if (_isArray(response.data.response_message) && !_isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
     response.data.error = true;
     response.data.error_code = 400;
     [response.data.error_message] = response.data.response_message;
@@ -328,21 +328,21 @@ const callDrupalApi = (url, method, data) => {
  *   Formatted / processed cart.
  */
 const formatCart = (cartData) => {
-  const data = cloneDeep(cartData);
+  const data = _cloneDeep(cartData);
 
   // Check if there is no cart data.
-  if (isUndefined(data.cart) || !isObject(data.cart)) {
+  if (_isUndefined(data.cart) || !_isObject(data.cart)) {
     return data;
   }
 
   // Move customer data to root level.
-  if (!isEmpty(data.cart.customer)) {
+  if (!_isEmpty(data.cart.customer)) {
     data.customer = data.cart.customer;
     delete data.cart.customer;
   }
 
   // Format addresses.
-  if (!isEmpty(data.customer) && !isEmpty(data.customer.addresses)) {
+  if (!_isEmpty(data.customer) && !_isEmpty(data.customer.addresses)) {
     data.customer.addresses = data.customer.addresses.map((address) => {
       const item = { ...address };
       delete item.id;
@@ -353,9 +353,9 @@ const formatCart = (cartData) => {
   }
 
   // Format shipping info.
-  if (!isEmpty(data.cart.extension_attributes)) {
-    if (!isEmpty(data.cart.extension_attributes.shipping_assignments)) {
-      if (!isEmpty(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
+  if (!_isEmpty(data.cart.extension_attributes)) {
+    if (!_isEmpty(data.cart.extension_attributes.shipping_assignments)) {
+      if (!_isEmpty(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
         data.shipping = data.cart.extension_attributes.shipping_assignments[0].shipping;
         delete data.cart.extension_attributes.shipping_assignments;
       }
@@ -365,23 +365,23 @@ const formatCart = (cartData) => {
   }
 
   let shippingMethod = '';
-  if (!isEmpty(data.shipping)) {
-    if (!isEmpty(data.shipping.method)) {
+  if (!_isEmpty(data.shipping)) {
+    if (!_isEmpty(data.shipping.method)) {
       shippingMethod = data.shipping.method;
     }
-    if (!isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
+    if (!_isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
       data.shipping.type = 'click_and_collect';
     } else {
       data.shipping.type = 'home_delivery';
     }
   }
 
-  if (!isEmpty(data.shipping) && !isEmpty(data.shipping.extension_attributes)) {
+  if (!_isEmpty(data.shipping) && !_isEmpty(data.shipping.extension_attributes)) {
     const extensionAttributes = data.shipping.extension_attributes;
-    if (!isEmpty(extensionAttributes.click_and_collect_type)) {
+    if (!_isEmpty(extensionAttributes.click_and_collect_type)) {
       data.shipping.clickCollectType = extensionAttributes.click_and_collect_type;
     }
-    if (!isEmpty(extensionAttributes.store_code)) {
+    if (!_isEmpty(extensionAttributes.store_code)) {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
     delete data.shipping.extension_attributes;
@@ -545,8 +545,8 @@ const getCart = async (force = false) => {
 
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
 
-  if (isEmpty(response.data)
-    || (!isUndefined(response.data.error) && response.data.error)
+  if (_isEmpty(response.data)
+    || (!_isUndefined(response.data.error) && response.data.error)
   ) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
       logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
@@ -589,7 +589,7 @@ const getCartWithProcessedData = async (force = false) => {
   const response = await getCart(force);
 
   // If we don't have any errors, process the cart data.
-  if (!isEmpty(response.data) && isUndefined(response.data.error)) {
+  if (!_isEmpty(response.data) && _isUndefined(response.data.error)) {
     response.data = getProcessedCartData(response.data);
   }
   return response;
@@ -604,7 +604,7 @@ const getCartWithProcessedData = async (force = false) => {
 const getCartCustomerId = async () => {
   const response = await getCart();
   const cart = response.data;
-  if (!isEmpty(cart) && !isEmpty(cart.customer) && !isUndefined(cart.customer.id)) {
+  if (!_isEmpty(cart) && !_isEmpty(cart.customer) && !_isUndefined(cart.customer.id)) {
     return parseInt(cart.customer.id, 10);
   }
   return null;
@@ -623,13 +623,13 @@ const validateRequestData = async (request) => {
   // Return error response if not valid data.
   // Setting custom error code for bad response so that
   // we could distinguish this error.
-  if (isEmpty(request)) {
+  if (_isEmpty(request)) {
     logger.error('Cart update operation not containing any data. Error 500.');
     return 500;
   }
 
   // If action info or cart id not available.
-  if (isEmpty(request.extension) || isUndefined(request.extension.action)) {
+  if (_isEmpty(request.extension) || _isUndefined(request.extension.action)) {
     const logData = JSON.stringify(request);
     logger.error(`Cart update operation not containing any action. Error: 400. Data: ${logData}`);
     return 400;
@@ -645,7 +645,7 @@ const validateRequestData = async (request) => {
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
   if (window.drupalSettings.userDetails.customerId > 0) {
-    if (isNull(cartCustomerId)) {
+    if (_isNull(cartCustomerId)) {
       logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
       return 400;
     }
@@ -698,13 +698,13 @@ const updateCart = async (data) => {
   const cartId = window.commerceBackend.getCartId();
 
   let action = '';
-  if (!isEmpty(data.extension) && !isEmpty(data.extension.action)) {
+  if (!_isEmpty(data.extension) && !_isEmpty(data.extension.action)) {
     action = data.extension.action;
   }
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
-  if (!isUndefined(validationResult.error) && validationResult.error) {
+  if (!_isUndefined(validationResult.error) && validationResult.error) {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
@@ -716,8 +716,8 @@ const updateCart = async (data) => {
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
-      if (isEmpty(response.data)
-        || (!isUndefined(response.data.error) && response.data.error)) {
+      if (_isEmpty(response.data)
+        || (!_isUndefined(response.data.error) && response.data.error)) {
         return response;
       }
 
@@ -747,9 +747,9 @@ const updateCart = async (data) => {
 const getCartCustomerEmail = async () => {
   const response = await getCart();
   const cart = response.data;
-  if (!isUndefined(cart.customer)
-    && !isUndefined(cart.customer.email)
-    && !isEmpty(cart.customer.email)
+  if (!_isUndefined(cart.customer)
+    && !_isUndefined(cart.customer.email)
+    && !_isEmpty(cart.customer.email)
   ) {
     return cart.customer.email;
   }
@@ -766,15 +766,15 @@ const getCartCustomerEmail = async () => {
  *   TRUE if cart has an OOS item.
  */
 const isCartHasOosItem = (cartData) => {
-  if (!isEmpty(cartData.cart.items)) {
+  if (!_isEmpty(cartData.cart.items)) {
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
       // If error at item level.
-      if (!isUndefined(item.extension_attributes)
-        && !isUndefined(item.extension_attributes.error_message)
+      if (!_isUndefined(item.extension_attributes)
+        && !_isUndefined(item.extension_attributes.error_message)
       ) {
         const exceptionType = getExceptionMessageType(item.extension_attributes.error_message);
-        if (!isEmpty(exceptionType) && exceptionType === 'OOS') {
+        if (!_isEmpty(exceptionType) && exceptionType === 'OOS') {
           return true;
         }
       }
