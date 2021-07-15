@@ -254,7 +254,8 @@ class AlshayaConfigManager {
         // Using flush() method of ImageStyle entity takes a lot of time as it
         // iterates recursively and deletes each file one by one, deleting
         // the directory using shell cmd is quicker with hook_update.
-        $directory = file_url_transform_relative(file_create_url(file_default_scheme() . '://styles/' . $style->id()));
+        $schema = $this->configFactory->get('system.file')->get('default_scheme');
+        $directory = file_url_transform_relative(file_create_url($schema . '://styles/' . $style->id()));
         if (file_exists($directory)) {
           $this->logger->info('Removing style directory: @directory.', [
             '@directory' => $directory,
