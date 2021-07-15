@@ -243,6 +243,11 @@ $conductors = [
     'hmac_secret' => 'YjQxNWM0MmItODM0Ny00',
     'site_id' => 136,
   ],
+  'hmsa_qa2' => [
+    'hmac_id' => '78f2d639d1c040859763c88f14b8e2cf',
+    'hmac_secret' => 'NjYyMTBmZjktYmQ1OS00',
+    'site_id' => 435,
+  ],
   'hmsa_qa' => [
     'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
     'hmac_secret' => 'NDNkNDYzOGQtZjEyZC00',
