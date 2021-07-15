@@ -15,7 +15,6 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\file\Entity\File;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Class Sku Images Manager.
@@ -877,7 +876,7 @@ class SkuImagesManager {
             ],
           ];
 
-          $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku->getSku()));
+          $sku_identifier = mb_strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
           $labels = [
             '#theme' => 'product_labels',
@@ -1336,7 +1335,8 @@ class SkuImagesManager {
     static $public_dir;
 
     if (empty($public_dir)) {
-      $public_dir = file_create_url(file_default_scheme() . '://');
+      $default_schema = \Drupal::config('system.file')->get('default_scheme');
+      $public_dir = file_create_url($default_schema . '://');
     }
 
     return $public_dir;
