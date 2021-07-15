@@ -259,22 +259,22 @@
           var calcMaxHeight;
           if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
             calcMaxHeight = $('.block-alshaya-main-menu').height() + $('.block-alshaya-main-menu').offset().top;
-          }
-          var maxHeight = menuLevel2.map(function () {
-            return $(this).height();
-          })
-              .toArray()
-              .reduce(function (first, second) {
-                return Math.max(first, second);
-              });
+            var maxHeight = menuLevel2.map(function () {
+              return $(this).height();
+            })
+                .toArray()
+                .reduce(function (first, second) {
+                  return Math.max(first, second);
+                });
 
-          menuBackdrop.height(maxHeight);
-          menuLevel2.each(function () {
-            $(this).height(maxHeight + 20);
-            if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
-              $(this).css('max-height', 'calc(100vh - ' + calcMaxHeight + 'px)');
-            }
-          });
+            menuBackdrop.height(maxHeight);
+            menuLevel2.each(function () {
+              $(this).height(maxHeight + 20);
+              if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
+                $(this).css('max-height', 'calc(100vh - ' + calcMaxHeight + 'px)');
+              }
+            });
+          }
         }
       }
       setMenuHeight();

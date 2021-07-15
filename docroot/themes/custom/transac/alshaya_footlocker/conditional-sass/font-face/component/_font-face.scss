@@ -1,0 +1,62 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fonts';
+
+@font-face {
+  font-family: "Roboto-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi_Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidKufi_Regular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FootLocker-FLClassic";
+  src:
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FootLocker-FLStandard";
+  src:
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

@@ -23,15 +23,19 @@ function alshaya_bazaar_voice_update_8001() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['block.block.bazaarvoiceuserdatablock'],
-    'alshaya_bazaar_voice',
-    'install'
+    'alshaya_bazaar_voice'
   );
   // Update config for my account reviews limit.
   $manager->updateConfigs(
     ['bazaar_voice.settings'],
-    'bazaar_voice',
-    'install'
+    'bazaar_voice'
   );
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**

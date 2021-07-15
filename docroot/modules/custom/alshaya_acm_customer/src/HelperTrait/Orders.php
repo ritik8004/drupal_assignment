@@ -106,7 +106,7 @@ trait Orders {
 
     // Shipping.
     $order['shipping'] = $order['extension']['shipping_assignments'][0]['shipping'];
-    $order['shipping']['address']['customer_id'] = $order['customer_id'];
+    $order['shipping']['address']['customer_id'] = $order['customer_id'] ?? '';
     unset($order['shipping']['address']['entity_id']);
     unset($order['shipping']['address']['parent_id']);
 
@@ -116,7 +116,7 @@ trait Orders {
 
     // Billing.
     $order['billing'] = $order['billing_address'];
-    $order['billing']['customer_id'] = $order['customer_id'];
+    $order['billing']['customer_id'] = $order['customer_id'] ?? '';
     unset($order['billing']['entity_id']);
     unset($order['billing']['parent_id']);
 

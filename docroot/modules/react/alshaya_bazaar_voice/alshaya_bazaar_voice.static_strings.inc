@@ -91,6 +91,10 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('Please enter a minimum of %minLength characters for %fieldTitle.'),
     ],
     [
+      'key' => 'text_max_chars_limit_error',
+      'value' => t('Please enter a maximum of %maxLength characters for %fieldTitle.'),
+    ],
+    [
       'key' => 'reviews',
       'value' => t('reviews'),
     ],
@@ -269,6 +273,8 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'review_syndicated_text',
       'value' => t('Original posted on'),
+    ],
+    [
       'key' => 'view_review',
       'value' => t('View review'),
     ],
@@ -295,6 +301,11 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'Staff',
       'value' => t('Staff'),
+    ],
+    [
+      'key' => 'invalid_pie_user_details',
+      'value' => t('Logged in e-mail address does not matches with the email address used to purchase the product. 
+      To write a review on this product, please logout and login with same email address you have used for the purchase.'),
     ],
   ];
 }

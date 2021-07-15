@@ -1,4 +1,4 @@
-@javascript @KNetPayment @guest @homeDelivery @pbkwuat @tbskwuat
+@javascript @KNetPayment @guest @homeDelivery @pbkwuat @tbskwuat @mckwuat
 Feature: SPC Checkout Home Delivery Knet Payment for Guest User
 
   Background:
@@ -29,7 +29,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 30 seconds
     And I wait for AJAX to finish
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -40,14 +40,10 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I select "{spc_knet_option}" from dropdown ".paymentselect.bank"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I wait 10 seconds
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I wait 10 seconds
-    And I select "{spc_Knet_year}" from "debitYearSelect"
-    And I wait 10 seconds
+    And I select date and month in the form
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "Submit"
-    And I wait 2 seconds
+    And I wait 5 seconds
     And I press "Confirm"
     And I wait 5 seconds
     And I wait for the page to load
@@ -110,7 +106,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -120,8 +116,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds
@@ -156,7 +151,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -166,8 +161,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds

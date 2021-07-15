@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod
+@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @tbskwprod
 Feature: SPC Checkout Click and Collect using KNET payment method for authenticated user
 
   Background:
@@ -26,7 +26,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I select the collection store
-    And I scroll to the "#spc-payment-methods" element
+    And I wait 5 seconds
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -39,7 +39,6 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I press "Cancel"
     And I wait for AJAX to finish
     And I wait 30 seconds
-    Then I should be on "/checkout"
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -63,7 +62,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I select the collection store
-    And I scroll to the "#spc-payment-methods" element
+    And I wait 5 seconds
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -96,7 +95,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I select the collection store
-    And I scroll to the "#spc-payment-methods" element
+    And I wait 5 seconds
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page

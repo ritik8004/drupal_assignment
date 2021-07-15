@@ -35,15 +35,19 @@
     if (!$(this).hasClass('is-active')) {
       var selectedText = '';
       var eventName = '';
+      var facetTitle = $(this).attr('datadrupalfacetlabel');
       if ($(this).find('span.facet-item__value').length > 0) {
         selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
+        // For rating filter.
+        if (facetTitle === 'Rating') {
+          selectedText = $(this).find('span.facet-item__value div.listing-inline-star div.rating-label').html();
+        }
         eventName = 'filter';
       }
       else {
         selectedText = $(this).find('a.facet-item__value').html();
         eventName = 'sort';
       }
-      var facetTitle = $(this).attr('datadrupalfacetlabel');
 
       var data = {
         event: eventName,

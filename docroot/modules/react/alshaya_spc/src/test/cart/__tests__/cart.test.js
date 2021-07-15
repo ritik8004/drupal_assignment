@@ -1,19 +1,20 @@
 jest.mock('axios');
 import axios from 'axios';
+import * as cart from '../../../../js/backend/v2/cart';
 import { callMagentoApi } from '../../../../js/backend/v2/common';
-import { drupalSettings } from '../globals';
+import { drupalSettings, Drupal } from '../globals';
+import { getStorageInfo } from '../../../../js/utilities/storage';
 
 describe('Cart', () => {
+  beforeEach(() => {
+    window.drupalSettings = drupalSettings;
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('Calls to Magento API', () => {
-
-    beforeEach(() => {
-      window.drupalSettings = drupalSettings;
-    });
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     it('Test empty response data', async () => {
       axios.mockResolvedValue({ status: 200 });
       const result = await callMagentoApi('/cart', 'POST', {});
@@ -171,6 +172,50 @@ describe('Cart', () => {
         status: 405,
       });
       expect(axios).toHaveBeenCalled();
+    });
+  });
+
+  describe('Test window.commerceBackend.createCart()', () => {
+    it('Test with numeric value and response status 200', async () => {
+      axios.mockResolvedValue({ data: 1234, status: 200 });
+      const result = await window.commerceBackend.createCart();
+      expect(axios).toHaveBeenCalled();
+      expect(result).toEqual(1234);
+      expect(getStorageInfo('cart_id')).toEqual(1234);
+    });
+
+    it('Test with string value and response status 200', async () => {
+      axios.mockResolvedValue({ data: 'ZYJ47012050MHZ', status: 200 });
+      const result = await window.commerceBackend.createCart();
+      expect(axios).toHaveBeenCalled();
+      expect(result).toEqual('ZYJ47012050MHZ');
+      expect(getStorageInfo('cart_id')).toEqual('ZYJ47012050MHZ');
+    });
+
+    it('Test with returning error and status 200', async () => {
+      axios.mockResolvedValue({
+        data: {
+          error: true,
+        },
+        status: 200,
+      });
+      const result = await window.commerceBackend.createCart();
+      expect(axios).toHaveBeenCalled();
+      expect(result).toEqual(null);
+      expect(getStorageInfo('cart_id')).toEqual(null);
+    });
+
+    it('Test with returning error and status 500', async () => {
+      axios.mockResolvedValue({
+        data: {
+          error: true,
+        },
+        status: 500,
+      });
+      const result = await window.commerceBackend.createCart();
+      expect(axios).toHaveBeenCalled();
+      expect(result).toEqual(null);
+      expect(getStorageInfo('cart_id')).toEqual(null);
     });
   });
 });

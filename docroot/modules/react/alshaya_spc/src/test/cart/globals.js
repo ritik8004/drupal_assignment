@@ -1,3 +1,5 @@
+import Drupal from '../../../../../../core/misc/drupal.es6';
+
 export const drupalSettings = {
   cart: {
     url: 'v1',
@@ -16,4 +18,5 @@ export const drupalSettings = {
 
 export default {
   drupalSettings,
+  Drupal,
 };

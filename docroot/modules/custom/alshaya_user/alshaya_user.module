@@ -505,15 +505,10 @@ function alshaya_valid_email_address(&$element, FormStateInterface $form_state, 
     return;
   }
 
-  // @todo fix this. dns_get_record is not working as expected in LANDO.
-  if (getenv('LANDO')) {
-    return;
-  }
-
   // Check MX records. This is done by Magento and good to have this check.
   $domain = explode('@', $value)[1];
-  $dns_records = dns_get_record($domain);
-  if (empty($dns_records)) {
+  $host = gethostbyname($domain);
+  if (empty($host) || $host === $domain) {
     $form_state->setError($element, t('The email address %mail is not valid.', ['%mail' => $value]));
   }
 }
