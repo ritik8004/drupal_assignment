@@ -7,6 +7,7 @@
         // Check for size filter update.
         // Filter/Attribute name = attr_size;
         // For _product_list index it will be attr_size.en.
+        // split lang suffix to check condition.
         if (e.detail.attribute.split('.')[0] === 'attr_size' && e.detail.items.length > 0) {
           populateShopBySize();
         }
