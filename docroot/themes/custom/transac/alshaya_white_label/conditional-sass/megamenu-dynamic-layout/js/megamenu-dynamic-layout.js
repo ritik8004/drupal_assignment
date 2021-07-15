@@ -46,18 +46,32 @@
         // Get the Right position of Main Menu.
         var posRightEleMainMenu = eleMainMenu.width() + posEleMainMenu;
         // Get the Right position of the L2 wrapper.
-        var posRightL2Wrapper = eleL2HighlightWrapper.outerWidth() ? posL2LinksWrapper + eleL2LinksWrapper.outerWidth() + eleL2HighlightWrapper.outerWidth() : posL2LinksWrapper + eleL2LinksWrapper.outerWidth();
+        var posRightL2Wrapper = eleL2HighlightWrapper.outerWidth() ? posL2LinksWrapper + eleL2Wrapper.width() : posL2LinksWrapper + eleL2LinksWrapper.outerWidth();
 
         // Set the position for Arabic layout.
         if (isRTL()) {
           if (posEleL2Wrapper < posEleMainMenu) {
             var getRightPos = posEleL2Wrapper - posEleMainMenu;
             eleL2Wrapper.css('right', getRightPos);
+            var newRightOffset = getRightPos + posEleL2Wrapper;
+            if ((newRightOffset) < 0) {
+              var updatedMenuWidthAr = eleL2Wrapper.width() - Math.abs(newRightOffset);
+              eleL2Wrapper.css('width', updatedMenuWidthAr);
+              eleL2Wrapper.css('overflow-x', 'auto');
+              eleL2Wrapper.css('right', getRightPos + Math.abs(newRightOffset));
+            }
           }
         } else {
           if (posRightEleMainMenu < posRightL2Wrapper) {
             var getLeftPos = -(posRightL2Wrapper - posRightEleMainMenu);
             eleL2Wrapper.css('left', getLeftPos);
+            var newLeftOffset = getLeftPos + posEleL2Wrapper;
+            if ((newLeftOffset) < 0) {
+              var updatedMenuWidthEn = eleL2Wrapper.width() - Math.abs(newLeftOffset);
+              eleL2Wrapper.css('width', updatedMenuWidthEn);
+              eleL2Wrapper.css('overflow-x', 'auto');
+              eleL2Wrapper.css('left', getLeftPos + Math.abs(newLeftOffset));
+            }
           }
         }
       }
