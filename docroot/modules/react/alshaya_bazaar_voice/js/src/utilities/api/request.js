@@ -29,11 +29,15 @@ export function getUserBazaarVoiceSettings() {
 
 export function getUserDetails(productId = undefined) {
   const settings = [];
-  settings.user = drupalSettings.bazaarvoiceUserDetails;
-  if (productId !== undefined) {
-    settings.productReview = drupalSettings.productInfo[productId].productReview;
-  } else {
-    settings.productReview = drupalSettings.bazaarvoiceUserDetails.productReview;
+  if (drupalSettings.bazaarvoiceUserDetails !== undefined) {
+    settings.user = drupalSettings.bazaarvoiceUserDetails;
+    if (productId !== undefined && Object.keys(drupalSettings.productInfo[productId]).length > 0) {
+      settings.productReview = drupalSettings.productInfo[productId].productReview;
+    } else if (drupalSettings.bazaarvoiceUserDetails.productReview !== undefined) {
+      settings.productReview = drupalSettings.bazaarvoiceUserDetails.productReview;
+    } else {
+      settings.productReview = null;
+    }
   }
   return settings;
 }
