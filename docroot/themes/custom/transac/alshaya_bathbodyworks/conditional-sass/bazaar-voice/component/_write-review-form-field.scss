@@ -5,4 +5,17 @@
       font-family: $alshaya-thin;
     }
   }
+
+  .write-review-type-textfield {
+    &.user-nickname,
+    &.user-email {
+      @include breakpoint($desktop) {
+        width: 47%;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 45%;
+      }
+    }
+  }
 }

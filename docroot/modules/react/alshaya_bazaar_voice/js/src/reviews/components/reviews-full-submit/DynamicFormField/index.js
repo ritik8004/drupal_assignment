@@ -37,8 +37,9 @@ const DynamicFormField = (props) => {
         fieldProperty.default_value = userDetails.user.emailId;
         readonly = true;
       } else if (userStorage !== null) {
-        if (userStorage.email !== undefined) {
+        if (userStorage.email !== undefined && userStorage.email !== '') {
           fieldProperty.default_value = userStorage.email;
+          readonly = true;
         }
       }
     } else if (fieldProperty.id === 'usernickname' && userStorage !== null) {

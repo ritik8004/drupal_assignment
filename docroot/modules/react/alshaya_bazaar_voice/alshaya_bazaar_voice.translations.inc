@@ -103,6 +103,9 @@ function _alshaya_bazaar_voice_translations() {
     'Please enter a minimum of %minLength characters for %fieldTitle.' => [
       'ar' => 'الرجاء إدخال %minLength حرف كحد أدنى لـ %fieldTitle.',
     ],
+    'Please enter a maximum of %maxLength characters for %fieldTitle.' => [
+      'ar' => 'الرجاء إدخال %maxLength حرف كحد أدنى لـ %maxLength.',
+    ],
     'Thanks for submitting your review! It is currently being moderated and will be visible shortly.' => [
       'ar' => 'شكراً على إبداء رأيك! سوف نقوم بمراجعته لكي يتم نشره في أقرب وقت.',
     ],

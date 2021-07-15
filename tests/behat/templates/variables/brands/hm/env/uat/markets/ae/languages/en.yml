@@ -17,6 +17,8 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   add_to_cart_link: 'add to basket'
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   create_account: 'create an account'
   spc_search_byname: 'Suit trousers'
   spc_search_byID: 'HMAESSE'

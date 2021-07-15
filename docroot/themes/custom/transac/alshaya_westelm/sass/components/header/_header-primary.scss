@@ -1,4 +1,8 @@
 header {
+  @include breakpoint($desktop) {
+    border-bottom: 0.0625rem solid $mm_l1_border;
+  }
+
   &.c-header {
     .block-views-exposed-filter-blocksearch-page {
       .form-text {
@@ -141,6 +145,7 @@ header {
 
         @include breakpoint($desktop) {
           max-width: 12.5rem;
+          display: inline;
         }
 
         @include breakpoint($only-tablet) {
@@ -220,6 +225,12 @@ header {
         > div {
           @include breakpoint($desktop) {
             width: 33.33%;
+          }
+        }
+
+        > .block-system-branding-block {
+          @include breakpoint($desktop) {
+            width: 100%;
           }
         }
       }

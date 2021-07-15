@@ -16,6 +16,8 @@ variables:
   language_size_filter: ''
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   create_account: 'create an account'
   sign_in: 'Sign in'
   find_store: 'Find Store'

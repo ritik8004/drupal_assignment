@@ -101,7 +101,7 @@
       if ($(this).find('span.facet-item__value').length > 0) {
         selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
         // For rating filter.
-        if (faceTitle === 'Rating') {
+        if (facetTitle === 'Rating') {
           selectedText = $(this).find('span.facet-item__value div.listing-inline-star div.rating-label').html();
         }
         eventName = 'filter';

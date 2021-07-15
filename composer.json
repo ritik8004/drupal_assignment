@@ -33,6 +33,7 @@
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
         "drupal/conditional_fields": "^4.0@alpha",
+        "drupal/config_rewrite": "^1.4",
         "drupal/core": "^8.8.12",
         "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",
@@ -221,7 +222,7 @@
             },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                "CORE-31041 disabled skus not deleted for product list index": "patches/search_api/search_api_entity_delete_alter.patch"
+                "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
             },
             "drupal/facets": {
                 "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
@@ -274,7 +275,8 @@
                 "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch",
                 "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
                 "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
-                "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch"
+                "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
+                "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",

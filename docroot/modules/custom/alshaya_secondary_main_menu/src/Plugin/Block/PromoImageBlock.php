@@ -111,9 +111,10 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
         $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
         $item['promo_paragraph'] = $entity->get('field_promo_images')->getValue();
         $language = $this->languageManager->getCurrentLanguage()->getId();
+        $default_lang = $this->languageManager->getDefaultLanguage()->getId();
         foreach ($item['promo_paragraph'] as $tr) {
           $paragraph = Paragraph::load($tr['target_id']);
-          $language = ($paragraph->hasTranslation($language)) ? $language : 'en';
+          $language = ($paragraph->hasTranslation($language)) ? $language : $default_lang;
           $paragraph = $paragraph->getTranslation($language);
           $link_to_image = $paragraph->field_link_to_image->getValue();
           $img_title = $paragraph->get('field_image_title')->value;

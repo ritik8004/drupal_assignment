@@ -129,6 +129,8 @@ header {
 
         @include breakpoint($desktop) {
           max-width: 29rem;
+          margin: 0 auto;
+          text-align: center;
         }
 
         @include breakpoint($only-tablet) {
@@ -196,6 +198,12 @@ header {
             width: 17.5625rem;
           }
         }
+      }
+    }
+
+    .region__header > .block-system-branding-block {
+      @include breakpoint($desktop) {
+        width: 100%;
       }
     }
   }
