@@ -1222,6 +1222,69 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
 window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
 
 /**
+ * Process payment data before placing order.
+ *
+ * @param paymentData
+ * @param data
+ * @returns {{cvv: string, public_hash: string}}
+ */
+const processPaymentData = (paymentData, data) => {
+  let additionalInfo = data;
+
+  // Method specific code.
+  switch (paymentData.method) {
+    case 'checkout_com_upapi':
+      switch (additionalInfo.card_type) {
+        case 'new':
+          additionalInfo.is_active_payment_token_enabler = parseInt(additionalInfo.save_card, 10);
+          break;
+
+        case 'existing': {
+          const { cvvCheck } = drupalSettings.checkoutComUpapi;
+          const { cvv, id } = additionalInfo;
+
+          if (isEmpty(cvv)) {
+            return {
+              data: {
+                error: true,
+                error_code: cartErrorCodes.cartOrderPlacementError,
+                error_message: 'CVV missing for credit/debit card.',
+              },
+            };
+          }
+
+          if (isEmpty(id)) {
+            return {
+              data: {
+                error: true,
+                error_code: cartErrorCodes.cartOrderPlacementError,
+                error_message: 'Invalid card token.',
+              },
+            };
+          }
+
+          if (cvvCheck) {
+            additionalInfo = {
+              cvv: atob(cvv),
+              public_hash: atob(id),
+            };
+          }
+          break;
+        }
+
+        default:
+          return additionalInfo;
+      }
+      break;
+
+    default:
+      return additionalInfo;
+  }
+
+  return additionalInfo;
+};
+
+/**
  * Adds payment method in the cart and returns the cart.
  *
  * @param {object} data
@@ -1283,9 +1346,34 @@ const paymentUpdate = async (data) => {
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
   }
 
-  // @todo implement the processing for checkout_com_upapi for Cart::processPaymentData().
-  // @todo update payment method to checkout_com_upapi_vault if using a saved card.
-  // Both the points above are for authenticated users so still pending.
+  // Process paayment data by paymentMethod.
+  const processedData = processPaymentData(paymentData, params.payment.additional_data);
+  if (typeof processedData.data !== 'undefined' && processedData.data.error) {
+    logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
+      '@message': processedData.data.error_message,
+      '@cart': await window.commerceBackend.getCart(),
+      '@method': paymentData.method,
+    });
+    return processedData;
+  }
+  params.payment.additional_data = processedData;
+
+  // Additional changes for VAULT.
+  switch (paymentData.method) {
+    case 'checkout_com_upapi':
+      if (!isEmpty(params.payment.additional_data.public_hash)) {
+        params.payment.method = checkoutComUpapiVaultMethod();
+      }
+      break;
+
+    case 'checkout_com':
+      if (!isEmpty(params.payment.additional_data.public_hash)) {
+        params.payment.method = checkoutComVaultMethod();
+      }
+      break;
+
+    default:
+  }
 
   const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
