@@ -42,10 +42,11 @@ export const isOpenWriteReviewForm = (productId) => {
   const userDetails = getUserDetails(productId);
   const query = new URLSearchParams(document.referrer);
   const openPopup = query.get('openPopup');
-  if (userDetails !== undefined
+  if (userDetails.user !== undefined
     && userDetails.user.userId > 0
     && getStorageInfo('openPopup')
     && openPopup !== null
+    && userDetails.productReview !== undefined
     && userDetails.productReview === null) {
     return true;
   }
