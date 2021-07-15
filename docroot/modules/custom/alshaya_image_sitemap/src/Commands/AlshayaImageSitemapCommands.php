@@ -124,11 +124,12 @@ class AlshayaImageSitemapCommands extends DrushCommands {
     if ($success) {
       \Drupal::service('alshaya_image_sitemap.generator')
         ->sitemapGenerateFinished();
-      \Drupal::state()->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
-      drush_print(dt('Image Sitemap Generated Successfully.'));
+      $requestTime = \Drupal::time()->getRequestTime();
+      \Drupal::state()->set('alshaya_image_sitemap.last_generated', $requestTime);
+      \Drupal::logger(dt('Image Sitemap Generated Successfully.'));
     }
     else {
-      drush_print(dt('There was some error while generating image sitemap.'));
+      \Drupal::logger(dt('There was some error while generating image sitemap.'));
     }
   }
 
