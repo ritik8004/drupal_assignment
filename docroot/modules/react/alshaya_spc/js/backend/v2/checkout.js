@@ -9,6 +9,7 @@ import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isNull from 'lodash/isNull';
 import _isObject from 'lodash/isObject';
+import _each from 'lodash/each';
 import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
@@ -1166,9 +1167,9 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
   let orderId = '';
 
-  if (!_.isEmpty(cart.cart)
-    && !_.isEmpty(cart.cart.extension_attributes)
-    && !_.isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
+  if (_isEmpty(cart.cart)
+    && _isEmpty(cart.cart.extension_attributes)
+    && _isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
     orderId = cart.cart.extension_attributes.real_reserved_order_id;
   }
 
@@ -1178,34 +1179,34 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
   message.push(`double_check_done:${doubleCheckDone}`);
   message.push(`order_id:${orderId}`);
 
-  if (!_.isEmpty(cart.cart)) {
+  if (_isEmpty(cart.cart)) {
     message.push(`cart_id:${cart.cart.id}`);
     message.push(`amount_paid:${cart.totals.base_grand_total}`);
   }
 
-  if (!_.isEmpty(data.paymentMethod)) {
-    const paymentMethod = !_.isEmpty(data.paymentMethod.method)
-      ? data.paymentMethod.method
-      : data.method;
-    message.push(`payment_method:.${paymentMethod}`);
-  }
+
+  const paymentMethod = !_isEmpty(data.method)
+    ? data.method
+    : data.paymentMethod.method;
+  message.push(`payment_method:.${paymentMethod}`);
+
 
   let additionalInfo = '';
-  if (!_.isEmpty(data.paymentMethod) && !_.isEmpty(data.paymentMethod.additional_data)) {
+  if (!_isEmpty(data.paymentMethod) && !_isEmpty(data.paymentMethod.additional_data)) {
     additionalInfo = JSON.stringify(data.paymentMethod.additional_data);
-  } else if (!_.isEmpty(data.additional_data)) {
+  } else if (!_isEmpty(data.additional_data)) {
     additionalInfo = JSON.stringify(data.additional_data);
   }
   message.push(`additional_information:${additionalInfo}`);
 
-  if (!_.isEmpty(cart.shipping)) {
+  if (_isEmpty(cart.shipping) && _isEmpty(cart.shipping.method)) {
     message.push(`shipping_method:${cart.shipping.method}`);
-    _.each(cart.shipping.custom_attributes, (value) => {
+    _each(cart.shipping.custom_attributes, (value) => {
       message.push(`${value.attribute_code}:${value.value}`);
     });
   }
 
-  return !_.isEmpty(message) ? message.join('||') : '';
+  return _isEmpty(message) ? message.join('||') : '';
 };
 
 /**
@@ -1293,8 +1294,8 @@ const paymentUpdate = async (data) => {
   const cart = await updateCart(params);
   if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
     // Handle Error on cart update.
-    const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
-    const message = prepareOrderFailedMessage(oldCart, data, errorMessage, 'update cart', 'NA');
+    const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
+    const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
     logger.error(`Error occurred while placing order. ${message}`);
     return cart;
   }
@@ -1916,7 +1917,7 @@ window.commerceBackend.placeOrder = async (data) => {
         '@message': !_isEmpty(response.error) ? response.error.message : response,
         '@code': !_isEmpty(response.error) ? response.error.error_code : '',
       });
-      
+
       // @todo all the error handling.
       // @todo cancel reservation.
 
