@@ -6,7 +6,8 @@
       $(document).once('size-update-event').on('algoliaRefinementListUpdated', function (e) {
         // Check for size filter update.
         // Filter/Attribute name = attr_size;
-        if (e.detail.attribute === 'attr_size' && e.detail.items.length > 0) {
+        // For _product_list index it will be attr_size.en.
+        if (e.detail.attribute.split('.')[0] === 'attr_size' && e.detail.items.length > 0) {
           populateShopBySize();
         }
       });
