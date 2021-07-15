@@ -1384,14 +1384,14 @@ const validateBeforePaymentFinalise = async () => {
     // If first/last name not available in shipping address.
     isError = true;
     const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. first name or Last name not available in cart for shipping address. Cart: ${logData}.`);
+    logger.error(`Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: ${logData}.`);
   } else if (_isUndefined(cartData.cart.billing_address.firstname)
     || _isUndefined(cartData.cart.billing_address.lastname)
   ) {
     // If first/last name not available in billing address.
     isError = true;
     const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. first name or Last name not available in cart for billing address. Cart: ${logData}.`);
+    logger.error(`Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: ${logData}.`);
   }
 
   if (isError) {
@@ -1792,7 +1792,7 @@ window.commerceBackend.placeOrder = async (data) => {
   // If first/last name not available in shipping address.
   if (_isEmpty(cart.data.shipping.address.firstname)
     || _isEmpty(cart.data.shipping.address.lastname)) {
-    logger.error('Error while placing order. first name or Last name not available in cart for shipping address. Cart: @cart.', {
+    logger.error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });
     return {
@@ -1807,7 +1807,7 @@ window.commerceBackend.placeOrder = async (data) => {
   // Check If first/last name not available in billing address.
   if (_isEmpty(cart.data.cart.billing_address.firstname)
     || _isEmpty(cart.data.cart.billing_address.lastname)) {
-    logger.error('Error while placing order. first name or Last name not available in cart for billing address. Cart: @cart.', {
+    logger.error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });
     return {
