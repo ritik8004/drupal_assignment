@@ -15,6 +15,8 @@ variables:
   language_size_filter: 'فئة العطر'
   language_promotional_filter: ''
   filters: ''
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   empty_bag: 'Your shopping bag is empty'
   language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
   ar_collection_filter: ''

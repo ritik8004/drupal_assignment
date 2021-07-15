@@ -130,7 +130,12 @@ const PlpApp = ({
     && categoryFacetEnabled
     && nestedLevel < parseInt(categoryDepth, 10) + 1)) {
     for (let i = 0; i <= nestedLevel; i++) {
-      categoryFieldAttributes.push(`lhn_category.lvl${i}`);
+      if (productListIndexStatus()) {
+        // Set default EN category filter in product list index for VM.
+        categoryFieldAttributes.push(`lhn_category.en.lvl${i}`);
+      } else {
+        categoryFieldAttributes.push(`lhn_category.lvl${i}`);
+      }
     }
   }
 

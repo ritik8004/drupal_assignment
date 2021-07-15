@@ -20,6 +20,8 @@ variables:
   language_add_to_cart_link: 'أضف إلى حقيبة التسوق'
   ar_collection_filter: ''
   spc_search_byname: 'Suit trousers'
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   spc_search_byID: 'HMKWHDA'
   ar_sort_filter: 'رتب حسب'
   ar_price_filter: 'السعر'
