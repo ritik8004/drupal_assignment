@@ -178,11 +178,13 @@ const handleResponse = (apiResponse) => {
     //
   } else if (response.status === 401) {
     // Customer Token expired.
-    // @todo see ticket CORE-31154.
-    response.data.error = true;
-    response.data.error_code = 404;
-    response.data.error_message = getDefaultErrorMessage();
-    logger.notice(`The customer token has expired. Message: ${response.data.message}`);
+    logger.notice(`Message: ${response.data.message}. Redirecting to user/logout.`);
+
+    // Log the user out and redirect to the login page.
+    window.location = Drupal.url('user/logout');
+
+    // Throw an error to prevent further javascript execution.
+    throw new Error('The customer token is invalid.');
     //
   } else if (response.status === 404) {
     // Client error responses.
@@ -225,19 +227,6 @@ const handleResponse = (apiResponse) => {
 };
 
 /**
- * Get magento customer token.
- *
- * @returns {string}
- */
-const getCustomerToken = () => {
-  const token = localStorage.getItem('magento_customer_token');
-  if (typeof token === 'undefined' || token === false || token === '') {
-    logger.error(`Magento customer token is not set for user ${drupalSettings.user.uid}`);
-  }
-  return token;
-};
-
-/**
  * Make an AJAX call to Magento API.
  *
  * @param {string} url
@@ -261,7 +250,7 @@ const callMagentoApi = (url, method, data) => {
   };
 
   if (isUserAuthenticated()) {
-    params.headers.Authorization = `Bearer ${getCustomerToken()}`;
+    params.headers.Authorization = `Bearer ${window.drupalSettings.userDetails.customerToken}`;
   }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
