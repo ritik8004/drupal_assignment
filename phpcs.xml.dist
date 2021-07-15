@@ -22,7 +22,7 @@
   <!-- Include existing standards. -->
   <rule ref="Drupal"/>
   <rule ref="DrupalPractice" />
-<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+  <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
   <rule ref="Generic.CodeAnalysis.EmptyPHPStatement" />
   <rule ref="Generic.Files.ByteOrderMark"/>
   <rule ref="Generic.Files.LineEndings"/>
@@ -224,15 +224,13 @@
 
   <exclude-pattern>*/behat</exclude-pattern>
   <exclude-pattern>*/node_modules</exclude-pattern>
+  <exclude-pattern>*/dist/*.js</exclude-pattern>
+  <exclude-pattern>*/assets/js</exclude-pattern>
   <exclude-pattern>*/vendor</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/*.js</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/js</exclude-pattern>
-  <exclude-pattern>docroot/modules/react/*/dist</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/assets/js</exclude-pattern>
-  <exclude-pattern>docroot/modules/react/*/node_modules</exclude-pattern>
   <exclude-pattern>docroot/modules/react/*/modules/*/js</exclude-pattern>
   <exclude-pattern>docroot/modules/react/js</exclude-pattern>
-  <exclude-pattern>docroot/modules/react/node_modules</exclude-pattern>
-  <exclude-pattern>docroot/themes/custom/non_transac/*/dist</exclude-pattern>
 
 </ruleset>
