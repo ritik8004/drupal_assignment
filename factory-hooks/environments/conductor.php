@@ -217,6 +217,11 @@ $conductors = [
     'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
     'site_id' => 135,
   ],
+  'hmkw_qa2' => [
+    'hmac_id' => 'ad3866d497c34d529235f020461ed4af',
+    'hmac_secret' => 'OTk1ODcyZTItYmVmNC00',
+    'site_id' => 432,
+  ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
     'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
@@ -314,6 +319,11 @@ $conductors = [
     'hmac_id' => '037c238e9b0e474aa5cb501a24bde29d',
     'hmac_secret' => 'MzNlZDk0NjgtOWUzOC00',
     'site_id' => 413,
+  ],
+  'hmqa_qa2' => [
+    'hmac_id' => '7b87c3916f0c445b8e50642a2114e947',
+    'hmac_secret' => 'ZDBjZGQxMjEtYjQzOC00',
+    'site_id' => 433,
   ],
   'hmqa_uat' => [
     'hmac_id' => 'cfcd0d13ce9d4a28941a37d7481b980d',
