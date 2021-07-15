@@ -97,7 +97,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
   // Add verified purchaser context value.
   const path = decodeURIComponent(window.location.search);
   const queryParams = new URLSearchParams(path);
-  if (productId !== undefined || (queryParams.get('messageType') === 'PIE'
+  if (productId !== undefined || ((queryParams.get('messageType') === 'PIE' || queryParams.get('messageType') === 'PIE_FOLLOWUP')
     && bazaarVoiceSettings.productid === queryParams.get('productId'))) {
     params += `&contextdatavalue_VerifiedPurchaser=${true}`;
   }
@@ -156,7 +156,19 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
         } else if (id === 'reviewtext'
           || id === 'usernickname'
           || id === 'useremail') {
-          if (id === 'reviewtext' || id === 'usernickname') {
+          if (id === 'reviewtext') {
+            if (elements[id].value.length < fieldsConfig[key]['#minlength']) {
+              document.getElementById(`${id}-error`).classList.add('error');
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('text_max_chars_limit_error', { '%minLength': fieldsConfig[key]['#minlength'], '%fieldTitle': fieldsConfig[key]['#title'] });
+              isError = true;
+            }
+            if (elements[id].value.length > fieldsConfig[key]['#maxlength']) {
+              document.getElementById(`${id}-error`).classList.add('error');
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('text_max_chars_limit_error', { '%maxLength': fieldsConfig[key]['#maxlength'], '%fieldTitle': fieldsConfig[key]['#title'] });
+              isError = true;
+            }
+          }
+          if (id === 'usernickname') {
             if (elements[id].value.length < fieldsConfig[key]['#minlength']) {
               document.getElementById(`${id}-error`).classList.add('error');
               isError = true;

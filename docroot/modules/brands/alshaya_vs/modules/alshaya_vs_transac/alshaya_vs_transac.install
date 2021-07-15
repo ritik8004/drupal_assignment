@@ -12,6 +12,28 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * [6.3.0] Reindex to update the attributes.
+ */
+function alshaya_vs_transac_update_8017() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.sku_base_fields',
+    ],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
+  // Queue all products to re-index.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change block region for Size Facet Block for VS Bra PLPs.
  */
 function alshaya_vs_transac_update_8016() {
