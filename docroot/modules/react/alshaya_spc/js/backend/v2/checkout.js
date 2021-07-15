@@ -1243,7 +1243,7 @@ const processPaymentData = (paymentData, data) => {
           const { cvvCheck } = drupalSettings.checkoutComUpapi;
           const { cvv, id } = additionalInfo;
 
-          if (isEmpty(cvv)) {
+          if (_isEmpty(cvv)) {
             return {
               data: {
                 error: true,
@@ -1253,7 +1253,7 @@ const processPaymentData = (paymentData, data) => {
             };
           }
 
-          if (isEmpty(id)) {
+          if (_isEmpty(id)) {
             return {
               data: {
                 error: true,
@@ -1361,13 +1361,13 @@ const paymentUpdate = async (data) => {
   // Additional changes for VAULT.
   switch (paymentData.method) {
     case 'checkout_com_upapi':
-      if (!isEmpty(params.payment.additional_data.public_hash)) {
+      if (!_isEmpty(params.payment.additional_data.public_hash)) {
         params.payment.method = checkoutComUpapiVaultMethod();
       }
       break;
 
     case 'checkout_com':
-      if (!isEmpty(params.payment.additional_data.public_hash)) {
+      if (!_isEmpty(params.payment.additional_data.public_hash)) {
         params.payment.method = checkoutComVaultMethod();
       }
       break;
