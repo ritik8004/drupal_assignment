@@ -20,7 +20,6 @@ use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Unicode;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
@@ -141,7 +140,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       // For the logo file name - we always want the english value.
       // @TODO: Move this to a separate field and remove name dependency.
       $parent_en = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
-      $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent_en->label()));
+      $term_clean_name = Html::cleanCssIdentifier(mb_strtolower($parent_en->label()));
       // Set the language suffix for logo based on current language.
       $langcode = \Drupal::service('language_manager')
         ->getCurrentLanguage()

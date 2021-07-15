@@ -18,6 +18,8 @@ variables:
   language_add_to_cart_link: 'أضيفي إلى حقيبة التسوق'
   add_to_cart_link: 'add to bag'
   create_account: 'Create An Account'
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   sign_in: 'Sign In'
   find_store: 'Find A Store'
   language_link: 'العربية'
