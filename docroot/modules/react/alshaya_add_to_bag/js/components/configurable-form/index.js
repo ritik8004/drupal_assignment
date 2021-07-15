@@ -1,5 +1,5 @@
 import React from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import FormElement from '../form-element';
 import {
