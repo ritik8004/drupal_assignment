@@ -1,4 +1,5 @@
 import React from 'react';
+import HTMLReactParser from 'html-react-parser';
 import ReviewFeedback from '../review-feedback';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
@@ -32,7 +33,7 @@ const ReviewDescription = ({
             <div className="review-title">{reviewDescriptionData.Title}</div>
             <div className="review-date">{`${date}`}</div>
           </ConditionalView>
-          <div className="review-text">{reviewDescriptionData.ReviewText}</div>
+          <div className="review-text">{HTMLReactParser(reviewDescriptionData.ReviewText)}</div>
           <ReviewAdditionalAttributes
             additionalFieldsData={reviewDescriptionData.AdditionalFields}
             additionalFieldsOrder={reviewDescriptionData.AdditionalFieldsOrder}

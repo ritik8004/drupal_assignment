@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Menu\MenuLinkTree;
 use Drupal\alshaya_block\AlshayaBlockHelper;
-use Drupal\Core\Path\AliasStorage;
+use Drupal\path_alias\AliasRepositoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -62,7 +62,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * The alias storage.
    *
-   * @var \Drupal\Core\Path\AliasStorage
+   * @var \Drupal\path_alias\AliasRepositoryInterface
    */
   protected $aliasStorage;
 
@@ -85,7 +85,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Language Manager service object.
    * @param \Drupal\Core\Path\CurrentPathStack $current_path
    *   The current path stack.
-   * @param \Drupal\Core\Path\AliasStorage $alias_storage
+   * @param \Drupal\path_alias\AliasRepositoryInterface $alias_storage
    *   The alias storage service.
    */
   public function __construct(array $configuration,
@@ -96,7 +96,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
                               AlshayaBlockHelper $alshaya_block_helper,
                               LanguageManagerInterface $language_manager,
                               CurrentPathStack $current_path,
-                              AliasStorage $alias_storage) {
+                              AliasRepositoryInterface $alias_storage) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
@@ -119,7 +119,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('alshaya_block.helper'),
       $container->get('language_manager'),
       $container->get('path.current'),
-      $container->get('path.alias_storage')
+      $container->get('path_alias.repository')
     );
   }
 

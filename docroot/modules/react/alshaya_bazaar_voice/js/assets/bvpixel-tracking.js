@@ -16,8 +16,8 @@
       }
       localStorage.removeItem('bvpixel_order_id');
       const productsArray = [];
-      const itemObj = {};
       Object.keys(drupalSettings.order_details.items).forEach((sku) => {
+        const itemObj = {};
         itemObj.productId = drupalSettings.order_details.items[sku].sku;
         itemObj.quantity = drupalSettings.order_details.items[sku].qtyOrdered;
         itemObj.name = drupalSettings.order_details.items[sku].title;

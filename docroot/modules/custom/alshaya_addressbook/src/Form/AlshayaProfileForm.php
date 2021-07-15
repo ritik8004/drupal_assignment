@@ -96,10 +96,10 @@ class AlshayaProfileForm extends ProfileForm {
 
       if ($address_book_manager->pushUserAddressToApi($entity)) {
         if ($this->entity->isNew()) {
-          drupal_set_message($this->t('Address is added successfully.'));
+          $this->messenger()->addMessage($this->t('Address is added successfully.'));
         }
         else {
-          drupal_set_message($this->t('Address is updated successfully.'));
+          $this->messenger()->addMessage($this->t('Address is updated successfully.'));
         }
       }
 

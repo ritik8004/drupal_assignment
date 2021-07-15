@@ -1,4 +1,4 @@
 services:
   alshaya_block.helper:
     class: Drupal\alshaya_block\AlshayaBlockHelper
-    arguments: ['@language_manager', '@menu.link_tree', '@path.current', '@path.alias_storage']
+    arguments: ['@language_manager', '@menu.link_tree', '@path.current', '@path_alias.repository']

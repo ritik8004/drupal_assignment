@@ -16,6 +16,8 @@ variables:
   ar_promotional_filter: ''
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
+  np_plp_store: 'Abu Arish Saudi Arabia'
+  np_plp_language_store: 'الرياض السعودية'
   create_account: 'Create An Account'
   sign_in: 'Sign In'
   find_store: 'Find a Store'

@@ -27,6 +27,7 @@ use Drupal\image\ImageStyleInterface;
 use Drupal\Core\Extension\ModuleHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Class Product Controller.
@@ -72,6 +73,13 @@ class ProductController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -80,7 +88,8 @@ class ProductController extends ControllerBase {
       $container->get('request_stack'),
       $container->get('config.factory'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity.repository')
     );
   }
 
@@ -97,19 +106,23 @@ class ProductController extends ControllerBase {
    *   The SKU Image Manager.
    * @param \Drupal\Core\Extension\ModuleHandler $module_handler
    *   The Module Handler service.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository service.
    */
   public function __construct(
       SkuManager $sku_manager,
       RequestStack $request_stack,
       ConfigFactoryInterface $config_factory,
       SkuImagesManager $sku_image_manager,
-      ModuleHandler $module_handler
+      ModuleHandler $module_handler,
+      EntityRepositoryInterface $entity_repository
     ) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
     $this->acmConfig = $config_factory->get('alshaya_acm.settings');
     $this->skuImageManager = $sku_image_manager;
     $this->moduleHandler = $module_handler;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -225,7 +238,7 @@ class ProductController extends ControllerBase {
 
       if ($node instanceof NodeInterface) {
         // Get translated node object.
-        $node = $this->entityManager()->getTranslationFromContext($node);
+        $node = $this->entityRepository->getTranslationFromContext($node);
 
         // Set the title to empty string. We don't want to display title.
         $node->setTitle('');
