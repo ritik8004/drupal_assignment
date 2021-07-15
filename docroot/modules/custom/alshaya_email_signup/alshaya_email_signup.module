@@ -27,7 +27,7 @@ function alshaya_email_signup_form_webform_submission_alshaya_email_signup_add_f
     // Get the current lang code.
     $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-    $entity_manager = \Drupal::entityManager();
+    $entity_manager = \Drupal::entityTypeManager();
     // Load the block object from block id.
     $block = $entity_manager->getStorage('block_content')->load($block_id);
     // Render the block content view.
