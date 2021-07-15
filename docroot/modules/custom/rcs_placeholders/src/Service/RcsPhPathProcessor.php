@@ -14,6 +14,27 @@ use Symfony\Component\HttpFoundation\Request;
 class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
   /**
+   * RCS Entity Type.
+   *
+   * @var string
+   */
+  public static $entityType;
+
+  /**
+   * RCS Entity Path.
+   *
+   * @var string
+   */
+  public static $entityPath;
+
+  /**
+   * RCS Entity data.
+   *
+   * @var array|null
+   */
+  public static $entityData;
+
+  /**
    * The node storage.
    *
    * @var \Drupal\node\NodeStorageInterface
@@ -59,45 +80,71 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    *   The processed path.
    */
   public function processInbound($path, Request $request) {
+    static $static = [];
+
+    // Use static cache to improve performance.
+    if (isset($static[$path])) {
+      return $static[$path];
+    }
+
+    // The $path value has been processed in case the requested url is the alias
+    // of an existing technical path. For example, $path may be /node/12 if the
+    // requested url /buy-my-product is an alias for node 12.  For this reason,
+    // we use $request->getPathInfo() to get the real requested url instead of
+    // $path.
+    // Remove language code from URL.
+    $rcs_path_to_check = str_replace(
+      '/' . $request->getDefaultLocale() . '/',
+      '/',
+      $request->getPathInfo()
+    );
+
     $config = \Drupal::config('rcs_placeholders.settings');
 
     // Is it a category page?
     $category_prefix = $config->get('category.path_prefix');
 
-    preg_match('/^\/' . $category_prefix . '([^\/\?]*)/', $path, $matches);
+    preg_match('/^\/' . $category_prefix . '([^\/\?]*)/', $rcs_path_to_check, $matches);
     if (isset($matches[1])) {
-      $request->server->set('rcs_entity_type', 'category');
-      $request->server->set('rcs_entity_path', $matches[1]);
+      self::$entityType = 'category';
+      self::$entityPath = $matches[1];
+
+      $static[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
 
       $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', $matches[1]) : NULL;
       if (isset($category)) {
-        $request->server->set('rcs_entity_data', $category->toArray());
-        return '/taxonomy/term/' . $category->id();
+        self::$entityData = $category->toArray();
+        $static[$rcs_path_to_check] = '/taxonomy/term/' . $category->id();
       }
-      else {
-        return '/taxonomy/term/' . $config->get('category.placeholder_tid');
-      }
+
+      return $static[$rcs_path_to_check];
     }
 
     // Is it a product page?
     $product_prefix = $config->get('product.path_prefix');
 
-    preg_match('/^\/' . $product_prefix . '([^\?]*)/', $path, $matches);
+    preg_match('/^\/' . $product_prefix . '([^\?]*)/', $rcs_path_to_check, $matches);
     if (isset($matches[1])) {
-      $request->server->set('rcs_entity_type', 'product');
-      $request->server->set('rcs_entity_path', $matches[1]);
+      self::$entityType = 'product';
+      self::$entityPath = $matches[1];
+
+      $static[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
 
       $product = $config->get('product.enrichment') ? $this->getEnrichedEntity('product', $matches[1]) : NULL;
       if (isset($product)) {
-        $request->server->set('rcs_entity_data', $product->toArray());
-        return '/node/' . $product->id();
+        self::$entityData = $product->toArray();
+        $static[$rcs_path_to_check] = '/node/' . $product->id();
       }
-      else {
-        return '/node/' . $config->get('product.placeholder_nid');
-      }
+
+      return $static[$rcs_path_to_check];
     }
 
-    return $path;
+    // Set current path as default so we do not process twice for same path.
+    if (empty($static[$path])) {
+      $static[$path] = $path;
+    }
+
+    return $static[$path];
   }
 
   /**
@@ -111,7 +158,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    * @return object|null
    *   The loaded commerce entity if any matching the slug.
    */
-  public function getEnrichedEntity($type, $slug) {
+  public function getEnrichedEntity(string $type, string $slug) {
     $entity = NULL;
     $storage = NULL;
 
