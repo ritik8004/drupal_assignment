@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://tbskw2.factory.alshaya.com/en'
+  url_base_uri: 'https://www.thebodyshop.com.kw/ar/'
   create_account: 'تسجيل مستخدم جديد'
   sign_in: 'تسجيل الدخول'
   find_store: 'البحث عن محلاتنا'
