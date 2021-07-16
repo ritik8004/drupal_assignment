@@ -13,6 +13,7 @@ services:
       - '@alshaya_feed.sku_info'
       - '@twig'
       - '@logger.channel.alshaya_feed'
+      - '@config.factory'
 
   alshaya_feed.sku_info:
     class: Drupal\alshaya_feed\AlshayaFeedSkuInfoHelper

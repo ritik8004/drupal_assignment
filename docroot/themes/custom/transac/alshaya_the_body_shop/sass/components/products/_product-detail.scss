@@ -80,6 +80,20 @@
         padding: 0 1rem;
       }
     }
+
+    .content--size-volume {
+      font-size: 0.875rem;
+      color: $pdp_product_itemcode;
+
+      .field__value {
+        color: $pdp_product_itemcode_value;
+        font-family: $alshaya-bold;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding: 0 1rem 1rem;
+      }
+    }
   }
 }
 
@@ -267,6 +281,12 @@ article[gtm-sku-type="simple"] {
     .sku-base-form {
       button[type="submit"] {
         height: 3.1875rem;
+
+        html[lang=ar] & {
+          @include breakpoint($only-tablet) {
+            margin-top: 2rem;
+          }
+        }
       }
     }
   }
