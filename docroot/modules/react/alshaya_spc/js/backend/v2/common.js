@@ -665,9 +665,9 @@ const getCartWithProcessedData = async (force = false) => {
       // If the user is authenticated and we have cart_id in the local storage
       // it means the customer just became authenticated.
       // We need to associate the cart and remove the cart_id from local storage.
-      const response = await associateCartToCustomer(localStorage.getItem('cart_id'));
-      if (response !== false) {
-        cart = response;
+      const updated = await associateCartToCustomer(localStorage.getItem('cart_id'));
+      if (updated !== false) {
+        cart = updated;
       }
     }
   }
@@ -903,6 +903,7 @@ const getFormattedError = (code, message) => ({
 export {
   isAnonymousUserWithoutCart,
   isAuthenticatedUserWithoutCart,
+  associateCartToCustomer,
   callDrupalApi,
   callMagentoApi,
   preUpdateValidation,

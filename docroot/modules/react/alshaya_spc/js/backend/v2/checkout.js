@@ -12,6 +12,7 @@ import _isObject from 'lodash/isObject';
 import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
+  associateCartToCustomer,
   getCart,
   updateCart,
   getFormattedError,
@@ -1443,14 +1444,27 @@ window.commerceBackend.getCartForCheckout = () => {
 
   return getCart()
     .then(async (response) => {
-      const cartId = window.commerceBackend.getCartId();
+      let cart = response;
 
-      if (_isEmpty(response.data) || !_isEmpty(response.data.error_message)) {
-        logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
-        return new Promise((resolve) => resolve(response.data));
+      // Check if the user is authenticated but there is a guest cart_id in the local storage.
+      if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
+        // If the user is authenticated and we have cart_id in the local storage
+        // it means the customer just became authenticated.
+        // We need to associate the cart and remove the cart_id from local storage.
+        const updated = await associateCartToCustomer(localStorage.getItem('cart_id'));
+        if (updated !== false) {
+          cart = updated;
+        }
       }
 
-      if (_isEmpty(response.data.cart) || _isEmpty(response.data.cart.items)) {
+      const cartId = window.commerceBackend.getCartId();
+
+      if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
+        logger.error(`Error while getting cart:${cartId} Error:${cart.data.error_message}`);
+        return new Promise((resolve) => resolve(cart.data));
+      }
+
+      if (_isEmpty(cart.data.cart) || _isEmpty(cart.data.cart.items)) {
         logger.error(`Checkout accessed without items in cart for id:${cartId}`);
 
         const error = {
@@ -1464,16 +1478,16 @@ window.commerceBackend.getCartForCheckout = () => {
         return new Promise((resolve) => resolve(error));
       }
 
-      response.data = await getProcessedCheckoutData(response.data);
-      return response;
+      cart.data = await getProcessedCheckoutData(cart.data);
+      return cart;
     })
-    .catch((response) => {
-      logger.error(`Error while getCartForCheckout controller. Error: ${response.message}. Code: ${response.status}`);
+    .catch((cart) => {
+      logger.error(`Error while getCartForCheckout controller. Error: ${cart.message}. Code: ${cart.status}`);
 
       const error = {
         data: {
           error: true,
-          error_code: response.status,
+          error_code: cart.status,
           error_message: getDefaultErrorMessage(),
         },
       };
