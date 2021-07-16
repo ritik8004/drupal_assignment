@@ -7,11 +7,12 @@ import {
   callMagentoApi,
   getCartSettings,
   isAnonymousUserWithoutCart,
+  isAuthenticatedUserWithoutCart,
   updateCart,
   getProcessedCartData,
   getCartWithProcessedData,
 } from './common';
-import { getApiEndpoint, logger } from './utility';
+import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { getExceptionMessageType } from './error';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
@@ -141,7 +142,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   let cartId = window.commerceBackend.getCartId();
   // If we try to add/remove item while we don't have anything or corrupt
   // session, we create the cart object.
-  if (_isNull(cartId)) {
+  if (isAnonymousUserWithoutCart() || await isAuthenticatedUserWithoutCart()) {
     cartId = await window.commerceBackend.createCart();
     // If we still don't have a cart, we cannot continue.
     if (_isNull(cartId)) {
@@ -342,7 +343,10 @@ window.commerceBackend.createCart = async () => {
     const Id = window.drupalSettings.userDetails.customerId;
     logger.notice(`New cart created: ${response.data}, customer_id: ${Id}`);
 
-    setStorageInfo(response.data, 'cart_id');
+    // If its a guest customer, keep cart_id in the local storage.
+    if (!isUserAuthenticated()) {
+      setStorageInfo(response.data, 'cart_id');
+    }
     return response.data;
   }
 

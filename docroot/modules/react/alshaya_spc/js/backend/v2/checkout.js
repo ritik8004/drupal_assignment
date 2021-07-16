@@ -1437,13 +1437,14 @@ window.commerceBackend.addPaymentMethod = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.getCartForCheckout = () => {
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
-    return new Promise((resolve) => resolve({ error: true }));
+  if (isAnonymousUserWithoutCart()) {
+    return null;
   }
 
   return getCart()
     .then(async (response) => {
+      const cartId = window.commerceBackend.getCartId();
+
       if (_isEmpty(response.data) || !_isEmpty(response.data.error_message)) {
         logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
         return new Promise((resolve) => resolve(response.data));
