@@ -23,3 +23,11 @@ alshaya_algolia_react.algolia_react_config_setting:
     _title: 'Algolia Configuration'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_algolia_react.get_plp_settings:
+  path: '/plp-settings'
+  defaults:
+    _controller: '\Drupal\alshaya_algolia_react\Controller\AlgoliaController::getPlpSettings'
+    _title: ''
+  requirements:
+    _permission: 'access content'

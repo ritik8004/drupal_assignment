@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
+use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 
 /**
  * Customer controller to add front page.
@@ -75,6 +76,28 @@ class AlgoliaController extends ControllerBase {
     $settings['api_key'] = $config['commonAlgoliaSearch']['api_key'];
     $settings['indexName'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['indexName'];
     $settings['filters'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['filters'];
+    $settings['gallery']['showHoverImage'] = $config['commonReactTeaserView']['gallery']['showHoverImage'];
+    $settings['gallery']['showThumbnails'] = $config['commonReactTeaserView']['gallery']['showThumbnails'];
+    $settings['swatches'] = $config['commonReactTeaserView']['swatches'];
+
+    return new JsonResponse($settings);
+  }
+
+  /**
+   * Callback to get Algolia settings for PLP.
+   *
+   * @return \Drupal\Core\Cache\CacheableJsonResponse
+   *   Settings as JSON.
+   */
+  public function getPlpSettings() {
+    AlshayaRequestContextManager::updateDefaultContext('app');
+    $config = $this->configHelper->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE);
+
+    $settings = [];
+    $settings['application_id'] = $config['commonAlgoliaSearch']['application_id'];
+    $settings['api_key'] = $config['commonAlgoliaSearch']['api_key'];
+    $settings['indexName'] = $config[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
+    $settings['filters'] = $config[AlshayaAlgoliaReactPLP::PAGE_TYPE]['filters'];
     $settings['gallery']['showHoverImage'] = $config['commonReactTeaserView']['gallery']['showHoverImage'];
     $settings['gallery']['showThumbnails'] = $config['commonReactTeaserView']['gallery']['showThumbnails'];
     $settings['swatches'] = $config['commonReactTeaserView']['swatches'];

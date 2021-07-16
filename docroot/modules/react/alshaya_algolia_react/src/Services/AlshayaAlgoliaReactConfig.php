@@ -423,9 +423,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
               && !$this->configFactory->get('alshaya_acm_product.settings')->get('enable_size_grouping_filter')) {
             $widget['type'] = 'checkbox';
           }
+          $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
           $filter_facets[explode('.', $identifier)[0]] = [
-            'identifier' => $identifier,
+            'identifier' => $identifier . '.' . $langcode,
             'label' => $block->label(),
             'name' => $facet->getName(),
             'widget' => $widget,
