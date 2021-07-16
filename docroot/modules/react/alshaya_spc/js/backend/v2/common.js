@@ -594,11 +594,10 @@ const associateCartToCustomer = async (guestCartId) => {
   let response = await callMagentoApi(`/rest/V1/guest-carts/${guestCartId}`);
 
   // Check for errors.
-  if (response.status === 404) {
+  if (response.status !== 200) {
     logger.error('Could not associate cart: @cartId since cart is not available.', {
       '@cartId': guestCartId,
     });
-
     removeStorageInfo('cart_id');
 
     return false;
@@ -651,13 +650,25 @@ const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
   let cart = await getCart(force);
 
+  // Check if the user is authenticated but there is a guest cart_id in the local storage.
   if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
-    // If the user is authenticated and we have cart_id in the local storage
-    // it means the customer just became authenticated.
-    // We need to associate the cart and remove the cart_id from local storage.
-    const response = await associateCartToCustomer(localStorage.getItem('cart_id'));
-    if (response !== false) {
-      cart = response;
+    if (!_isNull(cart)
+      && !_isUndefined(cart.data)
+      && !_isUndefined(cart.data.cart)
+      && !_isUndefined(cart.data.cart.items)
+      && !_isEmpty(cart.data.cart.items)
+    ) {
+      // If the current cart has items, we carry on with this cart and remove
+      // the guest cart id from local storage.
+      removeStorageInfo('cart_id');
+    } else {
+      // If the user is authenticated and we have cart_id in the local storage
+      // it means the customer just became authenticated.
+      // We need to associate the cart and remove the cart_id from local storage.
+      const response = await associateCartToCustomer(localStorage.getItem('cart_id'));
+      if (response !== false) {
+        cart = response;
+      }
     }
   }
 
