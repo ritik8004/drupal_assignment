@@ -7,7 +7,6 @@ Feature: Test search functionality
 
   @desktop
   Scenario: Verify user should be able to search with valid keyword and see relevant results
-    Given I am on homepage
     And I should see an "#alshaya-algolia-autocomplete" element
     When I fill in "search" with "{spc_search_keyword}"
     And I wait for AJAX to finish
@@ -26,7 +25,6 @@ Feature: Test search functionality
 
   @desktop
   Scenario: Verify Search Results Message for No Results
-    Given I am on homepage
     When I fill in "search" with "NO-Results"
     And I wait for AJAX to finish
     And I wait 10 seconds
