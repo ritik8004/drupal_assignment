@@ -1187,6 +1187,6 @@ function alshaya_acm_node_view_alter(array &$build, EntityInterface $entity, Ent
 /**
  * Implements hook_alshaya_reset_config_configs_to_reset_alter().
  */
-function kaylera_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+function alshaya_acm_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
   $reset[] = 'kaleyra.settings';
 }
