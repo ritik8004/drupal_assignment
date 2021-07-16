@@ -1167,9 +1167,9 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
   let orderId = '';
 
-  if (_isEmpty(cart.cart)
-    && _isEmpty(cart.cart.extension_attributes)
-    && _isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
+  if (!_isEmpty(cart.cart)
+    && !_isEmpty(cart.cart.extension_attributes)
+    && !_isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
     orderId = cart.cart.extension_attributes.real_reserved_order_id;
   }
 
@@ -1179,17 +1179,19 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
   message.push(`double_check_done:${doubleCheckDone}`);
   message.push(`order_id:${orderId}`);
 
-  if (_isEmpty(cart.cart)) {
+  if (!_isEmpty(cart.cart)) {
     message.push(`cart_id:${cart.cart.id}`);
     message.push(`amount_paid:${cart.totals.base_grand_total}`);
   }
 
 
-  const paymentMethod = !_isEmpty(data.method)
-    ? data.method
-    : data.paymentMethod.method;
+  let paymentMethod = '';
+  if (!_isEmpty(data.method)) {
+    paymentMethod = data.method;
+  } else if (!_isEmpty(data.paymentMethod.method)) {
+    paymentMethod = data.paymentMethod.method;
+  }
   message.push(`payment_method:.${paymentMethod}`);
-
 
   let additionalInfo = '';
   if (!_isEmpty(data.paymentMethod) && !_isEmpty(data.paymentMethod.additional_data)) {
@@ -1199,14 +1201,14 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
   }
   message.push(`additional_information:${additionalInfo}`);
 
-  if (_isEmpty(cart.shipping) && _isEmpty(cart.shipping.method)) {
+  if (!_isEmpty(cart.shipping) && !_isEmpty(cart.shipping.method)) {
     message.push(`shipping_method:${cart.shipping.method}`);
     _each(cart.shipping.custom_attributes, (value) => {
       message.push(`${value.attribute_code}:${value.value}`);
     });
   }
 
-  return _isEmpty(message) ? message.join('||') : '';
+  return !_isEmpty(message) ? message.join('||') : '';
 };
 
 /**
