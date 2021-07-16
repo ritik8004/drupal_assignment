@@ -34,7 +34,7 @@ modules.
 # Manage dependecies between module's react/js while lazy loading.
 If your component is included or lazy loaded in the other react modules, you have to run the react build script in that module as well to capture the changes in component within your module. If we won't the Travis build will only run react build script in your module but not in the other module using your module's component. This will result in chunck failed error on the site after the deployment.
 
-To manage the dependecies between modules, please follow the below steps:
+Concept here is same as Drupal module dependencies. You have to add name of the module on which the current module depends on in the react_dependencies.txt file. For implementation, please follow the below steps:
 - Add a file name `react_dependencies.txt` in the module using your module's component.
 - Within the file, add your module's name.
 - If multiple modules are servicing components to a sinlge module, mention all the modules name one per line.
