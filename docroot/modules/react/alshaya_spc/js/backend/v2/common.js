@@ -493,7 +493,7 @@ const getProcessedCartData = (cartData) => {
 
   if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
-    cartData.cart.items.forEach((item) => {
+    cartData.cart.items.forEach(async (item) => {
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
@@ -508,9 +508,9 @@ const getProcessedCartData = (cartData) => {
       };
 
       // Get stock data.
-      const stockInfo = getProductStatus(item.sku);
+      const stockInfo = await getProductStatus(item.sku);
       data.items[item.sku].in_stock = stockInfo.in_stock;
-      data.items[item.sku].stock = stockInfo.in_stock;
+      data.items[item.sku].stock = stockInfo.stock;
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
@@ -551,6 +551,7 @@ const getProcessedCartData = (cartData) => {
   } else {
     data.items = [];
   }
+  console.log(data.items);
   return data;
 };
 
