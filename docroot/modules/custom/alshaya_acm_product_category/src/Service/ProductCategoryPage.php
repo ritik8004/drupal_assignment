@@ -155,6 +155,8 @@ class ProductCategoryPage {
    *   The language code to return the string.
    * @param string $tid
    *   The term id.
+   * @param bool $mapp
+   *   The boolean value to add lancode in MAPP.
    *
    * @return array
    *   The array containing hierarchy, level and rule contexts.
@@ -162,7 +164,7 @@ class ProductCategoryPage {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getCurrentSelectedCategory(string $langcode = NULL, string $tid = '') {
+  public function getCurrentSelectedCategory(string $langcode = NULL, string $tid = '', bool $mapp = FALSE) {
     if (empty($langcode)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
@@ -210,12 +212,16 @@ class ProductCategoryPage {
 
       $cache_tags = Cache::mergeTags($cache_tags, $term->getCacheTags());
     }
+    $category_field = 'field_category_name.lvl' . (count($contexts) - 1);
+    if ($mapp) {
+      $category_field = 'field_category_name.' . $langcode . '.lvl' . (count($contexts) - 1);
+    }
 
     $data = [
       'hierarchy' => implode(' > ', $hierarchy_list),
       'level' => count($contexts),
       'ruleContext' => array_reverse($contexts),
-      'category_field' => 'field_category_name.lvl' . (count($contexts) - 1),
+      'category_field' => $category_field,
     ];
 
     $this->cache->set($cid, $data, Cache::PERMANENT, $cache_tags);

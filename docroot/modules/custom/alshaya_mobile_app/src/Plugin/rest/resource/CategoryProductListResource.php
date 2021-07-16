@@ -330,7 +330,7 @@ class CategoryProductListResource extends ResourceBase {
     $response = [];
 
     // Get term details in current language for meta info (department name).
-    $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid);
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid, TRUE);
     if (isset($term_details['hierarchy'])) {
       $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
     }
@@ -364,7 +364,8 @@ class CategoryProductListResource extends ResourceBase {
       // Get term details in current language for filters.
       $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
         $this->languageManager->getCurrentLanguage()->getId(),
-        $tid
+        $tid,
+        TRUE
       );
 
       $index = $storage->load('alshaya_algolia_index');
