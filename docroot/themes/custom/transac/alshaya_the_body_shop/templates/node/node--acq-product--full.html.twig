@@ -58,3 +58,12 @@
 
   {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
 {% endblock %}
+
+{% block sizeVolume %}
+  {% if content.size_volume %}
+    <div class="content--size-volume">
+      <span class="field__label">{{ 'Size'|t }}:</span>
+      <span class="field__value">{{ content.size_volume }}</span>
+    </div>
+  {% endif %}
+{% endblock %}
