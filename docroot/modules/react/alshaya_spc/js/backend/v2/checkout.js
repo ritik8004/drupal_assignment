@@ -1272,13 +1272,11 @@ const processPaymentData = (paymentData, data) => {
           break;
         }
 
-        default:
-          return additionalInfo;
+        // no default
       }
       break;
 
-    default:
-      return additionalInfo;
+    // no default
   }
 
   return additionalInfo;
