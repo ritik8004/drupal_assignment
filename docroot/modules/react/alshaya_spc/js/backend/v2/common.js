@@ -408,7 +408,7 @@ const getProductStatus = async (sku) => {
   }
 
   // Return from static, if available.
-  if (!_.isUndefined(staticProductStatus[sku])) {
+  if (!_isUndefined(staticProductStatus[sku])) {
     return staticProductStatus[sku];
   }
 
@@ -416,8 +416,8 @@ const getProductStatus = async (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
-  if (!_.isUndefined(response.data)) {
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { _cf_cache_bypass: '1' });
+  if (!_isUndefined(response.data)) {
     staticProductStatus[sku] = response.data;
   }
 
@@ -544,14 +544,14 @@ const getProcessedCartData = (cartData) => {
       });
 
       // If any item is OOS.
-      if (_.isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
+      if (!_isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
         data.in_stock = false;
       }
     });
   } else {
     data.items = [];
   }
-  console.log(data.items);
+
   return data;
 };
 

@@ -55,44 +55,6 @@ const invisibleCharacter = '&#8203;';
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
-<<<<<<< HEAD
- * Static cache for getProductStatus().
- *
- * @type {null}
- */
-const staticProductStatus = [];
-
-/**
- * Get data related to product status.
- *
- * @param {Promise<string|null>} sku
- *  The sku for which the status is required.
- */
-const getProductStatus = async (sku) => {
-  if (typeof sku === 'undefined' || !sku) {
-    return null;
-  }
-
-  // Return from static, if available.
-  if (!_isUndefined(staticProductStatus[sku])) {
-    return staticProductStatus[sku];
-  }
-
-  // Bypass CloudFlare to get fresh stock data.
-  // Rules are added in CF to disable caching for urls having the following
-  // query string.
-  // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { _cf_cache_bypass: '1' });
-  if (!_isUndefined(response.data)) {
-    staticProductStatus[sku] = response.data;
-  }
-
-  return staticProductStatus[sku];
-};
-
-/**
-=======
->>>>>>> CORE-30158: Added stock info to processed cart data.
  * Get CnC status for cart based on skus in cart.
  *
  * @param {object} data
@@ -1732,7 +1694,7 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
 window.commerceBackend.placeOrder = async (data) => {
   const cart = await getCart(true);
 
-  if (_.isObject(cart) && isCartHasOosItem(cart.data)) {
+  if (_isObject(cart) && isCartHasOosItem(cart.data)) {
     logger.error('Error while placing order. Cart has an OOS item. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
