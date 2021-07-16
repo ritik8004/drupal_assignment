@@ -551,7 +551,6 @@ const getProcessedCartData = (cartData) => {
   } else {
     data.items = [];
   }
-
   return data;
 };
 
