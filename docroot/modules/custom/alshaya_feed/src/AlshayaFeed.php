@@ -10,6 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Template\TwigEnvironment;
 use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class Alshaya Feed.
@@ -70,6 +71,13 @@ class AlshayaFeed {
   protected $logger;
 
   /**
+   * Config Storage service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaFeed constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -86,6 +94,8 @@ class AlshayaFeed {
    *   The Twig template environment.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config storage object.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -94,7 +104,8 @@ class AlshayaFeed {
     EntityRepositoryInterface $entity_repository,
     AlshayaFeedSkuInfoHelper $sku_info_helper,
     TwigEnvironment $twig_environment,
-    LoggerInterface $logger
+    LoggerInterface $logger,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -103,6 +114,7 @@ class AlshayaFeed {
     $this->feedSkuInfoHelper = $sku_info_helper;
     $this->twig = $twig_environment;
     $this->logger = $logger;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -150,7 +162,8 @@ class AlshayaFeed {
           $file_content = PHP_EOL;
           if (!isset($context['results']['files'][$lang])) {
             $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>\n<products>" . PHP_EOL;
-            $context['results']['files'][$lang] = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml"));
+            $schema = $this->configFactory->get('system.file')->get('default_scheme');
+            $context['results']['files'][$lang] = file_create_url($this->fileSystem->realpath($schema . "://feed_{$lang}_wip.xml"));
           }
 
           $file_content .= $this->twig
@@ -193,7 +206,8 @@ class AlshayaFeed {
    */
   public function clear() {
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
-      $wip_file = $this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml");
+      $schema = $this->configFactory->get('system.file')->get('default_scheme');
+      $wip_file = $this->fileSystem->realpath($schema . "://feed_{$lang}_wip.xml");
       if (file_exists($wip_file)) {
         $this->fileSystem->delete($wip_file);
       }
@@ -208,11 +222,12 @@ class AlshayaFeed {
    */
   public function publish() {
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
-      $wip_file = $this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml");
+      $schema = $this->configFactory->get('system.file')->get('default_scheme');
+      $wip_file = $this->fileSystem->realpath($schema . "://feed_{$lang}_wip.xml");
       if (file_exists($wip_file)) {
         $this->fileSystem->move(
           $wip_file,
-          $this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}.xml"),
+          $this->fileSystem->realpath($schema . "://feed_{$lang}.xml"),
           FileSystemInterface::EXISTS_REPLACE
         );
       }
