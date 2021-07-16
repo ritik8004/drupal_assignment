@@ -43,7 +43,8 @@ const productRecommendationsSuffix = 'pr-';
       $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        if (typeof drupalSettings[productKey][sku] === 'undefined'
+          || typeof drupalSettings[productKey][sku]['group'][variant] === 'undefined') {
           return;
         }
 
