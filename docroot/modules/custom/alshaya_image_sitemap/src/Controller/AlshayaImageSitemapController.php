@@ -149,8 +149,8 @@ class AlshayaImageSitemapController extends ControllerBase {
     if ($success) {
       \Drupal::service('alshaya_image_sitemap.generator')
         ->sitemapGenerateFinished();
-      $requestTime = \Drupal::time()->getRequestTime();
-      \Drupal::state()->set('alshaya_image_sitemap.last_generated', $requestTime);
+      $request_time = \Drupal::time()->getRequestTime();
+      \Drupal::state()->set('alshaya_image_sitemap.last_generated', $request_time);
       // @codingStandardsIgnoreEnd
       \Drupal::messenger()->addMessage(t('Image Sitemap Generated Successfully.'), 'success');
     }
