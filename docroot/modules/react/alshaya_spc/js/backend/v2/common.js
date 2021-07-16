@@ -586,11 +586,21 @@ const getCart = async (force = false) => {
  *   Returns the updated cart or false.
  */
 const associateCartToCustomer = async (guestCartId) => {
+  logger.error('Trying to associate cart to the customer: @customerId but cart is not available in session.', {
+    '@customerId': window.drupalSettings.userDetails.customerId,
+  });
+
   // Get the cart id of the guest cart.
   let response = await callMagentoApi(`/rest/V1/guest-carts/${guestCartId}`);
+
   // Check for errors.
   if (response.status === 404) {
+    logger.error('Could not associate cart: @cartId since cart is not available.', {
+      '@cartId': guestCartId,
+    });
+
     removeStorageInfo('cart_id');
+
     return false;
   }
 
@@ -607,10 +617,18 @@ const associateCartToCustomer = async (guestCartId) => {
 
     // Associate cart to customer.
     response = await callMagentoApi(getApiEndpoint('associateCart'), 'PUT', params);
+
     // If it works, the response data is empty, so we can only check the status.
-    if (response.status === 200) {
+    if (response.status !== 200) {
+      logger.error('Error while associating cart: @cartId to customer: @customerId. Error message: @message.', {
+        '@cartId': guestCartId,
+        '@customerId': window.drupalSettings.userDetails.customerId,
+        '@message': (typeof response.data.message !== 'undefined') ? response.data.message : '',
+      });
+    } else {
       // Clear local storage.
       removeStorageInfo('cart_id');
+
       // Reload cart.
       return getCart(true);
     }
