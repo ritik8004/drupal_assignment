@@ -36,7 +36,6 @@
         "drupal/config_rewrite": "^1.4",
         "drupal/core": "^8.8.12",
         "drupal/core-composer-scaffold": "^8.8.10",
-        "drupal/critical_css": "^1.17",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
         "drupal/default_content": "^1.0@alpha",
