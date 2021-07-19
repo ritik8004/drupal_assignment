@@ -6,5 +6,4 @@ services:
     arguments:
       - '@database'
       - '@logger.factory'
-      - '@entity.manager'
-      - '@entity.query'
+      - '@entity_type.manager'
