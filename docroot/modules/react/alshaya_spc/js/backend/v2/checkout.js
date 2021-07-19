@@ -320,7 +320,11 @@ const validateAddressAreaCity = async (address) => {
 
 /**
  * Get last order of the customer.
- * @todo implement this.
+ *
+ * @param {string} customerId
+ *   The customer id.
+ * @returns {Promise<AxiosPromise<Object> | *[]>}
+ *   Customer last order or empty array.
  */
 const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {})
   .then((response) => {
@@ -998,7 +1002,6 @@ const selectHd = async (address, method, billing, shippingMethods) => {
  *   The data.
  */
 const applyDefaults = async (data, uid) => {
-  // @todo Update this function to return data after processing with user inputs.
   if (!_isEmpty(data.shipping.method)) {
     return data;
   }
@@ -1071,8 +1074,7 @@ const getProcessedCheckoutData = async (cartData) => {
   const cncStatus = await getCncStatusForCart(data);
 
   // Here we will do the processing of cart to make it in required format.
-  // @todo check if we need to use user.uid or userDetails.customerId.
-  const updated = await applyDefaults(data, window.drupalSettings.user.uid);
+  const updated = await applyDefaults(data, window.drupalSettings.userDetails.customerId);
   if (updated !== false && !_isEmpty(updated.cart)) {
     data = updated;
   }
