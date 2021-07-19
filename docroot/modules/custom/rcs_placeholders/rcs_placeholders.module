@@ -146,7 +146,8 @@ function rcs_placeholders_page_attachments(array &$attachments) {
   // These are the attributes that which will be search for replacement of
   // tokens.
   $attachments['#attached']['drupalSettings']['rcsPhSettings'] = [];
-  $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = [
+
+  $settings = [
     'href',
     'src',
     'alt',
@@ -158,6 +159,10 @@ function rcs_placeholders_page_attachments(array &$attachments) {
     'id',
     'value',
   ];
+
+  \Drupal::moduleHandler()->alter('rcs_placeholders_placeholder_attributes', $settings);
+
+  $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = $settings;
 }
 
 /*
