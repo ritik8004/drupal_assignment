@@ -1248,7 +1248,7 @@ const processPaymentData = (paymentData, data) => {
               data: {
                 error: true,
                 error_code: cartErrorCodes.cartOrderPlacementError,
-                error_message: 'CVV missing for credit/debit card.',
+                message: 'CVV missing for credit/debit card.',
               },
             };
           }
@@ -1258,7 +1258,7 @@ const processPaymentData = (paymentData, data) => {
               data: {
                 error: true,
                 error_code: cartErrorCodes.cartOrderPlacementError,
-                error_message: 'Invalid card token.',
+                message: 'Invalid card token.',
               },
             };
           }
@@ -1380,8 +1380,8 @@ const paymentUpdate = async (data) => {
   const oldCart = await getCart();
   const cart = await updateCart(params);
   if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
-    // Handle Error on cart update.
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
+    cart.data.message = errorMessage;
     const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
     logger.error(`Error occurred while placing order. ${message}`);
     return cart;
