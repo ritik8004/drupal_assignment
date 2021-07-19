@@ -135,7 +135,7 @@ class AlshayaAcmConfigCheck {
    * @return bool
    *   Command run fully or not.
    */
-  public function checkConfig($force = FALSE, string $config_reset = '') {
+  public function checkConfig($force = TRUE, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
       return FALSE;
@@ -218,10 +218,14 @@ class AlshayaAcmConfigCheck {
       'whatsapp_sid',
     ];
     $kaleyra_config = $this->configFactory->getEditable('kaleyra.settings');
-    foreach ($kaleyra_keys as $kaleyra_key) {
-      $kaleyra_config->set($kaleyra_key, '');
+    // Checks if config exists
+    // Checks if data in config is not an empty array.
+    if ($kaleyra_config && $kaleyra_config->get()) {
+      foreach ($kaleyra_keys as $kaleyra_key) {
+        $kaleyra_config->set($kaleyra_key, '');
+      }
+      $kaleyra_config->save();
     }
-    $kaleyra_config->save();
 
     // Re-configure Simple Oauth.
     $config = $this->configFactory->getEditable('simple_oauth.settings');
