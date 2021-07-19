@@ -140,6 +140,27 @@ function _rcs_placeholders_get_placeholder_entity_view(string $entity_type, stri
 }
 
 /**
+ * Implements hook_page_attachments().
+ */
+function rcs_placeholders_page_attachments(array &$attachments) {
+  // These are the attributes that which will be search for replacement of
+  // tokens.
+  $attachments['#attached']['drupalSettings']['rcsPhSettings'] = [];
+  $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = [
+    'href',
+    'src',
+    'alt',
+    'about',
+    'content',
+    'title',
+    'class',
+    'name',
+    'id',
+    'value',
+  ];
+}
+
+/*
  * Clear route cache after enriched entity is created or deleted.
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity
