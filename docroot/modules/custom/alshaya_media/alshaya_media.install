@@ -46,7 +46,7 @@ function alshaya_media_update_8105() {
     'media.type.video',
   ];
   $manager->updateConfigs($alshaya_media_configs, 'alshaya_media');
-  
+
   $alshaya_media_override = [
     'core.entity_form_display.media.video.default',
   ];
@@ -60,21 +60,21 @@ function alshaya_media_update_8105() {
   // media_revision__field_document ==> media_revision__field_media_document
   $document_rev_query = $connection->select('media_revision__field_document', 'mrfd')->fields('mrfd');
   $connection->insert('media_revision__field_media_document')->from($document_rev_query)->execute();
-  
+
   // media__image ==> media__field_media_image
   $image_query = $connection->select('media__image', 'mimg')->fields('mimg');
   $connection->insert('media__field_media_image')->from($image_query)->execute();
   // media_revision__image ==> media_revision__field_media_image
   $image_rev_query = $connection->select('media_revision__image', 'mrimg')->fields('mrimg');
   $connection->insert('media_revision__field_media_image')->from($image_rev_query)->execute();
-  
+
   // media__field_media_video_embed_field ==> media__field_media_oembed_video
   $video_query = $connection->select('media__field_media_video_embed_field', 'mvd')->fields('mvd');
   $connection->insert('media__field_media_oembed_video')->from($video_query)->execute();
   // media_revision__field_media_video_embed_field ==> media_revision__field_media_oembed_video
   $video_rev_query = $connection->select('media_revision__field_media_video_embed_field', 'mrvd')->fields('mrvd');
   $connection->insert('media_revision__field_media_oembed_video')->from($video_rev_query)->execute();
-  
+
   // Deleting of old fields and storage configs
   // for media entity type.
   FieldConfig::loadByName('media', 'video', 'field_media_video_embed_field')->delete();
@@ -95,7 +95,7 @@ function alshaya_media_update_8105() {
     'core.entity_view_display.media.image.thumbnail',
   ];
   $manager->updateConfigs($media_image_optional_configs, 'lightning_media_image', 'optional');
-  
+
   // Replace the configs for media document.
   $media_document_optional_configs = [
     'field.field.media.document.field_media_document',
@@ -183,7 +183,7 @@ function alshaya_media_update_8101() {
     \Drupal::service('module_installer')->install(['lightning_media_video']);
   }
   // Delete old video_embed bundle of media.
-  $media_type_storage = \Drupal::entityManager()->getStorage('media_type');
+  $media_type_storage = \Drupal::entityTypeManager()->getStorage('media_type');
   $entity_type = $media_type_storage->load('video_embed');
   $entity_type->delete();
 }
