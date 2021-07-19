@@ -322,7 +322,61 @@ const validateAddressAreaCity = async (address) => {
  * Get last order of the customer.
  * @todo implement this.
  */
-const getLastOrder = () => [];
+const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {})
+  .then((response) => {
+    if (typeof response.data.error !== 'undefined' && response.data.error) {
+      return [];
+    }
+
+    const order = {};
+    order.order_id = response.data.entity_id;
+
+    // Customer info.
+    order.firstname = response.data.customer_firstname;
+    order.lastname = response.data.customer_lastname;
+    order.email = response.data.customer_email;
+
+    // Items.
+    order.items = response.data.items;
+
+    // Coupon code.
+    order.coupon = !_isEmpty(response.data.coupon_code) ? response.data.coupon_code : '';
+
+    // Extension.
+    order.extension = response.data.extension_attributes;
+    delete response.data.extension_attributes;
+
+    // Shipping.
+    order.shipping = order.extension.shipping_assignments[0].shipping;
+    order.shipping.address.customer_id = response.data.customer_id;
+    delete order.shipping.address.entity_id;
+    delete order.shipping.address.parent_id;
+
+    order.shipping.commerce_address = order.shipping.address;
+    order.shipping.extension = order.shipping.address.extension_attributes;
+    delete order.shipping.address.extension_attributes;
+
+    // Billing.
+    order.billing = response.data.billing_address;
+    order.billing.customer_id = response.data.customer_id;
+    delete response.data.billing_address.entity_id;
+    delete response.data.billing_address.parent_id;
+
+    order.billing_commerce_address = order.billing;
+    delete response.data.billing_address;
+    order.billing.extension = order.billing.extension_attributes;
+    delete order.billing.extension_attributes;
+
+    Object.assign(response.data, order);
+
+    return response.data;
+  }).catch((error) => {
+    logger.error('Error while fetching customers last order. Message: @message, CustomerId: @customer_id', {
+      '@message': error.message,
+      '@customer_id': customerId,
+    });
+    return [];
+  });
 
 /**
  * Get payment method from last order.
@@ -951,7 +1005,7 @@ const applyDefaults = async (data, uid) => {
 
   // Get last order only for Drupal Customers.
   const order = isUserAuthenticated()
-    ? getLastOrder(uid)
+    ? await getLastOrder(uid)
     : [];
 
   // Try to apply defaults from last order.

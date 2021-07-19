@@ -108,6 +108,12 @@ const getApiEndpoint = (action, params = {}) => {
         : `/rest/V1/click-and-collect/stores/guest-cart/${params.cartId}/lat/${params.lat}/lon/${params.lon}`;
       break;
 
+    case 'getLastOrder':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/customer-order/me/getLastOrder/'
+        : '';
+      break;
+
     default:
       logger.critical(`Endpoint does not exist for action : ${action}`);
   }
