@@ -1184,7 +1184,6 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
     message.push(`amount_paid:${cart.totals.base_grand_total}`);
   }
 
-
   let paymentMethod = '';
   if (!_isEmpty(data.method)) {
     paymentMethod = data.method;
