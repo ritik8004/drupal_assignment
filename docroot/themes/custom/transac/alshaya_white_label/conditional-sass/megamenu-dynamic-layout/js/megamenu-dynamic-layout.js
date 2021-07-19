@@ -13,7 +13,7 @@
       var winWidth = $(window).width();
 
       $('.menu--one__list-item').once().on('mouseover', function () {
-        if(winWidth >= 1024){
+        if(winWidth > 1024){
           MegaMenuDynamicLayout($(this));
         }
       });
@@ -25,7 +25,7 @@
       var eleL2Wrapper = $(this).children('.menu--two__list');
       var eleL2LinksWrapper = eleL2Wrapper.find('.menu__links__wrapper');
       var eleL2HighlightWrapper = eleL2Wrapper.find('.term-image__wrapper .highlights');
-      var eleMainMenu = $('.megamenu-dynamic-layout');
+      var eleMainMenu = $(this).closest('.megamenu-dynamic-layout');
 
       if (eleL2Wrapper.length > 0) {
         $(this).css('position', 'relative');

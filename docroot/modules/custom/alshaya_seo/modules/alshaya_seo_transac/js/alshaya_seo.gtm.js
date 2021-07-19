@@ -235,13 +235,19 @@ const productRecommendationsSuffix = 'pr-';
         // Check if social login window opened to avoid GTM push from
         // social login window.
         var socialWindow = false;
-        if(window.name == 'ConnectWithSocialAuth'){
+        if (window.name == 'ConnectWithSocialAuth') {
           var socialWindow = true;
         }
 
+        // Check for user login type in cookies.
+        var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
+        if (drupalSettings.user.uid && loginType === undefined) {
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , drupalSettings.userDetails.userEmailID);
+        }
+
         // Fire sign-in success event on successful sign-in from parent window.
-        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
-          Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID && loginType !== undefined) {
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           localStorage.setItem('userID', userDetails.userID);
         }
 
@@ -249,6 +255,7 @@ const productRecommendationsSuffix = 'pr-';
         if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           localStorage.setItem('userID', userDetails.userID);
+          $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -635,19 +642,23 @@ const productRecommendationsSuffix = 'pr-';
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page' || listName === 'Promotion') {
           var section = listName;
           if (listName.indexOf('PLP') > -1) {
             // As we have used the same markup to display search results page
             // title, use the h1 tag inside '#block-page-title' context.
             section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase();
           }
-
           // Track facet filters.
-          $('li.facet-item', $('#block-facets-ajax')).once('js-event').on('click', function () {
+          $('li.facet-item', $('.block-facets-ajax')).once('js-event').on('click', function () {
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
+            // For promotion page.
+            if (listName === 'Promotion') {
+              facetTitle = $(this).parent('ul').attr('data-drupal-facet-alias').replaceAll("_", " ");
+              selectedVal = $(this).find('a').attr('data-drupal-facet-item-value');
+            }
             var data = {
               event: 'filter',
               siteSection: section.trim(),
@@ -662,10 +673,12 @@ const productRecommendationsSuffix = 'pr-';
           $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
             var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
             sortValue.trim();
+            var facetTitle = $('.fieldset-legend').first().html();
             var data = {
               event: 'sort',
               siteSection: section.trim(),
-              sortValue: sortValue
+              filterType: facetTitle,
+              filterValue: sortValue
             };
 
             dataLayer.push(data);
@@ -1021,12 +1034,14 @@ const productRecommendationsSuffix = 'pr-';
    * Helper funciton to push Login & Register events.
    *
    * @param eventAction
+   * @param loginType
    */
-  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction) {
+  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction, loginType = null) {
     dataLayer.push({
       event: 'eventTracker',
       eventCategory: 'Login & Register',
       eventAction: eventAction,
+      eventLabel: loginType,
       eventValue: 0,
       nonInteraction: 0
     });
@@ -1181,7 +1196,7 @@ const productRecommendationsSuffix = 'pr-';
         }
         // On page load, process only the required number of
         // items and push to datalayer.
-        if ((eventType === 'load') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
+        if ((eventType === 'load' || eventType === 'plp-results-updated') && (impressions.length == drupalSettings.gtm.productImpressionDefaultItemsInQueue)) {
           // This is to break out from the .each() function.
           return false;
         }

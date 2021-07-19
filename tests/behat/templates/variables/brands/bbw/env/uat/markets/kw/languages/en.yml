@@ -17,6 +17,8 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   empty_bag: 'Your shopping bag is empty'
+  spc_search_byname: 'Mad About You'
+  spc_search_byID: 'BWKWHDE'
   language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'

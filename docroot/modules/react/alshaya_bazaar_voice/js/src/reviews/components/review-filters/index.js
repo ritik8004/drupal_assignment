@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import { getArraysIntersection } from '../../../utilities/write_review_util';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 export default class ReviewFilters extends React.Component {
   handleSelect = (selectedOption) => {
@@ -20,6 +21,17 @@ export default class ReviewFilters extends React.Component {
 
       if (isOptionNew) {
         processingCallback(selectedOption);
+        // Process filter details click data as user clicks on filter option.
+        const filterName = selectedOption.value.split(':')[0];
+        const filterVal = selectedOption.value.split(':')[1];
+        const trimmedFilterName = filterName.substring(filterName.indexOf('_') + '_'.length);
+        const analyticsData = {
+          type: 'Used',
+          name: 'filter',
+          detail1: trimmedFilterName,
+          detail2: filterVal,
+        };
+        trackFeaturedAnalytics(analyticsData);
       }
     }
   }

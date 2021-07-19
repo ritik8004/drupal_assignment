@@ -156,14 +156,15 @@ export default class PaymentMethods extends React.Component {
       }
 
       // Select first payment method by default.
-      this.changePaymentMethod(Object.keys(paymentMethods)[0]);
+      const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
+      this.changePaymentMethod(sortedMethods[0].code);
     }
   };
 
   getPaymentMethods = (active) => {
     const { cart } = this.props;
 
-    let paymentMethods = [];
+    const paymentMethods = [];
 
     if (active) {
       Object.entries(cart.cart.payment.methods).forEach(([, method]) => {
@@ -184,8 +185,6 @@ export default class PaymentMethods extends React.Component {
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });
-
-      paymentMethods = paymentMethods.sort((a, b) => a.weight - b.weight);
     } else {
       Object.entries(drupalSettings.payment_methods).forEach(([, method]) => {
         if (!(cart.delivery_type !== undefined && cart.delivery_type === 'click_and_collect' && method.code === 'cashondelivery')) {
@@ -292,10 +291,11 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
-    const activePaymentMethods = this.getPaymentMethods(active);
+    const activePaymentMethods = Object.values(this.getPaymentMethods(active))
+      .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
-    Object.entries(activePaymentMethods).forEach(([key, method], index) => {
+    Object.entries(activePaymentMethods).forEach(([, method], index) => {
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
       methods.push(<PaymentMethod
@@ -304,7 +304,7 @@ export default class PaymentMethods extends React.Component {
         refreshCart={refreshCart}
         changePaymentMethod={this.changePaymentMethod}
         isSelected={cart.cart.payment.method === method.code}
-        key={key}
+        key={method.code}
         method={method}
         animationOffset={animationOffset}
       />);

@@ -1,54 +1,39 @@
-@javascript @auth @madaPayment @homeDelivery
+@javascript @auth @madaPayment @homeDelivery @pbaeuat @pbsauat @pbkwuat @vssauat
 Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
 
   Background:
-    Given I am on "user/login"
-    And I wait for the page to load
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for the page to load
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
+    And I wait 10 seconds
     Then I should be on "/user" page
     When I am on "{spc_basket_page}"
     And I wait for the page to load
 
   @cc @hd @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (VISA Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
-    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
+    Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
@@ -97,33 +82,23 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
+    And I select the home delivery address
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
@@ -131,7 +106,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
-    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
+    Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
@@ -185,41 +160,30 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
-    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
+    Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
@@ -234,10 +198,10 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -250,20 +214,9 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    Then I select the Checkout payment method
+    And I select the home delivery address
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
@@ -317,36 +270,23 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | fullname | {anon_username} |
-      | email    | {spc_mada_anon_username}    |
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -407,34 +347,23 @@ Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish

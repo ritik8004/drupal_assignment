@@ -72,9 +72,26 @@ function toggleSortByFilter(action, context = 'alshaya-algolia-search') {
   const searchWrapper = document.getElementById(context);
 
   if (action === 'hide') {
-    searchWrapper.querySelector('.container-without-product #sort_by').classList.add('hide-facet-block');
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.add('hide-sort-by-block');
   } else {
-    searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block');
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-sort-by-block');
+  }
+}
+
+// Show or hide blockcategory filter, when no results found.
+function toggleBlockCategoryFilter(action, context = 'alshaya-algolia-search') {
+  const searchWrapper = document.getElementById(context);
+  // To get the list of blocks in sidebar first region.
+  const list = searchWrapper.querySelectorAll('.block-facet-blockcategory-facet-search');
+  if (action === 'hide') {
+    // hide-block-category-block class is added to hide facet when no result.
+    for (let i = 0; i < list.length; ++i) {
+      list[i].classList.add('hide-block-category-block');
+    }
+  } else {
+    for (let i = 0; i < list.length; ++i) {
+      list[i].classList.remove('hide-block-category-block');
+    }
   }
 }
 
@@ -109,4 +126,5 @@ export {
   toggleSortByFilter,
   showLoader,
   removeLoader,
+  toggleBlockCategoryFilter,
 };

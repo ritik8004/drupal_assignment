@@ -1,4 +1,5 @@
 To be able to use the php scripts in this folder you need to create a settings.php file in the same folder with the following content:
+```
 <?php
 // @codingStandardsIgnoreFile
 
@@ -15,6 +16,7 @@ $config = [
   'hmac_key' => 'xxxxx',
   'hmac_secret' => 'xxxx',
 ];
+```
 
 And then replace hmac_key and hmac_secret with proper values.
 Hint: looking at Postman variables or asking ACM product team could help.

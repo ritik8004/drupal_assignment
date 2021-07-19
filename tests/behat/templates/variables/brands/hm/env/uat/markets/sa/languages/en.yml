@@ -12,6 +12,8 @@ variables:
   color_filter: ''
   size_filter: ''
   filters: 'all filters'
+  spc_search_byname: 'Tie-collar shirt'
+  spc_search_byID: 'HMSASSA'
   promotional_filter: ''
   language_collection_filter: 'المجموعة'
   language_sort_filter: 'رتب حسب'

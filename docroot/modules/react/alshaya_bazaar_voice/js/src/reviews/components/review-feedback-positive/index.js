@@ -1,6 +1,8 @@
 import React from 'react';
 import { handleFeedbackSubmit, getFeedbackInfo } from '../../../utilities/feedback_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 class ReviewFeedbackPositive extends React.Component {
   constructor(props) {
@@ -15,14 +17,17 @@ class ReviewFeedbackPositive extends React.Component {
     e.preventDefault();
     const { positiveCount, negativeCount } = this.state;
     handleFeedbackSubmit(contentId, voteText, contentType, positiveCount, negativeCount);
-    const event = new CustomEvent('handleFeedbackState', {
-      bubbles: true,
-      detail: {
-        contentId,
-      },
-    });
-    document.dispatchEvent(event);
+    dispatchCustomEvent('handleFeedbackState', contentId);
     this.setState({ positiveCount: positiveCount + 1 });
+
+    // Process positive feedback click data as user clicks on yes.
+    const analyticsData = {
+      type: 'Used',
+      name: 'helpfulness',
+      detail1: 'positive',
+      detail2: contentType,
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   render() {

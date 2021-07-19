@@ -25,6 +25,8 @@ variables:
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
   create_account: 'Create An Account'
+  spc_search_byID: 'VSSASSE'
+  spc_search_byname: 'Demi Bra'
   sign_in: 'Sign in'
   find_store: 'Find a Store'
   language_link: 'العربية'

@@ -17,6 +17,10 @@ if ($env === 'local') {
   global $host_site_code;
   $home = '/home/vagrant';
 
+  if (getenv('LANDO')) {
+    $home = '/app/local_home';
+  }
+
   $site_country_code = alshaya_get_site_country_code($host_site_code);
 }
 else {

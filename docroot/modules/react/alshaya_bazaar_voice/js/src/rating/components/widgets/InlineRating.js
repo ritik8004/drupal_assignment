@@ -1,9 +1,10 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
 import ConditionalView from '../../../common/components/conditional-view';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../stars';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 function clickHandler(e, callbackFn) {
   if (callbackFn === undefined) {
@@ -12,6 +13,14 @@ function clickHandler(e, callbackFn) {
     e.preventDefault();
     callbackFn(e);
   }
+  // Process review count click as user clicks on count link.
+  const analyticsData = {
+    type: 'Used',
+    name: 'link',
+    detail1: 'review_count',
+    detail2: 'PrimaryRatingSummary',
+  };
+  trackFeaturedAnalytics(analyticsData);
 }
 const InlineRating = ({
   reviewsData,

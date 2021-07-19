@@ -1,4 +1,4 @@
-@javascript @KNetPayment @homeDelivery @auth @bbwkwuat @flkwuat
+@javascript @KNetPayment @homeDelivery @auth @pbkwuat
 Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
 
   Background:
@@ -18,7 +18,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -27,21 +27,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
@@ -102,7 +88,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -111,21 +97,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I add in the billing address with following:
-      | mobile                        | {mobile}      |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I select the Knet payment method
     And I wait 10 seconds
@@ -154,7 +126,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -163,21 +135,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I add in the billing address with following:
-      | mobile                        | {mobile}      |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I select the Knet payment method
     And I wait 10 seconds

@@ -43,6 +43,7 @@ class AlshayaFeatureProcess {
     // Adding test templates for functionalities likes new checkout, new pdp, spc, boots etc. based on sites/region/environment
     $environment = explode('-', $parameters['site']);
     $this->suiteLocators = array();
+    $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPLPAddtocart';
     if (isset($parameters['variables']['new_pdp_enabled'])) {
       $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPDP';
     }

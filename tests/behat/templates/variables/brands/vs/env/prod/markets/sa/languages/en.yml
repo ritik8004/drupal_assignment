@@ -26,6 +26,7 @@ variables:
   order_summary: 'order summary'
   promo_code: 'have a promo code?'
   excluding_delivery: 'excluding delivery'
+  spc_search_keyword: 'body'
   checkout_link: 'continue to checkout'
   language_collection_filter: 'المجموعة'
   language_sort_filter: 'رتبي حسب'

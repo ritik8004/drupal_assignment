@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: promo-menu
+label: 'Promo Menu'
+description: 'The recommendation is not to add more then three promotion links.'
+locked: false

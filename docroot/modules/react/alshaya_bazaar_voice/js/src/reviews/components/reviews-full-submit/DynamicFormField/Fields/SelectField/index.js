@@ -40,9 +40,9 @@ export default class SelectField extends React.Component {
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="dropdown-conatiner" key={id}>
+        <div id={id} className="dropdown-conatiner" key={id}>
           <label className="dropdown-label" htmlFor={label}>
             {label}
             {' '}
@@ -65,7 +65,7 @@ export default class SelectField extends React.Component {
             onChange={this.handleChange}
             placeholder={getStringMessage('selectlist_placeholder')}
           />
-          <div id={`${id}-error`} className="error" />
+          <div id={`${id}-error`} className={(required) ? 'error' : ''} />
         </div>
       </>
     );

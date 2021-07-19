@@ -1,44 +1,55 @@
 import Axios from 'axios';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export function getLanguageCode() {
   return drupalSettings.path.currentLanguage;
 }
 
-export function getbazaarVoiceSettings($context = 'pdp') {
+export function getbazaarVoiceSettings(productId = undefined) {
   const settings = [];
-  if ($context === 'pdp') {
+  if (productId !== undefined) {
+    settings.productid = productId;
+    settings.reviews = drupalSettings.productInfo[productId].alshaya_bazaar_voice;
+  } else {
     Object.entries(drupalSettings.productInfo).forEach(([key]) => {
       settings.productid = key;
       settings.reviews = drupalSettings.productInfo[key].alshaya_bazaar_voice;
     });
   }
-  if ($context === 'user') {
+  return settings;
+}
+
+export function getUserBazaarVoiceSettings() {
+  const settings = [];
+  if (drupalSettings.userInfo) {
     settings.reviews = drupalSettings.userInfo;
   }
+  return settings;
+}
 
+export function getUserDetails(productId = undefined) {
+  const settings = [];
+  if (drupalSettings.bazaarvoiceUserDetails !== undefined) {
+    settings.user = drupalSettings.bazaarvoiceUserDetails;
+    if (productId !== undefined && Object.keys(drupalSettings.productInfo[productId]).length > 0) {
+      settings.productReview = drupalSettings.productInfo[productId].productReview;
+    } else if (drupalSettings.bazaarvoiceUserDetails.productReview !== undefined) {
+      settings.productReview = drupalSettings.bazaarvoiceUserDetails.productReview;
+    } else {
+      settings.productReview = null;
+    }
+  }
   return settings;
 }
 
 export function doRequest(url) {
   return Axios.get(url)
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }
@@ -46,23 +57,11 @@ export function doRequest(url) {
 export function postRequest(url, data) {
   return Axios.post(url, data)
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }
