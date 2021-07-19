@@ -5,21 +5,12 @@ set classes = [
   view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 ]
 %}
-<article data-sku="#rcs.product._self|data-sku#" data-sku-type="#rcs.product._self|data-sku-type#" {{ attributes }} {{ gtm_attributes }}>
+<article data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     {% block mainContent %}
       <div class="content__main {{ image_slider_position_pdp }}">
-        {% if content.gallery is not empty %}
-          {{ content.gallery }}
-        {% else %}
-          <div class="gallery-wrapper empty-gallery">
-            <div id="product-zoom-container">
-              <div class="cloudzoom"></div>
-              <div class="mobilegallery"></div>
-              <div id="product-full-screen-gallery-container" style="display: none;"></div>
-            </div>
-          </div>
-        {% endif %}
+        {# The image gallery and thumnails. #}
+        {% include "@alshaya_rcs/rcs-product-zoom.html.twig" %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
@@ -59,7 +50,7 @@ set classes = [
           {% block itemCode %}
             <div class="content--item-code">
               <span class="field__label">{{ 'Item Code'|t }}:</span>
-              <span class="field__value">#rcs.product._self|data-sku#</span>
+              <span class="field__value">#rcs.product._self|sku#</span>
             </div>
           {% endblock %}
 
@@ -186,19 +177,7 @@ set classes = [
             {% block afterDescription %}
             {% endblock %}
 
-            {% if content.home_delivery or content.click_and_collect %}
-              <div class="delivery-options-wrapper">
-                <div class="product-out-of-stock-layer"></div>
-                <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
-                <div class="field__content">
-                  {{ content.home_delivery }}
-
-                  {% if content.click_and_collect %}
-                    {{ content.click_and_collect }}
-                  {% endif %}
-                </div>
-              </div>
-            {% endif %}
+            <div id="rcs-ph-delivery-option"></div>
 
             {{ content.sharethis }}
 
