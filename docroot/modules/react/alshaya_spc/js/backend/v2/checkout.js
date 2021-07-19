@@ -1363,12 +1363,11 @@ const isAddressExtensionAttributesValid = (data) => {
     // shipping address or not.
     addressFieldsToValidate.forEach((field) => {
       // If field not exists or empty.
-      if (_isEmpty(cartAddressCustom[field])) {
+      if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
         const cartId = window.commerceBackend.getCartId();
         logger.error(`Field: ${field} not available in cart shipping address. Cart id: ${cartId}`);
+        isValid = false;
       }
-      isValid = false;
-      return isValid;
     });
   }
   return isValid;

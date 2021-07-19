@@ -813,5 +813,93 @@ describe('Checkout', () => {
         expect(result).toEqual([]);
       });
     });
+
+    describe('Test cartAddressFieldsToValidate()', () => {
+      const cartAddressFieldsToValidate = utilsRewire.__get__('cartAddressFieldsToValidate');
+      it('From drupal settings', async () => {
+        let result = cartAddressFieldsToValidate();
+        expect(result).toEqual(['area', 'address_apartment_segment']);
+      });
+    });
+
+    describe('Test isAddressExtensionAttributesValid()', () => {
+      const isAddressExtensionAttributesValid = utilsRewire.__get__('isAddressExtensionAttributesValid');
+
+      beforeEach(() => {
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+      });
+
+      it('With empty fields', async () => {
+        const response = await getCart();
+        let result = isAddressExtensionAttributesValid(response.data);
+        expect(result).toEqual(false);
+      });
+
+      it('With no empty fields', async () => {
+        window.drupalSettings.cart.address_fields.default.kw = [ 'area' ];
+        const response = await getCart();
+        let result = isAddressExtensionAttributesValid(response.data);
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('Test isCartHasOosItem()', () => {
+      const isCartHasOosItem = utilsRewire.__get__('isCartHasOosItem');
+
+      it('Without OOS items', async () => {
+        let result = isCartHasOosItem(cartData);
+        expect(result).toEqual(false);
+      });
+
+      it('With OOS items', async () => {
+        const cart = { ...cartData.cart };
+        cart.items[0].extension_attributes = { error_message: 'This product is out of stock' };
+        let result = isCartHasOosItem({ cart });
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('Test validateBeforePaymentFinalise()', () => {
+      const validateBeforePaymentFinalise = utilsRewire.__get__('validateBeforePaymentFinalise');
+
+      beforeEach(() => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+      });
+
+      it('With OOS items', async () => {
+        const data = { ...cartData };
+        cartData.cart.items[0].extension_attributes = { error_message: 'This product is out of stock' };
+        axios.mockResolvedValue({ data: data, status: 200 });
+        let result = await validateBeforePaymentFinalise();
+        expect(result.data.error).toEqual(true);
+        expect(result.data.error_code).toEqual(506);
+        expect(result.data.error_message).toEqual('Cart contains some items which are not in stock.');
+        delete cartData.cart.items[0].extension_attributes;
+      });
+
+      it('With shipping method and address', async () => {
+        window.drupalSettings.cart.address_fields.default.kw = [ 'area' ];
+        const data = { ...cartData };
+        axios.mockResolvedValue({ data: data, status: 200 });
+        let result = await validateBeforePaymentFinalise();
+        expect(result).toEqual(true);
+      });
+
+      it('With no shipping method', async () => {
+        const data = { ...cartData };
+        delete data.cart.extension_attributes.shipping_assignments;
+        axios.mockResolvedValue({ data: data, status: 200 });
+        let result = await validateBeforePaymentFinalise();
+        expect(result.data.error).toEqual(true);
+        expect(result.data.error_code).toEqual(505);
+        expect(result.data.error_message).toEqual('Delivery Information is incomplete. Please update and try again.');
+      });
+    });
   });
 });
