@@ -19,6 +19,8 @@
   var records = false;
   // Display search form.
   var displaySearchForm;
+  // The content container.
+  var node = null;
 
   Drupal.pdp = Drupal.pdp || {};
   Drupal.geolocation = Drupal.geolocation || {};
@@ -32,7 +34,9 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('click-collect').on('variant-selected', function (event, variant, code) {
+      node = $('.sku-base-form').not('[data-sku *= "#"]').parents('article.entity--type-node:first', context);
+
+      $('.sku-base-form', node).once('click-collect').on('variant-selected', function (event, variant, code) {
         var node = $(this).parents('article.entity--type-node:first');
         if (node.length < 1) {
           return;
@@ -62,18 +66,18 @@
         }
       });
 
-      $('#pdp-stores-container').once('bind-js').each(function () {
+      $('#pdp-stores-container', node).once('bind-js').each(function () {
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
         if ($(this).data('state') === 'disabled') {
-          $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
-          if ($('#pdp-stores-container.click-collect').accordion()) {
+          $('#pdp-stores-container.click-collect .c-accordion_content', node).addClass('hidden-important');
+          if ($('#pdp-stores-container.click-collect', node).accordion()) {
             $(this).accordion('option', 'disabled', true);
           }
         }
       });
 
-      $('#pdp-stores-container h3').once('bind-js').on('click', function () {
+      $('#pdp-stores-container h3', node).once('bind-js').on('click', function () {
         if (typeof Drupal.geolocation.loadGoogle !== 'function') {
           return;
         }
@@ -89,11 +93,11 @@
           $('.pac-container:visible').hide();
         });
 
-        $('#pdp-stores-container').once('initiate-stores').each(function () {
+        $('#pdp-stores-container', node).once('initiate-stores').each(function () {
           // Check if we have access to click & collect.
           if ($(this).data('state') !== 'disabled') {
             // Get the permission track the user location.
-            $('#pdp-stores-container').on('click', function () {
+            $('#pdp-stores-container', node).on('click', function () {
               if ($(this).hasClass('maps-loaded')) {
                 return;
               }
@@ -102,14 +106,14 @@
 
               // First load the library from google.
               Drupal.geolocation.loadGoogle(function () {
-                var field = $('.click-collect-form').find('input[name="location"]')[0];
+                var field = $('.click-collect-form', node).find('input[name="location"]')[0];
                 new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
 
                 Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
                 // Try again if we were not able to get location on page load.
-                if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
-                  $('#pdp-stores-container').data('second-try', 'done');
+                if (geoPerm === false && typeof $('#pdp-stores-container', node).data('second-try') === 'undefined') {
+                  $('#pdp-stores-container', node).data('second-try', 'done');
                   Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
                 }
               });
@@ -118,29 +122,29 @@
         });
       });
 
-      $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
+      $('.click-collect-top-stores', node).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
-          $('.click-collect-all-stores.inline-modal-wrapper').append('<div class="gradient-holder"></div>');
+          $('.click-collect-all-stores.inline-modal-wrapper', node).append('<div class="gradient-holder"></div>');
           // Close read more description window if open.
           if ($('.c-pdp .description-wrapper').hasClass('desc-open')) {
             $('.c-pdp .description-wrapper').toggleClass('desc-open');
           }
-          $('.click-collect-all-stores').toggleClass('desc-open', function () {
+          $('.click-collect-all-stores', node).toggleClass('desc-open', function () {
             // Scroll.
             $('html,body').animate({
               scrollTop: 0
             }, 'slow');
-            $('#pdp-stores-container').accordion({
+            $('#pdp-stores-container', node).accordion({
               active: false
             });
           });
         }
         else {
-          $('.click-collect-all-stores').slideToggle('slow');
+          $('.click-collect-all-stores', node).slideToggle('slow');
         }
       });
 
-      $('.click-collect-all-stores', context).once('bind-events').on('click', '.close-inline-modal, .change-location-link, .search-stores-button, .cancel-change-location', function (e) {
+      $('.click-collect-all-stores', node).once('bind-events').on('click', '.close-inline-modal, .change-location-link, .search-stores-button, .cancel-change-location', function (e) {
         if (e.target.className === 'change-location-link') {
           Drupal.pdp.allStoresAutocomplete();
           Drupal.pdp.allStoreschangeLocationAutocomplete();
@@ -150,7 +154,7 @@
         else if (e.target.className === 'cancel-change-location') {
           e.preventDefault();
           $(this).parent().hide();
-          $('.click-collect-all-stores').find('.available-store-text .change-location-link').show();
+          $('.click-collect-all-stores', node).find('.available-store-text .change-location-link').show();
           return false;
         }
         else if (e.target.className === 'search-stores-button' && !records) {
@@ -159,17 +163,17 @@
           return false;
         }
         else {
-          $('.click-collect-all-stores').toggleClass('desc-open');
+          $('.click-collect-all-stores', node).toggleClass('desc-open');
         }
       });
 
       $(document).once().on('click', function (e) {
-        if ($(e.target).closest('.c-pdp .content__sidebar').length === 0 && $('.click-collect-all-stores').hasClass('desc-open')) {
-          $('.click-collect-all-stores').removeClass('desc-open');
+        if ($(e.target).closest('.c-pdp .content__sidebar').length === 0 && $('.click-collect-all-stores', node).hasClass('desc-open')) {
+          $('.click-collect-all-stores', node).removeClass('desc-open');
         }
       });
 
-      $('.click-collect-form', context).once('bind-events').on('click', '.change-location-link, .search-stores-button, .cancel-change-location', function (e) {
+      $('.click-collect-form', node).once('bind-events').on('click', '.change-location-link, .search-stores-button, .cancel-change-location', function (e) {
         if (e.target.className === 'change-location-link') {
           $(this).siblings('.change-location').show();
           Drupal.pdp.changeLocationAutocomplete();
@@ -178,7 +182,7 @@
         else if (e.target.className === 'cancel-change-location') {
           e.preventDefault();
           $(this).parent().hide();
-          $('.click-collect-form').find('.available-store-text .change-location-link').show();
+          $('.click-collect-form', node).find('.available-store-text .change-location-link').show();
           return false;
         }
         else if (e.target.className === 'search-stores-button' && !records) {
@@ -204,7 +208,7 @@
   Drupal.click_collect.LocationAccessSuccess = function (coords) {
     asCoords = coords;
     geoPerm = true;
-    Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
+    Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form', node));
   };
 
   // Set the location coordinates, but don't render the stores.
@@ -217,13 +221,13 @@
 
   Drupal.pdp.getProductInfo = function () {
     // Get the SKU.
-    var sku = $('#pdp-stores-container').data('sku');
-    var skuClean = $('#pdp-stores-container').data('sku-clean');
+    var sku = $('#pdp-stores-container', node).data('sku');
+    var skuClean = $('#pdp-stores-container', node).data('sku-clean');
     var variant = null;
     // Get the type.
-    var type = $('#pdp-stores-container').data('product-type');
+    var type = $('#pdp-stores-container', node).data('product-type');
     if (type === 'configurable') {
-      variant = $('.selected-variant-sku-' + skuClean).val();
+      variant = $('.selected-variant-sku-' + skuClean, node).val();
     }
 
     // We always use SKU as string. For numeric values JS converts it to int.
@@ -240,12 +244,12 @@
   };
 
   Drupal.pdp.changeLocationAutocomplete = function () {
-    var field = $('.click-collect-form').find('input[name="store-location"]')[0];
+    var field = $('.click-collect-form', node).find('input[name="store-location"]')[0];
     var restriction = {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()};
     var callbacks = [Drupal.pdp.storesDisplay];
     new Drupal.AlshayaPlacesAutocomplete(field, callbacks, restriction);
     // Hit the search store button on hitting enter when on textbox.
-    $('.click-collect-form').find('input[name="store-location"]').once('trigger-enter').on('keypress', function (e) {
+    $('.click-collect-form', node).find('input[name="store-location"]').once('trigger-enter').on('keypress', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
         Drupal.AlshayaPlacesAutocomplete.handleEnterKeyPress($(this), callbacks, restriction);
@@ -278,10 +282,10 @@
     }
 
     if (check) {
-      $('.click-collect-empty-selection').hide();
-      $('.click-collect-form').show();
-      $('.click-collect-form').find('.available-store-text').hide();
-      $('.click-collect-form').find('.store-finder-form-wrapper').show();
+      $('.click-collect-empty-selection', node).hide();
+      $('.click-collect-form', node).show();
+      $('.click-collect-form', node).find('.available-store-text').hide();
+      $('.click-collect-form', node).find('.store-finder-form-wrapper').show();
     }
   };
 
@@ -301,12 +305,12 @@
             sku = productInfo.sku;
             if (productInfo.type === 'configurable') {
               if (typeof productInfo.selectedVariant !== 'undefined' && productInfo.selectedVariant !== null) {
-                $('.click-collect-empty-selection').hide();
+                $('.click-collect-empty-selection', node).hide();
                 sku = productInfo.selectedVariant;
               }
               else {
-                $('.click-collect-empty-selection').show();
-                $('.click-collect-form').hide();
+                $('.click-collect-empty-selection', node).show();
+                $('.click-collect-form', node).hide();
                 return;
               }
             }
@@ -322,14 +326,14 @@
                 lastCoords = asCoords;
 
                 if (typeof $trigger === 'undefined' || $trigger == null) {
-                  $trigger = $('.click-collect-form');
+                  $trigger = $('.click-collect-form', node);
                 }
 
                 // Add formatted address based on lat/lng before ajax for top three stores.
-                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'), 'html');
+                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form', node).find('.google-store-location'), 'html');
                 // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
-                if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
-                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
+                if ($('.click-collect-all-stores', node).find('.google-store-location').length > 0) {
+                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores', node).find('.google-store-location'), 'html');
                 }
 
                 var storeDisplayAjax = Drupal.ajax({
@@ -349,7 +353,7 @@
                   if (status === 'success') {
                     if (response.data.alshaya_click_collect.pdp.top_three) {
                       // Show formatted address after ajax for all stores, once we have html elements.
-                      Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
+                      Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores', node).find('.google-store-location'), 'html');
                       displaySearchForm = false;
                       records = true;
                     }
@@ -375,14 +379,14 @@
 
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
-    var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    var field = $('#all-stores-search-store', node).find('input[name="location"]')[0];
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores', node).find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
-    var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    var field = $('.click-collect-all-stores', node).find('input[name="store-location"]')[0];
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores', node).find('.store-finder-form-wrapper'));
   };
 
   /**
@@ -411,16 +415,16 @@
 
   // Command to display error message and rebind autocomplete to main input.
   $.fn.clickCollectPdpNoStoresFound = function (data) {
-    $('.click-collect-top-stores').html(data);
-    $('.click-collect-all-stores').html('');
-    $('.click-collect-form .available-store-text').hide();
-    $('.click-collect-form .change-location').hide();
+    $('.click-collect-top-stores', node).html(data);
+    $('.click-collect-all-stores', node).html('');
+    $('.click-collect-form .available-store-text', node).hide();
+    $('.click-collect-form .change-location', node).hide();
 
     // Bind the js again to main input.
-    var field = $('.click-collect-form').find('input[name="location"]')[0];
+    var field = $('.click-collect-form', node).find('input[name="location"]')[0];
     new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()});
 
-    $('.click-collect-form .store-finder-form-wrapper').show();
+    $('.click-collect-form .store-finder-form-wrapper', node).show();
   };
 
 })(jQuery, Drupal, drupalSettings);
