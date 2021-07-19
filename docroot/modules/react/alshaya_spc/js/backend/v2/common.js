@@ -433,7 +433,7 @@ const getProductStatus = async (sku) => {
  * @returns {object}
  *   The processed cart data.
  */
-const getProcessedCartData = (cartData) => {
+const getProcessedCartData = async (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
     return null;
   }
@@ -493,7 +493,8 @@ const getProcessedCartData = (cartData) => {
 
   if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
-    cartData.cart.items.forEach(async (item) => {
+    for (let i = 0; i < cartData.cart.items.length; i++) {
+      const item = cartData.cart.items[i];
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
@@ -508,6 +509,8 @@ const getProcessedCartData = (cartData) => {
       };
 
       // Get stock data.
+      // Suppressing the lint error for now.
+      // eslint-disable-next-line no-await-in-loop
       const stockInfo = await getProductStatus(item.sku);
       data.items[item.sku].in_stock = stockInfo.in_stock;
       data.items[item.sku].stock = stockInfo.stock;
@@ -547,7 +550,7 @@ const getProcessedCartData = (cartData) => {
       if (!_isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
         data.in_stock = false;
       }
-    });
+    }
   } else {
     data.items = [];
   }
@@ -620,7 +623,7 @@ const getCartWithProcessedData = async (force = false) => {
 
   // If we don't have any errors, process the cart data.
   if (!_isEmpty(response.data) && _isUndefined(response.data.error)) {
-    response.data = getProcessedCartData(response.data);
+    response.data = await getProcessedCartData(response.data);
   }
   return response;
 };

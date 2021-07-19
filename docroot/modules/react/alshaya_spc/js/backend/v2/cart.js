@@ -288,9 +288,9 @@ window.commerceBackend.applyRemovePromo = async (data) => {
   }
 
   return updateCart(params)
-    .then((response) => {
+    .then(async (response) => {
       // Process cart data.
-      response.data = getProcessedCartData(response.data);
+      response.data = await getProcessedCartData(response.data);
       return response;
     });
 };
@@ -317,9 +317,9 @@ window.commerceBackend.refreshCart = async (data) => {
   }
 
   return updateCart(postData)
-    .then((response) => {
+    .then(async (response) => {
       // Process cart data.
-      response.data = getProcessedCartData(response.data);
+      response.data = await getProcessedCartData(response.data);
       return response;
     });
 };

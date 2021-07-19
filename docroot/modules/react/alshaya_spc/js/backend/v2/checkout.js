@@ -1011,7 +1011,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   // Re-use the processing done for cart page.
-  const response = getProcessedCartData(data);
+  const response = await getProcessedCartData(data);
   response.cnc_enabled = cncStatus;
   response.customer = getCustomerPublicData(data.customer);
   response.shipping = (typeof data.shipping !== 'undefined')
