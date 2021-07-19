@@ -211,6 +211,18 @@ class AlshayaAcmConfigCheck {
       $config->save();
     }
 
+    // Reset keys for kaleyra.settings.
+    $kaleyra_keys = [
+      'api_key',
+      'whatsapp_api_key',
+      'whatsapp_sid',
+    ];
+    $kaleyra_config = $this->configFactory->getEditable('kaleyra.settings');
+    foreach ($kaleyra_keys as $kaleyra_key) {
+      $kaleyra_config->set($kaleyra_key, '');
+    }
+    $kaleyra_config->save();
+
     // Re-configure Simple Oauth.
     $config = $this->configFactory->getEditable('simple_oauth.settings');
     $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
