@@ -1344,7 +1344,7 @@ const paymentUpdate = async (data) => {
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
   }
 
-  // Process paayment data by paymentMethod.
+  // Process payment data by paymentMethod.
   const processedData = processPaymentData(paymentData, params.payment.additional_data);
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
     logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
