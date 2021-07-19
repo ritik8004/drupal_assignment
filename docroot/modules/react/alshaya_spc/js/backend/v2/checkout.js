@@ -9,6 +9,7 @@ import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isNull from 'lodash/isNull';
 import _isObject from 'lodash/isObject';
+import _each from 'lodash/each';
 import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
@@ -1148,7 +1149,6 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 
 /**
  * Prepare message to log when API fail after payment successful.
- * @todo implement this
  *
  * @param {array} cart
  *   Cart Data.
@@ -1165,7 +1165,49 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
  *   Prepared error message.
  */
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
-  logger.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
+  let orderId = '';
+
+  if (!_isEmpty(cart.cart)
+    && !_isEmpty(cart.cart.extension_attributes)
+    && !_isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
+    orderId = cart.cart.extension_attributes.real_reserved_order_id;
+  }
+
+  const message = [];
+  message.push(`exception:${exceptionMessage}`);
+  message.push(`api:${api}`);
+  message.push(`double_check_done:${doubleCheckDone}`);
+  message.push(`order_id:${orderId}`);
+
+  if (!_isEmpty(cart.cart)) {
+    message.push(`cart_id:${cart.cart.id}`);
+    message.push(`amount_paid:${cart.totals.base_grand_total}`);
+  }
+
+  let paymentMethod = '';
+  if (!_isEmpty(data.method)) {
+    paymentMethod = data.method;
+  } else if (!_isEmpty(data.paymentMethod.method)) {
+    paymentMethod = data.paymentMethod.method;
+  }
+  message.push(`payment_method:.${paymentMethod}`);
+
+  let additionalInfo = '';
+  if (!_isEmpty(data.paymentMethod) && !_isEmpty(data.paymentMethod.additional_data)) {
+    additionalInfo = JSON.stringify(data.paymentMethod.additional_data);
+  } else if (!_isEmpty(data.additional_data)) {
+    additionalInfo = JSON.stringify(data.additional_data);
+  }
+  message.push(`additional_information:${additionalInfo}`);
+
+  if (!_isEmpty(cart.shipping) && !_isEmpty(cart.shipping.method)) {
+    message.push(`shipping_method:${cart.shipping.method}`);
+    _each(cart.shipping.custom_attributes, (value) => {
+      message.push(`${value.attribute_code}:${value.value}`);
+    });
+  }
+
+  return !_isEmpty(message) ? message.join('||') : '';
 };
 
 /**
@@ -1252,9 +1294,11 @@ const paymentUpdate = async (data) => {
   const oldCart = await getCart();
   const cart = await updateCart(params);
   if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
-    const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
-    const message = prepareOrderFailedMessage(oldCart, data, errorMessage, 'update cart', 'NA');
+    // Handle Error on cart update.
+    const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
+    const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
     logger.error(`Error occurred while placing order. ${message}`);
+    return cart;
   }
 
   cart.data = await getProcessedCheckoutData(cart.data);
@@ -1877,6 +1921,11 @@ window.commerceBackend.placeOrder = async (data) => {
 
       // @todo all the error handling.
       // @todo cancel reservation.
+
+      const message = prepareOrderFailedMessage(cart.data, data.data, response, 'place order', 'no');
+      logger.error('Error while placing order. Error message: @message', {
+        '@message': message,
+      });
 
       return response;
     });
