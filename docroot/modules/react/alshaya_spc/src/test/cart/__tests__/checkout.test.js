@@ -9,6 +9,7 @@ import paymentMethods from '../data/paymentMethods';
 import homeDeliveryShippingMethods from '../data/homeDeliveryShippingMethods';
 import cncStoreList from '../data/stores/cnc_stores_list.js';
 import * as cartData from '../data/cart.json';
+import * as lastOrderData from '../data/lastOrder.json';
 import * as RA1_Q314_HEN_001 from '../data/stores/RA1-Q314-HEN-001.json';
 import * as RA1_Q314_HEN_002 from '../data/stores/RA1-Q314-HEN-002.json';
 import * as RA1_Q314_HEN_003 from '../data/stores/RA1-Q314-HEN-003.json';
@@ -68,7 +69,6 @@ describe('Checkout', () => {
         ],
       });
     });
-
 
     describe('Test getDefaultAddress()', () => {
       const getDefaultAddress = utilsRewire.__get__('getDefaultAddress');
@@ -378,6 +378,114 @@ describe('Checkout', () => {
       });
     });
 
+    describe('Test getCustomerAddressIds()', () => {
+      const getCustomerAddressIds = utilsRewire.__get__('getCustomerAddressIds');
+
+      beforeEach(() => {
+        // Reset static cache.
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+      });
+
+      it('Without cart data', async () => {
+        // Mock for getCart();
+        axios.mockResolvedValue({ data: {}, status: 200 });
+        const result = await getCustomerAddressIds();
+        expect(result).toEqual([]);
+      });
+
+      it('With cart data', async () => {
+        // Mock for getCart();
+        axios.mockResolvedValue({ data: cartData, status: 200 });
+        const result = await getCustomerAddressIds();
+        expect(result).toEqual(['69', '70']);
+      });
+   });
+
+    describe('Test getLastOrder()', () => {
+      const getLastOrder = utilsRewire.__get__('getLastOrder');
+
+      beforeEach(() => {
+        // Reset static cache.
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+      });
+
+      it('Without order data', async () => {
+        // Mock for getCart();
+        axios.mockResolvedValue({ data: {}, status: 200 });
+        const result = await getLastOrder();
+        expect(result).toEqual(null);
+      });
+
+      it('With order data', async () => {
+        // Mock for getCart();
+        axios.mockResolvedValue({ data: lastOrderData, status: 200 });
+        const result = await getLastOrder();
+        expect(result.order_id).toEqual(1654);
+      });
+   });
+
+    describe('Test processLastOrder()', () => {
+      const processLastOrder = utilsRewire.__get__('processLastOrder');
+
+      it('Without order data', () => {
+        // Mock for getCart();
+        const result = processLastOrder({});
+        expect(result).toEqual({});
+      });
+
+      it('With order data', () => {
+        const result = processLastOrder(lastOrderData);
+        expect(result.order_id).toEqual(1654);
+        expect(result.firstname).toEqual('Tester');
+        expect(result.lastname).toEqual('test');
+        expect(result.email).toEqual('tester01@example.com');
+        expect(result.items[0].item_id).toEqual(2213);
+        expect(result.coupon).toEqual('');
+        expect(result.extension.gift_cards).toEqual([]);
+        expect(result.extension_attributes).toEqual(undefined);
+        expect(result.shipping.address.city).toEqual('Al Badia');
+        expect(result.shipping.extension_attributes.click_and_collect_type).toEqual('home_delivery');
+        expect(result.shipping.method).toEqual('alshayadelivery_armx_s01');
+        expect(result.billing.customer_id).toEqual(845);
+        expect(result.billing_commerce_address.city).toEqual('Al Badia');
+        expect(result.billing_address).toEqual(undefined);
+      });
+    });
+
+    describe('Test getDefaultPaymentFromOrder()', () => {
+      const getDefaultPaymentFromOrder = utilsRewire.__get__('getDefaultPaymentFromOrder');
+
+      it('Without order data', async () => {
+        // Mock for getCart();
+        const result = await getDefaultPaymentFromOrder({});
+        expect(result).toEqual({});
+      });
+
+      it('With order data', async () => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        axios
+          // Mock for getCart.
+          .mockResolvedValueOnce({ data: cartData, status: 200 })
+          // Mock for getPaymentMethods().
+          .mockResolvedValueOnce({ data: paymentMethods, status: 200 });
+
+        const result = await getDefaultPaymentFromOrder(lastOrderData);
+
+        expect(result).toEqual({ default: 'checkout_com_upapi' });
+      });
+    });
+
     describe('Test formatAddressForShippingBilling()', () => {
       const formatAddressForShippingBilling = utilsRewire.__get__('formatAddressForShippingBilling');
 
@@ -418,23 +526,23 @@ describe('Checkout', () => {
 
     describe('Test selectCnc()', () => {
       const selectCnc = utilsRewire.__get__('selectCnc');
-      let address = null;
+      const address = cartData.cart.extension_attributes.shipping_assignments[0].shipping.address;
 
-      axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+      beforeEach(() => {
+        // Reset static cache.
+        window.commerceBackend.setRawCartDataInStorage(null);
 
-      beforeEach(async () => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
-
-        const response = await getCart();
-        address = response.data.shipping.address;
       });
 
       it('With invalid address area', async () => {
         // Mock for validateAddressAreaCity().
         axios.mockResolvedValueOnce({ data: false, status: 200 });
+
         const result = await selectCnc({ code: 1234 }, address, address);
+
         expect(axios.mock.calls.length).toBe(1);
         expect(result).toEqual(false);
       });
@@ -442,9 +550,11 @@ describe('Checkout', () => {
       it('With no extension_attributes', async () => {
         // Mock for validateAddressAreaCity().
         axios.mockResolvedValueOnce({ data: { address: true }, status: 200 });
+
         delete address.custom_attributes;
         delete address.extension_attributes;
         const result = await selectCnc({ code: 1234 }, address, address);
+
         expect(axios.mock.calls.length).toBe(1);
         expect(result).toEqual(false);
       });
@@ -452,6 +562,8 @@ describe('Checkout', () => {
       it('With address data', async () => {
         // Mock for validateAddressAreaCity().
         axios.mockResolvedValueOnce({ data: { address: true }, status: 200 });
+        // Mock for getCart().
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
         // Mock for updateCart().
         axios.mockResolvedValueOnce({ data: cartData, status: 200 });
         // Mock for updateCart().
@@ -464,13 +576,15 @@ describe('Checkout', () => {
         address.customer_address_id = '1';
 
         const result = await selectCnc({ code: 1234 }, address, address);
-        expect(axios.mock.calls.length).toBe(3);
+        expect(axios.mock.calls.length).toBe(4);
         const data = result.data.cart;
         expect(data.billing_address.city).toEqual('Al Awir');
         expect(data.billing_address.customer_address_id).toEqual('69');
         expect(data.billing_address.custom_attributes[0].attribute_code).toEqual('address_city_segment');
         // @todo check calling params for axios
       });
+
+      // @todo test with last order details
     });
 
     describe('Tests getCncStatusForCart()', () => {
@@ -736,7 +850,9 @@ describe('Checkout', () => {
         window.commerceBackend.setRawCartDataInStorage(null);
 
         axios
+          // Mock for getCart.
           .mockResolvedValueOnce({ data: cartData, status: 200 })
+          // Mock for getPaymentMethods().
           .mockResolvedValueOnce({ data: paymentMethods, status: 200 });
 
         jest
@@ -811,6 +927,94 @@ describe('Checkout', () => {
 
         let result = await getHomeDeliveryShippingMethods({});
         expect(result).toEqual([]);
+      });
+    });
+
+    describe('Test cartAddressFieldsToValidate()', () => {
+      const cartAddressFieldsToValidate = utilsRewire.__get__('cartAddressFieldsToValidate');
+      it('From drupal settings', async () => {
+        let result = cartAddressFieldsToValidate();
+        expect(result).toEqual(['area', 'address_apartment_segment']);
+      });
+    });
+
+    describe('Test isAddressExtensionAttributesValid()', () => {
+      const isAddressExtensionAttributesValid = utilsRewire.__get__('isAddressExtensionAttributesValid');
+
+      beforeEach(() => {
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+      });
+
+      it('With empty fields', async () => {
+        const response = await getCart();
+        let result = isAddressExtensionAttributesValid(response.data);
+        expect(result).toEqual(false);
+      });
+
+      it('With no empty fields', async () => {
+        window.drupalSettings.cart.address_fields.default.kw = [ 'area' ];
+        const response = await getCart();
+        let result = isAddressExtensionAttributesValid(response.data);
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('Test isCartHasOosItem()', () => {
+      const isCartHasOosItem = utilsRewire.__get__('isCartHasOosItem');
+
+      it('Without OOS items', async () => {
+        let result = isCartHasOosItem(cartData);
+        expect(result).toEqual(false);
+      });
+
+      it('With OOS items', async () => {
+        const cart = { ...cartData.cart };
+        cart.items[0].extension_attributes = { error_message: 'This product is out of stock' };
+        let result = isCartHasOosItem({ cart });
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('Test validateBeforePaymentFinalise()', () => {
+      const validateBeforePaymentFinalise = utilsRewire.__get__('validateBeforePaymentFinalise');
+
+      beforeEach(() => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+      });
+
+      it('With OOS items', async () => {
+        const data = { ...cartData };
+        cartData.cart.items[0].extension_attributes = { error_message: 'This product is out of stock' };
+        axios.mockResolvedValue({ data: data, status: 200 });
+        let result = await validateBeforePaymentFinalise();
+        expect(result.data.error).toEqual(true);
+        expect(result.data.error_code).toEqual(506);
+        expect(result.data.error_message).toEqual('Cart contains some items which are not in stock.');
+        delete cartData.cart.items[0].extension_attributes;
+      });
+
+      it('With shipping method and address', async () => {
+        window.drupalSettings.cart.address_fields.default.kw = [ 'area' ];
+        const data = { ...cartData };
+        axios.mockResolvedValue({ data: data, status: 200 });
+        let result = await validateBeforePaymentFinalise();
+        expect(result).toEqual(true);
+      });
+
+      it('With no shipping method', async () => {
+        const data = { ...cartData };
+        delete data.cart.extension_attributes.shipping_assignments;
+        axios.mockResolvedValue({ data: data, status: 200 });
+        let result = await validateBeforePaymentFinalise();
+        expect(result.data.error).toEqual(true);
+        expect(result.data.error_code).toEqual(505);
+        expect(result.data.error_message).toEqual('Delivery Information is incomplete. Please update and try again.');
       });
     });
   });

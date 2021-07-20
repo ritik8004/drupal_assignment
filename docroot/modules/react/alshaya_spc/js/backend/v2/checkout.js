@@ -9,6 +9,7 @@ import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isNull from 'lodash/isNull';
 import _isObject from 'lodash/isObject';
+import _each from 'lodash/each';
 import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
@@ -320,22 +321,85 @@ const validateAddressAreaCity = async (address) => {
 };
 
 /**
- * Get last order of the customer.
- * @todo implement this.
+ * Performs some data transformations.
+ *
+ * @param {object} orderData
+ *   The order data.
+ *
+ * @return {object}
+ *   The transformed data.
  */
-const getLastOrder = () => [];
+const processLastOrder = (orderData) => {
+  const order = { ...orderData };
+  if (_isUndefined(order.entity_id)) {
+    return order;
+  }
+
+  const data = {};
+  data.order_id = order.entity_id;
+
+  // Customer info.
+  data.firstname = order.customer_firstname;
+  data.lastname = order.customer_lastname;
+  data.email = order.customer_email;
+
+  // Items.
+  data.items = order.items;
+
+  // Coupon code.
+  data.coupon = !_isEmpty(order.coupon_code) ? order.coupon_code : '';
+
+  // Extension.
+  data.extension = order.extension_attributes;
+  delete order.extension_attributes;
+
+  // Shipping.
+  data.shipping = data.extension.shipping_assignments[0].shipping;
+  data.shipping.address.customer_id = order.customer_id;
+  delete data.shipping.address.entity_id;
+  delete data.shipping.address.parent_id;
+
+  data.shipping.commerce_address = data.shipping.address;
+  data.shipping.extension = data.shipping.address.extension_attributes;
+
+  // Billing.
+  data.billing = order.billing_address;
+  data.billing.customer_id = order.customer_id;
+  delete order.billing_address.entity_id;
+  delete order.billing_address.parent_id;
+
+  data.billing_commerce_address = data.billing;
+  delete order.billing_address;
+  data.billing.extension = data.billing.extension_attributes;
+
+  Object.assign(order, data);
+
+  return order;
+};
 
 /**
- * Get payment method from last order.
- * @todo implement this
+ * Get last order of the customer.
  *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, payment method name otherwise.
+ * @param {string} customerId
+ *   The customer id.
+ * @returns {Promise<AxiosPromise<Object|null>>}
+ *   Customer last order or null.
  */
-const getDefaultPaymentFromOrder = async () => null;
+const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {})
+  .then((response) => {
+    if (_isEmpty(response.data)
+      || (!_isUndefined(response.data.error) && response.data.error)
+    ) {
+      return null;
+    }
+    return processLastOrder(response.data);
+  }).catch((error) => {
+    logger.error('Error while fetching customers last order. Message: @message, CustomerId: @customer_id', {
+      '@message': error.message,
+      '@customer_id': customerId,
+    });
+    return null;
+  });
 
 /**
  * Gets payment methods.
@@ -365,6 +429,38 @@ const getPaymentMethods = async () => getCart()
         return null;
       });
   });
+
+/**
+ * Get payment method from last order.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|null>}
+ *   Payment method name or null.
+ */
+const getDefaultPaymentFromOrder = async (order) => {
+  if (_isUndefined(order.payment) || _isUndefined(order.payment.method)) {
+    return order;
+  }
+
+  const orderPaymentMethod = order.payment.method;
+
+  const methods = await getPaymentMethods();
+  if (_isEmpty(methods)
+    || (typeof methods.error !== 'undefined' && methods.error)
+  ) {
+    return null;
+  }
+
+  const methodNames = methods.map((value) => value.code);
+
+  if (!_includes(methodNames, orderPaymentMethod)) {
+    return null;
+  }
+
+  return { default: orderPaymentMethod };
+};
 
 /**
  * Get the payment method set on cart.
@@ -695,7 +791,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   }
 
   // Add customer address info.
-  if (!_isEmpty(shippingData.customer_address_id)) {
+  if (!_isUndefined(shippingData.customer_address_id)) {
     params.shipping.shipping_address = shippingData.address;
   } else {
     params.shipping.shipping_address = formatAddressForShippingBilling(shippingData.address);
@@ -713,7 +809,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   // not set. City with value 'NONE' means, that this was added in CnC
   // by default and not changed by user.
   if (updateBillingDetails
-    || _isEmpty(cartData.billing_address) || _isEmpty(cartData.billing_address.firstname)
+    || _isUndefined(cartData.billing_address) || _isUndefined(cartData.billing_address.firstname)
     || cartData.billing_address.city === 'NONE') {
     cart = await updateBilling(params.shipping.shipping_address);
   }
@@ -824,21 +920,26 @@ const selectCnc = async (store, address, billing) => {
 };
 
 /**
- * Apply shipping from last order.
- * @todo implement this.
+ * Gets customer's address ids.
  *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, updated cart data otherwise.
+ * @returns {Promise<AxiosPromise<Object> | *[]>}
+ *   Address ids array or empty.
  */
-const applyDefaultShipping = async (order) => {
-  const address = order.shipping.commerce_address;
-  // @todo finish the implementation of applyDefaultShipping() on CORE-30722
-  selectCnc({ code: 'RA1-Q314-HEN-001' }, address, order.billing_commerce_address);
-  return false;
-};
+const getCustomerAddressIds = () => getCart()
+  .then((response) => {
+    if (!_isUndefined(response.data)
+      && !_isUndefined(response.data.customer)
+      && !_isUndefined(response.data.customer.addresses)
+      && !_isEmpty(response.data.customer.addresses)
+    ) {
+      const addresses = [];
+      response.data.customer.addresses.forEach((item) => {
+        addresses.push(item.customer_address_id);
+      });
+      return addresses;
+    }
+    return [];
+  });
 
 /**
  * Select HD address and method from possible defaults.
@@ -867,9 +968,9 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   };
 
   // Set customer address id.
-  if (!_isEmpty(address.id)) {
+  if (!_isUndefined(address.id)) {
     shippingData.customer_address_id = address.id;
-  } else if (!_isEmpty(address.customer_address_id)) {
+  } else if (!_isUndefined(address.customer_address_id)) {
     shippingData.customer_address_id = address.customer_address_id;
   }
 
@@ -903,7 +1004,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
-  if (_isEmpty(billing.customer_address_id)) {
+  if (_isUndefined(billing.customer_address_id)) {
     return updated;
   }
 
@@ -935,6 +1036,78 @@ const selectHd = async (address, method, billing, shippingMethods) => {
 };
 
 /**
+ * Apply shipping from last order.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|boolean>}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = async (order) => {
+  if (_isUndefined(order.shipping) || _isUndefined(order.shipping.commerce_address)) {
+    return false;
+  }
+
+  const address = order.shipping.commerce_address;
+
+  if (_includes(order.shipping.method, 'click_and_collect')) {
+    const store = await getStoreInfo({ code: order.shipping.extension_attributes.store_code });
+
+    // We get a string value if store node is not present in Drupal. So in
+    // that case we do not proceed.
+    if (typeof store.lat === 'undefined' || typeof store.lng === 'undefined') {
+      return false;
+    }
+
+    const availableStores = await getCartStores(store.lat, store.lng);
+
+    const availableStoreCodes = availableStores.map((value) => value.code);
+
+    if (_includes(availableStoreCodes, store.code)) {
+      let storeKey = '';
+      availableStores.forEach((value, key) => {
+        if (value.code === store.code) {
+          storeKey = key;
+        }
+      });
+      return selectCnc(availableStores[storeKey], address, order.billing_commerce_address);
+    }
+
+    return false;
+  }
+
+  if (_isUndefined(address.customer_address_id)) {
+    return false;
+  }
+
+  // Return false if address id from last order doesn't
+  // exist in customer's address id list.
+  const customerAddressIds = await getCustomerAddressIds();
+  if (!_includes(customerAddressIds, address.customer_address_id)) {
+    return false;
+  }
+
+  const methods = await getHomeDeliveryShippingMethods(address);
+  if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
+    for (let i = 0; i < methods.length; i++) {
+      const method = methods[i];
+      if (typeof method.carrier_code !== 'undefined'
+        && order.shipping.method.indexOf(method.carrier_code, 0) === 0
+        && order.shipping.method.indexOf(method.method_code, 0) !== -1
+      ) {
+        logger.notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', {
+          '@cart_id': window.commerceBackend.getCartId(),
+        });
+        return selectHd(address, methods[0], address, methods);
+      }
+    }
+  }
+
+  return false;
+};
+
+/**
  * Apply defaults to cart for customer.
  *
  * @param {object} cartData
@@ -944,16 +1117,15 @@ const selectHd = async (address, method, billing, shippingMethods) => {
  * @returns {Promise<object>}.
  *   The data.
  */
-const applyDefaults = async (data, uid) => {
-  // @todo Update this function to return data after processing with user inputs.
+const applyDefaults = async (data, customerId) => {
   if (!_isEmpty(data.shipping.method)) {
     return data;
   }
 
   // Get last order only for Drupal Customers.
   const order = isUserAuthenticated()
-    ? getLastOrder(uid)
-    : [];
+    ? await getLastOrder(customerId)
+    : null;
 
   // Try to apply defaults from last order.
   if (!_isEmpty(order)) {
@@ -963,9 +1135,8 @@ const applyDefaults = async (data, uid) => {
     }
 
     const response = await applyDefaultShipping(order);
-    if (response) {
-      // @todo Check if returns empty string for anonymous (CORE-31245).
-      response.payment.default = await getDefaultPaymentFromOrder(order);
+    if (response !== false) {
+      response.data.payment = await getDefaultPaymentFromOrder(order);
       return response;
     }
   }
@@ -1018,8 +1189,7 @@ const getProcessedCheckoutData = async (cartData) => {
   const cncStatus = await getCncStatusForCart(data);
 
   // Here we will do the processing of cart to make it in required format.
-  // @todo check if we need to use user.uid or userDetails.customerId.
-  const updated = await applyDefaults(data, window.drupalSettings.user.uid);
+  const updated = await applyDefaults(data, window.drupalSettings.userDetails.customerId);
   if (updated !== false && !_isEmpty(updated.cart)) {
     data = updated;
   }
@@ -1149,7 +1319,6 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 
 /**
  * Prepare message to log when API fail after payment successful.
- * @todo implement this
  *
  * @param {array} cart
  *   Cart Data.
@@ -1166,7 +1335,49 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
  *   Prepared error message.
  */
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
-  logger.log(`${cart}, ${data}, ${exceptionMessage}, ${api}, ${doubleCheckDone}`);
+  let orderId = '';
+
+  if (!_isEmpty(cart.cart)
+    && !_isEmpty(cart.cart.extension_attributes)
+    && !_isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
+    orderId = cart.cart.extension_attributes.real_reserved_order_id;
+  }
+
+  const message = [];
+  message.push(`exception:${exceptionMessage}`);
+  message.push(`api:${api}`);
+  message.push(`double_check_done:${doubleCheckDone}`);
+  message.push(`order_id:${orderId}`);
+
+  if (!_isEmpty(cart.cart)) {
+    message.push(`cart_id:${cart.cart.id}`);
+    message.push(`amount_paid:${cart.totals.base_grand_total}`);
+  }
+
+  let paymentMethod = '';
+  if (!_isEmpty(data.method)) {
+    paymentMethod = data.method;
+  } else if (!_isEmpty(data.paymentMethod.method)) {
+    paymentMethod = data.paymentMethod.method;
+  }
+  message.push(`payment_method:.${paymentMethod}`);
+
+  let additionalInfo = '';
+  if (!_isEmpty(data.paymentMethod) && !_isEmpty(data.paymentMethod.additional_data)) {
+    additionalInfo = JSON.stringify(data.paymentMethod.additional_data);
+  } else if (!_isEmpty(data.additional_data)) {
+    additionalInfo = JSON.stringify(data.additional_data);
+  }
+  message.push(`additional_information:${additionalInfo}`);
+
+  if (!_isEmpty(cart.shipping) && !_isEmpty(cart.shipping.method)) {
+    message.push(`shipping_method:${cart.shipping.method}`);
+    _each(cart.shipping.custom_attributes, (value) => {
+      message.push(`${value.attribute_code}:${value.value}`);
+    });
+  }
+
+  return !_isEmpty(message) ? message.join('||') : '';
 };
 
 /**
@@ -1179,6 +1390,67 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
  *   A promise object.
  */
 window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
+
+/**
+ * Process payment data before placing order.
+ *
+ * @param paymentData
+ * @param data
+ * @returns {{cvv: string, public_hash: string}}
+ */
+const processPaymentData = (paymentData, data) => {
+  let additionalInfo = data;
+
+  // Method specific code.
+  switch (paymentData.method) {
+    case 'checkout_com_upapi':
+      switch (additionalInfo.card_type) {
+        case 'new':
+          additionalInfo.is_active_payment_token_enabler = parseInt(additionalInfo.save_card, 10);
+          break;
+
+        case 'existing': {
+          const { cvvCheck } = drupalSettings.checkoutComUpapi;
+          const { cvv, id } = additionalInfo;
+
+          if (_isEmpty(cvv)) {
+            return {
+              data: {
+                error: true,
+                error_code: cartErrorCodes.cartOrderPlacementError,
+                message: 'CVV missing for credit/debit card.',
+              },
+            };
+          }
+
+          if (_isEmpty(id)) {
+            return {
+              data: {
+                error: true,
+                error_code: cartErrorCodes.cartOrderPlacementError,
+                message: 'Invalid card token.',
+              },
+            };
+          }
+
+          if (cvvCheck) {
+            additionalInfo = {
+              cvv: atob(cvv),
+              public_hash: atob(id),
+            };
+          }
+          break;
+        }
+
+        // no default
+      }
+      break;
+
+    // no default
+  }
+
+  return additionalInfo;
+};
 
 /**
  * Adds payment method in the cart and returns the cart.
@@ -1242,9 +1514,34 @@ const paymentUpdate = async (data) => {
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
   }
 
-  // @todo implement the processing for checkout_com_upapi for Cart::processPaymentData().
-  // @todo update payment method to checkout_com_upapi_vault if using a saved card.
-  // Both the points above are for authenticated users so still pending.
+  // Process payment data by paymentMethod.
+  const processedData = processPaymentData(paymentData, params.payment.additional_data);
+  if (typeof processedData.data !== 'undefined' && processedData.data.error) {
+    logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
+      '@message': processedData.data.error_message,
+      '@cart': await window.commerceBackend.getCart(),
+      '@method': paymentData.method,
+    });
+    return processedData;
+  }
+  params.payment.additional_data = processedData;
+
+  // Additional changes for VAULT.
+  switch (paymentData.method) {
+    case 'checkout_com_upapi':
+      if (!_isEmpty(params.payment.additional_data.public_hash)) {
+        params.payment.method = checkoutComUpapiVaultMethod();
+      }
+      break;
+
+    case 'checkout_com':
+      if (!_isEmpty(params.payment.additional_data.public_hash)) {
+        params.payment.method = checkoutComVaultMethod();
+      }
+      break;
+
+    default:
+  }
 
   const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
@@ -1253,9 +1550,11 @@ const paymentUpdate = async (data) => {
   const oldCart = await getCart();
   const cart = await updateCart(params);
   if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
-    const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error.error_message;
-    const message = prepareOrderFailedMessage(oldCart, data, errorMessage, 'update cart', 'NA');
+    const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
+    cart.data.message = errorMessage;
+    const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
     logger.error(`Error occurred while placing order. ${message}`);
+    return cart;
   }
 
   cart.data = await getProcessedCheckoutData(cart.data);
@@ -1320,12 +1619,11 @@ const isAddressExtensionAttributesValid = (data) => {
     // shipping address or not.
     addressFieldsToValidate.forEach((field) => {
       // If field not exists or empty.
-      if (_isEmpty(cartAddressCustom[field])) {
+      if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
         const cartId = window.commerceBackend.getCartId();
         logger.error(`Field: ${field} not available in cart shipping address. Cart id: ${cartId}`);
+        isValid = false;
       }
-      isValid = false;
-      return isValid;
     });
   }
   return isValid;
@@ -1892,6 +2190,11 @@ window.commerceBackend.placeOrder = async (data) => {
 
       // @todo all the error handling.
       // @todo cancel reservation.
+
+      const message = prepareOrderFailedMessage(cart.data, data.data, response, 'place order', 'no');
+      logger.error('Error while placing order. Error message: @message', {
+        '@message': message,
+      });
 
       return response;
     });

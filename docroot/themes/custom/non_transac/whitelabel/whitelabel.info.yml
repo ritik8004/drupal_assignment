@@ -1,5 +1,5 @@
 name: whitelabel
-description: Base theme for Alshaya brands.
+description: Base theme for Alshaya brands - Non transac sites.
 type: theme
 core: 8.x
 core_version_requirement: ^8 || ^9

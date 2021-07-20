@@ -550,10 +550,15 @@ const getCart = async (force = false) => {
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
-    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+    if (response.data === false
+      || response.data.error_code === 404
+      || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)
+    ) {
       logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
-      // Get a new cart.
-      await window.commerceBackend.createCart();
+      // Remove cart_id from storage.
+      removeStorageInfo('cart_id');
+      // Reload the page.
+      window.location.reload();
     }
 
     const error = {
