@@ -30,13 +30,13 @@ class AlshayaAcsfDuplicationScrubUsersHandler extends AcsfEventHandler {
   /**
    * AlshayaSuperCategoryCommands constructor.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $logger) {
-    $this->entityTypeManager = $entityTypeManager;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactoryInterface $logger) {
+    $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger->get('alshaya_master');
   }
 
