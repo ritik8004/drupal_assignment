@@ -23,7 +23,7 @@
 
       // After slider is loaded, add a wrapper for dots.
       // We need a wrapper with fixed width and overflow hidden.
-      slickSlider.on('init', function (event, slick) {
+      slickSlider.once('i-dots').on('init', function (event, slick) {
         Drupal.behaviors.pdpInstagranDots.initialSetup($(this));
       });
 
@@ -38,7 +38,7 @@
    * Add before change event.
    */
   Drupal.behaviors.pdpInstagranDots.attachBeforeChange = function (slickSlider) {
-    slickSlider.once().on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+    slickSlider.once('i-dots').on('beforeChange', function (event, slick, currentSlide, nextSlide) {
       // We do instagram dots only if we are above the limit.
       // Else, let the slider function as is, no changes.
       var totalCount = $(this).find('.slick-dots li').length;
