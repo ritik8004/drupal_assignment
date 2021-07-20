@@ -318,21 +318,6 @@ function alshaya_rcs_magento_placeholders_theme_suggestions_product_zoom_alter(a
 }
 
 /**
- * Implements hook_block_access().
- */
-function alshaya_rcs_magento_placeholders_block_access(Block $block, $operation, AccountInterface $account) {
-  // Not allow 'page_title_block' block on RCS PDP page.
-  if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
-    $route = \Drupal::routeMatch();
-    if ($route->getRouteName() == 'entity.node.canonical') {
-      /* @var \Drupal\node\Entity\Node $node */
-      $node = $route->getParameter('node');
-      return AccessResult::forbiddenIf($node->bundle() == 'rcs_product');
-    }
-  }
-}
-
-/**
  * Implememts template_preprocess_HOOK().
  */
 function template_preprocess_rcs_pdp_delivery_option_home_delivery(array &$variables) {
