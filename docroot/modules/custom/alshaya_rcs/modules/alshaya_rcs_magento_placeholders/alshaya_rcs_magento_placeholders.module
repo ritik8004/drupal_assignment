@@ -53,7 +53,6 @@ function alshaya_rcs_magento_placeholders_theme($existing, $type, $theme, $path)
         'image_slider_position_pdp' => '',
         'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
       ],
-      // 'template' => 'rcs_product_zoom',
     ],
     'product_thumbnails' => [
       'variables' => [],
