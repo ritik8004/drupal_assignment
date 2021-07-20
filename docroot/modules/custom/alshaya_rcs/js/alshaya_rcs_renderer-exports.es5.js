@@ -18,8 +18,6 @@ exports.render = function render(
       const innerHtmlObj = jQuery('<div>').html(innerHtml);
 
       const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
-      const l1ClickableItemEle = innerHtmlObj.find('li.level-1.clickable');
-      const l1NonClickableItemEle = innerHtmlObj.find('li.level-1.non-clickable');
 
       if (inputs.length !== 0) {
         inputs.sort(function (a, b) {
@@ -35,7 +33,6 @@ exports.render = function render(
         menuListLevel1Ele.append(html);
       }
       return innerHtmlObj.html();
-
       break;
 
     default:
@@ -47,17 +44,20 @@ exports.render = function render(
 };
 
 const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
-
+  // We support max depth by L4.
+  if (level > parseInt(drupalSettings.alshaya_rcs_main_menu.menu_max_depth)) {
+    return;
+  }
   const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   const levelIdentifier = `level-${level}`;
   const ifChildren = (levelObj.children && levelObj.children.length > 0) ? true : false;
 
   var clonePhEle = null;
   if (levelObj.is_anchor) {
-    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone(); //jQuery('<div>').html(l1ClickableItemEle.clone())
+    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
   }
   else {
-    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone(); //jQuery('<div>').html(l1NonClickableItemEle.clone());
+    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
   }
 
   // If menu has no children further, return with actual markup.

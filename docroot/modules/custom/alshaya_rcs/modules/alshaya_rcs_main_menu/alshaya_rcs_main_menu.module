@@ -19,7 +19,7 @@ function alshaya_rcs_main_menu_page_attachments_alter(array &$page) {
   $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['menu_max_depth'] = $rcsMainMenuSettings->get('menu_max_depth');
 
   $getMenuQuery = alshaya_rcs_main_menu_get_query($rcsMainMenuSettings->get('menu_max_depth'));
-  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['query'] = json_encode($getMenuQuery, JSON_FORCE_OBJECT);
+  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['query'] = $getMenuQuery;
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $rcsMainMenuSettings->getCacheTags());
 
   // Get the alshaya main menu config object.
@@ -39,26 +39,23 @@ function alshaya_rcs_main_menu_page_attachments_alter(array &$page) {
 }
 
 function alshaya_rcs_main_menu_get_query($depth = 0) {
-  $fieldsToFetch = [
-    'children_count',
-    'children' => [
-      'id',
-      'level',
-      'name',
-      'include_in_menu',
-      'url_path',
-      'url_key',
-      'show_on_dpt',
-      'cta',
-      'display_view_all',
-      'position',
-      'is_anchor',
-    ]
-  ];
+  $fieldsToFetch = 'children_count
+      children {
+        id
+        level
+        name
+        include_in_menu
+        url_path
+        url_key
+        show_on_dpt
+        position
+        is_anchor
+        display_view_all
+        ';
 
   if ($depth > 0) {
-    $fieldsToFetch['children']['children'] = alshaya_rcs_main_menu_get_query($depth - 1);
+    $fieldsToFetch .= alshaya_rcs_main_menu_get_query($depth - 1);
   }
-
+  $fieldsToFetch .= '}';
   return $fieldsToFetch;
 }

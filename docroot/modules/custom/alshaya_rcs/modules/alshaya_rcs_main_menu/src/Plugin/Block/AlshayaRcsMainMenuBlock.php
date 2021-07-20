@@ -131,25 +131,9 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 'display_in_desktop' => "1",
                 'display_in_mobile' => "1",
                 'depth' => 3,
-                'move_to_right' => TRUE,
+                'move_to_right' => FALSE,
                 'class' => ['level-3', 'clickable'],
-                'child' => [
-                  // @todo make this dynamic to support 4th level.
-                  // '9' => [
-                  // 4th Level item with clickable and
-                  // enabled for both mobile an desktop.
-                  // 'id' => '9',
-                  // 'label' => $phTermLabel,
-                  // 'path' => '#rcs.category.url_path#',
-                  // 'clickable' => "1",
-                  // 'display_in_desktop' => "1",
-                  // 'display_in_mobile' => "1",
-                  // 'depth' => 4,
-                  // 'move_to_right' => TRUE,
-                  // 'class' => ['level-4', 'clickable'],
-                  // 'child' => [],
-                  // ],
-                ],
+                'child' => [],
               ],
               '4' => [
                 // 3rd Level item with clickable and
@@ -161,7 +145,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 'display_in_desktop' => "1",
                 'display_in_mobile' => "1",
                 'depth' => 3,
-                'move_to_right' => TRUE,
+                'move_to_right' => FALSE,
                 'class' => ['level-3', 'non-clickable'],
                 'child' => [],
               ],
@@ -176,7 +160,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
             'display_in_desktop' => "0",
             'display_in_mobile' => "1",
             'depth' => 2,
-            'move_to_right' => TRUE,
+            'move_to_right' => FALSE,
             'class' => ['level-2', 'non-clickable'],
             'child' => [
               '6' => [
@@ -189,7 +173,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 'display_in_desktop' => "1",
                 'display_in_mobile' => "1",
                 'depth' => 3,
-                'move_to_right' => TRUE,
+                'move_to_right' => FALSE,
                 'class' => ['level-3', 'clickable'],
                 'child' => [],
               ],
@@ -203,7 +187,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 'display_in_desktop' => "1",
                 'display_in_mobile' => "1",
                 'depth' => 3,
-                'move_to_right' => TRUE,
+                'move_to_right' => FALSE,
                 'class' => ['level-3', 'non-clickable'],
                 'child' => [],
               ],
@@ -242,11 +226,35 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       ],
     ];
 
+    // Get the alshaya rcs main menu config object.
+    $rcsMainMenuSettings = $this->configFactory->get('alshaya_rcs_main_menu.settings');
+    if ($rcsMainMenuSettings->get('menu_max_depth') > 3) {
+      $term_data[1]['child'][2]['child'][3]['child'] = [
+        '9' => [
+        // 4th Level item with clickable and
+        // enabled for both mobile an desktop.
+          'id' => '9',
+          'label' => $phTermLabel,
+          'path' => '#rcs.category.url_path#',
+          'clickable' => "1",
+          'display_in_desktop' => "1",
+          'display_in_mobile' => "1",
+          'depth' => 4,
+          'move_to_right' => FALSE,
+          'class' => ['level-4', 'clickable'],
+          'child' => [],
+        ],
+      ];
+    }
+
     // Set default parent_id 0 to load first level category terms.
     $parent_id = 0;
     $context = ['block' => $this->getBaseId()];
 
-    $desktop_main_menu_layout = $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
+    // Get the alshaya main menu config object.
+    $mainMenuSettings = $this->configFactory->get('alshaya_main_menu.settings');
+
+    $desktop_main_menu_layout = $mainMenuSettings->get('desktop_main_menu_layout');
     if ($desktop_main_menu_layout == 'default' || $desktop_main_menu_layout == 'menu_dynamic_display') {
       $columns_tree = $this->getColumnDataMenuAlgo($term_data);
       $this->moduleHandler->alter('alshaya_main_menu_links', $columns_tree, $parent_id, $context);
@@ -255,7 +263,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       $this->moduleHandler->alter('alshaya_main_menu_links', $term_data, $parent_id, $context);
     }
 
-    $desktop_main_menu_highlight_timing = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_highlight_timing');
+    $desktop_main_menu_highlight_timing = (int) $mainMenuSettings->get('desktop_main_menu_highlight_timing');
 
     return [
       '#theme' => 'alshaya_main_menu_level1',
