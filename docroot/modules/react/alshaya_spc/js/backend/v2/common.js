@@ -584,13 +584,15 @@ const getCart = async (force = false) => {
 /**
  * Adds a customer to cart.
  *
- * @param {string} guestCartId
- *   The guest cart id.
- *
  * @returns {Promise<object/boolean>}
  *   Returns the updated cart or false.
  */
-const associateCartToCustomer = async (guestCartId) => {
+const associateCartToCustomer = async () => {
+  const guestCartId = localStorage.getItem('cart_id');
+  if (_isNull(guestCartId) || _isUndefined(guestCartId)) {
+    return false;
+  }
+
   // Get the cart id of the guest cart.
   let response = await callMagentoApi(`/rest/V1/guest-carts/${guestCartId}`);
 
@@ -668,7 +670,7 @@ const getCartWithProcessedData = async (force = false) => {
       // If the user is authenticated and we have cart_id in the local storage
       // it means the customer just became authenticated.
       // We need to associate the cart and remove the cart_id from local storage.
-      const updated = await associateCartToCustomer(localStorage.getItem('cart_id'));
+      const updated = await associateCartToCustomer();
       if (updated !== false) {
         cart = updated;
       }

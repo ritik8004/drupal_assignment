@@ -1749,7 +1749,7 @@ window.commerceBackend.getCartForCheckout = () => {
         // If the user is authenticated and we have cart_id in the local storage
         // it means the customer just became authenticated.
         // We need to associate the cart and remove the cart_id from local storage.
-        const updated = await associateCartToCustomer(localStorage.getItem('cart_id'));
+        const updated = await associateCartToCustomer();
         if (updated !== false) {
           cart = updated;
         }
