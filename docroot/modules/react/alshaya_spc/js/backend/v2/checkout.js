@@ -881,21 +881,29 @@ const selectCnc = async (store, address, billing) => {
 };
 
 /**
- * Apply shipping from last order.
- * @todo implement this.
+ * Gets customer's address ids.
  *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, updated cart data otherwise.
+ * @param {string} customerId
+ *   Customer id.
+ * @returns {Promise<AxiosPromise<Object> | *[]>}
+ *   Address ids array or empty.
  */
-const applyDefaultShipping = async (order) => {
-  const address = order.shipping.commerce_address;
-  // @todo finish the implementation of applyDefaultShipping() on CORE-30722
-  selectCnc({ code: 'RA1-Q314-HEN-001' }, address, order.billing_commerce_address);
-  return false;
-};
+const getCustomerAddressIdsByCustomerId = async (customerId) => callMagentoApi('/rest/V1/customers/me', 'GET', {})
+  .then((response) => {
+    if (typeof response.data.error !== 'undefined') {
+      return [];
+    }
+    if (!_isEmpty(response.data.addresses)) {
+      return response.data.addresses.map((value) => value.id);
+    }
+    return [];
+  }).catch((e) => {
+    logger.error('Error while getting customer details. Error message: @message, Customer: @customer', {
+      '@message': e.message,
+      '@customer': customerId,
+    });
+    return [];
+  });
 
 /**
  * Select HD address and method from possible defaults.
@@ -992,6 +1000,75 @@ const selectHd = async (address, method, billing, shippingMethods) => {
 };
 
 /**
+ * Apply shipping from last order.
+ * @todo implement this.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|boolean>}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = async (order) => {
+  const address = order.shipping.commerce_address;
+
+  if (_includes(order.shipping.method, 'click_and_collect')) {
+    const store = await getStoreInfo({ code: order.shipping.extension_attributes.store_code });
+
+    // We get a string value if store node is not present in Drupal. So in
+    // that case we do not proceed.
+    if (typeof store.lat === 'undefined' || typeof store.lng === 'undefined') {
+      return false;
+    }
+
+    const availableStores = await getCartStores(store.lat, store.lng);
+
+    const availableStoreCodes = availableStores.map((value) => value.code);
+
+    if (_includes(availableStoreCodes, store.code)) {
+      let storeKey = '';
+      availableStores.forEach((value, key) => {
+        if (value.code === store.code) {
+          storeKey = key;
+        }
+      });
+      return selectCnc(availableStores[storeKey], address, order.billing_commerce_address);
+    }
+
+    return false;
+  }
+
+  if (_isEmpty(address.customer_address_id)) {
+    return false;
+  }
+
+  const customerAddressIds = await getCustomerAddressIdsByCustomerId(order.customer_id);
+
+  // Return false if address id from last order doesn't
+  // exist in customer's address id list.
+  if (!_includes(customerAddressIds, address.customer_address_id)) {
+    return false;
+  }
+
+  const methods = await getHomeDeliveryShippingMethods(address);
+  if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
+    for (let i = 0; i < methods.length; i++) {
+      const method = methods[i];
+      if (typeof method.carrier_code !== 'undefined'
+        && !_includes(method.carrier_code, order.shipping.method)
+        && _includes(method.method_code, order.shipping.method)) {
+        logger.notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', {
+          '@cart_id': window.commerceBackend.getCartId(),
+        });
+        return selectHd(address, methods[0], address, methods);
+      }
+    }
+  }
+
+  return false;
+};
+
+/**
  * Apply defaults to cart for customer.
  *
  * @param {object} cartData
@@ -1020,7 +1097,6 @@ const applyDefaults = async (data, uid) => {
 
     const response = await applyDefaultShipping(order);
     if (response) {
-      // @todo Check if returns empty string for anonymous (CORE-31245).
       response.payment.default = await getDefaultPaymentFromOrder(order);
       return response;
     }
