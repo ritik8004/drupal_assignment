@@ -4,4 +4,3 @@ main:
   dependencies:
     - core/jquery
     - core/drupalSettings
-
