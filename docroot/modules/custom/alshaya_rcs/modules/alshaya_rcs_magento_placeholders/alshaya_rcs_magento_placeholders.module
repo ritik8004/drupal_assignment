@@ -147,6 +147,7 @@ function alshaya_rcs_magento_placeholders_node_view(array &$build, EntityInterfa
 
   $build['#attached']['drupalSettings']['backend_language_prefix'] = Settings::get('magento_lang_prefix');
 
+  // @todo Work on feedback https://github.com/acquia-pso/alshaya/pull/21185#discussion_r672345369.
   // Add data for showing size guide.
   $build['#attached']['drupalSettings']['alshaya_rcs']['size_guide'] = _alshaya_acm_product_get_size_guide_info(null);
 }
