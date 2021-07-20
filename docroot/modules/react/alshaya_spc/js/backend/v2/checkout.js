@@ -1189,8 +1189,8 @@ const getProcessedCheckoutData = async (cartData) => {
 
   // Here we will do the processing of cart to make it in required format.
   const updated = await applyDefaults(data, window.drupalSettings.userDetails.customerId);
-  if (updated !== false && !_isEmpty(updated.cart)) {
-    data = updated;
+  if (updated !== false && !_isEmpty(updated.data)) {
+    data = updated.data;
   }
 
   if (_isUndefined(data.shipping.methods)
