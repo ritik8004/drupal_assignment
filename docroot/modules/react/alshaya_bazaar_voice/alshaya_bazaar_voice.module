@@ -117,7 +117,7 @@ function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alte
           'country' => $order['shipping']['address']['country_id'] ?? '',
           'nickname' => $order['customer_firstname'] ?? '',
           'customer_is_guest' => $order['customer_is_guest'] ?? '',
-          'customer_id' => $order['customer_id'] ?? '',
+          'customer_id' => \Drupal::currentUser()->id(),
           'locale' => $locale ?? '',
         ];
       }

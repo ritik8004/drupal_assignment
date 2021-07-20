@@ -29,7 +29,6 @@
       globalThis.rcsPhCommerceBackend
         .getEntity(langcode)
         .then(entity => {
-          /*
           // Process the block placeholders. This is async process, the
           // rendering engine is responsible of the entire processing and
           // replacement.
@@ -89,12 +88,11 @@
                 rcsPhApplyDrupalJs($(this).parent());
               });
           });
-          */
 
           if (typeof drupalSettings.rcsPage !== 'undefined') {
             // Hard coded list of html attributes which we need to parse to
             // find field placeholders.
-            const attributes = ['href', 'src', 'alt', 'about', 'content', 'title', 'data-sku', 'data-sku-type'];
+            const attributes = drupalSettings.rcsPhSettings.placeholderAttributes;
 
             // Identify all the field placeholders and get the replacement
             // value. Parse the html to find all occurrences at apply the
