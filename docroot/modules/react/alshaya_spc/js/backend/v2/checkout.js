@@ -319,67 +319,84 @@ const validateAddressAreaCity = async (address) => {
 };
 
 /**
+ * Performs some data transformations.
+ *
+ * @param {object} orderData
+ *   The order data.
+ *
+ * @return {object}
+ *   The transformed data.
+ */
+const processLastOrder = (orderData) => {
+  const order = { ...orderData };
+  if (_isUndefined(order.entity_id)) {
+    return order;
+  }
+
+  const data = {};
+  data.order_id = order.entity_id;
+
+  // Customer info.
+  data.firstname = order.customer_firstname;
+  data.lastname = order.customer_lastname;
+  data.email = order.customer_email;
+
+  // Items.
+  data.items = order.items;
+
+  // Coupon code.
+  data.coupon = !_isEmpty(order.coupon_code) ? order.coupon_code : '';
+
+  // Extension.
+  data.extension = order.extension_attributes;
+  delete order.extension_attributes;
+
+  // Shipping.
+  data.shipping = data.extension.shipping_assignments[0].shipping;
+  data.shipping.address.customer_id = order.customer_id;
+  delete data.shipping.address.entity_id;
+  delete data.shipping.address.parent_id;
+
+  data.shipping.commerce_address = data.shipping.address;
+  data.shipping.extension = data.shipping.address.extension_attributes;
+
+  // Billing.
+  data.billing = order.billing_address;
+  data.billing.customer_id = order.customer_id;
+  delete order.billing_address.entity_id;
+  delete order.billing_address.parent_id;
+
+  data.billing_commerce_address = data.billing;
+  delete order.billing_address;
+  data.billing.extension = data.billing.extension_attributes;
+
+  Object.assign(order, data);
+
+  return order;
+};
+
+/**
  * Get last order of the customer.
  *
  * @param {string} customerId
  *   The customer id.
- * @returns {Promise<AxiosPromise<Object> | *[]>}
- *   Customer last order or empty array.
+ * @returns {Promise<AxiosPromise<Object|null>>}
+ *   Customer last order or null.
  */
 const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {})
   .then((response) => {
-    if (typeof response.data.error !== 'undefined' && response.data.error) {
-      return [];
+    if (_isEmpty(response.data)
+      || (!_isUndefined(response.data.error) && response.data.error)
+    ) {
+      return null;
     }
-
-    const order = {};
-    order.order_id = response.data.entity_id;
-
-    // Customer info.
-    order.firstname = response.data.customer_firstname;
-    order.lastname = response.data.customer_lastname;
-    order.email = response.data.customer_email;
-
-    // Items.
-    order.items = response.data.items;
-
-    // Coupon code.
-    order.coupon = !_isEmpty(response.data.coupon_code) ? response.data.coupon_code : '';
-
-    // Extension.
-    order.extension = response.data.extension_attributes;
-    delete response.data.extension_attributes;
-
-    // Shipping.
-    order.shipping = order.extension.shipping_assignments[0].shipping;
-    order.shipping.address.customer_id = response.data.customer_id;
-    delete order.shipping.address.entity_id;
-    delete order.shipping.address.parent_id;
-
-    order.shipping.commerce_address = order.shipping.address;
-    order.shipping.extension = order.shipping.address.extension_attributes;
-    delete order.shipping.address.extension_attributes;
-
-    // Billing.
-    order.billing = response.data.billing_address;
-    order.billing.customer_id = response.data.customer_id;
-    delete response.data.billing_address.entity_id;
-    delete response.data.billing_address.parent_id;
-
-    order.billing_commerce_address = order.billing;
-    delete response.data.billing_address;
-    order.billing.extension = order.billing.extension_attributes;
-    delete order.billing.extension_attributes;
-
-    Object.assign(response.data, order);
-
-    return response.data;
+    return processLastOrder(response.data);
   }).catch((error) => {
     logger.error('Error while fetching customers last order. Message: @message, CustomerId: @customer_id', {
       '@message': error.message,
       '@customer_id': customerId,
     });
-    return [];
+    return null;
   });
 
 /**
@@ -413,31 +430,34 @@ const getPaymentMethods = async () => getCart()
 
 /**
  * Get payment method from last order.
- * @todo implement this
  *
  * @param {object} order
  *   Last Order details.
  *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, payment method name otherwise.
+ * @returns {Promise<object|null>}
+ *   Payment method name or null.
  */
 const getDefaultPaymentFromOrder = async (order) => {
+  if (_isUndefined(order.payment) || _isUndefined(order.payment.method)) {
+    return order;
+  }
+
   const orderPaymentMethod = order.payment.method;
 
   const methods = await getPaymentMethods();
   if (_isEmpty(methods)
-    || (typeof methods.error !== 'undefined'
-      && methods.error)) {
-    return false;
+    || (typeof methods.error !== 'undefined' && methods.error)
+  ) {
+    return null;
   }
 
   const methodNames = methods.map((value) => value.code);
 
   if (!_includes(methodNames, orderPaymentMethod)) {
-    return false;
+    return null;
   }
 
-  return orderPaymentMethod;
+  return { default: orderPaymentMethod };
 };
 
 /**
@@ -769,7 +789,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   }
 
   // Add customer address info.
-  if (!_isEmpty(shippingData.customer_address_id)) {
+  if (!_isUndefined(shippingData.customer_address_id)) {
     params.shipping.shipping_address = shippingData.address;
   } else {
     params.shipping.shipping_address = formatAddressForShippingBilling(shippingData.address);
@@ -787,7 +807,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   // not set. City with value 'NONE' means, that this was added in CnC
   // by default and not changed by user.
   if (updateBillingDetails
-    || _isEmpty(cartData.billing_address) || _isEmpty(cartData.billing_address.firstname)
+    || _isUndefined(cartData.billing_address) || _isUndefined(cartData.billing_address.firstname)
     || cartData.billing_address.city === 'NONE') {
     cart = await updateBilling(params.shipping.shipping_address);
   }
@@ -900,25 +920,22 @@ const selectCnc = async (store, address, billing) => {
 /**
  * Gets customer's address ids.
  *
- * @param {string} customerId
- *   Customer id.
  * @returns {Promise<AxiosPromise<Object> | *[]>}
  *   Address ids array or empty.
  */
-const getCustomerAddressIdsByCustomerId = async (customerId) => callMagentoApi('/rest/V1/customers/me', 'GET', {})
+const getCustomerAddressIds = () => getCart()
   .then((response) => {
-    if (typeof response.data.error !== 'undefined') {
-      return [];
+    if (!_isUndefined(response.data)
+      && !_isUndefined(response.data.customer)
+      && !_isUndefined(response.data.customer.addresses)
+      && !_isEmpty(response.data.customer.addresses)
+    ) {
+      const addresses = [];
+      response.data.customer.addresses.forEach((item) => {
+        addresses.push(item.customer_address_id);
+      });
+      return addresses;
     }
-    if (!_isEmpty(response.data.addresses)) {
-      return response.data.addresses.map((value) => value.id);
-    }
-    return [];
-  }).catch((e) => {
-    logger.error('Error while getting customer details. Error message: @message, Customer: @customer', {
-      '@message': e.message,
-      '@customer': customerId,
-    });
     return [];
   });
 
@@ -949,9 +966,9 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   };
 
   // Set customer address id.
-  if (!_isEmpty(address.id)) {
+  if (!_isUndefined(address.id)) {
     shippingData.customer_address_id = address.id;
-  } else if (!_isEmpty(address.customer_address_id)) {
+  } else if (!_isUndefined(address.customer_address_id)) {
     shippingData.customer_address_id = address.customer_address_id;
   }
 
@@ -985,7 +1002,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
-  if (_isEmpty(billing.customer_address_id)) {
+  if (_isUndefined(billing.customer_address_id)) {
     return updated;
   }
 
@@ -1018,7 +1035,6 @@ const selectHd = async (address, method, billing, shippingMethods) => {
 
 /**
  * Apply shipping from last order.
- * @todo implement this.
  *
  * @param {object} order
  *   Last Order details.
@@ -1027,6 +1043,10 @@ const selectHd = async (address, method, billing, shippingMethods) => {
  *   FALSE if something went wrong, updated cart data otherwise.
  */
 const applyDefaultShipping = async (order) => {
+  if (_isUndefined(order.shipping) || _isUndefined(order.shipping.commerce_address)) {
+    return false;
+  }
+
   const address = order.shipping.commerce_address;
 
   if (_includes(order.shipping.method, 'click_and_collect')) {
@@ -1055,14 +1075,13 @@ const applyDefaultShipping = async (order) => {
     return false;
   }
 
-  if (_isEmpty(address.customer_address_id)) {
+  if (_isUndefined(address.customer_address_id)) {
     return false;
   }
 
-  const customerAddressIds = await getCustomerAddressIdsByCustomerId(order.customer_id);
-
   // Return false if address id from last order doesn't
   // exist in customer's address id list.
+  const customerAddressIds = await getCustomerAddressIds();
   if (!_includes(customerAddressIds, address.customer_address_id)) {
     return false;
   }
@@ -1072,8 +1091,9 @@ const applyDefaultShipping = async (order) => {
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
       if (typeof method.carrier_code !== 'undefined'
-        && !_includes(method.carrier_code, order.shipping.method)
-        && _includes(method.method_code, order.shipping.method)) {
+        && order.shipping.method.indexOf(method.carrier_code, 0) === 0
+        && order.shipping.method.indexOf(method.method_code, 0) !== -1
+      ) {
         logger.notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', {
           '@cart_id': window.commerceBackend.getCartId(),
         });
@@ -1095,15 +1115,15 @@ const applyDefaultShipping = async (order) => {
  * @returns {Promise<object>}.
  *   The data.
  */
-const applyDefaults = async (data, uid) => {
+const applyDefaults = async (data, customerId) => {
   if (!_isEmpty(data.shipping.method)) {
     return data;
   }
 
   // Get last order only for Drupal Customers.
   const order = isUserAuthenticated()
-    ? await getLastOrder(uid)
-    : [];
+    ? await getLastOrder(customerId)
+    : null;
 
   // Try to apply defaults from last order.
   if (!_isEmpty(order)) {
@@ -1113,8 +1133,8 @@ const applyDefaults = async (data, uid) => {
     }
 
     const response = await applyDefaultShipping(order);
-    if (response) {
-      response.payment.default = await getDefaultPaymentFromOrder(order);
+    if (response !== false) {
+      response.data.payment = await getDefaultPaymentFromOrder(order);
       return response;
     }
   }
