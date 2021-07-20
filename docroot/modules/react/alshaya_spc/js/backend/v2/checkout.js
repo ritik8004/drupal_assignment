@@ -1391,6 +1391,67 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
 window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
 
 /**
+ * Process payment data before placing order.
+ *
+ * @param paymentData
+ * @param data
+ * @returns {{cvv: string, public_hash: string}}
+ */
+const processPaymentData = (paymentData, data) => {
+  let additionalInfo = data;
+
+  // Method specific code.
+  switch (paymentData.method) {
+    case 'checkout_com_upapi':
+      switch (additionalInfo.card_type) {
+        case 'new':
+          additionalInfo.is_active_payment_token_enabler = parseInt(additionalInfo.save_card, 10);
+          break;
+
+        case 'existing': {
+          const { cvvCheck } = drupalSettings.checkoutComUpapi;
+          const { cvv, id } = additionalInfo;
+
+          if (_isEmpty(cvv)) {
+            return {
+              data: {
+                error: true,
+                error_code: cartErrorCodes.cartOrderPlacementError,
+                message: 'CVV missing for credit/debit card.',
+              },
+            };
+          }
+
+          if (_isEmpty(id)) {
+            return {
+              data: {
+                error: true,
+                error_code: cartErrorCodes.cartOrderPlacementError,
+                message: 'Invalid card token.',
+              },
+            };
+          }
+
+          if (cvvCheck) {
+            additionalInfo = {
+              cvv: atob(cvv),
+              public_hash: atob(id),
+            };
+          }
+          break;
+        }
+
+        // no default
+      }
+      break;
+
+    // no default
+  }
+
+  return additionalInfo;
+};
+
+/**
  * Adds payment method in the cart and returns the cart.
  *
  * @param {object} data
@@ -1452,9 +1513,34 @@ const paymentUpdate = async (data) => {
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
   }
 
-  // @todo implement the processing for checkout_com_upapi for Cart::processPaymentData().
-  // @todo update payment method to checkout_com_upapi_vault if using a saved card.
-  // Both the points above are for authenticated users so still pending.
+  // Process payment data by paymentMethod.
+  const processedData = processPaymentData(paymentData, params.payment.additional_data);
+  if (typeof processedData.data !== 'undefined' && processedData.data.error) {
+    logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
+      '@message': processedData.data.error_message,
+      '@cart': await window.commerceBackend.getCart(),
+      '@method': paymentData.method,
+    });
+    return processedData;
+  }
+  params.payment.additional_data = processedData;
+
+  // Additional changes for VAULT.
+  switch (paymentData.method) {
+    case 'checkout_com_upapi':
+      if (!_isEmpty(params.payment.additional_data.public_hash)) {
+        params.payment.method = checkoutComUpapiVaultMethod();
+      }
+      break;
+
+    case 'checkout_com':
+      if (!_isEmpty(params.payment.additional_data.public_hash)) {
+        params.payment.method = checkoutComVaultMethod();
+      }
+      break;
+
+    default:
+  }
 
   const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
@@ -1463,8 +1549,8 @@ const paymentUpdate = async (data) => {
   const oldCart = await getCart();
   const cart = await updateCart(params);
   if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
-    // Handle Error on cart update.
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
+    cart.data.message = errorMessage;
     const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
     logger.error(`Error occurred while placing order. ${message}`);
     return cart;
