@@ -399,6 +399,7 @@ const staticProductStatus = [];
 
 /**
  * Get data related to product status.
+ * @todo Allow bulk requests, see CORE-32123
  *
  * @param {Promise<string|null>} sku
  *  The sku for which the status is required.
@@ -418,7 +419,11 @@ const getProductStatus = async (sku) => {
   // query string.
   // The query string is added since same APIs are used by MAPP also.
   const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
-  if (!_isUndefined(response.data)) {
+  if (_isEmpty(response.data)
+    || (!_isUndefined(response.data.error) && response.data.error)
+  ) {
+    staticProductStatus[sku] = null;
+  } else {
     staticProductStatus[sku] = response.data;
   }
 
