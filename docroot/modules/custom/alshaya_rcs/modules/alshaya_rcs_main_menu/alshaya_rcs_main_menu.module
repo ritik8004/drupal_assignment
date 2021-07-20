@@ -17,5 +17,48 @@ function alshaya_rcs_main_menu_page_attachments_alter(array &$page) {
   // Pass configs to drupal settings to avail in JS.
   $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['root_category'] = $rcsMainMenuSettings->get('root_category');
   $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['menu_max_depth'] = $rcsMainMenuSettings->get('menu_max_depth');
+
+  $getMenuQuery = alshaya_rcs_main_menu_get_query($rcsMainMenuSettings->get('menu_max_depth'));
+  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['query'] = json_encode($getMenuQuery, JSON_FORCE_OBJECT);
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $rcsMainMenuSettings->getCacheTags());
+
+  // Get the alshaya main menu config object.
+  $mainMenuSettings = \Drupal::config('alshaya_main_menu.settings');
+
+  // Pass configs to drupal settings to avail in JS.
+  $max_nb_col = (int) $mainMenuSettings->get('max_nb_col');
+  $ideal_max_col_length = (int) $mainMenuSettings->get('ideal_max_col_length');
+  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['max_nb_col'] = $max_nb_col > 0 ? $max_nb_col : 6;
+  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['ideal_max_col_length'] = $ideal_max_col_length > 0 ? $ideal_max_col_length : 10;
+  $page['#attached']['drupalSettings']['alshaya_rcs_main_menu']['desktop_main_menu_layout'] = $mainMenuSettings->get('desktop_main_menu_layout');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $mainMenuSettings->getCacheTags());
+
+  // Attach the render libraries.
+  $page['#attached']['library'][] = 'alshaya_rcs/renderer';
+  $page['#attached']['library'][] = 'rcs_magento_placeholders/rcs_magento_placeholders';
+}
+
+function alshaya_rcs_main_menu_get_query($depth = 0) {
+  $fieldsToFetch = [
+    'children_count',
+    'children' => [
+      'id',
+      'level',
+      'name',
+      'include_in_menu',
+      'url_path',
+      'url_key',
+      'show_on_dpt',
+      'cta',
+      'display_view_all',
+      'position',
+      'is_anchor',
+    ]
+  ];
+
+  if ($depth > 0) {
+    $fieldsToFetch['children']['children'] = alshaya_rcs_main_menu_get_query($depth - 1);
+  }
+
+  return $fieldsToFetch;
 }

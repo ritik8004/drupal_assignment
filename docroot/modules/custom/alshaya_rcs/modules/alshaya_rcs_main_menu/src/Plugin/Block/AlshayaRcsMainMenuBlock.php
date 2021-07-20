@@ -106,9 +106,10 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'depth' => 1,
         'move_to_right' => FALSE,
         'highlight_paragraph' => [],
+        'class' => ['level-1', 'clickable'],
         'child' => [
           '2' => [
-            // 2nd Level item with clickable and
+            // 2nd Level item non-clickable and
             // enabled for both mobile an desktop.
             'id' => '2',
             'label' => $phTermLabel,
@@ -118,7 +119,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
             'display_in_mobile' => "1",
             'depth' => 2,
             'move_to_right' => FALSE,
-            'highlight_paragraph' => [],
+            'class' => ['level-2', 'clickable'],
             'child' => [
               '3' => [
                 // 3rd Level item with clickable and
@@ -131,28 +132,44 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 'display_in_mobile' => "1",
                 'depth' => 3,
                 'move_to_right' => TRUE,
-                'highlight_paragraph' => [],
+                'class' => ['level-3', 'clickable'],
+                'child' => [
+                  // @todo make this dynamic to support 4th level.
+                  // '9' => [
+                  // 4th Level item with clickable and
+                  // enabled for both mobile an desktop.
+                  // 'id' => '9',
+                  // 'label' => $phTermLabel,
+                  // 'path' => '#rcs.category.url_path#',
+                  // 'clickable' => "1",
+                  // 'display_in_desktop' => "1",
+                  // 'display_in_mobile' => "1",
+                  // 'depth' => 4,
+                  // 'move_to_right' => TRUE,
+                  // 'class' => ['level-4', 'clickable'],
+                  // 'child' => [],
+                  // ],
+                ],
+              ],
+              '4' => [
+                // 3rd Level item with clickable and
+                // enabled for both mobile an desktop.
+                'id' => '4',
+                'label' => $phTermLabel,
+                'path' => '#rcs.category.url_path#',
+                'clickable' => "0",
+                'display_in_desktop' => "1",
+                'display_in_mobile' => "1",
+                'depth' => 3,
+                'move_to_right' => TRUE,
+                'class' => ['level-3', 'non-clickable'],
                 'child' => [],
               ],
             ],
           ],
           '5' => [
-            // 2nd Level item non-clickable and
-            // enabled for both mobile an desktop.
-            'id' => '5',
-            'label' => $phTermLabel,
-            'path' => '#rcs.category.url_path#',
-            'clickable' => "0",
-            'display_in_desktop' => "1",
-            'display_in_mobile' => "1",
-            'depth' => 2,
-            'move_to_right' => FALSE,
-            'highlight_paragraph' => [],
-            'child' => [],
-          ],
-          '6' => [
             // 2nd Level item non-clickable and enabled for mobile only.
-            'id' => '6',
+            'id' => '5',
             'label' => $phTermLabel,
             'path' => '#rcs.category.url_path#',
             'clickable' => "0",
@@ -160,20 +177,65 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
             'display_in_mobile' => "1",
             'depth' => 2,
             'move_to_right' => TRUE,
-            'highlight_paragraph' => [],
-            'child' => [],
+            'class' => ['level-2', 'non-clickable'],
+            'child' => [
+              '6' => [
+                // 3rd Level item with clickable and
+                // enabled for both mobile an desktop.
+                'id' => '6',
+                'label' => $phTermLabel,
+                'path' => '#rcs.category.url_path#',
+                'clickable' => "1",
+                'display_in_desktop' => "1",
+                'display_in_mobile' => "1",
+                'depth' => 3,
+                'move_to_right' => TRUE,
+                'class' => ['level-3', 'clickable'],
+                'child' => [],
+              ],
+              '7' => [
+                // 3rd Level item with clickable and
+                // enabled for both mobile an desktop.
+                'id' => '7',
+                'label' => $phTermLabel,
+                'path' => '#rcs.category.url_path#',
+                'clickable' => "0",
+                'display_in_desktop' => "1",
+                'display_in_mobile' => "1",
+                'depth' => 3,
+                'move_to_right' => TRUE,
+                'class' => ['level-3', 'non-clickable'],
+                'child' => [],
+              ],
+            ],
           ],
-          '7' => [
-            // 2nd Level item non-clickable and enabled for desktop only.
-            'id' => '7',
+        ],
+      ],
+      '8' => [
+        // 1st Level item non-clickable and enabled for both mobile an desktop.
+        'id' => '8',
+        'label' => $phTermLabel . '1',
+        'path' => '#rcs.category.url_path#',
+        'clickable' => "0",
+        'display_in_desktop' => "1",
+        'display_in_mobile' => "1",
+        'depth' => 1,
+        'move_to_right' => FALSE,
+        'highlight_paragraph' => [],
+        'class' => ['level-1', 'non-clickable'],
+        'child' => [
+          '5' => [
+            // 2nd Level item non-clickable and
+            // enabled for both mobile an desktop.
+            'id' => '5',
             'label' => $phTermLabel,
             'path' => '#rcs.category.url_path#',
-            'clickable' => "0",
+            'clickable' => "1",
             'display_in_desktop' => "1",
-            'display_in_mobile' => "0",
+            'display_in_mobile' => "1",
             'depth' => 2,
-            'move_to_right' => TRUE,
-            'highlight_paragraph' => [],
+            'move_to_right' => FALSE,
+            'class' => ['level-2', 'clickable'],
             'child' => [],
           ],
         ],
@@ -207,7 +269,10 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'class' => [
           'block-alshaya-main-menu',
         ],
+        'id' => 'rcs-ph-navigation_menu',
       ],
+      '#prefix' => '<div id="rcs-ph-navigation_menu">',
+      '#suffix' => '</div>',
     ];
 
   }
