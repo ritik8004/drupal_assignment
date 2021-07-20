@@ -142,7 +142,7 @@ class SwatchesHelper {
    *   GuzzleHttp\Client object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
-   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The filesystem service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
@@ -153,7 +153,7 @@ class SwatchesHelper {
                               SKUFieldsManager $sku_fields_manager,
                               Client $http_client,
                               ConfigFactoryInterface $config_factory,
-                              FileSystemInterface $fileSystem) {
+                              FileSystemInterface $file_system) {
     $this->entityTypeManager = $entity_type_manager;
     $this->fileStorage = $this->entityTypeManager->getStorage('file');
     $this->logger = $logger;
@@ -163,7 +163,7 @@ class SwatchesHelper {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
-    $this->fileSystem = $fileSystem;
+    $this->fileSystem = $file_system;
   }
 
   /**
