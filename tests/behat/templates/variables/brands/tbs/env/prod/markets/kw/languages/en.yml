@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://tbskw2.factory.alshaya.com/en'
+  url_base_uri: 'https://www.thebodyshop.com.kw/en/'
   collection_filter: 'Collection'
   sort_filter: 'Sort by'
   brand_filter: 'Product Type'

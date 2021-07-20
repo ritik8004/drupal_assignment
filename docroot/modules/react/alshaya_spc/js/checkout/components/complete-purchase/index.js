@@ -42,12 +42,14 @@ export default class CompletePurchase extends React.Component {
       return;
     }
 
-    dispatchCustomEvent('orderPaymentMethod', {
-      payment_method: Object
-        .values(drupalSettings.payment_methods)
-        .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
-        .shift().gtm_name,
-    });
+    setTimeout(() => {
+      dispatchCustomEvent('orderPaymentMethod', {
+        payment_method: Object
+          .values(drupalSettings.payment_methods)
+          .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+          .shift().gtm_name,
+      });
+    }, 5000);
 
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
