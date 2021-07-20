@@ -320,22 +320,85 @@ const validateAddressAreaCity = async (address) => {
 };
 
 /**
- * Get last order of the customer.
- * @todo implement this.
+ * Performs some data transformations.
+ *
+ * @param {object} orderData
+ *   The order data.
+ *
+ * @return {object}
+ *   The transformed data.
  */
-const getLastOrder = () => [];
+const processLastOrder = (orderData) => {
+  const order = { ...orderData };
+  if (_isUndefined(order.entity_id)) {
+    return order;
+  }
+
+  const data = {};
+  data.order_id = order.entity_id;
+
+  // Customer info.
+  data.firstname = order.customer_firstname;
+  data.lastname = order.customer_lastname;
+  data.email = order.customer_email;
+
+  // Items.
+  data.items = order.items;
+
+  // Coupon code.
+  data.coupon = !_isEmpty(order.coupon_code) ? order.coupon_code : '';
+
+  // Extension.
+  data.extension = order.extension_attributes;
+  delete order.extension_attributes;
+
+  // Shipping.
+  data.shipping = data.extension.shipping_assignments[0].shipping;
+  data.shipping.address.customer_id = order.customer_id;
+  delete data.shipping.address.entity_id;
+  delete data.shipping.address.parent_id;
+
+  data.shipping.commerce_address = data.shipping.address;
+  data.shipping.extension = data.shipping.address.extension_attributes;
+
+  // Billing.
+  data.billing = order.billing_address;
+  data.billing.customer_id = order.customer_id;
+  delete order.billing_address.entity_id;
+  delete order.billing_address.parent_id;
+
+  data.billing_commerce_address = data.billing;
+  delete order.billing_address;
+  data.billing.extension = data.billing.extension_attributes;
+
+  Object.assign(order, data);
+
+  return order;
+};
 
 /**
- * Get payment method from last order.
- * @todo implement this
+ * Get last order of the customer.
  *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, payment method name otherwise.
+ * @param {string} customerId
+ *   The customer id.
+ * @returns {Promise<AxiosPromise<Object|null>>}
+ *   Customer last order or null.
  */
-const getDefaultPaymentFromOrder = async () => null;
+const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {})
+  .then((response) => {
+    if (_isEmpty(response.data)
+      || (!_isUndefined(response.data.error) && response.data.error)
+    ) {
+      return null;
+    }
+    return processLastOrder(response.data);
+  }).catch((error) => {
+    logger.error('Error while fetching customers last order. Message: @message, CustomerId: @customer_id', {
+      '@message': error.message,
+      '@customer_id': customerId,
+    });
+    return null;
+  });
 
 /**
  * Gets payment methods.
@@ -365,6 +428,38 @@ const getPaymentMethods = async () => getCart()
         return null;
       });
   });
+
+/**
+ * Get payment method from last order.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|null>}
+ *   Payment method name or null.
+ */
+const getDefaultPaymentFromOrder = async (order) => {
+  if (_isUndefined(order.payment) || _isUndefined(order.payment.method)) {
+    return order;
+  }
+
+  const orderPaymentMethod = order.payment.method;
+
+  const methods = await getPaymentMethods();
+  if (_isEmpty(methods)
+    || (typeof methods.error !== 'undefined' && methods.error)
+  ) {
+    return null;
+  }
+
+  const methodNames = methods.map((value) => value.code);
+
+  if (!_includes(methodNames, orderPaymentMethod)) {
+    return null;
+  }
+
+  return { default: orderPaymentMethod };
+};
 
 /**
  * Get the payment method set on cart.
@@ -695,7 +790,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   }
 
   // Add customer address info.
-  if (!_isEmpty(shippingData.customer_address_id)) {
+  if (!_isUndefined(shippingData.customer_address_id)) {
     params.shipping.shipping_address = shippingData.address;
   } else {
     params.shipping.shipping_address = formatAddressForShippingBilling(shippingData.address);
@@ -713,7 +808,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   // not set. City with value 'NONE' means, that this was added in CnC
   // by default and not changed by user.
   if (updateBillingDetails
-    || _isEmpty(cartData.billing_address) || _isEmpty(cartData.billing_address.firstname)
+    || _isUndefined(cartData.billing_address) || _isUndefined(cartData.billing_address.firstname)
     || cartData.billing_address.city === 'NONE') {
     cart = await updateBilling(params.shipping.shipping_address);
   }
@@ -824,21 +919,26 @@ const selectCnc = async (store, address, billing) => {
 };
 
 /**
- * Apply shipping from last order.
- * @todo implement this.
+ * Gets customer's address ids.
  *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, updated cart data otherwise.
+ * @returns {Promise<AxiosPromise<Object> | *[]>}
+ *   Address ids array or empty.
  */
-const applyDefaultShipping = async (order) => {
-  const address = order.shipping.commerce_address;
-  // @todo finish the implementation of applyDefaultShipping() on CORE-30722
-  selectCnc({ code: 'RA1-Q314-HEN-001' }, address, order.billing_commerce_address);
-  return false;
-};
+const getCustomerAddressIds = () => getCart()
+  .then((response) => {
+    if (!_isUndefined(response.data)
+      && !_isUndefined(response.data.customer)
+      && !_isUndefined(response.data.customer.addresses)
+      && !_isEmpty(response.data.customer.addresses)
+    ) {
+      const addresses = [];
+      response.data.customer.addresses.forEach((item) => {
+        addresses.push(item.customer_address_id);
+      });
+      return addresses;
+    }
+    return [];
+  });
 
 /**
  * Select HD address and method from possible defaults.
@@ -867,9 +967,9 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   };
 
   // Set customer address id.
-  if (!_isEmpty(address.id)) {
+  if (!_isUndefined(address.id)) {
     shippingData.customer_address_id = address.id;
-  } else if (!_isEmpty(address.customer_address_id)) {
+  } else if (!_isUndefined(address.customer_address_id)) {
     shippingData.customer_address_id = address.customer_address_id;
   }
 
@@ -903,7 +1003,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
-  if (_isEmpty(billing.customer_address_id)) {
+  if (_isUndefined(billing.customer_address_id)) {
     return updated;
   }
 
@@ -935,6 +1035,78 @@ const selectHd = async (address, method, billing, shippingMethods) => {
 };
 
 /**
+ * Apply shipping from last order.
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|boolean>}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = async (order) => {
+  if (_isUndefined(order.shipping) || _isUndefined(order.shipping.commerce_address)) {
+    return false;
+  }
+
+  const address = order.shipping.commerce_address;
+
+  if (_includes(order.shipping.method, 'click_and_collect')) {
+    const store = await getStoreInfo({ code: order.shipping.extension_attributes.store_code });
+
+    // We get a string value if store node is not present in Drupal. So in
+    // that case we do not proceed.
+    if (typeof store.lat === 'undefined' || typeof store.lng === 'undefined') {
+      return false;
+    }
+
+    const availableStores = await getCartStores(store.lat, store.lng);
+
+    const availableStoreCodes = availableStores.map((value) => value.code);
+
+    if (_includes(availableStoreCodes, store.code)) {
+      let storeKey = '';
+      availableStores.forEach((value, key) => {
+        if (value.code === store.code) {
+          storeKey = key;
+        }
+      });
+      return selectCnc(availableStores[storeKey], address, order.billing_commerce_address);
+    }
+
+    return false;
+  }
+
+  if (_isUndefined(address.customer_address_id)) {
+    return false;
+  }
+
+  // Return false if address id from last order doesn't
+  // exist in customer's address id list.
+  const customerAddressIds = await getCustomerAddressIds();
+  if (!_includes(customerAddressIds, address.customer_address_id)) {
+    return false;
+  }
+
+  const methods = await getHomeDeliveryShippingMethods(address);
+  if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
+    for (let i = 0; i < methods.length; i++) {
+      const method = methods[i];
+      if (typeof method.carrier_code !== 'undefined'
+        && order.shipping.method.indexOf(method.carrier_code, 0) === 0
+        && order.shipping.method.indexOf(method.method_code, 0) !== -1
+      ) {
+        logger.notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', {
+          '@cart_id': window.commerceBackend.getCartId(),
+        });
+        return selectHd(address, methods[0], address, methods);
+      }
+    }
+  }
+
+  return false;
+};
+
+/**
  * Apply defaults to cart for customer.
  *
  * @param {object} cartData
@@ -944,16 +1116,15 @@ const selectHd = async (address, method, billing, shippingMethods) => {
  * @returns {Promise<object>}.
  *   The data.
  */
-const applyDefaults = async (data, uid) => {
-  // @todo Update this function to return data after processing with user inputs.
+const applyDefaults = async (data, customerId) => {
   if (!_isEmpty(data.shipping.method)) {
     return data;
   }
 
   // Get last order only for Drupal Customers.
   const order = isUserAuthenticated()
-    ? getLastOrder(uid)
-    : [];
+    ? await getLastOrder(customerId)
+    : null;
 
   // Try to apply defaults from last order.
   if (!_isEmpty(order)) {
@@ -963,9 +1134,8 @@ const applyDefaults = async (data, uid) => {
     }
 
     const response = await applyDefaultShipping(order);
-    if (response) {
-      // @todo Check if returns empty string for anonymous (CORE-31245).
-      response.payment.default = await getDefaultPaymentFromOrder(order);
+    if (response !== false) {
+      response.data.payment = await getDefaultPaymentFromOrder(order);
       return response;
     }
   }
@@ -1018,8 +1188,7 @@ const getProcessedCheckoutData = async (cartData) => {
   const cncStatus = await getCncStatusForCart(data);
 
   // Here we will do the processing of cart to make it in required format.
-  // @todo check if we need to use user.uid or userDetails.customerId.
-  const updated = await applyDefaults(data, window.drupalSettings.user.uid);
+  const updated = await applyDefaults(data, window.drupalSettings.userDetails.customerId);
   if (updated !== false && !_isEmpty(updated.cart)) {
     data = updated;
   }
