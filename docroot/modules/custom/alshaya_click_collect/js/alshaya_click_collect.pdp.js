@@ -32,6 +32,8 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
+      // We wait for rcs to do the replacement of tokens and then only we allow
+      // the events to be attached.
       var node = $('.sku-base-form', context).not('[data-sku *= "#"]').closest('article.entity--type-node').first();
 
       $('.sku-base-form', node).once('click-collect').on('variant-selected', function (event, variant, code) {
