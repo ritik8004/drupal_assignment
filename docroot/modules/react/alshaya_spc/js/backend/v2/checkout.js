@@ -383,18 +383,6 @@ const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder
   });
 
 /**
- * Get payment method from last order.
- * @todo implement this
- *
- * @param {object} order
- *   Last Order details.
- *
- * @returns {Promise<object|boolean>}
- *   FALSE if something went wrong, payment method name otherwise.
- */
-const getDefaultPaymentFromOrder = async () => null;
-
-/**
  * Gets payment methods.
  *
  * @returns {Promise<object|null>}.
@@ -422,6 +410,35 @@ const getPaymentMethods = async () => getCart()
         return null;
       });
   });
+
+/**
+ * Get payment method from last order.
+ * @todo implement this
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @returns {Promise<object|boolean>}
+ *   FALSE if something went wrong, payment method name otherwise.
+ */
+const getDefaultPaymentFromOrder = async (order) => {
+  const orderPaymentMethod = order.payment.method;
+
+  const methods = await getPaymentMethods();
+  if (_isEmpty(methods)
+    || (typeof methods.error !== 'undefined'
+      && methods.error)) {
+    return false;
+  }
+
+  const methodNames = methods.map((value) => value.code);
+
+  if (!_includes(methodNames, orderPaymentMethod)) {
+    return false;
+  }
+
+  return orderPaymentMethod;
+};
 
 /**
  * Get the payment method set on cart.
