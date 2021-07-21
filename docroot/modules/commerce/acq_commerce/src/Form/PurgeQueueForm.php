@@ -92,10 +92,10 @@ class PurgeQueueForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     try {
       $this->api->purgeQueue();
-      drupal_set_message($this->t('Queue purged.'));
+      $this->messenger()->addMessage($this->t('Queue purged.'));
     }
     catch (\Exception $e) {
-      drupal_set_message($this->t('Got error when purging queue: @error.', [
+      $this->messenger()->addMessage($this->t('Got error when purging queue: @error.', [
         '@error' => $e->getMessage(),
       ]), 'error');
     }
