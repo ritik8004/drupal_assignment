@@ -30,6 +30,7 @@ module.exports = {
     google: true,
     GTM_CONSTANTS: true,
     debounce: true,
+    BV: true,
   },
   parser: "babel-eslint",
   parserOptions: {
