@@ -68,42 +68,37 @@ class AlshayaRcsMenuTree implements AlshayaRcsMenuTreeInterface {
   }
 
   /**
-   * Get the term tree for 'product_category' vocabulary from cache or fresh.
+   * Get the ph term data for 'rcs_category' vocabulary from cache or fresh.
    *
    * @return array
    *   Processed term data from cache if available or fresh.
    */
   public function getRcsCategoryPlaceholderTerm() {
-    $cid = self::CACHE_ID_PH;
+    // Get the current language code.
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
-    $termData = $this->cache->get($cid);
-    if ($termData) {
-      return $termData->data;
+    // Create a cache ID.
+    $cid = self::CACHE_ID_PH . '_' . $langcode;
+
+    // Check if data available in cache and return.
+    $term_data = $this->cache->get($cid);
+    if ($term_data) {
+      return $term_data->data;
     }
 
-    $termData = $this->getPlaceholderTerm();
+    // Get the fresh placeholder term data.
+    $config = $this->configFactory->get('rcs_placeholders.settings');
+    $ph_term_id = $config->get('category.placeholder_tid');
+
+    $term_data = [];
+    if ($ph_term_id) {
+      $term_data = $this->termStorage->load($ph_term_id);
+    }
 
     // @todo Check for cache invalidation.
-    $this->cache->set($cid, $termData);
+    $this->cache->set($cid, $term_data);
 
-    return $termData;
-  }
-
-  /**
-   * Get the term tree for 'product_category' vocabulary.
-   *
-   * @return array
-   *   Processed term data.
-   */
-  protected function getPlaceholderTerm() {
-    $config = $this->configFactory->get('rcs_placeholders.settings');
-    $placeholderTermId = $config->get('category.placeholder_tid');
-
-    if (!$placeholderTermId) {
-      return [];
-    }
-
-    return $this->termStorage->load($placeholderTermId);
+    return $term_data;
   }
 
 }

@@ -11,28 +11,38 @@ exports.render = function render(
   langcode,
   innerHtml
 ) {
-  let html = "";
+  // Process according to the placeholder element.
   switch (placeholder) {
     case "navigation_menu":
-
+      // Covert innerHtml to a jQuery object.
       const innerHtmlObj = jQuery('<div>').html(innerHtml);
 
-      const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
-
       if (inputs.length !== 0) {
+        // Get the L1 menu list element.
+        const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
+
+        // Filter category menu items if include_in_menu flag true.
+        inputs = filterAvailableItems(inputs);
+
+        // Sort the remaining category menu items by position in asc order.
         inputs.sort(function (a, b) {
           return parseInt(a.position) - parseInt(b.position);
         });
-        let html = '';
-        inputs = filterAvailableItems(inputs);
+
+        let menuHtml = '';
+        // Iterate over each L1 item and get the inner markup
+        // prepared recursively.
         inputs.forEach(function eachCategory(level1) {
-          html += getMenuMarkup(level1, 1, innerHtmlObj, settings);
+          menuHtml += getMenuMarkup(level1, 1, innerHtmlObj, settings);
         });
 
+        // Remove the placeholders markup.
         menuListLevel1Ele.find('li').remove();
-        menuListLevel1Ele.append(html);
+
+        // Update with the resultant markups.
+        menuListLevel1Ele.append(menuHtml);
       }
-      return innerHtmlObj.html();
+      innerHtml = innerHtmlObj.html();
       break;
 
     default:
@@ -43,15 +53,27 @@ exports.render = function render(
   return innerHtml;
 };
 
+/**
+ *
+ * @param {object} levelObj
+ * @param {integer} level
+ * @param {string} phHtmlObj
+ * @param {object} settings
+ *
+ * @returns
+ *  {string} Generated menu markup for given level.
+ */
 const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
   // We support max depth by L4.
-  if (level > parseInt(drupalSettings.alshaya_rcs_main_menu.menu_max_depth)) {
+  if (level > parseInt(drupalSettings.alshayaRcs.navigationMenu.menuMaxDepth)) {
     return;
   }
+
   const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   const levelIdentifier = `level-${level}`;
-  const ifChildren = (levelObj.children && levelObj.children.length > 0) ? true : false;
+  const ifChildren = levelObj.children && levelObj.children.length > 0;
 
+  // Clone the relevant placeholder element from the given html.
   var clonePhEle = null;
   if (levelObj.is_anchor) {
     clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
@@ -75,9 +97,9 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
 
   // Build menu column for L1 dynamically, if a default layout.
   if (level === 1
-    && drupalSettings.alshaya_rcs_main_menu.desktop_main_menu_layout !== 'menu_inline_display') {
-    const max_nb_col = drupalSettings.alshaya_rcs_main_menu.max_nb_col;
-    let ideal_max_col_length = drupalSettings.alshaya_rcs_main_menu.ideal_max_col_length;
+    && drupalSettings.alshayaRcs.navigationMenu.menuLayout !== 'menu_inline_display') {
+    const max_nb_col = drupalSettings.alshayaRcs.navigationMenu.maxNbCol;
+    let ideal_max_col_length = drupalSettings.alshayaRcs.navigationMenu.idealMaxColLength;
     let reprocess = false;
     let col = 0;
 
@@ -141,13 +163,18 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
     .replace("#rcs.category.url_path#", `/${menuPathPrefixFull}${levelObj.url_path}/`);
 };
 
+/**
+ *
+ * @param {array} catArray
+ *
+ * @returns Filtered array with items for which the value of
+ *  include_in_menu property is true.
+ */
 const filterAvailableItems = function (catArray) {
   return catArray.filter(
     innerCatArray => (innerCatArray.include_in_menu === 1)
     );
 };
-
-
 
 exports.computePhFilters = function (input, filter) {
   let value = input;
