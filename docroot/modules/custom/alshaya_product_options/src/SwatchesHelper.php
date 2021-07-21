@@ -17,6 +17,7 @@ use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
+use Drupal\Core\File\FileSystemInterface;
 
 /**
  * Class Swatches Helper.
@@ -116,6 +117,13 @@ class SwatchesHelper {
   protected $configFactory;
 
   /**
+   * File system object.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * SwatchesHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -134,6 +142,8 @@ class SwatchesHelper {
    *   GuzzleHttp\Client object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The filesystem service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LoggerChannelInterface $logger,
@@ -142,7 +152,8 @@ class SwatchesHelper {
                               LanguageManagerInterface $language_manager,
                               SKUFieldsManager $sku_fields_manager,
                               Client $http_client,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              FileSystemInterface $file_system) {
     $this->entityTypeManager = $entity_type_manager;
     $this->fileStorage = $this->entityTypeManager->getStorage('file');
     $this->logger = $logger;
@@ -152,6 +163,7 @@ class SwatchesHelper {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -370,11 +382,11 @@ class SwatchesHelper {
     $directory = 'public://swatches/' . str_replace('/' . $file_name, '', $path);
 
     // Prepare the directory.
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
 
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
-    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FileSystemInterface::EXISTS_REPLACE)) {
       return $file;
     }
     else {
