@@ -138,10 +138,8 @@ function alshaya_rcs_magento_placeholders_node_view(array &$build, EntityInterfa
 
   $api_settings = Settings::get('alshaya_api.settings');
 
-  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend'] = [
-    'baseUrl' => 'https://' . $_SERVER['HTTP_HOST'],
-    'languageCode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
-  ];
+  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
+  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['languageCode'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
   // Use proxy on local env as here we don't have Cloudflare.
   if (Settings::get('env') === 'local') {
