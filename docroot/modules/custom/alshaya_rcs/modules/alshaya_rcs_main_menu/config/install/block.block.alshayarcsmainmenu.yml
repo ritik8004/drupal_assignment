@@ -7,7 +7,7 @@ dependencies:
     - alshaya_white_label
 id: alshayarcsmainmenu
 # @Todo: Use alshaya whitelabel and then move it to current theme.
-theme: alshaya_hnm
+theme: alshaya_white_label
 region: pre_content
 weight: -20
 provider: null

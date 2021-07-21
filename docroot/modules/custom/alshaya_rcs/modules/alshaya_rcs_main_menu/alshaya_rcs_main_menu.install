@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_main_menu_install() {
+  // Move the rcs navigation block to current theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+
+  // Disable existing V1 alshaya_main_menu block.
+  $non_rcs_main_menu_block = Block::load('alshayamainmenu');
+  if ($non_rcs_main_menu_block instanceof BlockInterface) {
+    $non_rcs_main_menu_block->disable()->save();
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_main_menu_uninstall() {
+  // Enable the V1 alshaya_main_menu block.
+  $non_rcs_main_menu_block = Block::load('alshayamainmenu');
+  if ($non_rcs_main_menu_block instanceof BlockInterface) {
+    $non_rcs_main_menu_block->enable()->save();
+  }
+}
