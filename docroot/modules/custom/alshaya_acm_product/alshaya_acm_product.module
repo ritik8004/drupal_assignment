@@ -1540,7 +1540,7 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
     if ($route->getRouteName() == 'entity.node.canonical') {
       /* @var \Drupal\node\Entity\Node $node */
       $node = $route->getParameter('node');
-      return AccessResult::forbiddenIf($node->bundle() == 'acq_product');
+      return AccessResult::forbiddenIf(in_array($node->bundle(), ['acq_product', 'rcs_product']));
     }
   }
 }

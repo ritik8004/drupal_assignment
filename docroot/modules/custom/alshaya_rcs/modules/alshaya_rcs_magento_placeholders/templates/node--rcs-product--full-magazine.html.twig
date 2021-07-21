@@ -125,18 +125,7 @@
           {% block afterDescription %}
           {% endblock %}
 
-          {% if content.home_delivery or content.click_and_collect %}
-            <div class="delivery-options-wrapper">
-              <div class="product-out-of-stock-layer"></div>
-              <div class="field__content">
-                {{ content.home_delivery }}
-
-                {% if content.click_and_collect %}
-                  {{ content.click_and_collect }}
-                {% endif %}
-              </div>
-            </div>
-          {% endif %}
+          <div id="rcs-ph-delivery-option"></div>
 
         </div>
 
