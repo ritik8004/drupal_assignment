@@ -206,14 +206,14 @@
     var context = $('#pdp-stores-container').closest('article.entity--type-node');
     asCoords = coords;
     geoPerm = true;
-    Drupal.pdp.storesDisplay(context, asCoords, $('.click-collect-form', context), null, null);
+    Drupal.pdp.storesDisplay(context, asCoords, $('.click-collect-form', context));
   };
 
   // Set the location coordinates, but don't render the stores.
   Drupal.pdp.setStoreCoords = function (context, coords, field, restriction, $trigger) {
     asCoords = coords;
     if (!$.isEmptyObject(asCoords)) {
-      Drupal.pdp.storesDisplay(context, asCoords, null, null, null);
+      Drupal.pdp.storesDisplay(context, asCoords);
     }
   };
 
