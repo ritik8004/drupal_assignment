@@ -8,6 +8,8 @@
 
   Drupal.behaviors.pdpJs = {
     attach: function (context, settings) {
+      var node = $('.sku-base-form').not('[data-sku *= "#"]').parents('article.entity--type-node:first');
+
       function moveContextualLink(parent, body) {
         if (typeof body === 'undefined') {
           body = '.c-accordion__title';
@@ -78,7 +80,7 @@
         };
 
         // Accordion for delivery option section on PDP.
-        $('.delivery-options-wrapper').find('.c-accordion-delivery-options').each(function () {
+        $('.delivery-options-wrapper', node).find('.c-accordion-delivery-options').each(function () {
           Drupal.convertIntoAccordion($(this));
           if ($(this).attr('data-state') === 'disabled') {
             $(this).accordion('option', 'disabled', true);
