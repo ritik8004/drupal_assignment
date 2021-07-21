@@ -48,6 +48,12 @@ const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.cust
 const getApiEndpoint = (action, params = {}) => {
   let endpoint = '';
   switch (action) {
+    case 'associateCart':
+      endpoint = isUserAuthenticated()
+        ? '/rest/V1/carts/mine'
+        : '';
+      break;
+
     case 'createCart':
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine'
