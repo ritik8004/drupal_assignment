@@ -50,67 +50,67 @@ const getApiEndpoint = (action, params = {}) => {
   switch (action) {
     case 'createCart':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine'
-        : '/rest/V1/guest-carts';
+        ? '/V1/carts/mine'
+        : '/V1/guest-carts';
       break;
 
     case 'getCart':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine/getCart'
-        : `/rest/V1/guest-carts/${params.cartId}/getCart`;
+        ? '/V1/carts/mine/getCart'
+        : `/V1/guest-carts/${params.cartId}/getCart`;
       break;
 
     case 'addUpdateItems':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine/items'
-        : `/rest/V1/guest-carts/${params.cartId}/items`;
+        ? '/V1/carts/mine/items'
+        : `/V1/guest-carts/${params.cartId}/items`;
       break;
 
     case 'removeItems':
       endpoint = isUserAuthenticated()
-        ? `/rest/V1/carts/mine/items/${params.itemId}`
-        : `/rest/V1/guest-carts/${params.cartId}/items/${params.itemId}`;
+        ? `/V1/carts/mine/items/${params.itemId}`
+        : `/V1/guest-carts/${params.cartId}/items/${params.itemId}`;
       break;
 
     case 'updateCart':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine/updateCart'
-        : `/rest/V1/guest-carts/${params.cartId}/updateCart`;
+        ? '/V1/carts/mine/updateCart'
+        : `/V1/guest-carts/${params.cartId}/updateCart`;
       break;
 
     case 'estimateShippingMethods':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine/estimate-shipping-methods'
-        : `/rest/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
+        ? '/V1/carts/mine/estimate-shipping-methods'
+        : `/V1/guest-carts/${params.cartId}/estimate-shipping-methods`;
       break;
 
     case 'getPaymentMethods':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine/payment-methods'
-        : `/rest/V1/guest-carts/${params.cartId}/payment-methods`;
+        ? '/V1/carts/mine/payment-methods'
+        : `/V1/guest-carts/${params.cartId}/payment-methods`;
       break;
 
     case 'selectedPaymentMethod':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine/selected-payment-method'
-        : `/rest/V1/guest-carts/${params.cartId}/selected-payment-method`;
+        ? '/V1/carts/mine/selected-payment-method'
+        : `/V1/guest-carts/${params.cartId}/selected-payment-method`;
       break;
 
     case 'placeOrder':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine/order'
-        : `/rest/V1/guest-carts/${params.cartId}/order`;
+        ? '/V1/carts/mine/order'
+        : `/V1/guest-carts/${params.cartId}/order`;
       break;
 
     case 'getCartStores':
       endpoint = isUserAuthenticated()
-        ? `/rest/V1/click-and-collect/stores/cart/mine/lat/${params.lat}/lon/${params.lon}`
-        : `/rest/V1/click-and-collect/stores/guest-cart/${params.cartId}/lat/${params.lat}/lon/${params.lon}`;
+        ? `/V1/click-and-collect/stores/cart/mine/lat/${params.lat}/lon/${params.lon}`
+        : `/V1/click-and-collect/stores/guest-cart/${params.cartId}/lat/${params.lat}/lon/${params.lon}`;
       break;
 
     case 'getLastOrder':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/customer-order/me/getLastOrder/'
+        ? '/V1/customer-order/me/getLastOrder/'
         : '';
       break;
 

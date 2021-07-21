@@ -142,7 +142,7 @@ const getCartSettings = (key) => window.drupalSettings.cart[key];
  * @param {string} path
  *  The API path.
  */
-const i18nMagentoUrl = (path) => `${getCartSettings('url')}/${getCartSettings('store')}${path}`;
+const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
 
 /**
  * Handle errors and messages.

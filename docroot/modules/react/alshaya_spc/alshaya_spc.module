@@ -242,8 +242,10 @@ function alshaya_spc_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
+  // Add the prefix for rest and store code.
+  $page['#attached']['drupalSettings']['cart']['url'] .= '/rest/' . $store_settings[$current_language];
+
   $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
-  $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];
   $page['#attached']['drupalSettings']['cart']['exception_messages'] = $exception_message;
   $page['#attached']['drupalSettings']['cart']['site_country_code'] = $site_country_code;
   $page['#attached']['drupalSettings']['cart']['address_fields'] = $address_fields;
