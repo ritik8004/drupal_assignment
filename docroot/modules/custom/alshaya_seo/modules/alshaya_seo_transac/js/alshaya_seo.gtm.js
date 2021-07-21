@@ -1384,8 +1384,11 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
+  // Push the errors to GA if enabled.
   // If TrackJS is enabled we let it track the errors.
-  if (window.TrackJS === undefined) {
+  if (drupalSettings.gtm.log_errors_to_ga !== undefined
+    && drupalSettings.gtm.log_errors_to_ga
+    && window.TrackJS === undefined) {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);
