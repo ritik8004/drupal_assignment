@@ -223,7 +223,7 @@ exports.computePhFilters = function (input, filter) {
         }
       });
 
-      if (mediaCollection.length > drupalSettings.alshaya_rcs.pdp_gallery_pager_limit) {
+      if (mediaCollection.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) {
         thumbnails.addClass('pager-yes');
       }
       else {
@@ -349,7 +349,7 @@ exports.computePhFilters = function (input, filter) {
           });
 
           // Check if the attribute is a swatch attribute.
-          if (drupalSettings.alshaya_rcs.pdp_swatch_attributes.includes(option.attribute_code)) {
+          if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
             configurableOptionsList.addClass('form-item-configurable-swatch');
             optionsListWrapper.addClass('configurable-swatch');
           }
@@ -370,10 +370,10 @@ exports.computePhFilters = function (input, filter) {
             configurableOptionsList.append(selectOption);
           });
 
-          if (typeof drupalSettings.alshaya_rcs.size_guide !== 'undefined'
-          && drupalSettings.alshaya_rcs.size_guide.attributes.includes(option.attribute_code)) {
+          if (typeof drupalSettings.alshayaRcs.sizeGuide !== 'undefined'
+          && drupalSettings.alshayaRcs.sizeGuide.attributes.includes(option.attribute_code)) {
             // Remove '\' added for escaping "".
-            const sizeGuideLink = drupalSettings.alshaya_rcs.size_guide.link.replace('\\', '');
+            const sizeGuideLink = drupalSettings.alshayaRcs.sizeGuide.link.replace('\\', '');
             const sizeGuideWrapper = jQuery('<div>');
             sizeGuideWrapper.addClass('size-guide-form-and-link-wrapper');
             sizeGuideWrapper.append(sizeGuideLink);
