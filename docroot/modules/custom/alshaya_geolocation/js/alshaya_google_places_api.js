@@ -73,7 +73,7 @@
 
       if ($.isArray(callbacks) && !$.isEmptyObject(places_autocomplete.coords)) {
         callbacks.forEach(function (callback) {
-          callback.call(this, places_autocomplete.coords, field, restriction, $trigger, context);
+          callback.call(this, context, places_autocomplete.coords, field, restriction, $trigger);
         });
       }
     });

@@ -52,7 +52,7 @@
           $('#pdp-stores-container.click-collect .c-accordion_content', node).removeClass('hidden-important');
 
           if ($('.search-stores-button', node).is(':visible')) {
-            Drupal.pdp.storesDisplay(null, null, null, null, node);
+            Drupal.pdp.storesDisplay(node);
           }
         }
         else {
@@ -154,7 +154,7 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-          Drupal.pdp.storesDisplay(null, null, null, null, node);
+          Drupal.pdp.storesDisplay(node);
           return false;
         }
         else {
@@ -182,13 +182,13 @@
         }
         else if (e.target.className === 'search-stores-button' && !records) {
           e.preventDefault();
-          Drupal.pdp.storesDisplay(null, null, null, null, node);
+          Drupal.pdp.storesDisplay(node);
           return false;
         }
       });
 
       // Display search store form if conditions matched.
-      Drupal.pdp.InvokeSearchStoreFormDisplay(settings, node);
+      Drupal.pdp.InvokeSearchStoreFormDisplay(node, settings);
     }
   };
 
@@ -198,7 +198,7 @@
 
     var context = $('#pdp-stores-container').closest('article.entity--type-node');
     // Display search store form if conditions matched.
-    Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings, context);
+    Drupal.pdp.InvokeSearchStoreFormDisplay(context, drupalSettings);
   };
 
   // Success callback.
@@ -206,14 +206,14 @@
     var context = $('#pdp-stores-container').closest('article.entity--type-node');
     asCoords = coords;
     geoPerm = true;
-    Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form', context), null, null, context);
+    Drupal.pdp.storesDisplay(context, asCoords, $('.click-collect-form', context), null, null);
   };
 
   // Set the location coordinates, but don't render the stores.
-  Drupal.pdp.setStoreCoords = function (coords, field, restriction, $trigger, context) {
+  Drupal.pdp.setStoreCoords = function (context, coords, field, restriction, $trigger) {
     asCoords = coords;
     if (!$.isEmptyObject(asCoords)) {
-      Drupal.pdp.storesDisplay(asCoords, null, null, null, context);
+      Drupal.pdp.storesDisplay(context, asCoords, null, null, null);
     }
   };
 
@@ -256,7 +256,7 @@
   };
 
   // Invoke display search store form if conditions matched.
-  Drupal.pdp.InvokeSearchStoreFormDisplay = function (settings, context) {
+  Drupal.pdp.InvokeSearchStoreFormDisplay = function (context, settings) {
     // Validate the product is same on ajax call.
     var validateProduct = Drupal.pdp.validateCurrentProduct(settings, context);
     // Get the settings for search form display.
@@ -288,7 +288,7 @@
   };
 
   // Make Ajax call to get stores and render html.
-  Drupal.pdp.storesDisplay = function (coords, field, restriction, $trigger, context) {
+  Drupal.pdp.storesDisplay = function (context, coords, field, restriction, $trigger) {
     var wait_for_maps_api = setInterval(function () {
       if (Drupal.geolocation.maps_api_loading === false) {
         clearInterval(wait_for_maps_api);
