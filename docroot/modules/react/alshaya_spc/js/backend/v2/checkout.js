@@ -822,7 +822,7 @@ const selectCnc = async (store, address, billing) => {
     Object.keys(extensionAttributes).forEach((key) => {
       data.shipping.shipping_address.custom_attributes.push(
         {
-          attributeCode: key,
+          attribute_code: key,
           value: extensionAttributes[key],
         },
       );

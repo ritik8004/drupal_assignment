@@ -2,8 +2,7 @@ import Drupal from '../../../../../../core/misc/drupal.es6';
 
 export const drupalSettings = {
   cart: {
-    url: 'v1',
-    store: 'en_gb',
+    url: '/rest/kw_en',
     site_country_code: {
       site_code: 'vs',
       country_code: 'kw',

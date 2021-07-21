@@ -308,6 +308,7 @@ describe('Checkout', () => {
         // Call addShippingInfo();
         await addShippingInfo(data, 'update shipping', true);
 
+        console.log(axios.mock.calls);
         expect(axios.mock.calls.length).toBe(3);
 
         // We cannot check the result of updateCart() but we can check if it
@@ -321,7 +322,7 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
+            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
           },
         );
       });
@@ -357,7 +358,7 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
+            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
           },
         );
 
@@ -372,7 +373,8 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
+            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
           },
         );
       });
@@ -526,7 +528,7 @@ describe('Checkout', () => {
 
     describe('Test selectCnc()', () => {
       const selectCnc = utilsRewire.__get__('selectCnc');
-      const address = cartData.cart.extension_attributes.shipping_assignments[0].shipping.address;
+      const address = { ...cartData.cart.extension_attributes.shipping_assignments[0].shipping.address };
 
       beforeEach(() => {
         // Reset static cache.
@@ -714,7 +716,8 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: 'v1/en_gb/rest/V1/guest-carts/1234/updateCart',
+            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
           },
         );
       });

@@ -1,3 +1,5 @@
+import {getApiEndpoint} from "../../../../js/backend/v2/utility";
+
 jest.mock('axios');
 import axios from 'axios';
 import * as cart from '../../../../js/backend/v2/cart';
@@ -35,7 +37,7 @@ describe('Cart', () => {
             'Alshaya-Channel': 'web',
             'Content-Type': 'application/json',
           },
-          url: 'v1/en_gb/cart',
+          url: '/rest/kw_en/cart',
         },
       ]);
     });
@@ -139,7 +141,7 @@ describe('Cart', () => {
             'Alshaya-Channel': 'web',
             'Content-Type': 'application/json',
           },
-          url: 'v1/en_gb/cart',
+          url: '/rest/kw_en/cart',
         },
       ]);
     });
