@@ -1,5 +1,3 @@
-import {getApiEndpoint} from "../../../../js/backend/v2/utility";
-
 jest.mock('axios');
 import axios from 'axios';
 import * as cart from '../../../../js/backend/v2/cart';
