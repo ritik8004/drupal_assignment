@@ -33,7 +33,7 @@ class CheckoutConfirmation extends React.Component {
       // has been placed.
       removeStorageInfo('shippingaddress-formdata');
       if (Cookies.get('middleware_order_placed')) {
-        window.commerceBackend.removeCartDataFromStorage();
+        window.commerceBackend.removeCartDataFromStorage(true);
         Cookies.remove('middleware_order_placed');
       }
     } catch (e) {

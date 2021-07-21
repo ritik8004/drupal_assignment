@@ -1,17 +1,18 @@
-import isNull from 'lodash/isNull';
-import isUndefined from 'lodash/isUndefined';
-import isString from 'lodash/isString';
-import isNumber from 'lodash/isNumber';
+import _isNull from 'lodash/isNull';
+import _isUndefined from 'lodash/isUndefined';
+import _isString from 'lodash/isString';
+import _isNumber from 'lodash/isNumber';
 import {
   callDrupalApi,
   callMagentoApi,
   getCartSettings,
   isAnonymousUserWithoutCart,
+  isAuthenticatedUserWithoutCart,
   updateCart,
   getProcessedCartData,
   getCartWithProcessedData,
 } from './common';
-import { getApiEndpoint, logger } from './utility';
+import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { getExceptionMessageType } from './error';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
@@ -141,10 +142,10 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   let cartId = window.commerceBackend.getCartId();
   // If we try to add/remove item while we don't have anything or corrupt
   // session, we create the cart object.
-  if (isNull(cartId)) {
+  if (isAnonymousUserWithoutCart() || await isAuthenticatedUserWithoutCart()) {
     cartId = await window.commerceBackend.createCart();
     // If we still don't have a cart, we cannot continue.
-    if (isNull(cartId)) {
+    if (_isNull(cartId)) {
       throw new Error('Error creating cart when adding/removing item.');
     }
   }
@@ -229,8 +230,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       const postString = JSON.stringify(itemData);
       logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
       // Remove the cart from storage.
-      window.commerceBackend.removeCartDataFromStorage();
-      removeStorageInfo('cart_id');
+      window.commerceBackend.removeCartDataFromStorage(true);
 
       if (
         data.action === 'add item'
@@ -244,7 +244,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
         // Create a new cart.
         cartId = await window.commerceBackend.createCart();
-        if (isNull(cartId)) {
+        if (_isNull(cartId)) {
           return cartId;
         }
         const cartData = await window.commerceBackend.getCart(true);
@@ -288,9 +288,9 @@ window.commerceBackend.applyRemovePromo = async (data) => {
   }
 
   return updateCart(params)
-    .then((response) => {
+    .then(async (response) => {
       // Process cart data.
-      response.data = getProcessedCartData(response.data);
+      response.data = await getProcessedCartData(response.data);
       return response;
     });
 };
@@ -317,9 +317,9 @@ window.commerceBackend.refreshCart = async (data) => {
   }
 
   return updateCart(postData)
-    .then((response) => {
+    .then(async (response) => {
       // Process cart data.
-      response.data = getProcessedCartData(response.data);
+      response.data = await getProcessedCartData(response.data);
       return response;
     });
 };
@@ -336,17 +336,20 @@ window.commerceBackend.createCart = async () => {
 
   // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
-  if (response.status === 200 && !isUndefined(response.data)
-    && (isString(response.data) || isNumber(response.data))
+  if (response.status === 200 && !_isUndefined(response.data)
+    && (_isString(response.data) || _isNumber(response.data))
   ) {
     const Id = window.drupalSettings.userDetails.customerId;
     logger.notice(`New cart created: ${response.data}, customer_id: ${Id}`);
 
-    setStorageInfo(response.data, 'cart_id');
+    // If its a guest customer, keep cart_id in the local storage.
+    if (!isUserAuthenticated()) {
+      setStorageInfo(response.data, 'cart_id');
+    }
     return response.data;
   }
 
-  const errorMessage = (!isUndefined(response.data.error_message))
+  const errorMessage = (!_isUndefined(response.data.error_message))
     ? response.data.error_message
     : '';
   logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);

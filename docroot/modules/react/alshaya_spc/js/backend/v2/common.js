@@ -1,11 +1,11 @@
 import Axios from 'axios';
 import qs from 'qs';
-import isArray from 'lodash/isArray';
-import cloneDeep from 'lodash/cloneDeep';
-import isUndefined from 'lodash/isUndefined';
-import isObject from 'lodash/isObject';
-import isEmpty from 'lodash/isEmpty';
-import isNull from 'lodash/isNull';
+import _isArray from 'lodash/isArray';
+import _cloneDeep from 'lodash/cloneDeep';
+import _isUndefined from 'lodash/isUndefined';
+import _isObject from 'lodash/isObject';
+import _isEmpty from 'lodash/isEmpty';
+import _isNull from 'lodash/isNull';
 import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import {
   cartErrorCodes,
@@ -13,6 +13,7 @@ import {
   getExceptionMessageType,
 } from './error';
 import cartActions from '../../utilities/cart_actions';
+import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -23,7 +24,20 @@ window.commerceBackend = window.commerceBackend || {};
  *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
-  const cartId = localStorage.getItem('cart_id');
+  // For guest users we use the local storage.
+  let cartId = localStorage.getItem('cart_id');
+
+  if (_isNull(cartId)) {
+    // For authenticated users we get the cart id from the cart.
+    const data = window.commerceBackend.getRawCartDataFromStorage();
+    if (!_isNull(data)
+      && !_isUndefined(data.cart)
+      && !_isUndefined(data.cart.id)
+    ) {
+      cartId = data.cart.id;
+    }
+  }
+
   if (typeof cartId === 'string' || typeof cartId === 'number') {
     return cartId;
   }
@@ -92,10 +106,17 @@ window.commerceBackend.setCartDataInStorage = (data) => {
 };
 
 /**
- * Unsets the stored cart data.
+ * Removes the cart data from storage.
+ *
+ * @param {boolean}
+ *  Whether we should remove all items.
  */
-window.commerceBackend.removeCartDataFromStorage = () => {
+window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   staticCartData = null;
+
+  if (resetAll) {
+    removeStorageInfo('cart_id');
+  }
 };
 
 /**
@@ -109,21 +130,6 @@ const checkoutComVaultMethod = () => 'checkout_com_cc_vault';
 // Magento method, to append for UAPAPI vault (tokenized card) transaction.
 // @See CHECKOUT_COM_UPAPI_VAULT_METHOD in \App\Service\CheckoutCom\APIWrapper
 const checkoutComUpapiVaultMethod = () => 'checkout_com_upapi_vault';
-
-/**
- * Check if user is anonymous and without cart.
- *
- * @returns bool
- */
-const isAnonymousUserWithoutCart = () => {
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null || typeof cartId === 'undefined') {
-    if (window.drupalSettings.user.uid === 0) {
-      return true;
-    }
-  }
-  return false;
-};
 
 /**
  * Wrapper to get cart settings.
@@ -141,7 +147,7 @@ const getCartSettings = (key) => window.drupalSettings.cart[key];
  * @param {string} path
  *  The API path.
  */
-const i18nMagentoUrl = (path) => `${getCartSettings('url')}/${getCartSettings('store')}${path}`;
+const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
 
 /**
  * Handle errors and messages.
@@ -156,7 +162,7 @@ const handleResponse = (apiResponse) => {
   // Deep clone the response object.
   const response = JSON.parse(JSON.stringify(apiResponse));
   // In case we don't receive any response data.
-  if (typeof response.data === 'undefined' || response.data.length === 0) {
+  if (typeof response.data === 'undefined') {
     logger.error(`Error while doing MDC api. Response result is empty. Status code: ${response.status}`);
 
     const error = {
@@ -178,11 +184,13 @@ const handleResponse = (apiResponse) => {
     //
   } else if (response.status === 401) {
     // Customer Token expired.
-    // @todo see ticket CORE-31154.
-    response.data.error = true;
-    response.data.error_code = 404;
-    response.data.error_message = getDefaultErrorMessage();
-    logger.notice(`The customer token has expired. Message: ${response.data.message}`);
+    logger.notice(`Message: ${response.data.message}. Redirecting to user/logout.`);
+
+    // Log the user out and redirect to the login page.
+    window.location = Drupal.url('user/logout');
+
+    // Throw an error to prevent further javascript execution.
+    throw new Error('The customer token is invalid.');
     //
   } else if (response.status === 404) {
     // Client error responses.
@@ -213,7 +221,7 @@ const handleResponse = (apiResponse) => {
     response.data.error_message = error.message;
     //
     logger.error(`Error while doing MDC api call. Error message: ${error.message}`);
-  } else if (isArray(response.data.response_message) && !isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
+  } else if (_isArray(response.data.response_message) && !_isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
     response.data.error = true;
     response.data.error_code = 400;
     [response.data.error_message] = response.data.response_message;
@@ -222,19 +230,6 @@ const handleResponse = (apiResponse) => {
     });
   }
   return response;
-};
-
-/**
- * Get magento customer token.
- *
- * @returns {string}
- */
-const getCustomerToken = () => {
-  const token = localStorage.getItem('magento_customer_token');
-  if (typeof token === 'undefined' || token === false || token === '') {
-    logger.error(`Magento customer token is not set for user ${drupalSettings.user.uid}`);
-  }
-  return token;
 };
 
 /**
@@ -250,7 +245,7 @@ const getCustomerToken = () => {
  * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callMagentoApi = (url, method, data) => {
+const callMagentoApi = (url, method = 'GET', data = {}) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -261,7 +256,7 @@ const callMagentoApi = (url, method, data) => {
   };
 
   if (isUserAuthenticated()) {
-    params.headers.Authorization = `Bearer ${getCustomerToken()}`;
+    params.headers.Authorization = `Bearer ${window.drupalSettings.userDetails.customerToken}`;
   }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
@@ -292,13 +287,13 @@ const callMagentoApi = (url, method, data) => {
  *   The url to send the request to.
  * @param {string} method
  *   The request method.
- * @param {string} data
+ * @param {object} data
  *   The object to send with the request.
  *
  * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callDrupalApi = (url, method, data) => {
+const callDrupalApi = (url, method = 'GET', data = {}) => {
   const headers = {};
   const params = {
     url: `/${window.drupalSettings.path.currentLanguage}${url}`,
@@ -328,21 +323,21 @@ const callDrupalApi = (url, method, data) => {
  *   Formatted / processed cart.
  */
 const formatCart = (cartData) => {
-  const data = cloneDeep(cartData);
+  const data = _cloneDeep(cartData);
 
   // Check if there is no cart data.
-  if (isUndefined(data.cart) || !isObject(data.cart)) {
+  if (_isUndefined(data.cart) || !_isObject(data.cart)) {
     return data;
   }
 
   // Move customer data to root level.
-  if (!isEmpty(data.cart.customer)) {
+  if (!_isEmpty(data.cart.customer)) {
     data.customer = data.cart.customer;
     delete data.cart.customer;
   }
 
   // Format addresses.
-  if (!isEmpty(data.customer) && !isEmpty(data.customer.addresses)) {
+  if (!_isEmpty(data.customer) && !_isEmpty(data.customer.addresses)) {
     data.customer.addresses = data.customer.addresses.map((address) => {
       const item = { ...address };
       delete item.id;
@@ -353,9 +348,9 @@ const formatCart = (cartData) => {
   }
 
   // Format shipping info.
-  if (!isEmpty(data.cart.extension_attributes)) {
-    if (!isEmpty(data.cart.extension_attributes.shipping_assignments)) {
-      if (!isEmpty(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
+  if (!_isEmpty(data.cart.extension_attributes)) {
+    if (!_isEmpty(data.cart.extension_attributes.shipping_assignments)) {
+      if (!_isEmpty(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
         data.shipping = data.cart.extension_attributes.shipping_assignments[0].shipping;
         delete data.cart.extension_attributes.shipping_assignments;
       }
@@ -365,23 +360,23 @@ const formatCart = (cartData) => {
   }
 
   let shippingMethod = '';
-  if (!isEmpty(data.shipping)) {
-    if (!isEmpty(data.shipping.method)) {
+  if (!_isEmpty(data.shipping)) {
+    if (!_isEmpty(data.shipping.method)) {
       shippingMethod = data.shipping.method;
     }
-    if (!isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
+    if (!_isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
       data.shipping.type = 'click_and_collect';
     } else {
       data.shipping.type = 'home_delivery';
     }
   }
 
-  if (!isEmpty(data.shipping) && !isEmpty(data.shipping.extension_attributes)) {
+  if (!_isEmpty(data.shipping) && !_isEmpty(data.shipping.extension_attributes)) {
     const extensionAttributes = data.shipping.extension_attributes;
-    if (!isEmpty(extensionAttributes.click_and_collect_type)) {
+    if (!_isEmpty(extensionAttributes.click_and_collect_type)) {
       data.shipping.clickCollectType = extensionAttributes.click_and_collect_type;
     }
-    if (!isEmpty(extensionAttributes.store_code)) {
+    if (!_isEmpty(extensionAttributes.store_code)) {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
     delete data.shipping.extension_attributes;
@@ -401,6 +396,46 @@ const formatCart = (cartData) => {
 };
 
 /**
+ * Static cache for getProductStatus().
+ *
+ * @type {null}
+ */
+const staticProductStatus = [];
+
+/**
+ * Get data related to product status.
+ * @todo Allow bulk requests, see CORE-32123
+ *
+ * @param {Promise<string|null>} sku
+ *  The sku for which the status is required.
+ */
+const getProductStatus = async (sku) => {
+  if (typeof sku === 'undefined' || !sku) {
+    return null;
+  }
+
+  // Return from static, if available.
+  if (!_isUndefined(staticProductStatus[sku])) {
+    return staticProductStatus[sku];
+  }
+
+  // Bypass CloudFlare to get fresh stock data.
+  // Rules are added in CF to disable caching for urls having the following
+  // query string.
+  // The query string is added since same APIs are used by MAPP also.
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
+  if (_isEmpty(response.data)
+    || (!_isUndefined(response.data.error) && response.data.error)
+  ) {
+    staticProductStatus[sku] = null;
+  } else {
+    staticProductStatus[sku] = response.data;
+  }
+
+  return staticProductStatus[sku];
+};
+
+/**
  * Transforms cart data to match the data structure from middleware.
  *
  * @param {object} cartData
@@ -409,7 +444,7 @@ const formatCart = (cartData) => {
  * @returns {object}
  *   The processed cart data.
  */
-const getProcessedCartData = (cartData) => {
+const getProcessedCartData = async (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
     return null;
   }
@@ -469,7 +504,8 @@ const getProcessedCartData = (cartData) => {
 
   if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
-    cartData.cart.items.forEach((item) => {
+    for (let i = 0; i < cartData.cart.items.length; i++) {
+      const item = cartData.cart.items[i];
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
@@ -481,9 +517,14 @@ const getProcessedCartData = (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
-        in_stock: true, // @todo get stock information
-        stock: 99999, // @todo get stock information
       };
+
+      // Get stock data.
+      // Suppressing the lint error for now.
+      // eslint-disable-next-line no-await-in-loop
+      const stockInfo = await getProductStatus(item.sku);
+      data.items[item.sku].in_stock = stockInfo.in_stock;
+      data.items[item.sku].stock = stockInfo.stock;
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
@@ -516,12 +557,30 @@ const getProcessedCartData = (cartData) => {
         }
       });
 
-      // @todo Get stock data.
-    });
+      // If any item is OOS.
+      if (!_isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
+        data.in_stock = false;
+      }
+    }
   } else {
     data.items = [];
   }
   return data;
+};
+
+/**
+ * Check if user is anonymous and without cart.
+ *
+ * @returns bool
+ */
+const isAnonymousUserWithoutCart = () => {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null || typeof cartId === 'undefined') {
+    if (window.drupalSettings.user.uid === 0) {
+      return true;
+    }
+  }
+  return false;
 };
 
 /**
@@ -538,20 +597,24 @@ const getCart = async (force = false) => {
     return { data: window.commerceBackend.getRawCartDataFromStorage() };
   }
 
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
+  if (isAnonymousUserWithoutCart()) {
     return null;
   }
 
+  const cartId = window.commerceBackend.getCartId();
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
-
-  if (isEmpty(response.data)
-    || (!isUndefined(response.data.error) && response.data.error)
+  if (_isEmpty(response.data)
+    || (!_isUndefined(response.data.error) && response.data.error)
   ) {
-    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+    if (response.data === false
+      || response.data.error_code === 404
+      || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)
+    ) {
       logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
-      // Get a new cart.
-      await window.commerceBackend.createCart();
+      // Remove cart_id from storage.
+      removeStorageInfo('cart_id');
+      // Reload the page.
+      window.location.reload();
     }
 
     const error = {
@@ -575,6 +638,66 @@ const getCart = async (force = false) => {
 };
 
 /**
+ * Adds a customer to cart.
+ *
+ * @returns {Promise<object/boolean>}
+ *   Returns the updated cart or false.
+ */
+const associateCartToCustomer = async () => {
+  const guestCartId = localStorage.getItem('cart_id');
+  if (_isNull(guestCartId) || _isUndefined(guestCartId)) {
+    return false;
+  }
+
+  // Get the cart id of the guest cart.
+  let response = await callMagentoApi(`/V1/guest-carts/${guestCartId}`);
+
+  // Check for errors.
+  if (response.status !== 200) {
+    logger.error('Error while associating cart @cartId to customer @customerId: Message @msg.', {
+      '@customerId': window.drupalSettings.userDetails.customerId,
+      '@cartId': guestCartId,
+      '@msg': (!_isUndefined(response.data) && !_isUndefined(response.data.message)) ? response.data.message : '',
+    });
+    removeStorageInfo('cart_id');
+
+    return false;
+  }
+
+  // Prepare params.
+  if (!_isUndefined(response.data.id)) {
+    const params = {
+      quote: {
+        id: response.data.id,
+        customer: {
+          id: window.drupalSettings.userDetails.customerId,
+        },
+      },
+    };
+
+    // Associate cart to customer.
+    response = await callMagentoApi(getApiEndpoint('associateCart'), 'PUT', params);
+
+    // If it works, the response data is empty, so we can only check the status.
+    if (response.status !== 200) {
+      logger.error('Error while associating cart: @cartId to customer: @customerId. Error message: @message.', {
+        '@cartId': guestCartId,
+        '@customerId': window.drupalSettings.userDetails.customerId,
+        '@message': (typeof response.data.message !== 'undefined') ? response.data.message : '',
+      });
+    } else {
+      // Clear local storage.
+      removeStorageInfo('cart_id');
+
+      // Reload cart.
+      return getCart(true);
+    }
+  }
+
+  return false;
+};
+
+/**
  * Format the cart data to have better structured array.
  * This is the equivalent to CartController:getCart().
  *
@@ -586,13 +709,53 @@ const getCart = async (force = false) => {
  */
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
-  const response = await getCart(force);
+  let cart = await getCart(force);
+
+  // Check if the user is authenticated but there is a guest cart_id in the local storage.
+  if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
+    if (!_isNull(cart)
+      && !_isUndefined(cart.data)
+      && !_isUndefined(cart.data.cart)
+      && !_isUndefined(cart.data.cart.items)
+      && !_isEmpty(cart.data.cart.items)
+    ) {
+      // If the current cart has items, we carry on with this cart and remove
+      // the guest cart id from local storage.
+      removeStorageInfo('cart_id');
+    } else {
+      // If the user is authenticated and we have cart_id in the local storage
+      // it means the customer just became authenticated.
+      // We need to associate the cart and remove the cart_id from local storage.
+      const updated = await associateCartToCustomer();
+      if (updated !== false) {
+        cart = updated;
+      }
+    }
+  }
 
   // If we don't have any errors, process the cart data.
-  if (!isEmpty(response.data) && isUndefined(response.data.error)) {
-    response.data = getProcessedCartData(response.data);
+  if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
+    cart.data = await getProcessedCartData(cart.data);
   }
-  return response;
+
+  return cart;
+};
+
+/**
+ * Check if user is authenticated and without cart.
+ *
+ * @returns bool
+ */
+const isAuthenticatedUserWithoutCart = async () => {
+  const response = await getCart();
+  if (_isNull(response)
+    || _isUndefined(response.data)
+    || _isUndefined(response.data.cart)
+    || _isUndefined(response.data.cart.id)
+  ) {
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -604,7 +767,7 @@ const getCartWithProcessedData = async (force = false) => {
 const getCartCustomerId = async () => {
   const response = await getCart();
   const cart = response.data;
-  if (!isEmpty(cart) && !isEmpty(cart.customer) && !isUndefined(cart.customer.id)) {
+  if (!_isEmpty(cart) && !_isEmpty(cart.customer) && !_isUndefined(cart.customer.id)) {
     return parseInt(cart.customer.id, 10);
   }
   return null;
@@ -623,13 +786,13 @@ const validateRequestData = async (request) => {
   // Return error response if not valid data.
   // Setting custom error code for bad response so that
   // we could distinguish this error.
-  if (isEmpty(request)) {
+  if (_isEmpty(request)) {
     logger.error('Cart update operation not containing any data. Error 500.');
     return 500;
   }
 
   // If action info or cart id not available.
-  if (isEmpty(request.extension) || isUndefined(request.extension.action)) {
+  if (_isEmpty(request.extension) || _isUndefined(request.extension.action)) {
     const logData = JSON.stringify(request);
     logger.error(`Cart update operation not containing any action. Error: 400. Data: ${logData}`);
     return 400;
@@ -645,7 +808,7 @@ const validateRequestData = async (request) => {
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
   if (window.drupalSettings.userDetails.customerId > 0) {
-    if (isNull(cartCustomerId)) {
+    if (_isNull(cartCustomerId)) {
       logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
       return 400;
     }
@@ -698,13 +861,13 @@ const updateCart = async (data) => {
   const cartId = window.commerceBackend.getCartId();
 
   let action = '';
-  if (!isEmpty(data.extension) && !isEmpty(data.extension.action)) {
+  if (!_isEmpty(data.extension) && !_isEmpty(data.extension.action)) {
     action = data.extension.action;
   }
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
-  if (!isUndefined(validationResult.error) && validationResult.error) {
+  if (!_isUndefined(validationResult.error) && validationResult.error) {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
@@ -716,8 +879,8 @@ const updateCart = async (data) => {
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
-      if (isEmpty(response.data)
-        || (!isUndefined(response.data.error) && response.data.error)) {
+      if (_isEmpty(response.data)
+        || (!_isUndefined(response.data.error) && response.data.error)) {
         return response;
       }
 
@@ -747,9 +910,9 @@ const updateCart = async (data) => {
 const getCartCustomerEmail = async () => {
   const response = await getCart();
   const cart = response.data;
-  if (!isUndefined(cart.customer)
-    && !isUndefined(cart.customer.email)
-    && !isEmpty(cart.customer.email)
+  if (!_isUndefined(cart.customer)
+    && !_isUndefined(cart.customer.email)
+    && !_isEmpty(cart.customer.email)
   ) {
     return cart.customer.email;
   }
@@ -766,15 +929,15 @@ const getCartCustomerEmail = async () => {
  *   TRUE if cart has an OOS item.
  */
 const isCartHasOosItem = (cartData) => {
-  if (!isEmpty(cartData.cart.items)) {
+  if (!_isEmpty(cartData.cart.items)) {
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
       // If error at item level.
-      if (!isUndefined(item.extension_attributes)
-        && !isUndefined(item.extension_attributes.error_message)
+      if (!_isUndefined(item.extension_attributes)
+        && !_isUndefined(item.extension_attributes.error_message)
       ) {
         const exceptionType = getExceptionMessageType(item.extension_attributes.error_message);
-        if (!isEmpty(exceptionType) && exceptionType === 'OOS') {
+        if (!_isEmpty(exceptionType) && exceptionType === 'OOS') {
           return true;
         }
       }
@@ -800,6 +963,8 @@ const getFormattedError = (code, message) => ({
 
 export {
   isAnonymousUserWithoutCart,
+  isAuthenticatedUserWithoutCart,
+  associateCartToCustomer,
   callDrupalApi,
   callMagentoApi,
   preUpdateValidation,
@@ -815,4 +980,5 @@ export {
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
+  getProductStatus,
 };
