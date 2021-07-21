@@ -102,7 +102,7 @@ variables:
   continue_shopping_text: 'continue shopping'
   governorate: 'Abha'
   address_area_field: 'Abqaiq'
-  spc_search_keyword: 'sport'
+  spc_search_keyword: 'lotion'
   filter_1: 'attr_actual_color_label_code'
   filter_2: 'attr_size'
   filter_3: 'final_price'

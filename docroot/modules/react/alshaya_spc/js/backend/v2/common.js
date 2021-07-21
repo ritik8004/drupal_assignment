@@ -389,6 +389,46 @@ const formatCart = (cartData) => {
 };
 
 /**
+ * Static cache for getProductStatus().
+ *
+ * @type {null}
+ */
+const staticProductStatus = [];
+
+/**
+ * Get data related to product status.
+ * @todo Allow bulk requests, see CORE-32123
+ *
+ * @param {Promise<string|null>} sku
+ *  The sku for which the status is required.
+ */
+const getProductStatus = async (sku) => {
+  if (typeof sku === 'undefined' || !sku) {
+    return null;
+  }
+
+  // Return from static, if available.
+  if (!_isUndefined(staticProductStatus[sku])) {
+    return staticProductStatus[sku];
+  }
+
+  // Bypass CloudFlare to get fresh stock data.
+  // Rules are added in CF to disable caching for urls having the following
+  // query string.
+  // The query string is added since same APIs are used by MAPP also.
+  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
+  if (_isEmpty(response.data)
+    || (!_isUndefined(response.data.error) && response.data.error)
+  ) {
+    staticProductStatus[sku] = null;
+  } else {
+    staticProductStatus[sku] = response.data;
+  }
+
+  return staticProductStatus[sku];
+};
+
+/**
  * Transforms cart data to match the data structure from middleware.
  *
  * @param {object} cartData
@@ -397,7 +437,7 @@ const formatCart = (cartData) => {
  * @returns {object}
  *   The processed cart data.
  */
-const getProcessedCartData = (cartData) => {
+const getProcessedCartData = async (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
     return null;
   }
@@ -457,7 +497,8 @@ const getProcessedCartData = (cartData) => {
 
   if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
-    cartData.cart.items.forEach((item) => {
+    for (let i = 0; i < cartData.cart.items.length; i++) {
+      const item = cartData.cart.items[i];
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
@@ -469,9 +510,14 @@ const getProcessedCartData = (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
-        in_stock: true, // @todo get stock information
-        stock: 99999, // @todo get stock information
       };
+
+      // Get stock data.
+      // Suppressing the lint error for now.
+      // eslint-disable-next-line no-await-in-loop
+      const stockInfo = await getProductStatus(item.sku);
+      data.items[item.sku].in_stock = stockInfo.in_stock;
+      data.items[item.sku].stock = stockInfo.stock;
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
@@ -504,8 +550,11 @@ const getProcessedCartData = (cartData) => {
         }
       });
 
-      // @todo Get stock data.
-    });
+      // If any item is OOS.
+      if (!_isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
+        data.in_stock = false;
+      }
+    }
   } else {
     data.items = [];
   }
@@ -924,4 +973,5 @@ export {
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
+  getProductStatus,
 };

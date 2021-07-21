@@ -26,6 +26,7 @@ import {
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
+  getProductStatus,
 } from './common';
 import {
   cartErrorCodes,
@@ -54,41 +55,6 @@ const invisibleCharacter = '&#8203;';
  * @returns bool
  */
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
-
-/**
- * Static cache for getProductStatus().
- *
- * @type {null}
- */
-const staticProductStatus = [];
-
-/**
- * Get data related to product status.
- *
- * @param {Promise<string|null>} sku
- *  The sku for which the status is required.
- */
-const getProductStatus = async (sku) => {
-  if (typeof sku === 'undefined' || !sku) {
-    return null;
-  }
-
-  // Return from static, if available.
-  if (!_isUndefined(staticProductStatus[sku])) {
-    return staticProductStatus[sku];
-  }
-
-  // Bypass CloudFlare to get fresh stock data.
-  // Rules are added in CF to disable caching for urls having the following
-  // query string.
-  // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { _cf_cache_bypass: '1' });
-  if (!_isUndefined(response.data)) {
-    staticProductStatus[sku] = response.data;
-  }
-
-  return staticProductStatus[sku];
-};
 
 /**
  * Get CnC status for cart based on skus in cart.
@@ -1190,8 +1156,8 @@ const getProcessedCheckoutData = async (cartData) => {
 
   // Here we will do the processing of cart to make it in required format.
   const updated = await applyDefaults(data, window.drupalSettings.userDetails.customerId);
-  if (updated !== false && !_isEmpty(updated.cart)) {
-    data = updated;
+  if (updated !== false && !_isEmpty(updated.data)) {
+    data = updated.data;
   }
 
   if (_isUndefined(data.shipping.methods)
@@ -1216,7 +1182,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   // Re-use the processing done for cart page.
-  const response = getProcessedCartData(data);
+  const response = await getProcessedCartData(data);
   response.cnc_enabled = cncStatus;
   response.customer = getCustomerPublicData(data.customer);
   response.shipping = (typeof data.shipping !== 'undefined')
@@ -2042,7 +2008,7 @@ window.commerceBackend.placeOrder = async (data) => {
   const cart = await getCart(true);
 
   if (_isObject(cart) && isCartHasOosItem(cart.data)) {
-    logger.error('Error while finalizing payment. Cart has an OOS item. Cart: @cart', {
+    logger.error('Error while placing order. Cart has an OOS item. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
 
