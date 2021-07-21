@@ -650,7 +650,7 @@ const associateCartToCustomer = async () => {
   }
 
   // Get the cart id of the guest cart.
-  let response = await callMagentoApi(`/rest/V1/guest-carts/${guestCartId}`);
+  let response = await callMagentoApi(`/V1/guest-carts/${guestCartId}`);
 
   // Check for errors.
   if (response.status !== 200) {
