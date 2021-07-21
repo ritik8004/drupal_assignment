@@ -330,7 +330,7 @@ class CategoryProductListResource extends ResourceBase {
     $response = [];
 
     // Get term details in current language for meta info (department name).
-    $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid, TRUE);
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid);
     if (isset($term_details['hierarchy'])) {
       $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
     }
