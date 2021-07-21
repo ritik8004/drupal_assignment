@@ -50,7 +50,7 @@ const getApiEndpoint = (action, params = {}) => {
   switch (action) {
     case 'associateCart':
       endpoint = isUserAuthenticated()
-        ? '/rest/V1/carts/mine'
+        ? '/V1/carts/mine'
         : '';
       break;
 
