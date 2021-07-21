@@ -308,7 +308,6 @@ describe('Checkout', () => {
         // Call addShippingInfo();
         await addShippingInfo(data, 'update shipping', true);
 
-        console.log(axios.mock.calls);
         expect(axios.mock.calls.length).toBe(3);
 
         // We cannot check the result of updateCart() but we can check if it
