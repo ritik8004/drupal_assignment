@@ -24,7 +24,20 @@ window.commerceBackend = window.commerceBackend || {};
  *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
-  const cartId = localStorage.getItem('cart_id');
+  // For guest users we use the local storage.
+  let cartId = localStorage.getItem('cart_id');
+
+  if (_isNull(cartId)) {
+    // For authenticated users we get the cart id from the cart.
+    const data = window.commerceBackend.getRawCartDataFromStorage();
+    if (!_isNull(data)
+      && !_isUndefined(data.cart)
+      && !_isUndefined(data.cart.id)
+    ) {
+      cartId = data.cart.id;
+    }
+  }
+
   if (typeof cartId === 'string' || typeof cartId === 'number') {
     return cartId;
   }
@@ -119,21 +132,6 @@ const checkoutComVaultMethod = () => 'checkout_com_cc_vault';
 const checkoutComUpapiVaultMethod = () => 'checkout_com_upapi_vault';
 
 /**
- * Check if user is anonymous and without cart.
- *
- * @returns bool
- */
-const isAnonymousUserWithoutCart = () => {
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null || typeof cartId === 'undefined') {
-    if (window.drupalSettings.user.uid === 0) {
-      return true;
-    }
-  }
-  return false;
-};
-
-/**
  * Wrapper to get cart settings.
  *
  * @param {string} key
@@ -164,7 +162,7 @@ const handleResponse = (apiResponse) => {
   // Deep clone the response object.
   const response = JSON.parse(JSON.stringify(apiResponse));
   // In case we don't receive any response data.
-  if (typeof response.data === 'undefined' || response.data.length === 0) {
+  if (typeof response.data === 'undefined') {
     logger.error(`Error while doing MDC api. Response result is empty. Status code: ${response.status}`);
 
     const error = {
@@ -247,7 +245,7 @@ const handleResponse = (apiResponse) => {
  * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callMagentoApi = (url, method, data) => {
+const callMagentoApi = (url, method = 'GET', data = {}) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -289,13 +287,13 @@ const callMagentoApi = (url, method, data) => {
  *   The url to send the request to.
  * @param {string} method
  *   The request method.
- * @param {string} data
+ * @param {object} data
  *   The object to send with the request.
  *
  * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callDrupalApi = (url, method, data) => {
+const callDrupalApi = (url, method = 'GET', data = {}) => {
   const headers = {};
   const params = {
     url: `/${window.drupalSettings.path.currentLanguage}${url}`,
@@ -571,6 +569,21 @@ const getProcessedCartData = async (cartData) => {
 };
 
 /**
+ * Check if user is anonymous and without cart.
+ *
+ * @returns bool
+ */
+const isAnonymousUserWithoutCart = () => {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null || typeof cartId === 'undefined') {
+    if (window.drupalSettings.user.uid === 0) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
  * Calls the cart get API.
  *
  * @param {boolean} force
@@ -584,11 +597,11 @@ const getCart = async (force = false) => {
     return { data: window.commerceBackend.getRawCartDataFromStorage() };
   }
 
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
+  if (isAnonymousUserWithoutCart()) {
     return null;
   }
 
+  const cartId = window.commerceBackend.getCartId();
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
@@ -625,6 +638,66 @@ const getCart = async (force = false) => {
 };
 
 /**
+ * Adds a customer to cart.
+ *
+ * @returns {Promise<object/boolean>}
+ *   Returns the updated cart or false.
+ */
+const associateCartToCustomer = async () => {
+  const guestCartId = localStorage.getItem('cart_id');
+  if (_isNull(guestCartId) || _isUndefined(guestCartId)) {
+    return false;
+  }
+
+  // Get the cart id of the guest cart.
+  let response = await callMagentoApi(`/rest/V1/guest-carts/${guestCartId}`);
+
+  // Check for errors.
+  if (response.status !== 200) {
+    logger.error('Error while associating cart @cartId to customer @customerId: Message @msg.', {
+      '@customerId': window.drupalSettings.userDetails.customerId,
+      '@cartId': guestCartId,
+      '@msg': (!_isUndefined(response.data) && !_isUndefined(response.data.message)) ? response.data.message : '',
+    });
+    removeStorageInfo('cart_id');
+
+    return false;
+  }
+
+  // Prepare params.
+  if (!_isUndefined(response.data.id)) {
+    const params = {
+      quote: {
+        id: response.data.id,
+        customer: {
+          id: window.drupalSettings.userDetails.customerId,
+        },
+      },
+    };
+
+    // Associate cart to customer.
+    response = await callMagentoApi(getApiEndpoint('associateCart'), 'PUT', params);
+
+    // If it works, the response data is empty, so we can only check the status.
+    if (response.status !== 200) {
+      logger.error('Error while associating cart: @cartId to customer: @customerId. Error message: @message.', {
+        '@cartId': guestCartId,
+        '@customerId': window.drupalSettings.userDetails.customerId,
+        '@message': (typeof response.data.message !== 'undefined') ? response.data.message : '',
+      });
+    } else {
+      // Clear local storage.
+      removeStorageInfo('cart_id');
+
+      // Reload cart.
+      return getCart(true);
+    }
+  }
+
+  return false;
+};
+
+/**
  * Format the cart data to have better structured array.
  * This is the equivalent to CartController:getCart().
  *
@@ -636,13 +709,53 @@ const getCart = async (force = false) => {
  */
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
-  const response = await getCart(force);
+  let cart = await getCart(force);
+
+  // Check if the user is authenticated but there is a guest cart_id in the local storage.
+  if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
+    if (!_isNull(cart)
+      && !_isUndefined(cart.data)
+      && !_isUndefined(cart.data.cart)
+      && !_isUndefined(cart.data.cart.items)
+      && !_isEmpty(cart.data.cart.items)
+    ) {
+      // If the current cart has items, we carry on with this cart and remove
+      // the guest cart id from local storage.
+      removeStorageInfo('cart_id');
+    } else {
+      // If the user is authenticated and we have cart_id in the local storage
+      // it means the customer just became authenticated.
+      // We need to associate the cart and remove the cart_id from local storage.
+      const updated = await associateCartToCustomer();
+      if (updated !== false) {
+        cart = updated;
+      }
+    }
+  }
 
   // If we don't have any errors, process the cart data.
-  if (!_isEmpty(response.data) && _isUndefined(response.data.error)) {
-    response.data = await getProcessedCartData(response.data);
+  if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
+    cart.data = await getProcessedCartData(cart.data);
   }
-  return response;
+
+  return cart;
+};
+
+/**
+ * Check if user is authenticated and without cart.
+ *
+ * @returns bool
+ */
+const isAuthenticatedUserWithoutCart = async () => {
+  const response = await getCart();
+  if (_isNull(response)
+    || _isUndefined(response.data)
+    || _isUndefined(response.data.cart)
+    || _isUndefined(response.data.cart.id)
+  ) {
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -850,6 +963,8 @@ const getFormattedError = (code, message) => ({
 
 export {
   isAnonymousUserWithoutCart,
+  isAuthenticatedUserWithoutCart,
+  associateCartToCustomer,
   callDrupalApi,
   callMagentoApi,
   preUpdateValidation,
