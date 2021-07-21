@@ -4,33 +4,38 @@
 // removing the above ignore line.
 exports.render = function render(
   settings,
-  placeholder,
-  params,
   inputs,
-  entity,
-  langcode,
   innerHtml
 ) {
-  let html = '';
-  // Process according to the placeholder element.
-  switch (placeholder) {
-    case "navigation_menu":
-      // Process rcs navigation renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html = globalThis.renderRcsNavigationMenu.render(
-          settings,
-          inputs,
-          innerHtml
-        );
-      }
-      break;
+  // Covert innerHtml to a jQuery object.
+  const innerHtmlObj = jQuery('<div>').html(innerHtml);
 
-    default:
-      console.log(`Placeholder ${placeholder} not supported for render.`);
-      break;
+  if (inputs.length !== 0) {
+    // Get the L1 menu list element.
+    const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
+
+    // Filter category menu items if include_in_menu flag true.
+    inputs = filterAvailableItems(inputs);
+
+    // Sort the remaining category menu items by position in asc order.
+    inputs.sort(function (a, b) {
+      return parseInt(a.position) - parseInt(b.position);
+    });
+
+    let menuHtml = '';
+    // Iterate over each L1 item and get the inner markup
+    // prepared recursively.
+    inputs.forEach(function eachCategory(level1) {
+      menuHtml += getMenuMarkup(level1, 1, innerHtmlObj, settings);
+    });
+
+    // Remove the placeholders markup.
+    menuListLevel1Ele.find('li').remove();
+
+    // Update with the resultant markups.
+    menuListLevel1Ele.append(menuHtml);
   }
-
-  return html;
+  return innerHtmlObj.html();
 };
 
 /**
@@ -154,76 +159,4 @@ const filterAvailableItems = function (catArray) {
   return catArray.filter(
     innerCatArray => (innerCatArray.include_in_menu === 1)
     );
-};
-
-exports.computePhFilters = function (input, filter) {
-  let value = input;
-
-  switch(filter) {
-    case 'price':
-      const priceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.regularPrice.amount.value);
-      const finalPriceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.maximalPrice.amount.value);
-      const discountVal = globalThis.rcsCommerceBackend.calculateDiscount(priceVal, finalPriceVal);
-
-      const price = jQuery('.rcs-templates--price').clone();
-      jQuery('.price-amount', price).html(priceVal);
-
-      const priceBlock = jQuery('.rcs-templates--price_block').clone();
-
-      if (finalPriceVal !== priceVal) {
-        const finalPrice = jQuery('.rcs-templates--price').clone();
-        jQuery('.price-amount', finalPrice).html(finalPriceVal);
-
-        jQuery('.has--special--price', priceBlock).html(price.html());
-        jQuery('.special--price', priceBlock).html(finalPrice.html());
-
-        let discount = jQuery('.price--discount').html();
-        discount = discount.replace('@discount', discountVal);
-        jQuery('.price--discount', priceBlock).html(discount);
-      }
-      else {
-        // Replace the entire price block html with this one.
-        priceBlock.html(price);
-      }
-
-      value = jQuery(priceBlock).html();
-      break;
-
-    case 'quantity':
-      // @todo Check for how to fetch the max sale quantity.
-      const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-      const quantityDroprown = jQuery('.edit-quantity');
-      // Remove the quantity filter.
-      quantityDroprown.html('');
-
-      for (let i = 1; i <= quantity; i++) {
-        if (i === 1) {
-          quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-          continue;
-        }
-        quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
-      }
-      value = quantityDroprown.html();
-      break;
-
-    case 'data-sku':
-      value = input.sku;
-      break;
-
-    case 'data-sku-type':
-      value = input.type_id;
-      break;
-
-    case 'vat_text':
-      if (drupalSettings.vat_text === '' || drupalSettings.vat_text === null) {
-        $('.vat-text').remove();
-      }
-      value = drupalSettings.vat_text;
-      break;
-
-    default:
-      console.log(`Unknown JS filter ${filter}.`)
-  }
-
-  return value;
 };

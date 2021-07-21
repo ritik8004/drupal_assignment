@@ -281,8 +281,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         ],
         // Attach required JS libraries.
         'library' => [
-          'alshaya_rcs/renderer',
-          'rcs_magento_placeholders/rcs_magento_placeholders',
+          'alshaya_rcs_main_menu/renderer',
         ],
       ],
       '#cache' => [
