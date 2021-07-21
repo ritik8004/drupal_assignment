@@ -286,9 +286,12 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
 
   if (!empty($values['logo_upload'])) {
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-    $filename = \Drupal::service('file_system')->copy($values['logo_upload']->getFileUri());
+    $source = $values['logo_upload']->getFileUri();
+    $destination = \Drupal::service('file_system')->basename($source);
+    $filename = \Drupal::service('file_system')->copy($source, $destination);
+    $schema = \Drupal::service('config.factory')->get('system.file')->get('default_scheme');
     $values['default_logo'] = 0;
-    $values['logo_path'] = $filename;
+    $values['logo_path'] = $schema . '://' . $filename;
   }
 
   // If the user entered a path relative to the system files directory for
@@ -317,8 +320,11 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
     // location and use it in place of the default theme-provided file.
     if (!empty($logo_upload)) {
       /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-      $filename = \Drupal::service('file_system')->copy($logo_upload->getFileUri());
-      $logo_path = $filename;
+      $source_path = $values['logo_upload']->getFileUri();
+      $destination_path = \Drupal::service('file_system')->basename($source_path);
+      $filepath = \Drupal::service('file_system')->copy($source_path, $destination_path);
+      $default_schema = \Drupal::service('config.factory')->get('system.file')->get('default_scheme');
+      $logo_path = $default_schema . '://' . $filepath;
     }
 
     if (!empty($logo_path) && empty($logo_upload)) {
@@ -371,7 +377,6 @@ function alshaya_master_validate_path($path) {
   // Prepend 'public://' for relative file paths within public filesystem.
   /** @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $stream_wrapper_manager */
   $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
-
   if ($stream_wrapper_manager->getScheme($path) === FALSE) {
     $path = 'public://' . $path;
   }

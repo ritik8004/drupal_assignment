@@ -320,8 +320,6 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
    * @hook pre-init *
    */
   public function alter(InputInterface $input, AnnotationData $annotationData) {
-    // We could also use DI once this is released
-    // https://github.com/drush-ops/drush/commit/fc6205aeb93099e91ca5f395cea958c3f0290b3e#diff-45719e337c3fa71a41f373a69e9a0c92.
     $self = $this->siteAliasManager()->getSelf();
     $uri = $self->get('uri');
     $url = parse_url($uri);
