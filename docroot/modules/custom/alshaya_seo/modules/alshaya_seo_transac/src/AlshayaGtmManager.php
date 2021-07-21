@@ -933,7 +933,7 @@ class AlshayaGtmManager {
     }
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-    $orders_count = $this->ordersManager->getOrdersCount((int) $order['customer_id']);
+    $orders_count = isset($order['customer_id']) ? $this->ordersManager->getOrdersCount((int) $order['customer_id']) : 1;
 
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
