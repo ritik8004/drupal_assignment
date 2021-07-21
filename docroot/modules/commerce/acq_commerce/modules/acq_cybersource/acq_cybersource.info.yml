@@ -1,8 +1,0 @@
-name: Acquia Commerce Cybersource
-type: module
-description: This module provides Cybersource payment method.
-core: 8.x
-package: Commerce
-dependencies:
-  - acq_commerce:acq_payment
-  - clientside_validation:clientside_validation_jquery
