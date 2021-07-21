@@ -204,8 +204,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
         $destination = $this->fileSystem->basename($source);
         $filename = $this->fileSystem->copy($source, $destination);
         $schema = $this->configFactory->get('system.file')->get('default_scheme');
-        $uri = $schema . '://' . $filename;
-        $marker_path = $uri;
+        $marker_path = $schema . '://' . $filename;
       }
       else {
         $marker_path = $form_state->getValue('marker_path');
