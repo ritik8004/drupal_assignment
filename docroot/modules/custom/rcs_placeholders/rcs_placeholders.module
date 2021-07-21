@@ -1,0 +1,284 @@
+<?php
+
+/**
+ * @file
+ * Module file for RCS Placeholders.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
+
+/**
+ * Implements hook_theme().
+ */
+function rcs_placeholders_theme($existing, $type, $theme, $path) {
+  return [
+    'taxonomy_term__rcs_category' => [
+      'variables' => [],
+    ],
+    'node__rcs_product' => [
+      // Need this so that the node preprocess hooks get executed.
+      'base hook' => 'node',
+      'variables' => [],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function rcs_placeholders_preprocess_html(&$variables) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  // Attach required JS. We must be cautious to only add new values or replace
+  // on purpose as some previous hooks may have already set some values.
+  $variables['#attached']['library'][] = 'rcs_placeholders/rcs_placeholders';
+  $variables['#attached']['drupalSettings']['rcsPhSettings']['categoryPathPrefix'] = $config->get('category.path_prefix');
+  $variables['#attached']['drupalSettings']['rcsPhSettings']['productPathPrefix'] = $config->get('product.path_prefix');
+
+  // Attach additional JS settings based on the current page type and
+  // enrichment.
+  if (!empty(RcsPhPathProcessor::$entityType)) {
+    $variables['#attached']['drupalSettings']['rcsPage']['type'] = RcsPhPathProcessor::$entityType;
+    $variables['#attached']['drupalSettings']['rcsPage']['path'] = RcsPhPathProcessor::$entityPath;
+
+    if($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
+      $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = RcsPhPathProcessor::$entityData;
+    }
+  }
+
+  // We need to override default cache context as we use the placeholder term
+  // for different categories.
+  $variables['#cache']['contexts'][] = 'url';
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function rcs_placeholders_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  switch ($variables['view_mode']) {
+    case 'full':
+      $token = '#rcs.product.slug#';
+
+      $variables['#cache']['contexts'][] = 'url';
+
+      // Add list cache tag for nodes for which we do not have any enrichment yet.
+      if ($variables['node']->id() === $config->get('product.placeholder_nid')) {
+        $variables['#cache']['tags'][] = 'node_list';
+      }
+
+      break;
+
+    default:
+      $token = '#rcs.productItem.slug#';
+      break;
+  }
+
+  // RDF module is adding an "about" attribute based on the "url" variable.
+  // If we don't set it, all the products will have "node/1" as "about".
+  $variables['url'] = '/' . $config->get('product.path_prefix') . $token;
+}
+
+/**
+ * Implements hook_preprocess_taxonomy_term().
+ */
+function rcs_placeholders_preprocess_taxonomy_term(&$variables) {
+  if ($variables['term']->bundle() !== 'rcs_category') {
+    return;
+  }
+
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  // RDF module is adding an "about" attribute based on the "url" variable.
+  // If we don't set it, all the categories will have "taxonomy/term/1" as
+  // "about".
+  $variables['url'] = '/' . $config->get('category.path_prefix') . '#rcs.category.slug#';
+
+  $variables['#cache']['contexts'][] = 'url';
+
+  // Add list cache tag for terms for which we do not have any enrichment yet.
+  if ($variables['term']->id() === $config->get('category.placeholder_tid')) {
+    $variables['#cache']['tags'][] = 'taxonomy_term_list';
+  }
+}
+
+/**
+ * Wrapper function to get template for view mode of specific entity type.
+ *
+ * @param string $entity_type
+ *   Entity Type.
+ * @param string $view_mode
+ *   View Mode.
+ *
+ * @return string|null
+ *   Rendered entity template if entity type supported.
+ */
+function _rcs_placeholders_get_placeholder_entity_view(string $entity_type, string $view_mode) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  switch ($entity_type) {
+    case 'node':
+      $id = $config->get('product.placeholder_nid');
+      break;
+
+    default:
+      return null;
+  }
+
+  $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load($id);
+  $entity_view = \Drupal::entityTypeManager()->getViewBuilder($entity_type)->view($entity, $view_mode);
+  return render($entity_view);
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function rcs_placeholders_page_attachments(array &$attachments) {
+  // These are the attributes that which will be search for replacement of
+  // tokens.
+  $attachments['#attached']['drupalSettings']['rcsPhSettings'] = [];
+
+  $attributes = [
+    'href',
+    'src',
+    'alt',
+    'about',
+    'content',
+    'title',
+    'class',
+    'name',
+    'id',
+    'value',
+  ];
+
+  // Allow other modules to add more attributes or remove exsiting ones.
+  \Drupal::moduleHandler()->alter('rcs_placeholders_placeholder_attributes', $attributes);
+
+  $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = $attributes;
+}
+
+/*
+ * Clear route cache after enriched entity is created or deleted.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   Entity object.
+ */
+function _rcs_placeholders_clear_route_cache(EntityInterface $entity) {
+  if (($entity->getEntityTypeId() === 'taxonomy_term' && $entity->bundle() === 'rcs_category')
+    || ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'rcs_product')){
+    Cache::invalidateTags(['4xx-response', 'route_match', 'http_response']);
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function rcs_placeholders_entity_insert(EntityInterface $entity) {
+  _rcs_placeholders_clear_route_cache($entity);
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function rcs_placeholders_entity_delete(EntityInterface $entity) {
+  _rcs_placeholders_clear_route_cache($entity);
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+
+  // We only alter the links for the products and categories.
+  if ((!$node || $node->bundle() !== 'rcs_product') && (!$term || $term->bundle() !== 'rcs_category')) {
+    return;
+  }
+
+  $entity_type = $node ? 'node' : 'taxonomy_term';
+
+  // If the entity is enriched, we only alter the tabs label.
+  if (($node && $node->nid->value !== $config->get('product.placeholder_nid')) || ($term && $term->tid->value !== $config->get('category.placeholder_tid'))) {
+    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['title'] = t('Edit the enrichment');
+    $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['title'] = t('Delete the enrichment');
+  }
+  // If the entity is not enriched, alter the tabs links.
+  else {
+    // We don't want the contributors to delete the default placeholder entity.
+    unset($data['tabs'][0]['entity.' . $entity_type . '.delete_form']);
+
+    // We alter the edit link so it actually redirects to the entity add form
+    // with the title and slug as query arguments. We need to build the url
+    // that way because using query options of url methods is encoding the #
+    // and so the placeholders are not replaced on the frontend.
+    if ($node) {
+      $url = Url::fromUserInput('/node/add/rcs_product?title=#rcs.product.name#&slug=' . $config->get('product.path_prefix') . '#rcs.product.slug#');
+    }
+    else {
+      $url = Url::fromUserInput('/admin/structure/taxonomy/manage/rcs_category/add?name=#rcs.category.name#&slug=' . $config->get('category.path_prefix') . '#rcs.category.slug#');
+    }
+
+    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['url'] = $url;
+    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['title'] = t('Enrich');
+  }
+}
+
+/**
+ * Helper function to alter both product and category forms.
+ *
+ * @param array $form
+ *   Form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form State.
+ */
+function _rcs_placeholders_enrichment_form_alter(&$form, FormStateInterface $form_state) {
+  $entity = $form_state->getFormObject()->getEntity();
+
+  // We only alter the form for new product/category.
+  if (!$entity->isNew()) {
+    return;
+  }
+
+  // @TODO: Check if need to secure the $q values.
+  // Assuming it is safe for now as it is only accessible to contributors.
+  $q = \Drupal::request()->query->all();
+
+  // @TODO: We may want to determine the title/name field using an entity
+  // method.
+  $title_field = $entity->getEntityTypeId() == 'node' ? 'title' : 'name';
+  $slug_field = $entity->getEntityTypeId() == 'node' ? 'field_product_slug' : 'field_category_slug';
+
+  // Pre-fill the title and slug fields with values from the query.
+  if (isset($q[$title_field])) {
+    $form[$title_field]['widget'][0]['value']['#default_value'] = $q[$title_field];
+  }
+  if (isset($q['slug'])) {
+    $form[$slug_field]['widget'][0]['value']['#default_value'] = $q['slug'];
+  }
+}
+
+/**
+ * Implements hook_form_taxonomy_term_VOCABULARY_form_alter().
+ */
+function rcs_placeholders_form_taxonomy_term_rcs_category_form_alter(&$form, FormStateInterface $form_state) {
+  _rcs_placeholders_enrichment_form_alter($form, $form_state);
+}
+
+/**
+ * Implements hook_form_node_NODE-TYPE_form_alter().
+ */
+function rcs_placeholders_form_node_rcs_product_form_alter(&$form, FormStateInterface $form_state) {
+  _rcs_placeholders_enrichment_form_alter($form, $form_state);
+}

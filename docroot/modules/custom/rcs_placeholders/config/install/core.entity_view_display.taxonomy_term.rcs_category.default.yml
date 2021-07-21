@@ -1,0 +1,18 @@
+uuid: 46d6835d-ae9f-4713-9b60-6d11e4797fdd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.rcs_category.field_category_slug
+    - taxonomy.vocabulary.rcs_category
+  module:
+    - path
+    - text
+_core:
+  default_config_hash: c4GyBSHQqBHt2RYCuq_4lPymn750N2iDBvRXgHmc_XE
+id: taxonomy_term.rcs_category.default
+targetEntityType: taxonomy_term
+bundle: rcs_category
+mode: default
+content:
+hidden: {  }
