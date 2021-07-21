@@ -21,7 +21,7 @@ exports.invokeApi = async function (request) {
   }
 
   return jQuery.ajax({
-    url: drupalSettings.cart.url + '/' + langcode + '/' + request.uri,
+    url: drupalSettings.alshayaRcs.commerceBackend.baseUrl + '/' + drupalSettings.alshayaRcs.commerceBackend.languageCode + '/' + request.uri,
     method: request.method,
     headers,
     data: request.data,

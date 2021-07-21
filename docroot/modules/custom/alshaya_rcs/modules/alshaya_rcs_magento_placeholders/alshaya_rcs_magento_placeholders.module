@@ -111,6 +111,8 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
 
 /**
  * Implements hook_ENTITY_TYPE_view().
+ *
+ * @todo: Change text case to camel case for the drupalsettings.
  */
 function alshaya_rcs_magento_placeholders_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() !== 'rcs_product') {
@@ -136,9 +138,10 @@ function alshaya_rcs_magento_placeholders_node_view(array &$build, EntityInterfa
 
   $api_settings = Settings::get('alshaya_api.settings');
 
-  // We proxy the requests via cloudflare, so we use the current domain as is
-  // without any language suffix so HTTP_HOST is enough.
-  $build['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
+  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend'] = [
+    'baseUrl' => 'https://' . $_SERVER['HTTP_HOST'],
+    'languageCode' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
+  ];
 
   // Use proxy on local env as here we don't have Cloudflare.
   if (Settings::get('env') === 'local') {
