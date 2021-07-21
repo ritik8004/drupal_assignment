@@ -361,11 +361,13 @@ class CategoryProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
-      // Get term details in current language for filters.
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+        $langcode = 'en';
+      }
       $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
-        $this->languageManager->getCurrentLanguage()->getId(),
-        $tid,
-        TRUE
+        $langcode,
+        $tid
       );
 
       $index = $storage->load('alshaya_algolia_index');
@@ -401,8 +403,15 @@ class CategoryProductListResource extends ResourceBase {
 
       // Prepare and execute query and pass result set.
       $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+      // Append 'en' in 'filter_field' of 'algolia_data'.
+      // for ex:
+      // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
+      $category_field = explode('.', $term_details['category_field']);
+      $category_field_temp[] = $category_field[0] . '.' . $langcode . '.';
+      array_shift($category_field);
+      $filter_field = implode(array_merge($category_field_temp, $category_field));
       $response['algolia_data'] = [
-        'filter_field' => $term_details['category_field'],
+        'filter_field' => $filter_field,
         'filter_value' => $term_details['hierarchy'],
         'rule_contexts' => $term_details['ruleContext'],
       ];
