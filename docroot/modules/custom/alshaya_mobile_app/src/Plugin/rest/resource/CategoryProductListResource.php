@@ -365,6 +365,8 @@ class CategoryProductListResource extends ResourceBase {
       if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
         $langcode = 'en';
       }
+
+      // Get term details in current language for filters.
       $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
         $langcode,
         $tid
