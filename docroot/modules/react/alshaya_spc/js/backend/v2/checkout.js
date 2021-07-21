@@ -1745,17 +1745,16 @@ window.commerceBackend.getCartForCheckout = () => {
       cart.data = await getProcessedCheckoutData(cart.data);
       return cart;
     })
-    .catch((cart) => {
-      logger.error(`Error while getCartForCheckout controller. Error: ${cart.message}. Code: ${cart.status}`);
+    .catch((error) => {
+      logger.error(`Error while getCartForCheckout controller. Error: ${error.message}. Code: ${error.status}`);
 
-      const error = {
+      return {
         data: {
           error: true,
-          error_code: cart.status,
+          error_code: error.status,
           error_message: getDefaultErrorMessage(),
         },
       };
-      return error;
     });
 };
 
