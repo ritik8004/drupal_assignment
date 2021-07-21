@@ -728,7 +728,7 @@ const getCartWithProcessedData = async (force = false) => {
 
   // If we don't have any errors, process the cart data.
   if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
-    cart.data = getProcessedCartData(cart.data);
+    cart.data = await getProcessedCartData(cart.data);
   }
 
   return cart;
