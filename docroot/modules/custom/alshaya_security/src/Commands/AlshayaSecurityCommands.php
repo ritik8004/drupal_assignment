@@ -14,10 +14,10 @@ class AlshayaSecurityCommands extends DrushCommands {
   /**
    * Throws exception when user:login command is used.
    *
-   * @hook pre-command user:login
+   * @hook post-command user:login
    */
-  public function preCommand() {
-    throw new \Exception("Use of this command is not allowed.");
+  public function postUserLogin() {
+    throw new \Exception('Use of this command is not allowed.');
   }
 
 }
