@@ -77,7 +77,7 @@ class StoresMigrateUploadForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Set message for users.
-    drupal_set_message($this->t('Please import stores in English language first.'), 'warning');
+    $this->messenger()->addMessage($this->t('Please import stores in English language first.'), 'warning');
 
     foreach ($this->languageManager->getLanguages() as $language) {
       $langs[$language->getId()] = $language->getName();
@@ -156,7 +156,7 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $initial_filepath);
     $migrate_plus_migration_store_config->save();
 
-    drupal_set_message($this->t('Stores have been imported.'), 'status');
+    $this->messenger()->addMessage($this->t('Stores have been imported.'), 'status');
   }
 
 }
