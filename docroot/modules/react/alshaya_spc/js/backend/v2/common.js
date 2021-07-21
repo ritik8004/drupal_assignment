@@ -93,10 +93,17 @@ window.commerceBackend.setCartDataInStorage = (data) => {
 };
 
 /**
- * Unsets the stored cart data.
+ * Removes the cart data from storage.
+ *
+ * @param {boolean}
+ *  Whether we should remove all items.
  */
-window.commerceBackend.removeCartDataFromStorage = () => {
+window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   staticCartData = null;
+
+  if (resetAll) {
+    removeStorageInfo('cart_id');
+  }
 };
 
 /**

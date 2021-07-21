@@ -140,14 +140,21 @@ window.commerceBackend.setCartDataInStorage = (data) => {
 
 /**
  * Removes the cart data from storage.
+ *
+ * @param {boolean}
+ *  Whether we should remove all items.
  */
-window.commerceBackend.removeCartDataFromStorage = () => {
+window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   removeStorageInfo('cart_data');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
   // selection at-least once and not more than once.
   removeStorageInfo('last_selected_payment');
+
+  if (resetAll) {
+    removeStorageInfo('cart_id');
+  }
 };
 
 export {

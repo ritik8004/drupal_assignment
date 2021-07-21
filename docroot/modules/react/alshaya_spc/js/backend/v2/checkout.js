@@ -1966,8 +1966,7 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
   }
 
   // Remove cart id and other caches from session.
-  window.commerceBackend.removeCartDataFromStorage();
-  localStorage.removeItem('cart_id');
+  window.commerceBackend.removeCartDataFromStorage(true);
 
   // Post order id and cart data to Drupal.
   const data = {

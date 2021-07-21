@@ -229,8 +229,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       const postString = JSON.stringify(itemData);
       logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
       // Remove the cart from storage.
-      window.commerceBackend.removeCartDataFromStorage();
-      removeStorageInfo('cart_id');
+      window.commerceBackend.removeCartDataFromStorage(true);
 
       if (
         data.action === 'add item'
