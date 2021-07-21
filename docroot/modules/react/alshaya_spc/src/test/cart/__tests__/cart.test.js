@@ -37,7 +37,7 @@ describe('Cart', () => {
             'Alshaya-Channel': 'web',
             'Content-Type': 'application/json',
           },
-          url: '/rest/kw_en/cart',
+          url: '/rest/kwt_en/cart',
         },
       ]);
     });
@@ -141,7 +141,7 @@ describe('Cart', () => {
             'Alshaya-Channel': 'web',
             'Content-Type': 'application/json',
           },
-          url: '/rest/kw_en/cart',
+          url: '/rest/kwt_en/cart',
         },
       ]);
     });

@@ -322,7 +322,7 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
           },
         );
       });
@@ -358,7 +358,7 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
           },
         );
 
@@ -373,8 +373,8 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
-            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
           },
         );
       });
@@ -716,8 +716,8 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
-            url: '/rest/kw_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
+            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
           },
         );
       });
