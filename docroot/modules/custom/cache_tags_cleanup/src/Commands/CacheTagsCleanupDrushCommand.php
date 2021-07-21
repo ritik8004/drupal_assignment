@@ -5,8 +5,7 @@ namespace Drupal\cache_tags_cleanup\Commands;
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Class contains drush command to clean up cache tags.
@@ -37,16 +36,9 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
   /**
    * Entity manager.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private $entityManager;
-
-  /**
-   * Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
 
   /**
    * CacheTagsCleanupDrushCommand constructor.
@@ -55,16 +47,13 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
    *   Database Connection.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
    *   Logger factory.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   Entity manager.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $queryFactory
-   *   Entity query factory.
    */
-  public function __construct(Connection $connection, LoggerChannelFactoryInterface $logger_channel_factory, EntityManagerInterface $entityManager, QueryFactory $queryFactory) {
+  public function __construct(Connection $connection, LoggerChannelFactoryInterface $logger_channel_factory, EntityTypeManagerInterface $entity_manager) {
     $this->connection = $connection;
     $this->drupalLogger = $logger_channel_factory->get('cache_tags_cleanup');
-    $this->entityManager = $entityManager;
-    $this->queryFactory = $queryFactory;
+    $this->entityManager = $entity_manager;
   }
 
   /**
@@ -91,6 +80,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
 
     // Getting all entity types.
     $entity_types = array_keys($this->entityManager->getDefinitions());
+
     foreach ($entity_types as $entity_type) {
       $deleted_entities = [];
       $entity_ids = [];
@@ -110,8 +100,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
       }
 
       // Get all entity ids from a entity type.
-      $entity_ids = $this->queryFactory->get($entity_type)->execute();
-
+      $entity_ids = $this->entityManager->getStorage($entity_type)->getQuery()->execute();
       // Find all entities which exists in cachetags
       // but not in entity table.
       $deleted_entities = array_diff($cachetags_ids, $entity_ids);
