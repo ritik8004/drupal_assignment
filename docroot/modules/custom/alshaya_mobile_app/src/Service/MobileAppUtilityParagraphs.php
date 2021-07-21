@@ -8,7 +8,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -109,7 +109,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The language manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
