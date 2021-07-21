@@ -7,3 +7,7 @@ services:
     # the url. So we need to keep priority between 100 and 300.
       - { name: 'path_processor_inbound', priority: 101 }
     arguments: ['@entity_type.manager']
+
+  rcs_placeholders.helper:
+    class: Drupal\rcs_placeholders\Service\RcsPhHelper
+    arguments: ['@entity_type.manager', '@config.factory']
