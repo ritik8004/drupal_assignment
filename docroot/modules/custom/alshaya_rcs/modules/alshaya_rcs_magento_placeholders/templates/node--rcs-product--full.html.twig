@@ -10,7 +10,7 @@ set classes = [
     {% block mainContent %}
       <div class="content__main {{ image_slider_position_pdp }}">
         {# The image gallery and thumnails. #}
-        {% include "@alshaya_rcs/rcs-product-zoom.html.twig" %}
+        {% include "@alshaya_rcs_magento_placeholders/rcs-product-zoom.html.twig" %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
@@ -88,7 +88,7 @@ set classes = [
           <div class="mobile-content-wrapper">
             <div class="basic-details-wrapper">
               <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
-                {% include "@alshaya_rcs/rcs-sku-base-form.html.twig" %}
+                {% include "@alshaya_rcs_magento_placeholders/rcs-sku-base-form.html.twig" %}
               </div>
               {% if quantity_limit_enabled == true %}
                 <div class="order-quantity-limit-message"></div>
