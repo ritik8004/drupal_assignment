@@ -8,7 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 /**
  * Service provides helper functions for the rcs_placeholders.
  */
-class RcsPhHelper implements RcsPhHelperInterface {
+class RcsPhEntityHelper implements RcsPhEntityHelperInterface {
 
   /**
    * The taxonomy storage.
@@ -25,7 +25,7 @@ class RcsPhHelper implements RcsPhHelperInterface {
   protected $configFactory;
 
   /**
-   * Constructs a new RcsPhHelper instance.
+   * Constructs a new RcsPhEntityHelper instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.

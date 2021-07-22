@@ -8,6 +8,6 @@ services:
       - { name: 'path_processor_inbound', priority: 101 }
     arguments: ['@entity_type.manager']
 
-  rcs_placeholders.helper:
-    class: Drupal\rcs_placeholders\Service\RcsPhHelper
+  rcs_placeholders.entity.helper:
+    class: Drupal\rcs_placeholders\Service\RcsPhEntityHelper
     arguments: ['@entity_type.manager', '@config.factory']

@@ -3,9 +3,9 @@
 namespace Drupal\rcs_placeholders\Service;
 
 /**
- * Interface for RcsPhHelper service.
+ * Interface for RcsPhEntityHelper service.
  */
-interface RcsPhHelperInterface {
+interface RcsPhEntityHelperInterface {
 
   /**
    * Return the placeholder term data from rcs_category.
