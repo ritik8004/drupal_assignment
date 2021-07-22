@@ -2,5 +2,5 @@ renderer:
   js:
     dist/alshaya_rcs_main_menu_renderer.bundle.js: {}
   dependencies:
-    - alshaya_rcs/renderer
+    - alshaya_rcs_magento_placeholders/main
     - rcs_magento_placeholders/rcs_magento_placeholders

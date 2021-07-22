@@ -107,6 +107,17 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
       'data-src',
     ],
   );
+
+  $api_settings = Settings::get('alshaya_api.settings');
+
+  $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
+
+  // Use proxy on local env as here we don't have Cloudflare.
+  if (Settings::get('env') === 'local') {
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = '/proxy/?url=' . $api_settings['magento_host'];
+  }
+
+  $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['languagePrefix'] = Settings::get('magento_lang_prefix');
 }
 
 /**
@@ -134,17 +145,6 @@ function alshaya_rcs_magento_placeholders_node_view(array &$build, EntityInterfa
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
-
-  $api_settings = Settings::get('alshaya_api.settings');
-
-  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
-
-  // Use proxy on local env as here we don't have Cloudflare.
-  if (Settings::get('env') === 'local') {
-    $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = '/proxy/?url=' . $api_settings['magento_host'];
-  }
-
-  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['languagePrefix'] = Settings::get('magento_lang_prefix');
 }
 
 /**
