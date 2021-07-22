@@ -145,10 +145,6 @@ function alshaya_rcs_magento_placeholders_node_view(array &$build, EntityInterfa
   }
 
   $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['languagePrefix'] = Settings::get('magento_lang_prefix');
-
-  // @todo Work on feedback https://github.com/acquia-pso/alshaya/pull/21185#discussion_r672345369.
-  // Add data for showing size guide.
-  $build['#attached']['drupalSettings']['alshayaRcs']['sizeGuide'] = _alshaya_acm_product_get_size_guide_info(null);
 }
 
 /**
@@ -288,6 +284,19 @@ function alshaya_rcs_magento_placeholders_preprocess_html(array &$variables) {
       'class' => 'rcs-templates--delivery_option-click-and-collect',
     ],
   ];
+
+  $size_guide = _alshaya_acm_product_get_size_guide_info(null);
+  if (isset($size_guide['link']) && isset($size_guide['attributes'])) {
+    $variables['rcs_templates']['size_guide'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => $size_guide['link'],
+      '#attributes' => [
+        'class' => 'rcs-templates--size-guide',
+        'data-attributes' => implode(',', $size_guide['attributes']),
+      ],
+    ];
+  }
 
   if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
     $node = \Drupal::request()->attributes->get('node');

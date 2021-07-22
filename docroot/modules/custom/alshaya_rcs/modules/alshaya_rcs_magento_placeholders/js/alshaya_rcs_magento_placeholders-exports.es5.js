@@ -325,6 +325,10 @@ exports.computePhFilters = function (input, filter) {
       const tempDivWrapper = jQuery('<div>');
 
       if (typeof input.configurable_options !== 'undefined' && input.configurable_options.length > 0) {
+        const sizeGuide = jQuery('.rcs-templates--size-guide');
+        let sizeGuideAttributes = sizeGuide.attr('data-attributes');
+        sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+
         input.configurable_options.forEach((option) => {
           // Get the field wrapper div.
           const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
@@ -370,10 +374,8 @@ exports.computePhFilters = function (input, filter) {
             configurableOptionsList.append(selectOption);
           });
 
-          if (typeof drupalSettings.alshayaRcs.sizeGuide !== 'undefined'
-          && drupalSettings.alshayaRcs.sizeGuide.attributes.includes(option.attribute_code)) {
-            // Remove '\' added for escaping "".
-            const sizeGuideLink = drupalSettings.alshayaRcs.sizeGuide.link.replace('\\', '');
+          if (sizeGuideAttributes.includes(option.attribute_code)) {
+            const sizeGuideLink = sizeGuide.children();
             const sizeGuideWrapper = jQuery('<div>');
             sizeGuideWrapper.addClass('size-guide-form-and-link-wrapper');
             sizeGuideWrapper.append(sizeGuideLink);
