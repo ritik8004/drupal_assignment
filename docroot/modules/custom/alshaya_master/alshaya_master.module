@@ -287,11 +287,9 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   if (!empty($values['logo_upload'])) {
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $source = $values['logo_upload']->getFileUri();
-    $destination = \Drupal::service('file_system')->basename($source);
-    $dest_path = file_build_uri($destination);
-    $filename = \Drupal::service('file_system')->copy($source, $dest_path);
+    $destination = file_build_uri(\Drupal::service('file_system')->basename($source));
     $values['default_logo'] = 0;
-    $values['logo_path'] = $filename;
+    $values['logo_path'] = \Drupal::service('file_system')->copy($source, $destination);
   }
 
   // If the user entered a path relative to the system files directory for
@@ -321,9 +319,8 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
     if (!empty($logo_upload)) {
       /** @var \Drupal\Core\File\FileSystemInterface $file_system */
       $source_path = $values['logo_upload']->getFileUri();
-      $destination_path = \Drupal::service('file_system')->basename($source_path);
-      $dest = file_build_uri($destination_path);
-      $filepath = \Drupal::service('file_system')->copy($source_path, $dest);
+      $destination_path = file_build_uri(\Drupal::service('file_system')->basename($source_path));
+      $filepath = \Drupal::service('file_system')->copy($source_path, $destination_path);
       $logo_path = file_build_uri($filepath);
     }
 
