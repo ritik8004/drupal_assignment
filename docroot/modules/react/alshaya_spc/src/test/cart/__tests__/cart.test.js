@@ -151,7 +151,7 @@ describe('Cart', () => {
         data: {
           error: true,
           error_code: 9010,
-          error_message: 'Invalid cart data',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
           message: 'Invalid cart data',
         },
         status: 400,
@@ -166,7 +166,7 @@ describe('Cart', () => {
         data: {
           error: true,
           error_code: 500,
-          error_message: 'Something is wrong',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
           message: 'Something is wrong',
         },
         status: 405,
