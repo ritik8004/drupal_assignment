@@ -5,9 +5,9 @@ namespace Drupal\alshaya_rcs\Services;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * General Helper service for the Ashaya RCS feature.
+ * Status Helper service for the Ashaya RCS feature.
  */
-class AlshayaRcsHelper {
+class AlshayaRcsFeatureStatusHelper {
 
   /**
    * Config factory service.
@@ -17,7 +17,7 @@ class AlshayaRcsHelper {
   protected $configFactory;
 
   /**
-   * Constructor for the AlshayaRcsHelper service.
+   * Constructor for the AlshayaRcsFeatureStatusHelper service.
    *
    * @param Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
