@@ -377,7 +377,8 @@ const getPaymentMethods = async () => getCart()
   .then((response) => {
     const cartId = window.commerceBackend.getCartId();
 
-    if (_isEmpty(response.data)
+    if (_isNull(response)
+      || _isEmpty(response.data)
       || _isEmpty(response.data.shipping)
       || _isEmpty(response.data.shipping.method)
       || (!_isUndefined(response.data.error) && response.data.error)
@@ -893,7 +894,8 @@ const selectCnc = async (store, address, billing) => {
  */
 const getCustomerAddressIds = () => getCart()
   .then((response) => {
-    if (!_isUndefined(response.data)
+    if (!_isNull(response)
+      && !_isUndefined(response.data)
       && !_isUndefined(response.data.customer)
       && !_isUndefined(response.data.customer.addresses)
       && !_isEmpty(response.data.customer.addresses)
@@ -1604,6 +1606,9 @@ const isAddressExtensionAttributesValid = (data) => {
 const validateBeforePaymentFinalise = async () => {
   // Fetch fresh cart from magento.
   const cart = await getCart(true);
+  if (_isNull(cart) || _isUndefined(cart.data)) {
+    return false;
+  }
   const cartData = cart.data;
 
   let isError = false;
@@ -2004,6 +2009,9 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
  */
 window.commerceBackend.placeOrder = async (data) => {
   const cart = await getCart(true);
+  if (_isNull(cart) || _isUndefined(cart.data)) {
+    return false;
+  }
 
   if (_isObject(cart) && isCartHasOosItem(cart.data)) {
     logger.error('Error while placing order. Cart has an OOS item. Cart: @cart', {
@@ -2102,6 +2110,12 @@ window.commerceBackend.placeOrder = async (data) => {
 
   return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
     .then((response) => {
+      if (_isEmpty(response.data)
+        || (!_isUndefined(response.data.error) && response.data.error)
+      ) {
+        return response;
+      }
+
       const result = {
         success: true,
         isAbsoluteUrl: false,

@@ -202,7 +202,13 @@ const handleResponse = (apiResponse) => {
     // All other responses.
     response.data.error = true;
     if (typeof response.data.message !== 'undefined') {
-      response.data.error_message = response.data.message;
+      response.data.error_message = getDefaultErrorMessage();
+
+      // Token replacement for magento responses.
+      if (!_isUndefined(response.data.parameters)) {
+        response.data.message = Drupal.formatString(response.data.message, { '%1': response.data.parameters[0] });
+      }
+
       const errorCode = (typeof response.data.error_code !== 'undefined') ? response.data.error_code : '-';
       logger.error(`Error while doing MDC api call. Error message: ${response.data.message}, Code: ${errorCode}, Response code: ${response.status}.`);
 
@@ -710,12 +716,13 @@ const associateCartToCustomer = async () => {
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
   let cart = await getCart(force);
+  if (_isNull(cart) || _isUndefined(cart.data)) {
+    return null;
+  }
 
   // Check if the user is authenticated but there is a guest cart_id in the local storage.
   if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
-    if (!_isNull(cart)
-      && !_isUndefined(cart.data)
-      && !_isUndefined(cart.data.cart)
+    if (!_isUndefined(cart.data.cart)
       && !_isUndefined(cart.data.cart.items)
       && !_isEmpty(cart.data.cart.items)
     ) {
@@ -766,6 +773,10 @@ const isAuthenticatedUserWithoutCart = async () => {
  */
 const getCartCustomerId = async () => {
   const response = await getCart();
+  if (_isNull(response) || _isUndefined(response.data)) {
+    return null;
+  }
+
   const cart = response.data;
   if (!_isEmpty(cart) && !_isEmpty(cart.customer) && !_isUndefined(cart.customer.id)) {
     return parseInt(cart.customer.id, 10);
@@ -909,6 +920,10 @@ const updateCart = async (data) => {
  */
 const getCartCustomerEmail = async () => {
   const response = await getCart();
+  if (_isNull(response) || _isUndefined(response.data)) {
+    return null;
+  }
+
   const cart = response.data;
   if (!_isUndefined(cart.customer)
     && !_isUndefined(cart.customer.email)

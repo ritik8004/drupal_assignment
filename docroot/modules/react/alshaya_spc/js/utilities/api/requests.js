@@ -36,6 +36,10 @@ export const fetchCartData = () => {
 
   if (!cart) {
     return window.commerceBackend.restoreCart().then((response) => {
+      if (response === null) {
+        return null;
+      }
+
       if (typeof response !== 'object') {
         redirectToCart();
         return null;
