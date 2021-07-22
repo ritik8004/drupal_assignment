@@ -583,7 +583,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     // Hide the node title on product list/search page.
     $variables['label'] = NULL;
   }
-  elseif ($variables['node']->bundle() === 'acq_product') {
+  elseif (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
     $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
     // Add class for enabling hover effect on PDP.
     if ($product_display_settings->get('color_swatches_hover')) {
