@@ -288,7 +288,8 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $source = $values['logo_upload']->getFileUri();
     $destination = \Drupal::service('file_system')->basename($source);
-    $filename = \Drupal::service('file_system')->copy($source, $destination);
+    $dest_path = file_build_uri($destination);
+    $filename = \Drupal::service('file_system')->copy($source, $dest_path);
     $values['default_logo'] = 0;
     $values['logo_path'] = $filename;
   }
@@ -321,7 +322,8 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
       /** @var \Drupal\Core\File\FileSystemInterface $file_system */
       $source_path = $values['logo_upload']->getFileUri();
       $destination_path = \Drupal::service('file_system')->basename($source_path);
-      $filepath = \Drupal::service('file_system')->copy($source_path, $destination_path);
+      $dest = file_build_uri($destination_path);
+      $filepath = \Drupal::service('file_system')->copy($source_path, $dest);
       $logo_path = file_build_uri($filepath);
     }
 
