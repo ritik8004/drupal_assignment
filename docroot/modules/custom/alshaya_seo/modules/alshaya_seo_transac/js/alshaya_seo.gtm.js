@@ -43,7 +43,8 @@ const productRecommendationsSuffix = 'pr-';
       $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        if (typeof drupalSettings[productKey][sku] === 'undefined'
+          || typeof drupalSettings[productKey][sku]['group'][variant] === 'undefined') {
           return;
         }
 
@@ -1384,8 +1385,11 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
+  // Push the errors to GA if enabled.
   // If TrackJS is enabled we let it track the errors.
-  if (window.TrackJS === undefined) {
+  if (drupalSettings.gtm.log_errors_to_ga !== undefined
+    && drupalSettings.gtm.log_errors_to_ga
+    && window.TrackJS === undefined) {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);

@@ -8,7 +8,8 @@
     "watch": "webpack --watch --mode=development",
     "build:gulp": "gulp",
     "lint": "eslint",
-    "lint-fix": "eslint --fix"
+    "lint-fix": "eslint --fix",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -20,6 +21,7 @@
     "@babel/runtime": "^7.8.4",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
+    "babel-plugin-rewire": "^1.2.0",
     "core-js": "^3.2.1",
     "eslint": "^6.8.0",
     "eslint-cli": "^1.1.1",
@@ -38,6 +40,8 @@
     "gulp-sourcemaps": "2.1.x",
     "gulp-uglify": "2.0.0",
     "gulp-watch": "4.3.10",
+    "jest": "^25.5.4",
+    "jest-each": "^25.5.0",
     "qs": "^6.9.0",
     "webpack": "^4.39.3",
     "webpack-chunk-rename-plugin": "^1.0.3",
@@ -61,6 +65,7 @@
     "javascript-time-ago": "^2.3.4",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.20",
+    "md5": "^2.3.0",
     "moment": "^2.27.0",
     "moment-range": "^4.0.2",
     "moment-timezone": "^0.5.31",

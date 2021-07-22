@@ -1,5 +1,5 @@
 import React from 'react';
-import debounce from 'lodash.debounce';
+import _debounce from 'lodash/debounce';
 import {
   triggerUpdateCart,
   isMaxSaleQtyEnabled,
@@ -29,7 +29,7 @@ export default class AddToBagSimple extends React.Component {
     this.buttonContainerRef = React.createRef();
 
     // Handle debounce effect for the click handler.
-    this.handleUserAction = debounce(this.handleUserAction, 100);
+    this.handleUserAction = _debounce(this.handleUserAction, 100);
   }
 
   /**

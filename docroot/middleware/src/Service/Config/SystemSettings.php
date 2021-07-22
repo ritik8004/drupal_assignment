@@ -76,11 +76,10 @@ class SystemSettings {
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/exception_message_type.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/mada_bins.php';
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/commerce_backend.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_checkout_settings.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_address_fields.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/alshaya_backend_calls_options.settings.php';
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/bin_numbers.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
