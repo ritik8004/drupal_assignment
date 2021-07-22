@@ -221,7 +221,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     return window.commerceBackend.getCart();
   }
 
-  let apiCallAttempts = 1;
+  let apiCallAttempts = 0;
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (response.data.error === true) {
