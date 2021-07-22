@@ -239,7 +239,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
           10,
         ) > apiCallAttempts
       ) {
-        // @todo test attempts.
         apiCallAttempts += 1;
 
         // Create a new cart.
