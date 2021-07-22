@@ -674,10 +674,12 @@ const productRecommendationsSuffix = 'pr-';
           $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
             var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
             sortValue.trim();
+            var facetTitle = $('.fieldset-legend').first().html();
             var data = {
               event: 'sort',
               siteSection: section.trim(),
-              sortValue: sortValue
+              filterType: facetTitle,
+              filterValue: sortValue
             };
 
             dataLayer.push(data);
