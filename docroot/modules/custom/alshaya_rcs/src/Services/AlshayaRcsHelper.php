@@ -17,7 +17,7 @@ class AlshayaRcsHelper {
   protected $configFactory;
 
   /**
-   * Constructor for the AddToBagHelper service.
+   * Constructor for the AlshayaRcsHelper service.
    *
    * @param Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
@@ -35,7 +35,7 @@ class AlshayaRcsHelper {
    *   Whether rcs replacement on pdp is enabled or not.
    */
   public function isRcsPdpEnabled() {
-    return (bool) $this->configFactory->get('alshaya_rcs.settings')->get('rcs_pdp_enabled');
+    return $this->configFactory->get('alshaya_rcs.settings')->get('rcs_pdp_enabled');
   }
 
 }
