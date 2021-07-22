@@ -18,7 +18,7 @@ exports.getEntity = async function getEntity(langcode) {
         request.uri += "graphql";
         request.method = "POST",
         request.headers.push(["Content-Type", "application/json"]);
-        request.language = langcode;
+        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.languagePrefix[drupalSettings.path.currentLanguage]]);
 
         const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
         // @todo: Make a config for this query and pass it from the backend.
