@@ -2,14 +2,54 @@
 
 namespace Drupal\alshaya_stores_finder\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Stores Finder Config Form.
  */
 class StoresFinderConfigForm extends ConfigFormBase {
+
+  /**
+   * File system object.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * ProductReportController constructor.
+   *
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The filesystem service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
+   */
+  public function __construct(FileSystemInterface $file_system, ConfigFactoryInterface $config_factory) {
+    $this->fileSystem = $file_system;
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('file_system'),
+      $container->get('config.factory')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -160,7 +200,9 @@ class StoresFinderConfigForm extends ConfigFormBase {
     else {
       $marker_upload = $form_state->getValue('marker_upload');
       if (!empty($marker_upload)) {
-        $filename = file_unmanaged_copy($marker_upload->getFileUri());
+        $source = $marker_upload->getFileUri();
+        $destination = file_build_uri($this->fileSystem->basename($source));
+        $filename = $this->fileSystem->copy($source, $destination);
         $marker_path = $filename;
       }
       else {
