@@ -5,7 +5,6 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -173,7 +172,7 @@ class UserResetPassword extends ResourceBase {
 
     // If last login time is greater than timestamp
     // or hash check is false. Expire one time login link.
-    if (($user->getLastLoginTime() >= $timestamp) || !(Crypt::hashEquals($hash, user_pass_rehash($user, $timestamp)))) {
+    if (($user->getLastLoginTime() >= $timestamp) || !(hash_equals($hash, user_pass_rehash($user, $timestamp)))) {
       return $this->mobileAppUtility->sendStatusResponse($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new.'));
     }
 

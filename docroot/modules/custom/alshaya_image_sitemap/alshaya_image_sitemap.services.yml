@@ -13,3 +13,4 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@config.factory'
       - '@simple_sitemap.generator'
+      - '@datetime.time'

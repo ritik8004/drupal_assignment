@@ -20,6 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
+use Drush\Drush;
 
 /**
  * Class Alshaya Address Product Commands.
@@ -168,7 +169,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $this->updateListingMode(SkuManager::AGGREGATED_LISTING);
 
     // Clear all indexed data.
-    drush_invoke_process('@self', 'sapi-c');
+    Drush::drush('@self', 'sapi-c');
 
     // Delete color nodes.
     $batch = [
@@ -221,7 +222,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $this->updateListingMode(SkuManager::NON_AGGREGATED_LISTING);
 
     // Clear all indexed data.
-    drush_invoke_process('@self', 'sapi-c');
+    Drush::drush('@self', 'sapi-c');
 
     // Create color nodes.
     $batch = [

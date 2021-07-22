@@ -12,6 +12,7 @@ const ReviewInformation = ({
   reviewInformationData,
   reviewTooltipInfo,
   isNewPdpLayout,
+  showLocationFilter,
 }) => {
   let newPdp = isNewPdpLayout;
   newPdp = (newPdp === undefined) ? false : newPdp;
@@ -71,6 +72,7 @@ const ReviewInformation = ({
         <ReviewAttributes
           contextDataValues={reviewInformationData.ContextDataValues}
           contextDataValuesOrder={reviewInformationData.ContextDataValuesOrder}
+          showLocationFilter={showLocationFilter}
         />
 
         <IndividualReviewSlider

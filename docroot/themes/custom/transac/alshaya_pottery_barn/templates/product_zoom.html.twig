@@ -8,16 +8,16 @@
         {% for thumbs in thumbnails %}
           {% if thumbs.type == 'youtube' %}
             <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">
-              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+              <img loading="lazy" width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
             </li>
           {% elseif thumbs.type == 'vimeo' %}
             <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
-              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+              <img loading="lazy" width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
             </li>
           {% else %}
             <li>
               <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
-                <img class="b-lazy" src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                <img loading="lazy" src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
               </a>
             </li>
           {% endif %}

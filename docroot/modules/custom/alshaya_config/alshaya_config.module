@@ -53,8 +53,11 @@ function alshaya_config_delete_configs(array $configs) {
 function _alshaya_config_get_config_yml($module_name, $directory) {
   $files = [];
   $directory_path = drupal_get_path('module', $module_name) . '/config/' . $directory;
+  /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+  $file_system = \Drupal::service('file_system');
+
   // Get all yml files inside the directory.
-  $ymls = file_scan_directory($directory_path, '/[(.yml)]$/');
+  $ymls = $file_system->scanDirectory($directory_path, '/[(.yml)]$/');
   if (!empty($ymls)) {
     foreach ($ymls as $yml) {
       $files[] = $yml->name;

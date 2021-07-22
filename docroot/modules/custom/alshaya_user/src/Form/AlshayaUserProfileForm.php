@@ -18,7 +18,7 @@ class AlshayaUserProfileForm extends ProfileForm {
     $account->save();
     $form_state->setValue('uid', $account->id());
 
-    drupal_set_message($this->t('Contact details changes have been saved.'));
+    $this->messenger()->addMessage($this->t('Contact details changes have been saved.'));
   }
 
 }

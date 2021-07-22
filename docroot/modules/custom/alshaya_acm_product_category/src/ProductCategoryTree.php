@@ -529,7 +529,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     // If term is of 'acq_product_category' vocabulary.
-    if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == self::VOCABULARY_ID) {
       return $term;
     }
     $term = NULL;

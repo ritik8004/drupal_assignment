@@ -50,6 +50,13 @@ function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, E
 
       // Prepare how to use block content for the product.
       _alshaya_tbs_transac_get_product_howtouse($sku_entity, $build);
+
+      // If it is a simple product check for size.
+      if ($sku_entity->getType() === 'simple') {
+        if ($size_volume = $sku_entity->get('attr_size')->getValue()) {
+          $build['size_volume']['#markup'] = $size_volume[0]['value'];
+        }
+      }
     }
   }
 }

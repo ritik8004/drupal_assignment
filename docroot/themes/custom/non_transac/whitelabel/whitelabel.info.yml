@@ -1,7 +1,8 @@
 name: whitelabel
-description: Base theme for Alshaya brands.
+description: Base theme for Alshaya brands - Non transac sites.
 type: theme
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: kashmir
 alshaya_theme_type: non_transac
 
@@ -44,7 +45,7 @@ libraries-override:
     css:
       theme:
         css/ltr.css: false
-  
+
 component-libraries:
   atoms:
     paths:

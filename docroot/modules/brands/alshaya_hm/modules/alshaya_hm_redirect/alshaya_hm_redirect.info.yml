@@ -2,4 +2,5 @@ name: alshaya_hm_redirect
 type: module
 description: Handling redirects for HnM.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya

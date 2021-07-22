@@ -17,6 +17,8 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   create_account: 'Create an Account'
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   spc_search_byname: 'Nike Air'
   spc_search_byID: 'FLKWSSE'
   sign_in: 'Sign in'

@@ -10,7 +10,6 @@ use Drupal\alshaya_block\AlshayaBlockHelper;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Provides a block to display 'Site branding' elements.
@@ -196,7 +195,7 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
       // Remove empty attributes by checking their string length.
       foreach ($attributes as &$attribute) {
-        if (!is_array($attribute) && Unicode::strlen($attribute) === 0) {
+        if (!is_array($attribute) && mb_strlen($attribute) === 0) {
           unset($attribute);
         }
       }

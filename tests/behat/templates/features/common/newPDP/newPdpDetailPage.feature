@@ -1,4 +1,4 @@
-@javascript @smoke @desktop @newPdp
+@javascript @smoke @desktop @newPdp @flkwprod @flaeprod @flsaprod @mckwprod @mcsaprod @mcaeprod
 Feature: Testing new PDP page for desktop
 
   Background:
@@ -41,9 +41,9 @@ Feature: Testing new PDP page for desktop
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
     And I wait for AJAX to finish
-    Then I should see a ".desc-overlay" element on page
-    Then I should see a ".desc-overlay .desc-label-text-wrapper" element on page
-    Then I should see a ".desc-overlay .magv2-desc-popup-pdp-item-code-attribute" element on page
+    Then I should see a ".overlay-desc" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-container div.magv2-pdp-title" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-pdp-item-code-attribute" element on page
 
 
   Scenario: To verify user is able to see product details when clicking on read more link
@@ -66,8 +66,6 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-pdp-item-code-attribute .magv2-desc-popup-pdp-item-code-label" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-pdp-item-code-attribute .magv2-desc-popup-pdp-item-code-value" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper" element on page
-    Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper .desc-label-text-wrapper" element on page
-    Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper .desc-label-text-wrapper .magv2-pdp-section-text " element on page
     When I click on ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" element
     And I wait 5 seconds
     Then the element ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" should not exist
@@ -85,14 +83,15 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".sharethis-wrapper" element on page
     Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
     Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
-    And I click on ".copy-button" element
+    And I click jQuery ".copy-button" element on page
+    And I wait 5 seconds
     And I navigate to the copied URL
     And I wait for the page to load
     Then I should see a ".magv2-pdp-description-wrapper" element on page
 
   Scenario: To verify, add to cart button is visible and is sticky
     Then I should see a "#add-to-cart-main" element on page
-    When I scroll to the ".magv2-pdp-click-and-collect-wrapper" element
+    When I scroll to the ".c-footer" element
     And I wait 3 seconds
     Then I should see a ".magv2-pdp-sticky-header .magv2-header-wrapper #sticky-header-btn #add-to-cart-sticky" element on page
 
@@ -131,9 +130,10 @@ Feature: Testing new PDP page for desktop
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
     And I wait for AJAX to finish
-    Then I should see a ".desc-overlay" element on page
-    Then I should see a ".desc-overlay .desc-label-text-wrapper" element on page
-    Then I should see a ".desc-overlay .magv2-desc-popup-pdp-item-code-attribute" element on page
+    Then I should see a ".overlay-desc" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-container div.magv2-pdp-title" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-pdp-item-code-attribute" element on page
+
 
   @language
   Scenario: To verify user is able to see product details when clicking on read more link
@@ -159,8 +159,6 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-pdp-item-code-attribute .magv2-desc-popup-pdp-item-code-label" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-pdp-item-code-attribute .magv2-desc-popup-pdp-item-code-value" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper" element on page
-    Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper .desc-label-text-wrapper" element on page
-    Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper .desc-label-text-wrapper .magv2-pdp-section-text " element on page
     When I click on ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" element
     And I wait 5 seconds
     Then the element ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" should not exist
@@ -184,7 +182,8 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".sharethis-wrapper" element on page
     Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
     Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
-    And I click on ".copy-button" element
+    And I click jQuery ".copy-button" element on page
+    And I wait 5 seconds
     And I navigate to the copied URL
     And I wait for the page to load
     Then I should see a ".magv2-pdp-description-wrapper" element on page
