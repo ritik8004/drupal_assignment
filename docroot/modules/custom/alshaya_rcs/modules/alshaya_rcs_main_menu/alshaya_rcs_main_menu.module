@@ -4,33 +4,3 @@
  * @file
  * Module file for alshaya_rcs_main_menu.
  */
-
-use Drupal\Core\Cache\Cache;
-
-/**
- * Helper function to build the graphql query dynamically.
- *
- * @param int $depth
- * @return string of graphql query.
- */
-function alshaya_rcs_main_menu_get_query($depth = 0) {
-  $fieldsToFetch = 'children_count
-      children {
-        id
-        level
-        name
-        include_in_menu
-        url_path
-        url_key
-        show_on_dpt
-        position
-        is_anchor
-        display_view_all
-        ';
-
-  if ($depth > 0) {
-    $fieldsToFetch .= alshaya_rcs_main_menu_get_query($depth - 1);
-  }
-  $fieldsToFetch .= '}';
-  return $fieldsToFetch;
-}

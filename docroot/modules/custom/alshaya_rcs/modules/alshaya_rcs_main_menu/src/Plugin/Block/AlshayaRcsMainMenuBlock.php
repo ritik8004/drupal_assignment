@@ -184,7 +184,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       '8' => [
         // 1st Level item non-clickable and enabled for both mobile an desktop.
         'id' => '8',
-        'label' => $ph_term_label . '1',
+        'label' => '#rcs.category.name1#',
         'path' => '#rcs.category.url_path#',
         'clickable' => "0",
         'depth' => 1,
@@ -272,7 +272,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
             'navigationMenu' => [
               'rootCategory' => $alshaya_rcs_main_menu_settings->get('root_category'),
               'menuMaxDepth' => $menu_max_depth,
-              'query' => alshaya_rcs_main_menu_get_query($menu_max_depth),
+              'query' => $this->getRcsCategoryMenuQuery($menu_max_depth),
               'maxNbCol' => $max_nb_col > 0 ? $max_nb_col : 6,
               'idealMaxColLength' => $ideal_max_col_length > 0 ? $ideal_max_col_length : 10,
               'menuLayout' => $desktop_main_menu_layout,
@@ -343,6 +343,37 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       ];
     }
     return $columns_tree;
+  }
+
+  /**
+   * Helper function to build the graphql query dynamically.
+   *
+   * @param int $depth
+   *   Define the depth of the query.
+   *
+   * @return string
+   *   The graphql query to fetch data using API.
+   */
+  public function getRcsCategoryMenuQuery($depth = 0) {
+    $fieldsToFetch = 'children_count
+        children {
+          id
+          level
+          name
+          include_in_menu
+          url_path
+          url_key
+          show_on_dpt
+          position
+          is_anchor
+          display_view_all
+          ';
+
+    if ($depth > 0) {
+      $fieldsToFetch .= $this->getRcsCategoryMenuQuery($depth - 1);
+    }
+    $fieldsToFetch .= '}';
+    return $fieldsToFetch;
   }
 
 }

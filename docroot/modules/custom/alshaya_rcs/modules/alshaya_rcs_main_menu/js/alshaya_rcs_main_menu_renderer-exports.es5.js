@@ -9,7 +9,6 @@ exports.render = function render(
 ) {
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
-
   if (inputs.length !== 0) {
     // Get the L1 menu list element.
     const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
@@ -54,7 +53,11 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
     return;
   }
 
+  // @todo build menu item path prefix.
   const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
+  // @todo remove this when API return the correct path.
+  levelObj.url_path = `${menuPathPrefixFull}${levelObj.url_path}`;
+
   const levelIdentifier = `level-${level}`;
   const ifChildren = levelObj.children && levelObj.children.length > 0;
 
@@ -64,16 +67,15 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
     clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
   }
   else {
+    // For non-clickable the placeholder name is different.
+    levelObj.name1 = levelObj.name;
     clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
   }
 
   // If menu has no children further, return with actual markup.
   if (!ifChildren) {
     clonePhEle.find('ul').remove();
-    return clonePhEle[0]
-      .outerHTML
-      .replace(/#rcs.category.name#[1-9]?/g, levelObj.name)
-      .replace("#rcs.category.url_path#", `/${menuPathPrefixFull}${levelObj.url_path}/`);
+    return navRcsReplacePh(clonePhEle, levelObj);
   }
 
   // If menu has children further.
@@ -141,11 +143,47 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
   }
 
   clonePhEle.find('ul > div:first-child').append(levelHtml);
+  return navRcsReplacePh(clonePhEle, levelObj);
+};
 
-  return clonePhEle[0]
-    .outerHTML
-    .replace(/#rcs.category.name#[1-9]?/g, levelObj.name)
-    .replace("#rcs.category.url_path#", `/${menuPathPrefixFull}${levelObj.url_path}/`);
+/**
+ * It will take the element, replace the navigation placeholders
+ * in that and return the output Html.
+ */
+const navRcsReplacePh = function (phElement, entity) {
+  const langcode = drupalSettings.path.currentLanguage;
+
+  // Identify all the field placeholders and get the replacement
+  // value. Parse the html to find all occurrences at apply the
+  // replacement.
+  rcsPhReplaceEntityPh(phElement[0].outerHTML, 'category', entity, langcode)
+    .forEach(function eachReplacement(r) {
+      const fieldPh = r[0];
+      const entityFieldValue = r[1];
+
+      $(`:contains('${fieldPh}')`)
+        .each(function eachEntityPhReplace() {
+          $(phElement).html(
+            $(phElement)
+              .html()
+              .replace(fieldPh, entityFieldValue)
+          );
+        });
+
+      //":contains" only returns the elements for which the
+      // placeholder is part of the content, it won't return the
+      // elements for which the placeholder is part of the
+      // attribute values. We are now fetching all the elements
+      // which have placeholders in the attributes and we
+      // apply the replacement.
+      for (const attribute of ['href']) {
+        $(`[${attribute} *= '${fieldPh}']`, phElement)
+          .each(function eachEntityPhAttributeReplace() {
+            $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
+          });
+      }
+    });
+  return phElement[0].outerHTML;
 };
 
 /**
@@ -158,5 +196,5 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
 const filterAvailableItems = function (catArray) {
   return catArray.filter(
     innerCatArray => (innerCatArray.include_in_menu === 1)
-    );
+  );
 };

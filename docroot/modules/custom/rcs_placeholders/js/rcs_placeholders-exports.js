@@ -163,7 +163,7 @@ rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
           }
         });
 
-        if (entityFieldValue[langcode] !== undefined) {
+        if (entityFieldValue && entityFieldValue[langcode] !== undefined) {
           entityFieldValue = entityFieldValue[langcode];
         }
       }
