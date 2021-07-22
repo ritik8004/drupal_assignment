@@ -14,7 +14,7 @@
  * @ingroup themeable
  */
 #}
-{% extends '@alshaya_rcs/node--rcs-product--full.html.twig' %}
+{% extends '@alshaya_rcs_magento_placeholders/node--rcs-product--full.html.twig' %}
 {% set attributes = attributes.addClass('magazine-layout-node') %}
 {% block mainContent %}
   <div class="content__main">
@@ -92,7 +92,7 @@
 
         <div class="basic-details-wrapper">
           <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
-            {% include "@alshaya_rcs/rcs-sku-base-form.html.twig" %}
+            {% include "@alshaya_rcs_magento_placeholders/rcs-sku-base-form.html.twig" %}
           </div>
           <div class="modal-share-this">
             <span class="share-icon">{{  'Share'|t }}</span>
