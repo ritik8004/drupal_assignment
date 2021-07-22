@@ -156,7 +156,7 @@ class SKUFieldsManager {
     $config->setData($fields)->save();
 
     $this->entityTypeManager->clearCachedDefinitions();
-    $this->entityDefinitionUpdateManager->applyUpdates();
+    $this->entityDefinitionUpdateManager->getChangeList();
 
     $fields_removed = [
       $field_code => $field,
@@ -226,7 +226,7 @@ class SKUFieldsManager {
     $config->setData($existing_fields)->save();
 
     if ($apply_updates) {
-      $this->entityDefinitionUpdateManager->applyUpdates();
+      $this->entityDefinitionUpdateManager->getChangeList();
     }
   }
 
