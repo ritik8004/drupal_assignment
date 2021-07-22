@@ -201,9 +201,8 @@ class StoresFinderConfigForm extends ConfigFormBase {
       $marker_upload = $form_state->getValue('marker_upload');
       if (!empty($marker_upload)) {
         $source = $marker_upload->getFileUri();
-        $destination = $this->fileSystem->basename($source);
-        $dest_path = file_build_uri($destination);
-        $filename = $this->fileSystem->copy($source, $dest_path);
+        $destination = file_build_uri($this->fileSystem->basename($source));
+        $filename = $this->fileSystem->copy($source, $destination);
         $marker_path = $filename;
       }
       else {
