@@ -2,8 +2,22 @@ import Drupal from '../../../../../../core/misc/drupal.es6';
 
 export const drupalSettings = {
   cart: {
-    url: 'v1',
-    store: 'en_gb',
+    url: '/rest/kwt_en',
+    site_country_code: {
+      site_code: 'vs',
+      country_code: 'kw',
+    },
+    address_fields: {
+      "default": {
+        "kw": [
+          "area",
+          "address_apartment_segment",
+        ]
+      }
+    },
+    exception_messages: {
+      "This product is out of stock.": "OOS",
+    },
   },
   path: {
     currentLanguage: 'en',

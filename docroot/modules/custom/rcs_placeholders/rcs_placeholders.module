@@ -145,6 +145,8 @@ function _rcs_placeholders_get_placeholder_entity_view(string $entity_type, stri
 function rcs_placeholders_page_attachments(array &$attachments) {
   // These are the attributes that which will be search for replacement of
   // tokens.
+  // To add/remove attributes from this list, just do it in
+  // hook_page_attachments_alter().
   $attachments['#attached']['drupalSettings']['rcsPhSettings'] = [];
 
   $attributes = [
@@ -159,9 +161,6 @@ function rcs_placeholders_page_attachments(array &$attachments) {
     'id',
     'value',
   ];
-
-  // Allow other modules to add more attributes or remove exsiting ones.
-  \Drupal::moduleHandler()->alter('rcs_placeholders_placeholder_attributes', $attributes);
 
   $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = $attributes;
 }

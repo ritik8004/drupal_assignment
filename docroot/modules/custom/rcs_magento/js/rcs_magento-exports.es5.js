@@ -12,7 +12,6 @@
  */
 exports.invokeApi = async function (request) {
   const headers = {};
-  const langcode = drupalSettings.backend_language_prefix[request.language];
 
   if (typeof request.headers !== 'undefined') {
     request.headers.forEach(function (header) {
@@ -21,7 +20,7 @@ exports.invokeApi = async function (request) {
   }
 
   return jQuery.ajax({
-    url: drupalSettings.cart.url + '/' + langcode + '/' + request.uri,
+    url: drupalSettings.alshayaRcs.commerceBackend.baseUrl + '/' + request.uri,
     method: request.method,
     headers,
     data: request.data,

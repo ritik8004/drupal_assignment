@@ -51,6 +51,10 @@ class ProxyController {
       // In case of errors, return the error response.
       $response = $e->getResponse();
     }
+    catch (\Exception $e) {
+      // In case of other exception return exception response.
+      $response = $e->getResponse();
+    }
 
     return new Response(
       $response->getBody(),

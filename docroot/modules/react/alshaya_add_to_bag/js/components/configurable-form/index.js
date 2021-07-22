@@ -1,5 +1,5 @@
 import React from 'react';
-import { debounce } from 'lodash';
+import _debounce from 'lodash/debounce';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import FormElement from '../form-element';
 import {
@@ -32,7 +32,7 @@ export default class ConfigurableForm extends React.Component {
     this.formRef = React.createRef();
 
     // Add debounce for the form Add button handler.
-    this.onAddClicked = debounce(this.onAddClicked, 300);
+    this.onAddClicked = _debounce(this.onAddClicked, 300);
 
     // Check max sale quantity limit for the display Sku.
     const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productData)

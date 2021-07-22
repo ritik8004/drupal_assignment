@@ -1,4 +1,4 @@
-import isEmpty from 'lodash/isEmpty';
+import _isEmpty from 'lodash/isEmpty';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
 import { logger } from './utility';
@@ -32,8 +32,8 @@ window.commerceBackend.saveApplePayPayment = (data) => {
     },
   };
   return addPaymentMethodInCart(cartActions.cartPaymentUpdate, paymentData).then((response) => {
-    if (!isEmpty(response.response_message)
-      && !isEmpty(response.response_message.status)
+    if (!_isEmpty(response.response_message)
+      && !_isEmpty(response.response_message.status)
       && response.response_message.status === 'success') {
       return {
         data: {
@@ -45,8 +45,8 @@ window.commerceBackend.saveApplePayPayment = (data) => {
     return response;
   }).catch((response) => {
     logger.error('Error while finalizing payment. Error message: @message, Code: @code.', {
-      '@message': !isEmpty(response.error) ? response.error.message : response,
-      '@code': !isEmpty(response.error) ? response.error.error_code : '',
+      '@message': !_isEmpty(response.error) ? response.error.message : response,
+      '@code': !_isEmpty(response.error) ? response.error.error_code : '',
     });
 
     return response;
