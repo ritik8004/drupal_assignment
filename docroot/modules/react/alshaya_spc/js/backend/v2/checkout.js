@@ -2110,12 +2110,6 @@ window.commerceBackend.placeOrder = async (data) => {
 
   return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
     .then((response) => {
-      if (_isEmpty(response.data)
-        || (!_isUndefined(response.data.error) && response.data.error)
-      ) {
-        return response;
-      }
-
       const result = {
         success: true,
         isAbsoluteUrl: false,
@@ -2139,6 +2133,12 @@ window.commerceBackend.placeOrder = async (data) => {
         });
 
         return { data: result };
+      }
+
+      if (_isEmpty(response.data)
+        || (!_isUndefined(response.data.error) && response.data.error)
+      ) {
+        return response;
       }
 
       const orderId = parseInt(response.data, 10);
