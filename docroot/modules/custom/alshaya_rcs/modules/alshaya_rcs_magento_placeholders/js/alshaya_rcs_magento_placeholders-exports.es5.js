@@ -83,6 +83,17 @@ exports.render = function render(
       html += deliveryOptionsWrapper.html();
       break;
 
+    case "navigation_menu":
+      // Process rcs navigation renderer, if available.
+      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
+        html += globalThis.renderRcsNavigationMenu.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;

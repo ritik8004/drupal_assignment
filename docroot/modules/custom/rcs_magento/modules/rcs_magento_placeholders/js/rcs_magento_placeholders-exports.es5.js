@@ -172,13 +172,46 @@ exports.getEntity = async function getEntity(langcode) {
 };
 
 exports.getData = async function getData(placeholder, params, entity, langcode) {
-  let result = null;
+  const request = {
+    uri: '',
+    method: 'GET',
+    headers: [],
+    language: langcode,
+  };
 
+  let response = null;
+  let result = null;
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
     // Just return empty string so that render() function gets called later.
     case 'delivery-option':
       result = '';
+      break;
+
+    case 'navigation_menu':
+      // Early return if the root category is undefined.
+      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
+        return null;
+      }
+
+      // Prepare request parameters.
+      request.uri += "graphql";
+      request.method = "POST",
+      request.headers.push(["Content-Type", "application/json"]);
+
+      request.data = JSON.stringify({
+        query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
+            ${drupalSettings.alshayaRcs.navigationMenu.query}
+          }
+        }`
+      });
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      // Get exact data from response.
+      if (response !== null) {
+        // @todo: Need to verify the structure with MDC team.
+        result = response.data.category.children[0].children;
+      }
       break;
 
     default:

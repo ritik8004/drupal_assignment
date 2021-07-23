@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_main_menu
+  theme:
+    - alshaya_white_label
+id: alshayarcsmainmenu
+# @Todo: Use alshaya whitelabel and then move it to current theme.
+theme: alshaya_white_label
+region: pre_content
+weight: -20
+provider: null
+plugin: alshaya_rcs_main_menu
+settings:
+  id: alshaya_rcs_main_menu
+  label: 'Alshaya rcs main menu'
+  provider: alshaya_rcs_main_menu
+  label_display: '0'
+visibility: {  }
