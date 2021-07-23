@@ -199,7 +199,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
 
-      // @todo: Make a config for this query and pass it from the backend.
       request.data = JSON.stringify({
         query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
             ${drupalSettings.alshayaRcs.navigationMenu.query}

@@ -292,9 +292,15 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   }
 
   /**
-   * Column data after menu algo is applied.
+   * Helper func to re-structure term array same as in V1.
+   *
+   * @param array $term_data
+   *   Array for taxonomy term data.
+   *
+   * @return array
+   *   Column tree array with the same structure as V1.
    */
-  protected function getColumnDataMenuAlgo($term_data) {
+  protected function getColumnDataMenuAlgo(array $term_data) {
     $columns_tree = [];
     foreach ($term_data as $l2s) {
       $ideal_max_col_length = 10;
