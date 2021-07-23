@@ -24,7 +24,7 @@ import WithModal from '../with-modal';
 import { makeFullName } from '../../../utilities/cart_customer_util';
 import {
   getCncSectionDescription,
-} from '../../../utilities/cnc_collection_points_util';
+} from '../../../utilities/cnc_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 

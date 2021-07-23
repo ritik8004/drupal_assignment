@@ -9,7 +9,7 @@ import {
 } from '../../../utilities/checkout_util';
 import {
   getCncSectionTitle,
-} from '../../../utilities/cnc_collection_points_util';
+} from '../../../utilities/cnc_util';
 
 export default class DeliveryInformation extends React.Component {
   showEmpty = (cart) => {
