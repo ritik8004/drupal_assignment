@@ -4,6 +4,7 @@
  * @file
  * Functions around module install.
  */
+
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
 
