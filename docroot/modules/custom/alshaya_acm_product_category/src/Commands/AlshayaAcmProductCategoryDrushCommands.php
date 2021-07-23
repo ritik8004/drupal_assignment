@@ -118,8 +118,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     // Get tid of all the parent product category.
     $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
 
-    // Start using PHP's built in file handler functions to create a temporary
-    // file.
+    // Path where we want to export the csv file.
     $path = "public://exports/v2/";
     if ($this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY)) {
       $location = $this->fileSystem->createFilename($options['file-name'] . '.csv', $path);
@@ -164,7 +163,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    */
   protected function getRequiredFields() {
     return [
-      'id',
+      'field_commerce_id',
       'field_show_in_lhn',
       'field_show_in_app_navigation',
       'field_mobile_only_dpt_page_link',
@@ -191,6 +190,12 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
 
   /**
    * Get required term data for export.
+   *
+   * @param string $term_id
+   *   The term id for which we need data.
+   *
+   * @return array
+   *   An array of data required for the term.
    */
   protected function getTermData(string $term_id) {
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
@@ -200,6 +205,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     foreach ($fields as $field) {
       // Proceed only if field is present.
       if ($term->hasField($field)) {
+        // Assigning empty value to maintain the CSV file mapping.
+        $data[$field] = '';
         // Process all the fields based on machine name.
         switch ($field) {
           case 'field_plp_group_category_img':
@@ -230,6 +237,13 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             $target_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($value);
             if ($target_term) {
               $data[$field] = $target_term->label();
+            }
+            break;
+
+          case 'field_plp_group_category_desc':
+            $value = $term->get($field)->getValue();
+            if ($value) {
+              $data[$field] = $value['value'];
             }
             break;
 
