@@ -603,6 +603,9 @@ class AlshayaSpcController extends ControllerBase {
     $build = $this->addCheckoutConfigSettings($build);
 
     $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
+    if ($cc_config->get('checkout_click_collect_collection_points_enabled')) {
+      $build['#attached']['library'][] = 'alshaya_white_label/checkout-pudo-aramex';
+    }
     return $build;
   }
 
