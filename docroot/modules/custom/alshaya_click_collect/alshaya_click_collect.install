@@ -5,6 +5,24 @@
  * Install file for alshaya_click_collect.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config to toggle click and collect collection points.
+ */
+function alshaya_click_collect_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_click_collect.settings'],
+    'alshaya_click_collect',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

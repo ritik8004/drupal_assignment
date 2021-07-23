@@ -531,6 +531,7 @@ class AlshayaSpcController extends ControllerBase {
           'cnc_enabled' => $cnc_enabled,
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
+          'cnc_collection_points_enabled' => $cc_config->get('checkout_click_collect_collection_points_enabled'),
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
           'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
