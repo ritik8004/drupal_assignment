@@ -11,6 +11,7 @@ import {
   cartErrorCodes,
   getDefaultErrorMessage,
   getExceptionMessageType,
+  getProcessedErrorMessage,
 } from './error';
 import cartActions from '../../utilities/cart_actions';
 import { removeStorageInfo } from '../../utilities/storage';
@@ -192,31 +193,48 @@ const handleResponse = (apiResponse) => {
     // Throw an error to prevent further javascript execution.
     throw new Error('The customer token is invalid.');
     //
-  } else if (response.status === 404) {
-    // Client error responses.
-    response.data.error = true;
-    response.data.error_code = 404;
-    response.data.error_message = response.data.message;
-    //
   } else if (response.status !== 200) {
-    // All other responses.
+    // Set default values.
     response.data.error = true;
-    if (typeof response.data.message !== 'undefined') {
-      response.data.error_message = getDefaultErrorMessage();
+    response.data.error_message = getDefaultErrorMessage();
 
-      // Token replacement for magento responses.
-      if (!_isUndefined(response.data.parameters)) {
-        response.data.message = Drupal.formatString(response.data.message, { '%1': response.data.parameters[0] });
-      }
+    // Check for empty resonse data.
+    if (_isNull(response) || _isUndefined(response.data)) {
+      logger.error('Error while doing MDC api. Response result is empty. Status code: @code', {
+        '@code': response.status,
+      });
+      response.data.error_code = 500;
+      //
+    } else if (!_isUndefined(response.data.message) && !_isEmpty(response.data.message)) {
+      // Process message.
+      response.data.error_message = getProcessedErrorMessage(response);
 
-      const errorCode = (typeof response.data.error_code !== 'undefined') ? response.data.error_code : '-';
-      logger.error(`Error while doing MDC api call. Error message: ${response.data.message}, Code: ${errorCode}, Response code: ${response.status}.`);
+      // Log the error message.
+      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+        '@message': response.data.error_message,
+        '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
+        '@response_code': response.status,
+      });
 
-      if (response.status === 400 && typeof response.data.error_code !== 'undefined' && response.data.error_code === cartErrorCodes.cartCheckoutQuantityMismatch) {
+      // The following case happens when there is a stock mismatch between
+      // Magento and OMS.
+      if (response.status === 400 && typeof response.data.code !== 'undefined' && response.data.code === cartErrorCodes.cartCheckoutQuantityMismatch) {
         response.data.error_code = cartErrorCodes.cartCheckoutQuantityMismatch;
       } else {
         response.data.error_code = 500;
       }
+      //
+    } else if (!_isUndefined(response.data.messages) && !_isEmpty(response.data.messages)
+      && !_isUndefined(response.data.messages.error) && !_isEmpty(response.data.messages.error)
+    ) {
+      // Other messages.
+      const error = response.data.messages.error[0];
+      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+        '@message': error.message,
+      });
+      response.data.error_code = error.code;
+      response.data.error_message = error.message;
+      //
     }
   } else if (typeof response.data.messages !== 'undefined' && typeof response.data.messages.error !== 'undefined') {
     const error = response.data.messages.error.shift();

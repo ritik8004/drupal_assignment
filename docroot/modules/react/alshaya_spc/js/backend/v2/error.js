@@ -1,3 +1,7 @@
+import _isArray from 'lodash/isArray';
+import _isEmpty from 'lodash/isEmpty';
+import _isUndefined from 'lodash/isUndefined';
+
 /**
  * Contains cart error codes.
  */
@@ -36,8 +40,49 @@ const getExceptionMessageType = (msg) => {
   return type;
 };
 
+/**
+ * Wrapper function to process the response error message from Magento.
+ *
+ * @param {object} response
+ *   Response data.
+ *
+ * @return {string}
+ *   Processed message.
+ */
+const getProcessedErrorMessage = (response) => {
+  let message = { ...response.data.message };
+
+  if (_isUndefined(response.data.parameters) || _isEmpty(response.data.parameters)) {
+    return message;
+  }
+
+  const parameters = { ...response.data.parameters };
+  const replacements = {};
+
+  // If parameters is an array, we loop the array to create the replacements object.
+  if (_isArray(parameters)) {
+    for (let i = 0; i < parameters.length; i++) {
+      replacements[`%${i + 1}`] = parameters[i];
+    }
+  } else {
+    // If parameters is an object, we loop the object to add % to each key.
+    Object.keys(parameters).forEach((key) => {
+      replacements[`%${key}`] = parameters[key];
+    });
+  }
+
+  // Replace placeholders.
+  message = Drupal.formatString(message, replacements);
+
+  // Strip html tags.
+  message = message.replace(/(<([^>]+)>)/gi, '');
+
+  return message;
+};
+
 export {
   cartErrorCodes,
   getDefaultErrorMessage,
   getExceptionMessageType,
+  getProcessedErrorMessage,
 };
