@@ -69,6 +69,8 @@ variables:
   language_delivery_type: 'خدمة التوصيل للمنزل'
   language_payment_type: ''
   cs_payment_type: 'Credit Card/Debit Card'
+  np_plp_store: 'Ardiya, Kuwait'
+  np_plp_language_store: 'العارضية ، الكويت'
   cnc_delivery_type: 'Click and Collect'
   language_cnc_delivery_type: 'Click and Collect'
   language_cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
