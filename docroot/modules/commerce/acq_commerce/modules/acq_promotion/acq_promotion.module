@@ -1,8 +1,5 @@
 <?php
 
-use Drupal\node\NodeInterface;
-use Drupal\Core\Cache\Cache;
-
 /**
  * @file
  * Acquia Commerce promotions module file.
