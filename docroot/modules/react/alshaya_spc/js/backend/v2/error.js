@@ -55,19 +55,18 @@ const getProcessedErrorMessage = (response) => {
   if (_isUndefined(response.data.parameters) || _isEmpty(response.data.parameters)) {
     return message;
   }
-
-  const parameters = { ...response.data.parameters };
+  const params = response.data.parameters;
   const replacements = {};
 
   // If parameters is an array, we loop the array to create the replacements object.
-  if (_isArray(parameters)) {
-    for (let i = 0; i < parameters.length; i++) {
-      replacements[`%${i + 1}`] = parameters[i];
+  if (_isArray(params)) {
+    for (let i = 0; i < params.length; i++) {
+      replacements[`%${i + 1}`] = params[i];
     }
   } else {
     // If parameters is an object, we loop the object to add % to each key.
-    Object.keys(parameters).forEach((key) => {
-      replacements[`%${key}`] = parameters[key];
+    Object.keys(params).forEach((key) => {
+      replacements[`%${key}`] = params[key];
     });
   }
 
