@@ -13,7 +13,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Add translations - CORE 23468.
  */
 function alshaya_algolia_react_update_8004() {
-  _alshaya_algolia_react_translations();
+  $strings = [
+    'clear filters' => [
+      'ar' => 'مسح الاختيارات',
+    ],
+    'Promotions' => [
+      'ar' => 'العروض',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.promotions')
     ->set('settings.label', 'العروض')
     ->save();
@@ -142,28 +150,10 @@ function alshaya_algolia_react_install() {
     'clear filters' => [
       'ar' => 'مسح الاختيارات',
     ],
-    'promotions' => [
+    'Promotions' => [
       'ar' => 'العروض',
     ],
   ];
 
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Method for new translations.
- *
- * @return void
- */
-function _alshaya_algolia_react_translations() {
-  // Add translations.
-  $strings = [
-    'clear filters' => [
-      'ar' => 'مسح الاختيارات',
-    ],
-    'promotions' => [
-      'ar' => 'العروض',
-    ],
-  ];
   alshaya_i18n_save_translations($strings);
 }
