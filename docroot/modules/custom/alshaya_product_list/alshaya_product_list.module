@@ -16,6 +16,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\alshaya_product_list\Plugin\Block\AlshayaAlgoliaReactProductList;
 
 /**
  * Implements hook_search_api_db_query_alter().
@@ -306,5 +307,15 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
     \Drupal::logger('alshaya_product_list')->error('Error occured while alter product list options list resource response alter : @message', [
       '@message' => $e->getMessage(),
     ]);
+  }
+}
+
+/**
+ * Implements hook_algolia_react_option_list_information().
+ */
+function alshaya_product_list_algolia_react_option_list_information_alter( $query_type, &$page_type, &$page_sub_type) {
+  if ($query_type === 'optionlist') {
+    $page_type = AlshayaAlgoliaReactProductList::PAGE_TYPE;
+    $page_sub_type = AlshayaAlgoliaReactProductList::PAGE_SUB_TYPE;
   }
 }

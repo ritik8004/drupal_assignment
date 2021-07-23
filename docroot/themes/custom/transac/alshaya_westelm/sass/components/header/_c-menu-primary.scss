@@ -96,7 +96,8 @@
 }
 
 .toggle--sign,
-.main--menu ul.menu--one__list:not(.secondary--main--menu__list) {
+.main--menu ul.menu--one__list:not(.secondary--main--menu__list),
+.c-menu-secondary.block--display {
   @include breakpoint($only-mobile) {
     width: 19.6875rem !important;
   }

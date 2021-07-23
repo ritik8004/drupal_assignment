@@ -590,7 +590,8 @@ const getCncStores = async (lat, lon) => {
   }
 
   const response = await getCartStores(lat, lon);
-  if (!_isUndefined(response.data) && !_isUndefined(response.data.error)) {
+  if (_isEmpty(response.data)
+    || (!_isUndefined(response.data) && !_isUndefined(response.data.error))) {
     // In case of errors, return the response with error.
     return response;
   }

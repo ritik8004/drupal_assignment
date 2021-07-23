@@ -51,17 +51,17 @@ class SKUTypeForm extends EntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %label SKU type.', [
+        $this->messenger()->addMessage($this->t('Created the %label SKU type.', [
           '%label' => $sku_type->label(),
         ]));
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %label SKU type.', [
+        $this->messenger()->addMessage($this->t('Saved the %label SKU type.', [
           '%label' => $sku_type->label(),
         ]));
     }
-    $form_state->setRedirectUrl($sku_type->urlInfo('collection'));
+    $form_state->setRedirectUrl($sku_type->toUrl('collection'));
   }
 
 }

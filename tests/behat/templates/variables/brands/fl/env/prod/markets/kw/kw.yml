@@ -5,5 +5,5 @@ variables:
   spc_pdp_page: ''
   product_listing_page_url: '/shop-mens/accessories/bags/'
   np_plp_product_page: '/buy-new-balance-athletics-mens-t-shirt-athletic-grey.html/'
-  np_plp_page: '/shop-womens/'
+  np_plp_page: '/shop-kids/upto-4-years/clothing/'
   new_pdp_enabled: TRUE
