@@ -50,10 +50,10 @@ const getExceptionMessageType = (msg) => {
  *   Processed message.
  */
 const getProcessedErrorMessage = (response) => {
-  let message = { ...response.data.message };
+  let msg = response.data.message;
 
   if (_isUndefined(response.data.parameters) || _isEmpty(response.data.parameters)) {
-    return message;
+    return msg;
   }
   const params = response.data.parameters;
   const replacements = {};
@@ -71,12 +71,12 @@ const getProcessedErrorMessage = (response) => {
   }
 
   // Replace placeholders.
-  message = Drupal.formatString(message, replacements);
+  msg = Drupal.formatString(msg, replacements);
 
   // Strip html tags.
-  message = message.replace(/(<([^>]+)>)/gi, '');
+  msg = msg.replace(/(<([^>]+)>)/gi, '');
 
-  return message;
+  return msg;
 };
 
 export {
