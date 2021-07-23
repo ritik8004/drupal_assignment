@@ -12,9 +12,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -94,20 +92,6 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $entityTypeManager;
 
   /**
-   * Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
-
-  /**
-   * Entity Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
-   */
-  private $entityManager;
-
-  /**
    * Language Manager service.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -168,10 +152,6 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Database connection object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Type Manager.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $queryFactory
-   *   Query Factory.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
-   *   Entity Manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $langaugeManager
    *   Language Manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -193,8 +173,6 @@ class AcqSkuDrushCommands extends DrushCommands {
                               LoggerChannelFactoryInterface $loggerChannelFactory,
                               Connection $connection,
                               EntityTypeManagerInterface $entityTypeManager,
-                              QueryFactory $queryFactory,
-                              EntityManagerInterface $entityManager,
                               LanguageManagerInterface $langaugeManager,
                               ModuleHandlerInterface $moduleHandler,
                               CacheBackendInterface $linkedSkuCache,
@@ -210,8 +188,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->drupalLogger = $loggerChannelFactory->get('acq_sku');
     $this->connection = $connection;
     $this->entityTypeManager = $entityTypeManager;
-    $this->queryFactory = $queryFactory;
-    $this->entityManager = $entityManager;
     $this->languageManager = $langaugeManager;
     $this->moduleHandler = $moduleHandler;
     $this->linkedSkuCache = $linkedSkuCache;
