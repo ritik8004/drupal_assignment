@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @search @flsaprod @vsaeprod @vssaprod @tbskwprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
+@javascript @account @smoke @auth @search @flsaprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
 Feature: Test search functionality
 
   Background:
@@ -19,9 +19,7 @@ Feature: Test search functionality
     And the element ".pager__item button" should exist
     And I click jQuery ".js-pager__items .button" element on page
     And I wait for AJAX to finish
-    And I click on "#react-algolia-searchbar-clear-button" element
-    And I wait 5 seconds
-    Then I should be on homepage
+    Then I click on "#react-algolia-searchbar-clear-button" element
 
   @desktop
   Scenario: Verify Search Results Message for No Results
@@ -52,11 +50,4 @@ Feature: Test search functionality
     When I follow "{language_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    And the element ".plp-facet-product-filter #sort_by" should exist
-    And I click jQuery ".plp-facet-product-filter #sort_by h3.c-facet__title" element on page
-    And I wait for AJAX to finish
-    And I wait 5 seconds
-    Then I should see an ".plp-facet-product-filter #sort_by li.facet-item" element
-    And I click jQuery ".plp-facet-product-filter #sort_by li.facet-item a.facet-item__value" element on page
-    And I wait for AJAX to finish
-    And I should see an "#plp-hits" element
+    And the element ".plp-facet-product-filter" should exist
