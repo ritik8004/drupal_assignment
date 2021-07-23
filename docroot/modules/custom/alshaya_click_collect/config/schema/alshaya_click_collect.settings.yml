@@ -34,3 +34,6 @@ alshaya_click_collect.settings:
     checkout_click_collect_unavailable:
       type: label
       label: 'Checkout: Click and Collect unavailable'
+    checkout_click_collect_collection_points_enabled:
+      type: boolean
+      label: 'Checkout: Click and Collect collection points enabled'
