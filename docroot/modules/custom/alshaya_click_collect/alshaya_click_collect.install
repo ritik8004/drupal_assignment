@@ -30,6 +30,9 @@ function alshaya_click_collect_update_8003() {
     'select your preferred collection point' => [
       'ar' => 'select your preferred collection point ar',
     ],
+    'find your collection point' => [
+      'ar' => 'find your collection point ar',
+    ]
   ];
   alshaya_i18n_save_translations($strings);
 }
@@ -78,6 +81,9 @@ function alshaya_click_collect_string_translations() {
     ],
     'select your preferred collection point' => [
       'ar' => 'select your preferred collection point ar',
+    ],
+    'find your collection point' => [
+      'ar' => 'find your collection point ar',
     ],
   ];
   alshaya_i18n_save_translations($strings);

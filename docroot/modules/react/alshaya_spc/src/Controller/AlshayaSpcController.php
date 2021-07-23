@@ -514,6 +514,21 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
+    $strings[] = [
+      'key' => 'cnc_collection_point',
+      'value' => $this->t('Collection Point'),
+    ];
+
+    $strings[] = [
+      'key' => 'cnc_find_your_collection_point',
+      'value' => $this->t('find your collection point'),
+    ];
+
+    $strings[] = [
+      'key' => 'cnc_select',
+      'value' => $this->t('select'),
+    ];
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
