@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPromotion;
-use Drupal\alshaya_product_list\Plugin\Block\AlshayaAlgoliaReactProductList;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Customer controller to add front page.
@@ -26,13 +26,23 @@ class AlgoliaController extends ControllerBase {
   protected $configHelper;
 
   /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlgoliaController constructor.
    *
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig $config_helper
    *   Algolia React Config Helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module services.
    */
-  public function __construct(AlshayaAlgoliaReactConfig $config_helper) {
+  public function __construct(AlshayaAlgoliaReactConfig $config_helper, ModuleHandlerInterface $module_handler) {
     $this->configHelper = $config_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -41,6 +51,7 @@ class AlgoliaController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
+      $container->get('module_handler'),
     );
   }
 
@@ -87,8 +98,7 @@ class AlgoliaController extends ControllerBase {
     }
     // Brand List page.
     elseif ($query_type === 'optionlist') {
-      $page_type = AlshayaAlgoliaReactProductList::PAGE_TYPE;
-      $page_sub_type = AlshayaAlgoliaReactProductList::PAGE_SUB_TYPE;
+      $this->moduleHandler->alter('algolia_react_option_list_information', $page_type, $page_sub_type);
     }
 
     $config = $this->configHelper->getAlgoliaReactCommonConfig($page_type, $page_sub_type);
