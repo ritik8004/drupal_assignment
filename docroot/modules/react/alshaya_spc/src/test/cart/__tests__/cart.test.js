@@ -94,7 +94,7 @@ describe('Cart', () => {
       expect(result).toEqual({
         data: {
           error: true,
-          error_code: 404,
+          error_code: 500,
           message: 'Not found',
           error_message: 'Not found',
         },
@@ -145,13 +145,14 @@ describe('Cart', () => {
     });
 
     it('Test response for cart quantity mismatch', async () => {
-      axios.mockResolvedValue({ data: { message: 'Invalid cart data', error_code: 9010 }, status: 400 });
+      axios.mockResolvedValue({ data: { message: 'Invalid cart data', code: 9010 }, status: 400 });
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
           error: true,
+          code: 9010,
           error_code: 9010,
-          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
+          error_message: 'Invalid cart data',
           message: 'Invalid cart data',
         },
         status: 400,
@@ -166,7 +167,7 @@ describe('Cart', () => {
         data: {
           error: true,
           error_code: 500,
-          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
+          error_message: 'Something is wrong',
           message: 'Something is wrong',
         },
         status: 405,
