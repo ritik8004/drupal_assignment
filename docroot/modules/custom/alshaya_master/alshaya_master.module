@@ -320,8 +320,7 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
       /** @var \Drupal\Core\File\FileSystemInterface $file_system */
       $source_path = $values['logo_upload']->getFileUri();
       $destination_path = file_build_uri(\Drupal::service('file_system')->basename($source_path));
-      $filepath = \Drupal::service('file_system')->copy($source_path, $destination_path);
-      $logo_path = file_build_uri($filepath);
+      $logo_path = \Drupal::service('file_system')->copy($source_path, $destination_path);
     }
 
     if (!empty($logo_path) && empty($logo_upload)) {
