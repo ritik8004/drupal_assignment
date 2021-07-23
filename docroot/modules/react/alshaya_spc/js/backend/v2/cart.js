@@ -221,7 +221,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     return window.commerceBackend.getCart();
   }
 
-  let apiCallAttempts = 1;
+  let apiCallAttempts = 0;
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (response.data.error === true) {
@@ -239,7 +239,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
           10,
         ) > apiCallAttempts
       ) {
-        // @todo test attempts.
         apiCallAttempts += 1;
 
         // Create a new cart.

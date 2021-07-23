@@ -2,5 +2,4 @@ variables:
   spc_product_listing_page: '/shop-women/trending-now/make-days-are-back/'
   spc_basket_page: '/shop-women/trending-now/make-days-are-back/'
   product_listing_page_url: 'shop-women/trending-now/make-days-are-back/'
-  spc_pdp_page: ''
-  governorate: ''
+  spc_pdp_page: 'buy-wash-bag-transparent.html'
