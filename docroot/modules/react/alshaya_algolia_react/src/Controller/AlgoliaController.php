@@ -9,6 +9,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
+use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPromotion;
+use Drupal\alshaya_product_list\Plugin\Block\AlshayaAlgoliaReactProductList;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Customer controller to add front page.
@@ -67,37 +70,34 @@ class AlgoliaController extends ControllerBase {
    * @return \Drupal\Core\Cache\CacheableJsonResponse
    *   Settings as JSON.
    */
-  public function getSettings() {
+  public function getSettings(Request $request) {
     AlshayaRequestContextManager::updateDefaultContext('app');
-    $config = $this->configHelper->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactAutocomplete::PAGE_TYPE);
+    $query_type = $request->query->get('type');
+    $page_type = AlshayaAlgoliaReactAutocomplete::PAGE_TYPE;
+    $page_sub_type = '';
+    // PLP.
+    if ($query_type === 'plp') {
+      $page_type = AlshayaAlgoliaReactPLP::PAGE_TYPE;
+      $page_sub_type = AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE;
+    }
+    // Promotions List Page.
+    elseif ($query_type === 'promotion') {
+      $page_type = AlshayaAlgoliaReactPromotion::PAGE_TYPE;
+      $page_sub_type = AlshayaAlgoliaReactPromotion::PAGE_SUB_TYPE;
+    }
+    // Brand List page.
+    elseif ($query_type === 'optionlist') {
+      $page_type = AlshayaAlgoliaReactProductList::PAGE_TYPE;
+      $page_sub_type = AlshayaAlgoliaReactProductList::PAGE_SUB_TYPE;
+    }
+
+    $config = $this->configHelper->getAlgoliaReactCommonConfig($page_type, $page_sub_type);
 
     $settings = [];
     $settings['application_id'] = $config['commonAlgoliaSearch']['application_id'];
     $settings['api_key'] = $config['commonAlgoliaSearch']['api_key'];
-    $settings['indexName'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['indexName'];
-    $settings['filters'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['filters'];
-    $settings['gallery']['showHoverImage'] = $config['commonReactTeaserView']['gallery']['showHoverImage'];
-    $settings['gallery']['showThumbnails'] = $config['commonReactTeaserView']['gallery']['showThumbnails'];
-    $settings['swatches'] = $config['commonReactTeaserView']['swatches'];
-
-    return new JsonResponse($settings);
-  }
-
-  /**
-   * Callback to get Algolia settings for PLP.
-   *
-   * @return \Drupal\Core\Cache\CacheableJsonResponse
-   *   Settings as JSON.
-   */
-  public function getPlpSettings() {
-    AlshayaRequestContextManager::updateDefaultContext('app');
-    $config = $this->configHelper->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE);
-
-    $settings = [];
-    $settings['application_id'] = $config['commonAlgoliaSearch']['application_id'];
-    $settings['api_key'] = $config['commonAlgoliaSearch']['api_key'];
-    $settings['indexName'] = $config[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
-    $settings['filters'] = $config[AlshayaAlgoliaReactPLP::PAGE_TYPE]['filters'];
+    $settings['indexName'] = $config[$page_type]['indexName'];
+    $settings['filters'] = $config[$page_type]['filters'];
     $settings['gallery']['showHoverImage'] = $config['commonReactTeaserView']['gallery']['showHoverImage'];
     $settings['gallery']['showThumbnails'] = $config['commonReactTeaserView']['gallery']['showThumbnails'];
     $settings['swatches'] = $config['commonReactTeaserView']['swatches'];
