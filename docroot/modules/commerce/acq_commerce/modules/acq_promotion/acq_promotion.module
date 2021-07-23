@@ -26,15 +26,3 @@ function acq_promotion_acq_sku_clean_synced_data_alter(&$context_results) {
     ];
   }
 }
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function acq_promotion_node_presave(NodeInterface $node) {
-  if ($node->bundle() != 'acq_promotion') {
-    return;
-  }
-  // Invalidate cache.
-  Cache::invalidateTags(['node_type:acq_promotion']);
-}
-

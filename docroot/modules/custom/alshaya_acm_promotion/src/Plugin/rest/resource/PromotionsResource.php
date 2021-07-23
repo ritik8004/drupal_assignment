@@ -183,7 +183,7 @@ class PromotionsResource extends ResourceBase {
 
     $cacheability = new CacheableMetadata();
     $cacheability->addCacheContexts(['url.query_args:context']);
-    $cacheability->addCacheTags(['node_type:acq_promotion']);
+    $cacheability->addCacheTags(['node_list:acq_promotion']);
 
     if (!empty($nids)) {
       $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
