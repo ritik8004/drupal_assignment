@@ -197,7 +197,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       // Prepare request parameters.
       request.uri += "graphql";
       request.method = "POST",
-        request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Content-Type", "application/json"]);
 
       // @todo: Make a config for this query and pass it from the backend.
       request.data = JSON.stringify({

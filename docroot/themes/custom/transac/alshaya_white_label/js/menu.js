@@ -22,6 +22,11 @@
 
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
+      // Return is the placeholders text there in code.
+      if ($('.menu__list-item:contains(#rcs.category.name#)').length > 0) {
+        return;
+      }
+
       $('html').once('setMenuWidth').each(function () {
         setMenuWidth();
       });

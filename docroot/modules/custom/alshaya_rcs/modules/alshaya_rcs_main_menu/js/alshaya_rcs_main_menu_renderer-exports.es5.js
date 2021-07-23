@@ -56,7 +56,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
   // @todo build menu item path prefix.
   const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   // @todo remove this when API return the correct path.
-  levelObj.url_path = `${menuPathPrefixFull}${levelObj.url_path}`;
+  levelObj.url_path = `/${menuPathPrefixFull}${levelObj.url_path}/`;
 
   const levelIdentifier = `level-${level}`;
   const ifChildren = levelObj.children && levelObj.children.length > 0;

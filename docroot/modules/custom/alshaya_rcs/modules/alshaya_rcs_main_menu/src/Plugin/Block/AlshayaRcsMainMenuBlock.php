@@ -294,49 +294,28 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   /**
    * Column data after menu algo is applied.
    */
-  public function getColumnDataMenuAlgo($term_data) {
+  protected function getColumnDataMenuAlgo($term_data) {
     $columns_tree = [];
     foreach ($term_data as $l2s) {
-      $max_nb_col = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('max_nb_col');
-      $ideal_max_col_length = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('ideal_max_col_length');
-      $max_nb_col = $max_nb_col > 0 ? $max_nb_col : 6;
-      $ideal_max_col_length = $ideal_max_col_length > 0 ? $ideal_max_col_length : 10;
+      $ideal_max_col_length = 10;
 
-      do {
-        $columns = [];
-        $col = 0;
-        $col_total = 0;
-        $reprocess = FALSE;
+      $columns = [];
+      $col = 0;
+      $col_total = 0;
 
-        foreach ($l2s['child'] as $l3s) {
-          // 2 below means L2 item + one blank line for spacing).
-          $l2_cost = 2 + count($l3s['child']);
+      foreach ($l2s['child'] as $l3s) {
+        // With static placeholders we have it max 4.
+        $l2_cost = 4;
 
-          // If we are detecting a longer column than the expected size
-          // we iterate with new max.
-          if ($l2_cost > $ideal_max_col_length) {
-            $ideal_max_col_length = $l2_cost;
-            $reprocess = TRUE;
-            break;
-          }
-
-          if ($col_total + $l2_cost > $ideal_max_col_length) {
-            $col++;
-            $col_total = 0;
-          }
-
-          // If we have too many columns we try with more items per column.
-          if ($col >= $max_nb_col) {
-            $ideal_max_col_length++;
-            break;
-          }
-
-          $columns[$col][] = $l3s;
-
-          $col_total += $l2_cost;
-
+        if ($col_total + $l2_cost > $ideal_max_col_length) {
+          $col++;
+          $col_total = 0;
         }
-      } while ($reprocess || $col >= $max_nb_col);
+
+        $columns[$col][] = $l3s;
+        $col_total += $l2_cost;
+      }
+
       $columns_tree[$l2s['label']] = [
         'l1_object' => $l2s,
         'columns' => $columns,
@@ -354,7 +333,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    * @return string
    *   The graphql query to fetch data using API.
    */
-  public function getRcsCategoryMenuQuery($depth = 0) {
+  protected function getRcsCategoryMenuQuery($depth = 0) {
     $fieldsToFetch = 'children_count
         children {
           id
