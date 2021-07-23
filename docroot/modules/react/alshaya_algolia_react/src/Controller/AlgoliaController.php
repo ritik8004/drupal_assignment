@@ -97,9 +97,7 @@ class AlgoliaController extends ControllerBase {
       $page_sub_type = AlshayaAlgoliaReactPromotion::PAGE_SUB_TYPE;
     }
     // Brand List page.
-    elseif ($query_type === 'optionlist') {
-      $this->moduleHandler->alter('algolia_react_option_list_information', $page_type, $page_sub_type);
-    }
+    $this->moduleHandler->alter('algolia_react_option_list_information', $query_type, $page_type, $page_sub_type);
 
     $config = $this->configHelper->getAlgoliaReactCommonConfig($page_type, $page_sub_type);
 
