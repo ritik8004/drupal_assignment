@@ -220,6 +220,8 @@ const handleResponse = (apiResponse) => {
       // Magento and OMS.
       if (response.status === 400 && typeof response.data.code !== 'undefined' && response.data.code === cartErrorCodes.cartCheckoutQuantityMismatch) {
         response.data.error_code = cartErrorCodes.cartCheckoutQuantityMismatch;
+      } else if (response.status === 404) {
+        response.data.error_code = 404;
       } else {
         response.data.error_code = 500;
       }

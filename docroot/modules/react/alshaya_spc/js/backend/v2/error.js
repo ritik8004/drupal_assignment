@@ -66,7 +66,7 @@ const getProcessedErrorMessage = (response) => {
   } else {
     // If parameters is an object, we loop the object to add % to each key.
     Object.keys(params).forEach((key) => {
-      replacements[`%${key}`] = params[key];
+      replacements[`%${key}`] = !_isEmpty(params[key]) ? params[key] : '';
     });
   }
 
