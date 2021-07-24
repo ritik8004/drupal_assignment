@@ -2575,7 +2575,7 @@ JS;
       $page->find('css', 'button.select-store')->click();
       $script = <<<JS
         jQuery("input#fullname").val("Test User");
-        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var maxlength = jQuery( ).attr('maxlength');
         var value = "55667788";
         if (maxlength == 9) {
             value = value + "9";

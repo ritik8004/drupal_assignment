@@ -1,4 +1,4 @@
-@javascript @auth @bazaar-voice @hmkwuat @bbwkwuat
+@javascript @auth @bazaar-voice
 Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
 
   Background:
@@ -28,15 +28,15 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
     And I wait 5 seconds
     And I fill in "title" with "My Review"
     And I wait 5 seconds
-    And I fill in "reviewtext" with "Product Quality is a good, overall great product. Very smooth and presentable. Great fabric Product Quality is a good, overall great product."
+    And I fill in "reviewtext" with "Product Quality is a good."
     And I click jQuery "#isrecommended-error > span:nth-child(1)" element on page
     And I wait 5 seconds
-    And I fill in "usernickname" with "Test123User4"
+    And I fill in "usernickname" with "Test User"
     And I wait 5 seconds
     And I scroll to the "#preview-write-review" element
     And I click jQuery "#preview-write-review" element on page
     And I wait 5 seconds
-    Then the element "#post-review-message" should exist
+    Then the element ".exception-error" should exist
 
   @language
   Scenario: As an Authenticated user, I should be able to write a review for a Product in second language
@@ -55,7 +55,7 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
     And I wait 5 seconds
     And I fill in "title" with "My Review"
     And I wait 5 seconds
-    And I fill in "reviewtext" with "Product Quality is a good, overall great product. Very smooth and presentable. Great fabric Product Quality is a good, overall great product."
+    And I fill in "reviewtext" with "Product Quality is a good."
     And I click jQuery "#isrecommended-error > span:nth-child(1)" element on page
     And I wait 5 seconds
     And I fill in "usernickname" with "Testuser1234"
@@ -63,4 +63,4 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
     And I scroll to the "#preview-write-review" element
     And I click jQuery "#preview-write-review" element on page
     And I wait 5 seconds
-    Then the element "#post-review-message" should exist
+    Then the element ".exception-error" should exist
