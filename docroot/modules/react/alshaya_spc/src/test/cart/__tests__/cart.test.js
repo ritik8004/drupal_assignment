@@ -94,7 +94,7 @@ describe('Cart', () => {
       expect(result).toEqual({
         data: {
           error: true,
-          error_code: 500,
+          error_code: 404,
           message: 'Not found',
           error_message: 'Not found',
         },
