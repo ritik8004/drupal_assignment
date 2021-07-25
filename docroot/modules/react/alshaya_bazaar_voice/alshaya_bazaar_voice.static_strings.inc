@@ -91,10 +91,6 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('Please enter a minimum of %minLength characters for %fieldTitle.'),
     ],
     [
-      'key' => 'text_max_chars_limit_error',
-      'value' => t('Please enter a maximum of %maxLength characters for %fieldTitle.'),
-    ],
-    [
       'key' => 'reviews',
       'value' => t('reviews'),
     ],
