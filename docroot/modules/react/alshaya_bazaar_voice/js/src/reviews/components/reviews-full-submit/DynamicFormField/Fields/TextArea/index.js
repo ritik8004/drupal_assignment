@@ -12,7 +12,7 @@ class TextArea extends React.Component {
         ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label })
         : '';
     }
-  }
+  };
 
   render() {
     const {
