@@ -202,7 +202,6 @@ const handleResponse = (apiResponse) => {
         '@code': response.status,
       });
       response.data.error_code = 500;
-      //
     } else if (!_isUndefined(response.data.message) && !_isEmpty(response.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(response);
