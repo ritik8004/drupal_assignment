@@ -28,6 +28,15 @@ const FixedFields = ({
         </div>
         )}
       <div className="spc-checkout-contact-information-fields">
+        <ConditionalView
+          condition={(drupalSettings.cnc_collection_points_enabled === true
+            && drupalSettings.user.uid > 0)}
+        >
+          <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" defaultChecked />
+          <label htmlFor="spc-checkout-contact-info-checkbox">
+            {Drupal.t('The same person placing the order will collect the order.')}
+          </label>
+        </ConditionalView>
         <ConditionalView condition={showFullName}>
           <TextField
             type="text"
