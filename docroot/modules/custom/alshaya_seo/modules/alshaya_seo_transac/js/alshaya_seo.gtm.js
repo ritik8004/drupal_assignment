@@ -243,7 +243,7 @@ const productRecommendationsSuffix = 'pr-';
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
         if (drupalSettings.user.uid && loginType === undefined) {
-          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , drupalSettings.userDetails.userEmailID);
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
