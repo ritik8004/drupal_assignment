@@ -20,9 +20,16 @@ use Drupal\user\Entity\Role;
  * [6.4.0] Uninstall redundant drupal core themes.
  */
 function alshaya_transac_update_8136() {
-  // Uninstalling the unused drupal core themes
-  \Drupal::service('theme_installer')->uninstall(['claro']);
-  \Drupal::service('theme_installer')->uninstall(['bartik']);
+  // Remove redundant drupal core themes.
+  $theme_handler = \Drupal::service('theme_handler');
+  // We set a admin theme as part of alshaya_admin module.
+  if ($theme_handler->themeExists('claro')) {
+    \Drupal::service('theme_installer')->uninstall(['claro']);
+  }
+  // We set a site theme as part of brand module.
+  if ($theme_handler->themeExists('bartik')) {
+    \Drupal::service('theme_installer')->uninstall(['bartik']);
+  }
 }
 
 /**
@@ -965,10 +972,15 @@ function alshaya_transac_install() {
   \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
 
   // Remove redundant drupal core themes.
+  $theme_handler = \Drupal::service('theme_handler');
   // We set a admin theme as part of alshaya_admin module.
-  \Drupal::service('theme_installer')->uninstall(['claro']);
-  // We set a brand theme as part of brand module.
-  \Drupal::service('theme_installer')->uninstall(['bartik']);
+  if ($theme_handler->themeExists('claro')) {
+    \Drupal::service('theme_installer')->uninstall(['claro']);
+  }
+  // We set a site theme as part of brand module.
+  if ($theme_handler->themeExists('bartik')) {
+    \Drupal::service('theme_installer')->uninstall(['bartik']);
+  }
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac');
