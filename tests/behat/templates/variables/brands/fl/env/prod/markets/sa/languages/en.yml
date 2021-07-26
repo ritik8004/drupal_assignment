@@ -31,7 +31,7 @@ variables:
   spc_search_keyword: 'nike'
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
-  create_account: 'create an account'
+  create_account: 'Create an Account'
   sign_in: 'Sign in'
   find_store: 'Find a Store'
   language_link: 'العربية'
