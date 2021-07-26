@@ -8,5 +8,6 @@ services:
       - '@entity_type.manager'
       - '@metatag.manager'
       - '@metatag.token'
+      - '@logger.factory'
     tags:
       - { name: drush.command }

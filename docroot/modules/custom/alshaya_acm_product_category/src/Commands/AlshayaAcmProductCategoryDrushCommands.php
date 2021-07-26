@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\metatag\MetatagManagerInterface;
 use Drupal\metatag\MetatagToken;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Expose drush commands for alshaya_acm_product_category.
@@ -58,6 +59,13 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
   protected $metatagToken;
 
   /**
+   * The logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * AlshayaAcmProductCategoryDrushCommands constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\Service\ProductCategorySyncManager $category_sync_manager
@@ -72,6 +80,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *   The Metatag manager service.
    * @param \Drupal\metatag\MetatagToken $metatag_token
    *   The Metatag token service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   LoggerFactory object.
    */
   public function __construct(
     ProductCategorySyncManager $category_sync_manager,
@@ -79,7 +89,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     FileSystemInterface $file_system,
     EntityTypeManagerInterface $entity_type_manager,
     MetatagManagerInterface $metatag_manager,
-    MetatagToken $metatag_token
+    MetatagToken $metatag_token,
+    LoggerChannelFactoryInterface $logger_factory
     ) {
     parent::__construct();
     $this->categorySyncManager = $category_sync_manager;
@@ -88,6 +99,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $this->entityTypeManager = $entity_type_manager;
     $this->metatagManager = $metatag_manager;
     $this->metatagToken = $metatag_token;
+    $this->loggerFactory = $logger_factory;
   }
 
   /**
@@ -119,7 +131,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
 
     // Path where we want to export the csv file.
-    $path = "public://exports/v2/";
+    $path = 'public://exports/v2/';
     if ($this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY)) {
       $location = $this->fileSystem->createFilename($options['file-name'] . '.csv', $path);
       $handle = fopen($location, 'wb');
@@ -148,10 +160,10 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       // storing this file anywhere in the filesystem.
       fclose($handle);
       $file_path = file_create_url($location);
-      $this->output()->writeln("Data exported successfully at Location: '{$file_path}'");
+      $this->loggerFactory->get('alshaya_acm_product_category')->notice("Data exported successfully at Location: '{$file_path}'");
     }
     else {
-      $this->output()->writeln('Something went wrong, Please check if the folder permissions are proper.');
+      $this->loggerFactory->get('alshaya_acm_product_category')->warning('Something went wrong, Please check if the folder permissions are proper.');
     }
   }
 
