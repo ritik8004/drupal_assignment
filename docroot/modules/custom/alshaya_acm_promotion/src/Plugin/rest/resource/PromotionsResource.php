@@ -183,7 +183,7 @@ class PromotionsResource extends ResourceBase {
 
     $cacheability = new CacheableMetadata();
     $cacheability->addCacheContexts(['url.query_args:context']);
-    $cacheability->addCacheTags(['node_type:acq_promotion']);
+    $cacheability->addCacheTags(['node_list:acq_promotion']);
 
     if (!empty($nids)) {
       $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
@@ -200,7 +200,7 @@ class PromotionsResource extends ResourceBase {
           'path' => $node_url->getGeneratedUrl(),
           'commerce_id' => (int) $node->get('field_acq_promotion_rule_id')->first()->getString(),
           'promo_sub_tpe' => $node->get('field_alshaya_promotion_subtype')->first()->getString(),
-          'promo_desc' => $node->get('field_acq_promotion_description')->first() ? $node->get('field_acq_promotion_description')->first()->getValue()['value'] : '',
+          'promo_desc' => $node->get('field_acq_promotion_description')->first() ? trim(strip_tags($node->get('field_acq_promotion_description')->first()->getValue()['value'])) : '',
           'promo_label' => $node->get('field_acq_promotion_label')->getString(),
         ];
 
