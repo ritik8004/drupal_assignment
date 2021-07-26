@@ -2,6 +2,7 @@ import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../utilities/strings';
+import { getCncModalButtonText } from '../../../../utilities/cnc_util';
 
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
@@ -52,7 +53,7 @@ const StoreItem = ({
               type="button"
               onClick={(e) => onStoreFinalize(e, store.code)}
             >
-              {getStringMessage('cnc_select_this_store')}
+              {getStringMessage(getCncModalButtonText())}
             </button>
           </div>
         </ConditionalView>

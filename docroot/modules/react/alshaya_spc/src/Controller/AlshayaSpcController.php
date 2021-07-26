@@ -514,6 +514,26 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
+    $cnc_collection_points_enabled = $cc_config->get('checkout_click_collect_collection_points_enabled');
+
+    // Add collection point string if feature enabled.
+    if ($cnc_collection_points_enabled == TRUE) {
+      $strings[] = [
+        'key' => 'cnc_collection_point',
+        'value' => $this->t('Collection Point'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_find_your_collection_point',
+        'value' => $this->t('find your collection point'),
+      ];
+
+      $strings[] = [
+        'key' => 'cnc_select',
+        'value' => $this->t('select'),
+      ];
+    }
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
@@ -531,7 +551,7 @@ class AlshayaSpcController extends ControllerBase {
           'cnc_enabled' => $cnc_enabled,
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
-          'cnc_collection_points_enabled' => $cc_config->get('checkout_click_collect_collection_points_enabled'),
+          'cnc_collection_points_enabled' => $cnc_collection_points_enabled,
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
           'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
