@@ -169,6 +169,10 @@
         padding-top: 1.125rem;
         padding-bottom: 1.125rem;
       }
+
+      &-text {
+        word-break: break-word;
+      }
     }
 
     &-moderation-block {

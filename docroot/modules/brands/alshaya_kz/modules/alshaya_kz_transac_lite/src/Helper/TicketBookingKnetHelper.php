@@ -161,7 +161,7 @@ class TicketBookingKnetHelper extends KnetHelper {
       $this->bookingPayment->updateTicketDetails($data, 1);
       $booking_info = $this->bookingPayment->getTicketDetails($data['quote_id']);
       $this->bookingPayment->bookingConfirmationMail($booking_info);
-      // @todo - send sms.
+      // @todo send sms.
     }
     else {
       return $this->processKnetFailed($state_key);

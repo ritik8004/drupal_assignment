@@ -62,6 +62,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 33, 'ar' => 30],
     ],
+    'jo' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
+    ],
   ],
   'tbs_prod' => [
     'url' => 'https://ri.store.alshaya.com',
@@ -83,6 +86,9 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
     ],
   ],
   // Mothercare.

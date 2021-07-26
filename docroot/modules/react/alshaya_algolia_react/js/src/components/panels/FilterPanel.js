@@ -14,7 +14,9 @@ const FilterPanel = (props) => {
   const finalClassName = `c-facet c-collapse-item ${propClass}`;
 
   return (
-    <div className={finalClassName} id={id}>
+    // Remove language suffix for _product_list index.
+    // ID to be attr_size instead of attr_size.en.
+    <div className={finalClassName} id={id.split('.')[0]}>
       <h3 className="c-facet__title c-collapse__title">{header}</h3>
       {children}
     </div>

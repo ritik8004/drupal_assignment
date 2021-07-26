@@ -43,7 +43,8 @@ const productRecommendationsSuffix = 'pr-';
       $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        if (typeof drupalSettings[productKey][sku] === 'undefined'
+          || typeof drupalSettings[productKey][sku]['group'][variant] === 'undefined') {
           return;
         }
 
@@ -239,16 +240,15 @@ const productRecommendationsSuffix = 'pr-';
           var socialWindow = true;
         }
 
-        var loginType = localStorage.getItem('socialType');
-        // Check for socialtype in localstorage.
-        if (drupalSettings.user.uid && loginType === null) {
-          Drupal.alshaya_seo_gtm_push_login_type('Self Login');
+        // Check for user login type in cookies.
+        var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
+        if (drupalSettings.user.uid && loginType === undefined) {
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , drupalSettings.userDetails.userEmailID);
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
-        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
-          Drupal.alshaya_seo_gtm_push_login_type(loginType);
-          Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
+        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID && loginType !== undefined) {
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           localStorage.setItem('userID', userDetails.userID);
         }
 
@@ -256,7 +256,7 @@ const productRecommendationsSuffix = 'pr-';
         if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           localStorage.setItem('userID', userDetails.userID);
-          localStorage.removeItem('socialType');
+          $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -643,7 +643,7 @@ const productRecommendationsSuffix = 'pr-';
        * Tracking clicks on fitler & sort options.
        */
       if (listName !== undefined) {
-        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
+        if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page' || listName === 'Promotion') {
           var section = listName;
           if (listName.indexOf('PLP') > -1) {
             // As we have used the same markup to display search results page
@@ -655,6 +655,11 @@ const productRecommendationsSuffix = 'pr-';
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
+            // For promotion page.
+            if (listName === 'Promotion') {
+              facetTitle = $(this).parent('ul').attr('data-drupal-facet-alias').replaceAll("_", " ");
+              selectedVal = $(this).find('a').attr('data-drupal-facet-item-value');
+            }
             var data = {
               event: 'filter',
               siteSection: section.trim(),
@@ -669,10 +674,12 @@ const productRecommendationsSuffix = 'pr-';
           $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
             var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
             sortValue.trim();
+            var facetTitle = $('.fieldset-legend').first().html();
             var data = {
               event: 'sort',
               siteSection: section.trim(),
-              sortValue: sortValue
+              filterType: facetTitle,
+              filterValue: sortValue
             };
 
             dataLayer.push(data);
@@ -1013,8 +1020,11 @@ const productRecommendationsSuffix = 'pr-';
     };
 
     dataLayer.push(data);
-  };
 
+    // Trigger Product Details View
+    var quickView = 'yes';
+    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView);
+  };
   /**
    * Helper function to push lead events.
    *
@@ -1028,12 +1038,14 @@ const productRecommendationsSuffix = 'pr-';
    * Helper funciton to push Login & Register events.
    *
    * @param eventAction
+   * @param loginType
    */
-  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction) {
+  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction, loginType = null) {
     dataLayer.push({
       event: 'eventTracker',
       eventCategory: 'Login & Register',
       eventAction: eventAction,
+      eventLabel: loginType,
       eventValue: 0,
       nonInteraction: 0
     });
@@ -1202,8 +1214,10 @@ const productRecommendationsSuffix = 'pr-';
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
+   * @param {string} quickView
+   *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
@@ -1217,6 +1231,20 @@ const productRecommendationsSuffix = 'pr-';
         }
       }
     };
+    if (quickView) {
+      data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: drupalSettings.gtm.currency,
+          detail: {
+            actionField: {
+              list: listName
+            },
+            products: [product]
+          }
+        }
+      };
+    }
 
     dataLayer.push(data);
   }
@@ -1234,11 +1262,18 @@ const productRecommendationsSuffix = 'pr-';
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
+    var listName = $('body').attr('gtm-list-name') ? $('body').attr('gtm-list-name') : drupalSettings.path.currentPath;
+    if (listName === 'search') {
+      listName = 'Search Results Page';
+    }
     var productData = {
       event: 'addToCart',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
         add: {
+          actionField: {
+            list: listName
+          },
           products: [
             product
           ]
@@ -1313,14 +1348,24 @@ const productRecommendationsSuffix = 'pr-';
     if ($.type(message) !== 'string') {
       message = JSON.stringify(message);
     }
-
+    var getCartId = localStorage.getItem('last_selected_payment');
+    var cartObject = localStorage.getItem('cart_data');
+    var cartId = 0;
+    if (category && getCartId) {
+      var extractCartId = getCartId.split(':');
+      cartId = extractCartId[1];
+    }
+    else if (category && cartObject) {
+      cartObject = JSON.parse(cartObject);
+      cartId = cartObject.cart.cart_id;
+    }
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
       eventAction: message,
       eventPlace: 'Error occurred on ' + window.location.href,
-      eventValue: 0,
+      eventValue: cartId,
       nonInteraction: 0,
     };
 
@@ -1342,8 +1387,11 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
+  // Push the errors to GA if enabled.
   // If TrackJS is enabled we let it track the errors.
-  if (window.TrackJS === undefined) {
+  if (drupalSettings.gtm.log_errors_to_ga !== undefined
+    && drupalSettings.gtm.log_errors_to_ga
+    && window.TrackJS === undefined) {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);
@@ -1353,19 +1401,5 @@ const productRecommendationsSuffix = 'pr-';
       return true;
     };
   }
-
-  /**
-   * Helper function to push events when user logins.
-   *
-   * @param loginType
-   */
-  Drupal.alshaya_seo_gtm_push_login_type = function (loginType) {
-    dataLayer.push({
-      event: 'Login',
-      eventCategory: 'Login Success',
-      eventLabel: loginType,
-    });
-
-  };
 
 })(jQuery, Drupal, dataLayer);

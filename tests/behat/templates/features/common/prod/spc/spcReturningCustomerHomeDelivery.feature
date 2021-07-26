@@ -1,4 +1,4 @@
-@javascript @returnUser @codPayment @homeDelivery
+@javascript @returnUser @codPayment @homeDelivery @vssaprod
 Feature: SPC Checkout Home Delivery COD for returning customer
 
   Background:

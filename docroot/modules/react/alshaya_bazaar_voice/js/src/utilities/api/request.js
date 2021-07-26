@@ -7,7 +7,7 @@ export function getLanguageCode() {
 
 export function getbazaarVoiceSettings(productId = undefined) {
   const settings = [];
-  if (productId !== undefined) {
+  if (productId !== undefined && Object.keys(drupalSettings.productInfo[productId]).length > 0) {
     settings.productid = productId;
     settings.reviews = drupalSettings.productInfo[productId].alshaya_bazaar_voice;
   } else {
@@ -29,12 +29,18 @@ export function getUserBazaarVoiceSettings() {
 
 export function getUserDetails(productId = undefined) {
   const settings = [];
-  settings.user = drupalSettings.bazaarvoiceUserDetails;
-  if (productId !== undefined) {
-    settings.productReview = drupalSettings.productInfo[productId].productReview;
-  } else {
-    settings.productReview = drupalSettings.bazaarvoiceUserDetails.productReview;
+
+  if (drupalSettings.bazaarvoiceUserDetails !== undefined) {
+    settings.user = drupalSettings.bazaarvoiceUserDetails;
+    if (productId !== undefined && Object.keys(drupalSettings.productInfo[productId]).length > 0) {
+      settings.productReview = drupalSettings.productInfo[productId].productReview;
+    } else if (drupalSettings.bazaarvoiceUserDetails.productReview !== undefined) {
+      settings.productReview = drupalSettings.bazaarvoiceUserDetails.productReview;
+    } else {
+      settings.productReview = null;
+    }
   }
+
   return settings;
 }
 

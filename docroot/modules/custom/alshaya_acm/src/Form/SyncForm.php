@@ -255,7 +255,7 @@ class SyncForm extends FormBase {
           }
         }
 
-        drupal_set_message($this->t('Product categories synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Product categories synchronization complete.'), 'status');
 
         // If any term deleted.
         if (!empty($deleted_orphans)) {
@@ -274,7 +274,7 @@ class SyncForm extends FormBase {
 
       case $this->t('Synchronize product options'):
         $this->productOptionshelper->synchronizeProductOptions();
-        drupal_set_message($this->t('Product options synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Product options synchronization complete.'), 'status');
         break;
 
       case $this->t('Synchronize listed SKUs'):
@@ -288,7 +288,7 @@ class SyncForm extends FormBase {
           }
         }
 
-        drupal_set_message($this->t('Selected products synchronization launched.'), 'status');
+        $this->messenger()->addMessage($this->t('Selected products synchronization launched.'), 'status');
         break;
 
       case $this->t('Synchronize ALL products'):
@@ -309,7 +309,7 @@ class SyncForm extends FormBase {
           implode(' and ', $message_addition) . ' languages'
         );
 
-        drupal_set_message($this->t('Full product synchronization launched on @addition.', [
+        $this->messenger()->addMessage($this->t('Full product synchronization launched on @addition.', [
           '@addition' => $message_addition,
         ]), 'status');
         break;
@@ -317,17 +317,17 @@ class SyncForm extends FormBase {
       case $this->t('Synchronize promotions'):
         $this->promotionsManager->syncPromotions();
         $this->queueHelper->processQueues(['acq_promotion_attach_queue']);
-        drupal_set_message($this->t('Promotions synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Promotions synchronization complete.'), 'status');
         break;
 
       case $this->t('Synchronize stores'):
         $this->storesManager->syncStores();
-        drupal_set_message($this->t('Stores synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Stores synchronization complete.'), 'status');
         break;
 
       case $this->t('Synchronize areas'):
         $this->addressBookManager->syncAreas();
-        drupal_set_message($this->t('Areas synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Areas synchronization complete.'), 'status');
         break;
     }
   }
@@ -336,7 +336,7 @@ class SyncForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    drupal_set_message($this->t('Syncing data can have a performance impact. Please use with caution.'), 'warning');
+    $this->messenger()->addMessage($this->t('Syncing data can have a performance impact. Please use with caution.'), 'warning');
 
     foreach ($this->languageManager->getLanguages() as $language) {
       $options[$language->getId()] = $language->getName();

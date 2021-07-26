@@ -11,7 +11,6 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\file\FileInterface;
@@ -69,13 +68,6 @@ class ProductSyncResource extends ResourceBase {
   private $entityManager;
 
   /**
-   * Drupal Entity Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
-
-  /**
    * I18n Helper.
    *
    * @var \Drupal\acq_commerce\I18nHelper
@@ -120,8 +112,6 @@ class ProductSyncResource extends ResourceBase {
    *   A logger instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
-   *   The query factory.
    * @param \Drupal\acq_sku\CategoryRepositoryInterface $cat_repo
    *   Category Repository instance.
    * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
@@ -142,7 +132,6 @@ class ProductSyncResource extends ResourceBase {
                               array $serializer_formats,
                               LoggerInterface $logger,
                               ConfigFactoryInterface $config_factory,
-                              QueryFactory $query_factory,
                               CategoryRepositoryInterface $cat_repo,
                               ProductOptionsManager $product_options_manager,
                               I18nHelper $i18n_helper,
@@ -152,7 +141,6 @@ class ProductSyncResource extends ResourceBase {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
-    $this->queryFactory = $query_factory;
     $this->categoryRepo = $cat_repo;
     $this->productOptionsManager = $product_options_manager;
     $this->i18nHelper = $i18n_helper;
@@ -173,7 +161,6 @@ class ProductSyncResource extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get(self::class),
       $container->get('config.factory'),
-      $container->get('entity.query'),
       $container->get('acq_sku.category_repo'),
       $container->get('acq_sku.product_options_manager'),
       $container->get('acq_commerce.i18n_helper'),
@@ -266,7 +253,7 @@ class ProductSyncResource extends ResourceBase {
           fwrite($fps[$langcode], '\n');
         }
 
-        $query = $this->queryFactory->get('acq_sku_type');
+        $query = $this->entityManager->getStorage('acq_sku_type')->getQuery();
         $query->condition('id', $product['type']);
         $query->count();
 
@@ -818,7 +805,7 @@ class ProductSyncResource extends ResourceBase {
     if (isset($product['extension'], $product['extension']['media'])) {
       $media = $product['extension']['media'];
 
-      // @TODO: Remove this hard coded fix after getting answer why we have
+      // @todo Remove this hard coded fix after getting answer why we have
       // empty second array index and why all media come in first array index.
       $media = reset($media);
 

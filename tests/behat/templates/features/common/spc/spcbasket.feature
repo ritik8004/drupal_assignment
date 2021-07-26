@@ -32,6 +32,25 @@ Feature: Test basket page
     Then I should see an "#alshaya-algolia-autocomplete" element
     Then I should see an ".plp-facet-product-filter" element
 
+  @desktop @footer
+  Scenario: As a Guest, I should be able to see the footer
+    And I scroll to the ".c-footer" element
+    And the element ".c-footer-primary" should exist
+    And the element ".c-footer-secondary" should exist
+    And the element "#block-shopby" should exist
+    And the element "#block-shopby h3.is-accordion" should exist
+    And the element "#block-aboutbrand" should exist
+    And the element "#block-alshaya-help" should exist
+    And the element "#block-sociallinks" should exist
+    And the element "#edit-email" should exist
+    And I fill in an element having class "#edit-email" with "test@user.com"
+    And I click on "#edit-newsletter" element
+    And I wait 10 seconds
+    And I wait for AJAX to finish
+    Then I should see an "#footer-newsletter-form-wrapper" element
+    And the element ".c-footer-secondary" should exist
+    And the element "#block-copyright" should exist
+
   @mobile
   Scenario: As a Guest, I should be able to see the header and the footer (mobile)
     When I scroll to top
@@ -116,6 +135,28 @@ Feature: Test basket page
     Then I should not see an ".delivery-vat" element
     Then I should see an ".dy-404__headline" element
     Then I should see an ".dy-404__description" element
+
+  @desktop @footer @language
+  Scenario: As a Guest, I should be able to see the footer
+    When I follow "{language_link}"
+    And I wait 10 seconds
+    And I wait for the page to load
+    And I scroll to the ".c-footer" element
+    And the element ".c-footer-primary" should exist
+    And the element ".c-footer-secondary" should exist
+    And the element "#block-shopby" should exist
+    And the element "#block-shopby h3.is-accordion" should exist
+    And the element "#block-aboutbrand" should exist
+    And the element "#block-alshaya-help" should exist
+    And the element "#block-sociallinks" should exist
+    And the element "#edit-email" should exist
+    And I fill in an element having class "#edit-email" with "test@user.com"
+    And I click on "#edit-newsletter" element
+    And I wait 10 seconds
+    And I wait for AJAX to finish
+    Then I should see an "#footer-newsletter-form-wrapper" element
+    And the element ".c-footer-secondary" should exist
+    And the element "#block-copyright" should exist
 
   @language @desktop
   Scenario: As a Guest, I should be able to add more quantity in second language

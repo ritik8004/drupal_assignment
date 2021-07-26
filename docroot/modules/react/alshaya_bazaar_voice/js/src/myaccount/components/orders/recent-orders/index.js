@@ -3,7 +3,6 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import { getUserDetails } from '../../../../utilities/api/request';
 import WriteReviewButton from '../../../../reviews/components/reviews-full-submit';
 import ViewReviewButton from '../view-review-button';
-import { createUserStorage } from '../../../../utilities/user_util';
 
 export default class RecentOrders extends React.Component {
   constructor(props) {
@@ -17,7 +16,6 @@ export default class RecentOrders extends React.Component {
   componentDidMount() {
     const { productId } = this.props;
     const userDetails = getUserDetails(productId);
-    createUserStorage(userDetails.user.userId, userDetails.user.emailId);
     if (userDetails.productReview !== null) {
       this.setState({
         rating: userDetails.productReview.user_rating,

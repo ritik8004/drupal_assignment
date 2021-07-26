@@ -16,7 +16,7 @@ const DynamicFormField = (props) => {
   const fieldProperty = [];
   let readonly = false;
 
-  const { field: defField, productId } = props;
+  const { field: defField, productId, countryCode } = props;
   if (defField.length !== 0
     && defField.length !== 'undefined') {
     Object.entries(defField).forEach(
@@ -37,8 +37,9 @@ const DynamicFormField = (props) => {
         fieldProperty.default_value = userDetails.user.emailId;
         readonly = true;
       } else if (userStorage !== null) {
-        if (userStorage.email !== undefined) {
+        if (userStorage.email !== undefined && userStorage.email !== '') {
           fieldProperty.default_value = userStorage.email;
+          readonly = true;
         }
       }
     } else if (fieldProperty.id === 'usernickname' && userStorage !== null) {
@@ -103,6 +104,12 @@ const DynamicFormField = (props) => {
 
   if (fieldProperty.group_type === 'select'
     && fieldProperty.visible === true) {
+    // Set current country as default value for location field.
+    let addClass = '';
+    if (fieldProperty.id === 'contextdatavalue_location_filter') {
+      fieldProperty.default_value = countryCode;
+      addClass = 'hide-field-select';
+    }
     return (
       <SelectField
         required={fieldProperty.required}
@@ -110,7 +117,7 @@ const DynamicFormField = (props) => {
         label={fieldProperty.title}
         defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         options={fieldProperty.options}
-        visible={fieldProperty.visible}
+        addClass={addClass}
         text={fieldProperty.text}
       />
     );

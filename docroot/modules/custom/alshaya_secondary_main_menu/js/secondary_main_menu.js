@@ -11,14 +11,25 @@
           $('#block-branding, #block-alshayasecondarymainmenu')
             .wrapAll('<div class="secondary-main-menu-wrapper"></div>');
           $('.secondary--main--menu .column').each(function (index) {
-            let menuItemsCount = $(this).find("li.menu--three__list-item").length
-            if (menuItemsCount > 16) {
-              let newColumn = '<div class="column new--column new--column_' + index + '"></div>';
-              $(newColumn).insertAfter($(this));
-              $(this).find("li.menu--three__list-item")
-                .slice(16).appendTo('.new--column_' + index);
+            const menuItemsCount = $(this).find("li.menu--three__list-item").length;
+            const numberOfItems = 16;
+
+            if (menuItemsCount > numberOfItems) {
+              let $pointerElement = $(this);
+              for (let i = 1; i < Math.ceil(menuItemsCount / numberOfItems); i++) {
+                let columnWrapper = '<div class="column new--column new--column_' + index + '"></div>';
+                const $newCol = $(columnWrapper).insertAfter($pointerElement);
+                $pointerElement = $newCol;
+
+                $(this)
+                  .find("li.menu--three__list-item")
+                  .slice(numberOfItems)
+                  .slice(0, numberOfItems)
+                  .appendTo($newCol);
+              }
             }
           })
+
           $('.secondary--main--menu ul > li.menu--one__list-item').each(function () {
             let menuTextLength = $(this).find('> .menu__link-wrapper > .menu__link').text().length;
             if(menuTextLength > 23) {
@@ -34,7 +45,6 @@
           $('#block-alshayamainmenu .secondary--main--menu').show();
           $('.main--menu .promo-wrapper').show();
           $('.secondary-main-menu-header').on('click', function () {
-            $('.secondary--main--menu > ul').toggle();
             $('.secondary-main-menu-header').toggleClass('closed');
           })
         }

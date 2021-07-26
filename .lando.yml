@@ -38,6 +38,7 @@ services:
   edge:
     app_mount: disabled
     type: varnish:4.1
+    scanner: false
     backends:
       - appserver
     ssl: true
@@ -49,11 +50,13 @@ services:
     mem: 64
   pma:
     app_mount: disabled
+    scanner: false
     type: phpmyadmin
     hosts:
       - database
   mailhog:
     app_mount: disabled
+    scanner: false
     type: mailhog:v1.0.0
     portforward: false
     hogfrom:
@@ -78,6 +81,9 @@ tooling:
   blt:
     service: appserver
     cmd: /app/vendor/acquia/blt/bin/blt
+  npm:
+    service: appserver
+    cmd: npm
   xdebug-on:
     service: appserver
     description: Enable xdebug for Apache.
