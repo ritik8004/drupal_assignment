@@ -41,6 +41,9 @@ bazaar_voice.settings:
     pdp_rating_reviews:
       type: boolean
       label: 'Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'
+    show_location_filter:
+      type: boolean
+      label: 'Display location on the left panel in pdp reviews.'
     myaccount_rating_reviews:
       type: boolean
       label: 'Enable/Disable My Account BazaarVoice Ratings and Review Feature.'

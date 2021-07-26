@@ -308,7 +308,7 @@ class Configurable extends SKUPluginBase {
       \Drupal::moduleHandler()->alter('acq_sku_configurable_cart_options', $options, $sku);
 
       // Check if item already in cart.
-      // @TODO: This needs to be fixed further to handle multiple parent
+      // @todo This needs to be fixed further to handle multiple parent
       // products for a child SKU. To be done as part of CORE-7003.
       if ($cart->hasItem($tree_pointer->getSku())) {
         $cart->addItemToCart($tree_pointer->getSku(), $quantity);
@@ -341,7 +341,7 @@ class Configurable extends SKUPluginBase {
     }
     else {
       $message = $this->t('The current selection does not appear to be valid.');
-      drupal_set_message($message);
+      $this->messenger()->addMessage($message);
       // Dispatch event so action can be taken.
       $dispatcher = \Drupal::service('event_dispatcher');
       $exception = new \Exception($message);

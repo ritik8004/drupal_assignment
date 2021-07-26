@@ -62,7 +62,7 @@ function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles
       time(),
       'custom',
       DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
-      DATETIME_STORAGE_TIMEZONE
+      DateTimeItemInterface::STORAGE_TIMEZONE
     );
 
     // Re-use if user exists.
@@ -285,9 +285,11 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   }
 
   if (!empty($values['logo_upload'])) {
-    $filename = file_unmanaged_copy($values['logo_upload']->getFileUri());
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $source = $values['logo_upload']->getFileUri();
+    $destination = file_build_uri(\Drupal::service('file_system')->basename($source));
     $values['default_logo'] = 0;
-    $values['logo_path'] = $filename;
+    $values['logo_path'] = \Drupal::service('file_system')->copy($source, $destination);
   }
 
   // If the user entered a path relative to the system files directory for
@@ -315,8 +317,10 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
     // If the user uploaded a new logo or favicon, save it to a permanent
     // location and use it in place of the default theme-provided file.
     if (!empty($logo_upload)) {
-      $filename = file_unmanaged_copy($logo_upload->getFileUri());
-      $logo_path = $filename;
+      /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+      $source_path = $values['logo_upload']->getFileUri();
+      $destination_path = file_build_uri(\Drupal::service('file_system')->basename($source_path));
+      $logo_path = \Drupal::service('file_system')->copy($source_path, $destination_path);
     }
 
     if (!empty($logo_path) && empty($logo_upload)) {
@@ -357,7 +361,9 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
  */
 function alshaya_master_validate_path($path) {
   // Absolute local file paths are invalid.
-  if (drupal_realpath($path) == $path) {
+  /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+  $realpath = \Drupal::service('file_system')->realpath($path);
+  if ($realpath == $path) {
     return FALSE;
   }
   // A path relative to the Drupal root or a fully qualified URI is valid.
@@ -365,7 +371,9 @@ function alshaya_master_validate_path($path) {
     return $path;
   }
   // Prepend 'public://' for relative file paths within public filesystem.
-  if (file_uri_scheme($path) === FALSE) {
+  /** @var \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface $stream_wrapper_manager */
+  $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
+  if ($stream_wrapper_manager->getScheme($path) === FALSE) {
     $path = 'public://' . $path;
   }
   if (is_file($path)) {
@@ -960,4 +968,11 @@ function _alshaya_master_get_subbrand_logo_image_link() {
   }
 
   return $data;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_master_preprocess_html(&$variables) {
+  $variables['#attached']['library'][] = 'alshaya_master/common_fixes';
 }

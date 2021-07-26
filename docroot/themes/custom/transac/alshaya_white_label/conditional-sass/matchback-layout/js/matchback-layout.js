@@ -127,6 +127,20 @@
           matchbackSlider(variantMatchbackSlider);
         }
       });
+
+      // On matchback product change using attributes like fragnance for grouped products, attach slick on matchback gallery and bind click event to open zoom image in modal.
+      $('article.entity--type-node').once('matchback-variant-group').on('group-item-selected', function () {
+        var variantMatchbackSlider = $(this).find('.cross-sell-product-component-left .machbackSlider');
+        var zoom_wrap = $(this).find('.cross-sell-product-component-left .imagezoom-wrap');
+        zoom_wrap.each(function () {
+          $(this).bind( "click", function () {
+            matchbackZoomModal($(this));
+          });
+        });
+        if (variantMatchbackSlider.length > 0) {
+          matchbackSlider(variantMatchbackSlider);
+        }
+      });
     }
   };
 })(jQuery, Drupal);

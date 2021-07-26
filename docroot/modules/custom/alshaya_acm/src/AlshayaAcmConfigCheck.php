@@ -5,8 +5,8 @@ namespace Drupal\alshaya_acm;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\alshaya_custom\AlshayaCountryManager;
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -76,6 +76,13 @@ class AlshayaAcmConfigCheck {
   protected $configManager;
 
   /**
+   * Module Extension List Manager.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  private $moduleExtensionList;
+
+  /**
    * AlshayaAcmConfigCheck constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -94,6 +101,8 @@ class AlshayaAcmConfigCheck {
    *   Alshaya country manager.
    * @param \Drupal\alshaya_config\AlshayaConfigManager $config_manager
    *   The config manager service.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   Module Extension List Manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleInstallerInterface $module_installer,
@@ -102,7 +111,8 @@ class AlshayaAcmConfigCheck {
                               TimeInterface $date_time,
                               StateInterface $state,
                               AlshayaCountryManager $alshaya_country_manager,
-                              AlshayaConfigManager $config_manager) {
+                              AlshayaConfigManager $config_manager,
+                              ModuleExtensionList $module_extension_list) {
     $this->configFactory = $config_factory;
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
@@ -111,6 +121,7 @@ class AlshayaAcmConfigCheck {
     $this->state = $state;
     $this->alshayaCountryManager = $alshaya_country_manager;
     $this->configManager = $config_manager;
+    $this->moduleExtensionList = $module_extension_list;
   }
 
   /**
@@ -200,6 +211,22 @@ class AlshayaAcmConfigCheck {
       $config->save();
     }
 
+    // Reset keys for kaleyra.settings.
+    $kaleyra_keys = [
+      'api_key',
+      'whatsapp_api_key',
+      'whatsapp_sid',
+    ];
+    $kaleyra_config = $this->configFactory->getEditable('kaleyra.settings');
+    // Checks if config exists
+    // Checks if data in config is not an empty array.
+    if ($kaleyra_config && $kaleyra_config->get()) {
+      foreach ($kaleyra_keys as $kaleyra_key) {
+        $kaleyra_config->set($kaleyra_key, '');
+      }
+      $kaleyra_config->save();
+    }
+
     // Re-configure Simple Oauth.
     $config = $this->configFactory->getEditable('simple_oauth.settings');
     $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
@@ -282,18 +309,18 @@ class AlshayaAcmConfigCheck {
     $this->moduleHandler->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
 
     // Get the expected country code cloned for.
-    $expected_country_code = Unicode::strtolower(Settings::get('country_code'));
+    $expected_country_code = strtolower(Settings::get('country_code'));
 
     // If the target country code does not have related country module, that
     // means we are not using a valid country code which may be on purpose so
     // don't do anything.
-    $modules = system_rebuild_module_data();
+    $modules = $this->moduleExtensionList->getList();
     if (!isset($modules['alshaya_' . $expected_country_code])) {
       return;
     }
 
     // Get the actual country code cloned from.
-    $actual_country_code = Unicode::strtolower(_alshaya_custom_get_site_level_country_code());
+    $actual_country_code = strtolower(_alshaya_custom_get_site_level_country_code());
 
     // Enable the expected country specific module only.
     if ($expected_country_code != $actual_country_code) {

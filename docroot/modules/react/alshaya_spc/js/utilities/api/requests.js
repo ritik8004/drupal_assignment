@@ -1,16 +1,8 @@
-import Axios from 'axios';
 import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
-  getCartApiUrl,
-  getCartForCheckoutApiUrl,
   redirectToCart,
 } from '../get_cart';
-import { restoreCartApiUrl } from '../update_cart';
-import {
-  removeCartFromStorage,
-} from '../storage';
-import i18nMiddleWareUrl from '../i18n_url';
 import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
 
@@ -20,27 +12,18 @@ export const fetchClicknCollectStores = (args) => {
     return new Promise((resolve) => resolve(null));
   }
 
-  const GET_STORE_URL = i18nMiddleWareUrl(
-    `cart/stores/${coords.lat}/${coords.lng}`,
-  );
-  return Axios.get(GET_STORE_URL);
+  return window.commerceBackend.fetchClickNCollectStores(coords);
 };
 
 export const fetchCartData = () => {
-  // If session cookie not exists, no need to process/check.
-  // @TODO: Remove Cookies.get('Drupal.visitor.acq_cart_id') check when we
-  // uninstall alshaya_acm module.
-  if (drupalSettings.user.uid === 0
-    && !Cookies.get('PHPSESSID')
-    && !Cookies.get('Drupal.visitor.acq_cart_id')
-  ) {
-    removeCartFromStorage();
+  if (window.commerceBackend.isAnonymousUserWithoutCart()) {
+    window.commerceBackend.removeCartDataFromStorage();
     return null;
   }
 
   // If reset_cart_storage cookie is set then remove cart from storage.
   if (Cookies.get('reset_cart_storage')) {
-    removeCartFromStorage();
+    window.commerceBackend.removeCartDataFromStorage();
     Cookies.remove('reset_cart_storage');
   }
 
@@ -52,10 +35,11 @@ export const fetchCartData = () => {
   }
 
   if (!cart) {
-    // Prepare api url.
-    const apiUrl = restoreCartApiUrl();
+    return window.commerceBackend.restoreCart().then((response) => {
+      if (response === null) {
+        return null;
+      }
 
-    return Axios.get(apiUrl).then((response) => {
       if (typeof response !== 'object') {
         redirectToCart();
         return null;
@@ -126,10 +110,7 @@ export const fetchCartData = () => {
     return Promise.resolve(cart);
   }
 
-  // Prepare api url.
-  const apiUrl = getCartApiUrl();
-
-  return Axios.get(apiUrl)
+  return window.commerceBackend.getCart()
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
@@ -139,17 +120,15 @@ export const fetchCartData = () => {
 
 export const fetchCartDataForCheckout = () => {
   // Remove cart data from storage every-time we land on checkout page.
-  removeCartFromStorage();
+  window.commerceBackend.removeCartDataFromStorage();
 
   // If session cookie not exists, no need to process/check.
-  if (drupalSettings.user.uid === 0 && !Cookies.get('PHPSESSID')) {
+  if (window.commerceBackend.isAnonymousUserWithoutCart()) {
     return null;
   }
 
   // Prepare api url.
-  const apiUrl = getCartForCheckoutApiUrl();
-
-  return Axios.get(apiUrl)
+  return window.commerceBackend.getCartForCheckout()
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.

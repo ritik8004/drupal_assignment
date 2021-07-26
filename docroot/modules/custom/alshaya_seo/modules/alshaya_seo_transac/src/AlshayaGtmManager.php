@@ -477,6 +477,8 @@ class AlshayaGtmManager {
 
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
+      // Overriding the products name as per CORE-26973.
+      $attributes['gtm-name'] = trim($parent_sku->label());
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
       if (!in_array('brand', $gtm_disabled_vars)) {
         $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: $attributes['gtm-brand'];
@@ -931,7 +933,7 @@ class AlshayaGtmManager {
     }
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-    $orders_count = $this->ordersManager->getOrdersCount((int) $order['customer_id']);
+    $orders_count = isset($order['customer_id']) ? $this->ordersManager->getOrdersCount((int) $order['customer_id']) : 1;
 
     $generalInfo = [
       'deliveryOption' => $deliveryOption,

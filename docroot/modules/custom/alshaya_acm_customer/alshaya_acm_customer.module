@@ -359,7 +359,7 @@ function alshaya_acm_customer_login_post_validate(array &$form, FormStateInterfa
     // Set error without name ref for name error.
     if (isset($all_errors['name'])) {
 
-      drupal_set_message($all_errors['name'], 'error');
+      \Drupal::messenger()->addMessage($all_errors['name'], 'error');
       $form_state->setErrorByName('custom', $all_errors['name']);
       unset($all_errors['name']);
     }
@@ -543,7 +543,7 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
     // after try/catch.
     if (acq_commerce_is_exception_api_down_exception($e)) {
       $form_state->setErrorByName('custom', $e->getMessage());
-      drupal_set_message($e->getMessage(), 'error');
+      \Drupal::messenger()->addMessage($e->getMessage(), 'error');
     }
   }
 
@@ -590,7 +590,7 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
     // after try/catch.
     if (acq_commerce_is_exception_api_down_exception($e)) {
       $form_state->setErrorByName('custom', $e->getMessage());
-      drupal_set_message($e->getMessage(), 'error');
+      \Drupal::messenger()->addMessage($e->getMessage(), 'error');
     }
     else {
       \Drupal::logger('alshaya_acm_customer')->error('Error occurred during customer registration @message', [
