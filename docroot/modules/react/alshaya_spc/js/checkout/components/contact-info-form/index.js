@@ -191,7 +191,7 @@ class ContactInfoForm extends React.Component {
           {collectionPointsEnabled() === true
           && (
             <div className="spc-cnc-store-actions-pudo-msg">
-              {Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}
+              {getStringMessage('cnc_address_action_pudo_msg')}
             </div>
           )}
           <button
