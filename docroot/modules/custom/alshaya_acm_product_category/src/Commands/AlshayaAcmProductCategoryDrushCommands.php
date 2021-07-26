@@ -99,7 +99,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $this->entityTypeManager = $entity_type_manager;
     $this->metatagManager = $metatag_manager;
     $this->metatagToken = $metatag_token;
-    $this->drupalLogger = $logger_factory;
+    $this->drupalLogger = $logger_factory->get('alshaya_acm_product_category');
   }
 
   /**
@@ -160,10 +160,10 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       // storing this file anywhere in the filesystem.
       fclose($handle);
       $file_path = file_create_url($location);
-      $this->drupalLogger->get('alshaya_acm_product_category')->notice("Data exported successfully at Location: '{$file_path}'");
+      $this->drupalLogger->notice(dt('Data exported successfully at Location: @location', ['@location' => $file_path]));
     }
     else {
-      $this->drupalLogger->get('alshaya_acm_product_category')->warning('Something went wrong, Please check if the folder permissions are proper.');
+      $this->drupalLogger->warning(dt('Something went wrong, Please check if the folder permissions are proper.'));
     }
   }
 
