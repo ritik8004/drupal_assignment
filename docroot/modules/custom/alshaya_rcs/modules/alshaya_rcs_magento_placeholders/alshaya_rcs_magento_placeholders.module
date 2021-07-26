@@ -120,6 +120,21 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
   $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['languagePrefix'] = Settings::get('magento_lang_prefix');
 }
 
+function alshaya_rcs_magento_placeholders_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() != 'rcs_category') {
+    return;
+  }
+
+  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
+  $api_settings = Settings::get('alshaya_api.settings');
+  // Use proxy on local env as here we don't have Cloudflare.
+  if (Settings::get('env') === 'local') {
+    $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = '/proxy/?url=' . $api_settings['magento_host'];
+  }
+
+  $build['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['languagePrefix'] = Settings::get('magento_lang_prefix');
+}
+
 /**
  * Implements hook_ENTITY_TYPE_view().
  *
@@ -315,6 +330,12 @@ function alshaya_rcs_magento_placeholders_theme_suggestions_page_alter(array &$s
     $node = \Drupal::request()->attributes->get('node');
     if ($node->bundle() == 'rcs_product') {
       $suggestions[] = 'page__rcs_pdp';
+    }
+  }
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $suggestions[] = 'page__plp';
     }
   }
 }

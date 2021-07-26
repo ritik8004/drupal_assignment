@@ -156,6 +156,32 @@ exports.getEntity = async function getEntity(langcode) {
 
       break;
 
+    case 'category':
+      case 'entity':
+      // Prepare request parameters.
+      request.uri += "graphql";
+      request.method = "POST",
+        request.headers.push(["Content-Type", "application/json"]);
+
+      const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/$/);
+      request.data = JSON.stringify({
+        query: `{ categories( filters: { url_path: {eq: "${categoryUrlKey[1]}"}}) {
+            total_count
+            items {
+              id
+              name
+            }
+            page_info {
+              current_page
+              page_size
+              total_pages
+            }
+          }
+        }`
+      });
+
+      break;
+
     default:
       console.log(
         `Entity type ${drupalSettings.rcsPage.type} not supported for get_entity.`
@@ -164,8 +190,11 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   const response = await rcsCommerceBackend.invokeApi(request);
-  if (response.data.products.total_count) {
+  if (drupalSettings.rcsPage.type == "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
+  }
+  if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
+    result = response.data.categories.items[0];
   }
 
   return result;
