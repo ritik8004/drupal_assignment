@@ -5,6 +5,7 @@ import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
+import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 
 const FixedFields = ({
   defaultVal, showEmail, showFullName = true, subTitle, type,
@@ -29,7 +30,7 @@ const FixedFields = ({
         )}
       <div className="spc-checkout-contact-information-fields">
         <ConditionalView
-          condition={(drupalSettings.cnc_collection_points_enabled === true
+          condition={(collectionPointsEnabled() === true
             && drupalSettings.user.uid > 0)}
         >
           <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" defaultChecked />
