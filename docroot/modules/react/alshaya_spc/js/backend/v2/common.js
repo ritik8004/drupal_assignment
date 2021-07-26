@@ -11,6 +11,7 @@ import {
   cartErrorCodes,
   getDefaultErrorMessage,
   getExceptionMessageType,
+  getProcessedErrorMessage,
 } from './error';
 import cartActions from '../../utilities/cart_actions';
 import { removeStorageInfo } from '../../utilities/storage';
@@ -181,7 +182,6 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = 600;
     response.data.error_message = 'Back-end system is down';
-    //
   } else if (response.status === 401) {
     // Customer Token expired.
     logger.notice(`Message: ${response.data.message}. Redirecting to user/logout.`);
@@ -191,26 +191,47 @@ const handleResponse = (apiResponse) => {
 
     // Throw an error to prevent further javascript execution.
     throw new Error('The customer token is invalid.');
-    //
-  } else if (response.status === 404) {
-    // Client error responses.
-    response.data.error = true;
-    response.data.error_code = 404;
-    response.data.error_message = response.data.message;
-    //
   } else if (response.status !== 200) {
-    // All other responses.
+    // Set default values.
     response.data.error = true;
-    if (typeof response.data.message !== 'undefined') {
-      response.data.error_message = response.data.message;
-      const errorCode = (typeof response.data.error_code !== 'undefined') ? response.data.error_code : '-';
-      logger.error(`Error while doing MDC api call. Error message: ${response.data.message}, Code: ${errorCode}, Response code: ${response.status}.`);
+    response.data.error_message = getDefaultErrorMessage();
 
-      if (response.status === 400 && typeof response.data.error_code !== 'undefined' && response.data.error_code === cartErrorCodes.cartCheckoutQuantityMismatch) {
+    // Check for empty resonse data.
+    if (_isNull(response) || _isUndefined(response.data)) {
+      logger.error('Error while doing MDC api. Response result is empty. Status code: @code', {
+        '@code': response.status,
+      });
+      response.data.error_code = 500;
+    } else if (!_isUndefined(response.data.message) && !_isEmpty(response.data.message)) {
+      // Process message.
+      response.data.error_message = getProcessedErrorMessage(response);
+
+      // Log the error message.
+      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+        '@message': response.data.error_message,
+        '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
+        '@response_code': response.status,
+      });
+
+      // The following case happens when there is a stock mismatch between
+      // Magento and OMS.
+      if (response.status === 400 && typeof response.data.code !== 'undefined' && response.data.code === cartErrorCodes.cartCheckoutQuantityMismatch) {
         response.data.error_code = cartErrorCodes.cartCheckoutQuantityMismatch;
+      } else if (response.status === 404) {
+        response.data.error_code = 404;
       } else {
         response.data.error_code = 500;
       }
+    } else if (!_isUndefined(response.data.messages) && !_isEmpty(response.data.messages)
+      && !_isUndefined(response.data.messages.error) && !_isEmpty(response.data.messages.error)
+    ) {
+      // Other messages.
+      const error = response.data.messages.error[0];
+      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+        '@message': error.message,
+      });
+      response.data.error_code = error.code;
+      response.data.error_message = error.message;
     }
   } else if (typeof response.data.messages !== 'undefined' && typeof response.data.messages.error !== 'undefined') {
     const error = response.data.messages.error.shift();
@@ -219,7 +240,6 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
-    //
     logger.error(`Error while doing MDC api call. Error message: ${error.message}`);
   } else if (_isArray(response.data.response_message) && !_isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
     response.data.error = true;
@@ -710,12 +730,13 @@ const associateCartToCustomer = async () => {
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
   let cart = await getCart(force);
+  if (_isNull(cart) || _isUndefined(cart.data)) {
+    return null;
+  }
 
   // Check if the user is authenticated but there is a guest cart_id in the local storage.
   if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
-    if (!_isNull(cart)
-      && !_isUndefined(cart.data)
-      && !_isUndefined(cart.data.cart)
+    if (!_isUndefined(cart.data.cart)
       && !_isUndefined(cart.data.cart.items)
       && !_isEmpty(cart.data.cart.items)
     ) {
@@ -766,6 +787,10 @@ const isAuthenticatedUserWithoutCart = async () => {
  */
 const getCartCustomerId = async () => {
   const response = await getCart();
+  if (_isNull(response) || _isUndefined(response.data)) {
+    return null;
+  }
+
   const cart = response.data;
   if (!_isEmpty(cart) && !_isEmpty(cart.customer) && !_isUndefined(cart.customer.id)) {
     return parseInt(cart.customer.id, 10);
@@ -909,6 +934,10 @@ const updateCart = async (data) => {
  */
 const getCartCustomerEmail = async () => {
   const response = await getCart();
+  if (_isNull(response) || _isUndefined(response.data)) {
+    return null;
+  }
+
   const cart = response.data;
   if (!_isUndefined(cart.customer)
     && !_isUndefined(cart.customer.email)
