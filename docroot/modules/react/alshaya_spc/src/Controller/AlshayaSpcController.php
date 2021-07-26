@@ -621,6 +621,9 @@ class AlshayaSpcController extends ControllerBase {
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     $build = $this->addCheckoutConfigSettings($build);
+    if ($cc_config->get('checkout_click_collect_collection_points_enabled')) {
+      $build['#attached']['library'][] = 'alshaya_white_label/checkout-pudo-aramex';
+    }
 
     $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
     return $build;

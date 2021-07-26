@@ -494,3 +494,8 @@ secondary-menu:
   css:
     theme:
       css/conditional-sass/secondary-menu/secondary-menu.ltr.css: {}
+
+checkout-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: {}
