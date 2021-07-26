@@ -15,6 +15,17 @@ use Drupal\facets\Entity\Facet;
 use Drupal\user\Entity\Role;
 
 /**
+ * Implements hook_update_n().
+ *
+ * [6.4.0] Uninstall redundant drupal core themes.
+ */
+function alshaya_transac_update_8136() {
+  // Uninstalling the unused drupal core themes
+  \Drupal::service('theme_installer')->uninstall(['claro']);
+  \Drupal::service('theme_installer')->uninstall(['bartik']);
+}
+
+/**
  * Implements hook_update_N().
  *
  * [6.3.0] Uninstall acq_cybersource module from
@@ -952,6 +963,12 @@ function alshaya_transac_install() {
 
   // Set alshaya_white_label as the default theme.
   \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+
+  // Remove redundant drupal core themes.
+  // We set a admin theme as part of alshaya_admin module.
+  \Drupal::service('theme_installer')->uninstall(['claro']);
+  // We set a brand theme as part of brand module.
+  \Drupal::service('theme_installer')->uninstall(['bartik']);
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac');
