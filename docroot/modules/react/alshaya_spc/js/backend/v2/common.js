@@ -182,7 +182,6 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = 600;
     response.data.error_message = 'Back-end system is down';
-    //
   } else if (response.status === 401) {
     // Customer Token expired.
     logger.notice(`Message: ${response.data.message}. Redirecting to user/logout.`);
@@ -192,7 +191,6 @@ const handleResponse = (apiResponse) => {
 
     // Throw an error to prevent further javascript execution.
     throw new Error('The customer token is invalid.');
-    //
   } else if (response.status !== 200) {
     // Set default values.
     response.data.error = true;
@@ -225,7 +223,6 @@ const handleResponse = (apiResponse) => {
       } else {
         response.data.error_code = 500;
       }
-      //
     } else if (!_isUndefined(response.data.messages) && !_isEmpty(response.data.messages)
       && !_isUndefined(response.data.messages.error) && !_isEmpty(response.data.messages.error)
     ) {
@@ -236,7 +233,6 @@ const handleResponse = (apiResponse) => {
       });
       response.data.error_code = error.code;
       response.data.error_message = error.message;
-      //
     }
   } else if (typeof response.data.messages !== 'undefined' && typeof response.data.messages.error !== 'undefined') {
     const error = response.data.messages.error.shift();
@@ -245,7 +241,6 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
-    //
     logger.error(`Error while doing MDC api call. Error message: ${error.message}`);
   } else if (_isArray(response.data.response_message) && !_isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
     response.data.error = true;
