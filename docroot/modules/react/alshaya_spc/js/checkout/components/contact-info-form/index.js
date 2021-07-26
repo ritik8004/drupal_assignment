@@ -10,6 +10,7 @@ import { validateContactInfo, addressFormInlineErrorScroll } from '../../../util
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
+import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -187,6 +188,12 @@ class ContactInfoForm extends React.Component {
           type="cnc"
         />
         <div className="spc-address-form-actions">
+          {collectionPointsEnabled() === true
+          && (
+            <div className="spc-cnc-store-actions-pudo-msg">
+              {getStringMessage('cnc_valid_govtid_message')}
+            </div>
+          )}
           <button
             id="save-address"
             className="spc-address-form-submit"
