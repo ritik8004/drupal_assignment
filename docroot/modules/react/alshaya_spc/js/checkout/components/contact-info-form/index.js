@@ -191,7 +191,7 @@ class ContactInfoForm extends React.Component {
           {collectionPointsEnabled() === true
           && (
             <div className="spc-cnc-store-actions-pudo-msg">
-              {getStringMessage('cnc_address_action_pudo_msg')}
+              {getStringMessage('cnc_valid_govtid_message')}
             </div>
           )}
           <button

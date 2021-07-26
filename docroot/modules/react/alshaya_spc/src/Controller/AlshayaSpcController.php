@@ -534,7 +534,7 @@ class AlshayaSpcController extends ControllerBase {
       ];
 
       $strings[] = [
-        'key' => 'cnc_address_action_puso_msg',
+        'key' => 'cnc_valid_govtid_message',
         'value' => $this->t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.'),
       ];
     }
