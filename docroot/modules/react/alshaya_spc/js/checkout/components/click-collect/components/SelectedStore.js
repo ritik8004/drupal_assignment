@@ -5,7 +5,7 @@ import SectionTitle from '../../../../utilities/section-title';
 import CheckoutMessage from '../../../../utilities/checkout-message';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import getStringMessage from '../../../../utilities/strings';
-import { getCnCModalContactSubtitle } from '../../../../utilities/cnc_util';
+import { getCnCModalContactSubtitle, collectionPointsEnabled } from '../../../../utilities/cnc_util';
 
 const SelectedStore = ({ store, open, closePanel }) => {
   const [messageType, setMsgType] = useState(null);
@@ -63,6 +63,12 @@ const SelectedStore = ({ store, open, closePanel }) => {
           <SectionTitle>{getStringMessage(getCnCModalContactSubtitle())}</SectionTitle>
           <div className="store-details-wrapper">
             <StoreItem display="default" store={store} />
+            {collectionPointsEnabled() === true
+            && (
+              <div className="spc-cnc-selected-store-pudo-info">
+                {getStringMessage('cnc_contact_info_subtitle')}
+              </div>
+            )}
           </div>
           <div className="spc-cnc-contact-form">
             <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} />

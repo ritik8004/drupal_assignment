@@ -37,7 +37,10 @@ const FixedFields = ({
         && (
         <div className="spc-contact-information-header">
           <SectionTitle>{getStringMessage(getCnCModalContactTitle())}</SectionTitle>
-          <span className="spc-contact-info-desc">{subTitle}</span>
+          {collectionPointsEnabled() === false
+            && (
+              <span className="spc-contact-info-desc">{subTitle}</span>
+            )}
         </div>
         )}
       <div className="spc-checkout-contact-information-fields">
