@@ -145,11 +145,12 @@ describe('Cart', () => {
     });
 
     it('Test response for cart quantity mismatch', async () => {
-      axios.mockResolvedValue({ data: { message: 'Invalid cart data', error_code: 9010 }, status: 400 });
+      axios.mockResolvedValue({ data: { message: 'Invalid cart data', code: 9010 }, status: 400 });
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
           error: true,
+          code: 9010,
           error_code: 9010,
           error_message: 'Invalid cart data',
           message: 'Invalid cart data',
