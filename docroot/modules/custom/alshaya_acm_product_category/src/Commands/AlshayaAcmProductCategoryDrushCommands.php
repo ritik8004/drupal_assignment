@@ -241,6 +241,15 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             foreach ($tags as $key => $value) {
               $data[$key] = $this->metatagToken->replace($value, ['taxonomy_term' => $term]);
             }
+            // Remove metatag empty field.
+            unset($data['field_meta_tags']);
+            // Change the canonical url to relative url.
+            $relative_url = parse_url($data['canonical_url'], PHP_URL_PATH);
+            $relative_url = explode('/', $relative_url);
+            // Unset the language prefix.
+            unset($relative_url['1']);
+            $relative_url = implode('/', $relative_url);
+            $data['canonical_url'] = $relative_url;
             break;
 
           case 'field_select_sub_categories_plp':
