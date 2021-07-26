@@ -2,7 +2,7 @@ variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
   product_listing_page_url: "/shop-mapp/"
   spc_product_listing_page: '/shop-mapp/'
-  spc_pdp_page: ''
+  spc_pdp_page: 'buy-focus-eucalyptus-tea-body-lotion.html'
   spc_basket_page: '/shop-mapp/'
   spc_single_product_detail_page_coupon: '/buy-pink-gem-pocketbac-holder.html/'
   spc_multiple_product_detail_page_coupon: '/buy-japanese-cherry-blossom-bath-fizzy.html/'
