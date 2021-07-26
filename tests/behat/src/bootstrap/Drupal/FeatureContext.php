@@ -2813,4 +2813,21 @@ JS;
     }
   }
 
+  public function getRandomString($length) {
+    $characters = 'abcdefghijklmnopqrstuvwxyz';
+    $randstring = '';
+    for ($i = 0; $i < $length; $i++) {
+      $randstring .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $randstring;
+  }
+
+  /**
+   * @Given /^I fill in "([^"]*)"$/
+   */
+  public function iFillIn($name) {
+    $random_string = $this->getRandomString(5);
+    $this->getSession()->executeScript('jQuery(\'input[name="' . $name . '"]\').val("' . $random_string . '")');
+  }
+
 }
