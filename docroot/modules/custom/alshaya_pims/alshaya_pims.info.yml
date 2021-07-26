@@ -1,0 +1,6 @@
+name: 'Alshaya PIMS'
+type: module
+core: 8.x
+dependencies:
+  - alshaya_acm_product:alshaya_acm_product
+package: Alshaya
