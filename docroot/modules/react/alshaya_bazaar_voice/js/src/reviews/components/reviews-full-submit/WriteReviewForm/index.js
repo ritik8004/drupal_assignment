@@ -7,13 +7,16 @@ import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import FormLinks from '../DynamicFormField/Fields/FormLinks';
-import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../utilities/api/request';
+import {
+  getLanguageCode, doRequest, getbazaarVoiceSettings, getUserDetails,
+} from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import { setStorageInfo } from '../../../../utilities/storage';
 import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 import { trackFeaturedAnalytics } from '../../../../utilities/analytics';
+import { createUserStorage } from '../../../../utilities/user_util';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -34,8 +37,13 @@ export default class WriteReviewForm extends React.Component {
     // Load and display write a review form.
     showFullScreenLoader();
     const {
-      productId,
+      productId, context,
     } = this.props;
+    // Create user token for my account section for each product.
+    const userDetails = getUserDetails(productId);
+    if (productId !== undefined && context === 'myaccount') {
+      createUserStorage(userDetails.user.userId, userDetails.user.emailId, productId);
+    }
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const apiUri = `/${getLanguageCode()}/get-write-review-fields-configs`;
     const apiData = doRequest(apiUri);
@@ -141,9 +149,10 @@ export default class WriteReviewForm extends React.Component {
   render() {
     const dynamicFields = [];
     const {
-      closeModal, productId,
+      closeModal,
+      productId,
     } = this.props;
-
+    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const {
       fieldsConfig,
     } = this.state;
@@ -156,11 +165,12 @@ export default class WriteReviewForm extends React.Component {
             field_key={key}
             field={field}
             productId={productId}
+            countryCode={bazaarVoiceSettings.reviews.bazaar_voice.country_code}
           />,
         );
       },
     );
-    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+
     return (
       <>
         <div className="write-review-form">

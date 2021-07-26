@@ -9,7 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
@@ -44,7 +44,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   /**
    * The path alias manager.
    *
-   * @var \Drupal\Core\Path\AliasManagerInterface
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -85,7 +85,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Database connection.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.

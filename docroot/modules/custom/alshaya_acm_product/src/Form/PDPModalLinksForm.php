@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_product\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Class PDP Modal Links Form.
@@ -15,17 +15,17 @@ class PDPModalLinksForm extends ConfigFormBase {
   /**
    * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityManager;
 
   /**
    * Constructs a EntityManager object.
    *
-   * @param \Drupal\Core\Entity\EntityManager $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   A list of entity definition objects.
    */
-  public function __construct(EntityManager $entity_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_manager) {
     $this->entityManager = $entity_manager;
   }
 
@@ -34,7 +34,7 @@ class PDPModalLinksForm extends ConfigFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager')
+      $container->get('entity_type.manager')
     );
   }
 

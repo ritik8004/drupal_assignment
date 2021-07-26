@@ -1,26 +1,19 @@
-import Axios from 'axios';
-import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
-import i18nMiddleWareUrl from './i18n_url';
-
-const associateCart = () => {
-  const url = i18nMiddleWareUrl('cart/associate');
-  return Axios.get(url)
-    .then((response) => {
-      if (response.data) {
-        addInfoInStorage({ cart: response.data });
-      }
-    })
-    .catch((error) => {
-      // Processing of error here.
-      Drupal.logJavascriptError('cart/associate', error, GTM_CONSTANTS.CART_ERRORS);
-    });
-};
+const associateCart = () => window.commerceBackend.associateCart()
+  .then((response) => {
+    if (response.data) {
+      window.commerceBackend.setCartDataInStorage({ cart: response.data });
+    }
+  })
+  .catch((error) => {
+    // Processing of error here.
+    Drupal.logJavascriptError('cart/associate', error, GTM_CONSTANTS.CART_ERRORS);
+  });
 
 /**
  * Empty cart.
  */
 const emptyCustomerCart = () => {
-  removeCartFromStorage();
+  window.commerceBackend.removeCartDataFromStorage();
 
   const emptyCart = {
     cart_id: null,
@@ -40,7 +33,7 @@ const emptyCustomerCart = () => {
 export async function checkCartCustomer(cartData = null) {
   let cartDataVal = cartData;
   if (!(cartDataVal) || cartDataVal.cart_id === undefined) {
-    const cartJson = getInfoFromStorage();
+    const cartJson = window.commerceBackend.getCartDataFromStorage();
     cartDataVal = cartJson.cart;
   }
 
@@ -53,7 +46,7 @@ export async function checkCartCustomer(cartData = null) {
     if (!cartDataVal.uid) {
       cartDataVal.uid = window.drupalSettings.user.uid;
       if (window.drupalSettings.user.uid === 0) {
-        addInfoInStorage({ cart: cartDataVal });
+        window.commerceBackend.setCartDataInStorage({ cart: cartDataVal });
         return false;
       }
 

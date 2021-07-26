@@ -461,6 +461,8 @@ export default class ReviewSummary extends React.Component {
                       reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
                         .AuthorId].ReviewStatistics}
                       isNewPdpLayout={isNewPdpLayout}
+                      showLocationFilter={bazaarVoiceSettings.reviews
+                        .bazaar_voice.show_location_filter}
                     />
                     <ReviewDescription
                       reviewDescriptionData={reviewsSummary[item]}

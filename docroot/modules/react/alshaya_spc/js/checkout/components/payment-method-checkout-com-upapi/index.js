@@ -125,6 +125,12 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
       removeFullScreenLoader();
       return;
     }
+    // Set selected payment method for GTM push.
+    let cardType = data.scheme;
+    if (data.card_type !== undefined && data.scheme !== undefined) {
+      cardType = ` ${data.card_type} - ${data.scheme}`;
+    }
+    drupalSettings.payment_methods.checkout_com_upapi.gtm_name = (data.card_category === 'Commercial') ? 'MADA' : cardType;
 
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;

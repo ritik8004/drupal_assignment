@@ -48,19 +48,23 @@ export default class CompletePurchase extends React.Component {
     // Check if payment method in cart is a pseudo method
     // or not and accordingly dispatch event.
     if (drupalSettings.payment_methods[cart.cart.payment.method]) {
-      dispatchCustomEvent('orderPaymentMethod', {
-        payment_method: Object
-          .values(drupalSettings.payment_methods)
-          .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
-          .shift().gtm_name,
-      });
+      setTimeout(() => {
+        dispatchCustomEvent('orderPaymentMethod', {
+          payment_method: Object
+            .values(drupalSettings.payment_methods)
+            .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+            .shift().gtm_name,
+        });
+      }, 5000);
     } else {
       // If cart payment method is not in drupalSettings,
       // then it's a pseudo payment method.
       isPseudoPaymentMedthod = true;
-      dispatchCustomEvent('orderPaymentMethod', {
-        payment_method: cart.cart.payment.method,
-      });
+      setTimeout(() => {
+        dispatchCustomEvent('orderPaymentMethod', {
+          payment_method: cart.cart.payment.method,
+        });
+      }, 5000);
     }
 
     const checkoutButton = e.target.parentNode;

@@ -15,6 +15,7 @@ variables:
   add_to_cart_link: 'add to cart'
   vat: ''
   city_option: 'Abu Arish'
+  np_plp_store: ''
   area_option: 'Abu Arish'
   spc_search_byname: 'Raylan'
   spc_search_byID: 'PBSASSA000'

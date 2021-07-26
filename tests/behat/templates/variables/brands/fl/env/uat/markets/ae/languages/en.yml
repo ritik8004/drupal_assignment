@@ -19,6 +19,8 @@ variables:
   create_account: 'Create an Account'
   spc_search_byname: 'Foot Locker'
   spc_search_byID: 'FLAEHDA'
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   sign_in: 'Sign in'
   find_store: 'Find a Store'
   language_link: 'العربية'

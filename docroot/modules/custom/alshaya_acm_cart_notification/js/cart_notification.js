@@ -119,7 +119,7 @@
         Drupal.cartNotification.triggerNotification(productData);
       });
 
-      $('.sku-base-form').once('cart-notification-error').on('product-add-to-cart-failed', function () {
+      $('.sku-base-form').once('cart-notification-failed').on('product-add-to-cart-failed', function () {
         Drupal.cartNotification.spinner_stop();
         scrollToErrorPDP();
       });

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "652cff3fa27e48b1a887548b7167301a",
+    "content-hash": "af785ba18fd4b759c39e327e32e6cc1f",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -5751,6 +5751,57 @@
             }
         },
         {
+            "name": "drupal/config_rewrite",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/config_rewrite.git",
+                "reference": "8.x-1.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_rewrite-8.x-1.4.zip",
+                "reference": "8.x-1.4",
+                "shasum": "558ae849dffef68aa304c7907f5f4ffa4a4d1a81"
+            },
+            "require": {
+                "drupal/core": "^8.6 || ^9",
+                "php": ">=7.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.4",
+                    "datestamp": "1611769139",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Brant Wynn (brantwynn)",
+                    "homepage": "https://www.drupal.org/u/brantwynn",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "saltednut",
+                    "homepage": "https://www.drupal.org/user/252788"
+                }
+            ],
+            "description": "Rewrites existing configuration on module installation via using a 'rewrite' folder in the config directory.",
+            "homepage": "https://www.drupal.org/project/config_rewrite",
+            "support": {
+                "source": "http://cgit.drupalcode.org/config_rewrite",
+                "issues": "https://www.drupal.org/project/issues/config_rewrite"
+            }
+        },
+        {
             "name": "drupal/config_split",
             "version": "1.4.0",
             "source": {
@@ -6287,6 +6338,7 @@
                     "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
                     "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                     "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
+                    "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-01-14/3143958-11-subprofile-support-8.9.x.patch",
                     "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch",
@@ -13342,7 +13394,8 @@
                     }
                 },
                 "patches_applied": {
-                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
+                    "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
