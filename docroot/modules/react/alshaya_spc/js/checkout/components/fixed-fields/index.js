@@ -47,7 +47,7 @@ const FixedFields = ({
         >
           <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" onChange={(e) => handleContactInfoChange(e)} defaultChecked />
           <label htmlFor="spc-checkout-contact-info-checkbox">
-            {Drupal.t('The same person placing the order will collect the order.')}
+            {getStringMessage('cnc_contact_info_checkbox')}
           </label>
         </ConditionalView>
         <ConditionalView condition={showFullName}>
