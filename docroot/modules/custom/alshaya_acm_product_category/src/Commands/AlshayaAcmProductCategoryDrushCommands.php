@@ -63,7 +63,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
    * AlshayaAcmProductCategoryDrushCommands constructor.
@@ -99,7 +99,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $this->entityTypeManager = $entity_type_manager;
     $this->metatagManager = $metatag_manager;
     $this->metatagToken = $metatag_token;
-    $this->loggerFactory = $logger_factory;
+    $this->drupalLogger = $logger_factory;
   }
 
   /**
@@ -160,10 +160,10 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       // storing this file anywhere in the filesystem.
       fclose($handle);
       $file_path = file_create_url($location);
-      $this->loggerFactory->get('alshaya_acm_product_category')->notice("Data exported successfully at Location: '{$file_path}'");
+      $this->drupalLogger->get('alshaya_acm_product_category')->notice("Data exported successfully at Location: '{$file_path}'");
     }
     else {
-      $this->loggerFactory->get('alshaya_acm_product_category')->warning('Something went wrong, Please check if the folder permissions are proper.');
+      $this->drupalLogger->get('alshaya_acm_product_category')->warning('Something went wrong, Please check if the folder permissions are proper.');
     }
   }
 
