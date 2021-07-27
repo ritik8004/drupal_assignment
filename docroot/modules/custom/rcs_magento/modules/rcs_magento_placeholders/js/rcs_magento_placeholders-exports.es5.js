@@ -161,15 +161,22 @@ exports.getEntity = async function getEntity(langcode) {
       // Prepare request parameters.
       request.uri += "graphql";
       request.method = "POST",
-        request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Content-Type", "application/json"]);
 
       const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/$/);
       request.data = JSON.stringify({
         query: `{ categories( filters: { url_path: {eq: "${categoryUrlKey[1]}"}}) {
             total_count
             items {
-              id
+              level
               name
+              url_path
+              breadcrumbs {
+                category_name
+                category_level
+                category_url_key
+                category_url_path
+              }
             }
             page_info {
               current_page

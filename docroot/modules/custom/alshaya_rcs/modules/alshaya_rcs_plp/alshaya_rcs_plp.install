@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_plp_install() {
+  // Move the rcs navigation block to current theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+}

@@ -120,6 +120,9 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
   $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['languagePrefix'] = Settings::get('magento_lang_prefix');
 }
 
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
 function alshaya_rcs_magento_placeholders_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() != 'rcs_category') {
     return;
