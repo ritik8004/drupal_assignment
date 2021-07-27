@@ -1,0 +1,58 @@
+.c-sidebar-first {
+  .my-account-nav {
+    .item-list ul {
+      font-family: $hnm-regular;
+      font-size: 0.875rem;
+    }
+
+    li {
+      &:not(:first-child) {
+        @include breakpoint($tablet) {
+          padding: 0.625rem 0;
+        }
+      }
+
+      &:first-child {
+        @include breakpoint($tablet) {
+          padding-bottom: 0.625rem;
+        }
+      }
+    }
+
+    a {
+      color: $hnm-black-three;
+      font-family: $hnm-regular;
+      line-height: 1.9;
+      text-transform: capitalize;
+      font-size: 0.8125rem !important;
+
+      @include breakpoint($tablet) {
+        font-size: 0.75rem;
+      }
+
+      &.active {
+        color: $hnm-black-three;
+        font-family: $hnm-demibold;
+        font-weight: normal;
+      }
+
+      &:hover {
+        color: $hnm-black-three;
+
+        &:active {
+          color: $default-anchor-link-hover;
+        }
+      }
+    }
+  }
+}
+
+.account--dashboard {
+  #block-jointheclub {
+    h3 {
+      color: $title;
+      font-size: 0.8125rem;
+      font-family: $hnm-demibold;
+    }
+  }
+}

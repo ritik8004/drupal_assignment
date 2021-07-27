@@ -1,0 +1,45 @@
+.path--user {
+  &.modal-overlay {
+    @include breakpoint($upto-desktop) {
+      &::before {
+        z-index: 12;
+      }
+    }
+  }
+
+  .ui-dialog {
+    @include breakpoint($upto-desktop) {
+      z-index: 13;
+    }
+  }
+
+  .ui-dialog .ui-dialog-titlebar-close {
+    color: $modal_subtext;
+
+    @include icon(close, after) {
+      color: $modal_close_icon;
+      background: $modal_close_bg;
+      width: 2.188rem;
+      padding: 0;
+      height: 2.188rem;
+      font-size: 2.688rem;
+      text-indent: -3px;
+      line-height: 0.8;
+    }
+  }
+
+  .dialog-cancel {
+    color: $cancel_button;
+    font-family: $hnm-bold;
+    font-weight: normal;
+    font-size: 0.8125rem;
+
+    @include breakpoint($tablet) {
+      font-size: 0.8125rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 0.8125rem;
+    }
+  }
+}

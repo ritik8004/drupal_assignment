@@ -1,0 +1,20 @@
+form.user-communication-preference {
+  input[type=checkbox] {
+    ~ label[for=edit-communication-preference-email],
+    ~ label[for=edit-communication-preference-mobile] {
+      &::before {
+        top: 0.325rem;
+
+        @include breakpoint($tablet) {
+          top: 0.125rem;
+        }
+      }
+    }
+  }
+
+  .form-submit {
+    font-family: $vs-bold;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+}

@@ -1,0 +1,37 @@
+.block-alshaya-user-recent-orders {
+  .no--orders {
+    + a {
+      background-color: $my_account_no_order_button_bg;
+      color: $my_account_no_order_button_text;
+      border: 2px solid $my_account_no_order_button_border;
+      padding: 0.75rem 2.25rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      width: 10rem;
+    }
+  }
+}
+
+.c-order-list {
+  .orders-list-pager-wrapper {
+    button {
+      color: $primary_brand_button;
+
+      @include breakpoint($only-tablet) {
+        width: 9rem;
+      }
+    }
+  }
+}
+
+#block-content {
+  .order-items {
+    li a {
+      .dark {
+        font-weight: 600;
+        letter-spacing: normal;
+        margin-bottom: 0.3125rem;
+      }
+    }
+  }
+}

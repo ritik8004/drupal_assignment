@@ -1,0 +1,823 @@
+.c-user--node,
+.c-communication-preferences {
+  .block-alshaya-acm-customer {
+    position: relative;
+  }
+
+  .block-local-tasks-block {
+    display: none;
+  }
+}
+
+// Dashboard page Sidebar.
+.c-user--node {
+  .c-sidebar-first {
+    @include breakpoint($upto-tablet) {
+      display: block;
+      margin-bottom: 2.6rem;
+
+      .my-account-nav {
+        li:first-child a {
+          text-transform: lowercase;
+          font-family: "alshaya-bold";
+          color: $user_nav_link;
+          line-height: 1;
+          margin-top: 0;
+          font-size: 1.12rem;
+          border-bottom: 1px solid $primary_border;
+          padding-bottom: 0.7rem;
+          padding-top: 0;
+
+          &::after {
+            content: none;
+          }
+        }
+
+        a {
+          border-bottom: 1px solid $primary_border;
+          display: block;
+          line-height: 1;
+          padding: 1.05rem 0;
+          position: relative;
+
+          @include icon(chevron#{$right}, after) {
+            font-size: 1.9rem;
+            position: absolute;
+            #{$right}: 0.7rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+
+  main {
+    @include breakpoint($only-mobile) {
+      #block-page-title,
+      #block-local-tasks,
+      #block-userrecentorders,
+      #block-myaccountneedhelp,
+      article .subtitle,
+      article .account-content-wrapper {
+        display: none;
+      }
+
+      .account--dashboard .joinclub {
+        float: none;
+        width: auto;
+        text-align: center;
+      }
+    }
+  }
+
+  &.l-two--sf {
+    @include breakpoint($only-mobile) {
+      article.account--dashboard {
+        margin-bottom: 2.5rem;
+      }
+
+      aside.c-sidebar-first {
+        display: block;
+        margin-bottom: 1.375rem;
+
+        .my-account-mobile-title1 {
+          display: block;
+          font-family: $alshaya-bold;
+          color: $title;
+          font-size: 1.125rem;
+          margin-bottom: 0.1875rem;
+          margin-top: 0;
+
+          html[lang=ar] & {
+            margin-bottom: 1rem;
+          }
+        }
+
+        .my-account-mobile-title2 {
+          display: block;
+          opacity: 0.6;
+          font-family: $arial;
+          font-size: 0.875rem;
+          color: $user_nav_mobile_title2;
+          font-weight: normal;
+          margin-top: 0.375rem;
+          margin-bottom: 0.5rem;
+        }
+
+        li {
+          &.my-account {
+            display: none;
+
+            + li a {
+              border-top: 1px solid $primary_border;
+            }
+          }
+
+          a {
+            color: $user_nav_mobile_link;
+            font-size: 0.875rem;
+            text-transform: capitalize;
+
+            &::after {
+              #{$right}: 0.3125rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-menu-primary,
+.c-sidebar-first {
+  .block-alshaya-my-account-links .my-account-mobile-title1,
+  .block-alshaya-my-account-links .my-account-mobile-title2 {
+    display: none;
+  }
+}
+
+.path--profile {
+  .l-two--sf {
+    margin-top: 2.5rem;
+  }
+}
+
+.c-user-login.user-page {
+  @include breakpoint($only-mobile) {
+    margin-top: 3rem;
+    padding-top: 1.7rem;
+  }
+
+  @include breakpoint($tablet) {
+    padding: 2.5rem 0;
+    margin: 4.25em 2rem 0;
+  }
+
+  @include breakpoint($desktop) {
+    margin: 4.6rem auto 1rem;
+    max-width: 64.125rem;
+  }
+
+  .messages__wrapper {
+    padding-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      width: 98%;
+    }
+  }
+
+  .user-login-form {
+    .form-text,
+    .form-email {
+      color: $user_form_text;
+
+      @include breakpoint($desktop) {
+        padding-bottom: 0.15rem;
+      }
+    }
+
+    .form-type-password .form-text {
+      font-size: 1rem;
+      letter-spacing: 0.1875rem;
+
+      @include arabic-letter-spacing;
+    }
+
+    .form-item:first-child {
+      margin-top: 1.49em;
+    }
+
+    .form-item {
+      margin-top: 2.375rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 3.9375rem;
+      }
+
+      &.form-type-email {
+        margin-top: 2.5625rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.9375rem;
+        }
+      }
+    }
+
+    #edit-actions {
+      margin-top: 1rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 1.6rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 1.3rem;
+      }
+
+      input {
+        font-size: 0.75rem;
+        font-family: $alshaya-bold;
+
+        @include breakpoint($only-tablet) {
+          font-size: 0.8125rem;
+          padding: 0.625rem 1.7rem;
+        }
+
+        @include breakpoint($desktop) {
+          min-width: 91px;
+        }
+      }
+    }
+  }
+
+  .c-sidebar-second {
+    #block-youllbeableto {
+      margin-bottom: 1.5rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 3.4rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-bottom: 4.1rem;
+
+        .field--type-image {
+          float: $right;
+        }
+      }
+
+      p {
+        margin: 0.375rem 0;
+
+        @include breakpoint($only-tablet) {
+          margin: 0.4rem 0;
+          vertical-align: middle;
+
+          span {
+            vertical-align: middle;
+          }
+
+          .icon-store {
+            background-size: cover;
+            width: 1rem;
+            height: 1rem;
+          }
+        }
+      }
+
+      a {
+        @include breakpoint($only-tablet) {
+          padding-top: 0.5rem;
+        }
+      }
+    }
+
+    #block-onlineexclusiveheadingovertwolinesneverthree p {
+      @include breakpoint($only-tablet) {
+        margin: 0.6875rem 0;
+      }
+    }
+
+    h3 {
+      margin-bottom: 0.9375rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 0.75rem;
+      }
+    }
+  }
+
+  main {
+    @include breakpoint($only-mobile) {
+      .region__content {
+        .block-system-main-block {
+          order: 1;
+          padding-bottom: 2.5rem;
+        }
+
+        .block-page-title-block {
+          h1 {
+            top: -2rem;
+          }
+        }
+      }
+
+      #block-content {
+        + #block-alshayasignupsigninbuttonsblock {
+          margin-top: 1.5rem;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0;
+  }
+}
+
+.c-user-register {
+  &.user-page {
+    @include breakpoint($upto-tablet) {
+      padding-top: 1.8rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1rem;
+      margin-top: 3rem;
+      padding-top: 1.7rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 2.5rem 0;
+      margin: 4.25em 2rem 0;
+    }
+
+    @include breakpoint($desktop) {
+      margin: 4.6rem auto 1rem;
+      max-width: 64.125rem;
+      padding: 2.5rem 0;
+    }
+
+    main {
+      @include breakpoint($only-mobile) {
+        .region__content {
+          .block-alshaya-social-login {
+            order: 1;
+            margin-bottom: 0;
+          }
+
+          .block-alshaya-signup-signin-buttons {
+            order: 3;
+          }
+
+          .block-system-main-block {
+            order: 2;
+          }
+        }
+      }
+    }
+  }
+
+  .messages.drupal-messages {
+    display: none;
+  }
+
+  .messages__wrapper {
+    padding-bottom: 1.25rem;
+
+    @include breakpoint($tablet) {
+      width: 98%;
+      margin: 2rem 0;
+      padding-bottom: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: -2.6rem;
+      margin-bottom: 0;
+      padding-top: 3rem;
+    }
+  }
+
+  .c-content__region .user-form {
+    margin-top: 0;
+
+    .form-wrapper,
+    .form-item {
+      @include breakpoint($desktop) {
+        margin-top: 2.63em;
+
+        &.form-type-email {
+          margin-top: 2.8rem;
+          position: relative;
+
+          label.error {
+            position: absolute;
+            #{$left}: 0;
+            top: 1.563rem;
+            background: $user_form_error_label;
+            width: 100%;
+          }
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-top: 2.9rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 2.93rem;
+      }
+    }
+
+    .form-item.form-type-password {
+      @include breakpoint($only-mobile) {
+        margin-top: 4.4rem;
+      }
+    }
+
+    .field--name-field-subscribe-newsletter {
+      margin-top: 1.1rem;
+      margin-bottom: 1rem;
+
+      .form-item {
+        margin-top: 1rem;
+
+        @include breakpoint($only-mobile) {
+          text-align: center;
+        }
+      }
+
+      p {
+        margin-top: 1.625rem;
+        margin-bottom: 1.4rem;
+        font-size: 0.875rem !important;
+        width: 15.9375rem;
+
+        @include breakpoint($only-mobile) {
+          text-align: center;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        a {
+          color: $user_field_link;
+          font-weight: bold;
+        }
+      }
+
+      label {
+        position: static;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem !important;
+
+        @include breakpoint($only-mobile) {
+          width: 17.9375rem;
+          margin: 0 auto;
+          text-align: $left;
+
+          &::before {
+            margin-#{$right}: 0.875rem;
+          }
+        }
+
+        @include breakpoint($tablet) {
+          justify-content: flex-start;
+          width: 18.4375rem;
+
+          &::before {
+            font-size: 1.4375rem;
+            top: 0;
+          }
+        }
+      }
+    }
+
+    .form-type-password {
+      @include breakpoint($desktop) {
+        margin-top: 3.4rem;
+
+        .c-input__bar {
+          position: absolute;
+          top: 25px;
+        }
+      }
+    }
+
+    .form-type-password-confirm {
+      margin-top: 4.5rem;
+
+      .confirm-parent {
+        margin-top: 4.42rem;
+      }
+    }
+
+    .field--name-field-terms-and-condition {
+      @include breakpoint($desktop) {
+        margin-top: 1.38rem;
+      }
+
+      .form-item-field-terms-and-condition-value {
+        @include breakpoint($upto-desktop) {
+          margin-top: 0;
+        }
+
+        a {
+          color: $user_field_link;
+          font-weight: bold;
+        }
+      }
+    }
+
+    #edit-actions {
+      margin-top: 0.477rem;
+      margin-bottom: 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
+    }
+
+    .field--name-field-first-name {
+      @include breakpoint($only-tablet) {
+        margin-top: 2.45rem;
+
+        .form-type-textfield {
+          margin-top: 0;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.5rem;
+
+        .form-type-textfield {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  .c-sidebar-second {
+    #block-youllbeableto {
+      margin-bottom: 1.3rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 3.7rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 1.75rem;
+        margin-bottom: 4rem;
+
+        .field--type-image {
+          float: $right;
+        }
+      }
+
+      h3 {
+        @include breakpoint($only-tablet) {
+          margin-top: 0.75rem;
+        }
+      }
+
+      p {
+        margin: 0.5625rem 0;
+
+        @include breakpoint($only-tablet) {
+          margin: 0.4rem 0;
+          vertical-align: middle;
+
+          span {
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user-password,
+.c-user-register-complete {
+  .my-account-nav {
+    display: none;
+  }
+}
+
+.c-user-password.user-page {
+  @include breakpoint($upto-desktop) {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 1.5625rem;
+    margin-right: 1.5625rem;
+
+    .password--message {
+      font-size: 0.8125rem;
+    }
+
+    .form-wrapper {
+      margin-top: 1rem;
+    }
+  }
+
+  .user-pass .form-item {
+    input {
+      padding-bottom: 0.5rem;
+      margin-top: 0.56rem;
+    }
+  }
+
+  @include breakpoint($upto-tablet) {
+    margin-left: 0.5rem;
+    margin-top: 2.38em;
+    margin-right: 0.5rem;
+    padding-top: 1.5rem;
+
+    .user-pass .form-item {
+      margin-top: 2.7rem;
+    }
+
+    .form-wrapper {
+      margin-top: 1.7rem;
+    }
+  }
+
+  .messages.messages--warning,
+  .messages.messages--error {
+    margin-top: 0;
+  }
+}
+
+.l-two--sf {
+  &.c-communication-preferences {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        max-width: 16.8125rem;
+        width: 24%;
+        padding-top: 1rem;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 74.5%;
+        max-width: 57.5625rem;
+        float: right;
+      }
+    }
+  }
+
+  &.order-detail {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        width: 22%;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 74.5%;
+        float: $right;
+      }
+    }
+  }
+}
+
+.c-user-register main .user-register-form.user-form,
+main .user-register-form {
+  .field--name-field-terms-and-condition {
+    margin-top: 2.2rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1rem;
+    }
+
+    .form-type-checkbox {
+      padding-#{$left}: 1.8rem;
+      line-height: 1.3;
+      color: $primary_checkbox_empty;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: 2rem;
+        line-height: 1;
+      }
+
+      label::before {
+        margin-#{$left}: -1.8rem;
+        margin-#{$right}: 0.8rem;
+
+        @include breakpoint($tablet) {
+          margin-#{$left}: -2rem;
+          margin-#{$right}: 1rem;
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    margin-top: 0.5rem;
+
+    .form-submit {
+      margin-top: 0;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.c-user-login.user-page,
+.checkout-login.user-page,
+.c-user-register {
+  .c-sidebar-second,
+  .fieldset-wrapper {
+    #block-youllbeableto {
+      @include breakpoint($only-mobile) {
+        h2 {
+          margin-bottom: 1rem;
+        }
+
+        span.icon-wish {
+          margin-#{$left}: -2.125rem;
+        }
+
+        span {
+          margin-#{$left}: -0.75rem;
+          vertical-align: middle;
+          height: 0.9375rem;
+          background-size: contain;
+        }
+
+        p {
+          margin: 0.6rem 0;
+        }
+      }
+
+      .field--type-image {
+        @include breakpoint($only-tablet) {
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+.c-user-login,
+.c-user-register {
+  &.user-page {
+    main {
+      @include breakpoint($tablet) {
+        width: 100%;
+
+        .block-system-main-block {
+          width: 50%;
+          float: $left;
+          border-#{$right}: 1px solid $user_form_layout_divider_color;
+          margin-#{$right}: 7.875rem;
+          min-height: 23.4375rem;
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        .block-system-main-block {
+          margin-#{$right}: 3.4375rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .region__content {
+          display: flex;
+          flex-direction: column;
+
+          .block-alshaya-social-login {
+            order: 2;
+          }
+
+          .block-alshaya-signup-signin-buttons {
+            order: 3;
+          }
+
+          .block-system-main-block {
+            order: 1;
+          }
+
+          .block-page-title-block {
+            h1 {
+              font-size: 1.25rem;
+              text-align: center;
+              width: 100%;
+
+              @include breakpoint($tablet) {
+                top: -3.6875rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .c-sidebar-second {
+      display: none;
+    }
+  }
+}

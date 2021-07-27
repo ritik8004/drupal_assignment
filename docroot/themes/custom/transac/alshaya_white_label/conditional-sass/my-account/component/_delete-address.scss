@@ -1,0 +1,165 @@
+.path--user {
+  .ui-dialog-title {
+    @extend %page-title;
+
+    border-bottom: 1px solid $user_ui_dialog_border;
+    font-size: 18px;
+    float: $left;
+    padding-bottom: 7px;
+    margin-top: 25px;
+    margin-bottom: 18px;
+    width: 70%;
+  }
+
+  .profile-address-book-delete-form,
+  .payment-card-delete-form {
+    color: $black;
+    font-size: 0.875rem;
+    min-height: 2rem;
+
+    .dialog-cancel {
+      width: auto !important;
+      height: 2.5rem !important;
+      display: inline-flex !important;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .button--primary {
+      margin-top: 1rem;
+      margin-#{$right}: 1rem;
+    }
+  }
+
+  .ui-dialog {
+    background: $white-five;
+    padding: 0;
+    padding-bottom: 1.25rem;
+    padding-#{$left}: 1.25rem;
+    z-index: 13;
+    width: 25rem !important;
+
+    html[lang=ar] & {
+      padding-right: 1rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: calc(100% - 0.5rem) !important;
+      margin: 0 0.25rem;
+    }
+
+    .ui-dialog-buttonpane {
+      margin: 0;
+      padding: 0;
+
+      button.dialog-cancel {
+        display: none;
+      }
+
+      button {
+        margin: 0;
+      }
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset,
+    .ui-dialog-content,
+    .ui-dialog-titlebar {
+      float: none;
+      padding: 0;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset {
+      float: $left;
+    }
+
+    .ui-button {
+      font-weight: 700;
+    }
+
+    .ui-dialog-content {
+      margin-bottom: 2rem;
+      padding-#{$right}: 3rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
+
+      html[lang=ar] & {
+        padding-#{$right}: 1rem;
+      }
+    }
+  }
+
+  .ui-widget-header {
+    overflow: hidden;
+  }
+
+  .ui-dialog .ui-dialog-titlebar-close {
+    color: $address_book_delete_close;
+    height: 3.125rem;
+    font-size: 1rem;
+    #{$right}: 0;
+    #{$left}: initial;
+    top: 0;
+    width: 2.5rem;
+    outline: none;
+    background-color: transparent;
+
+    &::before {
+      content: none;
+    }
+
+    &::after {
+      background: $address_pp_delete_closebtn;
+      content: "X";
+      display: block;
+      padding: 10px 15px;
+      position: absolute;
+      #{$right}: 0;
+      #{$left}: initial;
+      top: 0;
+    }
+  }
+
+  .button--primary {
+    @extend %button-wide;
+
+    min-width: 0;
+  }
+
+  .dialog-cancel {
+    color: $address_book_delete_cancel;
+    font-size: 10px;
+
+    @include breakpoint($tablet) {
+      font-size: 11px;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 12px;
+    }
+  }
+
+  button {
+    background: #fff;
+    border: none;
+  }
+
+  &.address--delete-popup {
+    .ui-dialog {
+      @include breakpoint($only-mobile) {
+        z-index: 11;
+      }
+    }
+  }
+
+  &.header--fixed {
+    &.modal-overlay::before {
+      z-index: 1000;
+    }
+
+    .ui-dialog {
+      z-index: 1001;
+    }
+  }
+}
