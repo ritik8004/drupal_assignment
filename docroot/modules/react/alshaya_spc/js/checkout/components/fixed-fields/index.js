@@ -5,6 +5,7 @@ import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
+import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 
 const FixedFields = ({
   defaultVal, showEmail, showFullName = true, subTitle, type,
@@ -17,6 +18,18 @@ const FixedFields = ({
   const hasSubTitle = subTitle !== undefined && subTitle.length > 0
     ? 'subtitle-yes' : 'subtitle-no';
 
+  const handleContactInfoChange = (e) => {
+    if (e.target.checked === false) {
+      // contains value of attribute 'name'.
+      const fields = ['fullname', 'mobile'];
+      let elementName = '';
+      // sets empty value for field fullname and mobile.
+      fields.forEach((fieldName) => {
+        elementName = `input[name='${fieldName}']`;
+        document.querySelector(elementName).value = '';
+      });
+    }
+  };
   return (
     <div className={`spc-checkout-contact-information ${hasSubTitle}`} id="spc-checkout-contact-info">
       {/* Show contact info only for CnC. */}
@@ -28,6 +41,15 @@ const FixedFields = ({
         </div>
         )}
       <div className="spc-checkout-contact-information-fields">
+        <ConditionalView
+          condition={(collectionPointsEnabled() === true
+            && drupalSettings.user.uid > 0)}
+        >
+          <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" onChange={(e) => handleContactInfoChange(e)} defaultChecked />
+          <label htmlFor="spc-checkout-contact-info-checkbox">
+            {getStringMessage('cnc_contact_info_checkbox')}
+          </label>
+        </ConditionalView>
         <ConditionalView condition={showFullName}>
           <TextField
             type="text"

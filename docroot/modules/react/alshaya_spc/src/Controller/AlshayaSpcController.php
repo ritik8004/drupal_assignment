@@ -537,6 +537,10 @@ class AlshayaSpcController extends ControllerBase {
         'key' => 'cnc_valid_govtid_message',
         'value' => $this->t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.'),
       ];
+      $strings[] = [
+        'key' => 'cnc_contact_info_checkbox',
+        'value' => $this->t('The same person placing the order will collect the order.'),
+      ];
     }
 
     $build = [
