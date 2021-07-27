@@ -631,28 +631,33 @@ const getCart = async (force = false) => {
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
-    if (response.data === false
-      || response.data.error_code === 404
-      || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)
+    if (_isEmpty(response.data)
+        || (!_isUndefined(response.status) && response.status === 404)
+        || (!_isUndefined(response.data) && response.data.error_code === 404)
+        || (!_isUndefined(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+      if (getCartIdFromStorage()) {
+        logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
 
-      // Remove cart_id from storage.
-      removeCartIdFromStorage();
+        // Remove cart_id from storage.
+        removeCartIdFromStorage();
 
-      // Reload the page.
-      // eslint-disable-next-line no-self-assign
-      window.location.href = window.location.href;
+        // Reload the page now that we have removed cart id from storage.
+        // eslint-disable-next-line no-self-assign
+        window.location.href = window.location.href;
+      }
+
+      // If cart is no longer available, no need to return any error.
+      return null;
     }
 
-    const error = {
+    return {
       data: {
         error: response.data.error,
         error_code: response.data.error_code,
         error_message: getDefaultErrorMessage(),
       },
     };
-    return new Promise((resolve) => resolve(error));
   }
 
   // Format data.
