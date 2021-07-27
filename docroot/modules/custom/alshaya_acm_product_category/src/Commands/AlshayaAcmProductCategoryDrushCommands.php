@@ -63,7 +63,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
    * AlshayaAcmProductCategoryDrushCommands constructor.
@@ -99,7 +99,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $this->entityTypeManager = $entity_type_manager;
     $this->metatagManager = $metatag_manager;
     $this->metatagToken = $metatag_token;
-    $this->loggerFactory = $logger_factory;
+    $this->drupalLogger = $logger_factory->get('alshaya_acm_product_category');
   }
 
   /**
@@ -160,10 +160,10 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       // storing this file anywhere in the filesystem.
       fclose($handle);
       $file_path = file_create_url($location);
-      $this->loggerFactory->get('alshaya_acm_product_category')->notice("Data exported successfully at Location: '{$file_path}'");
+      $this->drupalLogger->notice(dt('Data exported successfully at Location: @location', ['@location' => $file_path]));
     }
     else {
-      $this->loggerFactory->get('alshaya_acm_product_category')->warning('Something went wrong, Please check if the folder permissions are proper.');
+      $this->drupalLogger->warning(dt('Something went wrong, Please check if the folder permissions are proper.'));
     }
   }
 
@@ -241,6 +241,13 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             foreach ($tags as $key => $value) {
               $data[$key] = $this->metatagToken->replace($value, ['taxonomy_term' => $term]);
             }
+            // Remove metatag empty field.
+            unset($data['field_meta_tags']);
+            // Change the canonical url to relative url.
+            $relative_url = explode('/', parse_url($data['canonical_url'], PHP_URL_PATH));
+            // Unset the language prefix.
+            unset($relative_url['1']);
+            $data['canonical_url'] = implode('/', $relative_url);
             break;
 
           case 'field_select_sub_categories_plp':
