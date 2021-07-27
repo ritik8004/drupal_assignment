@@ -83,8 +83,131 @@ class SkuImagesManagerOverride extends SkuImagesManager {
    *   Processed media items.
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
-    // @todo stop image download from pims and set cache for pims media data.
-    return unserialize($sku->get('media')->getString());
+    $cache_key = implode(':', [
+      'product_media',
+      (int) $check_parent_child,
+      $context,
+    ]);
+
+    $cache = $this->productCacheManager->get($sku, $cache_key);
+
+    if (is_array($cache)) {
+      return $cache;
+    }
+
+    $data = $this->getGalleryMedia($sku);
+
+    foreach ($data['media_items']['images'] ?? [] as $key => $item) {
+      if (empty($item['label'])) {
+        $data['media_items']['images'][$key]['label'] = (string) $sku->label();
+      }
+    }
+
+    $this->productCacheManager->set($sku, $cache_key, $data);
+
+    return $data;
+  }
+
+  /**
+   * Utility function to return all media files for a SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param bool $check_parent_child
+   *   Check parent or child SKUs.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getGalleryMedia(SKUInterface $sku, $check_parent_child = FALSE) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $static_id = implode(':', [
+      $sku->getSku(),
+      $sku->language()->getId(),
+      (int) $check_parent_child,
+    ]);
+
+    if (isset($static[$static_id])) {
+      return $static[$static_id];
+    }
+
+    $media = unserialize($sku->get('media')->getString());
+
+    foreach ($media ?? [] as $index => $media_item) {
+      if (!isset($media_item['media_type'])) {
+        continue;
+      }
+
+      // Check for roles only if available.
+      if (!isset($media_item['roles'])) {
+        continue;
+      }
+
+      // If the image has base image role, we show it even if it is swatch
+      // or thumbnail.
+      if (in_array(self::BASE_IMAGE_ROLE, $media_item['roles'])) {
+        continue;
+      }
+
+      // Loop through all the roles we need to hide from gallery.
+      foreach ($this->getImageRolesToHide() as $role_to_hide) {
+        if (in_array($role_to_hide, $media_item['roles'])) {
+          unset($media[$index]);
+          break;
+        }
+      }
+    }
+
+    // Avoid notices and warnings in local.
+    if ($check_parent_child && empty($media)) {
+      if ($sku->bundle() == 'simple') {
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $sku->getPluginInstance();
+        $parent = $plugin->getParentSku($sku);
+
+        // Check if there is parent SKU available, use media files of parent.
+        if ($parent instanceof SKUInterface) {
+          return $this->getGalleryMedia($parent);
+        }
+      }
+      elseif ($sku->bundle() == 'configurable') {
+        $child = $this->getFirstChildWithMedia($sku);
+
+        // Check if there is child SKU available, use media files of child.
+        if ($child instanceof SKUInterface) {
+          return $this->getGalleryMedia($child, FALSE);
+        }
+      }
+    }
+
+    $return = [];
+    $media = !empty($media) ? array_filter($media) : [];
+    foreach ($media as $media_item) {
+      if ($media_item['media_type'] == 'image') {
+        $media_item['drupal_uri'] = $media_item['file'];
+        $return['media_items']['images'][] = $media_item;
+      }
+      elseif (!empty($media_item['video_url']) || $media_item['media_type'] === 'video') {
+        $return['media_items']['videos'][] = $media_item;
+      }
+    }
+
+    // For simple children we need to add images from parent
+    // if configured to do so.
+    if ($sku->bundle() === 'simple' && !$check_parent_child && $this->addParentImagesInChild()) {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $parent = $plugin->getParentSku($sku);
+
+      if ($parent instanceof SKUInterface) {
+        $parent_media = $this->getGalleryMedia($parent, FALSE);
+        $return = array_merge_recursive($return, $parent_media);
+      }
+    }
+
+    $static[$static_id] = $return;
+    return $return;
   }
 
 }
