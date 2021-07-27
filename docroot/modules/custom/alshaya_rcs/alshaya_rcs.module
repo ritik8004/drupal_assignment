@@ -13,15 +13,3 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
 
   $build['#attached']['library'][] = 'alshaya_rcs/add_to_cart';
 }
-
-/**
- * Implements hook_ENTITY_TYPE_view().
- */
-function alshaya_rcs_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() !== 'rcs_category') {
-    return;
-  }
-
-  $build['#attached']['library'][] = 'rcs_magento_placeholders/rcs_magento_placeholders';
-  $build['#attached']['library'][] = 'alshaya_rcs_magento_placeholders/main';
-}
