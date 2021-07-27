@@ -81,6 +81,24 @@ export function trackContentImpression(reviewData) {
 }
 
 /**
+ * Helper function to process datalayer push when element is visible in viewport.
+ *
+ * @param eventName
+ * @param inViewData
+ */
+function processAnalyticsDatalayerPush(eventName, inViewData) {
+  const reviewElement = document.getElementById('reviews-section');
+  function reviewsListener(event) {
+    event.preventDefault();
+    if (window.scrollY > reviewElement.offsetTop) {
+      pushContentToDataLayer(eventName, inViewData);
+      window.removeEventListener('scroll', reviewsListener);
+    }
+  }
+  window.addEventListener('scroll', reviewsListener);
+}
+
+/**
  * Helper function to push page view data to CGC analytics.
  *
  * @param inViewData
@@ -91,7 +109,7 @@ function trackInView(inViewData, containerId) {
     minPixels: 250,
     containerId,
   });
-  pushContentToDataLayer('BV_trackInView', inViewData);
+  processAnalyticsDatalayerPush('BV_trackInView', inViewData);
 }
 
 /**
@@ -106,7 +124,7 @@ function trackViewedCGC(inViewData, containerId) {
     minTime: 2500,
     containerId,
   });
-  pushContentToDataLayer('BV_trackViewedCGC', inViewData);
+  processAnalyticsDatalayerPush('BV_trackViewedCGC', inViewData);
 }
 
 /**
