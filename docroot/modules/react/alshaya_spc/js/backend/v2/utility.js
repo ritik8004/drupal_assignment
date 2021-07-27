@@ -1,4 +1,9 @@
 import Axios from 'axios';
+import {
+  getStorageInfo,
+  removeStorageInfo,
+  setStorageInfo,
+} from '../../utilities/storage';
 
 /**
  * Logs messages in the backend.
@@ -33,6 +38,35 @@ const logger = {
  *   True if user is authenticated.
  */
 const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);
+
+const removeCartIdFromStorage = () => {
+  if (isUserAuthenticated()) {
+    setStorageInfo(window.authenticatedUserCartId, 'cart_id');
+    return;
+  }
+
+  removeStorageInfo('cart_id');
+};
+
+const getCartIdFromStorage = () => {
+  let cartId = getStorageInfo('cart_id');
+
+  // Check if cartId is of authenticated user.
+  if (cartId === window.authenticatedUserCartId) {
+    // Reload the page if user is not authenticated based on settings.
+    if (!isUserAuthenticated()) {
+      removeStorageInfo('cart_id');
+
+      // eslint-disable-next-line no-self-assign
+      window.location.href = window.location.href;
+    }
+
+    // Replace with null so we don't need to add conditions everywhere.
+    cartId = null;
+  }
+
+  return cartId;
+};
 
 /**
  * Gets magento api endpoint by user role.
@@ -150,4 +184,6 @@ export {
   getApiEndpoint,
   isUserAuthenticated,
   getIp,
+  getCartIdFromStorage,
+  removeCartIdFromStorage,
 };

@@ -36,7 +36,7 @@ import {
   getApiEndpoint,
   isUserAuthenticated,
   logger,
-  getIp,
+  getIp, getCartIdFromStorage,
 } from './utility';
 import cartActions from '../../utilities/cart_actions';
 
@@ -1716,8 +1716,10 @@ window.commerceBackend.getCartForCheckout = () => {
     .then(async (response) => {
       let cart = response;
 
+      let cartId = getCartIdFromStorage();
+
       // Check if the user is authenticated but there is a guest cart_id in the local storage.
-      if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
+      if (isUserAuthenticated() && !_isNull(cartId)) {
         // If the user is authenticated and we have cart_id in the local storage
         // it means the customer just became authenticated.
         // We need to associate the cart and remove the cart_id from local storage.
@@ -1727,25 +1729,23 @@ window.commerceBackend.getCartForCheckout = () => {
         }
       }
 
-      const cartId = window.commerceBackend.getCartId();
+      cartId = window.commerceBackend.getCartId();
 
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
         logger.error(`Error while getting cart:${cartId} Error:${cart.data.error_message}`);
-        return new Promise((resolve) => resolve(cart.data));
+        return cart.data;
       }
 
       if (_isEmpty(cart.data.cart) || _isEmpty(cart.data.cart.items)) {
         logger.error(`Checkout accessed without items in cart for id:${cartId}`);
 
-        const error = {
+        return {
           data: {
             error: true,
             error_code: 500,
             error_message: 'Checkout accessed without items in cart',
           },
         };
-
-        return new Promise((resolve) => resolve(error));
       }
 
       cart.data = await getProcessedCheckoutData(cart.data);
