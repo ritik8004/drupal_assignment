@@ -13,9 +13,14 @@ import {
   getProcessedCartData,
   getCartWithProcessedData,
 } from './common';
-import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
+import {
+  getApiEndpoint,
+  isUserAuthenticated,
+  logger,
+  removeCartIdFromStorage,
+} from './utility';
 import { getExceptionMessageType } from './error';
-import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
+import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
@@ -333,7 +338,7 @@ window.commerceBackend.refreshCart = async (data) => {
  */
 window.commerceBackend.createCart = async () => {
   // Remove cart_id from storage.
-  removeStorageInfo('cart_id');
+  removeCartIdFromStorage();
 
   // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
@@ -347,6 +352,7 @@ window.commerceBackend.createCart = async () => {
     if (!isUserAuthenticated()) {
       setStorageInfo(response.data, 'cart_id');
     }
+
     return response.data;
   }
 
