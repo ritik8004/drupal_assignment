@@ -59,6 +59,7 @@ const Teaser = ({
       attribute[key] = value;
     }
   });
+  console.log(attribute);
   // Skip if there is no value for current language.
   if (attribute.title === undefined) {
     return null;
@@ -102,7 +103,7 @@ const Teaser = ({
           >
             <Gallery
 
-              media={attribute.media}
+              media={hit.media}
               title={attribute.title}
               labels={attribute.product_labels}
               sku={hit.sku}
