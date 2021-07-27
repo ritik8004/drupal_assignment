@@ -6,7 +6,13 @@ import _isUndefined from 'lodash/isUndefined';
 import _isObject from 'lodash/isObject';
 import _isEmpty from 'lodash/isEmpty';
 import _isNull from 'lodash/isNull';
-import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
+import {
+  getApiEndpoint,
+  getCartIdFromStorage,
+  isUserAuthenticated,
+  logger,
+  removeCartIdFromStorage,
+} from './utility';
 import {
   cartErrorCodes,
   getDefaultErrorMessage,
@@ -14,7 +20,8 @@ import {
   getProcessedErrorMessage,
 } from './error';
 import cartActions from '../../utilities/cart_actions';
-import { removeStorageInfo } from '../../utilities/storage';
+
+window.authenticatedUserCartId = 'NA';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -25,9 +32,7 @@ window.commerceBackend = window.commerceBackend || {};
  *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
-  // For guest users we use the local storage.
-  let cartId = localStorage.getItem('cart_id');
-
+  let cartId = getCartIdFromStorage();
   if (_isNull(cartId)) {
     // For authenticated users we get the cart id from the cart.
     const data = window.commerceBackend.getRawCartDataFromStorage();
@@ -116,7 +121,7 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   staticCartData = null;
 
   if (resetAll) {
-    removeStorageInfo('cart_id');
+    removeCartIdFromStorage();
   }
 };
 
@@ -631,10 +636,13 @@ const getCart = async (force = false) => {
       || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
       logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+
       // Remove cart_id from storage.
-      removeStorageInfo('cart_id');
+      removeCartIdFromStorage();
+
       // Reload the page.
-      window.location.reload();
+      // eslint-disable-next-line no-self-assign
+      window.location.href = window.location.href;
     }
 
     const error = {
@@ -664,8 +672,8 @@ const getCart = async (force = false) => {
  *   Returns the updated cart or false.
  */
 const associateCartToCustomer = async () => {
-  const guestCartId = localStorage.getItem('cart_id');
-  if (_isNull(guestCartId) || _isUndefined(guestCartId)) {
+  const guestCartId = getCartIdFromStorage();
+  if (_isNull(guestCartId)) {
     return false;
   }
 
@@ -679,7 +687,8 @@ const associateCartToCustomer = async () => {
       '@cartId': guestCartId,
       '@msg': (!_isUndefined(response.data) && !_isUndefined(response.data.message)) ? response.data.message : '',
     });
-    removeStorageInfo('cart_id');
+
+    removeCartIdFromStorage();
 
     return false;
   }
@@ -707,7 +716,7 @@ const associateCartToCustomer = async () => {
       });
     } else {
       // Clear local storage.
-      removeStorageInfo('cart_id');
+      removeCartIdFromStorage();
 
       // Reload cart.
       return getCart(true);
@@ -734,15 +743,17 @@ const getCartWithProcessedData = async (force = false) => {
     return null;
   }
 
+  const cartId = getCartIdFromStorage();
+
   // Check if the user is authenticated but there is a guest cart_id in the local storage.
-  if (isUserAuthenticated() && !_isNull(localStorage.getItem('cart_id'))) {
+  if (isUserAuthenticated() && !_isNull(cartId)) {
     if (!_isUndefined(cart.data.cart)
       && !_isUndefined(cart.data.cart.items)
       && !_isEmpty(cart.data.cart.items)
     ) {
       // If the current cart has items, we carry on with this cart and remove
       // the guest cart id from local storage.
-      removeStorageInfo('cart_id');
+      removeCartIdFromStorage();
     } else {
       // If the user is authenticated and we have cart_id in the local storage
       // it means the customer just became authenticated.
