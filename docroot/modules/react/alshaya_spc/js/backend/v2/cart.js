@@ -453,5 +453,10 @@ window.commerceBackend.addFreeGift = async (data) => {
       }
     }
   }
-  return getProcessedCartData(cart.data);
+
+  // If we don't have any errors, process the cart data.
+  if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
+    cart.data = await getProcessedCartData(cart.data);
+  }
+  return cart;
 };
