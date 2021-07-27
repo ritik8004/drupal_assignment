@@ -20,12 +20,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_metatags:
-    weight: 3
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: metatag_empty_formatter
-    region: content
 hidden:
   field_category_slug: true
+  field_metatags: true

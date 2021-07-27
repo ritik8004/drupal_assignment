@@ -14,13 +14,6 @@ targetEntityType: node
 bundle: rcs_product
 mode: default
 content:
-  field_metatags:
-    weight: 101
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: metatag_empty_formatter
-    region: content
   links:
     weight: 100
     region: content
@@ -28,4 +21,5 @@ content:
     third_party_settings: {  }
 hidden:
   body: true
+  field_metatags: true
   field_product_slug: true
