@@ -3,8 +3,6 @@
 namespace Drupal\rcs_placeholders\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a decoupled navigation menu block.
@@ -15,25 +13,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   category = @Translation("RCS Placeholders"),
  * )
  */
-class RcsPhNavigationMenu extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition
-    );
-  }
+class RcsPhNavigationMenu extends BlockBase {
 
   /**
    * {@inheritdoc}
    */
   public function build() {
     return [
-      '#markup' => '<div id="rcs-ph-navigation_menu"><span></span></div>',
+      '#markup' => '<div id="rcs-ph-navigation_menu" data-rcs-dependency="none"><span></span></div>',
     ];
   }
 

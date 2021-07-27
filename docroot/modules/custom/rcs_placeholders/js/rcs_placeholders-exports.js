@@ -163,7 +163,7 @@ rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
           }
         });
 
-        if (entityFieldValue && entityFieldValue[langcode] !== undefined) {
+        if (entityFieldValue !== null && entityFieldValue[langcode] !== undefined) {
           entityFieldValue = entityFieldValue[langcode];
         }
       }
@@ -171,7 +171,7 @@ rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
       if (filter !== undefined) {
         entityFieldValue = rcsPhRenderingEngine.computePhFilters(entityFieldValue, filter);
 
-        if (entityFieldValue[langcode] !== undefined) {
+        if (entityFieldValue !== null && entityFieldValue[langcode] !== undefined) {
           entityFieldValue = entityFieldValue[langcode];
         }
       }

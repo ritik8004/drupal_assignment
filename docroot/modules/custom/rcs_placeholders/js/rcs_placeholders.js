@@ -11,93 +11,40 @@
 /* global globalThis */
 
 (function main($) {
+
+  var pageEntity = null;
+
   $(document).ready(function ready() {
     if (
       !drupalSettings.rcsProcessed &&
       typeof globalThis.rcsPhCommerceBackend !== 'undefined' &&
-      // Currently we do not have the following configured.
-      // typeof globalThis.rcsPhSearchBackend !== 'undefined' &&
       typeof globalThis.rcsPhRenderingEngine !== 'undefined'
-      // typeof globalThis.rcsPhSearchRenderingEngine !== 'undefined'
     ) {
       globalThis.rcs_ph_context = 'browser';
 
-      // @todo make this configurable.
-      const langcode = drupalSettings.path.currentLanguage;
+      // Process the block placeholders. This is async process, the
+      // rendering engine is responsible of the entire processing and
+      // replacement.
+      $("[id^=rcs-ph-][data-rcs-dependency='none']").once('rcs-ph-process').each(eachBlockPh);
 
       // Retrieve overall page details if needed.
       globalThis.rcsPhCommerceBackend
-        .getEntity(langcode)
+        .getEntity(drupalSettings.path.currentLanguage)
         .then(entity => {
+          pageEntity = entity;
+
           // Process the block placeholders. This is async process, the
           // rendering engine is responsible of the entire processing and
           // replacement.
-          $("[id^=rcs-ph-]").each(function eachBlockPh() {
-            // Extract the placeholder ID.
-            const blockPhRegex = /rcs-ph-([^"]+)/;
-            const blockPhId = $(this)[0].id.match(blockPhRegex);
-
-            // Extract the parameters.
-            const params = [];
-            $($(this)[0].attributes).each(function eachBlockPhAttributes() {
-              const blockPhParamRegex = /data-param-([^"]+)/;
-              const blockPhParamId = $(this)[0].name.match(
-                blockPhParamRegex
-              );
-
-              if (blockPhParamId && blockPhParamId.length !== 0) {
-                params[blockPhParamId[1]] = $(this)[0].value;
-              }
-            });
-
-            let backend = globalThis.rcsPhCommerceBackend;
-            let renderer = globalThis.rcsPhRenderingEngine;
-            if (params.backend && params["backend"] === "search") {
-              backend = globalThis.rcsPhSearchBackend;
-              renderer = globalThis.rcsPhSearchRenderingEngine;
-            }
-
-            // Acquire data from the selected backend.
-            backend
-              .getData(
-                blockPhId[1],
-                params,
-                entity,
-                langcode,
-                $(this)[0].innerHTML
-              )
-              .then(data => {
-                if (data === null) {
-                  return;
-                }
-
-                // Pass the data to the rendering engine.
-                $(this).html(
-                  renderer.render(
-                    drupalSettings,
-                    blockPhId[1],
-                    params,
-                    data,
-                    entity,
-                    langcode,
-                    $(this)[0].innerHTML
-                  )
-                );
-
-                // Re-attach all behaviors.
-                rcsPhApplyDrupalJs($(this).parent());
-              });
-          });
+          $("[id^=rcs-ph-]").once('rcs-ph-process').each(eachBlockPh);
 
           if (typeof drupalSettings.rcsPage !== 'undefined') {
-            // Hard coded list of html attributes which we need to parse to
-            // find field placeholders.
             const attributes = drupalSettings.rcsPhSettings.placeholderAttributes;
 
             // Identify all the field placeholders and get the replacement
             // value. Parse the html to find all occurrences at apply the
             // replacement.
-            rcsPhReplaceEntityPh(document.documentElement.innerHTML, drupalSettings.rcsPage.type, entity, langcode)
+            rcsPhReplaceEntityPh(document.documentElement.innerHTML, drupalSettings.rcsPage.type, entity, drupalSettings.path.currentLanguage)
               .forEach(function eachReplacement(r) {
                 const fieldPh = r[0];
                 const entityFieldValue = r[1];
@@ -148,4 +95,69 @@
       JSON.parse(unescape($(item).attr('data-options'))),
     ));
   });
+
+  function eachBlockPh() {
+    // Extract the placeholder ID.
+    const blockPhRegex = /rcs-ph-([^"]+)/;
+    const blockPhId = $(this)[0].id.match(blockPhRegex);
+
+    // Extract the parameters.
+    const params = [];
+    $($(this)[0].attributes).each(function eachBlockPhAttributes() {
+      const blockPhParamRegex = /data-param-([^"]+)/;
+      const blockPhParamId = $(this)[0].name.match(
+        blockPhParamRegex
+      );
+
+      if (blockPhParamId && blockPhParamId.length !== 0) {
+        params[blockPhParamId[1]] = $(this)[0].value;
+      }
+    });
+
+    let backend = globalThis.rcsPhCommerceBackend;
+    let renderer = globalThis.rcsPhRenderingEngine;
+    if (params.backend && params["backend"] === "search") {
+      if (typeof globalThis.rcsPhSearchBackend === 'undefined'
+        || typeof globalThis.rcsPhSearchRenderingEngine === 'undefined') {
+        console.log('Search backend not available but used.');
+        return '';
+      }
+      backend = globalThis.rcsPhSearchBackend;
+      renderer = globalThis.rcsPhSearchRenderingEngine;
+    }
+
+    params['get-data'] = params['get-data'] === "true";
+
+    // Acquire data from the selected backend.
+    backend
+      .getData(
+        blockPhId[1],
+        params,
+        pageEntity,
+        drupalSettings.path.currentLanguage,
+        $(this)[0].innerHTML
+      )
+      .then(data => {
+        if (params['get-data'] && data === null) {
+          return;
+        }
+
+        // Pass the data to the rendering engine.
+        $(this).html(
+          renderer.render(
+            drupalSettings,
+            blockPhId[1],
+            params,
+            data,
+            pageEntity,
+            drupalSettings.path.currentLanguage,
+            $(this)[0].innerHTML
+          )
+        );
+
+        // Re-attach all behaviors.
+        rcsPhApplyDrupalJs($(this).parent());
+      });
+  }
+
 })(jQuery, Drupal, drupalSettings);
