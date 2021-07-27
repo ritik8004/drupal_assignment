@@ -507,6 +507,10 @@ const getStoreInfo = async (storeData) => {
   if (typeof store.rnc_config !== 'undefined') {
     delete store.rnc_config;
   }
+
+  // @todo: Remove this code once we start getting store type in api response for PUDO.
+  store.type = 'collection_point';
+
   return store;
 };
 

@@ -37,3 +37,12 @@ alshaya_click_collect.settings:
     checkout_click_collect_collection_points_enabled:
       type: boolean
       label: 'Checkout: Click and Collect collection points enabled'
+    checkout_click_collect_store_list_icon:
+      type: string
+      label: 'Checkout: Click and Collect store list icon'
+    checkout_click_collect_collection_point_list_icon:
+      type: string
+      label: 'Checkout: Click and Collect collection point list icon'
+    checkout_click_collect_collection_point_map_icon:
+      type: string
+      label: 'Checkout: Click and Collect collection point map icon'

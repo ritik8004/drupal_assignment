@@ -11,6 +11,50 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ * Add cnc collection point feature related data.
+ */
+function alshaya_click_collect_alshaya_spc_checkout_build_alter(array &$build) {
+  $cnc_config = \Drupal::config('alshaya_click_collect.settings');
+  $cnc_collection_points_enabled = $cnc_config->get('checkout_click_collect_collection_points_enabled');
+  $build['#attached']['drupalSettings']['cnc_collection_points_enabled'] = $cnc_collection_points_enabled;
+
+  // If collection point feature is not enabled, return.
+  if (!$cnc_collection_points_enabled) {
+    return;
+  }
+
+  $build['#strings'][] = [
+    'key' => 'cnc_collection_point',
+    'value' => t('Collection Point'),
+  ];
+
+  $build['#strings'][] = [
+    'key' => 'cnc_find_your_collection_point',
+    'value' => t('find your collection point'),
+  ];
+
+  $build['#strings'][] = [
+    'key' => 'cnc_select',
+    'value' => t('select'),
+  ];
+
+  $build['#strings'][] = [
+    'key' => 'cnc_valid_govtid_message',
+    'value' => $this->t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.'),
+  ];
+
+  $build['#strings'][] = [
+    'key' => 'cnc_contact_info_checkbox',
+    'value' => $this->t('The same person placing the order will collect the order.'),
+  ];
+
+  $build['#attached']['drupalSettings']['cnc_store_list_icon'] = $cnc_config->get('checkout_click_collect_store_list_icon');
+  $build['#attached']['drupalSettings']['cnc_collection_point_list_icon'] = $cnc_config->get('checkout_click_collect_collection_point_list_icon');
+  $build['#attached']['drupalSettings']['cnc_collection_point_map_icon'] = $cnc_config->get('checkout_click_collect_collection_point_map_icon');
+}
+
+/**
  * Implements hook_theme().
  */
 function alshaya_click_collect_theme($existing, $type, $theme, $path) {

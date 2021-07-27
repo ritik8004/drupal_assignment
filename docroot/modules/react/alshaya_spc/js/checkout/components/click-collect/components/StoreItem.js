@@ -2,13 +2,22 @@ import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../utilities/strings';
-import { getCncModalButtonText } from '../../../../utilities/cnc_util';
+import {
+  getCncModalButtonText,
+  getCncListIcon,
+  collectionPointsEnabled,
+} from '../../../../utilities/cnc_util';
 
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
 }) => (
   <>
     <span className="spc-cnc-store-name">
+      <ConditionalView condition={collectionPointsEnabled()}>
+        <span className="list-icon">
+          <img src={getCncListIcon(store.type)} />
+        </span>
+      </ConditionalView>
       <span className="spc-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
         <span className="store-name">{store.name}</span>
         <span className="store-distance">

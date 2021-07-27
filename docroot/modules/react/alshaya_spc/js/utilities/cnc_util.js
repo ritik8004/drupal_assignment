@@ -4,6 +4,21 @@
 export const collectionPointsEnabled = () => drupalSettings.cnc_collection_points_enabled || false;
 
 /**
+ * Helper to get click and collect store list icon.
+ */
+export const getCncStoreListIcon = () => drupalSettings.cnc_store_list_icon || '';
+
+/**
+ * Helper to get click and collect store list icon.
+ */
+export const getCncCollectionPointListIcon = () => drupalSettings.cnc_collection_point_list_icon || '';
+
+/**
+ * Helper to get click and collect store list icon.
+ */
+export const getCncCollectionPointMapIcon = () => drupalSettings.cnc_collection_point_map_icon || '';
+
+/**
  * Helper to get click and collect section title.
  */
 export const getCncSectionTitle = () => ((collectionPointsEnabled() === true)
@@ -37,3 +52,21 @@ export const getCncModalDescription = () => ((collectionPointsEnabled() === true
 export const getCncModalButtonText = () => ((collectionPointsEnabled() === true)
   ? 'cnc_select'
   : 'cnc_select_this_store');
+
+/**
+ * Helper to check if given store is a aramex/pudo collection point.
+ */
+export const isCollectionPoint = (type) => ((type === 'collection_point'));
+
+/**
+ * Helper to get cnc list icon.
+ */
+export const getCncListIcon = (type) => {
+  if (collectionPointsEnabled() !== true) {
+    return '';
+  }
+
+  const icon = isCollectionPoint(type) ? getCncCollectionPointListIcon() : getCncStoreListIcon();
+
+  return icon;
+};

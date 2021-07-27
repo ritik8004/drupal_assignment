@@ -13,4 +13,7 @@ click_collect_rnc: '1 hour'
 checkout_click_collect_available: 'Collect your order in-store'
 checkout_click_collect_unavailable: 'Sorry Collect your order in-store is unavailable'
 checkout_click_collect_collection_points_enabled: false
+checkout_click_collect_store_list_icon: ''
+checkout_click_collect_collection_point_list_icon: ''
+checkout_click_collect_collection_point_map_icon: ''
 langcode: en
