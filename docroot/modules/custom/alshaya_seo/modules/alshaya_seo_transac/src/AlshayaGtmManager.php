@@ -934,7 +934,8 @@ class AlshayaGtmManager {
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
     $orders_count = isset($order['customer_id']) ? $this->ordersManager->getOrdersCount((int) $order['customer_id']) : 1;
-
+    $current_user_id = $this->currentUser->id();
+    $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -943,8 +944,13 @@ class AlshayaGtmManager {
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
+      'userId' => (int) $order['customer_id'],
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
+      'userPhone' => $current_user_id ? ($current_user->get('field_mobile_number')->value ?? '') : '',
+      'userType' => isset($order['customer_id']) ? 'Logged in User' : 'Guest User',
+      'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
+      'platformType' => $this->getUserDeviceType(),
     ];
 
     return [
@@ -1320,6 +1326,25 @@ class AlshayaGtmManager {
     return !empty($currency_code->get('iso_currency_code'))
       ? $currency_code->get('iso_currency_code')
       : $currency_code->get('currency_code');
+  }
+
+  /**
+   * Helper function to get device type.
+   *
+   * @return string
+   *   User device type.
+   */
+  public function getUserDeviceType() {
+    $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    $device_type = "Desktop";
+    if (strpos($user_agent, 'mobile') !== FALSE) {
+      $device_type = "Mobile";
+    }
+    elseif (strpos($user_agent, 'tablet') !== FALSE) {
+      $device_type = "Tablet";
+    }
+
+    return $device_type;
   }
 
 }
