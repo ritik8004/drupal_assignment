@@ -59,7 +59,6 @@ const Teaser = ({
       attribute[key] = value;
     }
   });
-  console.log(attribute);
   // Skip if there is no value for current language.
   if (attribute.title === undefined) {
     return null;
