@@ -1151,6 +1151,9 @@ class AlshayaAlgoliaIndexHelper {
       'search_api_datasource',
       'search_api_id',
       'stock_quantity',
+      'attr_aims_barcode',
+      'field_configured_skus',
+      'media',
     ];
 
     $this->moduleHandler->alter('alshaya_product_list_exclude_attribute', $excludedAttributes);
