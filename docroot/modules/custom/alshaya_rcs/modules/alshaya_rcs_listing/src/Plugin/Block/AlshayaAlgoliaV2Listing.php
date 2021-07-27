@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_rcs_plp\Plugin\Block;
+namespace Drupal\alshaya_rcs_listing\Plugin\Block;
 
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
@@ -14,11 +14,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
  * Provides a block to display 'plp' results.
  *
  * @Block(
- *   id = "alshaya_algolia_plp_v2",
- *   admin_label = @Translation("Alshaya Algolia PLP V2")
+ *   id = "alshaya_algolia_listing_v2",
+ *   admin_label = @Translation("Alshaya Algolia Listing V2")
  * )
  */
-class AlshayaAlgoliaV2Plp extends AlshayaAlgoliaReactBlockBase {
+class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
 
   const PAGE_TYPE = 'listing';
   const PAGE_SUB_TYPE = 'plp';
@@ -132,7 +132,7 @@ class AlshayaAlgoliaV2Plp extends AlshayaAlgoliaReactBlockBase {
       '#attached' => [
         'library' => [
           'alshaya_algolia_react/plpv2',
-          'alshaya_rcs_plp/renderer',
+          'alshaya_rcs_listing/renderer',
         ],
         'drupalSettings' => [
           'algoliaSearch' => $algoliaSearch,

@@ -3,7 +3,7 @@ const buildPath = './dist/';
 
 const config = {
   entry: {
-    alshaya_rcs_plp_renderer: './js/alshaya_rcs_plp_renderer.es5.js',
+    alshaya_rcs_plp_renderer: './js/alshaya_rcs_listing_renderer.es5.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

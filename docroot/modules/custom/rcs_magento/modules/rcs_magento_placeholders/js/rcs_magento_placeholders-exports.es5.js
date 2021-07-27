@@ -157,7 +157,6 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'category':
-      case 'entity':
       // Prepare request parameters.
       request.uri += "graphql";
       request.method = "POST",
@@ -200,7 +199,7 @@ exports.getEntity = async function getEntity(langcode) {
   if (drupalSettings.rcsPage.type == "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
   }
-  if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
+  else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
   }
 

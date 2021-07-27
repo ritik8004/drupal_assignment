@@ -94,7 +94,7 @@ exports.render = function render(
       }
       break;
 
-    case "product_category_list":
+    case 'product_category_list':
       // Process rcs plp renderer, if available.
       if (typeof globalThis.renderRcsPlp !== 'undefined') {
         html += globalThis.renderRcsPlp.render(
