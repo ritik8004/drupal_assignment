@@ -1,5 +1,5 @@
-@javascript @KNetPayment @homeDelivery @auth @hmkwprod @mckwprod @bbwkwpprod @flkwprod @pbkwprod @bbwkwprod
-Feature: SPC Checkout Home Delivery CC
+@javascript @KNetPayment @homeDelivery @auth @hmkwprod @mckwprod @bbwkwpprod @flkwprod @pbkwprod @bbwkwprod @tbskwprod
+Feature: SPC Checkout Home Delivery of KNET payment for Guest User
 
   Background:
     Given I am on "{spc_product_listing_page}"
@@ -28,8 +28,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I scroll to the "#spc-payment-methods" element
+    And I wait for AJAX to finish
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -71,7 +70,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
+    And I wait for AJAX to finish
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -112,7 +111,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
+    And I wait for AJAX to finish
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page

@@ -197,7 +197,9 @@
 
   .toggle--icon {
     .icon-ic_dropdown-expand {
-      @include icon(dropdown-collapse);
+      @include icon(chevrondown, before) {
+        transform: translateY(-50%) rotate(180deg);
+      }
     }
   }
 }

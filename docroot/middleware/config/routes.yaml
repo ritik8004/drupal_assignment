@@ -63,11 +63,6 @@ payment.payment_error:
   controller: App\Controller\PaymentController::handlePaymentFail
   methods: GET
 
-card.bin_validation:
-  path: /card/bin-validation
-  controller: App\Controller\BinValidationController::handleBinValidation
-  methods: POST
-
 freegift.select_free_gift:
     path: /select-free-gift
     controller: App\Controller\FreeGiftController::selectFreeGift

@@ -1,0 +1,19 @@
+diff --git a/.htaccess b/.htaccess
+index f20c445..12e8343 100644
+--- a/.htaccess
++++ b/.htaccess
+@@ -20,8 +20,14 @@ DirectoryIndex index.php index.html index.htm
+
+ # Add correct encoding for SVGZ.
+ AddType image/svg+xml svg svgz
++AddType application/x-font-ttf .ttf
+ AddEncoding gzip svgz
+
++# Set the deflate filter type for compression.
++<IfModule mod_deflate.c>
++AddOutputFilterByType DEFLATE application/x-font-ttf
++</IfModule>
++
+ # Most of the following PHP settings cannot be changed at runtime. See
+ # sites/default/default.settings.php and
+ # Drupal\Core\DrupalKernel::bootEnvironment() for settings that can be

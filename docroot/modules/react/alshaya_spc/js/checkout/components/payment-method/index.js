@@ -23,6 +23,7 @@ import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import PaymentMethodCheckoutComUpapiFawry
   from '../payment-method-checkout-com-upapi-fawry';
+import cartActions from '../../../utilities/cart_actions';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -62,7 +63,7 @@ export default class PaymentMethod extends React.Component {
   };
 
   finalisePayment = (paymentData) => {
-    addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
+    addPaymentMethodInCart(cartActions.cartPaymentFinalise, paymentData).then((result) => {
       if (!result) {
         // If validation fails, addPaymentMethodInCart(), returns null.
         removeFullScreenLoader();
@@ -73,14 +74,22 @@ export default class PaymentMethod extends React.Component {
         if (result.error_code !== undefined) {
           const errorCode = parseInt(result.error_code, 10);
           if (errorCode === 505) {
-            Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+            Drupal.logJavascriptError(
+              cartActions.cartPaymentFinalise,
+              result.error_message,
+              GTM_CONSTANTS.CHECKOUT_ERRORS,
+            );
 
             dispatchCustomEvent('spcCheckoutMessageUpdate', {
               type: 'error',
               message: getStringMessage('shipping_method_error'),
             });
           } else if (errorCode === 500 && result.error_message !== undefined) {
-            Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.PAYMENT_ERRORS);
+            Drupal.logJavascriptError(
+              cartActions.cartPaymentFinalise,
+              result.error_message,
+              GTM_CONSTANTS.PAYMENT_ERRORS,
+            );
 
             dispatchCustomEvent('spcCheckoutMessageUpdate', {
               type: 'error',
@@ -88,14 +97,22 @@ export default class PaymentMethod extends React.Component {
             });
           } else if (errorCode === 404) {
             // Cart no longer available, redirect user to basket.
-            Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+            Drupal.logJavascriptError(
+              cartActions.cartPaymentFinalise,
+              result.error_message,
+              GTM_CONSTANTS.CHECKOUT_ERRORS,
+            );
             window.location = Drupal.url('cart');
           } else {
             const errorMessage = result.message === undefined
               ? result.error_message
               : result.message;
 
-            Drupal.logJavascriptError('finalise payment', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+            Drupal.logJavascriptError(
+              cartActions.cartPaymentFinalise,
+              errorMessage,
+              GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
+            );
           }
 
           // Enable the 'place order' CTA.
@@ -118,7 +135,11 @@ export default class PaymentMethod extends React.Component {
         removeStorageInfo('billing_shipping_same');
         window.location = result.redirectUrl;
       } else {
-        Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        Drupal.logJavascriptError(
+          cartActions.cartPaymentFinalise,
+          result.message,
+          GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
+        );
         removeFullScreenLoader();
       }
     }).catch((error) => {

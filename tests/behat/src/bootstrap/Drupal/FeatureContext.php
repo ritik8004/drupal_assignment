@@ -2431,9 +2431,9 @@ JS;
   public function iSelectKnetPaymentMethod()
   {
     $page = $this->getSession()->getPage();
-    $newCheckoutKnet = $page->find('css', '#payment-method-checkout_com_upapi_knet');
+    $newCheckoutKnet = $page->find('css', '#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet');
     if (!empty($newCheckoutKnet)) {
-      $element = '#payment-method-checkout_com_upapi_knet';
+      $element = '#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_knet';
     } else {
       $element = '#payment-method-knet';
     }
@@ -2580,7 +2580,11 @@ JS;
         if (maxlength == 9) {
             value = value + "9";
         }
+        else if (maxlength == 10) {
+            value = 1255557111;
+        }
         jQuery("input[name=\"mobile\"]").val(value);
+        
 JS;
       $this->getSession()->executeScript($script);
       if ($page->find('css', 'input[name="email"]')) {
@@ -2773,6 +2777,40 @@ JS;
     $checkoutButton = $this->getElementByCss('#spc-checkout .spc-content .checkout-link');
     $checkoutButton->click();
     $this->iWaitSeconds('30');
+  }
+
+  /**
+   * @Given /^I select date and month in the form$/
+   */
+  public function iSelectDateAndMonthInTheForm()
+  {
+    $page = $this->getSession()->getPage();
+    $knet_expiration = $page->find('css', '#cardExpdate .col:nth-child(2) select:first-child');
+    if ($knet_expiration != null) {
+      $this->getSession()->executeScript("jQuery('#debitMonthSelect').val(9)");
+      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2021)");
+      $this->iWaitSeconds('20');
+    }
+    else {
+      throw new \Exception(sprintf('Month-year not found.'));
+    }
+  }
+
+  /**
+   * @Given /^I select date and month in the form for arabic$/
+   */
+  public function iSelectDateAndMonthInTheFormForArabic()
+  {
+    $page = $this->getSession()->getPage();
+    $knet_expiration = $page->find('css', '#cardExpdate .col:nth-child(1) select:first-child');
+    if ($knet_expiration != null) {
+      $this->getSession()->executeScript("jQuery('#debitYearSelect').val(2021)");
+      $this->getSession()->executeScript("jQuery('#debitMonthSelect').val(9)");
+      $this->iWaitSeconds('20');
+    }
+    else {
+      throw new \Exception(sprintf('Month-year not found.'));
+    }
   }
 
 }

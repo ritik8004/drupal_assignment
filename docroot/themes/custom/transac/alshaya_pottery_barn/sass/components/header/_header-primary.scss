@@ -106,6 +106,17 @@ header {
       }
     }
 
+    .block-alshaya-react-mini-cart {
+      .cart-link {
+        @include breakpoint($only-mobile) {
+          html[lang=ar] & {
+            top: -0.125rem;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
     .site-brand-home {
       html[lang=ar] & {
         @include breakpoint($only-tablet) {

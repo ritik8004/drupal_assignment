@@ -2,6 +2,7 @@ name: Alshaya West Elm
 type: theme
 description: 'Theme for West Elm (Transactional).'
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: alshaya_white_label
 alshaya_theme_type: transac
 
@@ -35,6 +36,11 @@ libraries-override:
     css:
       theme:
         css/ltr-print.css: css/rtl-print.css
+
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
 
   alshaya_white_label/spc-login:
     css:

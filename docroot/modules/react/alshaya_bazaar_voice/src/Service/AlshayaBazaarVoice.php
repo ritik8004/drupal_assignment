@@ -172,7 +172,7 @@ class AlshayaBazaarVoice {
         $rating_distribution = $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution']);
         if ($value['ReviewStatistics']['TotalReviewCount'] > 0) {
           $response['ReviewStatistics'][$value['Id']] = [
-            'AverageOverallRating' => $value['ReviewStatistics']['AverageOverallRating'],
+            'AverageOverallRating' => $this->truncate($value['ReviewStatistics']['AverageOverallRating'], 1),
             'TotalReviewCount' => $value['ReviewStatistics']['TotalReviewCount'],
             'RatingDistribution' => $rating_distribution['rating_distribution'],
             'RatingStars' => ['rating_' . round($value['ReviewStatistics']['AverageOverallRating'])],
@@ -184,6 +184,24 @@ class AlshayaBazaarVoice {
     }
 
     return NULL;
+  }
+
+  /**
+   * Truncate a float number.
+   *
+   * @param float $val
+   *   Float number to be truncate.
+   * @param int $f
+   *   Number of precision.
+   *
+   * @return float
+   *   Return a float value.
+   */
+  public function truncate($val, $f = 0) {
+    if (($p = strpos($val, '.')) !== FALSE) {
+      $val = floatval(substr($val, 0, $p + 1 + $f));
+    }
+    return $val;
   }
 
   /**
@@ -386,6 +404,7 @@ class AlshayaBazaarVoice {
     $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
     $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
     $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
+    $basic_configs['show_location_filter'] = $config->get('show_location_filter');
     $basic_configs['comment_submission'] = $config->get('comment_submission');
 
     return $basic_configs;
@@ -554,10 +573,11 @@ class AlshayaBazaarVoice {
     $maxAge = $config->get('max_age');
     $userId = $this->currentUser->id();
     $mail = $this->currentUser->getEmail();
+    $productId = $this->currentRequest->get('product');
 
     // URL-encoded query string.
-    $userStr = "date=" . urlencode(date('Ymd')) . "&userid=" . urlencode($userId) . "&EmailAddress=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
-    // Encode the signature using HMAC SHA-256.
+    $uasStr = "date=" . urlencode(date('Ymd')) . "&userid=" . urlencode($userId) . "&EmailAddress=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
+    $userStr = ($productId !== NULL) ? $uasStr . '&verifiedpurchaser=True&subjectids=' . $productId : $uasStr;
     $signature = hash_hmac('sha256', $userStr, $sharedKey);
     // Concatenate the signature and hex-encoded string of parameters.
     $uas = $signature . bin2hex($userStr);
@@ -615,13 +635,13 @@ class AlshayaBazaarVoice {
    */
   public function getMyAccountProductSettings($sku_id, array $basic_configs) {
     $productNode = $this->skuManager->getDisplayNode($sku_id);
-    $productArray = [];
+    $productObj = new \stdClass();
     if ($productNode instanceof NodeInterface) {
-      $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $basic_configs);
+      $productObj->alshaya_bazaar_voice = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $basic_configs);
       // Add current user details.
-      $productArray['productReview'] = $this->getProductReviewForCurrentUser($productNode);
+      $productObj->productReview = $this->getProductReviewForCurrentUser($productNode);
     }
-    return $productArray;
+    return $productObj;
   }
 
   /**

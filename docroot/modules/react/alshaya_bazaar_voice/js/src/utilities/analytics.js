@@ -3,8 +3,9 @@
  * Contains analytics and datalayer events for bazaarvoice.
  */
 
-// eslint-disable-next-line
-const bvPixelUtility = (drupalSettings.productReviewStats !== undefined) ? BV.pixel : null;
+const bvPixelUtility = (typeof drupalSettings.productReviewStats !== 'undefined' && typeof BV !== 'undefined')
+  ? BV.pixel
+  : null;
 
 /**
  * Helper function to push content data to datalayer.

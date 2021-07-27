@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_security\Session;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Session\SessionConfiguration;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -9,6 +10,23 @@ use Symfony\Component\HttpFoundation\Request;
  * Defines the default session configuration generator.
  */
 class AlshayaSessionConfiguration extends SessionConfiguration {
+
+  /**
+   * Current time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $currentTime;
+
+  /**
+   * AlshayaSessionConfiguration constructor.
+   *
+   * @param \Drupal\Component\Datetime\TimeInterface $current_time
+   *   Current time service.
+   */
+  public function __construct(TimeInterface $current_time) {
+    $this->currentTime = $current_time;
+  }
 
   /**
    * {@inheritdoc}
@@ -54,7 +72,8 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
           // @todo Change it when moving to PHP 7.3 version.Not doing now as
           // we don't have a way to test it.
           $params = session_get_cookie_params();
-          $expire = $params['lifetime'] ? REQUEST_TIME + $params['lifetime'] : 0;
+          $request_time = $this->currentTime->getRequestTime();
+          $expire = $params['lifetime'] ? $request_time + $params['lifetime'] : 0;
           // Compare current php version.
           // We will use the latest setcookie() variant with PHP 7.3 and above.
           if (version_compare(PHP_VERSION, '7.3.0') >= 0) {
