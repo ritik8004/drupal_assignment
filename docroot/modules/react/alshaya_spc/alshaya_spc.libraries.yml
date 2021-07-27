@@ -89,10 +89,18 @@ commerce_backend.checkout.v1:
   js:
     dist/backend_checkout_v1.bundle.js: {}
 
+security:
+  js:
+    assets/js/security.js: { }
+
 commerce_backend.cart.v2:
   js:
     dist/backend_cart_v2.bundle.js: {}
+  dependencies:
+    - alshaya_spc/security
 
 commerce_backend.checkout.v2:
   js:
     dist/backend_checkout_v2.bundle.js: {}
+  dependencies:
+    - alshaya_spc/security
