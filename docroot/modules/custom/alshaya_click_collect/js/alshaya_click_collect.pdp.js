@@ -102,7 +102,7 @@
               // First load the library from google.
               Drupal.geolocation.loadGoogle(function () {
                 var field = $('.click-collect-form', node).find('input[name="location"]')[0];
-                new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
+                new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()}, null, node);
 
                 Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
@@ -245,7 +245,7 @@
     var field = $('.click-collect-form', context).find('input[name="store-location"]')[0];
     var restriction = {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()};
     var callbacks = [Drupal.pdp.storesDisplay];
-    new Drupal.AlshayaPlacesAutocomplete(field, callbacks, restriction);
+    new Drupal.AlshayaPlacesAutocomplete(field, callbacks, restriction, null, context);
     // Hit the search store button on hitting enter when on textbox.
     $('.click-collect-form', context).find('input[name="store-location"]').once('trigger-enter').on('keypress', function (e) {
       var keyCode = e.keyCode || e.which;
@@ -257,6 +257,10 @@
 
   // Invoke display search store form if conditions matched.
   Drupal.pdp.InvokeSearchStoreFormDisplay = function (context, settings) {
+    // Do not process if context is empty.
+    if (!context.length) {
+      return;
+    }
     // Validate the product is same on ajax call.
     var validateProduct = Drupal.pdp.validateCurrentProduct(settings, context);
     // Get the settings for search form display.
@@ -272,7 +276,11 @@
   Drupal.pdp.displaySearchStoreForm = function (context) {
     var productInfo = Drupal.pdp.getProductInfo(context);
     var check = false;
-    if (productInfo.type === 'configurable') {
+
+    if (typeof productInfo.type === 'undefined') {
+      // Do nothing. "check" will remain false.
+    }
+    else if (productInfo.type === 'configurable') {
       check = (productInfo.selectedVariant) ? productInfo.selectedVariant.length : false;
     }
     else {
@@ -378,13 +386,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function (context) {
     var field = $('#all-stores-search-store', context).find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores', context).find('.store-finder-form-wrapper'));
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores', context).find('.store-finder-form-wrapper'), context);
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function (context) {
     var field = $('.click-collect-all-stores', context).find('input[name="store-location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores', context).find('.store-finder-form-wrapper'));
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores', context).find('.store-finder-form-wrapper'), context);
   };
 
   /**
@@ -422,7 +430,7 @@
 
     // Bind the js again to main input.
     var field = $('.click-collect-form', context).find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()});
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, null, context);
 
     $('.click-collect-form .store-finder-form-wrapper', context).show();
   };
