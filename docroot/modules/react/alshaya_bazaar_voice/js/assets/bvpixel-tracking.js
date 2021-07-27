@@ -21,7 +21,7 @@
         itemObj.productId = drupalSettings.order_details.items[sku].sku;
         itemObj.quantity = drupalSettings.order_details.items[sku].qtyOrdered;
         itemObj.name = drupalSettings.order_details.items[sku].title;
-        itemObj.price = drupalSettings.order_details.items[sku].finalPrice;
+        itemObj.price = drupalSettings.order_details.items[sku].finalPrice.replace(/,/g, '');
         productsArray.push(itemObj);
       });
       const transactionData = {
