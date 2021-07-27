@@ -1,0 +1,24 @@
+#block-userrecentorders {
+  h2.subtitle {
+    .path--user & {
+      text-transform: capitalize;
+    }
+  }
+}
+
+.user__order--detail {
+  .dark {
+    line-height: 1.5;
+  }
+
+  td {
+    div {
+      margin-bottom: 0.625rem;
+      line-height: 1.5;
+    }
+  }
+
+  .label {
+    color: $order_detail_delivery_details_row_subtitle_content;
+  }
+}

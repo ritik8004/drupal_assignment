@@ -1,0 +1,10 @@
+form.user-communication-preference {
+  html[lang=ar] & {
+    .form-item-communication-preference-email,
+    .form-item-communication-preference-mobile {
+      span {
+        font-family: $muji-helvetica-neue-nodir;
+      }
+    }
+  }
+}

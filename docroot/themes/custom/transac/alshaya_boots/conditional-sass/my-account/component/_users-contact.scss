@@ -1,0 +1,34 @@
+.c-user-edit {
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    input {
+      margin-top: 0.25rem;
+    }
+  }
+
+  #user-form {
+    #edit-submit {
+      @include breakpoint($tablet) {
+        min-width: 9.125rem;
+      }
+    }
+  }
+
+  .user-form {
+    .field--type-mobile-number {
+      .form-item.form-type-tel {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &.user-page {
+    .user-form {
+      .field--type-mobile-number {
+        @include breakpoint($desktop) {
+          top: 0;
+        }
+      }
+    }
+  }
+}
