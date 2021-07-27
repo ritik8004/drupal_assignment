@@ -590,7 +590,7 @@ const getCncStores = async (lat, lon) => {
   }
 
   const response = await getCartStores(lat, lon);
-  if (_isEmpty(response.data)
+  if (_isEmpty(response)
     || (!_isUndefined(response.data) && !_isUndefined(response.data.error))) {
     // In case of errors, return the response with error.
     return response;
@@ -1487,7 +1487,7 @@ const paymentUpdate = async (data) => {
   const processedData = processPaymentData(paymentData, params.payment.additional_data);
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
     logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
-      '@message': processedData.data.error_message,
+      '@message': processedData.data.message,
       '@cart': await window.commerceBackend.getCart(),
       '@method': paymentData.method,
     });
