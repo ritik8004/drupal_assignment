@@ -1978,7 +1978,7 @@ const triggerCheckoutEvent = (event, data) => callDrupalApi(
  * @param {string} paymentMethod
  *   Payment Method.
  */
-const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
+const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
   let customerId = '';
   if (!_isEmpty(cart.data.cart.customer)
     && !_isEmpty(cart.data.cart.customer.id)) {
@@ -1996,7 +1996,7 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
     customer_id: customerId,
   };
 
-  triggerCheckoutEvent('place order success', data);
+  await triggerCheckoutEvent('place order success', data);
 };
 
 /**
@@ -2110,7 +2110,7 @@ window.commerceBackend.placeOrder = async (data) => {
   };
 
   return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
-    .then((response) => {
+    .then(async (response) => {
       const result = {
         success: true,
         isAbsoluteUrl: false,
@@ -2149,7 +2149,7 @@ window.commerceBackend.placeOrder = async (data) => {
       }));
 
       // Operations post order placed.
-      processPostOrderPlaced(cart, orderId, data.data.paymentMethod.method);
+      await processPostOrderPlaced(cart, orderId, data.data.paymentMethod.method);
 
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
