@@ -1,6 +1,6 @@
 services:
   alshaya_pims.sku_images_manager:
-    class: Drupal\alshaya_pims\SkuImagesManagerOverride
+    class: Drupal\alshaya_pims\SkuImagesManagerPims
     decorates: alshaya_acm_product.sku_images_manager
     decoration_priority: 9
     arguments:
