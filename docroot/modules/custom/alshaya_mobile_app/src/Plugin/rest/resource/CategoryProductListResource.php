@@ -407,7 +407,7 @@ class CategoryProductListResource extends ResourceBase {
       // Prepare and execute query and pass result set.
       $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
       $filter_field = $term_details['category_field'];
-      if (Settings::get('mobile_app_plp_index_new')) {
+      if (Settings::get('mobile_app_plp_index_new', FALSE)) {
         // Append 'en' in 'filter_field' of 'algolia_data'.
         // for ex:
         // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
