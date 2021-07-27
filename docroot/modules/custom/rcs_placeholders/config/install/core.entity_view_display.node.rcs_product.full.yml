@@ -4,6 +4,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.full
     - field.field.node.rcs_product.body
+    - field.field.node.rcs_product.field_metatags
     - field.field.node.rcs_product.field_product_slug
     - node.type.rcs_product
   module:
@@ -20,4 +21,5 @@ content:
     region: content
 hidden:
   body: true
+  field_metatags: true
   field_product_slug: true

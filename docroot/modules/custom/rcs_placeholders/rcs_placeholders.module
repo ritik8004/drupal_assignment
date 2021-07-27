@@ -5,10 +5,13 @@
  * Module file for RCS Placeholders.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 
 /**
@@ -123,30 +126,17 @@ function rcs_placeholders_preprocess_taxonomy_term(&$variables) {
  *   Rendered entity template if entity type supported.
  */
 function _rcs_placeholders_get_placeholder_entity_view(string $entity_type, string $view_mode) {
-  $config = \Drupal::config('rcs_placeholders.settings');
-
-  switch ($entity_type) {
-    case 'node':
-      $id = $config->get('product.placeholder_nid');
-      break;
-
-    default:
-      return null;
-  }
-
-  $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load($id);
-  $entity_view = \Drupal::entityTypeManager()->getViewBuilder($entity_type)->view($entity, $view_mode);
-  return render($entity_view);
+  /** @var \Drupal\rcs_placeholders\Service\RcsPhEntityHelper $helper */
+  $helper = \Drupal::service('rcs_placeholders.entity_helper');
+  return $helper->getRcsPhEntityView($entity_type, $view_mode);
 }
 
 /**
  * Implements hook_page_attachments().
  */
 function rcs_placeholders_page_attachments(array &$attachments) {
-  // These are the attributes that which will be search for replacement of
-  // tokens.
-  // To add/remove attributes from this list, just do it in
-  // hook_page_attachments_alter().
+  // These are the attributes that will be processed for replacement of tokens.
+  // Use hook_page_attachments_alter() to add/remove attributes in this list.
   $attachments['#attached']['drupalSettings']['rcsPhSettings'] = [];
 
   $attributes = [
@@ -280,4 +270,38 @@ function rcs_placeholders_form_taxonomy_term_rcs_category_form_alter(&$form, For
  */
 function rcs_placeholders_form_node_rcs_product_form_alter(&$form, FormStateInterface $form_state) {
   _rcs_placeholders_enrichment_form_alter($form, $form_state);
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function rcs_placeholders_block_access(Block $block, $operation, AccountInterface $account) {
+  // We only want to alter the access rule for the breadcrumb blocks.
+  if ($operation !== 'view' || !in_array($block->getPluginId(), ['system_breadcrumb_block', 'rcs_ph_breadcrumb'])) {
+    return AccessResult::neutral();
+  }
+
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  $entity = FALSE;
+  if ($route_name == 'entity.taxonomy_term.canonical') {
+    $entity = \Drupal::routeMatch()->getParameter('taxonomy_term');
+  }
+  elseif ($route_name == 'entity.node.canonical') {
+    $entity = \Drupal::routeMatch()->getParameter('node');
+  }
+
+  $rcs_entity = $entity && in_array($entity->bundle(), ['rcs_category', 'rcs_product']);
+
+  // We don't want to display the default breadcrumb on PLP/PDP.
+  if ($rcs_entity && $block->getPluginId() === 'system_breadcrumb_block') {
+    return AccessResult::forbidden();
+  }
+
+  // We don't want to display the "placeholder" breadcrumb outside PLP/PDP.
+  if (!$rcs_entity && $block->getPluginId() === 'rcs_ph_breadcrumb') {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
 }

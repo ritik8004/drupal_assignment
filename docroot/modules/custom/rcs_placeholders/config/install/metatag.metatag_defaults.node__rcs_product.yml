@@ -4,6 +4,6 @@ dependencies: {  }
 id: node__rcs_product
 label: 'Content: RCS Product'
 tags:
-  canonical_url: 'buy-#rcs.product.slug#'
+  canonical_url: '[rcs:product-path-prefix]#rcs.product.slug#'
   description: '#rcs.product.metaDescription#'
   title: '#rcs.product.metaTitle# | [site:name]'

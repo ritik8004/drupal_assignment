@@ -3,9 +3,11 @@ status: true
 dependencies:
   config:
     - field.field.node.rcs_product.body
+    - field.field.node.rcs_product.field_metatags
     - field.field.node.rcs_product.field_product_slug
     - node.type.rcs_product
   module:
+    - metatag
     - path
 id: node.rcs_product.default
 targetEntityType: node
@@ -18,6 +20,13 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_metatags:
+    weight: 51
+    settings:
+      sidebar: true
+    third_party_settings: {  }
+    type: metatag_firehose
+    region: content
   field_product_slug:
     type: string_textfield
     weight: 1
@@ -71,5 +80,10 @@ content:
       match_limit: 10
     region: content
     third_party_settings: {  }
+  url_redirects:
+    weight: 50
+    settings: {  }
+    third_party_settings: {  }
+    region: content
 hidden:
   body: true

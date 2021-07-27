@@ -3,8 +3,10 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.rcs_category.field_category_slug
+    - field.field.taxonomy_term.rcs_category.field_metatags
     - taxonomy.vocabulary.rcs_category
   module:
+    - metatag
     - path
     - text
 id: taxonomy_term.rcs_category.default
@@ -28,6 +30,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_metatags:
+    weight: 7
+    settings:
+      sidebar: true
+    third_party_settings: {  }
+    type: metatag_firehose
+    region: content
   name:
     type: string_textfield
     weight: 0

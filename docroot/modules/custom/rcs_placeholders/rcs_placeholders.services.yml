@@ -1,13 +1,16 @@
 services:
   Drupal\rcs_placeholders\Service\RcsPhPathProcessor:
     tags:
-    # PathProcessorAlias has priority 100. So if we do processing more late,
-    # then the alias will not be available to us. Also priority of
-    # LanguageNegotiationUrl processor is 300, which removes the langcode from
-    # the url. So we need to keep priority between 100 and 300.
+      # PathProcessorAlias has priority 100. So if we do processing more late,
+      # then the alias will not be available to us. Also priority of
+      # LanguageNegotiationUrl processor is 300, which removes the langcode from
+      # the url. So we need to keep priority between 100 and 300.
       - { name: 'path_processor_inbound', priority: 101 }
     arguments: ['@entity_type.manager']
 
-  rcs_placeholders.entity.helper:
+  rcs_placeholders.entity_helper:
     class: Drupal\rcs_placeholders\Service\RcsPhEntityHelper
-    arguments: ['@entity_type.manager', '@config.factory']
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@renderer'

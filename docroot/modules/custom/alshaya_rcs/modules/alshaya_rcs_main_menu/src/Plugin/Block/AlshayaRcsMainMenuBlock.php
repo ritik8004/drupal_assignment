@@ -5,7 +5,7 @@ namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\rcs_placeholders\Service\RcsPhEntityHelperInterface;
+use Drupal\rcs_placeholders\Service\RcsPhEntityHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
@@ -29,7 +29,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   /**
    * Stores the rcs placeholder helper.
    *
-   * @var \Drupal\rcs_placeholders\Service\RcsPhEntityHelperInterface
+   * @var \Drupal\rcs_placeholders\Service\RcsPhEntityHelper
    */
   protected $rcsPhEntityHelper;
 
@@ -51,12 +51,12 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    *   Plugin definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\rcs_placeholders\Service\RcsPhEntityHelperInterface $rcs_ph_helper
+   * @param \Drupal\rcs_placeholders\Service\RcsPhEntityHelper $rcs_ph_helper
    *   Rcs placeholders helper service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, RcsPhEntityHelperInterface $rcs_ph_helper, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, RcsPhEntityHelper $rcs_ph_helper, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->rcsPhEntityHelper = $rcs_ph_helper;
@@ -72,7 +72,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('rcs_placeholders.entity.helper'),
+      $container->get('rcs_placeholders.entity_helper'),
       $container->get('module_handler')
     );
   }
@@ -82,15 +82,15 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    */
   public function build() {
     // Get the rcs placeholder terms data.
-    $ph_term_data = $this->rcsPhEntityHelper->getRcsPhCategoryTermData();
+    $ph_term = $this->rcsPhEntityHelper->getRcsPhCategory();
 
     // If no data, no need to render the block.
-    if (empty($ph_term_data)) {
+    if (empty($ph_term)) {
       return [];
     }
 
     // Get the placeholder term name.
-    $ph_term_label = $ph_term_data->name->value;
+    $ph_term_label = $ph_term->label();
 
     // Prepare a static term array with placeholders
     // for all the possible combinations.
@@ -263,7 +263,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         ],
       ],
       // @todo need to move prefix and suffix in container type.
-      '#prefix' => '<div id="rcs-ph-navigation_menu">',
+      '#prefix' => '<div id="rcs-ph-navigation_menu" data-rcs-dependency="none">',
       '#suffix' => '</div>',
       '#attached' => [
         // Pass in drupal settings for FE.

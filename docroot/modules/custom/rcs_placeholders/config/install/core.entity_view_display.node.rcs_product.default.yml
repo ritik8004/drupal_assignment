@@ -3,15 +3,24 @@ status: true
 dependencies:
   config:
     - field.field.node.rcs_product.body
+    - field.field.node.rcs_product.field_metatags
     - field.field.node.rcs_product.field_product_slug
     - node.type.rcs_product
   module:
+    - metatag
     - user
 id: node.rcs_product.default
 targetEntityType: node
 bundle: rcs_product
 mode: default
 content:
+  field_metatags:
+    weight: 101
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
+    region: content
   links:
     weight: 100
     region: content
