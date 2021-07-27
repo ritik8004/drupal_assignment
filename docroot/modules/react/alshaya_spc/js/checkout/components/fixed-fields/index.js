@@ -46,7 +46,7 @@ const FixedFields = ({
             && drupalSettings.user.uid > 0)}
         >
           <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" onChange={(e) => handleContactInfoChange(e)} defaultChecked />
-          <label htmlFor="spc-checkout-contact-info-checkbox">
+          <label htmlFor="spc-checkout-contact-info-checkbox" className="spc-pudo-checkout-contact-info-checkbox">
             {getStringMessage('cnc_contact_info_checkbox')}
           </label>
         </ConditionalView>
