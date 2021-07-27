@@ -431,16 +431,21 @@ class LocalCommand extends BltTasks {
   }
 
   /**
-   * CRF for all sites on all stacks of given ENV.
+   * Execute drush command on all sites on all stacks of given ENV.
    *
    * @param string $env
    *   Environment code.
+   * @param string $drush_command
+   *   Drush Command.
    *
-   * @command local:crf
+   * @command cloud:drush
    *
-   * @description Do drush crf on all sites on all stacks of given ENV.
+   * @usage drush cloud:drush uat crf
+   *   Execute drush crf on all the sites of UAT environment.
+   *
+   * @description Execute drush command on all sites on all stacks of given ENV.
    */
-  public function crf(string $env) {
+  public function cloudDrush(string $env, string $drush_command) {
     if (!in_array($env, $this->envs)) {
       $this->yell('Invalid environment name.');
       return;
@@ -449,38 +454,20 @@ class LocalCommand extends BltTasks {
     foreach ($this->stacks as $stack) {
       $task = $this->taskDrush();
       $task->interactive(FALSE);
-      $task->drush('sfml crf')
+      $task->drush('sfl --fields')
         ->alias($stack . $env)
-        ->printOutput(TRUE);
-      $result = $task->run();
-      $this->io()->writeln($result->getMessage());
-    }
-  }
-
-  /**
-   * UPDB for all sites on all stacks of given ENV.
-   *
-   * @param string $env
-   *   Environment code.
-   *
-   * @command local:updb
-   *
-   * @description Do drush updb on all sites on all stacks of given ENV.
-   */
-  public function updb(string $env) {
-    if (!in_array($env, $this->envs)) {
-      $this->yell('Invalid environment name.');
-      return;
-    }
-
-    foreach ($this->stacks as $stack) {
-      $task = $this->taskDrush();
-      $task->interactive(FALSE);
-      $task->drush('sfml updb')
-        ->alias($stack . $env)
-        ->printOutput(TRUE);
-      $result = $task->run();
-      $this->io()->writeln($result->getMessage());
+        ->printOutput(FALSE);
+      $sites = $task->run();
+      foreach (explode(PHP_EOL, $sites->getMessage()) as $site) {
+        $task = $this->taskDrush();
+        $task->interactive(FALSE);
+        $task->drush($drush_command)
+          ->uri("${site}-${env}.factory.alshaya.com")
+          ->alias($stack . $env)
+          ->printOutput(FALSE);
+        $result = $task->run();
+        $this->io()->writeln($result->getMessage());
+      }
     }
   }
 
