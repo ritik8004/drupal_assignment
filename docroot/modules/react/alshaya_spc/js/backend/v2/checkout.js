@@ -2151,7 +2151,6 @@ window.commerceBackend.placeOrder = async (data) => {
       });
 
       // @todo all the error handling.
-      // @todo cancel reservation.
 
       const message = prepareOrderFailedMessage(cart.data, data.data, response, 'place order', 'no');
       logger.error('Error while placing order. Error message: @message', {
