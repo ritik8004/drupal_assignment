@@ -12,5 +12,4 @@ pdp_click_collect_select_option_text:
 click_collect_rnc: '1 hour'
 checkout_click_collect_available: 'Collect your order in-store'
 checkout_click_collect_unavailable: 'Sorry Collect your order in-store is unavailable'
-checkout_click_collect_collection_points_enabled: false
 langcode: en

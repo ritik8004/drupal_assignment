@@ -308,6 +308,25 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to collection point feature.
+  $strings['v5'] = [
+    'Collection Point' => [
+      'ar' => 'Collection Point AR',
+    ],
+    'select your preferred collection point' => [
+      'ar' => 'select your preferred collection point ar',
+    ],
+    'find your collection point' => [
+      'ar' => 'find your collection point ar',
+    ],
+    'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
+      'ar' => 'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice AR.',
+    ],
+    'The same person placing the order will collect the order.' => [
+      'ar' => 'The same person placing the order will collect the order AR.',
+    ],
+  ];
+
   return $strings;
 }
 
