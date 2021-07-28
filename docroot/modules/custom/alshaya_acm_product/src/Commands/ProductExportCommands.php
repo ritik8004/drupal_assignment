@@ -69,7 +69,7 @@ class ProductExportCommands extends DrushCommands {
   }
 
   /**
-   * Outputs some product data to a csv file.
+   * Outputs product data to a csv file.
    *
    * @command alshaya_acm_product:export-product-data
    * @aliases expproddata
@@ -92,17 +92,19 @@ class ProductExportCommands extends DrushCommands {
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
         $location = $this->fileSystem->getDestinationFilename($path . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+        if ($location === FALSE) {
+          $this->logger->warning('Could not create the file to export the data.');
+          return;
+        }
+
         // Make the file empty.
         $file = fopen($location, 'wb+');
         fclose($file);
-
-        if ($location === FALSE) {
-          $this->logger->notice('Could not create the file to export the data.');
-          return;
-        }
       }
       catch (\Exception $e) {
-        $this->logger->notice('Could not create the file to export the data.');
+        $this->logger->warning('Could not create the file to export the data. Message: @message.', [
+          '@message' => $e->getMessage(),
+        ]);
         return;
       }
     }
@@ -146,7 +148,7 @@ class ProductExportCommands extends DrushCommands {
       $context['results']['nodes'] = 0;
       $context['results']['failed_nids'] = [];
       $context['results']['data'] = [];
-      $context['results']['csv_header_added'] = FALSE;
+      $context['results']['csv_header_added'] = [];
     }
 
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
@@ -168,8 +170,8 @@ class ProductExportCommands extends DrushCommands {
           $data = array_merge($first_data, $node_data);
 
           // Add the header only once.
-          if (!$context['results']['csv_header_added']) {
-            $context['results']['csv_header_added'] = TRUE;
+          if (!isset($context['results']['csv_header_added'][$langcode])) {
+            $context['results']['csv_header_added'][$langcode] = TRUE;
             self::outputToFile(array_keys($data), $langcode);
           }
 
