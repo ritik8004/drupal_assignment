@@ -236,31 +236,41 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (response.data.error === true) {
+    logger.error('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
+      '@cartId': cartId,
+      '@post': JSON.stringify(itemData),
+      '@response': JSON.stringify(response.data),
+    });
+
+    // 404 errors could happen when we try to post to invalid cart id.
     if (response.data.error_code === 404) {
-      // 400 errors happens when we try to post to invalid cart id.
-      const postString = JSON.stringify(itemData);
-      logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
-      // Remove the cart from storage.
-      window.commerceBackend.removeCartDataFromStorage(true);
+      const freshCart = await getCart(true);
 
-      if (
-        data.action === 'add item'
-        && parseInt(
-          window.drupalSettings.cart.checkout_settings.max_native_update_attempts,
-          10,
-        ) > apiCallAttempts
-      ) {
-        apiCallAttempts += 1;
+      // Try to load fresh cart, if this fails it means we need to create new one.
+      if (_isEmpty(freshCart)) {
+        // Remove the cart id from storage.
+        window.commerceBackend.removeCartDataFromStorage(true);
 
-        // Create a new cart.
-        cartId = await window.commerceBackend.createCart();
-        if (_isNull(cartId)) {
-          return cartId;
+        // Create new one and retry but only if user is trying to add item to cart.
+        if (data.action === 'add item'
+          && parseInt(
+            drupalSettings.cart.checkout_settings.max_native_update_attempts,
+            10,
+          ) > apiCallAttempts) {
+          apiCallAttempts += 1;
+
+          // Create a new cart.
+          cartId = await window.commerceBackend.createCart();
+          if (_isNull(cartId)) {
+            // Cart creation is also failing, simply return.
+            return null;
+          }
+
+          return window.commerceBackend.addUpdateRemoveCartItem(data);
         }
-        const cartData = await window.commerceBackend.getCart(true);
-        window.commerceBackend.setCartDataInStorage(cartData);
-        return window.commerceBackend.addUpdateRemoveCartItem(data);
       }
+
+      // If cart is still available, it means something else is wrong.
       return response;
     }
 
