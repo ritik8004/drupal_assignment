@@ -434,10 +434,8 @@ window.commerceBackend.addFreeGift = async (data) => {
       logger.error('Cart is empty. Cart: @cart', {
         '@cart': JSON.stringify(cart),
       });
-    } else if (_isUndefined(cart.data.totals)
-      || _isUndefined(cart.data.totals)
-      || _isUndefined(cart.data.totals.coupon_code)
-      || _isEmpty(cart.data.totals.coupon_code)
+    } else if (_isUndefined(cart.data.appliedRules)
+      || _isEmpty(cart.data.appliedRules)
     ) {
       logger.error('Invalid promo code. Cart: @cart, Promo: @promoCode', {
         '@cart': JSON.stringify(cart.data),
@@ -446,22 +444,23 @@ window.commerceBackend.addFreeGift = async (data) => {
     } else {
       // Update cart with free gift.
       const params = { ...data };
+      params.items = [];
       params.extension = {
         action: cartActions.cartAddItem,
       };
 
       if (skuType === 'simple') {
-        params.items = {
+        params.items.push({
           sku,
           qty: 1,
           product_type: skuType,
           extension_attributes: {
             promo_rule_id: promoRuleId,
           },
-        };
+        });
       } else {
         const options = (!_isEmpty(data.configurable_values)) ? data.configurable_values : [];
-        params.items = {
+        params.items.push({
           sku,
           qty: 1,
           product_type: skuType,
@@ -476,7 +475,7 @@ window.commerceBackend.addFreeGift = async (data) => {
           extension_attributes: {
             promo_rule_id: promoRuleId,
           },
-        };
+        });
       }
 
       // Update cart.
@@ -487,14 +486,13 @@ window.commerceBackend.addFreeGift = async (data) => {
           '@cart': JSON.stringify(cart),
         });
       } else {
+        if (!_isEmpty(updated.data) && _isUndefined(updated.data.error)) {
+          updated.data = await getProcessedCartData(updated.data);
+        }
         cart = updated;
       }
     }
   }
 
-  // If we don't have any errors, process the cart data.
-  if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
-    cart.data = await getProcessedCartData(cart.data);
-  }
   return cart;
 };
