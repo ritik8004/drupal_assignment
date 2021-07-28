@@ -23,8 +23,6 @@
 
   .address-book-address,
   .profile-form {
-    @extend .contact-form;
-
     @include breakpoint($desktop) {
       margin-top: 4.5rem;
     }
