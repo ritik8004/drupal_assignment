@@ -13,7 +13,6 @@ import _each from 'lodash/each';
 import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
-  associateCartToCustomer,
   getCart,
   updateCart,
   getFormattedError,
@@ -36,7 +35,7 @@ import {
   getApiEndpoint,
   isUserAuthenticated,
   logger,
-  getIp, getCartIdFromStorage,
+  getIp,
 } from './utility';
 import cartActions from '../../utilities/cart_actions';
 
@@ -1707,29 +1706,13 @@ window.commerceBackend.addPaymentMethod = async (data) => {
  * @returns {Promise<object>}
  *   A promise object.
  */
-window.commerceBackend.getCartForCheckout = () => {
-  if (isAnonymousUserWithoutCart()) {
-    return null;
-  }
+window.commerceBackend.getCartForCheckout = async () => {
+  logger.debug('Loading cart data for checkout page.');
 
   return getCart()
     .then(async (response) => {
-      let cart = response;
-
-      let cartId = getCartIdFromStorage();
-
-      // Check if the user is authenticated but there is a guest cart_id in the local storage.
-      if (isUserAuthenticated() && !_isNull(cartId)) {
-        // If the user is authenticated and we have cart_id in the local storage
-        // it means the customer just became authenticated.
-        // We need to associate the cart and remove the cart_id from local storage.
-        const updated = await associateCartToCustomer();
-        if (updated !== false) {
-          cart = updated;
-        }
-      }
-
-      cartId = window.commerceBackend.getCartId();
+      const cart = response;
+      const cartId = window.commerceBackend.getCartId();
 
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
         logger.error(`Error while getting cart:${cartId} Error:${cart.data.error_message}`);
@@ -1978,7 +1961,7 @@ const triggerCheckoutEvent = (event, data) => callDrupalApi(
  * @param {string} paymentMethod
  *   Payment Method.
  */
-const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
+const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
   let customerId = '';
   if (!_isEmpty(cart.data.cart.customer)
     && !_isEmpty(cart.data.cart.customer.id)) {
@@ -1996,7 +1979,7 @@ const processPostOrderPlaced = (cart, orderId, paymentMethod) => {
     customer_id: customerId,
   };
 
-  triggerCheckoutEvent('place order success', data);
+  await triggerCheckoutEvent('place order success', data);
 };
 
 /**
@@ -2110,7 +2093,7 @@ window.commerceBackend.placeOrder = async (data) => {
   };
 
   return callMagentoApi(getApiEndpoint('placeOrder', params), 'PUT')
-    .then((response) => {
+    .then(async (response) => {
       const result = {
         success: true,
         isAbsoluteUrl: false,
@@ -2149,7 +2132,7 @@ window.commerceBackend.placeOrder = async (data) => {
       }));
 
       // Operations post order placed.
-      processPostOrderPlaced(cart, orderId, data.data.paymentMethod.method);
+      await processPostOrderPlaced(cart, orderId, data.data.paymentMethod.method);
 
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 

@@ -1,8 +1,8 @@
 import _isNull from 'lodash/isNull';
+import _isEmpty from 'lodash/isEmpty';
 import _isUndefined from 'lodash/isUndefined';
 import _isString from 'lodash/isString';
 import _isNumber from 'lodash/isNumber';
-import _isEmpty from 'lodash/isEmpty';
 import {
   callDrupalApi,
   callMagentoApi,
@@ -11,10 +11,11 @@ import {
   isAuthenticatedUserWithoutCart,
   updateCart,
   getProcessedCartData,
-  getCartWithProcessedData,
+  getCartWithProcessedData, getCart, associateCartToCustomer,
 } from './common';
 import {
   getApiEndpoint,
+  getCartIdFromStorage,
   isUserAuthenticated,
   logger,
   removeCartIdFromStorage,
@@ -361,6 +362,36 @@ window.commerceBackend.createCart = async () => {
     : '';
   logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
   return null;
+};
+
+window.commerceBackend.associateCartToCustomer = async (pageType) => {
+  // If user is not logged in, no further processing required.
+  if (!isUserAuthenticated()) {
+    return;
+  }
+
+  const guestCartId = getCartIdFromStorage();
+
+  // No further checks required if card id not available in storage.
+  if (_isEmpty(guestCartId)) {
+    return;
+  }
+
+  // Try to load customer's cart if not doing this on checkout page.
+  if (pageType !== 'checkout') {
+    const cart = await getCart();
+    if (!_isEmpty(cart.data.cart.items)) {
+      // If the current cart has items, we carry on with this cart and remove
+      // the guest cart id from local storage.
+      removeCartIdFromStorage();
+      return;
+    }
+  }
+
+  // If the user is authenticated and we have cart_id in the local storage
+  // it means the customer just became authenticated.
+  // We need to associate the cart and remove the cart_id from local storage.
+  await associateCartToCustomer();
 };
 
 /**

@@ -15,7 +15,12 @@ export const fetchClicknCollectStores = (args) => {
   return window.commerceBackend.fetchClickNCollectStores(coords);
 };
 
-export const fetchCartData = () => {
+export const fetchCartData = async () => {
+  // First thing, load the guest cart id for association later if required.
+  if (typeof window.commerceBackend.associateCartToCustomer !== 'undefined') {
+    await window.commerceBackend.associateCartToCustomer('cart');
+  }
+
   if (window.commerceBackend.isAnonymousUserWithoutCart()) {
     window.commerceBackend.removeCartDataFromStorage();
     return null;
@@ -118,11 +123,16 @@ export const fetchCartData = () => {
     });
 };
 
-export const fetchCartDataForCheckout = () => {
+export const fetchCartDataForCheckout = async () => {
+  // First thing, load the guest cart id for association later if required.
+  if (typeof window.commerceBackend.associateCartToCustomer !== 'undefined') {
+    await window.commerceBackend.associateCartToCustomer('checkout');
+  }
+
   // Remove cart data from storage every-time we land on checkout page.
   window.commerceBackend.removeCartDataFromStorage();
 
-  // If session cookie not exists, no need to process/check.
+  // Quick check for guest user if cart available.
   if (window.commerceBackend.isAnonymousUserWithoutCart()) {
     return null;
   }
