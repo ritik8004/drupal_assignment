@@ -22,6 +22,9 @@
 @import "../../alshaya_pottery_barn/sass/directional";
 @import "directional";
 
+// Common styles for @extend.
+@import "../../alshaya_white_label/sass/placeholder";
+
 // These are the default base styles applied to HTML elements.
 @import "../../alshaya_white_label/sass/base/**/*";
 @import "../../alshaya_pottery_barn/sass/base/**/*";
