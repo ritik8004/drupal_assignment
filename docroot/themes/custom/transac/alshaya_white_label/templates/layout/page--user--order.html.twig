@@ -1,4 +1,7 @@
 {% extends 'page.html.twig' %}
+{% block attach_library %}
+  {{ attach_library('alshaya_white_label/my-account') }}
+{% endblock %}
 {% block attach_custom_library %}
   {% if html_direction == "ltr" %}
     {{ attach_library('alshaya_white_label/ltr_print_styles') }}
