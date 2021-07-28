@@ -601,7 +601,7 @@ const getProcessedCartData = async (cartData) => {
 const isAnonymousUserWithoutCart = () => {
   const cartId = window.commerceBackend.getCartId();
   if (cartId === null || typeof cartId === 'undefined') {
-    if (window.drupalSettings.user.uid === 0) {
+    if (window.drupalSettings.userDetails.customerId === 0) {
       return true;
     }
   }
@@ -720,6 +720,11 @@ const associateCartToCustomer = async () => {
         '@message': (typeof response.data.message !== 'undefined') ? response.data.message : '',
       });
     } else {
+      logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
+        '@customerId': window.drupalSettings.userDetails.customerId,
+        '@guestCartId': guestCartId,
+      });
+
       // Clear local storage.
       removeCartIdFromStorage();
 
@@ -727,6 +732,11 @@ const associateCartToCustomer = async () => {
       return getCart(true);
     }
   }
+
+  logger.warning('Failed to associate Guest Cart @guestCartId to customer @customerId.', {
+    '@customerId': window.drupalSettings.userDetails.customerId,
+    '@guestCartId': guestCartId,
+  });
 
   return false;
 };
@@ -743,31 +753,9 @@ const associateCartToCustomer = async () => {
  */
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
-  let cart = await getCart(force);
+  const cart = await getCart(force);
   if (_isNull(cart) || _isUndefined(cart.data)) {
     return null;
-  }
-
-  const cartId = getCartIdFromStorage();
-
-  // Check if the user is authenticated but there is a guest cart_id in the local storage.
-  if (isUserAuthenticated() && !_isNull(cartId)) {
-    if (!_isUndefined(cart.data.cart)
-      && !_isUndefined(cart.data.cart.items)
-      && !_isEmpty(cart.data.cart.items)
-    ) {
-      // If the current cart has items, we carry on with this cart and remove
-      // the guest cart id from local storage.
-      removeCartIdFromStorage();
-    } else {
-      // If the user is authenticated and we have cart_id in the local storage
-      // it means the customer just became authenticated.
-      // We need to associate the cart and remove the cart_id from local storage.
-      const updated = await associateCartToCustomer();
-      if (updated !== false) {
-        cart = updated;
-      }
-    }
   }
 
   // If we don't have any errors, process the cart data.
@@ -842,7 +830,7 @@ const validateRequestData = async (request) => {
   // For any cart update operation, cart should be available in session.
   if (window.commerceBackend.getCartId() === null) {
     const logData = JSON.stringify(request);
-    logger.error(`Trying to do cart update operation while cart is not available in session. Data: ${logData}`);
+    logger.warning(`Trying to do cart update operation while cart is not available in session. Data: ${logData}`);
     return 404;
   }
 
