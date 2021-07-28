@@ -359,8 +359,8 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
     }
 
     //CORE-28957: Remove link for L2
-    $is_block_1 = (($view->id() === 'product_category_level_3') && ($view->current_display === 'block_1'));
-    $variables['output'] = $is_block_1 ? $term->toLink($term->getName(), '', $options)->toString() : $term->getName();
+    $is_l3 = (($view->id() === 'product_category_level_3') && ($view->current_display === 'block_1'));
+    $variables['output'] = $is_l3 ? $term->toLink($term->getName(), '', $options)->toString() : $term->getName();
   }
 }
 
