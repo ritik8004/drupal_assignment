@@ -90,8 +90,18 @@ class ProductExportCommands extends DrushCommands {
 
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
-      $location = $this->fileSystem->getDestinationFilename($path . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
-      if ($location === FALSE) {
+      try {
+        $location = $this->fileSystem->getDestinationFilename($path . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+        // Make the file empty.
+        $file = fopen($location, 'wb+');
+        fclose($file);
+
+        if ($location === FALSE) {
+          $this->logger->notice('Could not create the file to export the data.');
+          return;
+        }
+      }
+      catch (\Exception $e) {
         $this->logger->notice('Could not create the file to export the data.');
         return;
       }
@@ -101,7 +111,6 @@ class ProductExportCommands extends DrushCommands {
       ->condition('type', 'acq_product')
       ->condition('status', NodeInterface::PUBLISHED)
       ->addTag('get_display_node_for_sku')
-      ->range(0, 60)
       ->execute();
 
     $batch = [
@@ -137,6 +146,7 @@ class ProductExportCommands extends DrushCommands {
       $context['results']['nodes'] = 0;
       $context['results']['failed_nids'] = [];
       $context['results']['data'] = [];
+      $context['results']['csv_header_added'] = FALSE;
     }
 
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
@@ -157,8 +167,14 @@ class ProductExportCommands extends DrushCommands {
           $first_data = ['sku' => $main_sku];
           $data = array_merge($first_data, $node_data);
 
-          // Store the data in the context.
-          $context['results']['data'][$langcode][] = $data;
+          // Add the header only once.
+          if (!$context['results']['csv_header_added']) {
+            $context['results']['csv_header_added'] = TRUE;
+            self::outputToFile(array_keys($data), $langcode);
+          }
+
+          // Add the actual data.
+          self::outputToFile($data, $langcode);
         }
 
         $context['results']['nodes']++;
@@ -167,6 +183,8 @@ class ProductExportCommands extends DrushCommands {
         $context['results']['failed_nids'][] = $nid;
       }
     }
+
+    \Drupal::logger('alshaya_acm_product')->notice('@count nodes processed for exporting.', ['@count' => count($nids)]);
   }
 
   /**
@@ -183,21 +201,6 @@ class ProductExportCommands extends DrushCommands {
     $logger = \Drupal::logger('alshaya_acm_product');
 
     if ($success) {
-      foreach (\Drupal::languageManager()->getLanguages() as $langcode => $lang) {
-        // Get the destination file name for the given langcode.
-        $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
-
-        $file = fopen($location, 'wb');
-        // Add the header.
-        fputcsv($file, array_keys($results['data'][$langcode][0]));
-        // Add the values.
-        foreach ($results['data'][$langcode] as $data) {
-          fputcsv($file, array_values($data));
-        }
-        // Close the file.
-        fclose($file);
-      }
-
       // Here we do something meaningful with the results.
       $logger->notice('@count items successfully processed.', ['@count' => $results['nodes']]);
     }
@@ -310,6 +313,25 @@ class ProductExportCommands extends DrushCommands {
     }
 
     return $return;
+  }
+
+  /**
+   * Output the data to file.
+   *
+   * @param array $data_to_print
+   *   The output data.
+   * @param string $langcode
+   *   The langcode of the file to output.
+   */
+  public static function outputToFile(array $data_to_print, string $langcode) {
+    // Get the destination file name for the given langcode.
+    $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+    // Open the file to print.
+    $file = fopen($location, 'a');
+    // Add the values.
+    fputcsv($file, $data_to_print);
+    // Close the file.
+    fclose($file);
   }
 
 }
