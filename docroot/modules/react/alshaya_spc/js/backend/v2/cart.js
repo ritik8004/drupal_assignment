@@ -364,15 +364,15 @@ window.commerceBackend.createCart = async () => {
 };
 
 window.commerceBackend.associateCartToCustomer = async (pageType) => {
+  // If user is not logged in, no further processing required.
+  if (!isUserAuthenticated()) {
+    return;
+  }
+
   const guestCartId = getCartIdFromStorage();
 
   // No further checks required if card id not available in storage.
   if (_isEmpty(guestCartId)) {
-    return;
-  }
-
-  // If user is not logged in, no further processing required.
-  if (!isUserAuthenticated()) {
     return;
   }
 
