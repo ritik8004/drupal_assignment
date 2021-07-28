@@ -259,11 +259,11 @@ class ProductExportCommands extends DrushCommands {
       $logger->notice('@count items successfully processed.', ['@count' => $results['nodes']]);
     }
     else {
-      $logger->notice('Could not successfully complete the batch process.');
+      $logger->warning('Could not successfully complete the batch process.');
     }
 
     if (!empty($results['failed_nids'])) {
-      $logger->notice('Could not successfully process @count items. Items: @items', [
+      $logger->warning('Could not successfully process @count items. Items: @items', [
         '@count' => count($results['failed_nids']),
         '@items' => implode(',', $results['failed_nids']),
       ]);
