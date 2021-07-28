@@ -10,6 +10,7 @@ const cartActions = {
   cartBillingUpdate: 'update billing',
   cartPaymentUpdate: 'update payment',
   cartPaymentFinalise: 'finalise payment',
+  cartAddItem: 'add item',
 };
 
 export default cartActions;
