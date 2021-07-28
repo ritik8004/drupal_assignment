@@ -134,6 +134,11 @@ window.commerceBackend.getCart = (force = false) => getCartWithProcessedData(for
 window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
 
 /**
+ * Static variable to limit API attempts.
+ */
+let apiCallAttempts = 0;
+
+/**
  * Adds/removes/updates quantity of product in cart.
  *
  * @param {object} data
@@ -229,7 +234,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     return window.commerceBackend.getCart();
   }
 
-  let apiCallAttempts = 0;
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (response.data.error === true) {
@@ -270,6 +274,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
   }
+
+  // Reset counter.
+  apiCallAttempts = 0;
 
   return window.commerceBackend.getCart(true);
 };
