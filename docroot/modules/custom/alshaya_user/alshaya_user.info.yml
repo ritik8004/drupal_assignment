@@ -1,6 +1,7 @@
 name: 'Alshaya user'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 description: 'Stores user field and related settings.'
 dependencies:
   - alshaya_i18n:alshaya_i18n

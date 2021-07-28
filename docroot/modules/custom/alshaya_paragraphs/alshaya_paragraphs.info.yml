@@ -1,6 +1,7 @@
 name: 'Alshaya Paragraphs'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 description: 'All the paragraphs and its fields and field settings.'
 dependencies:
   - alshaya_config:alshaya_config
