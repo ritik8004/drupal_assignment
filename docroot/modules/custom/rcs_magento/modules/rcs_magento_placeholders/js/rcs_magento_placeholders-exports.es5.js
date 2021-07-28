@@ -162,7 +162,7 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
 
-      const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/$/);
+      const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
       request.data = JSON.stringify({
         query: `{ categories( filters: { url_path: {eq: "${categoryUrlKey[1]}"}}) {
             total_count

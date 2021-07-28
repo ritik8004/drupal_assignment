@@ -2,13 +2,10 @@
 
 namespace Drupal\alshaya_rcs_listing\Plugin\Block;
 
-use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Provides a block to display 'plp' results.
@@ -24,32 +21,11 @@ class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
   const PAGE_SUB_TYPE = 'plp';
 
   /**
-   * Entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Product category page service.
-   *
-   * @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage
-   */
-  protected $productCategoryPage;
-
-  /**
    * The Alshaya Algolia React Config.
    *
    * @var \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface
    */
   protected $alshayaAlgoliaReactConfig;
-
-  /**
-   * Entity Repository service.
-   *
-   * @var \Drupal\Core\Entity\EntityRepositoryInterface
-   */
-  protected $entityRepository;
 
   /**
    * AlshayaAlgoliaReactAutocomplete constructor.
@@ -60,29 +36,17 @@ class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
    *   Plugin id.
    * @param mixed $plugin_definition
    *   Plugin definition.
-   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
-   *   Product category page service.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
    *   Alshaya Algolia React Config.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity type manager.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
-   *   Entity Repository service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ProductCategoryPage $product_category_page,
-    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
-    EntityTypeManagerInterface $entity_type_manager,
-    EntityRepositoryInterface $entityRepository
+    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->productCategoryPage = $product_category_page;
     $this->alshayaAlgoliaReactConfig = $alshaya_algolia_react_config;
-    $this->fileStorage = $entity_type_manager->getStorage('file');
-    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -98,10 +62,7 @@ class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_product_category.page'),
       $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
-      $container->get('entity_type.manager'),
-      $container->get('entity.repository')
     );
   }
 
@@ -128,11 +89,13 @@ class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
 
     return [
       '#type' => 'markup',
-      '#markup' => '<div id="alshaya-v2-algolia-plp"></div>',
+      '#markup' => '<div id="alshaya-algolia-plp"></div>',
       '#attached' => [
         'library' => [
           'alshaya_algolia_react/plpv2',
           'alshaya_rcs_listing/renderer',
+          'alshaya_white_label/algolia_search',
+          'alshaya_white_label/slick_css',
         ],
         'drupalSettings' => [
           'algoliaSearch' => $algoliaSearch,
