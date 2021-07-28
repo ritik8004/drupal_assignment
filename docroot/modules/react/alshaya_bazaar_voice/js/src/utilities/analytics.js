@@ -64,17 +64,38 @@ function trackPageView(productData) {
  *
  * @param reviewData
  */
-function trackImpression(reviewData, productData) {
-  if (reviewData.Results && Object.keys(reviewData.Results).length > 0) {
-    Object.values(reviewData.Results).forEach((content) => {
-      pushContentToBVAnalytics(content, 'review', productData);
-    });
+export function trackContentImpression(reviewData) {
+  if (drupalSettings.productReviewStats && bvPixelUtility !== null) {
+    const { productData } = drupalSettings.productReviewStats;
+    if (reviewData.Results && Object.keys(reviewData.Results).length > 0) {
+      Object.values(reviewData.Results).forEach((content) => {
+        pushContentToBVAnalytics(content, 'review', productData);
+      });
+    }
+    if (reviewData.Includes.Comments && Object.keys(reviewData.Includes.Comments).length > 0) {
+      Object.values(reviewData.Includes.Comments).forEach((content) => {
+        pushContentToBVAnalytics(content, 'comment', productData);
+      });
+    }
   }
-  if (reviewData.Includes.Comments && Object.keys(reviewData.Includes.Comments).length > 0) {
-    Object.values(reviewData.Includes.Comments).forEach((content) => {
-      pushContentToBVAnalytics(content, 'comment', productData);
-    });
+}
+
+/**
+ * Helper function to process datalayer push when element is visible in viewport.
+ *
+ * @param eventName
+ * @param inViewData
+ */
+function processAnalyticsDatalayerPush(eventName, inViewData) {
+  const reviewElement = document.getElementById('reviews-section');
+  function reviewsListener(event) {
+    event.preventDefault();
+    if (window.scrollY > reviewElement.offsetTop) {
+      pushContentToDataLayer(eventName, inViewData);
+      window.removeEventListener('scroll', reviewsListener);
+    }
   }
+  window.addEventListener('scroll', reviewsListener);
 }
 
 /**
@@ -88,7 +109,7 @@ function trackInView(inViewData, containerId) {
     minPixels: 250,
     containerId,
   });
-  pushContentToDataLayer('BV_trackInView', inViewData);
+  processAnalyticsDatalayerPush('BV_trackInView', inViewData);
 }
 
 /**
@@ -103,7 +124,7 @@ function trackViewedCGC(inViewData, containerId) {
     minTime: 2500,
     containerId,
   });
-  pushContentToDataLayer('BV_trackViewedCGC', inViewData);
+  processAnalyticsDatalayerPush('BV_trackViewedCGC', inViewData);
 }
 
 /**
@@ -111,17 +132,13 @@ function trackViewedCGC(inViewData, containerId) {
  *
  * @param reviewData
  */
-export const trackPassiveAnalytics = (reviewData) => {
+export function trackPassiveAnalytics() {
   if (drupalSettings.productReviewStats && bvPixelUtility !== null) {
     const { productData } = drupalSettings.productReviewStats;
     const containerId = 'reviews-section';
 
     // This method communicates data specific to the product page
     trackPageView(productData);
-
-    // This method communicates the various pieces of consumer
-    // generated content on a given page back to Bazaarvoice.
-    trackImpression(reviewData, productData);
 
     // Prepare in view data for track view and CGC events.
     const inViewData = {
@@ -138,14 +155,14 @@ export const trackPassiveAnalytics = (reviewData) => {
     // is made visible for a set amount of time.
     trackViewedCGC(inViewData, containerId);
   }
-};
+}
 
 /**
  * Function to track all the featured analytics of BV.
  *
  * @param analyticsData
  */
-export const trackFeaturedAnalytics = (analyticsData) => {
+export function trackFeaturedAnalytics(analyticsData) {
   if (drupalSettings.productReviewStats && bvPixelUtility !== null) {
     const { productData } = drupalSettings.productReviewStats;
     const eventData = {
@@ -162,9 +179,10 @@ export const trackFeaturedAnalytics = (analyticsData) => {
     bvPixelUtility.trackEvent('Feature', eventData);
     pushContentToDataLayer(`BV_feature${analyticsData.name}Click`, eventData);
   }
-};
+}
 
 export default {
   trackPassiveAnalytics,
   trackFeaturedAnalytics,
+  trackContentImpression,
 };
