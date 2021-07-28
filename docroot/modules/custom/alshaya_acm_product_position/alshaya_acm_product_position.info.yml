@@ -3,5 +3,6 @@ type: module
 description: 'Contains custom code related to product position.'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - acq_commerce:acq_sku_position

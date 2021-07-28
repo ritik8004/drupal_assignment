@@ -3,5 +3,6 @@ type: module
 description: 'Product Linked Part Numbers(LPN) related changes.'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_acm_product:alshaya_acm_product

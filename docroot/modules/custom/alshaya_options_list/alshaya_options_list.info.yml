@@ -3,6 +3,7 @@ type: module
 description: 'Create shop by pages for configurable product attributes.'
 package: Alshaya
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - acq_sku:acq_sku
 themes:
