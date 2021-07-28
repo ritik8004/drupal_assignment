@@ -196,16 +196,14 @@ class ProductExportCommands extends DrushCommands {
 
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
     $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-    $language_manager = \Drupal::languageManager();
 
     foreach ($nids as $nid) {
       try {
         /** @var \Drupal\node\NodeInterface */
         $node = $node_storage->load($nid);
-        foreach ($language_manager->getLanguages() as $langcode => $language) {
-          if ($node->hasTranslation($langcode)) {
-            $translated_node = $node->getTranslation($langcode);
-          }
+        foreach ($node->getTranslationLanguages() as $langcode => $language) {
+          $translated_node = $node->getTranslation($langcode);
+
           // Get the required data.
           $node_data = self::getDataForNode($translated_node);
 
