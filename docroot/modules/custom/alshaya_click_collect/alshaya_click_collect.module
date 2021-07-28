@@ -15,8 +15,8 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  * Add cnc collection point feature related data.
  */
 function alshaya_click_collect_alshaya_spc_checkout_build_alter(array &$build) {
-  $cnc_config = \Drupal::config('alshaya_click_collect.settings');
-  $cnc_collection_points_enabled = $cnc_config->get('checkout_click_collect_collection_points_enabled');
+  $config = \Drupal::config('alshaya_spc.collection_points');
+  $cnc_collection_points_enabled = $config->get('click_collect_collection_points_enabled');
   $build['#attached']['drupalSettings']['cnc_collection_points_enabled'] = $cnc_collection_points_enabled;
 
   // If collection point feature is not enabled, return.
@@ -49,9 +49,10 @@ function alshaya_click_collect_alshaya_spc_checkout_build_alter(array &$build) {
     'value' => $this->t('The same person placing the order will collect the order.'),
   ];
 
-  $build['#attached']['drupalSettings']['cnc_store_list_icon'] = $cnc_config->get('checkout_click_collect_store_list_icon');
-  $build['#attached']['drupalSettings']['cnc_collection_point_list_icon'] = $cnc_config->get('checkout_click_collect_collection_point_list_icon');
-  $build['#attached']['drupalSettings']['cnc_collection_point_map_icon'] = $cnc_config->get('checkout_click_collect_collection_point_map_icon');
+  $build['#attached']['drupalSettings']['cnc_collection_point_icon'] = $config->get('click_collect_collection_point_icon');
+  $build['#attached']['drupalSettings']['cnc_collection_point_map_icon'] = $config->get('click_collect_collection_point_map_icon');
+  $build['#attached']['drupalSettings']['cnc_store_icon'] = $config->get('click_collect_store_icon');
+  $build['#attached']['drupalSettings']['cnc_store_map_icon'] = $config->get('click_collect_store_map_icon');
 }
 
 /**

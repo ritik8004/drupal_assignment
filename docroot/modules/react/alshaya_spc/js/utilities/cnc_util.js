@@ -6,12 +6,17 @@ export const collectionPointsEnabled = () => drupalSettings.cnc_collection_point
 /**
  * Helper to get click and collect store list icon.
  */
-export const getCncStoreListIcon = () => drupalSettings.cnc_store_list_icon || '';
+export const getCncStoreIcon = () => drupalSettings.cnc_store_icon || '';
+
+/**
+ * Helper to get click and collect store map icon.
+ */
+export const getCncStoreMapIcon = () => drupalSettings.cnc_store_map_icon || '';
 
 /**
  * Helper to get click and collect store list icon.
  */
-export const getCncCollectionPointListIcon = () => drupalSettings.cnc_collection_point_list_icon || '';
+export const getCncCollectionPointIcon = () => drupalSettings.cnc_collection_point_icon || '';
 
 /**
  * Helper to get click and collect store list icon.
@@ -66,7 +71,7 @@ export const getCncListIcon = (type) => {
     return '';
   }
 
-  const icon = isCollectionPoint(type) ? getCncCollectionPointListIcon() : getCncStoreListIcon();
+  const icon = isCollectionPoint(type) ? getCncCollectionPointIcon() : getCncStoreIcon();
 
   return icon;
 };

@@ -14,6 +14,41 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Add click and collect collection point configs and translations.
+ */
+function alshaya_spc_update_8014() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.collection_points'],
+    'alshaya_spc',
+    'install'
+  );
+
+  // Add translations.
+  $strings = [
+    'Collection Point' => [
+      'ar' => 'Collection Point AR',
+    ],
+    'select your preferred collection point' => [
+      'ar' => 'select your preferred collection point ar',
+    ],
+    'find your collection point' => [
+      'ar' => 'find your collection point ar',
+    ],
+    'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
+      'ar' => 'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice AR.',
+    ],
+    'The same person placing the order will collect the order.' => [
+      'ar' => 'The same person placing the order will collect the order AR.',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for V2.
  */
 function alshaya_spc_update_8013() {
