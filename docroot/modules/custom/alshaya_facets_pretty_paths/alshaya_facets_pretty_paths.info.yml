@@ -2,6 +2,7 @@ name: 'Alshaya Facets Pretty Paths'
 type: module
 description: 'Pretty paths for Facets.'
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Search
 dependencies:
   - alshaya_product:alshaya_product
