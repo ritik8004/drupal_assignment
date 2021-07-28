@@ -490,4 +490,26 @@
       }
     }
   }
+
+  .pie_notification-content {
+    .write-review-form {
+      padding: 1.25rem 1.5625rem 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 1rem 0.75rem 0;
+      }
+
+      .title-block {
+        margin-bottom: 0;
+      }
+
+      .already-reviewed-text {
+        text-align: $left;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      height: 100vh;
+    }
+  }
 }
