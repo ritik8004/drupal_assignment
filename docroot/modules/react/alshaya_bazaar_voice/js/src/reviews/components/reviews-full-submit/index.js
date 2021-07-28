@@ -35,7 +35,7 @@ export default class WriteReviewButton extends React.Component {
     const params = new URLSearchParams(path);
     if ((params.get('messageType') === 'PIE' || params.get('messageType') === 'PIE_FOLLOWUP') && reviewedByCurrentUser) {
       this.setState({
-        buttonClass: 'myaccount_review',
+        buttonClass: 'pie_notification',
       });
     }
     if (params.get('userToken') !== null) {
@@ -44,7 +44,7 @@ export default class WriteReviewButton extends React.Component {
       if (userDetails.user.userId !== 0 && userDetails.user.emailId !== currentEmail) {
         this.setState({
           validateCurrentEmail: true,
-          buttonClass: 'myaccount_review',
+          buttonClass: 'pie_notification',
         });
       }
     }
@@ -151,7 +151,7 @@ export default class WriteReviewButton extends React.Component {
             </Popup>
           </div>
         </ConditionalView>
-        <ConditionalView condition={reviewedByCurrentUser && buttonClass === 'myaccount_review'}>
+        <ConditionalView condition={reviewedByCurrentUser && buttonClass === 'pie_notification'}>
           <Popup
             open={isModelOpen}
             className={buttonClass}
@@ -168,7 +168,7 @@ export default class WriteReviewButton extends React.Component {
             </>
           </Popup>
         </ConditionalView>
-        <ConditionalView condition={validateCurrentEmail && buttonClass === 'myaccount_review'}>
+        <ConditionalView condition={validateCurrentEmail && buttonClass === 'pie_notification'}>
           <Popup
             open={isModelOpen}
             className={buttonClass}
