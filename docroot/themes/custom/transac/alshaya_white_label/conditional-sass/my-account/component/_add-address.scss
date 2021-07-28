@@ -23,10 +23,6 @@
 
   .address-book-address,
   .profile-form {
-    @include breakpoint($desktop) {
-      margin-top: 4.5rem;
-    }
-
     .address-container-inline > .form-item {
       max-width: 144px;
       display: inline-block;
