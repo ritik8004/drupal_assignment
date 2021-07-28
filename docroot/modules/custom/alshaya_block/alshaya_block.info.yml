@@ -3,6 +3,7 @@ type: module
 description: 'Contains custom bloks like: custom logo block, application links block etc..'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_i18n:alshaya_i18n
   - alshaya_menus:alshaya_menus

@@ -2,6 +2,7 @@ name: 'Alshaya Search API'
 description: 'Contains search_api related config templates'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - facets:facets_summary
   - search_api:search_api

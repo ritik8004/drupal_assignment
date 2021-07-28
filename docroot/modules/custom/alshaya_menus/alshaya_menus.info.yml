@@ -1,6 +1,7 @@
 name: 'Alshaya Menus'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 description: 'Footer and Header menus and related code.'
 dependencies:
   - drupal:block
