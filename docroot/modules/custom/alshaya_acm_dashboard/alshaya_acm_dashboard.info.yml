@@ -3,6 +3,6 @@ type: module
 description: Provides dashboard showing data flow from Magento.
 package: alshaya
 core: 8.x
-
+core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_acm:alshaya_acm
