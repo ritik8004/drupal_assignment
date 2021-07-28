@@ -18,11 +18,7 @@ services:
     class: Drupal\alshaya_acm_product\Commands\ProductExportCommands
     arguments:
       - '@entity_type.manager'
-      - '@alshaya_acm_product.skumanager'
-      - '@metatag.manager'
-      - '@request_stack'
       - '@language_manager'
-      - '@module_handler'
       - '@file_system'
     tags:
       - { name: drush.command }

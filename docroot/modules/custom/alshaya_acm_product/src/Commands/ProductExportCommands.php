@@ -2,14 +2,10 @@
 
 namespace Drupal\alshaya_acm_product\Commands;
 
-use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\metatag\MetatagManagerInterface;
 use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
@@ -25,46 +21,11 @@ class ProductExportCommands extends DrushCommands {
   protected $entityTypeManager;
 
   /**
-   * Entity query.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryInterface
-   */
-  protected $entityQuery;
-
-  /**
-   * Sku Manager service.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuManager
-   */
-  protected $skuManager;
-
-  /**
-   * Metatag manager service.
-   *
-   * @var \Drupal\metatag\MetatagManagerInterface
-   */
-  protected $metatagManager;
-
-  /**
-   * Request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
    * Language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $langugageManager;
-
-  /**
-   * Module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
 
   /**
    * File system.
@@ -92,35 +53,18 @@ class ProductExportCommands extends DrushCommands {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
-   *   Sku Manager service.
-   * @param \Drupal\metatag\MetatagManagerInterface $metatag_manager
-   *   The Metatag manager service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
-    SkuManager $sku_manager,
-    MetatagManagerInterface $metatag_manager,
-    RequestStack $request_stack,
     LanguageManagerInterface $language_manager,
-    ModuleHandlerInterface $module_handler,
     FileSystemInterface $file_system
   ) {
-    $this->entityTypeManager = $entity_type_manager;
     $this->entityQuery = $entity_type_manager->getStorage('node')->getQuery();
-    $this->skuManager = $sku_manager;
-    $this->metatagManager = $metatag_manager;
-    $this->requestStack = $request_stack;
     $this->languageManager = $language_manager;
-    $this->moduleHandler = $module_handler;
     $this->fileSystem = $file_system;
   }
 
@@ -157,6 +101,7 @@ class ProductExportCommands extends DrushCommands {
       ->condition('type', 'acq_product')
       ->condition('status', NodeInterface::PUBLISHED)
       ->addTag('get_display_node_for_sku')
+      ->range(0, 60)
       ->execute();
 
     $batch = [
