@@ -22,6 +22,7 @@ import {
 } from './utility';
 import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
+import cartActions from '../../utilities/cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -398,4 +399,100 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
   // it means the customer just became authenticated.
   // We need to associate the cart and remove the cart_id from local storage.
   await associateCartToCustomer();
+};
+
+/**
+ * Adds free gift to the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addFreeGift = async (data) => {
+  const { sku, promoRuleId } = data;
+  const skuType = data.type;
+  const langCode = data.langcode;
+  const promoCode = data.promo;
+  let cart = null;
+
+  if (_isEmpty(sku) || _isEmpty(promoCode) || _isEmpty(langCode)) {
+    logger.error(`Missing request header parameters. SKU: ${sku}, Promo: ${promoCode}, Langcode: ${langCode}`, {});
+    cart = await window.commerceBackend.getCart();
+  } else {
+    // Apply promo code.
+    cart = await window.commerceBackend.applyRemovePromo({
+      promo: promoCode,
+      action: cartActions.cartApplyCoupon,
+    });
+
+    // Validations.
+    if (_isEmpty(cart.data)
+      || (!_isUndefined(cart.data.error) && cart.data.error)
+    ) {
+      logger.error('Cart is empty. Cart: @cart', {
+        '@cart': JSON.stringify(cart),
+      });
+    } else if (_isUndefined(cart.data.appliedRules)
+      || _isEmpty(cart.data.appliedRules)
+    ) {
+      logger.error('Invalid promo code. Cart: @cart, Promo: @promoCode', {
+        '@cart': JSON.stringify(cart.data),
+        '@promoCode': promoCode,
+      });
+    } else {
+      // Update cart with free gift.
+      const params = { ...data };
+      params.items = [];
+      params.extension = {
+        action: cartActions.cartAddItem,
+      };
+
+      if (skuType === 'simple') {
+        params.items.push({
+          sku,
+          qty: 1,
+          product_type: skuType,
+          extension_attributes: {
+            promo_rule_id: promoRuleId,
+          },
+        });
+      } else {
+        const options = (!_isEmpty(data.configurable_values)) ? data.configurable_values : [];
+        params.items.push({
+          sku,
+          qty: 1,
+          product_type: skuType,
+          product_option: (_isEmpty(options))
+            ? []
+            : {
+              extension_attributes: {
+                configurable_item_options: options,
+              },
+            },
+          variant_sku: (!_isEmpty(data.variant)) ? data.variant : null,
+          extension_attributes: {
+            promo_rule_id: promoRuleId,
+          },
+        });
+      }
+
+      // Update cart.
+      const updated = await updateCart(params);
+      // If cart update has error.
+      if (_isEmpty(updated.data) || (!_isUndefined(updated.data.error) && updated.data.error)) {
+        logger.error('Update cart failed. Cart: @cart', {
+          '@cart': JSON.stringify(cart),
+        });
+      } else {
+        if (!_isEmpty(updated.data) && _isUndefined(updated.data.error)) {
+          updated.data = await getProcessedCartData(updated.data);
+        }
+        cart = updated;
+      }
+    }
+  }
+
+  return cart;
 };
