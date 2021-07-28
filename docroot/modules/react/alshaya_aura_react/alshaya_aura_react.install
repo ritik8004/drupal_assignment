@@ -5,6 +5,8 @@
  * Install file.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * Implements hook_install().
  */
@@ -21,7 +23,7 @@ function alshaya_aura_react_install() {
     'block.block.myaccountsaurablock',
     'block.block.aurarewardsheader',
   ];
-  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura_react', 'optional');
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura_react', 'optional', AlshayaConfigManager::MODE_REPLACE);
   $config_factory = \Drupal::configFactory();
 
   // Set the My Accounts AURA block to appear just below the page title.
