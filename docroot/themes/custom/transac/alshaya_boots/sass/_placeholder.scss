@@ -5,3 +5,16 @@
   font-weight: bold;
   height: 2.5rem;
 }
+
+%button-wide {
+  @extend %btn;
+}
+
+%button-brand {
+  @extend %btn;
+}
+
+%page-title {
+  text-transform: none;
+}
+

@@ -1,7 +1,7 @@
-%button-wide,
 .button-wide,
-%button-brand,
 .brand-button {
+  @extend %brand-wide;
+
   font-size: 1rem !important;
   font-family: $tbs-medium;
 }
