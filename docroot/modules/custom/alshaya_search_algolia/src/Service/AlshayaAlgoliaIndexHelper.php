@@ -19,7 +19,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
@@ -588,7 +587,7 @@ class AlshayaAlgoliaIndexHelper {
 
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $images[] = [
-        'url' => ImageStyle::load('product_listing')->buildUrl($media_item['drupal_uri']),
+        'url' => _alshaya_pims_get_image_style_url($media_item, 'product_listing'),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
       ];
     }

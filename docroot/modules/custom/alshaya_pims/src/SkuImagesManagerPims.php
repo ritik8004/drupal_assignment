@@ -83,6 +83,15 @@ class SkuImagesManagerPims extends SkuImagesManager {
    *   Processed media items.
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
+    if (!$this->getPimsSettings()) {
+      // Return media with downloaded images.
+      return $this->imagesManager->getProductMedia(
+        $sku,
+        $context,
+        $check_parent_child
+      );
+    }
+
     $cache_key = implode(':', [
       'product_media_pims',
       (int) $check_parent_child,
@@ -120,6 +129,11 @@ class SkuImagesManagerPims extends SkuImagesManager {
    *   Array of media files.
    */
   public function getGalleryMedia(SKUInterface $sku, $check_parent_child = FALSE) {
+    if (!$this->getPimsSettings()) {
+      // Return media with downloaded images.
+      return $this->imagesManager->getGalleryMedia($sku, $check_parent_child);
+    }
+
     $static = &drupal_static(__FUNCTION__, []);
 
     $static_id = implode(':', [
@@ -246,9 +260,9 @@ class SkuImagesManagerPims extends SkuImagesManager {
         $original_image = file_create_url($file_uri);
 
         // Get Pims urls by styles.
-        $image_small = $media_item['styles'][$thumbnail_style];
-        $image_zoom = $media_item['styles'][$zoom_style];
-        $image_medium = $media_item['styles'][$slide_style];
+        $image_small = _alshaya_pims_get_image_style_url($media_item, $thumbnail_style);
+        $image_zoom = _alshaya_pims_get_image_style_url($media_item, $zoom_style);
+        $image_medium = _alshaya_pims_get_image_style_url($media_item, $slide_style);
 
         if ($get_main_image && empty($main_image)) {
           $main_image = [
@@ -312,6 +326,16 @@ class SkuImagesManagerPims extends SkuImagesManager {
     }
 
     return $return;
+  }
+
+  /**
+   * Get PIMS setting.
+   *
+   * @return bool|null
+   *   Pims settings true or false.
+   */
+  public function getPimsSettings() {
+    return $this->configFactory->get('alshaya_pims.settings')->get('alshaya_pims');
   }
 
 }
