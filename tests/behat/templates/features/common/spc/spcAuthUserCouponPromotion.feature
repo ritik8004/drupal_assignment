@@ -1,4 +1,4 @@
-@javascript @coupon-promotion @discount @smoke @auth
+@javascript @coupon-promotion @discount @smoke @auth @mckwuat @mcsauat @mcaeuat
 Feature: SPC to add coupon promotions & get discount in cart page for Authenticated user
 
   Background:

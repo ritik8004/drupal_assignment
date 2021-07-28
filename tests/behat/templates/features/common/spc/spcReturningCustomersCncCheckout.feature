@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @clickCollect @hmaeuat @vssauat @tbskwuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat @flaeuat @bbwaeuat @vsaeuat
+@javascript @returnUser @checkoutPayment @clickCollect @hmaeuat @mcsauat @mcaeuat @flsauat @bbwsauat @vssauat @tbskwuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat @flaeuat @bbwaeuat @vsaeuat
 Feature: SPC Checkout using Click & Collect store for returning customer using Checkout (2D) Card Payment Method
 
   Background:
@@ -45,9 +45,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 10 seconds
     And I wait for the page to load
     And I wait 20 seconds
-    Then I should be on "/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -59,7 +56,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     Then I should see "{delivery_type_text}"
     Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{cc_payment_type}"
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -118,9 +114,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 10 seconds
     And I wait for the page to load
     And I wait 20 seconds
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"
@@ -132,7 +125,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
-    Then I should see "{language_cc_payment_type}"
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
