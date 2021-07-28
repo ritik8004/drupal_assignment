@@ -83,8 +83,7 @@ class FreeGiftController {
    *   Response.
    */
   public function selectFreeGift() {
-    $request_content = json_decode($this->request->getContent(), TRUE);
-    $data = json_decode($request_content['data'], TRUE);
+    $data = json_decode($this->request->getContent(), TRUE);
     $sku = $data['sku'];
     $promo_code = $data['promo'];
     $langcode = $data['langcode'];
