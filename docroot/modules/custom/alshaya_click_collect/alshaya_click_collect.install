@@ -59,6 +59,9 @@ function alshaya_click_collect_string_translations() {
     'The same person placing the order will collect the order.' => [
       'ar' => 'The same person placing the order will collect the order AR.',
     ],
+    'Selected collection point.' => [
+      'ar' => 'Selected collection point AR.',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
