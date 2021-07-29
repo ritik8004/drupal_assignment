@@ -1,0 +1,4 @@
+visibility:
+  node_type:
+    bundles:
+      rcs_product: rcs_product
