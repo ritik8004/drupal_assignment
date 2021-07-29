@@ -6,6 +6,8 @@
 /docroot/update.php
 /docroot/modules/brands/*/data
 /docroot/modules/brands/*/*/*/data
+/docroot/modules/react/*/src/test/
+/docroot/modules/react/jest.config.js
 /factory-hooks/pre-sites-php/sites.php
 /docroot/themes/custom/*/package.json
 /docroot/themes/custom/*/package-lock.json
