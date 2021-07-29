@@ -207,6 +207,21 @@ const handleResponse = (apiResponse) => {
         '@code': response.status,
       });
       response.data.error_code = 500;
+    } else if (response.status === 404
+      && _isUndefined(response.data)
+      && !_isUndefined(response.message)
+      && !_isEmpty(response.message)) {
+      response.data = {};
+      response.data.code = 404;
+      response.data.error_code = 404;
+      response.data.error_message = response.message;
+
+      // Log the error message.
+      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+        '@message': response.data.error_message,
+        '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
+        '@response_code': response.status,
+      });
     } else if (!_isUndefined(response.data.message) && !_isEmpty(response.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(response);
