@@ -5,6 +5,10 @@
     padding: 2.875rem 0;
 
     @include breakpoint($tablet) {
+      #{$left}: 50%;
+      margin-#{$left}: -50vw;
+      margin-#{$right}: -50vw;
+      width: 100vw;
       margin-top: 1rem;
     }
 
