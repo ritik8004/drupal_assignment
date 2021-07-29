@@ -83,8 +83,8 @@
       var scrollDuration = 300;
 
       // Paddles.
-      var leftPaddle = $('.paddle_prev');
-      var rightPaddle = $('.paddle_next');
+      var leftPaddle = ($('html').attr('dir') == 'rtl') ? $('.paddle_next') : $('.paddle_prev');
+      var rightPaddle = ($('html').attr('dir') == 'rtl') ? $('.paddle_prev') : $('.paddle_next');
 
       // Get items dimensions.
       var itemsLength = $('.shop-by-size-band').length;
@@ -105,15 +105,10 @@
         return $('.sfb-facets-container').outerWidth();
       };
 
-      // Get how much have we scrolled to the left.
-      var getMenuPosition = function () {
-        return $('.sfb-facets-container').scrollLeft();
-      };
-
       $('.sfb-band-cup').find('.shop-by-size-band').each(function () {
         // Get the distance of different cup size wrapper from starting point.
         if ($('html').attr('dir') == 'rtl') {
-          CupsizewrapperWidthsum = $(this).outerWidth() + 16;
+          CupsizewrapperWidthsum += $(this).outerWidth() + 16;
         }
         else {
           CupsizewrapperWidthsum += $(this).outerWidth() + 16;
@@ -135,27 +130,13 @@
         }
       }
 
-      var sliderIndex;
+      var sliderIndex = 0;
       var counter = 0;
       var sliderIndexidentifier;
-      if ($('html').attr('dir') == 'rtl') {
-        DifferenceOfsCupsizewrapper.reverse();
-        for (var i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
-          DifferenceOfsCupsizewrapper[i] = DifferenceOfsCupsizewrapper[i] + DifferenceOfsCupsizewrapper[i - 1];
-          if (DifferenceOfsCupsizewrapper[i] > $('.sfb-facets-container').width() && counter == 0) {
-            sliderIndex = DifferenceOfsCupsizewrapper.length - i - 1;
-            sliderIndexidentifier = DifferenceOfsCupsizewrapper.length - i;
-            counter++;
-          }
-        }
-      }
-      else {
-        sliderIndex = 0;
-        for (var i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
-          if (DifferenceOfsCupsizewrapper[i] > $('.sfb-facets-container').width() && counter == 0) {
-            sliderIndexidentifier = DifferenceOfsCupsizewrapper.length - i;
-            counter++;
-          }
+      for (var i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
+        if (DifferenceOfsCupsizewrapper[i] > $('.sfb-facets-container').width() && counter == 0) {
+          sliderIndexidentifier = DifferenceOfsCupsizewrapper.length - i;
+          counter++;
         }
       }
 
@@ -166,82 +147,45 @@
         menuWrapperSize = getMenuWrapperSize();
       }, 500));
 
-      var menuSize = getMenuSize();
-      // Get how much of menu is invisible.
-      var menuInvisibleSize = menuSize - menuWrapperSize;
-
-      // Finally, what happens when we are actually scrolling the menu.
-      $('.sfb-facets-container').on('scroll', function () {
-
-        // Get how much of menu is invisible.
-        menuInvisibleSize = menuSize - menuWrapperSize;
-        // Get how much have we scrolled so far.
-        var menuPosition = getMenuPosition();
-
-        // Show & hide the paddles depending on scroll position.
-        if (menuPosition <= 0) {
+      // Get how much have we scrolled to the left and hide arrows accordingly.
+      var hideArrow = function (scrollPosition) {
+        if (scrollPosition == 0) {
           $(leftPaddle).addClass('hidden');
           $(rightPaddle).removeClass('hidden');
         }
-        else if (menuPosition >= (DifferenceOfsCupsizewrapper[itemsLength - 1] - (menuWrapperSize + 17))) {
+        if (scrollPosition >= (DifferenceOfsCupsizewrapper[itemsLength - 1] - (menuWrapperSize + 17))) {
           $(leftPaddle).removeClass('hidden');
           $(rightPaddle).addClass('hidden');
         }
-        else {
-          $(leftPaddle).removeClass('hidden');
-          $(rightPaddle).removeClass('hidden');
+      };
+
+      // Scroll to left for EN and left for right.
+      $(rightPaddle).once().on('click', function () {
+        if (sliderIndex > sliderIndexidentifier - 1) {
+          sliderIndex = sliderIndexidentifier - 1;
         }
+        else {
+          sliderIndex++;
+        }
+        var animatePosition = ($('html').attr('dir') == 'rtl') ? -DifferenceOfsCupsizewrapper[sliderIndex - 1] : DifferenceOfsCupsizewrapper[sliderIndex - 1];
+        $('.sfb-facets-container').animate({scrollLeft: animatePosition}, scrollDuration);
+        hideArrow(DifferenceOfsCupsizewrapper[sliderIndex - 1]);
       });
 
-      if ($('html').attr('dir') == 'rtl') {
-        $(leftPaddle).once().on('click', function () {
-          sliderIndex--;
-          if (sliderIndex <= 0) {
-            $('.sfb-facets-container').animate({scrollLeft: 0}, scrollDuration);
-            sliderIndex = 0;
-          }
-          else {
-            $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
-          }
-        });
-
-        // Scroll to right.
-        $(rightPaddle).once().on('click', function () {
-          // After reaching the end of slide if we scroll using mouse then index should be same as last one.
-          if (sliderIndex >= sliderIndexidentifier - 1) {
-            sliderIndex = sliderIndexidentifier - 1;
-          }
-          else {
-            sliderIndex++;
-          }
-          $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
-        });
-      }
-      else {
-        // Scroll to left.
-        $(rightPaddle).once().on('click', function () {
-          if (sliderIndex > sliderIndexidentifier - 1) {
-            sliderIndex = sliderIndexidentifier - 1;
-          }
-          else {
-            sliderIndex++;
-          }
-          $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex - 1]}, scrollDuration);
-        });
-
-        // Scroll to right.
-        $(leftPaddle).once().on('click', function () {
-          sliderIndex--;
-          if (sliderIndex <= 0) {
-            sliderIndex = 0;
-            $('.sfb-facets-container').animate({scrollLeft: 0}, scrollDuration);
-          }
-          else {
-            // scroll by a single size wrapper.
-            $('.sfb-facets-container').animate({scrollLeft: (DifferenceOfsCupsizewrapper[sliderIndex - 1])}, scrollDuration);
-          }
-        });
-      }
+      // Scroll to right for EN and left for AR.
+      $(leftPaddle).once().on('click', function () {
+        sliderIndex--;
+        if (sliderIndex <= 0) {
+          sliderIndex = 0;
+          $('.sfb-facets-container').animate({scrollLeft: 0}, scrollDuration);
+          hideArrow(0);
+        }
+        else {
+          // scroll by a single size wrapper.
+          $('.sfb-facets-container').animate({scrollLeft: (DifferenceOfsCupsizewrapper[sliderIndex - 1])}, scrollDuration);
+          hideArrow(DifferenceOfsCupsizewrapper[sliderIndex - 1]);
+        }
+      });
     }
 
     //JS for checking the empty filters.
