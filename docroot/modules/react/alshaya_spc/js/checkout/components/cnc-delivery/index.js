@@ -12,7 +12,7 @@ import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
 import getStringMessage from '../../../utilities/strings';
-import { collectionPointsEnabled, getCncListIcon } from '../../../utilities/cnc_util';
+import { collectionPointsEnabled, getCncListIcon, getCncCollectionText } from '../../../utilities/cnc_util';
 import ConditionalView from '../../../common/components/conditional-view';
 
 class ClicknCollectDeiveryInfo extends React.Component {
@@ -172,7 +172,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
                   {hoursArray}
                 </div>
                 <div className="store-delivery-time">
-                  <span className="label--delivery-time">{getStringMessage('cnc_collect_in_store')}</span>
+                  <span className="label--delivery-time">{getStringMessage(getCncCollectionText())}</span>
                   <span className="delivery--time--value">{deliveryTime}</span>
                 </div>
               </ConditionalView>

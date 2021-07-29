@@ -56,6 +56,11 @@ function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
   ];
 
   $build['#strings'][] = [
+    'key' => 'cnc_collection_collect_in_store',
+    'value' => t('Collect in'),
+  ];
+
+  $build['#strings'][] = [
     'key' => 'cnc_selected_collection_point',
     'value' => t('Selected collection point'),
   ];
