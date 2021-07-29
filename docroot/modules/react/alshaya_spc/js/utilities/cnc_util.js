@@ -75,3 +75,10 @@ export const getCncListIcon = (type) => {
 
   return icon;
 };
+
+/**
+ * Helper to get contact subtitle.
+ */
+export const getCnCModalContactSubtitle = () => ((collectionPointsEnabled() === true)
+  ? 'cnc_selected_collection_point'
+  : 'cnc_selected_store');

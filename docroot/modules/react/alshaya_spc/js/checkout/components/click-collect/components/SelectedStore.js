@@ -5,7 +5,7 @@ import SectionTitle from '../../../../utilities/section-title';
 import CheckoutMessage from '../../../../utilities/checkout-message';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import getStringMessage from '../../../../utilities/strings';
-import { collectionPointsEnabled } from '../../../../utilities/cnc_util';
+import { getCnCModalContactSubtitle } from '../../../../utilities/cnc_util';
 
 const SelectedStore = ({ store, open, closePanel }) => {
   const [messageType, setMsgType] = useState(null);
@@ -45,11 +45,6 @@ const SelectedStore = ({ store, open, closePanel }) => {
     setErrorMessage(null);
   }, [store]);
 
-  let cncStoreTitle = getStringMessage('cnc_selected_store');
-  if (collectionPointsEnabled()) {
-    cncStoreTitle = getStringMessage('cnc_selected_collection_point');
-  }
-
   return (!store)
     ? null
     : (
@@ -65,7 +60,7 @@ const SelectedStore = ({ store, open, closePanel }) => {
           </CheckoutMessage>
           )}
         <div className="spc-cnc-selected-store-content">
-          <SectionTitle>{cncStoreTitle}</SectionTitle>
+          <SectionTitle>{getStringMessage(getCnCModalContactSubtitle())}</SectionTitle>
           <div className="store-details-wrapper">
             <StoreItem display="default" store={store} />
           </div>
