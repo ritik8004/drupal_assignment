@@ -118,16 +118,19 @@ export default class Cart extends React.Component {
         });
       }
 
-      // Call dynamic-yield spa api for cart context.
       const { items } = this.state;
-      window.DY.API('spa', {
-        context: {
-          type: 'CART',
-          data: Object.keys(items),
-          lng: drupalSettings.alshaya_spc.lng,
-        },
-        countAsPageview: false,
-      });
+
+      // Call dynamic-yield spa api for cart context.
+      if (typeof window.DY !== 'undefined' && typeof window.DY.API !== 'undefined') {
+        window.DY.API('spa', {
+          context: {
+            type: 'CART',
+            data: Object.keys(items),
+            lng: drupalSettings.alshaya_spc.lng,
+          },
+          countAsPageview: false,
+        });
+      }
     }, false);
 
     // Event handles cart message update.
