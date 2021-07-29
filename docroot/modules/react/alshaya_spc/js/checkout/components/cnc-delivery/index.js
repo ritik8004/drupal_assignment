@@ -147,7 +147,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
       </div>
     ));
 
-    const { selectedStore: { type, cart_address: cartAddress } } = this.context;
+    const { selectedStore: { type } } = this.context;
 
 
     return (
@@ -159,11 +159,10 @@ class ClicknCollectDeiveryInfo extends React.Component {
                 <span className="list-icon">
                   <img src={getCncListIcon(type)} />
                 </span>
+                {/* Todo: The title to be fetched from API */}
+                <span className="StorenCollectionPointTitle">{Drupal.t('Store or Collection Point Title')}</span>
               </ConditionalView>
               <div className="store-name">{name}</div>
-              <ConditionalView condition={collectionPointsEnabled()}>
-                <div className="store-city">{cartAddress.city}</div>
-              </ConditionalView>
               <div className="store-address">
                 {parse(address)}
               </div>
