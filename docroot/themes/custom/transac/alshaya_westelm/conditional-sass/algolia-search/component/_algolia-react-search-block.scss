@@ -60,7 +60,7 @@
 
     @include breakpoint($only-tablet) {
       border-bottom-color: $algolia-auto-complete-border-bottom;
-      width: 13.25rem;
+      width: 100%;
     }
 
     &::placeholder {
