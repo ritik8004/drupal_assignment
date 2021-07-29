@@ -68,11 +68,6 @@ const StoreItem = ({
         </ConditionalView>
       </div>
     </ConditionalView>
-    <ConditionalView condition={(display === 'accordion' || display === 'default') && (collectionPointsEnabled())}>
-      <div className="cnc_collection_subtitle">
-        {getStringMessage('cnc_contact_info_subtitle')}
-      </div>
-    </ConditionalView>
   </>
 );
 

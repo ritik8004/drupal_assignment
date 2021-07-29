@@ -328,6 +328,9 @@ function _alshaya_spc_translations() {
     'Selected collection point' => [
       'ar' => 'Selected collection point AR.',
     ],
+    'Collectors Information' => [
+      'ar' => 'Collectors Information AR',
+    ],
   ];
 
   return $strings;
