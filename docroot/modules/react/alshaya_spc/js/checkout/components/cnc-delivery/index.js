@@ -147,7 +147,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
       </div>
     ));
 
-    const { selectedStore: { type } } = this.context;
+    const { selectedStore: { type, collectionTitle } } = this.context;
 
 
     return (
@@ -160,7 +160,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
                   <img src={getCncListIcon(type)} />
                 </span>
                 {/* Todo: The title to be fetched from API */}
-                <span className="StorenCollectionPointTitle">{Drupal.t('Store or Collection Point Title')}</span>
+                <span className="StorenCollectionPointTitle">{collectionTitle}</span>
               </ConditionalView>
               <div className="store-name">{name}</div>
               <div className="store-address">
