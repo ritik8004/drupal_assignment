@@ -191,12 +191,13 @@ class AlshayaBazaarVoice {
             $bv_featured_reviews = $result['Includes']['Reviews'];
           }
           $response['ReviewStatistics'][$value['Id']] = [
+            'OverallRatingPercentage' => round(($value['ReviewStatistics']['AverageOverallRating'] / 5) * 100),
             'AverageOverallRating' => round($value['ReviewStatistics']['AverageOverallRating'], 1),
             'TotalReviewCount' => $value['ReviewStatistics']['TotalReviewCount'],
             'RatingDistribution' => $rating_distribution['rating_distribution'],
             'RatingDistributionAverage' => $rating_distribution['rating_distribution_average'],
             'RatingStars' => ['rating_' . round($value['ReviewStatistics']['AverageOverallRating'])],
-            'ProductRecommendedAverage' => ($value['ReviewStatistics']['RecommendedCount'] / $value['ReviewStatistics']['TotalReviewCount']) * 100,
+            'ProductRecommendedAverage' => round(($value['ReviewStatistics']['RecommendedCount'] / $value['ReviewStatistics']['TotalReviewCount']) * 100),
             'FeaturedReviews' => $bv_featured_reviews,
           ];
         }

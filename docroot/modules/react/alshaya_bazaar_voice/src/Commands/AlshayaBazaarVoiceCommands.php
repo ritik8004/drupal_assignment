@@ -215,11 +215,12 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
             foreach ($feeds as $feed) {
               if ($feed['context'] === 'web') {
                 $fields['sku'] = $object['sku'];
+                $fields['bv_overall_rating_percentage'] = $data['ReviewStatistics'][$sanitized_sku]['OverallRatingPercentage'];
                 $fields['bv_average_overall_rating'] = $data['ReviewStatistics'][$sanitized_sku]['AverageOverallRating'];
                 $fields['bv_total_review_count'] = $data['ReviewStatistics'][$sanitized_sku]['TotalReviewCount'];
                 $fields['bv_rating_distribution'] = json_encode($data['ReviewStatistics'][$sanitized_sku]['RatingDistribution']);
                 $fields['bv_rating_distribution_average'] = json_encode($data['ReviewStatistics'][$sanitized_sku]['RatingDistributionAverage']);
-                $fields['bv_recommended_average'] = round(($data['ReviewStatistics'][$sanitized_sku]['ProductRecommendedAverage'] / $data['ReviewStatistics'][$sanitized_sku]['TotalReviewCount']) * 100);
+                $fields['bv_recommended_average'] = $data['ReviewStatistics'][$sanitized_sku]['ProductRecommendedAverage'];
                 $featured_reviews = $data['ReviewStatistics'][$sanitized_sku]['FeaturedReviews'];
                 if (!empty($featured_reviews)) {
                   foreach ($languages as $language) {
