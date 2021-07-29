@@ -2,6 +2,7 @@ import _isEmpty from 'lodash/isEmpty';
 import isRTL from '../rtl';
 import dispatchCustomEvent from '../events';
 import { getDefaultMapCenter } from '../checkout_util';
+import { collectionPointsEnabled } from '../cnc_util';
 
 export class Gmap {
   constructor() {
@@ -130,16 +131,17 @@ export class Gmap {
    * Pass second parameter true to not show infowindo and
    * false to add infowindow and it's close event.
    */
-  setMapMarker = (markerSettings, showInfoWindow = false) => {
+  setMapMarker = (markerSettings, showInfoWindow = false, mapIcon = '') => {
     this.map.mapMarkers = this.map.mapMarkers || [];
     const currentMarkerSettings = { ...markerSettings };
 
     const { active: markerActiveIcon, inActive: markerInActiveIcon } = this.map.settings.map_marker;
+    const mapMarkerIcon = mapIcon || markerInActiveIcon;
 
-    if (typeof markerInActiveIcon === 'string') {
+    if (typeof mapMarkerIcon === 'string') {
       // Add the marker icon.
       currentMarkerSettings.icon = {
-        url: markerInActiveIcon,
+        url: mapMarkerIcon,
       };
     }
 
@@ -166,6 +168,12 @@ export class Gmap {
     currentMarker.addListener('click', () => {
       map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
       currentMarker.setIcon(markerActiveIcon);
+
+      // If collection point feature is enabled, zoom the marker icon on click.
+      if (collectionPointsEnabled()) {
+        currentMarker.setIcon({ url: mapIcon, scaledSize: new google.maps.Size(50, 50) });
+      }
+
       clickedMarker = currentMarker;
 
       if (currentMarkerSettings.infoWindowSolitary && showInfoWindow === true) {
@@ -191,7 +199,7 @@ export class Gmap {
       if (clickedMarker === currentMarker) {
         return;
       }
-      currentMarker.setIcon(markerActiveIcon);
+      currentMarker.setIcon(mapIcon || markerActiveIcon);
     });
 
     google.maps.event.addListener(currentMarker, 'mouseout', () => {
@@ -224,11 +232,19 @@ export class Gmap {
   };
 
   resetIcon = (currentMarker) => {
+    // If collection point is enabled, we don't want to change icon on reset.
+    if (collectionPointsEnabled()) {
+      return;
+    }
     const { inActive } = this.map.settings.map_marker;
     currentMarker.setIcon(inActive);
   }
 
   highlightIcon = (currentMarker) => {
+    // If collection point is enabled, we don't want to update icon.
+    if (collectionPointsEnabled()) {
+      return;
+    }
     const { active } = this.map.settings.map_marker;
     currentMarker.setIcon(active);
   }

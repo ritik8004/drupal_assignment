@@ -2,6 +2,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import StoreItemInfoWindow from './StoreItemInfowindow';
 import globalGmap from '../../../../utilities/map/Gmap';
+import { getCncMapIcon } from '../../../../utilities/cnc_util';
 
 class ClicknCollectMap extends React.Component {
   constructor(props) {
@@ -61,7 +62,7 @@ class ClicknCollectMap extends React.Component {
         zIndex: index + 1,
       };
       // Pass "false" as second param, to show infowindow.
-      self.googleMap.setMapMarker(markerConfig, !(window.innerWidth < 768));
+      self.googleMap.setMapMarker(markerConfig, !(window.innerWidth < 768), getCncMapIcon(store));
       // Add new marker position to bounds.
       this.googleMap.map.googleMap.bounds.extend(position);
     });
