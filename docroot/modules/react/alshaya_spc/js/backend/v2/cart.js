@@ -23,6 +23,7 @@ import {
 import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
+import StaticStorage from './staticStorage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -132,11 +133,6 @@ window.commerceBackend.getCart = (force = false) => getCartWithProcessedData(for
  *   A promise object.
  */
 window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
-
-/**
- * Static variable to limit API attempts.
- */
-let apiCallAttempts = 0;
 
 /**
  * Adds/removes/updates quantity of product in cart.
@@ -252,13 +248,15 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         // Remove the cart id from storage.
         window.commerceBackend.removeCartDataFromStorage(true);
 
+        const apiCallAttempts = StaticStorage.get('apiCallAttempts') || 0;
+
         // Create new one and retry but only if user is trying to add item to cart.
         if (data.action === 'add item'
           && parseInt(
             drupalSettings.cart.checkout_settings.max_native_update_attempts,
             10,
           ) > apiCallAttempts) {
-          apiCallAttempts += 1;
+          StaticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
 
           // Create a new cart.
           cartId = await window.commerceBackend.createCart();
@@ -286,7 +284,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   // Reset counter.
-  apiCallAttempts = 0;
+  StaticStorage.remove('apiCallAttempts');
 
   return window.commerceBackend.getCart(true);
 };
