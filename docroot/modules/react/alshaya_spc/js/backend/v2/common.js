@@ -20,6 +20,7 @@ import {
   getProcessedErrorMessage,
 } from './error';
 import cartActions from '../../utilities/cart_actions';
+import StaticStorage from './staticStorage';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -50,9 +51,6 @@ window.commerceBackend.getCartId = () => {
   return null;
 };
 
-// Contains the raw unprocessed cart data.
-let rawCartData = null;
-
 /**
  * Stores the raw cart data object into the storage.
  *
@@ -60,19 +58,13 @@ let rawCartData = null;
  *   The raw cart data object.
  */
 window.commerceBackend.setRawCartDataInStorage = (data) => {
-  rawCartData = data;
+  StaticStorage.set('cart_raw', data);
 };
 
 /**
  * Fetches the raw cart data object from the static storage.
  */
-window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
-
-/**
- * Object to serve as static cache for processed cart data over the course of a
- * request.
- */
-let staticCartData = null;
+window.commerceBackend.getRawCartDataFromStorage = () => StaticStorage.get('cart_raw');
 
 /**
  * Stores skus and quantities.
@@ -97,7 +89,7 @@ const matchStockQuantity = (sku, quantity = 0) => {
  * @returns {object|null}
  *   Processed cart data else null.
  */
-window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
 
 /**
  * Sets the cart data to storage.
@@ -108,7 +100,7 @@ window.commerceBackend.getCartDataFromStorage = () => staticCartData;
 window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
-  staticCartData = cartInfo;
+  StaticStorage.set('cart', cartInfo);
 };
 
 /**
@@ -118,7 +110,7 @@ window.commerceBackend.setCartDataInStorage = (data) => {
  *  Whether we should remove all items.
  */
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
-  staticCartData = null;
+  StaticStorage.clear();
 
   if (resetAll) {
     removeCartIdFromStorage();
@@ -742,6 +734,7 @@ const associateCartToCustomer = async () => {
 
       // Clear local storage.
       removeCartIdFromStorage();
+      StaticStorage.clear();
 
       // Reload cart.
       return getCart(true);
