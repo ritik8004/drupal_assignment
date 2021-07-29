@@ -41,24 +41,6 @@ function alshaya_click_collect_string_translations() {
     'We need permission to locate your nearest stores. You can enable location services in your browser settings.' => [
       'ar' => 'لنتمكن لتحديد أقرب محل إليك، يجب أن تفعل خدمات تحديد الموقع من إعدادات المتصفح الخاص بك.',
     ],
-    'Location access denied' => [
-      'ar' => 'رفض الوصول إلى الموقع',
-    ],
-    'Collection Point' => [
-      'ar' => 'Collection Point AR',
-    ],
-    'select your preferred collection point' => [
-      'ar' => 'select your preferred collection point ar',
-    ],
-    'find your collection point' => [
-      'ar' => 'find your collection point ar',
-    ],
-    'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
-      'ar' => 'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice AR.',
-    ],
-    'The same person placing the order will collect the order.' => [
-      'ar' => 'The same person placing the order will collect the order AR.',
-    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
