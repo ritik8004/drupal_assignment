@@ -12,6 +12,19 @@ import StaticStorage from './staticStorage';
 const getPaymentMethods = async () => {
   const cart = await getCart();
 
+  if (_isEmpty(cart) || _isEmpty(cart.data) || !_isEmpty(cart.data.error)) {
+    logger.error('Cart not available or there is an error, not loading payment methods.');
+    return null;
+  }
+
+  if (_isEmpty(cart.data.shipping) || _isEmpty(cart.data.shipping.method)) {
+    logger.notice('Shipping method not available, not loading payment methods. CartID: @cartId.', {
+      '@cartId': cart.data.id,
+    });
+
+    return null;
+  }
+
   // Change the payment methods based on shipping method and cart total.
   const staticCacheKey = `payment_methods_${cart.data.shipping.type}_${cart.data.totals.base_grand_total}`;
   const cached = StaticStorage.get(staticCacheKey);
