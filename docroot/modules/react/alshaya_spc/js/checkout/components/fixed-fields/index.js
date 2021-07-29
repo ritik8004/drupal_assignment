@@ -5,7 +5,7 @@ import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
-import { collectionPointsEnabled } from '../../../utilities/cnc_util';
+import { collectionPointsEnabled, getCnCModalContactTitle } from '../../../utilities/cnc_util';
 
 const FixedFields = ({
   defaultVal, showEmail, showFullName = true, subTitle, type,
@@ -36,7 +36,7 @@ const FixedFields = ({
       {type === 'cnc'
         && (
         <div className="spc-contact-information-header">
-          <SectionTitle>{getStringMessage('contact_information')}</SectionTitle>
+          <SectionTitle>{getStringMessage(getCnCModalContactTitle())}</SectionTitle>
           <span className="spc-contact-info-desc">{subTitle}</span>
         </div>
         )}

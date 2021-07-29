@@ -325,6 +325,12 @@ function _alshaya_spc_translations() {
     'The same person placing the order will collect the order.' => [
       'ar' => 'The same person placing the order will collect the order AR.',
     ],
+    'Selected collection point' => [
+      'ar' => 'Selected collection point AR.',
+    ],
+    'Collectors Information' => [
+      'ar' => 'Collectors Information AR',
+    ],
   ];
 
   return $strings;

@@ -5,6 +5,7 @@ import SectionTitle from '../../../../utilities/section-title';
 import CheckoutMessage from '../../../../utilities/checkout-message';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import getStringMessage from '../../../../utilities/strings';
+import { getCnCModalContactSubtitle } from '../../../../utilities/cnc_util';
 
 const SelectedStore = ({ store, open, closePanel }) => {
   const [messageType, setMsgType] = useState(null);
@@ -59,7 +60,7 @@ const SelectedStore = ({ store, open, closePanel }) => {
           </CheckoutMessage>
           )}
         <div className="spc-cnc-selected-store-content">
-          <SectionTitle>{getStringMessage('cnc_selected_store')}</SectionTitle>
+          <SectionTitle>{getStringMessage(getCnCModalContactSubtitle())}</SectionTitle>
           <div className="store-details-wrapper">
             <StoreItem display="default" store={store} />
           </div>

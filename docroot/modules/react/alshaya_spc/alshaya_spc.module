@@ -55,6 +55,16 @@ function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
     'value' => t('The same person placing the order will collect the order.'),
   ];
 
+  $build['#strings'][] = [
+    'key' => 'cnc_selected_collection_point',
+    'value' => t('Selected collection point'),
+  ];
+
+  $build['#strings'][] = [
+    'key' => 'cnc_collection_contact_info_title',
+    'value' => t('Collectors Information'),
+  ];
+
   $build['#attached']['drupalSettings']['cnc_collection_point_icon'] = $config->get('click_collect_collection_point_icon');
   $build['#attached']['drupalSettings']['cnc_collection_point_map_icon'] = $config->get('click_collect_collection_point_map_icon');
   $build['#attached']['drupalSettings']['cnc_store_icon'] = $config->get('click_collect_store_icon');
