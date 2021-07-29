@@ -363,13 +363,18 @@ window.commerceBackend.createCart = async () => {
   if (response.status === 200 && !_isUndefined(response.data)
     && (_isString(response.data) || _isNumber(response.data))
   ) {
-    const Id = window.drupalSettings.userDetails.customerId;
-    logger.notice(`New cart created: ${response.data}, customer_id: ${Id}`);
+    logger.notice('New cart created: @cartId, for Customer: @customerId.', {
+      '@cartId': response.data,
+      '@customerId': window.drupalSettings.userDetails.customerId,
+    });
 
     // If its a guest customer, keep cart_id in the local storage.
     if (!isUserAuthenticated()) {
       setStorageInfo(response.data, 'cart_id');
     }
+
+    // Get fresh cart once to ensure static caches are warm.
+    await getCart(true);
 
     return response.data;
   }

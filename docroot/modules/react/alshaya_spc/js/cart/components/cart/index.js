@@ -53,6 +53,7 @@ export default class Cart extends React.Component {
       checkCartCustomer(data);
 
       if (typeof data === 'undefined'
+        || data === null
         || data.cart_id === null
         || data.error !== undefined) {
         const prevState = this.state;
