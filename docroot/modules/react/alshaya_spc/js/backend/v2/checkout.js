@@ -1385,7 +1385,7 @@ const processPaymentData = (paymentData, data) => {
           const { cvvCheck } = drupalSettings.checkoutComUpapi;
           const { cvv, id } = additionalInfo;
 
-          if (_isEmpty(cvv)) {
+          if (cvvCheck && _isEmpty(cvv)) {
             return {
               data: {
                 error: true,
@@ -1405,12 +1405,14 @@ const processPaymentData = (paymentData, data) => {
             };
           }
 
+          additionalInfo = {
+            public_hash: atob(id),
+          };
+
           if (cvvCheck) {
-            additionalInfo = {
-              cvv: atob(cvv),
-              public_hash: atob(id),
-            };
+            additionalInfo.cvv = atob(cvv);
           }
+
           break;
         }
 
@@ -1491,7 +1493,7 @@ const paymentUpdate = async (data) => {
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
     logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
       '@message': processedData.data.message,
-      '@cart': await window.commerceBackend.getCart(),
+      '@cart': JSON.stringify(await window.commerceBackend.getCart()),
       '@method': paymentData.method,
     });
     return processedData;
