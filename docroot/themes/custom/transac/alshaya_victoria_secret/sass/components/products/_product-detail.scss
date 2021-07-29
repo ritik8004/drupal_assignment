@@ -443,6 +443,10 @@
     #product-image-gallery-mobile {
       @include breakpoint($only-mobile) {
         max-height: 31.25rem;
+
+        li.slick-slide {
+          max-height: 31.25rem;
+        }
       }
     }
   }
