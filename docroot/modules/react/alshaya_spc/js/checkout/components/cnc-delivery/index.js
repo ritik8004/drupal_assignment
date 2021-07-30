@@ -12,7 +12,12 @@ import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
 import getStringMessage from '../../../utilities/strings';
-import { collectionPointsEnabled, getCncListIcon, getCncCollectionText } from '../../../utilities/cnc_util';
+import {
+  collectionPointsEnabled,
+  isCollectionPoint,
+  getPickUpPointTitle,
+  getCncDeliveryTimePrefix,
+} from '../../../utilities/cnc_util';
 import ConditionalView from '../../../common/components/conditional-view';
 
 class ClicknCollectDeiveryInfo extends React.Component {
@@ -147,20 +152,15 @@ class ClicknCollectDeiveryInfo extends React.Component {
       </div>
     ));
 
-    const { selectedStore: { type, collectionTitle } } = this.context;
-
-
+    const { selectedStore } = this.context;
     return (
       <WithModal modalStatusKey="cncDelivery">
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
           <div className="delivery-information-preview">
             <div className="spc-delivery-store-info">
               <ConditionalView condition={collectionPointsEnabled()}>
-                <span className="list-icon">
-                  <img src={getCncListIcon(type)} />
-                </span>
-                {/* Todo: The title to be fetched from API */}
-                <span className="StorenCollectionPointTitle">{collectionTitle}</span>
+                <span className={`${isCollectionPoint(selectedStore) ? 'collection-point' : 'store'}-icon`} />
+                <span className="pickup-point-title">{getPickUpPointTitle(selectedStore)}</span>
               </ConditionalView>
               <div className="store-name">{name}</div>
               <div className="store-address">
@@ -171,7 +171,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
                   {hoursArray}
                 </div>
                 <div className="store-delivery-time">
-                  <span className="label--delivery-time">{getStringMessage(getCncCollectionText())}</span>
+                  <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
                   <span className="delivery--time--value">{deliveryTime}</span>
                 </div>
               </ConditionalView>
