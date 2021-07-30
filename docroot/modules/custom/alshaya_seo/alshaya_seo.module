@@ -358,9 +358,13 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
       $term = $term->getTranslation($langcode);
     }
 
-    //CORE-28957: Remove link for L2
-    $is_l3 = (($view->id() === 'product_category_level_3') && ($view->current_display === 'block_1'));
-    $variables['output'] = $is_l3 ? $term->toLink($term->getName(), '', $options)->toString() : $term->getName();
+    $clikable = $term->get('field_display_as_clickable_link')->value;
+    if ($clikable == 0){
+      $variables['output'] = $term->getName();
+    }
+    else {
+      $variables['output'] = $term->toLink($term->getName(), '', $options)->toString();
+    }
   }
 }
 
