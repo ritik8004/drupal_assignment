@@ -4,19 +4,9 @@
 export const collectionPointsEnabled = () => drupalSettings.cnc_collection_points_enabled || false;
 
 /**
- * Helper to get click and collect store list icon.
- */
-export const getCncStoreIcon = () => drupalSettings.cnc_store_icon || '';
-
-/**
  * Helper to get click and collect store map icon.
  */
 export const getCncStoreMapIcon = () => drupalSettings.cnc_store_map_icon || '';
-
-/**
- * Helper to get click and collect store list icon.
- */
-export const getCncCollectionPointIcon = () => drupalSettings.cnc_collection_point_icon || '';
 
 /**
  * Helper to get click and collect store list icon.
@@ -61,20 +51,8 @@ export const getCncModalButtonText = () => ((collectionPointsEnabled() === true)
 /**
  * Helper to check if given store is a aramex/pudo collection point.
  */
-export const isCollectionPoint = (type) => ((type === 'collection_point'));
-
-/**
- * Helper to get cnc list icon.
- */
-export const getCncListIcon = (type) => {
-  if (collectionPointsEnabled() !== true) {
-    return '';
-  }
-
-  const icon = isCollectionPoint(type) ? getCncCollectionPointIcon() : getCncStoreIcon();
-
-  return icon;
-};
+export const isCollectionPoint = (store) => (store.pudo_available !== undefined
+  && store.pudo_available === true);
 
 /**
  * Helper to get contact subtitle.
@@ -89,3 +67,28 @@ export const getCnCModalContactTitle = () => ((collectionPointsEnabled() === tru
 export const getCnCModalContactSubtitle = () => ((collectionPointsEnabled() === true)
   ? 'cnc_selected_collection_point'
   : 'cnc_selected_store');
+
+/**
+ * Helper to get cnc map icon.
+ */
+export const getCncMapIcon = (store) => {
+  if (collectionPointsEnabled() !== true) {
+    return '';
+  }
+
+  const icon = isCollectionPoint(store) ? getCncCollectionPointMapIcon() : getCncStoreMapIcon();
+
+  return icon;
+};
+
+/**
+ * Helper to get store/collection point title.
+ */
+export const getPickUpPointTitle = (store) => store.brand_name || '';
+
+/**
+ * Helper to get cnc delivery time prefix.
+ */
+export const getCncDeliveryTimePrefix = () => ((collectionPointsEnabled() === true)
+  ? 'cnc_collection_collect_in_store'
+  : 'cnc_collect_in_store');

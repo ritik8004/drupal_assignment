@@ -34,6 +34,7 @@ import {
   getCncModalTitle,
   getCncModalDescription,
   getCncModalButtonText,
+  collectionPointsEnabled,
 } from '../../../utilities/cnc_util';
 
 class ClickCollect extends React.Component {
@@ -288,7 +289,10 @@ class ClickCollect extends React.Component {
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
     if (map.map.mapMarkers[makerIndex] !== undefined) {
-      map.highlightIcon(map.map.mapMarkers[makerIndex]);
+      const options = collectionPointsEnabled()
+        ? { map_marker: { active: map.map.mapMarkers[makerIndex].icon } }
+        : {};
+      map.highlightIcon(map.map.mapMarkers[makerIndex], options);
     }
   }
 
@@ -425,7 +429,10 @@ class ClickCollect extends React.Component {
 
     const map = this.googleMap;
     if (map.map.mapMarkers[makerIndex] !== undefined) {
-      map.resetIcon(map.map.mapMarkers[makerIndex]);
+      const options = collectionPointsEnabled()
+        ? { map_marker: { inActive: map.map.mapMarkers[makerIndex].icon } }
+        : {};
+      map.resetIcon(map.map.mapMarkers[makerIndex], options);
     }
   }
 

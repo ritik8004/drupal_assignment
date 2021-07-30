@@ -4,8 +4,10 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../utilities/strings';
 import {
   getCncModalButtonText,
-  getCncListIcon,
   collectionPointsEnabled,
+  isCollectionPoint,
+  getPickUpPointTitle,
+  getCncDeliveryTimePrefix,
 } from '../../../../utilities/cnc_util';
 
 const StoreItem = ({
@@ -14,9 +16,8 @@ const StoreItem = ({
   <>
     <span className="spc-cnc-store-name">
       <ConditionalView condition={collectionPointsEnabled()}>
-        <span className="list-icon">
-          <img src={getCncListIcon(store.type)} />
-        </span>
+        <span className={`${isCollectionPoint(store) ? 'collection-point' : 'store'}-icon`} />
+        <span className="pickup-point-title">{getPickUpPointTitle(store)}</span>
       </ConditionalView>
       <span className="spc-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
         <span className="store-name">{store.name}</span>
@@ -38,7 +39,7 @@ const StoreItem = ({
       <div className="store-address-content">
         <div className="store-address">{parse(store.address)}</div>
         <div className="store-delivery-time">
-          <span className="label--delivery-time">{getStringMessage('cnc_collect_in_store')}</span>
+          <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
           <span className="delivery--time--value">{` ${store.delivery_time}`}</span>
         </div>
         <div className="store-open-hours">
