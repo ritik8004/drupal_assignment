@@ -85,3 +85,10 @@ export const getCncMapIcon = (store) => {
  * Helper to get store/collection point title.
  */
 export const getPickUpPointTitle = (store) => store.brand_name || '';
+
+/**
+ * Helper to get cnc delivery time prefix.
+ */
+export const getCncDeliveryTimePrefix = () => ((collectionPointsEnabled() === true)
+  ? 'cnc_collection_collect_in_store'
+  : 'cnc_collect_in_store');

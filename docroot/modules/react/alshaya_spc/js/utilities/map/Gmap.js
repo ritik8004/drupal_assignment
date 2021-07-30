@@ -2,7 +2,6 @@ import _isEmpty from 'lodash/isEmpty';
 import isRTL from '../rtl';
 import dispatchCustomEvent from '../events';
 import { getDefaultMapCenter } from '../checkout_util';
-import { collectionPointsEnabled } from '../cnc_util';
 
 export class Gmap {
   constructor() {
@@ -167,13 +166,9 @@ export class Gmap {
     let clickedMarker = '';
     currentMarker.addListener('click', () => {
       map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
-      currentMarker.setIcon(markerActiveIcon);
-
-      // If collection point feature is enabled, zoom the marker icon on click.
-      if (collectionPointsEnabled()) {
-        currentMarker.setIcon({ url: mapIcon, scaledSize: new google.maps.Size(50, 50) });
-      }
-
+      currentMarker.setIcon(
+        { url: mapIcon || markerActiveIcon, scaledSize: new google.maps.Size(50, 50) },
+      );
       clickedMarker = currentMarker;
 
       if (currentMarkerSettings.infoWindowSolitary && showInfoWindow === true) {
@@ -231,21 +226,13 @@ export class Gmap {
     return currentMarker;
   };
 
-  resetIcon = (currentMarker) => {
-    // If collection point is enabled, we don't want to change icon on reset.
-    if (collectionPointsEnabled()) {
-      return;
-    }
-    const { inActive } = this.map.settings.map_marker;
+  resetIcon = (currentMarker, options = {}) => {
+    const { inActive } = options.map_marker || this.map.settings.map_marker;
     currentMarker.setIcon(inActive);
   }
 
-  highlightIcon = (currentMarker) => {
-    // If collection point is enabled, we don't want to update icon.
-    if (collectionPointsEnabled()) {
-      return;
-    }
-    const { active } = this.map.settings.map_marker;
+  highlightIcon = (currentMarker, options = {}) => {
+    const { active } = options.map_marker || this.map.settings.map_marker;
     currentMarker.setIcon(active);
   }
 

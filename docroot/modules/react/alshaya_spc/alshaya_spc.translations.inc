@@ -331,6 +331,9 @@ function _alshaya_spc_translations() {
     'Collectors Information' => [
       'ar' => 'Collectors Information AR',
     ],
+    'Collect in' => [
+      'ar' => 'Collect in AR',
+    ],
   ];
 
   return $strings;
