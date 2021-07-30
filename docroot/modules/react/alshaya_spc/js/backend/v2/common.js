@@ -21,6 +21,7 @@ import {
 } from './error';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
+import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -101,6 +102,12 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   StaticStorage.set('cart', cartInfo);
+
+  // @todo find better way to get this using commerceBackend.
+  // As of now it not possible to get it on page load before all
+  // other JS is executed and for all other JS refactoring
+  // required is huge.
+  setStorageInfo(cartInfo, 'cart_data');
 };
 
 /**
@@ -111,6 +118,13 @@ window.commerceBackend.setCartDataInStorage = (data) => {
  */
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
+
+  removeStorageInfo('cart_data');
+
+  // Remove last selected payment on page load.
+  // We use this to ensure we trigger events for payment method
+  // selection at-least once and not more than once.
+  removeStorageInfo('last_selected_payment');
 
   if (resetAll) {
     removeCartIdFromStorage();
