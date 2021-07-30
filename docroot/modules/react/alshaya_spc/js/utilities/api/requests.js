@@ -115,7 +115,7 @@ export const fetchCartData = async () => {
     return Promise.resolve(cart);
   }
 
-  return window.commerceBackend.restoreCart()
+  return window.commerceBackend.getCart()
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
