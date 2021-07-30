@@ -14,6 +14,7 @@ use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Site\Settings;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -214,6 +215,12 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $build = $this->addCheckoutConfigSettings($build);
+
+    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
+      $checkout_settings = Settings::get('alshaya_checkout_settings');
+      $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
+    }
+
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
@@ -514,6 +521,8 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
+    $backend_version = $this->spcHelper->getCommerceBackendVersion();
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
@@ -522,8 +531,8 @@ class AlshayaSpcController extends ControllerBase {
         'library' => [
           'alshaya_acm_checkout/ab_testing',
           'alshaya_spc/googlemapapi',
-          'alshaya_spc/commerce_backend.cart.v' . $this->spcHelper->getCommerceBackendVersion(),
-          'alshaya_spc/commerce_backend.checkout.v' . $this->spcHelper->getCommerceBackendVersion(),
+          'alshaya_spc/commerce_backend.cart.v' . $backend_version,
+          'alshaya_spc/commerce_backend.checkout.v' . $backend_version,
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
         ],
@@ -600,6 +609,12 @@ class AlshayaSpcController extends ControllerBase {
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     $build = $this->addCheckoutConfigSettings($build);
+
+    if ($backend_version == 2) {
+      $checkout_settings = Settings::get('alshaya_checkout_settings');
+      $build['#attached']['drupalSettings']['cart']['siteInfo'] = alshaya_get_site_country_code();
+      $build['#attached']['drupalSettings']['cart']['addressFields'] = Settings::get('alshaya_address_fields', []);
+    }
 
     $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
     return $build;
@@ -915,6 +930,8 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
+
+    $settings['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
 
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);

@@ -252,10 +252,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
         // Create new one and retry but only if user is trying to add item to cart.
         if (data.action === 'add item'
-          && parseInt(
-            drupalSettings.cart.checkout_settings.max_native_update_attempts,
-            10,
-          ) > apiCallAttempts) {
+          && parseInt(getCartSettings('retryMaxAttempts'), 10) > apiCallAttempts) {
           StaticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
 
           // Create a new cart.
@@ -327,14 +324,13 @@ window.commerceBackend.applyRemovePromo = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.refreshCart = async (data) => {
-  const checkoutSettings = getCartSettings('checkout_settings');
   let postData = {
     extension: {
       action: 'refresh',
     },
   };
 
-  if (checkoutSettings.cart_refresh_mode === 'full') {
+  if (getCartSettings('refreshMode') === 'full') {
     postData = data.postData;
   }
 
