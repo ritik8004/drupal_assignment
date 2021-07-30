@@ -397,10 +397,12 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
     return;
   }
 
+  StaticStorage.set('associating_cart', true);
+
   // Try to load customer's cart if not doing this on checkout page.
   if (pageType !== 'checkout') {
     const cart = await getCart();
-    if (!_isEmpty(cart.data.cart.items)) {
+    if (!_isEmpty(cart) && !_isEmpty(cart.data) && !_isEmpty(cart.data.cart.items)) {
       // If the current cart has items, we carry on with this cart and remove
       // the guest cart id from local storage.
       removeCartIdFromStorage();
@@ -411,7 +413,9 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
   // If the user is authenticated and we have cart_id in the local storage
   // it means the customer just became authenticated.
   // We need to associate the cart and remove the cart_id from local storage.
-  await associateCartToCustomer();
+  await associateCartToCustomer(guestCartId);
+
+  StaticStorage.remove('associating_cart');
 };
 
 /**

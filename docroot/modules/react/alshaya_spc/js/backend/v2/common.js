@@ -643,7 +643,8 @@ const getCart = async (force = false) => {
         || (!_isUndefined(response.data) && response.data.error_code === 404)
         || (!_isUndefined(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      if (getCartIdFromStorage()) {
+      const isAssociatingCart = StaticStorage.get('associating_cart') || false;
+      if (getCartIdFromStorage() && !isAssociatingCart) {
         logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
 
         // Remove cart_id from storage.
@@ -683,70 +684,43 @@ const getCart = async (force = false) => {
  * @returns {Promise<object/boolean>}
  *   Returns the updated cart or false.
  */
-const associateCartToCustomer = async () => {
-  const guestCartId = getCartIdFromStorage();
-  if (_isNull(guestCartId)) {
-    return false;
+const associateCartToCustomer = async (guestCartId) => {
+  // Prepare params.
+  const params = { cartId: guestCartId };
+
+  // Associate cart to customer.
+  const response = await callMagentoApi(getApiEndpoint('associateCart'), 'POST', params);
+
+  // It's possible that page got reloaded quickly after login.
+  // For example on social login.
+  if (response.message === 'Request aborted') {
+    return;
   }
 
-  // Get the cart id of the guest cart.
-  let response = await callMagentoApi(`/V1/guest-carts/${guestCartId}`);
-
-  // Check for errors.
   if (response.status !== 200) {
-    logger.error('Error while associating cart @cartId to customer @customerId: Message @msg.', {
-      '@customerId': window.drupalSettings.userDetails.customerId,
+    logger.error('Error while associating cart: @cartId to customer: @customerId. Response: @response.', {
       '@cartId': guestCartId,
-      '@msg': (!_isUndefined(response.data) && !_isUndefined(response.data.message)) ? response.data.message : '',
+      '@customerId': window.drupalSettings.userDetails.customerId,
+      '@response': JSON.stringify(response),
     });
 
+    // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
-
-    return false;
+    StaticStorage.clear();
+    return;
   }
 
-  // Prepare params.
-  if (!_isUndefined(response.data.id)) {
-    const params = {
-      quote: {
-        id: response.data.id,
-        customer: {
-          id: window.drupalSettings.userDetails.customerId,
-        },
-      },
-    };
-
-    // Associate cart to customer.
-    response = await callMagentoApi(getApiEndpoint('associateCart'), 'PUT', params);
-
-    // If it works, the response data is empty, so we can only check the status.
-    if (response.status !== 200) {
-      logger.error('Error while associating cart: @cartId to customer: @customerId. Error message: @message.', {
-        '@cartId': guestCartId,
-        '@customerId': window.drupalSettings.userDetails.customerId,
-        '@message': (typeof response.data.message !== 'undefined') ? response.data.message : '',
-      });
-    } else {
-      logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
-        '@customerId': window.drupalSettings.userDetails.customerId,
-        '@guestCartId': guestCartId,
-      });
-
-      // Clear local storage.
-      removeCartIdFromStorage();
-      StaticStorage.clear();
-
-      // Reload cart.
-      return getCart(true);
-    }
-  }
-
-  logger.warning('Failed to associate Guest Cart @guestCartId to customer @customerId.', {
+  logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
     '@customerId': window.drupalSettings.userDetails.customerId,
     '@guestCartId': guestCartId,
   });
 
-  return false;
+  // Clear local storage.
+  removeCartIdFromStorage();
+  StaticStorage.clear();
+
+  // Reload cart.
+  await getCart(true);
 };
 
 /**
