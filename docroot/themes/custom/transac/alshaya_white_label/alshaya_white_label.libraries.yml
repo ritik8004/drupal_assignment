@@ -556,3 +556,8 @@ secondary-menu:
   css:
     theme:
       css/conditional-sass/secondary-menu/secondary-menu.ltr.css: {}
+
+my-account:
+  css:
+    theme:
+      css/conditional-sass/my-account/my-account.ltr.css: {}
