@@ -117,6 +117,17 @@ exports.render = function render(
       }
       break;
 
+    case 'breadcrumb':
+      // Render breadcrumb based on the page type.
+      if (drupalSettings.rcsPage.type === 'category' &&
+        typeof globalThis.renderRcsCategoryBreadcrumb !== 'undefined')  {
+        html += globalThis.renderRcsCategoryBreadcrumb.render(
+          settings,
+          entity,
+          innerHtml
+        );
+      }
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;

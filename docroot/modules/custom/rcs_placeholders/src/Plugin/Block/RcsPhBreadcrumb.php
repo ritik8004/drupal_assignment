@@ -3,6 +3,8 @@
 namespace Drupal\rcs_placeholders\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -31,9 +33,33 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
-    return [
-      '#markup' => '<div id="rcs-ph-breadcrumb" data-param-get-data="false"><span></span></div>',
+    $build = [];
+
+    $build['wrapper'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => 'rcs-ph-breadcrumb',
+        'data-param-get-data' => 'false',
+      ],
     ];
+
+    $build['wrapper']['content'] = [
+      '#theme' => 'breadcrumb',
+      '#links' => [
+        // Adding a default Home link.
+        // @see alshaya_victoria_secret_preprocess_breadcrumb();
+        Link::fromTextAndUrl(
+          $this->t('Home'),
+          Url::fromUserInput('/')
+        ),
+        Link::fromTextAndUrl(
+          '#rcs.categories.breadcrumbs.category_name#',
+          Url::fromUserInput('#rcs.categories.breadcrumbs.category_url_path#')
+        ),
+      ],
+    ];
+
+    return $build;
   }
 
 }

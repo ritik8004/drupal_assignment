@@ -1,0 +1,26 @@
+uuid: 95663d81-861e-42c8-b502-f4e23caf584a
+langcode: en
+status: true
+dependencies:
+  module:
+    - rcs_placeholders
+    - system
+  theme:
+    - alshaya_the_body_shop
+id: rcs_placeholders_breadcrumb
+theme: alshaya_the_body_shop
+region: breadcrumb
+weight: 0
+provider: null
+plugin: rcs_ph_breadcrumb
+settings:
+  id: rcs_ph_breadcrumb
+  label: 'RCS Placeholders breadcrumb'
+  provider: rcs_placeholders
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: false
+    context_mapping: {  }
