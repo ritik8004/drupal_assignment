@@ -84,10 +84,4 @@ export const getCncMapIcon = (store) => {
 /**
  * Helper to get store/collection point title.
  */
-export const getPickUpPointTitle = (store) => {
-  if (store.brand_name !== undefined) {
-    return store.brand_name || '';
-  }
-
-  return '';
-};
+export const getPickUpPointTitle = (store) => store.brand_name || '';
