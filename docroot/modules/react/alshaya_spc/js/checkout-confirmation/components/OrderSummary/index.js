@@ -170,6 +170,8 @@ const OrderSummary = () => {
                   address={storeAddress.join(', ')}
                   openingHours={storeInfo.store_open_hours}
                   mapLink={storeInfo.view_on_map_link}
+                  pickUpPointIcon={storeInfo.pudo_available ? 'collection-point' : 'store'}
+                  pickUpPointTitle={storeInfo.brand_name || ''}
                 />
                 <OrderSummaryItem label={Drupal.t('Collection by')} value={customerShippingName} />
               </>
