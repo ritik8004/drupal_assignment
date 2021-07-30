@@ -1,6 +1,5 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 import getStringMessage from '../../../utilities/strings';
 
 const OrderSummaryItem = (props) => {
@@ -36,12 +35,13 @@ const OrderSummaryItem = (props) => {
       <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
-          {(collectionPointsEnabled === true)
+          {(pickUpPointIcon !== undefined)
             && (
-              <>
-                <span className={`${pickUpPointIcon}-icon`} />
-                <span className="pickup-point-title">{pickUpPointTitle}</span>
-              </>
+            <span className={`${pickUpPointIcon}-icon`} />
+            )}
+          {(pickUpPointTitle !== undefined)
+            && (
+              <span className="pickup-point-title">{pickUpPointTitle}</span>
             )}
           <span className="spc-address-name">
             {name}
@@ -50,12 +50,9 @@ const OrderSummaryItem = (props) => {
             {address}
             <span className="spc-cnc-address-phone">{phone}</span>
           </span>
-          {(collectionPointsEnabled === true)
-            && (
-            <div className="spc-cnc-store-actions-pudo-msg">
-              {getStringMessage('cnc_valid_govtid_message')}
-            </div>
-            )}
+          <div className="spc-cnc-store-actions-pudo-msg">
+            {getStringMessage('cnc_valid_govtid_message')}
+          </div>
           <div className="spc-store-open-hours">
             {
               Object.entries(openingHours).map(([weekdays, timings]) => (
