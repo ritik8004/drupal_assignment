@@ -10,10 +10,12 @@
   }
 }
 
-.subtitle {
-  font-family: $vs-regular;
-  font-size: 1.125rem;
-  text-transform: capitalize;
+.path--user.logged-in {
+  .subtitle {
+    font-family: $vs-regular;
+    font-size: 1.125rem;
+    text-transform: capitalize;
+  }
 }
 
 .block-alshaya-acm-customer {
