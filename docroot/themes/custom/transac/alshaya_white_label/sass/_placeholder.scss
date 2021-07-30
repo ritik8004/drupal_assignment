@@ -1,3 +1,16 @@
+// The difference between overrides for placeholder and mixin is that
+// mixin if copied in a subtheme overrides the mixin from whitelabel.
+// placeholder loads twice, once from whitelabel and once from subtheme.
+// Hence if you have to override something preference is @mixin.
+// Declare the same mixin in subtheme and make changes as needed.
+%btn {
+  color: $primary_btn_text;
+  padding: 0.625rem 1.6rem;
+  border: 0;
+  font-size: 0.813rem;
+  font-family: $alshaya-bold;
+}
+
 %button-wide {
   background-color: $primary_btn_bg;
   color: $primary_btn_text;
