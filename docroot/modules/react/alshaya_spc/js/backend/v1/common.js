@@ -133,6 +133,9 @@ window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data'
  *   The cart data.
  */
 window.commerceBackend.setCartDataInStorage = (data) => {
+  if (typeof data.cart.cart_id === 'undefined' || data.cart.cart_id === null) {
+    return;
+  }
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   setStorageInfo(cartInfo);
