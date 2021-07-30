@@ -83,6 +83,13 @@ class SkuImagesManager {
   protected $productCacheManager;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -99,6 +106,8 @@ class SkuImagesManager {
    *   Cache backend object.
    * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
    *   Product Cache Manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
+   *   Sku images helper.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               ConfigFactoryInterface $config_factory,
@@ -106,7 +115,8 @@ class SkuImagesManager {
                               SkuManager $sku_manager,
                               ProductInfoHelper $product_info_helper,
                               CacheBackendInterface $cache,
-                              ProductCacheManager $product_cache_manager) {
+                              ProductCacheManager $product_cache_manager,
+                              SkuImagesHelper $images_helper) {
     $this->moduleHandler = $module_handler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
@@ -114,6 +124,7 @@ class SkuImagesManager {
     $this->productInfoHelper = $product_info_helper;
     $this->cache = $cache;
     $this->productCacheManager = $product_cache_manager;
+    $this->skuImagesHelper = $images_helper;
 
     $this->productDisplaySettings = $this->configFactory->get('alshaya_acm_product.display_settings');
   }
@@ -726,16 +737,16 @@ class SkuImagesManager {
         foreach ($media['media_items']['images'] ?? [] as $media_item) {
           // For now we are displaying only image slider on search results
           // page and PLP.
-          if (!empty($media_item['drupal_uri'])) {
+          if (!empty($media_item)) {
             if (empty($search_main_image)) {
-              $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
+              $search_main_image = $this->skuImagesHelper->getSkuImage($media_item, 'product_listing');
             }
             elseif ($this->productDisplaySettings->get('gallery_show_hover_image')) {
-              $search_hover_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
+              $search_hover_image = $this->skuImagesHelper->getSkuImage($media_item, 'product_listing');
             }
 
             if ($this->productDisplaySettings->get('image_thumb_gallery')) {
-              $thumbnails[] = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing', 'product_listing');
+              $thumbnails[] = $this->skuImagesHelper->getSkuImage($media_item, 'product_listing', 'product_listing');
             }
           }
         }
@@ -1086,10 +1097,10 @@ class SkuImagesManager {
 
       $duplicates[$value] = 1;
       if (empty($plp_main_image)) {
-        $plp_main_image = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), 'product_listing');
+        $plp_main_image = $this->skuImagesHelper->getSkuImage($product_image, 'product_listing');
       }
 
-      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), 'product_listing', 'product_listing');
+      $variants_image[$child->id()][] = $this->skuImagesHelper->getSkuImage($product_image, 'product_listing', 'product_listing');
     }
 
     return [

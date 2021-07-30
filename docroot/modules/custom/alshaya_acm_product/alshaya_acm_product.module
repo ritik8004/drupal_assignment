@@ -539,6 +539,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
+    /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
+    $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
+
     $priceHelper = _alshaya_acm_product_get_price_helper();
 
     $sku = $skuManager->getSkuForNode($entity);
@@ -680,8 +683,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
-        if (!empty($sku_media['drupal_uri'])) {
-          $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+        if (!empty($sku_media)) {
+          $build['image'] = $skuImagesHelper->getSkuImage($sku_media, 'product_teaser');
         }
 
         // Do not render VAT text along with price for teaser.
@@ -731,8 +734,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
           $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
-          if (!empty($sku_media['drupal_uri'])) {
-            $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+          if (!empty($sku_media)) {
+            $build['image'] = $skuImagesHelper->getSkuImage($sku_media,'product_teaser');
           }
         }
       }
@@ -783,7 +786,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
         // Prepare image style url.
         if (!empty($image['#uri'])) {
-          $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+          $image = $image['#uri'];
         }
         $productInfo['cart_image'] = is_string($image) ? $image : '';
 
@@ -958,7 +961,9 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     $sku_media = $skuImagesManager->getFirstImage($entity);
     if ($sku_media) {
-      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $entity->label(), '192x168');
+      /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
+      $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
+      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,'192x168');
     }
   }
 }

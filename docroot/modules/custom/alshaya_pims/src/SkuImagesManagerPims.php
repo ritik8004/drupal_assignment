@@ -5,6 +5,7 @@ namespace Drupal\alshaya_pims;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -45,6 +46,8 @@ class SkuImagesManagerPims extends SkuImagesManager {
    *   Cache backend object.
    * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
    *   Product Cache Manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   Sku images helper.
    */
   public function __construct(SkuImagesManager $sku_image_manager,
                               ModuleHandlerInterface $module_handler,
@@ -53,7 +56,8 @@ class SkuImagesManagerPims extends SkuImagesManager {
                               SkuManager $sku_manager,
                               ProductInfoHelper $product_info_helper,
                               CacheBackendInterface $cache,
-                              ProductCacheManager $product_cache_manager) {
+                              ProductCacheManager $product_cache_manager,
+                              SkuImagesHelper $sku_images_helper) {
     $this->imagesManager = $sku_image_manager;
     parent::__construct($module_handler,
       $config_factory,
@@ -61,7 +65,8 @@ class SkuImagesManagerPims extends SkuImagesManager {
       $sku_manager,
       $product_info_helper,
       $cache,
-      $product_cache_manager
+      $product_cache_manager,
+      $sku_images_helper
     );
   }
 
@@ -83,15 +88,6 @@ class SkuImagesManagerPims extends SkuImagesManager {
    *   Processed media items.
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
-    if (!$this->getPimsSettings()) {
-      // Return media with downloaded images.
-      return $this->imagesManager->getProductMedia(
-        $sku,
-        $context,
-        $check_parent_child
-      );
-    }
-
     $cache_key = implode(':', [
       'product_media_pims',
       (int) $check_parent_child,
@@ -129,11 +125,6 @@ class SkuImagesManagerPims extends SkuImagesManager {
    *   Array of media files.
    */
   public function getGalleryMedia(SKUInterface $sku, $check_parent_child = FALSE) {
-    if (!$this->getPimsSettings()) {
-      // Return media with downloaded images.
-      return $this->imagesManager->getGalleryMedia($sku, $check_parent_child);
-    }
-
     $static = &drupal_static(__FUNCTION__, []);
 
     $static_id = implode(':', [
@@ -253,16 +244,16 @@ class SkuImagesManagerPims extends SkuImagesManager {
 
     // Create our thumbnails to be rendered for zoom.
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
-      if (!empty($media_item['drupal_uri'])) {
-        $file_uri = $media_item['drupal_uri'];
+      if (!empty($media_item['file'])) {
+        $file_uri = $media_item['file'];
 
         // Show original full image in the modal inside a draggable container.
         $original_image = file_create_url($file_uri);
 
         // Get Pims urls by styles.
-        $image_small = _alshaya_pims_get_image_style_url($media_item, $thumbnail_style);
-        $image_zoom = _alshaya_pims_get_image_style_url($media_item, $zoom_style);
-        $image_medium = _alshaya_pims_get_image_style_url($media_item, $slide_style);
+        $image_small = $this->skuImagesHelper->getImageStyleUrl($media_item, $thumbnail_style);
+        $image_zoom = $this->skuImagesHelper->getImageStyleUrl($media_item, $zoom_style);
+        $image_medium = $this->skuImagesHelper->getImageStyleUrl($media_item, $slide_style);
 
         if ($get_main_image && empty($main_image)) {
           $main_image = [

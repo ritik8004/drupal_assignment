@@ -6,26 +6,3 @@ use Drupal\image\Entity\ImageStyle;
  * @file
  * Module file for alshaya_pims.
  */
-
-/**
- * Get image styled url by pims settings.
- *
- * @param $media_item
- *   Media item.
- * @param $image_style
- *   The image style.
- *
- * @return \Drupal\Core\GeneratedUrl|false|mixed|string
- *   Image styled url.
- */
-function _alshaya_pims_get_image_style_url($media_item, $image_style) {
-  $pimsSettings = \Drupal::config('alshaya_pims.settings')
-    ->get('alshaya_pims');
-  if ($pimsSettings) {
-    return $media_item['styles'][$image_style];
-  }
-
-  // Return drupal image style url.
-  $url = ImageStyle::load($image_style)->buildUrl($media_item['drupal_uri']);
-  return $url;
-}

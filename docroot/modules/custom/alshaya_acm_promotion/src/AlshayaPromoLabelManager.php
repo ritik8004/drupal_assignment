@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_promotion;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\CartData;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -101,6 +102,13 @@ class AlshayaPromoLabelManager {
   protected $requestContextManager;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * AlshayaPromoLabelManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -121,6 +129,8 @@ class AlshayaPromoLabelManager {
    *   Language Manager.
    * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
    *   Alshaya Request Context Manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   Sku images helper.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
@@ -130,7 +140,8 @@ class AlshayaPromoLabelManager {
                               AlshayaPromotionsManager $promotions_manager,
                               RendererInterface $renderer,
                               LanguageManagerInterface $language_manager,
-                              AlshayaRequestContextManager $alshayaRequestContextManager) {
+                              AlshayaRequestContextManager $alshayaRequestContextManager,
+                              SkuImagesHelper $sku_images_helper) {
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->entityTypeManager = $entity_type_manager;
@@ -140,6 +151,7 @@ class AlshayaPromoLabelManager {
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
     $this->requestContextManager = $alshayaRequestContextManager;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -753,8 +765,8 @@ class AlshayaPromoLabelManager {
       foreach ($free_skus as $free_sku) {
         if ($this->imagesManager->hasMedia($free_sku)) {
           $free_sku_media = $this->imagesManager->getFirstImage($free_sku);
-          $free_sku_image = $this->skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku->label(), '192x168');
-          $free_sku_image['#url'] = $this->entityTypeManager->getStorage('image_style')->load('192x168')->buildUrl($free_sku_image['#uri']);
+          $free_sku_image = $this->skuImagesHelper->getSkuImage($free_sku_media, '192x168');
+          $free_sku_image['#url'] = $this->skuImagesHelper->getImageStyleUrl($free_sku_media, '192x168');
           break;
         }
       }
@@ -849,7 +861,7 @@ class AlshayaPromoLabelManager {
       }
 
       if ($free_sku_media) {
-        $free_sku_image['#title'] = $this->skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku_entity->label(), '192x168');
+        $free_sku_image['#title'] = $this->skuImagesHelper->getSkuImage($free_sku_media, '192x168');
         $return['#sku_image'] = $this->renderer->renderPlain($free_sku_image);
         $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
       }
