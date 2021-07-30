@@ -24,6 +24,7 @@ import {
   matchStockQuantity,
   isCartHasOosItem,
   getProductStatus,
+  getCartSettings,
 } from './common';
 import {
   cartErrorCodes,
@@ -1351,17 +1352,16 @@ const cartAddressFieldsToValidate = () => {
 
   // Get the address fields based on site/country code
   // from the drupal settings.
-  const siteCountryCode = window.drupalSettings.cart.site_country_code;
-  const addressFields = window.drupalSettings.cart.address_fields;
+  const { country_code: countryCode, site_code: siteCode } = getCartSettings('siteInfo');
+  const addressFields = getCartSettings('addressFields');
 
   // Use default value first if available.
-  if (!_isUndefined(siteCountryCode.country_code)) {
-    const countryCode = siteCountryCode.country_code;
+  if (!_isUndefined(countryCode)) {
     if (!_isUndefined(addressFields.default[countryCode])) {
       addressFieldsToValidate = addressFields.default[countryCode];
     }
-    if (!_isUndefined(siteCountryCode.site_code)) {
-      const siteCode = siteCountryCode.site_code;
+
+    if (!_isUndefined(siteCode)) {
       // If brand specific value available/override.
       if (!_isUndefined(addressFields[siteCode])
         && !_isUndefined(addressFields[siteCode][countryCode])
@@ -1370,6 +1370,7 @@ const cartAddressFieldsToValidate = () => {
       }
     }
   }
+
   return addressFieldsToValidate;
 };
 
@@ -1379,32 +1380,41 @@ const cartAddressFieldsToValidate = () => {
  * @param {object} data
  *   Cart data.
  *
- * @return {bool}
+ * @return {boolean}
  *   FALSE if empty field value.
  */
 const isAddressExtensionAttributesValid = (data) => {
   let isValid = true;
+
   // If there are address fields available for validation
   // in drupal settings.
   const addressFieldsToValidate = cartAddressFieldsToValidate();
-  if (!_isEmpty(addressFieldsToValidate)) {
-    const cartAddressCustom = [];
-    // Prepare cart address field data.
-    data.shipping.address.custom_attributes.forEach((item) => {
-      cartAddressCustom[item.attribute_code] = item.value;
-    });
 
-    // Check each required field in custom attributes available in cart
-    // shipping address or not.
-    addressFieldsToValidate.forEach((field) => {
-      // If field not exists or empty.
-      if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
-        const cartId = window.commerceBackend.getCartId();
-        logger.error(`Field: ${field} not available in cart shipping address. Cart id: ${cartId}`);
-        isValid = false;
-      }
-    });
+  if (_isEmpty(addressFieldsToValidate)) {
+    return isValid;
   }
+
+  const cartAddressCustom = [];
+
+  // Prepare cart address field data.
+  data.shipping.address.custom_attributes.forEach((item) => {
+    cartAddressCustom[item.attribute_code] = item.value;
+  });
+
+  // Check each required field in custom attributes available in cart
+  // shipping address or not.
+  addressFieldsToValidate.forEach((field) => {
+    // If field not exists or empty.
+    if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
+      logger.error('Field: @field not available in cart shipping address. Cart id: @cartId', {
+        '@field': field,
+        '@cartId': window.commerceBackend.getCartId(),
+      });
+
+      isValid = false;
+    }
+  });
+
   return isValid;
 };
 
