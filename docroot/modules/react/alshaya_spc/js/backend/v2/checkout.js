@@ -865,7 +865,7 @@ const applyDefaultShipping = async (order) => {
   }
 
   const methods = await getHomeDeliveryShippingMethods(address);
-  if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
+  if (_isArray(methods) && !_isEmpty(methods)) {
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
       if (typeof method.carrier_code !== 'undefined'
@@ -921,7 +921,7 @@ const applyDefaults = async (data, customerId) => {
   const address = getDefaultAddress(data);
   if (address) {
     const methods = await getHomeDeliveryShippingMethods(address);
-    if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
+    if (_isArray(methods) && !_isEmpty(methods)) {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(address, methods[0], address, methods);
     }
@@ -930,7 +930,7 @@ const applyDefaults = async (data, customerId) => {
   // If address already available in cart, use it.
   if (!_isEmpty(data.shipping.address) && !_isEmpty(data.shipping.address.country_id)) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
+    if (_isArray(methods) && !_isEmpty(methods)) {
       logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
@@ -975,7 +975,9 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (_isEmpty(methods) || (!_isUndefined(methods.error) && methods.error)) {
+    if (_isEmpty(methods)
+      || (!_isUndefined(methods.data) && (!_isUndefined(methods.data.error) && methods.data.error))
+    ) {
       return methods;
     }
     data.shipping.methods = methods;
@@ -1701,12 +1703,14 @@ window.commerceBackend.addShippingMethod = async (data) => {
   const shippingMethods = await getHomeDeliveryShippingMethods(shippingAddress);
 
   // If no shipping method.
-  if (_isEmpty(shippingMethods)
-    || (!_isUndefined(shippingMethods.error) && shippingMethods.error)) {
+  if (!_isUndefined(shippingMethods.data)
+    && !_isUndefined(shippingMethods.data.error)
+    && shippingMethods.data.error
+  ) {
     logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', {
       '@data': JSON.stringify(data),
       '@cart_id': cartId,
-      '@error_message': shippingMethods.error_message,
+      '@error_message': shippingMethods.data.error_message,
     });
 
     return shippingMethods;

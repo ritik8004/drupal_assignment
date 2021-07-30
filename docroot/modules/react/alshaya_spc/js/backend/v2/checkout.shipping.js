@@ -135,28 +135,31 @@ const getHomeDeliveryShippingMethods = async (data) => {
   staticShippingMethods[key] = [];
   const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
   const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
-  if (!_isEmpty(response.data)) {
-    const methods = response.data;
-
-    // Check for errors.
-    if (!_isUndefined(methods.error) && methods.error) {
-      logger.error(`Error in getting shipping methods for HD. Data: ${methods.error_message}`);
-      return methods;
-    }
-
-    // Delete CNC from methods.
-    for (let i = 0; i < methods.length; i++) {
-      if (methods[i].carrier_code === 'click_and_collect') {
-        delete methods[i];
-      }
-    }
-
-    // Set shipping methods in static.
-    staticShippingMethods[key] = Object.values(methods);
-    StaticStorage.set('shipping_methods', staticShippingMethods);
+  if (_isEmpty(response.data)
+    || (!_isUndefined(response.data.error) && response.data.error)
+  ) {
+    return response;
   }
 
-  // Return methods.
+  const methods = response.data;
+
+  // Check for errors.
+  if (!_isUndefined(methods.error) && methods.error) {
+    logger.error(`Error in getting shipping methods for HD. Data: ${methods.error_message}`);
+    return methods;
+  }
+
+  // Delete CNC from methods.
+  for (let i = 0; i < methods.length; i++) {
+    if (methods[i].carrier_code === 'click_and_collect') {
+      delete methods[i];
+    }
+  }
+
+  // Set shipping methods in static.
+  staticShippingMethods[key] = Object.values(methods);
+  StaticStorage.set('shipping_methods', staticShippingMethods);
+
   return staticShippingMethods[key];
 };
 
