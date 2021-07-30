@@ -20,7 +20,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\TypedData\TranslatableInterface;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Class Sku Info Helper.
@@ -709,7 +708,7 @@ class SkuInfoHelper {
     $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
     // Prepare image style url.
     if (!empty($image['#uri'])) {
-      $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+      $image = $image['#uri'];
     }
 
     return is_string($image) ? $image : '';
