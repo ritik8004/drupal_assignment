@@ -146,6 +146,10 @@
     .write-review-form {
       padding: 3.625rem;
 
+      @include breakpoint($desktop) {
+        padding-#{$left}: 5.25rem;
+      }
+
       @include breakpoint($upto-desktop) {
         padding: 0.75rem;
       }
