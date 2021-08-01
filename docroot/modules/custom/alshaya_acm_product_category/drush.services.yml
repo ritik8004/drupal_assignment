@@ -9,5 +9,6 @@ services:
       - '@metatag.manager'
       - '@metatag.token'
       - '@logger.factory'
+      - '@language_manager'
     tags:
       - { name: drush.command }
