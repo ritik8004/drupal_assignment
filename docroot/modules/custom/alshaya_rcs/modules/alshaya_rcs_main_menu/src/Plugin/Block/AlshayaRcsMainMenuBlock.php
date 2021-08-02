@@ -262,9 +262,11 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           'block-alshaya-main-menu',
         ],
       ],
-      // @todo need to move prefix and suffix in container type.
-      '#prefix' => '<div id="rcs-ph-navigation_menu" data-rcs-dependency="none">',
-      '#suffix' => '</div>',
+      '#theme_wrappers' => [
+        'container' => [
+          '#attributes' => ['id' => 'rcs-ph-navigation_menu'],
+        ],
+      ],
       '#attached' => [
         // Pass in drupal settings for FE.
         'drupalSettings' => [
