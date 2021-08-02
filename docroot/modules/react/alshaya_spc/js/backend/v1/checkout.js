@@ -2,7 +2,9 @@ import {
   callMiddlewareApi,
   isAnonymousUserWithoutCart,
   updateCart,
+  returnExistingCartWithError,
 } from './common';
+import getStringMessage from '../../utilities/strings';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -52,7 +54,27 @@ window.commerceBackend.fetchClickNCollectStores = (coords) => callMiddlewareApi(
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.placeOrder = (data) => callMiddlewareApi('cart/place-order', 'POST', JSON.stringify(data));
+window.commerceBackend.placeOrder = (data) => callMiddlewareApi('cart/place-order', 'POST', JSON.stringify(data)).then(
+  (response) => {
+    // Check if we have tried to call middleware when the commerce backend is set to V2.
+    if (
+      typeof response.data.error !== 'undefined'
+      && response.data.error_code === 612
+    ) {
+      if (!sessionStorage.getItem('reloadOnBackendSwitch')) {
+        // Reload the page only once. The caches are expected to be cleared till then.
+        sessionStorage.setItem('reloadOnBackendSwitch', 1);
+        window.location.reload();
+      }
+      return returnExistingCartWithError(
+        response.status,
+        getStringMessage('backend_obsolete_version'),
+      );
+    }
+
+    return response;
+  },
+);
 
 /**
  * Adds shipping method to the cart and returns the cart.

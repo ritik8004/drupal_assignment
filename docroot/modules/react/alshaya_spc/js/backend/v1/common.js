@@ -154,4 +154,5 @@ export {
   callMiddlewareApi,
   isAnonymousUserWithoutCart,
   updateCart,
+  returnExistingCartWithError,
 };
