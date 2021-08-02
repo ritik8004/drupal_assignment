@@ -142,15 +142,18 @@ class ClicknCollectDeiveryInfo extends React.Component {
     const { showSelectedStore } = this.state;
 
     const hoursArrayList = [];
-    Object.keys(openHoursGroup).forEach((data) => {
-      hoursArrayList.push(`${data}(${openHoursGroup[data]})`);
-    });
+    let hoursArray = [];
+    if (openHoursGroup) {
+      Object.keys(openHoursGroup).forEach((data) => {
+        hoursArrayList.push(`${data}(${openHoursGroup[data]})`);
+      });
 
-    const hoursArray = hoursArrayList.map((data) => (
-      <div className="store-open-hours">
-        {data}
-      </div>
-    ));
+      hoursArray = hoursArrayList.map((data) => (
+        <div className="store-open-hours">
+          {data}
+        </div>
+      ));
+    }
 
     const { selectedStore } = this.context;
     return (
