@@ -18,10 +18,10 @@ class ProductLinkedSkusResourceV2 extends ProductLinkedSkusResource {
   /**
    * Responds to GET requests.
    *
-   * Returns available delivery method data.
+   * Returns linked skus of the given sku.
    *
    * @return \Drupal\rest\ResourceResponse
-   *   The response containing delivery methods data.
+   *   The response containing linked skus of the given sku.
    */
   public function get(string $sku) {
     $sku = base64_decode($sku);
