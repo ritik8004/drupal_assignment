@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -126,7 +127,10 @@ function alshaya_acm_cart_notification_sku_variant_info_alter(array &$variant, S
 
   // Prepare image style url.
   if (!empty($image['#uri'])) {
-    $image = $image['#uri'];
+    $scheme = StreamWrapperManager::getScheme($image['#uri']);
+    $image = (strstr($scheme, 'http'))
+      ? $image['#uri']
+      : file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
   }
 
   $variant['cart_image'] = is_string($image) ? $image : '';

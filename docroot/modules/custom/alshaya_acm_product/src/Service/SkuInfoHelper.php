@@ -13,6 +13,8 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
@@ -708,7 +710,10 @@ class SkuInfoHelper {
     $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
     // Prepare image style url.
     if (!empty($image['#uri'])) {
-      $image = $image['#uri'];
+      $scheme = StreamWrapperManager::getScheme($image['#uri']);
+      $image = (strstr($scheme, 'http'))
+        ? $image['#uri']
+        : file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
     }
 
     return is_string($image) ? $image : '';

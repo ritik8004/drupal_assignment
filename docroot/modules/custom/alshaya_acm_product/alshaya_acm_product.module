@@ -14,6 +14,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
@@ -786,7 +787,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
         // Prepare image style url.
         if (!empty($image['#uri'])) {
-          $image = $image['#uri'];
+          $scheme = StreamWrapperManager::getScheme($image['#uri']);
+          $image = (strstr($scheme, 'http'))
+            ? $image['#uri']
+            : file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
         }
         $productInfo['cart_image'] = is_string($image) ? $image : '';
 
@@ -2083,7 +2087,10 @@ function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterfac
 
   // Prepare image style url.
   if (!empty($image['#uri'])) {
-    $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+    $scheme = StreamWrapperManager::getScheme($image['#uri']);
+    $image = (strstr($scheme, 'http'))
+      ? $image['#uri']
+      : file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
   }
 
   $variant['matchback_teaser_image'] = is_string($image) ? $image : '';
