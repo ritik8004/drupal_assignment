@@ -13,7 +13,6 @@ export const cartAvailableInStorage = () => {
 
   // If data/cart is expired or cart has different language than
   // currently selected language.
-  // Return null to force the cart to be restored.
   if ((currentTime - cartData.last_update) > expireTime
     || cartData.cart.langcode === undefined
     || drupalSettings.path.currentLanguage !== cartData.cart.langcode) {
