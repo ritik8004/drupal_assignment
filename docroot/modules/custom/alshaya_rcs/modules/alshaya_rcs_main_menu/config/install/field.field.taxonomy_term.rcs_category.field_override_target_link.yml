@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_override_target_link
+    - taxonomy.vocabulary.rcs_category
+  enforced:
+    module:
+      - alshaya_rcs_main_menu
+id: taxonomy_term.rcs_category.field_override_target_link
+field_name: field_override_target_link
+entity_type: taxonomy_term
+bundle: rcs_category
+label: 'Override target link'
+description: 'Check to override the target link URL for this term.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
