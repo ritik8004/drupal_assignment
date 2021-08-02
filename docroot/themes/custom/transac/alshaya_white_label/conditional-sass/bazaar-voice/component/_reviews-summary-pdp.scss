@@ -238,10 +238,10 @@
       display: flex;
       align-items: center;
       color: $rr-review-summary-txt;
+      margin-top: 1.25rem;
 
       @include breakpoint($tablet) {
         margin-bottom: 0.625rem;
-        margin-top: 1.25rem;
       }
 
       &-text {
