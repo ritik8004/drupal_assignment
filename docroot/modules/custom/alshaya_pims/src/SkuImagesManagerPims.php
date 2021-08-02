@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_pims;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuImagesHelper;
@@ -327,6 +328,67 @@ class SkuImagesManagerPims extends SkuImagesManager {
    */
   public function getPimsSettings() {
     return $this->configFactory->get('alshaya_pims.settings')->get('alshaya_pims');
+  }
+
+  /**
+   * Get Swatch Image url for PDP.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return string|null
+   *   URL of swatch image or null
+   */
+  public function getPdpSwatchImageUrl(SKU $sku) {
+    $media = $this->getSkuMediaItems($sku);
+
+    $static = &drupal_static(__FUNCTION__, NULL);
+    $static[$sku->getSku()] = NULL;
+
+    foreach ($media as $item) {
+      if (isset($item['roles'])
+        && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])
+        && !empty($item['file'])) {
+
+        $static[$sku->getSku()] = file_create_url($item['file']);
+        break;
+      }
+    }
+
+    return $static[$sku->getSku()];
+  }
+
+  /**
+   * Get media items for particular SKU.
+   *
+   * This is CORE implementation to get media items from media array in SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Media items array.
+   */
+  public function getSkuMediaItems(SKUInterface $sku): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $static_id = implode(':', [
+      $sku->getSku(),
+      $sku->language()->getId(),
+    ]);
+
+    if (isset($static[$static_id])) {
+      return $static[$static_id];
+    }
+
+    $media = unserialize($sku->get('media')->getString());
+
+    $this->moduleHandler->alter(
+      'alshaya_acm_product_media_items', $media, $sku
+    );
+
+    $static[$static_id] = $media;
+    return $media;
   }
 
 }
