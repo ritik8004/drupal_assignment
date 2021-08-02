@@ -105,6 +105,15 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
       'data-sku-type',
       'data-zoom-url',
       'data-src',
+      'gtm-name',
+      'gtm-product-sku',
+      'gtm-product-sku-class-identifier',
+      'gtm-sku-type',
+      'gtm-main-sku',
+      'gtm-brand',
+      'gtm-dimension4',
+      'gtm-price',
+      'gtm-dimension3'
     ],
   );
 

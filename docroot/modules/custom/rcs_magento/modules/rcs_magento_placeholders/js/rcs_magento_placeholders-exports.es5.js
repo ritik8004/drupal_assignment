@@ -60,6 +60,17 @@ exports.getEntity = async function getEntity(langcode) {
                     }
                   }
                 }
+                gtm_attributes {
+                  id
+                  name
+                  variant
+                  price
+                  brand
+                  category
+                  dimension2
+                  dimension3
+                  dimension4
+                }
                 ... on ConfigurableProduct {
                   configurable_options {
                     id
