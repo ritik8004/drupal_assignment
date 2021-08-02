@@ -11,21 +11,13 @@ export const cartAvailableInStorage = () => {
   const expireTime = storageExpireTime * 60 * 1000;
   const currentTime = new Date().getTime();
 
-  // If data/cart is expired.
-  if (currentTime - cartData.last_update > expireTime) {
+  // If data/cart is expired or cart has different language than
+  // currently selected language.
+  // Return null to force the cart to be restored.
+  if ((currentTime - cartData.last_update) > expireTime
+    || cartData.cart.langcode === undefined
+    || drupalSettings.path.currentLanguage !== cartData.cart.langcode) {
     return null;
-  }
-
-  // If cart has different language than currently selected language.
-  if (cartData.cart.langcode === undefined
-    || drupalSettings.path.currentLanguage !== cartData.cart.langcode
-  ) {
-    // Do nothing if empty cart is there.
-    if (cartData.cart.cart_id === null) {
-      return 'empty';
-    }
-
-    return cartData.cart.cart_id;
   }
 
   return cartData.cart;
