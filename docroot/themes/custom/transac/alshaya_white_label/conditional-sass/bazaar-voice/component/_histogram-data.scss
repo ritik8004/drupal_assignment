@@ -76,6 +76,7 @@
 
                 @include breakpoint($only-mobile) {
                   height: 1.25rem;
+                  top: -0.25rem;
                 }
               }
             }
