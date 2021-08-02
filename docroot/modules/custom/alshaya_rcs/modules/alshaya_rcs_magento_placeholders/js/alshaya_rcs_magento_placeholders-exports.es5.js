@@ -127,6 +127,7 @@ exports.render = function render(
           innerHtml
         );
       }
+      break;
 
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
