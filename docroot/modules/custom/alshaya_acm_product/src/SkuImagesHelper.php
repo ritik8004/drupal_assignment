@@ -36,6 +36,10 @@ class SkuImagesHelper {
   public function getSkuImage(array $media,
                               string $style_name,
                               string $rel_image_style = '') {
+    if (empty($media['drupal_uri'])) {
+      return [];
+    }
+
     $image = [
       '#theme' => 'image_style',
       '#style_name' => $style_name,
@@ -63,6 +67,10 @@ class SkuImagesHelper {
    *   Image style url.
    */
   public function getImageStyleUrl(array $media, string $style_name) {
+    if (empty($media['drupal_uri'])) {
+      return '';
+    }
+
     return ImageStyle::load($style_name)->buildUrl($media['drupal_uri']);
   }
 

@@ -686,7 +686,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if (!empty($sku_media)) {
-          $build['image'] = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
+          $image = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
+          if (!empty($image)) {
+            $build['images'] = $image;
+          }
         }
 
         // Do not render VAT text along with price for teaser.
@@ -737,7 +740,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
           if (!empty($sku_media)) {
-            $build['image'] = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_TEASER);
+            $image = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_TEASER);
+            if (!empty($image)) {
+              $build['image'] = $image;
+            }
           }
         }
       }
@@ -968,7 +974,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     if ($sku_media) {
       /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
       $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
-      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,\Drupal\alshaya_acm_product\SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT);
+      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT);
     }
   }
 }
