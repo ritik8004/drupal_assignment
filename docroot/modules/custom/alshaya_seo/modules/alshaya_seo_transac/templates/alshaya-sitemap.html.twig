@@ -1,7 +1,4 @@
 <div class="sitemap">
-  {% block attach_library %}
-    {{ attach_library('alshaya_white_label/sitemap') }}
-  {% endblock %}
     {% if term_tree is not empty %}
         {% for level1 in term_tree %}
           <div class="level--1">
@@ -32,4 +29,7 @@
           </div>
         {% endfor %}
     {% endif %}
+  {% block attach_library %}
+    {{ attach_library('alshaya_white_label/sitemap') }}
+  {% endblock %}
 </div>
