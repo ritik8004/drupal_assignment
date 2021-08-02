@@ -22,10 +22,10 @@ class SkusProductListV2 extends SkusProductList {
    * @return \Drupal\rest\ResourceResponse
    *   The response containing attributes of skus.
    */
-  public function get(string $sku_list = '') {
+  public function get(string $sku_list = '', string $version = 'v2') {
     $sku_list = $this->requestStack->query->get('skus');
     $sku = base64_decode($sku_list);
-    return parent::get($sku);
+    return parent::get($sku, $version);
   }
 
 }

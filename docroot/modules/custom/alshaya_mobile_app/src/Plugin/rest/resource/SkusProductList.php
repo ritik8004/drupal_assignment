@@ -181,7 +181,10 @@ class SkusProductList extends ResourceBase {
    * @return \Drupal\rest\ResourceResponse
    *   The response containing attributes of skus.
    */
-  public function get(string $sku_list = '') {
+  public function get(string $sku_list = '', string $version = 'v1') {
+    if ($version === 'v1') {
+      $sku_list = $this->requestStack->query->get('skus');
+    }
     if (empty($sku_list)) {
       $this->logger->error('No Products are selected hence cannot find corresponding Sku\'s');
       return $this->mobileAppUtility->sendStatusResponse($this->t('No Products are selected hence cannot find corresponding SKUs'));
