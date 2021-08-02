@@ -14,6 +14,25 @@ use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_update_N().
+ * 
+ * Add new Skus Product List resource v2.
+ */
+function alshaya_mobile_app_update_8081() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+      'rest.resource.skus_product_list_v2'
+    ],
+    'alshaya_mobile_app',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
  *
  * Add new Rroduct Exclude Linked v2.
  */
