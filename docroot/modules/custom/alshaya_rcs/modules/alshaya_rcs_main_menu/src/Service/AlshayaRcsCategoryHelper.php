@@ -128,6 +128,14 @@ class AlshayaRcsCategoryHelper {
         $record['highlight_paragraphs'] = $this->getHighlightParagraph($main_menu_highlights, $langcode);
       }
 
+      // If icon available, only for web.
+      if (!empty($term->field_icon->target_id) && $context != 'app') {
+        $image = $this->entityTypeManager->getStorage('file')->load($term->field_icon->target_id);
+        $record['icon'] = [
+          'icon_url' => file_url_transform_relative(file_create_url($image->getFileUri())),
+        ];
+      }
+
       // Add term object in array for cache dependency.
       $this->cacheableTerms[] = $term;
 

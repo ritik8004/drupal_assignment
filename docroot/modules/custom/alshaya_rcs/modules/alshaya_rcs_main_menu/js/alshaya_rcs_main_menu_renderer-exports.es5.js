@@ -122,6 +122,19 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
     if (typeof enrichedDataObj.path !== 'undefined') {
       levelObj.url_path = enrichedDataObj.path;
     }
+
+    // Attach image icon with label.
+    if (typeof enrichedDataObj.icon !== 'undefined') {
+      levelObj.icon_url = enrichedDataObj.icon.icon_url;
+    }
+  }
+
+  // Remove icon markup if no icon or add
+  // wrapper class if available.
+  if (typeof levelObj.icon_url === 'undefined') {
+    clonePhEle.find('span.icon').remove();
+  } else {
+    clonePhEle.addClass('with-icon');
   }
 
   // If menu has no children further, return with actual markup.
@@ -248,7 +261,7 @@ const navRcsReplacePh = function (phElement, entity) {
       // attribute values. We are now fetching all the elements
       // which have placeholders in the attributes and we
       // apply the replacement.
-      for (const attribute of ['href']) {
+      for (const attribute of ['href', 'src']) {
         $(`[${attribute} *= '${fieldPh}']`, phElement)
           .each(function eachEntityPhAttributeReplace() {
             $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));

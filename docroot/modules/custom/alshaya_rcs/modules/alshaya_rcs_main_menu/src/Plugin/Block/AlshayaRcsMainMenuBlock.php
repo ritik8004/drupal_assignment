@@ -69,6 +69,12 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function build() {
+    // Prepare field icon placeholder array.
+    $icon = [
+      'url' => '#rcs.menuItem.icon_url#',
+      'label' => '#rcs.menuItem.name#',
+    ];
+
     // Prepare a static term array with placeholders
     // for all the possible combinations.
     $term_data = [
@@ -82,6 +88,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'move_to_right' => FALSE,
         'highlight_paragraph' => [],
         'class' => ['level-1', 'clickable'],
+        'icon' => $icon,
         'child' => [
           '2' => [
             // 2nd Level item non-clickable and
@@ -168,6 +175,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'move_to_right' => FALSE,
         'highlight_paragraph' => [],
         'class' => ['level-1', 'non-clickable'],
+        'icon' => $icon,
         'child' => [
           '5' => [
             // 2nd Level item non-clickable and
