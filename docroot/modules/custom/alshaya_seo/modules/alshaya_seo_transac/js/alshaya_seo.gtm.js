@@ -1391,7 +1391,8 @@ const productRecommendationsSuffix = 'pr-';
   // If TrackJS is enabled we let it track the errors.
   if (drupalSettings.gtm.log_errors_to_ga !== undefined
     && drupalSettings.gtm.log_errors_to_ga
-    && window.TrackJS === undefined) {
+    && typeof window.TrackJS === 'undefined'
+    && typeof window.DD_LOGS === 'undefined') {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);

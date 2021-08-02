@@ -19,6 +19,11 @@ import {
  */
 const logger = {
   send: (level, message, context) => {
+    if (typeof Drupal.logViaDataDog !== 'undefined') {
+      Drupal.logViaDataDog(level, message, context);
+      return;
+    }
+
     console.log(level, Drupal.formatString(message, context));
   },
   emergency: (message, context) => logger.send('emergency', message, context),
@@ -155,7 +160,9 @@ const getApiEndpoint = (action, params = {}) => {
       break;
 
     default:
-      logger.critical(`Endpoint does not exist for action : ${action}`);
+      logger.critical('Endpoint does not exist for action: @action.', {
+        '@action': action,
+      });
   }
 
   return endpoint;
