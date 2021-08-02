@@ -20,6 +20,8 @@ import {
   getProcessedErrorMessage,
 } from './error';
 import cartActions from '../../utilities/cart_actions';
+import StaticStorage from './staticStorage';
+import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -50,9 +52,6 @@ window.commerceBackend.getCartId = () => {
   return null;
 };
 
-// Contains the raw unprocessed cart data.
-let rawCartData = null;
-
 /**
  * Stores the raw cart data object into the storage.
  *
@@ -60,19 +59,13 @@ let rawCartData = null;
  *   The raw cart data object.
  */
 window.commerceBackend.setRawCartDataInStorage = (data) => {
-  rawCartData = data;
+  StaticStorage.set('cart_raw', data);
 };
 
 /**
  * Fetches the raw cart data object from the static storage.
  */
-window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
-
-/**
- * Object to serve as static cache for processed cart data over the course of a
- * request.
- */
-let staticCartData = null;
+window.commerceBackend.getRawCartDataFromStorage = () => StaticStorage.get('cart_raw');
 
 /**
  * Stores skus and quantities.
@@ -97,7 +90,7 @@ const matchStockQuantity = (sku, quantity = 0) => {
  * @returns {object|null}
  *   Processed cart data else null.
  */
-window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
 
 /**
  * Sets the cart data to storage.
@@ -108,7 +101,13 @@ window.commerceBackend.getCartDataFromStorage = () => staticCartData;
 window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
-  staticCartData = cartInfo;
+  StaticStorage.set('cart', cartInfo);
+
+  // @todo find better way to get this using commerceBackend.
+  // As of now it not possible to get it on page load before all
+  // other JS is executed and for all other JS refactoring
+  // required is huge.
+  setStorageInfo(cartInfo, 'cart_data');
 };
 
 /**
@@ -118,7 +117,14 @@ window.commerceBackend.setCartDataInStorage = (data) => {
  *  Whether we should remove all items.
  */
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
-  staticCartData = null;
+  StaticStorage.clear();
+
+  removeStorageInfo('cart_data');
+
+  // Remove last selected payment on page load.
+  // We use this to ensure we trigger events for payment method
+  // selection at-least once and not more than once.
+  removeStorageInfo('last_selected_payment');
 
   if (resetAll) {
     removeCartIdFromStorage();
@@ -207,6 +213,21 @@ const handleResponse = (apiResponse) => {
         '@code': response.status,
       });
       response.data.error_code = 500;
+    } else if (response.status === 404
+      && _isUndefined(response.data)
+      && !_isUndefined(response.message)
+      && !_isEmpty(response.message)) {
+      response.data = {};
+      response.data.code = 404;
+      response.data.error_code = 404;
+      response.data.error_message = response.message;
+
+      // Log the error message.
+      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+        '@message': response.data.error_message,
+        '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
+        '@response_code': response.status,
+      });
     } else if (!_isUndefined(response.data.message) && !_isEmpty(response.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(response);
@@ -601,7 +622,7 @@ const getProcessedCartData = async (cartData) => {
 const isAnonymousUserWithoutCart = () => {
   const cartId = window.commerceBackend.getCartId();
   if (cartId === null || typeof cartId === 'undefined') {
-    if (window.drupalSettings.user.uid === 0) {
+    if (window.drupalSettings.userDetails.customerId === 0) {
       return true;
     }
   }
@@ -636,7 +657,8 @@ const getCart = async (force = false) => {
         || (!_isUndefined(response.data) && response.data.error_code === 404)
         || (!_isUndefined(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      if (getCartIdFromStorage()) {
+      const isAssociatingCart = StaticStorage.get('associating_cart') || false;
+      if (getCartIdFromStorage() && !isAssociatingCart) {
         logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
 
         // Remove cart_id from storage.
@@ -676,59 +698,43 @@ const getCart = async (force = false) => {
  * @returns {Promise<object/boolean>}
  *   Returns the updated cart or false.
  */
-const associateCartToCustomer = async () => {
-  const guestCartId = getCartIdFromStorage();
-  if (_isNull(guestCartId)) {
-    return false;
+const associateCartToCustomer = async (guestCartId) => {
+  // Prepare params.
+  const params = { cartId: guestCartId };
+
+  // Associate cart to customer.
+  const response = await callMagentoApi(getApiEndpoint('associateCart'), 'POST', params);
+
+  // It's possible that page got reloaded quickly after login.
+  // For example on social login.
+  if (response.message === 'Request aborted') {
+    return;
   }
 
-  // Get the cart id of the guest cart.
-  let response = await callMagentoApi(`/V1/guest-carts/${guestCartId}`);
-
-  // Check for errors.
   if (response.status !== 200) {
-    logger.error('Error while associating cart @cartId to customer @customerId: Message @msg.', {
-      '@customerId': window.drupalSettings.userDetails.customerId,
+    logger.error('Error while associating cart: @cartId to customer: @customerId. Response: @response.', {
       '@cartId': guestCartId,
-      '@msg': (!_isUndefined(response.data) && !_isUndefined(response.data.message)) ? response.data.message : '',
+      '@customerId': window.drupalSettings.userDetails.customerId,
+      '@response': JSON.stringify(response),
     });
 
+    // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
-
-    return false;
+    StaticStorage.clear();
+    return;
   }
 
-  // Prepare params.
-  if (!_isUndefined(response.data.id)) {
-    const params = {
-      quote: {
-        id: response.data.id,
-        customer: {
-          id: window.drupalSettings.userDetails.customerId,
-        },
-      },
-    };
+  logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
+    '@customerId': window.drupalSettings.userDetails.customerId,
+    '@guestCartId': guestCartId,
+  });
 
-    // Associate cart to customer.
-    response = await callMagentoApi(getApiEndpoint('associateCart'), 'PUT', params);
+  // Clear local storage.
+  removeCartIdFromStorage();
+  StaticStorage.clear();
 
-    // If it works, the response data is empty, so we can only check the status.
-    if (response.status !== 200) {
-      logger.error('Error while associating cart: @cartId to customer: @customerId. Error message: @message.', {
-        '@cartId': guestCartId,
-        '@customerId': window.drupalSettings.userDetails.customerId,
-        '@message': (typeof response.data.message !== 'undefined') ? response.data.message : '',
-      });
-    } else {
-      // Clear local storage.
-      removeCartIdFromStorage();
-
-      // Reload cart.
-      return getCart(true);
-    }
-  }
-
-  return false;
+  // Reload cart.
+  await getCart(true);
 };
 
 /**
@@ -743,31 +749,9 @@ const associateCartToCustomer = async () => {
  */
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
-  let cart = await getCart(force);
+  const cart = await getCart(force);
   if (_isNull(cart) || _isUndefined(cart.data)) {
     return null;
-  }
-
-  const cartId = getCartIdFromStorage();
-
-  // Check if the user is authenticated but there is a guest cart_id in the local storage.
-  if (isUserAuthenticated() && !_isNull(cartId)) {
-    if (!_isUndefined(cart.data.cart)
-      && !_isUndefined(cart.data.cart.items)
-      && !_isEmpty(cart.data.cart.items)
-    ) {
-      // If the current cart has items, we carry on with this cart and remove
-      // the guest cart id from local storage.
-      removeCartIdFromStorage();
-    } else {
-      // If the user is authenticated and we have cart_id in the local storage
-      // it means the customer just became authenticated.
-      // We need to associate the cart and remove the cart_id from local storage.
-      const updated = await associateCartToCustomer();
-      if (updated !== false) {
-        cart = updated;
-      }
-    }
   }
 
   // If we don't have any errors, process the cart data.
@@ -842,7 +826,7 @@ const validateRequestData = async (request) => {
   // For any cart update operation, cart should be available in session.
   if (window.commerceBackend.getCartId() === null) {
     const logData = JSON.stringify(request);
-    logger.error(`Trying to do cart update operation while cart is not available in session. Data: ${logData}`);
+    logger.warning(`Trying to do cart update operation while cart is not available in session. Data: ${logData}`);
     return 404;
   }
 

@@ -27,7 +27,7 @@ const getDefaultErrorMessage = () => 'Sorry, something went wrong and we are una
  */
 const getExceptionMessageType = (msg) => {
   let type = null;
-  const exceptionMessages = window.drupalSettings.cart.exception_messages;
+  const { exceptionMessages } = drupalSettings.cart;
   const messages = Object.keys(exceptionMessages);
 
   for (let i = 0; i < messages.length; i++) {

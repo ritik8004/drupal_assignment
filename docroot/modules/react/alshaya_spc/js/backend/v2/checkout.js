@@ -1,7 +1,6 @@
 import _isUndefined from 'lodash/isUndefined';
 import _isEmpty from 'lodash/isEmpty';
 import _isBoolean from 'lodash/isBoolean';
-import _isString from 'lodash/isString';
 import _findIndex from 'lodash/findIndex';
 import _first from 'lodash/first';
 import _isArray from 'lodash/isArray';
@@ -10,10 +9,8 @@ import _cloneDeep from 'lodash/cloneDeep';
 import _isNull from 'lodash/isNull';
 import _isObject from 'lodash/isObject';
 import _each from 'lodash/each';
-import md5 from 'md5';
 import {
   isAnonymousUserWithoutCart,
-  associateCartToCustomer,
   getCart,
   updateCart,
   getFormattedError,
@@ -27,6 +24,7 @@ import {
   matchStockQuantity,
   isCartHasOosItem,
   getProductStatus,
+  getCartSettings,
 } from './common';
 import {
   cartErrorCodes,
@@ -36,9 +34,18 @@ import {
   getApiEndpoint,
   isUserAuthenticated,
   logger,
-  getIp, getCartIdFromStorage,
+  getIp,
 } from './utility';
 import cartActions from '../../utilities/cart_actions';
+import {
+  getPaymentMethods,
+  getPaymentMethodSetOnCart,
+} from './checkout.payment';
+import {
+  formatAddressForShippingBilling,
+  getHomeDeliveryShippingMethods,
+} from './checkout.shipping';
+import StaticStorage from './staticStorage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -66,6 +73,12 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  *    The CNC status.
  */
 const getCncStatusForCart = async (data) => {
+  const staticStatus = StaticStorage.get('cnc_status');
+
+  if (staticStatus !== null) {
+    return staticStatus;
+  }
+
   // Validate data.
   if (_isEmpty(data) || _isEmpty(data.cart)) {
     return true;
@@ -82,115 +95,13 @@ const getCncStatusForCart = async (data) => {
     if (!_isEmpty(productStatus)
       && _isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
+      StaticStorage.set('cnc_status', false);
       return false;
     }
   }
 
+  StaticStorage.set('cnc_status', true);
   return true;
-};
-
-/**
- * Format address structure for shipping estimates api.
- *
- * @param {object} $address
- *   Address object.
- * @return {object}.
- *   Formatted address object.
- */
-const formatShippingEstimatesAddress = (address) => {
-  const data = {};
-  data.firstname = (typeof address.firstname !== 'undefined') ? address.firstname : '';
-  data.lastname = (typeof address.lastname !== 'undefined') ? address.lastname : '';
-  data.email = (typeof address.email !== 'undefined') ? address.email : '';
-  data.country_id = (typeof address.country_id !== 'undefined') ? address.country_id : '';
-  data.city = (typeof address.city !== 'undefined') ? address.city : '';
-  data.telephone = (typeof address.telephone !== 'undefined') ? address.telephone : '';
-
-  data.street = _isString(address.street)
-    ? [address.street]
-    : address.street;
-
-  data.custom_attributes = [];
-  if (typeof address.custom_attributes !== 'undefined' && address.custom_attributes.length > 0) {
-    data.custom_attributes = address.custom_attributes.map((item) => {
-      if (typeof item.value !== 'undefined' && item.value !== '') {
-        return {
-          attribute_code: item.attribute_code,
-          value: item.value,
-        };
-      }
-      return null;
-    }).filter((item) => (item !== null));
-  }
-
-  // If custom attributes not available, we check for extension attributes.
-  if (data.custom_attributes.length === 0 && typeof address.extension_attributes !== 'undefined' && Object.keys(address.extension_attributes).length > 0) {
-    Object.keys(address.extension_attributes).forEach((key) => {
-      data.custom_attributes.push(
-        {
-          attribute_code: key,
-          value: address.extension_attributes[key],
-        },
-      );
-    });
-  }
-
-  return data;
-};
-
-const staticShippingMethods = [];
-
-/**
- * Gets shipping methods.
- *
- * @param data
- *   The shipping address.
- *
- * @returns {Promise<array>}
- *   HD Shipping methods.
- */
-const getHomeDeliveryShippingMethods = async (data) => {
-  if (_isEmpty(data.country_id)) {
-    logger.error(`Error in getting shipping methods for HD as country id not available. Data: ${JSON.stringify(data)}`);
-    return [];
-  }
-
-  // Prepare address data for api call.
-  const formattedAddress = formatShippingEstimatesAddress(data);
-
-  // Create a key for static store;
-  const key = md5(JSON.stringify(formattedAddress));
-
-  // Get shipping methods from static.
-  if (!_isEmpty(staticShippingMethods[key])) {
-    return staticShippingMethods[key];
-  }
-
-  staticShippingMethods[key] = [];
-  const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
-  const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
-  if (!_isEmpty(response.data)) {
-    const methods = response.data;
-
-    // Check for errors.
-    if (!_isUndefined(methods.error) && methods.error) {
-      logger.error(`Error in getting shipping methods for HD. Data: ${methods.error_message}`);
-      return methods;
-    }
-
-    // Delete CNC from methods.
-    for (let i = 0; i < methods.length; i++) {
-      if (methods[i].carrier_code === 'click_and_collect') {
-        delete methods[i];
-      }
-    }
-
-    // Set shipping methods in static.
-    staticShippingMethods[key] = Object.values(methods);
-  }
-
-  // Return methods.
-  return staticShippingMethods[key];
 };
 
 /**
@@ -215,55 +126,6 @@ const getDefaultAddress = (data) => {
 
   // Return first address.
   return _first(data.customer.addresses);
-};
-
-/**
- * Format the address array.
- *
- * Format the address array so that it can be used to update billing or
- * shipping address in the cart.
- *
- * @param {object} address
- *   Address array.
- * @return {object}.
- *   Formatted address object.
- */
-const formatAddressForShippingBilling = (address) => {
-  // Return as is if custom_attributes already set.
-  if (typeof address.custom_attributes !== 'undefined') {
-    return address;
-  }
-
-  const data = {};
-
-  if (!_isEmpty(address.static)) {
-    Object.keys(address.static).forEach((key) => {
-      data[key] = address.static[key];
-    });
-  }
-
-  data.street = _isString(address.street)
-    ? [address.street]
-    : address.street;
-
-  const customAttributes = [];
-  Object.keys(address).forEach((key) => {
-    if (typeof data[key] !== 'undefined' || key === 'carrier_info' || key === 'static') {
-      return;
-    }
-
-    if (_isEmpty(address[key])) {
-      return;
-    }
-
-    customAttributes.push({
-      attribute_code: key,
-      value: address[key],
-    });
-  });
-
-  data.custom_attributes = customAttributes;
-  return data;
 };
 
 /**
@@ -368,36 +230,6 @@ const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder
   });
 
 /**
- * Gets payment methods.
- *
- * @returns {Promise<object|null>}.
- *   The method list if available.
- */
-const getPaymentMethods = async () => getCart()
-  .then((response) => {
-    const cartId = window.commerceBackend.getCartId();
-
-    if (_isNull(response)
-      || _isEmpty(response.data)
-      || _isEmpty(response.data.shipping)
-      || _isEmpty(response.data.shipping.method)
-      || (!_isUndefined(response.data.error) && response.data.error)
-    ) {
-      logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartId}`);
-      return null;
-    }
-
-    // Get payment methods from MDC.
-    return callMagentoApi(getApiEndpoint('getPaymentMethods', { cartId }), 'GET', {})
-      .then((paymentMethods) => {
-        if (!_isEmpty(response.data)) {
-          return paymentMethods.data;
-        }
-        return null;
-      });
-  });
-
-/**
  * Get payment method from last order.
  *
  * @param {object} order
@@ -427,31 +259,6 @@ const getDefaultPaymentFromOrder = async (order) => {
   }
 
   return { default: orderPaymentMethod };
-};
-
-/**
- * Get the payment method set on cart.
- *
- * @return {Promise<string|null>}.
- *   Payment method set on cart.
- */
-const getPaymentMethodSetOnCart = async () => {
-  const params = {
-    cartId: window.commerceBackend.getCartId(),
-  };
-  const response = await callMagentoApi(getApiEndpoint('selectedPaymentMethod', params), 'GET', {});
-  if (!_isEmpty(response) && !_isEmpty(response.data) && !_isEmpty(response.data.method)) {
-    return response.data.method;
-  }
-
-  // Log if there is an error.
-  if (!_isEmpty(response.data.error)) {
-    logger.error('Error while getting payment set on cart. Response: @response', {
-      '@response': JSON.stringify(response.data),
-    });
-  }
-
-  return null;
 };
 
 /**
@@ -1382,7 +1189,7 @@ const processPaymentData = (paymentData, data) => {
           const { cvvCheck } = drupalSettings.checkoutComUpapi;
           const { cvv, id } = additionalInfo;
 
-          if (_isEmpty(cvv)) {
+          if (cvvCheck && _isEmpty(cvv)) {
             return {
               data: {
                 error: true,
@@ -1402,12 +1209,14 @@ const processPaymentData = (paymentData, data) => {
             };
           }
 
+          additionalInfo = {
+            public_hash: atob(id),
+          };
+
           if (cvvCheck) {
-            additionalInfo = {
-              cvv: atob(cvv),
-              public_hash: atob(id),
-            };
+            additionalInfo.cvv = atob(cvv);
           }
+
           break;
         }
 
@@ -1431,6 +1240,8 @@ const processPaymentData = (paymentData, data) => {
  *   A promise object.
  */
 const paymentUpdate = async (data) => {
+  StaticStorage.remove('payment_method');
+
   const paymentData = data.payment_info.payment;
   const params = {
     extension: {
@@ -1488,7 +1299,7 @@ const paymentUpdate = async (data) => {
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
     logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
       '@message': processedData.data.message,
-      '@cart': await window.commerceBackend.getCart(),
+      '@cart': JSON.stringify(await window.commerceBackend.getCart()),
       '@method': paymentData.method,
     });
     return processedData;
@@ -1541,17 +1352,16 @@ const cartAddressFieldsToValidate = () => {
 
   // Get the address fields based on site/country code
   // from the drupal settings.
-  const siteCountryCode = window.drupalSettings.cart.site_country_code;
-  const addressFields = window.drupalSettings.cart.address_fields;
+  const { country_code: countryCode, site_code: siteCode } = getCartSettings('siteInfo');
+  const addressFields = getCartSettings('addressFields');
 
   // Use default value first if available.
-  if (!_isUndefined(siteCountryCode.country_code)) {
-    const countryCode = siteCountryCode.country_code;
+  if (!_isUndefined(countryCode)) {
     if (!_isUndefined(addressFields.default[countryCode])) {
       addressFieldsToValidate = addressFields.default[countryCode];
     }
-    if (!_isUndefined(siteCountryCode.site_code)) {
-      const siteCode = siteCountryCode.site_code;
+
+    if (!_isUndefined(siteCode)) {
       // If brand specific value available/override.
       if (!_isUndefined(addressFields[siteCode])
         && !_isUndefined(addressFields[siteCode][countryCode])
@@ -1560,6 +1370,7 @@ const cartAddressFieldsToValidate = () => {
       }
     }
   }
+
   return addressFieldsToValidate;
 };
 
@@ -1569,32 +1380,41 @@ const cartAddressFieldsToValidate = () => {
  * @param {object} data
  *   Cart data.
  *
- * @return {bool}
+ * @return {boolean}
  *   FALSE if empty field value.
  */
 const isAddressExtensionAttributesValid = (data) => {
   let isValid = true;
+
   // If there are address fields available for validation
   // in drupal settings.
   const addressFieldsToValidate = cartAddressFieldsToValidate();
-  if (!_isEmpty(addressFieldsToValidate)) {
-    const cartAddressCustom = [];
-    // Prepare cart address field data.
-    data.shipping.address.custom_attributes.forEach((item) => {
-      cartAddressCustom[item.attribute_code] = item.value;
-    });
 
-    // Check each required field in custom attributes available in cart
-    // shipping address or not.
-    addressFieldsToValidate.forEach((field) => {
-      // If field not exists or empty.
-      if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
-        const cartId = window.commerceBackend.getCartId();
-        logger.error(`Field: ${field} not available in cart shipping address. Cart id: ${cartId}`);
-        isValid = false;
-      }
-    });
+  if (_isEmpty(addressFieldsToValidate)) {
+    return isValid;
   }
+
+  const cartAddressCustom = [];
+
+  // Prepare cart address field data.
+  data.shipping.address.custom_attributes.forEach((item) => {
+    cartAddressCustom[item.attribute_code] = item.value;
+  });
+
+  // Check each required field in custom attributes available in cart
+  // shipping address or not.
+  addressFieldsToValidate.forEach((field) => {
+    // If field not exists or empty.
+    if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
+      logger.error('Field: @field not available in cart shipping address. Cart id: @cartId', {
+        '@field': field,
+        '@cartId': window.commerceBackend.getCartId(),
+      });
+
+      isValid = false;
+    }
+  });
+
   return isValid;
 };
 
@@ -1707,29 +1527,13 @@ window.commerceBackend.addPaymentMethod = async (data) => {
  * @returns {Promise<object>}
  *   A promise object.
  */
-window.commerceBackend.getCartForCheckout = () => {
-  if (isAnonymousUserWithoutCart()) {
-    return null;
-  }
+window.commerceBackend.getCartForCheckout = async () => {
+  logger.debug('Loading cart data for checkout page.');
 
   return getCart()
     .then(async (response) => {
-      let cart = response;
-
-      let cartId = getCartIdFromStorage();
-
-      // Check if the user is authenticated but there is a guest cart_id in the local storage.
-      if (isUserAuthenticated() && !_isNull(cartId)) {
-        // If the user is authenticated and we have cart_id in the local storage
-        // it means the customer just became authenticated.
-        // We need to associate the cart and remove the cart_id from local storage.
-        const updated = await associateCartToCustomer();
-        if (updated !== false) {
-          cart = updated;
-        }
-      }
-
-      cartId = window.commerceBackend.getCartId();
+      const cart = response;
+      const cartId = window.commerceBackend.getCartId();
 
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
         logger.error(`Error while getting cart:${cartId} Error:${cart.data.error_message}`);
@@ -2168,7 +1972,6 @@ window.commerceBackend.placeOrder = async (data) => {
       });
 
       // @todo all the error handling.
-      // @todo cancel reservation.
 
       const message = prepareOrderFailedMessage(cart.data, data.data, response, 'place order', 'no');
       logger.error('Error while placing order. Error message: @message', {

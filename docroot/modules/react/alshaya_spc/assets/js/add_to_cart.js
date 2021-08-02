@@ -87,8 +87,11 @@
 
             // Configurable - normal as well as re-structured.
             if (is_configurable) {
-              productData['product_name'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_title;
-              productData['image'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_image;
+              var productVariantSku = settings[productInfoKey][page_main_sku].variants[variant_sku];
+              if (productVariantSku !== undefined) {
+                productData['product_name'] = productVariantSku.cart_title;
+                productData['image'] = productVariantSku.cart_image;
+              }
             }
             // Simple grouped (re-structured).
             else if (settings[productInfoKey][page_main_sku]['group'] !== undefined) {
