@@ -15,6 +15,25 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Add new Rroduct Exclude Linked v2.
+ */
+function alshaya_mobile_app_update_8080() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+      'rest.resource.product_exclude_linked_v2',
+    ],
+    'alshaya_mobile_app',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.2.0] Delete the cart_promotions resource config.
  */
 function alshaya_mobile_app_update_8079() {
