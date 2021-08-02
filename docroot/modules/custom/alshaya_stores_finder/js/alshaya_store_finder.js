@@ -154,7 +154,7 @@
           if ($('.current-view').length !== 0) {
             setTimeout(function () {
               if (runscript) {
-                $('.current-view form #edit-submit-stores-finder').trigger('click');
+                $('.current-view form .block-store-finder-form__input__submit').trigger('click');
               }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');
