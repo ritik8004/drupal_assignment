@@ -149,6 +149,34 @@ $magentos = [
       'store_id' => ['en' => 13, 'ar' => 12],
     ],
   ],
+  // For Aura
+  'mc_apc' => [
+    'url' => 'http://apc-7vc7xgy-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'avfy048yx6a25ubw8y2g6kq2qq0u9tnu',
+      'consumer_secret' => 'l7ujalr4galohhhc0cbuoepd3gp3w9y4',
+      'access_token' => 'vc7wk1ravvhfokih2nmy6q8mptuw220k',
+      'access_token_secret' => 'fv9w2ljiz7u287sozmhzzwow9b3lf3t6',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 7],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 13, 'ar' => 12],
+    ],
+  ],
   'mc_upgrade' => [
     'url' => 'http://magento-upgrade-kb5pcqa-z3gmkbwmwrl4g.eu.magentosite.cloud',
     'magento_secrets' => [
