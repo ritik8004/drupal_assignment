@@ -92,7 +92,7 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
 
       $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
       if (!empty($sku_media)) {
-        $teaser_image = $this->skuImagesHelper->getSkuImage($sku_media, 'product_teaser');
+        $teaser_image = $this->skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
         if (!empty($teaser_image['#uri'])) {
           $event->setMetaImage(file_create_url($teaser_image['#uri']));
           // We have three event subscriber to handle meta images.

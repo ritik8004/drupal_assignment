@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Core\Url;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
@@ -402,7 +403,7 @@ class ProductResource extends ResourceBase {
     if ($current_request->query->get('pdp') == 'magazinev2') {
       // Set cart image.
       $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-      $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
+      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
       // Prepare image style url.
       if (!empty($image['#uri'])) {
         $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
@@ -430,7 +431,7 @@ class ProductResource extends ResourceBase {
 
             // Set cart image.
             $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-            $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
+            $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
             // Prepare image style url.
             if (!empty($image['#uri'])) {
               $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
@@ -533,7 +534,7 @@ class ProductResource extends ResourceBase {
       // Adding extra data to the product resource.
       $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
       $data['extra_data'] = [];
-      $image = alshaya_acm_get_product_display_image($sku, 'cart_thumbnail', 'cart');
+      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_CART_THUMBNAIL, 'cart');
       if (!empty($image)) {
         if ($image['#theme'] == 'image_style') {
           $data['extra_data']['cart_image'] = [

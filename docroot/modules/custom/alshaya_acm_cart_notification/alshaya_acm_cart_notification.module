@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
@@ -50,7 +51,7 @@ function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_aj
   // Use the product SKU from request data if available.
   $product_added = empty($data['selected_variant_sku']) ? $sku : SKU::loadFromSku($data['selected_variant_sku']);
   $product_name = $productInfoHelper->getTitle($product_added, 'basket');
-  $image = alshaya_acm_get_product_display_image($product_added, 'pdp_gallery_thumbnail', 'cart');
+  $image = alshaya_acm_get_product_display_image($product_added, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
 
   // Quantity.
   $quantity = $data['quantity'] ?? 1;
@@ -123,7 +124,7 @@ function alshaya_acm_cart_notification_sku_variant_info_alter(array &$variant, S
   // Include the utility file to get product image.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   $variant['cart_title'] = $productInfoHelper->getTitle($child, 'basket');
-  $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
+  $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
 
   // Prepare image style url.
   if (!empty($image['#uri'])) {

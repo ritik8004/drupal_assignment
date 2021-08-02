@@ -765,8 +765,14 @@ class AlshayaPromoLabelManager {
       foreach ($free_skus as $free_sku) {
         if ($this->imagesManager->hasMedia($free_sku)) {
           $free_sku_media = $this->imagesManager->getFirstImage($free_sku);
-          $free_sku_image = $this->skuImagesHelper->getSkuImage($free_sku_media, '192x168');
-          $free_sku_image['#url'] = $this->skuImagesHelper->getImageStyleUrl($free_sku_media, '192x168');
+          $free_sku_image = $this->skuImagesHelper->getSkuImage(
+            $free_sku_media,
+            SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT
+          );
+          $free_sku_image['#url'] = $this->skuImagesHelper->getImageStyleUrl(
+            $free_sku_media,
+            SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT
+          );
           break;
         }
       }
@@ -861,7 +867,10 @@ class AlshayaPromoLabelManager {
       }
 
       if ($free_sku_media) {
-        $free_sku_image['#title'] = $this->skuImagesHelper->getSkuImage($free_sku_media, '192x168');
+        $free_sku_image['#title'] = $this->skuImagesHelper->getSkuImage(
+          $free_sku_media,
+          SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT
+        );
         $return['#sku_image'] = $this->renderer->renderPlain($free_sku_image);
         $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
       }

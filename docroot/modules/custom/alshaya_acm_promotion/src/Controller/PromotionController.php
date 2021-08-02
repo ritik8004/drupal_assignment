@@ -201,7 +201,7 @@ class PromotionController extends ControllerBase {
           if ($sku_media) {
             $item['#image'] = $this->skuImagesHelper->getSkuImage(
               $sku_media,
-              'product_teaser'
+              SkuImagesHelper::STYLE_PRODUCT_TEASER
             );
           }
 
@@ -233,7 +233,7 @@ class PromotionController extends ControllerBase {
           if ($sku_media) {
             $item['#image'] = $this->skuImagesHelper->getSkuImage(
               $sku_media,
-              'product_teaser'
+              SkuImagesHelper::STYLE_PRODUCT_TEASER
             );
           }
 

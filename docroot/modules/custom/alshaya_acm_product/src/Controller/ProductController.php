@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableJsonResponse;
@@ -23,7 +24,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\image\ImageStyleInterface;
 use Drupal\Core\Extension\ModuleHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -80,6 +80,13 @@ class ProductController extends ControllerBase {
   protected $entityRepository;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -89,7 +96,8 @@ class ProductController extends ControllerBase {
       $container->get('config.factory'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('module_handler'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('alshaya_acm_product.sku_images_helper')
     );
   }
 
@@ -108,6 +116,8 @@ class ProductController extends ControllerBase {
    *   The Module Handler service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
+   *   Sku imagese helper.
    */
   public function __construct(
       SkuManager $sku_manager,
@@ -115,7 +125,8 @@ class ProductController extends ControllerBase {
       ConfigFactoryInterface $config_factory,
       SkuImagesManager $sku_image_manager,
       ModuleHandler $module_handler,
-      EntityRepositoryInterface $entity_repository
+      EntityRepositoryInterface $entity_repository,
+      SkuImagesHelper $images_helper
     ) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
@@ -123,6 +134,7 @@ class ProductController extends ControllerBase {
     $this->skuImageManager = $sku_image_manager;
     $this->moduleHandler = $module_handler;
     $this->entityRepository = $entity_repository;
+    $this->skuImagesHelper = $images_helper;
   }
 
   /**
@@ -383,11 +395,8 @@ class ProductController extends ControllerBase {
       if ($related_sku_entity instanceof SKU) {
         $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
-        if (!empty($sku_media['drupal_uri'])) {
-          $image_style = $this->entityTypeManager()->getStorage('image_style')->load('product_zoom_medium_606x504');
-          if ($image_style instanceof ImageStyleInterface) {
-            $image = $image_style->buildUrl($sku_media['drupal_uri']);
-          }
+        if (!empty($sku_media)) {
+          $image = $this->skuImagesHelper->getImageStyleUrl($sku_media, SkuImagesHelper::STYLE_PRODUCT_SLIDE_STYLE);
         }
         $priceHelper = _alshaya_acm_product_get_price_helper();
         $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);

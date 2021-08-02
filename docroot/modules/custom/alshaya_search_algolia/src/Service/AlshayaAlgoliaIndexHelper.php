@@ -599,7 +599,7 @@ class AlshayaAlgoliaIndexHelper {
 
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $images[] = [
-        'url' => $this->skuImagesHelper->getImageStyleUrl($media_item, 'product_listing'),
+        'url' => $this->skuImagesHelper->getImageStyleUrl($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
       ];
     }

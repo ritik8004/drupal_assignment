@@ -739,14 +739,17 @@ class SkuImagesManager {
           // page and PLP.
           if (!empty($media_item)) {
             if (empty($search_main_image)) {
-              $search_main_image = $this->skuImagesHelper->getSkuImage($media_item, 'product_listing');
+              $search_main_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
             }
             elseif ($this->productDisplaySettings->get('gallery_show_hover_image')) {
-              $search_hover_image = $this->skuImagesHelper->getSkuImage($media_item, 'product_listing');
+              $search_hover_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
             }
 
             if ($this->productDisplaySettings->get('image_thumb_gallery')) {
-              $thumbnails[] = $this->skuImagesHelper->getSkuImage($media_item, 'product_listing', 'product_listing');
+              $thumbnails[] = $this->skuImagesHelper->getSkuImage(
+                $media_item,
+                SkuImagesHelper::STYLE_PRODUCT_LISTING,
+                SkuImagesHelper::STYLE_PRODUCT_LISTING);
             }
           }
         }
@@ -926,9 +929,9 @@ class SkuImagesManager {
    */
   protected function getCloudZoomDefaultSettings() {
     return [
-      'slide_style' => 'product_zoom_medium_606x504',
-      'zoom_style' => 'product_zoom_large_800x800',
-      'thumb_style' => 'pdp_gallery_thumbnail',
+      'slide_style' => SkuImagesHelper::STYLE_PRODUCT_SLIDE_STYLE,
+      'zoom_style' => SkuImagesHelper::STYLE_PRODUCT_ZOOM_STYLE,
+      'thumb_style' => SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE,
     ];
   }
 
@@ -1097,10 +1100,13 @@ class SkuImagesManager {
 
       $duplicates[$value] = 1;
       if (empty($plp_main_image)) {
-        $plp_main_image = $this->skuImagesHelper->getSkuImage($product_image, 'product_listing');
+        $plp_main_image = $this->skuImagesHelper->getSkuImage($product_image, SkuImagesHelper::STYLE_PRODUCT_LISTING);
       }
 
-      $variants_image[$child->id()][] = $this->skuImagesHelper->getSkuImage($product_image, 'product_listing', 'product_listing');
+      $variants_image[$child->id()][] = $this->skuImagesHelper->getSkuImage(
+        $product_image,
+        SkuImagesHelper::STYLE_PRODUCT_LISTING,
+        SkuImagesHelper::STYLE_PRODUCT_LISTING);
     }
 
     return [

@@ -33,6 +33,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\ConditionGroup;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -685,7 +686,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if (!empty($sku_media)) {
-          $build['image'] = $skuImagesHelper->getSkuImage($sku_media, 'product_teaser');
+          $build['image'] = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
         }
 
         // Do not render VAT text along with price for teaser.
@@ -736,7 +737,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
           if (!empty($sku_media)) {
-            $build['image'] = $skuImagesHelper->getSkuImage($sku_media,'product_teaser');
+            $build['image'] = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_TEASER);
           }
         }
       }
@@ -784,7 +785,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           }
         }
 
-        $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
+        $image = alshaya_acm_get_product_display_image($sku_entity, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
         // Prepare image style url.
         if (!empty($image['#uri'])) {
           $scheme = StreamWrapperManager::getScheme($image['#uri']);
@@ -967,7 +968,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     if ($sku_media) {
       /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
       $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
-      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,'192x168');
+      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,\Drupal\alshaya_acm_product\SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT);
     }
   }
 }
@@ -987,7 +988,11 @@ function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterfa
         if (!empty($default_image)) {
           /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
           $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-          $default_sku_image = $skuManager->getSkuImage($default_image->getFileUri(), $sku->label(), '192x168');
+          $default_sku_image = $skuManager->getSkuImage(
+            $default_image->getFileUri(),
+            $sku->label(),
+            SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT
+          );
           $default_sku_image['#attributes']['class'][] = 'product-default-image';
           $build['image'] = $default_sku_image;
         }
@@ -2083,7 +2088,7 @@ function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterfac
 
   // Get variant image for matchback mobile display.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-  $image = alshaya_acm_get_product_display_image($child, 'product_teaser');
+  $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_TEASER);
 
   // Prepare image style url.
   if (!empty($image['#uri'])) {

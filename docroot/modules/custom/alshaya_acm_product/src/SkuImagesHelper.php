@@ -10,6 +10,15 @@ use Drupal\image\Entity\ImageStyle;
  * @package Drupal\alshaya_acm_product
  */
 class SkuImagesHelper {
+  // Image Styles.
+  const STYLE_PRODUCT_FREE_GIFT = '192x168';
+  const STYLE_PRODUCT_LISTING = 'product_listing';
+  const STYLE_PRODUCT_SLIDE_STYLE = 'product_zoom_medium_606x504';
+  const STYLE_PRODUCT_ZOOM_STYLE = 'product_zoom_large_800x800';
+  const STYLE_PRODUCT_THUMBNAIL_STYLE = 'pdp_gallery_thumbnail';
+  const STYLE_PRODUCT_TEASER = 'product_teaser';
+  const STYLE_CART_THUMBNAIL = 'cart_thumbnail';
+  const STYLE_PRODUCT_MY_ACC = '291x288';
 
   /**
    * Get Image tag with optional rel.
