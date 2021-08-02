@@ -113,7 +113,8 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
       'gtm-brand',
       'gtm-dimension4',
       'gtm-price',
-      'gtm-dimension3'
+      'gtm-dimension3',
+      'gtm-category',
     ],
   );
 

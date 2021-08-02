@@ -424,10 +424,6 @@ exports.computePhFilters = function (input, filter) {
         value = input.price.maximalPrice.amount.value;
         break;
 
-      case 'gtm-brand':
-        value = input.gtm_attributes.brand;
-        break;
-
     default:
       console.log(`Unknown JS filter ${filter}.`)
   }

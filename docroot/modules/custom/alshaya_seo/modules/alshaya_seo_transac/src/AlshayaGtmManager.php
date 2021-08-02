@@ -408,7 +408,9 @@ class AlshayaGtmManager {
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
-    // SKU specific attributes will be added in front end.
+
+    // Product specific attributes will be added in front end.
+    $attributes['gtm-category'] = '#rcs.product.gtm_attributes.category#';
     $attributes['gtm-name'] = '#rcs.product.name#';
     $attributes['gtm-product-sku'] = '#rcs.product._self|sku#';
     $attributes['gtm-product-sku-class-identifier'] = '#rcs.product._self|sku-clean#';
