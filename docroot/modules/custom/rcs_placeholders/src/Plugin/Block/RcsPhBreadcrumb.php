@@ -3,8 +3,8 @@
 namespace Drupal\rcs_placeholders\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
+use Drupal\Core\Breadcrumb\BreadcrumbManager;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,13 +20,39 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * Breadcrumb manager object.
+   *
+   * @var \Drupal\Core\Breadcrumb\BreadcrumbManager
+   */
+  protected $breadcrumbManager;
+
+  /**
+   * Current route object.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $currentRoute;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, BreadcrumbManager $breadcrumb_manager, RouteMatchInterface $current_route) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->breadcrumbManager = $breadcrumb_manager;
+    $this->currentRoute = $current_route;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition);
+      $plugin_definition,
+      $container->get('breadcrumb'),
+      $container->get('current_route_match')
+    );
   }
 
   /**
@@ -45,18 +71,7 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
 
     $build['wrapper']['content'] = [
       '#theme' => 'breadcrumb',
-      '#links' => [
-        // Adding a default Home link.
-        // @see alshaya_victoria_secret_preprocess_breadcrumb();
-        Link::fromTextAndUrl(
-          $this->t('Home'),
-          Url::fromUserInput('/')
-        ),
-        Link::fromTextAndUrl(
-          '#rcs.categories.breadcrumbs.category_name#',
-          Url::fromUserInput('#rcs.categories.breadcrumbs.category_url_path#')
-        ),
-      ],
+      '#links' => $this->breadcrumbManager->build($this->currentRoute)->getLinks(),
     ];
 
     return $build;

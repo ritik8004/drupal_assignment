@@ -3,3 +3,8 @@ services:
     class: Drupal\alshaya_rcs\Services\AlshayaRcsFeatureStatusHelper
     arguments:
       - '@config.factory'
+  alshaya_rcs_plp.breadcrumb:
+    class: Drupal\alshaya_rcs\Breadcrumb\AlshayaRcsPLPBreadcrumbBuilder
+    arguments: ['@entity.repository', '@entity_type.manager']
+    tags:
+      - { name: breadcrumb_builder, priority: 10001 }
