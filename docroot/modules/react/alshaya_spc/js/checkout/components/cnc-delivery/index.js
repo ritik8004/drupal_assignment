@@ -11,6 +11,14 @@ import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
+import getStringMessage from '../../../utilities/strings';
+import {
+  collectionPointsEnabled,
+  isCollectionPoint,
+  getPickUpPointTitle,
+  getCncDeliveryTimePrefix,
+} from '../../../utilities/cnc_util';
+import ConditionalView from '../../../common/components/conditional-view';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;
@@ -122,22 +130,54 @@ class ClicknCollectDeiveryInfo extends React.Component {
     const {
       cart: {
         cart: {
-          shipping: { address: shippingAddress, storeInfo: { name, address } },
+          shipping: {
+            address: shippingAddress, storeInfo: {
+              name, address, open_hours_group: openHoursGroup, delivery_time: deliveryTime,
+            },
+          },
         },
       },
     } = this.props;
 
     const { showSelectedStore } = this.state;
 
+    const hoursArrayList = [];
+    let hoursArray = [];
+    if (openHoursGroup) {
+      Object.keys(openHoursGroup).forEach((data) => {
+        hoursArrayList.push(`${data}(${openHoursGroup[data]})`);
+      });
+
+      hoursArray = hoursArrayList.map((data) => (
+        <div className="store-open-hours">
+          {data}
+        </div>
+      ));
+    }
+
+    const { selectedStore } = this.context;
     return (
       <WithModal modalStatusKey="cncDelivery">
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
           <div className="delivery-information-preview">
             <div className="spc-delivery-store-info">
+              <ConditionalView condition={collectionPointsEnabled()}>
+                <span className={`${isCollectionPoint(selectedStore) ? 'collection-point' : 'store'}-icon`} />
+                <span className="pickup-point-title">{getPickUpPointTitle(selectedStore)}</span>
+              </ConditionalView>
               <div className="store-name">{name}</div>
               <div className="store-address">
                 {parse(address)}
               </div>
+              <ConditionalView condition={collectionPointsEnabled()}>
+                <div className="store-open-hours-list">
+                  {hoursArray}
+                </div>
+                <div className="store-delivery-time">
+                  <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
+                  <span className="delivery--time--value">{deliveryTime}</span>
+                </div>
+              </ConditionalView>
               <div
                 className="spc-change-address-link"
                 onClick={() => this.openModal(false, triggerOpenModal)}
