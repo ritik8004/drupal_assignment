@@ -24,7 +24,12 @@ const logger = {
       return;
     }
 
-    console.log(level, Drupal.formatString(message, context));
+    // Avoid console log in npm tests.
+    if (typeof drupalSettings.jest !== 'undefined') {
+      return;
+    }
+
+    console.debug(level, Drupal.formatString(message, context));
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
