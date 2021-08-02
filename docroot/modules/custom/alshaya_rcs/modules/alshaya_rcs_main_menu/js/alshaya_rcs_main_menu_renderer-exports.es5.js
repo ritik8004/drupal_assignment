@@ -228,7 +228,7 @@ const navRcsReplacePh = function (phElement, entity) {
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
   // replacement.
-  rcsPhReplaceEntityPh(phElement[0].outerHTML, 'category', entity, langcode)
+  rcsPhReplaceEntityPh(phElement[0].outerHTML, 'menuItem', entity, langcode)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];

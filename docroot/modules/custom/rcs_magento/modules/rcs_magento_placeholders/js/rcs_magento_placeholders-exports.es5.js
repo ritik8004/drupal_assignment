@@ -198,6 +198,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.languagePrefix[drupalSettings.path.currentLanguage]]);
 
       request.data = JSON.stringify({
         query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {

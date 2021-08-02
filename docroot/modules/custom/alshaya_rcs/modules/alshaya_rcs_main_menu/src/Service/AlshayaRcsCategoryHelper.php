@@ -81,18 +81,26 @@ class AlshayaRcsCategoryHelper {
    *   Placeholder term's data.
    */
   public function getRcsCategoryEnrichmentData($langcode, $context) {
+    // Get the placeholder term from config.
+    $config = $this->configFactory->get('rcs_placeholders.settings');
+    $entity_id = $config->get('category.placeholder_tid');
 
+    // Get all the terms from rcs_category taxonomy.
     $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
     $query->condition('vid', self::VOCABULARY_ID);
+    $query->condition('tid', $entity_id, '<>');
     $terms = $query->execute();
 
+    // Return if none available.
     if (empty($terms)) {
       return NULL;
     }
+
     $data = [];
     foreach ($terms as $term_id) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
 
+      // Skip if category slug field is empty.
       if (empty($term->field_category_slug->value)) {
         continue;
       }
@@ -120,6 +128,7 @@ class AlshayaRcsCategoryHelper {
         $record['highlight_paragraphs'] = $this->getHighlightParagraph($main_menu_highlights, $langcode);
       }
 
+      // Add term object in array for cache dependency.
       $this->cacheableTerms[] = $term;
 
       $data[$term->field_category_slug->value] = $record;
