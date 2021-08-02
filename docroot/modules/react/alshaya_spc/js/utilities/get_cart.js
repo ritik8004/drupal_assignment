@@ -21,7 +21,7 @@ export const cartAvailableInStorage = () => {
       return 'empty';
     }
 
-    return cartData.cart.cart_id;
+    return null;
   }
 
   return cartData.cart;
