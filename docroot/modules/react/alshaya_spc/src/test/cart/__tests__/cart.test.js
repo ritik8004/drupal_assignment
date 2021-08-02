@@ -1,3 +1,5 @@
+import StaticStorage from "../../../../js/backend/v2/staticStorage";
+
 jest.mock('axios');
 import axios from 'axios';
 import * as cart from '../../../../js/backend/v2/cart';
@@ -11,6 +13,7 @@ describe('Cart', () => {
   });
 
   afterEach(() => {
+    StaticStorage.clear();
     jest.clearAllMocks();
   });
 
@@ -95,7 +98,6 @@ describe('Cart', () => {
         data: {
           error: true,
           error_code: 404,
-          message: 'Not found',
           error_message: 'Not found',
         },
         status: 404,
@@ -153,7 +155,6 @@ describe('Cart', () => {
           code: 9010,
           error_code: 9010,
           error_message: 'Invalid cart data',
-          message: 'Invalid cart data',
         },
         status: 400,
       });
@@ -168,7 +169,6 @@ describe('Cart', () => {
           error: true,
           error_code: 500,
           error_message: 'Something is wrong',
-          message: 'Something is wrong',
         },
         status: 405,
       });
@@ -177,14 +177,6 @@ describe('Cart', () => {
   });
 
   describe('Test window.commerceBackend.createCart()', () => {
-    it('Test with numeric value and response status 200', async () => {
-      axios.mockResolvedValue({ data: 1234, status: 200 });
-      const result = await window.commerceBackend.createCart();
-      expect(axios).toHaveBeenCalled();
-      expect(result).toEqual(1234);
-      expect(getStorageInfo('cart_id')).toEqual(1234);
-    });
-
     it('Test with string value and response status 200', async () => {
       axios.mockResolvedValue({ data: 'ZYJ47012050MHZ', status: 200 });
       const result = await window.commerceBackend.createCart();
