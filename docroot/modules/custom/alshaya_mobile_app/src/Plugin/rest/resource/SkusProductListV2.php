@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 /**
- * Provides a resource to get attributes for SKU's list.
+ * Provides a resource to get details for SKU's list.
  *
  * @RestResource(
  *   id = "skus_product_list_v2",
