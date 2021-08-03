@@ -1,7 +1,6 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import getStringMessage from '../../../utilities/strings';
-import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 
 const OrderSummaryItem = (props) => {
   const {
@@ -51,7 +50,9 @@ const OrderSummaryItem = (props) => {
             {address}
             <span className="spc-cnc-address-phone">{phone}</span>
           </span>
-          {(collectionPointsEnabled() === true)
+          {/* We assume that if pickUpPointTitle is present in MDC API response then
+            collection point feature is enabled.  */}
+          {(pickUpPointTitle !== undefined)
             && (
               <div className="spc-cnc-store-actions-pudo-msg">
                 {getStringMessage('cnc_valid_govtid_message')}
