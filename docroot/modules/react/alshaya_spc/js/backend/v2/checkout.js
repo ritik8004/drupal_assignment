@@ -1755,7 +1755,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', {
       '@data': JSON.stringify(data),
       '@cart_id': cartId,
-      '@error_message': response.message,
+      '@error_message': response.error_message,
     });
 
     return { data: response };
