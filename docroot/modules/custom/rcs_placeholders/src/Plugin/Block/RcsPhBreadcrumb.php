@@ -5,6 +5,7 @@ namespace Drupal\rcs_placeholders\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Breadcrumb\BreadcrumbManager;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -75,6 +76,16 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
     ];
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    // Vary based on the route.
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'route',
+    ]);
   }
 
 }

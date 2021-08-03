@@ -36,6 +36,12 @@ class AlshayaRcsPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
 
+    // Get the current page's taxonomy term from route params.
+    $term = $route_match->getParameter('taxonomy_term');
+
+    // Add the current page term to cache dependency.
+    $breadcrumb->addCacheableDependency($term);
+
     // Add the home page link. We need it always.
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
 
