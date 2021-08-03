@@ -136,6 +136,7 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
             case 'textarea':
               document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': title });
               document.getElementById(`${id}-error`).classList.add('error');
+              document.getElementById(id).classList.add('error');
               isError = true;
               break;
             case 'select':
