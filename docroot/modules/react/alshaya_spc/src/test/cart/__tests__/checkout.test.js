@@ -1,3 +1,5 @@
+import StaticStorage from "../../../../js/backend/v2/staticStorage";
+
 jest.mock('axios');
 import _cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';
@@ -24,6 +26,7 @@ describe('Checkout', () => {
     });
 
     afterEach(() => {
+      StaticStorage.clear();
       // Clear and reset any mocks set by other tests.
       jest.clearAllMocks();
       jest.resetAllMocks();
@@ -311,7 +314,6 @@ describe('Checkout', () => {
               'Content-Type': 'application/json',
             },
             method: 'POST',
-            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
             url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
           },
         );
@@ -655,7 +657,6 @@ describe('Checkout', () => {
             },
             method: 'POST',
             url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
-            url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
           },
         );
       });
@@ -814,52 +815,6 @@ describe('Checkout', () => {
       });
     });
 
-    describe('Test getPaymentMethods()', () => {
-      const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
-
-      it('With Shipping type for getPaymentMethods', async () => {
-        window.commerceBackend.setRawCartDataInStorage(null);
-
-        axios
-          // Mock for getCart.
-          .mockResolvedValueOnce({ data: cartData, status: 200 })
-          // Mock for getPaymentMethods().
-          .mockResolvedValueOnce({ data: paymentMethods, status: 200 });
-
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        const result = await getPaymentMethods();
-
-        expect(axios).toHaveBeenCalled();
-        expect(result.length).toEqual(4);
-        expect(result[0].code).toEqual('checkout_com_upapi_vault');
-        expect(result[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
-        expect(result[3].code).toEqual('cashondelivery');
-        expect(result[3].title).toEqual('Cash On Delivery');
-      });
-
-      it('With null value when shipping method is not provided', async () => {
-        window.commerceBackend.setRawCartDataInStorage(null);
-        cartData.shipping = {
-          method: {
-            method: {},
-          },
-        };
-
-        axios
-          .mockResolvedValueOnce({ data: cartData, status: 200 })
-          .mockResolvedValueOnce({ data: {}, status: 200 });
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        const result = await getPaymentMethods();
-        expect(result).toEqual({});
-      });
-    });
-
     describe('Test getHomeDeliveryShippingMethods()', () => {
       const getHomeDeliveryShippingMethods = utilsRewire.__get__('getHomeDeliveryShippingMethods');
 
@@ -975,7 +930,7 @@ describe('Checkout', () => {
       });
 
       it('With no empty fields', async () => {
-        window.drupalSettings.cart.address_fields.default.kw = [ 'area' ];
+        window.drupalSettings.cart.addressFields.default.kw = [ 'area' ];
         const response = await getCart();
         let result = isAddressExtensionAttributesValid(response.data);
         expect(result).toEqual(true);
@@ -1019,7 +974,7 @@ describe('Checkout', () => {
       });
 
       it('With shipping method and address', async () => {
-        window.drupalSettings.cart.address_fields.default.kw = [ 'area' ];
+        window.drupalSettings.cart.addressFields.default.kw = [ 'area' ];
         const data = { ...cartData };
         axios.mockResolvedValue({ data: data, status: 200 });
         let result = await validateBeforePaymentFinalise();

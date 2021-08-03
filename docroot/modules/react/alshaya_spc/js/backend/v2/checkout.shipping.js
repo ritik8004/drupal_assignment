@@ -115,10 +115,11 @@ const formatShippingEstimatesAddress = (address) => {
  */
 const getHomeDeliveryShippingMethods = async (data) => {
   if (_isEmpty(data.country_id)) {
-    const message = `Error in getting shipping methods for HD as country id not available. Data: ${JSON.stringify(data)}`;
-    logger.error(message);
+    logger.error('Error in getting shipping methods for HD as country id not available. Data: @data', {
+      '@data': JSON.stringify(data),
+    });
 
-    return getFormattedError(600, message);
+    return getFormattedError(600, 'Error in getting shipping methods');
   }
 
   // Prepare address data for api call.
@@ -137,8 +138,8 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
     // Check for errors.
     if (!_isUndefined(response.data.error) && response.data.error) {
-      logger.error('Error in getting shipping methods for HD. Data: @data', {
-        '@data': JSON.stringify(response.data),
+      logger.error('Error in getting shipping methods for HD. Error: @error', {
+        '@error': response.data.error_message,
       });
 
       return getFormattedError(response.data.error_code, response.data.error_message);

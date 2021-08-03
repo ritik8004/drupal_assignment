@@ -102,9 +102,9 @@ const triggerStockRefresh = (data) => callDrupalApi(
     },
   },
 ).catch((error) => {
-  logger.error(
-    `Error occurred while triggering checkout event refresh stock. Message: ${error.message}`,
-  );
+  logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
+    '@message': error.message,
+  });
 });
 
 /**
@@ -116,6 +116,10 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 
 /**
  * Returns the processed cart data.
+ *
+ * @todo check why getCart in V1 and V2 are different
+ * In V1 it does API call all the time.
+ * In V2 it loads from static cache if available.
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
@@ -376,7 +380,9 @@ window.commerceBackend.createCart = async () => {
   const errorMessage = (!_isUndefined(response.data.error_message))
     ? response.data.error_message
     : '';
-  logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
+  logger.warning('Error while creating cart on MDC. Error: @error', {
+    '@error': errorMessage,
+  });
   return null;
 };
 
@@ -431,7 +437,11 @@ window.commerceBackend.addFreeGift = async (data) => {
   let cart = null;
 
   if (_isEmpty(sku) || _isEmpty(promoCode) || _isEmpty(langCode)) {
-    logger.error(`Missing request header parameters. SKU: ${sku}, Promo: ${promoCode}, Langcode: ${langCode}`, {});
+    logger.error('Missing request header parameters. SKU: @sku, Promo: @promoCode, Langcode: @langCode', {
+      '@sku': sku || '',
+      '@promoCode': promoCode || '',
+      '@langCode': langCode || '',
+    });
     cart = await window.commerceBackend.getCart();
   } else {
     // Apply promo code.
@@ -444,13 +454,13 @@ window.commerceBackend.addFreeGift = async (data) => {
     if (_isEmpty(cart.data)
       || (!_isUndefined(cart.data.error) && cart.data.error)
     ) {
-      logger.error('Cart is empty. Cart: @cart', {
+      logger.warning('Cart is empty. Cart: @cart', {
         '@cart': JSON.stringify(cart),
       });
     } else if (_isUndefined(cart.data.appliedRules)
       || _isEmpty(cart.data.appliedRules)
     ) {
-      logger.error('Invalid promo code. Cart: @cart, Promo: @promoCode', {
+      logger.warning('Invalid promo code. Cart: @cart, Promo: @promoCode', {
         '@cart': JSON.stringify(cart.data),
         '@promoCode': promoCode,
       });

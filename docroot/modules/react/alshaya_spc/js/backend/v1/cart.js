@@ -17,6 +17,10 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 /**
  * Calls the cart get API.
  *
+ * @todo check why getCart in V1 and V2 are different
+ * In V1 it does API call all the time.
+ * In V2 it loads from static cache if available.
+ *
  * @returns {Promise}
  *   A promise object.
  */
