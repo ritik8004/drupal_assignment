@@ -688,7 +688,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if (!empty($sku_media)) {
           $image = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
           if (!empty($image)) {
-            $build['images'] = $image;
+            $build['image'] = $image;
           }
         }
 
