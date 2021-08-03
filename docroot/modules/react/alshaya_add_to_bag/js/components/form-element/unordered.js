@@ -28,7 +28,8 @@ const UnorderedList = (props) => {
       ? option.label[groupData.defaultGroup]
       : option.label;
 
-    if (!allowedValues.includes(option.value)
+    if (allowedValues.length > 0
+      && !allowedValues.includes(option.value)
       && !allowedValues.includes(parseInt(option.value, 10))) {
       classes.push(disabledClass);
     }
