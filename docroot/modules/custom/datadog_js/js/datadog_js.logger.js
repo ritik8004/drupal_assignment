@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function (Drupal) {
   'use strict';
 
   Drupal.logViaDataDog = function (severity, message, context) {
@@ -43,4 +43,4 @@
     return false;
   };
 
-})(jQuery, Drupal);
+})(Drupal);
