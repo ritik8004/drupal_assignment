@@ -183,6 +183,13 @@ class SkusProductList extends ResourceBase {
    */
   public function get() {
     $sku_list = $this->requestStack->query->get('skus');
+    return $this->getSkuListData($sku_list);
+  }
+
+  /**
+   * Helper function to get data for sku list.
+   */
+  protected function getSkuListData($sku_list) {
     if (empty($sku_list)) {
       $this->logger->error('No Products are selected hence cannot find corresponding Sku\'s');
       return $this->mobileAppUtility->sendStatusResponse($this->t('No Products are selected hence cannot find corresponding SKUs'));
