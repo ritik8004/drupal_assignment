@@ -5,14 +5,10 @@
     padding: 2.875rem 0;
 
     @include breakpoint($tablet) {
-      margin-#{$left}: 50%;
-      width: calc(100vw - 1.125rem); /* for reducing scroll bar width on some browsers */
-      transform: translateX(-50%);
-
-      html[lang=ar] & {
-        transform: translateX(50%);
-      }
-
+      #{$left}: 50%;
+      margin-#{$left}: -50vw;
+      margin-#{$right}: -50vw;
+      width: 100vw;
       margin-top: 1rem;
     }
 
