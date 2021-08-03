@@ -234,6 +234,11 @@ class ProductExportCommands extends DrushCommands {
     ];
 
     $data = [];
+    $current_language = NULL;
+    /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
+    $language_manager = \Drupal::languageManager();
+    $current_language = $language_manager->getConfigOverrideLanguage();
+    $language_manager->setConfigOverrideLanguage($node->language());
 
     foreach ($fields as $field) {
       switch ($field) {
@@ -251,6 +256,9 @@ class ProductExportCommands extends DrushCommands {
           break;
       }
     }
+
+    // Revert the override for the language change.
+    $language_manager->setConfigOverrideLanguage($current_language);
 
     return $data;
   }
