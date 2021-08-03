@@ -17,6 +17,15 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 
 /**
+ * Implements hook_alshaya_stores_finder_store_update_alter().
+ */
+function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $store) {
+  if (isset($store['pudo_service'])) {
+    $node->get('field_store_type')->setValue($store['pudo_service']);
+  }
+}
+
+/**
  * Implements hook_alshaya_spc_checkout_build_alter().
  * Add cnc collection point feature related data.
  */

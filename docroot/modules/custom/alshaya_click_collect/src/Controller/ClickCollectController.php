@@ -355,6 +355,19 @@ class ClickCollectController extends ControllerBase {
       return [];
     }
 
+    // If collection point feature is enabled, check and remove
+    // collection points from store list.
+    $cnc_collection_points_enabled = $this->configFactory->get('alshaya_spc.collection_points');
+
+    if ($cnc_collection_points_enabled) {
+      foreach ($stores as $index => $store) {
+        if ($store['pudo_available'] === TRUE) {
+          unset($stores[$index]);
+          continue;
+        }
+      }
+    }
+
     // Start sequence from 1.
     $index = 1;
 
