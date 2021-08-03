@@ -223,6 +223,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
 
   clonePhEle.find('ul > div:first-child').append(levelHtml);
   // Override the path if exists.
+  // @todo: Need to handle the super category case.
   if (typeof enrichedDataObj.highlight_paragraphs !== 'undefined'
     && level === 1) {
     clonePhEle.find('ul div.term-image__wrapper').append(enrichedDataObj.highlight_paragraphs.markup);
