@@ -14,7 +14,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -708,13 +707,12 @@ class SkuInfoHelper {
    */
   public function getCartImage(SKUInterface $sku) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
+    $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
     // Prepare image style url.
     if (!empty($image['#uri'])) {
-      $scheme = StreamWrapperManager::getScheme($image['#uri']);
-      $image = (strstr($scheme, 'http'))
-        ? $image['#uri']
-        : file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+      $image = (strstr($image['#uri'], 'public://'))
+        ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
+        : $image['#uri'];
     }
 
     return is_string($image) ? $image : '';

@@ -26,6 +26,9 @@ class SkuImagesManager {
   const BASE_IMAGE_ROLE = 'image';
   const SWATCH_IMAGE_ROLE = 'swatch_image';
 
+  // Cache key used for product media.
+  const PRODUCT_MEDIA_CACHE_KEY = 'product_media';
+
   /**
    * Module Handler service object.
    *
@@ -182,7 +185,7 @@ class SkuImagesManager {
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
     $cache_key = implode(':', [
-      'product_media',
+      self::PRODUCT_MEDIA_CACHE_KEY,
       (int) $check_parent_child,
       $context,
     ]);
@@ -739,17 +742,27 @@ class SkuImagesManager {
           // page and PLP.
           if (!empty($media_item)) {
             if (empty($search_main_image)) {
-              $search_main_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+              $main_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+              if (!empty($main_image)) {
+                $search_main_image = $main_image;
+              }
             }
             elseif ($this->productDisplaySettings->get('gallery_show_hover_image')) {
-              $search_hover_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+              $hover_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+              if (!empty($hover_image)) {
+                $search_hover_image = $hover_image;
+              }
             }
 
             if ($this->productDisplaySettings->get('image_thumb_gallery')) {
-              $thumbnails[] = $this->skuImagesHelper->getSkuImage(
-                $media_item,
-                SkuImagesHelper::STYLE_PRODUCT_LISTING,
-                SkuImagesHelper::STYLE_PRODUCT_LISTING);
+              $thumbnail = $this->skuImagesHelper->getSkuImage(
+              $media_item,
+              SkuImagesHelper::STYLE_PRODUCT_LISTING,
+              SkuImagesHelper::STYLE_PRODUCT_LISTING
+              );
+              if (!empty($thumbnail)) {
+                $thumbnails[] = $thumbnail;
+              }
             }
           }
         }
@@ -929,9 +942,9 @@ class SkuImagesManager {
    */
   protected function getCloudZoomDefaultSettings() {
     return [
-      'slide_style' => SkuImagesHelper::STYLE_PRODUCT_SLIDE_STYLE,
-      'zoom_style' => SkuImagesHelper::STYLE_PRODUCT_ZOOM_STYLE,
-      'thumb_style' => SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE,
+      'slide_style' => SkuImagesHelper::STYLE_PRODUCT_SLIDE,
+      'zoom_style' => SkuImagesHelper::STYLE_PRODUCT_ZOOM,
+      'thumb_style' => SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL,
     ];
   }
 
@@ -1100,13 +1113,20 @@ class SkuImagesManager {
 
       $duplicates[$value] = 1;
       if (empty($plp_main_image)) {
-        $plp_main_image = $this->skuImagesHelper->getSkuImage($product_image, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+        $plp_image = $this->skuImagesHelper->getSkuImage($product_image, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+        if (!empty($plp_image)) {
+          $plp_main_image = $plp_image;
+        }
       }
 
-      $variants_image[$child->id()][] = $this->skuImagesHelper->getSkuImage(
+      $variant_image = $this->skuImagesHelper->getSkuImage(
         $product_image,
         SkuImagesHelper::STYLE_PRODUCT_LISTING,
-        SkuImagesHelper::STYLE_PRODUCT_LISTING);
+        SkuImagesHelper::STYLE_PRODUCT_LISTING
+      );
+      if (!empty($variant_image)) {
+        $variants_image[$child->id()][] = $variant_image;
+      }
     }
 
     return [

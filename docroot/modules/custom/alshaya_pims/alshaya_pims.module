@@ -1,8 +1,0 @@
-<?php
-
-use Drupal\image\Entity\ImageStyle;
-
-/**
- * @file
- * Module file for alshaya_pims.
- */

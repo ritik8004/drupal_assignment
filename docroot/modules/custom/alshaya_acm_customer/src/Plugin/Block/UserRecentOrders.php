@@ -241,7 +241,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               // Load the first image.
               $order['items'][$key]['image'] = alshaya_acm_get_product_display_image(
                 $item['sku'],
-                SkuImagesHelper::STYLE_PRODUCT_MY_ACC,
+                SkuImagesHelper::STYLE_PRODUCT_ORDER_SUMMARY,
                 'order_detail'
               );
 

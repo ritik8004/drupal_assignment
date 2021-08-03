@@ -1,7 +1,0 @@
-alshaya_pims.settings:
-  type: config_object
-  label: 'Alshaya PIMS settings'
-  mapping:
-    alshaya_pims:
-      type: boolean
-      label: 'Enable or disable PIMS images'

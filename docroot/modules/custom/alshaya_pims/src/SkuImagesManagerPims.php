@@ -20,13 +20,15 @@ use Drupal\Core\Cache\CacheBackendInterface;
  * @package Drupal\alshaya_acm_product
  */
 class SkuImagesManagerPims extends SkuImagesManager {
+  // Cache key used for product media.
+  const PRODUCT_MEDIA_CACHE_KEY = 'product_media_pims';
 
   /**
-   * Sku images manager.
+   * Inner service Sku images manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuImagesManager
    */
-  protected $imagesManager;
+  protected $innerService;
 
   /**
    * SkuImagesManager constructor.
@@ -59,7 +61,7 @@ class SkuImagesManagerPims extends SkuImagesManager {
                               CacheBackendInterface $cache,
                               ProductCacheManager $product_cache_manager,
                               SkuImagesHelper $sku_images_helper) {
-    $this->imagesManager = $sku_image_manager;
+    $this->innerService = $sku_image_manager;
     parent::__construct($module_handler,
       $config_factory,
       $entity_type_manager,
@@ -90,7 +92,7 @@ class SkuImagesManagerPims extends SkuImagesManager {
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
     $cache_key = implode(':', [
-      'product_media_pims',
+      self::PRODUCT_MEDIA_CACHE_KEY,
       (int) $check_parent_child,
       $context,
     ]);
@@ -101,15 +103,21 @@ class SkuImagesManagerPims extends SkuImagesManager {
       return $cache;
     }
 
-    $data = $this->getGalleryMedia($sku);
+    try {
+      $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
+      $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? NULL;
 
-    foreach ($data['media_items']['images'] ?? [] as $key => $item) {
-      if (empty($item['label'])) {
-        $data['media_items']['images'][$key]['label'] = (string) $sku->label();
+      foreach ($data['media_items']['images'] ?? [] as $key => $item) {
+        if (empty($item['label'])) {
+          $data['media_items']['images'][$key]['label'] = (string) $sku->label();
+        }
       }
-    }
 
-    $this->productCacheManager->set($sku, $cache_key, $data);
+      $this->productCacheManager->set($sku, $cache_key, $data);
+    }
+    catch (\Exception $e) {
+      $data = [];
+    }
 
     return $data;
   }
@@ -138,13 +146,7 @@ class SkuImagesManagerPims extends SkuImagesManager {
       return $static[$static_id];
     }
 
-    $media = unserialize($sku->get('media')->getString());
-
-    // Allow other modules to alter media.
-    // @todo implement hook for hnm.
-    $this->moduleHandler->alter(
-      'alshaya_pims_media_items', $media, $sku
-    );
+    $media = $this->getSkuMediaItems($sku);
 
     foreach ($media ?? [] as $index => $media_item) {
       if (!isset($media_item['media_type'])) {
@@ -321,16 +323,6 @@ class SkuImagesManagerPims extends SkuImagesManager {
   }
 
   /**
-   * Get PIMS setting.
-   *
-   * @return bool|null
-   *   Pims settings true or false.
-   */
-  public function getPimsSettings() {
-    return $this->configFactory->get('alshaya_pims.settings')->get('alshaya_pims');
-  }
-
-  /**
    * Get Swatch Image url for PDP.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -386,6 +378,16 @@ class SkuImagesManagerPims extends SkuImagesManager {
     $this->moduleHandler->alter(
       'alshaya_acm_product_media_items', $media, $sku
     );
+
+    foreach ($media ?? [] as $index => $media_item) {
+      $media_item = !empty($media_item) ? array_filter($media_item) : [];
+
+      if (isset($media_item['file'])) {
+        $media_item['drupal_uri'] = $media_item['file'];
+      }
+
+      $media[$index] = $media_item;
+    }
 
     $static[$static_id] = $media;
     return $media;

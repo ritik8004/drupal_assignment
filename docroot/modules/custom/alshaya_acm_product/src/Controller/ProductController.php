@@ -396,7 +396,7 @@ class ProductController extends ControllerBase {
         $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
         if (!empty($sku_media)) {
-          $image = $this->skuImagesHelper->getImageStyleUrl($sku_media, SkuImagesHelper::STYLE_PRODUCT_SLIDE_STYLE);
+          $image = $this->skuImagesHelper->getImageStyleUrl($sku_media, SkuImagesHelper::STYLE_PRODUCT_SLIDE);
         }
         $priceHelper = _alshaya_acm_product_get_price_helper();
         $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);

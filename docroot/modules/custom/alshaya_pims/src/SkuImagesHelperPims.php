@@ -55,7 +55,7 @@ class SkuImagesHelperPims extends SkuImagesHelper {
     ];
 
     if ($rel_image_style) {
-      $image['#attributes']['rel'] = $image['#uri'];
+      $image['#attributes']['rel'] = $this->getImageStyleUrl($media, $rel_image_style);
     }
 
     return $image;

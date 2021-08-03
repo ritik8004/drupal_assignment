@@ -403,7 +403,7 @@ class ProductResource extends ResourceBase {
     if ($current_request->query->get('pdp') == 'magazinev2') {
       // Set cart image.
       $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
+      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
       // Prepare image style url.
       if (!empty($image['#uri'])) {
         $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
@@ -431,7 +431,7 @@ class ProductResource extends ResourceBase {
 
             // Set cart image.
             $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-            $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL_STYLE, 'cart');
+            $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
             // Prepare image style url.
             if (!empty($image['#uri'])) {
               $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
