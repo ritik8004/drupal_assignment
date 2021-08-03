@@ -13,10 +13,11 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     let enrichmentData = [];
     jQuery.ajax({
-      url: Drupal.url('rest/v2/rcs_categories/all'),
-      async: false
-    }).done(function (data) {
-      enrichmentData = data;
+      url: Drupal.url('v2/categories'),
+      async: false,
+      success: function (data) {
+        enrichmentData = data;
+      }
     });
 
     // Get the L1 menu list element.
@@ -119,6 +120,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
     }
 
     // Override the path if exists.
+    // @todo: Need to handle the super category case.
     if (typeof enrichedDataObj.path !== 'undefined') {
       levelObj.url_path = enrichedDataObj.path;
     }
@@ -237,6 +239,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
  */
 const navRcsReplacePh = function (phElement, entity) {
   const langcode = drupalSettings.path.currentLanguage;
+  const attributes = drupalSettings.rcsPhSettings.placeholderAttributes;
 
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
@@ -261,7 +264,7 @@ const navRcsReplacePh = function (phElement, entity) {
       // attribute values. We are now fetching all the elements
       // which have placeholders in the attributes and we
       // apply the replacement.
-      for (const attribute of ['href', 'src']) {
+      for (const attribute of attributes) {
         $(`[${attribute} *= '${fieldPh}']`, phElement)
           .each(function eachEntityPhAttributeReplace() {
             $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));

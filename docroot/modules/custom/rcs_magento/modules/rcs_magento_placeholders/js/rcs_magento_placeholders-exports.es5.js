@@ -1,6 +1,7 @@
 // @codingStandardsIgnoreFile
 exports.getEntity = async function getEntity(langcode) {
-  if (typeof drupalSettings.rcsPage === 'undefined') {
+  if (typeof drupalSettings.rcsPage === 'undefined'
+    || typeof drupalSettings.alshayaRcs.commerceBackend.store === 'undefined') {
     return null;
   }
 
@@ -18,7 +19,7 @@ exports.getEntity = async function getEntity(langcode) {
         request.uri += "graphql";
         request.method = "POST",
         request.headers.push(["Content-Type", "application/json"]);
-        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.languagePrefix[drupalSettings.path.currentLanguage]]);
+        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
         const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
         // @todo: Make a config for this query and pass it from the backend.
@@ -190,7 +191,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
     case 'navigation_menu':
       // Early return if the root category is undefined.
-      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
+      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined'
+        || typeof drupalSettings.alshayaRcs.commerceBackend.store === 'undefined') {
         return null;
       }
 
@@ -198,7 +200,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
-      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.languagePrefix[drupalSettings.path.currentLanguage]]);
+      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
       request.data = JSON.stringify({
         query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
@@ -210,7 +212,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
       if (response !== null) {
-        // @todo: Need to verify the structure with MDC team.
+        // Skip the default category data always.
         result = response.data.category.children[0].children;
       }
       break;

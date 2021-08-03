@@ -17,7 +17,7 @@ use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
  *   id = "rcscategories",
  *   label = @Translation("List all rcs categories with enrichment data"),
  *   uri_paths = {
- *     "canonical" = "/rest/v2/rcs_categories/all"
+ *     "canonical" = "/v2/categories"
  *   }
  * )
  */
