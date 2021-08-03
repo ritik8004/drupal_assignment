@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PromotionControllerV2 extends PromotionController {
 
   /**
-   * Get Promotions dynamic labels for both product and cart level.
+   * Get Promotions dynamic labels for cart level.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request.

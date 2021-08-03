@@ -41,7 +41,7 @@ alshaya_acm_promotion.promotions_dynamic_labels_cart:
     _permission: 'access content'
 
 alshaya_acm_promotion.promotions_dynamic_labels_cart_v2:
-  path: '/promotions/dynamic-label-cart-v2'
+  path: '/v2/promotions/dynamic-label-cart'
   defaults:
       _title: ''
       _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionControllerV2::getPromotionDynamicLabelForCartV2'
