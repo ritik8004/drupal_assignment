@@ -1,3 +1,5 @@
+import StaticStorage from "../../../../js/backend/v2/staticStorage";
+
 jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
@@ -16,6 +18,7 @@ describe('Common', () => {
 
     afterEach(() => {
       // Clear all mocks.
+      StaticStorage.clear();
       jest.clearAllMocks();
     });
 
