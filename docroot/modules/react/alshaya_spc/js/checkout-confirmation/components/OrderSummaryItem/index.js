@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import getStringMessage from '../../../utilities/strings';
+import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 
 const OrderSummaryItem = (props) => {
   const {
@@ -50,9 +51,12 @@ const OrderSummaryItem = (props) => {
             {address}
             <span className="spc-cnc-address-phone">{phone}</span>
           </span>
-          <div className="spc-cnc-store-actions-pudo-msg">
-            {getStringMessage('cnc_valid_govtid_message')}
-          </div>
+          {(collectionPointsEnabled() === true)
+            && (
+              <div className="spc-cnc-store-actions-pudo-msg">
+                {getStringMessage('cnc_valid_govtid_message')}
+              </div>
+            )}
           <div className="spc-store-open-hours">
             {
               Object.entries(openingHours).map(([weekdays, timings]) => (
