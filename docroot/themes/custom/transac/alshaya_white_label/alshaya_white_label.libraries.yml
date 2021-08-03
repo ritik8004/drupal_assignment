@@ -561,3 +561,8 @@ my-account:
   css:
     theme:
       css/conditional-sass/my-account/my-account.ltr.css: {}
+
+sitemap:
+  css:
+    theme:
+      css/conditional-sass/sitemap/sitemap.ltr.css: {}
