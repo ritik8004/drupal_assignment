@@ -135,7 +135,7 @@ exports.render = function render(
       typeof globalThis.renderRcsLhn !== 'undefined') {
         html += globalThis.renderRcsLhn.render(
           settings,
-          entity,
+          inputs,
           innerHtml
         );
       }

@@ -233,6 +233,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'navigation_menu':
+    case 'lhn_block':
       // Early return if the root category is undefined.
       if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
         return null;
