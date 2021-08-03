@@ -658,6 +658,10 @@ class AlshayaSpcController extends ControllerBase {
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
+    // @todo Remove once collection point API starts working.
+    $orderDetails['delivery_type_info']['store']['pudo_available'] = FALSE;
+    $orderDetails['delivery_type_info']['store']['brand_name'] = 'H&M Store';
+
     $settings = [
       'site_details' => [
         'logo' => alshaya_master_get_email_logo(NULL, $langcode),
