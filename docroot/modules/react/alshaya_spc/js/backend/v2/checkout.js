@@ -280,7 +280,7 @@ const getStoreInfo = async (storeData) => {
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_isEmpty(response.data)
+  if (_isEmpty(response) || _isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
     return null;
@@ -342,7 +342,7 @@ const getCartStores = async (lat, lon) => {
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
     logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${response.data.error_message}`);
-    return response;
+    return getFormattedError(response.data.error_code, response.data.error_message);
   }
   stores = response.data;
   if (!stores || (Array.isArray(stores) && stores.length === 0)) {
@@ -388,20 +388,20 @@ const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
     logger.error('Error while fetching click and collect stores. No cart available in session');
-    return getFormattedError(404, 'No cart in session');
+
+    return {
+      data: getFormattedError(404, 'No cart in session'),
+    };
   }
 
   if (!lat || !lon) {
     logger.error(`Error while fetching CnC store for cart ${cartId}. One of lat/lon is not provided. Lat = ${lat}, Lon = ${lon}.`);
-    return [];
+    return {
+      data: [],
+    };
   }
 
   const response = await getCartStores(lat, lon);
-  if (_isEmpty(response)
-    || (!_isUndefined(response.data) && !_isUndefined(response.data.error))) {
-    // In case of errors, return the response with error.
-    return response;
-  }
 
   return { data: response };
 };
@@ -837,6 +837,9 @@ const applyDefaultShipping = async (order) => {
     }
 
     const availableStores = await getCartStores(store.lat, store.lng);
+    if (availableStores.error) {
+      return false;
+    }
 
     const availableStoreCodes = availableStores.map((value) => value.code);
 
@@ -864,8 +867,9 @@ const applyDefaultShipping = async (order) => {
     return false;
   }
 
-  const methods = await getHomeDeliveryShippingMethods(address);
-  if (_isArray(methods) && !_isEmpty(methods)) {
+  const response = await getHomeDeliveryShippingMethods(address);
+  if (!response.error) {
+    const methods = response.data;
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
       if (typeof method.carrier_code !== 'undefined'
@@ -920,18 +924,26 @@ const applyDefaults = async (data, customerId) => {
   // Select default address from address book if available.
   const address = getDefaultAddress(data);
   if (address) {
-    const methods = await getHomeDeliveryShippingMethods(address);
-    if (_isArray(methods) && !_isEmpty(methods)) {
-      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+    const response = await getHomeDeliveryShippingMethods(address);
+    if (!response.error) {
+      const methods = response.data;
+      logger.notice('Setting shipping/billing address from user address book. Address: @address. Cart: @cartId', {
+        '@Address': JSON.stringify(address),
+        '@cartId': window.commerceBackend.getCartId(),
+      });
       return selectHd(address, methods[0], address, methods);
     }
   }
 
   // If address already available in cart, use it.
   if (!_isEmpty(data.shipping.address) && !_isEmpty(data.shipping.address.country_id)) {
-    const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (_isArray(methods) && !_isEmpty(methods)) {
-      logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
+    const response = await getHomeDeliveryShippingMethods(data.shipping.address);
+    if (!response.error) {
+      const methods = response.data;
+      logger.notice('Setting shipping/billing address from user address book. Address: @address. Cart: @cartId', {
+        '@Address': JSON.stringify(address),
+        '@cartId': window.commerceBackend.getCartId(),
+      });
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
   }
@@ -974,13 +986,11 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_isUndefined(data.shipping.address)
     && !_isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
-    const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (_isEmpty(methods)
-      || (!_isUndefined(methods.data) && (!_isUndefined(methods.data.error) && methods.data.error))
-    ) {
-      return methods;
+    const response = await getHomeDeliveryShippingMethods(data.shipping.address);
+    if (response.error) {
+      return response;
     }
-    data.shipping.methods = methods;
+    data.shipping.methods = response.data;
   }
 
   if (_isUndefined(data.payment.methods)
@@ -1699,22 +1709,24 @@ window.commerceBackend.addShippingMethod = async (data) => {
     return cart;
   }
 
+  // Shipping address.
   const shippingAddress = formatAddressForShippingBilling(shippingInfo);
-  const shippingMethods = await getHomeDeliveryShippingMethods(shippingAddress);
 
-  // If no shipping method.
-  if (!_isUndefined(shippingMethods.data)
-    && !_isUndefined(shippingMethods.data.error)
-    && shippingMethods.data.error
-  ) {
+  // Shipping methods.
+  const response = await getHomeDeliveryShippingMethods(shippingAddress);
+  if (response.error) {
     logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', {
       '@data': JSON.stringify(data),
       '@cart_id': cartId,
-      '@error_message': shippingMethods.data.error_message,
+      '@error_message': response.message,
     });
 
-    return shippingMethods;
+    return {
+      data: getFormattedError(60, response.message),
+    };
   }
+
+  const shippingMethods = response.data;
 
   let carrierInfo = {};
   if (!_isEmpty(shippingInfo.carrier_info)) {

@@ -973,7 +973,10 @@ const getFormattedError = (code, message) => ({
   error: true,
   error_code: code,
   error_message: message,
-  response_message: [message, 'error'],
+  response_message: {
+    msg: message,
+    status: 'error',
+  },
 });
 
 export {

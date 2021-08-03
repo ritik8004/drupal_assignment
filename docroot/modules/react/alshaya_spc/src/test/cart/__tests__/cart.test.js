@@ -178,10 +178,10 @@ describe('Cart', () => {
 
   describe('Test window.commerceBackend.createCart()', () => {
     it('Test with numeric value and response status 200', async () => {
-      axios.mockResolvedValue({ data: 1234, status: 200 });
+      axios.mockResolvedValue({ data: '1234', status: 200 });
       const result = await window.commerceBackend.createCart();
       expect(axios).toHaveBeenCalled();
-      expect(result).toEqual(1234);
+      expect(result).toEqual('1234');
       expect(getStorageInfo('cart_id')).toEqual(1234);
     });
 
