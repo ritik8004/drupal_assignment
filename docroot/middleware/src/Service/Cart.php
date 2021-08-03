@@ -2040,6 +2040,15 @@ class Cart {
     $cart['shipping']['storeCode'] = $cart['shipping']['extension_attributes']['store_code'] ?? '';
     unset($cart['shipping']['extension_attributes']);
 
+    // Remove shipping info if address in cart is available but not available
+    // in address book for authenticated users.
+    if (isset($cart['shipping'], $cart['shipping']['type'])
+      && $cart['shipping']['type'] === 'home_delivery'
+      && $this->getDrupalInfo('customer_id')
+      && empty($cart['shipping']['address']['customer_address_id'])) {
+      $cart['shipping'] = [];
+    }
+
     // Initialise payment data holder.
     $cart['payment'] = [];
     // When shipping method is empty, Set shipping and billing info to empty,

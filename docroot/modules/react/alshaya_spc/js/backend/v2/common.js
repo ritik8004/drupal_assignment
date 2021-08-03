@@ -455,6 +455,10 @@ const formatCart = (cartData) => {
     }
     if (!_isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
       data.shipping.type = 'click_and_collect';
+    } else if (isUserAuthenticated()
+      && (typeof data.shipping.address.customer_address_id === 'undefined' || !(data.shipping.address.customer_address_id))) {
+      // Ignore the address if not available from address book for customer.
+      data.shipping = {};
     } else {
       data.shipping.type = 'home_delivery';
     }
