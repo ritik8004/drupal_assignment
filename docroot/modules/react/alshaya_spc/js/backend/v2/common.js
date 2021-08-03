@@ -245,7 +245,7 @@ const handleResponse = (apiResponse) => {
 
       // Log the error message.
       logger.warning('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
-        '@message': apiResponse.data.error_message,
+        '@message': response.data.error_message,
         '@result_code': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
         '@response_code': apiResponse.status,
       });
