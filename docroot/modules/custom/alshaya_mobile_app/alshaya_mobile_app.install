@@ -15,7 +15,7 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
- * [6.5.0] Add new Rroduct Exclude Linked and
+ * [6.5.0] Add new Product Exclude Linked and
  * Skus Product List resource v2.
  */
 function alshaya_mobile_app_update_8080() {
