@@ -1184,6 +1184,10 @@ const productRecommendationsSuffix = 'pr-';
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
         var condition = true;
+        var position = $(this).attr('data-insights-position');
+        if (position === undefined) {
+          $(this).attr('list-item-position', count);
+        }
         // Only on scroll we check if product is in view or not.
         if (eventType == 'scroll') {
           condition = $(this).isElementInViewPort(0, 10);
