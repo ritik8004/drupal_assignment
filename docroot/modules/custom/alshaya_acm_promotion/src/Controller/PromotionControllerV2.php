@@ -17,9 +17,11 @@ class PromotionControllerV2 extends PromotionController {
    */
   public function getPromotionDynamicLabelForCartV2(Request $request) {
     $get = $request->query->all();
-    $sku_encoded = $get['products'][0]['sku'];
-    $sku = base64_decode($sku_encoded);
-    $get['products'][0]['sku'] = $sku;
+    foreach ($get['products'] as $products_key => $products_value) {
+      $sku_encoded = $products_value['sku'];
+      $sku = base64_decode($sku_encoded);
+      $get['products'][$products_key]['sku'] = $sku;
+    }
     return parent::getPromotionDynamicLabelForCartHelper($get);
 
   }
