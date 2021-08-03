@@ -107,7 +107,8 @@ class AlshayaRcsCategoryResource extends ResourceBase {
     $response_data = $this->alshayaRcsCategoryHelper
       ->getRcsCategoryEnrichmentData(
         $this->languageManager->getCurrentLanguage()->getId(),
-        $context);
+        $context
+      );
 
     $response = new ResourceResponse($response_data);
     $this->addCacheableTermDependency($response);

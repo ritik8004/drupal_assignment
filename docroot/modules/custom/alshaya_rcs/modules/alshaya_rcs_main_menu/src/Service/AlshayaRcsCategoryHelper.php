@@ -89,6 +89,7 @@ class AlshayaRcsCategoryHelper {
     $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
     $query->condition('vid', self::VOCABULARY_ID);
     $query->condition('tid', $entity_id, '<>');
+    $query->condition('langcode', $langcode);
     $terms = $query->execute();
 
     // Return if none available.
@@ -103,6 +104,12 @@ class AlshayaRcsCategoryHelper {
       // Skip if category slug field is empty.
       if (empty($term->field_category_slug->value)) {
         continue;
+      }
+
+      // Get the translation of the term if exists.
+      if ($term->hasTranslation($langcode)) {
+        // Replace the current term with translated one.
+        $term = $term->getTranslation($langcode);
       }
 
       $record = [
