@@ -1,5 +1,3 @@
-import StaticStorage from "../../../../js/backend/v2/staticStorage";
-
 jest.mock('axios');
 import _cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';

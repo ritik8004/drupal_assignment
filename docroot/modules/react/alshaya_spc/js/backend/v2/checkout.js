@@ -375,6 +375,7 @@ const getCartStores = async (lat, lon) => {
       '@cartId': cartId,
       '@message': error.message,
     });
+    return getFormattedError(600, 'Error occurred while fetching stores');
   }
 
   return stores;

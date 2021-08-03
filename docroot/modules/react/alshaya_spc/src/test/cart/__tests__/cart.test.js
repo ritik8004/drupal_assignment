@@ -1,11 +1,10 @@
-import StaticStorage from "../../../../js/backend/v2/staticStorage";
-
 jest.mock('axios');
 import axios from 'axios';
-import * as cart from '../../../../js/backend/v2/cart';
+import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import { callMagentoApi } from '../../../../js/backend/v2/common';
 import { drupalSettings, Drupal } from '../globals';
 import { getStorageInfo } from '../../../../js/utilities/storage';
+import * as cart from '../../../../js/backend/v2/cart';
 
 describe('Cart', () => {
   beforeEach(() => {
