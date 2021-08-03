@@ -5,10 +5,11 @@
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
 
   Drupal.alshayaSpc.clearCartData = function () {
-    localStorage.removeItem('cart_data');
+    window.commerceBackend.removeCartDataFromStorage();
   };
 
   Drupal.alshayaSpc.getCartData = function () {
+    // @todo find better way to get this using commerceBackend.
     var cart_data = localStorage.getItem('cart_data');
     if (cart_data) {
       cart_data = JSON.parse(cart_data);
@@ -154,6 +155,18 @@
   Drupal.alshayaSpc.storeProductData = function (data) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, data.sku].join(':');
+
+    // This is to avoid the situation where a child product have more than one
+    // Parent products. In this case it will fetch the product name and id of
+    // the parent product from the local storage.
+    var localStorageData = JSON.parse(localStorage.getItem(key));
+    if (localStorageData != null) {
+      data.gtmAttributes.id = localStorageData.gtmAttributes.id ? localStorageData.gtmAttributes.id : data.gtmAttributes.id;
+      data.gtmAttributes.name = localStorageData.gtmAttributes.name ? localStorageData.gtmAttributes.name : data.gtmAttributes.name;
+      data.parentSKU = localStorageData.parentSKU ? localStorageData.parentSKU : data.parentSKU;
+      data.title = localStorageData.title ? localStorageData.title : data.title;
+      data.url = localStorageData.url ? localStorageData.url : data.url;
+    }
     var productData = {
       'id': data.id,
       'sku': data.sku,
@@ -246,4 +259,3 @@
   }
 
 })(jQuery, Drupal);
-

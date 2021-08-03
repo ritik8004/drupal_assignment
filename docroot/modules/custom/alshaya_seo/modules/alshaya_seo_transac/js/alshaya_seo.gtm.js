@@ -43,7 +43,8 @@ const productRecommendationsSuffix = 'pr-';
       $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        if (typeof drupalSettings[productKey][sku] === 'undefined'
+          || typeof drupalSettings[productKey][sku]['group'][variant] === 'undefined') {
           return;
         }
 
@@ -242,7 +243,7 @@ const productRecommendationsSuffix = 'pr-';
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
         if (drupalSettings.user.uid && loginType === undefined) {
-          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , drupalSettings.userDetails.userEmailID);
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
@@ -1019,8 +1020,11 @@ const productRecommendationsSuffix = 'pr-';
     };
 
     dataLayer.push(data);
-  };
 
+    // Trigger Product Details View
+    var quickView = 'yes';
+    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView);
+  };
   /**
    * Helper function to push lead events.
    *
@@ -1210,8 +1214,10 @@ const productRecommendationsSuffix = 'pr-';
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
+   * @param {string} quickView
+   *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';
@@ -1225,6 +1231,20 @@ const productRecommendationsSuffix = 'pr-';
         }
       }
     };
+    if (quickView) {
+      data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: drupalSettings.gtm.currency,
+          detail: {
+            actionField: {
+              list: listName
+            },
+            products: [product]
+          }
+        }
+      };
+    }
 
     dataLayer.push(data);
   }
@@ -1242,11 +1262,18 @@ const productRecommendationsSuffix = 'pr-';
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
+    var listName = $('body').attr('gtm-list-name') ? $('body').attr('gtm-list-name') : drupalSettings.path.currentPath;
+    if (listName === 'search') {
+      listName = 'Search Results Page';
+    }
     var productData = {
       event: 'addToCart',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
         add: {
+          actionField: {
+            list: listName
+          },
           products: [
             product
           ]
@@ -1321,7 +1348,6 @@ const productRecommendationsSuffix = 'pr-';
     if ($.type(message) !== 'string') {
       message = JSON.stringify(message);
     }
-
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
@@ -1350,8 +1376,11 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
+  // Push the errors to GA if enabled.
   // If TrackJS is enabled we let it track the errors.
-  if (window.TrackJS === undefined) {
+  if (drupalSettings.gtm.log_errors_to_ga !== undefined
+    && drupalSettings.gtm.log_errors_to_ga
+    && window.TrackJS === undefined) {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);

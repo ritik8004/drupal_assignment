@@ -366,7 +366,7 @@ function alshaya_acm_product_update_8053() {
     while ($row = $result->fetchAssoc()) {
       $fid = $row['fid'];
       // Delete the file now that its references are deleted.
-      file_delete_multiple([$fid]);
+      \Drupal::entityTypeManager()->getStorage('file')->load($fid)->delete();
     }
   }
 }
@@ -1352,7 +1352,7 @@ function alshaya_acm_product_update_8002() {
   $weight = 0;
   foreach ($option_sets as $options) {
     foreach ($options['options'] as $key => $value) {
-      db_query(
+      \Drupal::database()->query(
         'UPDATE {taxonomy_term_field_data} AS ttfd
 INNER JOIN {taxonomy_term__field_sku_attribute_code} ttfsac ON ttfsac.entity_id = ttfd.tid
 INNER JOIN {taxonomy_term__field_sku_option_id} ttfsoi ON ttfsoi.entity_id = ttfd.tid

@@ -19,6 +19,8 @@ variables:
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
   add_to_cart_link: 'add to basket'
   spc_search_byname: ''
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
   create_account: 'create an account'
   sign_in: 'Sign in'
   find_store: 'Find Store'

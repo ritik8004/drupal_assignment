@@ -1,6 +1,6 @@
 import React from 'react';
-import ConditionalView from '../../../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../../../js/utilities/strings';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class TextArea extends React.Component {
   handleChange = (e) => {

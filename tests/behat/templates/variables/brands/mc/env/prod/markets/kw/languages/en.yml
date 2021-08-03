@@ -16,6 +16,8 @@ variables:
   language_size_filter: ''
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
+  np_plp_store: 'Salmiya, Kuwait'
+  np_plp_language_store: 'السالمية، الكويت‎'
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'
   ar_price_filter: 'السعر'

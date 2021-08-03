@@ -1,4 +1,4 @@
-@javascript @KNetPayment @homeDelivery @auth @hmkwprod @mckwprod @bbwkwprod @flkwprod @pbkwprod
+@javascript @KNetPayment @homeDelivery @auth @hmkwprod @mckwprod @bbwkwprod @flkwprod @pbkwprod @tbskwprod
 Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
 
   Background:
@@ -68,7 +68,6 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I select the home delivery address
     And I wait for AJAX to finish
     And I wait for the page to load
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -107,7 +106,6 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I select the home delivery address
     And I wait for AJAX to finish
     And I wait for the page to load
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page

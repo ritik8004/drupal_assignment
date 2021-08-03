@@ -229,9 +229,11 @@
   &.focused {
     #alshaya-algolia-autocomplete {
       .react-autosuggest__container {
-        &::before,
-        &::after {
-          opacity: 0;
+        @include breakpoint($upto-desktop) {
+          &::before,
+          &::after {
+            opacity: 0;
+          }
         }
 
         .react-autosuggest__input {

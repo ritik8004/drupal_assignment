@@ -184,6 +184,7 @@ class ReviewCommentForm extends React.Component {
                 submissionTime: response.Comment.SubmissionTime,
                 showCommentSubmission: true,
                 showCommentForm: false,
+                commentbox: response.Comment.CommentText,
               });
               if (storageUpdated) {
                 setStorageInfo(userStorage, `bvuser_${userDetails.user.userId}`);
@@ -204,7 +205,7 @@ class ReviewCommentForm extends React.Component {
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
     }
-    this.setState({ email: e.target.value });
+    this.setState({ email: encodeURIComponent(e.target.value) });
   }
 
   handleNicknameChange = (e) => {
@@ -216,7 +217,7 @@ class ReviewCommentForm extends React.Component {
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
     }
-    this.setState({ nickname: e.target.value });
+    this.setState({ nickname: encodeURIComponent(e.target.value) });
   }
 
   handleCommentboxChange = (e) => {
@@ -228,7 +229,7 @@ class ReviewCommentForm extends React.Component {
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
     }
-    this.setState({ commentbox: e.target.value });
+    this.setState({ commentbox: encodeURIComponent(e.target.value) });
   }
 
   render() {

@@ -26,20 +26,14 @@ const AssetGallery = ({
           className="b-lazy"
         />
       </div>
-      {
-        typeof hoverImage.url !== 'undefined'
-          ? (
-            <div className="alshaya_search_hoverimage">
-              <ImageElement
-                src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-                data-src={hoverImage.url}
-                title={title}
-                className="b-lazy"
-              />
-            </div>
-          )
-          : ''
-      }
+      <div className="alshaya_search_hoverimage">
+        <ImageElement
+          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+          data-src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
+          title={title}
+          className="b-lazy"
+        />
+      </div>
       <Lozenges labels={labels} sku={sku} />
     </div>
   );

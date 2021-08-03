@@ -32,17 +32,26 @@ export default class SelectField extends React.Component {
       label,
       defaultValue,
       options,
-      visible,
+      addClass,
       text,
     } = this.props;
-    const result = Object.keys(options).map((key) => ({ value: key, label: options[key] }));
+    let defaultVal = defaultValue;
+    const optionsList = [];
+    let i = 0;
+    Object.entries(options).forEach(([index]) => {
+      if (defaultValue === index) {
+        defaultVal = { value: index, label: options[index] };
+      }
+      optionsList[i] = { value: index, label: options[index] };
+      i += 1;
+    });
 
     return (
       <>
         <ConditionalView condition={text !== undefined}>
           <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div id={id} className="dropdown-conatiner" key={id}>
+        <div id={id} className={`${addClass} dropdown-conatiner`} key={id}>
           <label className="dropdown-label" htmlFor={label}>
             {label}
             {' '}
@@ -54,14 +63,13 @@ export default class SelectField extends React.Component {
             className="bv-select"
             onMenuOpen={this.onMenuOpen}
             onMenuClose={this.onMenuClose}
-            options={result}
+            options={optionsList}
             id={id}
             name={id}
             required={required}
-            default_value={defaultValue}
+            defaultValue={defaultVal}
             isSearchable={false}
             isDisabled={false}
-            hidden={visible}
             onChange={this.handleChange}
             placeholder={getStringMessage('selectlist_placeholder')}
           />

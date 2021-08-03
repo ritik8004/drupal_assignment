@@ -38,3 +38,14 @@ Concept here is same as Drupal module dependencies. You have to add name of the 
 - Add a file name `react_dependencies.txt` in the module using your module's component.
 - Within the file, add your module's name.
 - If multiple modules are servicing components to a sinlge module, mention all the modules name one per line.
+
+# Testing
+We have implemented some unit tests using Jest. To run all tests (Inside VM), use:
+```bash
+cd /var/www/alshaya/tests/jest && sh run_tests.sh
+```
+
+Alternatively you can run tests from the application directory, i.e.
+```bash
+cd /var/www/alshaya/docroot/modules/react && npm test
+```

@@ -121,6 +121,9 @@ function _alshaya_bazaar_voice_translations() {
     'reviews' => [
       'ar' => 'مراجعة',
     ],
+    'Reviews' => [
+      'ar' => 'مراجعة',
+    ],
     'Vote' => [
       'ar' => 'تصويت',
     ],

@@ -1,6 +1,7 @@
 name: 'Alshaya Stores - Transac'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya
 description: 'Alshaya stores CT and related settings.'
 dependencies:

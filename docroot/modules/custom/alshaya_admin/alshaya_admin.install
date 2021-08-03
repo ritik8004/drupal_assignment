@@ -7,6 +7,7 @@
 
 use Drupal\search_api\Entity\Index;
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drush\Drush;
 
 /**
  * Implements hook_update_N().
@@ -85,7 +86,7 @@ function alshaya_admin_update_8002() {
   }
 
   // Invoke a drush command to execute migration.
-  drush_invoke_process('@self', 'wbm2cm-migrate');
+  Drush::drush('@self', 'wbm2cm-migrate');
 
   // Wbm2cm has created a workflow with random machine name during migration.
   // Delete that and use the one that we have created for site installation to

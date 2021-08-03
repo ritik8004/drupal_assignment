@@ -14,6 +14,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
+use Drupal\Core\File\FileSystemInterface;
 
 /**
  * Defines the SKU entity.
@@ -417,8 +418,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Prepare the directory path.
     $directory = 'public://media/' . str_replace('/' . $file_name, '', $path);
 
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+
     // Prepare the directory.
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+    $file_system->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
 
     // There are cases when upstream systems return different file id
     // but re-use the file name and this creates issue with CDNs.
@@ -432,7 +436,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
-    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FileSystemInterface::EXISTS_REPLACE)) {
       if ($lock_key) {
         // Add file id in cache for other processes to be able to use.
         \Drupal::cache('media_file_mapping')->set($lock_key, $file->id(), \Drupal::time()->getRequestTime() + 120);

@@ -258,7 +258,7 @@ class AlshayaBulkUploadRedirect extends FormBase {
         }
         catch (\Exception $e) {
           // If any exception.
-          drupal_set_message(t('There was some problem in adding redirect for the url @url. Please check if redirect already exists or not.', ['@url' => $redirect[1]]));
+          \Drupal::messenger()->addMessage(t('There was some problem in adding redirect for the url @url. Please check if redirect already exists or not.', ['@url' => $redirect[1]]));
         }
       }
     }
@@ -277,11 +277,11 @@ class AlshayaBulkUploadRedirect extends FormBase {
   public static function finishBatch($success, array $results = [], array $operations = []) {
     if ($success) {
       $message = t('Redirects imported successfully.');
-      drupal_set_message($message, 'success');
+      \Drupal::messenger()->addMessage($message, 'success');
     }
     else {
       $message = t('There was some error while importing redirects.');
-      drupal_set_message($message, 'error');
+      \Drupal::messenger()->addMessage($message, 'error');
     }
   }
 
