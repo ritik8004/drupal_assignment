@@ -389,8 +389,8 @@ const getCartStores = async (lat, lon) => {
  * @param {string} lon
  *   The longitude value.
  *
- * @returns {Promise<array>}
- *   The list of stores.
+ * @returns {Promise<object>}
+ *   Object containing list of stores.
  */
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
@@ -1758,9 +1758,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
       '@error_message': response.message,
     });
 
-    return {
-      data: getFormattedError(60, response.message),
-    };
+    return { data: response };
   }
 
   const shippingMethods = response.data;
