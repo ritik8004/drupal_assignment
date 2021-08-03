@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_rcs.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_install() {
+  // Configure ShareThis widget for the RCS content type.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    // Only enable sharethis for RCS content type if it is enabled for
+    // Product content type.
+    if (in_array('acq_product', $configFactory->get('node_types'))) {
+      $configFactory->set('node_types.rcs_product', 'rcs_product');
+      $configFactory->save();
+    }
+  }
+}

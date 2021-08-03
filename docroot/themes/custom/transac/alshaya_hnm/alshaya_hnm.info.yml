@@ -165,3 +165,8 @@ libraries-override:
       css:
         theme:
           css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/sitemap:
+    css:
+      theme:
+        css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css

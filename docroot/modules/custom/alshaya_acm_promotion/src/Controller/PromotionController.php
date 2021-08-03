@@ -413,12 +413,19 @@ class PromotionController extends ControllerBase {
    *   Request.
    */
   public function getPromotionDynamicLabelForCart(Request $request) {
+    $get = $request->query->all();
+    return $this->getPromotionDynamicLabelForCartHelper($get);
+  }
+
+  /**
+   * Helper function to get dynamic label data.
+   */
+  protected function getPromotionDynamicLabelForCartHelper($get) {
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
       'contexts' => ['url.query_args', 'languages'],
     ];
 
-    $get = $request->query->all();
     try {
       $cart = CartData::createFromArray($get);
     }
