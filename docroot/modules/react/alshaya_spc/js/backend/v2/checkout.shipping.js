@@ -116,7 +116,9 @@ const formatShippingEstimatesAddress = (address) => {
  */
 const getHomeDeliveryShippingMethods = async (data) => {
   if (_isEmpty(data.country_id)) {
-    logger.error(`Error in getting shipping methods for HD as country id not available. Data: ${JSON.stringify(data)}`);
+    logger.error('Error in getting shipping methods for HD as country id not available. Data: @data', {
+      '@data': JSON.stringify(data),
+    });
     return [];
   }
 
@@ -140,7 +142,9 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
     // Check for errors.
     if (!_isUndefined(methods.error) && methods.error) {
-      logger.error(`Error in getting shipping methods for HD. Data: ${methods.error_message}`);
+      logger.error('Error in getting shipping methods for HD. Error: @error', {
+        '@error': methods.error_message,
+      });
       return methods;
     }
 

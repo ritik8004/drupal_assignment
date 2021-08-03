@@ -1,6 +1,6 @@
 module.exports = {
-  verbose: true,
-  collectCoverage: true,
+  verbose: false,
+  collectCoverage: false,
   testRegex: '(/tests/.*|\\.(test|spec))\\.(ts|tsx|js)$',
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?react-native|lottie-react-native)'
