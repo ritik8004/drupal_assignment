@@ -103,6 +103,12 @@ export default class Checkout extends React.Component {
 
   processCheckout = (result) => {
     const cart = result;
+
+    // No further processing required if shipping is not set yet in cart.
+    if (typeof result.shipping === 'undefined') {
+      return;
+    }
+
     // Set default as user selection for handling conditions.
     cart.delivery_type = result.shipping.type;
 
@@ -112,7 +118,7 @@ export default class Checkout extends React.Component {
     }
     // Process Removal of "same as billing" flag before we update the
     // cart state. before the billing address component mounted. as
-    // setState will immidiately mount the components before localStorage
+    // setState will immediately mount the components before localStorage
     // update happens.
     removeBillingFlagFromStorage({ cart });
     dispatchCustomEvent('checkoutCartUpdate', { cart });
@@ -136,6 +142,11 @@ export default class Checkout extends React.Component {
   }
 
   processAddressFromLocalStorage = (result) => {
+    // Do this only for guests.
+    if (!(drupalSettings.userDetails.customerId)) {
+      return;
+    }
+
     if (result.shipping && result.shipping.method === null) {
       const shippingAddress = getStorageInfo('shippingaddress-formdata');
       if (shippingAddress) {
