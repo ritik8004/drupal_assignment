@@ -291,7 +291,6 @@ class ProductExportCommands extends DrushCommands {
     $tags = $metatag_manager->generateRawElements($tags, $node);
 
     $return = [];
-    $request_stack = \Drupal::requestStack()->getCurrentRequest()->getSchemeAndHttpHost();
 
     // Process the tags to a more suitable format.
     foreach ($tags as $key => $tag) {
@@ -303,12 +302,7 @@ class ProductExportCommands extends DrushCommands {
             break;
           }
           if ($tag['#attributes']['rel'] === 'canonical') {
-            // Convert to relative url.
-            $href = str_replace(
-              $request_stack . '/' . $node->language()->getId(),
-              '',
-              $tag['#attributes']['href']
-            );
+            $href = self::convertAbsoluteToRelativeUrl($tag['#attributes']['href'], $node->language()->getId());
           }
 
           $return[$tag['#attributes']['rel']] = $href;
@@ -318,6 +312,10 @@ class ProductExportCommands extends DrushCommands {
           // Key can be one of the following: name or property.
           $key = isset($tag['#attributes']['name']) ? $tag['#attributes']['name'] : $tag['#attributes']['property'];
           $return[$key] = $tag['#attributes']['content'];
+
+          if ($key === 'twitter:url') {
+            $return[$key] = self::convertAbsoluteToRelativeUrl($tag['#attributes']['content'], $node->language()->getId());
+          }
           break;
       }
     }
@@ -342,6 +340,30 @@ class ProductExportCommands extends DrushCommands {
     fputcsv($file, $data_to_print);
     // Close the file.
     fclose($file);
+  }
+
+  /**
+   * Returns the relative url for provided absolute url without the langcode.
+   *
+   * @param string $url
+   *   The url.
+   * @param string $langcode
+   *   The langcode.
+   *
+   * @return string
+   *   The relative url without langcode.
+   */
+  public static function convertAbsoluteToRelativeUrl(string $url, string $langcode) {
+    static $request_stack = NULL;
+    if (!$request_stack) {
+      $request_stack = \Drupal::requestStack()->getCurrentRequest()->getSchemeAndHttpHost();
+    }
+
+    return str_replace(
+      $request_stack . '/' . $langcode,
+      '',
+      $url
+    );
   }
 
 }
