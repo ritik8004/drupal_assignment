@@ -68,7 +68,10 @@ class AlshayaBazaarVoiceController extends ControllerBase {
   }
 
   /**
-   * Returns write a review form configs synced from BazaarVoice config hub.
+   * Convert base64 content into image and upload temporarily.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
    *
    * @return array
    *   Build array.
@@ -88,6 +91,29 @@ class AlshayaBazaarVoiceController extends ControllerBase {
 
     $response = new JsonResponse();
     $response->setData($url);
+
+    return $response;
+  }
+
+  /**
+   * Delete image file uploaded temporarily.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function removeFile(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    $file_name = $request_content['fileName'];
+    $directory_path = 'public://review_photo_temp_upload';
+    $image = $directory_path . '/' . $file_name;
+    // Remove file stored as temporarily.
+    $result = $this->fileSystem->unlink($image);
+
+    $response = new JsonResponse();
+    $response->setData($result);
 
     return $response;
   }
