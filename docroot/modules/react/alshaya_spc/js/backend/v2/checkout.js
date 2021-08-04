@@ -880,7 +880,7 @@ const applyDefaultShipping = async (order) => {
 
   const response = await getHomeDeliveryShippingMethods(address);
   if (!response.error) {
-    const methods = response.data;
+    const { methods } = response;
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
       if (typeof method.carrier_code !== 'undefined'
@@ -938,7 +938,7 @@ const applyDefaults = async (data, customerId) => {
   if (address) {
     const response = await getHomeDeliveryShippingMethods(address);
     if (!response.error) {
-      const methods = response.data;
+      const { methods } = response;
 
       logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Address: @address.', {
         '@cartId': window.commerceBackend.getCartId(),
@@ -953,7 +953,7 @@ const applyDefaults = async (data, customerId) => {
   if (!_isEmpty(data.shipping.address) && !_isEmpty(data.shipping.address.country_id)) {
     const response = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (!response.error) {
-      const methods = response.data;
+      const { methods } = response;
 
       logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Address: @address.', {
         '@cartId': window.commerceBackend.getCartId(),
@@ -1006,7 +1006,7 @@ const getProcessedCheckoutData = async (cartData) => {
     if (response.error) {
       return response;
     }
-    data.shipping.methods = response.data;
+    data.shipping.methods = response.methods;
   }
 
   if (_isUndefined(data.payment.methods)
@@ -1762,7 +1762,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     return { data: response };
   }
 
-  const shippingMethods = response.data;
+  const shippingMethods = response.methods;
 
   let carrierInfo = {};
   if (!_isEmpty(shippingInfo.carrier_info)) {

@@ -169,7 +169,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
   return {
     error: false,
-    data: staticShippingMethods[key],
+    methods: staticShippingMethods[key],
   };
 };
 
