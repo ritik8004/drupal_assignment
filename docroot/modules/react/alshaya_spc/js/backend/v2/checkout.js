@@ -280,7 +280,7 @@ const getStoreInfo = async (storeData) => {
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_isEmpty(response) || _isEmpty(response.data)
+  if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
     return null;
@@ -341,12 +341,8 @@ const getCartStores = async (lat, lon) => {
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
-    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @response.', {
-      '@cartId': cartId,
-      '@response': JSON.stringify(response.data),
-    });
-
-    return getFormattedError(response.data.error_code, response.data.error_message);
+    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${response.data.error_message}`);
+    return response;
   }
   stores = response.data;
   if (!stores || (Array.isArray(stores) && stores.length === 0)) {
@@ -371,11 +367,7 @@ const getCartStores = async (lat, lon) => {
         .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
     }
   } catch (error) {
-    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @message.', {
-      '@cartId': cartId,
-      '@message': error.message,
-    });
-    return getFormattedError(600, 'Error occurred while fetching stores');
+    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
   }
 
   return stores;
@@ -395,21 +387,21 @@ const getCartStores = async (lat, lon) => {
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session.');
-    return { data: getFormattedError(404, 'No cart in session') };
+    logger.error('Error while fetching click and collect stores. No cart available in session');
+    return getFormattedError(404, 'No cart in session');
   }
 
   if (!lat || !lon) {
-    logger.warning('Error while fetching CnC store for cart @cartId. One of lat/lon is not provided. Lat: @lat, Lon: @lon.', {
-      '@cartId': cartId,
-      '@lat': lat || '',
-      '@lon': lon || '',
-    });
-
-    return { data: [] };
+    logger.error(`Error while fetching CnC store for cart ${cartId}. One of lat/lon is not provided. Lat = ${lat}, Lon = ${lon}.`);
+    return [];
   }
 
   const response = await getCartStores(lat, lon);
+  if (_isEmpty(response)
+    || (!_isUndefined(response.data) && !_isUndefined(response.data.error))) {
+    // In case of errors, return the response with error.
+    return response;
+  }
 
   return { data: response };
 };
@@ -847,10 +839,6 @@ const applyDefaultShipping = async (order) => {
     }
 
     const availableStores = await getCartStores(store.lat, store.lng);
-    if (availableStores.error) {
-      return false;
-    }
-
     const availableStoreCodes = availableStores.map((value) => value.code);
 
     if (_includes(availableStoreCodes, store.code)) {
