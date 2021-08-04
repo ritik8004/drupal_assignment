@@ -277,6 +277,7 @@ class AlshayaFeedSkuInfoHelper {
             continue;
           }
           $stockInfo = $this->skuInfoHelper->stockInfo($child);
+          $prices = $this->skuManager->getMinPrices($child, $color);
 
           $variant = [
             'sku' => $child->getSku(),
@@ -293,6 +294,9 @@ class AlshayaFeedSkuInfoHelper {
               'description',
               'short_description',
             ]),
+            'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
+            'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
+            'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
           $product[$lang][] = array_merge($parentProduct, $variant);
         }
