@@ -1,13 +1,12 @@
-import StaticStorage from "../../../../js/backend/v2/staticStorage";
-
 jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
+import _cloneDeep from 'lodash/cloneDeep';
 import utilsRewire from '../../../../js/backend/v2/common';
 import { drupalSettings, Drupal } from '../globals';
-import * as cartData from '../data/cart.json';
 import cartActions from '../../../../js/utilities/cart_actions';
-import _cloneDeep from 'lodash/cloneDeep';
+import StaticStorage from '../../../../js/backend/v2/staticStorage';
+import * as cartData from '../data/cart.json';
 
 describe('Common', () => {
   describe('Functions from common.js', () => {
