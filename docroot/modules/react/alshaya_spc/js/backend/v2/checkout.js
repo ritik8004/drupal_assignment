@@ -345,6 +345,7 @@ const getCartStores = async (lat, lon) => {
       '@cartId': cartId,
       '@response': JSON.stringify(response.data),
     });
+
     return response;
   }
   stores = response.data;
@@ -393,7 +394,7 @@ const getCartStores = async (lat, lon) => {
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session');
+    logger.error('Error while fetching click and collect stores. No cart available in session.');
     return getFormattedError(404, 'No cart in session');
   }
 
