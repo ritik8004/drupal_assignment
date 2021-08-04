@@ -4,9 +4,19 @@ import PlpApp from './plp/PlpApp';
 
 // Proceed only if element is present.
 const requiredData = jQuery('#alshaya-algolia-plp');
-if (requiredData.length && Object.keys(requiredData[0].dataset).length) {
+if (requiredData.length && !jQuery.isEmptyObject(requiredData.data())) {
+  // Destructure the required values from the attributes.
+  const {
+    categoryField, ruleContext, level, hierarchy,
+  } = requiredData.data();
+
   ReactDOM.render(
-    <PlpApp dataAttribute={requiredData[0].dataset} />,
+    <PlpApp
+      categoryField={categoryField}
+      ruleContext={ruleContext}
+      level={level}
+      hierarchy={hierarchy}
+    />,
     document.querySelector('#alshaya-algolia-plp'),
   );
 }

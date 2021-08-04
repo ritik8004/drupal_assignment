@@ -1,7 +1,4 @@
-// @codingStandardsIgnoreFile
-// This is because the linter is throwing errors where we use backticks here.
-// Once we enable webapack for the custom modules directory, we should look into
-// removing the above ignore line.
+// Render function to prepare markup and data attributes for PLP.
 exports.render = function render(
   entity,
   innerHtml
@@ -13,32 +10,36 @@ exports.render = function render(
   let context_list = [];
   let contexts = [];
 
-  if (entity.breadcrumbs && entity.breadcrumbs.length) {
-    entity.breadcrumbs.forEach(item => {
-      hierarchy_list.push(item.category_name);
-      // Also, build the rule context.
-      context_list.push(formatCleanRuleContext(item.category_name));
-      contexts.push(context_list.join('__'));
+  // Proceed only if entity is present.
+  if (entity !== null) {
+    if (entity.breadcrumbs && entity.breadcrumbs.length) {
+      entity.breadcrumbs.forEach(item => {
+        hierarchy_list.push(item.category_name);
+        // Also, build the rule context.
+        context_list.push(formatCleanRuleContext(item.category_name));
+        contexts.push(context_list.join('__'));
+      });
+    }
+    // Push the current category name.
+    hierarchy_list.push(entity.name);
+    context_list.push(formatCleanRuleContext(entity.name));
+    contexts.push(context_list.join('__'));
+    // Combine all the items.
+    hierarchy_list = hierarchy_list.join(' > ');
+    // Add required data as data-attributes.
+    innerHtmlObj.attr({
+      'data-hierarchy': hierarchy_list,
+      'data-level': contexts.length - 1,
+      'data-rule-context': contexts.reverse(),
+      'data-category-field': 'field_category_name.lvl' + (contexts.length - 1),
     });
   }
-  // Push the current category name.
-  hierarchy_list.push(entity.name);
-  context_list.push(formatCleanRuleContext(entity.name));
-  contexts.push(context_list.join('__'));
-  // Combine all the items.
-  hierarchy_list = hierarchy_list.join(' > ');
-  // Add required data as data-attributes.
-  innerHtmlObj.attr({
-    'data-hierarchy': hierarchy_list,
-    'data-level': contexts.length - 1,
-    'data-rule-context': contexts.reverse(),
-    'data-category-field': 'field_category_name.lvl' + (contexts.length - 1),
-  });
 
   return innerHtmlObj[0].outerHTML;
 }
 
 /**
+ * Format / Clean the rule context string.
  *
  * @param {string} context
  *

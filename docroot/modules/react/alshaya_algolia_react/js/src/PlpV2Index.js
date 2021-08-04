@@ -7,17 +7,27 @@ import PlpApp from './plp/PlpApp';
     attach: function process() {
       // Proceed only if RCS is processed.
       const requiredData = $('#rcs-ph-product_category_list > span');
-      if (requiredData.length && Object.keys(requiredData[0].dataset).length) {
+      if (requiredData.length && !$.isEmptyObject(requiredData.data())) {
+        // Destructure the required values from the attributes.
+        const {
+          categoryField, ruleContext, level, hierarchy,
+        } = requiredData.data();
+
         ReactDOM.render(
-          <PlpApp dataAttribute={requiredData[0].dataset} />,
+          <PlpApp
+            categoryField={categoryField}
+            ruleContext={ruleContext}
+            level={level}
+            hierarchy={hierarchy}
+          />,
           document.querySelector('#alshaya-algolia-plp'),
         );
       }
+      // Re-attach all behaviors after some delay.
+      // @todo To check for a proper way to Re-attach the behaviors.
+      setTimeout(() => {
+        Drupal.attachBehaviors(document, drupalSettings);
+      }, 5000);
     },
   };
-  // Re-attach all behaviors after some delay.
-  // @todo To check for a proper way to Re-attach the behaviors.
-  setTimeout(() => {
-    Drupal.attachBehaviors(document, drupalSettings);
-  }, 5000);
 }(jQuery, Drupal));

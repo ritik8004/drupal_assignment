@@ -42,7 +42,14 @@ const getBackToPlpPage = (pageType) => {
  * Render search results elements facets, filters and sorting etc.
  */
 const PlpApp = ({
-  searchState, createURL, onSearchStateChange, pageType, dataAttribute,
+  searchState,
+  createURL,
+  onSearchStateChange,
+  pageType,
+  hierarchy: defaultCategoryFilter,
+  level: nestedLevel,
+  ruleContext,
+  categoryField,
 }) => {
   const plpCategoryRef = useRef();
   const allFiltersRef = useRef();
@@ -57,13 +64,6 @@ const PlpApp = ({
     categoryFacetEnabled,
   } = drupalSettings.algoliaSearch;
 
-  // Extract required settings from data attribute.
-  const {
-    hierarchy: defaultCategoryFilter,
-    level: nestedLevel,
-    ruleContext,
-    categoryField,
-  } = JSON.parse(JSON.stringify(dataAttribute));
   // Split ruleContext into array of strings.
   let context = [];
   if (ruleContext !== undefined && ruleContext.length > 0) {
