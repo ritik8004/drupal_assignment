@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_target_link
+    - taxonomy.vocabulary.rcs_category
+  enforced:
+    module:
+      - alshaya_rcs_main_menu
+      - link
+id: taxonomy_term.rcs_category.field_target_link
+field_name: field_target_link
+entity_type: taxonomy_term
+bundle: rcs_category
+label: 'Target link'
+description: 'Allows you to customise the link URL for this term.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

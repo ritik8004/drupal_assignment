@@ -1,0 +1,8 @@
+services:
+  alshaya_rcs_main_menu.rcs_category_helper:
+    class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@renderer'
+      - '@language_manager'

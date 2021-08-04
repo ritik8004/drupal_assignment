@@ -18,7 +18,7 @@ exports.getEntity = async function getEntity(langcode) {
         request.uri += "graphql";
         request.method = "POST",
         request.headers.push(["Content-Type", "application/json"]);
-        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.languagePrefix[drupalSettings.path.currentLanguage]]);
+        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
         const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
         // @todo: Make a config for this query and pass it from the backend.
@@ -198,8 +198,14 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
       request.data = JSON.stringify({
+        // @todo: we are using 'category' API for now which is going to be
+        // deprecated, but only available API to support both 2.3 and 2.4
+        // magento version, so as suggested we are using this for now but
+        // need to change this when this got deprecated in coming magento
+        // version and replace it with 'categoryList' magento API.
         query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
             ${drupalSettings.alshayaRcs.navigationMenu.query}
           }
@@ -209,7 +215,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
       if (response !== null) {
-        // @todo: Need to verify the structure with MDC team.
+        // Skip the default category data always.
         result = response.data.category.children[0].children;
       }
       break;

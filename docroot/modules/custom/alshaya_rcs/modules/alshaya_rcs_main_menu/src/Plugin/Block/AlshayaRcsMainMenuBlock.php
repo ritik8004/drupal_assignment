@@ -5,7 +5,6 @@ namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\rcs_placeholders\Service\RcsPhEntityHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
@@ -27,13 +26,6 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   protected $configFactory;
 
   /**
-   * Stores the rcs placeholder helper.
-   *
-   * @var \Drupal\rcs_placeholders\Service\RcsPhEntityHelper
-   */
-  protected $rcsPhEntityHelper;
-
-  /**
    * Module Handler service object.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -51,15 +43,12 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    *   Plugin definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\rcs_placeholders\Service\RcsPhEntityHelper $rcs_ph_helper
-   *   Rcs placeholders helper service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, RcsPhEntityHelper $rcs_ph_helper, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
-    $this->rcsPhEntityHelper = $rcs_ph_helper;
     $this->moduleHandler = $module_handler;
   }
 
@@ -72,7 +61,6 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('rcs_placeholders.entity_helper'),
       $container->get('module_handler')
     );
   }
@@ -81,16 +69,11 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function build() {
-    // Get the rcs placeholder terms data.
-    $ph_term = $this->rcsPhEntityHelper->getRcsPhCategory();
-
-    // If no data, no need to render the block.
-    if (empty($ph_term)) {
-      return [];
-    }
-
-    // Get the placeholder term name.
-    $ph_term_label = $ph_term->label();
+    // Prepare field icon placeholder array.
+    $icon = [
+      'url' => '#rcs.menuItem.icon_url#',
+      'label' => '#rcs.menuItem.name#',
+    ];
 
     // Prepare a static term array with placeholders
     // for all the possible combinations.
@@ -98,20 +81,21 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       '1' => [
         // 1st Level item with clickable and enabled for both mobile an desktop.
         'id' => '1',
-        'label' => $ph_term_label,
-        'path' => '#rcs.category.url_path#',
+        'label' => '#rcs.menuItem.name#',
+        'path' => '#rcs.menuItem.url_path#',
         'clickable' => "1",
         'depth' => 1,
         'move_to_right' => FALSE,
         'highlight_paragraph' => [],
         'class' => ['level-1', 'clickable'],
+        'icon' => $icon,
         'child' => [
           '2' => [
             // 2nd Level item non-clickable and
             // enabled for both mobile an desktop.
             'id' => '2',
-            'label' => $ph_term_label,
-            'path' => '#rcs.category.url_path#',
+            'label' => '#rcs.menuItem.name#',
+            'path' => '#rcs.menuItem.url_path#',
             'clickable' => "1",
             'depth' => 2,
             'move_to_right' => FALSE,
@@ -121,8 +105,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 // 3rd Level item with clickable and
                 // enabled for both mobile an desktop.
                 'id' => '3',
-                'label' => $ph_term_label,
-                'path' => '#rcs.category.url_path#',
+                'label' => '#rcs.menuItem.name#',
+                'path' => '#rcs.menuItem.url_path#',
                 'clickable' => "1",
                 'depth' => 3,
                 'move_to_right' => FALSE,
@@ -133,8 +117,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 // 3rd Level item with clickable and
                 // enabled for both mobile an desktop.
                 'id' => '4',
-                'label' => $ph_term_label,
-                'path' => '#rcs.category.url_path#',
+                'label' => '#rcs.menuItem.name#',
+                'path' => '#rcs.menuItem.url_path#',
                 'clickable' => "0",
                 'depth' => 3,
                 'move_to_right' => FALSE,
@@ -146,8 +130,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           '5' => [
             // 2nd Level item non-clickable and enabled for mobile only.
             'id' => '5',
-            'label' => $ph_term_label,
-            'path' => '#rcs.category.url_path#',
+            'label' => '#rcs.menuItem.name#',
+            'path' => '#rcs.menuItem.url_path#',
             'clickable' => "0",
             'depth' => 2,
             'move_to_right' => FALSE,
@@ -157,8 +141,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 // 3rd Level item with clickable and
                 // enabled for both mobile an desktop.
                 'id' => '6',
-                'label' => $ph_term_label,
-                'path' => '#rcs.category.url_path#',
+                'label' => '#rcs.menuItem.name#',
+                'path' => '#rcs.menuItem.url_path#',
                 'clickable' => "1",
                 'depth' => 3,
                 'move_to_right' => FALSE,
@@ -169,8 +153,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
                 // 3rd Level item with clickable and
                 // enabled for both mobile an desktop.
                 'id' => '7',
-                'label' => $ph_term_label,
-                'path' => '#rcs.category.url_path#',
+                'label' => '#rcs.menuItem.name#',
+                'path' => '#rcs.menuItem.url_path#',
                 'clickable' => "0",
                 'depth' => 3,
                 'move_to_right' => FALSE,
@@ -184,20 +168,21 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       '8' => [
         // 1st Level item non-clickable and enabled for both mobile an desktop.
         'id' => '8',
-        'label' => '#rcs.category.name1#',
-        'path' => '#rcs.category.url_path#',
+        'label' => '#rcs.menuItem.name1#',
+        'path' => '#rcs.menuItem.url_path#',
         'clickable' => "0",
         'depth' => 1,
         'move_to_right' => FALSE,
         'highlight_paragraph' => [],
         'class' => ['level-1', 'non-clickable'],
+        'icon' => $icon,
         'child' => [
           '5' => [
             // 2nd Level item non-clickable and
             // enabled for both mobile an desktop.
             'id' => '5',
-            'label' => $ph_term_label,
-            'path' => '#rcs.category.url_path#',
+            'label' => '#rcs.menuItem.name#',
+            'path' => '#rcs.menuItem.url_path#',
             'clickable' => "1",
             'depth' => 2,
             'move_to_right' => FALSE,
@@ -217,8 +202,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         // 4th Level item with clickable and
         // enabled for both mobile an desktop.
           'id' => '9',
-          'label' => $ph_term_label,
-          'path' => '#rcs.category.url_path#',
+          'label' => '#rcs.menuItem.name#',
+          'path' => '#rcs.menuItem.url_path#',
           'clickable' => "1",
           'depth' => 4,
           'move_to_right' => FALSE,
@@ -262,9 +247,14 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           'block-alshaya-main-menu',
         ],
       ],
-      // @todo need to move prefix and suffix in container type.
-      '#prefix' => '<div id="rcs-ph-navigation_menu" data-rcs-dependency="none">',
-      '#suffix' => '</div>',
+      '#theme_wrappers' => [
+        'container' => [
+          '#attributes' => [
+            'id' => 'rcs-ph-navigation_menu',
+            'data-rcs-dependency' => 'none',
+          ],
+        ],
+      ],
       '#attached' => [
         // Pass in drupal settings for FE.
         'drupalSettings' => [

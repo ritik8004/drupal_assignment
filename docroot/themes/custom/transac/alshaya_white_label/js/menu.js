@@ -23,7 +23,7 @@
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
       // Return if the placeholders text there in code.
-      if ($('.menu__list-item:contains(#rcs.category.name#)').length > 0) {
+      if ($('.menu__list-item:contains(#rcs.menuItem.name#)').length > 0) {
         return;
       }
 

@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_term_font_color
+    - taxonomy.vocabulary.rcs_category
+  enforced:
+    module:
+      - alshaya_rcs_main_menu
+id: taxonomy_term.rcs_category.field_term_font_color
+field_name: field_term_font_color
+entity_type: taxonomy_term
+bundle: rcs_category
+label: 'Font color'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

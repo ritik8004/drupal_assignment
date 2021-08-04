@@ -10,6 +10,16 @@ exports.render = function render(
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
   if (inputs.length !== 0) {
+    // Get the enrichment data. It's a sync call.
+    let enrichmentData = [];
+    jQuery.ajax({
+      url: Drupal.url('v2/categories'),
+      async: false,
+      success: function (data) {
+        enrichmentData = data;
+      }
+    });
+
     // Get the L1 menu list element.
     const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
 
@@ -25,7 +35,13 @@ exports.render = function render(
     // Iterate over each L1 item and get the inner markup
     // prepared recursively.
     inputs.forEach(function eachCategory(level1) {
-      menuHtml += getMenuMarkup(level1, 1, innerHtmlObj, settings);
+      menuHtml += getMenuMarkup(
+        level1,
+        1,
+        innerHtmlObj,
+        settings,
+        enrichmentData,
+      );
     });
 
     // Remove the placeholders markup.
@@ -43,11 +59,12 @@ exports.render = function render(
  * @param {integer} level
  * @param {string} phHtmlObj
  * @param {object} settings
+ * @param {object} enrichmentData
  *
  * @returns
  *  {string} Generated menu markup for given level.
  */
-const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
+const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData) {
   // We support max depth by L4.
   if (level > parseInt(drupalSettings.alshayaRcs.navigationMenu.menuMaxDepth)) {
     return;
@@ -56,7 +73,8 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
   // Build menu item path prefix.
   const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   // @todo remove this when API return the correct path.
-  levelObj.url_path = `/${menuPathPrefixFull}${levelObj.url_path}/`;
+  const levelObjOrgUrlPath = levelObj.url_path;
+  levelObj.url_path = `/${menuPathPrefixFull}${levelObjOrgUrlPath}/`;
 
   const levelIdentifier = `level-${level}`;
   const ifChildren = levelObj.children && levelObj.children.length > 0;
@@ -70,6 +88,55 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
     // For non-clickable the placeholder name is different.
     levelObj.name1 = levelObj.name;
     clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
+  }
+
+  let enrichedDataObj = {};
+  // Get the enrichment data from the settings.
+  if (enrichmentData && enrichmentData[levelObjOrgUrlPath]) {
+    enrichedDataObj = enrichmentData[levelObjOrgUrlPath];
+
+    // Override label from Drupal.
+    levelObj.name = enrichedDataObj.name;
+
+    // Check if term font and background color are available.
+    if (enrichedDataObj.font_color) {
+      clonePhEle.find('div.menu__link-wrapper a, div.menu__link-wrapper div').css("color", enrichedDataObj.font_color);
+    }
+    if (enrichedDataObj.background_color) {
+      clonePhEle.find('div.menu__link-wrapper a, div.menu__link-wrapper div').css("background-color", enrichedDataObj.background_color);
+    }
+
+    // Hide on desktop / mobile.
+    if (!enrichedDataObj.include_in_desktop) {
+      clonePhEle.addClass('hide-on-desktop');
+    }
+    if (!enrichedDataObj.include_in_mobile_tablet) {
+      clonePhEle.addClass('hide-on-mobile');
+    }
+
+    // Move level item to right column. Only for L2 items.
+    if (enrichedDataObj.move_to_right && level === 2) {
+      clonePhEle.addClass('move-to-right');
+    }
+
+    // Override the path if exists.
+    // @todo: Need to handle the super category case.
+    if (typeof enrichedDataObj.path !== 'undefined') {
+      levelObj.url_path = enrichedDataObj.path;
+    }
+
+    // Attach image icon with label.
+    if (typeof enrichedDataObj.icon !== 'undefined') {
+      levelObj.icon_url = enrichedDataObj.icon.icon_url;
+    }
+  }
+
+  // Remove icon markup if no icon or add
+  // wrapper class if available.
+  if (typeof levelObj.icon_url === 'undefined') {
+    clonePhEle.find('span.icon').remove();
+  } else {
+    clonePhEle.addClass('with-icon');
   }
 
   // If menu has no children further, return with actual markup.
@@ -128,7 +195,13 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
           isNewColumn = false;
         }
 
-        levelHtml += getMenuMarkup(rcLevelObj, (parseInt(level) + 1), phHtmlObj, settings);
+        levelHtml += getMenuMarkup(
+          rcLevelObj,
+          (parseInt(level) + 1),
+          phHtmlObj,
+          settings,
+          enrichmentData,
+        );
 
         colTotal += l2_cost;
       });
@@ -138,11 +211,26 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
   } else {
     // For deep level items or if not a menu inline layout.
     levelObj.children.forEach(function eachCategory(rcLevelObj) {
-      levelHtml += getMenuMarkup(rcLevelObj, (parseInt(level) + 1), phHtmlObj, settings);
+      levelHtml += getMenuMarkup(
+        rcLevelObj,
+        (parseInt(level) + 1),
+        phHtmlObj,
+        settings,
+        enrichmentData,
+      );
     });
   }
 
   clonePhEle.find('ul > div:first-child').append(levelHtml);
+  // Override the path if exists.
+  // @todo: Need to handle the super category case.
+  if (typeof enrichedDataObj.highlight_paragraphs !== 'undefined'
+    && level === 1) {
+    clonePhEle.find('ul div.term-image__wrapper').append(enrichedDataObj.highlight_paragraphs.markup);
+    if (enrichedDataObj.highlight_paragraphs.text_link_para) {
+      clonePhEle.find('ul div.term-image__wrapper').addClass('text-link-para');
+    }
+  }
   return navRcsReplacePh(clonePhEle, levelObj);
 };
 
@@ -152,11 +240,12 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings) {
  */
 const navRcsReplacePh = function (phElement, entity) {
   const langcode = drupalSettings.path.currentLanguage;
+  const attributes = drupalSettings.rcsPhSettings.placeholderAttributes;
 
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
   // replacement.
-  rcsPhReplaceEntityPh(phElement[0].outerHTML, 'category', entity, langcode)
+  rcsPhReplaceEntityPh(phElement[0].outerHTML, 'menuItem', entity, langcode)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];
@@ -176,7 +265,7 @@ const navRcsReplacePh = function (phElement, entity) {
       // attribute values. We are now fetching all the elements
       // which have placeholders in the attributes and we
       // apply the replacement.
-      for (const attribute of ['href']) {
+      for (const attribute of attributes) {
         $(`[${attribute} *= '${fieldPh}']`, phElement)
           .each(function eachEntityPhAttributeReplace() {
             $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
