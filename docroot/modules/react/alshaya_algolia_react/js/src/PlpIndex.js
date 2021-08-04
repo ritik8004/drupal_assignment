@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import PlpApp from './plp/PlpApp';
 
 // Proceed only if element is present.
-const requiredData = jQuery('#alshaya-algolia-plp');
-if (requiredData.length && !jQuery.isEmptyObject(requiredData.data())) {
+const listingElement = jQuery('#alshaya-algolia-plp');
+if (listingElement.length && !jQuery.isEmptyObject(listingElement.data())) {
   // Destructure the required values from the attributes.
   const {
     categoryField, ruleContext, level, hierarchy,
-  } = requiredData.data();
+  } = listingElement.data();
 
   ReactDOM.render(
     <PlpApp

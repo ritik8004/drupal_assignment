@@ -6,13 +6,17 @@ import PlpApp from './plp/PlpApp';
   Drupal.behaviors.alshayaAlgoliaReactPLPV2Index = { // eslint-disable-line no-param-reassign
     attach: function process() {
       // Proceed only if RCS is processed.
-      const requiredData = $('#rcs-ph-product_category_list > span');
-      if (requiredData.length && !$.isEmptyObject(requiredData.data())) {
+      const listingElement = $('#rcs-ph-product_category_list > span');
+      if (
+        listingElement.length
+        && !$.isEmptyObject(listingElement.data())
+        && !listingElement.hasClass('processed')) {
         // Destructure the required values from the attributes.
         const {
           categoryField, ruleContext, level, hierarchy,
-        } = requiredData.data();
-
+        } = listingElement.data();
+        // Adding processed class to just execute the rendering once.
+        listingElement.addClass('processed');
         ReactDOM.render(
           <PlpApp
             categoryField={categoryField}
@@ -22,12 +26,10 @@ import PlpApp from './plp/PlpApp';
           />,
           document.querySelector('#alshaya-algolia-plp'),
         );
-      }
-      // Re-attach all behaviors after some delay.
-      // @todo To check for a proper way to Re-attach the behaviors.
-      setTimeout(() => {
+
+        // Re-attach all behaviors after some delay.
         Drupal.attachBehaviors(document, drupalSettings);
-      }, 5000);
+      }
     },
   };
 }(jQuery, Drupal));
