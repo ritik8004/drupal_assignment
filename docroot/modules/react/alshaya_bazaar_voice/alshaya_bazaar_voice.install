@@ -9,6 +9,28 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\block\BlockInterface;
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Moving bazaarvoice block from default to active theme.
+ */
+function alshaya_bazaar_voice_update_8003() {
+  $block_id = 'bazaarvoiceuserdatablock';
+  $target_theme = \Drupal::config('system.theme')->get('default');
+  $bazaarvoice_default_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => 'alshaya_white_label']);
+  if (!empty($bazaarvoice_default_blocks)) {
+    $bazaarvoice_default_block = reset($bazaarvoice_default_blocks);
+    if ($bazaarvoice_default_block instanceof Block) {
+      $block = $bazaarvoice_default_block->createDuplicateBlock($block_id, $target_theme);
+      // Delete the default block.
+      $bazaarvoice_default_block->delete();
+      // We save the block on the new theme.
+      $block->save();
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().
