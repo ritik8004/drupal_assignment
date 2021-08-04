@@ -6,10 +6,16 @@
 /**
  * Check if product is available for home delivery.
  *
+ * @param {object} entity
+ *   The product entity.
+ *
+ * @returns {Boolean}
+ *   Returns true if the product is available for home delivery else false.
+ *
  * @see alshaya_acm_product_available_home_delivery().
  */
-function isProductAvailableForHomeDelivery() {
-  return isProductBuyable();
+function isProductAvailableForHomeDelivery(entity) {
+  return isProductBuyable(entity);
 }
 
 /**
@@ -26,10 +32,15 @@ function isProductAvailableForClickAndCollect() {
 
 /**
  * Check if the product is buyable.
+ *
+ * @param {object} entity
+ *   The product entity.
+ *
+ * @returns {Boolean}
+ *   Returns true/false if product is buyable/not buyable.
  */
-function isProductBuyable() {
-  // @todo: Check for the buyable field of the product.
-  return true;
+function isProductBuyable(entity) {
+  return Boolean(drupalSettings.alshayaRcs.isAllProductsBuyable || entity.is_buyable);
 }
 
 exports.render = function render(
@@ -44,40 +55,42 @@ exports.render = function render(
   let html = "";
   switch (placeholder) {
     case "delivery-option":
+      if (!isProductBuyable(entity)) {
+        break;
+      }
+
       const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
       const cncEnabled = isProductAvailableForClickAndCollect();
-      const isDeliveryOptionsAvailable = isProductAvailableForHomeDelivery() || cncEnabled;
+      const isDeliveryOptionsAvailable = isProductAvailableForHomeDelivery(entity) || cncEnabled;
 
       if (isDeliveryOptionsAvailable) {
         const homeDelivery = jQuery('.rcs-templates--delivery_option-home-delivery').clone().children();
         jQuery('.field__content', deliveryOptionsWrapper).append(homeDelivery);
 
-        if (isProductBuyable()) {
-          const clickAndCollect = jQuery('.rcs-templates--delivery_option-click-and-collect').clone().children();
+        const clickAndCollect = jQuery('.rcs-templates--delivery_option-click-and-collect').clone().children();
 
-          if (entity.type_id === 'configurable') {
-            jQuery('.c-accordion_content .simple', clickAndCollect).remove();
-          }
-          else {
-            jQuery('.c-accordion_content .configurable', clickAndCollect).remove();
-          }
-
-          clickAndCollect.attr({
-            'data-state': cncEnabled ? 'enabled' : 'disabled',
-            'data-product-type': entity.type_id,
-            // @todo: Add method to clean the SKU value as twig's clean_class.
-            // @see: \Drupal\Component\Utility\Html::getClass().
-            'data-sku-clean': entity.sku,
-          });
-
-          const subTitle = cncEnabled
-            ? drupalSettings.alshaya_click_collect.subtitle.enabled
-            : drupalSettings.alshaya_click_collect.subtitle.disabled;
-          $('.subtitle', clickAndCollect).html(subTitle);
-
-          // Add click and collect to the delivery options field.
-          jQuery('.field__content', deliveryOptionsWrapper).append(clickAndCollect);
+        if (entity.type_id === 'configurable') {
+          jQuery('.c-accordion_content .simple', clickAndCollect).remove();
         }
+        else {
+          jQuery('.c-accordion_content .configurable', clickAndCollect).remove();
+        }
+
+        clickAndCollect.attr({
+          'data-state': cncEnabled ? 'enabled' : 'disabled',
+          'data-product-type': entity.type_id,
+          // @todo: Add method to clean the SKU value as twig's clean_class.
+          // @see: \Drupal\Component\Utility\Html::getClass().
+          'data-sku-clean': entity.sku,
+        });
+
+        const subTitle = cncEnabled
+          ? drupalSettings.alshaya_click_collect.subtitle.enabled
+          : drupalSettings.alshaya_click_collect.subtitle.disabled;
+        $('.subtitle', clickAndCollect).html(subTitle);
+
+        // Add click and collect to the delivery options field.
+        jQuery('.field__content', deliveryOptionsWrapper).append(clickAndCollect);
       }
 
       html += deliveryOptionsWrapper.html();
@@ -133,23 +146,6 @@ exports.computePhFilters = function (input, filter) {
       }
 
       value = jQuery(priceBlock).html();
-      break;
-
-    case 'quantity':
-      // @todo Check for how to fetch the max sale quantity.
-      const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-      const quantityDroprown = jQuery('.edit-quantity');
-      // Remove the quantity filter.
-      quantityDroprown.html('');
-
-      for (let i = 1; i <= quantity; i++) {
-        if (i === 1) {
-          quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-          continue;
-        }
-        quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
-      }
-      value = quantityDroprown.html();
       break;
 
     case 'sku':
@@ -332,6 +328,30 @@ exports.computePhFilters = function (input, filter) {
     case 'add_to_cart':
       value = '';
 
+      if (!isProductBuyable(input)) {
+        // Just show the not buyable text and don't show the form.
+        value = jQuery('.rcs-templates--not-buyable-product').html();
+        break;
+      }
+
+      const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
+      skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
+
+      // @todo Check for how to fetch the max sale quantity.
+      const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
+      const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
+      // Remove the quantity filter.
+      quantityDroprown.html('');
+
+      for (let i = 1; i <= quantity; i++) {
+        if (i === 1) {
+          quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
+          continue;
+        }
+        quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+      }
+      jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
+
       // This wrapper will be removed after processing.
       const tempDivWrapper = jQuery('<div>');
 
@@ -407,10 +427,26 @@ exports.computePhFilters = function (input, filter) {
             optionsListWrapper.addClass('hidden');
           }
         });
+
+        // Add the configurable options to the form.
+        jQuery('#configurable_ajax', skuBaseForm).append(tempDivWrapper.children());
       }
 
-      // Remove the temporary wrapper.
-      value = tempDivWrapper.html();
+      // Replace the placeholder attributes in the sku base form template.
+      const attributes = getRcsPlaceholderAttributes();
+      rcsPhReplaceEntityPh(skuBaseForm.html(), drupalSettings.rcsPage.type, input, drupalSettings.path.currentLanguage)
+        .forEach(function eachReplacement(r) {
+          const fieldPh = r[0];
+          const entityFieldValue = r[1];
+          for (const attribute of attributes) {
+            $(`[${ attribute } *= '${ fieldPh }']`, skuBaseForm)
+              .each(function eachEntityPhAttributeReplace() {
+                $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
+              });
+          }
+        });
+
+      value = skuBaseForm.html();
       break;
 
     default:

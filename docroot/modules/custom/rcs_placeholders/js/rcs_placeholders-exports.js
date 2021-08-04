@@ -191,3 +191,8 @@ rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
 
   return replacements;
 };
+
+/**
+ * Returns the attributes which can contain placeholders.
+ */
+getRcsPlaceholderAttributes = () => drupalSettings.rcsPhSettings.placeholderAttributes;
