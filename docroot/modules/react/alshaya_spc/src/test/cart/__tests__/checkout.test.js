@@ -745,24 +745,12 @@ describe('Checkout', () => {
 
         let result = await getCartStores(10, 20);
         expect(axios.mock.calls.length).toEqual(1);
-        expect(result.error).toEqual(true);
+        expect(result.data.error).toEqual(true);
       });
     });
 
     describe('Test getCncStores()', () => {
       const getCncStores = utilsRewire.__get__('getCncStores');
-
-      it('With no cart id', async () => {
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => null);
-
-        let result = await getCncStores(10, 20);
-        expect(result.data.error).toEqual(true);
-        expect(result.data.error_code).toEqual(404);
-        expect(result.data.response_message.status).toEqual('error');
-        expect(result.data.response_message.msg).toEqual('No cart in session');
-      });
 
       it('With mock data', async () => {
         axios
@@ -785,7 +773,7 @@ describe('Checkout', () => {
           .mockImplementation(() => '1234');
 
         let result = await getCncStores(null, 20);
-        expect(result.data).toEqual([]);
+        expect(result).toEqual([]);
       });
 
       it('When lon is not provided', async () => {
@@ -794,7 +782,7 @@ describe('Checkout', () => {
           .mockImplementation(() => '1234');
 
         let result = await getCncStores(10, null);
-        expect(result.data).toEqual([]);
+        expect(result).toEqual([]);
       });
 
       it('When fetching the cart stores fails', async () => {
