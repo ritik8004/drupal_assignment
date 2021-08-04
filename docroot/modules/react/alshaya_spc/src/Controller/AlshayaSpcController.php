@@ -521,11 +521,6 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
-    $strings[] = [
-      'key' => 'backend_obsolete_version',
-      'value' => $this->t('We have upgraded your experience, please refresh the page and try again.'),
-    ];
-
     $backend_version = $this->spcHelper->getCommerceBackendVersion();
 
     $build = [

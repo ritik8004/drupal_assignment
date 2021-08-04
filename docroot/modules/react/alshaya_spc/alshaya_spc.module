@@ -281,5 +281,5 @@ function alshaya_spc_preprocess_page(&$variables) {
       ],
     ],
   ];
-  $variables['page']['pre_content']['commerce_backend'] = $strings;
+  $variables['page']['content']['commerce_backend'] = $strings;
 }
