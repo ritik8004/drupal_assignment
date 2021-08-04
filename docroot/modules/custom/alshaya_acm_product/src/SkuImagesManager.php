@@ -93,13 +93,6 @@ class SkuImagesManager {
   protected $skuImagesHelper;
 
   /**
-   * Media cache key.
-   *
-   * @var string
-   */
-  protected $skuMediaCacheKey;
-
-  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -137,9 +130,6 @@ class SkuImagesManager {
     $this->skuImagesHelper = $images_helper;
 
     $this->productDisplaySettings = $this->configFactory->get('alshaya_acm_product.display_settings');
-
-    // Set cache key.
-    $this->skuMediaCacheKey = self::PRODUCT_MEDIA_CACHE_KEY;
   }
 
   /**
@@ -195,7 +185,7 @@ class SkuImagesManager {
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
     $cache_key = implode(':', [
-      $this->skuMediaCacheKey,
+      static::PRODUCT_MEDIA_CACHE_KEY,
       (int) $check_parent_child,
       $context,
     ]);

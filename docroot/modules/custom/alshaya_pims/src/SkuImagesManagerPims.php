@@ -30,13 +30,6 @@ class SkuImagesManagerPims extends SkuImagesManager {
   protected $innerService;
 
   /**
-   * Media cache key for pims.
-   *
-   * @var string
-   */
-  protected $skuMediaCacheKey;
-
-  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_image_manager
@@ -77,9 +70,6 @@ class SkuImagesManagerPims extends SkuImagesManager {
       $product_cache_manager,
       $sku_images_helper
     );
-
-    // Override cache key.
-    $this->skuMediaCacheKey = self::PRODUCT_MEDIA_CACHE_KEY;
   }
 
   /**
