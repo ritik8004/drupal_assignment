@@ -14,21 +14,6 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Add new string translations.
- */
-function alshaya_spc_update_8014() {
-  $strings = [
-    'We have upgraded your experience, please refresh the page and try again.' => [
-      'ar' => '.لقد قمنا بترقية تجربتك ، يرجى تحديث الصفحة والمحاولة مرة أخرى',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add translations for V2.
  */
 function alshaya_spc_update_8013() {
