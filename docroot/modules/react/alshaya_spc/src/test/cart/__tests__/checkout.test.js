@@ -740,6 +740,16 @@ describe('Checkout', () => {
     describe('Test getCncStores()', () => {
       const getCncStores = utilsRewire.__get__('getCncStores');
 
+      it('When cart ID is not provided', async () => {
+        let result = await getCncStores(10, 20);
+
+        expect(axios.mock.calls.length).toEqual(0);
+        expect(result).toEqual(expect.objectContaining({
+          'error': true,
+          'error_code': 404,
+        }));
+      });
+
       it('When lat is not provided', async () => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
@@ -770,7 +780,6 @@ describe('Checkout', () => {
 
         expect(axios.mock.calls.length).toEqual(1);
         expect(result.data.error).toEqual(true);
-        expect(result.data.error_code).toEqual(600);
       });
     });
 
