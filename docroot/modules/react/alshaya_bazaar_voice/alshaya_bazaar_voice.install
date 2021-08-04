@@ -197,14 +197,14 @@ function _disable_bv_rating_blocks_in_algolia_plp() {
 function _move_bazaarvoice_user_block_to_current_theme() {
   $block_id = 'bazaarvoiceuserdatablock';
   $target_theme = \Drupal::config('system.theme')->get('default');
-  $bazaarvoice_default_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => 'alshaya_white_label']);
-  if (!empty($bazaarvoice_default_blocks)) {
-    $bazaarvoice_default_block = reset($bazaarvoice_default_blocks);
-    if ($bazaarvoice_default_block instanceof Block) {
-      $block = $bazaarvoice_default_block->createDuplicateBlock($block_id, $target_theme);
+  $bazaarvoice_user_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => 'alshaya_white_label']);
+  if (!empty($bazaarvoice_user_blocks)) {
+    $bazaarvoice_user_block = reset($bazaarvoice_user_blocks);
+    if ($bazaarvoice_user_block instanceof Block) {
+      $block = $bazaarvoice_user_block->createDuplicateBlock($block_id, $target_theme);
       // Delete the default block.
-      $bazaarvoice_default_block->delete();
-      // We save the block on the new theme.
+      $bazaarvoice_user_block->delete();
+      // We save the block on the active theme.
       $block->save();
     }
   }
