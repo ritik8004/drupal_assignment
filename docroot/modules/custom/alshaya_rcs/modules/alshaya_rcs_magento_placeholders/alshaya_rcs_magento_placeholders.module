@@ -117,17 +117,12 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
     $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['baseUrl'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
-  // Get the current language, and magento language prefix array.
+  // Get the current language, and magento language prefix array,
+  // And pass the store header info to use in magento API calls.
   $current_language = \Drupal::languageManager()
-    ->getConfigOverrideLanguage()
+    ->getCurrentLanguage()
     ->getId();
-  $magento_lang_prefix = Settings::get('magento_lang_prefix');
-
-  // If magento lang prefix defined, pass the
-  // store header info to use in magento API calls.
-  if (!empty($magento_lang_prefix)) {
-    $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['store'] = $magento_lang_prefix[$current_language];
-  }
+  $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['store'] = Settings::get('magento_lang_prefix')[$current_language];
 }
 
 /**

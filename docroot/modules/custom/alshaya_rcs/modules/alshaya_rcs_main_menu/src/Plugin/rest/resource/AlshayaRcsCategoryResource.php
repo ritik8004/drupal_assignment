@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Provides a resource to get list of all categories.
@@ -116,18 +117,17 @@ class AlshayaRcsCategoryResource extends ResourceBase {
   }
 
   /**
-   * Adding payment method terms dependency to response.
+   * Adding rcs category terms dependency to response.
    *
    * @param \Drupal\rest\ResourceResponse $response
    *   Response object.
    */
   protected function addCacheableTermDependency(ResourceResponse $response) {
-    $cachebleTerms = $this->alshayaRcsCategoryHelper->getCacheableTerms();
-    if (!empty($cachebleTerms)) {
-      foreach ($cachebleTerms as $cachebleTerm) {
-        $response->addCacheableDependency($cachebleTerm);
-      }
-    }
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
+      '#cache' => [
+        'tags' => $this->alshayaRcsCategoryHelper->getTermsCacheTags(),
+      ],
+    ]));
   }
 
 }

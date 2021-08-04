@@ -9,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Service provides helper functions for the rcs category taxonomy.
@@ -46,11 +47,11 @@ class AlshayaRcsCategoryHelper {
   protected $languageManager;
 
   /**
-   * Rcs category cacheable term objects list.
+   * Rcs category term cache tags.
    *
    * @var array
    */
-  protected $cacheableTerms = [];
+  protected $termCacheTags = [];
 
   /**
    * Constructs a new AlshayaRcsCategoryHelper instance.
@@ -77,6 +78,11 @@ class AlshayaRcsCategoryHelper {
   /**
    * Get the placeholder term data from rcs_category.
    *
+   * @param string $langcode
+   *   Language code to get terms.
+   * @param string $context
+   *   Context value either web/app.
+   *
    * @return array
    *   Placeholder term's data.
    */
@@ -97,6 +103,11 @@ class AlshayaRcsCategoryHelper {
       return NULL;
     }
 
+    $this->termCacheTags = [
+      'taxonomy_term:' . self::VOCABULARY_ID,
+      'taxonomy_term:' . self::VOCABULARY_ID . ':new',
+    ];
+
     $data = [];
     foreach ($terms as $term_id) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
@@ -115,17 +126,19 @@ class AlshayaRcsCategoryHelper {
       $record = [
         'id' => $term_id,
         'name' => $term->label(),
-        'include_in_desktop' => (int) $term->field_include_in_desktop->value,
-        'include_in_mobile_tablet' => (int) $term->field_include_in_mobile_tablet->value,
-        'move_to_right' => (int) $term->field_move_to_right->value,
-        'font_color' => $term->field_term_font_color->value,
-        'background_color' => $term->field_term_background_color->value,
+        'include_in_desktop' => (int) $term->get('field_include_in_desktop')->getString(),
+        'include_in_mobile_tablet' => (int) $term->get('field_include_in_mobile_tablet')->getString(),
+        'move_to_right' => (int) $term->get('field_move_to_right')->getString(),
+        'font_color' => $term->get('field_term_font_color')->getString(),
+        'background_color' => $term->get('field_term_background_color')->getString(),
       ];
 
-      if ($term->field_target_link->uri) {
-        $path = UrlHelper::isExternal($term->field_target_link->uri)
-          ? $term->field_target_link->uri
-          : Url::fromUri($term->field_target_link->uri)->toString(TRUE)->getGeneratedUrl();
+      // Get overridden target link.
+      $field_target_link_uri = $term->get('field_target_link')->getString();
+      if ($field_target_link_uri) {
+        $path = UrlHelper::isExternal($field_target_link_uri)
+          ? $field_target_link_uri
+          : Url::fromUri($field_target_link_uri)->toString(TRUE)->getGeneratedUrl();
         $record['path'] = $path;
       }
 
@@ -136,17 +149,19 @@ class AlshayaRcsCategoryHelper {
       }
 
       // If icon available, only for web.
-      if (!empty($term->field_icon->target_id) && $context != 'app') {
-        $image = $this->entityTypeManager->getStorage('file')->load($term->field_icon->target_id);
+      $field_icon = $term->get('field_icon')->getValue() ?? [];
+      if ($field_icon && $field_icon['0']['target_id'] && $context != 'app') {
+        $image = $this->entityTypeManager->getStorage('file')->load($field_icon['0']['target_id']);
         $record['icon'] = [
           'icon_url' => file_url_transform_relative(file_create_url($image->getFileUri())),
         ];
       }
 
       // Add term object in array for cache dependency.
-      $this->cacheableTerms[] = $term;
+      $this->termCacheTags = Cache::mergeTags($this->termCacheTags, $term->getCacheTags());
 
-      $data[$term->field_category_slug->value] = $record;
+      $menu_item_slug = $term->get('field_category_slug')->getString();
+      $data[$menu_item_slug] = $record;
     }
 
     return $data;
@@ -259,13 +274,13 @@ class AlshayaRcsCategoryHelper {
   }
 
   /**
-   * Return the RCS category term array for cache dependency.
+   * Return the RCS category term cache tags cache dependency.
    *
    * @return array
    *   Cacheable term objects.
    */
-  public function getCacheableTerms() {
-    return $this->cacheableTerms;
+  public function getTermsCacheTags() {
+    return $this->termCacheTags;
   }
 
 }

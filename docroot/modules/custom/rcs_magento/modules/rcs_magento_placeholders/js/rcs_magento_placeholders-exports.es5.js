@@ -1,7 +1,6 @@
 // @codingStandardsIgnoreFile
 exports.getEntity = async function getEntity(langcode) {
-  if (typeof drupalSettings.rcsPage === 'undefined'
-    || typeof drupalSettings.alshayaRcs.commerceBackend.store === 'undefined') {
+  if (typeof drupalSettings.rcsPage === 'undefined') {
     return null;
   }
 
@@ -191,8 +190,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
     case 'navigation_menu':
       // Early return if the root category is undefined.
-      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined'
-        || typeof drupalSettings.alshayaRcs.commerceBackend.store === 'undefined') {
+      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
         return null;
       }
 
