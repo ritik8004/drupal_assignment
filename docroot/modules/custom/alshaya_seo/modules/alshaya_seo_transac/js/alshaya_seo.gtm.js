@@ -1348,24 +1348,13 @@ const productRecommendationsSuffix = 'pr-';
     if ($.type(message) !== 'string') {
       message = JSON.stringify(message);
     }
-    var getCartId = localStorage.getItem('last_selected_payment');
-    var cartObject = localStorage.getItem('cart_data');
-    var cartId = 0;
-    if (category && getCartId) {
-      var extractCartId = getCartId.split(':');
-      cartId = extractCartId[1];
-    }
-    else if (category && cartObject) {
-      cartObject = JSON.parse(cartObject);
-      cartId = cartObject.cart.cart_id;
-    }
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
       eventAction: message,
       eventPlace: 'Error occurred on ' + window.location.href,
-      eventValue: cartId,
+      eventValue: 0,
       nonInteraction: 0,
     };
 
@@ -1391,7 +1380,8 @@ const productRecommendationsSuffix = 'pr-';
   // If TrackJS is enabled we let it track the errors.
   if (drupalSettings.gtm.log_errors_to_ga !== undefined
     && drupalSettings.gtm.log_errors_to_ga
-    && window.TrackJS === undefined) {
+    && typeof window.TrackJS === 'undefined'
+    && typeof window.DD_LOGS === 'undefined') {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);
