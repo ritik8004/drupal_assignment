@@ -38,7 +38,7 @@ class PhotoUrls extends React.Component {
         if (result.status === 200) {
           if (result.data) {
             const photoUrl = result.data;
-            const params = `&contenttype=Review&photourl=${encodeURIComponent(photoUrl)}`;
+            const params = `&contenttype=Review&photourl=${photoUrl}`;
             const apiUri = '/data/uploadphoto.json';
             const apiData = postAPIPhoto(apiUri, params);
             if (apiData instanceof Promise) {
