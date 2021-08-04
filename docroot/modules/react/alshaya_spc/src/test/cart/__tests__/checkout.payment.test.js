@@ -1,11 +1,10 @@
-import StaticStorage from "../../../../js/backend/v2/staticStorage";
-
 jest.mock('axios');
 import axios from 'axios';
-import { getPaymentMethods }  from "../../../../js/backend/v2/checkout.payment";
+import { getPaymentMethods }  from '../../../../js/backend/v2/checkout.payment';
 import { drupalSettings, Drupal } from '../globals';
+import paymentMethods from '../data/paymentMethods';
+import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import * as cartData from '../data/cart.json';
-import paymentMethods from "../data/paymentMethods";
 
 describe('Checkout Payment', () => {
   describe('Checkout Payment functions', () => {
