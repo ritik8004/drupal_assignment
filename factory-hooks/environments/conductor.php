@@ -1101,6 +1101,11 @@ $conductors = [
     'hmac_secret' => 'MDFlYTlhYzUtNGVmMy00',
     'site_id' => 370,
   ],
+  'aeoqa_dev3' => [
+    'hmac_id' => 'ecd62d5ab65a4a4aa1f11321460445b3',
+    'hmac_secret' => 'ODNkNDA0MjctZTkyYy00',
+    'site_id' => 457,
+  ],
   'aeoqa_qa' => [
     'hmac_id' => '7203b241292f4d2db96141d4fbd16adc',
     'hmac_secret' => 'NzM4YjQ1NDctMDU0Yy00',
