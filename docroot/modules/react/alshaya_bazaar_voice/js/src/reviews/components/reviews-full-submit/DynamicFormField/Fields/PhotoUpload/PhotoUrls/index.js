@@ -1,5 +1,5 @@
 import React from 'react';
-import { postAPIData } from '../../../../../../../utilities/api/apiData';
+import { postAPIPhoto } from '../../../../../../../utilities/api/apiData';
 import { postRequest } from '../../../../../../../utilities/api/request';
 import {
   removeFullScreenLoader,
@@ -38,9 +38,9 @@ class PhotoUrls extends React.Component {
         if (result.status === 200) {
           if (result.data) {
             const photoUrl = result.data;
-            const params = `&contenttype=Review&photourl=${photoUrl}`;
+            const params = `&contenttype=Review&photourl=${encodeURIComponent(photoUrl)}`;
             const apiUri = '/data/uploadphoto.json';
-            const apiData = postAPIData(apiUri, params);
+            const apiData = postAPIPhoto(apiUri, params);
             if (apiData instanceof Promise) {
               apiData.then((response) => {
                 if (response.error === undefined && response.data !== undefined) {
@@ -48,12 +48,22 @@ class PhotoUrls extends React.Component {
                   if (response.data.Photo !== undefined
                     && response.data.Photo !== null) {
                     const url = response.data.Photo.Sizes.thumbnail.Url;
-                    // Save uploaded image url.
-                    this.setState({ bvPhotoUrl: url });
+                    // Remove file upload temporarily.
+                    const removeFile = postRequest('/removefile', data);
+                    if (removeFile instanceof Promise) {
+                      removeFile.then((resp) => {
+                        if (resp.status === 200 && resp.data) {
+                          // Save uploaded image url.
+                          this.setState({ bvPhotoUrl: url });
+                        } else {
+                          Drupal.logJavascriptError('review-photo-delete', resp.error);
+                        }
+                      });
+                    }
                   }
                 } else {
                   removeFullScreenLoader();
-                  Drupal.logJavascriptError('review-bv-photo-urls', result.error);
+                  Drupal.logJavascriptError('review-bv-photo-urls', response.error);
                 }
               });
             }
