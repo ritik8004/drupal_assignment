@@ -10,12 +10,6 @@ alshaya_bazaar_voice.upload:
     _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::uploadFile'
   requirements:
     _access: 'TRUE'
-alshaya_bazaar_voice.remove:
-  path: '/removefile'
-  defaults:
-    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::removeFile'
-  requirements:
-    _access: 'TRUE'
 alshaya_bazaar_voice.uas_token:
   path: '/get-uas-token'
   defaults:
