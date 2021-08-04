@@ -756,9 +756,9 @@ class SkuImagesManager {
 
             if ($this->productDisplaySettings->get('image_thumb_gallery')) {
               $thumbnail = $this->skuImagesHelper->getSkuImage(
-              $media_item,
-              SkuImagesHelper::STYLE_PRODUCT_LISTING,
-              SkuImagesHelper::STYLE_PRODUCT_LISTING
+                $media_item,
+                SkuImagesHelper::STYLE_PRODUCT_LISTING,
+                SkuImagesHelper::STYLE_PRODUCT_LISTING
               );
               if (!empty($thumbnail)) {
                 $thumbnails[] = $thumbnail;

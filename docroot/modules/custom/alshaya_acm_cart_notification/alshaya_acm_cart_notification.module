@@ -7,7 +7,6 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuImagesHelper;
-use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
