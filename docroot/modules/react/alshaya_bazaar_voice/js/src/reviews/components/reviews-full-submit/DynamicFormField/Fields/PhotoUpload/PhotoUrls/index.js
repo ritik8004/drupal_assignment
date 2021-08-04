@@ -38,7 +38,7 @@ class PhotoUrls extends React.Component {
         if (result.status === 200) {
           if (result.data) {
             const photoUrl = result.data;
-            const params = `&contenttype=Review&photourl=${encodeURIComponent(photoUrl)}`;
+            const params = `&contenttype=Review&photourl=${photoUrl}`;
             const apiUri = '/data/uploadphoto.json';
             const apiData = postAPIPhoto(apiUri, params);
             if (apiData instanceof Promise) {
@@ -48,18 +48,7 @@ class PhotoUrls extends React.Component {
                   if (response.data.Photo !== undefined
                     && response.data.Photo !== null) {
                     const url = response.data.Photo.Sizes.thumbnail.Url;
-                    // Remove file upload temporarily.
-                    const removeFile = postRequest('/removefile', data);
-                    if (removeFile instanceof Promise) {
-                      removeFile.then((resp) => {
-                        if (resp.status === 200 && resp.data) {
-                          // Save uploaded image url.
-                          this.setState({ bvPhotoUrl: url });
-                        } else {
-                          Drupal.logJavascriptError('review-photo-delete', resp.error);
-                        }
-                      });
-                    }
+                    this.setState({ bvPhotoUrl: url });
                   }
                 } else {
                   removeFullScreenLoader();
