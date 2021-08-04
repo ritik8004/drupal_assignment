@@ -819,10 +819,10 @@ describe('Checkout', () => {
         let cache = StaticStorage.get('shipping_methods');
 
         // Check results.
-        expect(cache[Object.keys(cache)[0]]).toEqual(result.data);
+        expect(cache[Object.keys(cache)[0]]).toEqual(result.methods);
         expect(axios).toBeCalledTimes(1);
         expect(result.error).toEqual(false);
-        expect(result.data.length).toEqual(1);
+        expect(result.methods.length).toEqual(1);
 
         // Call the function for the second time to test the static cache.
         jest.clearAllMocks();
@@ -831,9 +831,9 @@ describe('Checkout', () => {
         // Check results.
         expect(axios).toBeCalledTimes(0);
         expect(result.error).toEqual(false);
-        expect(result.data.length).toEqual(1);
-        expect(result.data[0].carrier_code).toEqual('alshayadelivery');
-        expect(result.data[0].carrier_title).toEqual('Standard Delivery');
+        expect(result.methods.length).toEqual(1);
+        expect(result.methods[0].carrier_code).toEqual('alshayadelivery');
+        expect(result.methods[0].carrier_title).toEqual('Standard Delivery');
       });
 
       it('With response errors', async () => {
