@@ -7,6 +7,58 @@ drupalSettings = window.drupalSettings;
 window.commerceBackend = window.commerceBackend || {};
 
 /**
+ * Formats the error message as required for cart.
+ *
+ * @param {int} code
+ *   The response code.
+ * @param {string} message
+ *   The response message.
+ */
+const returnExistingCartWithError = (code, message) => {
+  let cart = window.commerceBackend.getCartDataFromStorage();
+  const error = {
+    error: true,
+    error_code: code,
+    error_message: message,
+    response_message: [message, 'error'],
+  };
+
+  cart = cart ? cart.cart : {};
+  cart = Object.assign(cart, error);
+
+  return { data: cart };
+};
+
+/**
+ * Check if we have tried to call middleware when the commerce backend is set to V2.
+ *
+ * @param {object} response
+ *    The response object.
+ *
+ * @return {object}
+ *    The original response object or an error.
+ */
+const backendCheck = (response) => {
+  if (
+    typeof response.data !== 'undefined'
+    && typeof response.data.error !== 'undefined'
+    && response.data.error_code === 612
+  ) {
+    if (!sessionStorage.getItem('reloadOnBackendSwitch')) {
+      // Reload the page only once. The caches are expected to be cleared till then.
+      sessionStorage.setItem('reloadOnBackendSwitch', 1);
+      window.location.reload();
+    }
+    return returnExistingCartWithError(
+      response.status,
+      getStringMessage('backend_obsolete_version'),
+    );
+  }
+
+  return response;
+};
+
+/**
  * Check if user is anonymous and without cart.
  *
  * @returns {bool}
@@ -59,30 +111,8 @@ const callMiddlewareApi = (url, method, data) => {
     ajaxCallParams.data = data;
   }
 
-  return Axios(ajaxCallParams);
-};
-
-/**
- * Formats the error message as required for cart.
- *
- * @param {int} code
- *   The response code.
- * @param {string} message
- *   The response message.
- */
-const returnExistingCartWithError = (code, message) => {
-  let cart = window.commerceBackend.getCartDataFromStorage();
-  const error = {
-    error: true,
-    error_code: code,
-    error_message: message,
-    response_message: [message, 'error'],
-  };
-
-  cart = cart ? cart.cart : {};
-  cart = Object.assign(cart, error);
-
-  return { data: cart };
+  return Axios(ajaxCallParams)
+    .then((response) => backendCheck(response));
 };
 
 /**
@@ -94,29 +124,7 @@ const returnExistingCartWithError = (code, message) => {
  * @returns {Promise}
  *   A promise object.
  */
-const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data)).then(
-  (response) => {
-    // Check if we have tried to call middleware when the commerce backend is
-    // set to V2.
-    if (
-      typeof response.data.error !== 'undefined'
-      && response.data.error_code === 612
-    ) {
-      if (!sessionStorage.getItem('reloadOnBackendSwitch')) {
-        // Reload the page only once. The caches are expected to be cleared till
-        // then.
-        sessionStorage.setItem('reloadOnBackendSwitch', 1);
-        window.location.reload();
-      }
-      return returnExistingCartWithError(
-        response.status,
-        getStringMessage('backend_obsolete_version'),
-      );
-    }
-
-    return response;
-  },
-);
+const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
 
 /**
  * Gets the cached cart data.
@@ -155,4 +163,5 @@ export {
   isAnonymousUserWithoutCart,
   updateCart,
   returnExistingCartWithError,
+  backendCheck,
 };
