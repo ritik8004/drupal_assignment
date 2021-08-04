@@ -160,7 +160,7 @@ const getApiEndpoint = (action, params = {}) => {
 
     case 'getLastOrder':
       endpoint = isUserAuthenticated()
-        ? '/V1/customer-order/me/getLastOrder/'
+        ? '/V1/customer-order/me/getLastOrder'
         : '';
       break;
 

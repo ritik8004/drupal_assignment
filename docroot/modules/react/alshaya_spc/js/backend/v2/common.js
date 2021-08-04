@@ -348,9 +348,11 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
         return handleResponse(error.request);
       }
 
-      return logger.error('Something happened in setting up the request that triggered an error: @error.', {
+      logger.error('Something happened in setting up the request that triggered an error: @error.', {
         '@error': error.message,
       });
+
+      return error;
     });
 };
 

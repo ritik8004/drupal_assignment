@@ -44,7 +44,6 @@ export default class PaymentMethods extends React.Component {
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
 
-
       if (paymentErrorInfo.status === 'declined' && paymentErrorInfo.payment_method === 'postpay') {
         message = parse(getStringMessage('postpay_error'));
         // Adding Postpay identifier to the error message for the GA event.
