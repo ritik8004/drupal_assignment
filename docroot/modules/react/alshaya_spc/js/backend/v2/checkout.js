@@ -341,7 +341,10 @@ const getCartStores = async (lat, lon) => {
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
-    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${response.data.error_message}`);
+    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @response.', {
+      '@cartId': cartId,
+      '@response': JSON.stringify(response.data),
+    });
     return response;
   }
   stores = response.data;
@@ -367,7 +370,10 @@ const getCartStores = async (lat, lon) => {
         .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
     }
   } catch (error) {
-    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
+    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @message.', {
+      '@cartId': cartId,
+      '@message': error.message,
+    });
   }
 
   return stores;
@@ -381,8 +387,8 @@ const getCartStores = async (lat, lon) => {
  * @param {string} lon
  *   The longitude value.
  *
- * @returns {Promise<object>}
- *   Object containing list of stores.
+ * @returns {Promise<array>}
+ *   The list of stores.
  */
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
@@ -392,7 +398,12 @@ const getCncStores = async (lat, lon) => {
   }
 
   if (!lat || !lon) {
-    logger.error(`Error while fetching CnC store for cart ${cartId}. One of lat/lon is not provided. Lat = ${lat}, Lon = ${lon}.`);
+    logger.warning('Error while fetching CnC store for cart @cartId. One of lat/lon is not provided. Lat: @lat, Lon: @lon.', {
+      '@cartId': cartId,
+      '@lat': lat || '',
+      '@lon': lon || '',
+    });
+
     return [];
   }
 
@@ -839,6 +850,7 @@ const applyDefaultShipping = async (order) => {
     }
 
     const availableStores = await getCartStores(store.lat, store.lng);
+
     const availableStoreCodes = availableStores.map((value) => value.code);
 
     if (_includes(availableStoreCodes, store.code)) {
