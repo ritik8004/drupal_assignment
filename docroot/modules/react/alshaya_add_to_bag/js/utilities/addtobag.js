@@ -191,7 +191,7 @@ export const getAllowedAttributeValues = (
 
   // Check if the end of the hierarchy has been reached.
   /* eslint-disable eqeqeq */
-  if (attributesHierarchyClone[attributeName] == 1) {
+  if (attributesHierarchyClone[attributeName][attributeValue] == 1) {
     return attributesAndValuesClone;
   }
 
