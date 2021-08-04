@@ -1,0 +1,256 @@
+.address-book-address,
+.contact-form,
+.user-communication-preference,
+.webform-submission-alshaya-contact-form,
+.profile-form {
+  max-width: 24.75rem;
+  margin-top: 0;
+
+  legend {
+    font-weight: bold;
+    font-size: 0.875rem;
+    padding-bottom: 1.5rem;
+  }
+
+  input[type="text"],
+  input,
+  textarea {
+    border: 1px solid $primary_textarea_border;
+    border-width: 0 0 1px;
+    width: 100%;
+    height: 1.563rem;
+    outline: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    border-bottom: 1px solid $primary_textarea_border;
+  }
+
+  label.error {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    display: block;
+    color: $formitem_error_label;
+    top: 0;
+    padding-top: 0;
+  }
+
+  .form-item--error {
+    input.error {
+      color: $formitem_error;
+    }
+  }
+
+  .form-item.form-type-tel,
+  .form-item.form-type-email,
+  .form-item.form-type-textfield,
+  .form-item.form-type-textarea {
+    label:last-of-type {
+      @include placeholder-label;
+    }
+
+    input[type="text"]:focus ~ label:last-of-type,
+    textarea:focus ~ label:last-of-type,
+    input:focus ~ label:last-of-type,
+    textarea:focus ~ label:last-of-type,
+    .active-label:last-of-type,
+    input:visited ~ label:last-of-type,
+    input:not(:focus):valid ~ label:not(.error),
+    input:not(:active):valid ~ label:not(.error) {
+      top: -1.375rem;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 1;
+      font-size: 0.75rem;
+    }
+  }
+
+  .country-field-wrapper {
+    @include clearfix;
+
+    position: relative;
+    height: 3rem;
+    margin-bottom: 1rem;
+
+    .country-label {
+      font-size: 0.75rem;
+      color: $formitem_label;
+      transition: 0.2s ease all;
+    }
+
+    .country-name {
+      font-size: 1rem;
+      color: $formitem_input;
+      transition: 0.2s ease all;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .form-item {
+    position: relative;
+  }
+
+  fieldset {
+    margin-top: 2.875rem;
+    margin-bottom: 2.875rem;
+  }
+
+  .form-item-first-name {
+    margin-#{$right}: 1.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 0;
+    }
+  }
+
+  .form-item-first-name,
+  .form-item-last-name {
+    float: left;
+    max-width: 11.625rem;
+    width: calc(50% - 0.75rem);
+  }
+
+  .field--type-telephone,
+  .field--type-email {
+    clear: both;
+    padding-top: 3rem;
+  }
+
+  .field--type-string-long {
+    margin-top: 3rem;
+  }
+
+  .form-submit {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    width: 5.875rem;
+    height: 2.1875rem;
+    text-transform: lowercase;
+    font-size: 0.875rem;
+    color: $primary_btn_text;
+    background: $primary_btn_bg;
+    margin-bottom: 7.1875rem;
+    border: none;
+    margin-top: 3.5rem;
+    line-height: 1;
+    float: $left;
+  }
+}
+
+.c-user-edit .user-form {
+  #edit-account {
+    margin-top: 2.813rem;
+  }
+
+  > div:first-child {
+    margin-top: 3rem !important;
+  }
+
+  .form-wrapper,
+  .form-item:not(.mobile-number-field) {
+    margin-top: 1.975rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.25rem;
+    }
+  }
+
+  .form-actions {
+    @include breakpoint($desktop) {
+      margin-top: 0.8rem;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: 1rem;
+    }
+
+    input {
+      margin-top: 0;
+    }
+  }
+
+  .form-item-field-subscribe-newsletter-value {
+    label {
+      padding-#{$left}: 1.875rem;
+      text-indent: -2rem;
+      display: block;
+    }
+  }
+}
+
+html[lang=ar] {
+  form.user-form {
+    .form-type-email {
+      input[type=email] {
+        margin-top: 0.3125rem;
+
+        & ~ label {
+          background: transparent !important;
+        }
+      }
+    }
+
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      input[type=text] {
+        font-family: $arial-nodir;
+      }
+    }
+  }
+}
+
+.path--user .c-address-book {
+  .address-book-address {
+    .country-field-wrapper {
+      height: 3rem;
+      line-height: 1.43;
+    }
+  }
+}
+
+.c-user-edit.user-page {
+  .user-form {
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      @include breakpoint($desktop) {
+        margin-top: 0.5rem;
+      }
+    }
+
+    .mobile-number-field {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+
+    .field--type-mobile-number {
+      @include breakpoint($desktop) {
+        position: relative;
+        clear: both;
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .c-user-edit.user-page {
+    .user-form {
+      .field--type-mobile-number {
+        position: relative;
+        clear: both;
+      }
+    }
+  }
+}
+
+.c-user-edit.user-page .mobile-number-field {
+  width: 100%;
+  display: inline-block;
+}

@@ -1,0 +1,77 @@
+.address-book-address,
+.contact-form,
+.user-communication-preference {
+  legend {
+    font-family: $hnm-demibold;
+    font-weight: normal;
+  }
+
+  fieldset {
+    margin-top: 1rem;
+    margin-bottom: 2.875rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2.875rem;
+    }
+  }
+
+  .form-submit {
+    text-transform: uppercase;
+    font-size: 0.8125rem !important;
+    color: $primary_btn_text;
+    background: $primary_btn_bg;
+    font-family: $hnm-bold;
+
+    &:hover {
+      background: $gray44;
+    }
+  }
+}
+
+.c-user-edit .user-form {
+  .field--type-mobile-number {
+    clear: both;
+
+    .mobile-number-field {
+      display: inline-block;
+
+      .form-type-select {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .form-actions {
+    @include breakpoint($desktop) {
+      margin-top: 2rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1rem;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-user-edit.user-page {
+    .user-form {
+      .field--name-field-first-name,
+      .field--name-field-last-name {
+        margin-top: 1.975rem;
+      }
+
+      .field--type-mobile-number {
+        position: relative;
+        top: auto;
+      }
+    }
+  }
+}
+
+.form-composite {
+  &.webform-fieldset--title-inline {
+    legend {
+      float: $left;
+    }
+  }
+}

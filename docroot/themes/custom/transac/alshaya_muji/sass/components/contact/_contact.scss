@@ -1,0 +1,27 @@
+.address-book-address,
+.contact-form,
+.user-communication-preference {
+  .form-submit {
+    font-family: $muji-helvetica-neue-bold;
+    text-transform: uppercase;
+  }
+}
+
+.c-user-edit {
+  .user-form {
+    .form-wrapper,
+    .form-item:not(.mobile-number-field) {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.975rem;
+      }
+    }
+  }
+
+  &.user-page {
+    .user-form {
+      .field--type-mobile-number {
+        top: 0;
+      }
+    }
+  }
+}
