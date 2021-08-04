@@ -361,7 +361,7 @@ describe('Checkout', () => {
         // Mock for getCart();
         axios.mockResolvedValue({ data: {}, status: 200 });
         const result = await getLastOrder();
-        expect(result).toEqual(null);
+        expect(result).toEqual({});
       });
 
       it('With order data', async () => {
@@ -422,7 +422,7 @@ describe('Checkout', () => {
 
         const result = await getDefaultPaymentFromOrder(lastOrderData);
 
-        expect(result).toEqual({ default: 'checkout_com_upapi' });
+        expect(result).toEqual('checkout_com_upapi');
       });
     });
 
@@ -733,7 +733,7 @@ describe('Checkout', () => {
 
         let result = await getCartStores(10, 20);
         expect(axios.mock.calls.length).toEqual(1);
-        expect(result.data.error).toEqual(true);
+        expect(result).toEqual([]);
       });
     });
 
@@ -779,7 +779,7 @@ describe('Checkout', () => {
         let result = await getCncStores(10, 20);
 
         expect(axios.mock.calls.length).toEqual(1);
-        expect(result.data.error).toEqual(true);
+        expect(result.data).toEqual([]);
       });
     });
 
