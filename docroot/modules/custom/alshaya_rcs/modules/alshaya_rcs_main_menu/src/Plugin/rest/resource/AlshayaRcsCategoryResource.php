@@ -46,7 +46,7 @@ class AlshayaRcsCategoryResource extends ResourceBase {
   protected $requestContextManager;
 
   /**
-   * AlshayaErrorMessages constructor.
+   * AlshayaRcsCategoryResource constructor.
    *
    * @param array $configuration
    *   Configuration array.

@@ -277,7 +277,7 @@ class AlshayaRcsCategoryHelper {
    * Return the RCS category term cache tags cache dependency.
    *
    * @return array
-   *   Cacheable term objects.
+   *   Term cache tags.
    */
   public function getTermsCacheTags() {
     return $this->termCacheTags;
