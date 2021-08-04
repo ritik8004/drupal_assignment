@@ -1,0 +1,19 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_rcs_listing_preprocess_page(&$variables) {
+   $routematch = \Drupal::routeMatch();
+  // Add description placeholder.
+  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routematch->getParameter('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $variables['category_term_name'] = $term->getName();
+      $variables['category_term_description'] = '#rcs.category.description#';
+    }
+  }
+}

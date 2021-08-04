@@ -170,17 +170,14 @@ exports.getEntity = async function getEntity(langcode) {
               level
               name
               url_path
+              description
+              image
               breadcrumbs {
                 category_name
                 category_level
                 category_url_key
                 category_url_path
               }
-            }
-            page_info {
-              current_page
-              page_size
-              total_pages
             }
           }
         }`

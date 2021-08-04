@@ -112,7 +112,7 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
  *   PLP banner for mobile hide or not.
  */
 function _alshaya_acm_product_category_hide_plp_banner_for_mobile(Term $term) {
-  if ($term->hasField('field_promo_banner_form_mobile') && ($mobile_banner = $term->get('field_promo_banner_for_mobile'))) {
+  if ($mobile_banner = $term->get('field_promo_banner_for_mobile')) {
     return $mobile_banner->getValue() ? (bool) $mobile_banner->getValue()[0]['value'] : FALSE;
   }
 
