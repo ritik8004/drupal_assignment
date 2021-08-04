@@ -14,22 +14,10 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Moving bazaarvoice block from default to active theme.
+ * Moving bazaarvoice block from white label to active theme.
  */
 function alshaya_bazaar_voice_update_8003() {
-  $block_id = 'bazaarvoiceuserdatablock';
-  $target_theme = \Drupal::config('system.theme')->get('default');
-  $bazaarvoice_default_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => 'alshaya_white_label']);
-  if (!empty($bazaarvoice_default_blocks)) {
-    $bazaarvoice_default_block = reset($bazaarvoice_default_blocks);
-    if ($bazaarvoice_default_block instanceof Block) {
-      $block = $bazaarvoice_default_block->createDuplicateBlock($block_id, $target_theme);
-      // Delete the default block.
-      $bazaarvoice_default_block->delete();
-      // We save the block on the new theme.
-      $block->save();
-    }
-  }
+  _move_bazaarvoice_user_block_to_current_theme();
 }
 
 /**
@@ -116,7 +104,8 @@ function alshaya_bazaar_voice_install() {
   _disable_bv_rating_blocks_in_algolia_plp();
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
-
+  // Move bazaarvoice block from white label to active theme.
+  _move_bazaarvoice_user_block_to_current_theme();
 }
 
 /**
@@ -198,6 +187,25 @@ function _disable_bv_rating_blocks_in_algolia_plp() {
           $block->save();
         }
       }
+    }
+  }
+}
+
+/** 
+ * Moving bazaarvoice block from white label to active theme.
+ */
+function _move_bazaarvoice_user_block_to_current_theme() {
+  $block_id = 'bazaarvoiceuserdatablock';
+  $target_theme = \Drupal::config('system.theme')->get('default');
+  $bazaarvoice_default_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => 'alshaya_white_label']);
+  if (!empty($bazaarvoice_default_blocks)) {
+    $bazaarvoice_default_block = reset($bazaarvoice_default_blocks);
+    if ($bazaarvoice_default_block instanceof Block) {
+      $block = $bazaarvoice_default_block->createDuplicateBlock($block_id, $target_theme);
+      // Delete the default block.
+      $bazaarvoice_default_block->delete();
+      // We save the block on the new theme.
+      $block->save();
     }
   }
 }
