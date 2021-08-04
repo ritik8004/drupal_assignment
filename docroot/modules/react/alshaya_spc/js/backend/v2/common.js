@@ -171,11 +171,15 @@ const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
  *   Returns a promise object.
  */
 const handleResponse = (apiResponse) => {
-  // Deep clone the response object.
-  const response = JSON.parse(JSON.stringify(apiResponse));
+  const response = {};
+  response.data = {};
+  response.status = apiResponse.status;
+
   // In case we don't receive any response data.
-  if (typeof response.data === 'undefined') {
-    logger.error(`Error while doing MDC api. Response result is empty. Status code: ${response.status}`);
+  if (typeof apiResponse.data === 'undefined') {
+    logger.error('Error while doing MDC api. Response result is empty. Status code: @status', {
+      '@status': response.status,
+    });
 
     const error = {
       data: {
@@ -188,94 +192,116 @@ const handleResponse = (apiResponse) => {
   }
 
   // Treat each status code.
-  if (response.status >= 500) {
+  if (apiResponse.status >= 500) {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
     response.data.error_message = 'Back-end system is down';
-  } else if (response.status === 401) {
-    // Customer Token expired.
-    logger.notice(`Message: ${response.data.message}. Redirecting to user/logout.`);
+  } else if (apiResponse.status === 401) {
+    if (isUserAuthenticated()) {
+      // Customer Token expired.
+      logger.warning('Got 401 response, redirecting to user/logout. Message: @message.', {
+        '@message': apiResponse.data.message,
+      });
 
-    // Log the user out and redirect to the login page.
-    window.location = Drupal.url('user/logout');
+      // Log the user out and redirect to the login page.
+      window.location = Drupal.url('user/logout');
 
-    // Throw an error to prevent further javascript execution.
-    throw new Error('The customer token is invalid.');
-  } else if (response.status !== 200) {
+      // Throw an error to prevent further javascript execution.
+      throw new Error('The customer token is invalid.');
+    }
+
+    response.data.error = true;
+    response.data.error_code = 401;
+    response.data.error_message = apiResponse.data.message;
+  } else if (apiResponse.status !== 200) {
     // Set default values.
     response.data.error = true;
     response.data.error_message = getDefaultErrorMessage();
 
     // Check for empty resonse data.
-    if (_isNull(response) || _isUndefined(response.data)) {
-      logger.error('Error while doing MDC api. Response result is empty. Status code: @code', {
+    if (_isNull(apiResponse) || _isUndefined(apiResponse.data)) {
+      logger.warning('Error while doing MDC api. Response result is empty. Status code: @code', {
         '@code': response.status,
       });
       response.data.error_code = 500;
-    } else if (response.status === 404
-      && _isUndefined(response.data)
-      && !_isUndefined(response.message)
-      && !_isEmpty(response.message)) {
-      response.data = {};
+    } else if (apiResponse.status === 404
+      && _isUndefined(apiResponse.data)
+      && !_isUndefined(apiResponse.message)
+      && !_isEmpty(apiResponse.message)) {
       response.data.code = 404;
       response.data.error_code = 404;
       response.data.error_message = response.message;
 
       // Log the error message.
-      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.warning('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
         '@message': response.data.error_message,
         '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
         '@response_code': response.status,
       });
-    } else if (!_isUndefined(response.data.message) && !_isEmpty(response.data.message)) {
+    } else if (!_isUndefined(apiResponse.data.message) && !_isEmpty(apiResponse.data.message)) {
       // Process message.
-      response.data.error_message = getProcessedErrorMessage(response);
+      response.data.error_message = getProcessedErrorMessage(apiResponse);
 
       // Log the error message.
-      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.warning('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
         '@message': response.data.error_message,
-        '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
-        '@response_code': response.status,
+        '@result_code': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
+        '@response_code': apiResponse.status,
       });
 
       // The following case happens when there is a stock mismatch between
       // Magento and OMS.
-      if (response.status === 400 && typeof response.data.code !== 'undefined' && response.data.code === cartErrorCodes.cartCheckoutQuantityMismatch) {
+      if (apiResponse.status === 400
+        && typeof apiResponse.data.code !== 'undefined'
+        && apiResponse.data.code === cartErrorCodes.cartCheckoutQuantityMismatch) {
+        response.data.code = cartErrorCodes.cartCheckoutQuantityMismatch;
         response.data.error_code = cartErrorCodes.cartCheckoutQuantityMismatch;
-      } else if (response.status === 404) {
+      } else if (apiResponse.status === 404) {
         response.data.error_code = 404;
       } else {
         response.data.error_code = 500;
       }
-    } else if (!_isUndefined(response.data.messages) && !_isEmpty(response.data.messages)
-      && !_isUndefined(response.data.messages.error) && !_isEmpty(response.data.messages.error)
+    } else if (!_isUndefined(apiResponse.data.messages)
+      && !_isEmpty(apiResponse.data.messages)
+      && !_isUndefined(apiResponse.data.messages.error)
+      && !_isEmpty(response.data.messages.error)
     ) {
       // Other messages.
-      const error = response.data.messages.error[0];
-      logger.error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      const error = apiResponse.data.messages.error[0];
+      logger.info('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
         '@message': error.message,
       });
       response.data.error_code = error.code;
       response.data.error_message = error.message;
     }
-  } else if (typeof response.data.messages !== 'undefined' && typeof response.data.messages.error !== 'undefined') {
-    const error = response.data.messages.error.shift();
-    //
-    delete (response.data.messages);
+  } else if (typeof apiResponse.data.messages !== 'undefined'
+    && typeof apiResponse.data.messages.error !== 'undefined') {
+    const error = apiResponse.data.messages.error.shift();
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
-    logger.error(`Error while doing MDC api call. Error message: ${error.message}`);
-  } else if (_isArray(response.data.response_message) && !_isUndefined(response.data.response_message[1]) && response.data.response_message[1] === 'error') {
+    logger.info('Error while doing MDC api call. Error: @error_message', {
+      '@error_message': error.message,
+    });
+  } else if (_isArray(apiResponse.data.response_message)
+    && !_isUndefined(apiResponse.data.response_message[1])
+    && apiResponse.data.response_message[1] === 'error') {
+    // When there is error in response_message from custom updateCart API.
     response.data.error = true;
     response.data.error_code = 400;
-    [response.data.error_message] = response.data.response_message;
-    logger.error('Error while doing MDC api call. Error: @error_message', {
+    [response.data.error_message] = apiResponse.data.response_message;
+    logger.info('Error while doing MDC api call. Error: @error_message', {
       '@error_message': JSON.stringify(response.data.response_message),
     });
   }
-  return response;
+
+  // Assign response data as is if no error.
+  if (typeof response.data.error === 'undefined') {
+    response.data = JSON.parse(JSON.stringify(apiResponse.data));
+  }
+
+  return new Promise((resolve) => resolve(response));
 };
 
 /**
@@ -321,8 +347,10 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
         // The request was made but no response was received
         return handleResponse(error.request);
       }
-      // Something happened in setting up the request that triggered an Error
-      return logger.error(error.message);
+
+      return logger.error('Something happened in setting up the request that triggered an error: @error.', {
+        '@error': error.message,
+      });
     });
 };
 
@@ -412,6 +440,10 @@ const formatCart = (cartData) => {
     }
     if (!_isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
       data.shipping.type = 'click_and_collect';
+    } else if (isUserAuthenticated()
+      && (typeof data.shipping.address.customer_address_id === 'undefined' || !(data.shipping.address.customer_address_id))) {
+      // Ignore the address if not available from address book for customer.
+      data.shipping = {};
     } else {
       data.shipping.type = 'home_delivery';
     }
@@ -659,7 +691,9 @@ const getCart = async (force = false) => {
     ) {
       const isAssociatingCart = StaticStorage.get('associating_cart') || false;
       if (getCartIdFromStorage() && !isAssociatingCart) {
-        logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+        logger.warning('getCart() returned error: @code. Removed cart from local storage', {
+          '@code': response.data.error_code,
+        });
 
         // Remove cart_id from storage.
         removeCartIdFromStorage();
@@ -712,7 +746,7 @@ const associateCartToCustomer = async (guestCartId) => {
   }
 
   if (response.status !== 200) {
-    logger.error('Error while associating cart: @cartId to customer: @customerId. Response: @response.', {
+    logger.warning('Error while associating cart: @cartId to customer: @customerId. Response: @response.', {
       '@cartId': guestCartId,
       '@customerId': window.drupalSettings.userDetails.customerId,
       '@response': JSON.stringify(response),
@@ -812,35 +846,41 @@ const validateRequestData = async (request) => {
   // Setting custom error code for bad response so that
   // we could distinguish this error.
   if (_isEmpty(request)) {
-    logger.error('Cart update operation not containing any data. Error 500.');
+    logger.error('Cart update operation not containing any data.');
     return 500;
   }
 
   // If action info or cart id not available.
   if (_isEmpty(request.extension) || _isUndefined(request.extension.action)) {
-    const logData = JSON.stringify(request);
-    logger.error(`Cart update operation not containing any action. Error: 400. Data: ${logData}`);
+    logger.error('Cart update operation not containing any action. Data: @data.', {
+      '@data': JSON.stringify(request),
+    });
     return 400;
   }
 
   // For any cart update operation, cart should be available in session.
   if (window.commerceBackend.getCartId() === null) {
-    const logData = JSON.stringify(request);
-    logger.warning(`Trying to do cart update operation while cart is not available in session. Data: ${logData}`);
+    logger.warning('Trying to do cart update operation while cart is not available in session. Data: @data.', {
+      '@data': JSON.stringify(request),
+    });
     return 404;
   }
 
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
-  if (window.drupalSettings.userDetails.customerId > 0) {
+  if (drupalSettings.userDetails.customerId > 0) {
     if (_isNull(cartCustomerId)) {
-      logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
+      // @todo Check if we should associate cart and proceed.
+      // Todo copied from middleware.
       return 400;
     }
 
     // This is serious.
-    if (cartCustomerId !== window.drupalSettings.userDetails.customerId) {
-      logger.error(`Mismatch session customer id: ${window.drupalSettings.userDetails.customerId} and card customer id: ${cartCustomerId}.`);
+    if (cartCustomerId !== drupalSettings.userDetails.customerId) {
+      logger.error('Mismatch session customer id: @sessionCustomerId and card customer id: @cartCustomerId.', {
+        '@sessionCustomerId': drupalSettings.userDetails.customerId,
+        '@cartCustomerId': cartCustomerId,
+      });
       return 400;
     }
   }
@@ -898,8 +938,10 @@ const updateCart = async (data) => {
 
   // Log the shipping / billing address we pass to magento.
   if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
-    const logData = JSON.stringify(data);
-    logger.notice(`Billing / Shipping address data: ${logData}. CartId: ${cartId}`);
+    logger.debug('Billing / Shipping update. CartId: @cartId, Address: @address.', {
+      '@cartId': cartId,
+      '@address': JSON.stringify(data),
+    });
   }
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
@@ -918,9 +960,11 @@ const updateCart = async (data) => {
       return response;
     })
     .catch((response) => {
-      const errorCode = response.error.error_code;
-      const errorMessage = response.error.message;
-      logger.error(`Error while updating cart on MDC for action ${action}. Error message: ${errorMessage}, Code: ${errorCode}`);
+      logger.warning('Error while updating cart on MDC for action: @action. Error message: @errorMessage, Code: @errorCode', {
+        '@action': action,
+        '@errorMessage': response.error.message,
+        '@errorCode': response.error.error_code,
+      });
       // @todo add error handling, see try/catch block in Cart:updateCart().
       return response;
     });

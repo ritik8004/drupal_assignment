@@ -341,7 +341,11 @@ const getCartStores = async (lat, lon) => {
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
-    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${response.data.error_message}`);
+    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @response.', {
+      '@cartId': cartId,
+      '@response': JSON.stringify(response.data),
+    });
+
     return response;
   }
   stores = response.data;
@@ -367,7 +371,10 @@ const getCartStores = async (lat, lon) => {
         .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
     }
   } catch (error) {
-    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
+    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @message.', {
+      '@cartId': cartId,
+      '@message': error.message,
+    });
   }
 
   return stores;
@@ -387,12 +394,17 @@ const getCartStores = async (lat, lon) => {
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session');
+    logger.error('Error while fetching click and collect stores. No cart available in session.');
     return getFormattedError(404, 'No cart in session');
   }
 
   if (!lat || !lon) {
-    logger.error(`Error while fetching CnC store for cart ${cartId}. One of lat/lon is not provided. Lat = ${lat}, Lon = ${lon}.`);
+    logger.warning('Error while fetching CnC store for cart @cartId. One of lat/lon is not provided. Lat: @lat, Lon: @lon.', {
+      '@cartId': cartId,
+      '@lat': lat || '',
+      '@lon': lon || '',
+    });
+
     return [];
   }
 
@@ -757,8 +769,10 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Add log for shipping data we pass to magento update cart.
-  const logData = JSON.stringify(shippingData);
-  logger.notice(`Shipping update default for HD. Data: ${logData} Cart: ${cartId}`);
+  logger.debug('Shipping update default for HD. Cart: @cartId, Data: @data.', {
+    '@cartId': cartId,
+    '@data': JSON.stringify(shippingData),
+  });
 
   // If shipping address not contains proper address, don't process further.
   if (_isEmpty(shippingData.address.extension_attributes)
@@ -872,8 +886,9 @@ const applyDefaultShipping = async (order) => {
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
       ) {
-        logger.notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', {
+        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cart_id, Address: @address.', {
           '@cart_id': window.commerceBackend.getCartId(),
+          '@address': JSON.stringify(address),
         });
         return selectHd(address, methods[0], address, methods);
       }
@@ -922,7 +937,11 @@ const applyDefaults = async (data, customerId) => {
   if (address) {
     const methods = await getHomeDeliveryShippingMethods(address);
     if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
-      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+      logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Address: @address.', {
+        '@cartId': window.commerceBackend.getCartId(),
+        '@address': JSON.stringify(address),
+      });
+
       return selectHd(address, methods[0], address, methods);
     }
   }
@@ -931,7 +950,10 @@ const applyDefaults = async (data, customerId) => {
   if (!_isEmpty(data.shipping.address) && !_isEmpty(data.shipping.address.country_id)) {
     const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
-      logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
+      logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Address: @address.', {
+        '@cartId': window.commerceBackend.getCartId(),
+        '@address': JSON.stringify(data.shipping.address),
+      });
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
   }
@@ -1058,10 +1080,13 @@ window.commerceBackend.addBillingMethod = async (data) => {
   const billingInfo = data.billing_info;
   const billingData = formatAddressForShippingBilling(billingInfo);
 
-  const logAddress = JSON.stringify(billingData);
-  const logData = JSON.stringify(billingInfo);
   const cartId = window.commerceBackend.getCartId();
-  logger.notice(`Billing update manual. Address: ${logAddress} Data: ${logData} Cart: ${cartId}`);
+  logger.debug('Billing update manual. Cart: @cartId, Address: @address, Data: @data.', {
+    '@cartId': cartId,
+    '@data': JSON.stringify(billingInfo),
+    '@address': JSON.stringify(billingData),
+  });
+
 
   const cart = await updateBilling(billingData);
 
@@ -1297,7 +1322,7 @@ const paymentUpdate = async (data) => {
   // Process payment data by paymentMethod.
   const processedData = processPaymentData(paymentData, params.payment.additional_data);
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
-    logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
+    logger.warning('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
       '@message': processedData.data.message,
       '@cart': JSON.stringify(await window.commerceBackend.getCart()),
       '@method': paymentData.method,
@@ -1323,9 +1348,12 @@ const paymentUpdate = async (data) => {
     default:
   }
 
-  const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
-  logger.notice(`Calling update payment for payment_update. Cart id: ${cartId} Method: ${paymentData.method} Data: ${logData}`);
+  logger.notice('Calling update payment for payment_update. Cart id: @cartId Method: @method Data: @data.', {
+    '@cartId': cartId,
+    '@method': paymentData.method,
+    '@data': JSON.stringify(paymentData),
+  });
 
   const oldCart = await getCart();
   const cart = await updateCart(params);
@@ -1333,7 +1361,10 @@ const paymentUpdate = async (data) => {
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
     cart.data.message = errorMessage;
     const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
-    logger.error(`Error occurred while placing order. ${message}`);
+    logger.warning('Error occurred while placing order. Error: @error', {
+      '@error': message,
+    });
+
     return cart;
   }
 
@@ -1438,7 +1469,9 @@ const validateBeforePaymentFinalise = async () => {
 
   if (_isObject(cartData) && isCartHasOosItem(cartData)) {
     isError = true;
-    logger.error(`Error while finalizing payment. Cart has an OOS item. Cart: ${JSON.stringify(cartData)}.`);
+    logger.warning('Error while finalizing payment. Cart has an OOS item. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
 
     Object.keys(cartData.cart.items).forEach((key) => {
       matchStockQuantity(cartData.cart.items[key].sku);
@@ -1451,38 +1484,41 @@ const validateBeforePaymentFinalise = async () => {
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. No shipping method available. Cart: ${logData}.`);
-    //
+    logger.error('Error while finalizing payment. No shipping method available. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (_isUndefined(cartData.shipping.address)
     || _isUndefined(cartData.shipping.address.custom_attributes)
     || _isEmpty(cartData.shipping.address.custom_attributes)
   ) {
     // If shipping address not have custom attributes.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. Shipping address not contains all info. Cart: ${logData}.`);
-    //
+    logger.error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (!isAddressExtensionAttributesValid(cartData)) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: ${logData}.`);
+    logger.error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (_isUndefined(cartData.shipping.address.firstname)
     || _isUndefined(cartData.shipping.address.lastname)
   ) {
     // If first/last name not available in shipping address.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: ${logData}.`);
+    logger.error('Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (_isUndefined(cartData.cart.billing_address.firstname)
     || _isUndefined(cartData.cart.billing_address.lastname)
   ) {
     // If first/last name not available in billing address.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: ${logData}.`);
+    logger.error('Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   }
 
   if (isError) {
@@ -1536,12 +1572,17 @@ window.commerceBackend.getCartForCheckout = async () => {
       const cartId = window.commerceBackend.getCartId();
 
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
-        logger.error(`Error while getting cart:${cartId} Error:${cart.data.error_message}`);
+        logger.error('Error while getting cart: @cartId, Error: @error.', {
+          '@cartId': cartId,
+          '@error': cart.data.error_message,
+        });
         return cart.data;
       }
 
       if (_isEmpty(cart.data.cart) || _isEmpty(cart.data.cart.items)) {
-        logger.error(`Checkout accessed without items in cart for id:${cartId}`);
+        logger.warning('Checkout accessed without items in cart for id: @cartId', {
+          '@cartId': cartId,
+        });
 
         return {
           data: {
@@ -1556,7 +1597,10 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error(`Error while getCartForCheckout controller. Error: ${error.message}. Code: ${error.status}`);
+      logger.error('Error while getCartForCheckout controller. Error: @error. Code: @code.', {
+        '@error': error.message,
+        '@code': error.status,
+      });
 
       return {
         data: {

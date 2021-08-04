@@ -16,13 +16,11 @@ const UserReviewsDescription = ({
       <div className="review-title">{reviewsIndividualSummary.Title}</div>
       <div className="review-date">{reviewDate}</div>
       <div className="review-text">{reviewsIndividualSummary.ReviewText}</div>
-      <>
-        <ConditionalView condition={reviewsIndividualSummary.Photos
-          && reviewsIndividualSummary.Photos.length > 0}
-        >
-          <ReviewPhotos photoCollection={reviewsIndividualSummary.Photos} />
-        </ConditionalView>
-      </>
+      <ConditionalView condition={reviewsIndividualSummary.Photos
+        && reviewsIndividualSummary.Photos.length > 0}
+      >
+        <ReviewPhotos photoCollection={reviewsIndividualSummary.Photos} />
+      </ConditionalView>
     </div>
   );
 };

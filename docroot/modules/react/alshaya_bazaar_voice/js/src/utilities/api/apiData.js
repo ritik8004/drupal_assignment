@@ -57,7 +57,23 @@ export function postAPIData(apiUri, params, productId = undefined) {
     });
 }
 
+export function postAPIPhoto(apiUri, params) {
+  const bazaarVoiceSettings = getbazaarVoiceSettings();
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
+
+  return Axios.post(url)
+    .then((response) => {
+      dispatchCustomEvent('showMessage', { data: response });
+      return response;
+    })
+    .catch((error) => {
+      dispatchCustomEvent('showMessage', { data: error });
+      return error;
+    });
+}
+
 export default {
   fetchAPIData,
   postAPIData,
+  postAPIPhoto,
 };

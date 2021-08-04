@@ -7,6 +7,7 @@ use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -372,7 +373,7 @@ class AlshayaFeedSkuInfoHelper {
       return [];
     }
 
-    $image_style_plp = ImageStyle::load('product_listing');
+    $image_style_plp = ImageStyle::load(SkuImagesHelper::STYLE_PRODUCT_LISTING);
 
     $images = array_map(function ($image) use ($image_style_plp) {
       if (!empty($image['drupal_uri'])) {
