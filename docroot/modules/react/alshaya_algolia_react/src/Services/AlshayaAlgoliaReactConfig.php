@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_algolia_react\Services;
 
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
@@ -174,7 +175,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = $this->entityTypeManager
         ->getStorage('image_style')
-        ->load('product_listing')
+        ->load(SkuImagesHelper::STYLE_PRODUCT_LISTING)
         ->buildUrl($default_image->getFileUri());
     }
 

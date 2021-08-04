@@ -505,3 +505,7 @@ contact:
     theme:
       css/conditional-sass/contact-us/contact-us.ltr.css: {}
 
+sitemap:
+  css:
+    theme:
+      css/conditional-sass/sitemap/sitemap.ltr.css: {}

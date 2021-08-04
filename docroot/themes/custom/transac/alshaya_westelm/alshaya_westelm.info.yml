@@ -126,3 +126,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
+  alshaya_white_label/sitemap:
+    css:
+      theme:
+        css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css

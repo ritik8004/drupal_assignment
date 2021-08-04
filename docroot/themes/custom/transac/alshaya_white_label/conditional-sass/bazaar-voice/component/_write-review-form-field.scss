@@ -97,6 +97,7 @@
 
       &.error {
         border: 1px solid $primary_input_inline_error !important;
+        border-width: 0.125rem !important;
       }
     }
   }

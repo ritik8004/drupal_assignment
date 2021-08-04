@@ -188,8 +188,8 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
     return [];
   }
 
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
+  $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
 
   /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
   $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
@@ -200,7 +200,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
 
   // If we have image for the product.
   if (!empty($media_image)) {
-    $image = $skuManager->getSkuImage($media_image['drupal_uri'], $sku->label(), $image_style);
+    $image = $skuImagesHelper->getSkuImage($media_image, $image_style);
   }
 
   // If still image is not available, set default one.
