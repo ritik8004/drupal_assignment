@@ -1341,14 +1341,29 @@ $conductors = [
     'site_id' => 419,
   ],
   'tbssa_qa' => [
-    'hmac_id' => '0a161c94a6f74716b9f6f72ebf0eff0e',
-    'hmac_secret' => 'Zjg1NmM0NzctODhiYy00',
-    'site_id' => 138,
+    'hmac_id' => 'c93ef02e4cd5476492e3107026c1da17',
+    'hmac_secret' => 'ZTY0ZGVlMjctMGQxZS00',
+    'site_id' => 452,
   ],
   'tbseg_qa' => [
-    'hmac_id' => '8e3ed7928ee9496b85ffa3a751c09b1d',
-    'hmac_secret' => 'MWJiYTk5ZmItYzIwMC00',
-    'site_id' => 329,
+    'hmac_id' => '98a3a7e553c4401e89833b536599f766',
+    'hmac_secret' => 'NWMwYjBkZjgtOWY4Yi00',
+    'site_id' => 453,
+  ],
+  'tbsbh_qa' => [
+    'hmac_id' => 'e10ee5b7d9464901a5abe3409ce95203',
+    'hmac_secret' => 'OThlNTM3MjctY2NjNC00',
+    'site_id' => 454,
+  ],
+  'tbsqa_qa' => [
+    'hmac_id' => '724f03c6febd436c94e49a00635b6ed0',
+    'hmac_secret' => 'MThmYjc5ZDEtOTAwNS00',
+    'site_id' => 455,
+  ],
+  'tbsjo_qa' => [
+    'hmac_id' => 'e728bedef5b34a0dba02818960876e7a',
+    'hmac_secret' => 'NWNkMjljMmYtN2Y4Zi00',
+    'site_id' => 456,
   ],
   'tbskw_uat' => [
     'hmac_id' => 'cbe72e31734d430c9d38749329f2d68d',
