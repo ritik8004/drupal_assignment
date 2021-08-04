@@ -692,18 +692,6 @@ describe('Checkout', () => {
           .mockImplementation(() => '1234');
       });
 
-      it('With no cart id', async () => {
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => null);
-
-        let result = await getCartStores(10, 20);
-        expect(result.error).toEqual(true);
-        expect(result.error_code).toEqual(404);
-        expect(result.response_message.status).toEqual('error');
-        expect(result.response_message.msg).toEqual('No cart in session');
-      });
-
       it('When proper store data parameter is provided', async () => {
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
@@ -751,21 +739,6 @@ describe('Checkout', () => {
 
     describe('Test getCncStores()', () => {
       const getCncStores = utilsRewire.__get__('getCncStores');
-
-      it('With mock data', async () => {
-        axios
-          .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: RA1_Q314_HEN_001, status: 200 })
-          .mockResolvedValueOnce({ data: RA1_Q314_HEN_002, status: 200 })
-          .mockResolvedValueOnce({ data: RA1_Q314_HEN_003, status: 200 });
-
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        let result = await getCncStores(10, 20);
-        expect(result.data[0].code).toEqual('RA1-Q314-HEN-002');
-      });
 
       it('When lat is not provided', async () => {
         jest
