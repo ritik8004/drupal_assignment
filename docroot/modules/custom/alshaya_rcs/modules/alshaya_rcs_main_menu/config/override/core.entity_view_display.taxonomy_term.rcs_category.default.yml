@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.rcs_category.field_category_slug
+    - field.field.taxonomy_term.rcs_category.field_display_as_clickable_link
     - field.field.taxonomy_term.rcs_category.field_icon
     - field.field.taxonomy_term.rcs_category.field_include_in_desktop
     - field.field.taxonomy_term.rcs_category.field_include_in_mobile_tablet
@@ -36,6 +37,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_display_as_clickable_link:
+    weight: 11
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
   field_icon:
     weight: 7
     label: above

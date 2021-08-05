@@ -44,8 +44,13 @@ class AlshayaRcsPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     // Add the home page link. We need it always.
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
-
-    $breadcrumb->addLink(Link::fromTextAndUrl('#rcs.categories.breadcrumbs.category_name#', Url::fromUserInput('#rcs.categories.breadcrumbs.category_url_path#')));
+    // Add class placeholder.
+    $options = [
+      'attributes' => [
+        'class' => ['#rcs.categories.breadcrumbs.classes#'],
+      ],
+    ];
+    $breadcrumb->addLink(Link::fromTextAndUrl('#rcs.categories.breadcrumbs.category_name#', Url::fromUserInput('#rcs.categories.breadcrumbs.category_url_path#', $options)));
 
     // Add the current route context in cache.
     $breadcrumb->addCacheContexts(['route']);
