@@ -146,10 +146,6 @@
     .write-review-form {
       padding: 3.625rem;
 
-      @include breakpoint($desktop) {
-        padding-#{$left}: 5.25rem;
-      }
-
       @include breakpoint($upto-desktop) {
         padding: 0.75rem;
       }
@@ -223,6 +219,15 @@
           #{$left}: 0;
         }
       }
+    }
+  }
+
+  .view_review-overlay,
+  .myaccount_review-overlay {
+    @include breakpoint($tablet) {
+      overflow-y: auto;
+      padding: 2.5rem 0;
+      margin-bottom: 0;
     }
   }
 }
