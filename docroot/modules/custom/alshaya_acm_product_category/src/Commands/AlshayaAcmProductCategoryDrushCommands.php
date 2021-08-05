@@ -301,6 +301,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    */
   protected function getRequiredFields() {
     return [
+      'url_alias',
       'field_commerce_id',
       'field_show_in_lhn',
       'field_show_in_app_navigation',
@@ -341,7 +342,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $data = [];
     foreach ($fields as $field) {
       // Proceed only if field is present.
-      if ($term->hasField($field)) {
+      if ($field == 'url_alias' || $term->hasField($field)) {
         // Assigning empty value to maintain the CSV file mapping.
         $data[$field] = '';
         // Process all the fields based on machine name.
@@ -374,24 +375,26 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             }
             // Iterate through the $tags and pass it to metatag::replace.
             foreach ($tags as $key => $value) {
-              $data[$key] = \Drupal::service('metatag.token')->replace($value, ['taxonomy_term' => $term]);
+              $data[$key] = \Drupal::service('metatag.token')->replace($value, ['taxonomy_term' => $term], [
+                'langcode' => $term->language()->getId(),
+              ]);
             }
-            // Remove metatag empty field.
+            // Remove metatag empty field and canonical url.
             unset($data['field_meta_tags']);
-            // Change the canonical url to relative url.
-            $relative_url = explode('/', parse_url($data['canonical_url'], PHP_URL_PATH));
-            // Unset the language prefix.
-            unset($relative_url['1']);
-            $data['canonical_url'] = implode('/', $relative_url);
+            unset($data['canonical_url']);
             break;
 
           case 'field_select_sub_categories_plp':
-            $value = $term->get($field)->getString();
-            // The value is the tid of the term. So getting the term name.
-            $target_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($value);
-            if ($target_term) {
-              $data[$field] = $target_term->label();
+            $ids = $term->get($field)->getValue();
+            $items = [];
+            foreach ($ids as $id) {
+              // The value is the tid of the term. So getting the term name.
+              $target_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($id['value']);
+              if ($target_term) {
+                array_push($items, $target_term->label());
+              }
             }
+            $data[$field] = implode(',', $items);
             break;
 
           case 'field_plp_group_category_desc':
@@ -399,6 +402,12 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             if ($value) {
               $data[$field] = $value['value'];
             }
+            break;
+
+          case 'url_alias':
+            $url = $term->toUrl()->toString();
+            // Only provide the path without langcode and domain.
+            $data[$field] = str_replace('/' . $term->language()->getId(), '', $url);
             break;
 
           default:
