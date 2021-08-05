@@ -17,7 +17,15 @@ use Drupal\block\Entity\Block;
  * Moving bazaarvoice block from white label to active theme.
  */
 function alshaya_bazaar_voice_update_8003() {
-  _move_bazaarvoice_user_block_to_current_theme();
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'block.block.bazaarvoiceuserdatablock',
+    ],
+    'alshaya_bazaar_voice',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
 }
 
 /**
@@ -105,7 +113,14 @@ function alshaya_bazaar_voice_install() {
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
   // Move bazaarvoice block from white label to active theme.
-  _move_bazaarvoice_user_block_to_current_theme();
+  $manager->updateConfigs(
+    [
+      'block.block.bazaarvoiceuserdatablock',
+    ],
+    'alshaya_bazaar_voice',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
 }
 
 /**
@@ -187,25 +202,6 @@ function _disable_bv_rating_blocks_in_algolia_plp() {
           $block->save();
         }
       }
-    }
-  }
-}
-
-/** 
- * Moving bazaarvoice block from white label to active theme.
- */
-function _move_bazaarvoice_user_block_to_current_theme() {
-  $block_id = 'bazaarvoiceuserdatablock';
-  $target_theme = \Drupal::config('system.theme')->get('default');
-  $bazaarvoice_user_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => 'alshaya_white_label']);
-  if (!empty($bazaarvoice_user_blocks)) {
-    $bazaarvoice_user_block = reset($bazaarvoice_user_blocks);
-    if ($bazaarvoice_user_block instanceof Block) {
-      $block = $bazaarvoice_user_block->createDuplicateBlock($block_id, $target_theme);
-      // Delete the default block.
-      $bazaarvoice_user_block->delete();
-      // We save the block on the active theme.
-      $block->save();
     }
   }
 }
