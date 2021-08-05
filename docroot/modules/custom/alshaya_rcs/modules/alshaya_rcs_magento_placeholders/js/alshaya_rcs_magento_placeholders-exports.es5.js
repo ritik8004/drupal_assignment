@@ -40,7 +40,7 @@ function isProductAvailableForClickAndCollect() {
  *   Returns true/false if product is buyable/not buyable.
  */
 function isProductBuyable(entity) {
-  return Boolean(drupalSettings.alshayaRcs.isAllProductsBuyable || entity.is_buyable);
+  return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
 }
 
 exports.render = function render(
