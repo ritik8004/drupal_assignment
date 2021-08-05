@@ -22,6 +22,7 @@ import {
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -192,7 +193,16 @@ const handleResponse = (apiResponse) => {
   }
 
   // Treat each status code.
-  if (apiResponse.status >= 500) {
+  if (apiResponse.status === 500) {
+    logger.warning('500 error from backend. Message: @message.', {
+      '@message': getProcessedErrorMessage(apiResponse),
+    });
+
+    // Server error responses.
+    response.data.error = true;
+    response.data.error_code = 500;
+    response.data.error_message = getDefaultErrorMessage();
+  } else if (apiResponse.status > 500) {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
@@ -663,6 +673,20 @@ const isAnonymousUserWithoutCart = () => {
   return false;
 };
 
+const clearInvalidCart = () => {
+  const isAssociatingCart = StaticStorage.get('associating_cart') || false;
+  if (getCartIdFromStorage() && !isAssociatingCart) {
+    logger.warning('Removing cart from local storage and reloading.');
+
+    // Remove cart_id from storage.
+    removeCartIdFromStorage();
+
+    // Reload the page now that we have removed cart id from storage.
+    // eslint-disable-next-line no-self-assign
+    window.location.href = window.location.href;
+  }
+};
+
 /**
  * Calls the cart get API.
  *
@@ -683,27 +707,19 @@ const getCart = async (force = false) => {
 
   const cartId = window.commerceBackend.getCartId();
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
-    if (_isEmpty(response.data)
-        || (!_isUndefined(response.status) && response.status === 404)
-        || (!_isUndefined(response.data) && response.data.error_code === 404)
-        || (!_isUndefined(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
+
+  response.data = response.data || {};
+
+  if (hasValue(response.data.error)) {
+    if ((hasValue(response.status) && response.status === 404)
+        || (hasValue(response.data) && response.data.error_code === 404)
+        || (hasValue(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      const isAssociatingCart = StaticStorage.get('associating_cart') || false;
-      if (getCartIdFromStorage() && !isAssociatingCart) {
-        logger.warning('getCart() returned error: @code. Removed cart from local storage', {
-          '@code': response.data.error_code,
-        });
+      logger.warning('getCart() returned error: @code.', {
+        '@code': response.data.error_code,
+      });
 
-        // Remove cart_id from storage.
-        removeCartIdFromStorage();
-
-        // Reload the page now that we have removed cart id from storage.
-        // eslint-disable-next-line no-self-assign
-        window.location.href = window.location.href;
-      }
+      clearInvalidCart();
 
       // If cart is no longer available, no need to return any error.
       return null;
@@ -716,6 +732,12 @@ const getCart = async (force = false) => {
         error_message: getDefaultErrorMessage(),
       },
     };
+  }
+
+  // If no error and no response, consider that as 404.
+  if (!hasValue(response.data)) {
+    clearInvalidCart();
+    return null;
   }
 
   // Format data.

@@ -110,8 +110,8 @@ describe('Cart', () => {
       expect(result).toEqual({
         data: {
           error: true,
-          error_code: 600,
-          error_message: 'Back-end system is down',
+          error_code: 500,
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 500,
       });
