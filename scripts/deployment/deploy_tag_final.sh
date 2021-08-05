@@ -37,13 +37,16 @@ fi
 stack=`whoami`
 repo="$stack@svn-5975.enterprise-g1.hosting.acquia.com:$stack.git"
 
-server_root="/var/www/html/$AH_SITE_NAME"
-docroot="${server_root}/docroot"
-slack_file="${server_root}/scripts/deployment/post_to_slack.sh"
-clear_caches_post_command="${server_root}/scripts/cloudflare/clear_caches_post_command.sh"
-clear_caches_post_command_site="${server_root}/scripts/cloudflare/clear_caches_post_command_site.sh"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
+
+server_root="/var/www/html/$AH_SITE_NAME"
 deployment_identifier=$(cat "$server_root/deployment_identifier")
+docroot="${server_root}/docroot"
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+slack_file="${script_dir}/post_to_slack.sh"
+clear_caches_post_command="${script_dir}/../cloudflare/clear_caches_post_command.sh"
+clear_caches_post_command_site="${script_dir}/../cloudflare/clear_caches_post_command_site.sh"
 
 if [[ "$AH_SITE_ENVIRONMENT" == *"live"* ]]
 then

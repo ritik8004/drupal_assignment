@@ -19,7 +19,17 @@ import {
  */
 const logger = {
   send: (level, message, context) => {
-    console.log(level, Drupal.formatString(message, context));
+    if (typeof Drupal.logViaDataDog !== 'undefined') {
+      Drupal.logViaDataDog(level, message, context);
+      return;
+    }
+
+    // Avoid console log in npm tests.
+    if (typeof drupalSettings.jest !== 'undefined') {
+      return;
+    }
+
+    console.debug(level, Drupal.formatString(message, context));
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
@@ -150,12 +160,14 @@ const getApiEndpoint = (action, params = {}) => {
 
     case 'getLastOrder':
       endpoint = isUserAuthenticated()
-        ? '/V1/customer-order/me/getLastOrder/'
+        ? '/V1/customer-order/me/getLastOrder'
         : '';
       break;
 
     default:
-      logger.critical(`Endpoint does not exist for action : ${action}`);
+      logger.critical('Endpoint does not exist for action: @action.', {
+        '@action': action,
+      });
   }
 
   return endpoint;

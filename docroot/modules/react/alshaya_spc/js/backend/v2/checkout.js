@@ -46,6 +46,7 @@ import {
   getHomeDeliveryShippingMethods,
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -210,24 +211,40 @@ const processLastOrder = (orderData) => {
  *
  * @param {string} customerId
  *   The customer id.
- * @returns {Promise<AxiosPromise<Object|null>>}
+ * @returns {Promise<AxiosPromise<Object>>}
  *   Customer last order or null.
  */
-const getLastOrder = (customerId) => callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {})
-  .then((response) => {
-    if (_isEmpty(response.data)
-      || (!_isUndefined(response.data.error) && response.data.error)
-    ) {
-      return null;
+const getLastOrder = async (customerId) => {
+  const staticOrder = StaticStorage.get('last_order');
+  if (staticOrder !== null) {
+    return staticOrder;
+  }
+
+  try {
+    const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
+    if (!hasValue(order.data) || hasValue(order.data.error)) {
+      logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
+        '@response': JSON.stringify(order.data),
+        '@customer_id': customerId,
+      });
+
+      StaticStorage.set('last_order', {});
+      return {};
     }
-    return processLastOrder(response.data);
-  }).catch((error) => {
-    logger.error('Error while fetching customers last order. Message: @message, CustomerId: @customer_id', {
+
+    const processedOrder = processLastOrder(order.data);
+    StaticStorage.set('last_order', processedOrder);
+    return processedOrder;
+  } catch (error) {
+    logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Message: @message.', {
       '@message': error.message,
       '@customer_id': customerId,
     });
-    return null;
-  });
+  }
+
+  StaticStorage.set('last_order', {});
+  return {};
+};
 
 /**
  * Get payment method from last order.
@@ -258,7 +275,7 @@ const getDefaultPaymentFromOrder = async (order) => {
     return null;
   }
 
-  return { default: orderPaymentMethod };
+  return orderPaymentMethod;
 };
 
 /**
@@ -330,26 +347,43 @@ const getStoreInfo = async (storeData) => {
  */
 const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
+
+  // If cart not available in session, log the error and return empty array.
   if (!cartId) {
     logger.error('Error while fetching click and collect stores. No cart available in session');
-    return getFormattedError(404, 'No cart in session');
+    return [];
   }
-  let stores = [];
 
   const url = getApiEndpoint('getCartStores', { cartId, lat, lon });
   const response = await callMagentoApi(url, 'GET', {});
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
-    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${response.data.error_message}`);
-    return response;
+
+  // If no stores available, return empty.
+  if (_isEmpty(response.data)) {
+    return [];
   }
-  stores = response.data;
-  if (!stores || (Array.isArray(stores) && stores.length === 0)) {
+
+  // If API returned error, log the error and return empty.
+  if (!_isUndefined(response.data.error) && response.data.error) {
+    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @response.', {
+      '@cartId': cartId,
+      '@response': JSON.stringify(response.data),
+    });
+
+    return [];
+  }
+
+  // If not array return empty.
+  if (!Array.isArray(response.data)) {
+    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @response.', {
+      '@cartId': cartId,
+      '@response': JSON.stringify(response.data),
+    });
+
     return [];
   }
 
   const storeInfoPromises = [];
+  let stores = response.data;
   stores.forEach((store) => {
     storeInfoPromises.push(getStoreInfo(store));
   });
@@ -366,11 +400,16 @@ const getCartStores = async (lat, lon) => {
         .sort((store1, store2) => store1.distance - store2.distance)
         .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
     }
+
+    return stores;
   } catch (error) {
-    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
+    logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @message.', {
+      '@cartId': cartId,
+      '@message': error.message,
+    });
   }
 
-  return stores;
+  return [];
 };
 
 /**
@@ -387,22 +426,23 @@ const getCartStores = async (lat, lon) => {
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session');
+    logger.error('Error while fetching click and collect stores. No cart available in session.');
     return getFormattedError(404, 'No cart in session');
   }
 
   if (!lat || !lon) {
-    logger.error(`Error while fetching CnC store for cart ${cartId}. One of lat/lon is not provided. Lat = ${lat}, Lon = ${lon}.`);
+    logger.warning('Error while fetching CnC store for cart @cartId. One of lat/lon is not provided. Lat: @lat, Lon: @lon.', {
+      '@cartId': cartId,
+      '@lat': lat || '',
+      '@lon': lon || '',
+    });
+
     return [];
   }
 
   const response = await getCartStores(lat, lon);
-  if (_isEmpty(response)
-    || (!_isUndefined(response.data) && !_isUndefined(response.data.error))) {
-    // In case of errors, return the response with error.
-    return response;
-  }
 
+  // Data added below is to keep the response consistent with V1.
   return { data: response };
 };
 
@@ -561,7 +601,9 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
 
   // Add carrier info.
   if (!_isEmpty(shippingData.carrier_info)) {
-    params.shipping.shipping_carrier_code = shippingData.carrier_info.code;
+    // @todo make the parameter consistent for all the cases.
+    params.shipping.shipping_carrier_code = shippingData.carrier_info.code
+      || shippingData.carrier_info.carrier;
     params.shipping.shipping_method_code = shippingData.carrier_info.method;
   }
 
@@ -757,8 +799,10 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Add log for shipping data we pass to magento update cart.
-  const logData = JSON.stringify(shippingData);
-  logger.notice(`Shipping update default for HD. Data: ${logData} Cart: ${cartId}`);
+  logger.debug('Shipping update default for HD. Cart: @cartId, Data: @data.', {
+    '@cartId': cartId,
+    '@data': JSON.stringify(shippingData),
+  });
 
   // If shipping address not contains proper address, don't process further.
   if (_isEmpty(shippingData.address.extension_attributes)
@@ -864,18 +908,20 @@ const applyDefaultShipping = async (order) => {
     return false;
   }
 
-  const methods = await getHomeDeliveryShippingMethods(address);
-  if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
+  const response = await getHomeDeliveryShippingMethods(address);
+  if (!response.error) {
+    const { methods } = response;
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
       if (typeof method.carrier_code !== 'undefined'
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
       ) {
-        logger.notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', {
+        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cart_id, Address: @address.', {
           '@cart_id': window.commerceBackend.getCartId(),
+          '@address': JSON.stringify(address),
         });
-        return selectHd(address, methods[0], address, methods);
+        return selectHd(address, method, address, methods);
       }
     }
   }
@@ -904,7 +950,7 @@ const applyDefaults = async (data, customerId) => {
     : null;
 
   // Try to apply defaults from last order.
-  if (!_isEmpty(order)) {
+  if (hasValue(order)) {
     // If cnc order but cnc is disabled.
     if (_includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
       return data;
@@ -912,7 +958,8 @@ const applyDefaults = async (data, customerId) => {
 
     const response = await applyDefaultShipping(order);
     if (response !== false) {
-      response.data.payment = await getDefaultPaymentFromOrder(order);
+      response.data.payment = response.data.payment || {};
+      response.data.payment.default = await getDefaultPaymentFromOrder(order);
       return response;
     }
   }
@@ -920,18 +967,30 @@ const applyDefaults = async (data, customerId) => {
   // Select default address from address book if available.
   const address = getDefaultAddress(data);
   if (address) {
-    const methods = await getHomeDeliveryShippingMethods(address);
-    if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
-      logger.notice(`Setting shipping/billing address from user address book. Address: ${address} Cart: ${window.commerceBackend.getCartId()}`);
+    const response = await getHomeDeliveryShippingMethods(address);
+    if (!response.error) {
+      const { methods } = response;
+
+      logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Address: @address.', {
+        '@cartId': window.commerceBackend.getCartId(),
+        '@address': JSON.stringify(address),
+      });
+
       return selectHd(address, methods[0], address, methods);
     }
   }
 
   // If address already available in cart, use it.
   if (!_isEmpty(data.shipping.address) && !_isEmpty(data.shipping.address.country_id)) {
-    const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (!_isEmpty(methods) && _isArray(methods) && _isUndefined(methods.error)) {
-      logger.notice(`Setting shipping/billing address from user address book. Address: ${data.shipping.address} Cart: ${window.commerceBackend.getCartId()}`);
+    const response = await getHomeDeliveryShippingMethods(data.shipping.address);
+    if (!response.error) {
+      const { methods } = response;
+
+      logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Address: @address.', {
+        '@cartId': window.commerceBackend.getCartId(),
+        '@address': JSON.stringify(data.shipping.address),
+      });
+
       return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
     }
   }
@@ -974,11 +1033,11 @@ const getProcessedCheckoutData = async (cartData) => {
     && !_isUndefined(data.shipping.address)
     && !_isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
-    const methods = await getHomeDeliveryShippingMethods(data.shipping.address);
-    if (_isEmpty(methods) || (!_isUndefined(methods.error) && methods.error)) {
-      return methods;
+    const response = await getHomeDeliveryShippingMethods(data.shipping.address);
+    if (response.error) {
+      return response;
     }
-    data.shipping.methods = methods;
+    data.shipping.methods = response.methods;
   }
 
   if (_isUndefined(data.payment.methods)
@@ -1020,17 +1079,19 @@ const getProcessedCheckoutData = async (cartData) => {
   response.shipping.address = formatAddressForFrontend(response.shipping.address);
   response.billing_address = formatAddressForFrontend(data.cart.billing_address);
 
-  // If payment method is not available in the list, we set the first
-  // available payment method.
-  if (typeof response.payment !== 'undefined' && typeof response.payment.methods !== 'undefined') {
+  response.payment = response.payment || {};
+  if (typeof response.payment.methods !== 'undefined' && response.payment.methods.length > 0) {
     const codes = response.payment.methods.map((el) => el.code);
-    if (typeof response.payment.method !== 'undefined' && !_isEmpty(codes) && !codes.includes(response.payment.method)) {
+
+    // If payment method is not available in the list, we set the first
+    // available payment method in React, here we remove it from response.
+    if (typeof response.payment.method !== 'undefined' && !codes.includes(response.payment.method)) {
       delete (response.payment.method);
     }
 
     // If default also has invalid payment method, we remove it
     // so that first available payment method will be selected.
-    if (typeof response.payment.default !== 'undefined' && typeof codes[response.payment.default] === 'undefined') {
+    if (typeof response.payment.default !== 'undefined' && !codes.includes(response.payment.default)) {
       delete (response.payment.default);
     }
 
@@ -1042,6 +1103,7 @@ const getProcessedCheckoutData = async (cartData) => {
       response.payment.default = getMethodCodeForFrontend(response.payment.default);
     }
   }
+
   return response;
 };
 
@@ -1058,10 +1120,13 @@ window.commerceBackend.addBillingMethod = async (data) => {
   const billingInfo = data.billing_info;
   const billingData = formatAddressForShippingBilling(billingInfo);
 
-  const logAddress = JSON.stringify(billingData);
-  const logData = JSON.stringify(billingInfo);
   const cartId = window.commerceBackend.getCartId();
-  logger.notice(`Billing update manual. Address: ${logAddress} Data: ${logData} Cart: ${cartId}`);
+  logger.debug('Billing update manual. Cart: @cartId, Address: @address, Data: @data.', {
+    '@cartId': cartId,
+    '@data': JSON.stringify(billingInfo),
+    '@address': JSON.stringify(billingData),
+  });
+
 
   const cart = await updateBilling(billingData);
 
@@ -1297,7 +1362,7 @@ const paymentUpdate = async (data) => {
   // Process payment data by paymentMethod.
   const processedData = processPaymentData(paymentData, params.payment.additional_data);
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
-    logger.error('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
+    logger.warning('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
       '@message': processedData.data.message,
       '@cart': JSON.stringify(await window.commerceBackend.getCart()),
       '@method': paymentData.method,
@@ -1323,9 +1388,12 @@ const paymentUpdate = async (data) => {
     default:
   }
 
-  const logData = JSON.stringify(paymentData);
   const cartId = window.commerceBackend.getCartId();
-  logger.notice(`Calling update payment for payment_update. Cart id: ${cartId} Method: ${paymentData.method} Data: ${logData}`);
+  logger.notice('Calling update payment for payment_update. Cart id: @cartId Method: @method Data: @data.', {
+    '@cartId': cartId,
+    '@method': paymentData.method,
+    '@data': JSON.stringify(paymentData),
+  });
 
   const oldCart = await getCart();
   const cart = await updateCart(params);
@@ -1333,7 +1401,10 @@ const paymentUpdate = async (data) => {
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
     cart.data.message = errorMessage;
     const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
-    logger.error(`Error occurred while placing order. ${message}`);
+    logger.warning('Error occurred while placing order. Error: @error', {
+      '@error': message,
+    });
+
     return cart;
   }
 
@@ -1438,7 +1509,9 @@ const validateBeforePaymentFinalise = async () => {
 
   if (_isObject(cartData) && isCartHasOosItem(cartData)) {
     isError = true;
-    logger.error(`Error while finalizing payment. Cart has an OOS item. Cart: ${JSON.stringify(cartData)}.`);
+    logger.warning('Error while finalizing payment. Cart has an OOS item. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
 
     Object.keys(cartData.cart.items).forEach((key) => {
       matchStockQuantity(cartData.cart.items[key].sku);
@@ -1451,38 +1524,41 @@ const validateBeforePaymentFinalise = async () => {
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. No shipping method available. Cart: ${logData}.`);
-    //
+    logger.error('Error while finalizing payment. No shipping method available. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (_isUndefined(cartData.shipping.address)
     || _isUndefined(cartData.shipping.address.custom_attributes)
     || _isEmpty(cartData.shipping.address.custom_attributes)
   ) {
     // If shipping address not have custom attributes.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. Shipping address not contains all info. Cart: ${logData}.`);
-    //
+    logger.error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (!isAddressExtensionAttributesValid(cartData)) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: ${logData}.`);
+    logger.error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (_isUndefined(cartData.shipping.address.firstname)
     || _isUndefined(cartData.shipping.address.lastname)
   ) {
     // If first/last name not available in shipping address.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: ${logData}.`);
+    logger.error('Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   } else if (_isUndefined(cartData.cart.billing_address.firstname)
     || _isUndefined(cartData.cart.billing_address.lastname)
   ) {
     // If first/last name not available in billing address.
     isError = true;
-    const logData = JSON.stringify(cartData);
-    logger.error(`Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: ${logData}.`);
+    logger.error('Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: @cart.', {
+      '@cart': JSON.stringify(cartData),
+    });
   }
 
   if (isError) {
@@ -1536,12 +1612,17 @@ window.commerceBackend.getCartForCheckout = async () => {
       const cartId = window.commerceBackend.getCartId();
 
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
-        logger.error(`Error while getting cart:${cartId} Error:${cart.data.error_message}`);
+        logger.error('Error while getting cart: @cartId, Error: @error.', {
+          '@cartId': cartId,
+          '@error': cart.data.error_message,
+        });
         return cart.data;
       }
 
       if (_isEmpty(cart.data.cart) || _isEmpty(cart.data.cart.items)) {
-        logger.error(`Checkout accessed without items in cart for id:${cartId}`);
+        logger.warning('Checkout accessed without items in cart for id: @cartId', {
+          '@cartId': cartId,
+        });
 
         return {
           data: {
@@ -1556,7 +1637,10 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error(`Error while getCartForCheckout controller. Error: ${error.message}. Code: ${error.status}`);
+      logger.error('Error while getCartForCheckout controller. Error: @error. Code: @code.', {
+        '@error': error.message,
+        '@code': error.status,
+      });
 
       return {
         data: {
@@ -1697,20 +1781,22 @@ window.commerceBackend.addShippingMethod = async (data) => {
     return cart;
   }
 
+  // Shipping address.
   const shippingAddress = formatAddressForShippingBilling(shippingInfo);
-  const shippingMethods = await getHomeDeliveryShippingMethods(shippingAddress);
 
-  // If no shipping method.
-  if (_isEmpty(shippingMethods)
-    || (!_isUndefined(shippingMethods.error) && shippingMethods.error)) {
+  // Shipping methods.
+  const response = await getHomeDeliveryShippingMethods(shippingAddress);
+  if (response.error) {
     logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', {
       '@data': JSON.stringify(data),
       '@cart_id': cartId,
-      '@error_message': shippingMethods.error_message,
+      '@error_message': response.error_message,
     });
 
-    return shippingMethods;
+    return { data: response };
   }
+
+  const shippingMethods = response.methods;
 
   let carrierInfo = {};
   if (!_isEmpty(shippingInfo.carrier_info)) {

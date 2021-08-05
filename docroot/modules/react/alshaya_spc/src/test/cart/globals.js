@@ -1,13 +1,14 @@
 import Drupal from '../../../../../../core/misc/drupal.es6';
 
 export const drupalSettings = {
+  jest: 1,
   cart: {
     url: '/rest/kwt_en',
-    site_country_code: {
+    siteInfo: {
       site_code: 'vs',
       country_code: 'kw',
     },
-    address_fields: {
+    addressFields: {
       "default": {
         "kw": [
           "area",
@@ -15,7 +16,7 @@ export const drupalSettings = {
         ]
       }
     },
-    exception_messages: {
+    exceptionMessages: {
       "This product is out of stock.": "OOS",
     },
   },
