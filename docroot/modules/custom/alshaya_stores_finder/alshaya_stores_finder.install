@@ -17,8 +17,8 @@ function alshaya_stores_finder_update_8111() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-    'field.field.node.store.field_store_type',
     'field.storage.node.field_store_type',
+    'field.field.node.store.field_store_type',
     'views.view.stores_finder'
   ],
     'alshaya_stores_finder',
