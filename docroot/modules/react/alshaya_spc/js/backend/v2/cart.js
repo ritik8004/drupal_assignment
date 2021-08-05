@@ -24,6 +24,7 @@ import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -236,7 +237,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
-  if (response.data.error === true) {
+  if (hasValue(response.data) && hasValue(response.data.error)) {
     logger.error('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
       '@cartId': cartId,
       '@post': JSON.stringify(itemData),
@@ -248,7 +249,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       const freshCart = await getCart(true);
 
       // Try to load fresh cart, if this fails it means we need to create new one.
-      if (_isEmpty(freshCart)) {
+      if (!hasValue(freshCart)) {
         // Remove the cart id from storage.
         window.commerceBackend.removeCartDataFromStorage(true);
 
