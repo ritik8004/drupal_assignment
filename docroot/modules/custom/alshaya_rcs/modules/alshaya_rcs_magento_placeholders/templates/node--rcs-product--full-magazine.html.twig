@@ -92,7 +92,15 @@
 
         <div class="basic-details-wrapper">
           <div class="field field--name-field-skus field--type-sku field--label-hidden field__items">
-            {% include "@alshaya_rcs_magento_placeholders/rcs-sku-base-form.html.twig" %}
+            <div class="field field--name-field-skus field--type-sku field--label-hidden field__item">
+              <article>
+                <div class="field field--name-sku field--type-string field--label-above">
+                  <div class="field__label">SKU</div>
+                  <div class="field__item">#rcs.product._self|sku#</div>
+                </div>
+                <div>#rcs.product._self|add_to_cart#</div>
+              </article>
+            </div>
           </div>
           <div class="modal-share-this">
             <span class="share-icon">{{  'Share'|t }}</span>

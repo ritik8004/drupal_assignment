@@ -39,7 +39,7 @@
           $("[id^=rcs-ph-]").once('rcs-ph-process').each(eachBlockPh);
 
           if (typeof drupalSettings.rcsPage !== 'undefined') {
-            const attributes = drupalSettings.rcsPhSettings.placeholderAttributes;
+            const attributes = getRcsPlaceholderAttributes();
 
             // Identify all the field placeholders and get the replacement
             // value. Parse the html to find all occurrences at apply the
