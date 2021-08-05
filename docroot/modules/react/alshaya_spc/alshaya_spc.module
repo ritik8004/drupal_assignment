@@ -81,6 +81,7 @@ function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
 
   $build['#attached']['drupalSettings']['cnc_collection_point_map_icon'] = $config->get('click_collect_collection_point_map_icon');
   $build['#attached']['drupalSettings']['cnc_store_map_icon'] = $config->get('click_collect_store_map_icon');
+  $build['#attached']['library'][] = 'alshaya_white_label/checkout-pudo-aramex';
 }
 
 /**
