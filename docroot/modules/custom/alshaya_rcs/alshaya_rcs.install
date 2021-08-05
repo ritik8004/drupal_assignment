@@ -6,21 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Create a new RCS breadcrumb block.
- */
-function alshaya_rcs_update_8001() {
-  // Create the breadcrumb block.
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['block.block.rcs_placeholders_breadcrumb'],
-    'alshaya_rcs',
-    'install'
-  );
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_rcs_install() {

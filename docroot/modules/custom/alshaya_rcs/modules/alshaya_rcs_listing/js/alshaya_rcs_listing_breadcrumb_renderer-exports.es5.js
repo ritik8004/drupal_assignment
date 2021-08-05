@@ -1,7 +1,5 @@
-// @codingStandardsIgnoreFile
-// This is because the linter is throwing errors where we use backticks here.
-// Once we enable webapack for the custom modules directory, we should look into
-// removing the above ignore line.
+// Render function to build the markup of breadcrumb and replace the placeholder
+// with API response.
 exports.render = function render(
   settings,
   entity,
@@ -9,40 +7,43 @@ exports.render = function render(
 ) {
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
-  // Extract breadcrumb from the entity response.
-  const { breadcrumbs } = entity;
+  // Proceed only if entity is present.
+  if (entity !== null) {
+    // Extract breadcrumb from the entity response.
+    const { breadcrumbs } = entity;
 
-  let breadcrumbHtml = '';
+    let breadcrumbHtml = '';
 
-  // Check if Home link is already present, if Yes then extract it.
-  let homeEl = '';
-  if (innerHtmlObj.find('li').length > 1) {
-    homeEl = innerHtmlObj.find('li').first()[0].outerHTML;
-    innerHtmlObj.find('li').first().remove();
+    // Check if Home link is already present, if Yes then extract it.
+    let homeEl = '';
+    if (innerHtmlObj.find('li').length > 1) {
+      homeEl = innerHtmlObj.find('li').first()[0].outerHTML;
+      innerHtmlObj.find('li').first().remove();
+    }
+
+    // Iterate through each breadcrumb item and generate the markup.
+    breadcrumbs != null && breadcrumbs.forEach(function eachBreadcrumb(breadcrumb) {
+      // Attach the language prefix and category pathprefix.
+      breadcrumb.category_url_path = '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + breadcrumb.category_url_path;
+      // @todo To add a check here based on field_remove_term_in_breadcrumb.
+      breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings);
+    });
+
+    // Add the current item in the breadcrumb.
+    breadcrumbHtml += getBreadcrumbMarkup({
+      'category_name': entity.name,
+      'category_url_path': '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + entity.url_path,
+    }, innerHtmlObj, settings);
+
+    // Remove the placeholders markup.
+    innerHtmlObj.find('li').remove();
+    // Update with the resultant markups.
+    innerHtmlObj.find('ol').append(homeEl + breadcrumbHtml);
   }
-
-  // Iterate through each breadcrumb item and generate the markup.
-  breadcrumbs != null && breadcrumbs.forEach(function eachBreadcrumb(breadcrumb) {
-    // Attach the language prefix and category pathprefix.
-    breadcrumb.category_url_path = '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + breadcrumb.category_url_path;
-    breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings);
-  });
-
-  // Add the current item in the breadcrumb.
-  breadcrumbHtml += getBreadcrumbMarkup({
-    'category_name': entity.name,
-    'category_url_path': '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + entity.url_path,
-  }, innerHtmlObj, settings);
-
-  // Remove the placeholders markup.
-  innerHtmlObj.find('li').remove();
-  // Update with the resultant markups.
-  innerHtmlObj.find('ol').append(homeEl + breadcrumbHtml);
-
   return innerHtmlObj.html();
 }
 
-const getBreadcrumbMarkup = function(breadcrumb, innerHtmlObj, settings) {
+const getBreadcrumbMarkup = function (breadcrumb, innerHtmlObj, settings) {
   // Clone the breadcrumb placeholder element.
   let clonedElement = innerHtmlObj.find('li').clone();
   // Identify all the field placeholders and get the replacement
