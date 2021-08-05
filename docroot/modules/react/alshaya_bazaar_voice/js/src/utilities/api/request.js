@@ -28,7 +28,7 @@ export function getUserBazaarVoiceSettings() {
 }
 
 export function getUserDetails(productId = undefined) {
-  const settings = [];
+  const settings = {};
 
   if (drupalSettings.bazaarvoiceUserDetails !== undefined) {
     settings.user = drupalSettings.bazaarvoiceUserDetails;
