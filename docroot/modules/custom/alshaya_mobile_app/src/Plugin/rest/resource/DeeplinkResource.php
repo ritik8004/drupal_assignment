@@ -28,11 +28,6 @@ use Drupal\Core\Routing\RequestContext;
 class DeeplinkResource extends ResourceBase {
 
   /**
-   * Prefix used for the v2 endpoint.
-   */
-  const V2_ENDPOINT_PREFIX = '/rest/v2/';
-
-  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -137,7 +132,8 @@ class DeeplinkResource extends ResourceBase {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
-    return $this->getDeeplink($alias);
+    $url = $this->getDeeplink($alias);
+    return new ModifiedResourceResponse(['deeplink' => $url]);
   }
 
   /**
@@ -199,17 +195,8 @@ class DeeplinkResource extends ResourceBase {
       }
       $url = $this->mobileAppUtility->getDeepLinkFromUrl($url_obj);
     }
-    // Check if sku is encoded.
-    if (strpos($url, 'product-exclude-linked') !== FALSE) {
-      $url_array = explode('product-exclude-linked', $url);
-      $sku = $url_array[1];
-      if (base64_decode(str_replace('/', '', $sku), TRUE)) {
-        $url = self::V2_ENDPOINT_PREFIX . 'product-exclude-linked' . $sku;
-      }
-    }
 
-    return new ModifiedResourceResponse(['deeplink' => $url]);
-
+    return $url;
   }
 
 }

@@ -2,6 +2,8 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\rest\ModifiedResourceResponse;
+
 /**
  * Provides a resource to get deeplink.
  *
@@ -16,6 +18,11 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 class DeeplinkResourceV2 extends DeeplinkResource {
 
   /**
+   * Prefix used for the v2 endpoint.
+   */
+  const V2_ENDPOINT_PREFIX = '/rest/v2/';
+
+  /**
    * Responds to GET requests.
    *
    * @return \Drupal\rest\ResourceResponse
@@ -23,7 +30,15 @@ class DeeplinkResourceV2 extends DeeplinkResource {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
-    return parent::getDeeplink($alias);
+    $url = parent::getDeeplink($alias);
+    // Check if sku is encoded.
+    if (strpos($url, 'product-exclude-linked') !== FALSE) {
+      $url_array = explode('product-exclude-linked', $url);
+      $sku = $url_array[1];
+      $encoded_sku = base64_encode(str_replace('/', '', $sku));
+      $url = self::V2_ENDPOINT_PREFIX . 'product-exclude-linked/' . $encoded_sku;
+    }
+    return new ModifiedResourceResponse(['deeplink' => $url]);
   }
 
 }
