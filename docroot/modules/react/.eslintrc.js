@@ -64,5 +64,6 @@ module.exports = {
       ]
     }],
     "react/jsx-props-no-spreading": "off",
-  }
+  },
+  ignorePatterns: ["**/__tests__/*.js"],
 };

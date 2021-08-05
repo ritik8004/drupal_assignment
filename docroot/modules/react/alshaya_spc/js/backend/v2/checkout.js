@@ -46,6 +46,7 @@ import {
   getHomeDeliveryShippingMethods,
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -210,7 +211,7 @@ const processLastOrder = (orderData) => {
  *
  * @param {string} customerId
  *   The customer id.
- * @returns {Promise<AxiosPromise<Object|null>>}
+ * @returns {Promise<AxiosPromise<Object>>}
  *   Customer last order or null.
  */
 const getLastOrder = async (customerId) => {
@@ -221,7 +222,7 @@ const getLastOrder = async (customerId) => {
 
   try {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
-    if (_isEmpty(order.data) || !_isEmpty(order.data.error)) {
+    if (!hasValue(order.data) || hasValue(order.data.error)) {
       logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
         '@response': JSON.stringify(order.data),
         '@customer_id': customerId,
@@ -949,7 +950,7 @@ const applyDefaults = async (data, customerId) => {
     : null;
 
   // Try to apply defaults from last order.
-  if (!_isEmpty(order)) {
+  if (hasValue(order)) {
     // If cnc order but cnc is disabled.
     if (_includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
       return data;
