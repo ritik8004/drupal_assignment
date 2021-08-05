@@ -6,8 +6,14 @@
 (function ($, Drupal) {
   'use strict';
 
-  $(window).on('load', function () {
-    // Trigger productDetailView event.
-    Drupal.alshayaSeoGtmPushProductDetailView($('.entity--type-node'));
-  });
+  var productDetailViewTriggered = false;
+  Drupal.behaviors.alshayaSeoGtmPdpBehavior = {
+    attach: function (context, settings) {
+      if (!productDetailViewTriggered && $('.entity--type-node').not('[gtm-name *= "#"]').length > 0) {
+        productDetailViewTriggered = true;
+        // Trigger productDetailView event.
+        Drupal.alshayaSeoGtmPushProductDetailView($('.entity--type-node'));
+      }
+    }
+  }
 })(jQuery, Drupal);

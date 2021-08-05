@@ -157,6 +157,12 @@ exports.computePhFilters = function (input, filter) {
       value = input.sku;
       break;
 
+      case 'sku-clean':
+        // @todo: Might need to make the value markup safe like what we do for
+        // data-sku-clean for the delivery-block code written above.
+        value = input.sku;
+        break;
+
     case 'sku-type':
       value = input.type_id;
       break;
@@ -412,6 +418,11 @@ exports.computePhFilters = function (input, filter) {
       // Remove the temporary wrapper.
       value = tempDivWrapper.html();
       break;
+
+      case 'gtm-price':
+        // @todo: Use the correct price key.
+        value = input.price.maximalPrice.amount.value;
+        break;
 
     default:
       console.log(`Unknown JS filter ${filter}.`)
