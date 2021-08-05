@@ -923,9 +923,8 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
 
-    $settings['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
-
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
+
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);
 
     $build['#cache']['contexts'][] = 'languages:' . LanguageInterface::TYPE_INTERFACE;
