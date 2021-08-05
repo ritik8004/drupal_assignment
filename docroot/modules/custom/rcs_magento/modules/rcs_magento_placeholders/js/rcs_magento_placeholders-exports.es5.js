@@ -31,6 +31,7 @@ exports.getEntity = async function getEntity(langcode) {
                 type_id
                 name
                 url_key
+                is_buyable
                 price {
                     regularPrice {
                         amount {
