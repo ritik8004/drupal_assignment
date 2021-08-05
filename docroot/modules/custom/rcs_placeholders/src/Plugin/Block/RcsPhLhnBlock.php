@@ -85,6 +85,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
           'label' => '#rcs.lhn.name#',
           'url' => '#rcs.lhn.url_path#',
           'depth' => '#rcs.lhn.level#',
+          'active' => '#rcs.lhn.active#',
           'clickable' => TRUE,
         ],
         // Unclickable.
@@ -93,6 +94,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
           'label' => '#rcs.lhn.name#',
           'url' => '#rcs.lhn.url_path#',
           'depth' => '#rcs.lhn.level#',
+          'active' => '#rcs.lhn.active#',
           'clickable' => FALSE,
         ],
       ],

@@ -6,9 +6,9 @@
         <li>
           {% if link.clickable == 0 %}
             {# If not clickable link. #}
-            <span class="lhn-{{ link.depth }}">{{ link.label }}</span>
+            <span class="lhn-{{ link.depth }} #rcs.lhn.active#">{{ link.label }}</span>
           {% else %}
-            <a href="{{ link.url }}" class = "lhn-{{ link.depth }}">{{ link.label }}</a>
+            <a href="{{ link.url }}" class = "lhn-{{ link.depth }} #rcs.lhn.active#">{{ link.label }}</a>
           {% endif %}
         </li>
       {% endif %}
