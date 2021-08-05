@@ -874,6 +874,19 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
       unset($attachments['#attached']['library'][$index]);
     }
   }
+
+  // For performance testing & debugging purposes adding a quick bypass for
+  // escaping GTM JS on a page.
+  // Usage: ?GTM=BLOCK.
+  $param = \Drupal::request()->get('GTM');
+  if ($param === 'BLOCK') {
+    foreach ($attachments['#attached']['html_head'] ?? [] as $index => $script) {
+      if ($script[1] === 'google_tag_script_tag__primary' || $script[1] === 'google_tag_data_layer_tag__primary') {
+        unset($attachments['#attached']['html_head'][$index]);
+        return;
+      }
+    }
+  }
 }
 
 /**
