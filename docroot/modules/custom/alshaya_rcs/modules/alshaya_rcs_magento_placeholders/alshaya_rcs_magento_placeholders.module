@@ -365,6 +365,12 @@ function alshaya_rcs_magento_placeholders_theme_suggestions_page_alter(array &$s
       $suggestions[] = 'page__rcs_pdp';
     }
   }
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $suggestions[] = 'page__plp';
+    }
+  }
 }
 
 /**

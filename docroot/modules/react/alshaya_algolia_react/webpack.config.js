@@ -9,6 +9,7 @@ var config = {
   entry: {
     autocomplete: './js/src/SearchIndex.js',
     plp: './js/src/PlpIndex.js',
+    plpv2: './js/src/PlpV2Index.js',
   },
   mode: 'production',
   output: {

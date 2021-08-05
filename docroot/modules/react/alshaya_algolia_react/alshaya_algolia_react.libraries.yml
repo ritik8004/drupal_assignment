@@ -46,6 +46,14 @@ plp:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
 
+plpv2:
+  js:
+    dist/plpv2.js: {}
+    js/alshaya_algolia_plp.js: {}
+  dependencies:
+    - core/drupalSettings
+    - alshaya_algolia_react/algolia_common
+
 algolia_common:
   js:
     js/alshaya_algolia_global.js: {}

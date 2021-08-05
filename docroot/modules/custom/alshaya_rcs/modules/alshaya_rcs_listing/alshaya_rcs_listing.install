@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_listing_install() {
+  // Move the rcs navigation block to current theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+  // Disable the V1 blocks that are not required.
+  $blocks = [
+    'alshayagridcountblock_plp',
+    'alshaya_algolia_react_plp',
+    'views_block__plp_promotional_banner_block_1',
+  ];
+  foreach ($blocks as $block_id) {
+    $block = Block::load($block_id);
+    if ($block instanceof BlockInterface) {
+      $block->disable()->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_listing_uninstall() {
+  // Enable the V1 blocks.
+  $blocks = [
+    'alshayagridcountblock_plp',
+    'alshaya_algolia_react_plp',
+    'views_block__plp_promotional_banner_block_1',
+  ];
+  foreach ($blocks as $block_id) {
+    $block = Block::load($block_id);
+    if ($block instanceof BlockInterface) {
+      $block->enable()->save();
+    }
+  }
+}
