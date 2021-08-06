@@ -28,6 +28,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Detection\MobileDetect;
 
 /**
  * Class Alshaya Gtm Manager.
@@ -936,6 +937,9 @@ class AlshayaGtmManager {
     $orders_count = isset($order['customer_id']) ? $this->ordersManager->getOrdersCount((int) $order['customer_id']) : 1;
     $current_user_id = $this->currentUser->id();
     $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
+    if (!empty($current_user->field_mobile_number->getValue())) {
+      $phone_number = $current_user->field_mobile_number->getValue()[0]['value'];
+    }
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -947,8 +951,8 @@ class AlshayaGtmManager {
       'userId' => (int) $order['customer_id'],
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
-      'userPhone' => $current_user_id ? ($current_user->get('field_mobile_number')->value ?? '') : '',
-      'userType' => isset($order['customer_id']) ? 'Logged in User' : 'Guest User',
+      'userPhone' => $phone_number ?? '',
+      'userType' => $this->currentUser->isAnonymous() ? 'Guest User' : 'Logged in User',
       'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
       'platformType' => $this->getUserDeviceType(),
     ];
@@ -1334,14 +1338,14 @@ class AlshayaGtmManager {
    * @return string
    *   User device type.
    */
-  public function getUserDeviceType() {
-    $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-    $device_type = "Desktop";
-    if (strpos($user_agent, 'mobile') !== FALSE) {
-      $device_type = "Mobile";
+  protected function getUserDeviceType() {
+    $detect = new MobileDetect();
+    $device_type = 'Desktop';
+    if ($detect->isMobile()) {
+      $device_type = 'Mobile';
     }
-    elseif (strpos($user_agent, 'tablet') !== FALSE) {
-      $device_type = "Tablet";
+    elseif ($detect->isTablet()) {
+      $device_type = 'Tablet';
     }
 
     return $device_type;
