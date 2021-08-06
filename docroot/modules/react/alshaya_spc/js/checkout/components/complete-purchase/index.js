@@ -41,7 +41,6 @@ export default class CompletePurchase extends React.Component {
     if (!this.completePurchaseButtonActive()) {
       return;
     }
-
     setTimeout(() => {
       dispatchCustomEvent('orderPaymentMethod', {
         payment_method: Object
@@ -49,7 +48,7 @@ export default class CompletePurchase extends React.Component {
           .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
           .shift().gtm_name,
       });
-    }, 5000);
+    }, 2000);
 
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
