@@ -24,6 +24,7 @@ import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -102,9 +103,9 @@ const triggerStockRefresh = (data) => callDrupalApi(
     },
   },
 ).catch((error) => {
-  logger.error(
-    `Error occurred while triggering checkout event refresh stock. Message: ${error.message}`,
-  );
+  logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
+    '@message': error.message,
+  });
 });
 
 /**
@@ -116,6 +117,10 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 
 /**
  * Returns the processed cart data.
+ *
+ * @todo check why getCart in V1 and V2 are different
+ * In V1 it does API call all the time.
+ * In V2 it loads from static cache if available.
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
@@ -232,7 +237,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
-  if (response.data.error === true) {
+  if (hasValue(response.data) && hasValue(response.data.error)) {
     logger.error('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
       '@cartId': cartId,
       '@post': JSON.stringify(itemData),
@@ -244,7 +249,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       const freshCart = await getCart(true);
 
       // Try to load fresh cart, if this fails it means we need to create new one.
-      if (_isEmpty(freshCart)) {
+      if (!hasValue(freshCart)) {
         // Remove the cart id from storage.
         window.commerceBackend.removeCartDataFromStorage(true);
 
@@ -252,10 +257,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
         // Create new one and retry but only if user is trying to add item to cart.
         if (data.action === 'add item'
-          && parseInt(
-            drupalSettings.cart.checkout_settings.max_native_update_attempts,
-            10,
-          ) > apiCallAttempts) {
+          && parseInt(getCartSettings('retryMaxAttempts'), 10) > apiCallAttempts) {
           StaticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
 
           // Create a new cart.
@@ -327,14 +329,13 @@ window.commerceBackend.applyRemovePromo = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.refreshCart = async (data) => {
-  const checkoutSettings = getCartSettings('checkout_settings');
   let postData = {
     extension: {
       action: 'refresh',
     },
   };
 
-  if (checkoutSettings.cart_refresh_mode === 'full') {
+  if (getCartSettings('refreshMode') === 'full') {
     postData = data.postData;
   }
 
@@ -380,7 +381,9 @@ window.commerceBackend.createCart = async () => {
   const errorMessage = (!_isUndefined(response.data.error_message))
     ? response.data.error_message
     : '';
-  logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
+  logger.warning('Error while creating cart on MDC. Error: @error', {
+    '@error': errorMessage,
+  });
   return null;
 };
 
@@ -397,10 +400,12 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
     return;
   }
 
+  StaticStorage.set('associating_cart', true);
+
   // Try to load customer's cart if not doing this on checkout page.
   if (pageType !== 'checkout') {
     const cart = await getCart();
-    if (!_isEmpty(cart.data.cart.items)) {
+    if (!_isEmpty(cart) && !_isEmpty(cart.data) && !_isEmpty(cart.data.cart.items)) {
       // If the current cart has items, we carry on with this cart and remove
       // the guest cart id from local storage.
       removeCartIdFromStorage();
@@ -411,7 +416,9 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
   // If the user is authenticated and we have cart_id in the local storage
   // it means the customer just became authenticated.
   // We need to associate the cart and remove the cart_id from local storage.
-  await associateCartToCustomer();
+  await associateCartToCustomer(guestCartId);
+
+  StaticStorage.remove('associating_cart');
 };
 
 /**
@@ -431,7 +438,11 @@ window.commerceBackend.addFreeGift = async (data) => {
   let cart = null;
 
   if (_isEmpty(sku) || _isEmpty(promoCode) || _isEmpty(langCode)) {
-    logger.error(`Missing request header parameters. SKU: ${sku}, Promo: ${promoCode}, Langcode: ${langCode}`, {});
+    logger.error('Missing request header parameters. SKU: @sku, Promo: @promoCode, Langcode: @langCode', {
+      '@sku': sku || '',
+      '@promoCode': promoCode || '',
+      '@langCode': langCode || '',
+    });
     cart = await window.commerceBackend.getCart();
   } else {
     // Apply promo code.
@@ -444,13 +455,13 @@ window.commerceBackend.addFreeGift = async (data) => {
     if (_isEmpty(cart.data)
       || (!_isUndefined(cart.data.error) && cart.data.error)
     ) {
-      logger.error('Cart is empty. Cart: @cart', {
+      logger.warning('Cart is empty. Cart: @cart', {
         '@cart': JSON.stringify(cart),
       });
     } else if (_isUndefined(cart.data.appliedRules)
       || _isEmpty(cart.data.appliedRules)
     ) {
-      logger.error('Invalid promo code. Cart: @cart, Promo: @promoCode', {
+      logger.warning('Invalid promo code. Cart: @cart, Promo: @promoCode', {
         '@cart': JSON.stringify(cart.data),
         '@promoCode': promoCode,
       });

@@ -5,3 +5,4 @@ permissions:
   - 'restful get stock_v2'
   - 'restful get product_v2'
   - 'restful get product_status'
+  - 'restful get product_linked_skus_v2'

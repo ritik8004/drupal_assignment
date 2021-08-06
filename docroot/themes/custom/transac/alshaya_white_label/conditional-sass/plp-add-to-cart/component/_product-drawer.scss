@@ -116,6 +116,10 @@
     .content--item-code {
       font-size: 0.625rem;
       color: $pdp_product_itemcode;
+
+      .field__value {
+        padding-#{$left}: 0.25rem;
+      }
     }
 
     .content--item-code,

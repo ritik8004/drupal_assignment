@@ -499,3 +499,13 @@ checkout-pudo-aramex:
   css:
     theme:
       css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: {}
+
+my-account:
+  css:
+    theme:
+      css/conditional-sass/my-account/my-account.ltr.css: {}
+
+sitemap:
+  css:
+    theme:
+      css/conditional-sass/sitemap/sitemap.ltr.css: {}

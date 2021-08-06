@@ -116,3 +116,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/secondary-menu/secondary-menu.ltr.css: css/conditional-sass/secondary-menu/secondary-menu.ltr.css
+
+  alshaya_white_label/my-account:
+    css:
+      theme:
+        css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/sitemap:
+    css:
+      theme:
+        css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css

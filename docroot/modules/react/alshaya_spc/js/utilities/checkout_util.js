@@ -2,6 +2,7 @@ import axios from 'axios';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
+import hasValue from '../../../js/utilities/conditionsUtility';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -209,11 +210,15 @@ export const addShippingInCart = (action, data) => window.commerceBackend.addShi
         return null;
       }
 
+      if (hasValue(response.data.error)) {
+        return response.data;
+      }
+
       if (!validateCartResponse(response.data)) {
         return null;
       }
       // If there is no error on shipping update.
-      if (response.data.error === undefined) {
+      if (!hasValue(response.data.error)) {
         setBillingFlagInStorage(response.data);
         // Trigger event on shipping update, so that
         // other components take necessary action if required.
