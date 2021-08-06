@@ -2006,7 +2006,7 @@ window.commerceBackend.placeOrder = async (data) => {
         isAbsoluteUrl: false,
       };
 
-      if (typeof response.data.redirect_url !== 'undefined') {
+      if (hasValue(response.data) && hasValue(response.data.redirect_url)) {
         result.error = true;
         result.success = false;
         result.redirectUrl = response.data.redirect_url;
@@ -2026,9 +2026,7 @@ window.commerceBackend.placeOrder = async (data) => {
         return { data: result };
       }
 
-      if (_isEmpty(response.data)
-        || (!_isUndefined(response.data.error) && response.data.error)
-      ) {
+      if (!hasValue(response.data) || hasValue(response.data.error)) {
         return response;
       }
 
