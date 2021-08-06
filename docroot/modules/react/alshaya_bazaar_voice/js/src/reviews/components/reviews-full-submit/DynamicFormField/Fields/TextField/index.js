@@ -8,18 +8,25 @@ class TextField extends React.Component {
     super(props);
     this.state = {
       labelActiveClass: '',
+      currVal: 1,
     };
   }
 
   handleChange = (e) => {
     const { label } = this.props;
     const { value, minLength, id } = e.currentTarget;
-    let activeClass = '';
-    if (value.length > 0) {
-      document.getElementById(`${id}-error`).innerHTML = value.length < minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label })
-        : '';
-      activeClass = 'active-label';
+    let activeClass = 'active-label';
+    if (value.length > 0 && value.length < minLength) {
+      document.getElementById(`${id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label });
+      document.getElementById(id).classList.add('error');
+    } else if (value.length === 0) {
+      document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(id).classList.add('error');
+      this.setState({ currVal: 0 });
+      activeClass = '';
+    } else {
+      document.getElementById(`${id}-error`).innerHTML = '';
+      document.getElementById(id).classList.remove('error');
     }
 
     this.setState({ labelActiveClass: activeClass });
@@ -44,7 +51,12 @@ class TextField extends React.Component {
       classLable,
       readonly,
     } = this.props;
-    const { labelActiveClass } = this.state;
+    let { labelActiveClass } = this.state;
+    const { currVal } = this.state;
+
+    if (defaultValue !== null && currVal === 1) {
+      labelActiveClass = 'active-label';
+    }
 
     if (visible === true) {
       return (
@@ -52,7 +64,7 @@ class TextField extends React.Component {
           <ConditionalView condition={text !== undefined}>
             <div id={`${id}-head-row`} className="head-row">{text}</div>
           </ConditionalView>
-          <div id={id} className={`write-review-type-textfield ${(classLable !== undefined) ? classLable : ''}`}>
+          <div id={`${id}-perror`} className={`write-review-type-textfield ${(classLable !== undefined) ? classLable : ''}`}>
             <input
               type="text"
               id={id}
@@ -64,7 +76,7 @@ class TextField extends React.Component {
               readOnly={readonly}
             />
             <div className="c-input__bar" />
-            <label className={`${(defaultValue !== undefined && defaultValue !== null) ? 'active-label' : labelActiveClass}`}>
+            <label className={`${(labelActiveClass !== null) ? labelActiveClass : ''}`}>
               {label}
               {' '}
               {(required) ? '*' : '' }

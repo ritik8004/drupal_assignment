@@ -5,10 +5,11 @@
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
 
   Drupal.alshayaSpc.clearCartData = function () {
-    localStorage.removeItem('cart_data');
+    window.commerceBackend.removeCartDataFromStorage();
   };
 
   Drupal.alshayaSpc.getCartData = function () {
+    // @todo find better way to get this using commerceBackend.
     var cart_data = localStorage.getItem('cart_data');
     if (cart_data) {
       cart_data = JSON.parse(cart_data);

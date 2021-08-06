@@ -9,6 +9,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
@@ -157,7 +158,7 @@ function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, arra
   if (!empty($data) && $type == 'light' && !empty(\Drupal::requestStack()->getCurrentRequest()->query->get('context'))) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $data['extra_data'] = [];
-    $image = alshaya_acm_get_product_display_image($sku, 'product_teaser', 'cart');
+    $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
     if (!empty($image)) {
       if ($image['#theme'] == 'image_style') {
         $data['extra_data']['cart_image'] = [
@@ -293,13 +294,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
   }
 
   $api_settings = Settings::get('alshaya_api.settings');
-  $checkout_settings = Settings::get('alshaya_checkout_settings');
   $store_settings = Settings::get('magento_lang_prefix');
-  $timeout_settings = Settings::get('alshaya_backend_calls_options');
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $exception_message = Settings::get('alshaya_spc.exception_message');
-  $site_country_code = Settings::get('alshaya_site_country_code') ?? '';
-  $address_fields = Settings::get('alshaya_address_fields') ?? [];
 
   // We proxy the requests via cloudflare, so we use the current domain as is
   // without any language suffix so HTTP_HOST is enough.
@@ -313,13 +309,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // Add the prefix for rest and store code.
   $page['#attached']['drupalSettings']['cart']['url'] .= '/rest/' . $store_settings[$current_language];
 
-  $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
-  $page['#attached']['drupalSettings']['cart']['exception_messages'] = $exception_message;
-  $page['#attached']['drupalSettings']['cart']['site_country_code'] = $site_country_code;
-  $page['#attached']['drupalSettings']['cart']['address_fields'] = $address_fields;
-  $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
-    return $key['timeout'];
-  }, $timeout_settings['middleware']);
+  $page['#attached']['drupalSettings']['cart']['retryMaxAttempts'] = Settings::get('alshaya_checkout_settings')['max_native_update_attempts'] ?? 10;
+  $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
 }
 
 /**
@@ -356,10 +347,9 @@ function alshaya_spc_preprocess_page(&$variables) {
     '#strings' => [
       [
         'key' => 'backend_obsolete_version',
-        'value' => t('The version of the website that you are using is now obsolete. Please refresh the page and try again.'),
+        'value' => t('We have upgraded your experience, please refresh the page and try again.'),
       ],
     ],
   ];
-
-  $variables['page']['pre_content']['commerce_backend'] = $strings;
+  $variables['page']['content']['commerce_backend'] = $strings;
 }

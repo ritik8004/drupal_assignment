@@ -324,6 +324,12 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('pdp_reviews_seo_limit'),
       '#description' => $this->t('Enter total number of reviews to be captured for SEO on PDP.'),
     ];
+    $form['basic_settings']['featured_reviews_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Set limit for featured reviews.'),
+      '#default_value' => $config->get('featured_reviews_limit'),
+      '#description' => $this->t('Set the limit for featured reviews to be pushed in DY.'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -365,6 +371,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('reviews_per_page', $values['reviews_per_page'])
       ->set('comment_submission', $values['comment_submission'])
       ->set('pdp_reviews_seo_limit', $values['pdp_reviews_seo_limit'])
+      ->set('featured_reviews_limit', $values['featured_reviews_limit'])
       ->save();
 
     parent::submitForm($form, $form_state);

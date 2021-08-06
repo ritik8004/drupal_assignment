@@ -106,3 +106,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css: css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css
+
+  alshaya_white_label/my-account:
+      css:
+        theme:
+          css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css

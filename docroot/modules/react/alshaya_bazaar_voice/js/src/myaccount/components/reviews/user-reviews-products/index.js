@@ -14,9 +14,7 @@ const UserReviewsProducts = ({
       </div>
       <div className="product-desc-block">
         <div className="product-title">
-          <a href={reviewsProduct[reviewsIndividualSummary.ProductId].ProductPageUrl}>
-            <span>{reviewsProduct[reviewsIndividualSummary.ProductId].Name}</span>
-          </a>
+          <span>{reviewsProduct[reviewsIndividualSummary.ProductId].Name}</span>
         </div>
         <div className="product-item-code">
           {Drupal.t('Item Code')}
