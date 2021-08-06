@@ -1,4 +1,4 @@
-@javascript @coupon-promotion @discount @smoke
+@javascript @coupon-promotion @discount @smoke @mckwuat @mcsauat @mcaeuat
 Feature: SPC to add coupon promotions & get discount in cart page for Guest user
 
   @desktop @dynamic
