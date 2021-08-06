@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @auth @vssauat @pbsauat @pbkwuat @tbskwuat
+@javascript @returnUser @madaPayment @auth @vssauat @pbsauat @pbkwuat @tbskwuat @flsauat @bbwsauat @mcsauat @mcaeuat
 Feature: SPC Checkout using Click & Collect store for returning customer
 
   Background:
@@ -61,9 +61,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -75,7 +72,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{delivery_type_text}"
     Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -151,9 +147,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"
@@ -170,7 +163,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
-    Then I should see "{language_cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -316,7 +308,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{delivery_type_text}"
     Then I should see "{cnc_delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -411,7 +402,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
-    Then I should see "{language_cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
