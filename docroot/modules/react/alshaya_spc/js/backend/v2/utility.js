@@ -1,4 +1,9 @@
 import Axios from 'axios';
+import {
+  getStorageInfo,
+  removeStorageInfo,
+  setStorageInfo,
+} from '../../utilities/storage';
 
 /**
  * Logs messages in the backend.
@@ -14,7 +19,17 @@ import Axios from 'axios';
  */
 const logger = {
   send: (level, message, context) => {
-    console.log(level, Drupal.formatString(message, context));
+    if (typeof Drupal.logViaDataDog !== 'undefined') {
+      Drupal.logViaDataDog(level, message, context);
+      return;
+    }
+
+    // Avoid console log in npm tests.
+    if (typeof drupalSettings.jest !== 'undefined') {
+      return;
+    }
+
+    console.debug(level, Drupal.formatString(message, context));
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
@@ -34,6 +49,39 @@ const logger = {
  */
 const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);
 
+const removeCartIdFromStorage = () => {
+  // Always remove cart_data, we have added this as workaround with
+  // to-do at right place.
+  removeStorageInfo('cart_data');
+
+  if (isUserAuthenticated()) {
+    setStorageInfo(window.authenticatedUserCartId, 'cart_id');
+    return;
+  }
+
+  removeStorageInfo('cart_id');
+};
+
+const getCartIdFromStorage = () => {
+  let cartId = getStorageInfo('cart_id');
+
+  // Check if cartId is of authenticated user.
+  if (cartId === window.authenticatedUserCartId) {
+    // Reload the page if user is not authenticated based on settings.
+    if (!isUserAuthenticated()) {
+      removeCartIdFromStorage();
+
+      // eslint-disable-next-line no-self-assign
+      window.location.href = window.location.href;
+    }
+
+    // Replace with null so we don't need to add conditions everywhere.
+    cartId = null;
+  }
+
+  return cartId;
+};
+
 /**
  * Gets magento api endpoint by user role.
  *
@@ -50,7 +98,7 @@ const getApiEndpoint = (action, params = {}) => {
   switch (action) {
     case 'associateCart':
       endpoint = isUserAuthenticated()
-        ? '/V1/carts/mine'
+        ? '/V1/carts/mine/associate-cart'
         : '';
       break;
 
@@ -116,12 +164,14 @@ const getApiEndpoint = (action, params = {}) => {
 
     case 'getLastOrder':
       endpoint = isUserAuthenticated()
-        ? '/V1/customer-order/me/getLastOrder/'
+        ? '/V1/customer-order/me/getLastOrder'
         : '';
       break;
 
     default:
-      logger.critical(`Endpoint does not exist for action : ${action}`);
+      logger.critical('Endpoint does not exist for action: @action.', {
+        '@action': action,
+      });
   }
 
   return endpoint;
@@ -150,4 +200,6 @@ export {
   getApiEndpoint,
   isUserAuthenticated,
   getIp,
+  getCartIdFromStorage,
+  removeCartIdFromStorage,
 };

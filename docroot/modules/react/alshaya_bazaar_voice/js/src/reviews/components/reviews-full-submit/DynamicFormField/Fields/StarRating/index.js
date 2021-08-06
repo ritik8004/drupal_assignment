@@ -11,10 +11,15 @@ class StarRating extends React.Component {
   }
 
   onClick = (e, ratingValue) => {
+    const {
+      id,
+    } = this.props;
+
     if (ratingValue > 0) {
       this.setState({
         rating: ratingValue,
       });
+      document.getElementById(`${id}-error`).classList.remove('rating-error');
     }
   };
 

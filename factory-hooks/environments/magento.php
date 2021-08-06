@@ -35,6 +35,39 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ], 
+  ],
+  'tbs_local' => [
+    'url' => 'http://www.tbs-alshayam.lndo.site',
+    'magento_secrets' => [
+      'consumer_key' => 'k7354eyo76v0novunidn99wu7o9mafjm',
+      'consumer_secret' => 'enwl857ymegc2bptwg1cjddcfccr1rga',
+      'access_token' => 'e4wdjveiqgwg78zd5ip2nirm51abo0k1',
+      'access_token_secret' => '5pim4yvsqa3h4wkttznsonma6qgoo9xl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 21, 'ar' => 18],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
+    ],
   ],
   'tbs_uat' => [
     'url' => 'https://ri-uat.store.alshaya.com',
@@ -791,6 +824,33 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+  ],
+  'we_local' => [
+    'url' => 'http://www.wes-alshayam.lndo.site',
+    'magento_secrets' => [
+      'consumer_key' => '2dobu86iimp9x3oc2n0qitc03ypcyud3',
+      'consumer_secret' => 'nqnmmvijrx3gmwpag73hbws67sfil94s',
+      'access_token' => 'j06xgfwz2p99scbwsc6eiil20l3ser2f',
+      'access_token_secret' => '8efr0c8hev5tkas1s5yj555o5in1vf4p',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
   'we_qa' => [

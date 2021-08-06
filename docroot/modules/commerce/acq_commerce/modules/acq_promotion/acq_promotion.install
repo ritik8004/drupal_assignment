@@ -11,6 +11,21 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_update_N().
+ * 
+ * Override the translate key for description field.
+ */
+function acq_promotion_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['field.field.node.acq_promotion.field_acq_promotion_description'],
+    'acq_promotion',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
  *
  * Create the new table for storing promotion mapping and remove the field.
  */

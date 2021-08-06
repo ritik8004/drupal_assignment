@@ -153,3 +153,19 @@
     }
   }
 }
+
+#hits,
+#plp-hits,
+.view-alshaya-product-list {
+  .c-products__item {
+    .alshaya_search_gallery {
+      .alshaya_search_slider {
+        .slick-dots {
+          html[lang=ar] & {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}

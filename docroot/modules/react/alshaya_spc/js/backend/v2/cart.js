@@ -1,4 +1,5 @@
 import _isNull from 'lodash/isNull';
+import _isEmpty from 'lodash/isEmpty';
 import _isUndefined from 'lodash/isUndefined';
 import _isString from 'lodash/isString';
 import _isNumber from 'lodash/isNumber';
@@ -10,11 +11,20 @@ import {
   isAuthenticatedUserWithoutCart,
   updateCart,
   getProcessedCartData,
-  getCartWithProcessedData,
+  getCartWithProcessedData, getCart, associateCartToCustomer,
 } from './common';
-import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
+import {
+  getApiEndpoint,
+  getCartIdFromStorage,
+  isUserAuthenticated,
+  logger,
+  removeCartIdFromStorage,
+} from './utility';
 import { getExceptionMessageType } from './error';
-import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
+import { setStorageInfo } from '../../utilities/storage';
+import cartActions from '../../utilities/cart_actions';
+import StaticStorage from './staticStorage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -93,9 +103,9 @@ const triggerStockRefresh = (data) => callDrupalApi(
     },
   },
 ).catch((error) => {
-  logger.error(
-    `Error occurred while triggering checkout event refresh stock. Message: ${error.message}`,
-  );
+  logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
+    '@message': error.message,
+  });
 });
 
 /**
@@ -107,6 +117,10 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 
 /**
  * Returns the processed cart data.
+ *
+ * @todo check why getCart in V1 and V2 are different
+ * In V1 it does API call all the time.
+ * In V2 it loads from static cache if available.
  *
  * @param {boolean} force
  *   Force refresh cart data from magento.
@@ -221,35 +235,43 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     return window.commerceBackend.getCart();
   }
 
-  let apiCallAttempts = 0;
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
-  if (response.data.error === true) {
+  if (hasValue(response.data) && hasValue(response.data.error)) {
+    logger.error('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
+      '@cartId': cartId,
+      '@post': JSON.stringify(itemData),
+      '@response': JSON.stringify(response.data),
+    });
+
+    // 404 errors could happen when we try to post to invalid cart id.
     if (response.data.error_code === 404) {
-      // 400 errors happens when we try to post to invalid cart id.
-      const postString = JSON.stringify(itemData);
-      logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
-      // Remove the cart from storage.
-      window.commerceBackend.removeCartDataFromStorage(true);
+      const freshCart = await getCart(true);
 
-      if (
-        data.action === 'add item'
-        && parseInt(
-          window.drupalSettings.cart.checkout_settings.max_native_update_attempts,
-          10,
-        ) > apiCallAttempts
-      ) {
-        apiCallAttempts += 1;
+      // Try to load fresh cart, if this fails it means we need to create new one.
+      if (!hasValue(freshCart)) {
+        // Remove the cart id from storage.
+        window.commerceBackend.removeCartDataFromStorage(true);
 
-        // Create a new cart.
-        cartId = await window.commerceBackend.createCart();
-        if (_isNull(cartId)) {
-          return cartId;
+        const apiCallAttempts = StaticStorage.get('apiCallAttempts') || 0;
+
+        // Create new one and retry but only if user is trying to add item to cart.
+        if (data.action === 'add item'
+          && parseInt(getCartSettings('retryMaxAttempts'), 10) > apiCallAttempts) {
+          StaticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
+
+          // Create a new cart.
+          cartId = await window.commerceBackend.createCart();
+          if (_isNull(cartId)) {
+            // Cart creation is also failing, simply return.
+            return null;
+          }
+
+          return window.commerceBackend.addUpdateRemoveCartItem(data);
         }
-        const cartData = await window.commerceBackend.getCart(true);
-        window.commerceBackend.setCartDataInStorage(cartData);
-        return window.commerceBackend.addUpdateRemoveCartItem(data);
       }
+
+      // If cart is still available, it means something else is wrong.
       return response;
     }
 
@@ -262,6 +284,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
   }
+
+  // Reset counter.
+  StaticStorage.remove('apiCallAttempts');
 
   return window.commerceBackend.getCart(true);
 };
@@ -304,14 +329,13 @@ window.commerceBackend.applyRemovePromo = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.refreshCart = async (data) => {
-  const checkoutSettings = getCartSettings('checkout_settings');
   let postData = {
     extension: {
       action: 'refresh',
     },
   };
 
-  if (checkoutSettings.cart_refresh_mode === 'full') {
+  if (getCartSettings('refreshMode') === 'full') {
     postData = data.postData;
   }
 
@@ -331,26 +355,168 @@ window.commerceBackend.refreshCart = async (data) => {
  */
 window.commerceBackend.createCart = async () => {
   // Remove cart_id from storage.
-  removeStorageInfo('cart_id');
+  removeCartIdFromStorage();
 
   // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
   if (response.status === 200 && !_isUndefined(response.data)
     && (_isString(response.data) || _isNumber(response.data))
   ) {
-    const Id = window.drupalSettings.userDetails.customerId;
-    logger.notice(`New cart created: ${response.data}, customer_id: ${Id}`);
+    logger.notice('New cart created: @cartId, for Customer: @customerId.', {
+      '@cartId': response.data,
+      '@customerId': window.drupalSettings.userDetails.customerId,
+    });
 
     // If its a guest customer, keep cart_id in the local storage.
     if (!isUserAuthenticated()) {
       setStorageInfo(response.data, 'cart_id');
     }
+
+    // Get fresh cart once to ensure static caches are warm.
+    await getCart(true);
+
     return response.data;
   }
 
   const errorMessage = (!_isUndefined(response.data.error_message))
     ? response.data.error_message
     : '';
-  logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
+  logger.warning('Error while creating cart on MDC. Error: @error', {
+    '@error': errorMessage,
+  });
   return null;
+};
+
+window.commerceBackend.associateCartToCustomer = async (pageType) => {
+  // If user is not logged in, no further processing required.
+  if (!isUserAuthenticated()) {
+    return;
+  }
+
+  const guestCartId = getCartIdFromStorage();
+
+  // No further checks required if card id not available in storage.
+  if (_isEmpty(guestCartId)) {
+    return;
+  }
+
+  StaticStorage.set('associating_cart', true);
+
+  // Try to load customer's cart if not doing this on checkout page.
+  if (pageType !== 'checkout') {
+    const cart = await getCart();
+    if (!_isEmpty(cart) && !_isEmpty(cart.data) && !_isEmpty(cart.data.cart.items)) {
+      // If the current cart has items, we carry on with this cart and remove
+      // the guest cart id from local storage.
+      removeCartIdFromStorage();
+      return;
+    }
+  }
+
+  // If the user is authenticated and we have cart_id in the local storage
+  // it means the customer just became authenticated.
+  // We need to associate the cart and remove the cart_id from local storage.
+  await associateCartToCustomer(guestCartId);
+
+  StaticStorage.remove('associating_cart');
+};
+
+/**
+ * Adds free gift to the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addFreeGift = async (data) => {
+  const { sku, promoRuleId } = data;
+  const skuType = data.type;
+  const langCode = data.langcode;
+  const promoCode = data.promo;
+  let cart = null;
+
+  if (_isEmpty(sku) || _isEmpty(promoCode) || _isEmpty(langCode)) {
+    logger.error('Missing request header parameters. SKU: @sku, Promo: @promoCode, Langcode: @langCode', {
+      '@sku': sku || '',
+      '@promoCode': promoCode || '',
+      '@langCode': langCode || '',
+    });
+    cart = await window.commerceBackend.getCart();
+  } else {
+    // Apply promo code.
+    cart = await window.commerceBackend.applyRemovePromo({
+      promo: promoCode,
+      action: cartActions.cartApplyCoupon,
+    });
+
+    // Validations.
+    if (_isEmpty(cart.data)
+      || (!_isUndefined(cart.data.error) && cart.data.error)
+    ) {
+      logger.warning('Cart is empty. Cart: @cart', {
+        '@cart': JSON.stringify(cart),
+      });
+    } else if (_isUndefined(cart.data.appliedRules)
+      || _isEmpty(cart.data.appliedRules)
+    ) {
+      logger.warning('Invalid promo code. Cart: @cart, Promo: @promoCode', {
+        '@cart': JSON.stringify(cart.data),
+        '@promoCode': promoCode,
+      });
+    } else {
+      // Update cart with free gift.
+      const params = { ...data };
+      params.items = [];
+      params.extension = {
+        action: cartActions.cartAddItem,
+      };
+
+      if (skuType === 'simple') {
+        params.items.push({
+          sku,
+          qty: 1,
+          product_type: skuType,
+          extension_attributes: {
+            promo_rule_id: promoRuleId,
+          },
+        });
+      } else {
+        const options = (!_isEmpty(data.configurable_values)) ? data.configurable_values : [];
+        params.items.push({
+          sku,
+          qty: 1,
+          product_type: skuType,
+          product_option: (_isEmpty(options))
+            ? []
+            : {
+              extension_attributes: {
+                configurable_item_options: options,
+              },
+            },
+          variant_sku: (!_isEmpty(data.variant)) ? data.variant : null,
+          extension_attributes: {
+            promo_rule_id: promoRuleId,
+          },
+        });
+      }
+
+      // Update cart.
+      const updated = await updateCart(params);
+      // If cart update has error.
+      if (_isEmpty(updated.data) || (!_isUndefined(updated.data.error) && updated.data.error)) {
+        logger.error('Update cart failed. Cart: @cart', {
+          '@cart': JSON.stringify(cart),
+        });
+      } else {
+        if (!_isEmpty(updated.data) && _isUndefined(updated.data.error)) {
+          updated.data = await getProcessedCartData(updated.data);
+        }
+        cart = updated;
+      }
+    }
+  }
+
+  return cart;
 };

@@ -1184,6 +1184,10 @@ const productRecommendationsSuffix = 'pr-';
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
         var condition = true;
+        var position = $(this).attr('data-insights-position');
+        if (position === undefined) {
+          $(this).attr('list-item-position', count);
+        }
         // Only on scroll we check if product is in view or not.
         if (eventType == 'scroll') {
           condition = $(this).isElementInViewPort(0, 10);
@@ -1348,24 +1352,13 @@ const productRecommendationsSuffix = 'pr-';
     if ($.type(message) !== 'string') {
       message = JSON.stringify(message);
     }
-    var getCartId = localStorage.getItem('last_selected_payment');
-    var cartObject = localStorage.getItem('cart_data');
-    var cartId = 0;
-    if (category && getCartId) {
-      var extractCartId = getCartId.split(':');
-      cartId = extractCartId[1];
-    }
-    else if (category && cartObject) {
-      cartObject = JSON.parse(cartObject);
-      cartId = cartObject.cart.cart_id;
-    }
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
       eventAction: message,
       eventPlace: 'Error occurred on ' + window.location.href,
-      eventValue: cartId,
+      eventValue: 0,
       nonInteraction: 0,
     };
 
@@ -1391,7 +1384,8 @@ const productRecommendationsSuffix = 'pr-';
   // If TrackJS is enabled we let it track the errors.
   if (drupalSettings.gtm.log_errors_to_ga !== undefined
     && drupalSettings.gtm.log_errors_to_ga
-    && window.TrackJS === undefined) {
+    && typeof window.TrackJS === 'undefined'
+    && typeof window.DD_LOGS === 'undefined') {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);
