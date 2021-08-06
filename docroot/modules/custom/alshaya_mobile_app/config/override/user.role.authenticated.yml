@@ -22,3 +22,4 @@ permissions:
   - 'restful get webform_options_list'
   - 'restful get product_exclude_linked_v2'
   - 'restful get skus_product_list_v2'
+  - 'restful get deeplink_v2'

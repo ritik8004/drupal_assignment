@@ -1,11 +1,10 @@
-import StaticStorage from "../../../../js/backend/v2/staticStorage";
-
 jest.mock('axios');
 import axios from 'axios';
-import * as cart from '../../../../js/backend/v2/cart';
+import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import { callMagentoApi } from '../../../../js/backend/v2/common';
 import { drupalSettings, Drupal } from '../globals';
 import { getStorageInfo } from '../../../../js/utilities/storage';
+import * as cart from '../../../../js/backend/v2/cart';
 
 describe('Cart', () => {
   beforeEach(() => {
@@ -111,8 +110,8 @@ describe('Cart', () => {
       expect(result).toEqual({
         data: {
           error: true,
-          error_code: 600,
-          error_message: 'Back-end system is down',
+          error_code: 500,
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 500,
       });

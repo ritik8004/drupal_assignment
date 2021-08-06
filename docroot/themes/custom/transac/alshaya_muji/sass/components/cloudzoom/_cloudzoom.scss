@@ -122,11 +122,14 @@
 }
 
 .acq-content-product-modal {
-  #lightSlider {
+  .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
-      height: 32.875rem;
+      width: calc(100% - 6.75rem);
+      margin-#{$right}: 1rem;
     }
+  }
 
+  #lightSlider {
     .slick-next {
       @include breakpoint($desktop) {
         bottom: 0;

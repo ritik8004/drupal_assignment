@@ -35,6 +35,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ], 
   ],
   'tbs_local' => [
     'url' => 'http://www.tbs-alshayam.lndo.site',

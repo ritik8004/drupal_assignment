@@ -194,7 +194,9 @@
     Object.assign(data.ecommerce.checkout, cartData.checkout);
     delete cartData.checkout;
     Object.assign(data, cartData);
-    dataLayer.push(data);
+    setTimeout(() => {
+      dataLayer.push(data);
+    }, 500);
   });
 
   document.addEventListener('updateCartItemData', function (e) {

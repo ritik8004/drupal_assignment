@@ -8,13 +8,20 @@ Using Lando should be considered in BETA phase.
 * XHPROF
 * Make SOLR work (we still use for non-transac)
 
+### Switching from DrupalVM to Lando
+* Reset your local.settings.php (docroot/sites/g/settings/local.settings.php) file
+  from docroot/sites/default/settings/default.local.settings.php
+* Shut down (no need to destroy) vagrant (vagrant halt or vagrant suspend)
+
 ### Build steps
 
 If you are switching from DrupalVM to Lando, please check the steps below.
 
-Requirements
+#### Requirements
 * Docker
-* Lando
+* Lando (https://docs.lando.dev/basics/installation.html)
+_**NOTE**: Lando recommends you download their installer which has docker desktop bundled with it instead of installing
+separately._
 
 Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
 as per the instructions above.
@@ -23,20 +30,15 @@ All steps are executed on your host OS.
 
   * `lando start` - this will configure and set up your containers and services.
   * `lando composer install` - This will install all the composer packages.
-  * `lando blt-init` - this will initialize BLT aliases, git hooks and settings.
-  * `lando frontend-setup` - see notes on BLT below
-  * `lando frontend-build` - see notes on BLT below
+  * `lando blt blt:init` - this will initialize BLT aliases, git hooks and settings.
+  * `lando blt frontend:setup` - see notes on BLT & NPM below
+  * `lando blt frontend:build` - see notes on BLT & NPM below
   * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build. If you don't specify the
      site name, you will be able to pick the name from a list.
 
 You should now be able to access the site in your browser at https://<sitename>.alshaya.lndo.site/
 
 Drush commands can be executed from your host OS using `lando drush -l <site_url>`.
-
-### Switching from DrupalVM to Lando
-* Reset your local.settings.php (docroot/sites/g/settings/local.settings.php) file
-  from docroot/sites/default/settings/default.local.settings.php
-* Shut down (no need to destroy) vagrant (vagrant halt or vagrant suspend)
 
 ## Services
 
@@ -87,11 +89,12 @@ running some scripts from our `blt/scripts` folder.
 
 This is not ideal since it means we could get out of date if the blt code in that area changes.
 
-### NPM
+### NPM and NODE components setup.
 
-To execute all the NPM commands inside VM, use lando npm ...
+To execute any NPM commands with lando, use `lando npm run build` or `lando npm run build:dev`.
+Theme and React compilation works same way, execute the commands from inside the module/theme folder.
 
-For example to compile the JS for alshaya_spc:
+For example to compile the JS for `alshaya_spc`.
 ```
 $ cd docroot/modules/react/alshaya_spc
 $ lando npm run build:dev
@@ -148,7 +151,7 @@ Performance is not as good as a dedicated VM, for a number of reasons, but mostl
 We have made some attempt to improve this by using `excludes` within `.lando.yml` to exclude folders that are mostly
 written by server and we do not need them.
 
-On local, it has been found that updating docker preferences on mac to only mount project folder and $HOME/.lando
+On local, it has been found that updating docker preferences on Mac to only mount project folder and $HOME/.lando
 folder into containers.
 
 For reference:
