@@ -193,7 +193,10 @@ const handleResponse = (apiResponse) => {
   }
 
   // Treat each status code.
-  if (apiResponse.status === 500) {
+  if (apiResponse.status === 202) {
+    // Place order can return 202, this isn't error.
+    // Do nothing here, we will let code below return the response.
+  } else if (apiResponse.status === 500) {
     logger.warning('500 error from backend. Message: @message.', {
       '@message': getProcessedErrorMessage(apiResponse),
     });
