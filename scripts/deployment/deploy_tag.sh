@@ -67,7 +67,7 @@ log_message "Repo: $repo"
 log_message "Docroot: $docroot"
 log_message "Log file: $log_file"
 log_message "Base URI: $base_uri"
-log_message "Script Directory: $current_dir"
+log_message "Script Directory: $script_dir"
 
 echo
 read -p "Please confirm details above and say proceed to start the release: " proceed

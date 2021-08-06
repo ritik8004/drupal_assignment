@@ -393,6 +393,9 @@
             },
             "drupal/lightning_media": {
                 "Create alshaya_media dependent install config directory in lightning_media": "patches/lightning_media/lightning_media_config_changes.patch"
+            },
+            "drupal/metatag": {
+                "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2021-08-03/metatag-3077442-6.patch"
             }
         },
         "installer-paths": {

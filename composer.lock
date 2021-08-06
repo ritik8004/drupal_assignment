@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af785ba18fd4b759c39e327e32e6cc1f",
+    "content-hash": "a62d0ccd78b6148c73303bddf79636a4",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -10804,6 +10804,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2021-08-03/metatag-3077442-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

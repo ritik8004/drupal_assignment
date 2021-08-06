@@ -1,5 +1,3 @@
-import StaticStorage from "../../../../js/backend/v2/staticStorage";
-
 jest.mock('axios');
 import _cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';
@@ -7,6 +5,7 @@ import each from 'jest-each'
 import utilsRewire, { getCncStores } from "../../../../js/backend/v2/checkout";
 import { getCart } from '../../../../js/backend/v2/common';
 import { drupalSettings, Drupal } from '../globals';
+import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import paymentMethods from '../data/paymentMethods';
 import homeDeliveryShippingMethods from '../data/homeDeliveryShippingMethods';
 import cncStoreList from '../data/stores/cnc_stores_list.js';
@@ -362,7 +361,7 @@ describe('Checkout', () => {
         // Mock for getCart();
         axios.mockResolvedValue({ data: {}, status: 200 });
         const result = await getLastOrder();
-        expect(result).toEqual(null);
+        expect(result).toEqual({});
       });
 
       it('With order data', async () => {
@@ -423,7 +422,7 @@ describe('Checkout', () => {
 
         const result = await getDefaultPaymentFromOrder(lastOrderData);
 
-        expect(result).toEqual({ default: 'checkout_com_upapi' });
+        expect(result).toEqual('checkout_com_upapi');
       });
     });
 
@@ -734,7 +733,7 @@ describe('Checkout', () => {
 
         let result = await getCartStores(10, 20);
         expect(axios.mock.calls.length).toEqual(1);
-        expect(result.data.error).toEqual(true);
+        expect(result).toEqual([]);
       });
     });
 
@@ -780,48 +779,96 @@ describe('Checkout', () => {
         let result = await getCncStores(10, 20);
 
         expect(axios.mock.calls.length).toEqual(1);
-        expect(result.data.error).toEqual(true);
+        expect(result.data).toEqual([]);
       });
     });
 
     describe('Test getHomeDeliveryShippingMethods()', () => {
       const getHomeDeliveryShippingMethods = utilsRewire.__get__('getHomeDeliveryShippingMethods');
-      it('With static value from getHomeDeliveryShippingMethods', async () => {
-        const data = homeDeliveryShippingMethods;
-        window.commerceBackend.setRawCartDataInStorage(null);
 
-        axios
-          .mockResolvedValueOnce({data, status: 200});
-
-        await getHomeDeliveryShippingMethods({ country_id: 'EG' });
-        // Call the function for the second time to test the static data.
-        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
-        expect(axios).toBeCalledTimes(1);
-        expect(result.length).toEqual(1);
+      beforeEach(() => {
+        StaticStorage.set('shipping_methods', null);
       });
 
-      it('With country_id for getHomeDeliveryShippingMethods', async () => {
-        const data = homeDeliveryShippingMethods;
-        window.commerceBackend.setRawCartDataInStorage(null);
-
-        axios
-          .mockResolvedValueOnce({data, status: 200});
-
-        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
-        expect(result.length).toEqual(1);
-        expect(result[0].carrier_code).toEqual('alshayadelivery');
-        expect(result[0].carrier_title).toEqual('Standard Delivery');
-      });
-
-      it('With null for getHomeDeliveryShippingMethods when country_id not provided', async () => {
+      it('With no data or country_id not provided', async () => {
         const data = null;
         window.commerceBackend.setRawCartDataInStorage(null);
 
         axios
-          .mockResolvedValueOnce({data, status: 200});
+          .mockResolvedValueOnce({ data, status: 200 });
 
         let result = await getHomeDeliveryShippingMethods({});
-        expect(result).toEqual([]);
+        expect(result.error).toEqual(true);
+
+        result = await getHomeDeliveryShippingMethods({ country_id: null });
+        expect(result.error).toEqual(true);
+
+        result = await getHomeDeliveryShippingMethods({ country_id: '' });
+        expect(result.error).toEqual(true);
+      });
+
+      it('With data', async () => {
+        const data = homeDeliveryShippingMethods;
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({data, status: 200});
+
+        // Without static cache.
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        let cache = StaticStorage.get('shipping_methods');
+
+        // Check results.
+        expect(cache[Object.keys(cache)[0]]).toEqual(result.methods);
+        expect(axios).toBeCalledTimes(1);
+        expect(result.error).toEqual(false);
+        expect(result.methods.length).toEqual(1);
+
+        // Call the function for the second time to test the static cache.
+        jest.clearAllMocks();
+        result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+
+        // Check results.
+        expect(axios).toBeCalledTimes(0);
+        expect(result.error).toEqual(false);
+        expect(result.methods.length).toEqual(1);
+        expect(result.methods[0].carrier_code).toEqual('alshayadelivery');
+        expect(result.methods[0].carrier_title).toEqual('Standard Delivery');
+      });
+
+      it('With response errors', async () => {
+        const data = {};
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({ data, status: 500 });
+
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        expect(result.error).toEqual(true);
+      });
+
+      it('With empty response', async () => {
+        const data = {};
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({ data, status: 200 });
+
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        expect(result.error).toEqual(true);
+      });
+
+      it('With empty methods', async () => {
+        const data = homeDeliveryShippingMethods;
+        // Set to CNC to force it to be removed.
+        data[0].carrier_code = 'click_and_collect';
+        window.commerceBackend.setRawCartDataInStorage(null);
+
+        axios
+          .mockResolvedValueOnce({ data, status: 200 });
+
+        let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
+        expect(result.error).toEqual(true);
       });
     });
 

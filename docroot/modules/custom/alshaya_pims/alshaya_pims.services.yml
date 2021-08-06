@@ -1,0 +1,22 @@
+services:
+  alshaya_pims.sku_images_manager:
+    class: Drupal\alshaya_pims\SkuImagesManagerPims
+    decorates: alshaya_acm_product.sku_images_manager
+    decoration_priority: 9
+    arguments:
+      - '@alshaya_pims.sku_images_manager.inner'
+      - '@module_handler'
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@alshaya_acm_product.skumanager'
+      - '@acq_sku.product_info_helper'
+      - '@cache.data'
+      - '@alshaya_acm_product.cache_manager'
+      - '@alshaya_pims.sku_images_helper'
+
+  alshaya_pims.sku_images_helper:
+    class: Drupal\alshaya_pims\SkuImagesHelperPims
+    decorates: alshaya_acm_product.sku_images_helper
+    decoration_priority: 9
+    arguments:
+      - '@alshaya_pims.sku_images_helper.inner'

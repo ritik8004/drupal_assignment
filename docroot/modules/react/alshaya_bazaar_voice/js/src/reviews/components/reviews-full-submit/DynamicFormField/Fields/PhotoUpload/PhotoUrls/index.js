@@ -1,5 +1,5 @@
 import React from 'react';
-import { postAPIData } from '../../../../../../../utilities/api/apiData';
+import { postAPIPhoto } from '../../../../../../../utilities/api/apiData';
 import { postRequest } from '../../../../../../../utilities/api/request';
 import {
   removeFullScreenLoader,
@@ -40,7 +40,7 @@ class PhotoUrls extends React.Component {
             const photoUrl = result.data;
             const params = `&contenttype=Review&photourl=${photoUrl}`;
             const apiUri = '/data/uploadphoto.json';
-            const apiData = postAPIData(apiUri, params);
+            const apiData = postAPIPhoto(apiUri, params);
             if (apiData instanceof Promise) {
               apiData.then((response) => {
                 if (response.error === undefined && response.data !== undefined) {
@@ -48,12 +48,11 @@ class PhotoUrls extends React.Component {
                   if (response.data.Photo !== undefined
                     && response.data.Photo !== null) {
                     const url = response.data.Photo.Sizes.thumbnail.Url;
-                    // Save uploaded image url.
                     this.setState({ bvPhotoUrl: url });
                   }
                 } else {
                   removeFullScreenLoader();
-                  Drupal.logJavascriptError('review-bv-photo-urls', result.error);
+                  Drupal.logJavascriptError('review-bv-photo-urls', response.error);
                 }
               });
             }
