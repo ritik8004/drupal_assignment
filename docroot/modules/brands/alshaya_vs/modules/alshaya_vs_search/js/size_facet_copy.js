@@ -94,7 +94,6 @@
       var widthOfsCupsizewrapper = [];
       var Cupsizewrapperwidth = 0;
       var CupsizewrapperWidthsum = 0;
-      var scrollPos = 0;
 
       // Get total width of all menu items.
       var getMenuSize = function () {
@@ -172,20 +171,14 @@
       }, 500));
 
       // Get how much have we scrolled to the left and hide arrows accordingly.
-      var hideArrow = function (scrollPosition, click = 'right') {
-        if ($('.sfb-facets-container').scrollLeft() == 0) {
+      var hideArrow = function (scrollPosition) {
+        if (scrollPosition == 0) {
           $(leftPaddle).addClass('hidden');
           $(rightPaddle).removeClass('hidden');
         }
         else if (scrollPosition >= maxAllowedScrollValue) {
-          if (click == 'right') {
-            $(leftPaddle).removeClass('hidden');
-            $(rightPaddle).addClass('hidden');
-          }
-          else {
-            $(leftPaddle).addClass('hidden');
-            $(rightPaddle).removeClass('hidden');
-          }
+          $(leftPaddle).removeClass('hidden');
+          $(rightPaddle).addClass('hidden');
         }
         else {
           $(leftPaddle).removeClass('hidden');
@@ -193,35 +186,30 @@
         }
       };
 
+      $('.sfb-facets-container').on('scroll', function () {
+        hideArrow(Math.abs($('.sfb-facets-container').scrollLeft()));
+      });
+
       // Scroll to left for EN and right for AR.
       $(rightPaddle).once().on('click', function () {
-        scrollPos = $('.sfb-facets-container').scrollLeft();
         var animatePosition = ($('html').attr('dir') == 'rtl') ? -widthOfsCupsizewrapper[sliderIndex] : widthOfsCupsizewrapper[sliderIndex];
-        scrollPos += animatePosition;
-        if (Math.abs(scrollPos) > maxAllowedScrollValue) {
-          scrollPos = ($('html').attr('dir') == 'rtl') ? -maxAllowedScrollValue : maxAllowedScrollValue;
+        if (Math.abs(animatePosition) > maxAllowedScrollValue) {
+          animatePosition = ($('html').attr('dir') == 'rtl') ? -maxAllowedScrollValue : maxAllowedScrollValue;
         }
-        $('.sfb-facets-container').animate({scrollLeft: scrollPos}, scrollDuration);
+        animatePosition += $('.sfb-facets-container').scrollLeft();
+        $('.sfb-facets-container').animate({scrollLeft: animatePosition}, scrollDuration);
         sliderIndex++;
-        // Hide the arrow after slider is scrolled.
-        setTimeout(function () {
-          hideArrow(Math.abs(scrollPos), 'right');
-        }, 350);
         getRightClickIndexidentifier();
       });
 
       // Scroll to right for EN and left for AR.
       $(leftPaddle).once().on('click', function () {
         var animatePosition = ($('html').attr('dir') == 'rtl') ? widthOfsCupsizewrapper[sliderIndexidentifier] : -widthOfsCupsizewrapper[sliderIndexidentifier];
-        scrollPos += animatePosition;
-        if (Math.abs(scrollPos) > maxAllowedScrollValue) {
-          scrollPos = ($('html').attr('dir') == 'rtl') ? maxAllowedScrollValue : -maxAllowedScrollValue;
+        if (Math.abs(animatePosition) > maxAllowedScrollValue) {
+          animatePosition = ($('html').attr('dir') == 'rtl') ? maxAllowedScrollValue : -maxAllowedScrollValue;
         }
-        $('.sfb-facets-container').animate({scrollLeft: scrollPos}, scrollDuration);
-        // Hide the arrow after slider is scrolled.
-        setTimeout(function () {
-          hideArrow(Math.abs(scrollPos), 'left');
-        }, 350);
+        animatePosition += $('.sfb-facets-container').scrollLeft();
+        $('.sfb-facets-container').animate({scrollLeft: animatePosition}, scrollDuration);
         getLeftClickIndexidentifier(widthOfsCupsizewrapper[sliderIndexidentifier]);
         sliderIndexidentifier--;
       });
