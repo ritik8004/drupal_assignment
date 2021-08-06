@@ -74,7 +74,7 @@ class SearchGallery extends React.PureComponent {
               src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
               data-src={mainImageUrl}
               title={title}
-              className="b-lazy"
+              loading="lazy"
             />
             {initSlider ? this.onHoverAppendMarkup(sliderStatus, thumbnails) : ''}
           </div>

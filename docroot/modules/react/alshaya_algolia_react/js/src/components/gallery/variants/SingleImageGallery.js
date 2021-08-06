@@ -22,7 +22,7 @@ const SingleImageGallery = (props) => {
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
           data-src={mainImageUrl}
           title={title}
-          className="b-lazy"
+          loading="lazy"
         />
         <Lozenges labels={labels} sku={sku} />
       </div>

@@ -23,7 +23,7 @@ const AssetGallery = ({
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
           data-src={mainImageUrl}
           title={title}
-          className="b-lazy"
+          loading="lazy"
         />
       </div>
       <div className="alshaya_search_hoverimage">
@@ -31,7 +31,7 @@ const AssetGallery = ({
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
           data-src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
           title={title}
-          className="b-lazy"
+          loading="lazy"
         />
       </div>
       <Lozenges labels={labels} sku={sku} />

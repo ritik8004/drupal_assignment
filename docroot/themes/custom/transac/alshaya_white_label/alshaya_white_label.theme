@@ -1755,13 +1755,13 @@ function alshaya_white_label_preprocess_image(&$variables) {
 
   // Use lazy load only for public schema and for already relative urls.
   if ($scheme == 'public') {
-    $variables['attributes']['class'][] = 'b-lazy';
+    $variables['attributes']['loading'] = 'lazy';
     // For public scheme, create the url and make it relative.
     $variables['attributes']['data-src'] = file_url_transform_relative(file_create_url($variables['uri']));
     $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
   }
   elseif ($scheme === FALSE) {
-    $variables['attributes']['class'][] = 'b-lazy';
+    $variables['attributes']['loading'] = 'lazy';
     $variables['attributes']['data-src'] = $variables['uri'];
     $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
   }
