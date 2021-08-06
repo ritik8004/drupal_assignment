@@ -10,7 +10,7 @@ set classes = [
     {% block mainContent %}
       <div class="content__main {{ image_slider_position_pdp }}">
         {# The image gallery and thumnails. #}
-        {% include "@alshaya_rcs_magento_placeholders/rcs-product-zoom.html.twig" %}
+        {% include "@alshaya_rcs_product/rcs-product-zoom.html.twig" %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
