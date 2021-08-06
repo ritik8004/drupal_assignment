@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @tbskwuat @vssauat @bbwkwuat @auth @flaeuat @bbwaeuat @vsaeuat @hmkwuat @hmsauat @flkwuat
+@javascript @returnUser @checkoutPayment @homeDelivery @pbsauat @bbwsauat @mcsauat @mcaeuat @hmaeuat @mckwuat @tbskwuat @flsauat @vssauat @bbwkwuat @auth @flaeuat @bbwaeuat @vsaeuat @hmkwuat @hmsauat @flkwuat
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:
@@ -42,9 +42,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -56,7 +53,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I should see "{delivery_type_text}"
     Then I should see "{delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -117,10 +113,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/" page
-    And I wait 10 seconds
-    And I wait for the page to load
-    And print current URL
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"
@@ -137,7 +129,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_delivery_type}"
     Then I should see "{language_payment_type_text}"
-    Then I should see "{language_cc_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist

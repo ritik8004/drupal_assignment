@@ -1,4 +1,4 @@
-@javascript @dynamic-promotion @discount @smoke
+@javascript @dynamic-promotion @discount @smoke @mckwuat @mcsauat @mcaeuat
 Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) for Guest user
 
   @desktop @dynamic
