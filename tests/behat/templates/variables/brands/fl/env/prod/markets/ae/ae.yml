@@ -1,8 +1,8 @@
 variables:
-  spc_product_listing_page: '/shop-mens/accessories/bags/'
-  spc_basket_page: '/shop-mens/accessories/bags/'
-  spc_pdp_page: ''
-  product_listing_page_url: '/shop-mens/accessories/bags/'
+  spc_product_listing_page: '/shop-mens/accessories/shoe-care//'
+  spc_basket_page: '/shop-mens/accessories/caps/'
+  spc_pdp_page: 'buy-nike-air-force-1-07-mens-shoes-white-white.html'
+  product_listing_page_url: '/shop-mens/accessories/caps/'
   np_plp_product_page: '/buy-jordan-jumpman-classics-backpack-black-white-gym-red.html/'
-  np_plp_page: '/shop-mens/accessories/bags/'
+  np_plp_page: '/shop-mens/accessories/caps/'
   new_pdp_enabled: TRUE
