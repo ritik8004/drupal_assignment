@@ -1,0 +1,89 @@
+@font-face {
+  font-family: "Roboto-Bold";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Bold.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Regular.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi_Bold";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidArabicKufi_Bold.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidArabicKufi_Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidKufi_Regular";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidKufi_Regular.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidKufi_Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FootLocker-FLClassic";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/FootLocker-FLClassic.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/FootLocker-FLClassic.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FootLocker-FLStandard";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/FootLocker-FLStandard.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/FootLocker-FLStandard.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFProText-Regular";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/SFProText-Regular.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/SFProText-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFProText-Medium";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/SFProText-Medium.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/SFProText-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SFProText-Bold";
+  src:
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/SFProText-Bold.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/SFProText-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
