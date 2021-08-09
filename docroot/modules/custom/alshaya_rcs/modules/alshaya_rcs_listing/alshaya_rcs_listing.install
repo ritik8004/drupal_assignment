@@ -22,6 +22,7 @@ function alshaya_rcs_listing_install() {
     'alshayagridcountblock_plp',
     'alshaya_algolia_react_plp',
     'views_block__plp_promotional_banner_block_1',
+    'views_block__alshaya_term_description_block_1',
   ];
   foreach ($blocks as $block_id) {
     $block = Block::load($block_id);
@@ -40,6 +41,7 @@ function alshaya_rcs_listing_uninstall() {
     'alshayagridcountblock_plp',
     'alshaya_algolia_react_plp',
     'views_block__plp_promotional_banner_block_1',
+    'views_block__alshaya_term_description_block_1',
   ];
   foreach ($blocks as $block_id) {
     $block = Block::load($block_id);
