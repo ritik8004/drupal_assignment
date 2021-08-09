@@ -1,4 +1,4 @@
-@javascript @dynamic-promo @discount @smoke @auth
+@javascript @dynamic-promo @discount @smoke @auth @tbskwprod
 Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authenticated user
 
   Background:
@@ -16,7 +16,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authe
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".promotions-full-view-mode" should exist
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -74,7 +74,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authe
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".promotions-full-view-mode" should exist
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -130,7 +130,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authe
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".promotions-full-view-mode" should exist
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
