@@ -15,6 +15,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Provides integration with BazaarVoice.
@@ -412,6 +413,10 @@ class AlshayaBazaarVoice {
       $basic_configs['endpoint'] = $config->get('api_base_url');
       $basic_configs['passkey'] = $config->get('conversations_apikey');
       $basic_configs['max_age'] = $config->get('max_age');
+      // Get Configs for Google translation API.
+      $google_translations_api = Settings::get('google_translations_api');
+      $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'];
+      $basic_configs['google_api_key'] = $google_translations_api['api_key'];
     }
     $basic_configs['api_version'] = $config->get('api_version');
     $basic_configs['locale'] = $config->get('locale');
