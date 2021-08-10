@@ -23,7 +23,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
   /**
    * Config to enable/disable the lhn category tree.
    */
-  const ENABLE_DISABLE_CONFIG = 'alshaya_acm_product_category.settings';
+  const ENABLE_DISABLE_CONFIG_KEY = 'alshaya_acm_product_category.settings';
 
   /**
    * Stores the configuration factory.
@@ -107,7 +107,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public function access(AccountInterface $account, $return_as_object = FALSE) {
-    $config = $this->configFactory->get(self::ENABLE_DISABLE_CONFIG);
+    $config = $this->configFactory->get(self::ENABLE_DISABLE_CONFIG_KEY);
     // Not allow if lhn is disabled.
     return AccessResult::allowedif($config->get('enable_lhn_tree'));
   }

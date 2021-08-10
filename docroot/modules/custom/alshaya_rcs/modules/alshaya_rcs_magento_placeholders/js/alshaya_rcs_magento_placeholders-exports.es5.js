@@ -131,8 +131,8 @@ exports.render = function render(
 
     case 'lhn_block':
       // Render lhn based on the page type.
-      if (drupalSettings.rcsPage.type === 'category' &&
-      typeof globalThis.renderRcsLhn !== 'undefined') {
+      if (drupalSettings.rcsPage.type === 'category'
+      && typeof globalThis.renderRcsLhn !== 'undefined') {
         html += globalThis.renderRcsLhn.render(
           settings,
           inputs,

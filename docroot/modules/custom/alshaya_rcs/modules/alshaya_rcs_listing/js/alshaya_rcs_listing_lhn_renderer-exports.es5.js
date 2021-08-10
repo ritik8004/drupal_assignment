@@ -35,6 +35,7 @@ exports.render = function render(
 }
 
 /**
+ * Provides the LHN block HTML.
  *
  * @param {string} itemHtml
  * @param {object} items
@@ -67,6 +68,7 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
 }
 
 /**
+ * Replace the placeholders with the LHN block items.
  *
  * @param {object} item
  * @param {string} itemHtml
@@ -96,28 +98,8 @@ const replaceLhnPlaceHolders = function (item, itemHtml, settings) {
       // Apply the replacement on all the elements containing the
       // placeholder. We filter to keep only the child element
       // and not the parent ones.
-      $(`:contains('${fieldPh}')`)
-        .each(function eachEntityPhReplace() {
-          $(clonedElement).html(
-            $(clonedElement)
-              .html()
-              .replace(fieldPh, entityFieldValue)
-          );
-        });
-
-      //":contains" only returns the elements for which the
-      // placeholder is part of the content, it won't return the
-      // elements for which the placeholder is part of the
-      // attribute values. We are now fetching all the elements
-      // which have placeholders in the attributes and we
-      // apply the replacement.
-      for (const attribute of settings.rcsPhSettings.placeholderAttributes) {
-        $(`[${attribute} *= '${fieldPh}']`, clonedElement)
-          .each(function eachEntityPhAttributeReplace() {
-            $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
-          });
-      }
+      itemHtml = rcsReplaceAll(itemHtml, fieldPh, entityFieldValue);
     });
 
-  return clonedElement.html();
+  return itemHtml;
 }
