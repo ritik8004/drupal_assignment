@@ -82,6 +82,8 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
     // In case of error, we redirect to cart page.
     $redirect = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString(), 302);
+    $redirect->setMaxAge(0);
+    $redirect->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
 
     // If order id is not available in request.
     if (!$order_id) {
@@ -165,12 +167,14 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    *   Response to redirect to cart or confirmation page.
    */
   public function error(Request $request, string $method) {
-    $this->logger->error('UPAPI Payment failed for Payment Method: @payment_method, Type: @type.', [
+    $this->logger->warning('UPAPI Payment failed for Payment Method: @payment_method, Type: @type.', [
       '@payment_method' => $method,
       '@type' => $request->query->get('type'),
     ]);
 
     $response = new RedirectResponse(Url::fromRoute('alshaya_spc.checkout')->toString(), 302);
+    $response->setMaxAge(0);
+    $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
 
     $payment_data = [
       'status' => self::PAYMENT_DECLINED_VALUE,
