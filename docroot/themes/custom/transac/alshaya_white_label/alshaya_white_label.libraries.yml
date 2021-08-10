@@ -505,6 +505,11 @@ my-account:
     theme:
       css/conditional-sass/my-account/my-account.ltr.css: {}
 
+contact:
+  css:
+    theme:
+      css/conditional-sass/contact-us/contact-us.ltr.css: {}
+
 sitemap:
   css:
     theme:
