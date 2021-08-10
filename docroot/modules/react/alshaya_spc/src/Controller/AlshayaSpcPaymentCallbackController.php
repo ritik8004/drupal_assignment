@@ -204,11 +204,8 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
     }
 
-    $response->headers->setCookie(CookieHelper::create(
-      'middleware_payment_error',
-      json_encode($payment_data),
-      strtotime('+1 year')
-    ));
+    // Using the same way as used by user_cookie_save() in CORE.
+    setrawcookie('middleware_payment_error', rawurlencode(json_encode($payment_data)), strtotime('+1 year'), '/');
 
     return $response;
   }
