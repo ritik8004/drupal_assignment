@@ -965,9 +965,10 @@ const updateCart = async (data) => {
 
   // Log the shipping / billing address we pass to magento.
   if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
-    logger.debug('Billing / Shipping update. CartId: @cartId, Address: @address.', {
+    logger.debug('Billing / Shipping update. CartId: @cartId, Action: @action, Address: @address.', {
       '@cartId': cartId,
       '@address': JSON.stringify(data),
+      '@action': action,
     });
   }
 
