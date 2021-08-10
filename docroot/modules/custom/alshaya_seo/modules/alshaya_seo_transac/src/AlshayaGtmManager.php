@@ -934,11 +934,18 @@ class AlshayaGtmManager {
     }
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-    $orders_count = isset($order['customer_id']) ? $this->ordersManager->getOrdersCount((int) $order['customer_id']) : 1;
     $current_user_id = $this->currentUser->id();
-    $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
-    if (!empty($current_user->field_mobile_number->getValue())) {
-      $phone_number = $current_user->field_mobile_number->getValue()[0]['value'];
+    // For guest fetching the phone number from shipping details.
+    $phone_number = $order['shipping']['address']['telephone'];
+    $is_customer = alshaya_acm_customer_is_customer($this->currentUser);
+    $orders_count = $customer_id = 0;
+    if ($is_customer) {
+      $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
+      $customer_id = $current_user->get('acq_customer_id')->getString();
+      $orders_count = $this->ordersManager->getOrdersCount($customer_id);
+      if (!empty($current_user->get('field_mobile_number')->getValue())) {
+        $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
+      }
     }
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
@@ -948,11 +955,11 @@ class AlshayaGtmManager {
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
-      'userId' => (int) $order['customer_id'],
+      'userId' => $customer_id,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
       'userPhone' => $phone_number ?? '',
-      'userType' => $this->currentUser->isAnonymous() ? 'Guest User' : 'Logged in User',
+      'userType' => $is_customer ? 'Logged in User' : 'Guest User',
       'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
       'platformType' => $this->getUserDeviceType(),
     ];
