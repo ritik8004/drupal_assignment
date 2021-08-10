@@ -17,3 +17,15 @@ function alshaya_rcs_listing_preprocess_page(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_rcs_listing_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $suggestions[] = 'page__plp';
+    }
+  }
+}
