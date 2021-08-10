@@ -233,6 +233,7 @@ class AlshayaRcsCategoryDataMigration {
 
         // Add category_slug field value from the old term path alias.
         $term_slug = $this->pathAliasManager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
+        $term_slug = ltrim($term_slug, '/');
         $rcs_term->get('field_category_slug')->setValue($term_slug);
 
         // Save the new term object in rcs category.
