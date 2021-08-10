@@ -157,79 +157,103 @@ class AlshayaRcsCategoryDataMigration {
 
     // Do not process if no terms are found.
     if (!empty($terms)) {
-      foreach ($terms as $pct) {
+      foreach ($terms as $acq_term) {
         // Load the product category term object.
-        $pct_data = $this->entityTypeManager->getStorage('taxonomy_term')->load($pct->tid);
+        $acq_term_data = $this->entityTypeManager->getStorage('taxonomy_term')->load($acq_term->tid);
 
         // Create a new rcs category term object.
-        $term_obj = $this->entityTypeManager->getStorage('taxonomy_term')->create([
+        $rcs_term = $this->entityTypeManager->getStorage('taxonomy_term')->create([
           'vid' => self::VOCABULARY_ID,
-          'name' => $pct->name,
+          'name' => $acq_term->name,
           'langcode' => $langcode,
         ]);
 
         // Add include_in_desktop field value from the old term.
-        $include_in_desktop = $pct_data->get('field_include_in_desktop')->getValue();
-        $term_obj->get('field_include_in_desktop')->setValue($include_in_desktop);
+        $rcs_term->get('field_include_in_desktop')
+          ->setValue($acq_term_data->get('field_include_in_desktop')->getValue());
 
         // Add include_in_mobile_tablet field value from the old term.
-        $include_in_mobile = $pct_data->get('field_include_in_mobile_tablet')->getValue();
-        $term_obj->get('field_include_in_mobile_tablet')->setValue($include_in_mobile);
+        $rcs_term->get('field_include_in_mobile_tablet')
+          ->setValue($acq_term_data->get('field_include_in_mobile_tablet')->getValue());
 
         // Add term_background_color field value from the old term.
-        $term_background_color = $pct_data->get('field_term_background_color')->getValue();
-        $term_obj->get('field_term_background_color')->setValue($term_background_color);
+        $rcs_term->get('field_term_background_color')
+          ->setValue($acq_term_data->get('field_term_background_color')->getValue());
 
         // Add term_font_color field value from the old term.
-        $term_font_color = $pct_data->get('field_term_font_color')->getValue();
-        $term_obj->get('field_term_font_color')->setValue($term_font_color);
+        $rcs_term->get('field_term_font_color')
+          ->setValue($acq_term_data->get('field_term_font_color')->getValue());
 
         // Add icon field value from the old term.
-        $icon_target = $pct_data->get('field_icon')->getValue();
-        $term_obj->get('field_icon')->setValue($icon_target);
+        $rcs_term->get('field_icon')
+          ->setValue($acq_term_data->get('field_icon')->getValue());
 
         // Add main_menu_highlight field value from the old term.
-        $main_menu_highlight = $pct_data->get('field_main_menu_highlight')->getValue();
-        $term_obj->get('field_main_menu_highlight')->setValue($main_menu_highlight);
+        $main_menu_highlights = $acq_term_data->get('field_main_menu_highlight')->getValue();
+        if (!empty($main_menu_highlights)) {
+          $rcs_term_paragraphs = [];
+          foreach ($main_menu_highlights as $highlight) {
+            // Load source paragraph entity.
+            $source_paragraphs = $this->entityTypeManager->getStorage('paragraph')->load($highlight['target_id']);
+
+            // Create a duplicate of the sourced entity.
+            $cloned_paragraphs = $source_paragraphs->createDuplicate();
+
+            // Save the new paragraph entity.
+            $cloned_paragraphs->save();
+
+            // Add target and revision id to value array for the rcs term.
+            $rcs_term_paragraphs[] = [
+              'target_id' => $cloned_paragraphs->id(),
+              'target_revision_id' => $cloned_paragraphs->getRevisionId(),
+            ];
+          }
+
+          // Attach highlights with rcs term if available.
+          if (!empty($rcs_term_paragraphs)) {
+            $rcs_term->get('field_main_menu_highlight')
+              ->setValue($rcs_term_paragraphs);
+          }
+        }
 
         // Add move_to_right field value from the old term.
-        $move_to_right = $pct_data->get('field_move_to_right')->getValue();
-        $term_obj->get('field_move_to_right')->setValue($move_to_right);
+        $rcs_term->get('field_move_to_right')
+          ->setValue($acq_term_data->get('field_move_to_right')->getValue());
 
         // Add override_target_link field value from the old term.
-        $override_target_link = $pct_data->get('field_override_target_link')->getValue();
-        $term_obj->get('field_override_target_link')->setValue($override_target_link);
+        $override_target_link = $acq_term_data->get('field_override_target_link')->getValue();
+        $rcs_term->get('field_override_target_link')->setValue($override_target_link);
 
         // Add target_link field value from the old term,
         // override_target_link field flag is true.
         if ($override_target_link == "1") {
-          $target_link = $pct_data->get('field_target_link')->getValue();
-          $term_obj->get('field_target_link')->setValue($target_link);
+          $rcs_term->get('field_target_link')
+            ->setValue($acq_term_data->get('field_target_link')->getValue());
         }
 
         // Add category_slug field value from the old term path alias.
-        $term_slug = $this->pathAliasManager->getAliasByPath('/taxonomy/term/' . $pct->tid);
-        $term_obj->get('field_category_slug')->setValue($term_slug);
+        $term_slug = $this->pathAliasManager->getAliasByPath('/taxonomy/term/' . $acq_term->tid);
+        $rcs_term->get('field_category_slug')->setValue($term_slug);
 
         // Save the new term object in rcs category.
-        $term_obj->save();
+        $rcs_term->save();
 
         // Check if the translations exists for arabic language.
-        if ($pct_data->hasTranslation($langcode)) {
+        if ($acq_term_data->hasTranslation($langcode)) {
           // Load the translation object.
-          $pct_data = $pct_data->getTranslation('ar');
+          $acq_term_data = $acq_term_data->getTranslation('ar');
 
           // Add translation in the new term.
-          $term_obj = $term_obj->addTranslation('ar', ['name' => $pct_data->name]);
+          $rcs_term = $rcs_term->addTranslation('ar', ['name' => $acq_term_data->name]);
 
-          $term_background_color = $pct_data->get('field_term_background_color')->getValue();
-          $term_obj->get('field_term_background_color')->setValue($term_background_color);
+          $rcs_term->get('field_term_background_color')
+            ->setValue($acq_term_data->get('field_term_background_color')->getValue());
 
-          $term_font_color = $pct_data->get('field_term_font_color')->getValue();
-          $term_obj->get('field_term_font_color')->setValue($term_font_color);
+          $rcs_term->get('field_term_font_color')
+            ->setValue($acq_term_data->get('field_term_font_color')->getValue());
 
           // Save the translations.
-          $term_obj->save();
+          $rcs_term->save();
         }
       }
     }
@@ -247,7 +271,6 @@ class AlshayaRcsCategoryDataMigration {
     $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
     $query->condition('vid', self::VOCABULARY_ID);
     $query->condition('tid', $entity_id, '<>');
-    $query->condition('langcode', $langcode);
     $terms = $query->execute();
 
     // Return if none available.
