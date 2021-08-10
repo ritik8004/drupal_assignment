@@ -1,0 +1,5 @@
+datadog_js.settings:
+  title: 'DataDogJS Settings'
+  description: 'Configure DataDogJS module.'
+  route_name: datadog_js.settings
+  parent: system.admin_config_system

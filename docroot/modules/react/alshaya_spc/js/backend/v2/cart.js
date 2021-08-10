@@ -24,6 +24,7 @@ import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -102,9 +103,9 @@ const triggerStockRefresh = (data) => callDrupalApi(
     },
   },
 ).catch((error) => {
-  logger.error(
-    `Error occurred while triggering checkout event refresh stock. Message: ${error.message}`,
-  );
+  logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
+    '@message': error.message,
+  });
 });
 
 /**
@@ -236,7 +237,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
-  if (response.data.error === true) {
+  if (hasValue(response.data) && hasValue(response.data.error)) {
     logger.error('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
       '@cartId': cartId,
       '@post': JSON.stringify(itemData),
@@ -248,7 +249,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       const freshCart = await getCart(true);
 
       // Try to load fresh cart, if this fails it means we need to create new one.
-      if (_isEmpty(freshCart)) {
+      if (!hasValue(freshCart)) {
         // Remove the cart id from storage.
         window.commerceBackend.removeCartDataFromStorage(true);
 
@@ -380,7 +381,9 @@ window.commerceBackend.createCart = async () => {
   const errorMessage = (!_isUndefined(response.data.error_message))
     ? response.data.error_message
     : '';
-  logger.notice(`Error while creating cart on MDC. Error message: ${errorMessage}`);
+  logger.warning('Error while creating cart on MDC. Error: @error', {
+    '@error': errorMessage,
+  });
   return null;
 };
 
@@ -435,7 +438,11 @@ window.commerceBackend.addFreeGift = async (data) => {
   let cart = null;
 
   if (_isEmpty(sku) || _isEmpty(promoCode) || _isEmpty(langCode)) {
-    logger.error(`Missing request header parameters. SKU: ${sku}, Promo: ${promoCode}, Langcode: ${langCode}`, {});
+    logger.error('Missing request header parameters. SKU: @sku, Promo: @promoCode, Langcode: @langCode', {
+      '@sku': sku || '',
+      '@promoCode': promoCode || '',
+      '@langCode': langCode || '',
+    });
     cart = await window.commerceBackend.getCart();
   } else {
     // Apply promo code.
@@ -448,13 +455,13 @@ window.commerceBackend.addFreeGift = async (data) => {
     if (_isEmpty(cart.data)
       || (!_isUndefined(cart.data.error) && cart.data.error)
     ) {
-      logger.error('Cart is empty. Cart: @cart', {
+      logger.warning('Cart is empty. Cart: @cart', {
         '@cart': JSON.stringify(cart),
       });
     } else if (_isUndefined(cart.data.appliedRules)
       || _isEmpty(cart.data.appliedRules)
     ) {
-      logger.error('Invalid promo code. Cart: @cart, Promo: @promoCode', {
+      logger.warning('Invalid promo code. Cart: @cart, Promo: @promoCode', {
         '@cart': JSON.stringify(cart.data),
         '@promoCode': promoCode,
       });

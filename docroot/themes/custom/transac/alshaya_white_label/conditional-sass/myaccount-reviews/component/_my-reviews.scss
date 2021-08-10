@@ -173,23 +173,103 @@
   }
 }
 
-.thumbnail-img-block {
-  display: flex;
-  overflow-y: auto;
+.review-summary,
+.reviews-block {
+  position: relative;
 
-  @include breakpoint($only-mobile) {
-    margin-bottom: 1.25rem;
+  .thumbnail-img-block {
+    display: flex;
+    overflow-y: auto;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+    }
+
+    .thumbnail-img {
+      @include bv-photo-upload-container ();
+
+      img {
+        @include bv-photo-upload-image ();
+      }
+    }
+
+    .popup-overlay {
+      background: transparent !important;
+      position: absolute !important;
+      z-index: 2;
+    }
+
+    .popup-content {
+      width: 18.75rem !important;
+      padding: 0 !important;
+      border: 0 !important;
+      z-index: 3 !important;
+      top: 1.875rem !important;
+
+      @include breakpoint($only-mobile) {
+        #{$left}: 0 !important;
+        width: 100% !important;
+        top: 6.25rem !important;
+      }
+
+      .popup-arrow {
+        display: none;
+      }
+
+      .large-image {
+        @include breakpoint($tablet) {
+          width: 18.75rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 23.75rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          height: 21rem;
+        }
+
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          object-position: center;
+          zoom: 1;
+        }
+      }
+
+      .close {
+        position: absolute;
+        #{$right}: 0;
+        border: 0;
+        padding: 0;
+        background: $modal_close_bg;
+        color: $modal_close_icon;
+
+        @include icon(close, after) {
+          font-size: 1.25rem;
+          vertical-align: middle;
+          position: relative;
+        }
+      }
+    }
   }
+}
 
-  @include breakpoint($tablet) {
-    position: relative;
-  }
+.reviews-block {
+  .thumbnail-img-block {
+    .popup-content {
+      @include breakpoint($tablet) {
+        margin-#{$left}: 4.5rem;
+      }
 
-  .thumbnail-img {
-    @include bv-photo-upload-container ();
+      @include breakpoint($desktop) {
+        top: -4.625rem !important;
+      }
 
-    img {
-      @include bv-photo-upload-image ();
+      @include breakpoint($only-tablet) {
+        top: -3rem !important;
+      }
     }
   }
 }

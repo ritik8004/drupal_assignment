@@ -241,6 +241,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['cart']['url'] .= '/rest/' . $store_settings[$current_language];
 
   $page['#attached']['drupalSettings']['cart']['retryMaxAttempts'] = Settings::get('alshaya_checkout_settings')['max_native_update_attempts'] ?? 10;
+  $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
 }
 
 /**
@@ -277,10 +278,9 @@ function alshaya_spc_preprocess_page(&$variables) {
     '#strings' => [
       [
         'key' => 'backend_obsolete_version',
-        'value' => t('The version of the website that you are using is now obsolete. Please refresh the page and try again.'),
+        'value' => t('We have upgraded your experience, please refresh the page and try again.'),
       ],
     ],
   ];
-
-  $variables['page']['pre_content']['commerce_backend'] = $strings;
+  $variables['page']['content']['commerce_backend'] = $strings;
 }

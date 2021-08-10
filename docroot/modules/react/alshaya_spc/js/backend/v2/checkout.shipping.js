@@ -3,9 +3,8 @@ import _isUndefined from 'lodash/isUndefined';
 import _isString from 'lodash/isString';
 import md5 from 'md5';
 import { getApiEndpoint, logger } from './utility';
-import { callMagentoApi } from './common';
+import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
-
 
 /**
  * Format the address array.
@@ -102,6 +101,19 @@ const formatShippingEstimatesAddress = (address) => {
     });
   }
 
+  // Sort custom_attributes to make sure it is always in same order.
+  data.custom_attributes.sort((a, b) => {
+    if (a.attribute_code < b.attribute_code) {
+      return -1;
+    }
+
+    if (a.attribute_code > b.attribute_code) {
+      return 1;
+    }
+
+    return 0;
+  });
+
   return data;
 };
 
@@ -111,13 +123,16 @@ const formatShippingEstimatesAddress = (address) => {
  * @param data
  *   The shipping address.
  *
- * @returns {Promise<array>}
- *   HD Shipping methods.
+ * @returns {Promise<object>}
+ *   HD Shipping methods or error.
  */
 const getHomeDeliveryShippingMethods = async (data) => {
   if (_isEmpty(data.country_id)) {
-    logger.error(`Error in getting shipping methods for HD as country id not available. Data: ${JSON.stringify(data)}`);
-    return [];
+    logger.error('Error in getting shipping methods for HD as country id not available. Data: @data', {
+      '@data': JSON.stringify(data),
+    });
+
+    return getFormattedError(600, 'Error in getting shipping methods');
   }
 
   // Prepare address data for api call.
@@ -128,27 +143,36 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
   // Get shipping methods from static.
   const staticShippingMethods = StaticStorage.get('shipping_methods') || {};
-  if (!_isEmpty(staticShippingMethods[key])) {
-    return staticShippingMethods[key];
-  }
 
-  staticShippingMethods[key] = [];
-  const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
-  const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
-  if (!_isEmpty(response.data)) {
-    const methods = response.data;
+  if (_isEmpty(staticShippingMethods[key])) {
+    staticShippingMethods[key] = [];
+    const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
+    const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
 
     // Check for errors.
-    if (!_isUndefined(methods.error) && methods.error) {
-      logger.error(`Error in getting shipping methods for HD. Data: ${methods.error_message}`);
-      return methods;
+    if (!_isUndefined(response.data.error) && response.data.error) {
+      logger.error('Error in getting shipping methods for HD. Error: @error', {
+        '@error': response.data.error_message,
+      });
+
+      return getFormattedError(response.data.error_code, response.data.error_message);
     }
 
-    // Delete CNC from methods.
-    for (let i = 0; i < methods.length; i++) {
-      if (methods[i].carrier_code === 'click_and_collect') {
-        delete methods[i];
-      }
+    if (_isEmpty(response.data)) {
+      const message = 'Got empty response while getting shipping methods for HD.';
+      logger.notice(message);
+
+      return getFormattedError(600, message);
+    }
+
+    // Delete methods for CNC.
+    const methods = response.data.filter((i) => i.carrier_code !== 'click_and_collect');
+
+    if (_isEmpty(methods)) {
+      const message = 'No shipping methods available for HD.';
+      logger.notice(message);
+
+      return getFormattedError(600, message);
     }
 
     // Set shipping methods in static.
@@ -156,8 +180,10 @@ const getHomeDeliveryShippingMethods = async (data) => {
     StaticStorage.set('shipping_methods', staticShippingMethods);
   }
 
-  // Return methods.
-  return staticShippingMethods[key];
+  return {
+    error: false,
+    methods: staticShippingMethods[key],
+  };
 };
 
 export {
