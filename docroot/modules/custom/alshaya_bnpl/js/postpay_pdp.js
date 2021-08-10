@@ -1,11 +1,13 @@
 (function ($, Drupal) {
   Drupal.behaviors.postpayPDP = {
     attach: function (context, settings) {
-      $('.sku-base-form').each(function () {
+      var skuBaseForm = $('.sku-base-form').not('[data-sku *= "#"]');
+
+      skuBaseForm.each(function () {
         setPostpayWidgetAmount(this);
       });
 
-      $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+      skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
         setPostpayWidgetAmount(this, variant, event);
       });
     }
@@ -15,7 +17,9 @@
     var product = $(element).closest('[gtm-type="gtm-product-link"]');
     var sku = $(element).attr('data-sku');
     var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-    if (typeof drupalSettings[productKey][sku] === 'undefined') {
+    var productData = window.Product.getProductData(sku, productKey);
+
+    if (typeof productData === 'undefined') {
       return;
     }
     if (typeof event !== 'undefined') {
@@ -27,9 +31,9 @@
     else {
       variant = $('.selected-variant-sku', element).val();
     }
-    var variantPrice = (drupalSettings[productKey][sku]['type'] != 'simple') ?
-      drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
-      drupalSettings[productKey][sku]['gtm_attributes']['price'];
+    var variantPrice = (productData.type != 'simple') ?
+      productData['variants'][variant]['gtm_price'] :
+      productData.gtm_attributes.price;
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.
