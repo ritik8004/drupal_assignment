@@ -24,11 +24,23 @@ function alshaya_rcs_listing_install() {
     'views_block__plp_promotional_banner_block_1',
     'views_block__alshaya_term_description_block_1',
   ];
+  $weight = NULL;
   foreach ($blocks as $block_id) {
     $block = Block::load($block_id);
     if ($block instanceof BlockInterface) {
+      // Change the RCS term description block weight based on the view term
+      // description block.
+      if ($block_id == 'views_block__alshaya_term_description_block_1') {
+        $weight = $block->getWeight();
+      }
       $block->disable()->save();
     }
+  }
+  // Load the RCS Block and Change the weight.
+  if ($weight !== NULL) {
+    $block = Block::load('alshaya_rcs_term_description');
+    $block->setWeight($weight);
+    $block->save();
   }
 }
 
