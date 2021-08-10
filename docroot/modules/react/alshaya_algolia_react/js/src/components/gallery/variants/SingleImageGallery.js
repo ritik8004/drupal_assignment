@@ -19,8 +19,7 @@ const SingleImageGallery = (props) => {
     <div className="alshaya_search_gallery">
       <div className="alshaya_search_mainimage" data-sku-image={`${mainImageUrl}`}>
         <ImageElement
-          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={mainImageUrl}
+          src={mainImageUrl}
           title={title}
           loading="lazy"
         />
