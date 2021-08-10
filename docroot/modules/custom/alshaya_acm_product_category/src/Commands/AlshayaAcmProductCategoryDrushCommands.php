@@ -10,6 +10,8 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\metatag\MetatagManagerInterface;
 use Drupal\metatag\MetatagToken;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Expose drush commands for alshaya_acm_product_category.
@@ -66,6 +68,27 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
   protected $drupalLogger;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $langugageManager;
+
+  /**
+   * The export directory path.
+   *
+   * @var string
+   */
+  const PATH = 'public://exports/v2/';
+
+  /**
+   * The filename prefix for the output file.
+   *
+   * @var string
+   */
+  const FILE_NAME_PREFIX = 'product-category-data';
+
+  /**
    * AlshayaAcmProductCategoryDrushCommands constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\Service\ProductCategorySyncManager $category_sync_manager
@@ -82,6 +105,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *   The Metatag token service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
     ProductCategorySyncManager $category_sync_manager,
@@ -90,7 +115,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     EntityTypeManagerInterface $entity_type_manager,
     MetatagManagerInterface $metatag_manager,
     MetatagToken $metatag_token,
-    LoggerChannelFactoryInterface $logger_factory
+    LoggerChannelFactoryInterface $logger_factory,
+    LanguageManagerInterface $language_manager
     ) {
     parent::__construct();
     $this->categorySyncManager = $category_sync_manager;
@@ -100,6 +126,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $this->metatagManager = $metatag_manager;
     $this->metatagToken = $metatag_token;
     $this->drupalLogger = $logger_factory->get('alshaya_acm_product_category');
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -121,49 +148,148 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *
    * @command alshaya_acm_product_category:export-data
    *
-   * @aliases export-product-category-data
+   * @aliases export-pcdata
    *
-   * @usage drush export-product-category-data --file-name=category_data
-   *   Export the product category data as CSV.
+   * @options limit The number of terms to process per batch.
+   *
+   * @usage drush export-product-category-data --limit 50
+   *   Process 50 terms per batch and output to the file. Default is 30.
    */
-  public function exportProductCategoryData($options = ['file-name' => 'product_category_data']) {
+  public function exportProductCategoryData($options = ['limit' => 30]) {
+    $path = self::PATH;
+    $output_directory = $this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY);
+    if (!$output_directory) {
+      $this->drupalLogger->notice('Could not read/create the directory to export the data.');
+      return;
+    }
+
+    // Check if it is possible to create the output files.
+    foreach ($this->languageManager->getLanguages() as $langcode => $language) {
+      try {
+        $location = $this->fileSystem->getDestinationFilename($path . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+        if ($location === FALSE) {
+          $this->drupalLogger->warning('Could not create the file to export the data.');
+          return;
+        }
+
+        // Make the file empty.
+        $file = fopen($location, 'wb+');
+        fclose($file);
+      }
+      catch (\Exception $e) {
+        $this->drupalLogger->warning('Could not create the file to export the data. Message: @message.', [
+          '@message' => $e->getMessage(),
+        ]);
+        return;
+      }
+    }
     // Get tid of all the parent product category.
     $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
 
-    // Path where we want to export the csv file.
-    $path = 'public://exports/v2/';
-    if ($this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY)) {
-      $location = $this->fileSystem->createFilename($options['file-name'] . '.csv', $path);
-      $handle = fopen($location, 'wb');
-      // Combine parent and child tids.
-      $tids = [];
-      foreach ($term_ids as $term_id) {
-        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
-        $child_tids = $this->productCategoryTree->getNestedChildrenTids($term);
-        $tids = array_merge($tids, [$term_id], $child_tids);
-      }
-      // Flag variable to track if header is added in the CSV file or not.
-      $header_flag = FALSE;
-      // Process all the terms and put the data in csv file.
-      foreach ($tids as $tid) {
-        $data = $this->getTermData($tid);
-        if (!$header_flag) {
-          // Add the header as the first line of the CSV.
-          fputcsv($handle, array_keys($data));
-          $header_flag = TRUE;
-        }
-        // Add the data we exported to the next line of the CSV.
-        fputcsv($handle, array_values($data));
-      }
+    // Combine parent and child tids.
+    $tids = [];
+    foreach ($term_ids as $term_id) {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+      $child_tids = $this->productCategoryTree->getNestedChildrenTids($term);
+      $tids = array_merge($tids, [$term_id], $child_tids);
+    }
 
-      // Close the file handler since we don't need it anymore.  We are not
-      // storing this file anywhere in the filesystem.
-      fclose($handle);
-      $file_path = file_create_url($location);
-      $this->drupalLogger->notice(dt('Data exported successfully at Location: @location', ['@location' => $file_path]));
+    $batch = [
+      'title' => 'Export Product Category Data',
+      'init' => 'Starting product category data export process..',
+      'finished' => [__CLASS__, 'batchFinished'],
+    ];
+
+    foreach (array_chunk($tids, $options['limit']) as $tid_batch) {
+      $batch['operations'][] = [
+        [
+          '\Drupal\alshaya_acm_product_category\Commands\AlshayaAcmProductCategoryDrushCommands',
+          'exportProductCategory',
+        ],
+        [$tid_batch],
+      ];
+    }
+
+    batch_set($batch);
+    drush_backend_batch_process();
+  }
+
+  /**
+   * Main batch operation which aggregates the data to be exported.
+   *
+   * @param array $tids
+   *   The tids for which data is to be exported.
+   * @param mixed $context
+   *   The batch context.
+   */
+  public static function exportProductCategory(array $tids, &$context) {
+    if (!isset($context['results']['terms'])) {
+      $context['results']['terms'] = 0;
+      $context['results']['failed_tids'] = [];
+      $context['results']['data'] = [];
+      $context['results']['csv_header_added'] = [];
+    }
+
+    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    // Process all the terms and put the data in csv file.
+    foreach ($tids as $tid) {
+      try {
+        // Export the translated term data as well.
+        $term = $term_storage->load($tid);
+        foreach ($term->getTranslationLanguages() as $langcode => $language) {
+          $translated_term = $term->getTranslation($langcode);
+          // Get the term data of the required fields.
+          $data = self::getTermData($translated_term);
+          $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+          $handle = fopen($location, 'a');
+
+          // Add the header only once.
+          if (!isset($context['results']['csv_header_added'][$langcode])) {
+            $context['results']['csv_header_added'][$langcode] = TRUE;
+            fputcsv($handle, array_keys($data));
+          }
+          // Add the data we exported to the next line of the CSV.
+          fputcsv($handle, array_values($data));
+          // Close the file handler since we don't need it anymore.  We are not
+          // storing this file anywhere in the filesystem.
+          fclose($handle);
+        }
+        $context['results']['terms']++;
+      }
+      catch (\Exception $e) {
+        $context['results']['failed_tids'][] = $tid;
+      }
+    }
+
+    \Drupal::logger('alshaya_acm_product_category')->notice('@count terms processed for exporting.', ['@count' => count($tids)]);
+  }
+
+  /**
+   * Finishes the update process and stores the results.
+   *
+   * @param bool $success
+   *   Indicate that the batch API tasks were all completed successfully.
+   * @param array $results
+   *   An array of all the results that were updated in update_do_one().
+   * @param array $operations
+   *   A list of all the operations that had not been completed by batch API.
+   */
+  public static function batchFinished($success, array $results, array $operations) {
+    $drupalLogger = \Drupal::logger('alshaya_acm_product_category');
+
+    if ($success) {
+      // Here we do something meaningful with the results.
+      $drupalLogger->notice('@count items successfully processed.', ['@count' => $results['terms']]);
     }
     else {
-      $this->drupalLogger->warning(dt('Something went wrong, Please check if the folder permissions are proper.'));
+      $drupalLogger->warning('Could not successfully complete the batch process.');
+    }
+
+    if (!empty($results['failed_tids'])) {
+      $drupalLogger->warning('Could not successfully process @count items. Items: @items', [
+        '@count' => count($results['failed_tids']),
+        '@items' => implode(',', $results['failed_tids']),
+      ]);
     }
   }
 
@@ -175,6 +301,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    */
   protected function getRequiredFields() {
     return [
+      'url_alias',
       'field_commerce_id',
       'field_show_in_lhn',
       'field_show_in_app_navigation',
@@ -203,20 +330,19 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
   /**
    * Get required term data for export.
    *
-   * @param string $term_id
-   *   The term id for which we need data.
+   * @param \Drupal\taxonomy\Entity\Term $term
+   *   The term object.
    *
    * @return array
    *   An array of data required for the term.
    */
-  protected function getTermData(string $term_id) {
-    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+  public static function getTermData(Term $term) {
     // Get the list of fields required.
-    $fields = $this->getRequiredFields();
+    $fields = self::getRequiredFields();
     $data = [];
     foreach ($fields as $field) {
       // Proceed only if field is present.
-      if ($term->hasField($field)) {
+      if ($field == 'url_alias' || $term->hasField($field)) {
         // Assigning empty value to maintain the CSV file mapping.
         $data[$field] = '';
         // Process all the fields based on machine name.
@@ -228,7 +354,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             if (!empty($value) && array_key_exists('target_id', $value[0])) {
               $target_id = $value[0]['target_id'];
               // Load file and get the Image URL.
-              $image = $this->entityTypeManager->getStorage('file')->load($target_id);
+              $image = \Drupal::entityTypeManager()->getStorage('file')->load($target_id);
               if ($image) {
                 $data[$field] = $image->url();
               }
@@ -236,27 +362,39 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             break;
 
           case 'field_meta_tags':
-            $tags = $this->metatagManager->tagsFromEntityWithDefaults($term);
+            $tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($term);
+            // Allow modules to override tags or the entity used for token
+            // replacements.
+            $context = ['entity' => &$term];
+            \Drupal::moduleHandler()->alter('metatags', $tags, $context);
+
+            // If the entity was changed above, use that for generating the
+            // meta tags.
+            if (isset($context['entity'])) {
+              $term = $context['entity'];
+            }
             // Iterate through the $tags and pass it to metatag::replace.
             foreach ($tags as $key => $value) {
-              $data[$key] = $this->metatagToken->replace($value, ['taxonomy_term' => $term]);
+              $data[$key] = \Drupal::service('metatag.token')->replace($value, ['taxonomy_term' => $term], [
+                'langcode' => $term->language()->getId(),
+              ]);
             }
-            // Remove metatag empty field.
+            // Remove metatag empty field and canonical url.
             unset($data['field_meta_tags']);
-            // Change the canonical url to relative url.
-            $relative_url = explode('/', parse_url($data['canonical_url'], PHP_URL_PATH));
-            // Unset the language prefix.
-            unset($relative_url['1']);
-            $data['canonical_url'] = implode('/', $relative_url);
+            unset($data['canonical_url']);
             break;
 
           case 'field_select_sub_categories_plp':
-            $value = $term->get($field)->getString();
-            // The value is the tid of the term. So getting the term name.
-            $target_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($value);
-            if ($target_term) {
-              $data[$field] = $target_term->label();
+            $ids = $term->get($field)->getValue();
+            $items = [];
+            foreach ($ids as $id) {
+              // The value is the tid of the term. So getting the term name.
+              $target_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($id['value']);
+              if ($target_term) {
+                array_push($items, $target_term->label());
+              }
             }
+            $data[$field] = implode(',', $items);
             break;
 
           case 'field_plp_group_category_desc':
@@ -266,12 +404,20 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             }
             break;
 
+          case 'url_alias':
+            $url = $term->toUrl()->toString();
+            // Only provide the path without langcode and domain.
+            $data[$field] = str_replace('/' . $term->language()->getId(), '', $url);
+            break;
+
           default:
             $data[$field] = $term->get($field)->getString();
             break;
         }
       }
     }
+    // Sorting based on key value so that order of data remains same.
+    ksort($data);
 
     return $data;
   }
