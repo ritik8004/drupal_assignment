@@ -340,6 +340,12 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     // Get the list of fields required.
     $fields = self::getRequiredFields();
     $data = [];
+
+    /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
+    $language_manager = \Drupal::languageManager();
+    $current_language = $language_manager->getConfigOverrideLanguage();
+    $language_manager->setConfigOverrideLanguage($term->language());
+
     foreach ($fields as $field) {
       // Proceed only if field is present.
       if ($field == 'url_alias' || $term->hasField($field)) {
@@ -418,6 +424,9 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     }
     // Sorting based on key value so that order of data remains same.
     ksort($data);
+
+    // Revert the override for the language change.
+    $language_manager->setConfigOverrideLanguage($current_language);
 
     return $data;
   }
