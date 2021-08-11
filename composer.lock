@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7460561541e840cf567c470c0605cf43",
+    "content-hash": "3e1f05a27d6e335fbe5776d28b9819ad",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -11982,39 +11982,39 @@
         },
         {
             "name": "drupal/profile",
-            "version": "1.0.0-rc6",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/profile.git",
-                "reference": "8.x-1.0-rc6"
+                "reference": "8.x-1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.0-rc6.zip",
-                "reference": "8.x-1.0-rc6",
-                "shasum": "fa6328aa1db0fc4d72245dd53162ab7bb8b3ebfc"
+                "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.3.zip",
+                "reference": "8.x-1.3",
+                "shasum": "e2f0b76ae0cfb312259a956f7140cec261e543b1"
             },
             "require": {
-                "drupal/core": "^8.6",
+                "drupal/core": "^8.8 || ^9",
                 "drupal/entity": "^1.0-rc2"
             },
             "require-dev": {
-                "drupal/token": "1.0"
+                "drupal/token": "^1.7"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-rc6",
-                    "datestamp": "1582134004",
+                    "version": "8.x-1.3",
+                    "datestamp": "1628099894",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
