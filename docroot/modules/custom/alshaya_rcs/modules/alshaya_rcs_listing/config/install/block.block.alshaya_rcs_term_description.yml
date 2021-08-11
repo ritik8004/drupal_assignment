@@ -2,20 +2,19 @@ langcode: en
 status: true
 dependencies:
   module:
-    - rcs_placeholders
-    - system
+    - alshaya_rcs_listing
   theme:
     - alshaya_white_label
-id: rcs_placeholders_breadcrumb
+id: alshaya_rcs_term_description
 theme: alshaya_white_label
-region: breadcrumb
-weight: 0
+region: content
+weight: -55
 provider: null
-plugin: rcs_ph_breadcrumb
+plugin: rcs_term_description
 settings:
-  id: rcs_ph_breadcrumb
-  label: 'RCS Placeholders breadcrumb'
-  provider: rcs_placeholders
+  id: rcs_term_description
+  label: 'Alshaya RCS Term Description'
+  provider: alshaya_rcs_listing
   label_display: '0'
 visibility:
   request_path:
