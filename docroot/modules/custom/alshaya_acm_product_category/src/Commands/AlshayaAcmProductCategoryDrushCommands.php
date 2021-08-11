@@ -341,7 +341,6 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $fields = self::getRequiredFields();
     $data = [];
 
-    $current_language = NULL;
     /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
     $language_manager = \Drupal::languageManager();
     $current_language = $language_manager->getConfigOverrideLanguage();
