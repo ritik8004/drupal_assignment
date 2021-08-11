@@ -126,12 +126,18 @@
       renderer = globalThis.rcsPhSearchRenderingEngine;
     }
 
+    let entityToGet = blockPhId[1];
+    // Replace placeholder with entity-to-get param if exists.
+    if (params.indexOf('entity-to-get') !== -1) {
+      entityToGet = params['entity-to-get'];
+    }
+
     params['get-data'] = params['get-data'] === "true";
 
     // Acquire data from the selected backend.
     backend
       .getData(
-        blockPhId[1],
+        entityToGet,
         params,
         pageEntity,
         drupalSettings.path.currentLanguage,
