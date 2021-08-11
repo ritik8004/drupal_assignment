@@ -166,10 +166,13 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
-        $location = $this->fileSystem->getDestinationFilename($path . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+        $location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
         if ($location === FALSE) {
           $this->drupalLogger->warning('Could not create the file to export the data.');
           return;
+        }
+        else {
+          $this->drupalLogger->notice('Lancode: ' . $langcode . '. File: ' . file_create_url($location));
         }
 
         // Make the file empty.
@@ -177,9 +180,9 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
         fclose($file);
       }
       catch (\Exception $e) {
-        $this->drupalLogger->warning('Could not create the file to export the data. Message: @message.', [
+        $this->drupalLogger->warning(dt('Could not create the file to export the data. Message: @message.', [
           '@message' => $e->getMessage(),
-        ]);
+        ]));
         return;
       }
     }
@@ -240,7 +243,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
           $translated_term = $term->getTranslation($langcode);
           // Get the term data of the required fields.
           $data = self::getTermData($translated_term);
-          $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+          $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
           $handle = fopen($location, 'a');
 
           // Add the header only once.
@@ -299,7 +302,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    * @return array
    *   An array of machine name of all the fields required in CSV file.
    */
-  protected function getRequiredFields() {
+  protected static function getRequiredFields() {
     return [
       'url_alias',
       'field_commerce_id',
@@ -374,6 +377,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             $context = ['entity' => &$term];
             \Drupal::moduleHandler()->alter('metatags', $tags, $context);
 
+            self::removeNonEssentialTags($tags);
+
             // If the entity was changed above, use that for generating the
             // meta tags.
             if (isset($context['entity'])) {
@@ -429,6 +434,26 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $language_manager->setConfigOverrideLanguage($current_language);
 
     return $data;
+  }
+
+  /**
+   * Removes metatags that are not required in the output.
+   *
+   * @param array $tags
+   *   The tags array.
+   */
+  public static function removeNonEssentialTags(array &$tags) {
+    $tags_to_keep = [
+      'title',
+      'description',
+      'keywords',
+    ];
+
+    foreach ($tags as $tag => $replacements) {
+      if (!in_array($tag, $tags_to_keep)) {
+        unset($tags[$tag]);
+      }
+    }
   }
 
 }
