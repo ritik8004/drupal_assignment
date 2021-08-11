@@ -1,8 +1,5 @@
 // @codingStandardsIgnoreFile
 
-// Static variable to store API response for the products in a page.
-var staticProductData = [];
-
 exports.getEntity = async function getEntity(langcode) {
   if (typeof drupalSettings.rcsPage === 'undefined') {
     return null;
@@ -211,7 +208,7 @@ exports.getEntity = async function getEntity(langcode) {
   const response = await rcsCommerceBackend.invokeApi(request);
   if (drupalSettings.rcsPage.type == "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
-    setDataToStorage('product', result);
+    rcsPhSetDataToStorage('product', result.sku, result);
   }
   else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
@@ -276,46 +273,3 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
   return result;
 };
-
-/**
- * Stores the response from API call into storage.
- *
- * @param {string} entityType
- *   The entity type, eg. 'product'.
- * @param {object} data
- *   The entity data to store.
- */
-function setDataToStorage(entityType, data) {
-  switch (entityType) {
-    case 'product':
-      staticProductData[data.sku] = data;
-      break;
-  }
-}
-
-/**
- * Retrieves the given entity from storage.
- *
- * @param {string} entityType
- *   The entity type, eg. 'product'.
- * @param {string} entityId
- *   The identifier key for the entity, eg. sku value for product.
- *
- * @returns {Object}
- *   The stored entity data.
- */
-function getDataFromStorage(entityType, entityId) {
-  // We leave it undefined so that the checks in the existing code which check
-  // for eg. the undefined value of drupalSettings.productInfo continue to work
-  // as before.
-  var data;
-
-  switch (entityType) {
-    case 'product':
-      data = staticProductData[entityId];
-      break;
-  }
-
-  return data;
-}
-exports.getDataFromStorage = getDataFromStorage;

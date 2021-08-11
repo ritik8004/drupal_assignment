@@ -15,7 +15,7 @@ window.commerceBackend = window.commerceBackend || {};
  *    The processed product data.
  */
 window.commerceBackend.getProductData = function (sku) {
-  var product = window.rcsPhCommerceBackend.getDataFromStorage('product', sku);
+  var product = rcsPhGetDataFromStorage('product', sku);
   if (typeof product === 'undefined') {
     return product;
   }
