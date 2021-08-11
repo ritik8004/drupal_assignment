@@ -2,20 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import SearchApp from './search/SearchApp';
 
-// Start instant search only after Document ready.
-// eslint-disable-next-line func-names
-(function ($, drupalSettings) {
-  // We will trigger search only after activity is started.
-  window.algoliaSearchActivityStarted = (typeof drupalSettings.algoliaSearch.showSearchResults === 'undefined')
-    ? false
-    : drupalSettings.algoliaSearch.showSearchResults;
+/* eslint-disable */
+(function (Drupal) {
+  let searchAlgoliaInitiated = false;
 
-  ReactDOM.render(
-    <SearchApp />,
-    document.querySelector('#alshaya-algolia-autocomplete'),
-  );
+  Drupal.behaviors.searchAlgolia = {
+    attach: function () {
+      initiateSearchAlgolia();
+    }
+  };
 
-  $('#alshaya-algolia-autocomplete input[type="search"]').on('mousedown tap focus', () => {
-    window.algoliaSearchActivityStarted = true;
-  });
-}(jQuery, drupalSettings));
+  function initiateSearchAlgolia() {
+    if (searchAlgoliaInitiated) {
+      return;
+    }
+
+    // Do not load if user is not focusing/checking this tab right now.
+    if (!document.hasFocus()) {
+      return;
+    }
+
+    searchAlgoliaInitiated = true;
+
+    ReactDOM.render(
+      <SearchApp />,
+      document.querySelector('#alshaya-algolia-autocomplete'),
+    );
+  }
+}(Drupal));
+/* eslint-enable */
