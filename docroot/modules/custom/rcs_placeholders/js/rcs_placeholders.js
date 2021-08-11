@@ -126,12 +126,13 @@
       renderer = globalThis.rcsPhSearchRenderingEngine;
     }
 
+    const entityToGet = params['entity-to-get'] || blockPhId[1];
     params['get-data'] = params['get-data'] === "true";
 
     // Acquire data from the selected backend.
     backend
       .getData(
-        blockPhId[1],
+        entityToGet,
         params,
         pageEntity,
         drupalSettings.path.currentLanguage,

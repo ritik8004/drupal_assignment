@@ -183,7 +183,9 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
   // Initialising the variable to check the sidebar visibilty.
   // This will be disable by default.
-  $variables['enable_lhn_tree'] = 0;
+  if (!array_key_exists('enable_lhn_tree', $variables)) {
+    $variables['enable_lhn_tree'] = 0;
+  }
 
   // Attach the plp search js library to PLP page.
   if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
