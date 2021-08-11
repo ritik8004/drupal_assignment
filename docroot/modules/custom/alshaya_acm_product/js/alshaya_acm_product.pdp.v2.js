@@ -1,3 +1,4 @@
+// @todo Move this file to alshaya_rcs_product once it is available.
 /**
  * Global variable which will contain acq_product related data/methods among
  * other things.
