@@ -1,0 +1,10 @@
+alshaya_spc.advantage_card_settings:
+  type: config_object
+  label: 'Advantage Card configuration'
+  mapping:
+    enable_disable_advantage_card:
+      type: boolean
+      label: 'Advantage card status'
+    advantage_card_prefix:
+      type: string
+      label: 'Advantage card prefix'
