@@ -1,7 +1,7 @@
 // @codingStandardsIgnoreFile
 
 // Static variable to store API response for the products in a page.
-var staticProductData = null;
+var staticProductData = [];
 
 exports.getEntity = async function getEntity(langcode) {
   if (typeof drupalSettings.rcsPage === 'undefined') {
