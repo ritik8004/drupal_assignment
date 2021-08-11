@@ -27,7 +27,7 @@ window.commerceBackend.getProductData = function (sku) {
  * Process the product so that it has the same structure as drupalSettings
  * productInfo key.
  *
- * @param {object} sku
+ * @param {object} product
  *   The product object from the API response.
  *
  * @returns {Object}
