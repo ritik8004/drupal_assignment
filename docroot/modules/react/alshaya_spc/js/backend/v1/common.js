@@ -158,6 +158,10 @@ window.commerceBackend.removeCartDataFromStorage = () => {
   removeStorageInfo('last_selected_payment');
 };
 
+// Do nothing for V1, it should be done already
+// when doing update cart from backend.
+window.commerceBackend.pushAgentDetailsInCart = () => window.commerceBackend.getCart();
+
 export {
   callMiddlewareApi,
   isAnonymousUserWithoutCart,

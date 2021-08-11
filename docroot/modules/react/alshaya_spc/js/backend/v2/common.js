@@ -20,10 +20,10 @@ import {
   getExceptionMessageType,
   getProcessedErrorMessage,
 } from './error';
-import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import getAgentDataForExtension from './smartAgent';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -951,19 +951,24 @@ const preUpdateValidation = async (request) => {
 /**
  * Calls the update cart API and returns the updated cart.
  *
- * @param {object} data
+ * @param {object} postData
  *  The data to send.
  *
  * @returns {Promise<AxiosPromise<object>>}
  *   A promise object with cart data.
  */
-const updateCart = async (data) => {
+const updateCart = async (postData) => {
+  const data = { ...postData };
   const cartId = window.commerceBackend.getCartId();
 
   let action = '';
-  if (!_isEmpty(data.extension) && !_isEmpty(data.extension.action)) {
+  data.extension = data.extension || {};
+  if (hasValue(data.extension.action)) {
     action = data.extension.action;
   }
+
+  // Add Smart Agent data to extension.
+  data.extension = Object.assign(data.extension, getAgentDataForExtension());
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
@@ -971,14 +976,11 @@ const updateCart = async (data) => {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
-  // Log the shipping / billing address we pass to magento.
-  if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
-    logger.debug('Billing / Shipping update. CartId: @cartId, Action: @action, Address: @address.', {
-      '@cartId': cartId,
-      '@address': JSON.stringify(data),
-      '@action': action,
-    });
-  }
+  logger.debug('Updating Cart. CartId: @cartId, Action: @action, Request: @request.', {
+    '@cartId': cartId,
+    '@request': JSON.stringify(data),
+    '@action': action,
+  });
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
@@ -1002,6 +1004,22 @@ const updateCart = async (data) => {
         '@errorCode': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
+      return response;
+    });
+};
+
+window.commerceBackend.pushAgentDetailsInCart = async () => {
+  // Do simple refresh cart to make sure we push data before sharing.
+  const postData = {
+    extension: {
+      action: 'refresh',
+    },
+  };
+
+  return updateCart(postData)
+    .then(async (response) => {
+      // Process cart data.
+      response.data = await getProcessedCartData(response.data);
       return response;
     });
 };
