@@ -11,6 +11,7 @@ use Drupal\metatag\MetatagManagerInterface;
 use Drupal\metatag\MetatagToken;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -304,6 +305,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    */
   protected static function getRequiredFields() {
     return [
+      'store_code',
       'url_alias',
       'field_commerce_id',
       'field_show_in_lhn',
@@ -348,14 +350,19 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $language_manager = \Drupal::languageManager();
     $current_language = $language_manager->getConfigOverrideLanguage();
     $language_manager->setConfigOverrideLanguage($term->language());
+    $term_langcode = $term->language()->getId();
 
     foreach ($fields as $field) {
       // Proceed only if field is present.
-      if ($field == 'url_alias' || $term->hasField($field)) {
+      if (in_array($field, ['store_code', 'url_alias']) || $term->hasField($field)) {
         // Assigning empty value to maintain the CSV file mapping.
         $data[$field] = '';
         // Process all the fields based on machine name.
         switch ($field) {
+          case 'store_code':
+            $data[$field] = self::getStoreCode($term_langcode);
+            break;
+
           case 'field_plp_group_category_img':
           case 'field_promotion_banner':
           case 'field_promotion_banner_mobile':
@@ -387,7 +394,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             // Iterate through the $tags and pass it to metatag::replace.
             foreach ($tags as $key => $value) {
               $data[$key] = \Drupal::service('metatag.token')->replace($value, ['taxonomy_term' => $term], [
-                'langcode' => $term->language()->getId(),
+                'langcode' => $term_langcode,
               ]);
             }
             // Remove metatag empty field and canonical url.
@@ -418,7 +425,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
           case 'url_alias':
             $url = $term->toUrl()->toString();
             // Only provide the path without langcode and domain.
-            $data[$field] = str_replace('/' . $term->language()->getId(), '', $url);
+            $data[$field] = str_replace('/' . $term_langcode, '', $url);
             break;
 
           default:
@@ -454,6 +461,26 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
         unset($tags[$tag]);
       }
     }
+  }
+
+  /**
+   * Gets the magento store code for the given language.
+   *
+   * @param string $langcode
+   *   The langcode.
+   *
+   * @return string
+   *   The store code.
+   */
+  public static function getStoreCode(string $langcode) {
+    static $store_code = [];
+    if (isset($store_code[$langcode])) {
+      return $store_code[$langcode];
+    }
+
+    $store_code[$langcode] = Settings::get('magento_lang_prefix')[$langcode];
+
+    return $store_code[$langcode];
   }
 
 }

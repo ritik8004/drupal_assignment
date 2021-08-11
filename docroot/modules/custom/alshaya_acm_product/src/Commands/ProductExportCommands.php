@@ -7,6 +7,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * A Drush commandfile for exporting product data.
@@ -232,6 +233,7 @@ class ProductExportCommands extends DrushCommands {
    */
   private static function getDataForNode(NodeInterface $node) {
     $fields = [
+      'store_code',
       'url_alias',
       'field_meta_tags',
     ];
@@ -242,13 +244,18 @@ class ProductExportCommands extends DrushCommands {
     $language_manager = \Drupal::languageManager();
     $current_language = $language_manager->getConfigOverrideLanguage();
     $language_manager->setConfigOverrideLanguage($node->language());
+    $node_langcode = $node->language()->getId();
 
     foreach ($fields as $field) {
       switch ($field) {
+        case 'store_code':
+          $data[$field] = self::getStoreCode($node_langcode);
+          break;
+
         case 'url_alias':
           $url = $node->toUrl()->toString();
           // Only provide the path without langcode and domain.
-          $data[$field] = str_replace('/' . $node->language()->getId(), '', $url);
+          $data[$field] = str_replace('/' . $node_langcode, '', $url);
           break;
 
         case 'field_meta_tags':
@@ -389,6 +396,26 @@ class ProductExportCommands extends DrushCommands {
         unset($tags[$tag]);
       }
     }
+  }
+
+  /**
+   * Gets the magento store code for the given language.
+   *
+   * @param string $langcode
+   *   The langcode.
+   *
+   * @return string
+   *   The store code.
+   */
+  public static function getStoreCode(string $langcode) {
+    static $store_code = [];
+    if (isset($store_code[$langcode])) {
+      return $store_code[$langcode];
+    }
+
+    $store_code[$langcode] = Settings::get('magento_lang_prefix')[$langcode];
+
+    return $store_code[$langcode];
   }
 
 }
