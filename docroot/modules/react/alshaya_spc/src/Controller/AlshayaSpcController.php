@@ -178,7 +178,6 @@ class AlshayaSpcController extends ControllerBase {
     $cart_config = $this->config('alshaya_acm.cart_config');
     $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
 
-    $advantage_card_config = $this->config('alshaya_spc.advantage_card_settings');
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Get country code.
@@ -207,8 +206,6 @@ class AlshayaSpcController extends ControllerBase {
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
-            'enable_disable_advantage_card' => $advantage_card_config->get('enable_disable_advantage_card') ?? TRUE,
-            'advantage_card_prefix' => $advantage_card_config->get('advantage_card_prefix'),
           ],
         ],
       ],
@@ -223,7 +220,13 @@ class AlshayaSpcController extends ControllerBase {
       $checkout_settings = Settings::get('alshaya_checkout_settings');
       $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
     }
+    // Advantage card settings only available if it is enabled.
+    $advantage_card_config = $this->config('alshaya_spc.advantage_card');
+    if ($advantage_card_config->get('advantageCardEnabled') === 1) {
+      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard']['enabled'] = $advantage_card_config->get('advantageCardEnabled');
+      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard']['advantageCardPrefix'] = $advantage_card_config->get('advantageCardPrefix');
 
+    }
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;

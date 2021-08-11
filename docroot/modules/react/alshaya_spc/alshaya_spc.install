@@ -20,10 +20,9 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 function alshaya_spc_update_8014() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['alshaya_spc.advantage_card_settings'],
+    ['alshaya_spc.advantage_card'],
     'alshaya_spc',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    'install'
   );
 }
 
