@@ -71,7 +71,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
   /**
    * Overridden controller for cart page.
    *
-   * @param \GuzzleHttp\Psr7\Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request object.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
