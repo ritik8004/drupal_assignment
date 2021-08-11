@@ -1348,11 +1348,11 @@ class AlshayaGtmManager {
   protected function getUserDeviceType() {
     $detect = new MobileDetect();
     $device_type = 'Desktop';
-    if ($detect->isMobile()) {
-      $device_type = 'Mobile';
-    }
-    elseif ($detect->isTablet()) {
+    if ($detect->isTablet()) {
       $device_type = 'Tablet';
+    }
+    elseif ($detect->isMobile()) {
+      $device_type = 'Mobile';
     }
 
     return $device_type;
