@@ -3,3 +3,10 @@ services:
     class: Drupal\alshaya_rcs\Services\AlshayaRcsFeatureStatusHelper
     arguments:
       - '@config.factory'
+  alshaya_rcs_plp.breadcrumb:
+    class: Drupal\alshaya_rcs\Breadcrumb\AlshayaRcsPLPBreadcrumbBuilder
+    # The priority here should be greater than 1002 otherwise the
+    # TermBreadcrumbBuilder service will override the RCS PLP breadcrumb.
+    # @see taxonomy.services.yml
+    tags:
+      - { name: breadcrumb_builder, priority: 1003 }

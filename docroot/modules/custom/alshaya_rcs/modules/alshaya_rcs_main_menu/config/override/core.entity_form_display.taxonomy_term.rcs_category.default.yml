@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.rcs_category.field_category_slug
+    - field.field.taxonomy_term.rcs_category.field_display_as_clickable_link
     - field.field.taxonomy_term.rcs_category.field_icon
     - field.field.taxonomy_term.rcs_category.field_include_in_desktop
     - field.field.taxonomy_term.rcs_category.field_include_in_mobile_tablet
@@ -81,6 +82,7 @@ third_party_settings:
       children:
         - field_override_target_link
         - field_target_link
+        - field_display_as_clickable_link
       parent_name: group_mega_menu_content
       weight: 20
       format_type: details
@@ -161,6 +163,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_display_as_clickable_link:
+    weight: 6
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   field_icon:
     type: image_image
     weight: 13

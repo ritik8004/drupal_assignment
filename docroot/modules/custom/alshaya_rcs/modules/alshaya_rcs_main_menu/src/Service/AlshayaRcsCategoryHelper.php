@@ -131,6 +131,8 @@ class AlshayaRcsCategoryHelper {
         'move_to_right' => (int) $term->get('field_move_to_right')->getString(),
         'font_color' => $term->get('field_term_font_color')->getString(),
         'background_color' => $term->get('field_term_background_color')->getString(),
+        'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
+        'item_clickable' => (int) $term->get('field_display_as_clickable_link')->getString(),
       ];
 
       // Get overridden target link.

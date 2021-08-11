@@ -1,4 +1,4 @@
-@javascript @guest @pdp @homeDelivery @bbwaeprod @pbsaprod @bbwkwprod @bbwsaprod @vssaprod @vsaeprod @pbaeprod @pbsaprod @pbkwprod
+@javascript @guest @pdp @homeDelivery @bbwaeprod @pbsaprod @bbwkwprod @vskwprod @bbwsaprod @vssaprod @vsaeprod @pbaeprod @pbsaprod @pbkwprod
 Feature: SPC Classic PDP block for desktop
 
   Background:
