@@ -27,12 +27,6 @@ function rcs_placeholders_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'variables' => [],
     ],
-    'alshaya_rcs_lhn_tree' => [
-      'template' => 'alshaya-rcs-lhn',
-      'variables' => [
-        'lhn_cat_tree' => NULL,
-      ],
-    ],
   ];
 }
 

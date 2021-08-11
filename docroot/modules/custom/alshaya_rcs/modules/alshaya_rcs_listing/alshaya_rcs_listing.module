@@ -6,6 +6,20 @@
  */
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_rcs_lhn_tree' => [
+      'template' => 'alshaya-rcs-lhn',
+      'variables' => [
+        'lhn_cat_tree' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_preprocess_page().
  */
 function alshaya_rcs_listing_preprocess_page(&$variables) {

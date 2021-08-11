@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - rcs_placeholders
+    - alshaya_rcs_listing
     - system
   theme:
     - alshaya_white_label
@@ -15,7 +15,7 @@ plugin: rcs_ph_lhn
 settings:
   id: rcs_ph_lhn
   label: 'RCS Placeholders LHN'
-  provider: rcs_placeholders
+  provider: alshaya_rcs_listing
   label_display: '0'
 visibility:
   request_path:

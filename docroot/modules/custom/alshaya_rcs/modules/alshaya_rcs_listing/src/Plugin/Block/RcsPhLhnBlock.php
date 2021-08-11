@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\rcs_placeholders\Plugin\Block;
+namespace Drupal\alshaya_rcs_listing\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Session\AccountInterface;
