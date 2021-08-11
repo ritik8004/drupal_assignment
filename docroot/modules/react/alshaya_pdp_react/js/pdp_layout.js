@@ -2,15 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PdpLayout from './pdp-layout/components/pdp-layout';
 
-/* eslint-disable */
+// eslint-disable-next-line func-names
 (function (Drupal) {
   let pdpInitiated = false;
-
-  Drupal.behaviors.pdpReact = {
-    attach: function () {
-      initiatePDP();
-    }
-  };
 
   function initiatePDP() {
     if (pdpInitiated) {
@@ -29,5 +23,11 @@ import PdpLayout from './pdp-layout/components/pdp-layout';
       document.getElementById('pdp-layout'),
     );
   }
+
+  // eslint-disable-next-line no-param-reassign
+  Drupal.behaviors.pdpReact = {
+    attach() {
+      initiatePDP();
+    },
+  };
 }(Drupal));
-/* eslint-enable */

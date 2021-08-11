@@ -2,15 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MiniCart from './minicart/components/minicart';
 
-/* eslint-disable */
+// eslint-disable-next-line func-names
 (function (Drupal) {
   let miniCartInitiated = false;
-
-  Drupal.behaviors.spcMiniCart = {
-    attach: function () {
-      initiateMiniCart();
-    }
-  };
 
   function initiateMiniCart() {
     if (miniCartInitiated) {
@@ -29,5 +23,11 @@ import MiniCart from './minicart/components/minicart';
       document.getElementById('mini-cart-wrapper'),
     );
   }
+
+  // eslint-disable-next-line no-param-reassign
+  Drupal.behaviors.spcMiniCart = {
+    attach() {
+      initiateMiniCart();
+    },
+  };
 }(Drupal));
-/* eslint-enable */

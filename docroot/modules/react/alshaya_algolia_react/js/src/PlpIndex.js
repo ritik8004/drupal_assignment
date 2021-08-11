@@ -2,17 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PlpApp from './plp/PlpApp';
 
-/* eslint-disable */
+// eslint-disable-next-line func-names
 (function (Drupal) {
   let plpAlgoliaInitiated = false;
 
-  Drupal.behaviors.plpAlgolia = {
-    attach: function () {
-      initiatePlpAlgolia();
-    }
-  };
-
-  function initiatePlpAlgolia () {
+  function initiatePlpAlgolia() {
     if (plpAlgoliaInitiated) {
       return;
     }
@@ -29,5 +23,11 @@ import PlpApp from './plp/PlpApp';
       document.querySelector('#alshaya-algolia-plp'),
     );
   }
+
+  // eslint-disable-next-line no-param-reassign
+  Drupal.behaviors.plpAlgolia = {
+    attach() {
+      initiatePlpAlgolia();
+    },
+  };
 }(Drupal));
-/* eslint-enable */
