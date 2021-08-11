@@ -4,7 +4,6 @@ namespace Drupal\alshaya_rcs_main_menu\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Path\AliasManager;
@@ -12,13 +11,13 @@ use Drupal\Core\Path\AliasManager;
 /**
  * Service provides data migration functions in rcs_category taxonomy.
  *
- * Service is responsible to migrate the category data from other existing
- * taxonomies such as acq_product_category.
+ * Service is responsible to migrate the category data
+ * from acq_product_category.
  */
 class AlshayaRcsCategoryDataMigration {
 
-  const VOCABULARY_ID = 'rcs_category';
-  const VOCABULARY_FROM_ID = 'acq_product_category';
+  const TARGET_VOCABULARY_ID = 'rcs_category';
+  const SOURCE_VOCABULARY_ID = 'acq_product_category';
 
   /**
    * The entity type manager service.
@@ -35,25 +34,11 @@ class AlshayaRcsCategoryDataMigration {
   protected $configFactory;
 
   /**
-   * Drupal Renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
-
-  /**
-   * Rcs category term cache tags.
-   *
-   * @var array
-   */
-  protected $termCacheTags = [];
 
   /**
    * Database connection.
@@ -76,8 +61,6 @@ class AlshayaRcsCategoryDataMigration {
    *   The entity type manager service.
    * @param \Drupal\Core\Entity\ConfigFactoryInterface $config_factory
    *   Config Factory.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   Drupal Renderer.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Database\Connection $connection
@@ -87,13 +70,11 @@ class AlshayaRcsCategoryDataMigration {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
-                              RendererInterface $renderer,
                               LanguageManagerInterface $language_manager,
                               Connection $connection,
                               AliasManager $pathalias_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
-    $this->renderer = $renderer;
     $this->languageManager = $language_manager;
     $this->connection = $connection;
     $this->pathAliasManager = $pathalias_manager;
@@ -150,7 +131,7 @@ class AlshayaRcsCategoryDataMigration {
     $query->condition($orCondGroup);
 
     $query->condition('tfd.langcode', $langcode);
-    $query->condition('tfd.vid', self::VOCABULARY_FROM_ID);
+    $query->condition('tfd.vid', self::SOURCE_VOCABULARY_ID);
 
     // Get the terms statisfying the above conditions.
     $terms = $query->distinct()->execute()->fetchAll();
@@ -163,7 +144,7 @@ class AlshayaRcsCategoryDataMigration {
 
         // Create a new rcs category term object.
         $rcs_term = $this->entityTypeManager->getStorage('taxonomy_term')->create([
-          'vid' => self::VOCABULARY_ID,
+          'vid' => self::TARGET_VOCABULARY_ID,
           'name' => $acq_term->name,
           'langcode' => $langcode,
         ]);
@@ -270,7 +251,7 @@ class AlshayaRcsCategoryDataMigration {
 
     // Get all the terms from rcs_category taxonomy.
     $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
-    $query->condition('vid', self::VOCABULARY_ID);
+    $query->condition('vid', self::TARGET_VOCABULARY_ID);
     $query->condition('tid', $entity_id, '<>');
     $terms = $query->execute();
 

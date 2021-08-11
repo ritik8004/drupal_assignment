@@ -11,7 +11,6 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@config.factory'
-      - '@renderer'
       - '@language_manager'
       - '@database'
       - '@path.alias_manager'
