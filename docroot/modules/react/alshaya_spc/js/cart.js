@@ -2,15 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Cart from './cart/components/cart';
 
-/* eslint-disable */
+// eslint-disable-next-line func-names
 (function (Drupal) {
   let cartInitiated = false;
-
-  Drupal.behaviors.spcCart = {
-    attach: function () {
-      initiateCart();
-    }
-  };
 
   function initiateCart() {
     if (cartInitiated) {
@@ -29,5 +23,11 @@ import Cart from './cart/components/cart';
       document.getElementById('spc-cart'),
     );
   }
+
+  // eslint-disable-next-line no-param-reassign
+  Drupal.behaviors.spcCart = {
+    attach() {
+      initiateCart();
+    },
+  };
 }(Drupal));
-/* eslint-enable */
