@@ -10,6 +10,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Provides a block for bazaarvoice user data.
@@ -43,6 +44,13 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
   protected $alshayaBazaarVoice;
 
   /**
+   * SKU Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * AlshayaBazaarVoiceUserDataBlock constructor.
    *
    * @param array $configuration
@@ -57,12 +65,15 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
    *   Route match service.
    * @param \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice
    *   Alshaya bazaar voice service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_user, RouteMatchInterface $route_match, AlshayaBazaarVoice $alshayaBazaarVoice) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_user, RouteMatchInterface $route_match, AlshayaBazaarVoice $alshayaBazaarVoice, SkuManager $sku_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_user;
     $this->routeMatch = $route_match;
     $this->alshayaBazaarVoice = $alshayaBazaarVoice;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -75,7 +86,8 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
       $plugin_definition,
       $container->get('current_user'),
       $container->get('current_route_match'),
-      $container->get('alshaya_bazaar_voice.service')
+      $container->get('alshaya_bazaar_voice.service'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
@@ -87,11 +99,12 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
       'userId' => $this->currentUser->id(),
       'emailId' => $this->currentUser->getEmail(),
     ];
-    if ($this->routeMatch->getRouteName() === 'entity.node.canonical') {
+    if ($this->currentUser->id() !== 0 && $this->routeMatch->getRouteName() === 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
       if ($node instanceof NodeInterface && $node->bundle() === 'acq_product') {
         // Add user review of current product in user settings.
-        $user_details['productReview'] = $this->alshayaBazaarVoice->getProductReviewForCurrentUser($node);
+        $sku_id = $this->skuManager->getSkuForNode($node);
+        $user_details['productReview'] = $this->alshayaBazaarVoice->getProductReviewForCurrentUser($sku_id);
       }
     }
     $build['#attached']['drupalSettings']['bazaarvoiceUserDetails'] = $user_details;
