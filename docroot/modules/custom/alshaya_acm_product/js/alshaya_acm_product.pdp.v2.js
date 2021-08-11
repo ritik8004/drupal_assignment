@@ -1,7 +1,8 @@
 /**
- * Global variable to store rcs_product related data/methods.
+ * Global variable which will contain acq_product related data/methods among
+ * other things.
  */
-window.Product = window.Product || {};
+window.commerceBackend = window.commerceBackend || {};
 
 /**
  * Gets the required data for rcs_product.
@@ -12,7 +13,7 @@ window.Product = window.Product || {};
  * @returns {Object}
  *    The processed product data.
  */
-window.Product.getProductData = function (sku) {
+window.commerceBackend.getProductData = function (sku) {
   var product = window.rcsPhCommerceBackend.getDataFromStorage('product', sku);
   if (typeof product === 'undefined') {
     return product;

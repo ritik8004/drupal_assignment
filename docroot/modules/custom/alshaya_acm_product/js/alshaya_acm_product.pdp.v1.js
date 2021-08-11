@@ -1,7 +1,8 @@
 /**
- * Global variable to store acq_product related data/methods.
+ * Global variable which will contain acq_product related data/methods among
+ * other things.
  */
-window.Product = window.Product || {};
+window.commerceBackend = window.commerceBackend || {};
 
 /**
  * Gets the required data for acq_product.
@@ -14,6 +15,6 @@ window.Product = window.Product || {};
  * @returns {Object}
  *    The product data.
  */
-window.Product.getProductData = function (sku, productKey) {
+window.commerceBackend.getProductData = function (sku, productKey) {
   return drupalSettings[productKey][sku];
 }

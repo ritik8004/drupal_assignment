@@ -17,7 +17,9 @@
     var product = $(element).closest('[gtm-type="gtm-product-link"]');
     var sku = $(element).attr('data-sku');
     var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-    var productData = window.Product.getProductData(sku, productKey);
+    // @todo Check this works for all kinds of products:
+    // simple, simple grouped, configurable, configurable grouped & matchback.
+    var productData = window.commerceBackend.getProductData(sku, productKey);
 
     if (typeof productData === 'undefined') {
       return;
