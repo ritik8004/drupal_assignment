@@ -5,9 +5,9 @@ dependencies:
     - rcs_placeholders
     - system
   theme:
-    - alshaya_the_body_shop
+    - alshaya_white_label
 id: rcs_placeholders_breadcrumb
-theme: alshaya_the_body_shop
+theme: alshaya_white_label
 region: breadcrumb
 weight: 0
 provider: null
