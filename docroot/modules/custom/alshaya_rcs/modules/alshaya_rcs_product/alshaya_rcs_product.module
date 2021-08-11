@@ -136,6 +136,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     return;
   }
 
+  $build['#attached']['library'][] = 'alshaya_rcs_product/main';
+
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
   ];
