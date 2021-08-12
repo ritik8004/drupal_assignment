@@ -120,7 +120,7 @@ const handleSubmit = (e) => {
           shareVal = elements['smart-agent-share-mobile'].value;
         }
 
-        const cartData = await window.commerceBackend.getCart();
+        const cartData = await window.commerceBackend.pushAgentDetailsInCart();
 
         const postData = {
           cartId: cartData.data.cart_id_int || cartData.data.cart_id,
