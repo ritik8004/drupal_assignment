@@ -57,3 +57,13 @@ add_free_gift_promotions:
   dependencies:
     - core/jquery
     - core/drupalSettings
+
+acq_product_info:
+  version: 1.x
+  js:
+    js/alshaya_acm_product.pdp.v1.js: {}
+
+rcs_product_info:
+  version: 1.x
+  js:
+    js/alshaya_acm_product.pdp.v2.js: {}

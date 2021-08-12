@@ -196,3 +196,49 @@ rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
  * Returns the attributes which can contain placeholders.
  */
 getRcsPlaceholderAttributes = () => drupalSettings.rcsPhSettings.placeholderAttributes;
+
+// Static variable to store API response for the products in a page.
+var staticProductData = [];
+
+/**
+ * Stores the response from API call into storage.
+ *
+ * @param {string} entityType
+ *   The entity type, eg. 'product'.
+ * @param {string} entityId
+ *   The identifier for the entity, eg. sku value for product.
+ *
+ * @param {object} data
+ *   The entity data to store.
+ */
+ function rcsPhSetDataToStorage(entityType, entityId, data) {
+  switch (entityType) {
+    case 'product':
+      staticProductData[entityId] = data;
+      break;
+  }
+}
+
+/**
+ * Retrieves the given entity from storage.
+ *
+ * @param {string} entityType
+ *   The entity type, eg. 'product'.
+ * @param {string} entityId
+ *   The identifier key for the entity, eg. sku value for product.
+ *
+ * @returns {Object}
+ *   The stored entity data.
+ */
+function rcsPhGetDataFromStorage(entityType, entityId) {
+  // We leave it undefined so that the we can use checks for undefined variable.
+  var data;
+
+  switch (entityType) {
+    case 'product':
+      data = staticProductData[entityId];
+      break;
+  }
+
+  return data;
+}
