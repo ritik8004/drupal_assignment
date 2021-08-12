@@ -15,7 +15,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     let enrichmentData = [];
     jQuery.ajax({
-      url: Drupal.url('v2/categories'),
+      url: Drupal.url('rest/v2/categories'),
       async: false,
       success: function (data) {
         enrichmentData = data;
