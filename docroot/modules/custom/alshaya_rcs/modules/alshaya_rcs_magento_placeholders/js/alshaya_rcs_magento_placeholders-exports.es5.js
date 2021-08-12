@@ -494,6 +494,27 @@ exports.computePhFilters = function (input, filter) {
         value = input.price.maximalPrice.amount.value;
         break;
 
+      case 'final_price':
+        // @todo: Use the correct price key.
+        value = input.price.maximalPrice.amount.value;
+        break;
+
+      case 'first_image':
+        // @todo: Use the correct image key.
+        value = (typeof input.media_gallery[1].url === 'undefined' || !input.media_gallery[1].url || input.media_gallery[1].url === '')
+          ? drupalSettings.alshayaRcs.default_meta_image
+          : input.media_gallery[1].url;
+        break;
+
+      case 'schema_stock':
+        if (input.stock_status === 'IN_STOCK') {
+          value = 'http://schema.org/InStock';
+        }
+        else {
+          value = 'http://schema.org/OutOfStock';
+        }
+        break;
+
     default:
       console.log(`Unknown JS filter ${filter}.`)
   }

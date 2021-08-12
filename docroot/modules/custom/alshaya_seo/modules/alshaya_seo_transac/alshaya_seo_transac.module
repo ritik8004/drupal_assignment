@@ -135,8 +135,12 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
   if ($route_match->getRouteName() == 'entity.node.canonical') {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
+    if (!$node) {
+      return $snippet;
+    }
+
     // If 'product' node.
-    if ($node && $node->getType() == 'acq_product') {
+    if ($node->getType() == 'acq_product') {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -181,6 +185,26 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
           'availability' => ($availability === TRUE) ? "http://schema.org/InStock" : "http://schema.org/OutOfStock",
         ];
       }
+    }
+    elseif ($node->getType() == 'rcs_product') {
+      // Prepare rich snippet.
+      $snippet['@context'] = 'http://schema.org';
+      $snippet['@type'] = 'Product';
+      $snippet['name'] = '#rcs.product.name#';
+      $snippet['description'] = _alshaya_seo_get_node_meta_description();
+      $snippet['image'] = '#rcs.product._self|first_image#';
+      $snippet['sku'] = '#rcs.product.sku#';
+      // @Todo: Change this once brand field is available.
+      $snippet['brand'] = [
+        '@type' => 'Thing',
+        'name' => \Drupal::config('system.site')->get('name'),
+      ];
+      $snippet['offers'] = [
+        '@type' => "Offer",
+        'priceCurrency' => $gtm_manager->getGtmCurrency(),
+        'price' => '#rcs.product._self|final_price#',
+        'availability' => '#rcs.product._self|schema_stock#',
+      ];
     }
   }
 

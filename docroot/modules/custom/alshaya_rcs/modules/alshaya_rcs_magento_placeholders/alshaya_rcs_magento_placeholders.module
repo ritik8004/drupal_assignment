@@ -141,6 +141,7 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
     ->getCurrentLanguage()
     ->getId();
   $attachments['#attached']['drupalSettings']['alshayaRcs']['commerceBackend']['store'] = Settings::get('magento_lang_prefix')[$current_language];
+  $attachments['#attached']['library'][] = 'alshaya_rcs_magento_placeholders/schema_org';
 }
 
 /**
@@ -169,8 +170,9 @@ function alshaya_rcs_magento_placeholders_node_view(array &$build, EntityInterfa
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
-}
 
+  $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
+}
 /**
  * Implements template_preprocess_HOOK().
  */

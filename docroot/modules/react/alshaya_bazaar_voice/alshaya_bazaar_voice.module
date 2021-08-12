@@ -314,8 +314,12 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
   if ($route_match->getRouteName() == 'entity.node.canonical') {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
+    if (!$node) {
+      return;
+    }
+    $bundle = $node->getType();
     // If 'product' node.
-    if ($node && $node->getType() == 'acq_product') {
+    if ($bundle == 'acq_product') {
       $sku = $skuManager->getSkuForNode($node);
       // Get sanitized sku.
       $sanitized_sku = $skuManager->getSanitizedSku($sku);
@@ -347,6 +351,10 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
           ];
         }
       }
+    }
+    elseif ($bundle === 'rcs_product') {
+      // Add only this here so that in JS we can detect that BV is enabled.
+      $product_schema_data['aggregateRating'] = [];
     }
   }
 }

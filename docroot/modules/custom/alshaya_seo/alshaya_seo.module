@@ -164,17 +164,28 @@ function alshaya_seo_page_attachments(array &$attachments) {
     \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
 
     if (!empty($product_schema_data)) {
-      $product_script = [
-          '#type' => 'html_tag',
-          '#tag' => 'script',
-          '#attributes' => [
-            'type' => 'application/ld+json',
-          ],
-          // Adding PHP_EOL on both sides to make it look exactly same as expected.
-          '#value' => PHP_EOL . json_encode($product_schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
-          '#weight' => 110,
-      ];
-      $attachments['#attached']['html_head'][] = [$product_script, 'product_data'];
+      switch ($content_type) {
+        case 'acq_product':
+          $product_script = [
+              '#type' => 'html_tag',
+              '#tag' => 'script',
+              '#attributes' => [
+                'type' => 'application/ld+json',
+              ],
+              // Adding PHP_EOL on both sides to make it look exactly same as expected.
+              '#value' => PHP_EOL . json_encode($product_schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
+              '#weight' => 110,
+          ];
+          $attachments['#attached']['html_head'][] = [$product_script, 'product_data'];
+          break;
+
+        case 'rcs_product':
+          // We pass this as drupalSettings and create the script tag from FE
+          // so that we can call other apis to add to this data if required.
+          // For eg. we would need to add Bazaar Voice data when it is enabled.
+          $attachments['#attached']['drupalSettings']['schema_org_product'] = $product_schema_data;
+          break;
+      }
     }
   }
 }
