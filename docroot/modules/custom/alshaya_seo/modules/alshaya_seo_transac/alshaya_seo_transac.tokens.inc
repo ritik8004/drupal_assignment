@@ -141,7 +141,7 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
       if ($parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($term_list)) {
         foreach ($parents as $term) {
           if ($term instanceof TermInterface) {
-            $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+            $term = \Drupal::service('entity.repository')->getTranslationFromContext($term, $node->language()->getId());
             $replacements[$tokens['category_names']] = $term->getName();
             break;
           }
