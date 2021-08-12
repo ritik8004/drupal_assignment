@@ -15,3 +15,10 @@ schema_org:
     js/alshaya_rcs_product.schema_org.js: {}
   dependencies:
     - rcs_placeholders/helpers
+
+rcs_product_modal:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.modal.js: {}
+  dependencies:
+    - alshaya_rcs/add_to_cart

@@ -90,6 +90,26 @@ exports.render = function render(
       }
       break;
 
+    case 'mobile-upsell-products':
+    case 'upsell-products':
+    case 'mobile-related-products':
+    case 'related-products':
+    case 'mobile-crosssell-products':
+    case 'crosssell-products':
+      // Render super category block.
+      if (typeof globalThis.renderRcsProduct !== 'undefined') {
+        html += globalThis.renderRcsProduct.render(
+          settings,
+          placeholder,
+          params,
+          inputs,
+          entity,
+          langcode,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
@@ -118,6 +138,7 @@ exports.computePhFilters = function (input, filter) {
     case 'first_image':
     case 'schema_stock':
     case 'brand_logo':
+    case 'url':
     case 'stock_qty':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
