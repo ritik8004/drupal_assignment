@@ -5,42 +5,31 @@ import SearchApp from './search/SearchApp';
 // Start instant search only after Document ready.
 // eslint-disable-next-line func-names
 (function ($, drupalSettings, Drupal) {
-  // React DOM render.
-  function renderSearch() {
+  let searchInitiated = false;
+  function initiateSearch() {
+    if (searchInitiated) {
+      return;
+    }
+    // Do not load if user is not focusing/checking this tab right now.
+    if (!document.hasFocus()) {
+      return;
+    }
+    searchInitiated = true;
     ReactDOM.render(
       <SearchApp />,
       document.querySelector('#alshaya-algolia-autocomplete'),
     );
+
+    // Attach event to activate search.
+    $('#alshaya-algolia-autocomplete input[type="search"]').on('mousedown tap focus', () => {
+      window.algoliaSearchActivityStarted = true;
+    });
   }
 
   // We will trigger search only after activity is started.
   window.algoliaSearchActivityStarted = (typeof drupalSettings.algoliaSearch.showSearchResults === 'undefined')
     ? false
     : drupalSettings.algoliaSearch.showSearchResults;
-
-  // For all pages, except Search.
-  // Activate search only when user uses the search field.
-  if (!window.algoliaSearchActivityStarted) {
-    renderSearch();
-  }
-
-  // Focus event to activate search.
-  $('#alshaya-algolia-autocomplete input[type="search"]').on('mousedown tap focus', () => {
-    window.algoliaSearchActivityStarted = true;
-  });
-
-  // For search page - `/search`
-  let searchInitiated = false;
-  function initiateSearch() {
-    if (searchInitiated) {
-      return;
-    }
-    // Activate search if the tab has focus & search page.
-    if (drupalSettings.algoliaSearch.showSearchResults === true && document.hasFocus()) {
-      searchInitiated = true;
-      renderSearch();
-    }
-  }
 
   // eslint-disable-next-line no-param-reassign
   Drupal.behaviors.searchAlgolia = {
