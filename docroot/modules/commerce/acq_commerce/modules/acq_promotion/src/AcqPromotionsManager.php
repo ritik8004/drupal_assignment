@@ -446,10 +446,16 @@ class AcqPromotionsManager {
       // Assuming rule_id is unique across a promotion type.
       $promotion_node = $this->getPromotionByRuleId($promotion['rule_id'], $promotion['promotion_type']);
 
+      // Extract the promotion contexts attached with the promotion passed.
+      $promotion_context = $promotion['extension']['channel'] ?? [];
+      $promotion_context_existing = [];
       // Release the lock if the promotion_node already present.
       if ($promotion_node instanceof NodeInterface) {
         $this->lock->release($lock_key);
         unset($lock_key);
+
+        // Extract the promotion context from the existing promotion node.
+        $promotion_context_existing = array_column($promotion_node->get('field_acq_promotion_context')->getValue(), 'value');
       }
 
       $promotion_node = $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
@@ -460,7 +466,26 @@ class AcqPromotionsManager {
 
       // Attach promotions to skus.
       if ($promotion_node) {
+        $is_promotion_context_changed = FALSE;
+        // Checking the difference between the context of the promotion
+        // present in Drupal and the promotion response fetched
+        // from Magento.
+        if (array_diff($promotion_context, $promotion_context_existing)
+          || array_diff($promotion_context_existing, $promotion_context)) {
+          $is_promotion_context_changed = TRUE;
+          $attached = $promotion_skus;
+        }
+
         if ($promotion['promotion_type'] === 'cart' && $attached) {
+          // On promotion context change, we re-add skus to the mapping table.
+          if ($is_promotion_context_changed) {
+            $this->logger->notice('Deleting existing rule @rule_id due to promotion context change. Existing: @existing_context New: @new_context', [
+              '@rule_id' => $promotion['rule_id'],
+              '@existing_context' => json_encode($promotion_context_existing),
+              '@new_context' => json_encode($promotion_context),
+            ]);
+            $this->deleteCartPromotionMappings($promotion['rule_id'], $attached);
+          }
           $this->addCartPromotionMapping($promotion['rule_id'], $attached);
 
           $event = new PromotionMappingUpdatedEvent($attached);
