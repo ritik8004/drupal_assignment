@@ -1307,7 +1307,7 @@ const processPaymentData = (paymentData, data) => {
           };
 
           if (cvvCheck) {
-            additionalInfo.cvv = atob(cvv);
+            additionalInfo.cvv = atob(decodeURIComponent(cvv));
           }
 
           break;
