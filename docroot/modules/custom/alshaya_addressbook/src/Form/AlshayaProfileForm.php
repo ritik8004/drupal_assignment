@@ -42,7 +42,7 @@ class AlshayaProfileForm extends ProfileForm {
             'class' => ['cancel-button', 'button'],
           ],
           '#weight' => 20,
-          '#url' => Url::fromRoute('profile.user_page.single', [
+          '#url' => Url::fromRoute('profile.user_page.multiple', [
             'user' => $user_id,
             'profile_type' => 'address_book',
           ]),
@@ -103,7 +103,7 @@ class AlshayaProfileForm extends ProfileForm {
         }
       }
 
-      $form_state->setRedirect('profile.user_page.single', [
+      $form_state->setRedirect('profile.user_page.multiple', [
         'user' => $this->entity->getOwnerId(),
         'profile_type' => 'address_book',
       ]);

@@ -100,7 +100,7 @@ class AlshayaProfileDeleteForm extends ProfileDeleteForm {
     if ($form_state->isExecuted()) {
       $response = new AjaxResponse();
       $response->addCommand(new CloseModalDialogCommand());
-      $response->addCommand(new RedirectCommand(Url::fromRoute('profile.user_page.single', [
+      $response->addCommand(new RedirectCommand(Url::fromRoute('profile.user_page.multiple', [
         'user' => $this->entity->getOwnerId(),
         'profile_type' => 'address_book',
       ])->toString()));

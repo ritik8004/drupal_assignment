@@ -2,20 +2,17 @@
 
 namespace Drupal\alshaya_addressbook\Controller;
 
-use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RemoveCommand;
-use Drupal\profile\Controller\ProfileController;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\profile\Controller\UserController;
 use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\UserInterface;
 use Drupal\profile\Entity\ProfileTypeInterface;
 use Drupal\Core\Link;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,37 +20,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Alshaya Address Book Controller class.
  */
-class AlshayaAddressBookController extends ProfileController {
-
-  /**
-   * AddressBook Areas Terms helper service.
-   *
-   * @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper
-   */
-  protected $areasTermsHelper;
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('datetime.time'),
-      $container->get('alshaya_addressbook.area_terms_helper')
-    );
-  }
-
-  /**
-   * AlshayaAddressBookController constructor.
-   *
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time.
-   * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
-   *   AddressBook Areas Terms helper service.
-   */
-  public function __construct(TimeInterface $time, AddressBookAreasTermsHelper $areas_terms_helper) {
-    parent::__construct($time);
-    $this->areasTermsHelper = $areas_terms_helper;
-  }
+class AlshayaAddressBookController extends UserController {
 
   /**
    * AJAX callback to get list of areas for a governate.
@@ -86,7 +53,8 @@ class AlshayaAddressBookController extends ProfileController {
       throw new NotFoundHttpException();
     }
 
-    $areas = $this->areasTermsHelper->getAllAreasWithParent($governate);
+    $area_terms_helper = \Drupal::service('alshaya_addressbook.area_terms_helper');
+    $areas = $area_terms_helper->getAllAreasWithParent($governate);
 
     $response = new AjaxResponse();
     $response->addCommand(new InvokeCommand(NULL, 'updateAreaList', [$areas]));
@@ -164,15 +132,15 @@ class AlshayaAddressBookController extends ProfileController {
 
     // If the profile type does not support multiple, only display an add form
     // if there are no entities, or an edit for the current.
-    if (!$profile_type->getMultiple()) {
+    if (!$profile_type->allowsMultiple()) {
 
       // If there is an active profile, provide edit form.
       if ($active_profile) {
-        return $this->editProfile($route_match, $user, $active_profile);
+        return $this->editForm($user, $active_profile);
       }
 
       // Else show the add form.
-      return $this->addProfile($route_match, $user, $profile_type);
+      return $this->addForm($user, $profile_type);
     }
     // Display active, and link to create a profile.
     else {
@@ -180,7 +148,7 @@ class AlshayaAddressBookController extends ProfileController {
 
       // If there is no active profile, display add form.
       if (!$active_profile) {
-        return $this->addProfile($route_match, $user, $profile_type);
+        return $this->addForm($user, $profile_type);
       }
 
       $build['add_profile'] = Link::createFromRoute(
@@ -236,7 +204,7 @@ class AlshayaAddressBookController extends ProfileController {
    *   Return the form OR The ajax response object.
    */
   public function addAddress(RouteMatchInterface $route_match, UserInterface $user, ProfileTypeInterface $profile_type, $js = FALSE) {
-    $form = parent::addProfile($route_match, $user, $profile_type);
+    $form = parent::addForm($user, $profile_type);
     if ($js == 'nojs') {
       return $form;
     }
