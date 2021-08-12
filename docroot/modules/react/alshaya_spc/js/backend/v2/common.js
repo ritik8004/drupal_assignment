@@ -608,12 +608,15 @@ const getProcessedCartData = async (cartData) => {
         finalPrice: item.price,
       };
 
-      // Get stock data.
-      // Suppressing the lint error for now.
-      // eslint-disable-next-line no-await-in-loop
-      const stockInfo = await getProductStatus(item.sku);
-      data.items[item.sku].in_stock = stockInfo.in_stock;
-      data.items[item.sku].stock = stockInfo.stock;
+      // Get stock data on cart and checkout pages.
+      const spcPageType = window.spcPageType || '';
+      if (spcPageType === 'cart' || spcPageType === 'checkout') {
+        // Suppressing the lint error for now.
+        // eslint-disable-next-line no-await-in-loop
+        const stockInfo = await getProductStatus(item.sku);
+        data.items[item.sku].in_stock = stockInfo.in_stock;
+        data.items[item.sku].stock = stockInfo.stock;
+      }
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
