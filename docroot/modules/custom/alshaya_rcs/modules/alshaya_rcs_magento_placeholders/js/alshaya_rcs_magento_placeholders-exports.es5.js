@@ -473,7 +473,7 @@ exports.computePhFilters = function (input, filter) {
       }
 
       // Replace the placeholder attributes in the sku base form template.
-      const attributes = getRcsPlaceholderAttributes();
+      const attributes = rcsPhGetSetting('placeholderAttributes');
       rcsPhReplaceEntityPh(skuBaseForm.html(), drupalSettings.rcsPage.type, input, drupalSettings.path.currentLanguage)
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
