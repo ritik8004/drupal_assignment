@@ -158,7 +158,7 @@
           <div class="c-content__region show-content-loading-throbber">
             {% if plp_layout is defined and plp_layout is constant('Drupal\\alshaya_acm_product_category\\ProductCategoryTree::PLP_LAYOUT_1') %}
             <div class="campaign-plp-style-1-layout-submenu-icon">
-              <span class="plp-icon"><img src="{{ file_url(plp_icon) }}"></span>
+              <span class="plp-icon"><img loading="lazy" src="{{ file_url(plp_icon) }}"></span>
               <span class="sub-menu-btn"></span>
             </div>
             {% endif %}
