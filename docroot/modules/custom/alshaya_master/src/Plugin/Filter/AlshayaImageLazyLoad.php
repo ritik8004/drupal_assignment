@@ -48,8 +48,8 @@ class AlshayaImageLazyLoad extends FilterBase {
       }
     }
 
-    // Apply loading lazy to individual img tags. We won't process again if already
-    // processed once.
+    // Apply loading lazy to individual img tags.
+    // We won't process again if already processed once.
     $image_list = $dom->getElementsByTagName('img');
     if ($image_list->length > 0) {
       /** @var \DOMElement $image */
