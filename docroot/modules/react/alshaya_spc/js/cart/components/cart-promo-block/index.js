@@ -51,6 +51,16 @@ export default class CartPromoBlock extends React.Component {
     document.removeEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
   }
 
+  // Helper function for Advantage card status.
+  isAdvantagecardEnabled = () => {
+    if (typeof drupalSettings.alshaya_spc.advantageCard !== 'undefined') {
+      if (drupalSettings.alshaya_spc.advantageCard.enabled === 1 && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined') {
+        return drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix;
+      }
+    }
+    return false;
+  }
+
   /**
    * Call back to get product data from storage.
    */
@@ -126,6 +136,17 @@ export default class CartPromoBlock extends React.Component {
       document.getElementById('promo-message').classList.add('error');
       document.getElementById('promo-code').classList.add('error');
       return;
+    }
+
+    // If empty promo text.
+    if (this.isAdvantagecardEnabled() && promoValue.length === 16) {
+      const parts = promoValue.match(/.{9}/g);
+      if (parts[0] !== this.isAdvantagecardEnabled()) {
+        document.getElementById('promo-message').innerHTML = Drupal.t('please enter valide Advantage card code.');
+        document.getElementById('promo-message').classList.add('error');
+        document.getElementById('promo-code').classList.add('error');
+        return;
+      }
     }
 
     const action = (promoApplied === true) ? 'remove coupon' : 'apply coupon';

@@ -223,9 +223,10 @@ class AlshayaSpcController extends ControllerBase {
     // Advantage card settings only available if it is enabled.
     $advantage_card_config = $this->config('alshaya_spc.advantage_card');
     if ($advantage_card_config->get('advantageCardEnabled') === 1) {
-      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard']['enabled'] = $advantage_card_config->get('advantageCardEnabled');
-      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard']['advantageCardPrefix'] = $advantage_card_config->get('advantageCardPrefix');
-
+      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard'] = [
+        'enabled' => $advantage_card_config->get('advantageCardEnabled'),
+        'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
+      ];
     }
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
