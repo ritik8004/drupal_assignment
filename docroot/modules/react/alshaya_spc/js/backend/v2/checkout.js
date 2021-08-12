@@ -1173,7 +1173,7 @@ window.commerceBackend.addBillingMethod = async (data) => {
  * @return {bool}
  *   TRUE if payment methods from checkout.com
  */
-const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('checkout_com_upapi', 0) !== -1;
+const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('upapi', 0) !== -1;
 
 /**
  * Checks if postpay payment method.
@@ -1268,7 +1268,7 @@ window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coord
  * @returns {{cvv: string, public_hash: string}}
  */
 const processPaymentData = (paymentData, data) => {
-  let additionalInfo = data;
+  const additionalInfo = data;
 
   // Method specific code.
   switch (paymentData.method) {
@@ -1302,9 +1302,7 @@ const processPaymentData = (paymentData, data) => {
             };
           }
 
-          additionalInfo = {
-            public_hash: atob(id),
-          };
+          additionalInfo.public_hash = atob(id);
 
           if (cvvCheck) {
             additionalInfo.cvv = atob(decodeURIComponent(cvv));
