@@ -794,7 +794,6 @@ function alshaya_white_label_theme() {
         'desktop_image' => NULL,
         'mobile_image' => NULL,
         'default_image' => NULL,
-        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
       ],
     ],
   ];
