@@ -1,0 +1,31 @@
+#click-and-collect-selected-store {
+  .store-details-wrapper {
+    padding-#{$left}: 3.6875rem;
+
+    .spc-cnc-store-name {
+      .store-name {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .pudo-collection-list {
+    position: relative;
+    display: block;
+    margin-bottom: 1.25rem;
+
+    .store-icon,
+    .collection-point-icon {
+      &::before {
+        #{$right}: calc(100% + 0.625rem);
+        #{$left}: auto;
+      }
+    }
+
+    .spc-store-name-wrapper {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}

@@ -161,11 +161,13 @@ class ClicknCollectDeiveryInfo extends React.Component {
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
           <div className="delivery-information-preview">
             <div className="spc-delivery-store-info">
-              <ConditionalView condition={collectionPointsEnabled()}>
-                <span className={`${isCollectionPoint(selectedStore) ? 'collection-point' : 'store'}-icon`} />
-                <span className="pickup-point-title">{getPickUpPointTitle(selectedStore)}</span>
-              </ConditionalView>
-              <div className="store-name">{name}</div>
+              <div className="spc-delivery-store-name-wrapper">
+                <ConditionalView condition={collectionPointsEnabled()}>
+                  <span className={`${isCollectionPoint(selectedStore) ? 'collection-point' : 'store'}-icon`} />
+                  <span className="pickup-point-title">{getPickUpPointTitle(selectedStore)}</span>
+                </ConditionalView>
+                <div className="store-name">{name}</div>
+              </div>
               <div className="store-address">
                 {parse(address)}
               </div>
