@@ -8,6 +8,8 @@ import { removeCartFromStorage, removeStorageInfo } from '../../utilities/storag
 import VatFooterText from '../../utilities/vat-footer';
 import ConditionalView from '../../common/components/conditional-view';
 import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
+import PaymentMethodCheckoutComUpapiBenefitPay
+  from '../../checkout/components/payment-method-checkout-com-upapi-benefit-pay';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -47,7 +49,9 @@ class CheckoutConfirmation extends React.Component {
   }
 
   render() {
-    const { items, totals, number_of_items: itemsTotal } = drupalSettings.order_details;
+    const {
+      items, totals, number_of_items: itemsTotal, payment,
+    } = drupalSettings.order_details;
 
     return (
       <>
@@ -59,6 +63,9 @@ class CheckoutConfirmation extends React.Component {
             content={() => this.componentRef}
           />
         </div>
+        <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
+          <PaymentMethodCheckoutComUpapiBenefitPay payment={payment} totals={totals} />
+        </ConditionalView>
         <div className="spc-main">
           <div className="spc-content">
             <OrderSummary />
