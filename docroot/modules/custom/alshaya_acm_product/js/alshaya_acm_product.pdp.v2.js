@@ -15,12 +15,12 @@ window.commerceBackend = window.commerceBackend || {};
  *    The processed product data.
  */
 window.commerceBackend.getProductData = function (sku) {
-  var product = rcsPhGetDataFromStorage('product', sku);
-  if (typeof product === 'undefined') {
-    return product;
+  var product = RcsPhStaticStorage.get('product_' + sku);
+  if (product) {
+    return processProduct(product);
   }
 
-  return processProduct(product);
+  return null;
 }
 
 /**

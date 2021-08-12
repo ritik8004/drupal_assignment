@@ -83,9 +83,7 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
    */
   public function getCacheContexts() {
     // Vary based on the route.
-    return Cache::mergeContexts(parent::getCacheContexts(), [
-      'route',
-    ]);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }

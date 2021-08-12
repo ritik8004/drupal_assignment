@@ -39,7 +39,7 @@
           $("[id^=rcs-ph-]").once('rcs-ph-process').each(eachBlockPh);
 
           if (typeof drupalSettings.rcsPage !== 'undefined') {
-            const attributes = getRcsPlaceholderAttributes();
+            const attributes = rcsPhGetSetting('placeholderAttributes');
 
             // Identify all the field placeholders and get the replacement
             // value. Parse the html to find all occurrences at apply the
@@ -126,7 +126,9 @@
       renderer = globalThis.rcsPhSearchRenderingEngine;
     }
 
+    // Allow specifying separate entity than the block id.
     const entityToGet = params['entity-to-get'] || blockPhId[1];
+
     params['get-data'] = params['get-data'] === "true";
 
     // Acquire data from the selected backend.

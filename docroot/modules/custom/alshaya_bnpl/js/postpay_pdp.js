@@ -19,9 +19,10 @@
     var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
     var productData = window.commerceBackend.getProductData(sku, productKey);
 
-    if (typeof productData === 'undefined') {
+    if (productData === null) {
       return;
     }
+
     if (typeof event !== 'undefined') {
       // We get variant details in event object for magazine v2 layout.
       if ((typeof event.detail !== 'undefined') && (typeof event.detail.variant !== 'undefined')) {
