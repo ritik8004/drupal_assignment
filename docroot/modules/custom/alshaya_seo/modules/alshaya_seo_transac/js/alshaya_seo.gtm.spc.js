@@ -89,7 +89,7 @@
    * @param product
    */
   Drupal.alshayaSeoSpc.cartGtmCallback = function (product, extraData) {
-    if (product !== undefined && product.sku !== undefined) {
+    if (product !== undefined && product.sku !== undefined && product.gtmAttributes !== undefined) {
       // gtmAttributes.id contains value of "getSkuForNode", which we need
       // to pass for productStyleCode.
       extraData.cartDataLayer.productStyleCode.push(product.gtmAttributes.id);

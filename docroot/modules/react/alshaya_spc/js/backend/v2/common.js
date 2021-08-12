@@ -6,6 +6,7 @@ import _isUndefined from 'lodash/isUndefined';
 import _isObject from 'lodash/isObject';
 import _isEmpty from 'lodash/isEmpty';
 import _isNull from 'lodash/isNull';
+import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
   getCartIdFromStorage,
@@ -35,6 +36,16 @@ window.commerceBackend = window.commerceBackend || {};
  *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
+  // This is for ALX InStorE feature.
+  // We want to be able to resume guest carts from URL,
+  // we pass that id from backend via Cookie to Browser.
+  const resumeCartId = Cookies.get('resume_cart_id');
+  if (hasValue(resumeCartId)) {
+    removeStorageInfo('cart_data');
+    setStorageInfo(resumeCartId, 'cart_id');
+    Cookies.remove('resume_cart_id');
+  }
+
   let cartId = getCartIdFromStorage();
   if (_isNull(cartId)) {
     // For authenticated users we get the cart id from the cart.
@@ -544,6 +555,7 @@ const getProcessedCartData = async (cartData) => {
 
   const data = {
     cart_id: window.commerceBackend.getCartId(),
+    cart_id_int: cartData.cart.id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
@@ -965,9 +977,10 @@ const updateCart = async (data) => {
 
   // Log the shipping / billing address we pass to magento.
   if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
-    logger.debug('Billing / Shipping update. CartId: @cartId, Address: @address.', {
+    logger.debug('Billing / Shipping update. CartId: @cartId, Action: @action, Address: @address.', {
       '@cartId': cartId,
       '@address': JSON.stringify(data),
+      '@action': action,
     });
   }
 

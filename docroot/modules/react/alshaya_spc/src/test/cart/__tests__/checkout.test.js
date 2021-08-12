@@ -516,7 +516,7 @@ describe('Checkout', () => {
         address.customer_address_id = '1';
 
         const result = await selectCnc({ code: 1234 }, address, address);
-        expect(axios.mock.calls.length).toBe(4);
+        expect(axios.mock.calls.length).toBe(3);
         const data = result.data.cart;
         expect(data.billing_address.city).toEqual('Al Awir');
         expect(data.billing_address.customer_address_id).toEqual('69');
