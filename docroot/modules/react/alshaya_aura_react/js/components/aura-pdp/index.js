@@ -41,17 +41,17 @@ class AuraPDP extends React.Component {
   };
 
   getInitialProductPoints = (mode) => {
-    let productPoints = 0;
+    let selector = null;
 
     if (mode === 'main') {
-      productPoints = document.querySelector('.content__title_wrapper .price-amount')
-        ? parseInt(document.querySelector('.content__title_wrapper .price-amount').innerText, 10)
-        : 0;
+      selector = document.querySelector('.content__title_wrapper .special--price .price-amount') || document.querySelector('.content__title_wrapper .price-amount');
     } else if (mode === 'related') {
-      productPoints = document.querySelector('#drupal-modal .price-amount')
-        ? parseInt(document.querySelector('#drupal-modal .price-amount').innerText, 10)
-        : 0;
+      selector = document.querySelector('#drupal-modal .special--price .price-amount') || document.querySelector('#drupal-modal .price-amount');
     }
+
+    const productPoints = (selector !== null)
+      ? parseInt(selector.innerText, 10)
+      : 0;
 
     return productPoints;
   };
