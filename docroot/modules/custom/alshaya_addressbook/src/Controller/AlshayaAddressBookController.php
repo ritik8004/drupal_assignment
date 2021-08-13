@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_addressbook\Controller;
 
 use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -35,13 +34,10 @@ class AlshayaAddressBookController extends UserController {
   /**
    * AlshayaAddressBookController constructor.
    *
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
    *   AddressBook Areas Terms helper service.
    */
-  public function __construct(TimeInterface $time, AddressBookAreasTermsHelper $areas_terms_helper) {
-    $this->time = $time;
+  public function __construct(AddressBookAreasTermsHelper $areas_terms_helper) {
     $this->areasTermsHelper = $areas_terms_helper;
   }
 
@@ -50,7 +46,6 @@ class AlshayaAddressBookController extends UserController {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('datetime.time'),
       $container->get('alshaya_addressbook.area_terms_helper')
     );
   }
