@@ -99,14 +99,16 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
       'userId' => $this->currentUser->id(),
       'emailId' => $this->currentUser->getEmail(),
     ];
-    if ($this->currentUser->id() !== 0 && $this->routeMatch->getRouteName() === 'entity.node.canonical') {
+    $product_review_data = NULL;
+    if ($this->currentUser->isAuthenticated() && $this->routeMatch->getRouteName() === 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
       if ($node instanceof NodeInterface && $node->bundle() === 'acq_product') {
         // Add user review of current product in user settings.
         $sku_id = $this->skuManager->getSkuForNode($node);
-        $user_details['productReview'] = $this->alshayaBazaarVoice->getProductReviewForCurrentUser($sku_id);
+        $product_review_data = $this->alshayaBazaarVoice->getProductReviewForCurrentUser($sku_id);
       }
     }
+    $user_details['productReview'] = $product_review_data;
     $build['#attached']['drupalSettings']['bazaarvoiceUserDetails'] = $user_details;
     return $build;
   }
