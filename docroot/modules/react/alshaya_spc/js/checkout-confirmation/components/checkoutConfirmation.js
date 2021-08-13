@@ -63,11 +63,11 @@ class CheckoutConfirmation extends React.Component {
             content={() => this.componentRef}
           />
         </div>
-        <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
-          <CompleteBenefitPayPayment payment={payment} totals={totals} />
-        </ConditionalView>
         <div className="spc-main">
           <div className="spc-content">
+            <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
+              <CompleteBenefitPayPayment payment={payment} totals={totals} />
+            </ConditionalView>
             <OrderSummary />
             <ConditionalView condition={window.innerWidth > 768}>
               <div className="checkout-link submit fadeInUp" style={{ animationDelay: '1s' }}>
