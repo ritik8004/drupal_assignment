@@ -550,6 +550,33 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
+  'vs_test' => [
+    'url' => 'https://vs-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
+      'consumer_secret' => 'l65u29tw675glfm3rmfps1gliqlwr6m1',
+      'access_token' => 'km7olqq1wx37sveeepwcmpwvem2t6jar',
+      'access_token_secret' => 'si8olbegg9i4y3bywk2gnb4o2vpommiw',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 18],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 6, 'ar' => 9],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
+    ],
+  ],
   'vs_uat' => [
     'url' => 'https://vs-uat2.store.alshaya.com',
     'magento_secrets' => [
