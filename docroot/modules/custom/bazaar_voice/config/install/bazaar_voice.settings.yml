@@ -30,3 +30,5 @@ reviews_on_loadmore: 10
 reviews_per_page: 5
 pdp_reviews_seo_limit: 5
 featured_reviews_limit: 1
+translate_chars_limit: 6000
+enable_google_translation: false

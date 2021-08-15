@@ -438,6 +438,8 @@ class AlshayaBazaarVoice {
     $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
     $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
     $basic_configs['show_location_filter'] = $config->get('show_location_filter');
+    $basic_configs['enable_google_translation'] = $config->get('enable_google_translation');
+    $basic_configs['translate_chars_limit'] = $config->get('translate_chars_limit');
     $basic_configs['comment_submission'] = $config->get('comment_submission');
 
     return $basic_configs;

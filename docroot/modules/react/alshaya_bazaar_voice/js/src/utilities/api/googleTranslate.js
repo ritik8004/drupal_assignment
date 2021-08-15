@@ -1,7 +1,8 @@
 import Axios from 'axios';
-import { getbazaarVoiceSettings, getLanguageCode } from './request';
+import { getbazaarVoiceSettings } from './request';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getStorageInfo, setStorageInfo } from '../storage';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 /**
  * Translate reviews content using google translation api.
@@ -38,19 +39,20 @@ export function getTranslations(params, fromLang, toLang) {
  * Get the srouce and target language based on tranlation status.
  *
  * @param {*} tranlateStatus
+ * @param {*} contentLocale
  *
  * @return
  *   Array of source and target lang.
  */
-export function getTranslateLang(tranlateStatus) {
+export function getTranslateLang(tranlateStatus, contentLocale) {
   const lang = {
     soruceLang: 'en',
     targetLang: 'ar',
   };
 
-  if (getLanguageCode() !== 'en') {
-    lang.targetLang = 'en';
+  if (contentLocale !== 'en') {
     lang.soruceLang = 'ar';
+    lang.targetLang = 'en';
   }
 
   if (tranlateStatus) {
@@ -62,19 +64,24 @@ export function getTranslateLang(tranlateStatus) {
 }
 
 /**
- * Store the review data in local storage.
+ * Store the reviews/comments data to local storage.
  *
  * @param {*} tranlateStatus
- * @param {*} reviewId
- * @param {*} reviewData
+ * @param {*} id
+ * @param {*} storeData
+ * @param {*} contentType
  */
-export function setReviewData(tranlateStatus, reviewId, reviewData) {
+export function storeTranlatedData(tranlateStatus, id, storeData, contentType) {
   const data = {};
-  Object.entries(reviewData).forEach(([key, value]) => {
+  Object.entries(storeData).forEach(([key, value]) => {
     data[key] = value;
   });
 
-  setStorageInfo(data, `review_${reviewId}_${tranlateStatus}`);
+  if (contentType === 'comment') {
+    setStorageInfo(data, `comment_${id}_${tranlateStatus}`);
+  } else {
+    setStorageInfo(data, `review_${id}_${tranlateStatus}`);
+  }
 }
 
 /**
@@ -82,8 +89,10 @@ export function setReviewData(tranlateStatus, reviewId, reviewData) {
  *
  * @param {*} reviewId
  * @param {*} tranlateStatus
+ * @param {*} contentLocale
+ * @param {*} contentType
  */
-export function renderTranslatedContent(reviewId, tranlateStatus) {
+export function renderTranslatedReview(reviewId, tranlateStatus, contentLocale, contentType) {
   const data = getStorageInfo(`review_${reviewId}_${tranlateStatus}`);
   if (data !== null) {
     document.getElementById(`${reviewId}-review-title`).innerHTML = data.title;
@@ -100,35 +109,96 @@ export function renderTranslatedContent(reviewId, tranlateStatus) {
   };
 
   // Keep original content in local storage.
-  setReviewData(true, reviewId, reviewData);
+  storeTranlatedData(true, reviewId, reviewData, contentType);
 
-  const lang = getTranslateLang(tranlateStatus);
+  const lang = getTranslateLang(tranlateStatus, contentLocale);
 
   let params = `&q=${encodeURI(reviewData.title)}`;
   params += `&q=${encodeURI(reviewData.date)}`;
   params += `&q=${encodeURI(reviewData.text)}`;
 
+  showFullScreenLoader();
   // Get the translated contents for reviews.
   const request = getTranslations(params, lang.soruceLang, lang.targetLang);
 
   if (request instanceof Promise) {
     request
       .then((result) => {
+        removeFullScreenLoader();
         if (result.status === 200) {
           Object.entries(result.data).forEach(([key, value]) => {
             if (key === 'data') {
               document.getElementById(`${reviewId}-review-title`).innerHTML = value.translations[0].translatedText;
               document.getElementById(`${reviewId}-review-date`).innerHTML = value.translations[1].translatedText;
               document.getElementById(`${reviewId}-review-text`).innerHTML = value.translations[2].translatedText;
-            }
 
-            const translatedReviewData = {
-              title: value.translations[0].translatedText,
-              date: value.translations[1].translatedText,
-              text: value.translations[2].translatedText,
-            };
-            // Keep review translations in local storage.
-            setReviewData(tranlateStatus, reviewId, translatedReviewData);
+              const translatedReviewData = {
+                title: value.translations[0].translatedText,
+                date: value.translations[1].translatedText,
+                text: value.translations[2].translatedText,
+              };
+              // Keep review translations in local storage.
+              storeTranlatedData(tranlateStatus, reviewId, translatedReviewData, contentType);
+            }
+          });
+        }
+        return null;
+      })
+      .catch((error) => error);
+  }
+}
+
+/**
+ * Render the translated/original reviews content.
+ *
+ * @param {*} reviewId
+ * @param {*} tranlateStatus
+ * @param {*} contentLocale
+ * @param {*} contentType
+ */
+export function renderTranslatedComment(commentId, tranlateStatus, contentLocale, contentType) {
+  const data = getStorageInfo(`comment_${commentId}_${tranlateStatus}`);
+  if (data !== null) {
+    document.getElementById(`${commentId}-comment-user-date`).innerHTML = data.date;
+    document.getElementById(`${commentId}-comment-description-text`).innerHTML = data.text;
+
+    return;
+  }
+
+  const commentData = {
+    date: document.getElementById(`${commentId}-comment-user-date`).innerHTML,
+    text: document.getElementById(`${commentId}-comment-description-text`).innerHTML,
+  };
+
+  // Keep original content in local storage.
+  storeTranlatedData(true, commentId, commentData, contentType);
+
+  const lang = getTranslateLang(tranlateStatus, contentLocale);
+
+  let params = `&q=${encodeURI(commentData.date)}`;
+  params += `&q=${encodeURI(commentData.text)}`;
+
+  showFullScreenLoader();
+  // Get the translated contents for reviews.
+  const request = getTranslations(params, lang.soruceLang, lang.targetLang);
+
+  if (request instanceof Promise) {
+    request
+      .then((result) => {
+        removeFullScreenLoader();
+        if (result.status === 200) {
+          Object.entries(result.data).forEach(([key, value]) => {
+            if (key === 'data') {
+              document.getElementById(`${commentId}-comment-user-date`).innerHTML = value.translations[0].translatedText;
+              document.getElementById(`${commentId}-comment-description-text`).innerHTML = value.translations[1].translatedText;
+
+              const translatedCommentData = {
+                date: value.translations[0].translatedText,
+                text: value.translations[1].translatedText,
+              };
+              // Keep review translations in local storage.
+              storeTranlatedData(tranlateStatus, commentId, translatedCommentData, contentType);
+            }
           });
         }
         return null;
@@ -138,5 +208,6 @@ export function renderTranslatedContent(reviewId, tranlateStatus) {
 }
 
 export default {
-  renderTranslatedContent,
+  renderTranslatedReview,
+  renderTranslatedComment,
 };

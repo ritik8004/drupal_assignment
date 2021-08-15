@@ -160,11 +160,14 @@ function _alshaya_bazaar_voice_translations() {
     'Original posted on' => [
       'ar' => 'تم نشرها في الأصل على',
     ],
-    'translate by Google' => [
-      'ar' => 'ترجمة جوجل',
+    'Translate with Google' => [
+      'ar' => 'الترجمة باستخدام جوجل',
     ],
-    'Back to original' => [
-      'ar' => 'العودة إلى الأصل',
+    'Back to Original Review' => [
+      'ar' =>  'الرجوع للمراجعة الأصلي',
+    ],
+    'Back to Original Comment' => [
+      'ar' => 'الرجوع للتعليق الأصلي',
     ],
   ];
 }

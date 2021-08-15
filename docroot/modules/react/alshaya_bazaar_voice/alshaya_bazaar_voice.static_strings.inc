@@ -299,12 +299,16 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('Staff'),
     ],
     [
-      'key' => 'translate_by_google',
-      'value' => t('translate by Google'),
+      'key' => 'translate_with_google',
+      'value' => t('Translate with Google'),
     ],
     [
-      'key' => 'back_to_original',
-      'value' => t('Back to original'),
+      'key' => 'back_to_original_review',
+      'value' => t('Back to Original Review'),
+    ],
+    [
+      'key' => 'back_to_original_comment',
+      'value' => t('Back to Original Comment'),
     ],
     [
       'key' => 'invalid_pie_user_details',
