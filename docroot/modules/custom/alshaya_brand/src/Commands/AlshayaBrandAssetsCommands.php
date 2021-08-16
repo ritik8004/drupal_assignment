@@ -281,13 +281,15 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
           }
         }
         if (!empty($uri)) {
-          $uris = implode(',', $uri);
+          foreach (array_chunk($uri, $batch_size, TRUE) as $chunk) {
+            $uris = implode(',', $chunk);
 
-          // Batch operation to check if brand asset entity exists.
-          $batch['operations'][] = [
-            [__CLASS__, 'checkBrandAssetFileForDomain'],
-            [$domain, $uris],
-          ];
+            // Batch operation to check if brand asset entity exists.
+            $batch['operations'][] = [
+              [__CLASS__, 'checkBrandAssetFileForDomain'],
+              [$domain, $uris],
+            ];
+          }
         }
       }
     }
@@ -443,6 +445,11 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *   Batch context.
    */
   public static function checkBrandAssetFileForDomain(string $domain, string $uris, &$context) {
+    \Drupal::logger('AlshayaBrandAssetsCommands')->notice('Checking Brand Asset File for Domain: @domain, uris: @uris', [
+      '@domain' => $domain,
+      '@uris' => $uris,
+    ]);
+
     $processManager = ProcessManager::createDefault();
     $command = sprintf('drush -l %s check-brand-asset-file-entity --uris="%s"', $domain, $uris);
     $get_file_usage = $processManager->process($command);
