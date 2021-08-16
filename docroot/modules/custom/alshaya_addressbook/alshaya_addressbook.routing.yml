@@ -11,7 +11,7 @@ alshaya_addressbook.add_address_ajax:
       profile_type:
         type: entity:profile_type
   requirements:
-    _profile_access_check: 'profile:{profile_type}'
+    _custom_access: '\Drupal\profile\Controller\UserController::checkAccess'
     js: 'nojs|ajax'
 
 alshaya_addressbook.edit_address_ajax:
