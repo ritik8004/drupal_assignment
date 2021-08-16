@@ -3,7 +3,7 @@ import QRCode from 'react-qr-code';
 import DeviceView from '../../../common/components/device-view';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 
-const PaymentMethodCheckoutComUpapiBenefitPay = (props) => {
+const CompleteBenefitPayPayment = (props) => {
   const { payment, totals } = props;
 
   return (
@@ -55,4 +55,4 @@ const PaymentMethodCheckoutComUpapiBenefitPay = (props) => {
   );
 };
 
-export default PaymentMethodCheckoutComUpapiBenefitPay;
+export default CompleteBenefitPayPayment;

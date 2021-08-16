@@ -37,7 +37,6 @@ function alshaya_spc_update_8013() {
 
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
-  // @todo Update Benefit pay static strings and translations.
   $translations = _alshaya_spc_get_translations('v4');
   if ($translations) {
     alshaya_i18n_save_translations($translations);

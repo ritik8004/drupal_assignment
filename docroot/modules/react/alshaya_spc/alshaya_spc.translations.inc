@@ -300,6 +300,19 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to Benefit Pay payment method.
+  $strings['v4'] = [
+    'Continue with Benefit pay' => [
+      'ar' => 'Continue with Benefit pay AR',
+    ],
+    'Please complete your payment by scanning the QR code.' => [
+      'ar' => 'Please complete your payment by scanning the QR code. AR',
+    ],
+    'Scan to Pay' => [
+      'ar' => 'Scan to Pay AR',
+    ],
+  ];
+
   return $strings;
 }
 
