@@ -348,6 +348,21 @@ function alshaya_rcs_magento_placeholders_preprocess_html(array &$variables) {
     ],
   ];
 
+  // We pass this as html so that in the JS, we can fetch the data from here and
+  // we can call other apis to add to this data if required.
+  // For eg. we would need to add Bazaar Voice data when it is enabled.
+  $product_schema_data = _alshaya_seo_transac_pdp_rich_snippet();
+  \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
+
+  $variables['rcs_templates']['product_schema_data'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#attributes' => [
+      'class' => 'rcs-templates--product_schema_data',
+      'data-product-schema' => json_encode($product_schema_data),
+    ],
+  ];
+
   if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
     $node = \Drupal::request()->attributes->get('node');
     if ($node->bundle() == 'rcs_product') {

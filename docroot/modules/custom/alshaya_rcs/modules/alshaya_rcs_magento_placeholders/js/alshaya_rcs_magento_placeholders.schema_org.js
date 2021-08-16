@@ -11,7 +11,7 @@
       }
       schemaOrgMetadataAdded = true;
       var pageMainSku = node.attr('data-sku');
-      var schemaOrgProductData = JSON.stringify(drupalSettings.schema_org_product);
+      var schemaOrgProductData = JSON.stringify(JSON.parse($('.rcs-templates--product_schema_data').attr('data-product-schema')));
 
       // @todo This will be added by Bazaar Voice. Once the queries related to
       // BV are resolved, then work on this.
