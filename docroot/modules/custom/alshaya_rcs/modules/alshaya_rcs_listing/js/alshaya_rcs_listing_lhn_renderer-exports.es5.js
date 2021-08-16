@@ -25,6 +25,11 @@ exports.render = function render(
   if (clickable && unclickable) {
     // Remove the placeholder li elements.
     innerHtmlObj.find('li').remove();
+    // @todo Handle special base where we separate URL by - instead of /.
+    const firstLevelTermUrl = rcsWindowLocation().pathname.match(/shop-(.*?)\/(.*?)$/);
+    inputs = inputs.filter((input) => {
+      return input.url_path == firstLevelTermUrl[1];
+    });
     // Retrive the item from Level 3 as the response that we get from MDC starts
     // from level 2.
     // @todo Supercategory special case needs to verfied.
@@ -90,7 +95,7 @@ const replaceLhnPlaceHolders = function (item, itemHtml, settings) {
   item.level -= 1;
 
   // Add active class based on current path.
-  if (document.location.pathname == item.url_path) {
+  if (rcsWindowLocation().pathname == item.url_path) {
     item.active = 'active';
   }
   const clonedElement = jQuery('<li>' + itemHtml + '</li>');
