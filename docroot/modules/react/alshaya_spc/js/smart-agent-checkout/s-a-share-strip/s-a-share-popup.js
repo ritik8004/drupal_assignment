@@ -107,7 +107,7 @@ const handleSubmit = (e) => {
 
   const validationRequest = validateInputValues();
   if (validationRequest instanceof Promise) {
-    validationRequest.then((hasError) => {
+    validationRequest.then(async (hasError) => {
       if (hasError === false) {
         // Get the share method type.
         const shareMethod = elements['agent-share-method'].value;
@@ -120,10 +120,10 @@ const handleSubmit = (e) => {
           shareVal = elements['smart-agent-share-mobile'].value;
         }
 
-        const cartData = Drupal.alshayaSpc.getCartData();
+        const cartData = await window.commerceBackend.pushAgentDetailsInCart();
 
         const postData = {
-          cartId: cartData.cart_id,
+          cartId: cartData.data.cart_id_int || cartData.data.cart_id,
           type: shareMethod,
           value: shareVal,
         };

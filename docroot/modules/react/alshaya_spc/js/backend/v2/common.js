@@ -6,6 +6,7 @@ import _isUndefined from 'lodash/isUndefined';
 import _isObject from 'lodash/isObject';
 import _isEmpty from 'lodash/isEmpty';
 import _isNull from 'lodash/isNull';
+import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
   getCartIdFromStorage,
@@ -19,10 +20,10 @@ import {
   getExceptionMessageType,
   getProcessedErrorMessage,
 } from './error';
-import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import getAgentDataForExtension from './smartAgent';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -35,6 +36,16 @@ window.commerceBackend = window.commerceBackend || {};
  *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
+  // This is for ALX InStorE feature.
+  // We want to be able to resume guest carts from URL,
+  // we pass that id from backend via Cookie to Browser.
+  const resumeCartId = Cookies.get('resume_cart_id');
+  if (hasValue(resumeCartId)) {
+    removeStorageInfo('cart_data');
+    setStorageInfo(resumeCartId, 'cart_id');
+    Cookies.remove('resume_cart_id');
+  }
+
   let cartId = getCartIdFromStorage();
   if (_isNull(cartId)) {
     // For authenticated users we get the cart id from the cart.
@@ -455,6 +466,10 @@ const formatCart = (cartData) => {
     }
     if (!_isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
       data.shipping.type = 'click_and_collect';
+    } else if (isUserAuthenticated()
+      && (typeof data.shipping.address.customer_address_id === 'undefined' || !(data.shipping.address.customer_address_id))) {
+      // Ignore the address if not available from address book for customer.
+      data.shipping = {};
     } else {
       data.shipping.type = 'home_delivery';
     }
@@ -540,6 +555,7 @@ const getProcessedCartData = async (cartData) => {
 
   const data = {
     cart_id: window.commerceBackend.getCartId(),
+    cart_id_int: cartData.cart.id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
@@ -608,12 +624,15 @@ const getProcessedCartData = async (cartData) => {
         finalPrice: item.price,
       };
 
-      // Get stock data.
-      // Suppressing the lint error for now.
-      // eslint-disable-next-line no-await-in-loop
-      const stockInfo = await getProductStatus(item.sku);
-      data.items[item.sku].in_stock = stockInfo.in_stock;
-      data.items[item.sku].stock = stockInfo.stock;
+      // Get stock data on cart and checkout pages.
+      const spcPageType = window.spcPageType || '';
+      if (spcPageType === 'cart' || spcPageType === 'checkout') {
+        // Suppressing the lint error for now.
+        // eslint-disable-next-line no-await-in-loop
+        const stockInfo = await getProductStatus(item.sku);
+        data.items[item.sku].in_stock = stockInfo.in_stock;
+        data.items[item.sku].stock = stockInfo.stock;
+      }
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
@@ -939,19 +958,24 @@ const preUpdateValidation = async (request) => {
 /**
  * Calls the update cart API and returns the updated cart.
  *
- * @param {object} data
+ * @param {object} postData
  *  The data to send.
  *
  * @returns {Promise<AxiosPromise<object>>}
  *   A promise object with cart data.
  */
-const updateCart = async (data) => {
+const updateCart = async (postData) => {
+  const data = { ...postData };
   const cartId = window.commerceBackend.getCartId();
 
   let action = '';
-  if (!_isEmpty(data.extension) && !_isEmpty(data.extension.action)) {
+  data.extension = data.extension || {};
+  if (hasValue(data.extension.action)) {
     action = data.extension.action;
   }
+
+  // Add Smart Agent data to extension.
+  data.extension = Object.assign(data.extension, getAgentDataForExtension());
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
@@ -959,14 +983,11 @@ const updateCart = async (data) => {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
-  // Log the shipping / billing address we pass to magento.
-  if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
-    logger.debug('Billing / Shipping update. CartId: @cartId, Action: @action, Address: @address.', {
-      '@cartId': cartId,
-      '@address': JSON.stringify(data),
-      '@action': action,
-    });
-  }
+  logger.debug('Updating Cart. CartId: @cartId, Action: @action, Request: @request.', {
+    '@cartId': cartId,
+    '@request': JSON.stringify(data),
+    '@action': action,
+  });
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
@@ -990,6 +1011,22 @@ const updateCart = async (data) => {
         '@errorCode': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
+      return response;
+    });
+};
+
+window.commerceBackend.pushAgentDetailsInCart = async () => {
+  // Do simple refresh cart to make sure we push data before sharing.
+  const postData = {
+    extension: {
+      action: 'refresh',
+    },
+  };
+
+  return updateCart(postData)
+    .then(async (response) => {
+      // Process cart data.
+      response.data = await getProcessedCartData(response.data);
       return response;
     });
 };
