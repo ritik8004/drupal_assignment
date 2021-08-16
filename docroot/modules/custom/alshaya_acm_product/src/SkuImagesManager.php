@@ -1177,32 +1177,24 @@ class SkuImagesManager {
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
 
       // Thumbnail Image - Gallery slider thumbnail.
-      $image_small_style = ImageStyle::load($thumbnail_style);
-      $image_small = $image_small_style->buildUrl($file_uri);
-      $image_small_build_uri = $image_small_style->buildUri($file_uri);
-      $image_small_factory = \Drupal::service('image.factory')->get($image_small_build_uri);
+      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
 
       // Thumbnail Image - Height/Width.
-      $t_height = $image_small_factory->getToolkit()->getHeight();
-      $t_width = $image_small_factory->getToolkit()->getWidth();
+      $t_image_dimensions = $this->getImageHeightWidth($thumbnail_style, $file_uri);
 
       // Medium Image - Main image on Gallery.
-      $image_medium_style = ImageStyle::load($slide_style);
-      $image_medium = $image_medium_style->buildUrl($file_uri);
-      $image_medium_build_uri = $image_medium_style->buildUri($file_uri);
-      $image_medium_factory = \Drupal::service('image.factory')->get($image_medium_build_uri);
+      $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
       // Medium Image - Height/Width.
-      $m_height = $image_medium_factory->getToolkit()->getHeight();
-      $m_width = $image_medium_factory->getToolkit()->getWidth();
+      $m_image_dimensions = $this->getImageHeightWidth($slide_style, $file_uri);
 
       $thumbnails[] = [
         'thumburl' => $image_small,
-        't_height' => $t_height,
-        't_width' => $t_width,
+        't_height' => $t_image_dimensions['height'],
+        't_width' => $t_image_dimensions['width'],
         'mediumurl' => $image_medium,
-        'm_height' => $m_height,
-        'm_width' => $m_width,
+        'm_height' => $m_image_dimensions['height'],
+        'm_width' => $m_image_dimensions['width'],
         'zoomurl' => $image_zoom,
         'fullurl' => $original_image,
         'label' => $media_item['label'] ?? '',
@@ -1452,6 +1444,28 @@ class SkuImagesManager {
     }
 
     return $images;
+  }
+
+  /**
+   * Get Image dimensions, height and width for img tags.
+   *
+   * @param string $style_name
+   *   The image style name.
+   * @param string $file_uri
+   *   The URI of the file.
+   *
+   * @return array
+   *   Array contains image width and height.
+   */
+  public function getImageHeightWidth($style_name, $file_uri) {
+    $image_style = ImageStyle::load($style_name);
+    $image_factory = \Drupal::service('image.factory')->get($image_style->buildUri($file_uri));
+
+    // Height/Width.
+    return [
+      'height' => $image_factory->getToolkit()->getHeight(),
+      'width' => $image_factory->getToolkit()->getWidth(),
+    ];
   }
 
 }
