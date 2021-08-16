@@ -48,6 +48,7 @@ exports.getEntity = async function getEntity(langcode) {
                         }
                     }
                 }
+                brand_logo
                 media_gallery {
                   url
                   label
