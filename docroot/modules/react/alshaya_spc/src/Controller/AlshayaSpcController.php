@@ -670,10 +670,6 @@ class AlshayaSpcController extends ControllerBase {
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
-    // @todo Remove once collection point API starts working.
-    $orderDetails['delivery_type_info']['store']['pudo_available'] = FALSE;
-    $orderDetails['delivery_type_info']['store']['brand_name'] = 'H&M Store';
-
     $settings = [
       'site_details' => [
         'logo' => alshaya_master_get_email_logo(NULL, $langcode),
@@ -694,6 +690,10 @@ class AlshayaSpcController extends ControllerBase {
         'billing' => $orderDetails['billing'],
       ],
     ];
+
+    // @todo Remove once collection point API starts working.
+    $settings['order_details']['delivery_type_info']['store']['pudo_available'] = FALSE;
+    $settings['order_details']['delivery_type_info']['store']['brand_name'] = 'H&M Store';
 
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
       $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
@@ -739,6 +739,12 @@ class AlshayaSpcController extends ControllerBase {
       if (!empty($data_apikey)) {
         $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey, $base_currency_code);
       }
+    }
+
+    $collection_settings = $this->config('alshaya_spc.collection_points');
+    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
+    if ($cnc_collection_points_enabled) {
+      $build['#attached']['library'][] = 'alshaya_white_label/checkout-confirmation-pudo-aramex';
     }
     // Adding hook alter for bazaarvoice pixel integration.
     $this->moduleHandler->alter('alshaya_spc_checkout_confirmation_order_build', $build, $order);

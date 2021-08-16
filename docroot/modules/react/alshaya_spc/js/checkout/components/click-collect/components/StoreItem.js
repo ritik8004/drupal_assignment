@@ -14,12 +14,17 @@ const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
 }) => (
   <>
-    <span className="spc-cnc-store-name">
+    <span
+      className={`spc-cnc-store-name ${collectionPointsEnabled ? 'pudo-collection-list' : ''}`}
+      onClick={(e) => onStoreChoose(e, index)}
+    >
       <ConditionalView condition={collectionPointsEnabled()}>
-        <span className={`${isCollectionPoint(store) ? 'collection-point' : 'store'}-icon`} />
-        <span className="pickup-point-title">{getPickUpPointTitle(store)}</span>
+        <span className="spc-collection-label-wrapper">
+          <span className={`${isCollectionPoint(store) ? 'collection-point' : 'store'}-icon`} />
+          <span className="pickup-point-title">{getPickUpPointTitle(store)}</span>
+        </span>
       </ConditionalView>
-      <span className="spc-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
+      <span className="spc-store-name-wrapper">
         <span className="store-name">{store.name}</span>
         <span className="store-distance">
           {getStringMessage(

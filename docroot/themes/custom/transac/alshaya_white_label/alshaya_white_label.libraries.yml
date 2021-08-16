@@ -514,3 +514,8 @@ sitemap:
   css:
     theme:
       css/conditional-sass/sitemap/sitemap.ltr.css: {}
+
+checkout-confirmation-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: {}

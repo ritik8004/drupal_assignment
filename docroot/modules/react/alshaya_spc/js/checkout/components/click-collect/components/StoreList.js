@@ -34,7 +34,7 @@ const StoreList = ({
 
   const chooseStoreItem = (e, index) => {
     onStoreRadio(index);
-    addClassToStoreItem(e.target.parentElement.parentElement, 'selected');
+    addClassToStoreItem(e.currentTarget.parentElement, 'selected');
     document.getElementsByClassName('spc-cnc-store-actions')[0].classList.add('show');
   };
 

@@ -1,0 +1,25 @@
+.spc-delivery-store-info {
+  .spc-delivery-store-name-wrapper {
+    position: relative;
+    padding-#{$left}: 2.4375rem;
+    margin-bottom: 1.125rem;
+
+    .store-icon,
+    .collection-point-icon {
+      &::before {
+        #{$left}: -0.3125rem;
+      }
+    }
+  }
+}
+
+.spc-checkout-delivery-information {
+  .delivery-information-preview {
+    .spc-delivery-store-info {
+      .store-name {
+        font-family: $alshaya-thin;
+        color: $spc-delivery-info-text;
+      }
+    }
+  }
+}

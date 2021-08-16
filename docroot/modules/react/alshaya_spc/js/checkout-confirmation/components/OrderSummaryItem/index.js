@@ -32,32 +32,28 @@ const OrderSummaryItem = (props) => {
       name, address, phone, openingHours, mapLink, pickUpPointIcon, pickUpPointTitle,
     } = props;
     return (
-      <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-order-summary-item spc-order-summary-address-item spc-order-summary-cnc fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
-          {(pickUpPointIcon !== undefined)
-            && (
-            <span className={`${pickUpPointIcon}-icon`} />
-            )}
-          {(pickUpPointTitle !== undefined)
-            && (
-              <span className="pickup-point-title">{pickUpPointTitle}</span>
-            )}
-          <span className="spc-address-name">
-            {name}
-          </span>
+          <div className="spc-store-name-wrapper">
+            {(pickUpPointIcon !== undefined)
+              && (
+              <span className={`${pickUpPointIcon}-icon`} />
+              )}
+            {(pickUpPointTitle !== undefined)
+              && (
+                <span className="pickup-point-title">{pickUpPointTitle}</span>
+              )}
+            <span className="spc-address-name">
+              {name}
+            </span>
+          </div>
           <span className="spc-address">
             {address}
             <span className="spc-cnc-address-phone">{phone}</span>
           </span>
           {/* We assume that if pickUpPointTitle is present in MDC API response then
             collection point feature is enabled.  */}
-          {(pickUpPointTitle !== undefined)
-            && (
-              <div className="spc-cnc-store-actions-pudo-msg">
-                {getStringMessage('cnc_valid_govtid_message')}
-              </div>
-            )}
           <div className="spc-store-open-hours">
             {
               Object.entries(openingHours).map(([weekdays, timings]) => (
@@ -68,6 +64,12 @@ const OrderSummaryItem = (props) => {
               ))
             }
           </div>
+          {(pickUpPointTitle !== undefined)
+            && (
+              <div className="spc-cnc-confirmation-govtid-msg">
+                {getStringMessage('cnc_valid_govtid_message')}
+              </div>
+            )}
           <span className="spc-store-map-link">
             <a href={mapLink} rel="noopener noreferrer" target="_blank">
               {Drupal.t('Get directions')}
