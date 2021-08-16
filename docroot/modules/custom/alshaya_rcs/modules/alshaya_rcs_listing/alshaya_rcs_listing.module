@@ -1,19 +1,54 @@
 <?php
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_rcs_lhn_tree' => [
+      'template' => 'alshaya-rcs-lhn',
+      'variables' => [
+        'lhn_cat_tree' => NULL,
+      ],
+    ],
+  ];
+}
 
 /**
  * Implements hook_preprocess_page().
  */
 function alshaya_rcs_listing_preprocess_page(&$variables) {
-   $routematch = \Drupal::routeMatch();
-  // Add description placeholder.
+  // Initialising the variable to check the sidebar visibilty.
+  // This will be disable by default.
+  $variables['enable_lhn_tree'] = 0;
+
+  $routematch = \Drupal::routeMatch();
   if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'rcs_category') {
+      // Add description placeholder for mobile view.
       $variables['category_term_name'] = $term->getName();
       $variables['category_term_description'] = '#rcs.category.description#';
+
+      // Taking the sidebar visibility check from config for PLP.
+      $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_rcs_listing_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $suggestions[] = 'page__plp';
     }
   }
 }

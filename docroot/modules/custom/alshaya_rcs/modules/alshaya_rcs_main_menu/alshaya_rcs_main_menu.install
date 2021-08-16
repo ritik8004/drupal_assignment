@@ -23,6 +23,10 @@ function alshaya_rcs_main_menu_install() {
   if ($non_rcs_main_menu_block instanceof BlockInterface) {
     $non_rcs_main_menu_block->disable()->save();
   }
+
+  // Migrate the enriched terms from the acq_product_category taxonomy.
+  \Drupal::service('alshaya_rcs_main_menu.category_data_migration')
+    ->processProductCategoryMigration();
 }
 
 /**
@@ -34,4 +38,8 @@ function alshaya_rcs_main_menu_uninstall() {
   if ($non_rcs_main_menu_block instanceof BlockInterface) {
     $non_rcs_main_menu_block->enable()->save();
   }
+
+  // Rollback the enriched terms from the acq_product_category taxonomy.
+  \Drupal::service('alshaya_rcs_main_menu.category_data_migration')
+    ->rollbackProductCategoryMigration();
 }

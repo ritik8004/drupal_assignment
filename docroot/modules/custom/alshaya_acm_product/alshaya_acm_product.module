@@ -537,6 +537,8 @@ function alshaya_acm_product_node_delete(NodeInterface $node) {
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
+    $build['#attached']['library'][] = 'alshaya_acm_product/acq_product_info';
+
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -842,6 +844,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
     }
   }
+  elseif ($entity->bundle() === 'rcs_product') {
+    // @todo Move to the new rcs product module once it is available.
+    $build['#attached']['library'][] = 'alshaya_acm_product/rcs_product_info';
+  }
 }
 
 /**
@@ -892,7 +898,7 @@ function alshaya_acm_product_get_flags_config() {
 
   if (!empty($config->get('delivery_in_only_city_text')) && !empty($config->get('delivery_in_only_city_key'))) {
     $return['delivery_in_only_city']['text'] = $config->get('delivery_in_only_city_text');
-    $return['delivery_in_only_city']['key'] = $config->get('delivery_in_only_city_key');
+    $return['delivery_in_only_city']['key'] = (int) $config->get('delivery_in_only_city_key');
   }
 
   if (!empty($config->get('legal_notice_enabled'))) {

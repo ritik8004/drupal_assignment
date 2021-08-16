@@ -1,6 +1,7 @@
 helpers:
   version: 1.x
   js:
+    js/rcs_placeholders.static_storage.js: { }
     js/rcs_placeholders-exports.js: { }
   dependencies:
     - core/jquery

@@ -3,6 +3,7 @@
 namespace Drupal\rcs_placeholders\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\views\Views;
@@ -28,11 +29,19 @@ class RcsPhProductListBlock extends BlockBase implements ContainerFactoryPluginI
   protected $logger;
 
   /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->logger = $logger;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -43,7 +52,8 @@ class RcsPhProductListBlock extends BlockBase implements ContainerFactoryPluginI
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory')->get('RcsPhProductList')
+      $container->get('logger.factory')->get('RcsPhProductList'),
+      $container->get('module_handler')
     );
   }
 
@@ -55,16 +65,27 @@ class RcsPhProductListBlock extends BlockBase implements ContainerFactoryPluginI
 
     $current_configuration = $this->getConfiguration();
 
-    // @todo List down available block IDs from a hook.
-    $form['block_id'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Block ID'),
-      '#description' => $this->t('The block ID is used by the frontend to determine which data to fetch and how to render these.'),
-      '#default_value' => $current_configuration['id'] ?? '',
+    // Get the list of product list blocks defined by the various backend.
+    $rcs_block_info = $this->moduleHandler->invokeAll('rcs_placeholders_product_list_block_info');
+    $this->moduleHandler->alter('rcs_placeholders_product_list_block_info', $rcs_block_info);
+
+    $options = [];
+    foreach ($rcs_block_info as $block_key => $block_info) {
+      // We only keep the product list blocks which are allowing to be used by
+      // this block type.
+      if (!isset($block_info['allowed_block_types']) || !in_array($this->getPluginId(), $block_info['allowed_block_types'])) {
+        continue;
+      }
+      $options[$block_key] = $block_info['label'];
+    }
+
+    $form['block_info_id'] = [
+      '#type' => 'select',
+      '#options' => $options,
+      '#title' => $this->t('List type'),
+      '#description' => $this->t('The list type is used by the frontend to determine which data to fetch, from where and how to render these.'),
+      '#default_value' => $current_configuration['block_info_id'] ?? '',
       '#required' => TRUE,
-      '#attributes' => [
-        'placeholder' => $this->t('rcs-ph-related_products'),
-      ],
     ];
 
     // @todo list down available views for RCS Product.
@@ -120,7 +141,7 @@ class RcsPhProductListBlock extends BlockBase implements ContainerFactoryPluginI
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
-    $this->configuration['block_id'] = $form_state->getValue('block_id');
+    $this->configuration['block_info_id'] = $form_state->getValue('block_info_id');
     $this->configuration['view_id'] = $form_state->getValue('view_id');
     $this->configuration['view_display'] = $form_state->getValue('view_display');
     $this->configuration['number_of_products'] = $form_state->getValue('number_of_products');
@@ -131,6 +152,9 @@ class RcsPhProductListBlock extends BlockBase implements ContainerFactoryPluginI
    */
   public function build() {
     $config = $this->getConfiguration();
+
+    $rcs_block_info = $this->moduleHandler->invokeAll('rcs_placeholders_product_list_block_info');
+    $this->moduleHandler->alter('rcs_placeholders_product_list_block_info', $rcs_block_info);
 
     try {
       $view = Views::getView($config['view_id']);
@@ -157,10 +181,16 @@ class RcsPhProductListBlock extends BlockBase implements ContainerFactoryPluginI
       '#attributes' => [
         // @todo instead of id we should use data param to avoid having issues
         // with divs with same ID multiple times.
-        'id' => $config['block_id'],
+        'id' => 'rcs-ph-' . $rcs_block_info[$config['block_info_id']]['id'],
         'data-param-limit' => $config['number_of_products'],
       ],
     ];
+
+    if (isset($rcs_block_info[$config['block_info_id']]['param'])) {
+      foreach ($rcs_block_info[$config['block_info_id']]['param'] as $param_name => $param_value) {
+        $build['wrapper']['#attributes']['data-param-' . $param_name] = $param_value;
+      }
+    }
 
     $build['wrapper']['content'] = views_embed_view(
       $config['view_id'],

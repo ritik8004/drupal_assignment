@@ -7,6 +7,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * A Drush commandfile for exporting product data.
@@ -91,10 +92,13 @@ class ProductExportCommands extends DrushCommands {
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
-        $location = $this->fileSystem->getDestinationFilename($path . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+        $location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
         if ($location === FALSE) {
           $this->logger->warning('Could not create the file to export the data.');
           return;
+        }
+        else {
+          $this->logger->notice('Lancode: ' . $langcode . '. File: ' . file_create_url($location));
         }
 
         // Make the file empty.
@@ -102,9 +106,9 @@ class ProductExportCommands extends DrushCommands {
         fclose($file);
       }
       catch (\Exception $e) {
-        $this->logger->warning('Could not create the file to export the data. Message: @message.', [
+        $this->logger->warning(dt('Could not create the file to export the data. Message: @message.', [
           '@message' => $e->getMessage(),
-        ]);
+        ]));
         return;
       }
     }
@@ -229,6 +233,7 @@ class ProductExportCommands extends DrushCommands {
    */
   private static function getDataForNode(NodeInterface $node) {
     $fields = [
+      'store_code',
       'url_alias',
       'field_meta_tags',
     ];
@@ -239,13 +244,18 @@ class ProductExportCommands extends DrushCommands {
     $language_manager = \Drupal::languageManager();
     $current_language = $language_manager->getConfigOverrideLanguage();
     $language_manager->setConfigOverrideLanguage($node->language());
+    $node_langcode = $node->language()->getId();
 
     foreach ($fields as $field) {
       switch ($field) {
+        case 'store_code':
+          $data[$field] = self::getStoreCode($node_langcode);
+          break;
+
         case 'url_alias':
           $url = $node->toUrl()->toString();
           // Only provide the path without langcode and domain.
-          $data[$field] = str_replace('/' . $node->language()->getId(), '', $url);
+          $data[$field] = str_replace('/' . $node_langcode, '', $url);
           break;
 
         case 'field_meta_tags':
@@ -286,6 +296,8 @@ class ProductExportCommands extends DrushCommands {
     if (isset($context['entity'])) {
       $node = $context['entity'];
     }
+
+    self::removeNonEssentialTags($tags);
 
     // Generate the actual meta tag values.
     $tags = $metatag_manager->generateRawElements($tags, $node);
@@ -333,7 +345,7 @@ class ProductExportCommands extends DrushCommands {
    */
   public static function outputToFile(array $data_to_print, string $langcode) {
     // Get the destination file name for the given langcode.
-    $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+    $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
     // Open the file to print.
     $file = fopen($location, 'a');
     // Add the values.
@@ -364,6 +376,46 @@ class ProductExportCommands extends DrushCommands {
       '',
       $url
     );
+  }
+
+  /**
+   * Removes metatags that are not required in the output.
+   *
+   * @param array $tags
+   *   The tags array.
+   */
+  public static function removeNonEssentialTags(array &$tags) {
+    $tags_to_keep = [
+      'title',
+      'description',
+      'keywords',
+    ];
+
+    foreach ($tags as $tag => $replacements) {
+      if (!in_array($tag, $tags_to_keep)) {
+        unset($tags[$tag]);
+      }
+    }
+  }
+
+  /**
+   * Gets the magento store code for the given language.
+   *
+   * @param string $langcode
+   *   The langcode.
+   *
+   * @return string
+   *   The store code.
+   */
+  public static function getStoreCode(string $langcode) {
+    static $store_code = [];
+    if (isset($store_code[$langcode])) {
+      return $store_code[$langcode];
+    }
+
+    $store_code[$langcode] = Settings::get('magento_lang_prefix')[$langcode];
+
+    return $store_code[$langcode];
   }
 
 }

@@ -44,6 +44,30 @@ exports.render = function render(
       }
       break;
 
+    case 'breadcrumb':
+      // Render breadcrumb based on the page type.
+      if (drupalSettings.rcsPage.type === 'category' &&
+        typeof globalThis.renderRcsCategoryBreadcrumb !== 'undefined')  {
+        html += globalThis.renderRcsCategoryBreadcrumb.render(
+          settings,
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
+    case 'lhn_block':
+      // Render lhn based on the page type.
+      if (drupalSettings.rcsPage.type === 'category'
+      && typeof globalThis.renderRcsLhn !== 'undefined') {
+        html += globalThis.renderRcsLhn.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;

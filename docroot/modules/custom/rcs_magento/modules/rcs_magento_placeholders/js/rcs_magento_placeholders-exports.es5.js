@@ -1,4 +1,5 @@
 // @codingStandardsIgnoreFile
+
 exports.getEntity = async function getEntity(langcode) {
   if (typeof drupalSettings.rcsPage === 'undefined') {
     return null;
@@ -207,6 +208,7 @@ exports.getEntity = async function getEntity(langcode) {
   const response = await rcsCommerceBackend.invokeApi(request);
   if (drupalSettings.rcsPage.type == "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
+    RcsPhStaticStorage.set('product_' + result.sku, result);
   }
   else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
@@ -233,6 +235,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'navigation_menu':
+      // @todo To optimize the multiple category API call.
       // Early return if the root category is undefined.
       if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
         return null;

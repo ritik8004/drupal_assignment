@@ -160,7 +160,7 @@
     // Parent products. In this case it will fetch the product name and id of
     // the parent product from the local storage.
     var localStorageData = JSON.parse(localStorage.getItem(key));
-    if (localStorageData != null) {
+    if (localStorageData != null && localStorageData.gtmAttributes !== undefined) {
       data.gtmAttributes.id = localStorageData.gtmAttributes.id ? localStorageData.gtmAttributes.id : data.gtmAttributes.id;
       data.gtmAttributes.name = localStorageData.gtmAttributes.name ? localStorageData.gtmAttributes.name : data.gtmAttributes.name;
       data.parentSKU = localStorageData.parentSKU ? localStorageData.parentSKU : data.parentSKU;
