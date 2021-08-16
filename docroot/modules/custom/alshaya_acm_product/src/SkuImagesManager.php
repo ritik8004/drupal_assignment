@@ -1173,13 +1173,36 @@ class SkuImagesManager {
       // Show original full image in the modal inside a draggable container.
       $original_image = file_create_url($file_uri);
 
-      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+      // Zoom Image - Image that comes when you hover on main image.
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-      $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+      // Thumbnail Image - Gallery slider thumbnail.
+      $image_small_style = ImageStyle::load($thumbnail_style);
+      $image_small = $image_small_style->buildUrl($file_uri);
+      $image_small_build_uri = $image_small_style->buildUri($file_uri);
+      $image_small_factory = \Drupal::service('image.factory')->get($image_small_build_uri);
+
+      // Thumbnail Image - Height/Width.
+      $t_height = $image_small_factory->getToolkit()->getHeight();
+      $t_width = $image_small_factory->getToolkit()->getWidth();
+
+      // Medium Image - Main image on Gallery.
+      $image_medium_style = ImageStyle::load($slide_style);
+      $image_medium = $image_medium_style->buildUrl($file_uri);
+      $image_medium_build_uri = $image_medium_style->buildUri($file_uri);
+      $image_medium_factory = \Drupal::service('image.factory')->get($image_medium_build_uri);
+
+      // Medium Image - Height/Width.
+      $m_height = $image_medium_factory->getToolkit()->getHeight();
+      $m_width = $image_medium_factory->getToolkit()->getWidth();
 
       $thumbnails[] = [
         'thumburl' => $image_small,
+        't_height' => $t_height,
+        't_width' => $t_width,
         'mediumurl' => $image_medium,
+        'm_height' => $m_height,
+        'm_width' => $m_width,
         'zoomurl' => $image_zoom,
         'fullurl' => $original_image,
         'label' => $media_item['label'] ?? '',
@@ -1212,6 +1235,8 @@ class SkuImagesManager {
         $main_image = [
           'zoomurl' => $thumbnail['zoomurl'],
           'mediumurl' => $thumbnail['mediumurl'],
+          'm_width' => $thumbnail['m_width'],
+          'm_height' => $thumbnail['m_height'],
           'label' => $media_item['label'],
         ];
       }
