@@ -223,6 +223,7 @@ class PromotionExportCommand extends DrushCommands {
   private static function getDataForNode(NodeInterface $node) {
     $fields = [
       'url_alias',
+      'field_acq_promotion_rule_id',
     ];
 
     $data = [];
@@ -238,6 +239,10 @@ class PromotionExportCommand extends DrushCommands {
           $url = $node->toUrl()->toString();
           // Only provide the path without langcode and domain.
           $data[$field] = str_replace('/' . $node->language()->getId(), '', $url);
+          break;
+
+        default:
+          $data[$field] = $node->get($field)->getString();
           break;
       }
     }
