@@ -67,3 +67,155 @@
     }
   }
 }
+
+.benefit-pay-container {
+  background: $spc-checkout-order-detail-bg;
+  padding: 0 0.5rem 1.5625rem;
+  position: relative;
+
+  @include breakpoint($only-mobile) {
+    padding: 2.1875rem 0 1.5625rem;
+  }
+
+  &::after {
+    content: '';
+    width: calc(100% - 1rem);
+    position: absolute;
+    bottom: 0;
+    height: 0.0625rem;
+    background-color: $order_summary_section_border;
+  }
+
+  button {
+    margin: 0 auto;
+    margin-bottom: 2.1875rem;
+    display: block;
+    padding: 0.625rem 1.25rem;
+    text-transform: uppercase;
+    background: $bp-mobile-pay-button;
+    color: $bp-mobile-pay-button-txt;
+    border: 0.125rem solid $bp-mobile-pay-button;
+    font-family: $alshaya-bold;
+    font-size: 1.125rem;
+  }
+
+  .qr {
+    text-align: center;
+
+    > div {
+      margin-bottom: 1.875rem;
+
+      &::after {
+        content: '';
+        display: block;
+        height: 0.0625rem;
+        background: $order_summary_section_border;
+        margin-top: 0.125rem;
+      }
+    }
+
+    .qr-label {
+      font-size: 1.125rem;
+      background: $bp-mobile-scan-bg;
+      color: $bp-mobile-pay-button-txt;
+      padding: 0.3125rem;
+    }
+  }
+
+  .benefit-pay-wrapper {
+    border-bottom: 0.0625rem solid $order_summary_section_border;
+    border: 0.125rem solid $bp-box-border;
+    margin: 0 2.1875rem;
+  }
+
+  .benefit-pay-header {
+    background-image: $bp-header-gradient;
+    display: flex;
+    height: 2.1875rem;
+    width: 100%;
+    align-items: center;
+
+    svg {
+      position: absolute;
+      height: 2.1875rem;
+    }
+
+    .title {
+      font-size: 0.875rem;
+      flex: 1;
+      text-align: center;
+      padding: 0;
+      color: $bp-mobile-pay-button-txt;
+    }
+  }
+
+  .benefit-pay-footer {
+    text-align: $right;
+    font-size: 0.75rem;
+    margin: 0.625rem 0.9375rem;
+    padding-top: 0.625rem;
+    border-top: 0.0625rem solid $bp-mobile-title-border;
+
+    a {
+      color: $bp-footer-link;
+      font-family: $alshaya-bold;
+      text-decoration: underline;
+    }
+  }
+
+  .title {
+    padding: 1.25rem 0.75rem;
+    color: $bp-section-title;
+  }
+
+  .qr-code-wrapper {
+    padding: 0.625rem 0.75rem 0.75rem;
+    display: flex;
+  }
+
+  .qr-left {
+    display: inline-flex;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    span {
+      text-align: center;
+      padding-bottom: 0.625rem;
+      color: $bp-QR-code-title;
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+    }
+
+    svg {
+      @include breakpoint($only-tablet) {
+        width: 13.125rem !important;
+      }
+    }
+  }
+
+  .info-right {
+    padding: 1.8125rem 0.625rem 0 1.25rem;
+
+    div {
+      padding-bottom: 0.625rem;
+    }
+
+    span {
+      &.spc-label {
+        font-size: 0.75rem;
+        display: block;
+        color: $primary_input_label;
+      }
+
+      &.spc-value {
+        font-size: 0.875rem;
+        font-family: $alshaya-bold;
+      }
+
+      &.merchant-value {
+        color: $bp-merchant-value;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
