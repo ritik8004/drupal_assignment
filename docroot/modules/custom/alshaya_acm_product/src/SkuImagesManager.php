@@ -1486,7 +1486,7 @@ class SkuImagesManager {
     $media = $this->getSkuMediaItems($sku);
 
     $static = &drupal_static(__FUNCTION__, NULL);
-    $static['swatch-dimensions'][$sku->getSku()] = NULL;
+    $static['swatch-dimensions'][$sku->getSku()] = [];
 
     foreach ($media as $item) {
       if (isset($item['roles'])
