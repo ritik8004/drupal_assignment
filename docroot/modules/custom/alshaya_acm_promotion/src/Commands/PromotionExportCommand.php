@@ -72,7 +72,7 @@ class PromotionExportCommand extends DrushCommands {
    * Outputs promotion data to a csv file.
    *
    * @command alshaya_acm_promotion:export-promotion-data
-   * @aliases exppromoddata
+   * @aliases export-promodata
    *
    * @options limit The number of nodes to process per batch.
    *
@@ -91,10 +91,13 @@ class PromotionExportCommand extends DrushCommands {
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
-        $location = $this->fileSystem->getDestinationFilename($path . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+        $location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
         if ($location === FALSE) {
           $this->logger->warning('Could not create the file to export the data.');
           return;
+        }
+        else {
+          $this->logger->notice('Lancode: ' . $langcode . '. File: ' . file_create_url($location));
         }
 
         // Make the file empty.
@@ -102,9 +105,9 @@ class PromotionExportCommand extends DrushCommands {
         fclose($file);
       }
       catch (\Exception $e) {
-        $this->logger->warning('Could not create the file to export the data. Message: @message.', [
+        $this->logger->warning(dt('Could not create the file to export the data. Message: @message.', [
           '@message' => $e->getMessage(),
-        ]);
+        ]));
         return;
       }
     }
@@ -112,7 +115,6 @@ class PromotionExportCommand extends DrushCommands {
     $nids = $this->entityQuery
       ->condition('type', 'acq_promotion')
       ->condition('status', NodeInterface::PUBLISHED)
-      ->addTag('get_display_node_for_sku')
       ->execute();
 
     $batch = [
@@ -263,7 +265,7 @@ class PromotionExportCommand extends DrushCommands {
    */
   public static function outputToFile(array $data_to_print, string $langcode) {
     // Get the destination file name for the given langcode.
-    $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . '/' . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
+    $location = \Drupal::service('file_system')->getDestinationFilename(self::PATH . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
     // Open the file to print.
     $file = fopen($location, 'a');
     // Add the values.
