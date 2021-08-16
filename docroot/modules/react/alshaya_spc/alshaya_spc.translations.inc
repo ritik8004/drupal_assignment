@@ -311,6 +311,24 @@ function _alshaya_spc_translations() {
     'Scan to Pay' => [
       'ar' => 'Scan to Pay AR',
     ],
+    'Pay using BenefitPay App' => [
+      'ar' => 'Pay using BenefitPay App AR',
+    ],
+    'BenefitPay' => [
+      'ar' => 'BenefitPay AR',
+    ],
+    'Merchant' => [
+      'ar' => 'Merchant AR',
+    ],
+    'Amount' => [
+      'ar' => 'Amount AR',
+    ],
+    'Reference number' => [
+      'ar' => 'Reference number AR',
+    ],
+    'How to pay using BenefitPay?' => [
+      'ar' => 'How to pay using BenefitPay? AR',
+    ],
   ];
 
   return $strings;
