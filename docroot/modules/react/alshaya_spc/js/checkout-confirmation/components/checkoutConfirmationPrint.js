@@ -6,10 +6,12 @@ import VatFooterText from '../../utilities/vat-footer';
 import isRTL from '../../utilities/rtl';
 import ConditionalView from '../../common/components/conditional-view';
 import CompleteBenefitPayPayment
-  from '../../checkout/components/CompleteBenefitPayPayment';
+  from './CompleteBenefitPayPayment';
 
 const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
-  const { items, totals, number_of_items: itemsTotal, payment, } = drupalSettings.order_details;
+  const {
+    items, totals, number_of_items: itemsTotal, payment,
+  } = drupalSettings.order_details;
   const {
     logo,
     customer_service_text: customerServiceText,

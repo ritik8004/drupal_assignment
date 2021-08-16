@@ -18,7 +18,7 @@ const CompleteBenefitPayPayment = (props) => {
         </button>
         <div className="qr">
           <div><span className="qr-label">{Drupal.t('or Scan to Pay')}</span></div>
-          <QRCode value={payment.qrData} size='130' />
+          <QRCode value={payment.qrData} size="130" />
         </div>
       </DeviceView>
       <DeviceView device="above-mobile">
@@ -32,7 +32,7 @@ const CompleteBenefitPayPayment = (props) => {
             <div className="qr-code-wrapper">
               <div className="qr-left">
                 <span>{Drupal.t('Scan to Pay')}</span>
-                <QRCode value={payment.qrData} size='100' />
+                <QRCode value={payment.qrData} size="100" />
               </div>
               <div className="info-right">
                 <div>
