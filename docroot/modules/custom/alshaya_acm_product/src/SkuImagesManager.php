@@ -1180,13 +1180,13 @@ class SkuImagesManager {
       $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
 
       // Thumbnail Image - Height/Width.
-      $t_image_dimensions = $this->getImageHeightWidth($thumbnail_style, $file_uri);
+      $t_image_dimensions = $this->getImageHeightWidth($file_uri, $thumbnail_style);
 
       // Medium Image - Main image on Gallery.
       $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
       // Medium Image - Height/Width.
-      $m_image_dimensions = $this->getImageHeightWidth($slide_style, $file_uri);
+      $m_image_dimensions = $this->getImageHeightWidth($file_uri, $slide_style);
 
       $thumbnails[] = [
         'thumburl' => $image_small,
@@ -1449,23 +1449,58 @@ class SkuImagesManager {
   /**
    * Get Image dimensions, height and width for img tags.
    *
-   * @param string $style_name
-   *   The image style name.
    * @param string $file_uri
    *   The URI of the file.
+   * @param string|null $style_name
+   *   The image style name.
    *
    * @return array
    *   Array contains image width and height.
    */
-  public function getImageHeightWidth($style_name, $file_uri) {
-    $image_style = ImageStyle::load($style_name);
-    $image_factory = \Drupal::service('image.factory')->get($image_style->buildUri($file_uri));
+  public function getImageHeightWidth(string $file_uri, string $style_name = NULL): array {
+    if ($style_name !== NULL) {
+      $image_style = ImageStyle::load($style_name);
+      $image_factory = \Drupal::service('image.factory')->get($image_style->buildUri($file_uri));
+    }
+    else {
+      $image_factory = \Drupal::service('image.factory')->get($file_uri);
+    }
 
     // Height/Width.
     return [
       'height' => $image_factory->getToolkit()->getHeight(),
       'width' => $image_factory->getToolkit()->getWidth(),
     ];
+  }
+
+  /**
+   * Get Swatch Image dimensions.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Array contains image width and height of swatch image.
+   */
+  public function getPdpSwatchImageHeightWidth(SKU $sku): array {
+    $media = $this->getSkuMediaItems($sku);
+
+    $static = &drupal_static(__FUNCTION__, NULL);
+    $static['swatch-dimensions'][$sku->getSku()] = NULL;
+
+    foreach ($media as $item) {
+      if (isset($item['roles'])
+        && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])) {
+        $dimensions = $this->getImageHeightWidth($item['drupal_uri']);
+        $dimensions['test'] = $item['drupal_uri'];
+        if ($dimensions) {
+          $static['swatch-dimensions'][$sku->getSku()] = $dimensions;
+          break;
+        }
+      }
+    }
+
+    return $static['swatch-dimensions'][$sku->getSku()];
   }
 
 }
