@@ -13,6 +13,36 @@ class CompleteBenefitPayPayment extends React.Component {
 
   secretKey = 'vbgm3o5354c820vhrj0ld5wck693yipbabf43nq9m6avr';
 
+  inAppScript = document.createElement('script');
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      inAppScriptLoaded: false,
+    };
+  }
+
+  componentDidMount() {
+    this.inAppScript.async = true;
+    this.inAppScript.src = '/modules/react/alshaya_spc/assets/js/benefit_pay_in_app.min.js';
+    document.head.appendChild(this.inAppScript);
+    this.inAppScript.onload = () => {
+      if (typeof InApp !== 'undefined') {
+        this.setState({
+          inAppScriptLoaded: true,
+        });
+      }
+    };
+  }
+
+  successCallback = () => {
+    window.InApp.close();
+  }
+
+  errorCallback = () => {
+    window.InApp.close();
+  }
+
   // Create 'secure_hash' - the Hashing should be done by concatenating the
   // request parameters as key value pairs, sorting them ascending by key and
   // value, combining key and value with an =, then concatenating all the key-value
@@ -48,49 +78,31 @@ class CompleteBenefitPayPayment extends React.Component {
     return this.calcSecureHash(data);
   }
 
-  buildBenefitPayMobileAppURL = () => {
-    const data = this.prepareBenefitPayDetails();
-    const { payment } = this.props;
-
-    const link = encodeURIComponent(
-      `https://benefit.bh/?inapp&app_id=${
-        data.appId
-      }&merchant_id=${
-        data.merchantId
-      }&qrdata=${
-        payment.qrData
-      }&referenceNumber=${
-        data.referenceNumber
-      }&hashedString=${
-        data.hashedString
-      }&amount=${
-        data.transactionAmount}`,
+  openBenefitPayModal = () => {
+    window.InApp.open(
+      this.prepareBenefitPayDetails(),
+      this.successCallback,
+      this.errorCallback,
     );
-
-    return `https://tbenefituser.page.link/?link=${link}`;
   }
-
-  openBenefitPayApp = () => {
-    window.open(this.buildBenefitPayMobileAppURL(), '_blank');
-  };
 
   render() {
     const { payment, totals } = this.props;
+    const { inAppScriptLoaded } = this.state;
+
+    if (inAppScriptLoaded === false) {
+      return null;
+    }
 
     return (
       <div className="benefit-pay-container">
         <DeviceView device="mobile">
           <button
             type="button"
+            ref={() => { this.openBenefitPayModal(); }}
+            onClick={() => { this.openBenefitPayModal(); }}
             className="inapp-btn"
-            onClick={() => this.openBenefitPayApp()}
-          >
-            {Drupal.t('Pay using BenefitPay App')}
-          </button>
-          <div className="qr">
-            <div><span className="qr-label">{Drupal.t('or Scan to Pay')}</span></div>
-            <QRCode value={payment.qrData} size="130" />
-          </div>
+          />
         </DeviceView>
         <DeviceView device="above-mobile">
           <div className="title">{Drupal.t('Please complete your payment by scanning the QR code.')}</div>
