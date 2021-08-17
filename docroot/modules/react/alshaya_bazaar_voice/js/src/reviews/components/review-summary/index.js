@@ -464,7 +464,7 @@ export default class ReviewSummary extends React.Component {
                       <DisplayStar
                         starPercentage={reviewsSummary[item].Rating}
                       />
-                      <div className="review-title">{reviewsSummary[item].Title}</div>
+                      <div id={`${reviewsSummary[item].Id}-review-title`} className="review-title">{reviewsSummary[item].Title}</div>
                     </ConditionalView>
                     <ReviewInformation
                       reviewInformationData={reviewsSummary[item]}
