@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Cart from './cart/components/cart';
 
+// Store the page type for conditions later.
+window.spcPageType = 'cart';
+
 // eslint-disable-next-line func-names
 (function (Drupal) {
   let cartInitiated = false;
