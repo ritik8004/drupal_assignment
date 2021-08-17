@@ -24,7 +24,7 @@
         {% elseif loop.first %}
           <figure class="pdp-asset pdp-image pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}  data-scale="2">
             <div class="pdp-image-zoom-wrapper">
-              <img loading="lazy" data-zoom-url="{{ thumbs.zoomurl }}" src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+              <img loading="lazy" width="{{ thumbs.m_width }}" height="{{ thumbs.m_height }}" data-zoom-url="{{ thumbs.zoomurl }}" src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             </div>
             {%  if labels|length > 0 %}
               <div class="product-labels">
@@ -35,7 +35,7 @@
         {% else %}
           <figure class="pdp-asset pdp-image pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }} data-scale="2">
             <div class="pdp-image-zoom-wrapper">
-              <img loading="lazy" data-zoom-url="{{ thumbs.zoomurl }}" src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+              <img loading="lazy" width="{{ thumbs.m_width }}" height="{{ thumbs.m_height }}" data-zoom-url="{{ thumbs.zoomurl }}" src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             </div>
           </figure>
         {% endif %}
