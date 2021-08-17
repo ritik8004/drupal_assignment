@@ -68,7 +68,8 @@ class CompleteBenefitPayPayment extends React.Component {
       inAppScript.id = 'benefit-pay-in-app';
       document.head.appendChild(inAppScript);
       inAppScript.onload = () => {
-        if (typeof InApp !== 'undefined') {
+        if (typeof InApp !== 'undefined'
+          && localStorage.getItem('benefit_pay_modal_auto_opened') !== 'true') {
           this.openInAppModal();
         }
       };
@@ -85,6 +86,8 @@ class CompleteBenefitPayPayment extends React.Component {
       this.successCallback,
       this.errorCallback,
     );
+    // Save that benefit pay modal was auto opened once.
+    localStorage.setItem('benefit_pay_modal_auto_opened', true);
   }
 
   render() {
