@@ -406,7 +406,9 @@ class ProductResource extends ResourceBase {
       $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
       // Prepare image style url.
       if (!empty($image['#uri'])) {
-        $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+        $image = (strstr($image['#uri'], 'public://'))
+          ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
+          : $image['#uri'];
       }
       $data['cart_image'] = is_string($image) ? $image : '';
     }
@@ -434,7 +436,9 @@ class ProductResource extends ResourceBase {
             $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
             // Prepare image style url.
             if (!empty($image['#uri'])) {
-              $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+              $image = (strstr($image['#uri'], 'public://'))
+                ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
+                : $image['#uri'];
             }
             $data['variants'][$values['sku']]['cart_image'] = is_string($image) ? $image : '';
           }
