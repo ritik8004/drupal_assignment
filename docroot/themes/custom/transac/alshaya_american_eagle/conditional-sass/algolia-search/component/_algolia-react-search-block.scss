@@ -119,15 +119,15 @@
 
     .react-autosuggest__input {
       @include breakpoint($only-mobile) {
+        height: 3.5rem;
         margin: 0;
         width: 100%;
         border: 0.0625rem solid $algolia-auto-complete-border;
+        padding-#{$left}: 3rem;
       }
 
       @include breakpoint($upto-desktop) {
-        height: 3.75rem;
         line-height: 1.25rem;
-        padding-#{$left}: 3rem;
       }
 
       @include breakpoint($only-tablet) {
@@ -231,7 +231,7 @@ body {
 
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($only-mobile) {
-      margin-top: 3.125rem;
+      margin-top: 6.625rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -255,26 +255,8 @@ body {
     }
   }
 
-  &.no-sticky-algolia-search-bar {
-    .block-alshaya-algolia-react-autocomplete {
-      &.show-algolia-search-bar {
-        @include breakpoint($only-mobile) {
-          top: -0.25rem;
-        }
-      }
-    }
-  }
-
   &.frontpage {
     &:not(.Sticky-algolia-search) {
-      #alshaya-algolia-autocomplete {
-        .react-autosuggest__input {
-          @include breakpoint($only-mobile) {
-            border-top: none;
-          }
-        }
-      }
-
       .mobile--search {
         @include breakpoint($only-tablet) {
           display: none;

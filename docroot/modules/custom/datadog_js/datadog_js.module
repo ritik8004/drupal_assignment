@@ -36,8 +36,12 @@ function datadog_js_page_attachments(array &$attachments) {
 
   $attachments['#attached']['library'][] = 'datadog_js/logger';
 
+  global $_acsf_site_name;
+
   $config = [];
   $config['clientToken'] = $token;
+  $config['service'] = $_acsf_site_name;
+  $config['env'] = Settings::get('env_name');
 
   $application = $settings->get('application');
   if (!empty($application)) {
