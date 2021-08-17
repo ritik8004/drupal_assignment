@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @homeDelivery @pbsauat @pbaeuat @pbkwuat @bbwkwuat @tbskwuat
+@javascript @returnUser @madaPayment @homeDelivery @pbsauat @mcsauat @pbaeuat @pbkwuat @mcaeuat @bbwkwuat @tbskwuat @flsauat @flaeuat @bbwsauat @mckwuat
 Feature: SPC Checkout Home Delivery CC for Returning Customers
 
   Background:
@@ -48,9 +48,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -62,7 +59,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I should see "{delivery_type_text}"
     Then I should see "{delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -127,9 +123,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_mada_anon_username}"
     Then I should see "{language_order_detail}"
@@ -146,7 +139,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_delivery_type}"
     Then I should see "{language_payment_type_text}"
-    Then I should see "{language_cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -256,9 +248,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -270,7 +259,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I should see "{delivery_type_text}"
     Then I should see "{delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -335,9 +323,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_mada_anon_username}"
     Then I should see "{language_order_detail}"
@@ -354,7 +339,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_delivery_type}"
     Then I should see "{language_payment_type_text}"
-    Then I should see "{language_cc_mada_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist

@@ -63,8 +63,10 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    createUserStorage(userDetails.user.userId, userDetails.user.emailId);
-    this.getReviews();
+    if (userDetails && Object.keys(userDetails).length !== 0) {
+      createUserStorage(userDetails.user.userId, userDetails.user.emailId);
+      this.getReviews();
+    }
   }
 
   componentWillUnmount() {

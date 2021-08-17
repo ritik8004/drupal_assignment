@@ -114,6 +114,16 @@
   display: none;
 }
 
+header {
+  .secondary-main-menu-wrapper + .block-alshaya-react-mini-cart {
+    #cart_notification {
+      @include breakpoint($tablet) {
+        top: 3.7rem;
+      }
+    }
+  }
+}
+
 html[lang=ar] {
   #cart_notification,
   #static_minicart_notification {

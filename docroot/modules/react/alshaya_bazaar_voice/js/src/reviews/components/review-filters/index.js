@@ -48,7 +48,9 @@ export default class ReviewFilters extends React.Component {
       Object.entries(filterOptions).forEach(([index]) => {
         const contextData = filterOptions[index].FilteredReviewStatistics.ContextDataDistribution;
         Object.entries(contextData).forEach(([item, option]) => {
-          if (item.includes('_filter')) {
+          if (pdpFilterOptions !== null
+            && pdpFilterOptions[item] !== undefined
+            && item.includes('_filter')) {
             const options = Object.keys(option.Values).map((key) => ({
               value: `contextdatavalue_${item}:${option.Values[key].Value}`,
               label: `${pdpFilterOptions[item][option.Values[key].Value]} (${option.Values[key].Count})`,

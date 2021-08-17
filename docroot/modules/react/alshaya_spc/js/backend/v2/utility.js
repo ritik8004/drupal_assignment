@@ -50,6 +50,10 @@ const logger = {
 const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);
 
 const removeCartIdFromStorage = () => {
+  // Always remove cart_data, we have added this as workaround with
+  // to-do at right place.
+  removeStorageInfo('cart_data');
+
   if (isUserAuthenticated()) {
     setStorageInfo(window.authenticatedUserCartId, 'cart_id');
     return;
@@ -65,7 +69,7 @@ const getCartIdFromStorage = () => {
   if (cartId === window.authenticatedUserCartId) {
     // Reload the page if user is not authenticated based on settings.
     if (!isUserAuthenticated()) {
-      removeStorageInfo('cart_id');
+      removeCartIdFromStorage();
 
       // eslint-disable-next-line no-self-assign
       window.location.href = window.location.href;
@@ -160,7 +164,7 @@ const getApiEndpoint = (action, params = {}) => {
 
     case 'getLastOrder':
       endpoint = isUserAuthenticated()
-        ? '/V1/customer-order/me/getLastOrder/'
+        ? '/V1/customer-order/me/getLastOrder'
         : '';
       break;
 

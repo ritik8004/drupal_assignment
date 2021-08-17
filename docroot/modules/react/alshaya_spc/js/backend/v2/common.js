@@ -6,6 +6,7 @@ import _isUndefined from 'lodash/isUndefined';
 import _isObject from 'lodash/isObject';
 import _isEmpty from 'lodash/isEmpty';
 import _isNull from 'lodash/isNull';
+import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
   getCartIdFromStorage,
@@ -19,9 +20,10 @@ import {
   getExceptionMessageType,
   getProcessedErrorMessage,
 } from './error';
-import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
+import getAgentDataForExtension from './smartAgent';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -34,6 +36,16 @@ window.commerceBackend = window.commerceBackend || {};
  *   The cart id or null if not available.
  */
 window.commerceBackend.getCartId = () => {
+  // This is for ALX InStorE feature.
+  // We want to be able to resume guest carts from URL,
+  // we pass that id from backend via Cookie to Browser.
+  const resumeCartId = Cookies.get('resume_cart_id');
+  if (hasValue(resumeCartId)) {
+    removeStorageInfo('cart_data');
+    setStorageInfo(resumeCartId, 'cart_id');
+    Cookies.remove('resume_cart_id');
+  }
+
   let cartId = getCartIdFromStorage();
   if (_isNull(cartId)) {
     // For authenticated users we get the cart id from the cart.
@@ -192,7 +204,19 @@ const handleResponse = (apiResponse) => {
   }
 
   // Treat each status code.
-  if (apiResponse.status >= 500) {
+  if (apiResponse.status === 202) {
+    // Place order can return 202, this isn't error.
+    // Do nothing here, we will let code below return the response.
+  } else if (apiResponse.status === 500) {
+    logger.warning('500 error from backend. Message: @message.', {
+      '@message': getProcessedErrorMessage(apiResponse),
+    });
+
+    // Server error responses.
+    response.data.error = true;
+    response.data.error_code = 500;
+    response.data.error_message = getDefaultErrorMessage();
+  } else if (apiResponse.status > 500) {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
@@ -348,9 +372,11 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
         return handleResponse(error.request);
       }
 
-      return logger.error('Something happened in setting up the request that triggered an error: @error.', {
+      logger.error('Something happened in setting up the request that triggered an error: @error.', {
         '@error': error.message,
       });
+
+      return error;
     });
 };
 
@@ -529,6 +555,7 @@ const getProcessedCartData = async (cartData) => {
 
   const data = {
     cart_id: window.commerceBackend.getCartId(),
+    cart_id_int: cartData.cart.id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
@@ -597,12 +624,15 @@ const getProcessedCartData = async (cartData) => {
         finalPrice: item.price,
       };
 
-      // Get stock data.
-      // Suppressing the lint error for now.
-      // eslint-disable-next-line no-await-in-loop
-      const stockInfo = await getProductStatus(item.sku);
-      data.items[item.sku].in_stock = stockInfo.in_stock;
-      data.items[item.sku].stock = stockInfo.stock;
+      // Get stock data on cart and checkout pages.
+      const spcPageType = window.spcPageType || '';
+      if (spcPageType === 'cart' || spcPageType === 'checkout') {
+        // Suppressing the lint error for now.
+        // eslint-disable-next-line no-await-in-loop
+        const stockInfo = await getProductStatus(item.sku);
+        data.items[item.sku].in_stock = stockInfo.in_stock;
+        data.items[item.sku].stock = stockInfo.stock;
+      }
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
@@ -661,6 +691,20 @@ const isAnonymousUserWithoutCart = () => {
   return false;
 };
 
+const clearInvalidCart = () => {
+  const isAssociatingCart = StaticStorage.get('associating_cart') || false;
+  if (getCartIdFromStorage() && !isAssociatingCart) {
+    logger.warning('Removing cart from local storage and reloading.');
+
+    // Remove cart_id from storage.
+    removeCartIdFromStorage();
+
+    // Reload the page now that we have removed cart id from storage.
+    // eslint-disable-next-line no-self-assign
+    window.location.href = window.location.href;
+  }
+};
+
 /**
  * Calls the cart get API.
  *
@@ -681,27 +725,19 @@ const getCart = async (force = false) => {
 
   const cartId = window.commerceBackend.getCartId();
   const response = await callMagentoApi(getApiEndpoint('getCart', { cartId }), 'GET', {});
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
-    if (_isEmpty(response.data)
-        || (!_isUndefined(response.status) && response.status === 404)
-        || (!_isUndefined(response.data) && response.data.error_code === 404)
-        || (!_isUndefined(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
+
+  response.data = response.data || {};
+
+  if (hasValue(response.data.error)) {
+    if ((hasValue(response.status) && response.status === 404)
+        || (hasValue(response.data) && response.data.error_code === 404)
+        || (hasValue(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      const isAssociatingCart = StaticStorage.get('associating_cart') || false;
-      if (getCartIdFromStorage() && !isAssociatingCart) {
-        logger.warning('getCart() returned error: @code. Removed cart from local storage', {
-          '@code': response.data.error_code,
-        });
+      logger.warning('getCart() returned error: @code.', {
+        '@code': response.data.error_code,
+      });
 
-        // Remove cart_id from storage.
-        removeCartIdFromStorage();
-
-        // Reload the page now that we have removed cart id from storage.
-        // eslint-disable-next-line no-self-assign
-        window.location.href = window.location.href;
-      }
+      clearInvalidCart();
 
       // If cart is no longer available, no need to return any error.
       return null;
@@ -714,6 +750,12 @@ const getCart = async (force = false) => {
         error_message: getDefaultErrorMessage(),
       },
     };
+  }
+
+  // If no error and no response, consider that as 404.
+  if (!hasValue(response.data)) {
+    clearInvalidCart();
+    return null;
   }
 
   // Format data.
@@ -916,19 +958,24 @@ const preUpdateValidation = async (request) => {
 /**
  * Calls the update cart API and returns the updated cart.
  *
- * @param {object} data
+ * @param {object} postData
  *  The data to send.
  *
  * @returns {Promise<AxiosPromise<object>>}
  *   A promise object with cart data.
  */
-const updateCart = async (data) => {
+const updateCart = async (postData) => {
+  const data = { ...postData };
   const cartId = window.commerceBackend.getCartId();
 
   let action = '';
-  if (!_isEmpty(data.extension) && !_isEmpty(data.extension.action)) {
+  data.extension = data.extension || {};
+  if (hasValue(data.extension.action)) {
     action = data.extension.action;
   }
+
+  // Add Smart Agent data to extension.
+  data.extension = Object.assign(data.extension, getAgentDataForExtension());
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
@@ -936,13 +983,11 @@ const updateCart = async (data) => {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
-  // Log the shipping / billing address we pass to magento.
-  if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
-    logger.debug('Billing / Shipping update. CartId: @cartId, Address: @address.', {
-      '@cartId': cartId,
-      '@address': JSON.stringify(data),
-    });
-  }
+  logger.debug('Updating Cart. CartId: @cartId, Action: @action, Request: @request.', {
+    '@cartId': cartId,
+    '@request': JSON.stringify(data),
+    '@action': action,
+  });
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
@@ -966,6 +1011,22 @@ const updateCart = async (data) => {
         '@errorCode': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
+      return response;
+    });
+};
+
+window.commerceBackend.pushAgentDetailsInCart = async () => {
+  // Do simple refresh cart to make sure we push data before sharing.
+  const postData = {
+    extension: {
+      action: 'refresh',
+    },
+  };
+
+  return updateCart(postData)
+    .then(async (response) => {
+      // Process cart data.
+      response.data = await getProcessedCartData(response.data);
       return response;
     });
 };
@@ -1031,7 +1092,10 @@ const getFormattedError = (code, message) => ({
   error: true,
   error_code: code,
   error_message: message,
-  response_message: [message, 'error'],
+  response_message: {
+    msg: message,
+    status: 'error',
+  },
 });
 
 export {

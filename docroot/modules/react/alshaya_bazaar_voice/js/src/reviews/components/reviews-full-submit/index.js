@@ -108,13 +108,15 @@ export default class WriteReviewButton extends React.Component {
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const userDetails = getUserDetails(productId);
-    const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
-    if (userDetails.user.userId === 0
-      && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission
-      && userStorage.uasToken === null) {
-      return (
-        <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
-      );
+    if (userDetails && Object.keys(userDetails).length !== 0) {
+      const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
+      if (userDetails.user.userId === 0
+        && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission
+        && userStorage.uasToken === null) {
+        return (
+          <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
+        );
+      }
     }
 
     return (
