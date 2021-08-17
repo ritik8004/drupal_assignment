@@ -343,6 +343,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    */
   public static function deleteUnusedBrandAssetsAllMarketsChunk(array $files, $dry_run, &$context) {
     $logger = \Drupal::logger('AlshayaBrandAssetsCommands');
+
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');
 
@@ -350,12 +351,29 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       if (in_array($uri, $context['results'])) {
         continue;
       }
+
       $logger->notice('Delete file with uri @uri', [
         '@uri' => $uri,
       ]);
 
       if (!$dry_run) {
-        $file_system->delete($uri);
+        try {
+          if (strpos($uri, 's3://') !== FALSE) {
+            // @todo use stream_wrapper.s3fs service and unlink.
+            $logger->notice('Not deleting S3 file as of now as pending dev. URI: @uri.', [
+              '@uri' => $uri,
+            ]);
+
+            continue;
+          }
+
+          $file_system->delete($uri);
+        }
+        catch (\Exception $e) {
+          $logger->warning('Failed to delete the file with uri: @uri, exception: @message.', [
+            '@uri' => $uri,
+          ]);
+        }
       }
     }
   }
