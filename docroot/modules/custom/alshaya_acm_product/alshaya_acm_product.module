@@ -688,8 +688,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         if (!empty($sku_media)) {
           $image = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
+
+          // Get Dimensions.
+          $dimensions = $skuImagesManager->getImageHeightWidth($sku_media['drupal_uri'], SkuImagesHelper::STYLE_PRODUCT_TEASER);
+
           if (!empty($image)) {
             $build['image'] = $image;
+            $build['image']['#width'] = $dimensions['width'];
+            $build['image']['#height'] = $dimensions['height'];
           }
         }
 
