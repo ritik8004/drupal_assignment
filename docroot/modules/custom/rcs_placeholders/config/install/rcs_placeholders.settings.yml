@@ -23,3 +23,6 @@ product:
   placeholder_nid:
   path_prefix: 'buy-'
   enrichment: false
+promotion:
+  placeholder_nid:
+  path_prefix: 'promotion'

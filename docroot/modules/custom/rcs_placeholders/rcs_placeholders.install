@@ -33,6 +33,15 @@ function rcs_placeholders_install() {
 
   $config->set('product.placeholder_nid', $node->id())->save();
 
+  // Placeholder promotion node.
+  $node = Node::create(array(
+    'type' => 'rcs_promotion',
+    'title' => '#rcs.promotion.name#',
+  ));
+  $node->save();
+
+  $config->set('promotion.placeholder_nid', $node->id())->save();
+
 
   // Placeholder main menu items (depth 1 to 3).
   $level1 = MenuLinkContent::create([
