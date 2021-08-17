@@ -83,8 +83,6 @@
             // Handle click on image thumbnails.
             var anchor = $(this).find('a.cloudzoom__thumbnails__image');
             if (anchor !== undefined && anchor.length > 0) {
-              console.log(anchor.attr('data-m-width'));
-              console.log(anchor.attr('data-m-height'));
               // Put the big image in our main container.
               $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr({
                 'src':anchor.attr('href'),
