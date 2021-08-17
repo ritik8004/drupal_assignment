@@ -128,8 +128,11 @@ class AddToCartFormHelper {
 
           if ($swatch_sku instanceof SKU) {
             $swatch_image_url = $this->imagesManager->getPdpSwatchImageUrl($swatch_sku);
+            $swatch_image_dimensions = $this->imagesManager->getPdpSwatchImageHeightWidth($swatch_sku);
             if ($swatch_image_url) {
               $configurable['#options_attributes'][$value]['swatch-image'] = file_url_transform_relative($swatch_image_url);
+              $configurable['#options_attributes'][$value]['swatch-image-width'] = $swatch_image_dimensions['width'];
+              $configurable['#options_attributes'][$value]['swatch-image-height'] = $swatch_image_dimensions['height'];
             }
           }
         }

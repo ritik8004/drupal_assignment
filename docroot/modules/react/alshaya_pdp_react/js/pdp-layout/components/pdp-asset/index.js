@@ -44,7 +44,16 @@ export default class PdpAsset extends React.Component {
 
   render() {
     const {
-      type, imageZoomUrl, imageUrl, alt, title, viewport, index, children,
+      type,
+      imageZoomUrl,
+      imageUrl,
+      alt,
+      title,
+      viewport,
+      index,
+      children,
+      width,
+      height,
     } = this.props;
 
     if (type === 'image' && viewport !== 'mobile') {
@@ -63,6 +72,8 @@ export default class PdpAsset extends React.Component {
               src={imageUrl}
               alt={alt}
               title={title}
+              width={width}
+              height={height}
               loading="lazy"
             />
             <div className="magazine-image-zoom-placeholder" style={{ backgroundImage: `url(${imageZoomUrl})` }} />

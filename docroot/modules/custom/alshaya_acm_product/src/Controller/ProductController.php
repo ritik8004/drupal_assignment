@@ -397,6 +397,7 @@ class ProductController extends ControllerBase {
 
         if (!empty($sku_media)) {
           $image = $this->skuImagesHelper->getImageStyleUrl($sku_media, SkuImagesHelper::STYLE_PRODUCT_SLIDE);
+          $dimensions = $this->skuImageManager->getImageHeightWidth($sku_media['drupal_uri'], SkuImagesHelper::STYLE_PRODUCT_SLIDE);
         }
         $priceHelper = _alshaya_acm_product_get_price_helper();
         $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);
@@ -404,6 +405,8 @@ class ProductController extends ControllerBase {
         $final_price = isset($related_sku_price['#final_price']) ? $related_sku_price['#final_price']['#price'] : $price;
         $title = $related_sku_entity->label();
         $related_products['products'][$related_sku]['gallery']['mediumurl'] = $image;
+        $related_products['products'][$related_sku]['gallery']['m_width'] = $dimensions['width'];
+        $related_products['products'][$related_sku]['gallery']['m_height'] = $dimensions['height'];
         $related_products['products'][$related_sku]['finalPrice'] = $final_price;
         $related_products['products'][$related_sku]['priceRaw'] = $price;
         $related_products['products'][$related_sku]['title'] = $title;
