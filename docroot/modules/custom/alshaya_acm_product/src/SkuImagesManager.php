@@ -1468,8 +1468,8 @@ class SkuImagesManager {
 
     // Height/Width.
     return [
-      'height' => $image_factory->getToolkit()->getHeight(),
       'width' => $image_factory->getToolkit()->getWidth(),
+      'height' => $image_factory->getToolkit()->getHeight(),
     ];
   }
 
