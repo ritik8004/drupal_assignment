@@ -405,8 +405,11 @@ class ProductResource extends ResourceBase {
       $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
       $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
       // Prepare image style url.
-      if (!empty($image['#uri'])) {
-        $image = (strstr($image['#uri'], 'public://'))
+      if (!empty($image['#uri']) && !empty($image['#theme'])) {
+        // If image has image_style theme
+        // then get style url by loading image style,
+        // else get PIMS url directly from uri.
+        $image = ($image['#theme'] == 'image_style')
           ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
           : $image['#uri'];
       }
@@ -436,7 +439,10 @@ class ProductResource extends ResourceBase {
             $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
             // Prepare image style url.
             if (!empty($image['#uri'])) {
-              $image = (strstr($image['#uri'], 'public://'))
+              // If image has image_style theme
+              // then get style url by loading image style,
+              // else get PIMS url directly from uri.
+              $image = ($image['#theme'] == 'image_style')
                 ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
                 : $image['#uri'];
             }
