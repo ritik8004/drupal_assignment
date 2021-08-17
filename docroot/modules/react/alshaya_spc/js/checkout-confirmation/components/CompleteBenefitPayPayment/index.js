@@ -13,28 +13,6 @@ class CompleteBenefitPayPayment extends React.Component {
 
   secretKey = 'vbgm3o5354c820vhrj0ld5wck693yipbabf43nq9m6avr';
 
-  inAppScript = document.createElement('script');
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      inAppScriptLoaded: false,
-    };
-  }
-
-  componentDidMount() {
-    this.inAppScript.async = true;
-    this.inAppScript.src = '/modules/react/alshaya_spc/assets/js/benefit_pay_in_app.min.js';
-    document.head.appendChild(this.inAppScript);
-    this.inAppScript.onload = () => {
-      if (typeof InApp !== 'undefined') {
-        this.setState({
-          inAppScriptLoaded: true,
-        });
-      }
-    };
-  }
-
   successCallback = () => {
     window.InApp.close();
   }
@@ -68,8 +46,10 @@ class CompleteBenefitPayPayment extends React.Component {
     const { payment, totals } = this.props;
 
     const data = {
-      transactionAmount: totals.base_grand_total.toFixed(3),
-      transactionCurrency: payment.currency,
+      transactionAmount: totals.base_grand_total.toFixed(
+        drupalSettings.alshaya_spc.currency_config.decimal_points,
+      ),
+      transactionCurrency: drupalSettings.alshaya_spc.currency_config.currency_code,
       referenceNumber: payment.referenceNumber,
       merchantId: this.merchantId,
       appId: this.appId,
@@ -78,7 +58,28 @@ class CompleteBenefitPayPayment extends React.Component {
     return this.calcSecureHash(data);
   }
 
-  openBenefitPayModal = () => {
+  loadBenefitPayModal = () => {
+    const scriptExists = document.getElementById('benefit-pay-in-app');
+
+    if (!scriptExists) {
+      const inAppScript = document.createElement('script');
+      inAppScript.async = true;
+      inAppScript.src = '/modules/react/alshaya_spc/assets/js/benefit_pay_in_app.min.js';
+      inAppScript.id = 'benefit-pay-in-app';
+      document.head.appendChild(inAppScript);
+      inAppScript.onload = () => {
+        if (typeof InApp !== 'undefined') {
+          this.openInAppModal();
+        }
+      };
+    }
+
+    if (typeof InApp !== 'undefined') {
+      this.openInAppModal();
+    }
+  }
+
+  openInAppModal = () => {
     window.InApp.open(
       this.prepareBenefitPayDetails(),
       this.successCallback,
@@ -88,19 +89,14 @@ class CompleteBenefitPayPayment extends React.Component {
 
   render() {
     const { payment, totals } = this.props;
-    const { inAppScriptLoaded } = this.state;
-
-    if (inAppScriptLoaded === false) {
-      return null;
-    }
 
     return (
       <div className="benefit-pay-container">
         <DeviceView device="mobile">
           <button
             type="button"
-            ref={() => { this.openBenefitPayModal(); }}
-            onClick={() => { this.openBenefitPayModal(); }}
+            ref={() => { this.loadBenefitPayModal(); }}
+            onClick={() => { this.loadBenefitPayModal(); }}
             className="inapp-btn"
           />
         </DeviceView>
@@ -140,7 +136,6 @@ class CompleteBenefitPayPayment extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="benefit-pay-footer"><a href="/">{Drupal.t('How to pay using BenefitPay?')}</a></div>
             </div>
           </div>
         </DeviceView>
