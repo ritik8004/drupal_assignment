@@ -88,7 +88,7 @@
       var advancedfeaturedproduct = $('.l-one--w .paragraph--type--product-carousel-category .product-category-carousel, .advanced-page-only .paragraph--type--product-carousel-category .product-category-carousel, .frontpage .paragraph--type--product-carousel-category .product-category-carousel');
       var crossSell = $('.horizontal-crossell .owl-carousel');
       var upSell = $('.horizontal-upell .owl-carousel');
-      var relatedSell = $('.dhorizontal-relate .owl-carousel');
+      var relatedSell = $('.horizontal-related .owl-carousel');
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
       var productCarouselClasses = ['.product-category-carousel', '.owl-carousel'];
 
