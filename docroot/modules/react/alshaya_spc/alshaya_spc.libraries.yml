@@ -13,6 +13,7 @@ mini_cart:
     dist/minicart.bundle.js: { }
   dependencies:
     - alshaya_react/react
+    - alshaya_master/on_focus_attach
 
 cart:
   version: 1.x
@@ -23,6 +24,7 @@ cart:
     - core/drupal.ajax
     - core/drupal.dialog
     - alshaya_react/react
+    - alshaya_master/on_focus_attach
     - alshaya_product_zoom/cloud_zoom_pdp_gallery
     - alshaya_spc/cart_utilities
 
