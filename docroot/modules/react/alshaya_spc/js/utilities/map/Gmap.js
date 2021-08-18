@@ -167,7 +167,7 @@ export class Gmap {
     currentMarker.addListener('click', () => {
       map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
       currentMarker.setIcon(
-        { url: mapIcon || markerActiveIcon, scaledSize: new google.maps.Size(50, 50) },
+        { url: mapIcon || markerActiveIcon, scaledSize: new google.maps.Size(66, 85) },
       );
       clickedMarker = currentMarker;
 
