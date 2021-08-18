@@ -378,7 +378,7 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
   $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
 
   if ($product_pdp_layout !== 'magazine_v2') {
-    $build['#attached']['library'][] = 'alshaya_bazaar_voice/rating';
+    $build['#attached']['library'][] = 'alshaya_bazaar_voice/ratingV2';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviewsV2';
   }
 

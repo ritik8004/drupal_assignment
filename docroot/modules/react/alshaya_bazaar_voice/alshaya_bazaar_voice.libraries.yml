@@ -38,3 +38,12 @@ reviewsV2:
     - core/drupal
     - core/drupalSettings
     - alshaya_react/react
+
+ratingV2:
+  js:
+    dist/ratingV2.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - alshaya_react/react
