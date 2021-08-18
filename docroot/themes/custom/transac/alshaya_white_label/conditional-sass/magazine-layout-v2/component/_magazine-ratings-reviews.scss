@@ -656,26 +656,3 @@ body.ratings-reviews-overlay {
     }
   }
 }
-
-.translate-by-google,
-.back-to-original {
-  color: $rr-translate-link;
-  font-family: $alshaya-thin;
-  font-size: 0.875rem;
-  cursor: pointer;
-
-  &:hover {
-    color: $rr-translate-link;
-  }
-}
-
-.back-to-original {
-  &::before {
-    content: '';
-    width: 7.75rem;
-    height: 2.5rem;
-    display: block;
-    background: url('#{$base_theme_img_directory_path}/icons/google-translate.png') no-repeat;
-    background-size: 100%;
-  }
-}

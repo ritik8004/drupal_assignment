@@ -149,7 +149,7 @@
       word-break: break-word;
 
       @include breakpoint($only-mobile) {
-        margin-bottom: 1.5rem;
+        margin-bottom: 0;
       }
     }
 
@@ -525,6 +525,11 @@
   &:hover {
     color: $rr-translate-link;
   }
+
+  .comment-submission-box & {
+    margin-bottom: 0.75rem;
+    display: inline-block;
+  }
 }
 
 .back-to-original {
@@ -535,5 +540,14 @@
     display: block;
     background: url('#{$base_theme_img_directory_path}/icons/google-translate.png') no-repeat;
     background-size: 100%;
+  }
+}
+
+.translate-by-google {
+  margin-top: 0.875rem;
+  display: inline-block;
+
+  .comment-submission-box & {
+    margin-top: 0;
   }
 }
