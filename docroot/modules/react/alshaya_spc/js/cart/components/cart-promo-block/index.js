@@ -139,10 +139,10 @@ export default class CartPromoBlock extends React.Component {
     }
 
     // If empty promo text.
-    if (this.isAdvantagecardEnabled() && promoValue.length === 16) {
+    if (this.isAdvantagecardEnabled()) {
       const parts = promoValue.match(/.{9}/g);
-      if (parts[0] !== this.isAdvantagecardEnabled()) {
-        document.getElementById('promo-message').innerHTML = Drupal.t('please enter valide Advantage card code.');
+      if (parts[0] === this.isAdvantagecardEnabled() && promoValue.length !== 16) {
+        document.getElementById('promo-message').innerHTML = Drupal.t('Please enter valid Advantage card code.');
         document.getElementById('promo-message').classList.add('error');
         document.getElementById('promo-code').classList.add('error');
         return;
