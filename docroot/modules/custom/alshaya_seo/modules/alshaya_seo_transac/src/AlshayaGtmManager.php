@@ -926,6 +926,15 @@ class AlshayaGtmManager {
       'shipping' => alshaya_master_convert_amount_to_float($order['totals']['shipping']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
+    // If Advantage card dont send card value.
+    if ($this->configFactory->get('alshaya_spc.advantage_card')->get('advantageCardEnabled') === 1 && !empty($this->configFactory->get('alshaya_spc.advantage_card')->get('advantageCardPrefix'))) {
+      if (strpos($order['coupon'], $this->configFactory->get('alshaya_spc.advantage_card')->get('advantageCardPrefix')) !== FALSE) {
+        $actionData = [
+          'coupon' => NULL,
+          'isAdvantageCard' => 'Yes',
+        ];
+      }
+    }
 
     $loyalty_card = '';
 

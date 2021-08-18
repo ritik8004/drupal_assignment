@@ -138,10 +138,9 @@ export default class CartPromoBlock extends React.Component {
       return;
     }
 
-    // If empty promo text.
+    // If Advantage card enabled and not valid.
     if (this.isAdvantagecardEnabled()) {
-      const parts = promoValue.match(/.{9}/g);
-      if (parts[0] === this.isAdvantagecardEnabled() && promoValue.length !== 18) {
+      if (promoValue.includes(this.isAdvantagecardEnabled()) && promoValue.length !== 18) {
         document.getElementById('promo-message').innerHTML = Drupal.t('Please enter valid Advantage card code.');
         document.getElementById('promo-message').classList.add('error');
         document.getElementById('promo-code').classList.add('error');
@@ -177,8 +176,8 @@ export default class CartPromoBlock extends React.Component {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
-          if (this.isAdvantagecardEnabled()) {
-            // If isAdvantagecardEnabled disabled set promoValue to null.
+          if (promoValue.includes(this.isAdvantagecardEnabled())) {
+            // For Advantage card set promoValue to null.
             promoValue = null;
           }
           // If coupon is not valid.
