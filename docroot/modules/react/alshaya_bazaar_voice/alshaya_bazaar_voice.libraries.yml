@@ -29,3 +29,12 @@ bvpixel_tracking:
 iovation:
   js:
     js/assets/iovation-loader.js: {}
+
+reviewsV2:
+  js:
+    dist/reviewsV2.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - alshaya_react/react

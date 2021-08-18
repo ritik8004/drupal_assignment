@@ -7,13 +7,15 @@ export function getLanguageCode() {
 
 export function getbazaarVoiceSettings(productId = undefined) {
   const settings = [];
-  if (productId !== undefined && Object.keys(drupalSettings.productInfo[productId]).length > 0) {
+  const productInfo = window.commerceBackend.getProductData(productId, true);
+
+  if (typeof productId !== 'undefined' && Object.keys(productInfo).length > 0) {
     settings.productid = productId;
-    settings.reviews = drupalSettings.productInfo[productId].alshaya_bazaar_voice;
+    settings.reviews = productInfo.alshaya_bazaar_voice;
   } else {
-    Object.entries(drupalSettings.productInfo).forEach(([key]) => {
+    Object.entries(productInfo).forEach(([key]) => {
       settings.productid = key;
-      settings.reviews = drupalSettings.productInfo[key].alshaya_bazaar_voice;
+      settings.reviews = productInfo[key].alshaya_bazaar_voice;
     });
   }
   return settings;

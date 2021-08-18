@@ -21,7 +21,7 @@ import { createUserStorage } from '../../../utilities/user_util';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { trackPassiveAnalytics, trackFeaturedAnalytics, trackContentImpression } from '../../../utilities/analytics';
 
-const bazaarVoiceSettings = getbazaarVoiceSettings();
+let bazaarVoiceSettings;
 const userDetails = getUserDetails();
 
 export default class ReviewSummary extends React.Component {
@@ -29,6 +29,7 @@ export default class ReviewSummary extends React.Component {
 
   constructor(props) {
     super(props);
+    bazaarVoiceSettings = getbazaarVoiceSettings();
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',

@@ -750,6 +750,49 @@ class AlshayaBazaarVoice {
   }
 
   /**
+   * Fetch drupal settings for individual product.
+   *
+   * @param array $basic_configs
+   *   Basic configurations of bazaarvoice.
+   *
+   * @return array|null
+   *   Drupal settings with product details.
+   */
+  public function getRcsProductBazaarVoiceDetails(array $basic_configs) {
+    $settings = [];
+
+    // Get avalable sorting options from config.
+    $sorting_options = $this->getSortingOptions();
+    // Get avalable BazaarVoice error messages from config.
+    $bv_error_messages = $this->getBazaarVoiceErrorMessages();
+    // Get the filter options to be rendered on review summary.
+    $filter_options = $this->getPdpFilterOptions();
+
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
+
+    $config = $this->configFactory->get('bazaar_voice.settings');
+
+    $settings = [
+      'bazaar_voice' => [
+        'stats' => 'Reviews',
+        'sorting_options' => $sorting_options,
+        'filter_options' => $filter_options,
+        'country_code' => $country_code,
+        'error_messages' => $bv_error_messages,
+      ],
+      'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
+      'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
+      'hide_fields_write_review' => isset($category_based_config['hide_fields_write_review'])
+      ? $category_based_config['hide_fields_write_review'] : [],
+      'myaccount_reviews_limit' => $config->get('myaccount_reviews_limit'),
+    ];
+    $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
+
+    return $settings;
+  }
+
+  /**
    * Check if parent sku exists.
    *
    * @param string $sku_id
