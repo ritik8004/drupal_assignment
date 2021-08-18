@@ -37,7 +37,7 @@ $magentos = [
     ],
     'jo' => [
       'store_id' => ['en' => 14, 'ar' => 13],
-    ], 
+    ],
   ],
   'tbs_local' => [
     'url' => 'http://www.tbs-alshayam.lndo.site',
@@ -126,7 +126,7 @@ $magentos = [
   ],
   // Mothercare.
   'mc_qa' => [
-    'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'url' => 'https://mc-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
       'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
@@ -150,24 +150,6 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 13, 'ar' => 12],
-    ],
-  ],
-  'mc_upgrade' => [
-    'url' => 'http://magento-upgrade-kb5pcqa-z3gmkbwmwrl4g.eu.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
-      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
-      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
-      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 3],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 5, 'ar' => 4],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 7, 'ar' => 6],
     ],
   ],
   'mc_sit' => [
@@ -566,6 +548,33 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'vs_test' => [
+    'url' => 'https://vs-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
+      'consumer_secret' => 'l65u29tw675glfm3rmfps1gliqlwr6m1',
+      'access_token' => 'km7olqq1wx37sveeepwcmpwvem2t6jar',
+      'access_token_secret' => 'si8olbegg9i4y3bywk2gnb4o2vpommiw',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 18],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 6, 'ar' => 9],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
     ],
   ],
   'vs_uat' => [

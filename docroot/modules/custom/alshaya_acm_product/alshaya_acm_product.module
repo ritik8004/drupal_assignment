@@ -686,8 +686,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         if (!empty($sku_media)) {
           $image = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
+
+          // Get Dimensions.
+          $dimensions = $skuImagesManager->getImageHeightWidth($sku_media['drupal_uri'], SkuImagesHelper::STYLE_PRODUCT_TEASER);
+
           if (!empty($image)) {
             $build['image'] = $image;
+            $build['image']['#width'] = $dimensions['width'];
+            $build['image']['#height'] = $dimensions['height'];
           }
         }
 
@@ -892,7 +898,7 @@ function alshaya_acm_product_get_flags_config() {
 
   if (!empty($config->get('delivery_in_only_city_text')) && !empty($config->get('delivery_in_only_city_key'))) {
     $return['delivery_in_only_city']['text'] = $config->get('delivery_in_only_city_text');
-    $return['delivery_in_only_city']['key'] = $config->get('delivery_in_only_city_key');
+    $return['delivery_in_only_city']['key'] = (int) $config->get('delivery_in_only_city_key');
   }
 
   if (!empty($config->get('legal_notice_enabled'))) {

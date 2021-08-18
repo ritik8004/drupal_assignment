@@ -26,7 +26,7 @@ class AlshayaCustomHook extends BltTasks {
 
     $patterns = [];
 
-    $ignoredDirs = ['alshaya_react', 'js', 'dist', 'node_modules'];
+    $ignoredDirs = ['alshaya_react', 'js', 'dist', 'node_modules', '__tests__'];
 
     $reactDir = $this->getConfigValue('docroot') . '/modules/react';
 

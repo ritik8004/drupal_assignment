@@ -916,16 +916,15 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['non_refundable_tooltip'] = $product_config->get('non_refundable_tooltip');
     $settings['alshaya_spc']['non_refundable_text'] = $product_config->get('non_refundable_text');
     $settings['alshaya_spc']['delivery_in_only_city_text'] = $product_config->get('delivery_in_only_city_text');
-    $settings['alshaya_spc']['delivery_in_only_city_key'] = $product_config->get('delivery_in_only_city_key');
+    $settings['alshaya_spc']['delivery_in_only_city_key'] = (int) $product_config->get('delivery_in_only_city_key');
 
     // Time we get from configuration is in minutes.
     $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
 
-    $settings['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
-
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
+
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);
 
     $build['#cache']['contexts'][] = 'languages:' . LanguageInterface::TYPE_INTERFACE;

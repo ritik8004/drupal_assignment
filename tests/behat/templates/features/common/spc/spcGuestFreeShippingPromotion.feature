@@ -1,4 +1,4 @@
-@javascript @free-shipping @promotion @smoke
+@javascript @free-shipping @promotion @smoke @mckwuat @mcsauat @mcaeuat
 Feature: SPC to add Free shipping promotion on cart for Guest user
 
   @desktop @guest @free-shipping @promotion

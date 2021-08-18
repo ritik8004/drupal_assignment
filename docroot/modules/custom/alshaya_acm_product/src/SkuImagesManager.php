@@ -1173,13 +1173,28 @@ class SkuImagesManager {
       // Show original full image in the modal inside a draggable container.
       $original_image = file_create_url($file_uri);
 
-      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+      // Zoom Image - Image that comes when you hover on main image.
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+
+      // Thumbnail Image - Gallery slider thumbnail.
+      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+
+      // Thumbnail Image - Height/Width.
+      $t_image_dimensions = $this->getImageHeightWidth($file_uri, $thumbnail_style);
+
+      // Medium Image - Main image on Gallery.
       $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+      // Medium Image - Height/Width.
+      $m_image_dimensions = $this->getImageHeightWidth($file_uri, $slide_style);
 
       $thumbnails[] = [
         'thumburl' => $image_small,
+        't_height' => $t_image_dimensions['height'],
+        't_width' => $t_image_dimensions['width'],
         'mediumurl' => $image_medium,
+        'm_height' => $m_image_dimensions['height'],
+        'm_width' => $m_image_dimensions['width'],
         'zoomurl' => $image_zoom,
         'fullurl' => $original_image,
         'label' => $media_item['label'] ?? '',
@@ -1212,6 +1227,8 @@ class SkuImagesManager {
         $main_image = [
           'zoomurl' => $thumbnail['zoomurl'],
           'mediumurl' => $thumbnail['mediumurl'],
+          'm_width' => $thumbnail['m_width'],
+          'm_height' => $thumbnail['m_height'],
           'label' => $media_item['label'],
         ];
       }
@@ -1427,6 +1444,63 @@ class SkuImagesManager {
     }
 
     return $images;
+  }
+
+  /**
+   * Get Image dimensions, height and width for img tags.
+   *
+   * @param string $file_uri
+   *   The URI of the file.
+   * @param string|null $style_name
+   *   The image style name.
+   *
+   * @return array
+   *   Array contains image width and height.
+   */
+  public function getImageHeightWidth(string $file_uri, string $style_name = NULL): array {
+    if ($style_name !== NULL) {
+      $image_style = ImageStyle::load($style_name);
+      $image_factory = \Drupal::service('image.factory')->get($image_style->buildUri($file_uri));
+    }
+    else {
+      $image_factory = \Drupal::service('image.factory')->get($file_uri);
+    }
+
+    // Height/Width.
+    return [
+      'width' => $image_factory->getToolkit()->getWidth(),
+      'height' => $image_factory->getToolkit()->getHeight(),
+    ];
+  }
+
+  /**
+   * Get Swatch Image dimensions.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Array contains image width and height of swatch image.
+   */
+  public function getPdpSwatchImageHeightWidth(SKU $sku): array {
+    $media = $this->getSkuMediaItems($sku);
+
+    $static = &drupal_static(__FUNCTION__, NULL);
+    $static['swatch-dimensions'][$sku->getSku()] = [];
+
+    foreach ($media as $item) {
+      if (isset($item['roles'])
+        && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])) {
+        $dimensions = $this->getImageHeightWidth($item['drupal_uri']);
+        $dimensions['test'] = $item['drupal_uri'];
+        if ($dimensions) {
+          $static['swatch-dimensions'][$sku->getSku()] = $dimensions;
+          break;
+        }
+      }
+    }
+
+    return $static['swatch-dimensions'][$sku->getSku()];
   }
 
 }
