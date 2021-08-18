@@ -128,7 +128,7 @@ export default class CartPromoBlock extends React.Component {
     if (inStock === false) {
       return;
     }
-    const promoValue = document.getElementById('promo-code').value.trim();
+    let promoValue = document.getElementById('promo-code').value.trim();
 
     // If empty promo text.
     if (promoApplied === false && promoValue.length === 0) {
@@ -177,6 +177,10 @@ export default class CartPromoBlock extends React.Component {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
+          if (this.isAdvantagecardEnabled()) {
+            // If isAdvantagecardEnabled disabled set promoValue to null.
+            promoValue = null;
+          }
           // If coupon is not valid.
           if (result.response_message.status === 'error_coupon') {
             const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });

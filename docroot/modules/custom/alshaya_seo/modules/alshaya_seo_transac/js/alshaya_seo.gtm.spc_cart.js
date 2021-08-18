@@ -217,20 +217,30 @@
   document.addEventListener('promoCodeSuccess', function (e) {
     // Push promoCode event into dataLayer.
     var promoCode = e.detail.data;
+    // Instead of Card number add isAdvantageCard : Yes for pass.
+    if (!promoCode) {
+      var isAdvantageCard = 'Yes';
+    }
     var data = {
       event: 'promoCode',
       couponCode: promoCode,
       couponStatus: 'pass',
+      isAdvantageCard: isAdvantageCard,
     };
     dataLayer.push(data);
   });
 
   document.addEventListener('promoCodeFailed', function (e) {
     var promoCode = e.detail.data;
+    // Instead of Card number add isAdvantageCard : No for fail.
+    if (!promoCode) {
+      var isAdvantageCard = 'No';
+    }
     var data = {
       event: 'promoCode',
       couponCode: promoCode,
       couponStatus: 'fail',
+      isAdvantageCard: isAdvantageCard,
     };
     dataLayer.push(data);
   });
