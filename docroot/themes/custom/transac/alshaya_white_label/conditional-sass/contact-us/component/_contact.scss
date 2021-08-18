@@ -292,3 +292,20 @@
     }
   }
 }
+
+.webform-submission-alshaya-contact-form .mobile-number-field .mobile-input--wrapper .country-select {
+  @include country-select;
+}
+
+.webform-submission-alshaya-contact-form .mobile-number-field .mobile-input--wrapper {
+  @include mobile-input-style;
+}
+
+.webform-submission-alshaya-contact-form,
+#selected-store-wrapper {
+  .mobile-number-field {
+    input {
+      @include mobile-number-input-style;
+    }
+  }
+}
