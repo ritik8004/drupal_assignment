@@ -850,10 +850,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
     }
   }
-  elseif ($entity->bundle() === 'rcs_product') {
-    // @todo Move to the new rcs product module once it is available.
-    $build['#attached']['library'][] = 'alshaya_acm_product/rcs_product_info';
-  }
 }
 
 /**
