@@ -9,15 +9,15 @@ label: 'Promotion url alias'
 type: 'canonical_entities:node'
 pattern: 'promotion/[node:field_acq_promotion_label]'
 selection_criteria:
-  a208e978-9d97-48ba-94ae-84a6cffe43d4:
+  fa86c8f3-6918-4bec-b970-837d64c3c895:
     id: node_type
     bundles:
       acq_promotion: acq_promotion
     negate: false
     context_mapping:
       node: node
-    uuid: a208e978-9d97-48ba-94ae-84a6cffe43d4
-  09441bc0-71a9-4f4c-ba8b-ec12f38b5e56:
+    uuid: fa86c8f3-6918-4bec-b970-837d64c3c895
+  45926b0e-c17b-44be-bd1d-fa0fca419509:
     id: language
     langcodes:
       en: en
@@ -25,7 +25,7 @@ selection_criteria:
     negate: false
     context_mapping:
       language: 'node:langcode:language'
-    uuid: 09441bc0-71a9-4f4c-ba8b-ec12f38b5e56
+    uuid: 45926b0e-c17b-44be-bd1d-fa0fca419509
 selection_logic: and
 weight: -10
 relationships:

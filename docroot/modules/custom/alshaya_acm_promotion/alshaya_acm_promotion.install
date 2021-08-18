@@ -12,6 +12,57 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Update the path pattern of promotion.
+ */
+function alshaya_acm_promotion_update_8027(&$sandbox) {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'pathauto.pattern.promotion_url_alias'
+  ],
+    'alshaya_acm_promotion',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  // Bulk update all the promotion nodes.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'acq_promotion')
+    ->execute();
+  // Use the sandbox to store the information needed to track progression.
+  if (!isset($sandbox['current'])) {
+    $sandbox['current'] = 0;
+    $sandbox['max'] = count($nids);
+  }
+
+  // Process nodes by groups of 10.
+  $limit = 10;
+  $result = array_slice($nids, $sandbox['current'], $limit);
+  foreach ($result as $nid) {
+    $entity_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $entity = $entity_storage->load($nid);
+    // Load different translated versions of the node.
+    foreach ($entity->getTranslationLanguages() as $langcode => $language) {
+      $translated_node = $entity->getTranslation($langcode);
+      // Update Entity URL alias.
+      \Drupal::service('pathauto.generator')->updateEntityAlias($translated_node, 'update');
+    }
+
+    // Update our progress information.
+    $sandbox['current']++;
+  }
+
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['current'] / $sandbox['max']);
+
+  if ($sandbox['#finished'] >= 1) {
+    return t('The URL Alias update is finished.');
+  }
+
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new promotions dynamic labels resource.
  */
 function alshaya_acm_promotion_update_8026() {
