@@ -44,12 +44,14 @@ class CompleteBenefitPayPayment extends React.Component {
 
   prepareBenefitPayDetails = () => {
     const { payment, totals } = this.props;
+    const {
+      decimal_points: decimalPoints,
+      currency_code: currencyCode,
+    } = drupalSettings.alshaya_spc.currency_config;
 
     const data = {
-      transactionAmount: totals.base_grand_total.toFixed(
-        drupalSettings.alshaya_spc.currency_config.decimal_points,
-      ),
-      transactionCurrency: drupalSettings.alshaya_spc.currency_config.currency_code,
+      transactionAmount: totals.base_grand_total.toFixed(decimalPoints),
+      transactionCurrency: currencyCode,
       referenceNumber: payment.referenceNumber,
       merchantId: this.merchantId,
       appId: this.appId,
@@ -68,8 +70,10 @@ class CompleteBenefitPayPayment extends React.Component {
       inAppScript.id = 'benefit-pay-in-app';
       document.head.appendChild(inAppScript);
       inAppScript.onload = () => {
-        if (typeof InApp !== 'undefined'
-          && localStorage.getItem('benefit_pay_modal_auto_opened') !== 'true') {
+        // We only want to auto open payment modal once so checking
+        // `benefit_pay_modal_auto_opened` from storage to check if this is user's
+        // first visit of confirmation page or user is reloading the page.
+        if (typeof InApp !== 'undefined' && !localStorage.getItem('benefit_pay_modal_auto_opened')) {
           this.openInAppModal();
         }
       };
