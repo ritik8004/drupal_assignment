@@ -22,6 +22,8 @@ class ReviewCommentDisplay extends React.Component {
                   UserNickname={comment.UserNickname}
                   SubmissionTime={comment.SubmissionTime}
                   CommentText={comment.CommentText}
+                  commentId={comment.Id}
+                  contentLocale={comment.ContentLocale}
                 />
                 <div className="review-feedback">
                   <ReviewFeedback
