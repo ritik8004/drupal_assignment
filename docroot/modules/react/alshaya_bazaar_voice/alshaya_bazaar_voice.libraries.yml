@@ -38,6 +38,7 @@ reviewsV2:
     - core/drupal
     - core/drupalSettings
     - alshaya_react/react
+    - alshaya_acm_product/rcs_product_info
 
 ratingV2:
   js:
@@ -47,3 +48,4 @@ ratingV2:
     - core/drupal
     - core/drupalSettings
     - alshaya_react/react
+    - alshaya_acm_product/rcs_product_info

@@ -24,6 +24,12 @@ export default class WriteReviewForm extends React.Component {
     super(props);
     this.state = {
       fieldsConfig: '',
+      userDetails: {
+        user: {
+          userId: 0,
+          emailId: null,
+        },
+      },
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -39,10 +45,12 @@ export default class WriteReviewForm extends React.Component {
       productId, context,
     } = this.props;
     // Create user token for my account section for each product.
-    const userDetails = getUserDetails(productId);
-    if (productId !== undefined && context === 'myaccount') {
-      createUserStorage(userDetails.user.userId, userDetails.user.emailId, productId);
-    }
+    getUserDetails(productId).then((userDetails) => {
+      if (productId !== undefined && context === 'myaccount') {
+        createUserStorage(userDetails.user.userId, userDetails.user.emailId, productId);
+      }
+      this.setState({ userDetails });
+    });
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const apiUri = `/${getLanguageCode()}/get-write-review-fields-configs`;
     const apiData = doRequest(apiUri);
@@ -74,7 +82,7 @@ export default class WriteReviewForm extends React.Component {
     this.setState = () => {};
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     const { fieldsConfig } = this.state;
     const { productId, newPdp } = this.props;
     e.preventDefault();
@@ -84,7 +92,7 @@ export default class WriteReviewForm extends React.Component {
       return;
     }
     showFullScreenLoader();
-    const request = prepareRequest(e.target.elements, fieldsConfig, productId);
+    const request = await prepareRequest(e.target.elements, fieldsConfig, productId);
     const apiUri = '/data/submitreview.json';
 
     // Post the review data to BazaarVoice.
@@ -154,6 +162,7 @@ export default class WriteReviewForm extends React.Component {
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const {
       fieldsConfig,
+      userDetails,
     } = this.state;
 
     Object.entries(fieldsConfig).forEach(
@@ -165,6 +174,7 @@ export default class WriteReviewForm extends React.Component {
             field={field}
             productId={productId}
             countryCode={bazaarVoiceSettings.reviews.bazaar_voice.country_code}
+            userDetails={userDetails}
           />,
         );
       },

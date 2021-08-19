@@ -117,7 +117,10 @@ export async function getProductReviewForCurrrentUser(productIdentifier) {
   let productReviewData = StaticStorage.get(staticStorageKey);
 
   if (productReviewData) {
-    return productReviewData;
+    return JSON.parse(productReviewData);
+  }
+  if (productReviewData === 0) {
+    return null;
   }
 
   // Get review data from BazaarVoice based on available parameters.
@@ -139,7 +142,10 @@ export async function getProductReviewForCurrrentUser(productIdentifier) {
     }
   }
 
-  StaticStorage.set(staticStorageKey, productReviewData);
+  // In case there are no reviews, store 0 instead of null in order to
+  // differentiate between empty storage and 0 reviews.
+  const staticData = !productReviewData ? 0 : JSON.stringify(productReviewData);
+  StaticStorage.set(staticStorageKey, staticData);
 
   return productReviewData;
 }

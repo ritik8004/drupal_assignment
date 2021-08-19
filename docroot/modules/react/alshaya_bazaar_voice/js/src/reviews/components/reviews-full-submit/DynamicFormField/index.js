@@ -9,14 +9,13 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
-import { getUserDetails } from '../../../../utilities/api/request';
 import { getStorageInfo } from '../../../../utilities/storage';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
   let readonly = false;
 
-  const { field: defField, productId, countryCode } = props;
+  const { field: defField, countryCode, userDetails } = props;
   if (defField.length !== 0
     && defField.length !== 'undefined') {
     Object.entries(defField).forEach(
@@ -29,7 +28,6 @@ const DynamicFormField = (props) => {
 
   // Set default value for user nickname and email.
   // For anonymous user, default value is from user cookies.
-  const userDetails = getUserDetails(productId);
   const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
