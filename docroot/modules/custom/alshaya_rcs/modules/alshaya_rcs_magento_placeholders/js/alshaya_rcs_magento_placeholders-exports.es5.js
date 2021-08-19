@@ -93,7 +93,7 @@ exports.computePhFilters = function (input, filter) {
     case 'add_to_cart':
     case 'gtm-price':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
-        html += globalThis.renderRcsProduct.computePhFilters(input, filter);
+        value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }
       break;
 

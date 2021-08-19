@@ -136,12 +136,16 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     return;
   }
 
+  // Attach required libraries.
   $build['#attached']['library'][] = 'alshaya_rcs_product/main';
+  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
+
 
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
   ];
 
+  // Attach required drupalSettings.
   $cart_config = \Drupal::config('alshaya_acm.cart_config');
   $build['#attached']['drupalSettings']['alshaya_spc']['cart_config']['max_cart_qty'] = $cart_config->get('max_cart_qty');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $cart_config->getCacheTags());
