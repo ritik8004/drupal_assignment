@@ -227,6 +227,8 @@ class AlshayaSpcController extends ControllerBase {
         'enabled' => $advantage_card_config->get('advantageCardEnabled'),
         'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
       ];
+      $cache_tags = Cache::mergeTags($cache_tags, $advantage_card_config->getCacheTags());
+      $build['#cache']['tags'] = $cache_tags;
     }
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
