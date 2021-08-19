@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_promotion_install() {
+  // Move the rcs promotion block to current theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+  // Disable the V1 blocks that are not required.
+  $blocks = [
+    'views_block__alshaya_promotion_description_block_1',
+    'alshayaalgoliareactpromotion',
+  ];
+  $existing_algolia_promotion_block_weight = NULL;
+  foreach ($blocks as $block_id) {
+    $block = Block::load($block_id);
+    if ($block instanceof BlockInterface) {
+      // Change the RCS term description block weight based on the view term
+      // description block.
+      if ($block_id == 'alshayaalgoliareactpromotion') {
+        $existing_algolia_promotion_block_weight = $block->getWeight();
+      }
+      $block->disable()->save();
+    }
+  }
+  // Load the RCS Block and Change the weight.
+  if ($existing_term_desc_block_weight !== NULL) {
+    $block = Block::load('alshaya_algolia_react_promotion_v2');
+    $block->setWeight($existing_algolia_promotion_block_weight);
+    $block->save();
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_promotion_uninstall() {
+  // Enable the V1 blocks.
+  $blocks = [
+    'views_block__alshaya_promotion_description_block_1',
+    'alshayaalgoliareactpromotion',
+  ];
+  foreach ($blocks as $block_id) {
+    $block = Block::load($block_id);
+    if ($block instanceof BlockInterface) {
+      $block->enable()->save();
+    }
+  }
+}

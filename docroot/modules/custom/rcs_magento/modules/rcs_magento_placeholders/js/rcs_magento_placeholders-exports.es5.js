@@ -41,6 +41,22 @@ exports.getEntity = async function getEntity(langcode) {
 
       break;
 
+    case 'promotion':
+      // Prepare request parameters.
+      request.uri += "graphql";
+      request.method = "POST",
+        request.headers.push(["Content-Type", "application/json"]);
+
+      const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
+      request.data = JSON.stringify({
+        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") {
+            id
+          }
+        }`
+      });
+
+      break;
+
     default:
       console.log(
         `Entity type ${drupalSettings.rcsPage.type} not supported for get_entity.`
@@ -55,6 +71,9 @@ exports.getEntity = async function getEntity(langcode) {
   }
   else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
+  }
+  else if (drupalSettings.rcsPage.type == 'promotion' && response.data.promotionUrlResolver) {
+    result = response.data.promotionUrlResolver;
   }
 
   return result;
