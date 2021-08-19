@@ -91,6 +91,19 @@ export default class ReviewSummary extends React.Component {
 
     let sortParams = '';
     let filterParams = '';
+    // Set default sorting options.
+    const sortOptions = bazaarVoiceSettings.reviews.bazaar_voice.sorting_options;
+    if (sortOptions.length > 0 && extraParams === undefined) {
+      let optionVal = '';
+      sortOptions.map((option) => {
+        if (option.value !== 'none') {
+          optionVal += `${option.value},`;
+        }
+        return optionVal;
+      });
+      optionVal = optionVal.replace(/,\s*$/, '');
+      sortParams = `&sort=${optionVal}`;
+    }
     if (extraParams !== undefined) {
       // Add sorting parameters.
       if (extraParams.currentSortOption.length > 0) {

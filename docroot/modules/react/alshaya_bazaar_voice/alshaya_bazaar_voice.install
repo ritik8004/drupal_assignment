@@ -15,6 +15,7 @@ use Drupal\block\Entity\Block;
  * Implements hook_update_N().
  *
  * Add configs for Google translations.
+ * Add new field for sorting optons.
  * Add translations.
  */
 function alshaya_bazaar_voice_update_8004() {
@@ -24,6 +25,25 @@ function alshaya_bazaar_voice_update_8004() {
     ['bazaar_voice.settings'],
     'bazaar_voice'
   );
+
+  // Add new field for sorting optons.
+  $config = \Drupal::configFactory()->getEditable('bazaar_voice_sort_review.settings');
+  // Update available option.
+  $available_sort_options = $config->get('sort_options');
+  $available_sort_options['IsFeatured'] = 'IsFeatured';
+  $config->set('sort_options', $available_sort_options);
+  // Update sorting options label.
+  $new_label = [
+    [
+      'value' => 'IsFeatured:Desc',
+      'label' => 'Featured',
+    ],
+  ];
+  $labels = $config->get('sort_options_labels');
+  $labels = array_merge($labels, $new_label);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+
   // Add translations.
   module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
   if ($translations = _alshaya_bazaar_voice_translations()) {
