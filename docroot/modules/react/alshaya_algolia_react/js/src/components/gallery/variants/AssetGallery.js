@@ -13,7 +13,23 @@ const AssetGallery = ({
   // cloned array, keep original array reusable on state change.
   const images = [...media];
   const mainImage = images.length > 0 ? images.shift() : {};
+  // Dimensions.
+  let mWidth = null;
+  let mHeight = null;
+  if (typeof mainImage.width !== 'undefined') {
+    mWidth = mainImage.width;
+    mHeight = mainImage.height;
+  }
+
   const hoverImage = images.length > 0 ? images.shift() : {};
+  // Dimensions.
+  let hWidth = null;
+  let hHeight = null;
+  if (typeof hoverImage.width !== 'undefined') {
+    hWidth = hoverImage.width;
+    hHeight = hoverImage.height;
+  }
+
   const mainImageUrl = typeof mainImage.url !== 'undefined' ? mainImage.url : '';
 
   return (
@@ -24,6 +40,8 @@ const AssetGallery = ({
           data-src={mainImageUrl}
           title={title}
           className="b-lazy"
+          width={mWidth}
+          height={mHeight}
         />
       </div>
       <div className="alshaya_search_hoverimage">
@@ -32,6 +50,8 @@ const AssetGallery = ({
           data-src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
           title={title}
           className="b-lazy"
+          width={hWidth}
+          height={hHeight}
         />
       </div>
       <Lozenges labels={labels} sku={sku} />

@@ -598,9 +598,14 @@ class AlshayaAlgoliaIndexHelper {
     $images = [];
 
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      // Get Dimensions.
+      $dimensions = $this->skuImagesManager->getImageHeightWidth($media_item['drupal_uri'], SkuImagesHelper::STYLE_PRODUCT_LISTING);
+
       $images[] = [
         'url' => $this->skuImagesHelper->getImageStyleUrl($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
+        'width' => $dimensions['width'],
+        'height' => $dimensions['height'],
       ];
     }
     return $images;
