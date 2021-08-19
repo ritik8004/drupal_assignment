@@ -2,13 +2,12 @@ import React from 'react';
 import SectionTitle from '../../../../utilities/section-title';
 import DynamicFormField from '../DynamicFormField';
 import { prepareRequest, validateRequest } from '../../../../utilities/write_review_util';
-import { postAPIData } from '../../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import {
-  getLanguageCode, doRequest, getbazaarVoiceSettings, getUserDetails,
+  getLanguageCode, doRequest, getbazaarVoiceSettings, getUserDetails, postAPIData,
 } from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
