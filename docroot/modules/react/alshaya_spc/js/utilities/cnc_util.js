@@ -57,13 +57,6 @@ export const isCollectionPoint = (store) => (store.pudo_available !== undefined
 /**
  * Helper to get contact subtitle.
  */
-export const getCnCModalContactTitle = () => ((collectionPointsEnabled() === true)
-  ? 'cnc_collection_contact_info_title'
-  : 'contact_information');
-
-/**
- * Helper to get contact subtitle.
- */
 export const getCnCModalContactSubtitle = () => ((collectionPointsEnabled() === true)
   ? 'cnc_selected_collection_point'
   : 'cnc_selected_store');

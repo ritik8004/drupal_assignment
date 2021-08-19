@@ -5,7 +5,7 @@ import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
-import { collectionPointsEnabled, getCnCModalContactTitle } from '../../../utilities/cnc_util';
+import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 
 const FixedFields = ({
   defaultVal, showEmail, showFullName = true, subTitle, type,
@@ -18,25 +18,13 @@ const FixedFields = ({
   const hasSubTitle = subTitle !== undefined && subTitle.length > 0
     ? 'subtitle-yes' : 'subtitle-no';
 
-  const handleContactInfoChange = (e) => {
-    if (e.target.checked === false) {
-      // contains value of attribute 'name'.
-      const fields = ['fullname', 'mobile'];
-      let elementName = '';
-      // sets empty value for field fullname and mobile.
-      fields.forEach((fieldName) => {
-        elementName = `input[name='${fieldName}']`;
-        document.querySelector(elementName).value = '';
-      });
-    }
-  };
   return (
     <div className={`spc-checkout-contact-information ${hasSubTitle}`} id="spc-checkout-contact-info">
       {/* Show contact info only for CnC. */}
       {type === 'cnc'
         && (
         <div className="spc-contact-information-header">
-          <SectionTitle>{getStringMessage(getCnCModalContactTitle())}</SectionTitle>
+          <SectionTitle>{getStringMessage('contact_information')}</SectionTitle>
           {collectionPointsEnabled() === false
             && (
               <span className="spc-contact-info-desc">{subTitle}</span>
@@ -44,15 +32,6 @@ const FixedFields = ({
         </div>
         )}
       <div className="spc-checkout-contact-information-fields">
-        <ConditionalView
-          condition={(collectionPointsEnabled() === true
-            && drupalSettings.user.uid > 0)}
-        >
-          <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" onChange={(e) => handleContactInfoChange(e)} defaultChecked />
-          <label htmlFor="spc-checkout-contact-info-checkbox" className="spc-pudo-checkout-contact-info-checkbox">
-            {getStringMessage('cnc_contact_info_checkbox')}
-          </label>
-        </ConditionalView>
         <ConditionalView condition={showFullName}>
           <TextField
             type="text"
@@ -79,6 +58,14 @@ const FixedFields = ({
           className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
           label={getStringMessage('ci_mobile_number')}
         />
+        <ConditionalView condition={collectionPointsEnabled() === true}>
+          <div className="spc-pudo-checkout-contact-info-checkbox-wrapper">
+            <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" />
+            <label htmlFor="spc-checkout-contact-info-checkbox" className="spc-pudo-checkout-contact-info-checkbox">
+              {getStringMessage('cnc_contact_info_checkbox')}
+            </label>
+          </div>
+        </ConditionalView>
         <input type="hidden" name="address_id" value={defaultValue !== '' && defaultValue.address_id !== null ? defaultValue.address_id : 0} />
       </div>
     </div>
