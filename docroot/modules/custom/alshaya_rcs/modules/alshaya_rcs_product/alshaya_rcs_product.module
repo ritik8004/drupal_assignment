@@ -1,0 +1,464 @@
+<?php
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
+  return [
+    'node__rcs_product__full' => [
+      'variables' => [],
+      'base hook' => 'node',
+    ],
+    'node__rcs_product__full_magazine' => [
+      'variables' => [
+        'price_block' => [],
+      ],
+      'base hook' => 'node',
+    ],
+    'node__rcs_product__full_magazine_v2' => [
+      'variables' => [],
+    ],
+    'rcs_commerce_price' => [
+      'variables' => [
+        'price' => '',
+        'currency_format' => '',
+        'currency_code_position' => '',
+        'decimal_points' => '',
+        'append_each_to_price' => '',
+      ],
+    ],
+    'rcs_price_block' => [
+      'variables' => [],
+    ],
+    'rcs_sku_base_form' => [
+      'variables' => [],
+    ],
+    'page__rcs_pdp' => [
+      'variable'
+    ],
+    'rcs_product_zoom' => [
+      'variables' => [
+        'mainImage' => '',
+        'thumbnails' => '',
+        'pager_flag' => '',
+        'properties' => '',
+        'labels' => '',
+        'image_slider_position_pdp' => '',
+        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
+      ],
+    ],
+    'product_thumbnails' => [
+      'variables' => [],
+    ],
+    'product_gallery_mobile' => [
+      'variables' => [],
+    ],
+    'form_element_select' => [
+      'variables' => [],
+    ],
+    'rcs_pdp_delivery_option' => [
+      'variables' => [],
+    ],
+    'rcs_pdp_delivery_option_home_delivery' => [
+      'render element' => 'elements',
+      'variables' => [
+        'title' => NULL,
+        'title_price' => NULL,
+        'subtitle' => NULL,
+        'options' => [],
+      ],
+    ],
+    'rcs_pdp_delivery_option_click_and_collect' => [
+      'render element' => 'elements',
+      'variables' => [
+        'state' => NULL,
+        'sku' => NULL,
+        'type' => NULL,
+        'title' => NULL,
+        'subtitle' => NULL,
+        'title_price' => NULL,
+        'help_text' => NULL,
+        'available_at_title' => NULL,
+        'store_finder_form' => NULL,
+        'select_option_text' => NULL,
+      ],
+    ],
+    'rcs_not_buyable_product' => [
+      'variables' => [
+        'not_buyable_message' => NULL,
+        'not_buyable_help_text' => NULL,
+      ],
+    ],
+    'rcs_sku_base_form' => [
+      'variables' => [],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
+  // Add more attributes to the list provided by the rcs_placeholders module.
+  $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = array_merge(
+    $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'],
+    [
+      'data-sku',
+      'data-sku-type',
+      'data-zoom-url',
+      'data-src',
+      'gtm-name',
+      'gtm-product-sku',
+      'gtm-product-sku-class-identifier',
+      'gtm-sku-type',
+      'gtm-main-sku',
+      'gtm-brand',
+      'gtm-dimension4',
+      'gtm-price',
+      'gtm-dimension3',
+      'gtm-category',
+    ],
+  );
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ *
+ */
+function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  // Attach required libraries.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/main';
+  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
+
+
+  $build['price_block'] = [
+    '#theme' => 'rcs_commerce_price',
+  ];
+
+  // Attach required drupalSettings.
+  $cart_config = \Drupal::config('alshaya_acm.cart_config');
+  $build['#attached']['drupalSettings']['alshaya_spc']['cart_config']['max_cart_qty'] = $cart_config->get('max_cart_qty');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $cart_config->getCacheTags());
+
+  $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $build['#attached']['drupalSettings']['vat_text'] = $product_settings->get('vat_text');
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
+  $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
+
+  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
+
+  $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_rcs_commerce_price(array &$variables) {
+  $acm_settings = \Drupal::config('alshaya_acm.settings');
+
+  // With matchback enabled, we will have 'each' word added to price
+  // based on the quantity for main product as well as matchback products
+  // following the host site implementation.
+  $variables['append_each_to_price'] = $acm_settings->get('show_crosssell_as_matchback') && $acm_settings->get('append_each_to_price')
+    ? TRUE
+    : FALSE;
+
+  $current_language = \Drupal::languageManager()
+    ->getConfigOverrideLanguage()
+    ->getId();
+
+  if (empty($config_data[$current_language])) {
+    $config = \Drupal::configFactory()->get('acq_commerce.currency');
+    $config_data[$current_language]['currency_format'] = $config->get('currency_code');
+    $config_data[$current_language]['currency_code_position'] = $config->get('currency_code_position');
+    $config_data[$current_language]['decimal_points'] = $config->get('decimal_points');
+  }
+
+  $variables['currency_format'] = $config_data[$current_language]['currency_format'];
+  $variables['currency_code_position'] = $config_data[$current_language]['currency_code_position'];
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_rcs_product_preprocess_html(array &$variables) {
+  $variables['rcs_templates'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => 'hidden',
+    ],
+  ];
+
+  $price_template = [
+    '#theme' => 'rcs_commerce_price',
+  ];
+
+  $price_block_template = [
+    '#theme' => 'rcs_price_block'
+  ];
+
+  $variables['rcs_templates']['price'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($price_template),
+    '#attributes' => [
+      'class' => 'rcs-templates--price',
+    ],
+  ];
+
+  $variables['rcs_templates']['price_block'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($price_block_template),
+    '#attributes' => [
+      'class' => 'rcs-templates--price_block',
+    ],
+  ];
+
+  $product_thumbnails_template = [
+    '#theme' => 'product_thumbnails',
+  ];
+  $variables['rcs_templates']['product_thumbnails'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'ul',
+    '#value' => render($product_thumbnails_template),
+    '#attributes' => [
+      'class' => 'rcs-templates--product_thumbnails',
+    ],
+  ];
+
+  $product_gallery_mobile_template = [
+    '#theme' => 'product_gallery_mobile',
+  ];
+  $variables['rcs_templates']['product_gallery_mobile'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'ul',
+    '#value' => render($product_gallery_mobile_template),
+    '#attributes' => [
+      'class' => 'rcs-templates--product_gallery_mobile',
+    ],
+  ];
+
+  $form_element_select_template = [
+    '#theme' => 'form_element_select',
+  ];
+  $variables['rcs_templates']['form_element_select'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($form_element_select_template),
+    '#attributes' => [
+      'class' => 'rcs-templates--form_element_select',
+    ],
+  ];
+
+
+  $delivery_option = [
+    '#theme' => 'rcs_pdp_delivery_option',
+  ];
+  $variables['rcs_templates']['delivery_option'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($delivery_option),
+    '#attributes' => [
+      'class' => 'rcs-templates--delivery_option',
+    ],
+  ];
+
+  $delivery_option_home_delivery = [
+    '#theme' => 'rcs_pdp_delivery_option_home_delivery',
+  ];
+  $variables['rcs_templates']['home_delivery'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($delivery_option_home_delivery),
+    '#attributes' => [
+      'class' => 'rcs-templates--delivery_option-home-delivery',
+    ],
+  ];
+
+  $delivery_option_click_and_collect = [
+    '#theme' => 'rcs_pdp_delivery_option_click_and_collect',
+  ];
+  $variables['rcs_templates']['click_and_collect'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($delivery_option_click_and_collect),
+    '#attributes' => [
+      'class' => 'rcs-templates--delivery_option-click-and-collect',
+    ],
+  ];
+
+  $size_guide = _alshaya_acm_product_get_size_guide_info(null);
+  if (isset($size_guide['link']) && isset($size_guide['attributes'])) {
+    $variables['rcs_templates']['size_guide'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => $size_guide['link'],
+      '#attributes' => [
+        'class' => 'rcs-templates--size-guide',
+        'data-attributes' => implode(',', $size_guide['attributes']),
+      ],
+    ];
+  }
+
+  $not_buyable_product = [
+    '#theme' => 'rcs_not_buyable_product',
+  ];
+  $variables['rcs_templates']['not_buyable_product'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($not_buyable_product),
+    '#attributes' => [
+      'class' => 'rcs-templates--not-buyable-product',
+    ],
+  ];
+
+  $sku_base_form = [
+    '#theme' => 'rcs_sku_base_form',
+  ];
+  $variables['rcs_templates']['sku_base_form'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($sku_base_form),
+    '#attributes' => [
+      'class' => 'rcs-templates--sku-base-form',
+    ],
+  ];
+
+  // We pass this as html so that in the JS, we can fetch the data from here and
+  // we can call other apis to add to this data if required.
+  // For eg. we would need to add Bazaar Voice data when it is enabled.
+  $product_schema_data = _alshaya_seo_transac_pdp_rich_snippet();
+  \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
+
+  $variables['rcs_templates']['product_schema_data'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#attributes' => [
+      'class' => 'rcs-templates--product_schema_data',
+      'data-product-schema' => json_encode($product_schema_data),
+    ],
+  ];
+
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    $node = \Drupal::request()->attributes->get('node');
+    if ($node->bundle() == 'rcs_product') {
+      // Add classes to keep the styling same as acq_product node.
+      $variables['attributes']['class'][] = 'nodetype--acq_product';
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function alshaya_rcs_product_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    $node = \Drupal::request()->attributes->get('node');
+    if ($node->bundle() == 'rcs_product') {
+      $suggestions[] = 'page__rcs_pdp';
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_product_zoom_alter().
+ */
+function alshaya_rcs_product_theme_suggestions_product_zoom_alter(array &$suggestions, array $variables) {
+  $suggestions[] = 'rcs_product_zoom';
+}
+
+/**
+ * Implememts template_preprocess_HOOK().
+ */
+function template_preprocess_rcs_pdp_delivery_option_home_delivery(array &$variables) {
+  $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
+
+  $variables['title'] = $home_delivery_config['title'];
+  $variables['subtitle'] = $home_delivery_config['subtitle'];
+  $variables['options'] = [
+    'standard_title' => $home_delivery_config['standard_title'],
+    'standard_subtitle' => $home_delivery_config['standard_subtitle'],
+  ];
+  $variables['#cache']['tags'] = \Drupal::config('alshaya_acm_product.home_delivery')->getCacheTags();
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_rcs_pdp_delivery_option_click_and_collect(array &$variables) {
+  $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
+
+  // Adding shipping options.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+  $config = alshaya_click_collect_get_config();
+
+  // Here we just show static text, we will get stores info using ajax.
+  // We need lat/lon info of user to get stores.
+  $store_form = \Drupal::formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
+
+  $variables['state'] = '';
+  $variables['sku'] = '';
+  $variables['type'] = '';
+  $variables['title'] = $config['title'];
+  $variables['title_price'] = alshaya_acm_price_get_formatted_price($config['title_price']);
+  $variables['subtitle'] = [
+    'enabled' => $config['subtitle'],
+    'disabled' => $config['unavailable'],
+  ];
+  $variables['help_text'] = $config['help_text'];
+  $variables['select_option_text'] = $config['select_option_text'];
+  $variables['store_finder_form'] = render($store_form);
+  $variables['#attached'] = [
+    'drupalSettings' => [
+      'alshaya_click_collect' => [
+        'pdp' => ['ajax_call' => FALSE],
+        // Default site country to limit autocomplete result.
+        'country' => _alshaya_custom_get_site_level_country_code(),
+        'status' => $cnc_settings->get('feature_status'),
+        'subtitle' => [
+          'enabled' => $config['subtitle'],
+          'disabled' => $config['unavailable'],
+        ],
+      ],
+    ],
+    'library' => [
+      'alshaya_click_collect/click-and-collect.pdp',
+    ],
+  ];
+
+  $variables['#cache']['tags'] = $cnc_settings->getCacheTags();
+  // Adding cache tags for the on-off feature.
+  $variables['#cache']['tags'][] = 'click-collect-cache-tag';
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_rcs_not_buyable_product(&$variables) {
+  $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $variables['#cache']['tags'] = $product_settings->getCacheTags();
+
+  // Get store finder link.
+  $find_store_url = Url::fromUserInput('/store-finder')->toString();
+  $not_buyable_help_text = new FormattableMarkup($product_settings->get('not_buyable_help_text.value'), [
+    ':find_store' => $find_store_url,
+  ]);
+
+  $variables['not_buyable_message'] = $product_settings->get('not_buyable_message.value');
+  $variables['not_buyable_help_text'] = $not_buyable_help_text;
+}

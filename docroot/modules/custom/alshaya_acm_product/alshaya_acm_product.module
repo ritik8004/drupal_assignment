@@ -688,8 +688,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         if (!empty($sku_media)) {
           $image = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
+
+          // Get Dimensions.
+          $dimensions = $skuImagesManager->getImageHeightWidth($sku_media['drupal_uri'], SkuImagesHelper::STYLE_PRODUCT_TEASER);
+
           if (!empty($image)) {
             $build['image'] = $image;
+            $build['image']['#width'] = $dimensions['width'];
+            $build['image']['#height'] = $dimensions['height'];
           }
         }
 
@@ -843,10 +849,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         \Drupal::moduleHandler()->alter('alshaya_acm_product_build', $build, $sku_entity, $context);
       }
     }
-  }
-  elseif ($entity->bundle() === 'rcs_product') {
-    // @todo Move to the new rcs product module once it is available.
-    $build['#attached']['library'][] = 'alshaya_acm_product/rcs_product_info';
   }
 }
 

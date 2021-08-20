@@ -28,6 +28,11 @@ function rcs_placeholders_token_info() {
     'description' => t('The configured path prefix for RCS categories.'),
   ];
 
+  $info['tokens']['rcs']['promotion-path-prefix'] = [
+    'name' => t('RCS promotion path prefix'),
+    'description' => t('The configured path prefix for RCS promotion.'),
+  ];
+
   return $info;
 }
 
@@ -51,6 +56,10 @@ function rcs_placeholders_tokens($type, $tokens, array $data, array $options, Bu
 
       case 'category-path-prefix':
         $replacements[$original] = $config->get('category.path_prefix');
+        break;
+
+      case 'promotion-path-prefix':
+        $replacements[$original] = $config->get('promotion.path_prefix');
         break;
     }
   }

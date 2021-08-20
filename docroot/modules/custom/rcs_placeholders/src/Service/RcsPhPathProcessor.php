@@ -153,6 +153,19 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       return $static[$rcs_path_to_check];
     }
 
+    // Is it a promotion page?
+    $promotion_prefix = $config->get('promotion.path_prefix');
+
+    preg_match('/^\/' . $promotion_prefix . '([^\/\?]*)/', $rcs_path_to_check, $matches);
+    if (isset($matches[1])) {
+      self::$entityType = 'promotion';
+      self::$entityPath = $matches[1];
+
+      $static[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
+
+      return $static[$rcs_path_to_check];
+    }
+
     // Set current path as default so we do not process twice for same path.
     if (empty($static[$path])) {
       $static[$path] = $path;

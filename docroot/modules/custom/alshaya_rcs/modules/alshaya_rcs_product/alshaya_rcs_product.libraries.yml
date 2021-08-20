@@ -1,0 +1,11 @@
+main:
+  js:
+    dist/alshaya_rcs_product.bundle.js: {}
+  dependencies:
+    - rcs_magento_placeholders/rcs_magento_placeholders
+    - alshaya_rcs_magento_placeholders/main
+
+rcs_product_info:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.pdp.v2.js: {}
