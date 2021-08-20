@@ -233,8 +233,8 @@ class ProductExportCommands extends DrushCommands {
    */
   private static function getDataForNode(NodeInterface $node) {
     $fields = [
-      'store_code',
-      'url_alias',
+      'store_view_code',
+      'url_key',
       'field_meta_tags',
     ];
 
@@ -248,14 +248,14 @@ class ProductExportCommands extends DrushCommands {
 
     foreach ($fields as $field) {
       switch ($field) {
-        case 'store_code':
+        case 'store_view_code':
           $data[$field] = self::getStoreCode($node_langcode);
           break;
 
-        case 'url_alias':
+        case 'url_key':
           $url = $node->toUrl()->toString();
-          // Only provide the path without langcode and domain.
-          $data[$field] = str_replace('/' . $node_langcode, '', $url);
+          // Only provide the path without langcode and domain and .html.
+          $data[$field] = str_replace(["/$node_langcode/", '.html'], ['', ''], $url);
           break;
 
         case 'field_meta_tags':
