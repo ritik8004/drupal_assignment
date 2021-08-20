@@ -14,6 +14,26 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add configs for Google translations.
+ * Add translations.
+ */
+function alshaya_bazaar_voice_update_8004() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Add configs for Google translations feature.
+  $manager->updateConfigs(
+    ['bazaar_voice.settings'],
+    'bazaar_voice'
+  );
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Moving bazaarvoice block from white label to active theme.
  */
 function alshaya_bazaar_voice_update_8003() {

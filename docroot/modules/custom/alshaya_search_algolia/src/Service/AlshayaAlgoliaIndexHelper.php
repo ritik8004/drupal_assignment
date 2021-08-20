@@ -7,6 +7,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases;
@@ -19,7 +20,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
@@ -189,6 +189,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $moduleHandler;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -231,6 +238,8 @@ class AlshayaAlgoliaIndexHelper {
    *   Product Info Helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   Sku images helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -255,7 +264,8 @@ class AlshayaAlgoliaIndexHelper {
     DefaultFacetManager $facets_manager,
     AlshayaFacetsPrettyAliases $pretty_aliases,
     ProductInfoHelper $product_info_helper,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -278,6 +288,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->prettyAliases = $pretty_aliases;
     $this->productInfoHelper = $product_info_helper;
     $this->moduleHandler = $module_handler;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -587,9 +598,14 @@ class AlshayaAlgoliaIndexHelper {
     $images = [];
 
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      // Get Dimensions.
+      $dimensions = $this->skuImagesManager->getImageHeightWidth($media_item['drupal_uri'], SkuImagesHelper::STYLE_PRODUCT_LISTING);
+
       $images[] = [
-        'url' => ImageStyle::load('product_listing')->buildUrl($media_item['drupal_uri']),
+        'url' => $this->skuImagesHelper->getImageStyleUrl($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
+        'width' => $dimensions['width'],
+        'height' => $dimensions['height'],
       ];
     }
     return $images;

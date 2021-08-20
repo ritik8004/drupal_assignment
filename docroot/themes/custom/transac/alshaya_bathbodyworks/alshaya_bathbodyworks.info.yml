@@ -131,3 +131,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/style-review-stars/style-review-stars.ltr.css: css/conditional-sass/style-review-stars/style-review-stars.ltr.css
+
+  alshaya_white_label/my-account:
+      css:
+        theme:
+          css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css

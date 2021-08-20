@@ -1,9 +1,9 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  spc_product_listing_page: '//shop-toddler-clothing/new-arrivals/new-arrivals-for-boys/'
-  spc_basket_page: '//shop-toddler-clothing/new-arrivals/new-arrivals-for-boys/'
-  product_listing_page_url: '/shop-toys/activity-toys/cars-trains-construction-toys/'
+  spc_product_listing_page: '/shop-clothing/newborn/newborn-boys/tops/'
+  spc_basket_page: '/shop-clothing/newborn/newborn-boys/tops/'
+  product_listing_page_url: '/shop-clothing/newborn/newborn-boys/tops/'
   np_plp_product_page: '/buy-seaside-t-shirts-2-pack.html/'
   spc_pdp_page: ''
-  np_plp_page: '/shop-toddler-clothing/new-arrivals/new-arrivals-for-boys/'
+  np_plp_page: '/shop-clothing/newborn/newborn-boys/tops/'
   new_pdp_enabled: TRUE

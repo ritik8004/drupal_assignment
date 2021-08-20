@@ -357,8 +357,9 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
     if ($term->hasTranslation($langcode)) {
       $term = $term->getTranslation($langcode);
     }
-
-    $variables['output'] = $term->toLink($term->getName(), '', $options)->toString();
+    $variables['output'] = $term->get('field_display_as_clickable_link')->getString()
+      ? $term->toLink($term->getName(), '', $options)->toString()
+      : $term->getName();
   }
 }
 

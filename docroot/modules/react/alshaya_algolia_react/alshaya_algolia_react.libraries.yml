@@ -51,6 +51,7 @@ algolia_common:
     js/alshaya_algolia_global.js: {}
   dependencies:
     - core/jquery
+    - alshaya_master/on_focus_attach
 
 back_to_plp:
   js:

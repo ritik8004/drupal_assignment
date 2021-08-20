@@ -20,6 +20,10 @@ $dir: rtl;
 @import "../../alshaya_white_label/sass/directional";
 //@import "directional";
 
+// Common styles for @extend.
+@import "../../alshaya_white_label/sass/placeholder";
+@import "placeholder";
+
 // These are the default base styles applied to HTML elements.
 @import "../../alshaya_white_label/sass/base/**/*";
 @import "base/**/*";

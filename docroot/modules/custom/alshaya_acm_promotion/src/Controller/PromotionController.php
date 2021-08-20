@@ -8,6 +8,7 @@ use Drupal\acq_commerce\UpdateCartErrorEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm\CartData;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -84,6 +85,13 @@ class PromotionController extends ControllerBase {
   protected $promoLabelManager;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -94,7 +102,8 @@ class PromotionController extends ControllerBase {
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('acq_cart.cart_storage'),
       $container->get('event_dispatcher'),
-      $container->get('alshaya_acm_promotion.label_manager')
+      $container->get('alshaya_acm_promotion.label_manager'),
+      $container->get('alshaya_acm_product.sku_images_helper')
     );
   }
 
@@ -115,6 +124,8 @@ class PromotionController extends ControllerBase {
    *   Event Dispatcher.
    * @param \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
    *   Alshaya Promo Label Manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
+   *   Sku images helper.
    */
   public function __construct(EntityRepositoryInterface $entity_repository,
                               SkuManager $sku_manager,
@@ -122,7 +133,8 @@ class PromotionController extends ControllerBase {
                               AlshayaPromotionsManager $promotions_manager,
                               CartStorageInterface $cart_storage,
                               EventDispatcherInterface $dispatcher,
-                              AlshayaPromoLabelManager $alshayaPromoLabelManager) {
+                              AlshayaPromoLabelManager $alshayaPromoLabelManager,
+                              SkuImagesHelper $images_helper) {
     $this->entityRepository = $entity_repository;
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
@@ -130,6 +142,7 @@ class PromotionController extends ControllerBase {
     $this->cartStorage = $cart_storage;
     $this->dispatcher = $dispatcher;
     $this->promoLabelManager = $alshayaPromoLabelManager;
+    $this->skuImagesHelper = $images_helper;
   }
 
   /**
@@ -186,10 +199,9 @@ class PromotionController extends ControllerBase {
           $promo_rule_id = $node->get('field_acq_promotion_rule_id')->getString();
 
           if ($sku_media) {
-            $item['#image'] = $this->skuManager->getSkuImage(
-              $sku_media['drupal_uri'],
-              $free_gift->label(),
-              'product_teaser'
+            $item['#image'] = $this->skuImagesHelper->getSkuImage(
+              $sku_media,
+              SkuImagesHelper::STYLE_PRODUCT_TEASER
             );
           }
 
@@ -219,10 +231,9 @@ class PromotionController extends ControllerBase {
           $sku_for_gallery = $this->promotionsManager->getSkuForFreeGiftGallery($free_gift);
           $sku_media = $this->imagesManager->getFirstImage($sku_for_gallery, 'plp', TRUE);
           if ($sku_media) {
-            $item['#image'] = $this->skuManager->getSkuImage(
-              $sku_media['drupal_uri'],
-              $free_gift->label(),
-              'product_teaser'
+            $item['#image'] = $this->skuImagesHelper->getSkuImage(
+              $sku_media,
+              SkuImagesHelper::STYLE_PRODUCT_TEASER
             );
           }
 

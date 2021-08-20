@@ -1,0 +1,15 @@
+.l-two--sf {
+  &.c-address-book,
+  &.c-user--node,
+  &.c-user-edit,
+  &.c-order-list,
+  &.c-order-detail,
+  &.c-communication-preferences,
+  &.c-change-password {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        width: 24%;
+      }
+    }
+  }
+}
