@@ -34,7 +34,7 @@ export default class ReviewSummary extends React.Component {
       reviewsProduct: '',
       reviewsComment: '',
       reviewsAuthors: '',
-      currentSortOption: '',
+      currentSortOption: 'none',
       currentFilterOptions: [],
       noResultmessage: null,
       totalReviews: '',
@@ -93,7 +93,9 @@ export default class ReviewSummary extends React.Component {
     let filterParams = '';
     // Set default sorting options.
     const sortOptions = bazaarVoiceSettings.reviews.bazaar_voice.sorting_options;
-    if (sortOptions.length > 0 && extraParams === undefined) {
+    const { currentSortOption } = this.state;
+    if (sortOptions.length > 0
+      && (extraParams === undefined || currentSortOption === 'none')) {
       let optionVal = '';
       sortOptions.map((option) => {
         if (option.value !== 'none') {
@@ -106,7 +108,7 @@ export default class ReviewSummary extends React.Component {
     }
     if (extraParams !== undefined) {
       // Add sorting parameters.
-      if (extraParams.currentSortOption.length > 0) {
+      if (extraParams.currentSortOption.length > 0 && currentSortOption !== 'none') {
         sortParams = `&${extraParams.sortType}=${extraParams.currentSortOption}`;
       }
       // Add filtering parameters.
