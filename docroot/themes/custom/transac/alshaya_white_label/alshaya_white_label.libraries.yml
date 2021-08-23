@@ -509,3 +509,8 @@ sitemap:
   css:
     theme:
       css/conditional-sass/sitemap/sitemap.ltr.css: {}
+
+slug-banner:
+  css:
+    theme:
+      css/conditional-sass/slug-banner/slug-banner.ltr.css: {}
