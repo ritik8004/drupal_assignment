@@ -5,15 +5,9 @@ alshaya_spc.collection_points:
     click_collect_collection_points_enabled:
       type: boolean
       label: 'Click and Collect collection points enabled'
-    click_collect_collection_point_icon:
-      type: string
-      label: 'Click and Collect collection point icon'
     click_collect_collection_point_map_icon:
       type: string
       label: 'Click and Collect collection point map icon'
-    click_collect_store_icon:
-      type: string
-      label: 'Click and Collect store icon'
     click_collect_store_map_icon:
       type: string
       label: 'Click and Collect store map icon'

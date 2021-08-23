@@ -425,6 +425,8 @@ class AlshayaSpcOrderHelper {
         $lat = $store_node['lat'];
         $lng = $store_node['lng'];
         $orderDetails['store']['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
+        $orderDetails['store']['collection_point'] = $order['shipping']['extension_attributes']['collection_point'] ?? '';
+        $orderDetails['store']['pudo_available'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
 
         $cc_text = ($cc_type == 'reserve_and_collect')
           ? $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc')

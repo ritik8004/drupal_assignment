@@ -691,10 +691,6 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
-    // @todo Remove once collection point API starts working.
-    $settings['order_details']['delivery_type_info']['store']['pudo_available'] = FALSE;
-    $settings['order_details']['delivery_type_info']['store']['brand_name'] = 'H&M Store';
-
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
       $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
     }
