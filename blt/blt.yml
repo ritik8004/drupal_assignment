@@ -88,6 +88,3 @@ disable-targets.tests.security.check.updates: true
 tests:
   chrome:
     args: '--window-size=1920,1080'
-  drupal:
-    test-runner: run-tests-script
-
