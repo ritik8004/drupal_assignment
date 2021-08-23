@@ -84,11 +84,7 @@ validate:
     functions: [alshaya_main_menu, alshaya_secondary_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
-disable-targets:
-  tests:
-    security: { check: { updates: true } }
-    phpcs: { sniff: { all: true } }
-    behat: { run: true }
+disable-targets.tests.security.check.updates: true
 tests:
   chrome:
     args: '--window-size=1920,1080'
