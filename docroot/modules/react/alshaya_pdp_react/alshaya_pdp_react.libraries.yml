@@ -5,6 +5,5 @@ pdp_magazine_v2_layout:
     dist/pdp_layout.bundle.js: { }
   dependencies:
     - alshaya_react/react
-    - alshaya_master/on_focus_attach
     - core/drupalSettings
     - core/drupal.debounce
