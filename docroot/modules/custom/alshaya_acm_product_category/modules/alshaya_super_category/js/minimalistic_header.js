@@ -6,17 +6,18 @@
 (function ($) {
   Drupal.behaviors.alshaya_super_category_header = {
     attach: function (context, settings) {
-      $(".block-alshaya-super-category a.menu--one__link").mouseover(function () {
+      $(".block-alshaya-super-category a.menu--one__link").on('mouseover', function () {
         var activeImage = $(this).find('.image-container');
         activeImage.attr('src', activeImage.data("hover-image"));
-      }).mouseout(function () {
+      }).on('mouseout', function () {
         var inactiveImage = $(this).find('.image-container');
         inactiveImage.attr('src', inactiveImage.data("org-image"));
       });
 
       // Only on mobile.
-      if ($(window).width() < 768) {
-        $(window).on('scroll', function () {
+      var windowObj = $(window);
+      if (windowObj.width() < 768) {
+        windowObj.on('scroll', function () {
           if ($(this).scrollTop() > 0) {
             $('body').addClass('hide-minimalistic-header');
           } else {
