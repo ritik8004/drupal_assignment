@@ -13497,7 +13497,7 @@
             },
             "require": {
                 "drupal/core": "^8 || ^9",
-                "drush/drush": "^10",
+                "drush/drush": "^9",
                 "php": ">=7.2.0"
             },
             "type": "drupal-module",
