@@ -84,6 +84,9 @@ validate:
     functions: [alshaya_main_menu, alshaya_secondary_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
+# We must disable security checks for module updates until
+# https://github.com/drush-ops/drush/issues/3748 will be fixed
+# (test with drush pm:security command)
 disable-targets.tests.security.check.updates: true
 tests:
   chrome:

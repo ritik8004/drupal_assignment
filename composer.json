@@ -121,7 +121,7 @@
         "drupal/viewsreference": "^1.0",
         "drupal/webform": "^6.0",
         "drupal/webform_rest": "^2.0",
-        "drush/drush": "^10.2.2",
+        "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
@@ -451,7 +451,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Example\\": "blt/src/"
+            "Alshaya\\": "blt/src/"
         }
     }
 }
