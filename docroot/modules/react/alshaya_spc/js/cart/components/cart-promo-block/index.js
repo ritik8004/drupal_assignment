@@ -54,7 +54,7 @@ export default class CartPromoBlock extends React.Component {
   // Helper function for Advantage card status.
   isAdvantagecardEnabled = () => {
     if (typeof drupalSettings.alshaya_spc.advantageCard !== 'undefined') {
-      if (drupalSettings.alshaya_spc.advantageCard.enabled === 1 && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined') {
+      if (drupalSettings.alshaya_spc.advantageCard.enabled && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined') {
         return drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix;
       }
     }

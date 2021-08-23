@@ -21,7 +21,7 @@ alshaya_spc.advantage_card:
   label: 'Advantage Card configuration'
   mapping:
     advantageCardEnabled:
-      type: integer
+      type: boolean
       label: 'Advantage card status'
     advantageCardPrefix:
       type: string
