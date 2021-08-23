@@ -99,6 +99,9 @@ exports.computePhFilters = function (input, filter) {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }
       break;
+
+    default:
+      console.log(`Unknown JS filter ${filter}.`);
   }
 
   return value;
