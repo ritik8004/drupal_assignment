@@ -16,15 +16,8 @@ import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      collectorForm: false,
-    };
-  }
-
   handleSubmit = (e, store) => {
-    const { collectorForm } = this.state;
+    const { showCollectorForm } = this.context;
     e.preventDefault();
 
     const contactInfoError = validateContactInfo(e, (drupalSettings.user.uid === 0));
@@ -36,24 +29,15 @@ class ContactInfoForm extends React.Component {
     showFullScreenLoader();
     const { contactInfo: { email } } = this.context;
     const name = e.target.elements.fullname.value.trim();
-    const PudoCollectorName = collectorForm === true
-      ? e.target.elements.collectorFullname.value.trim() : null;
     const { firstname, lastname } = extractFirstAndLastName(name);
-    const pudoName = collectorForm === true ? extractFirstAndLastName(PudoCollectorName) : null;
 
     const formData = {
       static: {
         firstname,
         lastname,
-        pudo_firstname: (collectorForm === true) ? pudoName.firstname : null,
-        pudo_lastname: (collectorForm === true) ? pudoName.lastname : null,
         email: drupalSettings.user.uid > 0 ? email : e.target.elements.email.value,
         telephone: `+${drupalSettings.country_mobile_code}${cleanMobileNumber(e.target.elements.mobile.value)}`,
         country_id: drupalSettings.country_code,
-        pudo_collector_email: (collectionPointsEnabled() && collectorForm === true)
-          ? e.target.elements.collectorEmail.value : null,
-        pudo_collector_tel: (collectionPointsEnabled() && collectorForm === true)
-          ? e.target.elements.collectorMobile.value : null,
       },
       shipping_type: 'click_and_collect',
       store: {
@@ -65,6 +49,17 @@ class ContactInfoForm extends React.Component {
       carrier_info: { ...drupalSettings.map.cnc_shipping },
     };
 
+    // If collection point feature is enabled, add collectors information.
+    if (collectionPointsEnabled() && showCollectorForm === true) {
+      const collectorName = extractFirstAndLastName(
+        e.target.elements.collectorFullname.value.trim(),
+      ) || null;
+      formData.static.collector_firstname = collectorName.firstname || '';
+      formData.static.collector_lastname = collectorName.lastname || '';
+      formData.static.collector_email = e.target.elements.collectorEmail.value || '';
+      formData.static.collector_telephone = e.target.elements.collectorMobile.value || '';
+    }
+
     this.processShippingUpdate(formData);
   };
 
@@ -72,7 +67,7 @@ class ContactInfoForm extends React.Component {
    * Validate mobile number and email address and on success process shipping address update.
    */
   processShippingUpdate = (formData) => {
-    const { collectorForm } = this.state;
+    const { showCollectorForm } = this.context;
     const validationData = {
       mobile: formData.static.telephone,
       fullname: {
@@ -89,12 +84,13 @@ class ContactInfoForm extends React.Component {
       validationData.email = formData.static.email;
     }
 
-    if (collectorForm === true) {
-      validationData.pudo_collector_tel = formData.static.pudo_collector_tel;
-      validationData.pudo_collector_email = formData.static.pudo_collector_email;
+    // If collection point feature is enabled, validate collector's information.
+    if (collectionPointsEnabled() && showCollectorForm === true) {
+      validationData.pudo_collector_tel = formData.static.collector_telephone;
+      validationData.pudo_collector_email = formData.static.collector_email;
       validationData.pudo_fullname = {
-        firstname: formData.static.pudo_firstname,
-        lastname: formData.static.pudo_lastname,
+        firstname: formData.static.collector_firstname,
+        lastname: formData.static.collector_lastname,
       };
     }
 
@@ -107,7 +103,7 @@ class ContactInfoForm extends React.Component {
         let isError = false;
 
         // Validate PUDO collector info.
-        if (collectorForm === true) {
+        if (collectionPointsEnabled() && showCollectorForm === true) {
           // If invalid full name.
           if (result.data.pudo_fullname === false) {
             document.getElementById('collectorFullname-error').innerHTML = getStringMessage('form_error_full_name');
@@ -197,7 +193,7 @@ class ContactInfoForm extends React.Component {
   updateShipping = (formData) => {
     const cartInfo = addShippingInCart('update shipping', formData);
     if (cartInfo instanceof Promise) {
-      const { updateContactInfo } = this.context;
+      const { updateContactInfo, updateCollectorInfo, showCollectorForm } = this.context;
       cartInfo
         .then((cartResult) => {
           removeFullScreenLoader();
@@ -227,6 +223,12 @@ class ContactInfoForm extends React.Component {
             return null;
           }
           updateContactInfo(formData.static);
+
+          // If collection point feature is enabled, update collector's information.
+          if (collectionPointsEnabled() && showCollectorForm === true) {
+            updateCollectorInfo(formData.static);
+          }
+
           dispatchCustomEvent('refreshCartOnCnCSelect', { cart: cartResult });
           return null;
         })
@@ -238,8 +240,9 @@ class ContactInfoForm extends React.Component {
 
   render() {
     const { store, subTitle } = this.props;
-    const { contactInfo } = this.context;
-    const { collectorForm } = this.state;
+    const {
+      contactInfo, showCollectorForm, updateCollectorFormVisibility, collectorInfo,
+    } = this.context;
 
     return (
       <form
@@ -251,15 +254,15 @@ class ContactInfoForm extends React.Component {
           defaultVal={contactInfo ? { static: contactInfo } : []}
           subTitle={subTitle}
           type="cnc"
-          setCollectorForm={(collectorForm) => this.setState({ collectorForm })}
-          collectorForm={collectorForm}
+          showCollectorForm={showCollectorForm}
+          updateCollectorFormVisibility={updateCollectorFormVisibility}
         />
         {collectionPointsEnabled() === true
-          && collectorForm === true
+          && showCollectorForm === true
           && (
             <PudoCollectorFields
-              defaultVal={contactInfo ? { static: contactInfo } : []}
-              collectorForm={collectorForm}
+              defaultVal={collectorInfo ? { static: collectorInfo } : []}
+              showCollectorForm={showCollectorForm}
             />
           )}
         <div className="spc-address-form-actions">
