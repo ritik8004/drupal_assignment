@@ -8,7 +8,7 @@ import getStringMessage from '../../../utilities/strings';
 import { collectionPointsEnabled } from '../../../utilities/cnc_util';
 
 const FixedFields = ({
-  defaultVal, showEmail, showFullName = true, subTitle, type,
+  defaultVal, showEmail, showFullName = true, subTitle, type, setCollectorForm, collectorForm,
 }) => {
   let defaultValue = '';
   if (defaultVal.length !== 0 && defaultVal.length !== 'undefined') {
@@ -58,9 +58,16 @@ const FixedFields = ({
           className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
           label={getStringMessage('ci_mobile_number')}
         />
-        <ConditionalView condition={collectionPointsEnabled() === true}>
+        <ConditionalView condition={collectionPointsEnabled() === true && type === 'cnc'}>
           <div className="spc-pudo-checkout-contact-info-checkbox-wrapper">
-            <input type="checkbox" value={1} id="spc-checkout-contact-info-checkbox" name="contact_info_checkbox" />
+            <input
+              type="checkbox"
+              value={1}
+              id="spc-checkout-contact-info-checkbox"
+              name="contact_info_checkbox"
+              onChange={(e) => setCollectorForm(e.target.checked)}
+              defaultChecked={collectorForm}
+            />
             <label htmlFor="spc-checkout-contact-info-checkbox" className="spc-pudo-checkout-contact-info-checkbox">
               {getStringMessage('cnc_contact_info_checkbox')}
             </label>
