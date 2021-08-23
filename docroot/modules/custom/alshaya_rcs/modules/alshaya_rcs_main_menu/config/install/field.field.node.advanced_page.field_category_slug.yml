@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_category_slug
+    - node.type.advanced_page
+  enforced:
+    module:
+      - alshaya_rcs_main_menu
+id: node.advanced_page.field_category_slug
+field_name: field_category_slug
+entity_type: node
+bundle: advanced_page
+label: 'Category Slug'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
