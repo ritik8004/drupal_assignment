@@ -307,7 +307,7 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  /** @var \Drupal\bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
 
   if ($route_match->getRouteName() == 'entity.node.canonical') {
@@ -352,8 +352,9 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
       }
     }
     elseif ($bundle === 'rcs_product') {
-      // Add only this here so that in JS we can detect that BV is enabled.
-      $product_schema_data['aggregateRating'] = [];
+      // Get the request parameters with a placeholder SKU value.
+      $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics('SKU_VAL', false);
+      $attachments['#attached']['drupalSettings']['alshaya_bazaar_voice']['product_review_schema_request_data'] = $productReviewStats;
     }
   }
 }

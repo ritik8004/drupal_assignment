@@ -813,11 +813,13 @@ class AlshayaBazaarVoice {
    *
    * @param string $product_id
    *   Product id or sanitized sku id.
+   * @param bool $do_request
+   *   Whether to make the request or just return the request parameters.
    *
    * @return array|null
    *   returns product review statistics and rating.
    */
-  public function getProductReviewStatistics(string $product_id) {
+  public function getProductReviewStatistics(string $product_id, bool $do_request = TRUE) {
     static $response = [];
     $config = $this->configFactory->get('bazaar_voice.settings');
     $pdp_reviews_seo_limit = $config->get('pdp_reviews_seo_limit');
@@ -834,6 +836,10 @@ class AlshayaBazaarVoice {
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
     $url = $request['url'];
     $request_options['query'] = $request['query'];
+
+    if (!$do_request) {
+      return $request;
+    }
 
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
     if (!$result['HasErrors'] && isset($result['Results']) && !empty($result['Results'])) {
