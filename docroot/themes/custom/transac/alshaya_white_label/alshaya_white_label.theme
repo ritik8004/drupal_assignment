@@ -1473,6 +1473,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
     /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $advanced_page_slug_banner = $variables['paragraph'];
+    if (!empty($advanced_page_slug_banner)) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/slug-banner';
+    }
 
     // Get the desktop and mobile slug background color if available.
     $desktop_slug_bkg_color = $advanced_page_slug_banner->get('field_default_slug_bkg_color')->value ?? NULL;
