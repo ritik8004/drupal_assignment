@@ -39,6 +39,7 @@ exports.render = function render(
     inputs.forEach((item) => {
       if (activeSuperCategory == item.url_path) {
         validSuperCategory = true;
+        item.classes = 'active';
       }
     });
     if (!validSuperCategory && inputs[0].url_path.length) {
@@ -68,10 +69,15 @@ exports.render = function render(
  * Replace the placeholders with the Super Category items.
  *
  * @param {object} item
+ *   The individual category item object.
  * @param {string} itemHtml
+ *   HTML snippit with placeholders for the item.
  * @param {object} settings
+ *   The drupal settings object.
  * @param {object} enrichment
+ *   Enriched data object for the current item.
  * @param {boolean} first
+ *   Current item is the first item of the super category menu or not.
  * @returns
  *   {string} Single Super Category item HTML with proper data.
  */
@@ -101,7 +107,7 @@ const replaceSuperCategoryPlaceHolders = function (item, itemHtml, settings, enr
     logo_inactive_image = defaultImages.logo_inactive_image;
   }
 
-  item.inactive_path = logo_active_image;
+  item.inactive_image = logo_active_image;
   item.image = item.classes.indexOf('active') != -1 ? logo_active_image : logo_inactive_image;
 
   // Identify all the field placeholders and get the replacement
@@ -125,7 +131,9 @@ const replaceSuperCategoryPlaceHolders = function (item, itemHtml, settings, enr
  * Provides super category default images.
  *
  * @param {object} item
+ *   The individual category item object.
  * @param {object} settings
+ *   The drupal settings object.
  * @return returns an object containing the default super category images.
  */
 const getSuperCategoryDefaultImages = function (item, settings) {
@@ -141,6 +149,7 @@ const getSuperCategoryDefaultImages = function (item, settings) {
  * Provides term name as safe css indentifier.
  *
  * @param {string} name
+ *   The term name which needs to be filtered out.
  * @returns return a string safe for css indentifier.
  */
 const makeSafeForCss = function (name) {

@@ -33,7 +33,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
   protected $configFactory;
 
   /**
-   * Entity type manager.
+   * The request object.
    *
    * @var Symfony\Component\HttpFoundation\RequestStack
    */
@@ -55,7 +55,13 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
    * @param Symfony\Component\HttpFoundation\RequestStack $request
    *   Entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ThemeManagerInterface $theme_manager, ConfigFactoryInterface $config_factory, RequestStack $request) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ThemeManagerInterface $theme_manager,
+    ConfigFactoryInterface $config_factory,
+    RequestStack $request) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->themeManager = $theme_manager;
     $this->configFactory = $config_factory;
@@ -80,7 +86,6 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function build() {
-
     // Don't need to build this block if status of super category settings
     // is false.
     if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
@@ -95,7 +100,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
           'path' => '#rcs.super_category.url_path#',
           'meta_title' => '#rcs.super_category.meta_title#',
           'label' => '#rcs.super_category.name#',
-          'inactive_path' => '#rcs.super_category.inactive_path#',
+          'inactive_path' => '#rcs.super_category.inactive_image#',
           'class' => '#rcs.super_category.classes#',
         ],
       ],
@@ -121,7 +126,6 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         'drupalSettings' => [
           'superCategory' => [
             'search_facet' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
-            'status' => $this->configFactory->get('alshaya_super_category.settings')->get('status'),
           ],
           'theme' => [
             'path' => $this->themeManager->getActiveTheme()->getPath(),

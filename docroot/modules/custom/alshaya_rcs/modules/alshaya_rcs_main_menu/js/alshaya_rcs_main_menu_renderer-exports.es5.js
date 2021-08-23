@@ -45,7 +45,7 @@ exports.render = function render(
       // If there are no active super category then make first item as default.
       activeSuperCategory = inputs[0].url_path;
     }
-    const isSuperCategory = settings.superCategory != undefined && settings.superCategory.status;
+    const isSuperCategory = (typeof settings.superCategory) != "undefined";
     // Filter out the items that doesn't belong to the active super category.
     if (isSuperCategory) {
       inputs = inputs.filter((item) => {

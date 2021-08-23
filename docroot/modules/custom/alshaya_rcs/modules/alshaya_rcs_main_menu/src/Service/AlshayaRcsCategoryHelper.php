@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
-use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\TermInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -193,13 +193,13 @@ class AlshayaRcsCategoryHelper {
    *
    * @param string $field
    *   The field key string.
-   * @param \Drupal\taxonomy\Entity\Term $term
+   * @param \Drupal\taxonomy\Entity\TermInterface $term
    *   The term object.
    *
    * @return null|string
    *   The relative URL of the image.
    */
-  protected function getImageFromField(string $field, Term $term) {
+  protected function getImageFromField(string $field, TermInterface $term) {
     $field_image = $term->get($field)->getValue() ?? [];
     if ($field_image && $field_image[0]['target_id']) {
       $image = $this->entityTypeManager->getStorage('file')->load($field_image['0']['target_id']);
