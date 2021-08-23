@@ -4,9 +4,3 @@ main:
   dependencies:
     - core/jquery
     - core/drupalSettings
-
-schema_org:
-  js:
-    js/alshaya_rcs_magento_placeholders.schema_org.js: {}
-  dependencies:
-    - rcs_placeholders/helpers

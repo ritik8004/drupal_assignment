@@ -130,6 +130,8 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
   // We pass empty array as a variable here in order to avoid PHP error.
   $product_schema_data = [];
   \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
+  // Add the library which adds adds the schema script tag.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_product/schema_org';
 }
 
 /**
