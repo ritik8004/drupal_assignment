@@ -3,7 +3,6 @@
 namespace Drupal\rcs_placeholders\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -50,30 +49,17 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   protected $termStorage;
 
   /**
-   * The language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * Constructs a new RcsPhPathProcessor instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    LanguageManagerInterface $language_manager
-  ) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
-    $this->languageManager = $language_manager;
   }
 
   /**
@@ -108,7 +94,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // $path.
     // Remove language code from URL.
     $rcs_path_to_check = str_replace(
-      '/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+      '/' . $request->getDefaultLocale() . '/',
       '/',
       $request->getPathInfo()
     );
