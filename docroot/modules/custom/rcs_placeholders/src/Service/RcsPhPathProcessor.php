@@ -28,6 +28,16 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public static $entityPath;
 
   /**
+   * RCS Entity Path Prefix.
+   *
+   * It is stored from config here.
+   * Allow using this directly from the variable in other places.
+   *
+   * @var string
+   */
+  public static $entityPathPrefix;
+
+  /**
    * RCS Entity data.
    *
    * @var array|null
@@ -108,6 +118,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (isset($matches[1])) {
       self::$entityType = 'category';
       self::$entityPath = $matches[1];
+      self::$entityPathPrefix = $category_prefix;
 
       $static[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
 
@@ -127,6 +138,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (isset($matches[1])) {
       self::$entityType = 'product';
       self::$entityPath = $matches[1];
+      self::$entityPathPrefix = $product_prefix;
 
       $static[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
 
@@ -146,6 +158,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (isset($matches[1])) {
       self::$entityType = 'promotion';
       self::$entityPath = $matches[1];
+      self::$entityPathPrefix = $promotion_prefix;
 
       $static[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
 
