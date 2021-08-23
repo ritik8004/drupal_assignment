@@ -7,6 +7,9 @@ dependencies:
     - field.field.taxonomy_term.rcs_category.field_icon
     - field.field.taxonomy_term.rcs_category.field_include_in_desktop
     - field.field.taxonomy_term.rcs_category.field_include_in_mobile_tablet
+    - field.field.taxonomy_term.rcs_category.field_logo_active_image
+    - field.field.taxonomy_term.rcs_category.field_logo_header_image
+    - field.field.taxonomy_term.rcs_category.field_logo_inactive_image
     - field.field.taxonomy_term.rcs_category.field_main_menu_highlight
     - field.field.taxonomy_term.rcs_category.field_move_to_right
     - field.field.taxonomy_term.rcs_category.field_override_target_link
@@ -33,6 +36,7 @@ third_party_settings:
       children:
         - group_configuration
         - group_mega_menu_content
+        - group_super_category_logos
       parent_name: ''
       weight: 0
       format_type: tabs
@@ -140,6 +144,22 @@ third_party_settings:
         open: false
         required_fields: true
       label: 'Menu item colors'
+    group_super_category_logos:
+      children:
+        - field_logo_inactive_image
+        - field_logo_active_image
+        - field_logo_header_image
+      parent_name: group_taxonomy_tabs
+      weight: 19
+      format_type: tab
+      region: content
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        formatter: closed
+        required_fields: true
+      label: 'Super Category Logos'
 _core:
   default_config_hash: c4GyBSHQqBHt2RYCuq_4lPymn750N2iDBvRXgHmc_XE
 id: taxonomy_term.rcs_category.default
@@ -192,6 +212,30 @@ content:
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
+  field_logo_active_image:
+    type: image_image
+    weight: 27
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_logo_header_image:
+    type: image_image
+    weight: 28
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_logo_inactive_image:
+    type: image_image
+    weight: 26
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
   field_main_menu_highlight:
     weight: 12
     settings:
