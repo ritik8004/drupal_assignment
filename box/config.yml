@@ -136,6 +136,10 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-mcqa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
   - servername: "local.alshaya-hmkw.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
@@ -370,6 +374,10 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_mckw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_mcqa
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
