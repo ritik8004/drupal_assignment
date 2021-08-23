@@ -18,10 +18,16 @@ function alshaya_rcs_main_menu_install() {
     alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
   }
 
-  // Disable existing V1 alshaya_main_menu block.
-  $non_rcs_main_menu_block = Block::load('alshayamainmenu');
-  if ($non_rcs_main_menu_block instanceof BlockInterface) {
-    $non_rcs_main_menu_block->disable()->save();
+  // Disable existing V1 block.
+  $non_rcs_blocks = [
+    'alshayamainmenu',
+    'supercategorymenu',
+  ];
+  foreach ($non_rcs_blocks as $block_id) {
+    $block = Block::load($block_id);
+    if ($block instanceof BlockInterface) {
+      $block->disable()->save();
+    }
   }
 
   // Migrate the enriched terms from the acq_product_category taxonomy.
@@ -33,10 +39,16 @@ function alshaya_rcs_main_menu_install() {
  * Implements hook_uninstall().
  */
 function alshaya_rcs_main_menu_uninstall() {
-  // Enable the V1 alshaya_main_menu block.
-  $non_rcs_main_menu_block = Block::load('alshayamainmenu');
-  if ($non_rcs_main_menu_block instanceof BlockInterface) {
-    $non_rcs_main_menu_block->enable()->save();
+  // Enable existing V1 block.
+  $non_rcs_blocks = [
+    'alshayamainmenu',
+    'supercategorymenu',
+  ];
+  foreach ($non_rcs_blocks as $block_id) {
+    $block = Block::load($block_id);
+    if ($block instanceof BlockInterface) {
+      $block->enable()->save();
+    }
   }
 
   // Rollback the enriched terms from the acq_product_category taxonomy.

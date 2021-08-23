@@ -68,6 +68,17 @@ exports.render = function render(
       }
       break;
 
+    case 'super_category':
+      // Render super category block.
+      if (typeof globalThis.renderRcsSuperCategoryMenu !== 'undefined') {
+        html += globalThis.renderRcsSuperCategoryMenu.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
