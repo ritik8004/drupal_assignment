@@ -5,11 +5,13 @@ import Lozenges
   from '../../../../common/components/lozenges';
 
 const SliderElement = ({
-  src, title,
+  src, title, width, height,
 }) => (
   <ImageElement
     src={src}
     title={title}
+    width={width}
+    height={height}
   />
 );
 
@@ -53,6 +55,10 @@ class SearchGallery extends React.PureComponent {
     } = this.props;
     const mainImageUrl = typeof this.mainImage.url !== 'undefined' ? this.mainImage.url : '';
     const thumbnails = [];
+    // Dimensions.
+    const {
+      width, height,
+    } = this.mainImage;
 
     media.forEach((element) => {
       thumbnails.push((
@@ -60,6 +66,8 @@ class SearchGallery extends React.PureComponent {
           key={element.url}
           title={title}
           src={element.url}
+          width={element.width}
+          height={element.height}
         />
       ));
     });
@@ -74,6 +82,8 @@ class SearchGallery extends React.PureComponent {
               src={mainImageUrl}
               title={title}
               loading="lazy"
+              width={width}
+              height={height}
             />
             {initSlider ? this.onHoverAppendMarkup(sliderStatus, thumbnails) : ''}
           </div>

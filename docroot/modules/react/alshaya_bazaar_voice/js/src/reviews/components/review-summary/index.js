@@ -34,7 +34,7 @@ export default class ReviewSummary extends React.Component {
       reviewsProduct: '',
       reviewsComment: '',
       reviewsAuthors: '',
-      currentSortOption: '',
+      currentSortOption: 'none',
       currentFilterOptions: [],
       noResultmessage: null,
       totalReviews: '',
@@ -91,9 +91,24 @@ export default class ReviewSummary extends React.Component {
 
     let sortParams = '';
     let filterParams = '';
+    // Set default sorting options.
+    const sortOptions = bazaarVoiceSettings.reviews.bazaar_voice.sorting_options;
+    const { currentSortOption } = this.state;
+    if (sortOptions.length > 0
+      && (extraParams === undefined || currentSortOption === 'none')) {
+      let optionVal = '';
+      sortOptions.map((option) => {
+        if (option.value !== 'none') {
+          optionVal += `${option.value},`;
+        }
+        return optionVal;
+      });
+      optionVal = optionVal.replace(/,\s*$/, '');
+      sortParams = `&sort=${optionVal}`;
+    }
     if (extraParams !== undefined) {
       // Add sorting parameters.
-      if (extraParams.currentSortOption.length > 0) {
+      if (extraParams.currentSortOption.length > 0 && currentSortOption !== 'none') {
         sortParams = `&${extraParams.sortType}=${extraParams.currentSortOption}`;
       }
       // Add filtering parameters.
@@ -464,7 +479,7 @@ export default class ReviewSummary extends React.Component {
                       <DisplayStar
                         starPercentage={reviewsSummary[item].Rating}
                       />
-                      <div className="review-title">{reviewsSummary[item].Title}</div>
+                      <div id={`${reviewsSummary[item].Id}-review-title`} className="review-title">{reviewsSummary[item].Title}</div>
                     </ConditionalView>
                     <ReviewInformation
                       reviewInformationData={reviewsSummary[item]}
