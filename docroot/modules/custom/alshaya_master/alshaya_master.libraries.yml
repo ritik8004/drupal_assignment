@@ -61,9 +61,3 @@ common_functions:
   dependencies:
     - core/jquery
     - core/drupal
-
-on_focus_attach:
-  js:
-    js/alshaya_on_focus.js: {}
-  dependencies:
-    - core/jquery
