@@ -87,9 +87,10 @@ cloud:
 disable-targets:
   tests:
     behat: { all: true, run: true }
-    drupal: { run: true }
-    frontend: { run: true }
     security: { check: { updates: true } }
 tests:
   chrome:
     args: '--window-size=1920,1080'
+  drupal:
+    test-runner: run-tests-script
+    web-driver: chromedriver
