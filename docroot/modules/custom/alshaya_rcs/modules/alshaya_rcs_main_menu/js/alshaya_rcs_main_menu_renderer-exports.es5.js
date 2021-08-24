@@ -11,14 +11,12 @@ exports.render = function render(
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
   if (inputs.length !== 0) {
     // Get the enrichment data. It's a sync call.
-    let enrichmentData = [];
-    jQuery.ajax({
-      url: Drupal.url('rest/v2/categories'),
-      async: false,
-      success: function (data) {
-        enrichmentData = data;
-      }
-    });
+    // Check if static storage is having value, If 'YES' then use that else call
+    // the API.
+    let enrichmentData = RcsPhStaticStorage.get('enriched_categories');
+    if (!enrichmentData) {
+      enrichmentData = rcsGetEnrichedCategories();
+    }
 
     // Get the L1 menu list element.
     const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');

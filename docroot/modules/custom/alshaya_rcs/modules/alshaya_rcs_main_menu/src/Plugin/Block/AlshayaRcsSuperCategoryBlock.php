@@ -130,7 +130,6 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
           'theme' => [
             'path' => $this->themeManager->getActiveTheme()->getPath(),
           ],
-          'basePath' => $this->request->getCurrentRequest()->getSchemeAndHttpHost(),
         ],
       ],
     ];

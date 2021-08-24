@@ -13,14 +13,12 @@ exports.render = function render(
 
   if (inputs.length !== 0) {
     // Get the enrichment data. It's a sync call.
-    let enrichmentData = [];
-    jQuery.ajax({
-      url: Drupal.url('rest/v2/categories'),
-      async: false,
-      success: function (data) {
-        enrichmentData = data;
-      }
-    });
+    // Check if static storage is having value, If 'YES' then use that else call
+    // the API.
+    let enrichmentData = RcsPhStaticStorage.get('enriched_categories');
+    if (!enrichmentData) {
+      enrichmentData = rcsGetEnrichedCategories();
+    }
 
     // Sort the remaining category menu items by position in asc order.
     inputs.sort(function (a, b) {
@@ -138,10 +136,10 @@ const replaceSuperCategoryPlaceHolders = function (item, itemHtml, settings, enr
  */
 const getSuperCategoryDefaultImages = function (item, settings) {
   const termName = makeSafeForCss(item.name);
-  const { basePath, theme } = settings;
+  const { theme } = settings;
   return {
-    'logo_active_image': `${basePath}/${theme.path}/imgs/logos/super-category/${termName}-active.svg`,
-    'logo_inactive_image': `${basePath}/${theme.path}/imgs/logos/super-category/${termName}.svg`,
+    'logo_active_image': `/${theme.path}/imgs/logos/super-category/${termName}-active.svg`,
+    'logo_inactive_image': `/${theme.path}/imgs/logos/super-category/${termName}.svg`,
   }
 }
 

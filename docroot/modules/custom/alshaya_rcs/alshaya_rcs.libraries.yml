@@ -5,3 +5,9 @@ add_to_cart:
     - core/jquery
     - core/drupalSettings
     - alshaya_acm_cart_notification/cart_notification_js
+
+utility:
+  js:
+    js/alshaya_rcs_utility.js: {}
+  dependencies:
+    - core/jquery
