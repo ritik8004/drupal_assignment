@@ -57,6 +57,7 @@ export default class CartPromoBlock extends React.Component {
       if (
         drupalSettings.alshaya_spc.advantageCard.enabled
         && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined'
+        && drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
       ) {
         return true;
       }
@@ -69,22 +70,22 @@ export default class CartPromoBlock extends React.Component {
     const advantageCardType = ['01', '02', '03'];
     if
     (
-      advantageCard.length !== 16
-      && advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      && advantageCard.length !== 16
     ) {
       return false;
     }
     if
     (
-      !advantageCardType.includes(advantageCard.substring(9, 7))
-      && advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      && !advantageCardType.includes(advantageCard.substring(9, 7))
     ) {
       return false;
     }
     if
     (
-      !/^\d+$/.test(advantageCard.substring(16, 9))
-      && advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      && !/^\d+$/.test(advantageCard.substring(16, 9))
     ) {
       return false;
     }
