@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
-import StaticStorage from '../staticStorage';
+import BVStaticStorage from '../bvStaticStorage';
 import hasValue from '../../../../../js/utilities/conditionsUtility';
 
 function getBvUrl(bazaarVoiceSettings) {
@@ -110,7 +110,7 @@ export async function getProductReviewForCurrrentUser(productIdentifier) {
   const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
   const userId = drupalSettings.user.uid;
   const staticStorageKey = `${userId}_${productId}`;
-  let productReviewData = StaticStorage.get(staticStorageKey);
+  let productReviewData = BVStaticStorage.get(staticStorageKey);
 
   if (productReviewData) {
     return JSON.parse(productReviewData);
@@ -141,7 +141,7 @@ export async function getProductReviewForCurrrentUser(productIdentifier) {
   // In case there are no reviews, store 0 instead of null in order to
   // differentiate between empty storage and 0 reviews.
   const staticData = !productReviewData ? 0 : JSON.stringify(productReviewData);
-  StaticStorage.set(staticStorageKey, staticData);
+  BVStaticStorage.set(staticStorageKey, staticData);
 
   return productReviewData;
 }

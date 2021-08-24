@@ -1,8 +1,8 @@
 window.bazaarVoiceStaticStorage = window.bazaarVoiceStaticStorage || {};
 
-const StaticStorage = {};
+const BVStaticStorage = {};
 
-StaticStorage.get = (key) => {
+BVStaticStorage.get = (key) => {
   if (typeof window.bazaarVoiceStaticStorage[key] === 'undefined') {
     return null;
   }
@@ -10,16 +10,16 @@ StaticStorage.get = (key) => {
   return window.bazaarVoiceStaticStorage[key];
 };
 
-StaticStorage.set = (key, value) => {
+BVStaticStorage.set = (key, value) => {
   window.bazaarVoiceStaticStorage[key] = value;
 };
 
-StaticStorage.remove = (key) => {
+BVStaticStorage.remove = (key) => {
   window.bazaarVoiceStaticStorage[key] = null;
 };
 
-StaticStorage.clear = () => {
+BVStaticStorage.clear = () => {
   window.bazaarVoiceStaticStorage = {};
 };
 
-export default StaticStorage;
+export default BVStaticStorage;
