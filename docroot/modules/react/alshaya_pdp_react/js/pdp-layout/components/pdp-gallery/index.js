@@ -70,8 +70,6 @@ export default class PdpGallery extends React.PureComponent {
                   type={image.type}
                   imageZoomUrl={image.zoomurl}
                   imageUrl={image.mediumurl}
-                  width={image.m_width}
-                  height={image.m_height}
                   alt={image.label}
                   title={image.label}
                   onClick={this.showFullScreenModal}
