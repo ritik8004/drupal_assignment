@@ -11,7 +11,7 @@ else
   yaml-cli update:value blt/blt.yml project.profile.name ${PROFILE}
 
   echo -en "travis_fold:start:Validate\r"
-  blt validate:all --no-interaction
+  blt validate:all
   npm install -g gulp-cli
   blt frontend:test
 
