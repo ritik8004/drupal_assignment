@@ -211,25 +211,37 @@ class StoresFinderUtility {
 
     $store = [];
     if ($store_node) {
+      $cnc_collection_points_enabled = $this->configFactory->get('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled');
+
       $store['name'] = $store_node->label();
       $store['code'] = $store_node->get('field_store_locator_id')->getString();
       $store['address'] = $this->getStoreAddress($store_node);
       $store['phone_number'] = $store_node->get('field_store_phone')->getString();
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
       $store['open_hours_group'] = $hours = [];
-      $init_day = '';
-      foreach ($store['open_hours'] as $open_hours) {
-        // Check the hours are present or not. ['value'] contains timings.
-        // ['Key'] contains week day.
-        if (empty($hours[$open_hours['value']])) {
-          $hours[$open_hours['value']] = $open_hours['key'];
-          $init_day = $open_hours['key'];
+
+      if ($cnc_collection_points_enabled) {
+        foreach ($store['open_hours'] as $open_hours) {
+          $store_timings[substr($open_hours['key'], 0, 3)] = $open_hours['value'];
         }
-        else {
-          // Prepare text like "Monday - Friday".
-          $hours[$open_hours['value']] = $init_day . ' - ' . $open_hours['key'];
+        $hours[implode(', ', array_unique($store_timings))] = implode(', ', array_keys($store_timings));
+      }
+      else {
+        $init_day = '';
+        foreach ($store['open_hours'] as $open_hours) {
+          // Check the hours are present or not. ['value'] contains timings.
+          // ['Key'] contains week day.
+          if (empty($hours[$open_hours['value']])) {
+            $hours[$open_hours['value']] = $open_hours['key'];
+            $init_day = $open_hours['key'];
+          }
+          else {
+            // Prepare text like "Monday - Friday".
+            $hours[$open_hours['value']] = $init_day . ' - ' . $open_hours['key'];
+          }
         }
       }
+
       $store['open_hours_group'] = array_flip($hours);
       $store['delivery_time'] = $store_node->get('field_store_sts_label')->getString();
       $store['nid'] = $store_node->id();

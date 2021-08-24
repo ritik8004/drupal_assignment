@@ -516,7 +516,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
-    $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
+    $cnc_collection_points_enabled = \Drupal::config('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled');
+    $build['#delivery_detail_notice'] = $cnc_collection_points_enabled
+      ? t('Your order will be available for pickup at the following collection point')
+      : t('Your order will be available for pickup at the following store');
   }
   else {
     $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');
