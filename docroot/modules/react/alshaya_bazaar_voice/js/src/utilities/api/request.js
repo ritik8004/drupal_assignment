@@ -44,12 +44,7 @@ export function getUserBazaarVoiceSettings() {
 }
 
 export function fetchAPIData(apiUri, params, context = '') {
-  let bazaarVoiceSettings = null;
-  if (context === 'user') {
-    bazaarVoiceSettings = getUserBazaarVoiceSettings();
-  } else {
-    bazaarVoiceSettings = getbazaarVoiceSettings();
-  }
+  const bazaarVoiceSettings = context === 'user' ? getUserBazaarVoiceSettings() : getbazaarVoiceSettings();
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
   return Axios.get(url)
