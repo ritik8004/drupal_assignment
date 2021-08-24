@@ -33,9 +33,8 @@
         }
       });
 
-      if (bvData && bvData.Results.length > 0) {
-        var results = bvData.Results;
-
+      var results = typeof bvData.Results !== 'undefined' ? bvData.Results : null;
+      if (results && results.length > 0) {
         var reviewSchemaData = {};
 
         var averageOverallRating = (results[0].ReviewStatistics.AverageOverallRating);
@@ -49,21 +48,24 @@
             reviewCount: typeof results[0].ReviewStatistics.TotalReviewCount,
         };
 
-        // Add schema for review.
-        reviewSchemaData.review = [];
-        Object.values(bvData.Includes.Reviews).forEach(function (review) {
-          reviewSchemaData.review.push({
-            '@type': 'Review',
-            author:  review.UserNickname,
-            datePublished: review.reviewSubmissionTime,
-            description: review.ReviewText,
-            name: review.Title,
-            reviewRating: {
-              '@type': 'Rating',
-              ratingValue: review.Rating,
-            },
+        var reviews = Object.values(bvData.Includes.Reviews);
+        if (reviews.length > 0) {
+          // Add schema for review.
+          reviewSchemaData.review = [];
+          reviews.forEach(function (review) {
+            reviewSchemaData.review.push({
+              '@type': 'Review',
+              author:  review.UserNickname,
+              datePublished: review.reviewSubmissionTime,
+              description: review.ReviewText,
+              name: review.Title,
+              reviewRating: {
+                '@type': 'Rating',
+                ratingValue: review.Rating,
+              },
+            });
           });
-        });
+        }
 
         // Add the aggregate ratings and reviews schema metadata.
         additionalSchemaData.push(reviewSchemaData);
