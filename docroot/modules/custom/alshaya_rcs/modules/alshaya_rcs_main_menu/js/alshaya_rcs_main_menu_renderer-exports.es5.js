@@ -33,24 +33,27 @@ exports.render = function render(
 
     let menuHtml = '';
     // Get the active super category.
-    let activeSuperCategory = rcsWindowLocation().pathname.split('/')[2];
-    // Check if the active super category is valid or not.
-    let validSuperCategory = false;
-    inputs.forEach((item) => {
-      if (activeSuperCategory == item.url_path) {
-        validSuperCategory = true;
-      }
-    });
-    if (!validSuperCategory && inputs[0].url_path.length) {
-      // If there are no active super category then make first item as default.
-      activeSuperCategory = inputs[0].url_path;
-    }
     const isSuperCategory = (typeof settings.superCategory) != "undefined";
-    // Filter out the items that doesn't belong to the active super category.
+    // Proceed only if superCategory is enabled.
     if (isSuperCategory) {
-      inputs = inputs.filter((item) => {
-        return activeSuperCategory == item.url_path;
+      let activeSuperCategory = rcsWindowLocation().pathname.split('/')[2];
+      // Check if the active super category is valid or not.
+      let validSuperCategory = false;
+      inputs.forEach((item) => {
+        if (activeSuperCategory == item.url_path) {
+          validSuperCategory = true;
+        }
       });
+      if (!validSuperCategory && inputs[0].url_path.length) {
+        // If there are no active super category then make first item as default.
+        activeSuperCategory = inputs[0].url_path;
+      }
+      // Filter out the items that doesn't belong to the active super category.
+      if (isSuperCategory) {
+        inputs = inputs.filter((item) => {
+          return activeSuperCategory == item.url_path;
+        });
+      }
     }
     // Iterate over each L1 item and get the inner markup
     // prepared recursively.
