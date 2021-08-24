@@ -54,11 +54,41 @@ export default class CartPromoBlock extends React.Component {
   // Helper function for Advantage card status.
   isAdvantagecardEnabled = () => {
     if (typeof drupalSettings.alshaya_spc.advantageCard !== 'undefined') {
-      if (drupalSettings.alshaya_spc.advantageCard.enabled && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined') {
-        return drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix;
+      if (
+        drupalSettings.alshaya_spc.advantageCard.enabled
+        && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined'
+      ) {
+        return true;
       }
     }
     return false;
+  }
+
+  // Helper function to check valid Advantage card pattern.
+  isValidAdvantagecard = (advantageCard) => {
+    const advantageCardType = ['01', '02', '03'];
+    if
+    (
+      advantageCard.length !== 16
+      && advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+    ) {
+      return false;
+    }
+    if
+    (
+      !advantageCardType.includes(advantageCard.substring(9, 7))
+      && advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+    ) {
+      return false;
+    }
+    if
+    (
+      !/^\d+$/.test(advantageCard.substring(16, 9))
+      && advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+    ) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -137,15 +167,12 @@ export default class CartPromoBlock extends React.Component {
       document.getElementById('promo-code').classList.add('error');
       return;
     }
-
     // If Advantage card enabled and not valid.
-    if (this.isAdvantagecardEnabled()) {
-      if (promoValue.includes(this.isAdvantagecardEnabled()) && promoValue.length !== 18) {
-        document.getElementById('promo-message').innerHTML = Drupal.t('Please enter valid Advantage card code.');
-        document.getElementById('promo-message').classList.add('error');
-        document.getElementById('promo-code').classList.add('error');
-        return;
-      }
+    if (this.isAdvantagecardEnabled() && this.isValidAdvantagecard(promoValue) === false) {
+      document.getElementById('promo-message').innerHTML = Drupal.t('Please enter valid Advantage card code.');
+      document.getElementById('promo-message').classList.add('error');
+      document.getElementById('promo-code').classList.add('error');
+      return;
     }
 
     const action = (promoApplied === true) ? 'remove coupon' : 'apply coupon';
@@ -176,7 +203,12 @@ export default class CartPromoBlock extends React.Component {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
-          if (promoValue.includes(this.isAdvantagecardEnabled())) {
+          if
+          (
+            this.isAdvantagecardEnabled()
+            && promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
+            && this.isValidAdvantagecard(promoValue)
+          ) {
             // For Advantage card set promoValue to null.
             promoValue = null;
           }

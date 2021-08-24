@@ -307,6 +307,12 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to Advantage card.
+  $strings['v5'] = [
+    'Please enter valid Advantage card code.' => [
+      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+    ],
+  ];
   return $strings;
 }
 
