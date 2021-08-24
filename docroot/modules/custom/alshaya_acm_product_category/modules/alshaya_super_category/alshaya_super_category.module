@@ -148,16 +148,18 @@ function alshaya_super_category_preprocess_block(&$variables) {
 
       // Get super category based on slug and proceed only if the vocab is of
       // rcs category type.
-      $current_uri = \Drupal::request()->getRequestUri();
-      $current_super_category = explode('/', $current_uri);
-      if (!empty($current_super_category[2])) {
-        // Load term by comparing the slug with current super category.
-        $query = \Drupal::entityQuery('taxonomy_term');
-        $query->condition('field_category_slug', $current_super_category[2]);
-        $term_ids = $query->execute();
-        // Go through the term ids.
-        foreach ($term_ids as $term_id) {
-          $parent = Term::load($term_id);
+      if (!is_null(\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load('rcs_category'))) {
+        $current_uri = \Drupal::request()->getRequestUri();
+        $current_super_category = explode('/', $current_uri);
+        if (!empty($current_super_category[2])) {
+          // Load term by comparing the slug with current super category.
+          $query = \Drupal::entityQuery('taxonomy_term');
+          $query->condition('field_category_slug', $current_super_category[2]);
+          $term_ids = $query->execute();
+          // Go through the term ids.
+          foreach ($term_ids as $term_id) {
+            $parent = Term::load($term_id);
+          }
         }
       }
 
