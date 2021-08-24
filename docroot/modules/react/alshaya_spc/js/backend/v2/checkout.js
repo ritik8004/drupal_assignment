@@ -332,10 +332,6 @@ const getStoreInfo = async (storeData) => {
     delete store.rnc_config;
   }
 
-  // @todo: Remove this code once we start getting store type in api response for PUDO.
-  store.pudo_available = false;
-  store.brand_name = 'H&M Store';
-
   return store;
 };
 
