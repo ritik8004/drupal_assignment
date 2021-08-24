@@ -3,9 +3,7 @@
     <div class="cloudzoom thumbnail-count-{{ thumbnails|length }}">
     <div class="cloudzoom__herocontainer">
       <div id="cloud-zoom-wrap" class="cloudzoom__image">
-        <div class="img-wrap" data-scale="2">
-          <img width="{{ mainImage.m_width }}" height="{{ mainImage.m_height }}" data-zoom-url="{{ mainImage.zoomurl }}" loading="lazy" src="{{ mainImage.mediumurl }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" />
-        </div>
+        <div class="img-wrap" data-scale="2"><img data-zoom-url="{{ mainImage.zoomurl }}" loading="lazy" src="{{ mainImage.mediumurl }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" /></div>
       </div>
       <div class="yt-vi-container cloudzoom__video_main"></div>
       {%  if labels|length > 0 %}
@@ -38,8 +36,8 @@
           </li>
         {% else %}
           <li>
-            <a data-zoom-url="{{ thumbs.zoomurl }}" href="{{ thumbs.mediumurl }}" data-m-width="{{ thumbs.m_width }}" data-m-height="{{ thumbs.m_height }}" class="cloud-zoom-gallery cloudzoom__thumbnails__image">
-              <img loading="lazy" width="{{ thumbs.t_width }}"  height="{{ thumbs.t_height }}" src="{{ thumbs.thumburl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+            <a data-zoom-url="{{ thumbs.zoomurl }}" href="{{ thumbs.mediumurl }}" class="cloud-zoom-gallery cloudzoom__thumbnails__image">
+              <img loading="lazy" src="{{ thumbs.thumburl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
             </a>
           </li>
         {% endif %}
@@ -77,7 +75,7 @@
             </li>
           {% else %}
             <li>
-              <img loading="lazy" width="{{ mainImage.m_width }}" height="{{ mainImage.m_height }}" src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+              <img loading="lazy" src="{{ thumbs.zoomurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
             </li>
           {% endif %}
         {% endfor %}
