@@ -258,10 +258,11 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
       $advantage_card_config = \Drupal::config('alshaya_spc.advantage_card');
       // Dont send card number if its Advantage card.
-      if ($advantage_card_config->get('advantageCardEnabled') && $attributes['actionField']['coupon'] === $advantage_card_config->get('advantageCardPrefix')) {
+      if ($advantage_card_config->get('advantageCardEnabled') && strpos($attributes['actionField']['coupon'], $advantage_card_config->get('advantageCardPrefix')) !== FALSE ) {
         $attributes['actionField']['coupon'] = NULL;
         $attributes['actionField']['isAdvantageCard'] = 'Yes';
       }
+
       $data_layer['event'] = 'purchaseSuccess';
       $data_layer['ecommerce'] = [
         'currencyCode' => $gtm_manager->getGtmCurrency(),
