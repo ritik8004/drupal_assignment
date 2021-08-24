@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import StaticStorage from '../staticStorage';
+import hasValue from '../../../../../js/utilities/conditionsUtility';
 
 function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
@@ -128,7 +129,7 @@ export async function getProductReviewForCurrrentUser(productIdentifier) {
   const params = `&include=Authors,Products&filter=AuthorId:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
   const result = await fetchAPIData(apiUri, params);
 
-  if (typeof result.error === 'undefined' && typeof result.data !== 'undefined') {
+  if (!hasValue(result.error) && hasValue(result.data)) {
     if (result.data.Results.length > 0) {
       const products = result.data.Includes.Products;
       Object.keys(products).forEach((sku) => {
