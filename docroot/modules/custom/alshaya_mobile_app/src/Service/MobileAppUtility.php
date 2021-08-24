@@ -784,6 +784,7 @@ class MobileAppUtility {
    *   Return user object or false.
    */
   public function createUserFromCommerce(string $email, $block = TRUE) {
+    $user = FALSE;
     // Try to get user from mdc and create new user account.
     try {
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
