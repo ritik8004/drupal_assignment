@@ -4,3 +4,4 @@ services:
     arguments:
       - '@config.factory'
       - '@alshaya_stores_finder_transac.utility'
+      - '@request_stack'

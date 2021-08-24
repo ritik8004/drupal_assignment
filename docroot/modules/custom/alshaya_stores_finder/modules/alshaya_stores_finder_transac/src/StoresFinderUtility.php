@@ -200,11 +200,13 @@ class StoresFinderUtility {
    *   The store data.
    * @param object|null $store_node
    *   The store node object if available.
+   * @param string $isCollectionPoint
+   *   (Optional) TRUE if store is a collection point.
    *
    * @return array
    *   Return the store array with additional data from store node.
    */
-  public function getStoreExtraData(array $store_data, $store_node = NULL) {
+  public function getStoreExtraData(array $store_data, $store_node = NULL, $isCollectionPoint = FALSE) {
     if (!empty($store_data) && empty($store_node)) {
       $store_node = $this->getTranslatedStoreFromCode($store_data['code']);
     }
@@ -220,7 +222,7 @@ class StoresFinderUtility {
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
       $store['open_hours_group'] = $hours = [];
 
-      if ($cnc_collection_points_enabled) {
+      if ($cnc_collection_points_enabled && $isCollectionPoint) {
         foreach ($store['open_hours'] as $open_hours) {
           $store_timings[substr($open_hours['key'], 0, 3)] = $open_hours['value'];
         }
@@ -294,11 +296,13 @@ class StoresFinderUtility {
    *   The array of store from magento api.
    * @param string $langcode
    *   (Optional) The language code.
+   * @param string $isCollectionPoint
+   *   (Optional) TRUE if store is a collection point.
    *
    * @return array
    *   Return array of stores.
    */
-  public function getMultipleStoresExtraData(array $stores, $langcode = NULL) {
+  public function getMultipleStoresExtraData(array $stores, $langcode = NULL, $isCollectionPoint = FALSE) {
     $store_codes = array_keys($stores);
     if (empty($langcode)) {
       $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
@@ -336,7 +340,7 @@ class StoresFinderUtility {
         $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
       }
 
-      $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
+      $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node, $isCollectionPoint);
       $prepared_stores[$nid] += $store;
       // Unset the store for which we found the node, so that we can log the
       // store codes for which nodes are missing.

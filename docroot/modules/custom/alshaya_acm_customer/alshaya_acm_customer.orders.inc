@@ -236,6 +236,20 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
       $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
 
+      // Update store timings format for collection points if feature enabled.
+      if (\Drupal::config('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled')
+        && $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup') {
+        foreach ($orderDetails['store_open_hours'] as $open_hours) {
+          $store_timings[substr($open_hours['key'], 0, 3)] = $open_hours['value'];
+        }
+        $orderDetails['store_open_hours'] = [
+          [
+            'key' => implode(', ', array_keys($store_timings)),
+            'value' => implode(', ', array_unique($store_timings)),
+          ],
+        ];
+      }
+
       if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
         $lat = $lat_lng[0]['lat'];
         $lng = $lat_lng[0]['lng'];

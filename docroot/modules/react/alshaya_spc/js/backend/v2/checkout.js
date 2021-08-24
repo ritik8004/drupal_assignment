@@ -47,6 +47,9 @@ import {
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  collectionPointsEnabled,
+} from '../../utilities/cnc_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -296,7 +299,10 @@ const getStoreInfo = async (storeData) => {
   }
 
   // Fetch store info from Drupal.
-  const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
+  const url = collectionPointsEnabled()
+    ? `/cnc/store/${store.code}?isCollectionPoint=${store.pudo_available}`
+    : `/cnc/store/${store.code}`;
+  const response = await callDrupalApi(url, 'GET', {});
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
