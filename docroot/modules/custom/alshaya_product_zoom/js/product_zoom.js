@@ -83,13 +83,8 @@
             // Handle click on image thumbnails.
             var anchor = $(this).find('a.cloudzoom__thumbnails__image');
             if (anchor !== undefined && anchor.length > 0) {
-              // Put the big image in our main container.
-              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr({
-                'src':anchor.attr('href'),
-                'width':anchor.attr('data-m-width'),
-                'height':anchor.attr('data-m-height'),
-                'data-zoom-url': anchor.attr('data-zoom-url'),
-              });
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', anchor.attr('href'));
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('data-zoom-url', anchor.attr('data-zoom-url'));
             }
           }
           // Hide Product labels on video slides.
@@ -532,8 +527,6 @@
           }
           else {
             var bigImage = $(this).find('a').attr('href');
-            var width = $(this).find('a').attr('data-m-width');
-            var height = $(this).find('a').attr('data-m-height');
             // Put the big image in our main container.
             $('#full-image-wrapper img').attr('src', bigImage);
             $('#full-image-wrapper img').css('transform', 'scale(1)');
