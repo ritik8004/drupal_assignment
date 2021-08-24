@@ -9,14 +9,14 @@ window.commerceBackend = window.commerceBackend || {};
  *
  * @param {string} sku
  *   The product sku value.
- * @param {Boolean} allProducts
- *   Whether to return all the products from storage.
+ * @param {string} productKey
+ *   The product view mode.
  *
  * @returns {Object}
  *    The processed product data.
  */
-window.commerceBackend.getProductData = function (sku, allProducts) {
-  if (typeof allProducts !== 'undefined' && allProducts) {
+window.commerceBackend.getProductData = function (sku, productKey) {
+  if (typeof sku === 'undefined' || !sku) {
     var allStorageData = RcsPhStaticStorage.getAll();
     var productData = {};
     Object.keys(allStorageData).forEach(function (key) {

@@ -21,7 +21,7 @@ function getLocale(bazaarVoiceSettings) {
 
 export function getbazaarVoiceSettings(productId = undefined) {
   const settings = [];
-  const productInfo = window.commerceBackend.getProductData(productId, true);
+  const productInfo = window.commerceBackend.getProductData(productId);
 
   if (typeof productId !== 'undefined' && Object.keys(productInfo).length > 0) {
     settings.productid = productId;
