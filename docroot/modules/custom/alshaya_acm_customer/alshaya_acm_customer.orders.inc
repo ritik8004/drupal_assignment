@@ -239,13 +239,10 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       // Update store timings format for collection points if feature enabled.
       if (\Drupal::config('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled')
         && $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup') {
-        foreach ($orderDetails['store_open_hours'] as $open_hours) {
-          $store_timings[substr($open_hours['key'], 0, 3)] = $open_hours['value'];
-        }
         $orderDetails['store_open_hours'] = [
           [
-            'key' => implode(', ', array_keys($store_timings)),
-            'value' => implode(', ', array_unique($store_timings)),
+            'key' => implode(', ', array_column($orderDetails['store_open_hours'], 'key')),
+            'value' => $orderDetails['store_open_hours'][0]['value'],
           ],
         ];
       }

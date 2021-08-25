@@ -211,8 +211,6 @@ class StoresFinderUtility {
 
     $store = [];
     if ($store_node) {
-      $cnc_collection_points_enabled = $this->configFactory->get('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled');
-
       $store['name'] = $store_node->label();
       $store['code'] = $store_node->get('field_store_locator_id')->getString();
       $store['address'] = $this->getStoreAddress($store_node);
@@ -221,11 +219,8 @@ class StoresFinderUtility {
       $store['open_hours_group'] = $hours = [];
 
       // 'field_store_type' value 1 is for pudo collection point.
-      if ($cnc_collection_points_enabled
+      if ($this->configFactory->get('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled')
         && $store_node->get('field_store_type')->getString() === '1') {
-        foreach ($store['open_hours'] as $open_hours) {
-          $store_timings[substr($open_hours['key'], 0, 3)] = $open_hours['value'];
-        }
         $hours[$store['open_hours'][0]['value']] = implode(', ', array_column($store['open_hours'], 'key'));
       }
       else {

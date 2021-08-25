@@ -58,7 +58,6 @@ class AlshayaClickCollect {
     if ($this->getConfig()->get('feature_status') === 'disabled') {
       return [];
     }
-
     $store_info = $this->storesFinderUtility->getMultipleStoresExtraData([$store_code => []]);
     $store_info['rnc_config'] = $this->getConfig()->get('click_collect_rnc');
     return $store_info;
