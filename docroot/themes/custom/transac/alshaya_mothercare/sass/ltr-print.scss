@@ -15,6 +15,9 @@
 // Utilities for building multilingual websites.
 @import "../../alshaya_white_label/sass/directional";
 
+// Common styles for @extend.
+@import "../../alshaya_white_label/sass/placeholder";
+
 // These are the default base styles applied to HTML elements.
 @import "../../alshaya_white_label/sass/base/**/*";
 @import "../../alshaya_white_label/sass/layout/**/*";

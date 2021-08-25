@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
 
@@ -480,7 +481,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       }
 
       // Load the first image.
-      $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
+      $product['image'] = alshaya_acm_get_product_display_image($item['sku'], SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
       if ($product['image']) {
         $product['image']['#skip_lazy_loading'] = TRUE;
       }
