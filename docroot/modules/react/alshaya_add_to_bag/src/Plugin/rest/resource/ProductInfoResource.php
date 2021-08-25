@@ -358,9 +358,13 @@ class ProductInfoResource extends ResourceBase {
           }
           foreach ($configurable_attributes[$swatches['attribute_code']]['swatches'] as $key => $value) {
             if (is_null($value['data'])) {
-              $color_code_attribute = $this->config->get('color_attribute_config')['configurable_color_code_attribute'];
-              $child_node = SKU::loadFromSku($value['child_sku_code'], $langcode);
-              $configurable_attributes[$swatches['attribute_code']]['swatches'][$key]['data'] = $color_code_attribute ? $child_node->get($color_code_attribute)->getString() : NULL;
+              $multiple_attributes_for_color = $this->config->get('color_attribute_config');
+              // If site uses multiple attributes for color.
+              if ($multiple_attributes_for_color && $multiple_attributes_for_color['support_multiple_attributes']) {
+                $color_code_attribute = $multiple_attributes_for_color['configurable_color_code_attribute'];
+                $child_node = SKU::loadFromSku($value['child_sku_code'], $langcode);
+                $configurable_attributes[$swatches['attribute_code']]['swatches'][$key]['data'] = $color_code_attribute ? $child_node->get($color_code_attribute)->getString() : NULL;
+              }
             }
           }
         }
