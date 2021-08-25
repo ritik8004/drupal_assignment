@@ -48,7 +48,11 @@ exports.getEntity = async function getEntity(langcode) {
                         }
                     }
                 }
-                brand_logo
+                brand_logo_data {
+                  url
+                  alt
+                  title
+                }
                 media_gallery {
                   url
                   label
