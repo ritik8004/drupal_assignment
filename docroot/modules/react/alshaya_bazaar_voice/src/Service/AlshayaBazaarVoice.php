@@ -813,13 +813,11 @@ class AlshayaBazaarVoice {
    *
    * @param string $product_id
    *   Product id or sanitized sku id.
-   * @param bool $do_request
-   *   Whether to make the request or just return the request parameters.
    *
    * @return array|null
    *   returns product review statistics and rating.
    */
-  public function getProductReviewStatistics(string $product_id, bool $do_request = TRUE) {
+  public function getProductReviewStatistics(string $product_id) {
     static $response = [];
     $config = $this->configFactory->get('bazaar_voice.settings');
     $pdp_reviews_seo_limit = $config->get('pdp_reviews_seo_limit');
@@ -837,7 +835,10 @@ class AlshayaBazaarVoice {
     $url = $request['url'];
     $request_options['query'] = $request['query'];
 
-    if (!$do_request) {
+    // For RCS product, we do not have the product id avaialble on page load.
+    // So we send this dummy value which is replaced in JS.
+    // Also, the API request is done in JS.
+    if ($product_id === 'SKU_VAL') {
       return $request;
     }
 
