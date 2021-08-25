@@ -202,7 +202,7 @@ class AlshayaRcsCategoryDataMigration {
           ->setValue($acq_term_data->get('field_move_to_right')->getValue());
 
         // Add override_target_link field value from the old term.
-        $override_target_link = $acq_term_data->get('field_override_target_link')->getValue();
+        $override_target_link = $acq_term_data->get('field_override_target_link')->getString();
         $rcs_term->get('field_override_target_link')->setValue($override_target_link);
 
         // Add target_link field value from the old term,
