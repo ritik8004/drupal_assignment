@@ -54,6 +54,14 @@ exports.render = function render(
           innerHtml
         );
       }
+      if (drupalSettings.rcsPage.type === 'product' &&
+        typeof globalThis.renderRcsCategoryBreadcrumb !== 'undefined')  {
+        html += globalThis.renderRcsCategoryBreadcrumb.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
       break;
 
     case 'lhn_block':

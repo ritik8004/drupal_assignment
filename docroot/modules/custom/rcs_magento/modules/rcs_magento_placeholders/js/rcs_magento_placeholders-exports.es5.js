@@ -163,6 +163,20 @@ exports.getEntity = async function getEntity(langcode) {
                     }
                   }
                 }
+                category_ids_in_admin
+                categories {
+                  id
+                  name
+                  level
+                  url_path
+                  include_in_menu
+                  breadcrumbs {
+                    category_name
+                    category_level
+                    category_url_key
+                    category_url_path
+                  }
+                }
             }
           }}`
         });
@@ -264,6 +278,17 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       if (response !== null) {
         // Skip the default category data always.
         result = response.data.category.children[0].children;
+      }
+      break;
+
+    case 'breadcrumb':
+      if (typeof entity.categories !== 'undefined') {
+        // Get categories from entity.
+        const { categories } = entity;
+        // Get category flagged as `category_ids_in_admin`.
+        result = categories.find((e) => {
+          return entity.category_ids_in_admin.includes(e.id.toString());
+        });
       }
       break;
 
