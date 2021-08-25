@@ -173,6 +173,28 @@ const getCartSettings = (key) => window.drupalSettings.cart[key];
  */
 const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
 
+const logApiStats = (response) => {
+  try {
+    if (!hasValue(response) || !hasValue(response.config) || !hasValue(response.config.headers)) {
+      return response;
+    }
+
+    const transferTime = Date.now() - response.config.headers.RequestTime;
+    logger.debug('Finished API request @url in @transferTime, ResponseCode: @code, Method: @method.', {
+      '@url': response.config.url,
+      '@transferTime': `${transferTime}ms`,
+      '@code': response.status,
+      '@method': response.config.method,
+    });
+  } catch (error) {
+    logger.error('Failed to log API response time, error: @message', {
+      '@message': error.message,
+    });
+  }
+
+  return response;
+};
+
 /**
  * Handle errors and messages.
  *
@@ -183,6 +205,7 @@ const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
  *   Returns a promise object.
  */
 const handleResponse = (apiResponse) => {
+  logApiStats(apiResponse);
   const response = {};
   response.data = {};
   response.status = apiResponse.status;
@@ -359,6 +382,9 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
     params.data = data;
   }
 
+  params.headers = params.headers || {};
+  params.headers.RequestTime = Date.now();
+
   return Axios(params)
     .then((response) => handleResponse(response))
     .catch((error) => {
@@ -410,9 +436,14 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
     });
   }
 
+  params.headers = params.headers || {};
+  params.headers.RequestTime = Date.now();
+
   return Axios(params)
+    .then((response) => logApiStats(response))
     .catch((error) => {
       if (hasValue(error.response) && hasValue(error.response.status)) {
+        logApiStats(error.response);
         const responseCode = parseInt(error.response.status, 10);
 
         if (responseCode === 404) {
