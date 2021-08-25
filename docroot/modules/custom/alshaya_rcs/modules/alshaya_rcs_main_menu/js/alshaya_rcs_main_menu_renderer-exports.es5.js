@@ -13,10 +13,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = RcsPhStaticStorage.get('enriched_categories');
-    if (!enrichmentData) {
-      enrichmentData = rcsGetEnrichedCategories();
-    }
+    let enrichmentData = rcsGetEnrichedCategories();
 
     // Get the L1 menu list element.
     const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
@@ -31,9 +28,9 @@ exports.render = function render(
 
     let menuHtml = '';
     // Get the active super category.
-    const isSuperCategory = (typeof settings.superCategory) != "undefined";
+    const isSuperCategoryEnabled = (typeof settings.superCategory) != "undefined";
     // Proceed only if superCategory is enabled.
-    if (isSuperCategory) {
+    if (isSuperCategoryEnabled) {
       let activeSuperCategory = rcsWindowLocation().pathname.split('/')[2];
       // Check if the active super category is valid or not.
       let validSuperCategory = false;
@@ -47,7 +44,7 @@ exports.render = function render(
         activeSuperCategory = inputs[0].url_path;
       }
       // Filter out the items that doesn't belong to the active super category.
-      if (isSuperCategory) {
+      if (isSuperCategoryEnabled) {
         inputs = inputs.filter((item) => {
           return activeSuperCategory == item.url_path;
         });
@@ -57,7 +54,7 @@ exports.render = function render(
     // prepared recursively.
     inputs.forEach(function eachCategory(level1) {
       // Change item level only if super category is enabled.
-      if (isSuperCategory) {
+      if (isSuperCategoryEnabled) {
         // Return from here if L2 element is empty and if the child element is
         // not associated with the current active super category.
         if (!level1.children) {
@@ -71,7 +68,7 @@ exports.render = function render(
         innerHtmlObj,
         settings,
         enrichmentData,
-        isSuperCategory,
+        isSuperCategoryEnabled,
       );
     });
 
@@ -91,12 +88,12 @@ exports.render = function render(
  * @param {string} phHtmlObj
  * @param {object} settings
  * @param {object} enrichmentData
- * @param {boolean} isSuperCategory
+ * @param {boolean} isSuperCategoryEnabled
  *
  * @returns
  *  {string} Generated menu markup for given level.
  */
-const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData, isSuperCategory) {
+const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData, isSuperCategoryEnabled) {
   // We support max depth by L4.
   if (level > parseInt(drupalSettings.alshayaRcs.navigationMenu.menuMaxDepth)) {
     return;
@@ -107,7 +104,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   // @todo remove this when API return the correct path.
   const levelObjOrgUrlPath = levelObj.url_path;
   // Append category prefix in L2 if super category is enabled.
-  if (isSuperCategory) {
+  if (isSuperCategoryEnabled) {
       let urlItems = levelObj.url_path.split('/');
       if (urlItems.length > 1) {
         urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
@@ -242,7 +239,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
           phHtmlObj,
           settings,
           enrichmentData,
-          isSuperCategory,
+          isSuperCategoryEnabled,
         );
 
         colTotal += l2_cost;
@@ -259,7 +256,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         phHtmlObj,
         settings,
         enrichmentData,
-        isSuperCategory,
+        isSuperCategoryEnabled,
       );
     });
   }

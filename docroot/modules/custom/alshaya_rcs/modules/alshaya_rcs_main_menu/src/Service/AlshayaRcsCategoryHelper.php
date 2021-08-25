@@ -155,7 +155,7 @@ class AlshayaRcsCategoryHelper {
       $images = [
         'field_icon' => [
           'key' => 'icon_url',
-          'app' => TRUE,
+          'app' => FALSE,
         ],
         'field_logo_active_image' => [
           'key' => 'logo_active_image',

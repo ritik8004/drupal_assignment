@@ -15,10 +15,7 @@ exports.render = function render(
     // Get the enrichment data. It's a sync call.
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
-    let enrichmentData = RcsPhStaticStorage.get('enriched_categories');
-    if (!enrichmentData) {
-      enrichmentData = rcsGetEnrichedCategories();
-    }
+    let enrichmentData = rcsGetEnrichedCategories();
 
     // Sort the remaining category menu items by position in asc order.
     inputs.sort(function (a, b) {
@@ -51,7 +48,7 @@ exports.render = function render(
         input,
         menuListLevel1Ele.html(),
         settings,
-        enrichmentData[input.url_path] ? [enrichmentData[input.url_path]] : [],
+        enrichmentData && enrichmentData[input.url_path] ? [enrichmentData[input.url_path]] : [],
         key == 0 ? true : false,
       );
     });
