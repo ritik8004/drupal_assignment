@@ -10,7 +10,7 @@ use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class to build the breadcrumb for RCS PLP pages.
+ * Class to build the breadcrumb for RCS PLP/PDP pages.
  */
 class AlshayaRcsPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
@@ -24,6 +24,13 @@ class AlshayaRcsPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     if ($route_match->getRouteName() == 'entity.taxonomy_term.canonical') {
       $term = $route_match->getParameter('taxonomy_term');
       if ($term->bundle() === 'rcs_category') {
+        return TRUE;
+      }
+    }
+    // Breadcrumb for 'pdp' pages.
+    if ($route_match->getRouteName() == 'entity.node.canonical') {
+      $term = $route_match->getParameter('node');
+      if ($term->bundle() === 'rcs_product') {
         return TRUE;
       }
     }
