@@ -27,7 +27,6 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 
 /**
  * Class Alshaya Spc Order Helper.
@@ -163,13 +162,6 @@ class AlshayaSpcOrderHelper {
   protected $renderer;
 
   /**
-   * Checkout.com API Helper.
-   *
-   * @var \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper
-   */
-  protected $checkoutComApiHelper;
-
-  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -206,8 +198,6 @@ class AlshayaSpcOrderHelper {
    *   Store finder utility.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
-   * @param \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper
-   *   Acm checkout com api helper.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -225,8 +215,7 @@ class AlshayaSpcOrderHelper {
                               OrdersManager $orders_manager,
                               ConfigFactory $configFactory,
                               StoresFinderUtility $store_finder,
-                              RendererInterface $renderer,
-                              AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper) {
+                              RendererInterface $renderer) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -244,7 +233,6 @@ class AlshayaSpcOrderHelper {
     $this->configFactory = $configFactory;
     $this->storeFinder = $store_finder;
     $this->renderer = $renderer;
-    $this->checkoutComApiHelper = $checkout_com_api_helper;
   }
 
   /**
@@ -502,15 +490,12 @@ class AlshayaSpcOrderHelper {
         break;
 
       case 'checkout_com_upapi_benefitpay':
-        $checkoutcomConfig = $this->checkoutComApiHelper->getCheckoutcomUpApiConfig();
         $orderDetails['payment']['methodTitle'] = $payment_info['method_title'];
         $orderDetails['payment']['qrData'] = $payment_info['qr_data'];
         $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
         $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
         $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
-        $orderDetails['payment']['benefitpayMerchantId'] = $checkoutcomConfig['benefit_pay_merchant_id'];
-        $orderDetails['payment']['benefitpayAppId'] = $checkoutcomConfig['benefit_pay_app_id'];
-        $orderDetails['payment']['benefitpaySecretKey'] = $checkoutcomConfig['benefit_pay_secret_key'];
+
         break;
     }
 
