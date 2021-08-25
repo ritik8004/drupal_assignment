@@ -11,10 +11,19 @@ import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
     document.addEventListener('updatePlaceOrderCTA', this.updatePlaceOrderCTA, false);
+    document.addEventListener('orderPlaced', this.orderPlaced);
   }
 
   componentWillUnmount() {
     document.removeEventListener('updatePlaceOrderCTA', this.updatePlaceOrderCTA, false);
+  }
+
+  /**
+   * Callback for any action after an order is placed.
+   */
+  orderPlaced = () => {
+    // Remove benefit pay storage data.
+    localStorage.removeItem('benefit_pay_modal_auto_opened');
   }
 
   /**
