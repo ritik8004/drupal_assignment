@@ -412,10 +412,8 @@ class AlshayaSpcOrderHelper {
       $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
       $orderDetails['view_on_map_link'] = '';
 
-      $isCollectionPoint = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
-
       // Getting store node object from store code.
-      if ($store_data = $this->storeFinder->getMultipleStoresExtraData([$store_code => []], NULL, $isCollectionPoint)) {
+      if ($store_data = $this->storeFinder->getMultipleStoresExtraData([$store_code => []])) {
         $store_node = current($store_data);
         $orderDetails['store']['store_name'] = $store_node['name'];
         $country_list = $this->countryRepository->getList();
