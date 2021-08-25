@@ -1,6 +1,6 @@
 /**
- * Check whether the Javascript code is executed on a browser or on a Node.js server.
- * @return {bool} Whether or not the execution context is browser (in opposition to middleware).
+ * Fetch the enriched data from the storage if present or call API.
+ * @return {object} Object of enriched data.
  */
 rcsGetEnrichedCategories = () => {
   let enrichedData = RcsPhStaticStorage.get('enriched_categories');
