@@ -7,12 +7,6 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import BenefitPaySVG from '../../../svg-component/payment-method-svg/components/benefit-pay-svg';
 
 class CompleteBenefitPayPayment extends React.Component {
-  appId = 2264812781;
-
-  merchantId = 4187951;
-
-  secretKey = 'vbgm3o5354c820vhrj0ld5wck693yipbabf43nq9m6avr';
-
   successCallback = () => {
     window.InApp.close();
   }
@@ -27,16 +21,17 @@ class CompleteBenefitPayPayment extends React.Component {
   // pairs separated by a comma and finally performing a SHA-256 hash using the
   // secret token with base64 encoding.
   calcSecureHash = (data) => {
+    const { payment } = this.props;
     const benefitpayData = data;
     const sortedValues = Object.entries(benefitpayData)
       .filter((kv) => kv[1])
       .map((kv) => `${kv[0]}="${kv[1]}"`)
       .sort();
     const hashStr = sortedValues.join(',');
-    const hash = hmacSHA256(hashStr, this.secretKey);
+    const hash = hmacSHA256(hashStr, payment.benefitpaySecretKey);
     const hashInBase64 = Base64.stringify(hash);
 
-    benefitpayData.hashedString = this.secretKey;
+    benefitpayData.hashedString = payment.benefitpaySecretKey;
     benefitpayData.secure_hash = hashInBase64;
 
     return benefitpayData;
@@ -53,8 +48,8 @@ class CompleteBenefitPayPayment extends React.Component {
       transactionAmount: totals.base_grand_total.toFixed(decimalPoints),
       transactionCurrency: currencyCode,
       referenceNumber: payment.referenceNumber,
-      merchantId: this.merchantId,
-      appId: this.appId,
+      merchantId: payment.benefitpayMerchantId,
+      appId: payment.benefitpayAppId,
     };
 
     return this.calcSecureHash(data);
