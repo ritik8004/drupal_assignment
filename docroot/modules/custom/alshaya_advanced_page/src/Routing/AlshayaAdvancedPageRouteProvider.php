@@ -50,6 +50,21 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
       }
     }
 
+    // If V2 function exist for checking department page,
+    // proceed and check for department page existance.
+    if (function_exists('alshaya_rcs_main_menu_is_department_page')) {
+      if ($department_node = alshaya_rcs_main_menu_is_department_page($path)) {
+        $node_route = $this->connection->query("SELECT name, route, fit FROM {" . $this->connection->escapeTable($this->tableName) . "} WHERE name = 'entity.node.canonical'")
+          ->fetchAll(\PDO::FETCH_ASSOC);
+        if ($node_route) {
+          /** @var \Symfony\Component\Routing\Route $route */
+          $route = unserialize($node_route[0]['route']);
+          // Setting options to identify the department page later.
+          $route->setOption('_department_page_node', $department_node);
+          $collection->add($node_route[0]['name'], $route);
+        }
+      }
+    }
     return $collection;
   }
 
