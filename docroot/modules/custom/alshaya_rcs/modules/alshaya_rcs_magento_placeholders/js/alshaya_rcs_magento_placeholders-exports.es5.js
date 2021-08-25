@@ -92,13 +92,16 @@ exports.computePhFilters = function (input, filter) {
     case 'product_mobile_gallery':
     case 'add_to_cart':
     case 'gtm-price':
+    case 'final_price':
+    case 'first_image':
+    case 'schema_stock':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }
       break;
 
     default:
-      console.log(`Unknown JS filter ${filter}.`)
+      console.log(`Unknown JS filter ${filter}.`);
   }
 
   return value;

@@ -842,6 +842,13 @@ class AlshayaBazaarVoice {
     $url = $request['url'];
     $request_options['query'] = $request['query'];
 
+    // For RCS product, we do not have the product id avaialble on page load.
+    // So we send this dummy value which is replaced in JS.
+    // Also, the API request is done in JS.
+    if ($product_id === 'SKU_VAL') {
+      return $request;
+    }
+
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
     if (!$result['HasErrors'] && isset($result['Results']) && !empty($result['Results'])) {
       $response[$product_id]['productData'] = $result['Results'][0];

@@ -125,6 +125,13 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
       'gtm-category',
     ],
   );
+
+  // Alter the attachments for the schema metadata.
+  // We pass empty array as a variable here in order to avoid PHP error.
+  $product_schema_data = [];
+  \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
+  // Add the library which adds adds the schema script tag.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_product/schema_org';
 }
 
 /**
@@ -159,6 +166,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
+
+  $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
 }
 
 /**
@@ -333,6 +342,19 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#value' => render($sku_base_form),
     '#attributes' => [
       'class' => 'rcs-templates--sku-base-form',
+    ],
+  ];
+
+  // We pass this as html so that in the JS, we can fetch the data from here and
+  // we can call other apis to add to this data if required.
+  // For eg. we would need to add Bazaar Voice data when it is enabled.
+  $product_schema_data = _alshaya_seo_transac_pdp_rich_snippet();
+  $variables['rcs_templates']['product_schema_data'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#attributes' => [
+      'class' => 'rcs-templates--product_schema_data',
+      'data-product-schema' => json_encode($product_schema_data),
     ],
   ];
 

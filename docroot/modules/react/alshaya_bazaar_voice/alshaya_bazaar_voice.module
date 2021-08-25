@@ -307,14 +307,18 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  /** @var \Drupal\bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
 
   if ($route_match->getRouteName() == 'entity.node.canonical') {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
+    if (!$node) {
+      return;
+    }
+    $bundle = $node->getType();
     // If 'product' node.
-    if ($node && $node->getType() == 'acq_product') {
+    if ($bundle == 'acq_product') {
       $sku = $skuManager->getSkuForNode($node);
       // Get sanitized sku.
       $sanitized_sku = $skuManager->getSanitizedSku($sku);
@@ -346,6 +350,11 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
           ];
         }
       }
+    }
+    elseif ($bundle === 'rcs_product') {
+      // Get the request parameters with a placeholder SKU value.
+      $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics('SKU_VAL');
+      $attachments['#attached']['drupalSettings']['alshaya_bazaar_voice']['product_review_schema_request_data'] = $productReviewStats;
     }
   }
 }
