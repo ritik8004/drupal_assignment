@@ -33,6 +33,7 @@ exports.getEntity = async function getEntity(langcode) {
                 name
                 url_key
                 is_buyable
+                stock_status
                 price {
                     regularPrice {
                         amount {
@@ -73,6 +74,11 @@ exports.getEntity = async function getEntity(langcode) {
                   dimension3
                   dimension4
                 }
+                meta_title
+                meta_description
+                meta_keyword
+                og_meta_title
+                og_meta_description
                 ... on ConfigurableProduct {
                   configurable_options {
                     id

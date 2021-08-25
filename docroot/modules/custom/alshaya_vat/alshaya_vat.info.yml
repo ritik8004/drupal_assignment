@@ -1,0 +1,5 @@
+name: Alshaya Vat
+description: Provides alshaya vat certification feature.
+package: Alshaya
+type: module
+core_version_requirement: ^8 || ^9

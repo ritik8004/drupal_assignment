@@ -87,3 +87,8 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/my-account/my-account.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/slug-banner:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/slug-banner/slug-banner.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/slug-banner/slug-banner.ltr.css

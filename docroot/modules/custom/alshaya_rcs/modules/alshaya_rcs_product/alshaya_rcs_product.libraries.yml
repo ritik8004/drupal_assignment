@@ -9,3 +9,9 @@ rcs_product_info:
   version: 1.x
   js:
     js/alshaya_rcs_product.pdp.v2.js: {}
+
+schema_org:
+  js:
+    js/alshaya_rcs_product.schema_org.js: {}
+  dependencies:
+    - rcs_placeholders/helpers

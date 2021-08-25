@@ -27,7 +27,7 @@ const ReviewInformation = ({
 
             <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
               <div className="review-detail-mobile">
-                <span className="review-date">{`${date}`}</span>
+                <span id={`${reviewInformationData.Id}-review-date`} className="review-date">{`${date}`}</span>
 
                 <ConditionalView condition={reviewInformationData.UserLocation !== null}>
                   <span className="user-detail-location">{reviewInformationData.UserLocation}</span>

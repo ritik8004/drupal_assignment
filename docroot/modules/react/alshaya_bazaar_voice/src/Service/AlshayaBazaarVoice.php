@@ -15,6 +15,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Provides integration with BazaarVoice.
@@ -412,6 +413,10 @@ class AlshayaBazaarVoice {
       $basic_configs['endpoint'] = $config->get('api_base_url');
       $basic_configs['passkey'] = $config->get('conversations_apikey');
       $basic_configs['max_age'] = $config->get('max_age');
+      // Get Configs for Google translation API.
+      $google_translations_api = Settings::get('google_translations_api');
+      $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'];
+      $basic_configs['google_api_key'] = $google_translations_api['api_key'];
     }
     $basic_configs['api_version'] = $config->get('api_version');
     $basic_configs['locale'] = $config->get('locale');
@@ -433,6 +438,8 @@ class AlshayaBazaarVoice {
     $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
     $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
     $basic_configs['show_location_filter'] = $config->get('show_location_filter');
+    $basic_configs['enable_google_translation'] = $config->get('enable_google_translation');
+    $basic_configs['translate_chars_limit'] = $config->get('translate_chars_limit');
     $basic_configs['comment_submission'] = $config->get('comment_submission');
 
     return $basic_configs;
@@ -877,6 +884,13 @@ class AlshayaBazaarVoice {
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
     $url = $request['url'];
     $request_options['query'] = $request['query'];
+
+    // For RCS product, we do not have the product id avaialble on page load.
+    // So we send this dummy value which is replaced in JS.
+    // Also, the API request is done in JS.
+    if ($product_id === 'SKU_VAL') {
+      return $request;
+    }
 
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
     if (!$result['HasErrors'] && isset($result['Results']) && !empty($result['Results'])) {

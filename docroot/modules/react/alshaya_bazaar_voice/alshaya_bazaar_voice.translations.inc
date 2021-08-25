@@ -160,5 +160,14 @@ function _alshaya_bazaar_voice_translations() {
     'Original posted on' => [
       'ar' => 'تم نشرها في الأصل على',
     ],
+    'Translate with Google' => [
+      'ar' => 'الترجمة باستخدام جوجل',
+    ],
+    'Back to Original Review' => [
+      'ar' => 'الرجوع للمراجعة الأصلي',
+    ],
+    'Back to Original Comment' => [
+      'ar' => 'الرجوع للتعليق الأصلي',
+    ],
   ];
 }
