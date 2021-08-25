@@ -410,7 +410,30 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
     });
   }
 
-  return Axios(params);
+  return Axios(params)
+    .catch((error) => {
+      if (hasValue(error.response) && hasValue(error.response.status)) {
+        const responseCode = parseInt(error.response.status, 10);
+
+        if (responseCode === 404) {
+          logger.warning('Drupal page no longer available.', { ...params });
+          return null;
+        }
+
+        logger.error('Drupal API call failed.', {
+          responseCode,
+          ...params,
+        });
+        return null;
+      }
+
+      logger.error('Something happened in setting up the request that triggered an error.', {
+        '@error': error.message,
+        ...params,
+      });
+
+      return null;
+    });
 };
 
 /**
@@ -519,7 +542,7 @@ const getProductStatus = async (sku) => {
   }
 
   // Return from static, if available.
-  if (!_isUndefined(staticProductStatus[sku])) {
+  if (typeof staticProductStatus[sku] !== 'undefined') {
     return staticProductStatus[sku];
   }
 
@@ -528,9 +551,7 @@ const getProductStatus = async (sku) => {
   // query string.
   // The query string is added since same APIs are used by MAPP also.
   const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
+  if (!hasValue(response) || !hasValue(response.data) || hasValue(response.data.error)) {
     staticProductStatus[sku] = null;
   } else {
     staticProductStatus[sku] = response.data;
@@ -630,8 +651,28 @@ const getProcessedCartData = async (cartData) => {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
         const stockInfo = await getProductStatus(item.sku);
+
+        // Do not show the products which are not available in
+        // system but only available in cart.
+        if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
+          logger.error('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+            '@sku': item.sku,
+            '@cartId': data.cart_id_int,
+            '@stockInfo': JSON.stringify(stockInfo || {}),
+          });
+
+          delete data.items[item.sku];
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
         data.items[item.sku].in_stock = stockInfo.in_stock;
         data.items[item.sku].stock = stockInfo.stock;
+
+        // If any item is OOS.
+        if (!hasValue(stockInfo.in_stock) || !hasValue(stockInfo.stock)) {
+          data.in_stock = false;
+        }
       }
 
       if (typeof item.extension_attributes !== 'undefined') {
@@ -664,11 +705,6 @@ const getProcessedCartData = async (cartData) => {
           }
         }
       });
-
-      // If any item is OOS.
-      if (!_isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
-        data.in_stock = false;
-      }
     }
   } else {
     data.items = [];
