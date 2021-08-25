@@ -47,7 +47,6 @@ exports.getEntity = async function getEntity(langcode) {
                         }
                     }
                 }
-                brand_logo
                 media_gallery {
                   url
                   label
@@ -289,6 +288,13 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
         result = categories.find((e) => {
           return entity.category_ids_in_admin.includes(e.id.toString());
         });
+        // Push last crumb.
+        result.breadcrumbs.push({
+          category_name: result.name,
+          category_url_path: result.url_path,
+        });
+        // Set last crumb from entity title.
+        result.name = entity.name;
       }
       break;
 
