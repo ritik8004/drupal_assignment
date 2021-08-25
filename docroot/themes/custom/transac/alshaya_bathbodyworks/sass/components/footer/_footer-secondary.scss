@@ -35,3 +35,17 @@
     }
   }
 }
+
+.block-alshaya-vat-certificate-block {
+  text-align: $right;
+  margin-#{$right}: 3rem;
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+    margin-#{$right}: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-#{$right}: 1rem;
+  }
+}
