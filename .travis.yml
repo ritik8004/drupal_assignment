@@ -8,12 +8,12 @@ dist: trusty
 matrix:
   fast_finish: true
   include:
-    - php: 7.3
+    - php: 7.4
       env:
         - INSTALL_TYPE=install
         - PROFILE=alshaya_transac
       if: type IN (pull_request, cron)
-    - php: 7.3
+    - php: 7.4
       env:
         - INSTALL_TYPE=install
         - PROFILE=alshaya_non_transac
@@ -26,17 +26,17 @@ matrix:
       # number of concurrent builds in Travis.
       # if: type IN (pull_request, cron)
       if: type IN (cron)
-    #- php: 7.3
+    #- php: 7.4
     #  env:
     #  - INSTALL_TYPE=update
     #  - PROFILE=alshaya_transac
     #  if: type = pull_request
-    #- php: 7.3
+    #- php: 7.4
     #  env:
     #  - INSTALL_TYPE=update
     #  - PROFILE=alshaya_non_transac
     #  if: type = pull_request
-    - php: 7.3
+    - php: 7.4
       # Skip all the builds from back merge.addons:
       # Code changes from back merges wont be deployed but that should be fine
       # considering we dont need for in-active branches and for active ones
@@ -134,10 +134,10 @@ deploy:
     on:
       all_branches: true
       tags: false
-      php: 7.3
+      php: 7.4
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_tag"
     skip_cleanup: true
     on:
       tags: true
-      php: 7.3
+      php: 7.4
