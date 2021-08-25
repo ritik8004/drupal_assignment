@@ -360,7 +360,7 @@ class ProductInfoResource extends ResourceBase {
             if (is_null($value['data'])) {
               $color_code_attribute = $this->config->get('color_attribute_config')['configurable_color_code_attribute'];
               $child_node = SKU::loadFromSku($value['child_sku_code'], $langcode);
-              $configurable_attributes[$swatches['attribute_code']]['swatches'][$key]['data'] = $child_node->get($color_code_attribute)->getString() ?? NULL;
+              $configurable_attributes[$swatches['attribute_code']]['swatches'][$key]['data'] = $color_code_attribute ? $child_node->get($color_code_attribute)->getString() : NULL;
             }
           }
         }
