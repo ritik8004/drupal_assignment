@@ -36,6 +36,14 @@ export const addressFormInlineErrorScroll = () => {
   // If error found in address fields, scroll and return.
   if (errorElement !== undefined && errorElement !== null) {
     smoothScrollToAddressField(errorElement);
+    return;
+  }
+
+  // If error is on collector's fields.
+  const collectorFieldsSelector = '.spc-checkout-collector-information-fields > div > div.error:not(:empty)';
+  errorElement = document.querySelector(collectorFieldsSelector);
+  if (errorElement !== undefined && errorElement !== null) {
+    smoothScrollToAddressField(errorElement, true);
   }
 };
 

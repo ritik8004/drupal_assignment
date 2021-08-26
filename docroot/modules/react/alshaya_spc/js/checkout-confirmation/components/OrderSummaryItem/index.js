@@ -1,6 +1,5 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import getStringMessage from '../../../utilities/strings';
 
 const OrderSummaryItem = (props) => {
   const {
@@ -67,7 +66,7 @@ const OrderSummaryItem = (props) => {
           {(pickUpPointTitle !== undefined)
             && (
               <div className="spc-cnc-confirmation-govtid-msg">
-                {getStringMessage('cnc_valid_govtid_message')}
+                {`${Drupal.t('Important Note')}: ${Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}`}
               </div>
             )}
           <span className="spc-store-map-link">

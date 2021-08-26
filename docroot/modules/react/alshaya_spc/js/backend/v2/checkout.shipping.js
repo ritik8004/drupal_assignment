@@ -5,6 +5,9 @@ import md5 from 'md5';
 import { getApiEndpoint, logger } from './utility';
 import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
+import {
+  collectionPointsEnabled,
+} from '../../utilities/cnc_util';
 
 /**
  * Format the address array.
@@ -52,6 +55,35 @@ const formatAddressForShippingBilling = (address) => {
   });
 
   data.custom_attributes = customAttributes;
+
+  // If pudo is enabled, send collectors details in shipping
+  // and contact details seperately.
+  if (collectionPointsEnabled()) {
+    if (data.collector_firstname) {
+      data.order_firstname = data.firstname;
+      data.firstname = data.collector_firstname;
+      delete data.collector_firstname;
+    }
+
+    if (data.collector_lastname) {
+      data.order_lastname = data.lastname;
+      data.lastname = data.collector_lastname;
+      delete data.collector_lastname;
+    }
+
+    if (data.collector_email) {
+      data.order_email = data.email;
+      data.email = data.collector_email;
+      delete data.collector_email;
+    }
+
+    if (data.collector_telephone) {
+      data.order_telephone = data.telephone;
+      data.telephone = data.collector_telephone;
+      delete data.collector_telephone;
+    }
+  }
+
   return data;
 };
 

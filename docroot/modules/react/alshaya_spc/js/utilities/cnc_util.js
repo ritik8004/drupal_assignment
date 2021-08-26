@@ -1,3 +1,5 @@
+import getStringMessage from './strings';
+
 /**
  * Helper to check if click and collect collection points is enabled.
  */
@@ -85,3 +87,46 @@ export const getPickUpPointTitle = (store) => store.collection_point || '';
 export const getCncDeliveryTimePrefix = () => ((collectionPointsEnabled() === true)
   ? 'cnc_collection_collect_in_store'
   : 'cnc_collect_in_store');
+
+/**
+ * Validate collector information.
+ */
+export const validateCollectorInfo = (e) => {
+  let isError = false;
+  const name = e.target.elements.collectorFullname.value.trim();
+  let splitedName = name.split(' ');
+  splitedName = splitedName.filter((s) => (
+    (s.trim().length > 0
+    && (s !== '\\n' && s !== '\\t' && s !== '\\r'))));
+  if (name.length === 0 || splitedName.length === 1) {
+    document.getElementById('collectorFullname-error').innerHTML = getStringMessage('form_error_full_name');
+    document.getElementById('collectorFullname-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('collectorFullname-error').innerHTML = '';
+    document.getElementById('collectorFullname-error').classList.remove('error');
+  }
+
+  const mobile = e.target.elements.collectorMobile.value.trim();
+  if (mobile.length === 0
+    || mobile.match(/^[0-9]+$/) === null) {
+    document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_mobile_number');
+    document.getElementById('collectorMobile-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('collectorMobile-error').innerHTML = '';
+    document.getElementById('collectorMobile-error').classList.remove('error');
+  }
+
+  const email = e.target.elements.collectorEmail.value.trim();
+  if (email.length === 0) {
+    document.getElementById('collectorEmail-error').innerHTML = getStringMessage('form_error_email');
+    document.getElementById('collectorEmail-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('collectorEmail-error').innerHTML = '';
+    document.getElementById('collectorEmail-error').classList.remove('error');
+  }
+
+  return isError;
+};

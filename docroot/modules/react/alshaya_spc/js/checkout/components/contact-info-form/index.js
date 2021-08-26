@@ -11,7 +11,10 @@ import { validateContactInfo, addressFormInlineErrorScroll } from '../../../util
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
-import { collectionPointsEnabled } from '../../../utilities/cnc_util';
+import {
+  collectionPointsEnabled,
+  validateCollectorInfo,
+} from '../../../utilities/cnc_util';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -24,6 +27,15 @@ class ContactInfoForm extends React.Component {
     if (contactInfoError) {
       addressFormInlineErrorScroll();
       return;
+    }
+
+    // If collection point feature is enabled, validate collectors information.
+    if (collectionPointsEnabled() && showCollectorForm === true) {
+      const collectorInfoError = validateCollectorInfo(e);
+      if (collectorInfoError) {
+        addressFormInlineErrorScroll();
+        return;
+      }
     }
 
     showFullScreenLoader();
@@ -57,7 +69,7 @@ class ContactInfoForm extends React.Component {
       formData.static.collector_firstname = collectorName.firstname || '';
       formData.static.collector_lastname = collectorName.lastname || '';
       formData.static.collector_email = e.target.elements.collectorEmail.value || '';
-      formData.static.collector_telephone = e.target.elements.collectorMobile.value || '';
+      formData.static.collector_telephone = `+${drupalSettings.country_mobile_code}${cleanMobileNumber(e.target.elements.collectorMobile.value)}`;
     }
 
     this.processShippingUpdate(formData);
