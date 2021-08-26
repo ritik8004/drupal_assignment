@@ -122,7 +122,7 @@ const Teaser = ({
             <h2 className="field--name-name">
               <a href={attribute.url} className="product-selected-url">
                 <div className="aa-suggestion">
-                  <span className="suggested-text">
+                  <span className="suggested-text" title={attribute.title && Parser(attribute.title)}>
                     {attribute.title && Parser(attribute.title)}
                   </span>
                 </div>

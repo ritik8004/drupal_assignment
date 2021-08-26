@@ -1,0 +1,24 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .c-products__item {
+    border: 1px solid $_screeching_white;
+
+    .field--name-name {
+      a {
+        .suggested-text {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          line-height: 1.25rem;
+          max-height: 2.8125rem;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
+    }
+
+    article:hover {
+      z-index: -1;
+    }
+  }
+}
