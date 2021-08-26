@@ -400,31 +400,7 @@ function alshaya_tbs_transac_alshaya_performance_preload_alter(array &$preload) 
   ];
   $preload[] = [
     'as' => 'font',
-    'href' => $fonts_directory_path . '/29LT-Bukra-Condensed-Bold.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/Druk-Bold-Web.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
     'href' => $fonts_directory_path . '/DrukWide-Bold-Cy-Web.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/DrukWide-Super-Web.woff2',
-    'crossorigin' => 'crossorigin',
-    'type' => 'font/woff2',
-  ];
-  $preload[] = [
-    'as' => 'font',
-    'href' => $fonts_directory_path . '/DrukCond-Super-Cy-Web.woff2',
     'crossorigin' => 'crossorigin',
     'type' => 'font/woff2',
   ];
