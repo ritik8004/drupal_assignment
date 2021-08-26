@@ -5,6 +5,7 @@ namespace Drupal\alshaya_rcs_main_menu\Service;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\UrlHelper;
@@ -55,6 +56,13 @@ class AlshayaRcsCategoryHelper {
   protected $termCacheTags = [];
 
   /**
+   * The path alias manager.
+   *
+   * @var \Drupal\path_alias\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
    * Constructs a new AlshayaRcsCategoryHelper instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -65,15 +73,19 @@ class AlshayaRcsCategoryHelper {
    *   Drupal Renderer.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
+   *   The path alias manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
                               RendererInterface $renderer,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              AliasManagerInterface $alias_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
+    $this->aliasManager = $alias_manager;
   }
 
   /**
@@ -134,6 +146,7 @@ class AlshayaRcsCategoryHelper {
         'background_color' => $term->get('field_term_background_color')->getString(),
         'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
         'item_clickable' => (int) $term->get('field_display_as_clickable_link')->getString(),
+        'deeplink' => $this->getDeepLink($term),
       ];
 
       // Get overridden target link.
@@ -324,6 +337,35 @@ class AlshayaRcsCategoryHelper {
    */
   public function getTermsCacheTags() {
     return $this->termCacheTags;
+  }
+
+  /**
+   * Get Deep link based on give object.
+   *
+   * @param object $object
+   *   Object of node or term or query containing node/term data.
+   *
+   * @return string
+   *   Return deeplink url.
+   */
+  public function getDeepLink($object) {
+    // Get all the departments pages having category slug value.
+    $department_pages = alshaya_rcs_main_menu_get_department_pages();
+    if ($object->hasField('field_category_slug')) {
+      $slug = $object->get('field_category_slug')->getString();
+      if (array_key_exists($slug, $department_pages)) {
+        return 'page/advanced?url=' .
+        ltrim(
+          $this->aliasManager->getAliasByPath(
+            '/node/' . $object->id(),
+            $this->languageManager->getCurrentLanguage(),
+          ),
+          '/'
+        );
+      }
+    }
+
+    return '';
   }
 
 }

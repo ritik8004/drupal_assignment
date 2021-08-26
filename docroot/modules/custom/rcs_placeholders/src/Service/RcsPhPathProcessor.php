@@ -129,6 +129,14 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     $category_prefix = $config->get('category.path_prefix');
 
     if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
+      // Is there any department page for the cateogry page?
+      if (function_exists('alshaya_rcs_main_menu_get_department_pages')) {
+        $department_pages = alshaya_rcs_main_menu_get_department_pages();
+        if (array_key_exists($path, $department_pages)) {
+          return $path;
+        }
+      }
+
       self::$entityType = 'category';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
       self::$entityPathPrefix = $category_prefix;
