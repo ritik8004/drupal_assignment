@@ -9,6 +9,7 @@ use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Cache\Cache;
@@ -353,12 +354,14 @@ class AlshayaRcsCategoryHelper {
     $department_pages = alshaya_rcs_main_menu_get_department_pages();
     if ($object->hasField('field_category_slug')) {
       $slug = $object->get('field_category_slug')->getString();
+      // @todo Change the logic here once we get the prefixed response from
+      // magento.
       if (array_key_exists($slug, $department_pages)) {
-        return 'page/advanced?url=' .
+        return MobileAppUtility::ENDPOINT_PREFIX . 'page/advanced?url=' .
         ltrim(
           $this->aliasManager->getAliasByPath(
-            '/node/' . $object->id(),
-            $this->languageManager->getCurrentLanguage(),
+            '/node/' . $department_pages[$slug],
+            $this->languageManager->getCurrentLanguage()->getId(),
           ),
           '/'
         );

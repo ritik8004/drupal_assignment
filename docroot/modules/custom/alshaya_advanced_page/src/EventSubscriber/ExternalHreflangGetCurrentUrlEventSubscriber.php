@@ -50,13 +50,23 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
    */
   public function onGetCurrentUrlEvent(ExternalHreflangGetCurrentUrlEvent $event) {
     $route = $this->routeMatch->getRouteObject();
-    if (empty($route) || !($route->hasOption('_department_page_term'))) {
-      return;
+    // If _department_page_node option is there for V2 then prepare the URL here
+    // only otherwise the module will throw route not found exception.
+    if (function_exists('alshaya_rcs_main_menu_is_department_page')
+    && $route->hasOption('_department_page_node')) {
+      $url = Url::fromRoute('entity.node.canonical', [
+        'node' => $route->getOption('_department_page_node'),
+      ]);
     }
+    else {
+      if (empty($route) || !($route->hasOption('_department_page_term'))) {
+        return;
+      }
 
-    $url = Url::fromRoute('entity.taxonomy_term.canonical', [
-      'taxonomy_term' => $route->getOption('_department_page_term'),
-    ]);
+      $url = Url::fromRoute('entity.taxonomy_term.canonical', [
+        'taxonomy_term' => $route->getOption('_department_page_term'),
+      ]);
+    }
 
     $event->setCurrentUrl($url);
     $event->stopPropagation();
