@@ -15,7 +15,7 @@ function alshaya_pb_transac_alshaya_performance_preload_alter(array &$preload) {
 
   $preload[] = [
     'as' => 'style',
-    'href' => 'https://fonts.googleapis.com/css?family=Cairo:300,400,600,700|Open+Sans:300,400,600,700&subset=arabic',
+    'href' => 'https://fonts.googleapis.com/css?family=Cairo:300,400,600,700|Open+Sans:300,400,600,700&subset=arabic&display=swap',
     'crossorigin' => 'crossorigin',
     'type' => 'text/css',
   ];
