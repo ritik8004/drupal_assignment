@@ -231,9 +231,8 @@ function _alshaya_bbw_transac_get_language_specific_data($lang, $sku_data, $node
  * Implements hook_alshaya_performance_preload_alter().
  */
 function alshaya_bbw_transac_alshaya_performance_preload_alter(array &$preload) {
-  // Footlocker's icon font comes from whitelabel.
-  $themePath = drupal_get_path('theme', 'alshaya_white_label');
-  $icon_directory_path = '/' . $themePath . '/fonts';
+  // BBW's icon font comes from whitelabel.
+  $icon_directory_path = '/' . drupal_get_path('theme', 'alshaya_white_label') . '/fonts';
 
   $preload[] = [
     'as' => 'font',
