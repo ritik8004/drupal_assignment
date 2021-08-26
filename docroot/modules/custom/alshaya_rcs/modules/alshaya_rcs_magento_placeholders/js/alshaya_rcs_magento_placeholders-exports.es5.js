@@ -47,16 +47,16 @@ exports.render = function render(
     case 'breadcrumb':
       // Render breadcrumb based on the page type.
       if (drupalSettings.rcsPage.type === 'category' &&
-        typeof globalThis.renderRcsCategoryBreadcrumb !== 'undefined')  {
-        html += globalThis.renderRcsCategoryBreadcrumb.render(
+        typeof globalThis.renderRcsListingBreadcrumb !== 'undefined')  {
+        html += globalThis.renderRcsListingBreadcrumb.render(
           settings,
           entity,
           innerHtml
         );
       }
       if (drupalSettings.rcsPage.type === 'product' &&
-        typeof globalThis.renderRcsCategoryBreadcrumb !== 'undefined')  {
-        html += globalThis.renderRcsCategoryBreadcrumb.render(
+        typeof globalThis.renderRcsProductBreadcrumb !== 'undefined')  {
+        html += globalThis.renderRcsProductBreadcrumb.render(
           settings,
           inputs,
           innerHtml

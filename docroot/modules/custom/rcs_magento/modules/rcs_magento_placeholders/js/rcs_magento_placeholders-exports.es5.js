@@ -288,12 +288,12 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
         result = categories.find((e) => {
           return entity.category_ids_in_admin.includes(e.id.toString());
         });
-        // Push last crumb.
+        // Move last crumb up.
         result.breadcrumbs.push({
           category_name: result.name,
           category_url_path: result.url_path,
         });
-        // Set last crumb from entity title.
+        // Set breadcrumb title.
         result.name = entity.name;
       }
       break;
