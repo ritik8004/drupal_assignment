@@ -10,6 +10,10 @@ RcsPhStaticStorage.get = (key) => {
   return window.rcsPhStaticStorage[key];
 };
 
+RcsPhStaticStorage.getAll = () => {
+  return window.rcsPhStaticStorage;
+};
+
 RcsPhStaticStorage.set = (key, value) => {
   window.rcsPhStaticStorage[key] = value;
 };

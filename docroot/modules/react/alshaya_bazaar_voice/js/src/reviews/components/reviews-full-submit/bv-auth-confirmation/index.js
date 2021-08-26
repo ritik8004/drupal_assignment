@@ -1,9 +1,10 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { postAPIData, fetchAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import AuthConfirmationMessage from '../auth-confirmation-message';
-import { getbazaarVoiceSettings, getUserDetails } from '../../../../utilities/api/request';
+import {
+  getbazaarVoiceSettings, getUserDetails, postAPIData, fetchAPIData,
+} from '../../../../utilities/api/request';
 import { setStorageInfo, getStorageInfo } from '../../../../utilities/storage';
 
 export default class BvAuthConfirmation extends React.Component {
