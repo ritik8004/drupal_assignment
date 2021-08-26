@@ -310,28 +310,37 @@ function _alshaya_spc_translations() {
   // Strings related to collection point feature.
   $strings['v5'] = [
     'Collection Point' => [
-      'ar' => 'Collection Point AR',
+      'ar' => 'نقطة الاستلام',
     ],
     'select your preferred collection point' => [
-      'ar' => 'select your preferred collection point ar',
+      'ar' => 'اختر نقطة الاستلام المفضلة',
     ],
     'find your collection point' => [
-      'ar' => 'find your collection point ar',
+      'ar' => 'اكتشف أقرب نقطة استلام',
     ],
     'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
-      'ar' => 'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice AR.',
+      'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
     ],
     'The same person placing the order will collect the order.' => [
-      'ar' => 'The same person placing the order will collect the order AR.',
+      'ar' => 'يجب على الشخص الذي وضع الطلبية أن يستلمها بنفسه.',
     ],
     'Selected collection point' => [
-      'ar' => 'Selected collection point AR.',
+      'ar' => 'نقطة الاستلام المختارة.',
     ],
     'Collectors Information' => [
-      'ar' => 'Collectors Information AR',
+      'ar' => 'بيانات المستلمين',
+    ],
+    'Important Note:' => [
+      'ar' => 'ملاحظة مهمة:',
     ],
     'Collect in' => [
       'ar' => 'Collect in AR',
+    ],
+    'Mobile number invalid or same as contact number' => [
+      'ar' => 'Mobile number invalid or same as contact number AR',
+    ],
+    'Your order will be available for pickup at the following collection point' => [
+      'ar' => 'Your order will be available for pickup at the following collection point AR',
     ],
   ];
 

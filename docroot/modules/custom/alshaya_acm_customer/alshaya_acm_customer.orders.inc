@@ -236,6 +236,17 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
       $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
 
+      // Update store timings format for collection points if feature enabled.
+      if (\Drupal::config('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled')
+        && $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup') {
+        $orderDetails['store_open_hours'] = [
+          [
+            'key' => implode(', ', array_column($orderDetails['store_open_hours'], 'key')),
+            'value' => $orderDetails['store_open_hours'][0]['value'],
+          ],
+        ];
+      }
+
       if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
         $lat = $lat_lng[0]['lat'];
         $lng = $lat_lng[0]['lng'];
@@ -516,7 +527,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
-    $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
+    $cnc_collection_points_enabled = \Drupal::config('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled');
+    $build['#delivery_detail_notice'] = $cnc_collection_points_enabled
+      ? t('Your order will be available for pickup at the following collection point')
+      : t('Your order will be available for pickup at the following store');
   }
   else {
     $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');
