@@ -19,47 +19,6 @@
 
     article:hover {
       z-index: -1;
-      position: static;
-
-      .product-plp-detail-wrapper {
-        transform: none;
-      }
-
-      &::after {
-        content: unset;
-      }
-    }
-
-    .product-plp-detail-wrapper {
-      .promotions {
-        margin: 0.5rem 1.25rem;
-      }
-    }
-
-    .sku-promotion-text--ellipse {
-      color: $oos_btn_bg;
-      border: 1px solid $oos_btn_bg;
-      display: block;
-      padding: 0.5rem 1.25rem;
-      font-size: 0.75rem;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      cursor: pointer;
-
-      @include breakpoint($only-mobile) {
-        padding: 0.5rem;
-      }
-    }
-
-    .addtobag-button-container,
-    .addtobag-config-button-container,
-    .is-not-buyable {
-      margin-bottom: 1.25rem;
-
-      @include breakpoint($only-mobile) {
-        margin-top: 0;
-      }
     }
   }
 }
