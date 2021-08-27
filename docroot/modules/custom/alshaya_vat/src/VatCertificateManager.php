@@ -91,7 +91,8 @@ class VatCertificateManager {
         $vat_text_url = $output['vat_certificate']['text'][$language_code];
         $vat_text_url_split = explode('@', $vat_text_url);
 
-        $vat_data['number'] = trim($vat_text_url_split[0]) . ': ' . $output['vat_certificate']['number'][$language_code];
+        $vat_data['number'] = $output['vat_certificate']['number'][$language_code];
+        $vat_data['text'] = trim($vat_text_url_split[0]);
         $vat_data['url'] = $vat_text_url_split[1];
         $vat_data['langcode'] = $language_code;
         // Store the data into the cache.
