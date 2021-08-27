@@ -499,7 +499,7 @@ exports.computePhFilters = function (input, filter) {
           alt: input.brand_logo_data.alt,
           title: input.brand_logo_data.title,
         });
-        value = jQuery('rcs-templates--brand_logo').clone().append(image).html();
+        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
       }
 
       break;
