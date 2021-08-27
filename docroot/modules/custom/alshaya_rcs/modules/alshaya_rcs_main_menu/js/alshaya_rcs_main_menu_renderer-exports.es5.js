@@ -285,34 +285,17 @@ const navRcsReplacePh = function (phElement, entity) {
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
   // replacement.
-  rcsPhReplaceEntityPh(phElement[0].outerHTML, 'menuItem', entity, langcode)
+  let menuItemHtml = phElement[0].outerHTML;
+  rcsPhReplaceEntityPh(menuItemHtml, 'menuItem', entity, langcode)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];
-
-      $(`:contains('${fieldPh}')`)
-        .each(function eachEntityPhReplace() {
-          $(phElement).html(
-            $(phElement)
-              .html()
-              .replace(fieldPh, entityFieldValue)
-          );
-        });
-
-      //":contains" only returns the elements for which the
-      // placeholder is part of the content, it won't return the
-      // elements for which the placeholder is part of the
-      // attribute values. We are now fetching all the elements
-      // which have placeholders in the attributes and we
-      // apply the replacement.
-      for (const attribute of attributes) {
-        $(`[${attribute} *= '${fieldPh}']`, phElement)
-          .each(function eachEntityPhAttributeReplace() {
-            $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
-          });
-      }
+      // Apply the replacement on all the elements containing the
+      // placeholder.
+      menuItemHtml = rcsReplaceAll(menuItemHtml, fieldPh, entityFieldValue);
     });
-  return phElement[0].outerHTML;
+
+  return menuItemHtml;
 };
 
 /**

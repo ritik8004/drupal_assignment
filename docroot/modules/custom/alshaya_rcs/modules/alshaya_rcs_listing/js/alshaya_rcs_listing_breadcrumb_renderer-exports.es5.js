@@ -11,16 +11,8 @@ exports.render = function render(
   if (entity !== null) {
     // Extract breadcrumb from the entity response.
     const { breadcrumbs } = entity;
-    // @todo To optimise the multiple API Calls.
     // Get the enrichment data. It's a sync call.
-    let enrichmentData = [];
-    jQuery.ajax({
-      url: Drupal.url('rest/v2/categories'),
-      async: false,
-      success: function (data) {
-        enrichmentData = data;
-      }
-    });
+    let enrichmentData = rcsGetEnrichedCategories();
 
     let breadcrumbHtml = '';
 
@@ -87,36 +79,16 @@ const getBreadcrumbMarkup = function (breadcrumb, innerHtmlObj, settings) {
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
   // replacement.
-  rcsPhReplaceEntityPh(clonedElement[0].outerHTML, 'categories', breadcrumb, settings.path.currentLanguage)
+  let breadcrumbItemHtml = clonedElement[0].outerHTML;
+  rcsPhReplaceEntityPh(breadcrumbItemHtml, 'categories', breadcrumb, settings.path.currentLanguage)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];
 
       // Apply the replacement on all the elements containing the
-      // placeholder. We filter to keep only the child element
-      // and not the parent ones.
-      $(`:contains('${fieldPh}')`)
-        .each(function eachEntityPhReplace() {
-          $(clonedElement).html(
-            $(clonedElement)
-              .html()
-              .replace(fieldPh, entityFieldValue)
-          );
-        });
-
-      //":contains" only returns the elements for which the
-      // placeholder is part of the content, it won't return the
-      // elements for which the placeholder is part of the
-      // attribute values. We are now fetching all the elements
-      // which have placeholders in the attributes and we
-      // apply the replacement.
-      for (const attribute of settings.rcsPhSettings.placeholderAttributes) {
-        $(`[${attribute} *= '${fieldPh}']`, clonedElement)
-          .each(function eachEntityPhAttributeReplace() {
-            $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
-          });
-      }
+      // placeholder.
+      breadcrumbItemHtml = rcsReplaceAll(breadcrumbItemHtml, fieldPh, entityFieldValue);
     });
 
-  return clonedElement[0].outerHTML;
+  return breadcrumbItemHtml;
 }
