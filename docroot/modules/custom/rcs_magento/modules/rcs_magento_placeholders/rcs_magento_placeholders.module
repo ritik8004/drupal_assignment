@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\rcs_magento_placeholders\Graphql\ArrayGraphQL;
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function rcs_magento_placeholders_js_settings_alter(&$settings, AttachedAssetsInterface $assets) {
+  // Invoke hook to get default values.
+  $query_fields = \Drupal::moduleHandler()->invokeAll('rcs_graphql_query_fields');
+
+  // Allow other modules to alter the data.
+  \Drupal::moduleHandler()->alter('rcs_graphql_query_fields', $query_fields);
+
+  // Convert array to graphql.
+  foreach ($query_fields as $query => $fields) {
+    $query_fields[$query] = ArrayGraphQL::convert($fields);
+  }
+
+  // Expose via drupal settings.
+  $settings['rcs_magento_placeholders']['graphql_query_fields'] = $query_fields;
+}
+
+/**
+ * Implements hook_rcs_graphql_query_fields().
+ */
+function rcs_magento_placeholders_rcs_graphql_query_fields() {
+  $query_fields = [];
+
+  $query_fields['categories'] = [
+    'total_count',
+    'items' => [
+      'level',
+      'name',
+      'url_path',
+      'description',
+      'image',
+      'breadcrumbs' => [
+        'category_name',
+        'category_level',
+        'category_url_key',
+        'category_url_path',
+      ],
+    ],
+  ];
+
+  return $query_fields;
+}
