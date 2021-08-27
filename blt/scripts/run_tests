@@ -15,7 +15,7 @@ else
   blt validate:all
   npm install -g gulp-cli
   echo -en "blt frontend command"
-
+  blt source:build:frontend
 
   echo -en "travis_fold:end:Validate\r"
   echo -en "blt install"
