@@ -1,4 +1,7 @@
 import getStringMessage from './strings';
+import {
+  smoothScrollToAddressField,
+} from './smoothScroll';
 
 /**
  * Helper to check if click and collect collection points is enabled.
@@ -113,6 +116,11 @@ export const validateCollectorInfo = (e) => {
     document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_mobile_number');
     document.getElementById('collectorMobile-error').classList.add('error');
     isError = true;
+  } else if (mobile === e.target.elements.mobile.value.trim()) {
+    // Validate to ensure collectors mobile and contact mobile is not same.
+    document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_valid_collector_mobile_number');
+    document.getElementById('collectorMobile-error').classList.add('error');
+    isError = true;
   } else {
     document.getElementById('collectorMobile-error').innerHTML = '';
     document.getElementById('collectorMobile-error').classList.remove('error');
@@ -126,6 +134,14 @@ export const validateCollectorInfo = (e) => {
   } else {
     document.getElementById('collectorEmail-error').innerHTML = '';
     document.getElementById('collectorEmail-error').classList.remove('error');
+  }
+
+  // Scroll to collectors section if error.
+  if (isError) {
+    smoothScrollToAddressField(
+      document.querySelector('.spc-checkout-collector-information-fields > div > div.error:not(:empty)'),
+      true,
+    );
   }
 
   return isError;

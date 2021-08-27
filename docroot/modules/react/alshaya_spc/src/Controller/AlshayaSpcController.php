@@ -767,8 +767,6 @@ class AlshayaSpcController extends ControllerBase {
 
     $status = [];
 
-    $contact_number = $data['mobile'];
-
     foreach ($data as $key => $value) {
       $status[$key] = FALSE;
 
@@ -798,10 +796,6 @@ class AlshayaSpcController extends ControllerBase {
             // If mobile number not contains only digits.
             if (!preg_match('/^[0-9]+$/', $raw_number)) {
               throw new \Exception('Invalid mobile number.');
-            }
-
-            if ($key == 'pudo_collector_tel' && ($contact_number === $value)) {
-              throw new \Exception('Collector and contact mobile number cannot be same.');
             }
 
             if ($this->mobileUtil->testMobileNumber($value)) {

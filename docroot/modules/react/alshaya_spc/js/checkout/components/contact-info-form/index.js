@@ -29,13 +29,10 @@ class ContactInfoForm extends React.Component {
       return;
     }
 
-    // If collection point feature is enabled, validate collectors information.
-    if (collectionPointsEnabled() && showCollectorForm === true) {
-      const collectorInfoError = validateCollectorInfo(e);
-      if (collectorInfoError) {
-        addressFormInlineErrorScroll();
-        return;
-      }
+    // If collection point feature is enabled, validate collectors information
+    // and return if error.
+    if (collectionPointsEnabled() && showCollectorForm && validateCollectorInfo(e)) {
+      return;
     }
 
     showFullScreenLoader();
@@ -140,7 +137,7 @@ class ContactInfoForm extends React.Component {
 
           // If invalid mobile number.
           if (result.data.pudo_collector_tel === false) {
-            document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_valid_collector_mobile_number');
+            document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
             document.getElementById('collectorMobile-error').classList.add('error');
             isError = true;
           } else {

@@ -321,7 +321,7 @@ function _alshaya_spc_translations() {
     'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
       'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
     ],
-    'The same person placing the order will collect the order.' => [
+    'The same person placing the order will not collect the order.' => [
       'ar' => 'يجب على الشخص الذي وضع الطلبية أن يستلمها بنفسه.',
     ],
     'Selected collection point' => [
@@ -336,8 +336,8 @@ function _alshaya_spc_translations() {
     'Collect in' => [
       'ar' => 'Collect in AR',
     ],
-    'Mobile number invalid or same as contact number' => [
-      'ar' => 'Mobile number invalid or same as contact number AR',
+    'Collector`s mobile number can not be same as contact number' => [
+      'ar' => 'Collector`s mobile number can not be same as contact number AR',
     ],
     'Your order will be available for pickup at the following collection point' => [
       'ar' => 'Your order will be available for pickup at the following collection point AR',

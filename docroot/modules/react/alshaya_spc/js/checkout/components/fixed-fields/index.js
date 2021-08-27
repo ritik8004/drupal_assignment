@@ -64,6 +64,7 @@ const FixedFields = ({
           className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
           label={getStringMessage('ci_mobile_number')}
         />
+        {/* Show checkbox for collector info only for CnC. */}
         <ConditionalView condition={collectionPointsEnabled() === true && type === 'cnc'}>
           <div className="spc-pudo-checkout-contact-info-checkbox-wrapper">
             <input
