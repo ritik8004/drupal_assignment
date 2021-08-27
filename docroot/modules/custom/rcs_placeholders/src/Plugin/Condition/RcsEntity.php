@@ -26,7 +26,7 @@ class RcsEntity extends ConditionPluginBase implements ContainerFactoryPluginInt
   protected $routeMatch;
 
   /**
-   * HasModeratedContentType constructor.
+   * RcsEntity constructor.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
