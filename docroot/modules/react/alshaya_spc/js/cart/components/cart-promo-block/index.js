@@ -53,42 +53,34 @@ export default class CartPromoBlock extends React.Component {
 
   // Helper function for Advantage card status.
   isAdvantagecardEnabled = () => {
-    if (typeof drupalSettings.alshaya_spc.advantageCard !== 'undefined') {
-      if (
-        drupalSettings.alshaya_spc.advantageCard.enabled
+    if (typeof drupalSettings.alshaya_spc.advantageCard !== 'undefined'
+      && drupalSettings.user.uid) {
+      if (drupalSettings.alshaya_spc.advantageCard.enabled
         && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined'
-        && drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
-      ) {
+        && drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix) {
         return true;
       }
     }
+
     return false;
   }
 
   // Helper function to check valid Advantage card pattern.
   isValidAdvantagecard = (advantageCard) => {
     const advantageCardType = ['01', '02', '03'];
-    if
-    (
-      advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
-      && advantageCard.length !== 16
-    ) {
+    if (advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      && advantageCard.length !== 16) {
       return false;
     }
-    if
-    (
-      advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
-      && !advantageCardType.includes(advantageCard.substring(9, 7))
-    ) {
+    if (advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      && !advantageCardType.includes(advantageCard.substring(9, 7))) {
       return false;
     }
-    if
-    (
-      advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
-      && !/^\d+$/.test(advantageCard.substring(16, 9))
-    ) {
+    if (advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      && !/^\d+$/.test(advantageCard.substring(16, 9))) {
       return false;
     }
+
     return true;
   }
 
@@ -204,14 +196,11 @@ export default class CartPromoBlock extends React.Component {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
-          if
-          (
-            this.isAdvantagecardEnabled()
+          if (this.isAdvantagecardEnabled()
             && promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
-            && this.isValidAdvantagecard(promoValue)
-          ) {
+            && this.isValidAdvantagecard(promoValue)) {
             // For Advantage card set promoValue to null.
-            promoValue = null;
+            promoValue = `Advantage_Card_${drupalSettings.userDetails.userID}`;
           }
           // If coupon is not valid.
           if (result.response_message.status === 'error_coupon') {

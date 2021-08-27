@@ -218,7 +218,7 @@
     // Push promoCode event into dataLayer.
     var promoCode = e.detail.data;
     // Instead of Card number add isAdvantageCard : Yes for pass.
-    if (!promoCode) {
+    if (promoCode.includes(`Advantage_Card_${drupalSettings.userDetails.userID}`)) {
       var isAdvantageCard = 'Yes';
     }
     var data = {
@@ -233,7 +233,7 @@
   document.addEventListener('promoCodeFailed', function (e) {
     var promoCode = e.detail.data;
     // Instead of Card number add isAdvantageCard : No for fail.
-    if (!promoCode) {
+    if (promoCode.includes(`Advantage_Card_${drupalSettings.userDetails.userID}`)) {
       var isAdvantageCard = 'No';
     }
     var data = {
