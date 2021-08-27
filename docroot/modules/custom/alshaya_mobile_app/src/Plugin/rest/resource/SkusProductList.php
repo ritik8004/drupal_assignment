@@ -19,8 +19,6 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
-use Drupal\node\NodeInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides a resource to get attributes for SKU's list.
@@ -97,7 +95,7 @@ class SkusProductList extends ResourceBase {
    *
    * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
    */
-  protected $productCategoryHelper;
+  private $productCategoryHelper;
 
   /**
    * AdvancedPageResource constructor.
@@ -320,12 +318,12 @@ class SkusProductList extends ResourceBase {
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
     $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
+    $data['categorisations'] = [];
     if (!$this->skuManager->isSkuFreeGift($sku)) {
       $node = $this->skuManager->getDisplayNode($sku);
-      if (!($node instanceof NodeInterface)) {
-        throw (new NotFoundHttpException());
+      if ($node) {
+        $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
       }
-      $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     }
     $this->moduleHandler->alter('alshaya_mobile_app_skus_product_list_data', $data, $sku, $with_parent_details);
     return $data;
