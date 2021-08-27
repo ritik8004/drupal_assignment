@@ -15,10 +15,9 @@ else
   blt validate:all
   npm install -g gulp-cli
   echo -en "blt frontend command"
-  blt source:build:frontend
-  blt source:build:frontend-assets
-  blt source:build:frontend-reqs
-  
+  blt source:build
+
+
   echo -en "travis_fold:end:Validate\r"
   echo -en "blt install"
   if ([ ${INSTALL_TYPE} == 'install' ])
