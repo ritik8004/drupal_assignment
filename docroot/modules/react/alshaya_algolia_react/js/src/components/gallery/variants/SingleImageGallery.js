@@ -15,14 +15,6 @@ const SingleImageGallery = (props) => {
   const mainImage = images.length > 0 ? images.shift() : {};
   const mainImageUrl = typeof mainImage.url !== 'undefined' ? mainImage.url : '';
 
-  // Dimensions.
-  let width = null;
-  let height = null;
-  if (typeof mainImage.width !== 'undefined') {
-    width = mainImage.width;
-    height = mainImage.height;
-  }
-
   return (
     <div className="alshaya_search_gallery">
       <div className="alshaya_search_mainimage" data-sku-image={`${mainImageUrl}`}>
@@ -30,8 +22,6 @@ const SingleImageGallery = (props) => {
           src={mainImageUrl}
           title={title}
           loading="lazy"
-          width={width}
-          height={height}
         />
         <Lozenges labels={labels} sku={sku} />
       </div>

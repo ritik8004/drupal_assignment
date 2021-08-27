@@ -9,8 +9,6 @@ const PdpCrossellUpsellImageContent = ({
   finalPrice,
   productLabels,
   productPromotions,
-  width,
-  height,
 }) => (
   <>
     <div className="magv2-pdp-crossell-upsell-img">
@@ -19,8 +17,6 @@ const PdpCrossellUpsellImageContent = ({
         alt={alt}
         title={title}
         loading="lazy"
-        width={width}
-        height={height}
       />
       {productLabels ? (
         <div className="product-labels">
