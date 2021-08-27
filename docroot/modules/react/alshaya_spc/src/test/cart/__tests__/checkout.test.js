@@ -259,6 +259,7 @@ describe('Checkout', () => {
             headers: {
               'Alshaya-Channel': 'web',
               'Content-Type': 'application/json',
+              'RequestTime': expect.anything(),
             },
             method: 'POST',
             url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
@@ -295,6 +296,7 @@ describe('Checkout', () => {
             headers: {
               'Alshaya-Channel': 'web',
               'Content-Type': 'application/json',
+              'RequestTime': expect.anything(),
             },
             method: 'POST',
             url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
@@ -310,6 +312,7 @@ describe('Checkout', () => {
             headers: {
               'Alshaya-Channel': 'web',
               'Content-Type': 'application/json',
+              'RequestTime': expect.anything(),
             },
             method: 'POST',
             url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',
@@ -652,6 +655,7 @@ describe('Checkout', () => {
             headers: {
               'Alshaya-Channel': 'web',
               'Content-Type': 'application/json',
+              'RequestTime': expect.anything(),
             },
             method: 'POST',
             url: '/rest/kwt_en/V1/guest-carts/1234/updateCart',

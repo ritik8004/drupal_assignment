@@ -98,6 +98,9 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'rcs_sku_base_form' => [
       'variables' => [],
     ],
+    'rcs_attribute_brand_logo' => [
+      'variables' => [],
+    ],
   ];
 }
 
@@ -358,6 +361,16 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
+  $brand_logo = ['#theme' => 'rcs_attribute_brand_logo'];
+  $variables['rcs_templates']['brand_logo'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($brand_logo),
+    '#attributes' => [
+      'class' => 'rcs-templates--brand_logo',
+    ],
+  ];
+
   if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
     $node = \Drupal::request()->attributes->get('node');
     if ($node->bundle() == 'rcs_product') {
@@ -468,6 +481,27 @@ function template_preprocess_rcs_not_buyable_product(&$variables) {
   $variables['not_buyable_help_text'] = $not_buyable_help_text;
 }
 
+/**
+ * Utility function to enable Bazaar voice reviews for RCS Product.
+ */
+function _alshaya_rcs_product_change_bv_routes_list() {
+  // Add rcs_product to the BV routes list.
+  $bv_config = \Drupal::configFactory()->getEditable('bazaar_voice.settings');
+  $bv_routes_list = $bv_config->get('bv_routes_list');
+  $bv_routes_list = array_map('trim', explode(PHP_EOL, $bv_routes_list));
+  $bv_routes_list[] = 'entity.node.canonical:rcs_product';
+  $bv_routes_list = implode(PHP_EOL, $bv_routes_list);
+  $bv_config->set('bv_routes_list', $bv_routes_list)->save();
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_rcs_product_modules_installed($modules) {
+  if (in_array('bazaar_voice', $modules)) {
+    _alshaya_rcs_product_change_bv_routes_list();
+  }
+}
 
 /**
  * Implements hook_rcs_graphql_query_fields().

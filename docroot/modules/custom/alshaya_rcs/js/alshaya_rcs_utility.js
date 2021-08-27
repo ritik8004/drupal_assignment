@@ -8,7 +8,7 @@ rcsGetEnrichedCategories = () => {
     return enrichedData;
   }
   else {
-    $.ajax({
+    jQuery.ajax({
       url: Drupal.url('rest/v2/categories'),
       async: false,
       success: function (data) {
