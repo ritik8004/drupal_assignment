@@ -11,12 +11,13 @@ else
   yaml-cli update:value blt/blt.yml project.profile.name ${PROFILE}
 
   echo -en "travis_fold:start:Validate\r"
+  echo -en "blt validating"
   blt validate:all
   npm install -g gulp-cli
   blt frontend:test
 
   echo -en "travis_fold:end:Validate\r"
-
+  echo -en "blt install"
   if ([ ${INSTALL_TYPE} == 'install' ])
   then
     echo -en "travis_fold:start:Setup\r"
@@ -28,7 +29,7 @@ else
     cd ${BUILD_DIR}
 
     echo -en "travis_fold:end:Setup\r"
-
+  echo -en "blt disable"
 # Disabling tests completely, for now we want to test only the fresh install part.
 # @see https://alshayagroup.atlassian.net/browse/CORE-27213
 #    if [[ $TRAVIS_EVENT_TYPE == "cron" ]]
