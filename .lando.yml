@@ -61,9 +61,6 @@ services:
     portforward: false
     hogfrom:
       - appserver
-  solr:
-    app_mount: disabled
-    type: solr:5.5
 
 proxy:
   edge:

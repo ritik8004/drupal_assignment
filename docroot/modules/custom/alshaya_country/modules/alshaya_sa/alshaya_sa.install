@@ -115,6 +115,7 @@ function alshaya_sa_install() {
 
   alshaya_i18n_save_translations($strings);
   alshaya_sa_default_spc_config();
+  \Drupal::service('module_installer')->install(['alshaya_vat']);
 }
 
 /**
