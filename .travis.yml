@@ -45,6 +45,7 @@ matrix:
 
 services:
   - mysql
+  - memcached
 
 env:
   global:
@@ -92,6 +93,11 @@ notifications:
     on_success: never
     on_failure: always
 
+before_script:
+  - nvm install 8.12.0
+  - nvm use 8.12.0
+  - npm install -g gulp-cli
+
 before_install:
   # Disable xdebug.
   - ${BUILD_DIR}/blt/scripts/deploy_branch_validate.sh
@@ -100,7 +106,7 @@ before_install:
   - git config --global github.accesstoken "${GITHUB_OAUTH_TOKEN}"
   - composer validate --no-check-all --ansi
   - source ${BUILD_DIR}/blt/scripts/delete_composer_caches "${BUILD_DIR}"
-  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  # - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   # There seems to be stronger rate limiting applied to Github downloads
   # that forces us to retry composer install several times.
   # Symptom is a Github download ending with 404 while the URL is valid.
@@ -118,9 +124,9 @@ install:
   - echo "memory_limit=576M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
-  - nvm install 8.12.0
-  - nvm use 8.12.0
-  - npm install -g gulp-cli
+  # - nvm install 8.12.0
+  # - nvm use 8.12.0
+  # - npm install -g gulp-cli
   # Setup the themes here so the node_modules folders can be cached.
   - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
   # Frontend-setup.sh changed directory, hence we return to the original dir.
