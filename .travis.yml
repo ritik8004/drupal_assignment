@@ -49,6 +49,9 @@ env:
     - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
     - BUILD_DIR=$TRAVIS_BUILD_DIR
 
+services:
+  - mysql
+
 jdk:
   - oraclejdk8
 
