@@ -137,20 +137,3 @@
     }
   }
 }
-
-.block-alshaya-vat-certificate-block {
-  @include breakpoint($only-mobile) {
-    margin-top: -1rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    order: 4;
-    // flex-basis: 93%;
-  }
-
-  @include breakpoint($desktop) {
-    order: 2;
-    flex-basis: 85%;
-    margin-#{$right}: 0;
-  }
-}

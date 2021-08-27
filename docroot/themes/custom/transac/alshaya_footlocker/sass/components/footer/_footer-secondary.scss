@@ -29,26 +29,3 @@
     }
   }
 }
-
-.block-alshaya-vat-certificate-block {
-  @include breakpoint($only-mobile) {
-    html[lang=ar] & {
-      margin-top: -1rem;
-    }
-  }
-
-  @include breakpoint($tablet) {
-    text-align: $right;
-
-    html[lang=ar] & {
-      margin-top: -1.25rem;
-      margin-bottom: 1rem;
-    }
-  }
-
-  @include breakpoint($desktop) {
-    html[lang=ar] & {
-      margin-bottom: 0;
-    }
-  }
-}
