@@ -491,6 +491,19 @@ exports.computePhFilters = function (input, filter) {
       }
       break;
 
+    case 'brand_logo':
+      if (typeof input.brand_logo_data.url !== 'null') {
+        const image = jQuery('img');
+        image.attr({
+          src: input.brand_logo_data.url,
+          alt: input.brand_logo_data.alt,
+          title: input.brand_logo_data.title,
+        });
+        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
+      }
+
+      break;
+
     default:
       console.log(`Unknown JS filter ${filter}.`)
   }
