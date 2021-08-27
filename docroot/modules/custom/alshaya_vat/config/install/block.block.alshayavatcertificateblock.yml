@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_vat
+id: alshayavatcertificateblock
+theme: alshaya_white_label
+region: footer_secondary
+weight: 100
+provider: null
+plugin: alshaya_vat_certificate_block
+settings:
+  id: alshaya_vat_certificate_block
+  label: 'Alshaya Vat Certificate Block'
+  provider: alshaya_vat
+  label_display: '0'
+visibility: { }

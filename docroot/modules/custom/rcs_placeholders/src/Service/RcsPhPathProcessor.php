@@ -3,6 +3,7 @@
 namespace Drupal\rcs_placeholders\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,6 +29,16 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public static $entityPath;
 
   /**
+   * RCS Entity Path Prefix.
+   *
+   * It is stored from config here.
+   * Allow using this directly from the variable in other places.
+   *
+   * @var string
+   */
+  public static $entityPathPrefix;
+
+  /**
    * RCS Entity data.
    *
    * @var array|null
@@ -49,17 +60,30 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   protected $termStorage;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Constructs a new RcsPhPathProcessor instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    LanguageManagerInterface $language_manager
+  ) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -94,7 +118,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // $path.
     // Remove language code from URL.
     $rcs_path_to_check = str_replace(
-      '/' . $request->getDefaultLocale() . '/',
+      '/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
       '/',
       $request->getPathInfo()
     );
@@ -104,14 +128,14 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // Is it a category page?
     $category_prefix = $config->get('category.path_prefix');
 
-    preg_match('/^\/' . $category_prefix . '([^\/\?]*)/', $rcs_path_to_check, $matches);
-    if (isset($matches[1])) {
+    if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
       self::$entityType = 'category';
-      self::$entityPath = $matches[1];
+      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
+      self::$entityPathPrefix = $category_prefix;
 
       $static[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
 
-      $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', $matches[1]) : NULL;
+      $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', self::$entityPath) : NULL;
       if (isset($category)) {
         self::$entityData = $category->toArray();
         $static[$rcs_path_to_check] = '/taxonomy/term/' . $category->id();
@@ -123,14 +147,14 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // Is it a product page?
     $product_prefix = $config->get('product.path_prefix');
 
-    preg_match('/^\/' . $product_prefix . '([^\?]*)/', $rcs_path_to_check, $matches);
-    if (isset($matches[1])) {
+    if (strpos($rcs_path_to_check, '/' . $product_prefix) === 0) {
       self::$entityType = 'product';
-      self::$entityPath = $matches[1];
+      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($product_prefix) + 1);
+      self::$entityPathPrefix = $product_prefix;
 
       $static[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
 
-      $product = $config->get('product.enrichment') ? $this->getEnrichedEntity('product', $matches[1]) : NULL;
+      $product = $config->get('product.enrichment') ? $this->getEnrichedEntity('product', self::$entityPath) : NULL;
       if (isset($product)) {
         self::$entityData = $product->toArray();
         $static[$rcs_path_to_check] = '/node/' . $product->id();
@@ -142,10 +166,10 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // Is it a promotion page?
     $promotion_prefix = $config->get('promotion.path_prefix');
 
-    preg_match('/^\/' . $promotion_prefix . '([^\/\?]*)/', $rcs_path_to_check, $matches);
-    if (isset($matches[1])) {
+    if (strpos($rcs_path_to_check, '/' . $promotion_prefix) === 0) {
       self::$entityType = 'promotion';
-      self::$entityPath = $matches[1];
+      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($promotion_prefix) + 1);
+      self::$entityPathPrefix = $promotion_prefix;
 
       $static[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
 

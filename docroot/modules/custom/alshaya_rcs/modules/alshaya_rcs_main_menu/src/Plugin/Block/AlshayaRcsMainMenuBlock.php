@@ -335,6 +335,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           id
           level
           name
+          meta_title
           include_in_menu
           url_path
           url_key

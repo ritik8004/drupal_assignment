@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -150,13 +151,31 @@ class AlshayaRcsCategoryHelper {
         $record['highlight_paragraphs'] = $this->getHighlightParagraph($main_menu_highlights, $langcode);
       }
 
-      // If icon available, only for web.
-      $field_icon = $term->get('field_icon')->getValue() ?? [];
-      if ($field_icon && $field_icon['0']['target_id'] && $context != 'app') {
-        $image = $this->entityTypeManager->getStorage('file')->load($field_icon['0']['target_id']);
-        $record['icon'] = [
-          'icon_url' => file_url_transform_relative(file_create_url($image->getFileUri())),
-        ];
+      // List of all the images that are enriched.
+      $images = [
+        'field_icon' => [
+          'key' => 'icon_url',
+          'app' => FALSE,
+        ],
+        'field_logo_active_image' => [
+          'key' => 'logo_active_image',
+        ],
+        'field_logo_header_image' => [
+          'key' => 'logo_header_image',
+        ],
+        'field_logo_inactive_image' => [
+          'key' => 'logo_inactive_image',
+        ],
+      ];
+
+      foreach ($images as $key => $value) {
+        if ($term->hasField($key)) {
+          // If icon available, only for web.
+          if (array_key_exists('app', $value) && $context == 'app') {
+            continue;
+          }
+          $record['icon'][$value['key']] = $this->getImageFromField($key, $term);
+        }
       }
 
       // Add term object in array for cache dependency.
@@ -167,6 +186,28 @@ class AlshayaRcsCategoryHelper {
     }
 
     return $data;
+  }
+
+  /**
+   * Extract image from the term image field.
+   *
+   * @param string $field
+   *   The field key string.
+   * @param \Drupal\taxonomy\Entity\TermInterface $term
+   *   The term object.
+   *
+   * @return null|string
+   *   The relative URL of the image.
+   */
+  protected function getImageFromField(string $field, TermInterface $term) {
+    $field_image = $term->get($field)->getValue() ?? [];
+    if ($field_image && $field_image[0]['target_id']) {
+      $image = $this->entityTypeManager->getStorage('file')->load($field_image['0']['target_id']);
+      // Return the image relative URL.
+      return file_url_transform_relative(file_create_url($image->getFileUri()));
+    }
+
+    return NULL;
   }
 
   /**

@@ -305,3 +305,26 @@ function rcs_placeholders_block_access(Block $block, $operation, AccountInterfac
 
   return AccessResult::neutral();
 }
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function rcs_placeholders_language_switch_links_alter(array &$links, $type, Url $url) {
+  if (empty(RcsPhPathProcessor::$entityType)) {
+    return;
+  }
+
+  foreach (\Drupal::languageManager()->getLanguages() as $language) {
+    $url = Url::fromRoute(
+      '<front>',
+      [],
+      ['absolute' => TRUE, 'language' => $language]
+    )->toString();
+
+    // Add the URL as is, RCS expects the URL to be same in all languages.
+    $url .= RcsPhPathProcessor::$entityPathPrefix . RcsPhPathProcessor::$entityPath;
+
+    // We use absolute url below to make sure Drupal does not modify it.
+    $links[$language->getId()]['url'] = Url::fromUri($url);
+  }
+}

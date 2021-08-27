@@ -11,14 +11,9 @@ exports.render = function render(
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
   if (inputs.length !== 0) {
     // Get the enrichment data. It's a sync call.
-    let enrichmentData = [];
-    jQuery.ajax({
-      url: Drupal.url('rest/v2/categories'),
-      async: false,
-      success: function (data) {
-        enrichmentData = data;
-      }
-    });
+    // Check if static storage is having value, If 'YES' then use that else call
+    // the API.
+    let enrichmentData = rcsGetEnrichedCategories();
 
     // Get the L1 menu list element.
     const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
@@ -32,15 +27,48 @@ exports.render = function render(
     });
 
     let menuHtml = '';
+    // Get the active super category.
+    const isSuperCategoryEnabled = (typeof settings.superCategory) != "undefined";
+    // Proceed only if superCategory is enabled.
+    if (isSuperCategoryEnabled) {
+      let activeSuperCategory = rcsWindowLocation().pathname.split('/')[2];
+      // Check if the active super category is valid or not.
+      let validSuperCategory = false;
+      inputs.forEach((item) => {
+        if (activeSuperCategory == item.url_path) {
+          validSuperCategory = true;
+        }
+      });
+      if (!validSuperCategory && inputs[0].url_path.length) {
+        // If there are no active super category then make first item as default.
+        activeSuperCategory = inputs[0].url_path;
+      }
+      // Filter out the items that doesn't belong to the active super category.
+      if (isSuperCategoryEnabled) {
+        inputs = inputs.filter((item) => {
+          return activeSuperCategory == item.url_path;
+        });
+      }
+    }
     // Iterate over each L1 item and get the inner markup
     // prepared recursively.
     inputs.forEach(function eachCategory(level1) {
+      // Change item level only if super category is enabled.
+      if (isSuperCategoryEnabled) {
+        // Return from here if L2 element is empty and if the child element is
+        // not associated with the current active super category.
+        if (!level1.children) {
+          return;
+        }
+        level1 = level1.children[0];
+      }
       menuHtml += getMenuMarkup(
         level1,
         1,
         innerHtmlObj,
         settings,
         enrichmentData,
+        isSuperCategoryEnabled,
       );
     });
 
@@ -60,11 +88,12 @@ exports.render = function render(
  * @param {string} phHtmlObj
  * @param {object} settings
  * @param {object} enrichmentData
+ * @param {boolean} isSuperCategoryEnabled
  *
  * @returns
  *  {string} Generated menu markup for given level.
  */
-const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData) {
+const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData, isSuperCategoryEnabled) {
   // We support max depth by L4.
   if (level > parseInt(drupalSettings.alshayaRcs.navigationMenu.menuMaxDepth)) {
     return;
@@ -74,7 +103,16 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
   // @todo remove this when API return the correct path.
   const levelObjOrgUrlPath = levelObj.url_path;
-  levelObj.url_path = `/${menuPathPrefixFull}${levelObjOrgUrlPath}/`;
+  // Append category prefix in L2 if super category is enabled.
+  if (isSuperCategoryEnabled) {
+      let urlItems = levelObj.url_path.split('/');
+      if (urlItems.length > 1) {
+        urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
+      }
+      levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
+  } else {
+    levelObj.url_path = `/${menuPathPrefixFull}${levelObjOrgUrlPath}/`;
+  }
 
   const levelIdentifier = `level-${level}`;
   const ifChildren = levelObj.children && levelObj.children.length > 0;
@@ -201,6 +239,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
           phHtmlObj,
           settings,
           enrichmentData,
+          isSuperCategoryEnabled,
         );
 
         colTotal += l2_cost;
@@ -217,6 +256,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         phHtmlObj,
         settings,
         enrichmentData,
+        isSuperCategoryEnabled,
       );
     });
   }
@@ -245,34 +285,17 @@ const navRcsReplacePh = function (phElement, entity) {
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
   // replacement.
-  rcsPhReplaceEntityPh(phElement[0].outerHTML, 'menuItem', entity, langcode)
+  let menuItemHtml = phElement[0].outerHTML;
+  rcsPhReplaceEntityPh(menuItemHtml, 'menuItem', entity, langcode)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];
-
-      $(`:contains('${fieldPh}')`)
-        .each(function eachEntityPhReplace() {
-          $(phElement).html(
-            $(phElement)
-              .html()
-              .replace(fieldPh, entityFieldValue)
-          );
-        });
-
-      //":contains" only returns the elements for which the
-      // placeholder is part of the content, it won't return the
-      // elements for which the placeholder is part of the
-      // attribute values. We are now fetching all the elements
-      // which have placeholders in the attributes and we
-      // apply the replacement.
-      for (const attribute of attributes) {
-        $(`[${attribute} *= '${fieldPh}']`, phElement)
-          .each(function eachEntityPhAttributeReplace() {
-            $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
-          });
-      }
+      // Apply the replacement on all the elements containing the
+      // placeholder.
+      menuItemHtml = rcsReplaceAll(menuItemHtml, fieldPh, entityFieldValue);
     });
-  return phElement[0].outerHTML;
+
+  return menuItemHtml;
 };
 
 /**

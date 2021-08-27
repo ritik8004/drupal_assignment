@@ -465,10 +465,44 @@ exports.computePhFilters = function (input, filter) {
       value = skuBaseForm.html();
       break;
 
-      case 'gtm-price':
-        // @todo: Use the correct price key.
-        value = input.price.maximalPrice.amount.value;
-        break;
+    case 'gtm-price':
+      // @todo: Use the correct price key.
+      value = input.price.maximalPrice.amount.value;
+      break;
+
+    case 'final_price':
+      // @todo: Use the correct price key.
+      value = input.price.maximalPrice.amount.value;
+      break;
+
+    case 'first_image':
+      // @todo: Use the correct image key.
+      value = (typeof input.media_gallery[1].url === 'undefined' || !input.media_gallery[1].url || input.media_gallery[1].url === '')
+        ? drupalSettings.alshayaRcs.default_meta_image
+        : input.media_gallery[1].url;
+      break;
+
+    case 'schema_stock':
+      if (input.stock_status === 'IN_STOCK') {
+        value = 'http://schema.org/InStock';
+      }
+      else {
+        value = 'http://schema.org/OutOfStock';
+      }
+      break;
+
+    case 'brand_logo':
+      if (typeof input.brand_logo_data.url !== 'null') {
+        const image = jQuery('img');
+        image.attr({
+          src: input.brand_logo_data.url,
+          alt: input.brand_logo_data.alt,
+          title: input.brand_logo_data.title,
+        });
+        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
+      }
+
+      break;
 
     default:
       console.log(`Unknown JS filter ${filter}.`)

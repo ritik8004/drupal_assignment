@@ -24,7 +24,7 @@ set classes = [
     {% block contentSidebar %}
       {% block titleBlock %}
         <div class="content__title_wrapper">
-          <div class="brand-logo-wrapper">#rcs.product.brand_logo#</div>
+          <div>#rcs.product._self|brand_logo#</div>
 
           {% block productBrand %}
           {% endblock %}
@@ -216,8 +216,8 @@ set classes = [
 <div id="dy-recommendation"></div>
 
 {% if content.reviews_section %}
-  {% if bazaar_voice_strings %}
-    {{ bazaar_voice_strings }}
+  {% if bazaarvoice_strings %}
+    {{ bazaarvoice_strings }}
   {% endif %}
   {{ content.reviews_section }}
 {% endif %}

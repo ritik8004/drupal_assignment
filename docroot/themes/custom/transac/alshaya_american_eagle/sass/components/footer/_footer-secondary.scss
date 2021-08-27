@@ -71,12 +71,20 @@
   align-items: center;
   justify-content: center;
 
+  @include breakpoint($only-tablet) {
+    justify-content: space-between;
+  }
+
   .c-footer__copy {
     order: 1;
 
     @include breakpoint($tablet) {
       flex-basis: 85%;
       margin-#{$right}: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: auto;
     }
 
     @include breakpoint($only-mobile) {
@@ -99,7 +107,7 @@
   }
 
   .c-footer__logos {
-    order: 2;
+    order: 3;
 
     @include breakpoint($tablet) {
       padding-#{$left}: 1.5rem;
