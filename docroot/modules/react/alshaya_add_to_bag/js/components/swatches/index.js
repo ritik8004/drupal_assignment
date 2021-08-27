@@ -36,7 +36,7 @@ const Swatch = (props) => {
     classes.push(disabledClass);
   }
 
-  const isColor = type === 'color';
+  const isColor = (type === 'color' || type === 'text');
 
   return (
     <li

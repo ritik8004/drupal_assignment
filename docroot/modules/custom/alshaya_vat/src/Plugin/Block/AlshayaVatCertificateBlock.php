@@ -57,7 +57,13 @@ class AlshayaVatCertificateBlock extends BlockBase implements ContainerFactoryPl
     return [
       '#theme' => 'alshaya_vat_certificate_block',
       '#link_text' => $vat_data['number'],
+      '#vat_text' => $vat_data['text'],
       '#vat_url' => '/' . $vat_data['langcode'] . '/vat-certificate',
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/alshaya-vat-certificate',
+        ],
+      ],
     ];
   }
 

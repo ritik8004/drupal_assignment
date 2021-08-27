@@ -106,7 +106,7 @@ function _alshaya_bazaar_voice_translations() {
     'Thanks for submitting your review! It is currently being moderated and will be visible shortly.' => [
       'ar' => 'شكراً على إبداء رأيك! سوف نقوم بمراجعته لكي يتم نشره في أقرب وقت.',
     ],
-    'I would recommend this product.' => [
+    'I would like to recommend this product.' => [
       'ar' => 'سوف أوصي بهذا المنتج',
     ],
     'You have already reviewed the product.' => [
