@@ -3,7 +3,7 @@
 # @see https://github.com/travis-ci/travis-ci/issues/6842
 sudo: required
 language: php
-dist: xenial
+dist: bionic
 
 matrix:
   fast_finish: true
@@ -48,9 +48,6 @@ env:
     - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
     - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
     - BUILD_DIR=$TRAVIS_BUILD_DIR
-
-services:
-  - mysql
 
 jdk:
   - oraclejdk8
