@@ -4,6 +4,7 @@ namespace Drupal\alshaya_advanced_page\EventSubscriber;
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\external_hreflang\Event\ExternalHreflangGetCurrentUrlEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -22,13 +23,25 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
   private $routeMatch;
 
   /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * ExternalHreflangGetCurrentUrlEventSubscriber constructor.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route matcher.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
    */
-  public function __construct(RouteMatchInterface $route_match) {
+  public function __construct(
+    RouteMatchInterface $route_match,
+    ModuleHandlerInterface $module_handler) {
     $this->routeMatch = $route_match;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -52,8 +65,8 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
     $route = $this->routeMatch->getRouteObject();
     // If _department_page_node option is there for V2 then prepare the URL here
     // only otherwise the module will throw route not found exception.
-    if (function_exists('alshaya_rcs_main_menu_is_department_page')
-    && $route->hasOption('_department_page_node')) {
+    if ($this->moduleHandler->moduleExists('alshaya_rcs_main_menu')
+      && $route->hasOption('_department_page_node')) {
       $url = Url::fromRoute('entity.node.canonical', [
         'node' => $route->getOption('_department_page_node'),
       ]);

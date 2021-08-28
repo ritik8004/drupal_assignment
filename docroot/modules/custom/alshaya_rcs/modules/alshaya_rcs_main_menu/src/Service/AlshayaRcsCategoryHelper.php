@@ -9,7 +9,6 @@ use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Cache\Cache;
@@ -20,6 +19,11 @@ use Drupal\Core\Cache\Cache;
 class AlshayaRcsCategoryHelper {
 
   const VOCABULARY_ID = 'rcs_category';
+
+  /**
+   * Prefix used for the endpoint.
+   */
+  const ENDPOINT_PREFIX_V1 = '/rest/v1/';
 
   /**
    * The entity type manager service.
@@ -344,20 +348,20 @@ class AlshayaRcsCategoryHelper {
    * Get Deep link based on give object.
    *
    * @param object $object
-   *   Object of node or term or query containing node/term data.
+   *   Object of term containing term data.
    *
    * @return string
    *   Return deeplink url.
    */
   public function getDeepLink($object) {
-    // Get all the departments pages having category slug value.
-    $department_pages = alshaya_rcs_main_menu_get_department_pages();
     if ($object->hasField('field_category_slug')) {
       $slug = $object->get('field_category_slug')->getString();
+      // Get all the departments pages having category slug value.
+      $department_pages = alshaya_rcs_main_menu_get_department_pages();
       // @todo Change the logic here once we get the prefixed response from
       // magento.
       if (array_key_exists($slug, $department_pages)) {
-        return MobileAppUtility::ENDPOINT_PREFIX . 'page/advanced?url=' .
+        return self::ENDPOINT_PREFIX_V1 . 'page/advanced?url=' .
         ltrim(
           $this->aliasManager->getAliasByPath(
             '/node/' . $department_pages[$slug],

@@ -22,10 +22,11 @@ use Drupal\Core\Form\FormStateInterface;
  * @return int|bool
  *   Department page node id or false.
  */
-function alshaya_rcs_main_menu_is_department_page($path) {
+function alshaya_rcs_main_menu_is_department_page(string $path) {
   $data = [];
   // Check for cache first.
-  if ($cache = \Drupal::cache('data')->get('alshaya_rcs_main_menu:slug:nodes')) {
+  $cache = \Drupal::cache('data')->get('alshaya_rcs_main_menu:slug:nodes');
+  if ($cache) {
     $data = $cache->data;
     // If cache hit.
     if (!empty($data[$path])) {
@@ -39,10 +40,11 @@ function alshaya_rcs_main_menu_is_department_page($path) {
   if (isset($department_pages[$path])) {
     $nid = $department_pages[$path];
     /** @var \Drupal\node\Entity\Node $node */
-    if ($node = Node::load($nid)) {
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+    if (is_object($node)) {
       if ($node->isPublished()) {
         $data[$path] = $nid;
-        \Drupal::cache('data')->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        \Drupal::cache('data')->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, ['node:' . $nid]);
         return $nid;
       }
     }
@@ -58,7 +60,7 @@ function alshaya_rcs_main_menu_is_department_page($path) {
  *   Nids of department pages keyed by slug.
  */
 function alshaya_rcs_main_menu_get_department_pages() {
-  static $department_pages;
+  static $department_pages = [];
 
   // We cache the nid-tid relationship for a single page request.
   if (empty($department_pages)) {
