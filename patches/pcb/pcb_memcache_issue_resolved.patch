@@ -1,0 +1,24 @@
+diff --git a/modules/pcb_memcache/pcb_memcache.services.yml b/modules/pcb_memcache/pcb_memcache.services.yml
+index 7eb5a09..e1d774a 100644
+--- a/modules/pcb_memcache/pcb_memcache.services.yml
++++ b/modules/pcb_memcache/pcb_memcache.services.yml
+@@ -1,4 +1,4 @@
+ services:
+   cache.backend.permanent_memcache:
+     class: Drupal\pcb_memcache\Cache\PermanentMemcacheBackendFactory
+-    arguments: ['@memcache.factory', '@cache_tags.invalidator.checksum']
++    arguments: ['@memcache.factory', '@cache_tags.invalidator.checksum', '@memcache.timestamp.invalidator.bin']
+diff --git a/modules/pcb_memcache/src/Cache/PermanentMemcacheBackendFactory.php b/modules/pcb_memcache/src/Cache/PermanentMemcacheBackendFactory.php
+index 4f94803..00eadfe 100644
+--- a/modules/pcb_memcache/src/Cache/PermanentMemcacheBackendFactory.php
++++ b/modules/pcb_memcache/src/Cache/PermanentMemcacheBackendFactory.php
+@@ -16,7 +16,8 @@ class PermanentMemcacheBackendFactory extends MemcacheBackendFactory {
+     return new PermanentMemcacheBackend(
+       $bin,
+       $this->memcacheFactory->get($bin),
+-      $this->checksumProvider
++      $this->checksumProvider,
++      $this->timestampInvalidator
+     );
+   }
+ 
