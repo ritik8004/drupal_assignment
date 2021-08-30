@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_vat\VatCertificateManager;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides vat certificate block to be placed in a footer region.
@@ -65,6 +66,15 @@ class AlshayaVatCertificateBlock extends BlockBase implements ContainerFactoryPl
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $tags = Cache::mergeTags(parent::getCacheTags(), ['alshaya_vat_certificate']);
+
+    return $tags;
   }
 
 }
