@@ -56,8 +56,9 @@ const formatAddressForShippingBilling = (address) => {
 
   data.custom_attributes = customAttributes;
 
-  // If pudo is enabled, send collectors details in shipping
-  // and contact details seperately.
+  // If aramax collection points feature is enabled, send collectors details
+  // in shipping and contact details seperately.
+  // @todo Validate once MDC API starts working.
   if (collectionPointsEnabled()) {
     if (data.collector_firstname) {
       data.order_firstname = data.firstname;

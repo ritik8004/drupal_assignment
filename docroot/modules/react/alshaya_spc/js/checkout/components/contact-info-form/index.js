@@ -235,6 +235,7 @@ class ContactInfoForm extends React.Component {
 
           // If collection point feature is enabled, update collector's information.
           if (collectionPointsEnabled() && showCollectorForm === true) {
+            // @todo: Validate once MDC APIs start working.
             updateCollectorInfo(formData.static);
           }
 

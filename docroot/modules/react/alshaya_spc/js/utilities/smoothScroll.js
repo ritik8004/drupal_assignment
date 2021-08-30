@@ -38,7 +38,7 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
       homeDelivery = true;
     } else {
       addressOffset = document.querySelector('.store-details-wrapper').offsetHeight
-        + document.querySelector('#click-and-collect-selected-store .spc-checkout-section-title').offsetHeight;
+        + document.querySelector('#click-and-collect-selected-store > .spc-checkout-section-title').offsetHeight;
       contactHeaderOffset = document.querySelector('.spc-contact-information-header').offsetHeight;
     }
   }
