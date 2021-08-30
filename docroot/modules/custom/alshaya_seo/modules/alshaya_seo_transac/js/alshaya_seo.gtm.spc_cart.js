@@ -218,6 +218,7 @@
     // Push promoCode event into dataLayer.
     var promoCode = e.detail.data;
     // Instead of Card number add isAdvantageCard : Yes for pass.
+    // Check react/alshaya_spc/js/cart/components/cart-promo-block/index.js.
     if (promoCode.includes(`Advantage_Card_${drupalSettings.userDetails.userID}`)) {
       var isAdvantageCard = 'Yes';
     }
@@ -233,6 +234,7 @@
   document.addEventListener('promoCodeFailed', function (e) {
     var promoCode = e.detail.data;
     // Instead of Card number add isAdvantageCard : No for fail.
+    // Check react/alshaya_spc/js/cart/components/cart-promo-block/index.js.
     if (promoCode.includes(`Advantage_Card_${drupalSettings.userDetails.userID}`)) {
       var isAdvantageCard = 'No';
     }
