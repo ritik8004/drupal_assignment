@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09a55b1a4cf0ddee2bfbdfbf254f1fea",
+    "content-hash": "d3d9067ae0fea66e6ff38093fda48956",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -11844,6 +11844,9 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
+                },
+                "patches_applied": {
+                    "PCB module having issue with memcache": "patches/pcb/pcb_memcache_issue_resolved.patch"
                 }
             },
             "autoload": {
@@ -26136,5 +26139,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.3"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
