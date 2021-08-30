@@ -260,9 +260,6 @@ function _alshaya_spc_translations() {
       "This address doesn't contain all the required information, please update it." => [
         'ar' => 'لا يحتوي هذا العنوان على جميع المعلومات المطلوبة ، يرجى تحديثه.',
       ],
-      "Transaction Failed: Invalid CVV" => [
-        'ar' => 'فشلت المعاملة: رقم CVV غير صالح',
-      ],
     ],
   ];
 
@@ -307,6 +304,13 @@ function _alshaya_spc_translations() {
   $strings['v4'] = [
     'We have upgraded your experience, please refresh the page and try again.' => [
       'ar' => '.لقد قمنا بترقية تجربتك ، يرجى تحديث الصفحة والمحاولة مرة أخرى',
+    ],
+  ];
+
+  // Strings related to error handling for 4 digit CVV failure.
+  $strings['v5'] = [
+    'Transaction Failed: Invalid CVV' => [
+      'ar' => 'فشلت المعاملة: رقم CVV غير صالح',
     ],
   ];
 

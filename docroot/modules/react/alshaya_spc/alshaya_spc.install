@@ -18,7 +18,7 @@ use Drupal\taxonomy\Entity\Term;
 function alshaya_spc_update_8014() {
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
-  $translations = _alshaya_spc_get_translations('v1');
+  $translations = _alshaya_spc_get_translations('v5');
   if ($translations) {
     alshaya_i18n_save_translations($translations);
   }
