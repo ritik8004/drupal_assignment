@@ -618,21 +618,6 @@
   }
 }
 
-.form-type-select {
-  .select2-selection__arrow {
-    @include icon(chevrondown, after) {
-      font-size: 1.5rem;
-      position: absolute;
-      top: 9%;
-      #{$left}: 10%;
-    }
-
-    b {
-      display: none;
-    }
-  }
-}
-
 .profile-address-book-edit-form,
 #address-book-form-open {
   .form-actions {
