@@ -106,7 +106,7 @@ class LoyaltyClubOtpController {
       return new JsonResponse($this->utility->getErrorResponse(AuraErrorCodes::MOBILE_ALREADY_REGISTERED_MSG, AuraErrorCodes::MOBILE_ALREADY_REGISTERED_CODE));
     }
 
-    $response_data = $this->auraOtpHelper->sendOtp($mobile);
+    $response_data = $this->auraOtpHelper->sendOtp($mobile, 'reg');
 
     return new JsonResponse($response_data);
   }
@@ -121,14 +121,15 @@ class LoyaltyClubOtpController {
     $request_content = json_decode($request->getContent(), TRUE);
     $mobile = $request_content['mobile'];
     $otp = $request_content['otp'];
+    $type = $request_content['type'];
 
-    if (empty($mobile) || empty($otp)) {
-      $this->logger->error('Error while trying to verify otp. Mobile number and OTP is required.');
-      return new JsonResponse($this->utility->getErrorResponse('Mobile number and OTP is required.', Response::HTTP_NOT_FOUND));
+    if (empty($mobile) || empty($otp) || empty($type)) {
+      $this->logger->error('Error while trying to verify otp. Mobile number, OTP and type is required.');
+      return new JsonResponse($this->utility->getErrorResponse('Mobile number, OTP and type is required.', Response::HTTP_NOT_FOUND));
     }
 
     try {
-      $endpoint = sprintf('/verifyotp/phonenumber/%s/otp/%s', $mobile, $otp);
+      $endpoint = sprintf('/verifyotp/phonenumber/%s/otp/%s/type/%s', $mobile, $otp, $type);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $responseData = [
         'status' => $response,
@@ -136,9 +137,10 @@ class LoyaltyClubOtpController {
       return new JsonResponse($responseData);
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to verify otp for mobile number @mobile. OTP: @otp. Message: @message', [
+      $this->logger->notice('Error while trying to verify otp for mobile number @mobile. OTP: @otp. Type: @type. Message: @message', [
         '@mobile' => $mobile,
         '@otp' => $otp,
+        '@type' => $type,
         '@message' => $e->getMessage(),
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
@@ -172,7 +174,7 @@ class LoyaltyClubOtpController {
         return new JsonResponse($this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, Response::HTTP_NOT_FOUND));
       }
 
-      $response_data = $this->auraOtpHelper->sendOtp($search_response['data']['mobile']);
+      $response_data = $this->auraOtpHelper->sendOtp($search_response['data']['mobile'], 'link');
 
       if (!empty($response_data['status'])) {
         $response_data['mobile'] = $search_response['data']['mobile'];
