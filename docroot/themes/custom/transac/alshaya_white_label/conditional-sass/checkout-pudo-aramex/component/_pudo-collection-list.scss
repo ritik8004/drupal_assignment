@@ -1,6 +1,9 @@
 #click-and-collect-list-view {
   .spc-cnc-store-name.pudo-collection-list {
-    padding: 0.625rem 1.25rem 0.75rem 5.625rem;
+    padding-top: 0.625rem;
+    padding-#{$left}: 5.625rem;
+    padding-#{$right}: 1.25rem;
+    padding-bottom: 0.75rem;
 
     .spc-store-name-wrapper {
       height: auto;
