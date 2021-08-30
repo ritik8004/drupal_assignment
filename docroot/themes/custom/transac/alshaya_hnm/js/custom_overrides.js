@@ -13,7 +13,7 @@
       Drupal.theme.cartNotificationMarkup = function (data) {
         var markup = '<div class ="notification">';
         markup += '<div class="col-1">';
-        markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+        markup += '<img loading="lazy" src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
         markup += '</div>';
         markup += '<div class="col-2">';
         markup += '<span class="name">' + data.name + '</span>';
