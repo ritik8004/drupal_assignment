@@ -115,7 +115,7 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
         if (error.response.status === 422) {
           dispatchCustomEvent('spcCheckoutMessageUpdate', {
             type: 'error',
-            message: error.message,
+            message: Drupal.t('Transaction Failed: Invalid CVV'),
           });
         }
         removeFullScreenLoader();
