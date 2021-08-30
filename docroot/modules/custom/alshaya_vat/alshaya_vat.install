@@ -20,3 +20,13 @@ function alshaya_vat_install() {
     $manager::MODE_REPLACE
   );
 }
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Reset config. We need to ensure all the configuration added in the module
+ * is deleted to allow the ON/OFF code to work.
+ */
+function alshaya_vat_uninstall() {
+  \Drupal::configFactory()->getEditable('block.block.alshayavatcertificateblock')->delete();
+}
