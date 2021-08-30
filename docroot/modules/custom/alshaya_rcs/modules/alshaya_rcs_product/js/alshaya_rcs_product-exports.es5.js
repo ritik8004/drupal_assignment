@@ -87,7 +87,7 @@ exports.render = function render(
         const subTitle = cncEnabled
           ? drupalSettings.alshaya_click_collect.subtitle.enabled
           : drupalSettings.alshaya_click_collect.subtitle.disabled;
-        $('.subtitle', clickAndCollect).html(subTitle);
+        jQuery('.subtitle', clickAndCollect).html(subTitle);
 
         // Add click and collect to the delivery options field.
         jQuery('.field__content', deliveryOptionsWrapper).append(clickAndCollect);
@@ -175,7 +175,7 @@ exports.computePhFilters = function (input, filter) {
 
     case 'vat_text':
       if (drupalSettings.vat_text === '' || drupalSettings.vat_text === null) {
-        $('.vat-text').remove();
+        jQuery('.vat-text').remove();
       }
       value = drupalSettings.vat_text;
       break;
@@ -455,9 +455,9 @@ exports.computePhFilters = function (input, filter) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
           for (const attribute of attributes) {
-            $(`[${ attribute } *= '${ fieldPh }']`, skuBaseForm)
+            jQuery(`[${ attribute } *= '${ fieldPh }']`, skuBaseForm)
               .each(function eachEntityPhAttributeReplace() {
-                $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
+                jQuery(this).attr(attribute, jQuery(this).attr(attribute).replace(fieldPh, entityFieldValue));
               });
           }
         });
