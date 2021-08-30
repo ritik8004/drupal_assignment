@@ -78,7 +78,12 @@ function _alshaya_rcs_main_menu_advance_page_batch_operation(&$sandbox) {
         $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($product_category_id);
         $path = $term->get('path');
         if (!$path->isEmpty()) {
-          $entity->set('field_category_slug', $path->alias);
+          // Remove forward slash if present.
+          $alias = $path->alias;
+          if ($alias && $alias[0] == '/') {
+            $alias = substr($alias, 1);
+          }
+          $entity->set('field_category_slug', $alias);
           $entity->save();
         }
       }
