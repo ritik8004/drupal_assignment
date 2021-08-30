@@ -260,6 +260,9 @@ function _alshaya_spc_translations() {
       "This address doesn't contain all the required information, please update it." => [
         'ar' => 'لا يحتوي هذا العنوان على جميع المعلومات المطلوبة ، يرجى تحديثه.',
       ],
+      "Transaction Failed: Invalid CVV" => [
+        'ar' => 'فشلت المعاملة: رقم CVV غير صالح',
+      ],
     ],
   ];
 
