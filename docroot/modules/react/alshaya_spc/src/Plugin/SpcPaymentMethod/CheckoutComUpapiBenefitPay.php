@@ -21,21 +21,6 @@ class CheckoutComUpapiBenefitPay extends AlshayaSpcPaymentMethodPluginBase {
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
-    $build['#strings'] = array_merge($build['#strings'], self::getBenefitPayStaticText());
-  }
-
-  /**
-   * Strings related to benefit-pay payment-method.
-   *
-   * @return array
-   *   Translated strings array.
-   */
-  public static function getBenefitPayStaticText() {
-    // @todo Update array with Benefit pay strings and their keys.
-    return [
-      'key' => '',
-      'value' => '',
-    ];
   }
 
 }
