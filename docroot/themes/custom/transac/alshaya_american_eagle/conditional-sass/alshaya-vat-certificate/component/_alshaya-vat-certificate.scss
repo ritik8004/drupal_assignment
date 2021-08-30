@@ -8,10 +8,11 @@
   }
 
   @include breakpoint($desktop) {
-    order: 2;
-    flex-basis: 85%;
+    order: 3;
+    flex-basis: 100%;
     margin-#{$right}: 0;
     margin-top: 0 !important;
+    padding: 0 0.3125rem;
   }
 }
 
