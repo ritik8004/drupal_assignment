@@ -8,19 +8,6 @@
 (function ($, Drupal) {
   'use strict';
 
-  /**
-   * Call blazyRevalidate() on afterChange of slick sliders.
-   *
-   * @param {object} carousel
-   * The carousel element.
-   */
-  function applyHorizontalLazyLoad(carousel) {
-    // Lazy Load on carousels.
-    carousel.on('afterChange', function () {
-      Drupal.blazyRevalidate();
-    });
-  }
-
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
       var pdp_items_desk = drupalSettings.pdp_items_desk;
@@ -90,46 +77,30 @@
       var upSell = $('.horizontal-upell .owl-carousel');
       var relatedSell = $('.horizontal-related .owl-carousel');
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
-      var productCarouselClasses = ['.product-category-carousel', '.owl-carousel'];
 
       plpfeaturedproduct.each(function () {
         applyRtl($(this), optionsPlp);
-        applyHorizontalLazyLoad($(this));
       });
 
       advancedfeaturedproduct.each(function () {
         applyRtl($(this), optionshp);
-        applyHorizontalLazyLoad($(this));
       });
 
       basketHR.each(function () {
         applyRtl($(this), optionsBasket);
-        applyHorizontalLazyLoad($(this));
       });
 
       crossSell.each(function () {
         applyRtl($(this), optionsPdp);
-        applyHorizontalLazyLoad($(this));
       });
 
       upSell.each(function () {
         applyRtl($(this), optionsPdp);
-        applyHorizontalLazyLoad($(this));
       });
 
       relatedSell.each(function () {
         applyRtl($(this), optionsPdp);
-        applyHorizontalLazyLoad($(this));
       });
-
-      // We dont have carousel in tablets & phones,
-      // Enable horizontal lazy load.
-      if ($(window).width() < 1024) {
-        // Horizontal Lazy load for scroll areas.
-        $.each(productCarouselClasses, function (key, scrollArea) {
-          Drupal.blazyHorizontalLazyLoad(scrollArea);
-        });
-      }
 
       $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').once('product-carousel').on('click', function () {
         // Adjust the positioning of the throbber as per the transform property on slick-track.
