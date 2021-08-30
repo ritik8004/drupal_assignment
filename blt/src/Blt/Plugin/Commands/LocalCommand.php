@@ -1,6 +1,6 @@
 <?php
 
-namespace Example\Blt\Plugin\Commands;
+namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Robo\Contract\VerbosityThresholdInterface;
