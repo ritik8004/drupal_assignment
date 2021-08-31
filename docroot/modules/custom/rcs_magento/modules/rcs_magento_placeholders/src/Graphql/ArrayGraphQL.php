@@ -28,13 +28,13 @@ class ArrayGraphQL {
     // Remove array indexes.
     $fields = preg_replace('~"\d+":\s~', '', $fields);
 
-    // Remove quotes, colons and commas.
+    // Remove quotes, colons and commas (Original code doesn't remove commas).
     $fields = str_replace(['"', ':', ','], '', $fields);
 
     // Replace square brackets to curly brackets.
     $fields = str_replace(['[', ']'], ['{', '}'], $fields);
 
-    // Compress.
+    // Compress (Original code doesn't include this).
     $fields = preg_replace("/(\r?\n?\s+)/", ' ', $fields);
 
     return $fields;
@@ -60,6 +60,7 @@ class ArrayGraphQL {
 
       if ($isIndexedKey) {
         if (!$isScalar) {
+          // Original code uses a custom exception.
           throw new \Exception('Indexed array values should be scalar', 1);
         }
 
@@ -70,6 +71,7 @@ class ArrayGraphQL {
       }
       else {
         if (!$isArray || $isEmpty) {
+          // Original code uses a custom exception.
           throw new \Exception('Associative array values should be non-empty arrays', 2);
         }
         $array[$key] = self::removeDuplicates($value);

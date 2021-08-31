@@ -23,7 +23,7 @@ exports.getEntity = async function getEntity(langcode) {
 
       const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${drupalSettings.rcs_magento_placeholders.graphql_query_fields.products}}`
+        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
       });
 
       break;
@@ -36,7 +36,7 @@ exports.getEntity = async function getEntity(langcode) {
 
       const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${drupalSettings.rcs_magento_placeholders.graphql_query_fields.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
       });
 
       break;
