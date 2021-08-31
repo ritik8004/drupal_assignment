@@ -158,6 +158,7 @@
               isFormValid = true;
               totalEle.addClass('active');
               eleCartIcon.addClass('full');
+              tPrice = parseFloat(tPrice).toFixed(3);
               var html = "<span class='amount'><span id='#'>" + tCount + "</span><span class='icon icon-ticket'></span>KWD <span id='#'>" + tPrice + '</span></span>';
               totalEle.find('.total_price').html(html);
               eleCartPrice.html(tPrice);
