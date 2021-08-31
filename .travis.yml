@@ -3,7 +3,7 @@
 # @see https://github.com/travis-ci/travis-ci/issues/6842
 sudo: required
 language: php
-dist: trusty
+dist: xenial
 
 matrix:
   fast_finish: true
