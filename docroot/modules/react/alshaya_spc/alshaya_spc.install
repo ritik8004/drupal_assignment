@@ -23,8 +23,7 @@ function alshaya_spc_update_8014() {
   $benefitPay = $benefitPay->hasTranslation('ar')
     ? $benefitPay->getTranslation('ar')
     : $benefitPay->addTranslation('ar', []);
-  // @todo Add Arabic label for Benefit pay.
-  $benefitPay->setName('Benefit Pay Arabic');
+  $benefitPay->setName('بينفت باي');
   $benefitPay->save();
 
   // Disable new benefitpay method by default.
