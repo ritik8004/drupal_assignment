@@ -71,30 +71,26 @@
   align-items: center;
   justify-content: center;
 
+  @include breakpoint($only-tablet) {
+    justify-content: space-between;
+  }
+
   .c-footer__copy {
     order: 1;
 
     @include breakpoint($tablet) {
-      flex-basis: 85%;
+      flex-basis: 77%;
       margin-#{$right}: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: auto;
     }
 
     @include breakpoint($only-mobile) {
       flex-basis: 100%;
       border-top: 0.0625rem solid $footer_border_top;
       border-bottom: 0.0625rem solid $footer_border_top;
-    }
-
-    .path--cart & {
-      @include breakpoint($tablet) {
-        flex-basis: 69%;
-      }
-    }
-
-    .path--cart.alias--cart & {
-      @include breakpoint($tablet) {
-        flex-basis: 85%;
-      }
     }
   }
 

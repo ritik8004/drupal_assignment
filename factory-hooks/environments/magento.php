@@ -342,6 +342,34 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
+  'hm_test' => [
+    'url' => 'https://hm-test.store.alshaya.com',
+    'pims_base_url' => 'http://34.249.182.88:3030',
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 5],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 8, 'ar' => 14],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 17, 'ar' => 23],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 30, 'ar' => 27],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 35, 'ar' => 32],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 41, 'ar' => 38],
+    ],
+    'magento_secrets' => [
+      'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
+      'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
+      'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
+      'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
+    ],
+  ],
   'hm_uat' => [
     'url' => 'https://hm-uat2.store.alshaya.com',
     'pims_base_url' => 'http://34.249.182.88:3030',
@@ -817,6 +845,24 @@ $magentos = [
     ],
   ],
   // Westelm.
+  'we_training' => [
+    'url' => 'https://wes-training.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '4xtw4osc8e7fv45cy187xhhobr6xt59e',
+      'consumer_secret' => '3b5nydivhlbwm6v29ekyhv3v8v2s2pl4',
+      'access_token' => 'm8cgs2h1dj4zqvx1qy8293aygeu7zcar',
+      'access_token_secret' => '4mocc81s1pnejkm57fimdjw49mqcz4rl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+  ],
   'we_sit' => [
     'url' => 'https://wes-sit.store.alshaya.com',
     'magento_secrets' => [
@@ -1223,6 +1269,33 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'bp_test' => [
+    'url' => 'https://boots-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'nfjdttxqyqdaj81nilo4sab9wl7kkb0x',
+      'consumer_secret' => '5szrlic4mwpoxyjl11mhrxux287lykdc',
+      'access_token' => 'qwgohy4l3xnbcz63nhvb5u5soezfizka',
+      'access_token_secret' => 'a5seetf8c166nnkwgk7cbunjxv8l9jdu',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
     ],
   ],
   'bp_uat' => [

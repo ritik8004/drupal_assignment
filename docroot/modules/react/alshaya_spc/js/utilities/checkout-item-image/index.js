@@ -7,7 +7,7 @@ const CheckoutItemImage = (props) => {
     return null;
   }
 
-  return <img src={ImgData.url} alt={ImgData.alt} title={ImgData.title} />;
+  return <img loading="lazy" src={ImgData.url} alt={ImgData.alt} title={ImgData.title} />;
 };
 
 export default CheckoutItemImage;

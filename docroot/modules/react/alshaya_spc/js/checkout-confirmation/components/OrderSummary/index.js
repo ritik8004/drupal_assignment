@@ -30,6 +30,9 @@ const OrderSummary = () => {
     if (addressInfo.dependent_locality !== undefined) {
       customerAddress.push(addressInfo.dependent_locality);
     }
+    if (addressInfo.postal_code !== undefined) {
+      customerAddress.push(addressInfo.postal_code);
+    }
   }
 
   let etaLabel = Drupal.t('expected delivery within');
