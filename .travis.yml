@@ -45,7 +45,7 @@ matrix:
 
 services:
   - mysql
-  # - memcached
+  - memcached
 
 env:
   global:
