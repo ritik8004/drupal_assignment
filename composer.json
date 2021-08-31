@@ -498,10 +498,5 @@
         },
         "sort-packages": true,
         "discard-changes": true
-    },
-    "autoload": {
-        "psr-4": {
-            "Alshaya\\": "blt/src/"
-        }
     }
 }

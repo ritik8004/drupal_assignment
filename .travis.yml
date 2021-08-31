@@ -43,9 +43,9 @@ matrix:
       # there will be fresh PR merges which will take care of pushing.
       if: type = push AND (branch IN (master, uat, qa, develop) OR commit_message !~ /(git\+ssh)/)
 
-services:
-  - mysql
-  - memcached
+#services:
+  # - mysql
+  # - memcached
 
 env:
   global:
@@ -101,7 +101,7 @@ before_install:
   - git config --global github.accesstoken "${GITHUB_OAUTH_TOKEN}"
   - composer validate --no-check-all --ansi
   - source ${BUILD_DIR}/blt/scripts/delete_composer_caches "${BUILD_DIR}"
-  # - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   # There seems to be stronger rate limiting applied to Github downloads
   # that forces us to retry composer install several times.
   # Symptom is a Github download ending with 404 while the URL is valid.
