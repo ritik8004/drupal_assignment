@@ -10,6 +10,7 @@ use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
@@ -21,7 +22,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -162,6 +162,13 @@ class AlshayaSpcOrderHelper {
   protected $renderer;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -198,6 +205,8 @@ class AlshayaSpcOrderHelper {
    *   Store finder utility.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
+   *   Sku imagese helper.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -215,7 +224,8 @@ class AlshayaSpcOrderHelper {
                               OrdersManager $orders_manager,
                               ConfigFactory $configFactory,
                               StoresFinderUtility $store_finder,
-                              RendererInterface $renderer) {
+                              RendererInterface $renderer,
+                              SkuImagesHelper $images_helper) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -233,6 +243,7 @@ class AlshayaSpcOrderHelper {
     $this->configFactory = $configFactory;
     $this->storeFinder = $store_finder;
     $this->renderer = $renderer;
+    $this->skuImagesHelper = $images_helper;
   }
 
   /**
@@ -249,14 +260,22 @@ class AlshayaSpcOrderHelper {
     }
 
     $id = $this->request->query->get('id');
-    if (empty($id)) {
-      throw new NotFoundHttpException();
+    if (!empty($id)) {
+      $data = json_decode(SecureText::decrypt(
+        $id,
+        Settings::get('alshaya_api.settings')['consumer_secret']
+      ), TRUE);
     }
 
-    $data = json_decode(SecureText::decrypt(
-      $id,
-      Settings::get('alshaya_api.settings')['consumer_secret']
-    ), TRUE);
+    // Parameter used for V2 from browser.
+    $oid = $this->request->query->get('oid');
+    if (!empty($oid)) {
+      $data = (array) json_decode(base64_decode($oid));
+    }
+
+    if (empty($data)) {
+      throw new NotFoundHttpException();
+    }
 
     $data_email = strtolower(trim($data['email'] ?? ''));
     if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data_email)) {
@@ -314,7 +333,7 @@ class AlshayaSpcOrderHelper {
         $data['url'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
       }
 
-      $data['image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
+      $data['image'] = $this->getProductDisplayImage($skuEntity, SkuImagesHelper::STYLE_CART_THUMBNAIL, 'cart');
       // Check if we can find a parent SKU for this to get proper name.
       if ($this->skuManager->getParentSkuBySku($skuEntity)) {
         // Get configurable values.
@@ -347,7 +366,7 @@ class AlshayaSpcOrderHelper {
 
     // If we have image for the product.
     if (!empty($media_image)) {
-      $image = ImageStyle::load($image_style)->buildUrl($media_image['drupal_uri']);
+      $image = $this->skuImagesHelper->getImageStyleUrl($media_image, $image_style);
     }
     else {
       // If still image is not available, set default one.

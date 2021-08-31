@@ -31,7 +31,8 @@
   .block-alshaya-category-lhn-block {
     ul {
       li {
-        a {
+        a,
+        span {
           &.lhn-4,
           &.lhn-3 {
             @include breakpoint($desktop) {

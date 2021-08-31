@@ -1,6 +1,7 @@
 name: 'Alshaya Media'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 description: 'custom media bundles for alshaya and related settings.'
 dependencies:
   - drupal:field

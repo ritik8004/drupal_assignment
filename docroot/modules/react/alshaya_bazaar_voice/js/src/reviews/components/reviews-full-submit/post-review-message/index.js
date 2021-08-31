@@ -1,5 +1,4 @@
 import React from 'react';
-import HTMLReactParser from 'html-react-parser';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import ConditionalView from '../../../../common/components/conditional-view';
 import DisplayStar from '../../../../rating/components/stars';
@@ -12,7 +11,7 @@ const PostReviewMessage = ({
       starPercentage={postReviewData.Review.Rating}
     />
     <div className="review-title">{postReviewData.Review.Title}</div>
-    <div className="review-text">{HTMLReactParser(postReviewData.Review.ReviewText)}</div>
+    <div className="review-text">{postReviewData.Review.ReviewText}</div>
     <ConditionalView condition={postReviewData.Review.IsRecommended !== null
       && postReviewData.Review.IsRecommended}
     >

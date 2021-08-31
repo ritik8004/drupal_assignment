@@ -1,0 +1,50 @@
+.block-alshaya-vat-certificate-block {
+  margin-top: -1.25rem;
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-bottom: 1.25rem;
+  }
+
+  @include breakpoint($tablet) {
+    float: $right;
+    clear: both;
+    width: 55%;
+    margin-#{$right}: 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    width: 65%;
+    margin-#{$right}: 3rem;
+    margin-bottom: 0.625rem;
+
+    html[lang=ar] & {
+      margin-top: -1rem;
+    }
+  }
+
+  .vat-link,
+  span {
+    color: $copyright_footer_paragraph;
+    font-size: 0.6875rem;
+  }
+
+  .vat-link {
+    text-decoration: underline;
+  }
+}
+
+.vat-pdf {
+  height: 30.3125rem;
+
+  @include breakpoint($tablet) {
+    height: 66.875rem;
+  }
+}
+
+.c-vat-certificate {
+  margin-top: 1rem;
+}

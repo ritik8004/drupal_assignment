@@ -79,10 +79,12 @@
         }
 
         if (croppedSectionWidth < 0) {
-          var updatedMenuWidth = eleL2Wrapper.width() - Math.abs(croppedSectionWidth);
-          eleL2Wrapper.css('width', updatedMenuWidth);
           eleL2Wrapper.css('overflow-x', 'auto');
           eleL2Wrapper.css(isRTL() ? 'right' : 'left', positionAdjustment + Math.abs(croppedSectionWidth));
+        }
+
+        if (eleL2Wrapper.width() > $(window).width()) {
+          eleL2Wrapper.css('width', $(window).width());
         }
       }
     });

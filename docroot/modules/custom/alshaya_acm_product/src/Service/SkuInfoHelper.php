@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\StockManager;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
@@ -13,6 +14,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
@@ -20,7 +22,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\TypedData\TranslatableInterface;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Class Sku Info Helper.
@@ -706,10 +707,12 @@ class SkuInfoHelper {
    */
   public function getCartImage(SKUInterface $sku) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
+    $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
     // Prepare image style url.
-    if (!empty($image['#uri'])) {
-      $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+    if (!empty($image['#theme'])) {
+      $image = ($image['#theme'] == 'image_style')
+        ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
+        : $image['#uri'];
     }
 
     return is_string($image) ? $image : '';

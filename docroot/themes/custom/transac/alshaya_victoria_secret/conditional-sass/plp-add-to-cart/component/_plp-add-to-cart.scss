@@ -4,9 +4,11 @@
 .product-drawer-content-wrapper .config-form-addtobag-button {
   text-transform: uppercase;
   border-radius: 0;
-  font-family: $vs-bentonsanscomp-medium;
-  font-weight: 700;
-  letter-spacing: 0.15em;
+  font-family: $alshaya-bold;
 
   @include normal-arabic-letter-spacing;
+}
+
+.qty-sel-btn {
+  border-radius: 0;
 }

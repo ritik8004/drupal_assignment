@@ -2,7 +2,7 @@
   .gm-style {
     .gm-style-iw-c {
       width: 17.6875rem;
-      padding: 1.125rem 1.375rem !important;
+      padding: 1rem !important;
       border: solid 1px $spc-cnc-info-window-border;
       border-radius: 0;
     }
@@ -13,6 +13,10 @@
       color: $spc-cnc-map-info-window-text;
       overflow: auto !important;
 
+      .spc-store-name-wrapper {
+        display: flex;
+      }
+
       .spc-cnc-store-name {
         .store-name {
           color: $spc-cnc-map-info-window-impress;
@@ -21,7 +25,8 @@
         }
 
         .store-distance {
-          float: $right;
+          text-align: $right;
+          flex-basis: 5rem;
         }
 
         margin-bottom: 1rem;

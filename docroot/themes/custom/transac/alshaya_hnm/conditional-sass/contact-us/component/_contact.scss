@@ -1,0 +1,139 @@
+.c-contact {
+  .c-page-title {
+    margin-top: 2rem;
+
+    @include breakpoint($mobile) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .form-type-textarea {
+    textarea {
+      resize: none;
+      padding-#{$right}: 1.55rem !important;
+      line-height: 1.8;
+      overflow: hidden;
+      color: $primary_input !important;
+      background-color: $default_background_color;
+    }
+
+    label {
+      color: $primary_input_label !important;
+      font-size: 0.8125rem !important;
+
+      &.error {
+        color: $primary_input_inline_error !important;
+        font-size: 0.6875rem;
+        background: $default_background_color !important;
+        bottom: -1.5rem;
+      }
+    }
+
+    .field-suffix {
+      color: $gray44;
+    }
+  }
+}
+
+.webform-submission-alshaya-contact-form {
+  .form-item {
+    margin-bottom: 2.5rem;
+    display: inline-block;
+
+    &.mobile-number-field {
+      margin-bottom: 3.5rem;
+
+      .prefix {
+        color: $hnm-black-three;
+      }
+    }
+
+    &.js-webform-radios-fieldset {
+      margin-bottom: 0;
+    }
+
+    input {
+      background-color: $default_background_color;
+      color: $primary_input !important;
+    }
+
+    label {
+      color: $primary_input_label !important;
+      font-size: 0.8125rem !important;
+
+      &.error {
+        color: $primary_input_inline_error !important;
+        font-size: 0.6875rem;
+        background: $default_background_color !important;
+        bottom: -1.5rem;
+      }
+    }
+  }
+
+  .form-type-radio {
+    label {
+      font-size: 0.8125rem;
+      color: $gray44;
+
+      &::before {
+        margin-top: -0.25rem;
+        top: -0.75rem !important;
+        padding-#{$right}: 1.5rem;
+        background: transparent !important;
+      }
+    }
+  }
+
+  legend {
+    color: $hnm-black-three;
+    font-family: $hnm-demibold;
+    text-transform: capitalize;
+    font-size: 1.125rem;
+    margin: 0 !important;
+  }
+
+  .form-submit {
+    font-family: $hnm-demibold;
+    color: $white-five;
+    background-color: $hnm-black-three;
+
+    &:hover {
+      background-color: $gray44;
+    }
+  }
+}
+
+.webform-submission-alshaya-contact-add-form {
+  .form-item {
+    &.form-type-textfield,
+    &.form-type-textarea,
+    &.form-type-email {
+      label {
+        &:last-of-type {
+          text-transform: unset;
+        }
+      }
+    }
+  }
+
+  .mobile-number-field {
+    label {
+      text-transform: unset;
+    }
+  }
+}
+
+.alias--contact {
+  .webform-submission-alshaya-contact-form {
+    .contact-us-feedback,
+    .contact-us-type,
+    .contact-us-reason {
+      select.form-select {
+        @include breakpoint($upto-desktop) {
+          font-size: 1rem;
+          height: 2.7rem;
+        }
+      }
+    }
+  }
+}

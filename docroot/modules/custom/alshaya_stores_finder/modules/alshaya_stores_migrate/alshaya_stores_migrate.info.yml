@@ -1,6 +1,7 @@
 name: 'Alshaya Stores Migrate'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya
 description: 'Utility to migrate stores.'
 dependencies:

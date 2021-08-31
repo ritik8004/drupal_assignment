@@ -35,6 +35,10 @@
     @include breakpoint($desktop) {
       flex-basis: 27%;
     }
+
+    @include breakpoint($only-tablet) {
+      flex-basis: 34% !important;
+    }
   }
 
   .footer__categories {

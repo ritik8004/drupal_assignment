@@ -22,7 +22,9 @@ export default class CompletePurchase extends React.Component {
    * Callback for any action after an order is placed.
    */
   orderPlaced = () => {
-    // Remove benefit pay storage data.
+    // 'benefit_pay_modal_auto_opened' is used to ensure that we auto open the
+    // benefit pay modal only once for a user. Removing this key just after
+    // placing order to remove old value.
     localStorage.removeItem('benefit_pay_modal_auto_opened');
   }
 
@@ -50,15 +52,18 @@ export default class CompletePurchase extends React.Component {
     if (!this.completePurchaseButtonActive()) {
       return;
     }
-
-    setTimeout(() => {
+    // Dispatch the event for all payment method
+    // except checkout_com_upapi method.
+    // For checkout_com_upapi method this
+    // handle in its own component.
+    if (cart.cart.payment.method !== 'checkout_com_upapi') {
       dispatchCustomEvent('orderPaymentMethod', {
         payment_method: Object
           .values(drupalSettings.payment_methods)
           .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
           .shift().gtm_name,
       });
-    }, 5000);
+    }
 
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');

@@ -273,12 +273,10 @@ class AdvancedPageResource extends ResourceBase {
    */
   private function getCategoryData(int $parent_tid) {
     $subcategory_list_view = Views::getView('product_category_level_2_3');
-    $subcategory_list_view->setDisplay('block');
+    $subcategory_list_view->setDisplay('block_2');
     $subcategory_list_view->setArguments([$parent_tid]);
     $subcategory_list_view->execute();
     $data = [];
-    $childCategory_list_view = Views::getView('product_category_level_3');
-    $childCategory_list_view->setDisplay('block');
     foreach ($subcategory_list_view->result as $subcategory_list_view_value) {
       $sub_category_entity_list = $subcategory_list_view_value->_entity;
       $sub_category_entity = $this->entityRepository->getTranslationFromContext($sub_category_entity_list);
@@ -289,7 +287,7 @@ class AdvancedPageResource extends ResourceBase {
         'label' => $sub_category_entity->get('name')->getValue()[0]['value'],
         'deeplink' => $this->mobileAppUtility->getDeepLink($sub_category_entity),
         'path' => $sub_category_entity_url,
-        'child' => $this->getChildCategoryData($childCategory_list_view, $sub_category_entity->get('tid')->getValue()[0]['value']),
+        'child' => $this->getChildCategoryData($sub_category_entity->get('tid')->getValue()[0]['value']),
       ];
     }
     return $data;
@@ -298,15 +296,15 @@ class AdvancedPageResource extends ResourceBase {
   /**
    * Get all child terms of a given parent term.
    *
-   * @param object $childCategory_list_view
-   *   View data.
    * @param int $child_tid
    *   Child term id.
    *
    * @return array
    *   Data array.
    */
-  private function getChildCategoryData($childCategory_list_view, $child_tid) {
+  private function getChildCategoryData(int $child_tid) {
+    $childCategory_list_view = Views::getView('product_category_level_3');
+    $childCategory_list_view->setDisplay('block_1');
     $childCategory_list_view->setArguments([$child_tid]);
     $childCategory_list_view->execute();
     $data = [];

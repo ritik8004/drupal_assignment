@@ -1,6 +1,7 @@
 name: 'Alshaya i18n'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya
 description: 'All settings and custom code around internationalisation.'
 dependencies:

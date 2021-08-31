@@ -7,7 +7,11 @@
     .block-facet-blockcategory-facet-plp {
       @include breakpoint($only-mobile) {
         top: 3.5rem;
-        z-index: 11;
+        z-index: 9;
+
+        .sub-brand-logo.no-sticky-algolia-search-bar & {
+          top: 7.125rem;
+        }
       }
     }
   }

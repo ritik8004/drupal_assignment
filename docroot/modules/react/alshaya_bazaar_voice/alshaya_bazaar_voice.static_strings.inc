@@ -91,10 +91,6 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('Please enter a minimum of %minLength characters for %fieldTitle.'),
     ],
     [
-      'key' => 'text_max_chars_limit_error',
-      'value' => t('Please enter a maximum of %maxLength characters for %fieldTitle.'),
-    ],
-    [
       'key' => 'reviews',
       'value' => t('reviews'),
     ],
@@ -301,6 +297,18 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'Staff',
       'value' => t('Staff'),
+    ],
+    [
+      'key' => 'translate_with_google',
+      'value' => t('Translate with Google'),
+    ],
+    [
+      'key' => 'back_to_original_review',
+      'value' => t('Back to Original Review'),
+    ],
+    [
+      'key' => 'back_to_original_comment',
+      'value' => t('Back to Original Comment'),
     ],
     [
       'key' => 'invalid_pie_user_details',

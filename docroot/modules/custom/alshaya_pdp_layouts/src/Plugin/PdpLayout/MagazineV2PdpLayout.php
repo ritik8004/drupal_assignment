@@ -330,7 +330,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           'sku' => $sku,
           'thumbnails' => $thumbnails,
           'pager_flag' => $pager_flag,
-          'lazy_load_placeholder' => $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder'),
         ];
 
       }

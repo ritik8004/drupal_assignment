@@ -1,6 +1,5 @@
 react:
   version: 2
-  header: true
   js:
     js/react.production.min.js: { preprocess: false, minified: true }
     js/react-dom.production.min.js: { preprocess: false, minified: true }
@@ -10,7 +9,6 @@ react:
 
 react_pollyfill:
   version: 1.x
-  header: true
   js:
     js/ie-pollyfill.js: {}
     dist/number.bundle.js: {}
