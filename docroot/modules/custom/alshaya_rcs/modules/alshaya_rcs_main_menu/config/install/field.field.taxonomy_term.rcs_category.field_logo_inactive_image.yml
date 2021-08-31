@@ -7,6 +7,9 @@ dependencies:
   module:
     - content_translation
     - image
+  enforced:
+    module:
+      - alshaya_rcs_main_menu
 third_party_settings:
   content_translation:
     translation_sync:
