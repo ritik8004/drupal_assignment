@@ -303,31 +303,31 @@ function _alshaya_spc_translations() {
   // Strings related to Benefit Pay payment method.
   $strings['v4'] = [
     'Continue with Benefit pay' => [
-      'ar' => 'Continue with Benefit pay AR',
+      'ar' => 'أكمل مع بينفت باي',
     ],
     'Please complete your payment by scanning the QR code.' => [
-      'ar' => 'Please complete your payment by scanning the QR code. AR',
+      'ar' => 'أكمل عملية الدفع عبر مسح رمز QR.',
     ],
     'Scan to Pay' => [
-      'ar' => 'Scan to Pay AR',
+      'ar' => 'امسح وادفع',
     ],
     'Pay using BenefitPay App' => [
-      'ar' => 'Pay using BenefitPay App AR',
+      'ar' => 'ادفع باستخدام تطبيق بينفت باي',
     ],
     'BenefitPay' => [
-      'ar' => 'BenefitPay AR',
+      'ar' => 'بينفت باي',
     ],
     'Merchant' => [
-      'ar' => 'Merchant AR',
+      'ar' => 'التاجر',
     ],
     'Amount' => [
-      'ar' => 'Amount AR',
+      'ar' => 'المبلغ',
     ],
     'Reference number' => [
-      'ar' => 'Reference number AR',
+      'ar' => 'الرقم المرجعي',
     ],
     'How to pay using BenefitPay?' => [
-      'ar' => 'How to pay using BenefitPay? AR',
+      'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
     ],
   ];
 
