@@ -322,7 +322,7 @@ function _alshaya_spc_translations() {
       'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
     ],
     'The same person placing the order will not collect the order.' => [
-      'ar' => 'يجب على الشخص الذي وضع الطلبية أن يستلمها بنفسه.',
+      'ar' => 'الشخص الذي قام بوضع الطلب لن يقوم باستلام الطلب بنفسه',
     ],
     'Selected collection point' => [
       'ar' => 'نقطة الاستلام المختارة.',
@@ -334,13 +334,13 @@ function _alshaya_spc_translations() {
       'ar' => 'ملاحظة مهمة:',
     ],
     'Collect in' => [
-      'ar' => 'Collect in AR',
+      'ar' => 'الاستلام في',
     ],
     'Collector`s mobile number can not be same as contact number' => [
-      'ar' => 'Collector`s mobile number can not be same as contact number AR',
+      'ar' => 'لا يمكن أن يكون رقم هاتف المستلم نفس رقم الاتصال',
     ],
     'Your order will be available for pickup at the following collection point' => [
-      'ar' => 'Your order will be available for pickup at the following collection point AR',
+      'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
     ],
   ];
 
