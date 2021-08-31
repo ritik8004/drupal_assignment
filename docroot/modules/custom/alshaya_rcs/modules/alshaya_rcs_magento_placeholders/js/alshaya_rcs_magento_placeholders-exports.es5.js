@@ -57,9 +57,8 @@ exports.render = function render(
       break;
 
     case 'lhn_block':
-      // Render lhn based on the page type.
-      if (pageType === 'category'
-      && typeof globalThis.renderRcsLhn !== 'undefined') {
+      // Render lhn based block.
+      if (typeof globalThis.renderRcsLhn !== 'undefined') {
         html += globalThis.renderRcsLhn.render(
           settings,
           inputs,

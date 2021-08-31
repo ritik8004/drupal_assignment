@@ -51,17 +51,19 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
   }
 
   items.forEach(item => {
-    itemHtml += '<li>';
-    // @todo Add check for clickable and unclickable based on magento response.
-    // Replace placeholders with response value.
-    itemHtml += replaceLhnPlaceHolders(item, clickable, settings);
+    if (typeof item != "undefined") {
+      itemHtml += '<li>';
+      // @todo Add check for clickable and unclickable based on magento response.
+      // Replace placeholders with response value.
+      itemHtml += replaceLhnPlaceHolders(item, clickable, settings);
 
-    if (item.children !== undefined && item.children !== null) {
-      itemHtml += '<ul>';
-      itemHtml = buildLhnHtml(itemHtml, item.children, clickable, unclickable, settings);
-      itemHtml += '</ul>';
+      if (item.children !== undefined && item.children !== null) {
+        itemHtml += '<ul>';
+        itemHtml = buildLhnHtml(itemHtml, item.children, clickable, unclickable, settings);
+        itemHtml += '</ul>';
+      }
+      itemHtml += '</li>';
     }
-    itemHtml += '</li>';
   });
 
   return itemHtml;
