@@ -79,42 +79,6 @@
     }
   }
 
-  .list-view-link {
-    padding: 0.85rem 0;
-
-    @include breakpoint($desktop) {
-      text-indent: -0.4rem;
-    }
-
-    @include icon(list, before) {
-      color: $store_finder_icon;
-      width: 1.625rem;
-      height: 0.8rem;
-      vertical-align: top;
-      font-size: 2rem;
-      line-height: 0.6;
-
-      @include breakpoint($only-tablet) {
-        margin-#{$right}: 1.1rem;
-        margin-#{$left}: -0.45rem;
-      }
-
-      @include breakpoint($desktop) {
-        margin-#{$left}: 0.5rem;
-        margin-#{$right}: 0.8rem;
-      }
-    }
-
-    &:hover::before,
-    &.active::before {
-      color: $store_finder_text_hover;
-    }
-
-    @include breakpoint($desktop) {
-      padding: 1.595rem 0;
-    }
-  }
-
   .back-link,
   .mobile-only-back-to-glossary {
     a {
@@ -277,7 +241,8 @@
   .current-location,
   .cc-near-me,
   .map-view-link,
-  .label--location {
+  .label--location,
+  .list-view-link {
     &::before {
       content: '';
       display: inline-block;
@@ -363,6 +328,42 @@
 
     @include breakpoint($desktop) {
       padding: 1.47rem 0;
+    }
+  }
+
+  .list-view-link {
+    padding: 0.85rem 0;
+
+    @include breakpoint($desktop) {
+      text-indent: -0.4rem;
+    }
+
+    @include icon(list, before) {
+      color: $store_finder_icon;
+      width: 1.625rem;
+      height: 0.8rem;
+      vertical-align: top;
+      font-size: 2rem;
+      line-height: 0.6;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 1.1rem;
+        margin-#{$left}: -0.45rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0.5rem;
+        margin-#{$right}: 0.8rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      color: $store_finder_text_hover;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 1.595rem 0;
     }
   }
 

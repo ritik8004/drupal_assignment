@@ -16,7 +16,8 @@ export default class RecentOrders extends React.Component {
   componentDidMount() {
     const { productId } = this.props;
     const userDetails = getUserDetails(productId);
-    if (userDetails.productReview !== null) {
+    if (userDetails && Object.keys(userDetails).length !== 0
+      && userDetails.productReview !== null) {
       this.setState({
         rating: userDetails.productReview.user_rating,
         reviewData: userDetails.productReview.review_data,
@@ -26,9 +27,13 @@ export default class RecentOrders extends React.Component {
 
   render() {
     const { productId } = this.props;
+    const userDetails = getUserDetails(productId);
     const {
       rating, reviewData,
     } = this.state;
+    if (userDetails && Object.keys(userDetails).length === 0) {
+      return null;
+    }
     return (
       <>
         <ConditionalView condition={reviewData === ''}>

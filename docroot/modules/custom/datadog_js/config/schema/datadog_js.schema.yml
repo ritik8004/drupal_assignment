@@ -1,0 +1,16 @@
+datadog_js.settings:
+  type: config_object
+  label: 'DataDogJS settings'
+  mapping:
+    library:
+      type: string
+      label: 'DataDogJS Library'
+    token:
+      type: string
+      label: 'DataDogJS Token'
+    site:
+      type: string
+      label: 'DataDogJS Site'
+    admin_pages:
+      type: string
+      label: 'Track the errors on admin pages or not'

@@ -45,6 +45,7 @@ body {
   .branding__menu {
     @include breakpoint($only-mobile) {
       border-bottom: 1px solid $plp_facet_border;
+      box-shadow: none;
     }
   }
 }

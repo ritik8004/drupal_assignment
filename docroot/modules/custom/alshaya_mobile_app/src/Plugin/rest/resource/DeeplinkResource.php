@@ -132,6 +132,14 @@ class DeeplinkResource extends ResourceBase {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
+    $url = $this->getDeeplink($alias);
+    return new ModifiedResourceResponse(['deeplink' => $url]);
+  }
+
+  /**
+   * Helper function to get deeplink.
+   */
+  protected function getDeeplink($alias) {
     $alias = str_replace($this->baseUrl, '', $alias);
 
     if (empty($alias) || UrlHelper::isExternal($alias)) {
@@ -188,7 +196,7 @@ class DeeplinkResource extends ResourceBase {
       $url = $this->mobileAppUtility->getDeepLinkFromUrl($url_obj);
     }
 
-    return new ModifiedResourceResponse(['deeplink' => $url]);
+    return $url;
   }
 
 }

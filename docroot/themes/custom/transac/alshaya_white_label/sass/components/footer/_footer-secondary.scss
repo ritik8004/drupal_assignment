@@ -185,7 +185,7 @@
     width: 55%;
 
     .c-footer-secondary & {
-      width: auto;
+      width: 55%;
     }
 
     .field--name-body {
@@ -260,6 +260,29 @@
         width: 30%;
         margin: 0 auto;
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .region__footer-secondary {
+    display: flex;
+    flex-direction: column;
+
+    #block-css {
+      order: 1;
+    }
+
+    #block-copyright {
+      order: 2;
+    }
+
+    #block-alshayavatcertificateblock {
+      order: 3;
+    }
+
+    #block-footerlogos {
+      order: 4;
     }
   }
 }

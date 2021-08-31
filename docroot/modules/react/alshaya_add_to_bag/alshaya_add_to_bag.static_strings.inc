@@ -73,7 +73,7 @@ function _alshaya_add_to_bag_translations() {
         'ar' => 'تمت إضافة العنصر',
       ],
       'add to cart' => [
-        'ar' => 'أضيفي إلى الحقيب',
+        'ar' => 'أضف إلى الحقيبة',
       ],
       'view more' => [
         'ar' => 'عرض التفاصيل',

@@ -10,6 +10,7 @@ use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Block\BlockBase;
@@ -271,7 +272,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       }
 
       // Load the first image.
-      $image = alshaya_acm_get_product_display_image($sku, '291x288', 'cart');
+      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
       $image['#skip_lazy_loading'] = TRUE;
 
       $node = alshaya_acm_product_get_display_node($sku);

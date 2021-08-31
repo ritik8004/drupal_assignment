@@ -5,6 +5,10 @@
     padding: 2.875rem 0;
 
     @include breakpoint($tablet) {
+      #{$left}: 50%;
+      margin-#{$left}: -50vw;
+      margin-#{$right}: -50vw;
+      width: 100vw;
       margin-top: 1rem;
     }
 
@@ -72,6 +76,7 @@
 
                 @include breakpoint($only-mobile) {
                   height: 1.25rem;
+                  top: -0.25rem;
                 }
               }
             }
@@ -190,5 +195,11 @@
         }
       }
     }
+  }
+}
+
+.page-wrapper {
+  @include breakpoint($desktop) {
+    overflow-x: hidden;
   }
 }

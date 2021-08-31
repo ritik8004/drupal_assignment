@@ -78,6 +78,15 @@ then
       npm run lint $subdir/js/
     fi
   done
+
+  # Run Unit tests.
+  npm test
+
+  if [ $? -ne 0 ]
+  then
+    exit 1;
+  fi
+
 else
   echo -en "No need to setup REACT. There is no change in any modules/react."
 fi

@@ -19,7 +19,7 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
-import { trackPassiveAnalytics, trackFeaturedAnalytics } from '../../../utilities/analytics';
+import { trackPassiveAnalytics, trackFeaturedAnalytics, trackContentImpression } from '../../../utilities/analytics';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 const userDetails = getUserDetails();
@@ -34,7 +34,7 @@ export default class ReviewSummary extends React.Component {
       reviewsProduct: '',
       reviewsComment: '',
       reviewsAuthors: '',
-      currentSortOption: '',
+      currentSortOption: 'none',
       currentFilterOptions: [],
       noResultmessage: null,
       totalReviews: '',
@@ -45,6 +45,7 @@ export default class ReviewSummary extends React.Component {
       currentPage: 1,
       prevButtonDisabled: true,
       nextButtonDisabled: false,
+      analyticsState: false,
       loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
       paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
     };
@@ -62,8 +63,10 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    createUserStorage(userDetails.user.userId, userDetails.user.emailId);
-    this.getReviews();
+    if (userDetails && Object.keys(userDetails).length !== 0) {
+      createUserStorage(userDetails.user.userId, userDetails.user.emailId);
+      this.getReviews();
+    }
   }
 
   componentWillUnmount() {
@@ -88,9 +91,24 @@ export default class ReviewSummary extends React.Component {
 
     let sortParams = '';
     let filterParams = '';
+    // Set default sorting options.
+    const sortOptions = bazaarVoiceSettings.reviews.bazaar_voice.sorting_options;
+    const { currentSortOption } = this.state;
+    if (sortOptions.length > 0
+      && (extraParams === undefined || currentSortOption === 'none')) {
+      let optionVal = '';
+      sortOptions.map((option) => {
+        if (option.value !== 'none') {
+          optionVal += `${option.value},`;
+        }
+        return optionVal;
+      });
+      optionVal = optionVal.replace(/,\s*$/, '');
+      sortParams = `&sort=${optionVal}`;
+    }
     if (extraParams !== undefined) {
       // Add sorting parameters.
-      if (extraParams.currentSortOption.length > 0) {
+      if (extraParams.currentSortOption.length > 0 && currentSortOption !== 'none') {
         sortParams = `&${extraParams.sortType}=${extraParams.currentSortOption}`;
       }
       // Add filtering parameters.
@@ -136,8 +154,15 @@ export default class ReviewSummary extends React.Component {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
             });
+            const { analyticsState } = this.state;
             // Track reviews into bazaarvoice analytics.
-            trackPassiveAnalytics(result.data);
+            if (analyticsState === false) {
+              trackPassiveAnalytics(result.data);
+              this.setState({
+                analyticsState: true,
+              });
+            }
+            trackContentImpression(result.data);
           } else {
             this.setState({
               totalReviews: result.data.TotalResults,
@@ -454,7 +479,7 @@ export default class ReviewSummary extends React.Component {
                       <DisplayStar
                         starPercentage={reviewsSummary[item].Rating}
                       />
-                      <div className="review-title">{reviewsSummary[item].Title}</div>
+                      <div id={`${reviewsSummary[item].Id}-review-title`} className="review-title">{reviewsSummary[item].Title}</div>
                     </ConditionalView>
                     <ReviewInformation
                       reviewInformationData={reviewsSummary[item]}

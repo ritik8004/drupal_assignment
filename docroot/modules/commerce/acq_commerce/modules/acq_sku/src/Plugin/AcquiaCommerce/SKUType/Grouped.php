@@ -76,7 +76,7 @@ class Grouped extends SKUPluginBase {
       if ($quantity > 0) {
         $cart->addItemToCart($sku, $quantity);
 
-        drupal_set_message(
+        $this->messenger()->addMessage(
           $this->t('Added @quantity of @name to the cart.',
             [
               '@quantity' => $quantity,
@@ -89,14 +89,14 @@ class Grouped extends SKUPluginBase {
     }
 
     if ($added == 0) {
-      drupal_set_message($this->t('Please select a quantity greater than 0.'), 'error');
+      $this->messenger()->addMessage($this->t('Please select a quantity greater than 0.'), 'error');
     }
 
     try {
       \Drupal::service('acq_cart.cart_storage')->updateCart();
     }
     catch (\Exception $e) {
-      // @TODO: Handle clearing stock cache for grouped products.
+      // @todo Handle clearing stock cache for grouped products.
       // Dispatch event so action can be taken.
       $dispatcher = \Drupal::service('event_dispatcher');
       $event = new AddToCartErrorEvent($e);

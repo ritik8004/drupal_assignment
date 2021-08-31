@@ -16,7 +16,7 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Adds Benefit Pay payment method and other related data.
  */
-function alshaya_spc_update_8013() {
+function alshaya_spc_update_8014() {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $benefitPay = $checkout_options_manager->loadPaymentMethod('checkout_com_upapi_benefitpay', 'Benefit Pay');
@@ -35,6 +35,18 @@ function alshaya_spc_update_8013() {
   $config->set('refund_exclude_payment_methods', $data);
   $config->save();
 
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v5');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Add translations for V2.
+ */
+function alshaya_spc_update_8013() {
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
   $translations = _alshaya_spc_get_translations('v4');

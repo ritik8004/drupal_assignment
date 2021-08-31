@@ -50,9 +50,49 @@ const productRecommendationsSuffix = 'pr-';
 
         var variantInfo = drupalSettings[productKey][sku]['group'][variant];
 
+        // Datalayer push for product detail view
+        // when url is changed wrt variant.
+        let lastUrl = location.href;
+        const observer = new MutationObserver(() => {
+          const url = location.href;
+          if (url !== lastUrl) {
+            lastUrl = url;
+            var amount = $(this).attr('gtm-price').replace(/\,/g,'');
+            // Prepare data.
+            var data = {
+              event: 'productDetailView',
+              ecommerce: {
+                currencyCode: drupalSettings.gtm.currency,
+                detail: {
+                  products: {
+                    name: $(this).attr('gtm-name'),
+                    id: $(this).attr('gtm-main-sku'),
+                    price: parseFloat(amount),
+                    category: $(this).attr('gtm-category'),
+                    variant: $(this).attr('gtm-product-sku'),
+                    dimension2: $(this).attr('gtm-sku-type'),
+                    dimension3: $(this).attr('gtm-dimension3'),
+                    dimension4: $(this).attr('gtm-dimension4')
+                  }
+                }
+              }
+            };
+            if ($(this).attr('gtm-brand')) {
+              data.ecommerce.detail.products.brand = $(this).attr('gtm-brand');
+            }
+            // Push into datalayer.
+            dataLayer.push(data);
+          }
+        });
+        observer.observe(document, {subtree: true, childList: true});
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
         $(this).attr('gtm-price', variantInfo['gtm_price']);
+
+        // Detach the observer to avoid multiple occurence.
+        setTimeout(function () {
+          observer.disconnect();
+        }, 500);
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
@@ -243,7 +283,7 @@ const productRecommendationsSuffix = 'pr-';
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
         if (drupalSettings.user.uid && loginType === undefined) {
-          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , drupalSettings.userDetails.userEmailID);
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
@@ -674,10 +714,12 @@ const productRecommendationsSuffix = 'pr-';
           $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
             var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
             sortValue.trim();
+            var facetTitle = $('.fieldset-legend').first().html();
             var data = {
               event: 'sort',
               siteSection: section.trim(),
-              sortValue: sortValue
+              filterType: facetTitle,
+              filterValue: sortValue
             };
 
             dataLayer.push(data);
@@ -1182,6 +1224,10 @@ const productRecommendationsSuffix = 'pr-';
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
         var condition = true;
+        var position = $(this).attr('data-insights-position');
+        if (position === undefined) {
+          $(this).attr('list-item-position', count);
+        }
         // Only on scroll we check if product is in view or not.
         if (eventType == 'scroll') {
           condition = $(this).isElementInViewPort(0, 10);
@@ -1260,18 +1306,11 @@ const productRecommendationsSuffix = 'pr-';
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
-    var listName = $('body').attr('gtm-list-name') ? $('body').attr('gtm-list-name') : drupalSettings.path.currentPath;
-    if (listName === 'search') {
-      listName = 'Search Results Page';
-    }
     var productData = {
       event: 'addToCart',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
         add: {
-          actionField: {
-            list: listName
-          },
           products: [
             product
           ]
@@ -1346,24 +1385,13 @@ const productRecommendationsSuffix = 'pr-';
     if ($.type(message) !== 'string') {
       message = JSON.stringify(message);
     }
-    var getCartId = localStorage.getItem('last_selected_payment');
-    var cartObject = localStorage.getItem('cart_data');
-    var cartId = 0;
-    if (category && getCartId) {
-      var extractCartId = getCartId.split(':');
-      cartId = extractCartId[1];
-    }
-    else if (category && cartObject) {
-      cartObject = JSON.parse(cartObject);
-      cartId = cartObject.cart.cart_id;
-    }
     var errorData = {
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
       eventAction: message,
       eventPlace: 'Error occurred on ' + window.location.href,
-      eventValue: cartId,
+      eventValue: 0,
       nonInteraction: 0,
     };
 
@@ -1389,7 +1417,8 @@ const productRecommendationsSuffix = 'pr-';
   // If TrackJS is enabled we let it track the errors.
   if (drupalSettings.gtm.log_errors_to_ga !== undefined
     && drupalSettings.gtm.log_errors_to_ga
-    && window.TrackJS === undefined) {
+    && typeof window.TrackJS === 'undefined'
+    && typeof window.DD_LOGS === 'undefined') {
     window.onerror = function (message, url, lineNo, columnNo, error) {
       if (error !== null) {
         Drupal.logJavascriptError('Uncaught errors', error);
