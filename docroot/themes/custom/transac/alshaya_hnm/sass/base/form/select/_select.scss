@@ -17,3 +17,20 @@
     }
   }
 }
+
+.form-type-select {
+  .select2-selection__arrow {
+    @include icon(chevrondown, after) {
+      font-size: 0.4375rem !important;
+      color: $primary_dropdown_text;
+      line-height: 35px;
+      position: absolute;
+      top: 0;
+      #{$left}: 0;
+      width: 2rem !important;
+      height: 2rem !important;
+      z-index: 4;
+      background: $white-five;
+    }
+  }
+}
