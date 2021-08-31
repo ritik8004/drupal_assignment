@@ -126,7 +126,7 @@ exports.render = function render(
 };
 
 exports.computePhFilters = function (input, filter) {
-  let value = input;
+  let value = '';
 
   switch(filter) {
     case 'price':
@@ -492,7 +492,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'brand_logo':
-      if (typeof input.brand_logo_data.url !== 'null') {
+      if (input.brand_logo_data.url !== null) {
         const image = jQuery('img');
         image.attr({
           src: input.brand_logo_data.url,
