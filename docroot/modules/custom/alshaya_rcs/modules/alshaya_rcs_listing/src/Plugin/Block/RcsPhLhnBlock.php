@@ -3,11 +3,6 @@
 namespace Drupal\alshaya_rcs_listing\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a dynamic LHN Block for commerce pages.
@@ -18,48 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   category = @Translation("RCS Placeholders"),
  * )
  */
-class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * Config to enable/disable the lhn category tree.
-   */
-  const ENABLE_DISABLE_CONFIG_KEY = 'alshaya_acm_product_category.settings';
-
-  /**
-   * Stores the configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * AlshayaCategoryLhnBlock constructor.
-   *
-   * @param array $configuration
-   *   The configuration.
-   * @param string $plugin_id
-   *   Plugin id.
-   * @param mixed $plugin_definition
-   *   Plugin definition.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->configFactory = $config_factory;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('config.factory'),
-    );
-  }
+class RcsPhLhnBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -102,15 +56,6 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
     ];
 
     return $build;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function access(AccountInterface $account, $return_as_object = FALSE) {
-    $config = $this->configFactory->get(self::ENABLE_DISABLE_CONFIG_KEY);
-    // Not allow if lhn is disabled.
-    return AccessResult::allowedif($config->get('enable_lhn_tree'));
   }
 
 }
