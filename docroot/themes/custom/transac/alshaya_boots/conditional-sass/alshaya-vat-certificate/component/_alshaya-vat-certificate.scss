@@ -1,0 +1,32 @@
+.block-alshaya-vat-certificate-block {
+  @include breakpoint($only-mobile) {
+    margin-top: -1rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0.5rem;
+
+    html[lang=ar] & {
+      margin-top: 0.5rem;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    margin-#{$right}: 0;
+  }
+
+  @include breakpoint($desktop) {
+    width: 55%;
+    margin-top: 0;
+
+    html[lang=ar] & {
+      margin-top: 0;
+    }
+  }
+}
+
+.region__footer-secondary #block-copyright {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 2rem;
+  }
+}

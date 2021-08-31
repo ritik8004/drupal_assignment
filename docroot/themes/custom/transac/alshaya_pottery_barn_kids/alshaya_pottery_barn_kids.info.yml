@@ -82,3 +82,13 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/secondary-menu/secondary-menu.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/secondary-menu/secondary-menu.ltr.css
+
+  alshaya_white_label/my-account:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/my-account/my-account.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/alshaya-vat-certificate:
+    css:
+      theme:
+        css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css

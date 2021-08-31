@@ -130,8 +130,11 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     if (data.card_type !== undefined && data.scheme !== undefined) {
       cardType = ` ${data.card_type} - ${data.scheme}`;
     }
-    drupalSettings.payment_methods.checkout_com_upapi.gtm_name = (data.card_category === 'Commercial') ? 'MADA' : cardType;
-
+    // Dispatch the event to push into dataLayer for
+    // checkoutOut upapi payment method
+    dispatchCustomEvent('orderPaymentMethod', {
+      payment_method: (data.card_category === 'Commercial') ? 'MADA' : cardType,
+    });
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 

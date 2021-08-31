@@ -9,6 +9,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
@@ -89,7 +90,7 @@ function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, arra
   if (!empty($data) && $type == 'light' && !empty(\Drupal::requestStack()->getCurrentRequest()->query->get('context'))) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $data['extra_data'] = [];
-    $image = alshaya_acm_get_product_display_image($sku, 'product_teaser', 'cart');
+    $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
     if (!empty($image)) {
       if ($image['#theme'] == 'image_style') {
         $data['extra_data']['cart_image'] = [

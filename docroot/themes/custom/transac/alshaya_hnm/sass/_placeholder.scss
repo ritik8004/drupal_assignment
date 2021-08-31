@@ -1,0 +1,17 @@
+%button-wide {
+  font-family: $hnm-demibold;
+  text-transform: uppercase;
+  background-color: $primary_btn_bg;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+%button-brand {
+  @include arabic-letter-spacing;
+
+  border: 2px solid $primary_empty_btn_border;
+  color: $primary_empty_btn;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}

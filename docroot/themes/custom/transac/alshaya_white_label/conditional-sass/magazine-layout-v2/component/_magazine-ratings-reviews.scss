@@ -98,18 +98,18 @@ body.ratings-reviews-overlay {
 
                       .histogram-row {
                         .histogram-full-bar {
-                          width: 81%;
+                          width: 78%;
 
                           html[lang=ar] & {
-                            width: 79%;
+                            width: 76%;
                           }
                         }
 
                         .star-label {
-                          width: 11%;
+                          width: 14%;
 
                           html[lang=ar] & {
-                            width: 13%;
+                            width: 16%;
                           }
                         }
                       }
@@ -439,6 +439,12 @@ body.ratings-reviews-overlay {
 
               .bv-select {
                 width: 100%;
+              }
+            }
+
+            .hide-field-select {
+              &.dropdown-conatiner {
+                display: none;
               }
             }
 
