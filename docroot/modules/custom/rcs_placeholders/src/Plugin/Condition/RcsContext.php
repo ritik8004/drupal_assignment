@@ -6,17 +6,18 @@ use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\StackedRouteMatchInterface;
+use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides condition for "RCS" feature.
  *
  * @Condition(
- *   id = "rcs_entity",
+ *   id = "rcs_context",
  *   label = @Translation("RCS pages"),
  * )
  */
-class RcsEntity extends ConditionPluginBase implements ContainerFactoryPluginInterface {
+class RcsContext extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * The master route match.
@@ -58,29 +59,21 @@ class RcsEntity extends ConditionPluginBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    $form['rcs_nodes_enabled'] = [
+    $form['use_rcs_context'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('RCS nodes.'),
-      '#default_value' => $this->configuration['rcs_nodes_enabled'],
-      '#description' => $this->t('This block will be displayed on RCS Product Content.'),
+      '#title' => $this->t('Use RCS Context.'),
+      '#default_value' => $this->configuration['use_rcs_context'],
+      '#description' => $this->t('This block will be displayed on RCS Content.'),
     ];
-    $form['rcs_terms_enabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('RCS terms.'),
-      '#default_value' => $this->configuration['rcs_terms_enabled'],
-      '#description' => $this->t('This block will be displayed on RCS Category Terms.'),
-    ];
-    unset($form['negate']);
 
-    return $form;
+    return parent::buildConfigurationForm($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $this->configuration['rcs_nodes_enabled'] = $form_state->getValue('rcs_nodes_enabled');
-    $this->configuration['rcs_terms_enabled'] = $form_state->getValue('rcs_terms_enabled');
+    $this->configuration['use_rcs_context'] = $form_state->getValue('use_rcs_context');
     parent::submitConfigurationForm($form, $form_state);
   }
 
@@ -89,8 +82,7 @@ class RcsEntity extends ConditionPluginBase implements ContainerFactoryPluginInt
    */
   public function defaultConfiguration() {
     return [
-      'rcs_nodes_enabled' => FALSE,
-      'rcs_terms_enabled' => FALSE,
+      'use_rcs_context' => FALSE,
     ] + parent::defaultConfiguration();
   }
 
@@ -104,20 +96,7 @@ class RcsEntity extends ConditionPluginBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function evaluate() {
-    if ($this->configuration['rcs_terms_enabled'] &&
-      $this->routeMatch->getRouteName() == 'entity.taxonomy_term.canonical') {
-      $term = $this->routeMatch->getParameter('taxonomy_term');
-      if ($term->bundle() === 'rcs_category') {
-        return TRUE;
-      }
-    }
-    if ($this->configuration['rcs_nodes_enabled'] &&
-      $this->routeMatch->getRouteName() == 'entity.node.canonical') {
-      $term = $this->routeMatch->getParameter('node');
-      if ($term->bundle() === 'rcs_product') {
-        return TRUE;
-      }
-    }
+    return $this->configuration['use_rcs_context'] & RcsPhPathProcessor::isRcsPage();
   }
 
 }

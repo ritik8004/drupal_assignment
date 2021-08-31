@@ -18,9 +18,8 @@ settings:
   provider: rcs_placeholders
   label_display: '0'
 visibility:
-  rcs_entity:
-    id: rcs_entity
-    rcs_nodes_enabled: 1
-    rcs_terms_enabled: 1
-    negate: null
+  rcs_context:
+    id: rcs_context
+    use_rcs_context: 1
+    negate: 0
     context_mapping: {}
