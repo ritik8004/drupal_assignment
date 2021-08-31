@@ -9,9 +9,9 @@ use Drupal\rcs_magento_placeholders\Graphql\ArrayGraphQL;
 use Drupal\Core\Render\Markup;
 
 /**
- * Implements hook_page_attachments().
+ * Implements hook_page_bottom().
  */
-function rcs_magento_placeholders_page_attachments(array &$attachments) {
+function rcs_magento_placeholders_page_bottom(array &$page_bottom) {
   if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
@@ -27,13 +27,10 @@ function rcs_magento_placeholders_page_attachments(array &$attachments) {
     $query_fields[$query] = ArrayGraphQL::convert($fields);
   }
 
-  $script = [
-    [
-      '#type' => 'html_tag',
-      '#tag' => 'script',
-      '#value' => Markup::create('var rcsGraphqlQueryFields = ' . json_encode($query_fields) . ';'),
-    ],
-    'rcs_magento_placeholders',
+  // Add inline script to the page bottom.
+  $page_bottom['rcs_magento_placeholders'] = [
+    '#type'  => 'html_tag',
+    '#tag'   => 'script',
+    '#value' => Markup::create('var rcsGraphqlQueryFields = ' . json_encode($query_fields) . ';'),
   ];
-  array_unshift($attachments['#attached']['html_head'], $script);
 }
