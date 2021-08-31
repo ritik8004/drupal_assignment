@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * BenefitPay payment method for SPC.
@@ -14,13 +13,4 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * )
  */
 class CheckoutComUpapiBenefitPay extends AlshayaSpcPaymentMethodPluginBase {
-
-  use StringTranslationTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function processBuild(array &$build) {
-  }
-
 }
