@@ -52,3 +52,29 @@ function alshaya_rcs_listing_theme_suggestions_page_alter(array &$suggestions, a
     }
   }
 }
+
+/**
+ * Implements hook_rcs_graphql_query_fields().
+ */
+function alshaya_rcs_listing_rcs_graphql_query_fields() {
+  $query_fields = [];
+
+  $query_fields['categories'] = [
+    'total_count',
+    'items' => [
+      'level',
+      'name',
+      'url_path',
+      'description',
+      'image',
+      'breadcrumbs' => [
+        'category_name',
+        'category_level',
+        'category_url_key',
+        'category_url_path',
+      ],
+    ],
+  ];
+
+  return $query_fields;
+}
