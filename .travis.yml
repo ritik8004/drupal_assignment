@@ -93,13 +93,6 @@ notifications:
     on_success: never
     on_failure: always
 
-before_script:
-  - nvm install 8.12.0
-  - nvm use 8.12.0
-  - npm install -g gulp-cli
-  - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
-  - cd ${BUILD_DIR}
-
 before_install:
   # Disable xdebug.
   - ${BUILD_DIR}/blt/scripts/deploy_branch_validate.sh
