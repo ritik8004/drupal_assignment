@@ -89,7 +89,6 @@
     }
 
     textarea {
-      display: none;
       resize: none;
       font-size: 0.875rem;
       height: 10rem;
@@ -98,18 +97,8 @@
 
       &.error {
         border: 1px solid $primary_input_inline_error !important;
+        border-width: 0.125rem !important;
       }
-    }
-
-    .ck-content {
-      font-size: 0.875rem;
-      min-height: 10rem;
-      border: 1px solid $primary_input_border !important;
-      padding: 0.75rem !important;
-    }
-
-    .ck-label {
-      display: none;
     }
   }
 

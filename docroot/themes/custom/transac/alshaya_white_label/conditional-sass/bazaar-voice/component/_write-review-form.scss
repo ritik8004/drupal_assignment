@@ -70,8 +70,8 @@
     .close-modal {
       cursor: pointer;
       position: absolute;
-      #{$right}: 0;
-      top: 0;
+      #{$right}: -0.0625rem;
+      top: -0.0625rem;
       background: $modal_close_bg;
 
       @include icon('close') {

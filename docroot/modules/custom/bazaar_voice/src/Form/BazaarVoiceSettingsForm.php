@@ -324,6 +324,25 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('pdp_reviews_seo_limit'),
       '#description' => $this->t('Enter total number of reviews to be captured for SEO on PDP.'),
     ];
+    $form['basic_settings']['featured_reviews_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Set limit for featured reviews.'),
+      '#default_value' => $config->get('featured_reviews_limit'),
+      '#description' => $this->t('Set the limit for featured reviews to be pushed in DY.'),
+    ];
+    $form['basic_settings']['enable_google_translation'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Google translations.'),
+      '#default_value' => $config->get('enable_google_translation'),
+      '#description' => $this->t('Check the option to enable the Google translation feature.'),
+    ];
+    $form['basic_settings']['translate_chars_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Set characters limit for Google translations.'),
+      '#default_value' => $config->get('translate_chars_limit'),
+      '#description' => $this->t('Set the characters limit for Google translations per request.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -365,6 +384,9 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('reviews_per_page', $values['reviews_per_page'])
       ->set('comment_submission', $values['comment_submission'])
       ->set('pdp_reviews_seo_limit', $values['pdp_reviews_seo_limit'])
+      ->set('featured_reviews_limit', $values['featured_reviews_limit'])
+      ->set('translate_chars_limit', $values['translate_chars_limit'])
+      ->set('enable_google_translation', $values['enable_google_translation'])
       ->save();
 
     parent::submitForm($form, $form_state);

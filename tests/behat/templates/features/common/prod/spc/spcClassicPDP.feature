@@ -1,4 +1,4 @@
-@javascript @guest @pdp @homeDelivery @bbwaeprod @pbsaprod @bbwkwprod @bbwsaprod @vssaprod @vsaeprod @pbaeprod @pbsaprod @pbkwprod
+@javascript @guest @pdp @homeDelivery @bbwaeprod @pbsaprod @bbwkwprod @vskwprod @bbwsaprod @vssaprod @vsaeprod @pbaeprod @pbsaprod @pbkwprod
 Feature: SPC Classic PDP block for desktop
 
   Background:
@@ -27,15 +27,7 @@ Feature: SPC Classic PDP block for desktop
     And I click on "#pdp-home-delivery" element
     Then the element "#pdp-home-delivery .ui-accordion-header" should exist
     And the element "#pdp-stores-container" should exist
-    And I scroll to the "#pdp-stores-container" element
-    And I click jQuery "#pdp-stores-container" element on page
-    And I wait 5 seconds
-    Then I select the first autocomplete option for "{np_plp_store}" on the "edit-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    Then I should see a ".click-collect-top-stores div.store-info-wrap" element on page
     And the element ".sharethis-wrapper" should exist
-    And the element "[id^='dy-recommendations-']" should exist
 
   @pdp @language
   Scenario: To verify user is able to see product details on the PDP page for second language
@@ -61,12 +53,4 @@ Feature: SPC Classic PDP block for desktop
     And I click on "#pdp-home-delivery" element
     Then the element "#pdp-home-delivery .ui-accordion-header" should exist
     And the element "#pdp-stores-container" should exist
-    And I scroll to the "#pdp-stores-container" element
-    And I click jQuery "#pdp-stores-container" element on page
-    And I wait 5 seconds
-    Then I select the first autocomplete option for "{np_plp_language_store}" on the "edit-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    Then I should see a ".click-collect-top-stores div.store-info-wrap" element on page
     And the element ".sharethis-wrapper" should exist
-    And the element "[id^='dy-recommendations-']" should exist

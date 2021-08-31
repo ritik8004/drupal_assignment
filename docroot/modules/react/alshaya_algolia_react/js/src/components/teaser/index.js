@@ -102,7 +102,7 @@ const Teaser = ({
           >
             <Gallery
 
-              media={attribute.media}
+              media={hit.media}
               title={attribute.title}
               labels={attribute.product_labels}
               sku={hit.sku}

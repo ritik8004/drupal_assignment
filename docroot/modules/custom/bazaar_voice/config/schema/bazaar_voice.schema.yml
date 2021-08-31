@@ -95,3 +95,12 @@ bazaar_voice.settings:
     pdp_reviews_seo_limit:
       type: integer
       label: 'Enter total number of reviews to be captured for SEO on PDP.'
+    featured_reviews_limit:
+      type: integer
+      label: 'Set the limit for featured reviews to be pushed in DY.'
+    translate_chars_limit:
+      type: integer
+      label: 'Set the characters limit for google translations.'
+    enable_google_translation:
+      type: boolean
+      label: 'Check to enable google translation feature.'

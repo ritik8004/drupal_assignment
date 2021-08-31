@@ -833,7 +833,7 @@ function alshaya_super_category_gtm_product_attributes_alter($product, array &$a
 
   // If super category feature is enabled and brand attribute is enabled.
   if ($super_category_feature_enabled && !empty($attributes['gtm-brand'])) {
-    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired(NULL, 'en');
     if (!empty($super_category)) {
       $attributes['gtm-brand'] = $super_category['label'];
     }

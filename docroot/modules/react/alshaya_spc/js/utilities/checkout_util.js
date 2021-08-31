@@ -1,13 +1,8 @@
 import axios from 'axios';
-import {
-  getStorageInfo,
-  getInfoFromStorage,
-} from './storage';
-import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-import i18nMiddleWareUrl from './i18n_url';
+import hasValue from '../../../js/utilities/conditionsUtility';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -94,9 +89,6 @@ export const removeFullScreenLoader = () => {
  * @returns {boolean}
  */
 export const placeOrder = (paymentMethod) => {
-  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
-  const langcode = drupalSettings.path.currentLanguage;
-
   showFullScreenLoader();
   controlPlaceOrderCTA('disable');
 
@@ -105,39 +97,38 @@ export const placeOrder = (paymentMethod) => {
       method: paymentMethod,
     },
   };
-  return axios
-    .post(`${middlewareUrl}/cart/place-order?lang=${langcode}`, {
-      data,
-    })
+  window.commerceBackend.placeOrder({ data })
     .then(
       (response) => {
-        if (response.data.error === undefined) {
-          if (response.data.token !== undefined && paymentMethod === 'postpay') {
-            window.postpay.checkout(response.data.token, {
-              locale: drupalSettings.postpay_widget_info['data-locale'],
-            });
-            return;
+        if (paymentMethod === 'postpay' && hasValue(response.data.token)) {
+          window.postpay.checkout(response.data.token, {
+            locale: drupalSettings.postpay_widget_info['data-locale'],
+          });
+          return;
+        }
+
+        if (hasValue(response.data.redirectUrl)) {
+          // Add current logs as is with current conditions.
+          // @todo review this and make it appropriate / logical.
+          if (response.data.error) {
+            Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           }
 
           // If url is absolute, then redirect to the external payment page.
-          if (response.data.isAbsoluteUrl !== undefined && response.data.isAbsoluteUrl) {
+          if (hasValue(response.data.isAbsoluteUrl)) {
             window.location.href = response.data.redirectUrl;
             return;
           }
 
           // Dispatch an event after order is placed before redirecting to confirmation page.
           dispatchCustomEvent('orderPlaced', true);
+          // This here possibly means that we are redirecting to confirmation page.
           window.location = Drupal.url(response.data.redirectUrl);
           return;
         }
 
-        if (response.data.error && response.data.redirectUrl !== undefined) {
-          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
-          window.location = response.data.redirectUrl;
-          return;
-        }
         let message = response.data.error_message;
-        const errorCode = (typeof response.data.error_code !== 'undefined')
+        const errorCode = hasValue(response.data.error_code)
           ? parseInt(response.data.error_code, 10)
           : null;
 
@@ -211,43 +202,43 @@ export const setBillingFlagInStorage = (cart) => {
   }
 };
 
-export const addShippingInCart = (action, data) => {
-  const apiUrl = updateCartApiUrl();
-  return axios
-    .post(apiUrl, {
-      action,
-      shipping_info: data,
-      update_billing: isBillingSameAsShippingInStorage(),
-    })
-    .then(
-      (response) => {
-        if (typeof response.data !== 'object') {
-          removeFullScreenLoader();
-          return null;
-        }
+export const addShippingInCart = (action, data) => window.commerceBackend.addShippingMethod({
+  action,
+  shipping_info: data,
+  update_billing: isBillingSameAsShippingInStorage(),
+})
+  .then(
+    (response) => {
+      if (typeof response.data !== 'object') {
+        removeFullScreenLoader();
+        return null;
+      }
 
-        if (!validateCartResponse(response.data)) {
-          return null;
-        }
-        // If there is no error on shipping update.
-        if (response.data.error === undefined) {
-          setBillingFlagInStorage(response.data);
-          // Trigger event on shipping update, so that
-          // other components take necessary action if required.
-          dispatchCustomEvent('onShippingAddressUpdate', response.data);
-        }
-
+      if (hasValue(response.data.error)) {
         return response.data;
-      },
-      () => ({
-        error: true,
-        error_message: getStringMessage('global_error'),
-      }),
-    )
-    .catch((error) => {
-      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-    });
-};
+      }
+
+      if (!validateCartResponse(response.data)) {
+        return null;
+      }
+      // If there is no error on shipping update.
+      if (!hasValue(response.data.error)) {
+        setBillingFlagInStorage(response.data);
+        // Trigger event on shipping update, so that
+        // other components take necessary action if required.
+        dispatchCustomEvent('onShippingAddressUpdate', response.data);
+      }
+
+      return response.data;
+    },
+    () => ({
+      error: true,
+      error_message: getStringMessage('global_error'),
+    }),
+  )
+  .catch((error) => {
+    Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+  });
 
 /**
  * Adds billing in the cart.
@@ -255,35 +246,31 @@ export const addShippingInCart = (action, data) => {
  * @param {*} action
  * @param {*} data
  */
-export const addBillingInCart = (action, data) => {
-  const apiUrl = updateCartApiUrl();
-  return axios
-    .post(apiUrl, {
-      action,
-      billing_info: data,
-    })
-    .then(
-      (response) => {
-        if (!validateCartResponse(response.data)) {
-          return null;
-        }
-        return response.data;
-      },
-      () => ({
-        error: true,
-        error_message: getStringMessage('global_error'),
-      }),
-    )
-    .catch((error) => {
-      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-    });
-};
+export const addBillingInCart = (action, data) => window.commerceBackend.addBillingMethod({
+  action,
+  billing_info: data,
+})
+  .then(
+    (response) => {
+      if (!validateCartResponse(response.data)) {
+        return null;
+      }
+      return response.data;
+    },
+    () => ({
+      error: true,
+      error_message: getStringMessage('global_error'),
+    }),
+  )
+  .catch((error) => {
+    Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+  });
 
 /**
  * Refresh cart from MDC.
  */
 export const validateCartData = () => {
-  const cartData = getInfoFromStorage();
+  const cartData = window.commerceBackend.getCartDataFromStorage();
   // If cart not available at all.
   if (!cartData
     || !cartData.cart
@@ -311,13 +298,11 @@ export const validateCartData = () => {
     postData.coupon = cartData.cart.coupon_code;
   }
 
-  const apiUrl = updateCartApiUrl();
-  return axios
-    .post(apiUrl, {
-      action: 'refresh',
-      cart_id: cartData.cart.cart_id,
-      postData,
-    })
+  return window.commerceBackend.refreshCart({
+    action: 'refresh',
+    cart_id: cartData.cart.cart_id,
+    postData,
+  })
     .then(
       (response) => response.data,
       () => ({
@@ -381,7 +366,7 @@ export const cleanMobileNumber = (mobile) => {
  * @param {*} newCart
  */
 export const cartLocalStorageHasSameItems = (newCart) => {
-  const currentCart = getStorageInfo();
+  const currentCart = window.commerceBackend.getCartDataFromStorage();
   const currentTotalItems = Object.keys(currentCart.cart.items).length;
   const newCartItems = Object.keys(newCart.items).length;
   if (newCartItems !== currentTotalItems) {
@@ -618,31 +603,6 @@ export const setUpapiApplePayCofig = () => {
 export const getUpapiApplePayConfig = () => checkoutComUpapiApplePayConfig;
 
 /**
- * Bin validation.
- *
- * @param {*} bin
- * @param {*} paymentMethods
- */
-export const binValidation = (bin, paymentMethods) => {
-  const apiUrl = i18nMiddleWareUrl('card/bin-validation');
-  return axios
-    .post(apiUrl, {
-      bin,
-      paymentMethods,
-    })
-    .then(
-      (response) => response.data,
-      () => ({
-        error: true,
-        error_message: 'global_error',
-      }),
-    )
-    .catch((error) => {
-      Drupal.logJavascriptError('bin-validation', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-    });
-};
-
-/**
  * Helper function to get bin validation config.
  */
 export const getBinValidationConfig = () => {
@@ -653,4 +613,36 @@ export const getBinValidationConfig = () => {
   }
 
   return config;
+};
+
+/**
+ * Bin validation.
+ *
+ * @param {*} bin
+ */
+export const binValidation = (bin) => {
+  const { binValidationSupportedPaymentMethods, cardBinNumbers } = getBinValidationConfig();
+  let valid = true;
+  let errorMessage = 'invalid_card';
+
+  binValidationSupportedPaymentMethods.split(',').every((paymentMethod) => {
+    // If the given bin number matches with the bins of given payment method
+    // then this card belongs to that payment method, so throw an error
+    // asking user to use that payment method.
+    const paymentMethodBinNumbers = cardBinNumbers[paymentMethod];
+
+    if (paymentMethodBinNumbers !== undefined
+      && Object.values(paymentMethodBinNumbers.split(',')).includes(bin)) {
+      valid = false;
+      errorMessage = `card_bin_validation_error_message_${paymentMethod}`;
+      return false;
+    }
+    return true;
+  });
+
+  if (valid === false) {
+    return ({ error: true, error_message: errorMessage });
+  }
+
+  return valid;
 };

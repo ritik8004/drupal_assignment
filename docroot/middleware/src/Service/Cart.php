@@ -1625,7 +1625,7 @@ class Cart {
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
     }
 
-    // Check if shiping method is present else throw error.
+    // Check if shipping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
         '@cart' => json_encode($cart),
@@ -2039,6 +2039,15 @@ class Cart {
     $cart['shipping']['clickCollectType'] = $cart['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
     $cart['shipping']['storeCode'] = $cart['shipping']['extension_attributes']['store_code'] ?? '';
     unset($cart['shipping']['extension_attributes']);
+
+    // Remove shipping info if address in cart is available but not available
+    // in address book for authenticated users.
+    if (isset($cart['shipping'], $cart['shipping']['type'])
+      && $cart['shipping']['type'] === 'home_delivery'
+      && $this->getDrupalInfo('customer_id')
+      && empty($cart['shipping']['address']['customer_address_id'])) {
+      $cart['shipping'] = [];
+    }
 
     // Initialise payment data holder.
     $cart['payment'] = [];

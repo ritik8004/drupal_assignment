@@ -9,10 +9,13 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Asset\AttachedAssetsInterface;
 
 /**
  * Implements hook_theme().
@@ -26,6 +29,11 @@ function alshaya_spc_theme($existing, $type, $theme, $path) {
       ],
     ],
     'spc_confirmation' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'translatable_strings' => [
       'variables' => [
         'strings' => [],
       ],
@@ -60,7 +68,9 @@ function alshaya_spc_block_access(Block $block, $operation, AccountInterface $ac
 function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   unset($form['add_to_cart']['#ajax']);
   $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
-  $form['#attached']['drupalSettings']['alshaya_spc']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
+
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v' . $backend_version;
 }
 
 /**
@@ -80,7 +90,7 @@ function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, arra
   if (!empty($data) && $type == 'light' && !empty(\Drupal::requestStack()->getCurrentRequest()->query->get('context'))) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $data['extra_data'] = [];
-    $image = alshaya_acm_get_product_display_image($sku, 'product_teaser', 'cart');
+    $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
     if (!empty($image)) {
       if ($image['#theme'] == 'image_style') {
         $data['extra_data']['cart_image'] = [
@@ -207,8 +217,77 @@ function _alshaya_spc_global_error_message() {
 }
 
 /**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_spc_page_attachments_alter(&$page) {
+  $cart_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  if ($cart_version != 2) {
+    return;
+  }
+
+  $api_settings = Settings::get('alshaya_api.settings');
+  $store_settings = Settings::get('magento_lang_prefix');
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  // We proxy the requests via cloudflare, so we use the current domain as is
+  // without any language suffix so HTTP_HOST is enough.
+  $page['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
+
+  // Use proxy on local env as here we don't have Cloudflare.
+  if (Settings::get('env') === 'local') {
+    $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
+  }
+
+  // Add the prefix for rest and store code.
+  $page['#attached']['drupalSettings']['cart']['url'] .= '/rest/' . $store_settings[$current_language];
+
+  $page['#attached']['drupalSettings']['cart']['retryMaxAttempts'] = Settings::get('alshaya_checkout_settings')['max_native_update_attempts'] ?? 10;
+  $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
+}
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $assets) {
+  // Add Magento Customer Id to drupal settings.
+  $settings['userDetails']['customerId'] = 0;
+
+  $current_user = \Drupal::currentUser();
+
+  // Load the customer id from account if it is customer account.
+  if ($current_user->isAuthenticated() && alshaya_acm_customer_is_customer($current_user)) {
+    $user = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->load($current_user->id());
+
+    $settings['userDetails']['customerId']= (int) $user->get('acq_customer_id')->getString();
+
+    // For V2, add user token to drupalSettings for direct backend calls.
+    if (\Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion() == 2) {
+      $settings['userDetails']['customerToken'] = \Drupal::service('alshaya_spc.customer_helper')
+        ->getCustomerTokenBySocialDetail(
+          $user->get('mail')->getString()
+        );
+    }
+  }
+}
+
+/**
  * Implements hook_preprocess_page().
  */
 function alshaya_spc_preprocess_page(&$variables) {
-  $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  $strings = [
+    '#theme' => 'translatable_strings',
+    '#strings' => [
+      [
+        'key' => 'backend_obsolete_version',
+        'value' => t('We have upgraded your experience, please refresh the page and try again.'),
+      ],
+    ],
+  ];
+  $variables['page']['content']['commerce_backend'] = $strings;
 }

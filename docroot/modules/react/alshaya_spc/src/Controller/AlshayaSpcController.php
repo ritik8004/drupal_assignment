@@ -14,10 +14,12 @@ use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Site\Settings;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
+use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -101,6 +103,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $checkoutComApiHelper;
 
   /**
+   * SPC helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
@@ -123,6 +132,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Module Handler.
    * @param \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper
    *   Acm checkout com api helper.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Spc helper service.
    */
   public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
@@ -133,7 +144,8 @@ class AlshayaSpcController extends ControllerBase {
                               AlshayaSpcOrderHelper $order_helper,
                               LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
-                              AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper) {
+                              AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
+                              AlshayaSpcHelper $spc_helper) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -144,6 +156,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
     $this->checkoutComApiHelper = $checkout_com_api_helper;
+    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -160,7 +173,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_spc.order_helper'),
       $container->get('language_manager'),
       $container->get('module_handler'),
-      $container->get('alshaya_acm_checkoutcom.api_helper')
+      $container->get('alshaya_acm_checkoutcom.api_helper'),
+      $container->get('alshaya_spc.helper')
     );
   }
 
@@ -214,6 +228,12 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $build = $this->addCheckoutConfigSettings($build);
+
+    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
+      $checkout_settings = Settings::get('alshaya_checkout_settings');
+      $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
+    }
+
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
@@ -514,6 +534,8 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
+    $backend_version = $this->spcHelper->getCommerceBackendVersion();
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
@@ -522,6 +544,8 @@ class AlshayaSpcController extends ControllerBase {
         'library' => [
           'alshaya_acm_checkout/ab_testing',
           'alshaya_spc/googlemapapi',
+          'alshaya_spc/commerce_backend.cart.v' . $backend_version,
+          'alshaya_spc/commerce_backend.checkout.v' . $backend_version,
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
         ],
@@ -598,6 +622,12 @@ class AlshayaSpcController extends ControllerBase {
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     $build = $this->addCheckoutConfigSettings($build);
+
+    if ($backend_version == 2) {
+      $checkout_settings = Settings::get('alshaya_checkout_settings');
+      $build['#attached']['drupalSettings']['cart']['siteInfo'] = alshaya_get_site_country_code();
+      $build['#attached']['drupalSettings']['cart']['addressFields'] = Settings::get('alshaya_address_fields', []);
+    }
 
     $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
     return $build;
@@ -704,6 +734,7 @@ class AlshayaSpcController extends ControllerBase {
       '#strings' => $strings,
       '#attached' => [
         'library' => [
+          'alshaya_spc/commerce_backend.checkout.v' . $this->spcHelper->getCommerceBackendVersion(),
           'alshaya_spc/checkout-confirmation',
           'alshaya_white_label/spc-checkout-confirmation',
         ],
@@ -905,7 +936,7 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['non_refundable_tooltip'] = $product_config->get('non_refundable_tooltip');
     $settings['alshaya_spc']['non_refundable_text'] = $product_config->get('non_refundable_text');
     $settings['alshaya_spc']['delivery_in_only_city_text'] = $product_config->get('delivery_in_only_city_text');
-    $settings['alshaya_spc']['delivery_in_only_city_key'] = $product_config->get('delivery_in_only_city_key');
+    $settings['alshaya_spc']['delivery_in_only_city_key'] = (int) $product_config->get('delivery_in_only_city_key');
 
     // Time we get from configuration is in minutes.
     $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
@@ -913,6 +944,7 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
 
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
+
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);
 
     $build['#cache']['contexts'][] = 'languages:' . LanguageInterface::TYPE_INTERFACE;

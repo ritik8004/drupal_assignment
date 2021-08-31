@@ -363,6 +363,8 @@
         $(window).once('mobileMagazine').on('scroll', function (event) {
           // Magazine Gallery.
           var galleryWrapper = $('.gallery-wrapper');
+          var topPosition;
+          var mainBottom;
 
           // Figure out scroll direction.
           var currentScrollTop = $(this).scrollTop();
@@ -374,10 +376,13 @@
           }
           lastScrollTop = currentScrollTop;
 
-          // Gallery top.
-          var topPosition = galleryWrapper.offset().top - 20;
-          // Gallery Bottom.
-          var mainBottom = calculateBottom(galleryWrapper);
+          if (galleryWrapper.length > 0) {
+            // Gallery top.
+            topPosition = galleryWrapper.offset().top - 20;
+
+            // Gallery Bottom.
+            mainBottom = calculateBottom(galleryWrapper);
+          }
 
           // Fixing sidebar when the top part of sidebar touches viewport top.
           if (($(this).scrollTop() > topPosition)) {

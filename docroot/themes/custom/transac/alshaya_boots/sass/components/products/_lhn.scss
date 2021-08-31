@@ -6,6 +6,12 @@
       span {
         text-transform: none;
       }
+
+      a {
+        &:hover {
+          color: $secondary-link;
+        }
+      }
     }
   }
 }

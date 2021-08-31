@@ -103,13 +103,10 @@ function _alshaya_bazaar_voice_translations() {
     'Please enter a minimum of %minLength characters for %fieldTitle.' => [
       'ar' => 'الرجاء إدخال %minLength حرف كحد أدنى لـ %fieldTitle.',
     ],
-    'Please enter a maximum of %maxLength characters for %fieldTitle.' => [
-      'ar' => 'الرجاء إدخال %maxLength حرف كحد أدنى لـ %maxLength.',
-    ],
     'Thanks for submitting your review! It is currently being moderated and will be visible shortly.' => [
       'ar' => 'شكراً على إبداء رأيك! سوف نقوم بمراجعته لكي يتم نشره في أقرب وقت.',
     ],
-    'I would recommend this product.' => [
+    'I would like to recommend this product.' => [
       'ar' => 'سوف أوصي بهذا المنتج',
     ],
     'You have already reviewed the product.' => [
@@ -122,6 +119,9 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'المراجعة',
     ],
     'reviews' => [
+      'ar' => 'مراجعة',
+    ],
+    'Reviews' => [
       'ar' => 'مراجعة',
     ],
     'Vote' => [
@@ -159,6 +159,15 @@ function _alshaya_bazaar_voice_translations() {
     ],
     'Original posted on' => [
       'ar' => 'تم نشرها في الأصل على',
+    ],
+    'Translate with Google' => [
+      'ar' => 'الترجمة باستخدام جوجل',
+    ],
+    'Back to Original Review' => [
+      'ar' => 'الرجوع للمراجعة الأصلي',
+    ],
+    'Back to Original Comment' => [
+      'ar' => 'الرجوع للتعليق الأصلي',
     ],
   ];
 }

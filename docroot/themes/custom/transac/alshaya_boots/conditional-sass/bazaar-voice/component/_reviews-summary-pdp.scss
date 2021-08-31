@@ -13,6 +13,10 @@
       font-family: $bp-bold;
     }
 
+    &-date {
+      margin-top: 0.25rem;
+    }
+
     &-date,
     &-text,
     &-count,
@@ -53,4 +57,9 @@
       border-radius: 0.1875rem;
     }
   }
+}
+
+.translate-by-google,
+.back-to-original {
+  font-family: $bp-light;
 }

@@ -6,11 +6,14 @@
 /docroot/update.php
 /docroot/modules/brands/*/data
 /docroot/modules/brands/*/*/*/data
+/docroot/modules/react/*/src/test/
+/docroot/modules/react/jest.config.js
 /factory-hooks/pre-sites-php/sites.php
 /docroot/themes/custom/*/package.json
 /docroot/themes/custom/*/package-lock.json
 /docroot/themes/custom/transac/alshaya_example_subtheme
 /docroot/themes/custom/README.md
+/docroot/proxy
 /phpcs.xml.dist
 /hooks/dev
 /hooks/prod

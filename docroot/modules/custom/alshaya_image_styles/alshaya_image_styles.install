@@ -10,6 +10,20 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Delete image styles 192x168 and 291x288.
+ */
+function alshaya_image_styles_update_8110() {
+  alshaya_config_delete_configs(
+    [
+      'image.style.192x168',
+      'image.style.291x288',
+    ]
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete unused image styles.
  */
 function alshaya_image_styles_update_8109() {

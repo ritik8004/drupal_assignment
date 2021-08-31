@@ -1,9 +1,7 @@
-%button-wide,
 .button-wide {
   @extend %btn;
 }
 
-%button-brand,
 .brand-button {
   @extend %btn;
 }
