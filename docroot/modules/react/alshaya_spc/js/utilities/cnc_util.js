@@ -1,3 +1,8 @@
+import getStringMessage from './strings';
+import {
+  smoothScrollToAddressField,
+} from './smoothScroll';
+
 /**
  * Helper to check if click and collect collection points is enabled.
  */
@@ -57,13 +62,6 @@ export const isCollectionPoint = (store) => (store.pudo_available !== undefined
 /**
  * Helper to get contact subtitle.
  */
-export const getCnCModalContactTitle = () => ((collectionPointsEnabled() === true)
-  ? 'cnc_collection_contact_info_title'
-  : 'contact_information');
-
-/**
- * Helper to get contact subtitle.
- */
 export const getCnCModalContactSubtitle = () => ((collectionPointsEnabled() === true)
   ? 'cnc_selected_collection_point'
   : 'cnc_selected_store');
@@ -92,3 +90,59 @@ export const getPickUpPointTitle = (store) => store.collection_point || '';
 export const getCncDeliveryTimePrefix = () => ((collectionPointsEnabled() === true)
   ? 'cnc_collection_collect_in_store'
   : 'cnc_collect_in_store');
+
+/**
+ * Validate collector information.
+ */
+export const validateCollectorInfo = (e) => {
+  let isError = false;
+  const name = e.target.elements.collectorFullname.value.trim();
+  let splitedName = name.split(' ');
+  splitedName = splitedName.filter((s) => (
+    (s.trim().length > 0
+    && (s !== '\\n' && s !== '\\t' && s !== '\\r'))));
+  if (name.length === 0 || splitedName.length === 1) {
+    document.getElementById('collectorFullname-error').innerHTML = getStringMessage('form_error_full_name');
+    document.getElementById('collectorFullname-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('collectorFullname-error').innerHTML = '';
+    document.getElementById('collectorFullname-error').classList.remove('error');
+  }
+
+  const mobile = e.target.elements.collectorMobile.value.trim();
+  if (mobile.length === 0
+    || mobile.match(/^[0-9]+$/) === null) {
+    document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_mobile_number');
+    document.getElementById('collectorMobile-error').classList.add('error');
+    isError = true;
+  } else if (mobile === e.target.elements.mobile.value.trim()) {
+    // Validate to ensure collectors mobile and contact mobile is not same.
+    document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_valid_collector_mobile_number');
+    document.getElementById('collectorMobile-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('collectorMobile-error').innerHTML = '';
+    document.getElementById('collectorMobile-error').classList.remove('error');
+  }
+
+  const email = e.target.elements.collectorEmail.value.trim();
+  if (email.length === 0) {
+    document.getElementById('collectorEmail-error').innerHTML = getStringMessage('form_error_email');
+    document.getElementById('collectorEmail-error').classList.add('error');
+    isError = true;
+  } else {
+    document.getElementById('collectorEmail-error').innerHTML = '';
+    document.getElementById('collectorEmail-error').classList.remove('error');
+  }
+
+  // Scroll to collectors section if error.
+  if (isError) {
+    smoothScrollToAddressField(
+      document.querySelector('.spc-checkout-collector-information-fields > div > div.error:not(:empty)'),
+      true,
+    );
+  }
+
+  return isError;
+};

@@ -382,7 +382,6 @@ class AlshayaSpcController extends ControllerBase {
         'key' => 'cnc_distance',
         'value' => $this->t('@distance miles'),
       ];
-
     }
 
     $strings[] = [
@@ -773,6 +772,7 @@ class AlshayaSpcController extends ControllerBase {
 
       switch ($key) {
         case 'fullname':
+        case 'pudo_fullname':
           // If full name is not empty.
           if (!empty($value) && !empty(trim($value['firstname'])) && !empty(trim($value['lastname']))) {
             $status[$key] = TRUE;
@@ -780,6 +780,7 @@ class AlshayaSpcController extends ControllerBase {
           break;
 
         case 'mobile':
+        case 'pudo_collector_tel':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
@@ -808,6 +809,7 @@ class AlshayaSpcController extends ControllerBase {
           break;
 
         case 'email':
+        case 'pudo_collector_email':
           // For email validation we do two checks:
           // 1. email domain is valid
           // 2. email is not of an existing customer.
@@ -817,8 +819,10 @@ class AlshayaSpcController extends ControllerBase {
             $status[$key] = 'invalid';
           }
           else {
-            $user = user_load_by_mail($value);
-            $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
+            if ($key == 'email') {
+              $user = user_load_by_mail($value);
+              $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
+            }
           }
           break;
 
