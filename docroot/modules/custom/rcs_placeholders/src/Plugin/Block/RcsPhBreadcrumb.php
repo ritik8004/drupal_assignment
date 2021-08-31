@@ -47,13 +47,15 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
     $build['wrapper']['content'] = [
       '#theme' => 'breadcrumb',
       '#links' => [
+        // Link to home page.
         Link::fromTextAndUrl(
           $this->t('Home'),
           Url::fromUserInput('/')
         ),
+        // Placeholder for breadcrumbs.
         Link::fromTextAndUrl(
-          '#rcs.categories.breadcrumbs.category_name#',
-          Url::fromUserInput('#rcs.categories.breadcrumbs.category_url_path#')
+          '#rcs.breadcrumb.text#',
+          Url::fromUserInput('#rcs.breadcrumb.url#')
         ),
       ],
     ];

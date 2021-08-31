@@ -292,35 +292,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'breadcrumb':
-      if (typeof entity.categories !== 'undefined') {
-        // Get categories from entity.
-        let { categories } = entity;
-
-        // Get category flagged as `category_ids_in_admin`.
-        categories = categories.filter((e) => {
-          return entity.category_ids_in_admin.includes(e.id.toString());
-        });
-
-        // Build the breadcrumb using the category with deepest level.
-        // If they are all at same level, use the first category.
-        let max = 0;
-        Object.keys(categories).forEach(function (i) {
-          const depth = categories[i].level;
-          if (depth > max) {
-            result = categories[i];
-            max = depth;
-          }
-        });
-
-        // Set the last crumb.
-        result.breadcrumbs.push({
-          category_name: result.name,
-          category_url_path: result.url_path,
-        });
-
-        // Set breadcrumb title.
-        result.name = entity.name;
-      }
       break;
 
     default:
