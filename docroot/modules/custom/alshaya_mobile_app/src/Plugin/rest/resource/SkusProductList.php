@@ -18,6 +18,7 @@ use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Provides a resource to get attributes for SKU's list.
@@ -90,6 +91,13 @@ class SkusProductList extends ResourceBase {
   private $skuImagesManager;
 
   /**
+   * Product category helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
+   */
+  private $productCategoryHelper;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -118,6 +126,8 @@ class SkusProductList extends ResourceBase {
    *   Module handler.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
    *   SKU Images Manager.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   The Product Category helper service.
    */
 
   /**
@@ -136,7 +146,8 @@ class SkusProductList extends ResourceBase {
     ProductInfoHelper $product_info_helper,
     SkuInfoHelper $sku_info_helper,
     ModuleHandlerInterface $module_handler,
-    SkuImagesManager $sku_images_manager
+    SkuImagesManager $sku_images_manager,
+    ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
@@ -152,6 +163,7 @@ class SkusProductList extends ResourceBase {
     $this->skuInfoHelper = $sku_info_helper;
     $this->moduleHandler = $module_handler;
     $this->skuImagesManager = $sku_images_manager;
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -171,7 +183,8 @@ class SkusProductList extends ResourceBase {
       $container->get('acq_sku.product_info_helper'),
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('module_handler'),
-      $container->get('alshaya_acm_product.sku_images_manager')
+      $container->get('alshaya_acm_product.sku_images_manager'),
+      $container->get('alshaya_acm_product.category_helper')
     );
   }
 
@@ -305,6 +318,13 @@ class SkusProductList extends ResourceBase {
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
     $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
+    $data['categorisations'] = [];
+    if (!$this->skuManager->isSkuFreeGift($sku)) {
+      $node = $this->skuManager->getDisplayNode($sku);
+      if ($node) {
+        $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+      }
+    }
     $this->moduleHandler->alter('alshaya_mobile_app_skus_product_list_data', $data, $sku, $with_parent_details);
     return $data;
   }

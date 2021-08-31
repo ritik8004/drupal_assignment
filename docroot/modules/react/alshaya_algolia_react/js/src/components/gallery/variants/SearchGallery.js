@@ -5,13 +5,11 @@ import Lozenges
   from '../../../../common/components/lozenges';
 
 const SliderElement = ({
-  src, title, width, height,
+  src, title,
 }) => (
   <ImageElement
     src={src}
     title={title}
-    width={width}
-    height={height}
   />
 );
 
@@ -55,10 +53,6 @@ class SearchGallery extends React.PureComponent {
     } = this.props;
     const mainImageUrl = typeof this.mainImage.url !== 'undefined' ? this.mainImage.url : '';
     const thumbnails = [];
-    // Dimensions.
-    const {
-      width, height,
-    } = this.mainImage;
 
     media.forEach((element) => {
       thumbnails.push((
@@ -66,8 +60,6 @@ class SearchGallery extends React.PureComponent {
           key={element.url}
           title={title}
           src={element.url}
-          width={element.width}
-          height={element.height}
         />
       ));
     });
@@ -79,12 +71,9 @@ class SearchGallery extends React.PureComponent {
         <div className="alshaya_search_mainimage" ref={this.mainImageRef} data-sku-image={`${mainImageUrl}`}>
           <div className="img-wrapper">
             <ImageElement
-              src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-              data-src={mainImageUrl}
+              src={mainImageUrl}
               title={title}
-              className="b-lazy"
-              width={width}
-              height={height}
+              loading="lazy"
             />
             {initSlider ? this.onHoverAppendMarkup(sliderStatus, thumbnails) : ''}
           </div>

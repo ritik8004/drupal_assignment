@@ -136,8 +136,6 @@ export default class PdpCrossellUpsell extends React.PureComponent {
               openModal={this.openModal}
               getPanelData={getPanelData}
               relatedSku={sku}
-              width={products[sku].gallery.m_width}
-              height={products[sku].gallery.m_height}
               gtmAttributes={products[sku].gtm_attributes}
             />
           ))}

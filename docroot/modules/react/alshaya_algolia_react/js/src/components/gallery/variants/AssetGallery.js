@@ -1,7 +1,6 @@
 import React from 'react';
 import ImageElement from '../imageHelper/ImageElement';
-import Lozenges
-  from '../../../../common/components/lozenges';
+import Lozenges from '../../../../common/components/lozenges';
 
 const AssetGallery = ({
   media, title, labels, sku,
@@ -13,45 +12,23 @@ const AssetGallery = ({
   // cloned array, keep original array reusable on state change.
   const images = [...media];
   const mainImage = images.length > 0 ? images.shift() : {};
-  // Dimensions.
-  let mWidth = null;
-  let mHeight = null;
-  if (typeof mainImage.width !== 'undefined') {
-    mWidth = mainImage.width;
-    mHeight = mainImage.height;
-  }
-
   const hoverImage = images.length > 0 ? images.shift() : {};
-  // Dimensions.
-  let hWidth = null;
-  let hHeight = null;
-  if (typeof hoverImage.width !== 'undefined') {
-    hWidth = hoverImage.width;
-    hHeight = hoverImage.height;
-  }
-
   const mainImageUrl = typeof mainImage.url !== 'undefined' ? mainImage.url : '';
 
   return (
     <div className="alshaya_search_gallery">
       <div className="alshaya_search_mainimage" data-sku-image={`${mainImageUrl}`}>
         <ImageElement
-          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={mainImageUrl}
+          src={mainImageUrl}
           title={title}
-          className="b-lazy"
-          width={mWidth}
-          height={mHeight}
+          loading="lazy"
         />
       </div>
       <div className="alshaya_search_hoverimage">
         <ImageElement
-          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
+          src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
           title={title}
-          className="b-lazy"
-          width={hWidth}
-          height={hHeight}
+          loading="lazy"
         />
       </div>
       <Lozenges labels={labels} sku={sku} />

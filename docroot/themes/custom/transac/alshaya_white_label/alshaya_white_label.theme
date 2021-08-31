@@ -794,7 +794,6 @@ function alshaya_white_label_theme() {
         'desktop_image' => NULL,
         'mobile_image' => NULL,
         'default_image' => NULL,
-        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
       ],
     ],
   ];
@@ -1473,6 +1472,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
     /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $advanced_page_slug_banner = $variables['paragraph'];
+    if (!empty($advanced_page_slug_banner)) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/slug-banner';
+    }
 
     // Get the desktop and mobile slug background color if available.
     $desktop_slug_bkg_color = $advanced_page_slug_banner->get('field_default_slug_bkg_color')->value ?? NULL;
@@ -1747,24 +1749,7 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
  * Implements template_preprocess_image().
  */
 function alshaya_white_label_preprocess_image(&$variables) {
-  if (isset($variables['skip_lazy_loading']) && $variables['skip_lazy_loading']) {
-    return;
-  }
-
-  $scheme = \Drupal::service('file_system')->uriScheme($variables['uri']);
-
-  // Use lazy load only for public schema and for already relative urls.
-  if ($scheme == 'public') {
-    $variables['attributes']['class'][] = 'b-lazy';
-    // For public scheme, create the url and make it relative.
-    $variables['attributes']['data-src'] = file_url_transform_relative(file_create_url($variables['uri']));
-    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
-  }
-  elseif ($scheme === FALSE) {
-    $variables['attributes']['class'][] = 'b-lazy';
-    $variables['attributes']['data-src'] = $variables['uri'];
-    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
-  }
+  $variables['attributes']['loading'] = 'lazy';
 }
 
 /**

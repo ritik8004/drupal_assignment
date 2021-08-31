@@ -314,10 +314,7 @@ function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface
 
   if (!empty($assets)) {
     $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
-    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $dimensions = $skuImagesManager->getImageHeightWidth($assets[0]['drupal_uri'], 'pdp_gallery_thumbnail');
-    $color_options_list[key($color_options_list)]['display_value'] = '<img src="' . file_url_transform_relative($url) . '" width="' . $dimensions['width'] . '" height="' . $dimensions['height'] . '">';
+    $color_options_list[key($color_options_list)]['display_value'] = '<img loading="lazy" src="' . file_url_transform_relative($url) . '">';
     $color_options_list[key($color_options_list)]['swatch_type'] = $swatch_type;
   }
 }
