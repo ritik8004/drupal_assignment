@@ -132,7 +132,13 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       // Is there any department page for the cateogry page?
       if (function_exists('alshaya_rcs_main_menu_get_department_pages')) {
         $department_pages = alshaya_rcs_main_menu_get_department_pages();
-        if (array_key_exists($path, $department_pages)) {
+        // Filter out the front slash as it will not be the part of the
+        // department page category slug.
+        $filtered_path = $path;
+        if ($filtered_path && $filtered_path[0] == '/') {
+          $filtered_path = substr($filtered_path, 1);
+        }
+        if (array_key_exists($filtered_path, $department_pages)) {
           return $path;
         }
       }
