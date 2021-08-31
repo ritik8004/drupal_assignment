@@ -57,6 +57,11 @@ class OtpHelper {
   /**
    * Send OTP.
    *
+   * @param string $mobile
+   *   Mobile number.
+   * @param string $type
+   *   Type of send otp request - registration or link card.
+   *
    * @return array
    *   Return API response/error.
    */
