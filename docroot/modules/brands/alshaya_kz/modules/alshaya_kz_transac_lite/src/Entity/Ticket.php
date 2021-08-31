@@ -123,10 +123,10 @@ class Ticket extends ContentEntityBase {
       ->setDescription(t('The ticket info of the ticket entity.'))
       ->setRequired(FALSE);
 
-    $fields['order_total'] = BaseFieldDefinition::create('integer')
+    $fields['order_total'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Order Total'))
       ->setDescription(t('The order total of the ticket entity.'))
-      ->setRequired(TRUE);
+      ->setRequired(FALSE);
 
     $fields['langcode'] = BaseFieldDefinition::create('language')
       ->setLabel(t('Language code'))
