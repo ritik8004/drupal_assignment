@@ -9,6 +9,23 @@ use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
 
 /**
+ * Get list of blocks which needs to be enabled/disabled.
+ *
+ * @return array
+ *   An array of block ids.
+ */
+function alshaya_rcs_listing_get_block_ids() {
+  return [
+  'alshayagridcountblock_plp',
+  'alshaya_algolia_react_plp',
+  'categorylhnblock',
+  'views_block__plp_promotional_banner_block_1',
+  'views_block__alshaya_term_description_block_1',
+  'views_block__product_category_level_2_3_block_2'
+  ];
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_rcs_listing_install() {
@@ -50,22 +67,5 @@ function alshaya_rcs_listing_uninstall() {
     if ($block instanceof BlockInterface) {
       $block->enable()->save();
     }
-  }
-
-  /**
-   * Get list of blocks which needs to be enabled/disabled.
-   *
-   * @return array
-   *   An array of block ids.
-   */
-  function alshaya_rcs_listing_get_block_ids() {
-    return [
-    'alshayagridcountblock_plp',
-    'alshaya_algolia_react_plp',
-    'categorylhnblock',
-    'views_block__plp_promotional_banner_block_1',
-    'views_block__alshaya_term_description_block_1',
-    'views_block__product_category_level_2_3_block_2'
-    ];
   }
 }
