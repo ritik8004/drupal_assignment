@@ -6,7 +6,7 @@
     "prefer-stable": true,
     "require": {
         "acquia/acsf-tools": "dev-10.x-dev",
-        "acquia/blt": "^9.0.0",
+        "acquia/blt": "^11.0.0",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "~4.1.11",
         "aws/aws-sdk-php": "^3.138",
@@ -31,9 +31,11 @@
         "drupal/change_pwd_page": "^1.0@beta",
         "drupal/ckeditor_font": "^1.0",
         "drupal/clientside_validation": "^3.0@RC",
+        "drupal/cog": "^1.0.0",
         "drupal/components": "^2.4",
         "drupal/conditional_fields": "^4.0@alpha",
         "drupal/config_rewrite": "^1.4",
+        "drupal/config_update": "^1.7",
         "drupal/core": "^8.8.12",
         "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",
@@ -56,6 +58,7 @@
         "drupal/mailsystem": "^4.1",
         "drupal/media_entity": "^1.8",
         "drupal/media_entity_actions": "1.x-dev",
+        "drupal/memcache": "^2.3",
         "drupal/memory_limit_policy": "1.x-dev",
         "drupal/menu_admin_per_menu": "^1.0@RC",
         "drupal/menu_item_extras": "^2.15",
@@ -93,6 +96,7 @@
         "drupal/seckit": "^2.0",
         "drupal/sessions_expire": "1.0.x-dev",
         "drupal/sharethis": "^2.0@beta",
+        "drupal/shield": "^1.0.0",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "^3.2",
         "drupal/sms": "^1.1",
@@ -122,9 +126,11 @@
         "symfony/lock": "4.3.*"
     },
     "require-dev": {
+        "acquia/blt-require-dev": "11.x-dev",
+        "acquia/drupal-spec-tool": "^2.0",
         "drupal/console": "^1.8",
         "drupal/core-dev": "^8.8.11",
-        "drupal/devel": "^2.0.0",
+        "drupal/devel": "^2.0",
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "mglaman/drupal-check": "^1.1"
@@ -210,8 +216,7 @@
             },
             "drupal/search_api_solr_multilingual": {
                 "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch",
-                "Disable field type check on Acquia Search": "patches/search_api_solr_multilingual--disable-field-type-check.patch"
+                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
             },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
@@ -230,7 +235,7 @@
                 "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
                 "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
                 "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2020-02-12/3095601-8.patch",
-                "CORE-16705 Resolve undefined index" : "https://www.drupal.org/files/issues/2020-04-15/undefined-index-settings-3127730-1.patch",
+                "CORE-16705 Resolve undefined index": "https://www.drupal.org/files/issues/2020-04-15/undefined-index-settings-3127730-1.patch",
                 "CORE-25698 improve performance": "patches/facets/CORE-25698_facets_WidgetPluginBase.patch",
                 "Fix Facets Summary Block Deriver definitions getter": "https://www.drupal.org/files/issues/2018-07-17/facets-summary_block_deriver_fix-2986243-02.patch"
             },
@@ -259,13 +264,13 @@
                 "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
                 "CORE-6691 - Add traces to module handler code": "patches/core/traces_for_module_implements_cache.patch",
-                "CORE-6525 - Add autofix for missing block plugin issue" : "patches/core/autofix-block-plugin-cache-clear-issue.patch",
+                "CORE-6525 - Add autofix for missing block plugin issue": "patches/core/autofix-block-plugin-cache-clear-issue.patch",
                 "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                 "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                 "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
                 "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
-                "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch",
-                "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch",
+                "CORE-8488 - Add log trace for 500 error": "patches/core/missing-handler-check-cache.patch",
+                "CORE-24231 - Adding log trace for 500 error on user login page": "patches/core/traces-for-form-error.patch",
                 "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
                 "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                 "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
@@ -313,15 +318,9 @@
             "drupal/entity_reference_revisions": {
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             },
-            "drupal/memcache": {
-                "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
-            },
             "drupal/pathauto": {
                 "Improvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch",
                 "TypeError: Argument 5 passed to AliasUniquifier::__construct()": "https://www.drupal.org/files/issues/2021-02-15/3131460-15.patch"
-            },
-            "sensiolabs-de/deprecation-detector": {
-                "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             },
             "drupal/google_tag": {
                 "Cache content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2020-11-18/3092193-18.patch"
@@ -342,6 +341,9 @@
             },
             "drupal/metatag": {
                 "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2021-08-03/metatag-3077442-6.patch"
+            },
+            "drupal/pcb": {
+                "PCB module having issue with memcache": "patches/pcb/pcb_memcache_issue_resolved.patch"
             }
         },
         "installer-paths": {
@@ -375,20 +377,6 @@
                 "type:drupal-drush"
             ]
         },
-        "merge-plugin": {
-            "require": [
-                "blt/composer.required.json",
-                "blt/composer.suggested.json"
-            ],
-            "include": [
-                "blt/composer.overrides.json"
-            ],
-            "merge-extra": true,
-            "merge-extra-deep": true,
-            "merge-scripts": true,
-            "replace": false,
-            "ignore-duplicates": true
-        },
         "installer-types": [
             "bower-asset",
             "npm-asset",
@@ -400,12 +388,25 @@
         },
         "drupal-scaffold": {
             "locations": {
-                "web-root": "docroot/"
+                "web-root": "./docroot"
             },
             "allowed-packages": [
                 "drupal/core"
-            ]
-        }
+            ],
+            "file-mapping": {
+                "[web-root]/sites/default/default.services.yml": {
+                    "mode": "replace",
+                    "path": "docroot/core/assets/scaffold/files/default.services.yml",
+                    "overwrite": false
+                },
+                "[web-root]/sites/default/default.settings.php": {
+                    "mode": "replace",
+                    "path": "docroot/core/assets/scaffold/files/default.settings.php",
+                    "overwrite": false
+                }
+            }
+        },
+        "composer-exit-on-patch-failure": true
     },
     "scripts": {
         "blt-alias": "blt blt:init:shell-alias -y --ansi",
@@ -426,9 +427,9 @@
             "cd docroot && patch -p1 <../patches/development-services-twig.patch"
         ],
         "nuke": [
-            "rm -rf vendor composer.lock",
-            "@composer clearcache",
-            "@composer install"
+            "rm -rf vendor composer.lock docroot/core docroot/modules/contrib docroot/profiles/contrib docroot/themes/contrib",
+            "@composer clearcache --ansi",
+            "@composer install --ansi"
         ],
         "install-phantomjs": [
             "rm -rf vendor/bin/phantomjs",
@@ -436,13 +437,21 @@
         ],
         "post-install-cmd": [
             "cd docroot/proxy && composer install"
+        ],
+        "post-create-project-cmd": [
+            "blt internal:create-project:init-repo"
         ]
     },
     "config": {
         "platform": {
-            "php": "7.2"
+            "php": "7.3"
         },
         "sort-packages": true,
         "discard-changes": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Alshaya\\": "blt/src/"
+        }
     }
 }
