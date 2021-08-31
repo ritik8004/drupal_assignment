@@ -354,22 +354,20 @@ class AlshayaRcsCategoryHelper {
    *   Return deeplink url.
    */
   public function getDeepLink($object) {
-    if ($object->hasField('field_category_slug')) {
-      $slug = $object->get('field_category_slug')->getString();
-      // Get all the departments pages having category slug value.
-      $department_pages = alshaya_rcs_main_menu_get_department_pages();
-      // @todo Change the logic here once we get the prefixed response from
-      // magento.
-      if (array_key_exists($slug, $department_pages)) {
-        return self::ENDPOINT_PREFIX_V1 . 'page/advanced?url=' .
-        ltrim(
-          $this->aliasManager->getAliasByPath(
-            '/node/' . $department_pages[$slug],
-            $this->languageManager->getCurrentLanguage()->getId(),
-          ),
-          '/'
-        );
-      }
+    $slug = $object->get('field_category_slug')->getString();
+    // Get all the departments pages having category slug value.
+    $department_pages = alshaya_rcs_main_menu_get_department_pages();
+    // @todo Change the logic here once we get the prefixed response from
+    // magento.
+    if (array_key_exists($slug, $department_pages)) {
+      return self::ENDPOINT_PREFIX_V1 . 'page/advanced?url=' .
+      ltrim(
+        $this->aliasManager->getAliasByPath(
+          '/node/' . $department_pages[$slug],
+          $this->languageManager->getCurrentLanguage()->getId(),
+        ),
+        '/'
+      );
     }
 
     return '';

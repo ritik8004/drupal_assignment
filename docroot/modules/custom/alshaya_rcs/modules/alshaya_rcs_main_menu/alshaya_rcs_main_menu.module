@@ -44,7 +44,7 @@ function alshaya_rcs_main_menu_is_department_page(string $path) {
     if (is_object($node)) {
       if ($node->isPublished()) {
         $data[$path] = $nid;
-        \Drupal::cache('data')->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, ['node:' . $nid]);
+        \Drupal::cache('data')->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, $node->getCacheTags());
         return $nid;
       }
     }
