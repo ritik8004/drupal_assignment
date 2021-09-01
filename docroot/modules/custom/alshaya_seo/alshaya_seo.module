@@ -335,7 +335,7 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
   if (($is_product_level_3_view) &&
     ($field->getPluginId() === 'term_name')) {
     $args = $view->args;
-    $parents = \Drupal::entityManager()->getStorage('taxonomy_term')->loadParents($args[0]);
+    $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($args[0]);
     $parent_term = array_shift($parents);
     $term_classes = [];
     if ($parent_term) {
@@ -357,8 +357,9 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
     if ($term->hasTranslation($langcode)) {
       $term = $term->getTranslation($langcode);
     }
-
-    $variables['output'] = $term->toLink($term->getName(), '', $options)->toString();
+    $variables['output'] = $term->get('field_display_as_clickable_link')->getString()
+      ? $term->toLink($term->getName(), '', $options)->toString()
+      : $term->getName();
   }
 }
 

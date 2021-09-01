@@ -7,6 +7,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases;
@@ -19,7 +20,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
@@ -30,6 +30,7 @@ use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Alshaya Algolia Index Helper.
@@ -181,6 +182,20 @@ class AlshayaAlgoliaIndexHelper {
   protected $productInfoHelper;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -221,6 +236,10 @@ class AlshayaAlgoliaIndexHelper {
    *   Pretty Aliases.
    * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
    *   Product Info Helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   Sku images helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -244,7 +263,9 @@ class AlshayaAlgoliaIndexHelper {
     AlshayaFacetsPrettyPathsHelper $pretty_path_helper,
     DefaultFacetManager $facets_manager,
     AlshayaFacetsPrettyAliases $pretty_aliases,
-    ProductInfoHelper $product_info_helper
+    ProductInfoHelper $product_info_helper,
+    ModuleHandlerInterface $module_handler,
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -266,6 +287,8 @@ class AlshayaAlgoliaIndexHelper {
     $this->facetsManager = $facets_manager;
     $this->prettyAliases = $pretty_aliases;
     $this->productInfoHelper = $product_info_helper;
+    $this->moduleHandler = $module_handler;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -576,7 +599,7 @@ class AlshayaAlgoliaIndexHelper {
 
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $images[] = [
-        'url' => ImageStyle::load('product_listing')->buildUrl($media_item['drupal_uri']),
+        'url' => $this->skuImagesHelper->getImageStyleUrl($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
       ];
     }
@@ -606,6 +629,7 @@ class AlshayaAlgoliaIndexHelper {
    * Create term hierarchy to index for Algolia.
    *
    * Prepares the array structure as shown below.
+   * @codingStandardsIgnoreStart
    * @code
    * [
    *   [
@@ -642,6 +666,7 @@ class AlshayaAlgoliaIndexHelper {
    *   ]
    * }
    * @endcode
+   * @codingStandardsIgnoreEnd
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node object for which we need to prepare hierarchy.
@@ -1030,7 +1055,11 @@ class AlshayaAlgoliaIndexHelper {
               $replica_settings['ranking'] = [
                 'desc(stock)',
                 $sort['direction'] . '(' . $sort['field'] . ')',
-              ] + $ranking;
+              ];
+              // Allow other modules to add/alter ranking & sorting options.
+              $this->moduleHandler->alter('alshaya_search_algolia_ranking_sorting', $replica_settings, $sort, $ranking);
+              $replica_settings['ranking'] = $replica_settings['ranking'] + $ranking;
+
               $replica_index->setSettings($replica_settings, [
                 'forwardToReplicas' => TRUE,
               ]);
@@ -1059,7 +1088,11 @@ class AlshayaAlgoliaIndexHelper {
               $replica_settings['ranking'] = [
                 'desc(stock)',
                 $sort['direction'] . '(' . $sort['field'] . '.' . $language->getId() . ')',
-              ] + $ranking;
+              ];
+              // Allow other modules to add/alter ranking & sorting options.
+              $this->moduleHandler->alter('alshaya_search_algolia_ranking_sorting', $replica_settings, $sort, $ranking);
+              $replica_settings['ranking'] = $replica_settings['ranking'] + $ranking;
+
               $replica_index->setSettings($replica_settings, [
                 'forwardToReplicas' => TRUE,
               ]);
@@ -1129,9 +1162,12 @@ class AlshayaAlgoliaIndexHelper {
       'search_api_datasource',
       'search_api_id',
       'stock_quantity',
+      'attr_aims_barcode',
+      'field_configured_skus',
+      'media',
     ];
 
-    \Drupal::moduleHandler()->alter('alshaya_product_list_exclude_attribute', $excludedAttributes);
+    $this->moduleHandler->alter('alshaya_product_list_exclude_attribute', $excludedAttributes);
 
     return $excludedAttributes;
   }

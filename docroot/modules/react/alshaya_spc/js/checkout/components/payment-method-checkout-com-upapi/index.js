@@ -125,7 +125,16 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
       removeFullScreenLoader();
       return;
     }
-
+    // Set selected payment method for GTM push.
+    let cardType = data.scheme;
+    if (data.card_type !== undefined && data.scheme !== undefined) {
+      cardType = ` ${data.card_type} - ${data.scheme}`;
+    }
+    // Dispatch the event to push into dataLayer for
+    // checkoutOut upapi payment method
+    dispatchCustomEvent('orderPaymentMethod', {
+      payment_method: (data.card_category === 'Commercial') ? 'MADA' : cardType,
+    });
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 

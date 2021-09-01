@@ -149,18 +149,18 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in PDP.'),
     ];
 
+    $form['basic_settings']['show_location_filter'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show location in PDP reviews section.'),
+      '#default_value' => $config->get('show_location_filter'),
+      '#description' => $this->t('Display location on the left panel in pdp reviews.'),
+    ];
+
     $form['basic_settings']['myaccount_rating_reviews'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable ratings and reviews in My Account.'),
       '#default_value' => $config->get('myaccount_rating_reviews'),
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in My Account.'),
-    ];
-
-    $form['basic_settings']['myaccount_reviews_limit'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Total number of reviews in my reviews page.'),
-      '#default_value' => $config->get('myaccount_reviews_limit'),
-      '#description' => $this->t('Enter limit for number of reviews to be shown under my account section.'),
     ];
 
     $form['basic_settings']['plp_rating_reviews'] = [
@@ -174,7 +174,14 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Closed submission for unauthorized user.'),
       '#default_value' => $config->get('write_review_submission'),
-      '#description' => $this->t('This option should be checked to enable closed submission for unauthorized user on the site.'),
+      '#description' => $this->t('This option should be checked to allow write a review for logged in users only.'),
+    ];
+
+    $form['basic_settings']['myaccount_reviews_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Total number of reviews in my reviews page.'),
+      '#default_value' => $config->get('myaccount_reviews_limit'),
+      '#description' => $this->t('Enter limit for number of reviews to be shown under my account section.'),
     ];
 
     $form['basic_settings']['write_review_tnc'] = [
@@ -317,6 +324,25 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('pdp_reviews_seo_limit'),
       '#description' => $this->t('Enter total number of reviews to be captured for SEO on PDP.'),
     ];
+    $form['basic_settings']['featured_reviews_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Set limit for featured reviews.'),
+      '#default_value' => $config->get('featured_reviews_limit'),
+      '#description' => $this->t('Set the limit for featured reviews to be pushed in DY.'),
+    ];
+    $form['basic_settings']['enable_google_translation'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Google translations.'),
+      '#default_value' => $config->get('enable_google_translation'),
+      '#description' => $this->t('Check the option to enable the Google translation feature.'),
+    ];
+    $form['basic_settings']['translate_chars_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Set characters limit for Google translations.'),
+      '#default_value' => $config->get('translate_chars_limit'),
+      '#description' => $this->t('Set the characters limit for Google translations per request.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -339,6 +365,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('environment', $values['environment'])
       ->set('notify_comment_published', $values['notify_comment_published'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
+      ->set('show_location_filter', $values['show_location_filter'])
       ->set('myaccount_rating_reviews', $values['myaccount_rating_reviews'])
       ->set('myaccount_reviews_limit', $values['myaccount_reviews_limit'])
       ->set('plp_rating_reviews', $values['plp_rating_reviews'])
@@ -357,6 +384,9 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('reviews_per_page', $values['reviews_per_page'])
       ->set('comment_submission', $values['comment_submission'])
       ->set('pdp_reviews_seo_limit', $values['pdp_reviews_seo_limit'])
+      ->set('featured_reviews_limit', $values['featured_reviews_limit'])
+      ->set('translate_chars_limit', $values['translate_chars_limit'])
+      ->set('enable_google_translation', $values['enable_google_translation'])
       ->save();
 
     parent::submitForm($form, $form_state);

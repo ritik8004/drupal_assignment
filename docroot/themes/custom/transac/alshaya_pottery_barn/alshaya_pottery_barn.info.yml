@@ -2,6 +2,7 @@ name: Alshaya Pottery Barn
 type: theme
 description: 'Theme for Pottery Barn (Transactional).'
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: alshaya_white_label
 alshaya_theme_type: transac
 
@@ -35,6 +36,11 @@ libraries-override:
     css:
       theme:
         css/ltr-print.css: css/rtl-print.css
+
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
 
   alshaya_white_label/dynamic-promotions:
     css:
@@ -105,3 +111,23 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/secondary-menu/secondary-menu.ltr.css: css/conditional-sass/secondary-menu/secondary-menu.ltr.css
+
+  alshaya_white_label/my-account:
+      css:
+        theme:
+          css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
+  alshaya_white_label/sitemap:
+    css:
+      theme:
+        css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css
+
+  alshaya_white_label/alshaya-vat-certificate:
+    css:
+      theme:
+        css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css

@@ -55,7 +55,7 @@ header {
     .block-alshaya-react-mini-cart {
       .cart-link {
         background-size: 2rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0;
         background-position: center;
 
         @include breakpoint($only-tablet) {
@@ -65,7 +65,6 @@ header {
         @include breakpoint($only-mobile) {
           position: relative;
           background-size: 1.875rem;
-          margin-bottom: 0;
           margin-top: 0.625rem;
           height: 1.75rem;
           width: 2.1875rem;
@@ -77,7 +76,11 @@ header {
       }
 
       @include breakpoint($desktop) {
-        top: -0.25rem;
+        top: 0;
+
+        #mini-cart-wrapper {
+          min-width: 14.813rem;
+        }
       }
 
       @include breakpoint($only-tablet) {
@@ -103,6 +106,17 @@ header {
       }
     }
 
+    .block-alshaya-react-mini-cart {
+      .cart-link {
+        @include breakpoint($only-mobile) {
+          html[lang=ar] & {
+            top: -0.125rem;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
     .site-brand-home {
       html[lang=ar] & {
         @include breakpoint($only-tablet) {
@@ -115,6 +129,8 @@ header {
 
         @include breakpoint($desktop) {
           max-width: 29rem;
+          margin: 0 auto;
+          text-align: center;
         }
 
         @include breakpoint($only-tablet) {
@@ -142,7 +158,6 @@ header {
           @include breakpoint($desktop) {
             width: 25.94rem;
             margin-top: -1.25rem;
-            margin-right: 0.25rem;
           }
 
           @include breakpoint($only-tablet) {
@@ -168,11 +183,6 @@ header {
     }
 
     .c-header__region {
-      @include breakpoint($desktop) {
-        padding-bottom: 1.125rem;
-        padding-top: 2rem;
-      }
-
       @include breakpoint($only-tablet) {
         margin-top: 0.6875rem;
         padding-#{$left}: 1.5rem;
@@ -188,6 +198,12 @@ header {
             width: 17.5625rem;
           }
         }
+      }
+    }
+
+    .region__header > .block-system-branding-block {
+      @include breakpoint($desktop) {
+        width: 100%;
       }
     }
   }

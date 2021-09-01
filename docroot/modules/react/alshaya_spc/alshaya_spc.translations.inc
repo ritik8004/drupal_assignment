@@ -300,6 +300,13 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to V2.
+  $strings['v4'] = [
+    'We have upgraded your experience, please refresh the page and try again.' => [
+      'ar' => '.لقد قمنا بترقية تجربتك ، يرجى تحديث الصفحة والمحاولة مرة أخرى',
+    ],
+  ];
+
   return $strings;
 }
 

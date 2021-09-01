@@ -97,6 +97,7 @@
 
       &.error {
         border: 1px solid $primary_input_inline_error !important;
+        border-width: 0.125rem !important;
       }
     }
   }
@@ -107,6 +108,12 @@
 
     label {
       font-size: 0.75rem;
+    }
+  }
+
+  .hide-field-select {
+    &.dropdown-conatiner {
+      display: none;
     }
   }
 

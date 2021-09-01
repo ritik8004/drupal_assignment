@@ -79,6 +79,10 @@
       }
     }
   }
+
+  #cloud-zoom-wrap img {
+    object-fit: scale-down;
+  }
 }
 
 .acq-content-product-modal {
@@ -102,6 +106,18 @@
     &.pager-no {
       @include breakpoint($only-tablet) {
         margin-top: 2.5rem;
+      }
+    }
+  }
+}
+
+.mobilegallery {
+  #product-image-gallery-mobile {
+    li.slick-slide {
+      @include breakpoint($only-mobile) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

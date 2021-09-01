@@ -19,6 +19,7 @@ global_styles:
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element
+    - alshaya_white_label/font-face
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
     - alshaya_white_label/alshaya_image_lazy_load
@@ -42,6 +43,11 @@ rtl_print_styles:
   css:
     theme:
       css/rtl-print.css: {media: print}
+
+font-face:
+  css:
+    theme:
+      css/conditional-sass/font-face/font-face.ltr.css: { }
 
 unmask_password:
   js:
@@ -488,3 +494,23 @@ secondary-menu:
   css:
     theme:
       css/conditional-sass/secondary-menu/secondary-menu.ltr.css: {}
+
+my-account:
+  css:
+    theme:
+      css/conditional-sass/my-account/my-account.ltr.css: {}
+
+contact:
+  css:
+    theme:
+      css/conditional-sass/contact-us/contact-us.ltr.css: {}
+
+sitemap:
+  css:
+    theme:
+      css/conditional-sass/sitemap/sitemap.ltr.css: {}
+
+alshaya-vat-certificate:
+  css:
+    theme:
+      css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: {}

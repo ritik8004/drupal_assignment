@@ -2,6 +2,7 @@ name: 'Alshaya Checkout By Agent'
 description: 'Contains code to support checkout by smart agents for in-store devices.'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya
 
 dependencies:

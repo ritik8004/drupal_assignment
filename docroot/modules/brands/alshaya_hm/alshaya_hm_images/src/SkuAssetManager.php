@@ -164,6 +164,13 @@ class SkuAssetManager {
   protected $acmProductSettings;
 
   /**
+   * The file system.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -194,6 +201,8 @@ class SkuAssetManager {
    *   Lock service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
    *   Cache for media_file_mapping.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   File system service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -208,7 +217,8 @@ class SkuAssetManager {
                               TimeInterface $time,
                               FileUsageInterface $file_usage,
                               LockBackendInterface $lock,
-                              CacheBackendInterface $cache_media_file_mapping) {
+                              CacheBackendInterface $cache_media_file_mapping,
+                              FileSystemInterface $file_system) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -226,6 +236,7 @@ class SkuAssetManager {
     $this->cacheMediaFileMapping = $cache_media_file_mapping;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -400,7 +411,7 @@ class SkuAssetManager {
     // also get a 0 byte image with response 200 instead of 404.
     // So only checking $file_data is not enough.
     if (!isset($file_data_length) || $file_data_length[0] === '0') {
-      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
+      // @todo SAVE blacklist info in a way so it does not have dependency on SKU.
       // Blacklist this image URL to prevent subsequent downloads for 1 day.
       $data['blacklist_expiry'] = strtotime('+1 day');
       // Leave a message for developers to find out why this happened.
@@ -420,7 +431,7 @@ class SkuAssetManager {
     }
 
     // Prepare the directory.
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
     try {
       $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
 
@@ -502,7 +513,7 @@ class SkuAssetManager {
     // also get a 0 byte image with response 200 instead of 404.
     // So only checking $file_data is not enough.
     if (!isset($file_data_length) || $file_data_length[0] === '0') {
-      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
+      // @todo SAVE blacklist info in a way so it does not have dependency on SKU.
       // Blacklist this image URL to prevent subsequent downloads for 1 day.
       $asset['blacklist_expiry'] = strtotime('+1 day');
       // Leave a message for developers to find out why this happened.
@@ -535,7 +546,7 @@ class SkuAssetManager {
     }
 
     // Prepare the directory.
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
 
     try {
       $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
@@ -770,7 +781,7 @@ class SkuAssetManager {
    *   Overridden config in context of the category product belongs to.
    */
   public function overrideConfig($sku, $page_type) {
-    // @TODO: Check and remove this include.
+    // @todo Check and remove this include.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');

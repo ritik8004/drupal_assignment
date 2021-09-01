@@ -41,6 +41,9 @@ bazaar_voice.settings:
     pdp_rating_reviews:
       type: boolean
       label: 'Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'
+    show_location_filter:
+      type: boolean
+      label: 'Display location on the left panel in pdp reviews.'
     myaccount_rating_reviews:
       type: boolean
       label: 'Enable/Disable My Account BazaarVoice Ratings and Review Feature.'
@@ -92,3 +95,12 @@ bazaar_voice.settings:
     pdp_reviews_seo_limit:
       type: integer
       label: 'Enter total number of reviews to be captured for SEO on PDP.'
+    featured_reviews_limit:
+      type: integer
+      label: 'Set the limit for featured reviews to be pushed in DY.'
+    translate_chars_limit:
+      type: integer
+      label: 'Set the characters limit for google translations.'
+    enable_google_translation:
+      type: boolean
+      label: 'Check to enable google translation feature.'

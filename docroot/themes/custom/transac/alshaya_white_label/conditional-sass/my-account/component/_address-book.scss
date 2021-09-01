@@ -1,0 +1,734 @@
+.user__address--column {
+  border: 0.0625rem solid $address_book_border;
+  font-family: $arial;
+  font-size: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  @include breakpoint($tablet) {
+    float: $left;
+    width: calc(50% - 0.75rem);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 1.5rem;
+    }
+
+    &:last-child {
+      margin-bottom: 1.375rem;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    margin-bottom: 3rem;
+    width: calc(50% - 1.5rem);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 3rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+#edit-member-delivery-home .user__address--column {
+  @include breakpoint($tablet) {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: auto;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    float: $left;
+    margin-bottom: 3rem;
+    width: calc(50% - 1.5rem);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 3rem;
+    }
+  }
+}
+
+.address {
+  .address--data {
+    overflow: hidden;
+    padding: 1rem;
+
+    @include breakpoint($tablet) {
+      min-height: 12rem;
+      padding: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 1.5rem;
+      min-height: 12rem;
+    }
+  }
+
+  .address--contact {
+    margin-top: 1.375rem;
+  }
+
+  .address--content {
+    color: $black-two;
+    direction: ltr;
+    font-weight: 700;
+
+    html[lang=ar] & {
+      text-align: right;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .address--label {
+    margin-bottom: 0.1875rem;
+  }
+
+  .address--userinfo {
+    float: $left;
+    padding-#{$right}: 1rem;
+    vertical-align: top;
+    width: 55%;
+
+    @include breakpoint($tablet) {
+      width: 51%;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: 1.5rem;
+      width: 59%;
+    }
+  }
+
+  .address--delivery {
+    float: $left;
+    width: 44%;
+
+    @include breakpoint($tablet) {
+      width: 48%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 41%;
+    }
+  }
+
+  .address--options {
+    border-top: 0.0625rem solid $address_book_border;
+    clear: both;
+    display: table;
+    width: 100%;
+
+    @include breakpoint($desktop) {
+      padding: 1.25rem 1.5rem;
+    }
+
+    a {
+      color: $black-two;
+    }
+  }
+
+  .address--controls {
+    border-#{$right}: 0.0625rem solid $address_book_border;
+    display: table-cell;
+    min-height: 3.0625rem;
+    padding: 0.9375rem;
+    vertical-align: middle;
+    position: relative;
+
+    @include breakpoint($tablet) {
+      padding: 1.375rem 0.875rem;
+      min-height: 4.563rem;
+      text-align: center;
+    }
+
+    @include breakpoint($desktop) {
+      border: none;
+      min-height: none;
+      padding: 0;
+      padding-#{$right}: 1.25rem;
+    }
+  }
+
+  .address--primary {
+    width: 9.438rem;
+    position: relative;
+    padding-#{$right}: 0.5625rem;
+    padding-#{$left}: 2.5rem;
+    text-align: left;
+    letter-spacing: 0.5px;
+
+    @include breakpoint($tablet) {
+      width: 6.625rem;
+      padding-#{$left}: 2.4rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: 2.5625rem;
+      width: auto;
+      padding-#{$left}: 1.625rem;
+      text-indent: 0;
+    }
+
+    @include arabic-letter-spacing;
+
+    span::before,
+    a::before {
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      width: 0.875rem;
+      height: 0.875rem;
+      border-radius: 100%;
+      margin-#{$right}: 0.75rem;
+      border: 0.0625rem solid;
+      position: absolute;
+      #{$left}: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+
+      @include breakpoint($desktop) {
+        #{$left}: 0;
+      }
+    }
+
+    span::before,
+    a:hover::before {
+      border: 0.1875rem solid $address_form_radio;
+      background: white;
+    }
+  }
+
+  .address--edit,
+  .address--delete {
+    a {
+      display: block;
+      text-transform: uppercase;
+
+      @include breakpoint($tablet) {
+        text-align: center;
+      }
+
+      @include breakpoint($desktop) {
+        border: 0.0625rem solid $black-two;
+        display: inline-block;
+        font-weight: 700;
+        padding: 0.625rem 1.5rem;
+        min-width: 5.9375rem;
+
+        &:hover {
+          opacity: 0.75;
+        }
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .address--edit {
+    text-align: center;
+  }
+
+  .address--delete {
+    border-#{$right}: none;
+    padding-#{$right}: 0;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 0.9375rem;
+    }
+  }
+
+  &:hover {
+    @include breakpoint($desktop) {
+      .address--data {
+        background: $address_form_default;
+      }
+
+      .address--primary {
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+    }
+  }
+
+  &.default {
+    .address--data {
+      background: $address_form_default;
+    }
+
+    .address--primary {
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .address--controls:last-child {
+      border-#{$right}: none;
+
+      @include breakpoint($desktop) {
+        padding-right: 0;
+      }
+    }
+  }
+}
+
+#edit-member-delivery-home-addresses {
+  .address {
+    &--edit {
+      text-align: $right;
+
+      @include breakpoint($desktop) {
+        width: 45%;
+      }
+
+      a {
+        border: none;
+        font-weight: bold;
+        padding: 0;
+        min-width: auto;
+        color: $checkout_address_edit_link;
+        text-transform: capitalize;
+        text-align: center;
+      }
+    }
+
+    &--deliver-to-this-address {
+      padding: 0;
+      min-height: auto;
+      border: none;
+
+      @include breakpoint($desktop) {
+        width: 53.53%;
+      }
+
+      a {
+        min-height: 2.0625rem;
+        display: block;
+        padding: 1rem;
+        margin: 0;
+        color: $address_button_text;
+        text-align: center;
+        border: 0.0625rem solid $address_button_border;
+
+        @include breakpoint($tablet) {
+          padding: 0.625rem;
+          margin: 0.5rem 1rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin: 0;
+        }
+      }
+    }
+
+    &:hover {
+      @include breakpoint($desktop) {
+        .address--data {
+          background: $white-four;
+        }
+
+        .address--deliver-to-this-address {
+          a {
+            color: $white-five;
+            border: 1px solid $checkout_default_address_border;
+            background-color: $checkout_default_address_bg;
+          }
+        }
+      }
+    }
+
+    &.default {
+      .address--data {
+        background: $white-four;
+      }
+
+      .address--deliver-to-this-address {
+        a {
+          color: $checkout_deliver_address_btn_txt;
+          border: 1px solid $checkout_default_address_border;
+          background-color: $checkout_default_address_bg;
+
+          @include breakpoint($desktop) {
+            &:hover {
+              opacity: 0.75;
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      &--options {
+        display: block;
+
+        .address--deliver-to-this-address,
+        .address--edit {
+          display: inline-block;
+        }
+
+        .address--edit {
+          min-height: auto;
+          padding-#{$right}: 0;
+        }
+      }
+    }
+  }
+}
+
+.c-address-book {
+  .region__content {
+    position: relative;
+  }
+
+  .view-profiles .view-content {
+    position: relative;
+    top: -1.25rem;
+  }
+
+  #address-book-form-open {
+    @include breakpoint($only-mobile) {
+      margin-top: 2.25rem;
+    }
+  }
+
+  .block-system > a {
+    @extend %button-wide;
+
+    display: block;
+    margin-top: 1.25rem;
+
+    @include breakpoint($tablet) {
+      display: inline-block;
+      position: absolute;
+      top: -1rem;
+      #{$right}: 0;
+      min-width: 10.2rem;
+      text-transform: lowercase;
+      margin-top: 1.75rem;
+      margin-bottom: 0;
+    }
+
+    @include breakpoint($desktop) {
+      top: -0.5rem;
+      min-width: 11.75rem;
+      margin-top: 0;
+      margin-bottom: 1.25rem;
+    }
+
+    + .form-item {
+      overflow: hidden;
+      padding-top: 1rem;
+    }
+  }
+
+  .views-element-container {
+    padding-top: 1.5rem;
+  }
+}
+
+.l-two--sf {
+  &.c-address-book {
+    .c-sidebar-first {
+      @include breakpoint($only-tablet) {
+        display: block;
+        float: $left;
+        max-width: 16.8125rem;
+        width: 23%;
+        padding-top: 1em;
+      }
+    }
+
+    main {
+      @include breakpoint($only-tablet) {
+        width: 74%;
+        max-width: 57.5625rem;
+        float: right;
+      }
+    }
+  }
+}
+
+.user-form,
+.address-book-address,
+#selected-store-wrapper {
+  .mobile-number-field {
+    max-width: 24.75rem;
+    margin-bottom: 1.5rem;
+
+    #edit-mobile-number {
+      display: block;
+    }
+
+    .user-page.c-user-edit & {
+      margin-bottom: 3.5rem;
+    }
+
+    label {
+      opacity: 1;
+      font-size: 0.75rem !important;
+      color: $primary_input_label;
+      top: 0.4375rem !important;
+
+      &.error {
+        position: absolute;
+        #{$left}: 0;
+        top: 2.75rem !important;
+        width: 100%;
+        border-top: 1px solid $primary_input_inline_error;
+      }
+    }
+
+    .form-type-textfield {
+      margin-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .form-type-select {
+      &.form-item-guest-delivery-home-address-shipping-mobile-number-country-code,
+      &.form-item-billing-address-address-billing-mobile-number-country-code,
+      &.form-item-member-delivery-home-address-form-form-mobile-number-country-code,
+      &.form-item-cc-mobile-number-country-code,
+      &.form-item-field-address-0-address-mobile-number-country-code {
+        padding-bottom: 0;
+        margin-top: 0 !important;
+        width: 3rem;
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+
+    .country-select {
+      @include country-select;
+    }
+
+    .mobile-input--wrapper {
+      @include mobile-input-style;
+    }
+
+    input {
+      @include mobile-number-input-style;
+    }
+  }
+
+  #edit-field-address-0-address-administrative-area {
+    width: 100%;
+  }
+}
+
+#selected-store-wrapper {
+  .mobile-number-field {
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 1.5rem;
+    }
+
+    label {
+      &.error {
+        top: 3.125rem !important;
+        color: $primary_input_inline_error;
+      }
+    }
+  }
+
+  #selected-store-elements-wrapper {
+    .cc_mobile_number {
+      & > label {
+        top: -1rem;
+      }
+    }
+  }
+}
+
+#edit-billing-address {
+  .address-book-address {
+    .mobile-number-field .js-form-type-select {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.address-book-address .form-type-select {
+  @include select-wrapper(100%);
+
+  label {
+    top: -1.1375rem;
+    font-size: 0.75rem;
+
+    &.error {
+      top: 2rem;
+    }
+  }
+
+  select.select2-select.form-select {
+    font-size: 1rem;
+    box-sizing: border-box;
+
+    @include select-style(100%);
+  }
+
+  .select2-selection {
+    font-family: $alshaya-thin;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    border-radius: 0;
+    height: 2.188rem !important;
+    border-color: $white-two;
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: 2.1875rem;
+    height: 2.1875rem;
+    background: $primary_dropdown_arrow_bg;
+
+    &::after {
+      font-size: 1.7rem;
+      top: 12%;
+      #{$left}: 11%;
+    }
+  }
+
+  .select2-container {
+    width: 100% !important;
+  }
+
+  .select2-selection__rendered {
+    font-family: $arial;
+    line-height: 1.188rem !important;
+    color: $black;
+    padding: 0.25rem !important;
+  }
+}
+
+.profile-address-book-edit-form,
+#address-book-form-open {
+  .form-actions {
+    position: relative;
+
+    input[disabled] {
+      color: transparent !important;
+    }
+  }
+}
+
+// Replacing the throbber for delete address form on addressbook
+.profile-address-book-delete-form {
+  .ajax-progress-throbber {
+    @include fullPageLoader();
+  }
+}
+
+#address_wrapper .address-book-address,
+#address-book-form-open .address-book-address,
+.address_wrapper .address-book-address {
+  .country-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .country-name {
+    font-size: 1rem;
+    color: $greyish;
+  }
+
+  .select2-container {
+    max-width: 100%;
+  }
+}
+
+.address-book-address {
+  .form-item.form-type-textfield {
+    label:last-of-type {
+      @include placeholder-label;
+    }
+
+    input:focus ~ label:last-of-type,
+    label.active-label:not(.error) {
+      @include placeholder-active;
+    }
+  }
+
+  .form-item-guest-delivery-home-address-shipping-address-line2,
+  .form-item-guest-delivery-home-address-shipping-sorting-code,
+  .form-item-guest-delivery-home-address-shipping-postal-code,
+  .form-item-guest-delivery-home-address-shipping-additional-name,
+  .form-item-billing-address-address-billing-address-line2,
+  .form-item-billing-address-address-billing-sorting-code,
+  .form-item-billing-address-address-billing-postal-code,
+  .form-item-billing-address-address-billing-additional-name,
+  .form-item-field-address-0-address-address-line2,
+  .form-item-field-address-0-address-postal-code,
+  .form-item-field-address-0-address-sorting-code,
+  .form-item-field-address-0-address-additional-name,
+  .form-item-member-delivery-home-address-form-form-address-line2,
+  .form-item-member-delivery-home-address-form-form-additional-name,
+  .form-item-member-delivery-home-address-form-form-sorting-code,
+  .form-item-member-delivery-home-address-form-form-postal-code {
+    input[type=text] ~ label:not(.active-label) {
+      font-size: 1rem !important;
+      color: $primary_input_label !important;
+      position: absolute !important;
+      #{$left}: 0 !important;
+      top: -0.125rem !important;
+      transition: 0.2s ease all !important;
+    }
+
+    input[type=text]:focus ~ label {
+      top: -1.375rem !important;
+      bottom: 0 !important;
+      #{$left}: 0 !important;
+      opacity: 1 !important;
+      font-size: 0.75rem !important;
+    }
+  }
+
+  .form-item-guest-delivery-home-address-shipping-postal-code,
+  .form-item-member-delivery-home-address-form-form-postal-code,
+  .form-item-field-address-0-address-postal-code {
+    input[type=text] ~ label.error {
+      font-size: 0.75rem !important;
+      color: $red-error !important;
+      position: relative !important;
+      line-height: 1;
+    }
+  }
+
+  .form-item.form-type-select {
+    padding-bottom: 1rem;
+    margin-top: 2.75rem !important;
+
+    label {
+      top: -1.375rem;
+      font-size: 0.75rem;
+
+      &.error {
+        top: 2rem;
+      }
+    }
+  }
+
+  .mobile-number-field {
+    .mobile-input--wrapper {
+      .form-item-field-address-0-address-mobile-number-mobile {
+        margin-top: 0;
+      }
+    }
+  }
+}

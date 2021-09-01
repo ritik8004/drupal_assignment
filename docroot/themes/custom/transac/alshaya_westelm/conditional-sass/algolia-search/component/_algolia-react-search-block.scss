@@ -12,6 +12,10 @@
 
   @include breakpoint($only-tablet) {
     bottom: -3.5rem;
+
+    html[lang=ar] & {
+      bottom: -2.5rem;
+    }
   }
 
   @include breakpoint($desktop) {
@@ -56,7 +60,7 @@
 
     @include breakpoint($only-tablet) {
       border-bottom-color: $algolia-auto-complete-border-bottom;
-      width: 13.25rem;
+      width: 100%;
     }
 
     &::placeholder {

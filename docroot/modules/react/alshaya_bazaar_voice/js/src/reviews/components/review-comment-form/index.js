@@ -27,6 +27,7 @@ class ReviewCommentForm extends React.Component {
   }
 
   showCommentForm = () => {
+    const { ReviewId } = this.props;
     const { commentbox, nickname, email } = this.state;
     const commentTncUri = `/${getLanguageCode()}/${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
@@ -41,7 +42,7 @@ class ReviewCommentForm extends React.Component {
             <div className="form-item">
               <TextareaAutosize
                 type="text"
-                id="commentbox"
+                id={`comment-${ReviewId}`}
                 name="commentbox"
                 minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_min_length}
                 maxLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_max_length}
@@ -54,16 +55,17 @@ class ReviewCommentForm extends React.Component {
                 {getStringMessage('comment')}
                 {'*'}
               </label>
-              <div id="commentbox-error" className="error" />
+              <div id={`comment-${ReviewId}-error`} className="error" />
             </div>
 
             <div className="form-item-two-column">
               <div className="form-item">
                 <input
                   type="text"
-                  id="nickname"
+                  id={`nickname-${ReviewId}`}
                   name="nickname"
                   minLength={bazaarVoiceSettings.reviews.bazaar_voice.screen_name_min_length}
+                  maxLength="25"
                   onChange={this.handleNicknameChange}
                   className="form-input"
                   defaultValue={nickname}
@@ -73,13 +75,13 @@ class ReviewCommentForm extends React.Component {
                   {getStringMessage('screen_name')}
                   {'*'}
                 </label>
-                <div id="nickname-error" className="error" />
+                <div id={`nickname-${ReviewId}-error`} className="error" />
               </div>
 
               <div className="form-item">
                 <input
                   type="email"
-                  id="email"
+                  id={`email-${ReviewId}`}
                   name="email"
                   onChange={this.handleEmailChange}
                   className="form-input"
@@ -91,7 +93,7 @@ class ReviewCommentForm extends React.Component {
                   {getStringMessage('email_address_label')}
                   {'*'}
                 </label>
-                <div id="email-error" className="error" />
+                <div id={`email-${ReviewId}-error`} className="error" />
               </div>
             </div>
 
@@ -122,9 +124,9 @@ class ReviewCommentForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const isError = processFormDetails(e);
+    const { ReviewId } = this.props;
+    const isError = processFormDetails(e, ReviewId);
     if (!isError) {
-      const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
       const notifications = bazaarVoiceSettings.reviews.bazaar_voice.notify_comment_published;
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
@@ -184,6 +186,7 @@ class ReviewCommentForm extends React.Component {
                 submissionTime: response.Comment.SubmissionTime,
                 showCommentSubmission: true,
                 showCommentForm: false,
+                commentbox: response.Comment.CommentText,
               });
               if (storageUpdated) {
                 setStorageInfo(userStorage, `bvuser_${userDetails.user.userId}`);
@@ -198,37 +201,48 @@ class ReviewCommentForm extends React.Component {
   }
 
   handleEmailChange = (e) => {
-    if (e.target.value.length > 0) {
-      document.getElementById(`${e.target.id}-error`).innerHTML = validEmailRegex.test(e.target.value)
-        ? '' : getStringMessage('valid_email_error', { '%mail': e.target.value });
+    const label = getStringMessage('email_address_label');
+    if (e.target.value.length > 0 && !validEmailRegex.test(e.target.value)) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('valid_email_error', { '%mail': e.target.value });
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length === 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
+      document.getElementById(`${e.target.id}`).classList.remove('error');
     }
-    this.setState({ email: e.target.value });
+    this.setState({ email: encodeURIComponent(e.target.value) });
   }
 
   handleNicknameChange = (e) => {
-    if (e.target.value.length > 0) {
-      const label = getStringMessage('screen_name');
-      document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label })
-        : '';
+    const label = getStringMessage('screen_name');
+    if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length === 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
+      document.getElementById(`${e.target.id}`).classList.remove('error');
     }
-    this.setState({ nickname: e.target.value });
+    this.setState({ nickname: encodeURIComponent(e.target.value) });
   }
 
   handleCommentboxChange = (e) => {
-    if (e.target.value.length > 0) {
-      const label = getStringMessage('comment');
-      document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label })
-        : '';
+    const label = getStringMessage('comment');
+    if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length === 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
+      document.getElementById(`${e.target.id}`).classList.remove('error');
     }
-    this.setState({ commentbox: e.target.value });
+    this.setState({ commentbox: encodeURIComponent(e.target.value) });
   }
 
   render() {

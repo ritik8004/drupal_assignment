@@ -15,7 +15,6 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\file\Entity\File;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Class Sku Images Manager.
@@ -26,6 +25,9 @@ class SkuImagesManager {
 
   const BASE_IMAGE_ROLE = 'image';
   const SWATCH_IMAGE_ROLE = 'swatch_image';
+
+  // Cache key used for product media.
+  const PRODUCT_MEDIA_CACHE_KEY = 'product_media';
 
   /**
    * Module Handler service object.
@@ -84,6 +86,13 @@ class SkuImagesManager {
   protected $productCacheManager;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -100,6 +109,8 @@ class SkuImagesManager {
    *   Cache backend object.
    * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
    *   Product Cache Manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
+   *   Sku images helper.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               ConfigFactoryInterface $config_factory,
@@ -107,7 +118,8 @@ class SkuImagesManager {
                               SkuManager $sku_manager,
                               ProductInfoHelper $product_info_helper,
                               CacheBackendInterface $cache,
-                              ProductCacheManager $product_cache_manager) {
+                              ProductCacheManager $product_cache_manager,
+                              SkuImagesHelper $images_helper) {
     $this->moduleHandler = $module_handler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
@@ -115,6 +127,7 @@ class SkuImagesManager {
     $this->productInfoHelper = $product_info_helper;
     $this->cache = $cache;
     $this->productCacheManager = $product_cache_manager;
+    $this->skuImagesHelper = $images_helper;
 
     $this->productDisplaySettings = $this->configFactory->get('alshaya_acm_product.display_settings');
   }
@@ -172,7 +185,7 @@ class SkuImagesManager {
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
     $cache_key = implode(':', [
-      'product_media',
+      static::PRODUCT_MEDIA_CACHE_KEY,
       (int) $check_parent_child,
       $context,
     ]);
@@ -727,16 +740,29 @@ class SkuImagesManager {
         foreach ($media['media_items']['images'] ?? [] as $media_item) {
           // For now we are displaying only image slider on search results
           // page and PLP.
-          if (!empty($media_item['drupal_uri'])) {
+          if (!empty($media_item)) {
             if (empty($search_main_image)) {
-              $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
+              $main_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+              if (!empty($main_image)) {
+                $search_main_image = $main_image;
+              }
             }
             elseif ($this->productDisplaySettings->get('gallery_show_hover_image')) {
-              $search_hover_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
+              $hover_image = $this->skuImagesHelper->getSkuImage($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+              if (!empty($hover_image)) {
+                $search_hover_image = $hover_image;
+              }
             }
 
             if ($this->productDisplaySettings->get('image_thumb_gallery')) {
-              $thumbnails[] = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing', 'product_listing');
+              $thumbnail = $this->skuImagesHelper->getSkuImage(
+                $media_item,
+                SkuImagesHelper::STYLE_PRODUCT_LISTING,
+                SkuImagesHelper::STYLE_PRODUCT_LISTING
+              );
+              if (!empty($thumbnail)) {
+                $thumbnails[] = $thumbnail;
+              }
             }
           }
         }
@@ -877,7 +903,7 @@ class SkuImagesManager {
             ],
           ];
 
-          $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku->getSku()));
+          $sku_identifier = mb_strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
           $labels = [
             '#theme' => 'product_labels',
@@ -916,9 +942,9 @@ class SkuImagesManager {
    */
   protected function getCloudZoomDefaultSettings() {
     return [
-      'slide_style' => 'product_zoom_medium_606x504',
-      'zoom_style' => 'product_zoom_large_800x800',
-      'thumb_style' => 'pdp_gallery_thumbnail',
+      'slide_style' => SkuImagesHelper::STYLE_PRODUCT_SLIDE,
+      'zoom_style' => SkuImagesHelper::STYLE_PRODUCT_ZOOM,
+      'thumb_style' => SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL,
     ];
   }
 
@@ -980,6 +1006,21 @@ class SkuImagesManager {
   }
 
   /**
+   * Helper function to get image url.
+   *
+   * @param array $item
+   *   Media Item.
+   *
+   * @return false|string
+   *   Image url or false.
+   */
+  protected function getSwatchImageFromMedia(array $item) {
+    return !empty($item['drupal_uri'])
+      ? file_create_url($item['drupal_uri']) :
+      FALSE;
+  }
+
+  /**
    * Get Swatch Image url for PDP.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -996,11 +1037,12 @@ class SkuImagesManager {
 
     foreach ($media as $item) {
       if (isset($item['roles'])
-        && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])
-        && !empty($item['drupal_uri'])) {
-
-        $static[$sku->getSku()] = file_create_url($item['drupal_uri']);
-        break;
+        && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])) {
+        $image = $this->getSwatchImageFromMedia($item);
+        if ($image) {
+          $static[$sku->getSku()] = $image;
+          break;
+        }
       }
     }
 
@@ -1087,10 +1129,20 @@ class SkuImagesManager {
 
       $duplicates[$value] = 1;
       if (empty($plp_main_image)) {
-        $plp_main_image = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), 'product_listing');
+        $plp_image = $this->skuImagesHelper->getSkuImage($product_image, SkuImagesHelper::STYLE_PRODUCT_LISTING);
+        if (!empty($plp_image)) {
+          $plp_main_image = $plp_image;
+        }
       }
 
-      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), 'product_listing', 'product_listing');
+      $variant_image = $this->skuImagesHelper->getSkuImage(
+        $product_image,
+        SkuImagesHelper::STYLE_PRODUCT_LISTING,
+        SkuImagesHelper::STYLE_PRODUCT_LISTING
+      );
+      if (!empty($variant_image)) {
+        $variants_image[$child->id()][] = $variant_image;
+      }
     }
 
     return [
@@ -1098,6 +1150,42 @@ class SkuImagesManager {
       'thumbnails' => $variants_image,
     ];
 
+  }
+
+  /**
+   * Helper for media thumbnails.
+   *
+   * @param array $thumbnails
+   *   Thumbnails array.
+   * @param array $media_item
+   *   Media item.
+   */
+  protected function getThumbnailImagesFromMedia(array &$thumbnails, array $media_item) {
+    // Fetch settings.
+    $settings = $this->getCloudZoomDefaultSettings();
+    $thumbnail_style = $settings['thumb_style'];
+    $zoom_style = $settings['zoom_style'];
+    $slide_style = $settings['slide_style'];
+
+    if (!empty($media_item['drupal_uri'])) {
+      $file_uri = $media_item['drupal_uri'];
+
+      // Show original full image in the modal inside a draggable container.
+      $original_image = file_create_url($file_uri);
+
+      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+      $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+      $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+      $thumbnails[] = [
+        'thumburl' => $image_small,
+        'mediumurl' => $image_medium,
+        'zoomurl' => $image_zoom,
+        'fullurl' => $original_image,
+        'label' => $media_item['label'] ?? '',
+        'type' => 'image',
+      ];
+    }
   }
 
   /**
@@ -1114,43 +1202,21 @@ class SkuImagesManager {
   public function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
     $thumbnails = $media['thumbs'] ?? [];
 
-    // Fetch settings.
-    $settings = $this->getCloudZoomDefaultSettings();
-    $thumbnail_style = $settings['thumb_style'];
-    $zoom_style = $settings['zoom_style'];
-    $slide_style = $settings['slide_style'];
     $main_image = $media['main'] ?? [];
 
     // Create our thumbnails to be rendered for zoom.
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
-      if (!empty($media_item['drupal_uri'])) {
-        $file_uri = $media_item['drupal_uri'];
-
-        // Show original full image in the modal inside a draggable container.
-        $original_image = file_create_url($file_uri);
-
-        $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
-        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-        if ($get_main_image && empty($main_image)) {
-          $main_image = [
-            'zoomurl' => $image_zoom,
-            'mediumurl' => $image_medium,
-            'label' => $media_item['label'],
-          ];
-        }
-
-        $thumbnails[] = [
-          'thumburl' => $image_small,
-          'mediumurl' => $image_medium,
-          'zoomurl' => $image_zoom,
-          'fullurl' => $original_image,
-          'label' => $media_item['label'] ?? '',
-          'type' => 'image',
+      $this->getThumbnailImagesFromMedia($thumbnails, $media_item);
+      if ($get_main_image && empty($main_image) && !empty($media_item['drupal_uri'])) {
+        $thumbnail = end($thumbnails);
+        $main_image = [
+          'zoomurl' => $thumbnail['zoomurl'],
+          'mediumurl' => $thumbnail['mediumurl'],
+          'label' => $media_item['label'],
         ];
       }
     }
+
     $video_inserted_at_second_position = FALSE;
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
       $video_data = [];
@@ -1336,7 +1402,8 @@ class SkuImagesManager {
     static $public_dir;
 
     if (empty($public_dir)) {
-      $public_dir = file_create_url(file_default_scheme() . '://');
+      $default_schema = \Drupal::config('system.file')->get('default_scheme');
+      $public_dir = file_create_url($default_schema . '://');
     }
 
     return $public_dir;

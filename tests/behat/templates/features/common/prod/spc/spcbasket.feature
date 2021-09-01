@@ -1,4 +1,4 @@
-@javascript @smoke @mcsaprod @mcsapprod @mcaeprod @mcaepprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
+@javascript @smoke @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
 Feature: Test basket page
 
   Background:
@@ -24,7 +24,7 @@ Feature: Test basket page
     Then the price for product should be doubled
 
   @desktop
-  Scenario: As a Guest, I should be able to see the header and the footer
+  Scenario: As a Guest, I should be able to see the header
     When I scroll to top
     Then I should see "{create_account}"
     Then I should see "{sign_in}"
@@ -35,7 +35,7 @@ Feature: Test basket page
     Then I should see an ".plp-facet-product-filter" element
 
   @mobile
-  Scenario: As a Guest, I should be able to see the header and the footer (mobile)
+  Scenario: As a Guest, I should be able to see the header (mobile)
     When I scroll to top
     Then I should see a "#block-mobilenavigation a.store" element on page
     Then I should see a "#block-mobilenavigation a.mobile--search" element on page
@@ -50,7 +50,7 @@ Feature: Test basket page
     Then I click on "#block-alshayamainmenu .mobile--close" element
 
   @desktop
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
+  Scenario: As a Guest, I should be able to see the products added to basket and the header
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
@@ -79,7 +79,7 @@ Feature: Test basket page
     Then I should see an ".delivery-vat" element
 
   @mobile
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
+  Scenario: As a Guest, I should be able to see the products added to basket and the header (mobile)
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
@@ -162,7 +162,7 @@ Feature: Test basket page
     Then the price for product should be doubled
 
   @desktop @language
-  Scenario: As a Guest, I should be able to see the header and the footer in second language
+  Scenario: As a Guest, I should be able to see the header in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -176,7 +176,7 @@ Feature: Test basket page
     Then I should see an ".plp-facet-product-filter" element
 
   @mobile @language
-  Scenario: As a Guest, I should be able to see the header and the footer in second language (mobile)
+  Scenario: As a Guest, I should be able to see the header and in second language (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 5 seconds
     And I wait for the page to load
@@ -194,7 +194,7 @@ Feature: Test basket page
     Then I click on "#block-alshayamainmenu .mobile--close" element
 
   @language @desktop
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer in second language
+  Scenario: As a Guest, I should be able to see the products added to basket and the header in second language
     When I follow "{language_link}"
     And I wait 5 seconds
     And I wait for the page to load
@@ -214,7 +214,7 @@ Feature: Test basket page
     Then I should see an ".delivery-vat" element
 
   @mobile @language
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
+  Scenario: As a Guest, I should be able to see the products added to basket and the header (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 5 seconds
     And I wait for the page to load
@@ -257,8 +257,6 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element
 
   @language @mobile
   Scenario: As a Guest, I should be able to remove products from the basket in second language (mobile)
@@ -281,5 +279,3 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element

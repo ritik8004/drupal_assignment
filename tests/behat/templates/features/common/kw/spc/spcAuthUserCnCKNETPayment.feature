@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect
+@javascript @KNET @KNetPayment @clickCollect @tbskwuat @mckwuat @flkwuat @bbwkwuat @pbkwuat @hmkwuat
 Feature: SPC Checkout Click and Collect using KNET payment method for authenticated user
 
   Background:
@@ -18,7 +18,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -40,8 +40,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I select "{spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "Submit"
     And I wait 2 seconds
@@ -59,7 +58,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -74,15 +73,13 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
     And I wait for AJAX to finish
-    Then the Knet payment checkbox should be checked
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds
@@ -97,7 +94,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -119,8 +116,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I select "{spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "Submit"
     And I wait 2 seconds

@@ -1,0 +1,367 @@
+.c-contact {
+  &.l-one--w {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 6.438rem;
+    }
+  }
+
+  .c-page-title {
+    border-bottom: 1px solid $content_pagetitle_border;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    margin-top: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2rem;
+    }
+  }
+
+  .form-type-textarea {
+    textarea {
+      resize: none;
+      padding-#{$right}: 1.25rem !important;
+    }
+
+    .field-suffix {
+      position: absolute;
+      top: 0.125rem;
+      #{$right}: 0;
+      font-size: 0.8125rem;
+      color: $primary_textarea_suffix;
+      font-weight: normal;
+      z-index: 3;
+    }
+
+    #edit-message_counter,
+    .text-count-wrapper {
+      display: none !important;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .form-item-first-name,
+    .form-item-last-name {
+      width: 48% !important;
+    }
+
+    .form-item-first-name {
+      margin-right: 0 !important;
+    }
+
+    .form-item-last-name {
+      float: right !important;
+    }
+  }
+
+  .mobile-number-field {
+    .local-number {
+      height: 1.5rem;
+    }
+  }
+}
+
+.webform-submission-alshaya-contact-form {
+  .form-item,
+  .form-item.mobile-number-field {
+    margin-bottom: 3.5rem;
+    display: inline-block;
+  }
+
+  fieldset.form-item {
+    margin-top: 1em;
+  }
+
+  .form-type-radio {
+    margin-bottom: 0;
+  }
+
+  legend {
+    color: $webform_contact_legend;
+  }
+
+  .form-item-mobile-number-country-code {
+    .form-item--error-message {
+      display: none;
+    }
+  }
+
+  .mobile-input--wrapper {
+    #edit-mobile-number-mobile-error {
+      margin-top: -1.25rem;
+      padding-top: 0.25rem;
+    }
+  }
+
+  .form-item-order-number,
+  .form-item-missing-items {
+    input[type=text] ~ label:not(.active-label) {
+      font-size: 1rem !important;
+      color: $primary_input_label !important;
+      position: absolute !important;
+      #{$left}: 0 !important;
+      top: -0.125rem !important;
+      transition: 0.2s ease all !important;
+    }
+
+    input[type=text]:focus ~ label {
+      top: -1.375rem !important;
+      bottom: 0 !important;
+      #{$left}: 0 !important;
+      opacity: 1 !important;
+      font-size: 0.75rem !important;
+    }
+
+    input[type=text] ~ label.error {
+      font-size: 0.75rem !important;
+      color: $red-error !important;
+      position: relative !important;
+      line-height: 1;
+    }
+  }
+}
+
+.alias--contact {
+  .webform-submission-alshaya-contact-form {
+    &.webform-submission-form {
+      legend {
+        float: none;
+        margin-#{$left}: 0;
+      }
+
+      fieldset {
+        margin-#{$left}: 0;
+      }
+    }
+
+    .form-item-order-number,
+    .form-item-missing-items {
+      .js-form-required.form-required,
+      .error {
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .form-item-order-number {
+      margin-top: 1.5rem;
+    }
+
+    .form-item-file {
+      width: 100%;
+      margin-bottom: 3rem;
+
+      input {
+        color: $primary_input_label;
+        border-bottom: 0;
+      }
+    }
+
+    margin-top: 1.5rem;
+
+    .captcha {
+      margin-top: 0;
+    }
+
+    .webform-element-description {
+      font-size: 0.8125rem;
+      margin-top: 0.25rem;
+      color: $primary_input_label;
+    }
+
+    .form-type-managed-file {
+      .form-submit {
+        width: auto;
+        height: auto;
+        color: $primary_input_label;
+        background: none;
+        margin-bottom: 0.3125rem;
+        margin-top: 0;
+        border: none;
+        float: none;
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+
+      .messages.messages--warning,
+      .messages.messages--error {
+        margin-top: 0;
+        display: inline-block;
+        padding-#{$left}: 2.5rem;
+
+        &::before {
+          position: absolute;
+          #{$left}: 0.1875rem;
+        }
+      }
+
+      .form-item--error-message {
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+      }
+
+      label {
+        display: none;
+      }
+    }
+
+    .contact-us-feedback,
+    .contact-us-type,
+    .contact-us-reason {
+      &.form-type-select {
+        label.error {
+          position: absolute;
+          top: 2.25rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        @include select-wrapper(100%);
+
+        select.form-select {
+          @include select-style(100%);
+        }
+
+        margin-bottom: 2rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        @include select-wrapper(100%);
+        @include select-bg(6.5625rem);
+
+        select.form-select {
+          @include select-style(100%);
+        }
+
+        margin-bottom: 2rem;
+      }
+
+      .select2-selection {
+        width: 90.75%;
+      }
+
+      @include select-wrapper(100%);
+
+      margin-bottom: 2rem;
+
+      .select2-container {
+        @include select2-style(100%);
+
+        .select2-selection {
+          .select2-selection__rendered {
+            color: $webform_contact_dropdown_disable_text;
+            font-size: 1rem;
+          }
+        }
+      }
+
+      select.form-select {
+        @include breakpoint($upto-desktop) {
+          color: $primary_dropdown_text;
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+
+  .c-contact {
+    @include breakpoint($tablet) {
+      padding-#{$left}: 1.5rem;
+    }
+  }
+}
+
+.webform-submission-alshaya-contact-add-form {
+  .form-item {
+    &.form-type-textfield,
+    &.form-type-textarea,
+    &.form-type-email {
+      label {
+        &:last-of-type {
+          text-transform: lowercase;
+        }
+      }
+    }
+  }
+
+  .mobile-number-field {
+    label {
+      text-transform: lowercase;
+    }
+
+    .mobile-input--wrapper {
+      .country-select {
+        @include country-select;
+      }
+    }
+  }
+}
+
+.webform-submission-alshaya-contact-form .mobile-number-field .mobile-input--wrapper {
+  @include mobile-input-style;
+}
+
+.webform-submission-alshaya-contact-form,
+#selected-store-wrapper {
+  .mobile-number-field {
+    input {
+      @include mobile-number-input-style;
+    }
+
+    max-width: 24.75rem;
+    margin-bottom: 1.5rem;
+
+    #edit-mobile-number {
+      display: block;
+    }
+
+    .user-page.c-user-edit & {
+      margin-bottom: 3.5rem;
+    }
+
+    label {
+      opacity: 1;
+      font-size: 0.75rem !important;
+      color: $primary_input_label;
+      top: 0.4375rem !important;
+
+      &.error {
+        position: absolute;
+        #{$left}: 0;
+        top: 2.75rem !important;
+        width: 100%;
+        border-top: 1px solid $primary_input_inline_error;
+      }
+    }
+
+    .form-type-textfield {
+      margin-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .form-type-select {
+      &.form-item-guest-delivery-home-address-shipping-mobile-number-country-code,
+      &.form-item-billing-address-address-billing-mobile-number-country-code,
+      &.form-item-member-delivery-home-address-form-form-mobile-number-country-code,
+      &.form-item-cc-mobile-number-country-code,
+      &.form-item-field-address-0-address-mobile-number-country-code {
+        padding-bottom: 0;
+        margin-top: 0 !important;
+        width: 3rem;
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  #edit-field-address-0-address-administrative-area {
+    width: 100%;
+  }
+}

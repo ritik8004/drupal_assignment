@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityFormBuilderInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Provides a 'CheckoutRegisterBlock' block.
@@ -178,7 +179,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    return AccessResult::allowedIf($account->isAnonymous() && ($this->config->get('register') != USER_REGISTER_ADMINISTRATORS_ONLY));
+    return AccessResult::allowedIf($account->isAnonymous() && ($this->config->get('register') != UserInterface::REGISTER_ADMINISTRATORS_ONLY));
   }
 
   /**

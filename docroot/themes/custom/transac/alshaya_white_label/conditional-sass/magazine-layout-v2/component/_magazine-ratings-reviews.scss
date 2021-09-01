@@ -61,12 +61,18 @@ body.ratings-reviews-overlay {
 
                 &-title {
                   text-align: center;
+                  font-family: $alshaya-bold;
                 }
 
                 .histogram {
                   &-wrapper {
                     width: 100%;
                     margin-top: 1.5rem;
+
+                    .already-reviewed-text {
+                      text-align: center;
+                      margin-bottom: 1.25rem;
+                    }
 
                     .average-rating {
                       text-align: center;
@@ -92,18 +98,18 @@ body.ratings-reviews-overlay {
 
                       .histogram-row {
                         .histogram-full-bar {
-                          width: 81%;
+                          width: 78%;
 
                           html[lang=ar] & {
-                            width: 79%;
+                            width: 76%;
                           }
                         }
 
                         .star-label {
-                          width: 11%;
+                          width: 14%;
 
                           html[lang=ar] & {
-                            width: 13%;
+                            width: 16%;
                           }
                         }
                       }
@@ -436,6 +442,12 @@ body.ratings-reviews-overlay {
               }
             }
 
+            .hide-field-select {
+              &.dropdown-conatiner {
+                display: none;
+              }
+            }
+
             .netpromoter-option {
               .survey-block {
                 margin: 2rem 0;
@@ -503,16 +515,19 @@ body.ratings-reviews-overlay {
                 z-index: 3;
                 background: none;
                 top: 0.5rem;
-                #{$right}: 0.625rem;
+                #{$right}: auto;
+                #{$left}: 0;
 
                 html[lang=ar] & {
                   top: 0.3125rem;
-                  left: 0.8125rem;
                 }
 
-                &::before {
+                @include icon(chevron#{$left}, before) {
                   color: $magv2-panel-close-icon;
                   font-size: 2.5rem;
+                  width: 2rem;
+                  cursor: pointer;
+                  pointer-events: none;
                 }
               }
 

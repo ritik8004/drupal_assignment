@@ -1,4 +1,4 @@
-@javascript @dynamic-promotion @discount @smoke @auth
+@javascript @dynamic-promotion @discount @smoke @auth @mckwuat @mcsauat @mcaeuat
 Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get x% discount) for Authenticated user
 
   Background:

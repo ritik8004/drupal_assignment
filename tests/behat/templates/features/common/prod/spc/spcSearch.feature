@@ -1,8 +1,12 @@
-@javascript @account @smoke @auth @search @flsaprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
+@javascript @account @smoke @auth @search @flsaprod @vskwprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
 Feature: Test search functionality
 
+  Background:
+    Given I am on "{spc_basket_page}"
+    And I wait 10 seconds
+
+  @desktop
   Scenario: Verify user should be able to search with valid keyword and see relevant results
-    Given I am on homepage
     And I should see an "#alshaya-algolia-autocomplete" element
     When I fill in "search" with "{spc_search_keyword}"
     And I wait for AJAX to finish
@@ -15,13 +19,35 @@ Feature: Test search functionality
     And the element ".pager__item button" should exist
     And I click jQuery ".js-pager__items .button" element on page
     And I wait for AJAX to finish
-    And I click on "#react-algolia-searchbar-clear-button" element
-    And I wait 5 seconds
-    Then I should be on homepage
+    Then I click on "#react-algolia-searchbar-clear-button" element
 
+  @desktop
   Scenario: Verify Search Results Message for No Results
-    Given I am on homepage
     When I fill in "search" with "NO-Results"
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then the element ".dy_unit .dy-404" should exist
+
+  @desktop
+  Scenario: As a Guest, I should be able to see the header on SRP
+    Then I should see the link "{create_account}"
+    Then I should see the link "{find_store}"
+    Then I should see the link "{language_link}"
+    Then I should see an ".plp-facet-product-filter" element
+
+  @desktop @language
+  Scenario: As a Guest, I should be able to see the header and the footer on SRP
+    When I follow "{language_link}"
+    And I wait 10 seconds
+    And I wait for the page to load
+    When I fill in "search" with "{spc_search_keyword}"
+    Then I should see an ".stores-finder" element
+    Then I should see an ".register-link" element
+    Then I should see an ".plp-facet-product-filter" element
+
+  @desktop @language
+  Scenario: As a Guest, I should be able to select filters on PLP page
+    When I follow "{language_link}"
+    And I wait 10 seconds
+    And I wait for the page to load
+    And the element ".plp-facet-product-filter" should exist

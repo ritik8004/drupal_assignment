@@ -678,7 +678,7 @@ function alshaya_white_label_form_node_form_alter(&$form, FormStateInterface $fo
   $node = $form_state->getFormObject()->getEntity();
   $form['#theme'] = ['node_edit_form'];
   $form['advanced']['#type'] = 'container';
-  $is_new = !$node->isNew() ? format_date($node->getChangedTime(), 'short') : t('Not saved yet');
+  $is_new = !$node->isNew() ? \Drupal::service('date.formatter')->format($node->getChangedTime(), 'short') : t('Not saved yet');
   $form['meta'] = [
     '#attributes' => ['class' => ['entity-meta__header']],
     '#type'       => 'container',
@@ -872,6 +872,19 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
     if (in_array('back_to_top/back_to_top_js', $attachments['#attached']['library'])) {
       $index = array_search('back_to_top/back_to_top_js', $attachments['#attached']['library']);
       unset($attachments['#attached']['library'][$index]);
+    }
+  }
+
+  // For performance testing & debugging purposes adding a quick bypass for
+  // escaping GTM JS on a page.
+  // Usage: ?GTM=BLOCK.
+  $param = \Drupal::request()->get('GTM');
+  if ($param === 'BLOCK') {
+    foreach ($attachments['#attached']['html_head'] ?? [] as $index => $script) {
+      if ($script[1] === 'google_tag_script_tag__primary' || $script[1] === 'google_tag_data_layer_tag__primary') {
+        unset($attachments['#attached']['html_head'][$index]);
+        return;
+      }
     }
   }
 }
@@ -1112,7 +1125,7 @@ function alshaya_white_label_preprocess_mimemail_message(&$variables) {
   // with different env.
   $uuid = '340b823b-e16c-457a-bc03-4a096f8ae171';
   // Get copyright block based on language.
-  $copyright_block = \Drupal::entityManager()->loadEntityByUuid('block_content', $uuid);
+  $copyright_block = \Drupal::service('entity.repository')->loadEntityByUuid('block_content', $uuid);
   if ($copyright_block) {
     $block_view = \Drupal::entityTypeManager()
       ->getViewBuilder('block_content')
@@ -1178,7 +1191,7 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
     dynamic_yield_page_attachments($variables);
   }
   if (!empty($image)) {
-    if ($file = file_load($image)) {
+    if ($file = File::load($image)) {
       $variables['maintenance_image'] = file_create_url($file->getFileUri());
     }
   }
@@ -1216,7 +1229,7 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
   ];
   $variables['image_404'] = '';
   if (!empty($image)) {
-    if ($file = file_load($image)) {
+    if ($file = File::load($image)) {
       $variables['image_404'] = file_create_url($file->getFileUri());
     }
   }

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_checkout_by_agent\Plugin\rest\resource;
 
+use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Component\Datetime\Time;
+use Drupal\Core\Flood\FloodInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Provides a resource to cart URL with smart agent info.
@@ -109,6 +112,20 @@ class ShareCart extends ResourceBase {
   protected $token;
 
   /**
+   * The flood service.
+   *
+   * @var \Drupal\Core\Flood\FloodInterface
+   */
+  protected $flood;
+
+  /**
+   * Alshaya SPC Version Helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * ShareCart constructor.
    *
    * @param array $configuration
@@ -141,6 +158,10 @@ class ShareCart extends ResourceBase {
    *   Injecting time service.
    * @param \Drupal\token\TokenInterface $token
    *   Token service.
+   * @param \Drupal\Core\Flood\FloodInterface $flood
+   *   The flood service.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Alshaya SPC Version Helper.
    */
   public function __construct(
     array $configuration,
@@ -157,7 +178,9 @@ class ShareCart extends ResourceBase {
     MobileNumberUtilInterface $mobile_util,
     ConfigFactoryInterface $config_factory,
     Time $time,
-    TokenInterface $token
+    TokenInterface $token,
+    FloodInterface $flood,
+    AlshayaSpcHelper $spc_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->messageApiAdapter = $message_api_adapter;
@@ -170,6 +193,8 @@ class ShareCart extends ResourceBase {
     $this->configFactory = $config_factory;
     $this->time = $time;
     $this->token = $token;
+    $this->flood = $flood;
+    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -191,7 +216,9 @@ class ShareCart extends ResourceBase {
       $container->get('mobile_number.util'),
       $container->get('config.factory'),
       $container->get('datetime.time'),
-      $container->get('token')
+      $container->get('token'),
+      $container->get('flood'),
+      $container->get('alshaya_spc.helper')
     );
   }
 
@@ -209,6 +236,22 @@ class ShareCart extends ResourceBase {
       throw new AccessDeniedHttpException();
     }
 
+    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($smart_agent_details_array['email']);
+    if (!$user || $user->isBlocked() || !$user->hasRole('smartagent')) {
+      $error_message = 'Agent account is blocked or does not exist.';
+      return $this->prepareResourceResponse($error_message);
+    }
+
+    $settings = $this->configFactory->get('alshaya_checkout_by_agent.settings');
+    // Check if request is a flood request.
+    if ($this->isFloodRequest($user->id())) {
+      // Block the request and show the error message.
+      $error_message = sprintf('The request is blocked because you have crossed %s request per min API call limit. Please try after some time.', $settings->get('api_request_limit'));
+      throw new AccessDeniedHttpException($error_message, NULL, ResourceResponse::HTTP_TOO_MANY_REQUESTS);
+    }
+
     // Check request has required parameters.
     if (empty($data['type']) || empty($data['value']) || empty($data['cartId'])) {
       $responseData = [
@@ -220,19 +263,41 @@ class ShareCart extends ResourceBase {
       return $response;
     }
 
-    $settings = $this->configFactory->get('alshaya_checkout_by_agent.settings');
-
     $context = $data['type'];
 
     // @todo validate the mobile number of mail.
     $to = $data['value'];
 
+    // Validating the SmartAgent info with the user object info.
+    $storeCode = '';
+    $storeField = $user->get('field_agent_store')->first();
+    // Validate if there is value in store field.
+    if (empty($storeField)) {
+      $error_message = 'Agent store is empty.';
+      return $this->prepareResourceResponse($error_message);
+    }
+
+    $store = $storeField->get('entity')->getValue();
+    if (empty($store)) {
+      $error_message = 'The store that is assigned is missing or deleted.';
+      return $this->prepareResourceResponse($error_message);
+    }
+    $storeCode = $store->get('field_store_locator_id')->getString();
+    // Flag value to track update status.
+    $updated = FALSE;
+    if (!empty($storeCode) && $smart_agent_details_array['storeCode'] != $storeCode) {
+      $smart_agent_details_array['storeCode'] = $storeCode;
+      $updated = TRUE;
+    }
+    $user_name = $user->get('field_first_name')->getString() . ' ' . $user->get('field_last_name')->getString();
+    if (!empty($user_name) && $smart_agent_details_array['name'] != $user_name) {
+      $smart_agent_details_array['name'] = $user_name;
+      $updated = TRUE;
+    }
     // @todo basic validation of cart id.
     $cartId = $data['cartId'];
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
 
     // Add sharing channel and time with agent details.
     $smart_agent_details_array['shared_via'] = $context;
@@ -247,10 +312,19 @@ class ShareCart extends ResourceBase {
 
     $key = Settings::get('alshaya_api.settings');
     $encryptedData = SecureText::encrypt(json_encode($data), $key['consumer_secret']);
-    $cart_url = $this->currentRequest->getSchemeAndHttpHost();
-    $cart_url .= _alshaya_spc_get_middleware_url();
-    $cart_url .= '/cart/smart-agent-cart-resume';
+
+    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
+      $cart_url = Url::fromRoute('alshaya_checkout_by_agent.resume', [], ['absolute' => TRUE])->toString();
+    }
+    else {
+      $cart_url = $this->currentRequest->getSchemeAndHttpHost();
+      $cart_url .= _alshaya_spc_get_middleware_url();
+      $cart_url .= '/cart/smart-agent-cart-resume';
+    }
+
+    // Add the encrypted data in query string.
     $cart_url .= '?data=' . $encryptedData;
+
     $responseData = ['success' => TRUE];
 
     switch ($context) {
@@ -323,7 +397,16 @@ class ShareCart extends ResourceBase {
       '@smart_agent' => json_encode($data),
     ]);
 
-    return (new JsonResponse($responseData));
+    $json_response = new JsonResponse($responseData);
+    // Update cookie only if the data is outdated.
+    if ($updated) {
+      $cookie = new Cookie(
+        'smart_agent_cookie',
+        base64_encode(json_encode($smart_agent_details_array)), 0, '/', NULL, TRUE, FALSE);
+      $json_response->headers->setCookie($cookie);
+    }
+
+    return $json_response;
   }
 
   /**
@@ -346,6 +429,69 @@ class ShareCart extends ResourceBase {
     }
 
     return $value;
+  }
+
+  /**
+   * Check if the request is a flood request or not.
+   *
+   * @param string $user_id
+   *   The user id.
+   *
+   * @return bool
+   *   TRUE if flood request else FALSE.
+   */
+  protected function isFloodRequest(string $user_id) {
+    $api_request_limit = $this->configFactory->get('alshaya_checkout_by_agent.settings')->get('api_request_limit');
+    if (!$this->flood->isAllowed('alshaya_checkout_by_agent.requested_api', $api_request_limit, 60, $this->getIdentifier($user_id))) {
+      return TRUE;
+    }
+    // Register the Request.
+    $this->registerFlood($user_id);
+
+    return FALSE;
+  }
+
+  /**
+   * Register request for flood control.
+   *
+   * @param string $user_id
+   *   The user id.
+   */
+  protected function registerFlood(string $user_id) {
+    // Register the API call request.
+    $this->flood->register('alshaya_checkout_by_agent.requested_api', 60, $this->getIdentifier($user_id));
+  }
+
+  /**
+   * Log and Prepare ResourceResponse object.
+   *
+   * @param string $error_message
+   *   Error message to log and return in response.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   Return ResourceRequest object.
+   */
+  protected function prepareResourceResponse(string $error_message) {
+    $responseData = [
+      'success' => FALSE,
+      'error_message' => $error_message,
+    ];
+    // Log the error message.
+    $this->logger->error($error_message);
+    return new ResourceResponse($responseData);
+  }
+
+  /**
+   * Provides identifier for smart agent user.
+   *
+   * @param string $user_id
+   *   The user id.
+   *
+   * @return string
+   *   A unique identifier for the smart agent.
+   */
+  protected function getIdentifier(string $user_id) {
+    return 'smart_agent_' . $user_id;
   }
 
 }

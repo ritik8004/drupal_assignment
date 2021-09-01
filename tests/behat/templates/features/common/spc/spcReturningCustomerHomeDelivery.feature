@@ -1,4 +1,4 @@
-@javascript @returnUser @codPayment @homeDelivery @vsaeuat @hmaeuat @bbwkwuat @auth @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat
+@javascript @returnUser @codPayment @homeDelivery @vsaeuat @bbwsauat @mcsauat @hmaeuat @flsauat @bbwkwuat @tbskwuat @auth @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat
 Feature: SPC Checkout Home Delivery COD for returning customer
 
   Background:
@@ -39,9 +39,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -53,7 +50,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     Then I should see "{delivery_type_text}"
     Then I should see "{delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -108,9 +104,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"
@@ -126,7 +119,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
     Then I should see "{language_delivery_type_text}"
     Then I should see "{language_delivery_type}"
-    Then I should see "{language_payment_type_text}"
     Then I should see "{language_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -180,9 +172,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"

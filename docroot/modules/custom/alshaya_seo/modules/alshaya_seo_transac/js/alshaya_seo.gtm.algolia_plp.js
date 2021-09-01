@@ -13,7 +13,7 @@
 
         $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', $('#alshaya-algolia-plp')).once('product-list-clicked').on('click', function () {
           var that = $(this);
-          var position = parseInt($(this).closest('.views-row').data('list-item-position'));
+          var position = parseInt($(this).attr('data-insights-position'));
           Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, $('body').attr('gtm-list-name'), position);
         });
       });
@@ -35,15 +35,19 @@
     if (!$(this).hasClass('is-active')) {
       var selectedText = '';
       var eventName = '';
+      var facetTitle = $(this).attr('datadrupalfacetlabel');
       if ($(this).find('span.facet-item__value').length > 0) {
         selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
+        // For rating filter.
+        if (facetTitle === 'Rating') {
+          selectedText = $(this).find('span.facet-item__value div.listing-inline-star div.rating-label').html();
+        }
         eventName = 'filter';
       }
       else {
         selectedText = $(this).find('a.facet-item__value').html();
         eventName = 'sort';
       }
-      var facetTitle = $(this).attr('datadrupalfacetlabel');
 
       var data = {
         event: eventName,

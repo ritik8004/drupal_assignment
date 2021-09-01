@@ -33,7 +33,6 @@ class HmProductSettingsForm extends ProductSettingsForm {
     ];
 
     return parent::buildForm($form, $form_state);
-    ;
   }
 
   /**

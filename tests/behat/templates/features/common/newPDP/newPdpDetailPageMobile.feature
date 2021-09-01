@@ -1,4 +1,4 @@
-@javascript @smoke @newPdp @mobile
+@javascript @smoke @newPdp @mobile @flkwprod @flaeprod @flsaprod @mcaeuat
 Feature: Testing new PDP page for Mobile
 
   Background:
@@ -40,9 +40,9 @@ Feature: Testing new PDP page for Mobile
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
     And I wait for AJAX to finish
-    Then I should see a ".desc-overlay" element on page
-    Then I should see a ".desc-overlay .desc-label-text-wrapper" element on page
-    Then I should see a ".desc-overlay .magv2-desc-popup-pdp-item-code-attribute" element on page
+    Then I should see a ".overlay-desc" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-container div.magv2-pdp-title" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-pdp-item-code-attribute" element on page
 
   Scenario: To verify user is able to see product details when clicking on read more link
     Then I should see a ".magv2-pdp-description-wrapper" element on page

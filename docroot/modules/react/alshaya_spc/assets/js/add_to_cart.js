@@ -87,8 +87,11 @@
 
             // Configurable - normal as well as re-structured.
             if (is_configurable) {
-              productData['product_name'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_title;
-              productData['image'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_image;
+              var productVariantSku = settings[productInfoKey][page_main_sku].variants[variant_sku];
+              if (productVariantSku !== undefined) {
+                productData['product_name'] = productVariantSku.cart_title;
+                productData['image'] = productVariantSku.cart_image;
+              }
             }
             // Simple grouped (re-structured).
             else if (settings[productInfoKey][page_main_sku]['group'] !== undefined) {
@@ -97,23 +100,9 @@
             }
 
             // Post to ajax for cart update/create.
-            jQuery.ajax({
-              url: settings.alshaya_spc.cart_update_endpoint + '?lang=' + drupalSettings.path.currentLanguage,
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              data: JSON.stringify(post_data),
-              error: function (error) {
-                var cartNotification = new CustomEvent('product-add-to-cart-error', {
-                  bubbles: true,
-                  detail: {
-                    postData: post_data,
-                  },
-                });
-                form[0].dispatchEvent(cartNotification);
-              },
-              success: function (response) {
+            window.commerceBackend.addUpdateRemoveCartItem(post_data)
+              .then (function (responseData) {
+                const response = responseData.data;
                 // If there any error we throw from middleware.
                 if (response.error === true) {
                   if (response.error_code === '400') {
@@ -268,8 +257,16 @@
                     );
                   }
                 }
-              }
-            });
+              })
+              .catch (function() {
+                var cartNotification = new CustomEvent('product-add-to-cart-error', {
+                  bubbles: true,
+                  detail: {
+                    postData: post_data,
+                  },
+                });
+                form[0].dispatchEvent(cartNotification);
+              });
           }
         }, 20);
       });

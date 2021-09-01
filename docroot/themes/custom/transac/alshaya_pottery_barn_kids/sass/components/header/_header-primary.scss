@@ -1,8 +1,6 @@
 header.c-header {
-  .c-header__region {
-    @include breakpoint($only-tablet) {
-      margin-top: 0;
-    }
+  @include breakpoint($desktop) {
+    border-bottom: 0.0625rem solid $primary_search_border;
   }
 
   .block-views-exposed-filter-blocksearch-page {
@@ -49,11 +47,6 @@ header.c-header {
       }
 
       a {
-        @include breakpoint($only-tablet) {
-          width: 13.4375rem;
-          height: 2rem;
-        }
-
         @include breakpoint($desktop) {
           width: 18.1875rem;
           height: 2.625rem;
@@ -71,6 +64,12 @@ header.c-header {
         }
 
         img {
+          @include breakpoint($only-tablet) {
+            html[lang=ar] & {
+              width: auto !important;
+            }
+          }
+
           @include breakpoint($desktop) {
             width: 100%;
           }
@@ -105,7 +104,18 @@ header.c-header {
       }
 
       @include breakpoint($desktop) {
-        margin-bottom: -0.75rem;
+        margin-bottom: -0.35rem;
+      }
+    }
+  }
+
+  .block-alshaya-react-mini-cart {
+    .cart-link {
+      @include breakpoint($only-mobile) {
+        html[lang=ar] & {
+          top: 0.125rem;
+          margin-top: 0;
+        }
       }
     }
   }
@@ -185,6 +195,18 @@ body {
     &.overlay.overlay-main-menu {
       &::before {
         opacity: 0;
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    &.supermenu {
+      margin-top: 10.5625rem !important;
+    }
+
+    &:not(.supermenu) {
+      html[lang=ar] & {
+        margin-top: 8.6875rem;
       }
     }
   }

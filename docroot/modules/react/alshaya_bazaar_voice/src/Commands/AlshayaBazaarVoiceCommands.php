@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_bazaar_voice\Commands;
 
 use Algolia\AlgoliaSearch\SearchClient;
+use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\alshaya_master\Service\AlshayaEntityHelper;
 use Drush\Commands\DrushCommands;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
@@ -125,6 +126,13 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     if (empty($data)) {
       return;
     }
+    // Use to bv data into DY.
+    $dyProductDeltaFeedApiWrapper = \Drupal::service('dynamic_yield.product_feed_api_wrapper');
+    $dy_config = \Drupal::config('dynamic_yield.settings');
+    $feeds = $dy_config->get('feeds');
+
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     // Algolia config details.
     $alshaya_algolia_react_setting_values = \Drupal::config('search_api.server.algolia');
@@ -158,13 +166,17 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
           try {
             $objects = $index->getObjects($objectIDs);
             foreach ($objects['results'] as $object) {
-              if (empty($data['ReviewStatistics'][$object['sku']])) {
+              if (empty($object['sku'])) {
                 continue;
               }
-              $object['attr_bv_average_overall_rating'] = $data['ReviewStatistics'][$object['sku']]['AverageOverallRating'];
-              $object['attr_bv_total_review_count'] = $data['ReviewStatistics'][$object['sku']]['TotalReviewCount'];
-              $object['attr_bv_rating_distribution'] = $data['ReviewStatistics'][$object['sku']]['RatingDistribution'];
-              $object['attr_bv_rating'] = $data['ReviewStatistics'][$object['sku']]['RatingStars'];
+              $sanitized_sku = $skuManager->getSanitizedSku($object['sku']);
+              if (empty($data['ReviewStatistics'][$sanitized_sku])) {
+                continue;
+              }
+              $object['attr_bv_average_overall_rating'] = $data['ReviewStatistics'][$sanitized_sku]['AverageOverallRating'];
+              $object['attr_bv_total_review_count'] = $data['ReviewStatistics'][$sanitized_sku]['TotalReviewCount'];
+              $object['attr_bv_rating_distribution'] = $data['ReviewStatistics'][$sanitized_sku]['RatingDistribution'];
+              $object['attr_bv_rating'] = $data['ReviewStatistics'][$sanitized_sku]['RatingStars'];
               $bv_objects['results'][] = $object;
             }
 
@@ -178,21 +190,57 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
       }
       else {
         $bv_objects = [];
+        $fields = [];
         $index = $client->initIndex($index_name);
         // Skus will be the object ids in case of product list algolia index.
         try {
-          foreach ($data['ReviewStatistics'] as $sku_id => $statistics) {
-            $object = $index->getObject($sku_id);
-            if (empty($object)) {
+          $objects = $index->getObjects($skus);
+          foreach ($objects['results'] as $object) {
+            if (empty($object['sku'])) {
               continue;
             }
-            $object['attr_bv_total_review_count'] = $statistics['TotalReviewCount'];
-            $object['attr_bv_rating_distribution'] = $statistics['RatingDistribution'];
+            $sanitized_sku = $skuManager->getSanitizedSku($object['sku']);
+            if (empty($data['ReviewStatistics'][$sanitized_sku])) {
+              continue;
+            }
+            $object['attr_bv_total_review_count'] = $data['ReviewStatistics'][$sanitized_sku]['TotalReviewCount'];
+            $object['attr_bv_rating_distribution'] = $data['ReviewStatistics'][$sanitized_sku]['RatingDistribution'];
             foreach ($languages as $language) {
-              $object['attr_bv_average_overall_rating'][$language->getId()] = $statistics['AverageOverallRating'];
-              $object['attr_bv_rating'][$language->getId()] = $statistics['RatingStars'];
+              $object['attr_bv_average_overall_rating'][$language->getId()] = $data['ReviewStatistics'][$sanitized_sku]['AverageOverallRating'];
+              $object['attr_bv_rating'][$language->getId()] = $data['ReviewStatistics'][$sanitized_sku]['RatingStars'];
             }
             $bv_objects['results'][] = $object;
+
+            // Sync BV reviews info into DY.
+            foreach ($feeds as $feed) {
+              if ($feed['context'] === 'web') {
+                $fields['sku'] = $object['sku'];
+                $fields['bv_overall_rating_percentage'] = $data['ReviewStatistics'][$sanitized_sku]['OverallRatingPercentage'];
+                $fields['bv_average_overall_rating'] = $data['ReviewStatistics'][$sanitized_sku]['AverageOverallRating'];
+                $fields['bv_total_review_count'] = $data['ReviewStatistics'][$sanitized_sku]['TotalReviewCount'];
+                $fields['bv_rating_distribution'] = json_encode($data['ReviewStatistics'][$sanitized_sku]['RatingDistribution']);
+                $fields['bv_rating_distribution_average'] = json_encode($data['ReviewStatistics'][$sanitized_sku]['RatingDistributionAverage']);
+                $fields['bv_recommended_average'] = $data['ReviewStatistics'][$sanitized_sku]['ProductRecommendedAverage'];
+                $featured_reviews = $data['ReviewStatistics'][$sanitized_sku]['FeaturedReviews'];
+                if (!empty($featured_reviews)) {
+                  foreach ($languages as $language) {
+                    $review_title = [];
+                    $lang = $language->getId();
+                    $reviews = array_filter($featured_reviews, function ($v) use ($lang) {
+                      return stristr($v['ContentLocale'], $lang);
+                    });
+                    foreach ($reviews as $review) {
+                      $review_title[] = $review['Title'];
+                    }
+                    $locale_key_prefix = 'lng:' . AlshayaI18nLanguages::getLocale($lang) . ':';
+                    $fields[$locale_key_prefix . 'bv_featured_reviews'] = json_encode($review_title, JSON_UNESCAPED_UNICODE);
+                  }
+                }
+
+                $dy_data['data'] = $fields;
+                $dyProductDeltaFeedApiWrapper->productFeedPartialUpdate($feed['api_key'], $feed['id'], $object['sku'], $dy_data);
+              }
+            }
           }
           // Save and update objects with BazaarVoice attributes in algolia.
           $index->saveObjects($bv_objects['results']);

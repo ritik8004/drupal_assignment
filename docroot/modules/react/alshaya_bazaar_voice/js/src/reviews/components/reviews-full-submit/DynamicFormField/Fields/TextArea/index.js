@@ -1,16 +1,21 @@
 import React from 'react';
-import ConditionalView from '../../../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../../../js/utilities/strings';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class TextArea extends React.Component {
   handleChange = (e) => {
     const { label } = this.props;
     const { value, minLength, id } = e.currentTarget;
 
-    if (value.length > 0) {
-      document.getElementById(`${id}-error`).innerHTML = value.length < minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label })
-        : '';
+    if (value.length > 0 && value.length < minLength) {
+      document.getElementById(`${id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label });
+      document.getElementById(id).classList.add('error');
+    } else if (value.length === 0) {
+      document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(id).classList.add('error');
+    } else {
+      document.getElementById(`${id}-error`).innerHTML = '';
+      document.getElementById(id).classList.remove('error');
     }
   };
 
@@ -31,7 +36,7 @@ class TextArea extends React.Component {
         <ConditionalView condition={text !== undefined}>
           <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div id={id} className="write-review-type-textarea">
+        <div id={`${id}-perror`} className="write-review-type-textarea">
           <label>
             {label}
             {' '}

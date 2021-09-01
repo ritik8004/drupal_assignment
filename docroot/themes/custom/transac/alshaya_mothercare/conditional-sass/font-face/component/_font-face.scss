@@ -1,0 +1,81 @@
+// Mothercare fonts are indentical to the fonts in whitelabel.
+// Hence we declare only additional fonts here.
+
+// Define extra DY Fonts for Mothercare.
+$mc_theme_fonts_directory_path: '/themes/custom/transac/alshaya_mothercare/fonts';
+
+@font-face {
+  font-family: "ThrowMyHandsUpintheAir";
+  src: url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ThrowMyHandsUpintheAirBold";
+  src: url("#{$mc_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Demi";
+  src:
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Demi.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Demi.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Junior";
+  src:
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Junior.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Junior.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Regular";
+  src:
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Regular.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Thin";
+  src:
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Thin.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/Mothercare-Thin.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo-Regular";
+  src:
+    url("#{$mc_theme_fonts_directory_path}/Cairo-Regular.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/Cairo-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo-SemiBold";
+  src:
+    url("#{$mc_theme_fonts_directory_path}/Cairo-SemiBold.woff2") format("woff2"),
+    url("#{$mc_theme_fonts_directory_path}/Cairo-SemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

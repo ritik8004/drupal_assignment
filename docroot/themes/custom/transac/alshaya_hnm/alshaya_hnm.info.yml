@@ -2,6 +2,7 @@ name: Alshaya H&M
 type: theme
 description: 'Theme for H&M.'
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: alshaya_white_label
 alshaya_theme_type: transac
 
@@ -30,6 +31,11 @@ ckeditor_stylesheets:
   - css/ckeditor.css
 
 libraries-override:
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
+
   alshaya_white_label/convert_to_select2:
     js:
       js/convert_to_select2.js: js/convert_to_select2.js
@@ -154,3 +160,23 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/smart-agent/smart-agent.ltr.css: css/conditional-sass/smart-agent/smart-agent.ltr.css
+
+  alshaya_white_label/my-account:
+      css:
+        theme:
+          css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
+  alshaya_white_label/sitemap:
+    css:
+      theme:
+        css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css
+
+  alshaya_white_label/alshaya-vat-certificate:
+    css:
+      theme:
+        css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css

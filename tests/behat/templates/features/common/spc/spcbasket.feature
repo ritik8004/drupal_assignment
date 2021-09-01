@@ -1,4 +1,4 @@
-@javascript @smoke @hmaeuat @mckwuat @vsaeuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
+@javascript @smoke @hmaeuat @mckwuat @vsaeuat @tbskwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test basket page
 
   Background:
@@ -22,7 +22,7 @@ Feature: Test basket page
     Then the price for product should be doubled
 
   @desktop
-  Scenario: As a Guest, I should be able to see the header and the footer
+  Scenario: As a Guest, I should be able to see the header
     When I scroll to top
     Then I should see "{create_account}"
     Then I should see "{sign_in}"
@@ -31,9 +31,8 @@ Feature: Test basket page
     Then I should see an ".acq-mini-cart" element
     Then I should see an "#alshaya-algolia-autocomplete" element
     Then I should see an ".plp-facet-product-filter" element
-
   @mobile
-  Scenario: As a Guest, I should be able to see the header and the footer (mobile)
+  Scenario: As a Guest, I should be able to see the header (mobile)
     When I scroll to top
     Then I should see a "#block-mobilenavigation a.store" element on page
     Then I should see a "#block-mobilenavigation a.mobile--search" element on page
@@ -48,7 +47,7 @@ Feature: Test basket page
     Then I click on "#block-alshayamainmenu .mobile--close" element
 
   @desktop
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
+  Scenario: As a Guest, I should be able to see the products added to basket and the header
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
@@ -77,7 +76,7 @@ Feature: Test basket page
     Then I should see an ".delivery-vat" element
 
   @mobile
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
+  Scenario: As a Guest, I should be able to see the products added to basket and the header (mobile)
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
@@ -160,7 +159,7 @@ Feature: Test basket page
     Then the price for product should be doubled
 
   @desktop @language
-  Scenario: As a Guest, I should be able to see the header and the footer in second language
+  Scenario: As a Guest, I should be able to see the header in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -174,7 +173,7 @@ Feature: Test basket page
     Then I should see an ".plp-facet-product-filter" element
 
   @mobile @language
-  Scenario: As a Guest, I should be able to see the header and the footer in second language (mobile)
+  Scenario: As a Guest, I should be able to see the header in second language (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 5 seconds
     And I wait for the page to load
@@ -192,7 +191,7 @@ Feature: Test basket page
     Then I click on "#block-alshayamainmenu .mobile--close" element
 
   @language @desktop
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer in second language
+  Scenario: As a Guest, I should be able to see the products added to basket and the header in second language
     When I follow "{language_link}"
     And I wait 5 seconds
     And I wait for the page to load
@@ -212,7 +211,7 @@ Feature: Test basket page
     Then I should see an ".delivery-vat" element
 
   @mobile @language
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
+  Scenario: As a Guest, I should be able to see the products added to basket and the header (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 5 seconds
     And I wait for the page to load
