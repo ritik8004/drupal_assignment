@@ -1,6 +1,6 @@
 // Breadcrumb renderer for listing pages.
 
-const breadcrumbRenderer = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
+const rcsPhBreadcrumbRenderer = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
 
 exports.render = function render(
   settings,
@@ -23,5 +23,5 @@ exports.render = function render(
     text: entity.name,
   });
 
-  return breadcrumbRenderer.render(settings, breadcrumbs, innerHtml);
+  return rcsPhBreadcrumbRenderer.render(settings, breadcrumbs, innerHtml);
 };
