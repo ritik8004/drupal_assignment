@@ -1,7 +1,7 @@
-secondary_main_menu:
+gtm_exponea:
+  version: 1.x
   js:
-    js/secondary_main_menu.js: {}
+    js/exponea.min.js: { attributes: { defer: true } }
   dependencies:
-    - core/drupal
-    - core/jquery
-
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce
