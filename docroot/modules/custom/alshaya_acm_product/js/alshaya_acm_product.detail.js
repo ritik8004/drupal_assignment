@@ -5,6 +5,16 @@
   var scrollThreshold = 200;
 
   /**
+   * Checks if the PDP is RCS PDP or not.
+   *
+   * @returns {Boolean}
+   *  true page is RCS PDP else false.
+   */
+  function isRcsPdp() {
+    return $('body').hasClass('nodetype--rcs_product');
+  }
+
+  /**
    * All custom js for product detail page.
    *
    * @type {Drupal~behavior}
@@ -44,7 +54,9 @@
             }
           });
         }
-        Drupal.getRelatedProductPosition();
+        if (!isRcsPdp) {
+          Drupal.getRelatedProductPosition();
+        }
       });
 
       // Trigger matchback color change on main product color change.
@@ -235,10 +247,12 @@
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
       });
 
-      // Add related products on pdp on load and scroll.
-      $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
-        Drupal.getRelatedProductPosition();
-      });
+      if (!isRcsPdp) {
+        // Add related products on pdp on load and scroll.
+        $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
+          Drupal.getRelatedProductPosition();
+        });
+      }
 
       // Add 'each' with price on change of quantity if matchback is enabled.
       if ($('.price-suffix-matchback').length) {
