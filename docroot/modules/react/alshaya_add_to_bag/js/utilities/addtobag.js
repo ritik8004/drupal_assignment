@@ -178,6 +178,12 @@ export const getAllowedAttributeValues = (
   let attributesAndValuesClone = { ...attributesAndValues };
 
   const selectedFormAttributeNames = Object.keys(selectedFormValuesClone);
+  // Return all the values if product has only one attribute.
+  // @todo check for better solution if available.
+  if (selectedFormAttributeNames.length < 2) {
+    return attributesAndValuesClone;
+  }
+
   for (let i = 0; i < selectedFormAttributeNames.length; i++) {
     const code = selectedFormAttributeNames[i];
 
@@ -189,12 +195,6 @@ export const getAllowedAttributeValues = (
     attributesHierarchyClone = attributesHierarchyClone[code][selectedFormValuesClone[code]];
   }
 
-  // Check if the end of the hierarchy has been reached.
-  /* eslint-disable eqeqeq */
-  if (attributesHierarchyClone[attributeName][attributeValue] == 1) {
-    return attributesAndValuesClone;
-  }
-
   // If the key for the attribute does not exist, create one.
   if (typeof attributesAndValuesClone[attributeName] === 'undefined') {
     attributesAndValuesClone[attributeName] = [];
@@ -202,6 +202,12 @@ export const getAllowedAttributeValues = (
 
   // Push the selected attribute into the array.
   attributesAndValuesClone[attributeName].push(attributeValue);
+
+  // Check if the end of the hierarchy has been reached.
+  /* eslint-disable eqeqeq */
+  if (attributesHierarchyClone[attributeName][attributeValue] == 1) {
+    return attributesAndValuesClone;
+  }
 
   // Get the next attribute in the hierarchy.
   const nextAttribute = Object.keys(
