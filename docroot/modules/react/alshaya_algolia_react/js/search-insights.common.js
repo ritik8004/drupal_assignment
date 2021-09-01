@@ -12,7 +12,7 @@
    */
   Drupal.getAlgoliaUserToken = function () {
     if (drupalSettings.userDetails === undefined || drupalSettings.userDetails.userID === undefined || !(drupalSettings.userDetails.userID)) {
-      return $.cookie('_ALGOLIA').toString();
+      return $.cookie('_ALGOLIA');
     }
 
     return drupalSettings.userDetails.userID.toString();
