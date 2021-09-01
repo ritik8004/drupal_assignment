@@ -344,6 +344,12 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  $strings['v6'] = [
+    'Transaction Failed: Invalid CVV' => [
+      'ar' => 'فشلت المعاملة: رقم CVV غير صالح',
+    ],
+  ];
+
   return $strings;
 }
 
