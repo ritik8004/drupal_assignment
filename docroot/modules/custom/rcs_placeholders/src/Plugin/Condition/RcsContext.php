@@ -96,7 +96,7 @@ class RcsContext extends ConditionPluginBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function evaluate() {
-    return $this->configuration['use_rcs_context'] & RcsPhPathProcessor::isRcsPage();
+    return $this->configuration['use_rcs_context'] && RcsPhPathProcessor::isRcsPage();
   }
 
 }
