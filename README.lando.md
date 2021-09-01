@@ -29,7 +29,7 @@ _**NOTE**: Lando recommends you download their installer which has docker deskto
 separately._
 * Download the dmg file from `https://github.com/lando/lando/releases`
 * The lando package will have the compatible docker as well inside it.
-* Post installation, follow the recommendations in the Performance section below.
+* Post installation, follow the recommendations in the [Performance](#Performance) section below.
 
 Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
 as per the instructions above.
