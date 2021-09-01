@@ -141,7 +141,7 @@
         Drupal.disableLimitExceededProducts(sku, sku);
 
         node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, 'classic', productData.gallery);
+        Drupal.updateGallery(node, productData.layout, productData.gallery);
 
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
