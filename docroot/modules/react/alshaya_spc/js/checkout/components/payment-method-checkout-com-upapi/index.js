@@ -111,6 +111,13 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
       }).then((response) => {
         this.handleCheckoutResponse(response.data);
       }).catch((error) => {
+        // In case of 4 digit CVV code failure.
+        if (error.response.status === 422) {
+          dispatchCustomEvent('spcCheckoutMessageUpdate', {
+            type: 'error',
+            message: Drupal.t('Transaction Failed: Invalid CVV'),
+          });
+        }
         removeFullScreenLoader();
         Drupal.logJavascriptError('Checkout.com UPAPI Token', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
       });
