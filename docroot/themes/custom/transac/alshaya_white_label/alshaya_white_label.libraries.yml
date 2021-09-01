@@ -510,6 +510,11 @@ sitemap:
     theme:
       css/conditional-sass/sitemap/sitemap.ltr.css: {}
 
+alshaya-vat-certificate:
+  css:
+    theme:
+      css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: {}
+
 slug-banner:
   css:
     theme:

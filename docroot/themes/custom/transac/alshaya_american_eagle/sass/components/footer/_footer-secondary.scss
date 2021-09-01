@@ -79,7 +79,7 @@
     order: 1;
 
     @include breakpoint($tablet) {
-      flex-basis: 85%;
+      flex-basis: 77%;
       margin-#{$right}: 0;
     }
 
@@ -92,22 +92,10 @@
       border-top: 0.0625rem solid $footer_border_top;
       border-bottom: 0.0625rem solid $footer_border_top;
     }
-
-    .path--cart & {
-      @include breakpoint($tablet) {
-        flex-basis: 69%;
-      }
-    }
-
-    .path--cart.alias--cart & {
-      @include breakpoint($tablet) {
-        flex-basis: 85%;
-      }
-    }
   }
 
   .c-footer__logos {
-    order: 3;
+    order: 2;
 
     @include breakpoint($tablet) {
       padding-#{$left}: 1.5rem;
@@ -135,22 +123,5 @@
         margin-bottom: 3rem;
       }
     }
-  }
-}
-
-.block-alshaya-vat-certificate-block {
-  @include breakpoint($only-mobile) {
-    margin-top: -1rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    order: 4;
-    // flex-basis: 93%;
-  }
-
-  @include breakpoint($desktop) {
-    order: 2;
-    flex-basis: 85%;
-    margin-#{$right}: 0;
   }
 }

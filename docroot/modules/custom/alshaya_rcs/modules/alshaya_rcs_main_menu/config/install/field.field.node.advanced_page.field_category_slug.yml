@@ -12,7 +12,7 @@ field_name: field_category_slug
 entity_type: node
 bundle: advanced_page
 label: 'Category Slug'
-description: ''
+description: 'Every slug must be unique across a project, but a product can have the same slug for different languages. It should not start with ''/'', Allowed are the alphabetic, numeric, forward-slash (/), underscore (_), and hyphen (-) characters. The maximum size is 256.'
 required: false
 translatable: false
 skip_translation_check: 0

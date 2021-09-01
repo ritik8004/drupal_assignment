@@ -29,7 +29,7 @@ jQuery.fn.select2Option = function (options) {
 
         if ($(this).attr('swatch-image')) {
           liHtml.addClass('li-swatch-image');
-          var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
+          var swatchImage = '<img loading="lazy" src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
           }
@@ -46,7 +46,7 @@ jQuery.fn.select2Option = function (options) {
             liHtml.hide();
             var defaultTitle = $(this).parent().attr('data-default-title');
             if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4><span class="size-guide-placeholder"></span>';
+              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ': <span></h4><span class="size-guide-placeholder"></span>';
             }
             else {
               labeltext = '<h4 class="list-title"><span>' + textValue + ' : <span></h4><span class="size-guide-placeholder"></span>';
@@ -102,7 +102,7 @@ jQuery.fn.select2Option = function (options) {
       labeltext = select.attr('data-default-title');
     }
 
-    labeltext = '<h4 class="list-title"><span>' + labeltext + ' : </span><span class="selected-text"></span></h4><span class="size-guide-placeholder"></span>';
+    labeltext = '<h4 class="list-title"><span>' + labeltext + ': </span><span class="selected-text"></span></h4><span class="size-guide-placeholder"></span>';
     buttonsHtml.prepend(labeltext);
     buttonsHtml.find('a').on('click', function (e) {
       e.preventDefault();

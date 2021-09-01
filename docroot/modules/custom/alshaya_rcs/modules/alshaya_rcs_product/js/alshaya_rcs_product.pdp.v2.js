@@ -47,8 +47,37 @@ function mergeDeep(target, source) {
         Object.assign(output, { [key]: source[key] });
       }
     });
-  }
   return output;
+  }
+}
+/**
+ * Gets the required data for rcs_product.
+ *
+ * @param {string} sku
+ *   The product sku value.
+ *
+ * @returns {Object|null}
+ *    The processed product data else null if no product is found.
+ */
+window.commerceBackend.getProductData = function (sku) {
+  if (typeof sku === 'undefined' || !sku) {
+    var allStorageData = RcsPhStaticStorage.getAll();
+    var productData = {};
+    Object.keys(allStorageData).forEach(function (key) {
+      if (key.startsWith('product_')) {
+        productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
+      }
+    });
+
+    return productData;
+  }
+
+  var product = RcsPhStaticStorage.get('product_' + sku);
+  if (product) {
+    return processProduct(product);
+  }
+
+  return null;
 }
 
 /**
@@ -223,6 +252,17 @@ function processProduct(product) {
   if (productData.type === 'configurable') {
     productData.configurables = getConfigurables(product);
     productData.variants = getVariantsInfo(product);
+  }
+
+  // Add general bazaar voice data to product data if present.
+  if (typeof drupalSettings.alshaya_bazaar_voice !== 'undefined') {
+    var bazaarVoiceData = drupalSettings.alshaya_bazaar_voice;
+    bazaarVoiceData.product = {
+      url: '/' + drupalSettings.path.currentLanguage + '/buy-' + product.url_key + '.html',
+      title: product.name,
+      image_url: '',
+    }
+    productData.alshaya_bazaar_voice = drupalSettings.alshaya_bazaar_voice;
   }
 
   return productData;

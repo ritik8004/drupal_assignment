@@ -15,196 +15,28 @@ exports.getEntity = async function getEntity(langcode) {
 
   switch (drupalSettings.rcsPage.type) {
     case 'product':
-      case 'entity':
-        request.uri += "graphql";
-        request.method = "POST",
-        request.headers.push(["Content-Type", "application/json"]);
-        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+    case 'entity':
+      request.uri += "graphql";
+      request.method = "POST";
+      request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
-        const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
-        // @todo: Make a config for this query and pass it from the backend.
-        request.data = JSON.stringify({
-          query: `{products(filter: {url_key: {eq: "${productUrlKey[1]}"}}) {
-            total_count
-            items {
-                sku
-                id
-                type_id
-                name
-                url_key
-                is_buyable
-                stock_status
-                ship_to_store
-                reserve_and_collect
-                price {
-                    regularPrice {
-                        amount {
-                            currency
-                            value
-                        }
-                    }
-                    maximalPrice {
-                        amount {
-                            currency
-                            value
-                        }
-                    }
-                }
-                media_gallery {
-                  url
-                  label
-                  ... on ProductVideo {
-                    video_content {
-                      media_type
-                      video_provider
-                      video_url
-                      video_title
-                      video_description
-                      video_metadata
-                    }
-                  }
-                }
-                gtm_attributes {
-                  id
-                  name
-                  variant
-                  price
-                  brand
-                  category
-                  dimension2
-                  dimension3
-                  dimension4
-                }
-                meta_title
-                meta_description
-                meta_keyword
-                og_meta_title
-                og_meta_description
-                ... on ConfigurableProduct {
-                  configurable_options {
-                    attribute_uid
-                    label
-                    position
-                    attribute_code
-                    values {
-                      value_index
-                      store_label
-                    }
-                  }
-                  variants {
-                    product {
-                      id
-                      sku
-                      meta_title
-                      stock_status
-                      ship_to_store
-                      reserve_and_collect
-                      image {
-                        url
-                        label
-                      }
-                      sku
-                      attribute_set_id
-                      ... on PhysicalProductInterface {
-                        weight
-                      }
-                      price {
-                        regularPrice {
-                          amount {
-                            value
-                            currency
-                          }
-                        }
-                        maximalPrice {
-                          amount {
-                            value
-                            currency
-                          }
-                        }
-                      }
-                      special_price
-                      special_from_date
-                      special_to_date
-                      is_returnable
-                      stock_data {
-                        qty
-                        max_sale_qty
-                      }
-                      media_gallery {
-                        url
-                        label
-                        ... on ProductImage {
-                          url
-                          label
-                        }
-                      }
-                      small_image {
-                        url
-                        label
-                      }
-                      swatch_image
-                      image {
-                        url
-                        label
-                      }
-                      thumbnail {
-                        url
-                        label
-                      }
-                      media_gallery {
-                        url
-                        label
-                        ... on ProductVideo {
-                          video_content {
-                            media_type
-                            video_provider
-                            video_url
-                            video_title
-                            video_description
-                            video_metadata
-                          }
-                        }
-                      }
-                      gift_message_available
-                    }
-                    attributes {
-                      label
-                      code
-                      value_index
-                    }
-                  }
-                }
-            }
-          }}`
-        });
+      const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
+      request.data = JSON.stringify({
+        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
+      });
 
       break;
 
     case 'category':
       // Prepare request parameters.
       request.uri += "graphql";
-      request.method = "POST",
+      request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
 
       const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ categories( filters: { url_path: {eq: "${categoryUrlKey[1]}"}}) {
-            total_count
-            items {
-              level
-              name
-              url_path
-              description
-              image
-              breadcrumbs {
-                category_name
-                category_level
-                category_url_key
-                category_url_path
-              }
-            }
-          }
-        }`
+        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
       });
 
       break;

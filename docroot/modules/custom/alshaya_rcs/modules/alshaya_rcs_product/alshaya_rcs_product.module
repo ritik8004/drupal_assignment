@@ -98,6 +98,9 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'rcs_sku_base_form' => [
       'variables' => [],
     ],
+    'rcs_attribute_brand_logo' => [
+      'variables' => [],
+    ],
   ];
 }
 
@@ -364,6 +367,16 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
+  $brand_logo = ['#theme' => 'rcs_attribute_brand_logo'];
+  $variables['rcs_templates']['brand_logo'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($brand_logo),
+    '#attributes' => [
+      'class' => 'rcs-templates--brand_logo',
+    ],
+  ];
+
   if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
     $node = \Drupal::request()->attributes->get('node');
     if ($node->bundle() == 'rcs_product') {
@@ -472,4 +485,174 @@ function template_preprocess_rcs_not_buyable_product(&$variables) {
 
   $variables['not_buyable_message'] = $product_settings->get('not_buyable_message.value');
   $variables['not_buyable_help_text'] = $not_buyable_help_text;
+}
+
+/**
+ * Utility function to enable Bazaar voice reviews for RCS Product.
+ */
+function _alshaya_rcs_product_change_bv_routes_list() {
+  // Add rcs_product to the BV routes list.
+  $bv_config = \Drupal::configFactory()->getEditable('bazaar_voice.settings');
+  $bv_routes_list = $bv_config->get('bv_routes_list');
+  $bv_routes_list = array_map('trim', explode(PHP_EOL, $bv_routes_list));
+  $bv_routes_list[] = 'entity.node.canonical:rcs_product';
+  $bv_routes_list = implode(PHP_EOL, $bv_routes_list);
+  $bv_config->set('bv_routes_list', $bv_routes_list)->save();
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_rcs_product_modules_installed($modules) {
+  if (in_array('bazaar_voice', $modules)) {
+    _alshaya_rcs_product_change_bv_routes_list();
+  }
+}
+
+/**
+ * Implements hook_rcs_graphql_query_fields().
+ */
+function alshaya_rcs_product_rcs_graphql_query_fields() {
+  $query_fields = [];
+
+  $query_fields['products'] = [
+    'total_count',
+    'items' => [
+      'sku',
+      'id',
+      'type_id',
+      'name',
+      'url_key',
+      'is_buyable',
+      'stock_status',
+      'ship_to_store',
+      'reserve_and_collect',
+      'price' => [
+        'regularPrice' => [
+          'amount' => [
+            'currency',
+            'value',
+          ],
+        ],
+        'maximalPrice' => [
+          'amount' => [
+            'currency',
+            'value',
+          ],
+        ],
+      ],
+      'brand_logo_data' => [
+        'url',
+        'alt',
+        'title',
+      ],
+      'media_gallery' => [
+        'url',
+        'label',
+        '... on ProductVideo' => [
+          'video_content' => [
+            'media_type',
+            'video_provider',
+            'video_url',
+            'video_title',
+            'video_description',
+            'video_metadata',
+          ],
+        ],
+      ],
+      'gtm_attributes' => [
+        'id',
+        'name',
+        'variant',
+        'price',
+        'brand',
+        'category',
+        'dimension2',
+        'dimension3',
+        'dimension4',
+      ],
+      'meta_title',
+      'meta_description',
+      'meta_keyword',
+      'og_meta_title',
+      'og_meta_description',
+      '... on ConfigurableProduct' => [
+        'configurable_options' => [
+          'attribute_uid',
+          'label',
+          'position',
+          'use_default',
+          'attribute_code',
+          'product_id',
+          'values' => [
+            'value_index',
+            'store_label',
+          ],
+        ],
+        'variants' => [
+          'product' => [
+            'id',
+            'sku',
+            'meta_title',
+            'stock_status',
+            'ship_to_store',
+            'reserve_and_collect',
+            'attribute_set_id',
+            '... on PhysicalProductInterface' => [
+              'weight',
+            ],
+            'price' => [
+              'regularPrice' => [
+                'amount' => [
+                  'value',
+                  'currency',
+                ],
+              ],
+              'maximalPrice' => [
+                'amount' => [
+                  'value',
+                  'currency',
+                ],
+              ],
+            ],
+            'special_price',
+            'special_from_date',
+            'special_to_date',
+            'is_returnable',
+            'stock_data' => [
+              'qty',
+              'max_sale_qty',
+            ],
+            'swatch_image',
+            'media_gallery' => [
+              'url',
+              'label',
+              '... on ProductImage' => [
+                'url',
+                'label',
+              ],
+              '... on ProductVideo' => [
+                'video_content' => [
+                  'media_type',
+                  'video_provider',
+                  'video_url',
+                  'video_title',
+                  'video_description',
+                  'video_metadata',
+                ],
+              ],
+            ],
+            'gift_message_available',
+          ],
+          'attributes' => [
+            'label',
+            'code',
+            'value_index',
+          ],
+        ],
+      ],
+    ],
+  ];
+
+  return $query_fields;
 }

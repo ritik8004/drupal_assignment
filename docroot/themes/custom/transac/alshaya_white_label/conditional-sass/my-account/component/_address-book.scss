@@ -460,7 +460,6 @@
 
 .user-form,
 .address-book-address,
-.webform-submission-alshaya-contact-form,
 #selected-store-wrapper {
   .mobile-number-field {
     max-width: 24.75rem;
@@ -615,21 +614,6 @@
     line-height: 1.188rem !important;
     color: $black;
     padding: 0.25rem !important;
-  }
-}
-
-.form-type-select {
-  .select2-selection__arrow {
-    @include icon(chevrondown, after) {
-      font-size: 1.5rem;
-      position: absolute;
-      top: 9%;
-      #{$left}: 10%;
-    }
-
-    b {
-      display: none;
-    }
   }
 }
 

@@ -73,7 +73,7 @@ exports.render = function render(
         const subTitle = cncEnabled
           ? drupalSettings.alshaya_click_collect.subtitle.enabled
           : drupalSettings.alshaya_click_collect.subtitle.disabled;
-        $('.subtitle', clickAndCollect).html(subTitle);
+        jQuery('.subtitle', clickAndCollect).html(subTitle);
 
         // Add click and collect to the delivery options field.
         jQuery('.field__content', deliveryOptionsWrapper).append(clickAndCollect);
@@ -112,7 +112,7 @@ exports.render = function render(
 };
 
 exports.computePhFilters = function (input, filter) {
-  let value = input;
+  let value = '';
 
   switch(filter) {
     case 'price':
@@ -159,7 +159,7 @@ exports.computePhFilters = function (input, filter) {
 
     case 'vat_text':
       if (drupalSettings.vat_text === '' || drupalSettings.vat_text === null) {
-        $('.vat-text').remove();
+        jQuery('.vat-text').remove();
       }
       value = drupalSettings.vat_text;
       break;
@@ -443,9 +443,9 @@ exports.computePhFilters = function (input, filter) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
           for (const attribute of attributes) {
-            $(`[${ attribute } *= '${ fieldPh }']`, skuBaseForm)
+            jQuery(`[${ attribute } *= '${ fieldPh }']`, skuBaseForm)
               .each(function eachEntityPhAttributeReplace() {
-                $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
+                jQuery(this).attr(attribute, jQuery(this).attr(attribute).replace(fieldPh, entityFieldValue));
               });
           }
         });
@@ -477,6 +477,19 @@ exports.computePhFilters = function (input, filter) {
       else {
         value = 'http://schema.org/OutOfStock';
       }
+      break;
+
+    case 'brand_logo':
+      if (input.brand_logo_data.url !== null) {
+        const image = jQuery('img');
+        image.attr({
+          src: input.brand_logo_data.url,
+          alt: input.brand_logo_data.alt,
+          title: input.brand_logo_data.title,
+        });
+        value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
+      }
+
       break;
 
     default:

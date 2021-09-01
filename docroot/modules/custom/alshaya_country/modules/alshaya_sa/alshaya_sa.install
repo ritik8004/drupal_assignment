@@ -8,15 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_vat module.
- */
-function alshaya_sa_update_8007() {
-  \Drupal::service('module_installer')->install(['alshaya_vat']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Install config for spc click n collect.
  */
 function alshaya_sa_update_8006() {
