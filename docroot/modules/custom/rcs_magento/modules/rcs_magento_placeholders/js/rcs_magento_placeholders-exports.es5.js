@@ -111,6 +111,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'breadcrumb':
+      // We do not need to do anything for breadcrumbs.
+      // Adding this case to avoid console messages about breadcrumbs.
       break;
 
     default:

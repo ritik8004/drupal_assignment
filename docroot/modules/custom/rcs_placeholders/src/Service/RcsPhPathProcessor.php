@@ -218,7 +218,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   }
 
   /**
-   * Returns true if we are on Rcs page.
+   * Returns TRUE if we are on RCS page.
    *
    * @return bool
    *   Returns TRUE if its Rcs page.

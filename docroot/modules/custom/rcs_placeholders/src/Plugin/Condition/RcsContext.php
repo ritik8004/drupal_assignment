@@ -27,7 +27,7 @@ class RcsContext extends ConditionPluginBase implements ContainerFactoryPluginIn
   protected $routeMatch;
 
   /**
-   * RcsEntity constructor.
+   * RCS Context constructor.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
