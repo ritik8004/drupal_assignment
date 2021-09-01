@@ -82,6 +82,15 @@ function getCombinationHierarchy(options) {
   return combination;
 }
 
+/**
+ * Returns a string containing the selected product combinations.
+ *
+ * @param {object} configurables
+ *   The object of configurable attribute name and value.
+ *
+ * @returns {string}
+ *   The string containing attribute names and values separated by delimiter.
+ */
 function getSelectedCombination(configurables) {
   var combination = '';
 
@@ -341,7 +350,6 @@ window.commerceBackend.isProductAvailableForClickAndCollect = function (product)
   // collect. In both cases click and collect option will be considered as
   // available.
   // Magento provides for 2 for disabled and 1 for enabled.
-
   return (drupalSettings.alshaya_click_collect.status === 'enabled')
     && (parseInt(product.ship_to_store, 10) === 1 || parseInt(product.reserve_and_collect, 10) === 1);
 }
