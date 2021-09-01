@@ -307,8 +307,15 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to Benefit Pay payment method.
+  // Strings related to error handling for 4 digit CVV failure.
   $strings['v5'] = [
+    'Transaction Failed: Invalid CVV' => [
+      'ar' => 'فشلت المعاملة: رقم CVV غير صالح',
+    ],
+  ];
+
+  // Strings related to Benefit Pay payment method.
+  $strings['v6'] = [
     'Continue with Benefit pay' => [
       'ar' => 'أكمل مع بينفت باي',
     ],
