@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3118acabf91d21a987a48e982b7b028",
+    "content-hash": "c54517e5e4236a2d1d8efbb5df4747ea",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4450,7 +4450,7 @@
             },
             "require": {
                 "drupal/core": "^8 || ^9",
-                "drupal/machine_name_widget": "^1.0"
+                "drupal/machine_name_widget": "^2.0@alpha"
             },
             "type": "drupal-module",
             "extra": {
@@ -4461,6 +4461,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Not compatible with Drupal 9 when install with composer": "https://www.drupal.org/files/issues/2021-02-22/3199593-1.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5548,7 +5551,8 @@
                     "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-01-14/3143958-11-subprofile-support-8.9.x.patch",
-                    "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch"
+                    "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch",
+                    "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2019-12-16/2685749-73.patch"
                 }
             },
             "autoload": {
@@ -8959,29 +8963,38 @@
         },
         {
             "name": "drupal/machine_name_widget",
-            "version": "1.0.0",
+            "version": "2.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/machine_name_widget.git",
-                "reference": "8.x-1.0"
+                "reference": "8.x-2.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/machine_name_widget-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "1f0aa148682244823754b10b75cd4719295499e6"
+                "url": "https://ftp.drupal.org/files/projects/machine_name_widget-8.x-2.0-alpha2.zip",
+                "reference": "8.x-2.0-alpha2",
+                "shasum": "7f6ce9b6f2461b1cf902609aa2bf47f7136b99fe"
             },
             "require": {
-                "drupal/core": "~8.0"
+                "drupal/core": "^8.7.7 || ^9"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1492559943",
+                    "version": "8.x-2.0-alpha2",
+                    "datestamp": "1586494928",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-2.x": "2.x-dev"
+                },
+                "enable-patching": true,
+                "patches": {
+                    "drupal/core": {
+                        "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2019-12-16/2685749-73.patch"
                     }
                 }
             },
@@ -8992,7 +9005,8 @@
             "authors": [
                 {
                     "name": "davidwbarratt",
-                    "homepage": "https://www.drupal.org/user/411675"
+                    "homepage": "https://www.drupal.org/user/411675",
+                    "role": "Maintainer"
                 },
                 {
                     "name": "japerry",
@@ -26139,6 +26153,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.3"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
