@@ -17,12 +17,12 @@
         var pageMainSku = currentSelectedVariant;
         var variantSku = '';
         // If sku is variant type.
-        // var isConfigurable = $(form).attr('data-sku-type') === 'configurable';
+        var isConfigurable = $(form).attr('data-sku-type') === 'configurable';
         // If `selected_variant_sku` available, means its configurable.
-        // if ($('[name="selected_variant_sku"]', form).length > 0) {
-        //   currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
-        //   variantSku = currentSelectedVariant;
-        // }
+        if ($('[name="selected_variant_sku"]', form).length > 0) {
+          currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
+          variantSku = currentSelectedVariant;
+        }
 
         var quantity = 1;
         // If quantity drop down available, use that value.
@@ -35,25 +35,25 @@
 
         var cartData = window.commerceBackend.getCartDataFromStorage();
         var cart_id = (cartData) ? cartData.cart_id : null;
+        var storedProductData = window.commerceBackend.getProductData(pageMainSku);
 
-        // @todo For configurable products.
         // We pass configurable options if product is not available in cart
         // and of configurable variant.
         var options = new Array();
-        // if (isConfigurable) {
-        //   currentSelectedVariant = $(form).find('.selected-parent-sku').val();
-        //   Object.keys(settings.configurableCombinations[pageMainSku].configurables).forEach(function(key) {
-        //     var option = {
-        //       'option_id': settings.configurableCombinations[pageMainSku].configurables[key].attribute_id,
-        //       'option_value': $(form).find('[data-configurable-code="' + key + '"]').val()
-        //     };
+        if (isConfigurable) {
+          currentSelectedVariant = $(form).find('.selected-parent-sku').val();
+          Object.keys(storedProductData.configurables).forEach(function (key) {
+            var option = {
+              'option_id': storedProductData.configurables[key].attribute_id,
+              'option_value': $(form).find('[data-configurable-code="' + key + '"]').val()
+            };
 
-        //     // Skipping the psudo attributes.
-        //     if (settings.psudo_attribute === undefined || settings.psudo_attribute !== option.option_id) {
-        //       options.push(option);
-        //     }
-        //   });
-        // }
+            // Skipping the psudo attributes.
+            if (settings.psudo_attribute === undefined || settings.psudo_attribute !== option.option_id) {
+              options.push(option);
+            }
+          });
+        }
 
         // Prepare the POST data.
         var postData = {
@@ -111,11 +111,11 @@
             productData.options = [];
 
             // Get the key-value pair of selected option name and value.
-            // $('#configurable_ajax select').each(function () {
-            //   var configLabel = $(this).attr('data-default-title');
-            //   var configValue = $(this).find('option:selected').text();
-            //   productData.options.push(configLabel + ": " + configValue);
-            // });
+            $('#configurable_ajax select').each(function () {
+              var configLabel = $(this).attr('data-default-title');
+              var configValue = $(this).find('option:selected').text();
+              productData.options.push(configLabel + ": " + configValue);
+            });
 
             // Prepare the event.
             var cartNotification = new CustomEvent('product-add-to-cart-failed', {

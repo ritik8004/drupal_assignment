@@ -34,6 +34,8 @@ exports.getEntity = async function getEntity(langcode) {
                 url_key
                 is_buyable
                 stock_status
+                ship_to_store
+                reserve_and_collect
                 price {
                     regularPrice {
                         amount {
@@ -48,7 +50,6 @@ exports.getEntity = async function getEntity(langcode) {
                         }
                     }
                 }
-                brand_logo
                 media_gallery {
                   url
                   label
@@ -81,15 +82,13 @@ exports.getEntity = async function getEntity(langcode) {
                 og_meta_description
                 ... on ConfigurableProduct {
                   configurable_options {
-                    id
+                    attribute_uid
                     label
                     position
-                    use_default
                     attribute_code
-                    product_id
                     values {
                       value_index
-                      label
+                      store_label
                     }
                   }
                   variants {
@@ -98,6 +97,8 @@ exports.getEntity = async function getEntity(langcode) {
                       sku
                       meta_title
                       stock_status
+                      ship_to_store
+                      reserve_and_collect
                       image {
                         url
                         label
@@ -125,6 +126,10 @@ exports.getEntity = async function getEntity(langcode) {
                       special_from_date
                       special_to_date
                       is_returnable
+                      stock_data {
+                        qty
+                        max_sale_qty
+                      }
                       media_gallery {
                         url
                         label

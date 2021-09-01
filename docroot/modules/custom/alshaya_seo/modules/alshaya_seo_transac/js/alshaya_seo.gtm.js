@@ -25,7 +25,9 @@ const productRecommendationsSuffix = 'pr-';
         var product = $(this).closest('[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        if (typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
+
+        if (typeof productInfo === 'undefined' || !productInfo) {
           return;
         }
 
@@ -33,7 +35,7 @@ const productRecommendationsSuffix = 'pr-';
         if ((typeof event.detail !== 'undefined') && (typeof event.detail.variant !== 'undefined')) {
           variant = event.detail.variant;
         }
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var variantInfo = productInfo['variants'][variant];
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);

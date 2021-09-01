@@ -9,6 +9,6 @@
     </div>
   </span>
   <button name="add_to_cart_#rcs.product._self|sku#" id="edit-add-to-cart-#rcs.product._self|sku#" class='cv-validate-before-ajax edit-add-to-cart add-to-cart-button ladda-button' data-twig-suggestion="addtocart" type="submit">{{ "add to cart" | t }}</button>
-  <input class="selected-variant-sku selected-variant-sku-_#rcs.product._self|sku#" data-drupal-selector="edit-selected-variant-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_variant_sku" value="#rcs.product._self|sku#">
+  <input class="selected-variant-sku selected-variant-sku-#rcs.product._self|sku-clean#" data-drupal-selector="edit-selected-variant-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_variant_sku" value="#rcs.product._self|sku#">
   <input class="selected-parent-sku" data-drupal-selector="edit-selected-parent-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_parent_sku" value="#rcs.product._self|sku#">
 </form>
