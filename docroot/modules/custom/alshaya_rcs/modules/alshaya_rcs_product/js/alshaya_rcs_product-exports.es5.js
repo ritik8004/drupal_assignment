@@ -360,6 +360,9 @@ exports.computePhFilters = function (input, filter) {
         const sizeGuide = jQuery('.rcs-templates--size-guide');
         let sizeGuideAttributes = sizeGuide.attr('data-attributes');
         sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+        const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
+          ? drupalSettings.hidden_form_attributes
+          : [];
 
         configurableOptions.forEach((option) => {
           // Get the field wrapper div.
@@ -424,9 +427,9 @@ exports.computePhFilters = function (input, filter) {
           // Replace the placeholder class name.
           optionsListWrapper.attr('class', optionsListWrapper[0].className.replaceAll('ATTRIBUTENAME', formattedAttributeCode));
           // Hide field if supposed to be hidden.
-          // if (drupalSettings.add_to_bag.hidden_form_attributes.includes(option.attribute_code)) {
-          //   optionsListWrapper.addClass('hidden');
-          // }
+          if (hiddenFormAttributes.includes(option.attribute_code)) {
+            optionsListWrapper.addClass('hidden');
+          }
         });
 
         // Add the configurable options to the form.

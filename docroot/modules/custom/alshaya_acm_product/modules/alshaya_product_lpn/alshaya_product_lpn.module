@@ -23,7 +23,7 @@ function alshaya_product_lpn_page_attachments(array &$page) {
     'lpn_attribute' => $lpn_attribute,
   ];
 
-  $page['#attached']['drupalSettings']['add_to_bag']['hidden_form_attributes'][] = $config->get('lpn_attribute');
+  $page['#attached']['drupalSettings']['hidden_form_attributes'][] = $config->get('lpn_attribute');
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $config->getCacheTags());
 }
 
