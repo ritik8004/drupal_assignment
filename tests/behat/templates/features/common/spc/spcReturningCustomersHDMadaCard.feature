@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @homeDelivery @pbsauat @mcsauat @pbaeuat @pbkwuat @mcaeuat @bbwkwuat @tbskwuat @flsauat @flaeuat @bbwsauat @mckwuat
+@javascript @returnUser @madaPayment @homeDelivery @westelmsauat @westelmkwuat @pbsauat @mcsauat @pbaeuat @pbkwuat @mcaeuat @bbwkwuat @tbskwuat @flsauat @flaeuat @bbwsauat @mckwuat
 Feature: SPC Checkout Home Delivery CC for Returning Customers
 
   Background:
