@@ -165,7 +165,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
      case 'image':
-      value = '';
+      value = input.media_gallery[1].url;
       break;
 
     case 'thumbnail_count':
@@ -465,7 +465,9 @@ exports.computePhFilters = function (input, filter) {
 
     case 'first_image':
       // @todo: Use the correct image key.
-      value = ''
+      value = (typeof input.media_gallery[1].url === 'undefined' || !input.media_gallery[1].url || input.media_gallery[1].url === '')
+        ? drupalSettings.alshayaRcs.default_meta_image
+        : input.media_gallery[1].url;
       break;
 
     case 'schema_stock':
