@@ -184,6 +184,7 @@ function getVariantsInfo(product) {
         status: 1,
         maxSaleQty: variantInfo.stock_data.max_sale_qty,
       },
+      // @todo Implement this.
       description: '',
       price: rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
     }
@@ -224,8 +225,8 @@ function processProduct(product) {
  * @param {string} sku
  *   The product sku value.
  *
- * @returns {Object}
- *    The processed product data.
+ * @returns {Object|null}
+ *    The processed product data else null if no product is found.
  */
 window.commerceBackend.getProductData = function (sku) {
   var product = RcsPhStaticStorage.get('product_' + sku);
@@ -242,8 +243,9 @@ window.commerceBackend.getProductData = function (sku) {
  * @param {string} sku
  *   The sku value.
  *
- * @returns {object}
+ * @returns {object|null}
  *   The object containing the configurable combinations for the given sku.
+ *   Returns null if no product is found.
  */
 window.commerceBackend.getConfigurableCombinations = function (sku) {
   var staticKey = 'product' + sku + '_configurableCombinations';
@@ -328,6 +330,9 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
  *
  * @param {object} product
  *   The raw product entity.
+ *
+ * @returns {Boolean}
+ *   Returns true if CnC is enabled else false.
  *
  * @see alshaya_acm_product_available_click_collect().
  */
