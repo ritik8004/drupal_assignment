@@ -173,6 +173,14 @@ const Teaser = ({
             </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
+          <ConditionalView condition={
+              attribute.attr_express_delivery == '1'
+            }
+          >
+            <div className="express_delivery">
+            {Drupal.t('Express Delivery')}
+            </div>
+          </ConditionalView>
         </div>
         <AddToBagContainer
           url={attribute.url}

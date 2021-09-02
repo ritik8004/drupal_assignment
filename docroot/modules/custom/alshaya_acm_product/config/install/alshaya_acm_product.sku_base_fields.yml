@@ -107,7 +107,7 @@ fields:
     description: 'Sku applicable for non refundable or not.'
 
   same_day_delivery:
-    label: 'Is same day delivery'
+    label: 'Same Day Delivery Available'
     type: 'string'
     description: 'Sku applicable for same day delivery or not.'
 
@@ -115,4 +115,17 @@ fields:
     label: 'Barcode'
     type: 'string'
     description: 'Sku Barcode.'
+    translatable: 0
+
+  express_delivery:
+    label: 'Express Day Delivery Available'
+    type: 'string'
+    description: 'Sku applicable for express day delivery or not.'
+    index: 1
+
+  delivery_ways:
+    label: 'Delivery Type'
+    cardinality: -1
+    facet: 1
+    index: 1
     translatable: 0
