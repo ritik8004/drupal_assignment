@@ -504,6 +504,12 @@ exports.computePhFilters = function (input, filter) {
 
       break;
 
+    case 'short_description':
+      // @todo limit string length.
+      value = input.description.html;
+
+      break;
+
     default:
       console.log(`Unknown JS filter ${filter}.`)
   }
