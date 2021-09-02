@@ -379,11 +379,11 @@ class AlshayaAlgoliaIndexHelper {
     $object['attr_delivery_ways'] = [];
     $express_day_label = $sku->get('attr_express_delivery')->getString();
     $same_day_label = $sku->get('attr_same_day_delivery')->getString();
-    if($same_day_label == '1'){
-      array_push($object['attr_delivery_ways'],$sku->get('attr_same_day_delivery')->getFieldDefinition()->getLabel());
+    if ($same_day_label == '1') {
+      array_push($object['attr_delivery_ways'], $sku->get('attr_same_day_delivery')->getFieldDefinition()->getLabel());
     }
-    if($express_day_label == '1'){
-      array_push($object['attr_delivery_ways'],$sku->get('attr_express_delivery')->getFieldDefinition()->getLabel());
+    if ($express_day_label == '1') {
+      array_push($object['attr_delivery_ways'], $sku->get('attr_express_delivery')->getFieldDefinition()->getLabel());
     }
     $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
 
