@@ -45,10 +45,8 @@ exports.render = function render(
       break;
 
     case 'breadcrumb':
-      // Render breadcrumb based on the page type.
-      if (drupalSettings.rcsPage.type === 'category' &&
-        typeof globalThis.renderRcsCategoryBreadcrumb !== 'undefined')  {
-        html += globalThis.renderRcsCategoryBreadcrumb.render(
+      if (typeof globalThis.renderRcsBreadcrumb !== 'undefined')  {
+        html += globalThis.renderRcsBreadcrumb.render(
           settings,
           entity,
           innerHtml

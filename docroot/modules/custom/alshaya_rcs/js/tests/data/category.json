@@ -1,0 +1,22 @@
+{
+  "id": 33,
+  "name": "Handy Soap",
+  "level": 4,
+  "url_path": "hand-soaps/hand-care/handy-soap",
+  "breadcrumbs": [
+    {
+      "category_id": 5,
+      "category_name": "Hand Soaps",
+      "category_level": 2,
+      "category_url_key": "hand-soaps",
+      "category_url_path": "hand-soaps"
+    },
+    {
+      "category_id": 11,
+      "category_name": "hand care",
+      "category_level": 3,
+      "category_url_key": "hand-care",
+      "category_url_path": "hand-soaps/hand-care"
+    }
+  ]
+}
