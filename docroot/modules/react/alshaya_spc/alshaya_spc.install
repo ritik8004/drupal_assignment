@@ -28,10 +28,12 @@ function alshaya_spc_update_8015() {
 
   // Disable new benefitpay method by default.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
-  $data = $config->get('exclude_payment_methods');
-  $data['checkout_com_upapi_benefitpay'] = 'checkout_com_upapi_benefitpay';
-  $config->set('exclude_payment_methods', $data);
-  $config->set('refund_exclude_payment_methods', $data);
+  $exclude_payment_methods = $config->get('exclude_payment_methods');
+  $exclude_payment_methods['checkout_com_upapi_benefitpay'] = 'checkout_com_upapi_benefitpay';
+  $config->set('exclude_payment_methods', $exclude_payment_methods);
+  $refund_exclude_payment_methods = $config->get('refund_exclude_payment_methods');
+  $refund_exclude_payment_methods['checkout_com_upapi_benefitpay'] = 'checkout_com_upapi_benefitpay';
+  $config->set('refund_exclude_payment_methods', $refund_exclude_payment_methods);
   $config->save();
 
   // Add translations.
@@ -57,6 +59,8 @@ function alshaya_spc_update_8014() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
  * Add translations for V2.
  */
 function alshaya_spc_update_8013() {
