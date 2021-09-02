@@ -12,6 +12,7 @@ exports.getEntity = async function getEntity(langcode) {
   };
 
   let result = null;
+  let urlKey = '';
 
   switch (drupalSettings.rcsPage.type) {
     case 'product':
@@ -21,9 +22,9 @@ exports.getEntity = async function getEntity(langcode) {
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
-      const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
+      urlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
+        query: `{ products(filter: { url_key: { eq: "${urlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
       });
 
       break;
@@ -34,9 +35,9 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
 
-      const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
+      urlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${urlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
       });
 
       break;
@@ -48,10 +49,25 @@ exports.getEntity = async function getEntity(langcode) {
       return result;
   }
 
-  const response = await rcsCommerceBackend.invokeApi(request);
-  if (drupalSettings.rcsPage.type == "product" && response.data.products.total_count) {
-    result = response.data.products.items[0];
-    RcsPhStaticStorage.set('product_' + result.sku, result);
+  let response = await rcsCommerceBackend.invokeApi(request);
+  if (drupalSettings.rcsPage.type == "product") {
+    if (response.data.products.total_count) {
+      result = response.data.products.items[0];
+      RcsPhStaticStorage.set('product_' + result.sku, result);
+    }
+    else {
+      request.data = JSON.stringify({
+        query: `{urlResolver(url: "${urlKey[1]}.html") {
+          redirectCode
+        }}`
+      });
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response.data.urlResolver === null) {
+        const location = rcsWindowLocation();
+        location.href = `${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`;
+      }
+    }
   }
   else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
