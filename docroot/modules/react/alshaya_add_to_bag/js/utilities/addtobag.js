@@ -188,6 +188,21 @@ export const getAllowedAttributeValues = (
     if (code === attributeName) {
       break;
     }
+
+    // Update the next level selection if current selection is no longer valid.
+    // Example:
+    // color: blue, band_size: 30, cup_size: c
+    // color: red, band_size: 32, cup_size: d
+    // For above, when user changes from 30 to 32 for band_size,
+    // cup_size still says selected as c. But it's not available
+    // for 32 and hence we need to update the selected combination.
+    if (typeof attributesHierarchyClone[code][selectedFormValues[code]] === 'undefined') {
+      // Not sure why javascript hates pass by reference.
+      // We need it here on purpose so disabling linting.
+      // eslint-disable-next-line no-param-reassign
+      [selectedFormValues[code]] = Object.keys(attributesHierarchyClone[code]);
+    }
+
     // Shorten the attribute hierarchy in order to move to the attributeName
     // which has been updated.
     attributesHierarchyClone = attributesHierarchyClone[code][selectedFormValues[code]];
