@@ -8,6 +8,8 @@ exports.render = function render(
   innerHtml
 ) {
   let html = "";
+  const pageType = rcsPhGetPageType();
+
   switch (placeholder) {
     case "delivery-option":
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
@@ -46,7 +48,7 @@ exports.render = function render(
 
     case 'breadcrumb':
       // Render breadcrumb based on the page type.
-      if (drupalSettings.rcsPage.type === 'category' &&
+      if (pageType === 'category' &&
         typeof globalThis.renderRcsCategoryBreadcrumb !== 'undefined')  {
         html += globalThis.renderRcsCategoryBreadcrumb.render(
           settings,
@@ -58,7 +60,7 @@ exports.render = function render(
 
     case 'lhn_block':
       // Render lhn based on the page type.
-      if (drupalSettings.rcsPage.type === 'category'
+      if (pageType === 'category'
       && typeof globalThis.renderRcsLhn !== 'undefined') {
         html += globalThis.renderRcsLhn.render(
           settings,
