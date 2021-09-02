@@ -62,12 +62,14 @@ function alshaya_rcs_listing_rcs_graphql_query_fields() {
   $query_fields['categories'] = [
     'total_count',
     'items' => [
-      'level',
+      'id',
       'name',
+      'level',
       'url_path',
       'description',
       'image',
       'breadcrumbs' => [
+        'category_id',
         'category_name',
         'category_level',
         'category_url_key',
