@@ -405,3 +405,11 @@ function alshaya_tbs_transac_alshaya_performance_preload_alter(array &$preload) 
     'type' => 'font/woff2',
   ];
 }
+
+/**
+ * Implements hook_rcs_graphql_query_fields_alter().
+ */
+function alshaya_tbs_transac_rcs_graphql_query_fields_alter(&$query_fields) {
+  $query_fields['products']['items']['description'] = ['html'];
+//  var_dump($query_fields['products']); exit;
+}
