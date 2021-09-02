@@ -19,7 +19,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    *
    * @var string
    */
-  public static $entityType;
+  public static $entityType = NULL;
 
   /**
    * RCS Entity Path.
@@ -215,6 +215,16 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       }
     }
     return $entity;
+  }
+
+  /**
+   * Returns TRUE if we are on RCS page.
+   *
+   * @return bool
+   *   Returns TRUE if its Rcs page.
+   */
+  public static function isRcsPage() {
+    return self::$entityType != NULL;
   }
 
 }

@@ -18,8 +18,8 @@ settings:
   provider: rcs_placeholders
   label_display: '0'
 visibility:
-  request_path:
-    id: request_path
-    pages: '/taxonomy/term/*'
-    negate: false
-    context_mapping: {  }
+  rcs_context:
+    id: rcs_context
+    use_rcs_context: 1
+    negate: 0
+    context_mapping: {}

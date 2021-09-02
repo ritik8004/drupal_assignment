@@ -3,11 +3,10 @@
 namespace Drupal\rcs_placeholders\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Breadcrumb\BreadcrumbManager;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 
 /**
  * Provides a dynamic breadcrumb for commerce pages.
@@ -21,29 +20,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Breadcrumb manager object.
-   *
-   * @var \Drupal\Core\Breadcrumb\BreadcrumbManager
-   */
-  protected $breadcrumbManager;
-
-  /**
-   * Current route object.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $currentRoute;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, BreadcrumbManager $breadcrumb_manager, RouteMatchInterface $current_route) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->breadcrumbManager = $breadcrumb_manager;
-    $this->currentRoute = $current_route;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -51,8 +27,6 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('breadcrumb'),
-      $container->get('current_route_match')
     );
   }
 
@@ -72,18 +46,21 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
 
     $build['wrapper']['content'] = [
       '#theme' => 'breadcrumb',
-      '#links' => $this->breadcrumbManager->build($this->currentRoute)->getLinks(),
+      '#links' => [
+        // Link to home page.
+        Link::fromTextAndUrl(
+          $this->t('Home'),
+          Url::fromUserInput('/')
+        ),
+        // Placeholder for breadcrumbs.
+        Link::fromTextAndUrl(
+          '#rcs.breadcrumb.text#',
+          Url::fromUserInput('#rcs.breadcrumb.url#')
+        ),
+      ],
     ];
 
     return $build;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheContexts() {
-    // Vary based on the route.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }

@@ -651,6 +651,21 @@ function alshaya_rcs_product_rcs_graphql_query_fields() {
           ],
         ],
       ],
+      'category_ids_in_admin',
+      'categories' => [
+        'id',
+        'name',
+        'level',
+        'url_path',
+        'include_in_menu',
+        'breadcrumbs' => [
+          'category_name',
+          'category_id',
+          'category_level',
+          'category_url_key',
+          'category_url_path',
+        ],
+      ],
     ],
   ];
 

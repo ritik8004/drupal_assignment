@@ -1,10 +1,6 @@
 logger:
   version: 1
   js:
-    # We use weight here to ensure this is loaded first.
-    # It is hard to adjust the dependencies for this one considering
-    # it is to log data to external system and not required by
-    # functionalities itself.
-    js/datadog_js.logger.js: { weight: -999 }
+    js/datadog_js.logger.js: {}
   dependencies:
     - core/drupal
