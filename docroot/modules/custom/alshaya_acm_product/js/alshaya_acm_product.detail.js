@@ -11,7 +11,9 @@
    *  true page is RCS PDP else false.
    */
   function isRcsPdp() {
-    return $('body').hasClass('nodetype--rcs_product');
+    return typeof rcsPhGetPageType === 'function'
+      ? (rcsPhGetPageType() === 'product') ? true : false
+      : false;
   }
 
   /**
@@ -54,7 +56,7 @@
             }
           });
         }
-        if (!isRcsPdp) {
+        if (!isRcsPdp()) {
           Drupal.getRelatedProductPosition();
         }
       });
@@ -247,7 +249,7 @@
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
       });
 
-      if (!isRcsPdp) {
+      if (!isRcsPdp()) {
         // Add related products on pdp on load and scroll.
         $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
           Drupal.getRelatedProductPosition();
