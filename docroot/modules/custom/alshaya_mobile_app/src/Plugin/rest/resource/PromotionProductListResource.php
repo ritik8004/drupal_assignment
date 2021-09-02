@@ -197,7 +197,9 @@ class PromotionProductListResource extends ResourceBase {
         $node = $this->entityRepository->getTranslationFromContext($node, $this->languageManager->getCurrentLanguage()->getId());
 
         // Get result set.
-        $result_set = $this->prepareAndExecuteQuery($id);
+        $rule_id = (int) $node->get('field_acq_promotion_rule_id')->getString();
+        // Extract the rule id as we are now indexing based on rule id.
+        $result_set = $this->prepareAndExecuteQuery($rule_id);
         // Add promo data in result set.
         $response_data = $this->addExtraPromoData($node);
         // Make response data similar to web site.
@@ -225,13 +227,13 @@ class PromotionProductListResource extends ResourceBase {
   /**
    * Preparing and executing the search api query.
    *
-   * @param int $nid
-   *   Node id.
+   * @param int $rule_id
+   *   Rule id.
    *
    * @return \Drupal\search_api\Query\ResultSetInterface
    *   Result set after query execution.
    */
-  public function prepareAndExecuteQuery(int $nid) {
+  public function prepareAndExecuteQuery(int $rule_id) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
 
     if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
@@ -255,7 +257,7 @@ class PromotionProductListResource extends ResourceBase {
       $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey('promo_selling_price');
 
       // Add condition for promotion node.
-      $query->addCondition('promotion_nid', $nid);
+      $query->addCondition('promotion_nid', $rule_id);
 
       // Prepare and execute query and pass result set.
       return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
@@ -289,14 +291,14 @@ class PromotionProductListResource extends ResourceBase {
       if ($this->configFactory->get('alshaya_search_api.listing_settings')->get('filter_oos_product')) {
         $conditionGroup->addCondition('stock', 0, '>');
       }
-      $conditionGroup->addCondition('promotion_nid', $nid);
+      $conditionGroup->addCondition('promotion_nid', $rule_id);
       $query->addConditionGroup($conditionGroup);
 
       // Prepare and execute query and pass result set.
       $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
       $response['algolia_data'] = [
         'filter_field' => 'promotion_nid',
-        'filter_value' => $nid,
+        'filter_value' => $rule_id,
         'rule_contexts' => '',
       ];
 
