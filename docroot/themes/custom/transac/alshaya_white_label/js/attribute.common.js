@@ -54,7 +54,9 @@
 
       // Trigger event for other scripts to act after select options conversion
       // is completed.
-      $('.visually-hidden', form).trigger('select-to-option-conversion-completed');
+      if (form.hasClass('visually-hidden')) {
+        form.trigger('select-to-option-conversion-completed');
+      }
 
       $(window).on('resize', function (e) {
         Drupal.select2OptionConvert();
