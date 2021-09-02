@@ -176,11 +176,6 @@ export const getAllowedAttributeValues = (
   let attributesAndValuesClone = { ...attributesAndValues };
 
   const selectedFormAttributeNames = Object.keys(selectedFormValues);
-  // Return all the values if product has only one attribute.
-  // @todo check for better solution if available.
-  if (selectedFormAttributeNames.length < 2) {
-    return attributesAndValuesClone;
-  }
 
   for (let i = 0; i < selectedFormAttributeNames.length; i++) {
     const code = selectedFormAttributeNames[i];
