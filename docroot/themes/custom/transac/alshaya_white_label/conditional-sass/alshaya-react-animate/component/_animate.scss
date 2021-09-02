@@ -7,7 +7,7 @@ body:not(.ie) {
 
     &.notInMobile {
       @include breakpoint($only-mobile) {
-        animation: none !important;
+        animation: none;
       }
     }
   }
@@ -48,7 +48,7 @@ body:not(.ie) {
 
     &.notInMobile {
       @include breakpoint($only-mobile) {
-        animation: none !important;
+        animation: none;
       }
     }
   }
@@ -97,7 +97,7 @@ body:not(.ie) {
 
     &.notInMobile {
       @include breakpoint($only-mobile) {
-        animation: none !important;
+        animation: none;
       }
     }
   }
