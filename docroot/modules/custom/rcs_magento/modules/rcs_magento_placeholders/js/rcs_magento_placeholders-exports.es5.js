@@ -49,11 +49,11 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   const response = await rcsCommerceBackend.invokeApi(request);
-  if (drupalSettings.rcsPage.type == "product" && response.data.products.total_count) {
+  if (drupalSettings.rcsPage.type === "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
     RcsPhStaticStorage.set('product_' + result.sku, result);
   }
-  else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
+  else if (drupalSettings.rcsPage.type === "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
   }
 
