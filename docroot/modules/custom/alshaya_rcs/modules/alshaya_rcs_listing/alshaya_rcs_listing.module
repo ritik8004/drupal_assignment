@@ -5,10 +5,6 @@
  * Module file.
  */
 
-use Drupal\block\Entity\Block;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
-
 /**
  * Implements hook_theme().
  */
@@ -83,21 +79,4 @@ function alshaya_rcs_listing_rcs_graphql_query_fields() {
   ];
 
   return $query_fields;
-}
-
-/*
- * Implements hook_block_access().
- */
-function alshaya_rcs_listing_block_access(Block $block, $operation, AccountInterface $account) {
-  $routematch = \Drupal::routeMatch();
-  if ($block->id() == 'rcs_placeholders_lhn') {
-    if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
-      $term = $routematch->getParameter('taxonomy_term');
-      if ($term->bundle() == 'rcs_category') {
-        return AccessResult::allowedif(\Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree'));
-      }
-    }
-  }
-  // No opinion.
-  return AccessResult::neutral();
 }
