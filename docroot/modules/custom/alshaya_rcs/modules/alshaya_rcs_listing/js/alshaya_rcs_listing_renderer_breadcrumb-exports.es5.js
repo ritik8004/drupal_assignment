@@ -1,27 +1,65 @@
-// Breadcrumb renderer for listing pages.
-
 const rcsPhBreadcrumbRenderer = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
 
+/**
+ * Breadcrumb renderer for product pages.
+ *
+ * @param settings
+ *    Drupal settings.
+ * @param entity
+ *    The entity.
+ * @param innerHtml
+ *    The html.
+ * @returns
+ *    Return the placeholder replaced breadcrumb markup.
+ */
 exports.render = function render(
   settings,
   entity,
   innerHtml
 ) {
-  let breadcrumbs = [];
+  const breadcrumbs = this.normalize(entity);
+  return rcsPhBreadcrumbRenderer.render(settings, breadcrumbs, innerHtml);
+};
+
+/**
+ * Normalize the original data.
+ *
+ * @param data
+ *    The original data.
+ */
+exports.normalize = function normalize(
+  data,
+) {
+  let normalized = [];
+
+  // Check for empty data.
+  if (!data || Object.keys(data).length < 1) {
+    return [];
+  }
+
+  if (!Array.isArray(data.breadcrumbs) || data.breadcrumbs.length < 1) {
+    // For root level categories, push only name.
+    normalized.push({
+      url: null,
+      text: data.name,
+    });
+
+    return normalized;
+  }
 
   // Prepare the breadcrumb array.
-  Object.keys(entity.breadcrumbs).forEach(function (i) {
-    breadcrumbs.push({
-      url: entity.breadcrumbs[i].category_url_path,
-      text: entity.breadcrumbs[i].category_name,
+  Object.keys(data.breadcrumbs).forEach(function (i) {
+    normalized.push({
+      url: data.breadcrumbs[i].category_url_path,
+      text: data.breadcrumbs[i].category_name,
     });
   });
 
   // Push the last crumb without a url.
-  breadcrumbs.push({
+  normalized.push({
     url: null,
-    text: entity.name,
+    text: data.name,
   });
 
-  return rcsPhBreadcrumbRenderer.render(settings, breadcrumbs, innerHtml);
+  return normalized;
 };
