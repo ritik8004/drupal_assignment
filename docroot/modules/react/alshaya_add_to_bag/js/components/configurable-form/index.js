@@ -5,7 +5,6 @@ import FormElement from '../form-element';
 import {
   getAllowedAttributeValues,
   getHiddenFormAttributes,
-  getFirstAttributesAndValues,
   getQuantityDropdownValues,
   triggerUpdateCart,
   pushSeoGtmData,
@@ -93,26 +92,35 @@ export default class ConfigurableForm extends React.Component {
       .attribute_hierarchy_with_values;
 
     // Update the attribute value in this temporary array.
-    formAttributeValues[attributeName] = attributeValue;
+    formAttributeValues[attributeName] = attributeValue.toString();
 
     // Get the allowed attributes and values for the given combination.
     let attributesAndValues = getAllowedAttributeValues(
       combinationsHierarchy,
       attributeName,
-      attributeValue,
       [],
       formAttributeValues,
     );
 
-    // Get the first attribute and values from the allowed list for each
-    // attribute.
-    attributesAndValues = getFirstAttributesAndValues(attributesAndValues);
-
-    // Update the temporary array with the new default values for the
-    // attributes.
+    // Update the next level selection if current selection is no longer valid.
+    // Example:
+    // color: blue, band_size: 30, cup_size: c
+    // color: red, band_size: 32, cup_size: d
+    // For above, when user changes from 30 to 32 for band_size,
+    // cup_size still says selected as c. But it's not available
+    // for 32 and hence we need to update the selected combination.
     Object.keys(formAttributeValues).forEach((attribute) => {
-      if (typeof attributesAndValues[attribute] !== 'undefined') {
-        formAttributeValues[attribute] = attributesAndValues[attribute];
+      if (typeof attributesAndValues[attribute] !== 'undefined'
+        && !attributesAndValues[attribute].includes(formAttributeValues[attribute])) {
+        [formAttributeValues[attribute]] = attributesAndValues[attribute];
+
+        // Get fresh list of allowed values after changing to the available one.
+        attributesAndValues = getAllowedAttributeValues(
+          combinationsHierarchy,
+          attributeName,
+          [],
+          formAttributeValues,
+        );
       }
     });
 
@@ -284,7 +292,6 @@ export default class ConfigurableForm extends React.Component {
     const allowedAttributeValues = getAllowedAttributeValues(
       combinationsHierarchy,
       mainAttribute,
-      formAttributeValues[mainAttribute],
       [],
       formAttributeValues,
     );
