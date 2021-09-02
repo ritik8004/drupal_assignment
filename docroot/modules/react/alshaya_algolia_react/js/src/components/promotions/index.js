@@ -7,9 +7,12 @@ const Promotion = ({ promotion }) => (
       && Number(drupalSettings.path.currentPath.slice(5)) === promotion.id) ? (
         <span className="sku-promotion-text">{promotion.text}</span>
       ) : (
-        <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
-          {promotion.text}
-        </a>
+        <>
+          <div className="sku-promotion-text">{promotion.text}</div>
+          <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
+            {promotion.text}
+          </a>
+        </>
       )}
   </span>
 );

@@ -26,6 +26,7 @@ libraries:
   - alshaya_white_label/global_styles
   - alshaya_white_label/color_styles
   - alshaya_white_label/ucfix
+  - alshaya_white_label/alshaya-boots-plp
 
 libraries-override:
   back_to_top/back_to_top_icon:

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
-import Promotions from '../promotions';
+import BootsPromotions from '../boots-promotion';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
@@ -146,7 +146,7 @@ const Teaser = ({
             {attribute.rendered_price
               ? Parser(attribute.rendered_price)
               : <Price price={attribute.original_price} final_price={attribute.final_price} />}
-            <Promotions promotions={attribute.promotions} />
+            <BootsPromotions promotions={attribute.promotions} />
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
         </div>
