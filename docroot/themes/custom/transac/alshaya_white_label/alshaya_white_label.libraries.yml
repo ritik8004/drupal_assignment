@@ -22,7 +22,6 @@ global_styles:
     - alshaya_white_label/font-face
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
-    - alshaya_white_label/alshaya_image_lazy_load
 
 ltr_styles:
   css:
@@ -60,7 +59,6 @@ slider_banner:
     - core/jquery
     - core/drupal
     - alshaya_white_label/slick
-    - alshaya_white_label/alshaya_image_lazy_load
 
 delivery_usp:
   js:
@@ -76,7 +74,6 @@ product_carousel:
     - core/jquery
     - alshaya_white_label/utils
     - alshaya_white_label/slick
-    - alshaya_white_label/alshaya_image_lazy_load
 
 alshaya_brand_carousel:
   version: 1.x
@@ -217,14 +214,6 @@ magazine_article:
     - core/jquery
     - alshaya_white_label/slick
 
-alshaya_image_lazy_load:
-  js:
-    vendor/js/blazy.min.js: { minified: true }
-    js/alshaya_image_lazyload.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery.once
-
 algolia_search:
   js:
     conditional-sass/algolia-search/js/algolia-search.js: {}
@@ -329,7 +318,6 @@ matchback_layout:
   - core/jquery
   - core/drupal
   - alshaya_white_label/slick
-  - alshaya_white_label/alshaya_image_lazy_load
 
 matchback_cart_notification:
   css:
