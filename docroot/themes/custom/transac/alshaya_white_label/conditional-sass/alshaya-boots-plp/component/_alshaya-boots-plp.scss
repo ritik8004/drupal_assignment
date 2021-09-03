@@ -56,6 +56,10 @@
     .addtobag-config-button-container,
     .is-not-buyable {
       margin-bottom: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
     }
   }
 }
