@@ -91,6 +91,7 @@ function alshaya_rcs_main_menu_form_alter(&$form, FormStateInterface $form_state
     // Remove the validate function for product category and also make this
     // field non required.
     $form['field_product_category']['#access'] = FALSE;
+    unset($form['field_product_category']['widget']['#states']['required']);
     $form['#validate'] = array_diff($form['#validate'], ['alshaya_advanced_page_node_form_validate']);
   }
 }

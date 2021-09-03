@@ -53,7 +53,15 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
     // If V2 function exist for checking department page,
     // proceed and check for department page existance.
     if (function_exists('alshaya_rcs_main_menu_is_department_page')) {
-      if ($department_node = alshaya_rcs_main_menu_is_department_page($path)) {
+      // Filter out the front slash as it will not be the part of the
+      // department page category slug.
+      $filtered_path = $path;
+      if ($filtered_path && $filtered_path[0] == '/') {
+        $filtered_path = substr($filtered_path, 1);
+      }
+      // Get list of department pages.
+      $department_node = alshaya_rcs_main_menu_is_department_page($filtered_path);
+      if ($department_node) {
         $node_route = $this->connection->query("SELECT name, route, fit FROM {" . $this->connection->escapeTable($this->tableName) . "} WHERE name = 'entity.node.canonical'")
           ->fetchAll(\PDO::FETCH_ASSOC);
         if ($node_route) {
