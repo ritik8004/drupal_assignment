@@ -51,13 +51,20 @@ const OrderSummaryBlock = ({
     activeClass = 'in-active';
   }
 
-  let animationClasses = 'fadeInUp notInMobile';
+  let elClasses = 'spc-order-summary-block fadeInUp notInMobile';
+  let styles = {
+    animationDelay: animationDelayValue,
+  };
   if (context === 'print') {
-    animationClasses = '';
+    elClasses = 'spc-order-summary-block no-animate';
+    styles = {
+      animation: 'none !important',
+      transition: 'none !important',
+    };
   }
 
   return (
-    <div className={`spc-order-summary-block ${animationClasses}`} style={{ animationDelay: context === 'print' ? 0 : animationDelayValue }}>
+    <div className={elClasses} style={styles}>
       <SectionTitle>
         <span>{orderSummaryTitle}</span>
         <span>{` ${orderSummaryCount}`}</span>
