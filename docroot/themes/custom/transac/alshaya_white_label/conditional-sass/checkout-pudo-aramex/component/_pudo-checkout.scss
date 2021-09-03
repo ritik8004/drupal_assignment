@@ -16,6 +16,12 @@
   .store-delivery-time {
     margin-top: 0.625rem;
   }
+
+  .store-delivery-time {
+    .delivery--time--value {
+      padding-#{$left}: 0.3125rem;
+    }
+  }
 }
 
 .spc-checkout-delivery-information {
