@@ -16,7 +16,7 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Add click and collect collection point configs and translations.
  */
-function alshaya_spc_update_8014() {
+function alshaya_spc_update_8015() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -25,6 +25,20 @@ function alshaya_spc_update_8014() {
     'install'
   );
 
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v6');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translations for CVV error.
+ */
+function alshaya_spc_update_8014() {
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
   $translations = _alshaya_spc_get_translations('v5');

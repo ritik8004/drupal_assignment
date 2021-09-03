@@ -17,11 +17,19 @@ Using Lando should be considered in BETA phase.
 
 If you are switching from DrupalVM to Lando, please check the steps below.
 
-#### Requirements
+### Requirements
+
 * Docker
-* Lando (https://docs.lando.dev/basics/installation.html)
+* Lando
+* MacOS or Ubuntu/Linux (_*Not tested on Windows_)
+
+### Installation
+* Follow https://docs.lando.dev/basics/installation.html
 _**NOTE**: Lando recommends you download their installer which has docker desktop bundled with it instead of installing
 separately._
+* Download the dmg file from `https://github.com/lando/lando/releases`
+* The lando package will have the compatible docker as well inside it.
+* Post installation, follow the recommendations in the [Performance](#Performance) section below.
 
 Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
 as per the instructions above.
@@ -36,7 +44,8 @@ All steps are executed on your host OS.
   * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build. If you don't specify the
      site name, you will be able to pick the name from a list.
 
-You should now be able to access the site in your browser at https://<sitename>.alshaya.lndo.site/
+You should now be able to access the site in your browser at `https://<sitename>.alshaya.lndo.site/`
+example: `https://mckw.alshaya.lndo.site/`
 
 Drush commands can be executed from your host OS using `lando drush -l <site_url>`.
 
@@ -154,8 +163,18 @@ written by server and we do not need them.
 On local, it has been found that updating docker preferences on Mac to only mount project folder and $HOME/.lando
 folder into containers.
 
-For reference:
+1. Change `~/.lando/config.yml` and set home to empty, so home directory wont be loaded. The content of this file should be,
+```
+home: ''
+```
 
+2. `(Already applied)` Once #1 is done, the ssh keys are not accessible to lando as home directory is unmounted. This fix https://github.com/lando/lando/issues/478#issuecomment-654634511 has been added for now as part of `.lando.yml` until lando has a better way to allow projects to manage ssh keys without sacrificing performance by mounting entire `home` directory.
+
+NOTE: Be careful about the Experimental features in Docker dashboard. The assumption is we have them turned off.
+
+For reference:
+- https://github.com/lando/lando/issues/478#issuecomment-654634511
+- https://github.com/lando/lando/issues/2635#issuecomment-877473886
 - https://docs.lando.dev/config/performance.html
 - https://github.com/lando/lando/issues/763
 
