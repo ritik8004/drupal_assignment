@@ -99,7 +99,7 @@
               $(field).once('autocomplete-init').on('keyup', function (e) {
                 // If the input field length is 2 or more, we will load the
                 // google library if not loaded already.
-                if ($(field).val().length >= 2) {
+                if ($(this).val().length >= 2) {
                   // Do a check if the library is already loaded.
                   if ($('#pdp-stores-container').hasClass('maps-loaded')) {
                     return;
