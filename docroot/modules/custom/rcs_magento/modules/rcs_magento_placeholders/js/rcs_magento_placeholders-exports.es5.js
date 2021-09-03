@@ -1,11 +1,14 @@
 // @codingStandardsIgnoreFile
 
 /**
- * Utility function to redirect to 404 page.
+ * Utility function to redirect to page.
+ *
+ * @param {string} url
+ *   The url to redirect to.
  */
-function redirectTo404Page() {
+function redirectToPage(url) {
   const location = rcsWindowLocation();
-  location.href = `${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`;
+  location.href = url;
 }
 
 /**
@@ -20,12 +23,19 @@ async function handleNoItemsInResponse(request, urlKey) {
   request.data = JSON.stringify({
     query: `{urlResolver(url: "${urlKey[1]}.html") {
       redirectCode
+      relative_url
     }}`
   });
 
   let response = await rcsCommerceBackend.invokeApi(request);
   if (response.data.urlResolver === null) {
-    redirectTo404Page();
+    redirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
+  }
+  else if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
+    redirectToPage(response.data.urlResolver.relative_url);
+  }
+  else {
+    console.log(`No route/redirect found for ${urlKey[1]}.html.`);
   }
 }
 
