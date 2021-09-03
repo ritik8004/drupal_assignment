@@ -5,12 +5,16 @@
   "private": "true",
   "scripts": {
     "build": "node_modules/.bin/webpack",
-    "build:dev": "node_modules/.bin/webpack --mode=development"
+    "build:dev": "node_modules/.bin/webpack --mode=development",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.15.0",
+    "babel-plugin-rewire": "^1.2.0",
+    "jest": "^25.5.4",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7"
   },

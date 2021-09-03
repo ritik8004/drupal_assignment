@@ -40,8 +40,9 @@ async function handleNoItemsInResponse(request, urlKey) {
 }
 
 exports.getEntity = async function getEntity(langcode) {
-  if (typeof drupalSettings.rcsPage === 'undefined') {
-    return null;
+  const pageType = rcsPhGetPageType();
+  if (!pageType) {
+    return;
   }
 
   const request = {
@@ -53,9 +54,8 @@ exports.getEntity = async function getEntity(langcode) {
   let result = null;
   let urlKey = '';
 
-  switch (drupalSettings.rcsPage.type) {
+  switch (pageType) {
     case 'product':
-    case 'entity':
       request.uri += "graphql";
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
@@ -83,13 +83,13 @@ exports.getEntity = async function getEntity(langcode) {
 
     default:
       console.log(
-        `Entity type ${drupalSettings.rcsPage.type} not supported for get_entity.`
+        `Entity type ${pageType} not supported for get_entity.`
       );
       return result;
   }
 
   let response = await rcsCommerceBackend.invokeApi(request);
-  if (drupalSettings.rcsPage.type == "product") {
+  if (pageType == "product") {
     if (response.data.products.total_count) {
       result = response.data.products.items[0];
       RcsPhStaticStorage.set('product_' + result.sku, result);
@@ -98,7 +98,7 @@ exports.getEntity = async function getEntity(langcode) {
       await handleNoItemsInResponse(request, urlKey);
     }
   }
-  else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
+  else if (pageType == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
   }
 
@@ -153,6 +153,11 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
         // Skip the default category data always.
         result = response.data.category.children[0].children;
       }
+      break;
+
+    case 'breadcrumb':
+      // We do not need to do anything for breadcrumbs.
+      // Adding this case to avoid console messages about breadcrumbs.
       break;
 
     default:

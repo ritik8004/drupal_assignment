@@ -2,15 +2,13 @@
 // with API response.
 exports.render = function render(
   settings,
-  entity,
+  breadcrumbs,
   innerHtml
 ) {
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
   // Proceed only if entity is present.
-  if (entity !== null) {
-    // Extract breadcrumb from the entity response.
-    const { breadcrumbs } = entity;
+  if (breadcrumbs !== null) {
     // Get the enrichment data. It's a sync call.
     let enrichmentData = rcsGetEnrichedCategories();
 
@@ -28,8 +26,8 @@ exports.render = function render(
       // Get the enrichment data from the settings.
       let enrichedDataObj = {};
       let hideBreadcrumb = 0;
-      if (enrichmentData && enrichmentData[breadcrumb.category_url_path]) {
-        enrichedDataObj = enrichmentData[breadcrumb.category_url_path];
+      if (enrichmentData && enrichmentData[breadcrumb.url]) {
+        enrichedDataObj = enrichmentData[breadcrumb.url];
 
         // Add no-link class if item is set as not clickable.
         if (!enrichedDataObj.item_clickable) {
@@ -39,23 +37,10 @@ exports.render = function render(
         hideBreadcrumb = enrichedDataObj.remove_from_breadcrumb
       }
       if (!hideBreadcrumb) {
-        breadcrumb.category_url_path = '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + breadcrumb.category_url_path;
+        breadcrumb.url = '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + breadcrumb.url;
         breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings);
       }
     });
-
-    // Reset the flag value.
-    hideBreadcrumb = 0;
-    // Add the current item in the breadcrumb.
-    if (enrichmentData && enrichmentData[entity.url_path]) {
-      hideBreadcrumb = enrichmentData[entity.url_path].remove_from_breadcrumb;
-    }
-    if (!hideBreadcrumb) {
-      breadcrumbHtml += getBreadcrumbMarkup({
-        'category_name': entity.name,
-        'category_url_path': '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + entity.url_path,
-      }, innerHtmlObj, settings);
-    }
 
     // Remove the placeholders markup.
     innerHtmlObj.find('li').remove();
@@ -80,7 +65,7 @@ const getBreadcrumbMarkup = function (breadcrumb, innerHtmlObj, settings) {
   // value. Parse the html to find all occurrences at apply the
   // replacement.
   let breadcrumbItemHtml = clonedElement[0].outerHTML;
-  rcsPhReplaceEntityPh(breadcrumbItemHtml, 'categories', breadcrumb, settings.path.currentLanguage)
+  rcsPhReplaceEntityPh(breadcrumbItemHtml, 'breadcrumb', breadcrumb, settings.path.currentLanguage)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];
