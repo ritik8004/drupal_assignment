@@ -1,0 +1,26 @@
+[
+    {
+        "email": "user@test.com",
+        "order_id": "BWKWHDE0007587",
+        "order_date": "2021-09-03",
+        "payment_method": "Credit / Debit Card"
+    },
+    {
+        "email": "user@test.com",
+        "order_id": "BWKWHDA0001266",
+        "order_date": "2021-09-03",
+        "payment_method": "البطاقة الائتمانية / البطاقة المصرفية"
+    },
+    {
+        "email": "nikita@axelerant.com",
+        "order_id": "BWKWHDA0001272",
+        "order_date": "2021-09-03",
+        "payment_method": "البطاقة الائتمانية / البطاقة المصرفية"
+    },
+    {
+        "email": "nikita@axelerant.com",
+        "order_id": "BWKWHDA0001275",
+        "order_date": "2021-09-03",
+        "payment_method": "البطاقة الائتمانية / البطاقة المصرفية"
+    }
+]
