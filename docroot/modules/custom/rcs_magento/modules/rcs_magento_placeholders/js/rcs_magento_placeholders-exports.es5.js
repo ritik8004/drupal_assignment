@@ -1,5 +1,34 @@
 // @codingStandardsIgnoreFile
 
+/**
+ * Utility function to redirect to 404 page.
+ */
+function redirectTo404Page() {
+  const location = rcsWindowLocation();
+  location.href = `${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`;
+}
+
+/**
+ * Handle 404 case on initial request.
+ *
+ * @param {object} request
+ *   The request object.
+ * @param {string} urlKey
+ *   The url key.
+ */
+async function handleNoItemsInResponse(request, urlKey) {
+  request.data = JSON.stringify({
+    query: `{urlResolver(url: "${urlKey[1]}.html") {
+      redirectCode
+    }}`
+  });
+
+  let response = await rcsCommerceBackend.invokeApi(request);
+  if (response.data.urlResolver === null) {
+    redirectTo404Page();
+  }
+}
+
 exports.getEntity = async function getEntity(langcode) {
   if (typeof drupalSettings.rcsPage === 'undefined') {
     return null;
@@ -56,17 +85,7 @@ exports.getEntity = async function getEntity(langcode) {
       RcsPhStaticStorage.set('product_' + result.sku, result);
     }
     else {
-      request.data = JSON.stringify({
-        query: `{urlResolver(url: "${urlKey[1]}.html") {
-          redirectCode
-        }}`
-      });
-
-      response = await rcsCommerceBackend.invokeApi(request);
-      if (response.data.urlResolver === null) {
-        const location = rcsWindowLocation();
-        location.href = `${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`;
-      }
+      await handleNoItemsInResponse(request, urlKey);
     }
   }
   else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
