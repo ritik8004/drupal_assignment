@@ -69,7 +69,7 @@ function alshaya_cos_transac_install() {
   $strings = [
     'seo_brand_name' => [
       'en' => 'COS Store',
-      'ar' => 'COS Store',
+      'ar' => 'متجر COS',
     ],
     'Product Description' => [
       'en' => 'What does it do for you?',

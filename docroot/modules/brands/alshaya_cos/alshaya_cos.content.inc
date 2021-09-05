@@ -35,7 +35,7 @@ function alshaya_cos_create_copyright_block() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Copyright',
     'body' => [
-      'value' => "<p>&copy; 2021 COS Limited. All Rights Reserved</p>",
+      'value' => "<p>&copy; 2021 COS المحدودة. كل الحقوق محفوظة</p>",
       'format' => 'rich_text',
     ],
   ]);
