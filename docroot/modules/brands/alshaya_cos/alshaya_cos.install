@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_cos.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_cos_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_cos', 'inc', 'alshaya_cos.content');
+
+  // Create default content for cos.
+  alshaya_cos_create_default_content();
+}

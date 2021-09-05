@@ -1,0 +1,11 @@
+name: 'Alshaya COS (Transac)'
+type: module
+description: 'The dedicated module for transac The COS brand.'
+package: Alshaya
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_cos:alshaya_cos
+  - dynamic_yield:dynamic_yield
+themes:
+  - alshaya_cos_stores
