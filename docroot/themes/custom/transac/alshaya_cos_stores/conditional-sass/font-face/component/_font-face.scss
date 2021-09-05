@@ -1,0 +1,12 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_cos_stores/fonts';
+
+@font-face {
+  font-family: "SuisseIntl-Regular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/SuisseIntl-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SuisseIntl-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
