@@ -91,7 +91,7 @@ function alshaya_cos_transac_install() {
     alshaya_stores_finder_set_default_marker_icon('alshaya_cos_transac');
   }
 
-  // Configure map marker on checkout for CnC and appointment booking.
+  // Configure map marker on checkout for CnC.
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
     ->set('map_marker.active', '/modules/brands/alshaya_cos/images/cos-pin-active.svg')
     ->set('map_marker.in_active', '/modules/brands/alshaya_cos/images/cos-pin-inactive.svg')

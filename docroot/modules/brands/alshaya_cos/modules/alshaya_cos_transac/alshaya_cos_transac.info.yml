@@ -6,6 +6,5 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_cos:alshaya_cos
-  - dynamic_yield:dynamic_yield
 themes:
   - alshaya_cos_stores

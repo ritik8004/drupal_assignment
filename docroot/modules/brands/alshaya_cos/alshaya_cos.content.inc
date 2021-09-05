@@ -8,14 +8,14 @@
 use Drupal\block_content\Entity\BlockContent;
 
 /**
- * Create default content for the body shop.
+ * Create default content for COS.
  */
 function alshaya_cos_create_default_content() {
   alshaya_cos_create_copyright_block();
 }
 
 /**
- * Create copyright block content for the body shop.
+ * Create copyright block content for COS.
  */
 function alshaya_cos_create_copyright_block() {
   $block_content = BlockContent::create([
