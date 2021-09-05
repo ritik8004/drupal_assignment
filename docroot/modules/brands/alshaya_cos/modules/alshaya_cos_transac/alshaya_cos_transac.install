@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_cos.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_cos_transac_install() {
+  // Enable and set alshaya_cos as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_cos_stores');
+
+  // Reset theme logo.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  $current_theme = $active_theme->getName();
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  \Drupal::configFactory()
+    ->getEditable($current_theme . '.settings')
+    ->set('logo', [
+      'path' => $site_logo . '.svg',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'COS')
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
+      ],
+    ])
+    ->save();
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all The COS Stores');
+  $config->save();
+
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->save();
+
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'COS Store',
+      'ar' => 'متجر COS',
+    ],
+    'Product Description' => [
+      'en' => 'What does it do for you?',
+      'ar' => 'ما الذي تفعله من اجلك؟',
+    ],
+    'get email offers and the latest news from @site_name' => [
+      'en' => 'Enjoy 10% off your first order',
+      'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
+  // Install metatag transalations.
+  _alshaya_cos_get_metatag_translations();
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_cos_transac');
+  }
+
+  // Configure map marker on checkout for CnC.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_cos/images/cos-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_cos/images/cos-pin-inactive.svg')
+    ->save();
+
+  // Check if the sharethis module exists, then remove this from
+  // the Product CT as set in alshaya_transac.install by default.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    // Get the sharethis configuration.
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    if ($configFactory->get('node_types.acq_product')) {
+      // Disable share this for Product CT.
+      $configFactory->clear('node_types.acq_product');
+    }
+    // Save the changes.
+    $configFactory->save();
+  }
+}
