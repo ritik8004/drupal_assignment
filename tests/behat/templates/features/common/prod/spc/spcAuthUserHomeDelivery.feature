@@ -1,4 +1,4 @@
-@javascript @auth @codPayment @homeDelivery @vssaprod
+@javascript @auth @codPayment @homeDelivery @vssaprod @westelmkwprod
 Feature: SPC Checkout Home Delivery COD for Authenticated Users
 
   Background:

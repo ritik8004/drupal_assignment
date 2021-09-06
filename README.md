@@ -63,7 +63,7 @@ You typically run all the drush and blt commands *from inside* of the VM.
 
 _**Note**: We also have a **lando** setup available. As time has gone by more and more dependencies have prevented us from moving
 to newer drupal-vm versions, this has meant you might face issues on newer Mac OS Big Sur or on Catalina with certain
-vagrant and virtualbox variants. It is recommended to use the lando setup for such cases. Check README.lando.md._
+vagrant and virtualbox variants. It is recommended to use the lando setup for such cases. Check [README.lando.md](README.lando.md)._
 
 To prepare your local env:
 * Install Virtualbox and Vagrant.

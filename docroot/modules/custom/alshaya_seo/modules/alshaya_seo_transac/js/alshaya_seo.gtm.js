@@ -1306,18 +1306,11 @@ const productRecommendationsSuffix = 'pr-';
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
-    var listName = $('body').attr('gtm-list-name') ? $('body').attr('gtm-list-name') : drupalSettings.path.currentPath;
-    if (listName === 'search') {
-      listName = 'Search Results Page';
-    }
     var productData = {
       event: 'addToCart',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
         add: {
-          actionField: {
-            list: listName
-          },
           products: [
             product
           ]

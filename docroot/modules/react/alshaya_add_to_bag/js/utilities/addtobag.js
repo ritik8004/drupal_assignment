@@ -168,88 +168,75 @@ export const getHiddenFormAttributes = () => (typeof drupalSettings.add_to_bag.h
 export const getAllowedAttributeValues = (
   attributesHierarchy,
   attributeName,
-  attributeValue,
   attributesAndValues,
   selectedFormValues,
 ) => {
   // Create clones to allow modification.
   let attributesHierarchyClone = JSON.parse(JSON.stringify(attributesHierarchy));
-  const selectedFormValuesClone = { ...selectedFormValues };
   let attributesAndValuesClone = { ...attributesAndValues };
 
-  const selectedFormAttributeNames = Object.keys(selectedFormValuesClone);
+  const selectedFormAttributeNames = Object.keys(selectedFormValues);
+
   for (let i = 0; i < selectedFormAttributeNames.length; i++) {
     const code = selectedFormAttributeNames[i];
 
     if (code === attributeName) {
       break;
     }
+
+    // Update the next level selection if current selection is no longer valid.
+    // Example:
+    // color: blue, band_size: 30, cup_size: c
+    // color: red, band_size: 32, cup_size: d
+    // For above, when user changes from 30 to 32 for band_size,
+    // cup_size still says selected as c. But it's not available
+    // for 32 and hence we need to update the selected combination.
+    if (typeof attributesHierarchyClone[code][selectedFormValues[code]] === 'undefined') {
+      // Not sure why javascript hates pass by reference.
+      // We need it here on purpose so disabling linting.
+      // eslint-disable-next-line no-param-reassign
+      [selectedFormValues[code]] = Object.keys(attributesHierarchyClone[code]);
+    }
+
     // Shorten the attribute hierarchy in order to move to the attributeName
     // which has been updated.
-    attributesHierarchyClone = attributesHierarchyClone[code][selectedFormValuesClone[code]];
+    attributesHierarchyClone = attributesHierarchyClone[code][selectedFormValues[code]];
   }
 
+  // Add all the configurable options for current attribute.
+  // For next level we would add only for the current selected
+  // option. So if we have following and we select blue,
+  // we want both m and l. This is more appropriate when we have
+  // 2+ configurable attributes.
+  // {
+  //   red: s, m
+  //   blue: m, l
+  //   green: s, m
+  // }
+  attributesAndValuesClone[attributeName] = Object.keys(attributesHierarchyClone[attributeName]);
+
   // Check if the end of the hierarchy has been reached.
-  /* eslint-disable eqeqeq */
-  if (attributesHierarchyClone[attributeName][attributeValue] == 1) {
+  const nextLevel = Object.values(attributesHierarchyClone[attributeName])[0];
+  if (typeof nextLevel !== 'object') {
     return attributesAndValuesClone;
   }
 
-  // If the key for the attribute does not exist, create one.
-  if (typeof attributesAndValuesClone[attributeName] === 'undefined') {
-    attributesAndValuesClone[attributeName] = [];
-  }
-
-  // Push the selected attribute into the array.
-  attributesAndValuesClone[attributeName].push(attributeValue);
-
   // Get the next attribute in the hierarchy.
-  const nextAttribute = Object.keys(
-    attributesHierarchyClone[attributeName][attributeValue],
-  )[0];
+  const nextAttribute = Object.keys(nextLevel)[0];
 
   if (typeof nextAttribute === 'undefined') {
     return attributesAndValuesClone;
   }
 
-  // Get the list of values for the next attribute in the hierarchy.
-  const nextValues = Object.keys(
-    attributesHierarchyClone[attributeName][attributeValue][nextAttribute],
+  // Do a recursive call to travel further down the attribute hierarchy.
+  attributesAndValuesClone = getAllowedAttributeValues(
+    attributesHierarchy,
+    nextAttribute,
+    attributesAndValuesClone,
+    selectedFormValues,
   );
 
-  nextValues.forEach((nextAttributeVal) => {
-    selectedFormValuesClone[nextAttribute] = nextAttributeVal;
-    // Do a recursive call to travel further down the attribute hierarchy.
-    attributesAndValuesClone = getAllowedAttributeValues(
-      attributesHierarchy,
-      nextAttribute,
-      nextAttributeVal,
-      attributesAndValuesClone,
-      selectedFormValuesClone,
-    );
-  });
-
   return attributesAndValuesClone;
-};
-
-/**
- * Gets the first value among the array of values for each attribute.
- *
- * @param {object} attributesAndValues
- *   An object of attribute keys and their value like
- * {attr1: [val1, val2...], attr2: [val1, val2...]}.
- *
- * @returns {object}
- *   Object containing attribute keys and the first values like
- *  {attr1: val1, attr2: val2,....}.
- */
-export const getFirstAttributesAndValues = (attributesAndValues) => {
-  const data = [];
-  Object.keys(attributesAndValues).forEach((attribute) => {
-    [data[attribute]] = attributesAndValues[attribute];
-  });
-
-  return data;
 };
 
 /**
@@ -291,8 +278,14 @@ export const pushSeoGtmData = (productData) => {
   if (typeof Drupal.alshaya_seo_gtm_get_product_values !== 'undefined'
     && typeof Drupal.alshayaSeoGtmPushAddToCart !== 'undefined') {
     // Get the seo GTM product values.
+    let gtmProduct = productData.element.closest('[gtm-type="gtm-product-link"]');
+    // The product drawer is coming in page end in DOM,
+    // so element.closest is not right selector when quick view is open.
+    if (gtmProduct === null) {
+      gtmProduct = document.querySelector(`article[data-sku="${productData.element.getAttribute('data-sku')}"]`);
+    }
     const product = Drupal.alshaya_seo_gtm_get_product_values(
-      productData.element.closest('[gtm-type="gtm-product-link"]'),
+      gtmProduct,
     );
 
     // Set the product quantity.

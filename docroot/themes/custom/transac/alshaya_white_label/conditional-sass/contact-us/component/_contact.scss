@@ -5,10 +5,6 @@
     }
   }
 
-  @include breakpoint($tablet) {
-    padding-#{$left}: 1.5rem;
-  }
-
   .c-page-title {
     border-bottom: 1px solid $content_pagetitle_border;
     margin-bottom: 0.75rem;
@@ -65,12 +61,13 @@
 }
 
 .webform-submission-alshaya-contact-form {
-  .form-item {
+  .form-item,
+  .form-item.mobile-number-field {
     margin-bottom: 3.5rem;
     display: inline-block;
   }
 
-  fieldset {
+  fieldset.form-item {
     margin-top: 1em;
   }
 
@@ -271,6 +268,12 @@
       }
     }
   }
+
+  .c-contact {
+    @include breakpoint($tablet) {
+      padding-#{$left}: 1.5rem;
+    }
+  }
 }
 
 .webform-submission-alshaya-contact-add-form {
@@ -290,11 +293,13 @@
     label {
       text-transform: lowercase;
     }
-  }
-}
 
-.webform-submission-alshaya-contact-form .mobile-number-field .mobile-input--wrapper .country-select {
-  @include country-select;
+    .mobile-input--wrapper {
+      .country-select {
+        @include country-select;
+      }
+    }
+  }
 }
 
 .webform-submission-alshaya-contact-form .mobile-number-field .mobile-input--wrapper {
@@ -307,5 +312,56 @@
     input {
       @include mobile-number-input-style;
     }
+
+    max-width: 24.75rem;
+    margin-bottom: 1.5rem;
+
+    #edit-mobile-number {
+      display: block;
+    }
+
+    .user-page.c-user-edit & {
+      margin-bottom: 3.5rem;
+    }
+
+    label {
+      opacity: 1;
+      font-size: 0.75rem !important;
+      color: $primary_input_label;
+      top: 0.4375rem !important;
+
+      &.error {
+        position: absolute;
+        #{$left}: 0;
+        top: 2.75rem !important;
+        width: 100%;
+        border-top: 1px solid $primary_input_inline_error;
+      }
+    }
+
+    .form-type-textfield {
+      margin-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .form-type-select {
+      &.form-item-guest-delivery-home-address-shipping-mobile-number-country-code,
+      &.form-item-billing-address-address-billing-mobile-number-country-code,
+      &.form-item-member-delivery-home-address-form-form-mobile-number-country-code,
+      &.form-item-cc-mobile-number-country-code,
+      &.form-item-field-address-0-address-mobile-number-country-code {
+        padding-bottom: 0;
+        margin-top: 0 !important;
+        width: 3rem;
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  #edit-field-address-0-address-administrative-area {
+    width: 100%;
   }
 }

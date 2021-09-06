@@ -1331,6 +1331,11 @@
       #{$left}: 45%;
     }
   }
+
+  .empty-store-list {
+    display: inline-block;
+    padding-bottom: 0.625rem;
+  }
 }
 
 .other-stores-link {

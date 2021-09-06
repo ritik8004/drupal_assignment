@@ -47,6 +47,9 @@ class VatCertificateController extends ControllerBase {
     return [
       '#theme' => 'alshaya_vat_certificate_page',
       '#url' => $vat_data['url'],
+      '#cache' => [
+        'tags' => ['alshaya_vat_certificate'],
+      ],
     ];
 
   }

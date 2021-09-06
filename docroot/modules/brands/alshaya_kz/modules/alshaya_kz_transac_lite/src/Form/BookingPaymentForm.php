@@ -195,7 +195,7 @@ class BookingPaymentForm extends FormBase {
           'sales_number' => $final_visitor_list->sales_number,
           'visitor_types' => rtrim($visitor_types, ','),
           'visit_date' => $final_visitor_list->visit_date,
-          'order_total' => $order_total,
+          'order_total' => number_format((float) $order_total, 3, '.', ''),
           'ticket_info' => $final_visitor_list->data,
         ];
         // Save ticket details.

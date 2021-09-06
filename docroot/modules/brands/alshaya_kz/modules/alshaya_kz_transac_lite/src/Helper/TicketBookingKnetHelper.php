@@ -132,7 +132,7 @@ class TicketBookingKnetHelper extends KnetHelper {
 
     $this->logger->info('KNET update for Response: @message State: @state', [
       '@message' => json_encode($response),
-      '@state' => $state_data,
+      '@state' => json_encode($state_data),
     ]);
 
     // For new K-Net toolkit, we need to redirect.

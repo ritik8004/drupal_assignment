@@ -95,3 +95,11 @@ gtm_pdp_default:
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce
+
+dy_product_recom:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.dy_product.js: { attributes: { defer: true } }
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce
