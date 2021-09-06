@@ -121,7 +121,8 @@ class AuraFormSignUpOTPModal extends React.Component {
     removeError(getInlineErrorSelector('otp').otp);
     // API call to verify otp.
     const apiUrl = 'post/loyalty-club/verify-otp';
-    const apiData = postAPIData(apiUrl, { mobile, otp });
+    // Passing type `reg` to denote this otp verification is for user registration.
+    const apiData = postAPIData(apiUrl, { mobile, otp, type: 'reg' });
     showFullScreenLoader();
 
     if (apiData instanceof Promise) {

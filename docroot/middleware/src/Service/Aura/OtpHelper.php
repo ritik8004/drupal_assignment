@@ -57,12 +57,17 @@ class OtpHelper {
   /**
    * Send OTP.
    *
+   * @param string $mobile
+   *   Mobile number.
+   * @param string $type
+   *   Type of send otp request - registration or link card.
+   *
    * @return array
    *   Return API response/error.
    */
-  public function sendOtp($mobile) {
+  public function sendOtp($mobile, $type) {
     try {
-      $endpoint = sprintf('/sendotp/phonenumber/%s', str_replace('+', '', $mobile));
+      $endpoint = sprintf('/sendotp/phonenumber/%s/type/%s', str_replace('+', '', $mobile), $type);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $responseData = [
         'status' => $response,
