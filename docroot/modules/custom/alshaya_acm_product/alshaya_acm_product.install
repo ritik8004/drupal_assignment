@@ -35,11 +35,10 @@ function alshaya_acm_product_update_8073() {
   );
   // Re-indexing all the products.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
-  $new_block = Block::load('plpdeliveryways');
-    if ($new_block instanceof BlockInterface) {
-      $new_block->disable();
-      $new_block->save();
-    }
+  $all_facet_block = Block::load('alshaya_search_facets_block_all');
+  if ($all_facet_block instanceof BlockInterface) {
+    Block::load('deliveryways')->setWeight(($all_facet_block->getWeight())-1)->save();
+  }
 }
 
 /**
