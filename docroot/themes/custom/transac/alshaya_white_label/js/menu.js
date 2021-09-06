@@ -317,6 +317,16 @@
           stickyHeader();
         }
       });
+
+      // Push navigation events in dataLayer for 1st Level.
+      $('.menu--one__list-item .menu--one__link').once().on('click', function () {
+        var label = $(this).text();
+        var navigationData = {
+          event: 'Top Navigation',
+          eventLabel: label
+        };
+        dataLayer.push(navigationData);
+      });
     }
   };
 
