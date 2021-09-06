@@ -8,6 +8,34 @@
 global $magentos;
 
 $magentos = [
+  // COS.
+  'cos_qa' => [
+    'url' => 'https://integration-5ojmyuq-vlvasu2xupli4.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '6ih9p46w6xvqzo0ldex9xdhwuxgoyhyp',
+      'consumer_secret' => 'z90wonowuk21m3k6dv437nuqnekz04a6',
+      'access_token' => 'jhevrjbgghd8xm0tgn6047ggjspn76dl',
+      'access_token_secret' => 'j70evsya47dwxklpbf0kdz88qdjs4hrp',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 18],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 13, 'ar' => 14],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 15, 'ar' => 16],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 11, 'ar' => 12],
+    ],
+  ],
   // The body shop.
   'tbs_qa' => [
     'url' => 'https://tbs-uat.store.alshaya.com',
