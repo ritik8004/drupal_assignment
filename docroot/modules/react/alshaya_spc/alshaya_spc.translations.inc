@@ -314,6 +314,37 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to Benefit Pay payment method.
+  $strings['v6'] = [
+    'Continue with Benefit pay' => [
+      'ar' => 'أكمل مع بينفت باي',
+    ],
+    'Please complete your payment by scanning the QR code.' => [
+      'ar' => 'أكمل عملية الدفع عبر مسح رمز QR.',
+    ],
+    'Scan to Pay' => [
+      'ar' => 'امسح وادفع',
+    ],
+    'Pay using BenefitPay App' => [
+      'ar' => 'ادفع باستخدام تطبيق بينفت باي',
+    ],
+    'BenefitPay' => [
+      'ar' => 'بينفت باي',
+    ],
+    'Merchant' => [
+      'ar' => 'التاجر',
+    ],
+    'Amount' => [
+      'ar' => 'المبلغ',
+    ],
+    'Reference number' => [
+      'ar' => 'الرقم المرجعي',
+    ],
+    'How to pay using BenefitPay?' => [
+      'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
+    ],
+  ];
+
   return $strings;
 }
 

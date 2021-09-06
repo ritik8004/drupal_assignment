@@ -11,10 +11,21 @@ import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
     document.addEventListener('updatePlaceOrderCTA', this.updatePlaceOrderCTA, false);
+    document.addEventListener('orderPlaced', this.orderPlaced);
   }
 
   componentWillUnmount() {
     document.removeEventListener('updatePlaceOrderCTA', this.updatePlaceOrderCTA, false);
+  }
+
+  /**
+   * Callback for any action after an order is placed.
+   */
+  orderPlaced = () => {
+    // 'benefit_pay_modal_auto_opened' is used to ensure that we auto open the
+    // benefit pay modal only once for a user. Removing this key just after
+    // placing order to remove old value.
+    localStorage.removeItem('benefit_pay_modal_auto_opened');
   }
 
   /**
@@ -169,6 +180,8 @@ export default class CompletePurchase extends React.Component {
 
     if (paymentMethod === 'postpay') {
       buttonText = Drupal.t('Continue with postpay');
+    } else if (paymentMethod === 'checkout_com_upapi_benefitpay') {
+      buttonText = Drupal.t('Continue with Benefit pay');
     }
 
     return (
