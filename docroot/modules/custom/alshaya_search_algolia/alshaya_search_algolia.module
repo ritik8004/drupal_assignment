@@ -236,7 +236,8 @@ function alshaya_search_algolia_search_api_entity_delete_alter(array &$item_ids,
  * Implements hook_alshaya_search_api_track_items_alter().
  */
 function alshaya_search_algolia_search_api_track_items_alter(array &$item_ids, $index, $id) {
-  if ($index->id() === 'alshaya_algolia_product_list_index') {
+  // @todo: https://alshayagroup.atlassian.net/browse/CORE-29295.
+  if ($index->id() === 'alshaya_algolia_product_list_index' && strpos($id, ':') === FALSE) {
     $item_ids = [];
     // Set items id as SKU instead of enityt/node/nid:lancode which will be used as.
     // objectID for deleting items in algolia _product_list_index.

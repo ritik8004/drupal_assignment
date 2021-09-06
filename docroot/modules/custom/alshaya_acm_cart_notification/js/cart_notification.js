@@ -20,7 +20,7 @@
   Drupal.theme.cartNotificationMarkup = function (data) {
     var markup = '<div class="notification">';
     markup += '<div class="col-1">';
-    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    markup += '<img loading="lazy" src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
     markup += '<span class="qty">' + Drupal.t('Qty') + ': ' + data.quantity + '</span></div>';
     markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
     markup += Drupal.t('has been added to your cart.');
@@ -34,7 +34,7 @@
     var markup = '<div class="matchback-notification notification">';
     markup += '<div class="matchback-cart-notification-close"></div>';
     markup += '<div class="col-1">';
-    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    markup += '<img loading="lazy" src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
     markup += '</div>';
     markup += '<div class="col-2">';
     markup += '<div class="name">' + data.name + '</div>';

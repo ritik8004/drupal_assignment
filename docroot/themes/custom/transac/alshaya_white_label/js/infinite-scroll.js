@@ -95,10 +95,6 @@
           }
         }, 1));
 
-        if (typeof Drupal.blazyRevalidate !== 'undefined') {
-          Drupal.blazyRevalidate();
-        }
-
       });
     },
     detach: function (context, settings, trigger) {

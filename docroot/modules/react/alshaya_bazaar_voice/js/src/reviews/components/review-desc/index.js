@@ -10,6 +10,7 @@ import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
 import ReviewResponseDisplay from '../review-response-display';
 import { getbazaarVoiceSettings, getLanguageCode } from '../../../utilities/api/request';
+import TranslateByGoogle from '../../../common/components/translate-by-google';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -19,6 +20,10 @@ const ReviewDescription = ({
   let newPdp = isNewPdpLayout;
   newPdp = (newPdp === undefined) ? false : newPdp;
   const bazaarVoiceSettings = getbazaarVoiceSettings();
+  const reviewId = reviewDescriptionData.Id;
+  const contentLocale = reviewDescriptionData.ContentLocale.substring(0, 2);
+  const enableTranslation = bazaarVoiceSettings.reviews.bazaar_voice.enable_google_translation;
+  const charsLimit = bazaarVoiceSettings.reviews.bazaar_voice.translate_chars_limit;
 
   if (reviewDescriptionData !== undefined) {
     const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
@@ -29,10 +34,25 @@ const ReviewDescription = ({
             <DisplayStar
               starPercentage={reviewDescriptionData.Rating}
             />
-            <div className="review-title">{reviewDescriptionData.Title}</div>
-            <div className="review-date">{`${date}`}</div>
+            <div id={`${reviewId}-review-title`} className="review-title">{reviewDescriptionData.Title}</div>
+            <div id={`${reviewId}-review-date`} className="review-date">{`${date}`}</div>
           </ConditionalView>
-          <div className="review-text">{reviewDescriptionData.ReviewText}</div>
+          <div id={`${reviewId}-review-text`} className="review-text">
+            {
+              reviewDescriptionData.ReviewText.split('\n').map((item, idx) => (
+                <span key={idx.toString()}>
+                  {item}
+                  <br />
+                </span>
+              ))
+            }
+          </div>
+          <ConditionalView
+            condition={enableTranslation
+            && reviewDescriptionData.ReviewText.length < charsLimit}
+          >
+            <TranslateByGoogle id={reviewId} contentLocale={contentLocale} contentType="review" />
+          </ConditionalView>
           <ReviewAdditionalAttributes
             additionalFieldsData={reviewDescriptionData.AdditionalFields}
             additionalFieldsOrder={reviewDescriptionData.AdditionalFieldsOrder}

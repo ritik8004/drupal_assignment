@@ -1,0 +1,15 @@
+services:
+  alshaya_vat.vatCertificate:
+    class: Drupal\alshaya_vat\VatCertificateManager
+    arguments:
+      - '@config.factory'
+      - '@language_manager'
+      - '@http_client'
+      - '@logger.factory'
+      - '@cache.vat_cache'
+  cache.vat_cache:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [vat_cache]

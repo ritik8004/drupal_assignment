@@ -1,4 +1,4 @@
-@javascript @guest @pdp @homeDelivery @bbwaeprod @pbsaprod @bbwkwprod @bbwsaprod @vssaprod @vsaeprod @pbaeprod @pbsaprod @pbkwprod
+@javascript @guest @pdp @homeDelivery @bbwaeprod @pbsaprod @bbwkwprod @vskwprod @bbwsaprod @vssaprod @vsaeprod @pbaeprod @pbsaprod @pbkwprod
 Feature: SPC Classic PDP block for desktop
 
   Background:
@@ -28,7 +28,6 @@ Feature: SPC Classic PDP block for desktop
     Then the element "#pdp-home-delivery .ui-accordion-header" should exist
     And the element "#pdp-stores-container" should exist
     And the element ".sharethis-wrapper" should exist
-    And the element "[id^='dy-recommendations-']" should exist
 
   @pdp @language
   Scenario: To verify user is able to see product details on the PDP page for second language
@@ -55,4 +54,3 @@ Feature: SPC Classic PDP block for desktop
     Then the element "#pdp-home-delivery .ui-accordion-header" should exist
     And the element "#pdp-stores-container" should exist
     And the element ".sharethis-wrapper" should exist
-    And the element "[id^='dy-recommendations-']" should exist

@@ -20,7 +20,7 @@
       if (localStorage.getItem('booking_info') !== null) {
         var getDataFromLocal = JSON.parse(localStorage.getItem('booking_info'));
         $('.visit-date').html(getDataFromLocal.visit_date);
-        $('.order-total, .path--payment .total-price').html(getDataFromLocal.total.price);
+        $('.order-total, .path--payment .total-price').html(parseFloat(getDataFromLocal.total.price).toFixed(3));
         $('#booking-info').val(JSON.stringify(getDataFromLocal));
       }
     }

@@ -69,12 +69,14 @@ class SkuImagesHelperPims extends SkuImagesHelper {
    * @param string $style_name
    *   Image style name.
    *
-   * @return \Drupal\Core\GeneratedUrl|false|string
+   * @return mixed|string
    *   Image url.
    */
   public function getImageStyleUrl(array $media, string $style_name) {
-    // @todo return style specific image url.
-    return $media['file'];
+    if (!empty($media['styles']) && !empty($media['styles'][$style_name])) {
+      return $media['styles'][$style_name];
+    }
+    return '';
   }
 
 }

@@ -20,14 +20,14 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
     && subBrandLogo.sub_brand_logo_link !== undefined) {
     const { sub_brand_logo_img: brandLogo } = subBrandLogo;
     const pngLogo = brandLogo.replace('svg', 'png');
-    subBrandLogoMarkup = <img className="sub-brand-logo" src={pngLogo} />;
+    subBrandLogoMarkup = <img loading="lazy" className="sub-brand-logo" src={pngLogo} />;
   }
 
   return (
     <div ref={ref} className="spc-order-confirmation-wrapper" dir={direction}>
       <div className="spc-print-header">
         <div className="spc-print-header--logo">
-          <img src={logo.logo_url} />
+          <img loading="lazy" src={logo.logo_url} />
           { subBrandLogoMarkup }
         </div>
         <span className="spc-checkout-confirmation-title">{Drupal.t('Order confirmation')}</span>
@@ -58,9 +58,9 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
           <div className="content">{ parse(customerServiceText.value) }</div>
         </div>
         <div className="logos">
-          <img src="/themes/custom/transac/alshaya_white_label/imgs/cards/veri-sign-black.svg" />
-          <img src="/themes/custom/transac/alshaya_white_label/imgs/cards/verifiedby-visa-black.svg" />
-          <img src="/themes/custom/transac/alshaya_white_label/imgs/cards/master-card-secure-code-black.svg" />
+          <img loading="lazy" src="/themes/custom/transac/alshaya_white_label/imgs/cards/veri-sign-black.svg" />
+          <img loading="lazy" src="/themes/custom/transac/alshaya_white_label/imgs/cards/verifiedby-visa-black.svg" />
+          <img loading="lazy" src="/themes/custom/transac/alshaya_white_label/imgs/cards/master-card-secure-code-black.svg" />
         </div>
       </div>
     </div>

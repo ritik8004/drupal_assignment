@@ -11,14 +11,12 @@ use Drupal\image\Entity\ImageStyle;
  */
 class SkuImagesHelper {
   // Image Styles.
-  const STYLE_PRODUCT_FREE_GIFT = '192x168';
   const STYLE_PRODUCT_LISTING = 'product_listing';
   const STYLE_PRODUCT_SLIDE = 'product_zoom_medium_606x504';
   const STYLE_PRODUCT_ZOOM = 'product_zoom_large_800x800';
   const STYLE_PRODUCT_THUMBNAIL = 'pdp_gallery_thumbnail';
   const STYLE_PRODUCT_TEASER = 'product_teaser';
   const STYLE_CART_THUMBNAIL = 'cart_thumbnail';
-  const STYLE_PRODUCT_ORDER_SUMMARY = '291x288';
 
   /**
    * Get Image tag with optional rel.

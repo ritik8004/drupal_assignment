@@ -98,3 +98,9 @@ bazaar_voice.settings:
     featured_reviews_limit:
       type: integer
       label: 'Set the limit for featured reviews to be pushed in DY.'
+    translate_chars_limit:
+      type: integer
+      label: 'Set the characters limit for google translations.'
+    enable_google_translation:
+      type: boolean
+      label: 'Check to enable google translation feature.'

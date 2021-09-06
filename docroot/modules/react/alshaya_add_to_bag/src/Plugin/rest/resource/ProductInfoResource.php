@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\acq_sku\CartFormHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to get product details for drawer.
@@ -91,6 +92,13 @@ class ProductInfoResource extends ResourceBase {
   protected $cartFormHelper;
 
   /**
+   * Checkout settings config object.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
    * DrawerInfo constructor.
    *
    * @param array $configuration
@@ -119,6 +127,8 @@ class ProductInfoResource extends ResourceBase {
    *   Product Options Helper.
    * @param \Drupal\acq_sku\CartFormHelper $cartform_helper
    *   Cart Form Helper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
   public function __construct(
     array $configuration,
@@ -133,7 +143,8 @@ class ProductInfoResource extends ResourceBase {
     ModuleHandlerInterface $module_handler,
     LanguageManagerInterface $language_manager,
     ProductOptionsHelper $options_helper,
-    CartFormHelper $cartform_helper
+    CartFormHelper $cartform_helper,
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuInfoHelper = $sku_info_helper;
@@ -144,6 +155,7 @@ class ProductInfoResource extends ResourceBase {
     $this->languageManager = $language_manager;
     $this->optionsHelper = $options_helper;
     $this->cartFormHelper = $cartform_helper;
+    $this->config = $config_factory->get('alshaya_acm_product.display_settings');
   }
 
   /**
@@ -163,7 +175,8 @@ class ProductInfoResource extends ResourceBase {
       $container->get('module_handler'),
       $container->get('language_manager'),
       $container->get('alshaya_product_options.helper'),
-      $container->get('acq_sku.cart_form_helper')
+      $container->get('acq_sku.cart_form_helper'),
+      $container->get('config.factory'),
     );
   }
 
@@ -332,7 +345,6 @@ class ProductInfoResource extends ResourceBase {
           && !$configurable_attributes[$swatches['attribute_code']]['is_swatch']) {
             $configurable_attributes[$swatches['attribute_code']]['is_swatch'] = TRUE;
             $configurable_attributes[$swatches['attribute_code']]['swatches'] = [];
-
             foreach ($swatches['swatches'] as $swatch) {
               $is_color_swatch = $isColorSplitEnabled && ($swatch['swatch_type'] == AlshayaColorSplitManager::PDP_SWATCH_RGB);
               $configurable_attributes[$swatches['attribute_code']]['swatches'][] = [
@@ -340,11 +352,22 @@ class ProductInfoResource extends ResourceBase {
                 'data' => $swatch['display_value'] ?? $swatch['image_url'] ?? NULL,
                 'value' => $swatch['value'],
                 'type' => $is_color_swatch ? 'color' : $swatch['swatch_type'],
+                'child_sku_code' => $swatch['child_sku_code'],
               ];
             }
           }
+          foreach ($configurable_attributes[$swatches['attribute_code']]['swatches'] as $key => $value) {
+            if (is_null($value['data'])) {
+              $multiple_attributes_for_color = $this->config->get('color_attribute_config');
+              // If site uses multiple attributes for color.
+              if ($multiple_attributes_for_color && $multiple_attributes_for_color['support_multiple_attributes']) {
+                $color_code_attribute = $multiple_attributes_for_color['configurable_color_code_attribute'];
+                $child_node = SKU::loadFromSku($value['child_sku_code'], $langcode);
+                $configurable_attributes[$swatches['attribute_code']]['swatches'][$key]['data'] = $color_code_attribute ? $child_node->get($color_code_attribute)->getString() : NULL;
+              }
+            }
+          }
         }
-
         // Set product title.
         $data['title'] = $this->productInfoHelper->getTitle($sku, 'modal');
 

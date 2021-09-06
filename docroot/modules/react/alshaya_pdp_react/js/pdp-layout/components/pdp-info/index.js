@@ -36,7 +36,7 @@ const PdpInfo = ({
       >
         <div className={`magv2-pdp-title ${(brandLogo ? 'has-brand-logo' : '')}`}>{title}</div>
         {(brandLogo)
-          ? <div className="magv2-pdp-brand-logo"><img src={brandLogo} alt={brandLogoAlt} title={brandLogoTitle} /></div>
+          ? <div className="magv2-pdp-brand-logo"><img loading="lazy" src={brandLogo} alt={brandLogoAlt} title={brandLogoTitle} /></div>
           : null }
       </div>
       <div

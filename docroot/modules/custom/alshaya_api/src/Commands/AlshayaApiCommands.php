@@ -293,6 +293,10 @@ class AlshayaApiCommands extends DrushCommands {
   ]) {
     $to_check = explode(',', $options['check']);
 
+    // Increase memory limit for sanity check as we have a lot of skus
+    // now on production.
+    ini_set('memory_limit', '1024M');
+
     if (in_array('stock', $to_check)) {
       $this->sanityCheckStock($options);
     }

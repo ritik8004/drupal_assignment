@@ -41,6 +41,7 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
 function alshaya_seo_transac_page_attachments_alter(&$page) {
   if (_alshaya_seo_process_gtm()) {
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
+    $page['#attached']['library'][] = 'alshaya_seo_transac/dy_product_recom';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if (\Drupal::moduleHandler()->moduleExists('alshaya_algolia_react')) {

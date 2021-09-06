@@ -126,8 +126,8 @@ function alshaya_acm_cart_notification_sku_variant_info_alter(array &$variant, S
   $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
 
   // Prepare image style url.
-  if (!empty($image['#uri'])) {
-    $image = (strstr($image['#uri'], 'public://'))
+  if (!empty($image['#theme'])) {
+    $image = ($image['#theme'] == 'image_style')
       ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
       : $image['#uri'];
   }

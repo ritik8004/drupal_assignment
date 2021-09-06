@@ -442,6 +442,12 @@ body.ratings-reviews-overlay {
               }
             }
 
+            .hide-field-select {
+              &.dropdown-conatiner {
+                display: none;
+              }
+            }
+
             .netpromoter-option {
               .survey-block {
                 margin: 2rem 0;

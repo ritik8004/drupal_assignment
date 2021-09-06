@@ -345,6 +345,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9877876',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'YU8XKVS0GE',
+            'write_api_key' => 'a91441d0859635f7c8a3790cee0dd67a',
+            'search_api_key' => '642564ecc4ee0a9a60ec5bd39b7db1bf',
+          ],
         ],
         'live' => [
           'dynamic_yield.settings' => [

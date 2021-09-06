@@ -156,3 +156,43 @@ function _alshaya_mc_get_product_description($sku_entity) {
 
   return $return;
 }
+
+/**
+ * Implements hook_alshaya_performance_preload_alter().
+ */
+function alshaya_mc_alshaya_performance_preload_alter(array &$preload) {
+  // Mothercare's styles and fonts come from whitelabel.
+  $themePath = drupal_get_path('theme', 'alshaya_white_label');
+  $fonts_directory_path = '/' . $themePath . '/fonts';
+
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/alshaya-icons.woff?D7b5iT',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/alshaya-thin.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/alshaya-bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/alshaya-arabic-thin.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/alshaya-arabic-bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+}

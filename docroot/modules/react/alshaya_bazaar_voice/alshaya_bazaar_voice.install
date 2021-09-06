@@ -14,6 +14,46 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add configs for Google translations.
+ * Add new field for sorting optons.
+ * Add translations.
+ */
+function alshaya_bazaar_voice_update_8004() {
+  // Add configs for Google translations feature.
+  $config = \Drupal::configFactory()->getEditable('bazaar_voice.settings');
+  $config->set('translate_chars_limit', 6000);
+  $config->set('enable_google_translation', false);
+  $config->save();
+
+  // Add new field for sorting optons.
+  $config = \Drupal::configFactory()->getEditable('bazaar_voice_sort_review.settings');
+  // Update available option.
+  $available_sort_options = $config->get('sort_options');
+  $new_options['IsFeatured'] = 'IsFeatured';
+  $available_sort_options = array_merge(array_slice($available_sort_options, 0, 0), $new_options, array_slice($available_sort_options, 0));
+  $config->set('sort_options', $available_sort_options);
+  // Update sorting options label.
+  $new_label = [
+    [
+      'value' => 'IsFeatured:Desc',
+      'label' => 'Featured',
+    ],
+  ];
+  $labels = $config->get('sort_options_labels');
+  $labels = array_merge(array_slice($labels, 0, 1), $new_label, array_slice($labels, 1));
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Moving bazaarvoice block from white label to active theme.
  */
 function alshaya_bazaar_voice_update_8003() {

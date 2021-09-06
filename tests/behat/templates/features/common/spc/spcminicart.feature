@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @bbwsauat @mcsauat @mcaeuat @flsauat @hmkwuat @hmsauat @tbskwuat @flkwuat @flaeuat @tbskwuat @bbwaeuat @vsaeuat
+@javascript @smoke @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @bbwsauat @mcsauat @mcaeuat @flsauat @hmkwuat @hmsauat @tbskwuat @flkwuat @flaeuat @tbskwuat @bbwaeuat @vsaeuat
 Feature: Test MiniCart page
 
   Background:

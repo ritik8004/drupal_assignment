@@ -9,8 +9,7 @@ export default class ReviewSorting extends React.Component {
       processingCallback,
     } = this.props;
 
-    if (selectedOption.value !== 'none'
-      && currentOption !== selectedOption.value) {
+    if (currentOption !== selectedOption.value) {
       // Callback to process sort option.
       processingCallback(selectedOption);
       // Process sort click data as user clicks on sort option.

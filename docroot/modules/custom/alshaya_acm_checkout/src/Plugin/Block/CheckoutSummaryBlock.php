@@ -272,7 +272,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       }
 
       // Load the first image.
-      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_ORDER_SUMMARY, 'cart');
+      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
       $image['#skip_lazy_loading'] = TRUE;
 
       $node = alshaya_acm_product_get_display_node($sku);

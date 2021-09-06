@@ -8,6 +8,34 @@
 global $magentos;
 
 $magentos = [
+  // COS.
+  'cos_qa' => [
+    'url' => 'https://integration-5ojmyuq-vlvasu2xupli4.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '6ih9p46w6xvqzo0ldex9xdhwuxgoyhyp',
+      'consumer_secret' => 'z90wonowuk21m3k6dv437nuqnekz04a6',
+      'access_token' => 'jhevrjbgghd8xm0tgn6047ggjspn76dl',
+      'access_token_secret' => 'j70evsya47dwxklpbf0kdz88qdjs4hrp',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 18],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 13, 'ar' => 14],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 15, 'ar' => 16],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 11, 'ar' => 12],
+    ],
+  ],
   // The body shop.
   'tbs_qa' => [
     'url' => 'https://tbs-uat.store.alshaya.com',
@@ -37,7 +65,7 @@ $magentos = [
     ],
     'jo' => [
       'store_id' => ['en' => 14, 'ar' => 13],
-    ], 
+    ],
   ],
   'tbs_local' => [
     'url' => 'http://www.tbs-alshayam.lndo.site',
@@ -126,7 +154,7 @@ $magentos = [
   ],
   // Mothercare.
   'mc_qa' => [
-    'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'url' => 'https://mc-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
       'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
@@ -410,6 +438,34 @@ $magentos = [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
   ],
+  'hm_test' => [
+    'url' => 'https://hm-test.store.alshaya.com',
+    'pims_base_url' => 'http://34.249.182.88:3030',
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 5],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 8, 'ar' => 14],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 17, 'ar' => 23],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 30, 'ar' => 27],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 35, 'ar' => 32],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 41, 'ar' => 38],
+    ],
+    'magento_secrets' => [
+      'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
+      'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
+      'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
+      'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
+    ],
+  ],
   'hm_uat' => [
     'url' => 'https://hm-uat2.store.alshaya.com',
     'pims_base_url' => 'http://34.249.182.88:3030',
@@ -616,6 +672,33 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'vs_test' => [
+    'url' => 'https://vs-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
+      'consumer_secret' => 'l65u29tw675glfm3rmfps1gliqlwr6m1',
+      'access_token' => 'km7olqq1wx37sveeepwcmpwvem2t6jar',
+      'access_token_secret' => 'si8olbegg9i4y3bywk2gnb4o2vpommiw',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 18],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 6, 'ar' => 9],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
     ],
   ],
   'vs_uat' => [
@@ -912,6 +995,24 @@ $magentos = [
     ],
   ],
   // Westelm.
+  'we_training' => [
+    'url' => 'https://wes-training.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '4xtw4osc8e7fv45cy187xhhobr6xt59e',
+      'consumer_secret' => '3b5nydivhlbwm6v29ekyhv3v8v2s2pl4',
+      'access_token' => 'm8cgs2h1dj4zqvx1qy8293aygeu7zcar',
+      'access_token_secret' => '4mocc81s1pnejkm57fimdjw49mqcz4rl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+  ],
   'we_sit' => [
     'url' => 'https://wes-sit.store.alshaya.com',
     'magento_secrets' => [
@@ -1348,6 +1449,33 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'bp_test' => [
+    'url' => 'https://boots-test.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'nfjdttxqyqdaj81nilo4sab9wl7kkb0x',
+      'consumer_secret' => '5szrlic4mwpoxyjl11mhrxux287lykdc',
+      'access_token' => 'qwgohy4l3xnbcz63nhvb5u5soezfizka',
+      'access_token_secret' => 'a5seetf8c166nnkwgk7cbunjxv8l9jdu',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
     ],
   ],
   'bp_uat' => [

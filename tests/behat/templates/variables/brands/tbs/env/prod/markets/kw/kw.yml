@@ -4,3 +4,4 @@ variables:
   spc_product_listing_page: '/shop-bestsellers/'
   spc_basket_page: '/shop-bestsellers/'
   spc_pdp_page: 'buy-matte-clay-powder.html'
+  spc_promotion_listing_page: '/buy-2-get-1-free-your-favourites/'

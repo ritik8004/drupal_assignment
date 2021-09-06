@@ -91,6 +91,8 @@ alshaya_spc.callback_payment_success:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcPaymentCallbackController::success'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
 
 alshaya_spc.callback_payment_error:
   path: '/spc/payment-callback/{method}/error'
@@ -98,3 +100,5 @@ alshaya_spc.callback_payment_error:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcPaymentCallbackController::error'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

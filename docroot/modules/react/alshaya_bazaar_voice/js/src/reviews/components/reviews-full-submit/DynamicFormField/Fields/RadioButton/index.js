@@ -7,14 +7,15 @@ class RadioButton extends React.Component {
     super(props);
     this.state = {
       activeId: '',
+      swithcClass: '',
     };
   }
 
-  setActiveId = (radioLabel) => {
-    if (radioLabel.length > 0) {
-      this.setState({
-        activeId: radioLabel,
-      });
+  setActiveId = (radioValue, radioLabel) => {
+    if (radioValue === 1) {
+      this.setState({ activeId: 'no', swithcClass: radioLabel });
+    } else {
+      this.setState({ activeId: 'yes', swithcClass: radioLabel });
     }
   };
 
@@ -25,7 +26,7 @@ class RadioButton extends React.Component {
       label,
       text,
     } = this.props;
-    const { activeId } = this.state;
+    const { activeId, swithcClass } = this.state;
     const recommend = {
       0: getStringMessage('no'),
       1: getStringMessage('yes'),
@@ -50,8 +51,8 @@ class RadioButton extends React.Component {
               return (
                 <React.Fragment key={radioValue}>
                   <span
-                    className={activeId === radioLabel ? 'switchOn' : 'switchOff'}
-                    onClick={() => this.setActiveId(radioLabel)}
+                    className={swithcClass === radioLabel ? 'switchOn' : 'switchOff'}
+                    onClick={() => this.setActiveId(radioValue, radioLabel)}
                     htmlFor={radioLabel}
                   >
                     {radioLabel}

@@ -100,32 +100,34 @@ export const placeOrder = (paymentMethod) => {
   window.commerceBackend.placeOrder({ data })
     .then(
       (response) => {
-        if (response.data.error === undefined) {
-          if (response.data.token !== undefined && paymentMethod === 'postpay') {
-            window.postpay.checkout(response.data.token, {
-              locale: drupalSettings.postpay_widget_info['data-locale'],
-            });
-            return;
+        if (paymentMethod === 'postpay' && hasValue(response.data.token)) {
+          window.postpay.checkout(response.data.token, {
+            locale: drupalSettings.postpay_widget_info['data-locale'],
+          });
+          return;
+        }
+
+        if (hasValue(response.data.redirectUrl)) {
+          // Add current logs as is with current conditions.
+          // @todo review this and make it appropriate / logical.
+          if (response.data.error) {
+            Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           }
 
           // If url is absolute, then redirect to the external payment page.
-          if (response.data.isAbsoluteUrl !== undefined && response.data.isAbsoluteUrl) {
+          if (hasValue(response.data.isAbsoluteUrl)) {
             window.location.href = response.data.redirectUrl;
             return;
           }
 
           dispatchCustomEvent('orderPlaced', true);
+          // This here possibly means that we are redirecting to confirmation page.
           window.location = Drupal.url(response.data.redirectUrl);
           return;
         }
 
-        if (response.data.error && response.data.redirectUrl !== undefined) {
-          Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
-          window.location = response.data.redirectUrl;
-          return;
-        }
         let message = response.data.error_message;
-        const errorCode = (typeof response.data.error_code !== 'undefined')
+        const errorCode = hasValue(response.data.error_code)
           ? parseInt(response.data.error_code, 10)
           : null;
 

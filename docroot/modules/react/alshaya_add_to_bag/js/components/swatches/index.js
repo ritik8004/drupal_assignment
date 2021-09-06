@@ -36,7 +36,7 @@ const Swatch = (props) => {
     classes.push(disabledClass);
   }
 
-  const isColor = type === 'color';
+  const isColor = (type === 'color' || type === 'text');
 
   return (
     <li
@@ -61,7 +61,7 @@ const Swatch = (props) => {
           href="#"
           onClick={(e) => onSwatchSelect(e, attributeName, onClick, isColor)}
         >
-          <img src={data} />
+          <img loading="lazy" src={data} />
         </a>
 
       </ConditionalView>

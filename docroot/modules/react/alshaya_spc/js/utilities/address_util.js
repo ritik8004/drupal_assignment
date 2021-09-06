@@ -100,6 +100,7 @@ export const prepareAddressDataForShipping = (address) => {
     firstname: address.firstname,
     lastname: address.lastname,
     email: address.email,
+    postcode: address.postal_code,
     city: address.city,
     telephone: address.mobile,
     country_id: drupalSettings.country_code,

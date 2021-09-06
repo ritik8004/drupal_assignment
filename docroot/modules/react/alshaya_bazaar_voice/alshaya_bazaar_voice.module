@@ -28,13 +28,12 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  // Get sanitized sku.
+  $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
+  $settings = $alshayaBazaarVoice->getProductBazaarVoiceDetails($sku, $basic_configs);
   $productNode = $skuManager->getDisplayNode($sku->getSku());
 
   if ($productNode instanceof NodeInterface) {
-    // Get sanitized sku.
-    $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
-    $settings = $alshayaBazaarVoice->getProductBazaarVoiceDetails($sku, $productNode, $basic_configs);
-
     // Get the current pdp layout.
     $config = \Drupal::config('alshaya_acm_product.settings');
     $product_pdp_layout = $config->get('pdp_layout');
@@ -256,7 +255,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
       $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
       $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
       $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $sanitized_parent_sku;
-      $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
+      $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs, $item);
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
@@ -284,7 +283,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   foreach ($order['items'] as $key => $item) {
     $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
     $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
-    $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
+    $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs, $item);
   }
   if (!empty($bazaarvoiceSettings)) {
     $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);

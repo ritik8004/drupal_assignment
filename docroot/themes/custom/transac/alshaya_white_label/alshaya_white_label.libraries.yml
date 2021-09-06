@@ -562,7 +562,22 @@ my-account:
     theme:
       css/conditional-sass/my-account/my-account.ltr.css: {}
 
+contact:
+  css:
+    theme:
+      css/conditional-sass/contact-us/contact-us.ltr.css: {}
+
 sitemap:
   css:
     theme:
       css/conditional-sass/sitemap/sitemap.ltr.css: {}
+
+alshaya-vat-certificate:
+  css:
+    theme:
+      css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: {}
+
+slug-banner:
+  css:
+    theme:
+      css/conditional-sass/slug-banner/slug-banner.ltr.css: {}

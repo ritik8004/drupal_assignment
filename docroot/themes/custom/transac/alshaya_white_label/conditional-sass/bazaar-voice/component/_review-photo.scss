@@ -8,6 +8,7 @@
 
     .thumbnail-img-block {
       display: flex;
+      margin-top: 1rem;
 
       @include breakpoint($tablet) {
         position: relative;

@@ -792,8 +792,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $image = alshaya_acm_get_product_display_image($sku_entity, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
         // Prepare image style url.
-        if (!empty($image['#uri'])) {
-          $image = (strstr($image['#uri'], 'public://'))
+        if (!empty($image['#theme'])) {
+          $image = ($image['#theme'] == 'image_style')
             ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
             : $image['#uri'];
         }
@@ -892,7 +892,7 @@ function alshaya_acm_product_get_flags_config() {
 
   if (!empty($config->get('delivery_in_only_city_text')) && !empty($config->get('delivery_in_only_city_key'))) {
     $return['delivery_in_only_city']['text'] = $config->get('delivery_in_only_city_text');
-    $return['delivery_in_only_city']['key'] = $config->get('delivery_in_only_city_key');
+    $return['delivery_in_only_city']['key'] = (int) $config->get('delivery_in_only_city_key');
   }
 
   if (!empty($config->get('legal_notice_enabled'))) {
@@ -972,7 +972,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     if ($sku_media) {
       /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
       $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
-      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT);
+      $build['image'] = $skuImagesHelper->getSkuImage($sku_media,SkuImagesHelper::STYLE_PRODUCT_TEASER);
     }
   }
 }
@@ -995,7 +995,7 @@ function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterfa
           $default_sku_image = $skuManager->getSkuImage(
             $default_image->getFileUri(),
             $sku->label(),
-            SkuImagesHelper::STYLE_PRODUCT_FREE_GIFT
+            SkuImagesHelper::STYLE_PRODUCT_TEASER
           );
           $default_sku_image['#attributes']['class'][] = 'product-default-image';
           $build['image'] = $default_sku_image;
@@ -2095,8 +2095,8 @@ function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterfac
   $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_TEASER);
 
   // Prepare image style url.
-  if (!empty($image['#uri'])) {
-    $image = (strstr($image['#uri'], 'public://'))
+  if (!empty($image['#theme'])) {
+    $image = ($image['#theme'] == 'image_style')
       ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
       : $image['#uri'];
   }

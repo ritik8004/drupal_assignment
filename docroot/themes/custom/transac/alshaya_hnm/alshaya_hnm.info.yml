@@ -185,7 +185,17 @@ libraries-override:
         theme:
           css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
 
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
   alshaya_white_label/sitemap:
     css:
       theme:
         css/conditional-sass/sitemap/sitemap.ltr.css: css/conditional-sass/sitemap/sitemap.ltr.css
+
+  alshaya_white_label/alshaya-vat-certificate:
+    css:
+      theme:
+        css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css

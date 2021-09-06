@@ -551,6 +551,29 @@ const getMethodCodeForFrontend = (code) => {
 };
 
 /**
+ * Gets customer's address ids.
+ *
+ * @returns {Promise<AxiosPromise<Object> | *[]>}
+ *   Address ids array or empty.
+ */
+const getCustomerAddressIds = () => getCart()
+  .then((response) => {
+    if (!_isNull(response)
+      && !_isUndefined(response.data)
+      && !_isUndefined(response.data.customer)
+      && !_isUndefined(response.data.customer.addresses)
+      && !_isEmpty(response.data.customer.addresses)
+    ) {
+      const addresses = [];
+      response.data.customer.addresses.forEach((item) => {
+        addresses.push(item.customer_address_id);
+      });
+      return addresses;
+    }
+    return [];
+  });
+
+/**
  * Update billing info on cart.
  *
  * @param {object} data
@@ -626,8 +649,9 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   // not set. City with value 'NONE' means, that this was added in CnC
   // by default and not changed by user.
   if (updateBillingDetails
-    || _isUndefined(cartData.billing_address) || _isUndefined(cartData.billing_address.firstname)
-    || cartData.billing_address.city === 'NONE') {
+    && (!hasValue(cartData.billing_address)
+      || !hasValue(cartData.billing_address.firstname)
+      || cartData.billing_address.city === 'NONE')) {
     cart = await updateBilling(params.shipping.shipping_address);
   }
 
@@ -681,6 +705,8 @@ const selectCnc = async (store, address, billing) => {
   }
 
   // Validate address.
+  // @todo check if this is valid, it's same as middleware
+  // but it doesn't make sense to check before updating shipping.
   const valid = await validateAddressAreaCity(billing);
   if (!valid) {
     return false;
@@ -699,33 +725,48 @@ const selectCnc = async (store, address, billing) => {
   }
 
   let cart = await updateCart(data);
-  if (!_isUndefined(cart.data.error) && cart.data.error) {
+  if (!hasValue(cart.data) || hasValue(cart.data.error)) {
+    return false;
+  }
+
+  // If billing address not contains proper data (extension info).
+  if (!hasValue(billing.extension_attributes)) {
+    logger.warning('Billing address does not have extension attributes. Address: @address Cart: @cartId', {
+      '@address': JSON.stringify(billing),
+      '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+    });
+
     return false;
   }
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
-  if (_isUndefined(billing.customer_address_id)) {
+  if (!hasValue(billing.customer_address_id)) {
+    logger.warning('Billing address does not have customer_address_id. Address: @address Cart: @cartId', {
+      '@address': JSON.stringify(billing),
+      '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+    });
+
     return cart;
-  }
-
-  // Add log for billing data we pass to magento update cart.
-  logger.notice('Billing update default for CNC. Address: @address Cart: @cartId', {
-    '@address': JSON.stringify(billing),
-    '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
-  });
-
-  // If billing address not contains proper data (extension info).
-  if (_isUndefined(billing.extension_attributes) || _isEmpty(billing.extension_attributes)) {
-    return false;
   }
 
   // Return if address id from last order doesn't
   // exist in customer's address id list.
-  const item = { customer_address_id: billing.customer_address_id };
-  if (_findIndex(cart.data.customer.addresses, item) !== -1) {
+  const customerAddressIds = await getCustomerAddressIds();
+  if (!_includes(customerAddressIds, billing.customer_address_id)) {
+    logger.warning('Billing address not available in customer address book now. Address: @address Cart: @cartId', {
+      '@address': JSON.stringify(billing),
+      '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+    });
+
     return cart;
   }
+
+  // Add log for billing data we pass to magento update cart.
+  logger.debug('Billing update default for CNC. Address: @address Cart: @cartId', {
+    '@address': JSON.stringify(billing),
+    '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
+  });
 
   cart = await updateBilling(billing);
   // If billing update has error.
@@ -735,29 +776,6 @@ const selectCnc = async (store, address, billing) => {
 
   return cart;
 };
-
-/**
- * Gets customer's address ids.
- *
- * @returns {Promise<AxiosPromise<Object> | *[]>}
- *   Address ids array or empty.
- */
-const getCustomerAddressIds = () => getCart()
-  .then((response) => {
-    if (!_isNull(response)
-      && !_isUndefined(response.data)
-      && !_isUndefined(response.data.customer)
-      && !_isUndefined(response.data.customer.addresses)
-      && !_isEmpty(response.data.customer.addresses)
-    ) {
-      const addresses = [];
-      response.data.customer.addresses.forEach((item) => {
-        addresses.push(item.customer_address_id);
-      });
-      return addresses;
-    }
-    return [];
-  });
 
 /**
  * Select HD address and method from possible defaults.
@@ -812,7 +830,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   let updated = await addShippingInfo(shippingData, cartActions.cartShippingUpdate, false);
-  if (_isEmpty(updated.data) || (!_isUndefined(updated.data.error) && updated.data.error)) {
+  if (!hasValue(updated.data) || hasValue(updated.data.error)) {
     return false;
   }
 
@@ -835,14 +853,12 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   });
 
   // If billing address not contains proper address, don't process further.
-  if (_isEmpty(billing.extension_attributes)
-    && _isEmpty(billing.custom_attributes)
-  ) {
+  if (_isEmpty(billing.extension_attributes) && _isEmpty(billing.custom_attributes)) {
     return updated;
   }
 
   updated = await updateBilling(billing);
-  if (_isEmpty(updated.data) || (!_isUndefined(updated.data.error) && updated.data.error)) {
+  if (!hasValue(updated.data) || hasValue(updated.data.error)) {
     return false;
   }
 
@@ -917,11 +933,12 @@ const applyDefaultShipping = async (order) => {
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
       ) {
-        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cart_id, Address: @address.', {
+        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cart_id, Address: @address, Billing: @billing.', {
           '@cart_id': window.commerceBackend.getCartId(),
           '@address': JSON.stringify(address),
+          '@billing': JSON.stringify(order.billing_commerce_address),
         });
-        return selectHd(address, method, address, methods);
+        return selectHd(address, method, order.billing_commerce_address, methods);
       }
     }
   }
@@ -953,14 +970,20 @@ const applyDefaults = async (data, customerId) => {
   if (hasValue(order)) {
     // If cnc order but cnc is disabled.
     if (_includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
-      return data;
-    }
+      // Do nothing, we will let the address from address book used for default flow.
+    } else {
+      logger.debug('Applying defaults from last order. Cart: @cart_id.', {
+        '@cart_id': window.commerceBackend.getCartId(),
+      });
 
-    const response = await applyDefaultShipping(order);
-    if (response !== false) {
-      response.data.payment = response.data.payment || {};
-      response.data.payment.default = await getDefaultPaymentFromOrder(order);
-      return response;
+      const response = await applyDefaultShipping(order);
+      if (hasValue(response)) {
+        // If we were able to apply shipping, let's add the last payment method too
+        // as default.
+        response.data.payment = response.data.payment || {};
+        response.data.payment.default = await getDefaultPaymentFromOrder(order);
+        return response;
+      }
     }
   }
 
@@ -1145,7 +1168,7 @@ window.commerceBackend.addBillingMethod = async (data) => {
  * @return {bool}
  *   TRUE if payment methods from checkout.com
  */
-const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('checkout_com_upapi', 0) !== -1;
+const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('upapi', 0) !== -1;
 
 /**
  * Checks if postpay payment method.
@@ -1240,7 +1263,7 @@ window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coord
  * @returns {{cvv: string, public_hash: string}}
  */
 const processPaymentData = (paymentData, data) => {
-  let additionalInfo = data;
+  const additionalInfo = data;
 
   // Method specific code.
   switch (paymentData.method) {
@@ -1274,12 +1297,10 @@ const processPaymentData = (paymentData, data) => {
             };
           }
 
-          additionalInfo = {
-            public_hash: atob(id),
-          };
+          additionalInfo.public_hash = atob(id);
 
           if (cvvCheck) {
-            additionalInfo.cvv = atob(cvv);
+            additionalInfo.cvv = atob(decodeURIComponent(cvv));
           }
 
           break;

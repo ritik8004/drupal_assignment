@@ -101,6 +101,19 @@ const formatShippingEstimatesAddress = (address) => {
     });
   }
 
+  // Sort custom_attributes to make sure it is always in same order.
+  data.custom_attributes.sort((a, b) => {
+    if (a.attribute_code < b.attribute_code) {
+      return -1;
+    }
+
+    if (a.attribute_code > b.attribute_code) {
+      return 1;
+    }
+
+    return 0;
+  });
+
   return data;
 };
 

@@ -65,6 +65,10 @@
           }
         }
       }
+
+      .review-attributes-details {
+        margin-top: 1rem;
+      }
     }
 
     &-tooltip {
@@ -144,12 +148,12 @@
       white-space: pre-line;
       font-size: 0.875rem;
       color: $rr-review-summary-grey-text;
-      margin-bottom: 0.9375rem;
+      margin-bottom: 0.5rem;
       font-family: $alshaya-thin;
       word-break: break-word;
 
       @include breakpoint($only-mobile) {
-        margin-bottom: 1.5rem;
+        margin-bottom: 0;
       }
     }
 
@@ -512,5 +516,42 @@
     @include breakpoint($only-mobile) {
       height: 100vh;
     }
+  }
+}
+
+.translate-by-google,
+.back-to-original {
+  color: $rr-translate-link;
+  font-family: $alshaya-thin;
+  font-size: 0.875rem;
+  cursor: pointer;
+
+  &:hover {
+    color: $rr-translate-link;
+  }
+
+  .comment-submission-box & {
+    margin-bottom: 0.75rem;
+    display: inline-block;
+  }
+}
+
+.back-to-original {
+  &::before {
+    content: '';
+    width: 7.75rem;
+    height: 2.5rem;
+    display: block;
+    background: url('#{$base_theme_img_directory_path}/icons/google-translate.png') no-repeat;
+    background-size: 100%;
+  }
+}
+
+.translate-by-google {
+  margin-top: 0.875rem;
+  display: inline-block;
+
+  .comment-submission-box & {
+    margin-top: 0;
   }
 }

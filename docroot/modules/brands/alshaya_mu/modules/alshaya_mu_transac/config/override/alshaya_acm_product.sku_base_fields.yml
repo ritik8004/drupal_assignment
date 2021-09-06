@@ -42,7 +42,7 @@ fields:
     type: 'text_long'
   spec_en:
     label: 'Spec En'
-    type: 'string'
+    type: 'text_long'
   country_of_origin_en:
     label: 'Country Of Origin En'
     type: 'string'

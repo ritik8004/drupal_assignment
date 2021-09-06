@@ -185,18 +185,10 @@
             ? Object.keys(variants)[0]
             : drupalSettings.configurableCombinations[sku]['firstChild'];
 
-          // Use selected from query parameter only for main product.
-          var selected = ($(node).attr('data-vmode') === 'full')
-            ? parseInt(Drupal.getQueryVariable('selected'))
-            : 0;
+          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
 
-          if (selected > 0) {
-            for (var i in variants) {
-              if (variants[i]['id'] === selected) {
-                selectedSku = variants[i]['sku'];
-                break;
-              }
-            }
+          if (selectedSkuFromQueryParam !== '') {
+            selectedSku = selectedSkuFromQueryParam;
           }
           else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
             // Try to get first child with parent sku matching. This could go
@@ -313,10 +305,6 @@
       $(product).find('#product-zoom-container').replaceWith(gallery);
     }
 
-    if (typeof Drupal.blazyRevalidate !== 'undefined') {
-      Drupal.blazyRevalidate();
-    }
-
     if (layout === 'pdp-magazine') {
       // Set timeout so that original behavior attachment is not affected.
       setTimeout(function () {
@@ -385,6 +373,27 @@
       select.find('option[value="' + possibleValues[i] + '"]')
         .removeProp('disabled')
         .removeAttr('disabled');
+    }
+
+    // Select the attribute variant based on selected value in query param.
+    var sku = $(form).attr('data-sku');
+    var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
+    var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
+    var variants = drupalSettings[productKey][sku]['variants'];
+    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+
+    if (selectedSku) {
+      $(select).removeProp('selected').removeAttr('selected');
+      var attributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][selectedCode];
+      var attributeOption = select.find('option[value="' + attributeValue + '"]');
+
+      if (attributeOption) {
+        attributeOption
+          .prop('selected', true)
+          .attr('selected', 'selected')
+          .trigger('refresh');
+        return;
+      }
     }
 
     select.find('option:not([disabled]):first')
@@ -569,6 +578,25 @@
       : 'productInfo';
 
     return productKey
+  };
+
+  Drupal.getSelectedProductFromQueryParam = function (viewMode, variants) {
+    // Use selected from query parameter only for main product.
+    var selected = (viewMode === 'full')
+      ? parseInt(Drupal.getQueryVariable('selected'))
+      : 0;
+    var selectedSku = '';
+
+    if (selected > 0) {
+      for (var i in variants) {
+        if (variants[i]['id'] === selected) {
+          selectedSku = variants[i]['sku'];
+          break;
+        }
+      }
+    }
+
+    return selectedSku;
   };
 
 })(jQuery, Drupal, drupalSettings);

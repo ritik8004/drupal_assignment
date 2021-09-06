@@ -1,5 +1,5 @@
 variables:
-  spc_product_listing_page: '/shop-women/trending-now/make-days-are-back/'
-  spc_basket_page: '/shop-women/trending-now/make-days-are-back/'
-  product_listing_page_url: 'shop-women/trending-now/make-days-are-back/'
+  spc_product_listing_page: '/shop-women/new-arrivals/shoes-accessories/'
+  spc_basket_page: '/shop-women/new-arrivals/shoes-accessories/'
+  product_listing_page_url: '/shop-women/new-arrivals/shoes-accessories/'
   spc_pdp_page: 'buy-wash-bag-transparent.html'
