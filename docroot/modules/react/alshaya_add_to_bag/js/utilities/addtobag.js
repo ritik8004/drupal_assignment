@@ -278,8 +278,14 @@ export const pushSeoGtmData = (productData) => {
   if (typeof Drupal.alshaya_seo_gtm_get_product_values !== 'undefined'
     && typeof Drupal.alshayaSeoGtmPushAddToCart !== 'undefined') {
     // Get the seo GTM product values.
+    let gtmProduct = productData.element.closest('[gtm-type="gtm-product-link"]');
+    // The product drawer is coming in page end in DOM,
+    // so element.closest is not right selector when quick view is open.
+    if (gtmProduct === null) {
+      gtmProduct = document.querySelector(`article[data-sku="${productData.element.getAttribute('data-sku')}"]`);
+    }
     const product = Drupal.alshaya_seo_gtm_get_product_values(
-      productData.element.closest('[gtm-type="gtm-product-link"]'),
+      gtmProduct,
     );
 
     // Set the product quantity.

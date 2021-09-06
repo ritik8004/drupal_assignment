@@ -293,11 +293,13 @@
     label {
       text-transform: lowercase;
     }
-  }
-}
 
-.webform-submission-alshaya-contact-form .mobile-number-field .mobile-input--wrapper .country-select {
-  @include country-select;
+    .mobile-input--wrapper {
+      .country-select {
+        @include country-select;
+      }
+    }
+  }
 }
 
 .webform-submission-alshaya-contact-form .mobile-number-field .mobile-input--wrapper {
