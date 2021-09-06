@@ -91,13 +91,6 @@ autosize_textarea:
   dependencies:
     - alshaya_white_label/autosize
 
-alshaya_image_lazy_load:
-  js:
-    vendor/js/blazy.min.js: { minified: true }
-  dependencies:
-    - core/drupal
-    - core/jquery.once
-
 convert_to_select2:
   js:
     js/convert_to_select2.js: {}
@@ -220,6 +213,13 @@ magazine_article:
   dependencies:
     - core/jquery
     - alshaya_white_label/slick
+
+alshaya_image_lazy_load:
+  js:
+    vendor/js/blazy.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/jquery.once
 
 algolia_search:
   js:
