@@ -8,7 +8,10 @@
 use Drupal\node\Entity\Node;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Check for given path, department page exists.
@@ -112,6 +115,38 @@ function alshaya_rcs_main_menu_preprocess_page_title(&$variables) {
           '#markup' => '#rcs.category.name#',
         ];
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_rcs_main_menu_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() != 'advanced_page') {
+    return;
+  }
+
+  /** @var \Drupal\node\NodeInterface $node */
+  $is_department_page = $entity->get('field_use_as_department_page')->getString();
+  // Proceed only if the page is getting used as department page.
+  if ($is_department_page) {
+    $category_slug = $entity->get('field_category_slug')->getString();
+    // Redirect only if there is value in category slug.
+    if ($category_slug) {
+      $request = \Drupal::requestStack()->getCurrentRequest();
+      $lang_code = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      // Prepare the proper URL from the category slug.
+      $url = "/$lang_code/$category_slug/";
+      if ($request->getPathInfo() == $url) {
+        // We are already on term alias, no redirects required.
+        return;
+      }
+      // When trying to access advanced page (department page) directly via
+      // node alias we should redirect it to category slug.
+      $response = new RedirectResponse($url, 301);
+      $response->send();
+      exit;
     }
   }
 }
