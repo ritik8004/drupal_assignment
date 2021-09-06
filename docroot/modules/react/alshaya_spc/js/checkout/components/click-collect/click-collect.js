@@ -59,6 +59,26 @@ class ClickCollect extends React.Component {
     };
   }
 
+  /**
+   * Keyup handler for the search input.
+   */
+  keyUpHandler = (e) => {
+    if (e.target.value.length >= 2 && !this.autocomplete) {
+      this.autocomplete = new window.google.maps.places.Autocomplete(
+        this.searchplaceInput,
+        {
+          types: [],
+          componentRestrictions: { country: window.drupalSettings.country_code },
+        },
+      );
+
+      this.autocomplete.addListener(
+        'place_changed',
+        this.placesAutocompleteHandler,
+      );
+    }
+  };
+
   componentDidMount() {
     // For autocomplete text field.
     const { openSelectedStore } = this.state;
@@ -73,18 +93,7 @@ class ClickCollect extends React.Component {
 
     if (!this.autocomplete && !!this.searchRef && !!this.searchRef.current) {
       this.searchplaceInput = this.searchRef.current.getElementsByTagName('input').item(0);
-      this.autocomplete = new window.google.maps.places.Autocomplete(
-        this.searchplaceInput,
-        {
-          types: [],
-          componentRestrictions: { country: window.drupalSettings.country_code },
-        },
-      );
-
-      this.autocomplete.addListener(
-        'place_changed',
-        this.placesAutocompleteHandler,
-      );
+      this.searchplaceInput.addEventListener('keyup', this.keyUpHandler);
       this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
     }
 
