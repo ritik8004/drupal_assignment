@@ -3,8 +3,10 @@ const Advantagecard = {
   isAdvantageCardApplied: (items) => {
     let advantageCardApplied = false;
     Object.entries(items).forEach(([, item]) => {
-      if (item.extension_attributes.adv_card_applicable) {
-        advantageCardApplied = true;
+      if (typeof item.extension_attributes !== 'undefined') {
+        if (item.extension_attributes.adv_card_applicable) {
+          advantageCardApplied = true;
+        }
       }
     });
     return advantageCardApplied;
@@ -15,7 +17,9 @@ const Advantagecard = {
     let advantageCardEligibleProduct = true;
     Object.entries(items).forEach(([, item]) => {
       if (item.item_id === itemid) {
-        advantageCardEligibleProduct = item.extension_attributes.adv_card_applicable;
+        if (typeof item.extension_attributes !== 'undefined') {
+          advantageCardEligibleProduct = item.extension_attributes.adv_card_applicable;
+        }
       }
     });
     return advantageCardEligibleProduct;
