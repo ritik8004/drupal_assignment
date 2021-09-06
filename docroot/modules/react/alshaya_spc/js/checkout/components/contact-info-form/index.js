@@ -60,13 +60,9 @@ class ContactInfoForm extends React.Component {
 
     // If collection point feature is enabled, add collectors information.
     if (collectionPointsEnabled() && showCollectorForm === true) {
-      const collectorName = extractFirstAndLastName(
-        e.target.elements.collectorFullname.value.trim(),
-      ) || null;
-      formData.static.collector_firstname = collectorName.firstname || '';
-      formData.static.collector_lastname = collectorName.lastname || '';
-      formData.static.collector_email = e.target.elements.collectorEmail.value || '';
-      formData.static.collector_telephone = `+${drupalSettings.country_mobile_code}${cleanMobileNumber(e.target.elements.collectorMobile.value)}`;
+      formData.collector_name = e.target.elements.collectorFullname.value.trim() || '';
+      formData.collector_email = e.target.elements.collectorEmail.value || '';
+      formData.collector_mobile = `+${drupalSettings.country_mobile_code}${cleanMobileNumber(e.target.elements.collectorMobile.value)}`;
     }
 
     this.processShippingUpdate(formData);
@@ -95,12 +91,9 @@ class ContactInfoForm extends React.Component {
 
     // If collection point feature is enabled, validate collector's information.
     if (collectionPointsEnabled() && showCollectorForm === true) {
-      validationData.pudo_collector_tel = formData.static.collector_telephone;
-      validationData.pudo_collector_email = formData.static.collector_email;
-      validationData.pudo_fullname = {
-        firstname: formData.static.collector_firstname,
-        lastname: formData.static.collector_lastname,
-      };
+      validationData.pudo_collector_tel = formData.collector_mobile;
+      validationData.pudo_collector_email = formData.collector_email;
+      validationData.pudo_fullname = formData.collector_name;
     }
 
     const validationRequest = validateInfo(validationData);
@@ -235,8 +228,7 @@ class ContactInfoForm extends React.Component {
 
           // If collection point feature is enabled, update collector's information.
           if (collectionPointsEnabled() && showCollectorForm === true) {
-            // @todo: Validate once MDC APIs start working.
-            updateCollectorInfo(formData.static);
+            updateCollectorInfo(formData);
           }
 
           dispatchCustomEvent('refreshCartOnCnCSelect', { cart: cartResult });
