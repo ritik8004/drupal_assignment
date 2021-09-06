@@ -85,6 +85,13 @@ alshaya_brand_carousel:
     - core/jquery.once
     - alshaya_white_label/slick
 
+alshaya_image_lazy_load:
+  js:
+    vendor/js/blazy.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+
 autosize_textarea:
   js:
     js/autosize_textarea.js: {}
