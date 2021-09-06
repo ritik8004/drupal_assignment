@@ -22,7 +22,7 @@ regions:
   footer_secondary: 'Footer Secondary'
 
 libraries:
-  - alshaya_cos_store/global_styles
+  - alshaya_cos_stores/global_styles
 
 libraries-override:
   alshaya_white_label/ltr_print_styles:
