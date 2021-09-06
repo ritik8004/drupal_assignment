@@ -320,6 +320,11 @@
 
       // Push navigation events in dataLayer for 1st Level.
       $('.menu--one__list-item .menu--one__link').once().on('click', function () {
+        // Early return if the dataLayer isn't defined.
+        if (typeof dataLayer === 'undefined') {
+          return false;
+        }
+
         var label = $(this).text();
         var navigationData = {
           event: 'Top Navigation',
@@ -330,11 +335,34 @@
 
       // Push navigation events in dataLayer for 2nd Level.
       $('.menu--two__list-item .menu-two__link').once().on('click', function () {
+        // Early return if the dataLayer isn't defined.
+        if (typeof dataLayer === 'undefined') {
+          return false;
+        }
+
         // Create the event label with parent menu item and current target link text.
         var label = $(this).closest('.menu--one__list-item').find('.menu--one__link').text();
         label += ' > ' + $(this).text();
         var navigationData = {
           event: 'Category Navigation',
+          eventLabel: label
+        };
+        dataLayer.push(navigationData);
+      });
+
+      // Push navigation events in dataLayer for 3rd Level.
+      $('.menu--three__list-item .menu--three__link').once().on('click', function () {
+        // Early return if the dataLayer isn't defined.
+        if (typeof dataLayer === 'undefined') {
+          return false;
+        }
+
+        // Create the event label with parent menu item and current target link text.
+        var label = $(this).closest('.menu--one__list-item').find('.menu--one__link').text();
+        label += ' > ' + $(this).closest('.menu--two__list-item').find('.menu-two__link').text();
+        label += ' > ' + $(this).text();
+        var navigationData = {
+          event: 'Sub Category',
           eventLabel: label
         };
         dataLayer.push(navigationData);
