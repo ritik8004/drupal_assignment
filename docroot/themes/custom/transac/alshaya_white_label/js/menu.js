@@ -327,6 +327,18 @@
         };
         dataLayer.push(navigationData);
       });
+
+      // Push navigation events in dataLayer for 2nd Level.
+      $('.menu--two__list-item .menu-two__link').once().on('click', function () {
+        // Create the event label with parent menu item and current target link text.
+        var label = $(this).closest('.menu--one__list-item').find('.menu--one__link').text();
+        label += ' > ' + $(this).text();
+        var navigationData = {
+          event: 'Category Navigation',
+          eventLabel: label
+        };
+        dataLayer.push(navigationData);
+      });
     }
   };
 
