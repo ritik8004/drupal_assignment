@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://aeoae3-uat.factory.alshaya.com/en'
+  url_base_uri: 'https://www.americaneagle.com.sa/en/'
   collection_filter: ''
   sort_filter: 'sort by'
   rice_filter: 'Price'
@@ -19,7 +19,7 @@ variables:
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
   add_to_cart_link: 'Add To Bag'
   create_account: 'Create an Account'
-  sign_in: 'Sign in'
+  sign_in: 'Sign In'
   find_store: 'Find Store'
   language_link: 'العربية'
   subtotal: 'Subtotal'
