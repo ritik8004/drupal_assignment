@@ -95,3 +95,23 @@ function alshaya_rcs_main_menu_form_alter(&$form, FormStateInterface $form_state
     $form['#validate'] = array_diff($form['#validate'], ['alshaya_advanced_page_node_form_validate']);
   }
 }
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function alshaya_rcs_main_menu_preprocess_page_title(&$variables) {
+  $routematch = \Drupal::routeMatch();
+  if ($routematch->getRouteName() == 'entity.node.canonical') {
+    $node = $routematch->getParameter('node');
+    if ($node->bundle() == 'advanced_page') {
+      $is_department_page = $node->get('field_use_as_department_page')->getString();
+      // Proceed only if the page is getting used as department page.
+      if ($is_department_page) {
+        // Change the title of the department node.
+        $variables['title'] = [
+          '#markup' => '#rcs.category.name#',
+        ];
+      }
+    }
+  }
+}

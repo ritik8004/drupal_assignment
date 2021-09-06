@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_advanced_page\Routing;
 
 use Drupal\Core\Routing\RouteProvider;
+use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 
 /**
  * Class Alshaya Advanced Page Route Provider.
@@ -55,21 +56,22 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
     if (function_exists('alshaya_rcs_main_menu_is_department_page')) {
       // Filter out the front slash as it will not be the part of the
       // department page category slug.
-      $filtered_path = $path;
-      if ($filtered_path && $filtered_path[0] == '/') {
-        $filtered_path = substr($filtered_path, 1);
-      }
-      // Get list of department pages.
-      $department_node = alshaya_rcs_main_menu_is_department_page($filtered_path);
-      if ($department_node) {
-        $node_route = $this->connection->query("SELECT name, route, fit FROM {" . $this->connection->escapeTable($this->tableName) . "} WHERE name = 'entity.node.canonical'")
-          ->fetchAll(\PDO::FETCH_ASSOC);
-        if ($node_route) {
-          /** @var \Symfony\Component\Routing\Route $route */
-          $route = unserialize($node_route[0]['route']);
-          // Setting options to identify the department page later.
-          $route->setOption('_department_page_node', $department_node);
-          $collection->add($node_route[0]['name'], $route);
+      $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
+      preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
+      $filtered_path = $matches[1] ?? '';
+      if ($filtered_path) {
+        // Get list of department pages.
+        $department_node = alshaya_rcs_main_menu_is_department_page($filtered_path);
+        if ($department_node) {
+          $node_route = $this->connection->query("SELECT name, route, fit FROM {" . $this->connection->escapeTable($this->tableName) . "} WHERE name = 'entity.node.canonical'")
+            ->fetchAll(\PDO::FETCH_ASSOC);
+          if ($node_route) {
+            /** @var \Symfony\Component\Routing\Route $route */
+            $route = unserialize($node_route[0]['route']);
+            // Setting options to identify the department page later.
+            $route->setOption('_department_page_node', $department_node);
+            $collection->add($node_route[0]['name'], $route);
+          }
         }
       }
     }
