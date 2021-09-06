@@ -22,6 +22,7 @@ global_styles:
     - alshaya_white_label/font-face
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
+    - alshaya_white_label/alshaya_image_lazy_load
 
 ltr_styles:
   css:
@@ -59,6 +60,7 @@ slider_banner:
     - core/jquery
     - core/drupal
     - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 delivery_usp:
   js:
@@ -74,6 +76,7 @@ product_carousel:
     - core/jquery
     - alshaya_white_label/utils
     - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 alshaya_brand_carousel:
   version: 1.x
@@ -322,9 +325,10 @@ matchback_layout:
     theme:
       css/conditional-sass/matchback-layout/matchback-layout.ltr.css: {}
   dependencies:
-  - core/jquery
-  - core/drupal
-  - alshaya_white_label/slick
+    - core/jquery
+    - core/drupal
+    - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 matchback_cart_notification:
   css:
@@ -333,13 +337,13 @@ matchback_cart_notification:
 
 tooltip:
   js:
-      js/order-detail.js: {}
+    js/order-detail.js: {}
   css:
     theme:
       css/conditional-sass/tooltip/tooltip.ltr.css: {}
   dependencies:
-  - core/jquery
-  - core/drupal
+    - core/jquery
+    - core/drupal
 
 alshaya-react-animate:
   css:
