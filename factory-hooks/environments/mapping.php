@@ -136,7 +136,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     'hmqa' => [
       'qa2' => [
         'magento' => 'hm_qa',
-        'conductor' => 'hmkw_qa2',
+        'conductor' => 'hmqa_qa2',
       ],
     ],
     'flkw' => [
@@ -207,12 +207,8 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     ],
     'mckw' => [
       'dev' => [
-        'magento' => 'mc_upgrade',
-        'conductor' => 'mckw_dev',
-      ],
-      'qa2' => [
         'magento' => 'mc_qa',
-        'conductor' => 'mckw_qa2',
+        'conductor' => 'mckw_dev',
       ],
     ],
     'mcae' => [
@@ -249,13 +245,25 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'pbae_dev2',
       ],
     ],
+    'vskw' => [
+      'dev2' => [
+        'magento' => 'vs_test',
+        'conductor' => 'vskw_dev2',
+      ],
+    ],
+    'vssa' => [
+      'dev2' => [
+        'magento' => 'vs_test',
+        'conductor' => 'vssa_dev2',
+      ],
+    ],
     'vsae' => [
       'dev' => [
         'magento' => 'vs_qa',
         'conductor' => 'vsae_dev',
       ],
       'dev2' => [
-        'magento' => 'vs_uat',
+        'magento' => 'vs_test',
         'conductor' => 'vsae_dev2',
       ],
     ],
@@ -369,6 +377,42 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev' => [
         'magento' => 'tbs_qa',
         'conductor' => 'tbskw_dev',
+      ],
+    ],
+    'coskw' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'coskw_qa2',
+      ],
+    ],
+    'cossa' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cossa_qa2',
+      ],
+    ],
+    'cosae' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cosae_qa2',
+      ],
+    ],
+    'coseg' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'coseg_qa2',
+      ],
+    ],
+    'cosbh' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cosbh_qa2',
+      ],
+    ],
+    'cosqa' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cosqa_qa2',
       ],
     ],
   ];

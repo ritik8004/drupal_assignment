@@ -4,6 +4,13 @@
   .brand-list {
     .brand {
       margin: 0.875rem 1rem 0 0;
+
+      html[lang=ar] & {
+        @include breakpoint($only-tablet) {
+          margin-left: 1rem;
+          margin-right: 0;
+        }
+      }
     }
   }
 

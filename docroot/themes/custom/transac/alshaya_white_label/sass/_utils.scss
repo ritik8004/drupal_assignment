@@ -549,3 +549,111 @@ body {
     }
   }
 }
+
+//Country Select style
+@mixin country-select {
+  border: none;
+  height: auto;
+
+  .mobile-number-flag {
+    display: none;
+  }
+
+  .arrow {
+    display: none;
+  }
+
+  select.country {
+    display: none;
+  }
+}
+
+//Mobile input style
+@mixin mobile-input-style {
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid $checkout_cc_store_address_mobile_border;
+  position: relative;
+  direction: ltr;
+
+  .form-item.verified {
+    #edit-billing-address & {
+      display: none;
+    }
+  }
+
+  .prefix {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: $greyish;
+
+    html[lang=ar] .safari & {
+      line-height: 1.2;
+    }
+
+    html[lang=ar] .ie & {
+      line-height: 1.3;
+    }
+  }
+
+  .form-item-field-address-0-address-mobile-number-mobile,
+  .form-item-field-mobile-number-0-mobile,
+  .form-item-billing-address-address-billing-mobile-number-mobile,
+  .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
+  .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
+  .form-item-cc-mobile-number-mobile,
+  .form-item-mobile-number-mobile {
+    position: static !important;
+    width: 9.375rem;
+
+    .c-input__bar {
+      position: static;
+
+      &::before,
+      &::after {
+        bottom: -1px;
+      }
+    }
+  }
+
+  .form-item-field-mobile-number-0-country-code {
+    .user-page.c-user-edit & {
+      margin-top: 0;
+    }
+  }
+
+  #edit-field-address-0-address-mobile-number-mobile-error,
+  #edit-mobile-number-mobile-error {
+    border-top: 2px solid $primary_input_inline_error;
+    position: absolute;
+    top: 2rem;
+    #{$left}: 0;
+  }
+
+  .form-item--error-message {
+    position: absolute;
+    #{$left}: 0;
+    line-height: 1;
+    border-top: 2px solid $primary_input_inline_error;
+    width: 100%;
+  }
+}
+
+//Mobile number input style
+@mixin mobile-number-input-style {
+  border: none !important;
+
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: $white-five !important;
+  }
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  html[lang=ar] & {
+    direction: ltr;
+  }
+}
+

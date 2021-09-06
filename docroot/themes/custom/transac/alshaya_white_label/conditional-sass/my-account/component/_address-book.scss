@@ -460,7 +460,6 @@
 
 .user-form,
 .address-book-address,
-.webform-submission-alshaya-contact-form,
 #selected-store-wrapper {
   .mobile-number-field {
     max-width: 24.75rem;
@@ -511,107 +510,15 @@
     }
 
     .country-select {
-      border: none;
-      height: auto;
-
-      .mobile-number-flag {
-        display: none;
-      }
-
-      .arrow {
-        display: none;
-      }
-
-      select.country {
-        display: none;
-      }
+      @include country-select;
     }
 
     .mobile-input--wrapper {
-      display: flex;
-      align-items: flex-end;
-      border-bottom: 1px solid $checkout_cc_store_address_mobile_border;
-      position: relative;
-      direction: ltr;
-
-      .form-item.verified {
-        #edit-billing-address & {
-          display: none;
-        }
-      }
-
-      .prefix {
-        font-size: 1rem;
-        line-height: 1.5;
-        color: $greyish;
-
-        html[lang=ar] .safari & {
-          line-height: 1.2;
-        }
-
-        html[lang=ar] .ie & {
-          line-height: 1.3;
-        }
-      }
-
-      .form-item-field-address-0-address-mobile-number-mobile,
-      .form-item-field-mobile-number-0-mobile,
-      .form-item-billing-address-address-billing-mobile-number-mobile,
-      .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
-      .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
-      .form-item-cc-mobile-number-mobile,
-      .form-item-mobile-number-mobile {
-        position: static !important;
-        width: 9.375rem;
-
-        .c-input__bar {
-          position: static;
-
-          &::before,
-          &::after {
-            bottom: -1px;
-          }
-        }
-      }
-
-      .form-item-field-mobile-number-0-country-code {
-        .user-page.c-user-edit & {
-          margin-top: 0;
-        }
-      }
-
-      #edit-field-address-0-address-mobile-number-mobile-error,
-      #edit-mobile-number-mobile-error {
-        border-top: 2px solid $primary_input_inline_error;
-        position: absolute;
-        top: 2rem;
-        #{$left}: 0;
-      }
-
-      .form-item--error-message {
-        position: absolute;
-        #{$left}: 0;
-        line-height: 1;
-        border-top: 2px solid $primary_input_inline_error;
-        width: 100%;
-      }
+      @include mobile-input-style;
     }
 
     input {
-      border: none !important;
-
-      &:-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: $white-five !important;
-      }
-
-      &::placeholder {
-        color: transparent;
-      }
-
-      html[lang=ar] & {
-        direction: ltr;
-      }
+      @include mobile-number-input-style;
     }
   }
 
@@ -707,21 +614,6 @@
     line-height: 1.188rem !important;
     color: $black;
     padding: 0.25rem !important;
-  }
-}
-
-.form-type-select {
-  .select2-selection__arrow {
-    @include icon(chevrondown, after) {
-      font-size: 1.5rem;
-      position: absolute;
-      top: 9%;
-      #{$left}: 10%;
-    }
-
-    b {
-      display: none;
-    }
   }
 }
 

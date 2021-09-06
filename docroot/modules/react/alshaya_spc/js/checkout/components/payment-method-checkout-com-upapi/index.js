@@ -111,6 +111,13 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
       }).then((response) => {
         this.handleCheckoutResponse(response.data);
       }).catch((error) => {
+        // In case of 4 digit CVV code failure.
+        if (error.response.status === 422) {
+          dispatchCustomEvent('spcCheckoutMessageUpdate', {
+            type: 'error',
+            message: Drupal.t('Transaction Failed: Invalid CVV'),
+          });
+        }
         removeFullScreenLoader();
         Drupal.logJavascriptError('Checkout.com UPAPI Token', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
       });
@@ -130,8 +137,11 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     if (data.card_type !== undefined && data.scheme !== undefined) {
       cardType = ` ${data.card_type} - ${data.scheme}`;
     }
-    drupalSettings.payment_methods.checkout_com_upapi.gtm_name = (data.card_category === 'Commercial') ? 'MADA' : cardType;
-
+    // Dispatch the event to push into dataLayer for
+    // checkoutOut upapi payment method
+    dispatchCustomEvent('orderPaymentMethod', {
+      payment_method: (data.card_category === 'Commercial') ? 'MADA' : cardType,
+    });
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 

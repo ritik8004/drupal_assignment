@@ -3,3 +3,4 @@ variables:
   spc_product_listing_page: '/shop-furniture/living-room/armchairs/'
   spc_basket_page: '/shop-furniture/living-room/armchairs/'
   spc_pdp_page: ''
+  spc_bank_product: '/shop-decor-cushions/home-decor/mirrors/'

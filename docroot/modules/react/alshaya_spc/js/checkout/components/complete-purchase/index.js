@@ -41,6 +41,18 @@ export default class CompletePurchase extends React.Component {
     if (!this.completePurchaseButtonActive()) {
       return;
     }
+    // Dispatch the event for all payment method
+    // except checkout_com_upapi method.
+    // For checkout_com_upapi method this
+    // handle in its own component.
+    if (cart.cart.payment.method !== 'checkout_com_upapi') {
+      dispatchCustomEvent('orderPaymentMethod', {
+        payment_method: Object
+          .values(drupalSettings.payment_methods)
+          .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+          .shift().gtm_name,
+      });
+    }
 
     // Flag to track pseudo payment method.
     let isPseudoPaymentMedthod = false;

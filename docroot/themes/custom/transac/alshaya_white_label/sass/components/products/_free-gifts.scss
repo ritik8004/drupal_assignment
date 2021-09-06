@@ -810,14 +810,6 @@ body #drupal-modal.free-gift-listing-modal {
   padding: 2.3125rem 2.2rem;
 }
 
-body.ie {
-  #drupal-modal.free-gift-listing-modal {
-    .b-lazy {
-      transition-duration: 0s !important;
-    }
-  }
-}
-
 body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
     @include breakpoint($only-mobile) {

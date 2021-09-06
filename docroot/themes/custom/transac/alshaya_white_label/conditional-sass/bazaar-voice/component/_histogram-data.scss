@@ -197,3 +197,9 @@
     }
   }
 }
+
+.page-wrapper {
+  @include breakpoint($desktop) {
+    overflow-x: hidden;
+  }
+}

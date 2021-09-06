@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @tbskwprod
+@javascript @KNET @KNetPayment @clickCollect @westelmkwprod @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @tbskwprod @vskwprod @westelmkwprod
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
@@ -18,12 +18,12 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 5 seconds
+    And I wait 50 seconds
     And I wait for the page to load
     Then I should be on "/cart/login" page
     And I wait 5 seconds
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -47,7 +47,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I select "Eidity [KNET]" from dropdown ".paymentselect"
     And I wait 2 seconds
     And I press "Submit"
@@ -74,12 +74,12 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 5 seconds
+    And I wait 50 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
     And I wait 5 seconds
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -102,7 +102,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     And I press "إرسال"
@@ -125,12 +125,12 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 5 seconds
+    And I wait 50 seconds
     And I wait for the page to load
     Then I should be on "/cart/login" page
     And I wait 5 seconds
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -154,7 +154,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I select "Eidity [KNET]" from dropdown ".paymentselect"
     And I wait 2 seconds
     And I press "Submit"

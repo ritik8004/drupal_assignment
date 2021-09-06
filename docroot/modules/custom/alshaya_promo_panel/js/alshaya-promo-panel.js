@@ -16,9 +16,6 @@
         $(window).trigger('resize');
         $(this).parent().toggleClass('active-promo-panel');
         $($body).toggleClass('active-promo-panel-content');
-        if (typeof Drupal.blazy !== 'undefined') {
-          Drupal.blazyRevalidate();
-        }
       });
 
       $($mobile_link).once('alshaya_promo_mobile_link').on('click', function (e) {

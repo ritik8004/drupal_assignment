@@ -28,6 +28,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Detection\MobileDetect;
 
 /**
  * Class Alshaya Gtm Manager.
@@ -933,8 +934,19 @@ class AlshayaGtmManager {
     }
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-    $orders_count = isset($order['customer_id']) ? $this->ordersManager->getOrdersCount((int) $order['customer_id']) : 1;
-
+    $current_user_id = $this->currentUser->id();
+    // For guest fetching the phone number from shipping details.
+    $phone_number = $order['shipping']['address']['telephone'];
+    $is_customer = alshaya_acm_customer_is_customer($this->currentUser);
+    $orders_count = $customer_id = 0;
+    if ($is_customer) {
+      $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
+      $customer_id = $current_user->get('acq_customer_id')->getString();
+      $orders_count = $this->ordersManager->getOrdersCount($customer_id);
+      if (!empty($current_user->get('field_mobile_number')->getValue())) {
+        $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
+      }
+    }
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -943,8 +955,13 @@ class AlshayaGtmManager {
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
+      'userId' => $customer_id,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
+      'userPhone' => $phone_number ?? '',
+      'userType' => $is_customer ? 'Logged in User' : 'Guest User',
+      'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
+      'platformType' => $this->getUserDeviceType(),
     ];
 
     return [
@@ -1320,6 +1337,25 @@ class AlshayaGtmManager {
     return !empty($currency_code->get('iso_currency_code'))
       ? $currency_code->get('iso_currency_code')
       : $currency_code->get('currency_code');
+  }
+
+  /**
+   * Helper function to get device type.
+   *
+   * @return string
+   *   User device type.
+   */
+  protected function getUserDeviceType() {
+    $detect = new MobileDetect();
+    $device_type = 'Desktop';
+    if ($detect->isTablet()) {
+      $device_type = 'Tablet';
+    }
+    elseif ($detect->isMobile()) {
+      $device_type = 'Mobile';
+    }
+
+    return $device_type;
   }
 
 }

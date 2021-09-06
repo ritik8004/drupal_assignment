@@ -251,18 +251,24 @@ function alshaya_spc_page_attachments_alter(&$page) {
 function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $assets) {
   // Add Magento Customer Id to drupal settings.
   $settings['userDetails']['customerId'] = 0;
+
   $current_user = \Drupal::currentUser();
-  if ($current_user->isAuthenticated()) {
-    $entity_type_manager = \Drupal::entityTypeManager();
-    $user = $entity_type_manager
+
+  // Load the customer id from account if it is customer account.
+  if ($current_user->isAuthenticated() && alshaya_acm_customer_is_customer($current_user)) {
+    $user = \Drupal::entityTypeManager()
       ->getStorage('user')
       ->load($current_user->id());
 
     $settings['userDetails']['customerId']= (int) $user->get('acq_customer_id')->getString();
 
-    $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
-    $token = $customer_helper->getCustomerTokenBySocialDetail($user->get('mail')->getString());
-    $settings['userDetails']['customerToken'] = $token;
+    // For V2, add user token to drupalSettings for direct backend calls.
+    if (\Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion() == 2) {
+      $settings['userDetails']['customerToken'] = \Drupal::service('alshaya_spc.customer_helper')
+        ->getCustomerTokenBySocialDetail(
+          $user->get('mail')->getString()
+        );
+    }
   }
 }
 
