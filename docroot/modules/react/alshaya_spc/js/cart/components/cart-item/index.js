@@ -235,7 +235,6 @@ export default class CartItem extends React.Component {
       && maxSaleQty > 0)
       ? 'sku-max-quantity-limit-reached'
       : '';
-    const advantageCardProduct = Advantagecard.isAdvantageCardEligibleProduct(totalsItems, id);
 
     return (
       <div
@@ -305,7 +304,7 @@ export default class CartItem extends React.Component {
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />
-          <AdvantageCardExcludedItem type="warning" advantageCardProduct={advantageCardProduct} />
+          <AdvantageCardExcludedItem type="warning" advantageCardProduct={Advantagecard.isAdvantageCardEligibleProduct(totalsItems, id)} />
           <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
           {drupalSettings.quantity_limit_enabled
           && (

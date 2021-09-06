@@ -1,4 +1,5 @@
 const Advantagecard = {
+  // Helper function to check if Advantage Card Applied.
   isAdvantageCardApplied: (items) => {
     let advantageCardApplied = false;
     Object.entries(items).forEach(([, item]) => {
@@ -9,6 +10,7 @@ const Advantagecard = {
     return advantageCardApplied;
   },
 
+  // Helper function to check if Advantage Card Eligible Product.
   isAdvantageCardEligibleProduct: (items, itemid) => {
     let advantageCardEligibleProduct = true;
     Object.entries(items).forEach(([, item]) => {
