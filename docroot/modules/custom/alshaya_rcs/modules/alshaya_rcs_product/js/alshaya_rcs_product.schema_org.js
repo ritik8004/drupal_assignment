@@ -33,7 +33,7 @@
         }
       });
 
-      var results = typeof bvData.Results !== 'undefined' ? bvData.Results : null;
+      var results = bvData && (typeof bvData.Results !== 'undefined') ? bvData.Results : null;
       if (results && results.length > 0) {
         var reviewSchemaData = {};
 

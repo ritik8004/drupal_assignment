@@ -129,8 +129,8 @@ export const isHideMaxSaleMsg = () => {
  * @returns array
  *  The array of hidden form attribute names.
  */
-export const getHiddenFormAttributes = () => (typeof drupalSettings.add_to_bag.hidden_form_attributes !== 'undefined'
-  ? drupalSettings.add_to_bag.hidden_form_attributes
+export const getHiddenFormAttributes = () => (typeof drupalSettings.hidden_form_attributes !== 'undefined'
+  ? drupalSettings.hidden_form_attributes
   : []);
 
 /**

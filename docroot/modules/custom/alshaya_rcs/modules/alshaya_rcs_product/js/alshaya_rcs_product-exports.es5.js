@@ -19,18 +19,6 @@
 }
 
 /**
- * Check if product is available for click and collect.
- *
- * @see alshaya_acm_product_available_click_collect().
- */
-function isProductAvailableForClickAndCollect() {
-  // @todo: Implement the same way as
-  // alshaya_acm_product_available_click_collect(). Currently some attributes
-  // are not available so leaving this as a minimal stub.
-  return drupalSettings.alshaya_click_collect.status;
-}
-
-/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -60,7 +48,7 @@ exports.render = function render(
       }
 
       const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
-      const cncEnabled = isProductAvailableForClickAndCollect();
+      const cncEnabled = window.commerceBackend.isProductAvailableForClickAndCollect(entity);
       const isDeliveryOptionsAvailable = isProductAvailableForHomeDelivery(entity) || cncEnabled;
 
       if (isDeliveryOptionsAvailable) {
@@ -79,9 +67,7 @@ exports.render = function render(
         clickAndCollect.attr({
           'data-state': cncEnabled ? 'enabled' : 'disabled',
           'data-product-type': entity.type_id,
-          // @todo: Add method to clean the SKU value as twig's clean_class.
-          // @see: \Drupal\Component\Utility\Html::getClass().
-          'data-sku-clean': entity.sku,
+          'data-sku-clean': window.commerceBackend.cleanCssIdentifier(entity.sku),
         });
 
         const subTitle = cncEnabled
@@ -164,9 +150,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
       case 'sku-clean':
-        // @todo: Might need to make the value markup safe like what we do for
-        // data-sku-clean for the delivery-block code written above.
-        value = input.sku;
+        value = window.commerceBackend.cleanCssIdentifier(input.sku);
         break;
 
     case 'sku-type':
@@ -370,13 +354,17 @@ exports.computePhFilters = function (input, filter) {
 
       // This wrapper will be removed after processing.
       const tempDivWrapper = jQuery('<div>');
+      let configurableOptions = input.configurable_options;
 
-      if (typeof input.configurable_options !== 'undefined' && input.configurable_options.length > 0) {
+      if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
         const sizeGuide = jQuery('.rcs-templates--size-guide');
         let sizeGuideAttributes = sizeGuide.attr('data-attributes');
         sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+        const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
+          ? drupalSettings.hidden_form_attributes
+          : [];
 
-        input.configurable_options.forEach((option) => {
+        configurableOptions.forEach((option) => {
           // Get the field wrapper div.
           const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
           // The list containing the options.
@@ -417,7 +405,7 @@ exports.computePhFilters = function (input, filter) {
           // Add the option values.
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
-            selectOption.attr({value: value.value_index}).text(value.label);
+            selectOption.attr({value: value.value_index}).text(value.store_label);
             configurableOptionsList.append(selectOption);
           });
 
@@ -439,7 +427,7 @@ exports.computePhFilters = function (input, filter) {
           // Replace the placeholder class name.
           optionsListWrapper.attr('class', optionsListWrapper[0].className.replaceAll('ATTRIBUTENAME', formattedAttributeCode));
           // Hide field if supposed to be hidden.
-          if (drupalSettings.add_to_bag.hidden_form_attributes.includes(option.attribute_code)) {
+          if (hiddenFormAttributes.includes(option.attribute_code)) {
             optionsListWrapper.addClass('hidden');
           }
         });
@@ -450,7 +438,9 @@ exports.computePhFilters = function (input, filter) {
 
       // Replace the placeholder attributes in the sku base form template.
       const attributes = rcsPhGetSetting('placeholderAttributes');
-      rcsPhReplaceEntityPh(skuBaseForm.html(), drupalSettings.rcsPage.type, input, drupalSettings.path.currentLanguage)
+      const pageType = rcsPhGetPageType();
+
+      rcsPhReplaceEntityPh(skuBaseForm.html(), pageType, input, drupalSettings.path.currentLanguage)
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];

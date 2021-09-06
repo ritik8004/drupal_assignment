@@ -12,8 +12,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist
@@ -34,8 +32,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist
@@ -64,8 +60,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist

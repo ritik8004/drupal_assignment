@@ -8,6 +8,8 @@ exports.render = function render(
   innerHtml
 ) {
   let html = "";
+  const pageType = rcsPhGetPageType();
+
   switch (placeholder) {
     case "delivery-option":
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
@@ -56,7 +58,7 @@ exports.render = function render(
 
     case 'lhn_block':
       // Render lhn based on the page type.
-      if (drupalSettings.rcsPage.type === 'category'
+      if (pageType === 'category'
       && typeof globalThis.renderRcsLhn !== 'undefined') {
         html += globalThis.renderRcsLhn.render(
           settings,
@@ -105,6 +107,7 @@ exports.computePhFilters = function (input, filter) {
     case 'first_image':
     case 'schema_stock':
     case 'brand_logo':
+    case 'stock_qty':
     case 'short_description':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);

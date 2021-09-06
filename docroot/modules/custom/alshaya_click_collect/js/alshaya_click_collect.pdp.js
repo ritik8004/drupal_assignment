@@ -39,12 +39,13 @@
       $('.sku-base-form', node).once('click-collect').on('variant-selected', function (event, variant, code) {
         var sku = $(this).attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode(node.attr('data-vmode'));
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
 
-        if (drupalSettings[productKey][sku] === undefined) {
+        if (typeof productInfo === 'undefined' || !productInfo) {
           return;
         }
 
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var variantInfo = productInfo['variants'][variant];
         $('#pdp-stores-container', node).data('sku', variant);
 
         if (variantInfo.click_collect) {
@@ -196,7 +197,7 @@
   Drupal.click_collect.LocationAccessError = function (drupalSettings) {
     geoPerm = false;
 
-    var context = $('#pdp-stores-container').closest('article.entity--type-node');
+    var context = $('.entity--type-node #pdp-stores-container').closest('.entity--type-node');
     // Display search store form if conditions matched.
     Drupal.pdp.InvokeSearchStoreFormDisplay(context, drupalSettings);
   };

@@ -1,0 +1,18 @@
+// Stylesheet mixins.
+$cos_theme_img_directory_path: '/themes/custom/transac/alshaya_cos_stores/imgs';
+
+@mixin ic-social {
+  content: '';
+  background-repeat: no-repeat;
+  width: 1.8125rem;
+  height: 1rem;
+  display: inline-block;
+  background-size: contain;
+  margin-#{$left}: 0.125rem;
+
+  html[lang=ar] & {
+    background-position: right;
+  }
+
+  @content;
+}
