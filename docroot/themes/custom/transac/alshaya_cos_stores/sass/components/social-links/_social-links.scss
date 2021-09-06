@@ -3,6 +3,10 @@
     &::before {
       @include ic-social;
 
+      @include breakpoint($only-tablet) {
+        width: 1rem;
+      }
+
       background-image: url(#{$cos_theme_img_directory_path}/icons/facebook.svg);
     }
   }
