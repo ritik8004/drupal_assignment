@@ -26,8 +26,6 @@
         Drupal.geolocation.loadGoogle(function () {
           $('.geolocation-geocoder-google-places-api[type="search"]', context).once('bind-events').each(function () {
             var field = $(this).get(0);
-            // Create autocomplete object for places.
-            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.alshayaClickCollectPlacesApi.storePlacesDetails], componentRestrictions, field);
 
             // Handle input event.
             $(this).on('input', function () {
@@ -40,6 +38,28 @@
 
             // Handle keyup event.
             $(this).on('keyup', function (e) {
+              // If the input field length is 2 or more, we will load the
+              // google library if not loaded already.
+              if ($(this).val().length >= 2) {
+                // Do a check if the library is already loaded.
+                if (!$(this).hasClass('maps-loaded')) {
+                  // Create autocomplete object for places.
+                  new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.alshayaClickCollectPlacesApi.storePlacesDetails], componentRestrictions, field);
+
+                  // Add a check for identify that library is loaded.
+                  $(this).addClass('maps-loaded');
+                }
+              }
+              else {
+                // If library is loaded and character length is found under
+                // 3 character, we will clear the events binds with the input.
+                e.preventDefault();
+                $(".pac-container").remove();
+                google.maps.event.clearInstanceListeners(field);
+                $(this).removeClass('maps-loaded');
+                return false;
+              }
+
               var keyCode = e.keyCode || e.which;
               if (keyCode === 13) {
                 e.preventDefault();
