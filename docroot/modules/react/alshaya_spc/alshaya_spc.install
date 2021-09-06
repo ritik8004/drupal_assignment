@@ -17,7 +17,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Update the advantage card settings.
  */
-function alshaya_spc_update_8014() {
+function alshaya_spc_update_8016() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_spc.advantage_card'],
@@ -26,7 +26,7 @@ function alshaya_spc_update_8014() {
   );
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
-  $translations = _alshaya_spc_get_translations('v5');
+  $translations = _alshaya_spc_get_translations('v7');
   if ($translations) {
     alshaya_i18n_save_translations($translations);
   }

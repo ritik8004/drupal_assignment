@@ -5,6 +5,7 @@ import SectionTitle from '../../../utilities/section-title';
 import dispatchCustomEvent from '../../../utilities/events';
 import DynamicPromotionCode from './DynamicPromotionCode';
 import { openCartFreeGiftModal, getCartFreeGiftModalId } from '../../../utilities/free_gift_util';
+import Advantagecard from '../../../utilities/advantagecard';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -196,10 +197,13 @@ export default class CartPromoBlock extends React.Component {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
-          if (this.isAdvantagecardEnabled()
-            && promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
-            && this.isValidAdvantagecard(promoValue)) {
-            // For Advantage card set promoValue to null.
+          const advantageCardApplied = Advantagecard.isAdvantageCardApplied(result.totals.items);
+          if ((this.isAdvantagecardEnabled()
+            && advantageCardApplied)
+            || (this.isAdvantagecardEnabled()
+              && promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
+              && result.response_message.status === 'error_coupon')) {
+            // For Advantage card set promoValue to Advantage_Card_uid.
             promoValue = `Advantage_Card_${drupalSettings.userDetails.userID}`;
           }
           // If coupon is not valid.

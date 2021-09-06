@@ -21,6 +21,8 @@ import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
+import AdvantageCardExcludedItem from '../advantage-card';
+import Advantagecard from '../../../utilities/advantagecard';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -187,6 +189,7 @@ export default class CartItem extends React.Component {
       productPromotion,
       couponCode,
       selectFreeGift,
+      totalsItems,
     } = this.props;
 
     const {
@@ -232,6 +235,7 @@ export default class CartItem extends React.Component {
       && maxSaleQty > 0)
       ? 'sku-max-quantity-limit-reached'
       : '';
+    const advantageCardProduct = Advantagecard.isAdvantageCardEligibleProduct(totalsItems, id);
 
     return (
       <div
@@ -301,6 +305,7 @@ export default class CartItem extends React.Component {
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />
+          <AdvantageCardExcludedItem type="warning" advantageCardProduct={advantageCardProduct} />
           <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
           {drupalSettings.quantity_limit_enabled
           && (
