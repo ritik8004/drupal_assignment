@@ -1,0 +1,26 @@
+.c-menu-secondary {
+  text-transform: uppercase;
+  text-align: center;
+
+  li {
+    height: 1.875rem;
+  }
+
+  a {
+    font-size: 0.75rem;
+    height: 1.875rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .menu--account,
+  .block-alshaya-stores-finder,
+  .block-language-blocklanguage-interface {
+    height: 1.875rem;
+  }
+}
