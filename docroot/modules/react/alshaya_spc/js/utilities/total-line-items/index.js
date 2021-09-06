@@ -60,7 +60,7 @@ class TotalLineItems extends React.Component {
       });
     }
     // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
-    if (advantageCardApplied) {
+    if (Advantagecard.isAdvantagecardEnabled() && advantageCardApplied) {
       promoData += `<div class="promotion-label"><strong>${Drupal.t('Advantage Card Discount')}</strong></div>`;
     }
     return promoData;

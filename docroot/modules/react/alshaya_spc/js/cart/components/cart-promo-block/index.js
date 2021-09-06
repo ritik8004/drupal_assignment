@@ -52,39 +52,6 @@ export default class CartPromoBlock extends React.Component {
     document.removeEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
   }
 
-  // Helper function for Advantage card status.
-  isAdvantagecardEnabled = () => {
-    if (typeof drupalSettings.alshaya_spc.advantageCard !== 'undefined'
-      && drupalSettings.user.uid) {
-      if (drupalSettings.alshaya_spc.advantageCard.enabled
-        && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined'
-        && drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  // Helper function to check valid Advantage card pattern.
-  isValidAdvantagecard = (advantageCard) => {
-    const advantageCardType = ['01', '02', '03'];
-    if (advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
-      && advantageCard.length !== 16) {
-      return false;
-    }
-    if (advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
-      && !advantageCardType.includes(advantageCard.substring(9, 7))) {
-      return false;
-    }
-    if (advantageCard.slice(0, 7) === drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
-      && !/^\d+$/.test(advantageCard.substring(16, 9))) {
-      return false;
-    }
-
-    return true;
-  }
-
   /**
    * Call back to get product data from storage.
    */
@@ -162,7 +129,8 @@ export default class CartPromoBlock extends React.Component {
       return;
     }
     // If Advantage card enabled and not valid.
-    if (this.isAdvantagecardEnabled() && this.isValidAdvantagecard(promoValue) === false) {
+    if (Advantagecard.isAdvantagecardEnabled()
+      && Advantagecard.isValidAdvantagecard(promoValue) === false) {
       document.getElementById('promo-message').innerHTML = Drupal.t('Please enter valid Advantage card code.');
       document.getElementById('promo-message').classList.add('error');
       document.getElementById('promo-code').classList.add('error');
@@ -198,9 +166,9 @@ export default class CartPromoBlock extends React.Component {
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
           const advantageCardApplied = Advantagecard.isAdvantageCardApplied(result.totals.items);
-          if ((this.isAdvantagecardEnabled()
+          if ((Advantagecard.isAdvantagecardEnabled()
             && advantageCardApplied)
-            || (this.isAdvantagecardEnabled()
+            || (Advantagecard.isAdvantagecardEnabled()
               && promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
               && result.response_message.status === 'error_coupon')) {
             // For Advantage card set promoValue to Advantage_Card_uid.
