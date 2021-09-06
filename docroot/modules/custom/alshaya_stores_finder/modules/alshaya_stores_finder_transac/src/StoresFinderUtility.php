@@ -217,25 +217,17 @@ class StoresFinderUtility {
       $store['phone_number'] = $store_node->get('field_store_phone')->getString();
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
       $store['open_hours_group'] = $hours = [];
-
-      // 'field_store_type' value 1 is for pudo collection point.
-      if ($this->configFactory->get('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled')
-        && $store_node->get('field_store_type')->getString() === '1') {
-        $hours[$store['open_hours'][0]['value']] = implode(', ', array_column($store['open_hours'], 'key'));
-      }
-      else {
-        $init_day = '';
-        foreach ($store['open_hours'] as $open_hours) {
-          // Check the hours are present or not. ['value'] contains timings.
-          // ['Key'] contains week day.
-          if (empty($hours[$open_hours['value']])) {
-            $hours[$open_hours['value']] = $open_hours['key'];
-            $init_day = $open_hours['key'];
-          }
-          else {
-            // Prepare text like "Monday - Friday".
-            $hours[$open_hours['value']] = $init_day . ' - ' . $open_hours['key'];
-          }
+      $init_day = '';
+      foreach ($store['open_hours'] as $open_hours) {
+        // Check the hours are present or not. ['value'] contains timings.
+        // ['Key'] contains week day.
+        if (empty($hours[$open_hours['value']])) {
+          $hours[$open_hours['value']] = $open_hours['key'];
+          $init_day = $open_hours['key'];
+        }
+        else {
+          // Prepare text like "Monday - Friday".
+          $hours[$open_hours['value']] = $init_day . ' - ' . $open_hours['key'];
         }
       }
 
