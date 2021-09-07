@@ -447,10 +447,14 @@ class CartController {
 
     // If payment method is not available in the list, we set the first
     // available payment method.
+    // `aura_payment` is pseudo payment method so it won't be in
+    // the list of payment methods so do not remove payment method
+    // if it's `aura_payment`.
     if (!empty($response['payment'])) {
       $codes = array_column($response['payment']['methods'], 'code');
       if (!empty($response['payment']['method'])
-        && !in_array($response['payment']['method'], $codes)) {
+        && !in_array($response['payment']['method'], $codes)
+        && $response['payment']['method'] !== 'aura_payment') {
         unset($response['payment']['method']);
       }
 
