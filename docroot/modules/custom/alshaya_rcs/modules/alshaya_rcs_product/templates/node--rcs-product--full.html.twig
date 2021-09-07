@@ -117,34 +117,10 @@ set classes = [
                         {% endif %}
                         <div class="desc-value">#rcs.product._self|short_description#</div>
                       </div>
-                      {% for desc in content.description %}
-                        {% if desc.value|render %}
-                          <div class="desc-wrapper">
-                            {% if desc.label|render %}
-                              <div class="desc-label">
-                                {{ desc.label }}
-                              </div>
-                            {% endif %}
-
-                            <div class="desc-value">
-                              {{ desc.value }}
-                            </div>
-                          </div>
-                        {% endif %}
-                      {% endfor %}
                       {{ content.legal_notice }}
                     </div>
-{#@todo how to do conditions?#}
-{#                    {% if content.description %}#}
-{#                        @todo How to get style?#}
-{#                      {% if content.read_more_style.value|render %}#}
-{#                        <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>#}
-{#                        <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>#}
-{#                      {% else %}#}
-                        <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                        <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
-{#                      {% endif %}#}
-{#                    {% endif %}#}
+                    <span class="read-more-description-link">#rcs.product._self|short_description.read_more#</span>
+                    <span class="read-more-description-link-mobile">#rcs.product._self|short_description.read_more#</span>
                   </div>
                 </div>
               </div>
@@ -156,19 +132,9 @@ set classes = [
                   <span class="close"></span>
                   <h2 class="field__label">{{ 'Product Description'|t }}</h2>
                   <div class="field__content">
-{#                    @todo how to get label?#}
-{#                    {% for desc in content.description  %}#}
-{#                      {% if desc.value|render %}#}
-                        <div class="desc-wrapper">
-{#                          {% if desc.label|render %}#}
-                            <div class="desc-label">
-                              {{ desc.label }}
-                            </div>
-{#                          {% endif %}#}
-                          <div class="desc-value">#rcs.product.description.html#</div>
-                        </div>
-{#                      {% endif %}#}
-{#                    {% endfor %}#}
+                    <div class="desc-wrapper">
+                      <div class="desc-value">#rcs.product._self|description#</div>
+                    </div>
                     {{ content.legal_notice }}
                   </div>
                 </div>

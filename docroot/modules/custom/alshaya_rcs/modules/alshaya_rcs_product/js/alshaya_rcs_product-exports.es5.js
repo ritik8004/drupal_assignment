@@ -31,6 +31,39 @@ function isProductBuyable(entity) {
   return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
 }
 
+/**
+ * Create short text with ellipsis and Read more button.
+ *
+ * @param {string} value
+ *   The field value.
+ *
+ * @param {int} limit
+ *   The max number of characters.
+ *
+ * @returns {object}
+ *   Returns the object containing the value and ellipsis information.
+ */
+function createShortDescription(value, limit) {
+  if (typeof limit === 'undefined') {
+    limit = drupalSettings.alshayaRcs.shortDescLimit;
+  }
+
+  let ellipsis = false;
+
+  // Strip html tags.
+  value = jQuery('<p>' + value + '</p>').text();
+
+  if (value.length > limit) {
+    value = value.slice(0, limit) + '...';
+    ellipsis = true;
+  }
+
+  return {
+    value: value,
+    ellipsis: ellipsis,
+  };
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -494,10 +527,24 @@ exports.computePhFilters = function (input, filter) {
 
       break;
 
-    case 'short_description':
-      // @todo limit string length.
+    case 'description':
       value = input.description.html;
+      // Brands can define rcsGetProductDescription() to customize how short description is generated.
+      if (typeof rcsGetProductDescription === 'function') {
+        value = rcsGetProductDescription(input);
+      }
+      break;
 
+    case 'short_description':
+      let short_description = createShortDescription(this.computePhFilters(input,'description'));
+      value = short_description.value;
+      break;
+
+    case 'short_description.read_more':
+      let short_description_value = createShortDescription(this.computePhFilters(input,'short_description'));
+      if (short_description_value.ellipsis) {
+        value = rcsTranslatedText('Read more');
+      }
       break;
 
     default:
