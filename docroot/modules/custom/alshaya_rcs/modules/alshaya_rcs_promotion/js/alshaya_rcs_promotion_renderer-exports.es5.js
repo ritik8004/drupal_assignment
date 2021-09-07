@@ -14,4 +14,6 @@ exports.render = function render(
 
     return innerHtmlObj[0].outerHTML;
   }
+
+  return '';
 }
