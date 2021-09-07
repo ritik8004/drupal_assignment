@@ -10,6 +10,7 @@ $dark-gray: #999;
 $brownish-grey: #666;
 $bright-gray: #eee;
 $silver-gray: #b6b6b6;
+$gray-98: #fafafa;
 $pale-taupe: #b89978;
 $blood: #a81313;
 $lust-red: #e51b23;
@@ -104,3 +105,17 @@ $accordion_border: $bright-gray;
 // Language Switcher
 $lang_switch: $black-two;
 $lang_switch_active: $black;
+
+// Header secondary: ie: top header.
+$header_secondary_bg: $bright-gray;
+$header_secondary_bg_upto_desk: $bright-gray;
+$header_secondary_menu_link_mobile: $black-two;
+$header_secondary_menu_link: $black-two;
+
+// Header my account nav.
+$header_my_account_h3_title: $black-two;
+
+// Back to top
+$btt_bg: $gray-98;
+$btt_text: $black;
+$btt_border: $bright-gray;
