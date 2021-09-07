@@ -57,25 +57,14 @@
             var attributes = rcsPhGetSetting('placeholderAttributes');
 
             // Replace placeholders of modal content with product entity.
-            rcsPhReplaceEntityPh(content.html(), 'product_modal', entity, settings.path.currentLanguage)
+            let finalMarkup = content.html();
+            rcsPhReplaceEntityPh(finalMarkup, 'product_modal', entity, settings.path.currentLanguage)
               .forEach(function eachReplacement(r) {
                 const fieldPh = r[0];
                 const entityFieldValue = r[1];
-
-                $(`:contains('${fieldPh}')`, content)
-                  .each(function eachEntityPhReplace() {
-                    content.html(
-                      content.html().replace(fieldPh, entityFieldValue)
-                    );
-                  });
-
-                for (var attribute of attributes) {
-                  $(`[${ attribute } *= '${ fieldPh }']`, content)
-                    .each(function eachEntityPhAttributeReplace() {
-                      $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
-                    });
-                }
+                finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
               });
+            content.html(finalMarkup);
 
             // Open modal dailog.
             Drupal.dialog(content, {

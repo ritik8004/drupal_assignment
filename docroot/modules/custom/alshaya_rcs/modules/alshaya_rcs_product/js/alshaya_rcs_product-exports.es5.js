@@ -52,19 +52,21 @@ function getProductRecommendation(products, sectionTitle) {
   const productTeaser = jQuery('.rcs-templates--product-teaser').html();
 
   // Replace tokens and add teaser to the container.
+  let finalMarkup = '';
   products.forEach((product, index) => {
     related.find('.owl-carousel').append('<div id="row' + index + '" class="views-row"/>');
     related.find('#row' + index).append(productTeaser);
     const attributes = rcsPhGetSetting('placeholderAttributes');
-    rcsPhReplaceEntityPh(related.html(), 'product_teaser', product, drupalSettings.path.currentLanguage)
+    finalMarkup = related.html();
+    rcsPhReplaceEntityPh(finalMarkup, 'product_teaser', product, drupalSettings.path.currentLanguage)
       .forEach(function eachReplacement(r) {
         const fieldPh = r[0];
         const entityFieldValue = r[1];
-        related.html(rcsReplaceAll(related.html(), fieldPh, entityFieldValue));
+        finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
       });
   });
 
-  return related.html();
+  return finalMarkup;
 }
 
 exports.render = function render(
