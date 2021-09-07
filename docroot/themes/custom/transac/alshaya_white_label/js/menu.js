@@ -402,7 +402,7 @@
     // If super category block exist on the page, we need to prepend
     // super category label before pushing data to dataLayer.
     var superCategoryLabel = $('.block-alshaya-super-category').find('.menu--one__link.active').data('super-category-label');
-    navigationData.eventLabel = superCategoryLabel + '> ' + navigationData.eventLabel;
+    navigationData.eventLabel = superCategoryLabel + ' > ' + navigationData.eventLabel;
     dataLayer.push(navigationData);
   }
 
