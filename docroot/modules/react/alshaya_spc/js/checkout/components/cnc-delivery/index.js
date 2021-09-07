@@ -141,13 +141,16 @@ class ClicknCollectDeiveryInfo extends React.Component {
 
     let collectorName;
     let collectorMobile;
+    let collectionPoint;
 
     if (collectionPointsEnabled()) {
       ({
         cart: {
           cart: {
             shipping: {
-              collector_name: collectorName, collector_mobile: collectorMobile,
+              collector_name: collectorName,
+              collector_mobile: collectorMobile,
+              collection_point: collectionPoint,
             },
           },
         },
@@ -179,7 +182,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
               <div className="spc-delivery-store-name-wrapper">
                 <ConditionalView condition={collectionPointsEnabled()}>
                   <span className={`${isCollectionPoint(selectedStore) ? 'collection-point' : 'store'}-icon`} />
-                  <span className="pickup-point-title">{getPickUpPointTitle(selectedStore)}</span>
+                  <span className="pickup-point-title">{collectionPoint || getPickUpPointTitle(selectedStore)}</span>
                 </ConditionalView>
                 <div className="store-name">{name}</div>
               </div>
