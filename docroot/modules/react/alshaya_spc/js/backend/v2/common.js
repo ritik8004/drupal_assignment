@@ -545,6 +545,7 @@ const formatCart = (cartData) => {
       data.shipping.collector_name = extensionAttributes.collector_name;
       data.shipping.collector_email = extensionAttributes.collector_email;
       data.shipping.collector_mobile = extensionAttributes.collector_mobile;
+      data.shipping.collection_point = extensionAttributes.collection_point;
     }
 
     delete data.shipping.extension_attributes;
