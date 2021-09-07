@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @pbkwuat @westelmaeuat @westelmsauat @westelmkwuat @flsauat @mcaeuat @bbwsauat @mcsauat @tbskwuat @pbaeuat @pbsauat @hmaeuat @mckwuat @bbwaeuat @vssauat @vsaeuat @bbwkwuat @auth @hmkwuat @hmsauat @flkwuat @flaeuat
+@javascript @auth @checkoutPayment @homeDelivery @aeoaeuat @aeokwuat @aeosauat @pbkwuat @westelmaeuat @westelmsauat @westelmkwuat @flsauat @mcaeuat @bbwsauat @mcsauat @tbskwuat @pbaeuat @pbsauat @hmaeuat @mckwuat @bbwaeuat @vssauat @vsaeuat @bbwkwuat @auth @hmkwuat @hmsauat @flkwuat @flaeuat
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Authenticated user
 
   Background:
@@ -111,10 +111,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait for the page to load
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
@@ -180,3 +176,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I wait 10 seconds
+    And I wait for the page to load
+    And I should save the order details in the file

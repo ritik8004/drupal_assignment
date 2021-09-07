@@ -2830,4 +2830,27 @@ JS;
     $this->getSession()->executeScript('jQuery(\'input[name="' . $name . '"]\').val("' . $random_string . '")');
   }
 
+  /**
+   * @Then /^I should save the order details in the file$/
+   */
+  public function iShouldSaveTheOrderDetailsInTheFile() {
+    $session = $this->getSession();
+    $email_id = $session->evaluateScript('return $(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(0).text()');
+    $order_id = $session->evaluateScript('return $(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(1).text()');
+    $payment_method = $session->evaluateScript('return $(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(3).text()');
+    $order_detail = [
+      'email' => $email_id,
+      'order_id' => $order_id,
+      'order_date' => date('Y-m-d'),
+      'payment_method' => $payment_method,
+    ];
+    $filename = 'order_details.json';
+    $orders = [];
+    if (file_exists($filename)) {
+      $orders = (array) json_decode(file_get_contents($filename));
+    }
+    array_push($orders, $order_detail);
+    file_put_contents($filename, json_encode($orders, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+  }
+
 }
