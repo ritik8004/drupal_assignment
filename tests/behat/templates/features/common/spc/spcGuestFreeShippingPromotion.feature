@@ -40,6 +40,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
@@ -82,6 +83,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     And I wait 10 seconds
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 50 seconds
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
@@ -123,6 +125,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     And I wait 10 seconds
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 50 seconds
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
