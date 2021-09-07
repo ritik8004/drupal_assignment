@@ -312,3 +312,49 @@ function alshaya_vs_transac_alshaya_get_currency_code_alter(&$currency) {
 function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
   $variables['sku']['subtitle'] = $variables['sku_entity']->get('attr_product_collection')->getString();
 }
+
+/**
+ * Implements hook_alshaya_performance_preload_alter().
+ */
+function alshaya_vs_transac_alshaya_performance_preload_alter(array &$preload) {
+  $themeHandler = \Drupal::service('theme_handler');
+  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
+  $fonts_directory_path = '/' . $themePath . '/fonts';
+
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/alshaya-icons.woff?myjxot',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/BentonSans-Book.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/DroidArabicKufi.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/BentonSans-Bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/DroidArabicKufi-Bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/GESSTwoLight.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+}
