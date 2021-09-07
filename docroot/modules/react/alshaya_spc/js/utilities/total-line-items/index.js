@@ -72,7 +72,6 @@ class TotalLineItems extends React.Component {
   render() {
     const { totals, isCartPage } = this.props;
     const { cartPromo, freeShipping } = this.state;
-    // Check if Advantage card applied.
     const discountTooltip = this.discountToolTipContent(cartPromo);
     // Using a separate variable(shippingAmount) to update the value
     // not using the variable in props(totals) as it will
