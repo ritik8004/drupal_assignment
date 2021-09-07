@@ -130,10 +130,14 @@ class AlshayaBazaarVoiceApiHelper {
     ];
     $query = array_merge($query, $extra_params);
 
-    return [
-      'url' => $config->get('api_base_url') . '/' . $endpoint,
-      'query' => $query,
-    ];
+    if (!empty($config->get('api_base_url')) && !empty($query['passkey'])) {
+      return [
+        'url' => $config->get('api_base_url') . '/' . $endpoint,
+        'query' => $query,
+      ];
+    }
+
+    return NULL;
   }
 
 }
