@@ -127,6 +127,8 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
       'gtm-dimension3',
       'gtm-category',
       'data-product-type',
+      'data-cleaned-sku',
+      'data-drupal-form-fields',
     ],
   );
 
@@ -670,4 +672,11 @@ function alshaya_rcs_product_rcs_graphql_query_fields() {
   ];
 
   return $query_fields;
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_rcs_sku_base_form(&$variables) {
+  $variables['#attached']['library'][] = 'alshaya_spc/add_to_cart';
 }

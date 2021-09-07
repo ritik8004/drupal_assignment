@@ -1,11 +1,3 @@
-add_to_cart:
-  js:
-    js/alshaya_rcs_add_to_cart.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupalSettings
-    - alshaya_acm_cart_notification/cart_notification_js
-
 utility:
   js:
     js/alshaya_rcs_utility.js: {}

@@ -45,15 +45,16 @@
 
             var cart_data = Drupal.alshayaSpc.getCartData();
             var cart_id = (cart_data) ? cart_data.cart_id : null;
+            var storedProductData = window.commerceBackend.getProductData(page_main_sku, productInfoKey);
 
             // We pass configurable options if product is not available in cart
             // and of configurable variant.
             var options = new Array();
             if (is_configurable) {
               currentSelectedVariant = $(form).find('.selected-parent-sku').val();
-              Object.keys(settings.configurableCombinations[page_main_sku].configurables).forEach(function(key) {
+              Object.keys(storedProductData.configurables).forEach(function(key) {
                 var option = {
-                  'option_id': settings.configurableCombinations[page_main_sku].configurables[key].attribute_id,
+                  'option_id': storedProductData.configurables[key].attribute_id,
                   'option_value': $(form).find('[data-configurable-code="' + key + '"]').val()
                 };
 
@@ -82,21 +83,21 @@
               variant: variant_sku,
             };
 
-            productData['product_name'] = settings[productInfoKey][page_main_sku].cart_title;
-            productData['image'] = settings[productInfoKey][page_main_sku].cart_image;
+            productData['product_name'] = storedProductData.cart_title;
+            productData['image'] = storedProductData.cart_image;
 
             // Configurable - normal as well as re-structured.
             if (is_configurable) {
-              var productVariantSku = settings[productInfoKey][page_main_sku].variants[variant_sku];
+              var productVariantSku = storedProductData.variants[variant_sku];
               if (productVariantSku !== undefined) {
                 productData['product_name'] = productVariantSku.cart_title;
                 productData['image'] = productVariantSku.cart_image;
               }
             }
             // Simple grouped (re-structured).
-            else if (settings[productInfoKey][page_main_sku]['group'] !== undefined) {
-              productData['product_name'] = settings[productInfoKey][page_main_sku]['group'][currentSelectedVariant].cart_title;
-              productData['image'] = settings[productInfoKey][page_main_sku]['group'][currentSelectedVariant].cart_image;
+            else if (storedProductData['group'] !== undefined) {
+              productData['product_name'] = storedProductData['group'][currentSelectedVariant].cart_title;
+              productData['image'] = storedProductData['group'][currentSelectedVariant].cart_image;
             }
 
             // Post to ajax for cart update/create.
@@ -162,71 +163,7 @@
                   });
                   $(form).trigger(cartNotification);
 
-                  var productInfo = drupalSettings[productInfoKey][productData.parentSku];
-                  var options = [];
-                  var productUrl = productInfo.url;
-                  var price = productInfo.priceRaw;
-                  var promotions = productInfo.promotionsRaw;
-                  var freeGiftPromotion = productInfo.freeGiftPromotion;
-                  var productDataSKU = productData.sku;
-                  var parentSKU = productData.sku;
-                  var maxSaleQty = productInfo.maxSaleQty;
-                  var maxSaleQtyParent = productInfo.max_sale_qty_parent;
-                  var gtmAttributes = productInfo.gtm_attributes;
-                  var isNonRefundable = productInfo.is_non_refundable;
-
-                  if (productInfo.type === 'configurable') {
-                    var productVariantInfo = productInfo['variants'][productData.variant];
-                    productDataSKU = productData.variant;
-                    price = productVariantInfo.priceRaw;
-                    parentSKU = productVariantInfo.parent_sku;
-                    promotions = productVariantInfo.promotionsRaw;
-                    freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
-                    options = productVariantInfo.configurableOptions;
-                    maxSaleQty = productVariantInfo.maxSaleQty;
-                    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
-
-                    if (productVariantInfo.url !== undefined) {
-                      var langcode = $('html').attr('lang');
-                      productUrl = productVariantInfo.url[langcode];
-                    }
-                    gtmAttributes.price = productVariantInfo.gtm_price || price;
-                  }
-                  else if (productInfo.group !== undefined) {
-                    var productVariantInfo = productInfo.group[productData.sku];
-                    price = productVariantInfo.priceRaw;
-                    parentSKU = productVariantInfo.parent_sku;
-                    promotions = productVariantInfo.promotionsRaw;
-                    freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
-                    if (productVariantInfo.grouping_options !== undefined
-                      && productVariantInfo.grouping_options.length > 0) {
-                      options = productVariantInfo.grouping_options;
-                    }
-                    maxSaleQty = productVariantInfo.maxSaleQty;
-                    maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
-
-                    var langcode = $('html').attr('lang');
-                    productUrl = productVariantInfo.url[langcode];
-                    gtmAttributes.price = productVariantInfo.gtm_price || price;
-                  }
-
-                  // Store proper variant sku in gtm data now.
-                  gtmAttributes.variant = productDataSKU;
-                  Drupal.alshayaSpc.storeProductData({
-                    sku: productDataSKU,
-                    parentSKU: parentSKU,
-                    title: productData.product_name,
-                    url: productUrl,
-                    image: productData.image,
-                    price: price,
-                    options: options,
-                    promotions: promotions,
-                    freeGiftPromotion: freeGiftPromotion,
-                    maxSaleQty: maxSaleQty,
-                    maxSaleQtyParent: maxSaleQtyParent,
-                    gtmAttributes: gtmAttributes,
-                    isNonRefundable: isNonRefundable,
-                  });
+                  window.commerceBackend.storeProductDataOnAddToCart(productInfoKey, productData);
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {
