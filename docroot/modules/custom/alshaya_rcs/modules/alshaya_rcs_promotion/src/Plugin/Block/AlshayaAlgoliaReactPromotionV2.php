@@ -86,7 +86,13 @@ class AlshayaAlgoliaReactPromotionV2 extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
     // Add renderer library of promotion to the block.
-    array_push($common_config['otherRequiredValues']['libraries'], 'alshaya_rcs_promotion/renderer');
+    array_push(
+      $common_config['otherRequiredValues']['libraries'],
+      'alshaya_rcs_promotion/renderer',
+      'alshaya_algolia_react/plpv2',
+    );
+    // Remove the v1 PLP library.
+    $libraries = array_diff($common_config['otherRequiredValues']['libraries'], ['alshaya_algolia_react/plp']);
     return [
       'inside' => [
         '#type' => 'html_tag',
@@ -95,7 +101,7 @@ class AlshayaAlgoliaReactPromotionV2 extends AlshayaAlgoliaReactBlockBase {
           'id' => 'alshaya-algolia-plp',
         ],
         '#attached' => [
-          'library' => $common_config['otherRequiredValues']['libraries'],
+          'library' => $libraries,
           'drupalSettings' => [
             'algoliaSearch' => $algoliaSearch,
             'reactTeaserView' => $reactTeaserView,
