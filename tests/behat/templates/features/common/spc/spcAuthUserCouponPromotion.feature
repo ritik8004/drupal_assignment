@@ -54,6 +54,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
+    And I should save the order details in the file
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
@@ -107,6 +108,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
+    And I should save the order details in the file
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
@@ -158,6 +160,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
