@@ -22,6 +22,8 @@ $bright-blue: #2182d5;
 // Global elements.
 $primary_text: $outer-space;
 $primary_link: $eerie-black;
+$content_pagetitle: $outer-space;
+$content_pagetitle_border: $gray;
 $primary_link-hover: $eerie-black;
 $primary_link-active: $eerie-black;
 $primary_border: $bright-gray;
@@ -71,12 +73,17 @@ $highlights_subtitle_hover: $outer-space;
 // Dropdown.
 $primary_dropdown_arrow_bg: transparent;
 $primary_dropdown_text: $black-two;
-$primary_dropdown_border: $bright-gray;
+$primary_dropdown_border: $outer-space;
 $primary_dropdown_option_hover: $bright-gray;
-$primary_dropdown_option_border: $white;
+$primary_dropdown_option_border: $bright-gray;
 $primary_dropdown_option_disbled: $bright-gray;
 $primary_dropdown_arrow_icon: $outer-space;
-$primary_dropdown_option_border: $bright-gray;
+
+//Buttons.
+$primary_btn_bg: $outer-space;
+$primary_brand_button: $outer-space;
+$primary_brand_button_text: $white;
+$primary_brand_button: $outer-space;
 
 // Footer
 $footer_border_top: $bright-gray;
@@ -86,6 +93,15 @@ $footer_link_mobile: $eerie-black;
 $footer_link: $eerie-black;
 $footer_link_hover: $eerie-black;
 $social-icons-bg: $bright-gray;
+
+// Titles.
+$page_title: $outer-space;
+$block_title: $outer-space;
+$title: $outer-space;
+$sub_title: $outer-space;
+$label_black: $black-two;
+$label_dark: $black;
+$user_sidebar_block_title: $outer-space;
 
 // Copyright
 $copyright_footer_bg: $bright-gray;
@@ -119,3 +135,6 @@ $header_my_account_h3_title: $black-two;
 $btt_bg: $gray-98;
 $btt_text: $black;
 $btt_border: $bright-gray;
+
+// Contact Page
+$webform_contact_legend: $outer-space;
