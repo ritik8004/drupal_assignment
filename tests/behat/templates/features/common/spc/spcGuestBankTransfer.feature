@@ -36,7 +36,16 @@ Feature: SPC Checkout Home Delivery using Bank Transfer method for Guest user
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-banktransfer" element on page
     And I wait 10 seconds
     Then the "payment-method-banktransfer" checkbox should be checked
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait 50 seconds
+    And I wait for AJAX to finish
+    And I wait for the page to load
+    Then I should be on "/checkout/confirmation" page
+    And I wait for the page to load
+    And I should save the order details in the file
+    Then I should see "{order_confirm_text}"
+    Then I should see "{anon_email}"
+    Then I should see "{order_detail}"
 
   @hd @language @desktop
   Scenario: As a Guest, I should be able to checkout using Bank Transfer in second language
@@ -69,7 +78,15 @@ Feature: SPC Checkout Home Delivery using Bank Transfer method for Guest user
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-banktransfer" element on page
     And I wait 10 seconds
     Then the "payment-method-banktransfer" checkbox should be checked
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait 50 seconds
+    And I wait for AJAX to finish
+    And I wait for the page to load
+    Then I should be on "/{language_short}/checkout/" page
+    And I wait for the page to load
+    And I should save the order details in the file
+    Then I should see "{language_order_confirm_text}"
+    Then I should see "{language_order_detail}"
 
 
   @hd @language @mobile
@@ -104,4 +121,13 @@ Feature: SPC Checkout Home Delivery using Bank Transfer method for Guest user
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-banktransfer" element on page
     And I wait 10 seconds
     Then the "payment-method-banktransfer" checkbox should be checked
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait 50 seconds
+    And I wait for AJAX to finish
+    And I wait for the page to load
+    Then I should be on "/{language_short}/checkout/" page
+    And I wait for the page to load
+    And I should save the order details in the file
+    Then I should see "{language_order_confirm_text}"
+    Then I should see "{language_order_detail}"
+

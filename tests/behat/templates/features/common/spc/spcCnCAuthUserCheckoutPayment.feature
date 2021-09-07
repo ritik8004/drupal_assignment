@@ -1,4 +1,4 @@
-@javascript @checkoutPayment @auth @clickCollect @hmaeuat @westelmsauat @westelmkwuat @flaeuat @mcaeuat @bbwsauat @mcsauat @hmkwuat @hmsauat @tbskwuat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
+@javascript @checkoutPayment @auth @clickCollect @aeoaeuat @aeokwuat @aeosauat @hmaeuat @westelmsauat @westelmkwuat @flaeuat @mcaeuat @bbwsauat @mcsauat @hmkwuat @hmsauat @tbskwuat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
 Feature: SPC Checkout using Click & Collect store for Authenticated user using Checkout (2D) Cards
 
   Background:
@@ -48,6 +48,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 90 seconds
     Then I should be on "/checkout/" page
+    And I should save the order details in the file
 
   @cc @cnc @mobile @checkout_com
   Scenario: As an authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -90,6 +91,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 90 seconds
     And I wait for the page to load
     Then I should be on "/checkout/" page
+    And I should save the order details in the file
 
   @cc @cnc @language @desktop @checkout_com
   Scenario: As an authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -135,6 +137,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 90 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I should save the order details in the file
 
   @cc @cnc @language @mobile @checkout_com
   Scenario: As an authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -180,3 +183,4 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 90 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I should save the order details in the file
