@@ -132,9 +132,9 @@ class ClicknCollectContextProvider extends React.Component {
   updateCollectorInfo = (collectorInfo) => {
     this.setState({
       collectorInfo: {
-        fullname: makeFullName(collectorInfo.collector_firstname || '', collectorInfo.collector_lastname || ''),
+        fullname: collectorInfo.collector_name,
         email: collectorInfo.collector_email || '',
-        telephone: cleanMobileNumber(collectorInfo.collector_telephone) || '',
+        telephone: cleanMobileNumber(collectorInfo.collector_mobile) || '',
       },
     });
   }

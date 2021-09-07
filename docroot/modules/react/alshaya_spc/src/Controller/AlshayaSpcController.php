@@ -639,7 +639,10 @@ class AlshayaSpcController extends ControllerBase {
       $delivery_method_description = $this->t('Same day');
     }
     // Get formatted customer phone number.
-    $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    $number = $order['shipping']['extension_attributes']['collector_mobile']
+      ? $order['shipping']['extension_attributes']['collector_mobile']
+      : $order['shipping']['address']['telephone'];
+    $phone_number = $this->orderHelper->getFormattedMobileNumber($number);
 
     // Order Totals.
     $totals = [
@@ -676,7 +679,7 @@ class AlshayaSpcController extends ControllerBase {
         'customer_service_text' => $checkout_settings->get('checkout_customer_service'),
       ],
       'order_details' => [
-        'customer_email' => $order['email'],
+        'customer_email' => $order['shipping']['extension_attributes']['collector_email'] ?? $order['email'],
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
@@ -772,9 +775,15 @@ class AlshayaSpcController extends ControllerBase {
 
       switch ($key) {
         case 'fullname':
-        case 'pudo_fullname':
           // If full name is not empty.
           if (!empty($value) && !empty(trim($value['firstname'])) && !empty(trim($value['lastname']))) {
+            $status[$key] = TRUE;
+          }
+          break;
+
+        case 'pudo_fullname':
+          // If full name is not empty.
+          if (!empty($value)) {
             $status[$key] = TRUE;
           }
           break;

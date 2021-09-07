@@ -139,6 +139,21 @@ class ClicknCollectDeiveryInfo extends React.Component {
       },
     } = this.props;
 
+    let collectorName;
+    let collectorMobile;
+
+    if (collectionPointsEnabled()) {
+      ({
+        cart: {
+          cart: {
+            shipping: {
+              collector_name: collectorName, collector_mobile: collectorMobile,
+            },
+          },
+        },
+      } = this.props);
+    }
+
     const { showSelectedStore } = this.state;
 
     const hoursArrayList = [];
@@ -190,9 +205,16 @@ class ClicknCollectDeiveryInfo extends React.Component {
             <div className="spc-delivery-contact-info">
               <div className="contact-info-label">{Drupal.t('Collection by')}</div>
               <div className="contact-name">
-                { makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
+                { collectorName !== undefined
+                  ? collectorName
+                  : makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
               </div>
-              <div className="contact-telephone">{`+${drupalSettings.country_mobile_code} ${cleanMobileNumber(shippingAddress.telephone)}`}</div>
+              <div className="contact-telephone">
+                {`+${drupalSettings.country_mobile_code} `}
+                { collectorMobile !== undefined
+                  ? cleanMobileNumber(collectorMobile)
+                  : cleanMobileNumber(shippingAddress.telephone)}
+              </div>
               <div
                 className="spc-change-address-link"
                 onClick={() => this.openModal(true, triggerOpenModal)}
