@@ -120,6 +120,7 @@ export const placeOrder = (paymentMethod) => {
             return;
           }
 
+          // Dispatch an event after order is placed before redirecting to confirmation page.
           dispatchCustomEvent('orderPlaced', true);
           // This here possibly means that we are redirecting to confirmation page.
           window.location = Drupal.url(response.data.redirectUrl);
