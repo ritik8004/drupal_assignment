@@ -108,11 +108,9 @@
 }
 
 #alshaya-newsletter-subscribe {
-  #edit-email {
-    background-color: $newsletter_input_bg;
-    border: 0;
+  input[type="email"] {
     padding-#{$left}: 0.625rem;
-    height: 2.5rem;
+    border: 0;
   }
 }
 
@@ -137,6 +135,8 @@
     &-email {
       font-size: 0.875rem;
       margin-top: 0.5rem;
+      background-color: $newsletter_input_bg;
+      height: 2.5rem;
     }
 
     &-item {
