@@ -11,7 +11,7 @@ import Loading from '../../../utilities/loading';
 import {
   getCustomerDetails,
 } from '../../../../../alshaya_aura_react/js/utilities/header_helper';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 import { isDeliveryTypeSameAsInCart } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { processCheckoutCart } from '../utilities/checkout_helper';
@@ -30,9 +30,15 @@ class AuraCheckoutRewards extends React.Component {
 
   componentDidMount() {
     document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
     // Logged in user.
     if (getUserDetails().id) {
+      // Remove localstorage values if present for a logged in user.
+      if (localStorageValues) {
+        removeStorageInfo(getAuraLocalStorageKey());
+      }
+
       document.addEventListener('customerDetailsFetched', this.updateStates, false);
       const { loyaltyStatus, tier } = this.state;
 
@@ -49,8 +55,6 @@ class AuraCheckoutRewards extends React.Component {
     }
 
     // Guest user.
-    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
-
     if (localStorageValues === null) {
       this.setState({
         wait: false,
