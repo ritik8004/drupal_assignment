@@ -165,11 +165,10 @@ export default class CartPromoBlock extends React.Component {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
-          if ((Advantagecard.isAdvantagecardEnabled()
-            && Advantagecard.isAdvantageCardApplied(result.totals.items))
-            || (Advantagecard.isAdvantagecardEnabled()
-              && promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
-              && result.response_message.status === 'error_coupon')) {
+          if (Advantagecard.isAdvantagecardEnabled()
+            && (Advantagecard.isAdvantageCardApplied(result.totals.items)
+            || (promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
+              && result.response_message.status === 'error_coupon'))) {
             // For Advantage card set promoValue to Advantage_Card_uid.
             promoValue = `Advantage_Card_${drupalSettings.userDetails.userID}`;
           }

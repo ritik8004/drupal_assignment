@@ -44,7 +44,7 @@ class TotalLineItems extends React.Component {
   /**
    * Get the content of discount tooltip.
    */
-  discountToolTipContent = (cartPromo, advantageCardApplied) => {
+  discountToolTipContent = (cartPromo) => {
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
     if (cartPromo !== null
       && cartPromo !== undefined
@@ -59,9 +59,12 @@ class TotalLineItems extends React.Component {
         }
       });
     }
-    // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
-    if (Advantagecard.isAdvantagecardEnabled() && advantageCardApplied) {
-      promoData += `<div class="promotion-label"><strong>${Drupal.t('Advantage Card Discount')}</strong></div>`;
+    if (Advantagecard.isAdvantagecardEnabled()) {
+      const { totals } = this.props;
+      // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
+      if (Advantagecard.isAdvantageCardApplied(totals.items)) {
+        promoData += `<div class="promotion-label"><strong>${Drupal.t('Advantage Card Discount')}</strong></div>`;
+      }
     }
     return promoData;
   };
@@ -70,10 +73,7 @@ class TotalLineItems extends React.Component {
     const { totals, isCartPage } = this.props;
     const { cartPromo, freeShipping } = this.state;
     // Check if Advantage card applied.
-    const discountTooltip = this.discountToolTipContent(
-      cartPromo,
-      Advantagecard.isAdvantageCardApplied(totals.items),
-    );
+    const discountTooltip = this.discountToolTipContent(cartPromo);
     // Using a separate variable(shippingAmount) to update the value
     // not using the variable in props(totals) as it will
     // update the global value.
