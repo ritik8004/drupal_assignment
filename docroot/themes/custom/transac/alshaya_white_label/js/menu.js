@@ -3,7 +3,7 @@
  * Main Menu.
  */
 
-/* global debounce */
+/* global debounce, dataLayer */
 
 (function ($, Drupal) {
   'use strict';
@@ -384,7 +384,12 @@
    * Push the data to the data layer.
    *
    * @param {object} navigationData
+   *  Object with the dataLayer variables.
    * @param {boolean} topNavigation
+   *  Check for the top or super category navigation.
+   *
+   * @return {boolean}
+   *  Return true/false if data push is successfull.
    */
   function pushNavigationData(navigationData, topNavigation) {
     // Early return if the dataLayer isn't defined.
@@ -396,7 +401,7 @@
     // navigation item or super category isn't active on the brand site.
     if (topNavigation || $('.block-alshaya-super-category').length <= 0) {
       dataLayer.push(navigationData);
-      return;
+      return true;
     }
 
     // If super category block exist on the page, we need to prepend
@@ -404,6 +409,7 @@
     var superCategoryLabel = $('.block-alshaya-super-category').find('.menu--one__link.active').data('super-category-label');
     navigationData.eventLabel = superCategoryLabel + ' > ' + navigationData.eventLabel;
     dataLayer.push(navigationData);
+    return true;
   }
 
 })(jQuery, Drupal);
