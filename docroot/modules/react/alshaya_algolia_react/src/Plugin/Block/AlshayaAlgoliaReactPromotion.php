@@ -133,8 +133,7 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
 
     return [
       'inside' => [
-        '#type' => 'html_tag',
-        '#tag' => 'div',
+        '#type' => 'container',
         '#attributes' => [
           'id' => 'alshaya-algolia-plp',
           'data-hierarchy' => $algoliaSearch['hierarchy'] ?? '',

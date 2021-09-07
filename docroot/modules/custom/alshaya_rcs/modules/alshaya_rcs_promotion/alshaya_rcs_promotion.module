@@ -16,7 +16,6 @@ function alshaya_rcs_promotion_theme($existing, $type, $theme, $path) {
   ];
 }
 
-
 /**
  * Implements hook_theme_suggestions_page_alter().
  */

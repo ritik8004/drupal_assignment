@@ -82,7 +82,6 @@ exports.render = function render(
       if (drupalSettings.rcsPage.type === 'promotion' &&
         typeof globalThis.renderRcsPromotion !== 'undefined') {
         html += globalThis.renderRcsPromotion.render(
-          settings,
           entity,
           innerHtml
         );

@@ -45,7 +45,7 @@ exports.getEntity = async function getEntity(langcode) {
       // Prepare request parameters.
       request.uri += "graphql";
       request.method = "POST",
-        request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Content-Type", "application/json"]);
 
       const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
       request.data = JSON.stringify({
