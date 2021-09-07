@@ -59,6 +59,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
@@ -116,6 +117,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
@@ -170,6 +172,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"

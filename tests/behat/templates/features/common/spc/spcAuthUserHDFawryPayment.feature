@@ -50,6 +50,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
+    And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I should see "Reference number:"
     Then I should see "Complete payment by:"
@@ -104,6 +105,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -156,6 +158,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds

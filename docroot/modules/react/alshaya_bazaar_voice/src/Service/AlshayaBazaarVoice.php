@@ -839,6 +839,11 @@ class AlshayaBazaarVoice {
       'Limit_Reviews' => $pdp_reviews_seo_limit,
     ];
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
+
+    if (empty($request)) {
+      return;
+    }
+
     $url = $request['url'];
     $request_options['query'] = $request['query'];
 
