@@ -14,8 +14,7 @@ aura_header_library:
   js:
     dist/header.bundle.js: {}
   dependencies:
-    - core/drupal
-    - core/jquery
+    - alshaya_react/react
 
 alshaya_aura_pdp:
   js:
