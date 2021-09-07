@@ -46,7 +46,7 @@ exports.getEntity = async function getEntity(langcode) {
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
-
+      // @todo Remove the URL match once we get proper URL of promotion.
       const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
       request.data = JSON.stringify({
         query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") {
