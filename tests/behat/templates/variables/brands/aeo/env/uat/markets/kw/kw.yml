@@ -1,0 +1,7 @@
+variables:
+  spc_product_listing_page: '/shop-mens/'
+  spc_basket_page: '/shop-mens/'
+  product_listing_page_url: "/shop-mens/"
+  np_plp_page: '/shop-mens/'
+  np_plp_product_page: '/buy-ae-logo-pique-tipped-striped-polo-shirt-white.html/'
+  np_promotion: 0
