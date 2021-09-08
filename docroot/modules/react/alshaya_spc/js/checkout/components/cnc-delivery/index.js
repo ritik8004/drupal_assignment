@@ -19,6 +19,7 @@ import {
   getCncDeliveryTimePrefix,
 } from '../../../utilities/cnc_util';
 import ConditionalView from '../../../common/components/conditional-view';
+import PriceElement from '../../../utilities/special-price/PriceElement';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;
@@ -142,6 +143,10 @@ class ClicknCollectDeiveryInfo extends React.Component {
     let collectorName;
     let collectorMobile;
     let collectionPoint;
+    let pudoAvailable;
+    let pickupDate;
+    let priceAmount;
+    const { selectedStore } = this.context;
 
     if (collectionPointsEnabled()) {
       ({
@@ -151,10 +156,14 @@ class ClicknCollectDeiveryInfo extends React.Component {
               collector_name: collectorName,
               collector_mobile: collectorMobile,
               collection_point: collectionPoint,
+              pudo_available: pudoAvailable,
+              pickup_date: pickupDate,
+              price_amount: priceAmount,
             },
           },
         },
       } = this.props);
+      pudoAvailable = pudoAvailable || isCollectionPoint(selectedStore);
     }
 
     const { showSelectedStore } = this.state;
@@ -173,7 +182,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
       ));
     }
 
-    const { selectedStore } = this.context;
     return (
       <WithModal modalStatusKey="cncDelivery">
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
@@ -181,7 +189,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
             <div className="spc-delivery-store-info">
               <div className="spc-delivery-store-name-wrapper">
                 <ConditionalView condition={collectionPointsEnabled()}>
-                  <span className={`${isCollectionPoint(selectedStore) ? 'collection-point' : 'store'}-icon`} />
+                  <span className={`${pudoAvailable ? 'collection-point' : 'store'}-icon`} />
                   <span className="pickup-point-title">{collectionPoint || getPickUpPointTitle(selectedStore)}</span>
                 </ConditionalView>
                 <div className="store-name">{name}</div>
@@ -195,7 +203,9 @@ class ClicknCollectDeiveryInfo extends React.Component {
                 </div>
                 <div className="store-delivery-time">
                   <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
-                  <span className="delivery--time--value">{deliveryTime}</span>
+                  <span className="delivery--time--value">{pickupDate || deliveryTime}</span>
+                  {priceAmount
+                    && <PriceElement amount={priceAmount} />}
                 </div>
               </ConditionalView>
               <div
