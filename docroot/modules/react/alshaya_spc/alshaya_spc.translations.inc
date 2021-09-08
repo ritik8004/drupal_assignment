@@ -350,6 +350,19 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to Advantage card.
+  $strings['v7'] = [
+    'Please enter valid Advantage card code.' => [
+      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+    ],
+    'Advantage Card Discount' => [
+      'ar' => 'خصم بطاقة الشايع',
+    ],
+    'The products in your shopping basket are not eligible for the Advantage card discount.' => [
+      'ar' => 'المنتجات التي في سلة التسوق الخاصة بك غير مؤهلة للحصول على خصم بطاقة الشايع',
+    ],
+  ];
+
   return $strings;
 }
 
