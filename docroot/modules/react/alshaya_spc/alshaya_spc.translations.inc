@@ -358,6 +358,43 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to collection point feature.
+  $strings['v8'] = [
+    'Collection Point' => [
+      'ar' => 'نقطة الاستلام',
+    ],
+    'select your preferred collection point' => [
+      'ar' => 'اختر نقطة الاستلام المفضلة',
+    ],
+    'find your collection point' => [
+      'ar' => 'اكتشف أقرب نقطة استلام',
+    ],
+    'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
+      'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
+    ],
+    'The same person placing the order will not collect the order.' => [
+      'ar' => 'الشخص الذي قام بوضع الطلب لن يقوم باستلام الطلب بنفسه',
+    ],
+    'Selected collection point' => [
+      'ar' => 'نقطة الاستلام المختارة.',
+    ],
+    'Collectors Information' => [
+      'ar' => 'بيانات المستلمين',
+    ],
+    'Important Note:' => [
+      'ar' => 'ملاحظة مهمة:',
+    ],
+    'Collect in' => [
+      'ar' => 'الاستلام في',
+    ],
+    'Collector`s mobile number can not be same as contact number' => [
+      'ar' => 'لا يمكن أن يكون رقم هاتف المستلم نفس رقم الاتصال',
+    ],
+    'Your order will be available for pickup at the following collection point' => [
+      'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
+    ],
+  ];
+
   return $strings;
 }
 
