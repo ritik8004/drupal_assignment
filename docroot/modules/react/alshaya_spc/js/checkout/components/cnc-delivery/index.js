@@ -13,13 +13,13 @@ import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
 import getStringMessage from '../../../utilities/strings';
 import {
-  collectionPointsEnabled,
   isCollectionPoint,
   getPickUpPointTitle,
   getCncDeliveryTimePrefix,
 } from '../../../utilities/cnc_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;
@@ -168,18 +168,21 @@ class ClicknCollectDeiveryInfo extends React.Component {
 
     const { showSelectedStore } = this.state;
 
-    const hoursArrayList = [];
     let hoursArray = [];
-    if (openHoursGroup) {
-      Object.keys(openHoursGroup).forEach((data) => {
-        hoursArrayList.push(`${data}(${openHoursGroup[data]})`);
-      });
 
-      hoursArray = hoursArrayList.map((data) => (
-        <div className="store-open-hours">
-          {data}
-        </div>
-      ));
+    if (collectionPointsEnabled()) {
+      const hoursArrayList = [];
+      if (openHoursGroup) {
+        Object.keys(openHoursGroup).forEach((data) => {
+          hoursArrayList.push(`${data}(${openHoursGroup[data]})`);
+        });
+
+        hoursArray = hoursArrayList.map((data) => (
+          <div className="store-open-hours">
+            {data}
+          </div>
+        ));
+      }
     }
 
     return (
@@ -218,13 +221,11 @@ class ClicknCollectDeiveryInfo extends React.Component {
             <div className="spc-delivery-contact-info">
               <div className="contact-info-label">{Drupal.t('Collection by')}</div>
               <div className="contact-name">
-                { collectorName !== undefined
-                  ? collectorName
-                  : makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
+                { collectorName || makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
               </div>
               <div className="contact-telephone">
                 {`+${drupalSettings.country_mobile_code} `}
-                { collectorMobile !== undefined
+                { collectorMobile
                   ? cleanMobileNumber(collectorMobile)
                   : cleanMobileNumber(shippingAddress.telephone)}
               </div>

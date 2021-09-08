@@ -1,5 +1,6 @@
 import React from 'react';
 import parse from 'html-react-parser';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 const OrderSummaryItem = (props) => {
   const {
@@ -35,11 +36,11 @@ const OrderSummaryItem = (props) => {
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
           <div className="spc-store-name-wrapper">
-            {(pickUpPointIcon !== undefined)
+            {(collectionPointsEnabled() && pickUpPointIcon !== undefined)
               && (
               <span className={`${pickUpPointIcon}-icon`} />
               )}
-            {(pickUpPointTitle !== undefined)
+            {(collectionPointsEnabled() && pickUpPointTitle !== undefined)
               && (
                 <span className="pickup-point-title">{pickUpPointTitle}</span>
               )}
@@ -51,8 +52,6 @@ const OrderSummaryItem = (props) => {
             {address}
             <span className="spc-cnc-address-phone">{phone}</span>
           </span>
-          {/* We assume that if pickUpPointTitle is present in MDC API response then
-            collection point feature is enabled.  */}
           <div className="spc-store-open-hours">
             {
               Object.entries(openingHours).map(([weekdays, timings]) => (
@@ -63,7 +62,7 @@ const OrderSummaryItem = (props) => {
               ))
             }
           </div>
-          {(pickUpPointTitle !== undefined)
+          {(collectionPointsEnabled() && pickUpPointTitle !== undefined)
             && (
               <div className="spc-cnc-confirmation-govtid-msg">
                 {`${Drupal.t('Important Note')}: ${Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}`}

@@ -12,9 +12,9 @@ import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import {
-  collectionPointsEnabled,
   validateCollectorInfo,
 } from '../../../utilities/cnc_util';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;

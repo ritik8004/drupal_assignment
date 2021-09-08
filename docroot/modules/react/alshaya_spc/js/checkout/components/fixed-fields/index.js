@@ -5,7 +5,7 @@ import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
-import { collectionPointsEnabled } from '../../../utilities/cnc_util';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 const FixedFields = ({
   defaultVal,
