@@ -230,6 +230,7 @@ class StoresFinderUtility {
           $hours[$open_hours['value']] = $init_day . ' - ' . $open_hours['key'];
         }
       }
+
       $store['open_hours_group'] = array_flip($hours);
       $store['delivery_time'] = $store_node->get('field_store_sts_label')->getString();
       $store['nid'] = $store_node->id();

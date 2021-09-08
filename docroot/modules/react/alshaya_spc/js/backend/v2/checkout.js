@@ -47,6 +47,7 @@ import {
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -1720,6 +1721,11 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
       extension_attributes: {
         click_and_collect_type: hasValue(store.rnc_available) ? 'reserve_and_collect' : 'ship_to_store',
         store_code: store.code,
+        ...(collectionPointsEnabled() && {
+          collector_name: shippingData.collector_name,
+          collector_email: shippingData.collector_email,
+          collector_mobile: shippingData.collector_mobile,
+        }),
       },
     },
   };
