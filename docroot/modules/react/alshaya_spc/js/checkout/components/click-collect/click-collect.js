@@ -59,26 +59,6 @@ class ClickCollect extends React.Component {
     };
   }
 
-  /**
-   * Keyup handler for the search input.
-   */
-  keyUpHandler = (e) => {
-    if (e.target.value.length >= 2 && !this.autocomplete) {
-      this.autocomplete = new window.google.maps.places.Autocomplete(
-        this.searchplaceInput,
-        {
-          types: [],
-          componentRestrictions: { country: window.drupalSettings.country_code },
-        },
-      );
-
-      this.autocomplete.addListener(
-        'place_changed',
-        this.placesAutocompleteHandler,
-      );
-    }
-  };
-
   componentDidMount() {
     // For autocomplete text field.
     const { openSelectedStore } = this.state;
@@ -129,6 +109,26 @@ class ClickCollect extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('markerClick', this.mapMarkerClick);
   }
+
+  /**
+   * Keyup handler for the search input.
+   */
+  keyUpHandler = (e) => {
+    if (e.target.value.length >= 2 && !this.autocomplete) {
+      this.autocomplete = new window.google.maps.places.Autocomplete(
+        this.searchplaceInput,
+        {
+          types: [],
+          componentRestrictions: { country: window.drupalSettings.country_code },
+        },
+      );
+
+      this.autocomplete.addListener(
+        'place_changed',
+        this.placesAutocompleteHandler,
+      );
+    }
+  };
 
   mapMarkerClick = (e) => {
     const index = e.detail.markerSettings.zIndex - 1;

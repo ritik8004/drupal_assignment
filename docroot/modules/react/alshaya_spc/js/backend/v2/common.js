@@ -642,6 +642,7 @@ const getProcessedCartData = async (cartData) => {
       base_grand_total_without_surcharge: cartData.totals.base_grand_total,
       discount_amount: cartData.totals.discount_amount,
       surcharge: 0,
+      items: cartData.totals.items,
     },
     items: [],
   };

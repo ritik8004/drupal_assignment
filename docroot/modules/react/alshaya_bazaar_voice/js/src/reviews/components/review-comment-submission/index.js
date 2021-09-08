@@ -18,7 +18,7 @@ class ReviewCommentSubmission extends React.Component {
       <div className="comment-submission-details">
         <div className="comment-submission-wrapper">
           <div className="comment-user-details">
-            <span className="comment-user-nickname">{UserNickname}</span>
+            <span className="comment-user-nickname">{decodeURIComponent(UserNickname)}</span>
             <span className="comment-user-date">{getTimeAgoDate(SubmissionTime, countryCode, getLanguageCode())}</span>
           </div>
           <div className="comment-description">

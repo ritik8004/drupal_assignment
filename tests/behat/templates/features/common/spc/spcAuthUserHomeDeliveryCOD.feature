@@ -1,4 +1,4 @@
-@javascript @auth @codPayment @homeDelivery @tbskwuat @mckwuat @mcsauat @westelmkwuat
+@javascript @auth @codPayment @homeDelivery @tbskwuat @mckwuat @mcsauat @westelmkwuat @aeosauat
 Feature: SPC Checkout Home Delivery COD for Authenticated Users
 
   Background:
@@ -38,6 +38,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     Then I should be on "checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
@@ -101,6 +102,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
@@ -166,6 +168,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
@@ -205,6 +208,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     Then I should be on "checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
