@@ -37,7 +37,10 @@ class AuraProgressBar extends React.Component {
         widthFinalFill: progress,
       });
       // Show the dot.
-      document.getElementById('aura-pointer').style.visibility = 'visible';
+      const dot = document.getElementById('aura-pointer');
+      if (dot !== null) {
+        dot.style.visibility = 'visible';
+      }
     }, 1250);
   };
 
