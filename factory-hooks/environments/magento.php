@@ -437,6 +437,9 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
   ],
   'hm_test' => [
     'url' => 'https://hm-test.store.alshaya.com',

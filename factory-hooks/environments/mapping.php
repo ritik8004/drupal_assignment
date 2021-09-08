@@ -138,6 +138,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'hm_qa',
         'conductor' => 'hmqa_qa2',
       ],
+      'dev3' => [
+        'magento' => 'hm_apc',
+        'conductor' => 'hmqa_dev3',
+      ],
     ],
     'flkw' => [
       'dev' => [
