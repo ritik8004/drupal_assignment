@@ -24,7 +24,7 @@ import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
-import { collectionPointsEnabled } from '../../utilities/cnc_util';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 window.authenticatedUserCartId = 'NA';
 

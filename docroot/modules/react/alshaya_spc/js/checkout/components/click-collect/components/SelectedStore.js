@@ -5,7 +5,8 @@ import SectionTitle from '../../../../utilities/section-title';
 import CheckoutMessage from '../../../../utilities/checkout-message';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import getStringMessage from '../../../../utilities/strings';
-import { getCnCModalContactSubtitle, collectionPointsEnabled } from '../../../../utilities/cnc_util';
+import { getCnCModalContactSubtitle } from '../../../../utilities/cnc_util';
+import collectionPointsEnabled from '../../../../../../js/utilities/pudoAramaxCollection';
 
 const SelectedStore = ({ store, open, closePanel }) => {
   const [messageType, setMsgType] = useState(null);

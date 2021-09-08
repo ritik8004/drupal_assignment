@@ -2,11 +2,7 @@ import getStringMessage from './strings';
 import {
   smoothScrollToAddressField,
 } from './smoothScroll';
-
-/**
- * Helper to check if click and collect collection points is enabled.
- */
-export const collectionPointsEnabled = () => drupalSettings.cnc_collection_points_enabled || false;
+import collectionPointsEnabled from '../../../js/utilities/pudoAramaxCollection';
 
 /**
  * Helper to get click and collect store map icon.

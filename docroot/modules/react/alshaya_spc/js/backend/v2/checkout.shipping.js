@@ -52,7 +52,6 @@ const formatAddressForShippingBilling = (address) => {
   });
 
   data.custom_attributes = customAttributes;
-
   return data;
 };
 
