@@ -237,7 +237,11 @@ function _alshaya_advanced_page_get_node_title($node) {
   }
 
   // Get the product category for current department page.
-  $tid = $node->get('field_product_category')->first()->target_id;
+  $tid = $node->get('field_product_category')->first();
+  if (is_null($tid)) {
+    return '';
+  }
+  $tid = $tid->target_id;
   // Load the term object.
   $term = Term::load($tid);
 
@@ -407,7 +411,9 @@ function alshaya_advanced_page_node_update(EntityInterface $node) {
     ? $node->original->get('field_product_category')->entity
     : $node->get('field_product_category')->entity;
 
-    Cache::invalidateTags(['term:' . $term->id()]);
+    if ($term instanceof TermInterface) {
+      Cache::invalidateTags(['term:' . $term->id()]);
+    }
   }
 }
 
