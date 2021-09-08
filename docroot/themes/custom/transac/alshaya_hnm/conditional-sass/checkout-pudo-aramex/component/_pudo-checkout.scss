@@ -1,0 +1,12 @@
+.spc-delivery-store-info {
+  .spc-delivery-store-name-wrapper {
+    padding-#{$left}: 2.4375rem;
+
+    .store-icon,
+    .collection-point-icon {
+      &::before {
+        #{$left}: -0.3125rem;
+      }
+    }
+  }
+}
