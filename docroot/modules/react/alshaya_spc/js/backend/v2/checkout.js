@@ -47,7 +47,7 @@ import {
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
-import { collectionPointsEnabled } from '../../utilities/cnc_util';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -332,7 +332,6 @@ const getStoreInfo = async (storeData) => {
   if (typeof store.rnc_config !== 'undefined') {
     delete store.rnc_config;
   }
-
   return store;
 };
 

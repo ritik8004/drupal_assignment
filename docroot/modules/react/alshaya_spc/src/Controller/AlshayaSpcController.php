@@ -659,8 +659,12 @@ class AlshayaSpcController extends ControllerBase {
     if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] === $checkout_settings->get('same_day_shipping_method_code')) {
       $delivery_method_description = $this->t('Same day');
     }
+
+    $collection_settings = $this->config('alshaya_spc.collection_points');
+    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
+
     // Get formatted customer phone number.
-    $number = $order['shipping']['extension_attributes']['collector_mobile']
+    $number = $cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_mobile']
       ? $order['shipping']['extension_attributes']['collector_mobile']
       : $order['shipping']['address']['telephone'];
     $phone_number = $this->orderHelper->getFormattedMobileNumber($number);
@@ -700,7 +704,9 @@ class AlshayaSpcController extends ControllerBase {
         'customer_service_text' => $checkout_settings->get('checkout_customer_service'),
       ],
       'order_details' => [
-        'customer_email' => $order['shipping']['extension_attributes']['collector_email'] ?? $order['email'],
+        'customer_email' => ($cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_email'])
+        ? $order['shipping']['extension_attributes']['collector_email']
+        : $order['email'],
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
@@ -731,7 +737,10 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $cache_tags = [];
-    $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
+    $cache_tags = Cache::mergeTags($cache_tags, array_merge(
+      $checkout_settings->getCacheTags(),
+      $collection_settings->getCacheTags(),
+    ));
 
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
@@ -767,8 +776,6 @@ class AlshayaSpcController extends ControllerBase {
       }
     }
 
-    $collection_settings = $this->config('alshaya_spc.collection_points');
-    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
     if ($cnc_collection_points_enabled) {
       $build['#attached']['library'][] = 'alshaya_white_label/checkout-confirmation-pudo-aramex';
     }

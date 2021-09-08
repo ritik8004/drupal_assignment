@@ -5,6 +5,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -173,9 +174,9 @@ const OrderSummary = () => {
                   address={storeAddress.join(', ')}
                   openingHours={storeInfo.store_open_hours}
                   mapLink={storeInfo.view_on_map_link}
-                  {...(storeInfo.pudo_available !== undefined
+                  {...(collectionPointsEnabled() && storeInfo.pudo_available !== undefined
                     && { pickUpPointIcon: storeInfo.pudo_available ? 'collection-point' : 'store' })}
-                  {...(storeInfo.collection_point !== undefined
+                  {...(collectionPointsEnabled() && storeInfo.collection_point !== undefined
                     && { pickUpPointTitle: storeInfo.collection_point })}
                 />
                 <OrderSummaryItem label={Drupal.t('Collection by')} value={customerShippingName} />

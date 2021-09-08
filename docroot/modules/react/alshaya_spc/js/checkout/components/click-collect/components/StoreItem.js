@@ -4,12 +4,12 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../utilities/strings';
 import {
   getCncModalButtonText,
-  collectionPointsEnabled,
   isCollectionPoint,
   getPickUpPointTitle,
   getCncDeliveryTimePrefix,
 } from '../../../../utilities/cnc_util';
 import PriceElement from '../../../../utilities/special-price/PriceElement';
+import collectionPointsEnabled from '../../../../../../js/utilities/pudoAramaxCollection';
 
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
