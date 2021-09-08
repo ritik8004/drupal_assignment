@@ -70,13 +70,13 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
    *   An array of exploded url items.
    * @param mixed $department_node
    *   The department node id/FALSE if empty.
-   * @param bool $term
+   * @param bool $term_option
    *   A boolean value to check if the options needs to be set for term.
    *
    * @return Symfony\Component\Routing\RouteCollection
    *   The routecollection object.
    */
-  private function setRouteOptions(RouteCollection $collection, array $exploded_path, $department_node, bool $term = FALSE) {
+  private function setRouteOptions(RouteCollection $collection, array $exploded_path, $department_node, bool $term_option = FALSE) {
     // If department page exists.
     if ($department_node) {
       $node_route = $this->connection->select($this->connection->escapeTable($this->tableName), 'rp')
@@ -88,7 +88,7 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
         /** @var \Symfony\Component\Routing\Route $route */
         $route = unserialize($node_route[0]['route']);
         // Setting options to identify the department page later.
-        if ($term) {
+        if ($term_option) {
           $route->setOption('_department_page_term', $exploded_path[3]);
         }
         $route->setOption('_department_page_node', $department_node);
