@@ -682,7 +682,7 @@ const selectCnc = async (store, address, billing) => {
       shipping_method_code: 'click_and_collect',
       custom_attributes: [],
       extension_attributes: {
-        click_and_collect_type: (!_isUndefined(store.rnc_available) && store.rnc_available)
+        click_and_collect_type: (hasValue(store.rnc_available) && store.rnc_available)
           ? 'reserve_and_collect'
           : 'ship_to_store',
         store_code: store.code,
@@ -1720,7 +1720,7 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
       shipping_carrier_code: shippingData.carrier_info.code,
       shipping_method_code: shippingData.carrier_info.method,
       extension_attributes: {
-        click_and_collect_type: (!_isUndefined(store.rnc_available) && store.rnc_available)
+        click_and_collect_type: (hasValue(store.rnc_available) && store.rnc_available)
           ? 'reserve_and_collect'
           : 'ship_to_store',
         store_code: store.code,
