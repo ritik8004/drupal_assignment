@@ -26,34 +26,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *   Department page node id or false.
  */
 function alshaya_rcs_main_menu_is_department_page(string $path) {
-  $data = [];
-  // Check for cache first.
-  $cache = \Drupal::cache('data')->get('alshaya_rcs_main_menu:slug:nodes');
-  if ($cache) {
-    $data = $cache->data;
-    // If cache hit.
-    if (!empty($data[$path])) {
-      return $data[$path];
-    }
-  }
-
-  // Get all department pages.
-  $department_pages = alshaya_rcs_main_menu_get_department_pages();
-  // If there is department page available for given term.
-  if (isset($department_pages[$path])) {
-    $nid = $department_pages[$path];
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
-    if (is_object($node)) {
-      if ($node->isPublished()) {
-        $data[$path] = $nid;
-        \Drupal::cache('data')->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, $node->getCacheTags());
-        return $nid;
-      }
-    }
-  }
-
-  return FALSE;
+  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->isDepartmentPage($path);
 }
 
 /**
@@ -63,17 +36,7 @@ function alshaya_rcs_main_menu_is_department_page(string $path) {
  *   Nids of department pages keyed by slug.
  */
 function alshaya_rcs_main_menu_get_department_pages() {
-  static $department_pages = [];
-
-  // We cache the nid-tid relationship for a single page request.
-  if (empty($department_pages)) {
-    $query = \Drupal::database()->select('node__field_category_slug', 'nfcs');
-    $query->addField('nfcs', 'field_category_slug_value', 'tid');
-    $query->addField('nfcs', 'entity_id', 'nid');
-    $department_pages = $query->execute()->fetchAllKeyed();
-  }
-
-  return $department_pages;
+  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getDepartmentPages();
 }
 
 /**
@@ -147,6 +110,18 @@ function alshaya_rcs_main_menu_node_view(array &$build, EntityInterface $entity,
       $response = new RedirectResponse($url, 301);
       $response->send();
       exit;
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_rcs_main_menu_node_presave(EntityInterface $entity) {
+  if ($entity->getType() == 'advanced_page') {
+    // Unset the category slug if department page is unchecked.
+    if ($entity->get('field_use_as_department_page')->value == 0) {
+      unset($entity->field_category_slug);
     }
   }
 }

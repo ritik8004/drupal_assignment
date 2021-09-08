@@ -12,6 +12,8 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
 
 /**
  * Service provides helper functions for the rcs category taxonomy.
@@ -68,6 +70,20 @@ class AlshayaRcsCategoryHelper {
   protected $aliasManager;
 
   /**
+   * Cache Backend object for "cache.data".
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
    * Constructs a new AlshayaRcsCategoryHelper instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -80,17 +96,25 @@ class AlshayaRcsCategoryHelper {
    *   The language manager.
    * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache backend object.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
                               RendererInterface $renderer,
                               LanguageManagerInterface $language_manager,
-                              AliasManagerInterface $alias_manager) {
+                              AliasManagerInterface $alias_manager,
+                              CacheBackendInterface $cache,
+                              Connection $connection) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
+    $this->cache = $cache;
+    $this->connection = $connection;
   }
 
   /**
@@ -356,7 +380,7 @@ class AlshayaRcsCategoryHelper {
   public function getDeepLink($object) {
     $slug = $object->get('field_category_slug')->getString();
     // Get all the departments pages having category slug value.
-    $department_pages = alshaya_rcs_main_menu_get_department_pages();
+    $department_pages = $this->getDepartmentPages();
     // @todo Change the logic here once we get the prefixed response from
     // magento.
     if (array_key_exists($slug, $department_pages)) {
@@ -371,6 +395,69 @@ class AlshayaRcsCategoryHelper {
     }
 
     return '';
+  }
+
+  /**
+   * Check for given path, department page exists.
+   *
+   * Check for given path, department page exists. If department page exists
+   * then return that department page node id or return false.
+   *
+   * @param string $path
+   *   The current route path.
+   *
+   * @return int|bool
+   *   Department page node id or false.
+   */
+  public function isDepartmentPage(string $path) {
+    $data = [];
+    // Check for cache first.
+    $cache = $this->cache->get('alshaya_rcs_main_menu:slug:nodes');
+    if ($cache) {
+      $data = $cache->data;
+      // If cache hit.
+      if (!empty($data[$path])) {
+        return $data[$path];
+      }
+    }
+
+    // Get all department pages.
+    $department_pages = $this->getDepartmentPages();
+    // If there is department page available for given term.
+    if (isset($department_pages[$path])) {
+      $nid = $department_pages[$path];
+      /** @var \Drupal\node\Entity\Node $node */
+      $node = $this->entityTypeManager->getStorage('node')->load($nid);
+      if (is_object($node)) {
+        if ($node->isPublished()) {
+          $data[$path] = $nid;
+          $this->cache->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, $node->getCacheTags());
+          return $nid;
+        }
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Helper function to fetch list of department pages.
+   *
+   * @return array
+   *   Nids of department pages keyed by slug.
+   */
+  public function getDepartmentPages() {
+    static $department_pages = [];
+
+    // We cache the nid-tid relationship for a single page request.
+    if (empty($department_pages)) {
+      $query = $this->connection->select('node__field_category_slug', 'nfcs');
+      $query->addField('nfcs', 'field_category_slug_value', 'tid');
+      $query->addField('nfcs', 'entity_id', 'nid');
+      $department_pages = $query->execute()->fetchAllKeyed();
+    }
+
+    return $department_pages;
   }
 
 }

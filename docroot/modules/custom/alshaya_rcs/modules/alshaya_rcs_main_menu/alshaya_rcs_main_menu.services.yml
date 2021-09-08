@@ -7,6 +7,8 @@ services:
       - '@renderer'
       - '@language_manager'
       - '@path_alias.manager'
+      - '@cache.data'
+      - '@database'
   alshaya_rcs_main_menu.category_data_migration:
     class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration
     arguments:
