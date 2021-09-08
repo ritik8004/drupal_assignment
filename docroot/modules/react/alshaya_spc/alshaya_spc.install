@@ -13,6 +13,28 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add click and collect collection point configs and translations.
+ */
+function alshaya_spc_update_8017() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.collection_points'],
+    'alshaya_spc',
+    'install'
+  );
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v8');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_update().
  *
  * Update the advantage card settings.
