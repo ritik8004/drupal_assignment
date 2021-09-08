@@ -16,12 +16,12 @@ use Drupal\block\BlockInterface;
  */
 function alshaya_rcs_listing_get_block_ids() {
   return [
-  'alshayagridcountblock_plp',
-  'alshaya_algolia_react_plp',
-  'categorylhnblock',
-  'views_block__plp_promotional_banner_block_1',
-  'views_block__alshaya_term_description_block_1',
-  'views_block__product_category_level_2_3_block_2'
+    'alshayagridcountblock_plp',
+    'alshaya_algolia_react_plp',
+    'categorylhnblock',
+    'views_block__plp_promotional_banner_block_1',
+    'views_block__alshaya_term_description_block_1',
+    'views_block__product_category_level_2_3_block_2'
   ];
 }
 

@@ -1,3 +1,8 @@
+// @codingStandardsIgnoreFile
+// This is because the linter is throwing errors where we use backticks here.
+// Once we enable webapack for the custom modules directory, we should look into
+// removing the above ignore line.
+
 // Render function to prepare the markup for LHN Block and replace placeholders
 // with API Response.
 exports.render = function render(
@@ -23,12 +28,14 @@ exports.render = function render(
     // Retrive the item from Level 3 as the response that we get from MDC starts
     // from level 2.
     // @todo Supercategory special case needs to verfied.
-    let tempInputs = inputs;
-    tempInputs.forEach((input, key) => {
-      inputs[key] = input.children[0];
+    let tempInputs = [];
+    inputs.forEach((input, key) => {
+      if (input.children[0] !== undefined && input.children[0] !== null) {
+        tempInputs[key] = input.children[0];
+      }
     });
 
-    innerHtmlObj.find('ul').append(buildLhnHtml('', inputs, clickable, unclickable, settings));
+    innerHtmlObj.find('ul').append(buildLhnHtml('', tempInputs, clickable, unclickable, settings));
   }
 
   return innerHtmlObj.html();
@@ -51,19 +58,17 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
   }
 
   items.forEach(item => {
-    if (typeof item != "undefined") {
-      itemHtml += '<li>';
-      // @todo Add check for clickable and unclickable based on magento response.
-      // Replace placeholders with response value.
-      itemHtml += replaceLhnPlaceHolders(item, clickable, settings);
+    itemHtml += '<li>';
+    // @todo Add check for clickable and unclickable based on magento response.
+    // Replace placeholders with response value.
+    itemHtml += replaceLhnPlaceHolders(item, clickable, settings);
 
-      if (item.children !== undefined && item.children !== null) {
-        itemHtml += '<ul>';
-        itemHtml = buildLhnHtml(itemHtml, item.children, clickable, unclickable, settings);
-        itemHtml += '</ul>';
-      }
-      itemHtml += '</li>';
+    if (item.children !== undefined && item.children !== null) {
+      itemHtml += '<ul>';
+      itemHtml = buildLhnHtml(itemHtml, item.children, clickable, unclickable, settings);
+      itemHtml += '</ul>';
     }
+    itemHtml += '</li>';
   });
 
   return itemHtml;
@@ -80,7 +85,7 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
  */
 const replaceLhnPlaceHolders = function (item, itemHtml, settings) {
   // Change URL based on current language and category prefix.
-  item.url_path = '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + item.url_path;
+  item.url_path = `/${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}${item.url_path}/`;
   // lower the level as the response that we get from MDC starts from level 2.
   item.level -= 1;
 
