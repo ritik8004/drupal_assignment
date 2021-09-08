@@ -9,6 +9,7 @@ import {
   getPickUpPointTitle,
   getCncDeliveryTimePrefix,
 } from '../../../../utilities/cnc_util';
+import PriceElement from '../../../../utilities/special-price/PriceElement';
 
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
@@ -46,6 +47,9 @@ const StoreItem = ({
         <div className="store-delivery-time">
           <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
           <span className="delivery--time--value">{` ${store.delivery_time}`}</span>
+          <ConditionalView condition={collectionPointsEnabled()}>
+            <PriceElement amount={store.price_amount} />
+          </ConditionalView>
         </div>
         <div className="store-open-hours">
           {
