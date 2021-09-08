@@ -99,15 +99,15 @@ class AlshayaRcsCategoryHelper {
     $query->condition('langcode', $langcode);
     $terms = $query->execute();
 
+    $this->termCacheTags = [
+      'taxonomy_term:' . self::VOCABULARY_ID,
+      'taxonomy_term_list:' . self::VOCABULARY_ID,
+    ];
+
     // Return if none available.
     if (empty($terms)) {
       return NULL;
     }
-
-    $this->termCacheTags = [
-      'taxonomy_term:' . self::VOCABULARY_ID,
-      'taxonomy_term:' . self::VOCABULARY_ID . ':new',
-    ];
 
     $data = [];
     foreach ($terms as $term_id) {
