@@ -21,6 +21,7 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
  * Implements hook_alshaya_stores_finder_store_update_alter().
  */
 function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $store) {
+  // Set value in `field_store_type` to denote if it's a store or a collection point.
   if (isset($store['pudo_service'])) {
     $node->get('field_store_type')->setValue($store['pudo_service']);
   }
@@ -34,6 +35,7 @@ function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
   $config = \Drupal::config('alshaya_spc.collection_points');
   $cnc_collection_points_enabled = $config->get('click_collect_collection_points_enabled');
   $build['#attached']['drupalSettings']['cnc_collection_points_enabled'] = $cnc_collection_points_enabled;
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
 
   // If collection point feature is not enabled, return.
   if (!$cnc_collection_points_enabled) {
