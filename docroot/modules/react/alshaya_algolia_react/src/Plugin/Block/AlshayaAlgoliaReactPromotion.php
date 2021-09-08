@@ -177,7 +177,10 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    $tags = ['alshaya_acm_product_position.settings'];
+    $tags = [
+      'alshaya_acm_product_position.settings',
+      'config:alshaya_algolia_react.product_frames',
+    ];
     Cache::mergeTags(parent::getCacheTags(), $tags);
 
     $promotion = $this->getPromotion();

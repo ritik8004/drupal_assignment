@@ -152,6 +152,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
     return Cache::mergeTags(parent::getCacheTags(), [
       'alshaya_acm_product_position.settings',
       'alshaya_product_list.settings',
+      'config:alshaya_algolia_react.product_frames',
     ]);
   }
 

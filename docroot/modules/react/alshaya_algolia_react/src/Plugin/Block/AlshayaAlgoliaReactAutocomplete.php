@@ -145,6 +145,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   public function getCacheTags() {
     return Cache::mergeTags(parent::getCacheTags(), [
       'config:alshaya_search.settings',
+      'config:alshaya_algolia_react.product_frames',
     ]);
   }
 

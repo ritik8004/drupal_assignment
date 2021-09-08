@@ -8,7 +8,12 @@ import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
-import { productListIndexStatus } from '../../utils/indexUtils';
+import {
+  productFrame,
+  productListIndexStatus, productTitleTrimStatus,
+  promotionFrame,
+} from '../../utils/indexUtils';
+import Promotions from '../promotions';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -64,8 +69,21 @@ const Teaser = ({
     return null;
   }
 
+  let teaserClass = 'c-products__item views-row';
+  if (productFrame()) {
+    teaserClass = `${teaserClass} product-frame`;
+  }
+
+  if (promotionFrame()) {
+    teaserClass = `${teaserClass} promotion-frame`;
+  }
+
+  if (productTitleTrimStatus()) {
+    teaserClass = `${teaserClass} product-title-trim`;
+  }
+
   return (
-    <div className="c-products__item views-row">
+    <div className={teaserClass}>
       <article
         className="node--view-mode-search-result"
         onClick={(event) => storeClickedItem(event, pageType)}
@@ -146,7 +164,12 @@ const Teaser = ({
             {attribute.rendered_price
               ? Parser(attribute.rendered_price)
               : <Price price={attribute.original_price} final_price={attribute.final_price} />}
-            <BootsPromotions promotions={attribute.promotions} />
+            <ConditionalView condition={promotionFrame()}>
+              <BootsPromotions promotions={attribute.promotions} />
+            </ConditionalView>
+            <ConditionalView condition={!promotionFrame()}>
+              <Promotions promotions={attribute.promotions} />
+            </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
         </div>

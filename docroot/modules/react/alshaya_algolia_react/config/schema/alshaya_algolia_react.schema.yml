@@ -26,3 +26,17 @@ alshaya_algolia_react.settings:
     items_per_page:
       type: integer
       label: 'Number of items to show for search results.'
+
+alshaya_algolia_react.product_frames:
+  type: config_object
+  label: 'Alshaya algolia react listing configurations'
+  mapping:
+    product_frame:
+      type: boolean
+      label: 'Display frame around the teaser on all listing pages'
+    promotion_frame:
+      type: boolean
+      label: 'Display frame on promotion label on all listing pages'
+    product_title_trim:
+      type: boolean
+      label: 'Display trimmed product title on all listing pages'

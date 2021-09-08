@@ -10,6 +10,30 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Added product teaser frames settings.
+ */
+function alshaya_algolia_react_update_8005() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.product_frames'],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  $strings = [
+    'Shop all products in this offer' => [
+      'ar' => ''
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations - CORE 23468.
  */
 function alshaya_algolia_react_update_8004() {
