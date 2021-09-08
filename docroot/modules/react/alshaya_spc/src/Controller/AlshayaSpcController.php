@@ -718,6 +718,7 @@ class AlshayaSpcController extends ControllerBase {
         'payment' => $orderDetails['payment'],
         'billing' => $orderDetails['billing'],
       ],
+      'cnc_collection_points_enabled' => $cnc_collection_points_enabled ?? FALSE,
     ];
 
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
