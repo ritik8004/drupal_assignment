@@ -314,8 +314,52 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to collection point feature.
+  // Strings related to Benefit Pay payment method.
   $strings['v6'] = [
+    'Continue with Benefit pay' => [
+      'ar' => 'أكمل مع بينفت باي',
+    ],
+    'Please complete your payment by scanning the QR code.' => [
+      'ar' => 'أكمل عملية الدفع عبر مسح رمز QR.',
+    ],
+    'Scan to Pay' => [
+      'ar' => 'امسح وادفع',
+    ],
+    'Pay using BenefitPay App' => [
+      'ar' => 'ادفع باستخدام تطبيق بينفت باي',
+    ],
+    'BenefitPay' => [
+      'ar' => 'بينفت باي',
+    ],
+    'Merchant' => [
+      'ar' => 'التاجر',
+    ],
+    'Amount' => [
+      'ar' => 'المبلغ',
+    ],
+    'Reference number' => [
+      'ar' => 'الرقم المرجعي',
+    ],
+    'How to pay using BenefitPay?' => [
+      'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
+    ],
+  ];
+
+  // Strings related to Advantage card.
+  $strings['v7'] = [
+    'Please enter valid Advantage card code.' => [
+      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+    ],
+    'Advantage Card Discount' => [
+      'ar' => 'خصم بطاقة الشايع',
+    ],
+    'The products in your shopping basket are not eligible for the Advantage card discount.' => [
+      'ar' => 'المنتجات التي في سلة التسوق الخاصة بك غير مؤهلة للحصول على خصم بطاقة الشايع',
+    ],
+  ];
+
+  // Strings related to collection point feature.
+  $strings['v8'] = [
     'Collection Point' => [
       'ar' => 'نقطة الاستلام',
     ],

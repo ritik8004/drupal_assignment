@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 
 /**
  * Class Alshaya Spc Controller.
@@ -95,6 +96,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * Checkout.com API Helper.
+   *
+   * @var \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper
+   */
+  protected $checkoutComApiHelper;
+
+  /**
    * SPC helper.
    *
    * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
@@ -122,6 +130,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Language manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper
+   *   Acm checkout com api helper.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
    *   Spc helper service.
    */
@@ -134,6 +144,7 @@ class AlshayaSpcController extends ControllerBase {
                               AlshayaSpcOrderHelper $order_helper,
                               LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
+                              AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
                               AlshayaSpcHelper $spc_helper) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
@@ -144,6 +155,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->orderHelper = $order_helper;
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
+    $this->checkoutComApiHelper = $checkout_com_api_helper;
     $this->spcHelper = $spc_helper;
   }
 
@@ -161,6 +173,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_spc.order_helper'),
       $container->get('language_manager'),
       $container->get('module_handler'),
+      $container->get('alshaya_acm_checkoutcom.api_helper'),
       $container->get('alshaya_spc.helper')
     );
   }
@@ -220,7 +233,15 @@ class AlshayaSpcController extends ControllerBase {
       $checkout_settings = Settings::get('alshaya_checkout_settings');
       $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
     }
-
+    // Advantage card settings only available if it is enabled.
+    $advantage_card_config = $this->config('alshaya_spc.advantage_card');
+    if ($advantage_card_config->get('advantageCardEnabled')) {
+      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard'] = [
+        'enabled' => $advantage_card_config->get('advantageCardEnabled'),
+        'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
+      ];
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $advantage_card_config->getCacheTags());
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
@@ -706,6 +727,13 @@ class AlshayaSpcController extends ControllerBase {
     // Get static text for Fawry payment.
     if ($orderDetails['payment']['methodCode'] === 'checkout_com_upapi_fawry') {
       $strings = array_merge($strings, CheckoutComUpapiFawry::getFawryStaticText());
+    }
+
+    if ($orderDetails['payment']['methodCode'] === 'checkout_com_upapi_benefitpay') {
+      $checkoutcomConfig = $this->checkoutComApiHelper->getCheckoutcomUpApiConfig();
+      $settings['order_details']['payment']['benefitpayMerchantId'] = $checkoutcomConfig['benefit_pay_merchant_id'];
+      $settings['order_details']['payment']['benefitpayAppId'] = $checkoutcomConfig['benefit_pay_app_id'];
+      $settings['order_details']['payment']['benefitpaySecretKey'] = $checkoutcomConfig['benefit_pay_secret_key'];
     }
 
     $cache_tags = [];
