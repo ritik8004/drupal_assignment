@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   getStorageInfo,
+  removeStorageInfo,
 } from '../../../../js/utilities/storage';
 import { getAuraLocalStorageKey, getAuraDetailsDefaultState } from '../../utilities/aura_utils';
 import {
@@ -26,15 +27,20 @@ class Header extends React.Component {
       ...getAuraDetailsDefaultState(),
     };
 
-    if (!getUserDetails().id) {
-      const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
-      if (localStorageValues) {
+    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+
+    if (localStorageValues) {
+      // Use localStorage values only for anonymous users.
+      if (!getUserDetails().id) {
         this.state = {
           ...this.state,
           ...localStorageValues,
           signUpComplete: true,
         };
+        return;
       }
+      // Remove localstorage values if its a logged in user.
+      removeStorageInfo(getAuraLocalStorageKey());
     }
   }
 
