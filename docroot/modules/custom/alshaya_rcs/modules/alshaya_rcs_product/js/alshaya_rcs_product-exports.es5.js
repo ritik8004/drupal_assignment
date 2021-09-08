@@ -511,15 +511,15 @@ exports.computePhFilters = function (input, filter) {
       const attributes = rcsPhGetSetting('placeholderAttributes');
       const pageType = rcsPhGetPageType();
 
-      rcsPhReplaceEntityPh(skuBaseForm.html(), pageType, input, drupalSettings.path.currentLanguage)
-      rcsPhReplaceEntityPh(skuBaseForm.html(), 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
+      let finalHtml = skuBaseForm.html();
+      rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          skuBaseForm.html(rcsReplaceAll(skuBaseForm.html(), fieldPh, entityFieldValue));
+          skuBaseForm.html(rcsReplaceAll(finalHtml, fieldPh, entityFieldValue));
         });
 
-      value = skuBaseForm.html();
+      value = finalHtml;
       break;
 
     case 'gtm-price':
