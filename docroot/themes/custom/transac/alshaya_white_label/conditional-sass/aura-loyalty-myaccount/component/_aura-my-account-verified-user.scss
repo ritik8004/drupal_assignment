@@ -1,4 +1,70 @@
 .aura-card-linked-verified-wrapper {
+  // Aura Tier 3 = VIP gradient.
+  &.aura-level-Tier3 {
+    .aura-card-linked-verified-wrapper-content {
+      &::before {
+        background-image: $aura-myaccount-vip;
+
+        html[lang=ar] & {
+          background-image: $aura-myaccount-vip-ar;
+        }
+
+        @include breakpoint($upto-desktop) {
+          background-image: $aura-myaccount-vip-mobile;
+
+          html[lang=ar] & {
+            background-image: $aura-myaccount-vip-mobile-ar;
+          }
+        }
+      }
+
+      &::after {
+        mix-blend-mode: color-dodge;
+      }
+    }
+
+    .aura-user-avatar {
+      &:not(:empty) {
+        background-color: $aura-myaccount-user-dp-vip !important;
+      }
+    }
+  }
+
+  &.aura-level-Tier2 {
+    .aura-card-linked-verified-wrapper-content {
+      &::before {
+        background-image: $aura-myaccount-star;
+
+        html[lang=ar] & {
+          background-image: $aura-myaccount-star-ar;
+        }
+
+        @include breakpoint($upto-desktop) {
+          background-image: $aura-myaccount-star-mobile;
+
+          html[lang=ar] & {
+            background-image: $aura-myaccount-star-mobile-ar;
+          }
+        }
+      }
+
+      &::after {
+        background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop-50.svg');
+        mix-blend-mode: darken;
+
+        @include breakpoint($upto-desktop) {
+          background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile-50.svg');
+        }
+      }
+    }
+
+    .aura-user-avatar {
+      &:not(:empty) {
+        background-color: $aura-myaccount-user-dp-star !important;
+      }
+    }
+  }
+
   .aura-card-linked-verified-wrapper-content {
     position: relative;
     border-radius: 0.625rem;

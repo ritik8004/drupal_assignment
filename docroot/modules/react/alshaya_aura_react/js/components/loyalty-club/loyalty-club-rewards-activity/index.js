@@ -102,7 +102,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     Object.entries(activity).forEach(([, transaction]) => {
       statement.push(
-        <div className="statement-row">
+        <div className="statement-row" key={transaction.date + transaction.orderNo + transaction.orderTotal}>
           <span className="order-id">{transaction.orderNo}</span>
           <span className="date">{formatDate(transaction.date, 'DD-Mon-YYYY')}</span>
           <span className="amount">{`${transaction.currencyCode} ${transaction.orderTotal}`}</span>
