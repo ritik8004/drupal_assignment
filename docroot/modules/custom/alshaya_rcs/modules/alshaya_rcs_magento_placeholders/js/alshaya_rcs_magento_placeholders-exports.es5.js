@@ -79,6 +79,17 @@ exports.render = function render(
       }
       break;
 
+    case 'promotion_page':
+      // Render rcs promotion, if available.
+      if (drupalSettings.rcsPage.type === 'promotion' &&
+        typeof globalThis.renderRcsPromotion !== 'undefined') {
+        html += globalThis.renderRcsPromotion.render(
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;

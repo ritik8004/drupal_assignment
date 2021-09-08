@@ -50,6 +50,7 @@ const PlpApp = ({
   level: nestedLevel,
   ruleContext,
   categoryField,
+  promotionNodeId,
 }) => {
   const plpCategoryRef = useRef();
   const allFiltersRef = useRef();
@@ -59,7 +60,6 @@ const PlpApp = ({
     filterOos,
     pageSubType,
     max_category_tree_depth: categoryDepth,
-    promotionNodeId,
     subCategories,
     categoryFacetEnabled,
   } = drupalSettings.algoliaSearch;
