@@ -17,11 +17,11 @@
   .store-icon,
   .collection-point-icon {
     &::before {
-      height: 2.125rem;
-      width: 2.125rem;
+      height: 1.5rem;
+      width: 1.5rem;
       display: inline-block;
       position: absolute;
-      #{$left}: 2.875rem;
+      #{$left}: 3.25rem;
       top: 50%;
       transform: translateY(-50%);
     }
