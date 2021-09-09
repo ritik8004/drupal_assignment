@@ -83,6 +83,20 @@ function alshaya_rcs_main_menu_preprocess_page_title(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_rcs_main_menu_preprocess_page(&$variables) {
+  $routematch = \Drupal::routeMatch();
+  if ($routematch->getRouteName() == 'entity.node.canonical') {
+    $term = $routematch->getParameter('node');
+    if ($term->bundle() == 'advanced_page') {
+      // Add description placeholder for the advanced page.
+      $variables['category_term_description'] = '#rcs.category.description#';
+    }
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_rcs_main_menu_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
