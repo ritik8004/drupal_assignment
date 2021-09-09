@@ -157,7 +157,7 @@ libraries-override:
       theme:
         css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
 
-  alshaya_white_label/alshaya-boots-plp:
+  alshaya_white_label/plp-frame-options:
       css:
         theme:
-          css/conditional-sass/alshaya-boots-plp/alshaya-boots-plp.ltr.css: css/conditional-sass/alshaya-boots-plp/alshaya-boots-plp.ltr.css
+          css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css

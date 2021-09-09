@@ -102,6 +102,11 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       'alshaya_white_label/algolia_search',
       'alshaya_white_label/slick_css',
     ];
+
+    if ($common_config['commonAlgoliaSearch']['productFrameEnabled'] || $common_config['commonAlgoliaSearch']['productFrameEnabled'] || $common_config['commonAlgoliaSearch']['productFrameEnabled']) {
+      $libraries[] = 'alshaya_white_label/plp-frame-options';
+    }
+
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
     if ($display_settings->get('color_swatches_show_product_image')) {
       $libraries[] = 'alshaya_white_label/plp-swatch-hover';

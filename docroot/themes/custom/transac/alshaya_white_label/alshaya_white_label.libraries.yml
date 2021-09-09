@@ -529,7 +529,7 @@ slug-banner:
     theme:
       css/conditional-sass/slug-banner/slug-banner.ltr.css: {}
 
-alshaya-boots-plp:
+plp-frame-options:
   css:
     theme:
-      css/conditional-sass/alshaya-boots-plp/alshaya-boots-plp.ltr.css: {}
+      css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: {}

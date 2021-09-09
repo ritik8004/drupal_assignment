@@ -27,6 +27,12 @@ function alshaya_algolia_react_update_8005() {
     'Shop all products in this offer' => [
       'ar' => ''
     ],
+    'Offers available' => [
+      'ar' => ''
+    ],
+    'You can combine promotions but only one offer code can be used per transaction' => [
+      'ar' => ''
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
@@ -176,6 +182,15 @@ function alshaya_algolia_react_install() {
     ],
     'Promotions' => [
       'ar' => 'العروض',
+    ],
+    'Shop all products in this offer' => [
+      'ar' => ''
+    ],
+    'Offers available' => [
+      'ar' => ''
+    ],
+    'You can combine promotions but only one offer code can be used per transaction' => [
+      'ar' => ''
     ],
   ];
 
