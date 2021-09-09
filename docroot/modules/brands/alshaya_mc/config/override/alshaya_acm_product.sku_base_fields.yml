@@ -1,0 +1,8 @@
+fields:
+  gender:
+    label: 'Gender'
+    description: 'Gender attribute.'
+    type: 'attribute'
+    cardinality: -1
+    index: 1
+    facet: 1

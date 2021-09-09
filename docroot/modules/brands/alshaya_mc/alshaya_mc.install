@@ -6,6 +6,50 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\block\Entity\Block;
+
+/**
+ * Installing new gender filter.
+ */
+function alshaya_mc_update_8321() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Adding fields in search_api index
+  $manager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  // Re-indexing all the products.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+
+  // Adjust Block Facets weight for attr_gender so this
+  // appears after the price facet filter.
+  $blocks = [
+    'gender' => 'finalprice',
+    'promogender' => 'promofinalprice',
+    'plpgender' => 'plpfinalprice',
+    'productlistgender' => 'productlistfinalprice',
+  ];
+  foreach ($blocks as $facet_block_id => $price_filter_block_id) {
+    $facet_block = Block::load($facet_block_id);
+    $price_filter_block = Block::load($price_filter_block_id);
+    if (($facet_block instanceof BlockInterface) && ($price_filter_block instanceof BlockInterface)) {
+      $facet_block->setWeight(($price_filter_block->getWeight()) + 1);
+      $facet_block->save();
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().
