@@ -4,4 +4,5 @@ variables:
   product_listing_page_url: "/#query=fleece/"
   np_plp_page: '/#query=fleece/'
   np_plp_product_page: '/buy-ae-fleece-jogger-medium-heather.html'
+  spc_pdp_page: '/buy-aeo-6-boxer-brief-3-pack-multi-0.html/'
   np_promotion: 0
