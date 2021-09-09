@@ -38,6 +38,13 @@ class ConfigProduct extends ResourceBase {
   protected $configFactory;
 
   /**
+   * The list of config cache tags.
+   *
+   * @var array
+   */
+  protected $cacheTags = [];
+
+  /**
    * ConfigProduct Resource constructor.
    *
    * @param array $configuration
@@ -113,23 +120,20 @@ class ConfigProduct extends ResourceBase {
   }
 
   /**
-   * Builds an array of cache tags based on config names.
+   * Getter for cacheTags.
    *
    * @return array
    *   Cache tags.
    */
   private function getCacheTags() {
-    $tags = [];
-    foreach ($this->getList() as $key => $item) {
-      if (is_array($item)) {
-        $tags[] = 'config:' . $key;
-      }
-      else {
-        $tags[] = 'config:' . $item;
-      }
-    }
+    return $this->cacheTags;
+  }
 
-    return $tags;
+  /**
+   * Setter for cacheTags.
+   */
+  private function addCacheTags($tags) {
+    $this->cacheTags = array_unique(array_merge($this->cacheTags, $tags));
   }
 
   /**
@@ -165,7 +169,6 @@ class ConfigProduct extends ResourceBase {
     $cacheableMetadata->addCacheTags($this->getCacheTags());
     $cacheableMetadata->addCacheContexts(['url.query_args']);
     $response->addCacheableDependency($cacheableMetadata);
-
     return $response;
   }
 
@@ -181,7 +184,11 @@ class ConfigProduct extends ResourceBase {
    *   The config.
    */
   private function getConfig($name, $key) {
-    return $this->configFactory->get($name)->get($key);
+    $config = $this->configFactory->get($name);
+
+    $this->addCacheTags($config->getCacheTags());
+
+    return $config->get($key);
   }
 
   /**
@@ -194,10 +201,13 @@ class ConfigProduct extends ResourceBase {
    *   The config.
    */
   private function getAllConfigs($name) {
-    $configs = $this->configFactory->get($name)->getRawData();
+    $config = $this->configFactory->get($name);
+    $configs = $config->getRawData();
 
     // Remove unwanted item.
     unset($configs['_core']);
+
+    $this->addCacheTags($config->getCacheTags());
 
     return $configs;
   }
