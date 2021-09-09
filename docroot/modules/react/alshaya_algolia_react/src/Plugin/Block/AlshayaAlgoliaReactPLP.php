@@ -223,9 +223,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    $tags = [
-      'alshaya_acm_product_position.settings',
-    ];
+    $tags = ['alshaya_acm_product_position.settings'];
     $tags = Cache::mergeTags(parent::getCacheTags(), $tags);
 
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
