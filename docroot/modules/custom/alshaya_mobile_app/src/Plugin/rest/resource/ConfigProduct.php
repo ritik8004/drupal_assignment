@@ -85,7 +85,7 @@ class ConfigProduct extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_acm_product'),
+      $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('language_manager'),
       $container->get('config.factory')
     );
