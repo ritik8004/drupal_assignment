@@ -14,6 +14,10 @@
   opacity: 0;
   visibility: hidden;
 
+  html[lang=ar] & {
+    #{$left}: -3.7rem;
+  }
+
   &::before,
   &::after {
     top: 100%;
@@ -24,6 +28,10 @@
     width: 0;
     position: absolute;
     pointer-events: none;
+
+    html[lang=ar] & {
+      left: 61%;
+    }
   }
 
   &::after {
