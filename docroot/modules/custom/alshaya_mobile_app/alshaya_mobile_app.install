@@ -15,7 +15,7 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
- * [6.6.0] Add new API to expose Product configuration.
+ * Add new API to expose Product configuration.
  */
 function alshaya_mobile_app_update_8081() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
