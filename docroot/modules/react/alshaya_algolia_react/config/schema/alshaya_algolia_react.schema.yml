@@ -29,7 +29,7 @@ alshaya_algolia_react.settings:
 
 alshaya_algolia_react.product_frames:
   type: config_object
-  label: 'Alshaya algolia react listing configurations'
+  label: 'Alshaya algolia react product frames configurations'
   mapping:
     product_frame:
       type: boolean
