@@ -1,0 +1,13 @@
+alshaya_spc.collection_points:
+  type: config_object
+  label: 'SPC click and collect collection point configuration'
+  mapping:
+    click_collect_collection_points_enabled:
+      type: boolean
+      label: 'Click and Collect collection points enabled'
+    click_collect_collection_point_map_icon:
+      type: string
+      label: 'Click and Collect collection point map icon'
+    click_collect_store_map_icon:
+      type: string
+      label: 'Click and Collect store map icon'
