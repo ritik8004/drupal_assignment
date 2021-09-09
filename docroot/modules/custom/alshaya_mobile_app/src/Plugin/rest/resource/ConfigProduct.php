@@ -174,7 +174,6 @@ class ConfigProduct extends ResourceBase {
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
     $cacheableMetadata->addCacheTags($this->getCacheTags());
-    $cacheableMetadata->addCacheContexts(['url.query_args']);
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
