@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
-import BootsPromotions from '../boots-promotion';
+import PromotionsFrame from '../promotion-frame';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
 import {
-  productFrame,
-  productListIndexStatus, productTitleTrimStatus,
-  promotionFrame,
+  isProductFrameEnabled,
+  isProductTitleTrimEnabled,
+  isPromotionFrameEnabled,
+  productListIndexStatus,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
 
@@ -70,15 +71,15 @@ const Teaser = ({
   }
 
   let teaserClass = 'c-products__item views-row';
-  if (productFrame()) {
+  if (isProductFrameEnabled()) {
     teaserClass = `${teaserClass} product-frame`;
   }
 
-  if (promotionFrame()) {
+  if (isPromotionFrameEnabled()) {
     teaserClass = `${teaserClass} promotion-frame`;
   }
 
-  if (productTitleTrimStatus()) {
+  if (isProductTitleTrimEnabled()) {
     teaserClass = `${teaserClass} product-title-trim`;
   }
 
@@ -164,10 +165,10 @@ const Teaser = ({
             {attribute.rendered_price
               ? Parser(attribute.rendered_price)
               : <Price price={attribute.original_price} final_price={attribute.final_price} />}
-            <ConditionalView condition={promotionFrame()}>
-              <BootsPromotions promotions={attribute.promotions} />
+            <ConditionalView condition={isPromotionFrameEnabled()}>
+              <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
-            <ConditionalView condition={!promotionFrame()}>
+            <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}

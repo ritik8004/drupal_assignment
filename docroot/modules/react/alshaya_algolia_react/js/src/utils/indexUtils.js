@@ -349,8 +349,8 @@ export function productListIndexStatus() {
  *
  * @returns {boolean}
  */
-export function productFrame() {
-  if (drupalSettings.algoliaSearch.productFrameSettings === true) {
+export function isProductFrameEnabled() {
+  if (drupalSettings.algoliaSearch.productFrameEnabled === true) {
     return true;
   }
   return false;
@@ -361,8 +361,8 @@ export function productFrame() {
  *
  * @returns {boolean}
  */
-export function promotionFrame() {
-  if (drupalSettings.algoliaSearch.promotionFrameSettings === true) {
+export function isPromotionFrameEnabled() {
+  if (drupalSettings.algoliaSearch.promotionFrameEnabled === true) {
     return true;
   }
   return false;
@@ -373,8 +373,8 @@ export function promotionFrame() {
  *
  * @returns {boolean}
  */
-export function productTitleTrimStatus() {
-  if (drupalSettings.algoliaSearch.productTitleTrim === true) {
+export function isProductTitleTrimEnabled() {
+  if (drupalSettings.algoliaSearch.productTitleTrimEnabled === true) {
     return true;
   }
   return false;

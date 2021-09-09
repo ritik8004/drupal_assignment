@@ -2,7 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import Promotions from '../promotions';
 
-export default class BootsPromotions extends React.Component {
+export default class PromotionsFrame extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
