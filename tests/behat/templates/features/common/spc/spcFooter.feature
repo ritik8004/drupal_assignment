@@ -1,4 +1,4 @@
-@javascript @smoke @footer @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @mckwuat @vsaeuat @tbskwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
+@javascript @smoke @footer @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @mckwuat @vsaeuat @tbskwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test Footer on the site
 
   Background:
