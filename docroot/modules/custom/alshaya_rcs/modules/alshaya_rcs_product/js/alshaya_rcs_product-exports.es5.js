@@ -1,4 +1,14 @@
+Twig = require('twig');
+
+/**
+ * Extends Twigjs to add t() filter.
+ */
+Twig.extendFilter("t", function(value) {
+  return Drupal.t(value);
+});
+
 // @codingStandardsIgnoreFile
+
 // This is because the linter is throwing errors where we use backticks here.
 // Once we enable webapack for the custom modules directory, we should look into
 // removing the above ignore line.
@@ -14,7 +24,7 @@
  *
  * @see alshaya_acm_product_available_home_delivery().
  */
- function isProductAvailableForHomeDelivery(entity) {
+function isProductAvailableForHomeDelivery(entity) {
   return isProductBuyable(entity);
 }
 
@@ -29,6 +39,27 @@
  */
 function isProductBuyable(entity) {
   return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
+}
+
+/**
+ * Render twig templates.
+ *
+ * @param {string} url
+ *   The url of the twig template.
+ *
+ * @param {object} data
+ *   The data.
+ *
+ * @returns {object}
+ *   Returns the object containing the value and ellipsis information.
+ */
+function twigRender(url, data) {
+  let template = Twig.twig({
+    id: 'data' + Math.random(),
+    href: url,
+    async: false,
+  });
+  return template.render(data);
 }
 
 /**
@@ -68,6 +99,7 @@ exports.render = function render(
   innerHtml
 ) {
   let html = "";
+  let url = '';
   switch (placeholder) {
     case "delivery-option":
       if (!isProductBuyable(entity)) {
@@ -529,87 +561,45 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'description':
-      value = RcsPhStaticStorage.get(filter);
-
-      if (!value) {
-        let description = {
-          label: '',
-          value: input.description.html,
-        }
-
-        // Brands can define rcsGetProductDescription() to customize how description is generated.
-        if (typeof rcsGetProductDescription === 'function') {
-          description = rcsGetProductDescription(input);
-        }
-
-        if (description.value === '') {
-          // Remove field wrapper.
-          jQuery('.rcs-templates--field-description').find('.desc-wrapper').remove();
-        } else {
-          // Update value.
-          jQuery('.rcs-templates--field-description .desc-value').html(description.value);
-          if (description.label === '') {
-            // Remove field wrapper.
-            jQuery('.rcs-templates--field-description').find('.desc-label').remove();
-          } else {
-            // Update label.
-            jQuery('.rcs-templates--field-description .desc-label').html(description.label);
-          }
-        }
-        // Set value.
-        value = jQuery('.rcs-templates--field-description').html();
-        // Delete template.
-        jQuery('.rcs-templates--field-description').remove();
+      let description = {
+        label: '',
+        value: input.description.html,
       }
-      RcsPhStaticStorage.set(filter, value);
+
+      // Brands can define rcsGetProductDescription() to customize how description is generated.
+      if (typeof rcsGetProductDescription === 'function') {
+        description = rcsGetProductDescription(input);
+      }
+
+      url = '/modules/custom/alshaya_rcs/modules/alshaya_rcs_product/templates/rcs-field-description.twig.html';
+      value = twigRender(url, description);
 
       break;
 
     case 'short_description':
-      value = RcsPhStaticStorage.get(filter);
       let short_description = {
         label: '',
         value: input.description.html,
         read_more: false,
       };
 
-      if (!value) {
-
-        // Brands can define rcsGetProductShortDescription() to customize how short description is generated.
-        if (typeof rcsGetProductShortDescription === 'function') {
-          short_description = rcsGetProductShortDescription(input);
-        }
-
-        // Process text and add ellipsis if necessary.
-        let tmp = createShortDescription(short_description.value);
-        short_description.value = tmp.value;
-        short_description.read_more = tmp.read_more;
-
-        if (short_description.value === '') {
-          // Remove field wrapper.
-          jQuery('.rcs-templates--field-short-description').find('.desc-wrapper').remove();
-        } else {
-          // Update value.
-          jQuery('.rcs-templates--field-short-description .desc-value').html(short_description.value);
-          if (short_description.label === '') {
-            // Remove field wrapper.
-            jQuery('.rcs-templates--field-short-description').find('.desc-label').remove();
-          } else {
-            // Update label.
-            jQuery('.rcs-templates--field-short-description .desc-label').html(short_description.label);
-          }
-          if (!short_description.read_more) {
-            // Remove read more links.
-            jQuery('.rcs-templates--field-short-description').find('.read-more').remove();
-          }
-        }
-        // Set value.
-        value = jQuery('.rcs-templates--field-short-description').html();
-        // Delete template.
-        jQuery('.rcs-templates--field-short-description').remove();
+      // Brands can define rcsGetProductShortDescription() to customize how short description is generated.
+      if (typeof rcsGetProductShortDescription === 'function') {
+        short_description = rcsGetProductShortDescription(input);
       }
-      RcsPhStaticStorage.set(filter, value);
 
+      // Compute ellipsis.
+      let tmp = createShortDescription(short_description.value);
+      short_description.value = tmp.value;
+      short_description.read_more = tmp.read_more;
+
+      url = '/modules/custom/alshaya_rcs/modules/alshaya_rcs_product/templates/rcs-field-short-description.twig.html';
+      value = twigRender(url, short_description);
+
+      break;
+
+    case 'content.legal_notice':
+      // @todo add this field
       break;
 
     default:

@@ -2,17 +2,19 @@
   <span class="close"></span>
   <h2 class="field__label">{{ 'Product Description'|t }}</h2>
   <div class="field__content">
-    {# desc-wrapper will be removed with js if value is empty #}
+    {% if value %}
     <div class="desc-wrapper">
-      {# desc-label will be removed with js if label is empty #}
+      {% if label %}
       <div class="desc-label">
-        {# desc label will be printed here #}
+        {{ label }}
       </div>
+      {% endif %}
       <div class="desc-value">
-        {# desc value will be printed here #}
+        {{ value }}
       </div>
     </div>
-    {# legal notice will be printed here #}
+    {% endif %}
+    {{ content.legal_notice }}
   </div>
 </div>
 <div class="gradient-holder"></div>
