@@ -92,14 +92,15 @@ class ConfigProduct extends ResourceBase {
   }
 
   /**
-   * Lists configs to be sent as response.
+   * Lists configs to be sent in the response.
    *
-   * If you don't specify the individual keys, all items will be returned.
+   * If you don't specify the individual config items,
+   * all items will be exposed.
    *
    * @return array
    *   The list of configs.
    */
-  private function getList() {
+  private function getWhiteList() {
     return [
       'alshaya_acm_product.settings' => [
         'all_products_buyable',
@@ -144,10 +145,16 @@ class ConfigProduct extends ResourceBase {
    */
   public function get() {
     $data = [];
-    foreach ($this->getList() as $config => $name) {
+    $list = $this->getWhiteList();
+    // Build an array with config data.
+    foreach ($list as $config => $name) {
       if (is_array($name)) {
-        foreach ($name as $item) {
-          $data[$config][$item] = $this->getConfig($config, $item);
+        $data[$config] = $this->getAllConfigs($config);
+        // Keep only items specified in getList().
+        foreach ($data[$config] as $name => $item) {
+          if (!in_array($name, $list[$config])) {
+            unset($data[$config][$name]);
+          }
         }
       }
       else {
@@ -169,26 +176,8 @@ class ConfigProduct extends ResourceBase {
     $cacheableMetadata->addCacheTags($this->getCacheTags());
     $cacheableMetadata->addCacheContexts(['url.query_args']);
     $response->addCacheableDependency($cacheableMetadata);
+
     return $response;
-  }
-
-  /**
-   * Get config for a given config name and key.
-   *
-   * @param string $name
-   *   The config name.
-   * @param string $key
-   *   The config key.
-   *
-   * @return array|mixed
-   *   The config.
-   */
-  private function getConfig($name, $key) {
-    $config = $this->configFactory->get($name);
-
-    $this->addCacheTags($config->getCacheTags());
-
-    return $config->get($key);
   }
 
   /**
