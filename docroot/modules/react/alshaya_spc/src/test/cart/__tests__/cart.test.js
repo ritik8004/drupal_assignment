@@ -36,6 +36,7 @@ describe('Cart', () => {
           headers: {
             'Alshaya-Channel': 'web',
             'Content-Type': 'application/json',
+            'RequestTime': expect.anything(),
           },
           url: '/rest/kwt_en/cart',
         },
@@ -139,6 +140,7 @@ describe('Cart', () => {
           headers: {
             'Alshaya-Channel': 'web',
             'Content-Type': 'application/json',
+            'RequestTime': expect.anything(),
           },
           url: '/rest/kwt_en/cart',
         },
