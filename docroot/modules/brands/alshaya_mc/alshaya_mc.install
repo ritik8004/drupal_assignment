@@ -8,6 +8,7 @@
 use Drupal\Core\Site\Settings;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
 
 /**
  * Installing new gender filter.
