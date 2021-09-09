@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_mobile_app
+id: config_product
+plugin_id: config_product
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie
