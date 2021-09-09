@@ -29,7 +29,7 @@ set classes = [
           {% block productBrand %}
           {% endblock %}
 
-          <h1><span>#rcs.product.name#</span></h1>
+          <h1><span>#rcs.product._self|title#</span></h1>
 
           {% block pricePrefix %}
           {% endblock %}
@@ -105,40 +105,13 @@ set classes = [
 
             {% block shortDescBlock %}
               <div class="short-description-wrapper">
-                <div class="content--short-description">
-                  <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-                  <div class="field__content-wrapper">
-                    <div class="field__content">
-                      <div class="desc-wrapper">
-                        {% if content.short_desc.label|render %}
-                          <div class="desc-label">
-                            {{ content.short_desc.label }}
-                          </div>
-                        {% endif %}
-                        <div class="desc-value">#rcs.product._self|short_description#</div>
-                      </div>
-                      {{ content.legal_notice }}
-                    </div>
-                    <span class="read-more-description-link">#rcs.product._self|short_description.read_more#</span>
-                    <span class="read-more-description-link-mobile">#rcs.product._self|short_description.read_more#</span>
-                  </div>
-                </div>
+                #rcs.product._self|short_description#
               </div>
             {% endblock %}
 
             {% block descBlock %}
               <div class="description-wrapper">
-                <div class="content--description">
-                  <span class="close"></span>
-                  <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-                  <div class="field__content">
-                    <div class="desc-wrapper">
-                      <div class="desc-value">#rcs.product._self|description#</div>
-                    </div>
-                    {{ content.legal_notice }}
-                  </div>
-                </div>
-                <div class="gradient-holder"></div>
+                #rcs.product._self|description#
               </div>
             {% endblock %}
 

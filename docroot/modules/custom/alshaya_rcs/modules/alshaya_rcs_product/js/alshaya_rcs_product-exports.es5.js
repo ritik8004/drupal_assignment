@@ -37,30 +37,24 @@ function isProductBuyable(entity) {
  * @param {string} value
  *   The field value.
  *
- * @param {int} limit
- *   The max number of characters.
- *
  * @returns {object}
  *   Returns the object containing the value and ellipsis information.
  */
-function createShortDescription(value, limit) {
-  if (typeof limit === 'undefined') {
-    limit = drupalSettings.alshayaRcs.shortDescLimit;
-  }
-
-  let ellipsis = false;
+function createShortDescription(value) {
+  const limit = drupalSettings.alshayaRcs.shortDescLimit;
+  let read_more = false;
 
   // Strip html tags.
   value = jQuery('<p>' + value + '</p>').text();
 
   if (value.length > limit) {
     value = value.slice(0, limit) + '...';
-    ellipsis = true;
+    read_more = true;
   }
 
   return {
     value: value,
-    ellipsis: ellipsis,
+    read_more: read_more,
   };
 }
 
@@ -527,24 +521,95 @@ exports.computePhFilters = function (input, filter) {
 
       break;
 
-    case 'description':
-      value = input.description.html;
-      // Brands can define rcsGetProductDescription() to customize how short description is generated.
-      if (typeof rcsGetProductDescription === 'function') {
-        value = rcsGetProductDescription(input);
+    case 'title':
+      value = input.name;
+      if (typeof rcsGetProductTitle === 'function') {
+        value = rcsGetProductTitle(input);
       }
+      break;
+
+    case 'description':
+      value = RcsPhStaticStorage.get(filter);
+
+      if (!value) {
+        let description = {
+          label: '',
+          value: input.description.html,
+        }
+
+        // Brands can define rcsGetProductDescription() to customize how description is generated.
+        if (typeof rcsGetProductDescription === 'function') {
+          description = rcsGetProductDescription(input);
+        }
+
+        if (description.value === '') {
+          // Remove field wrapper.
+          jQuery('.rcs-templates--field-description').find('.desc-wrapper').remove();
+        } else {
+          // Update value.
+          jQuery('.rcs-templates--field-description .desc-value').html(description.value);
+          if (description.label === '') {
+            // Remove field wrapper.
+            jQuery('.rcs-templates--field-description').find('.desc-label').remove();
+          } else {
+            // Update label.
+            jQuery('.rcs-templates--field-description .desc-label').html(description.label);
+          }
+        }
+        // Set value.
+        value = jQuery('.rcs-templates--field-description').html();
+        // Delete template.
+        jQuery('.rcs-templates--field-description').remove();
+      }
+      RcsPhStaticStorage.set(filter, value);
+
       break;
 
     case 'short_description':
-      let short_description = createShortDescription(this.computePhFilters(input,'description'));
-      value = short_description.value;
-      break;
+      value = RcsPhStaticStorage.get(filter);
+      let short_description = {
+        label: '',
+        value: input.description.html,
+        read_more: false,
+      };
 
-    case 'short_description.read_more':
-      let short_description_value = createShortDescription(this.computePhFilters(input,'short_description'));
-      if (short_description_value.ellipsis) {
-        value = rcsTranslatedText('Read more');
+      if (!value) {
+
+        // Brands can define rcsGetProductShortDescription() to customize how short description is generated.
+        if (typeof rcsGetProductShortDescription === 'function') {
+          short_description = rcsGetProductShortDescription(input);
+        }
+
+        // Process text and add ellipsis if necessary.
+        let tmp = createShortDescription(short_description.value);
+        short_description.value = tmp.value;
+        short_description.read_more = tmp.read_more;
+
+        if (short_description.value === '') {
+          // Remove field wrapper.
+          jQuery('.rcs-templates--field-short-description').find('.desc-wrapper').remove();
+        } else {
+          // Update value.
+          jQuery('.rcs-templates--field-short-description .desc-value').html(short_description.value);
+          if (short_description.label === '') {
+            // Remove field wrapper.
+            jQuery('.rcs-templates--field-short-description').find('.desc-label').remove();
+          } else {
+            // Update label.
+            jQuery('.rcs-templates--field-short-description .desc-label').html(short_description.label);
+          }
+          if (!short_description.read_more) {
+            // Remove read more links.
+            jQuery('.rcs-templates--field-short-description').find('.read-more').remove();
+          }
+        }
+        // Set value.
+        value = jQuery('.rcs-templates--field-short-description').html();
+        // Delete template.
+        jQuery('.rcs-templates--field-short-description').remove();
       }
+      RcsPhStaticStorage.set(filter, value);
+
       break;
 
     default:

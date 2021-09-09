@@ -39,6 +39,12 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'rcs_sku_base_form' => [
       'variables' => [],
     ],
+    'rcs_field_description' => [
+      'variables' => [],
+    ],
+    'rcs_field_short_description' => [
+      'variables' => [],
+    ],
     'page__rcs_pdp' => [
       'variable'
     ],
@@ -355,6 +361,30 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
+  $description = [
+    '#theme' => 'rcs_field_description',
+  ];
+  $variables['rcs_templates']['field_description'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($description),
+    '#attributes' => [
+      'class' => 'rcs-templates--field-description',
+    ],
+  ];
+
+  $short_description = [
+    '#theme' => 'rcs_field_short_description',
+  ];
+  $variables['rcs_templates']['field_short_description'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($short_description),
+    '#attributes' => [
+      'class' => 'rcs-templates--field-short-description',
+    ],
+  ];
+
   // We pass this as html so that in the JS, we can fetch the data from here and
   // we can call other apis to add to this data if required.
   // For eg. we would need to add Bazaar Voice data when it is enabled.
@@ -523,6 +553,9 @@ function alshaya_rcs_product_rcs_graphql_query_fields() {
       'id',
       'type_id',
       'name',
+      'description' => [
+        'html',
+      ],
       'url_key',
       'is_buyable',
       'stock_status',
