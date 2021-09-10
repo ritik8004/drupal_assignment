@@ -586,7 +586,7 @@ exports.computePhFilters = function (input, filter) {
       value = RcsPhStaticStorage.get(filter);
       let short_description = {
         label: '',
-        value: input.description.html,
+        value: (typeof input.short_description !== 'undefined') ? input.short_description.html : input.description.html,
         read_more: false,
       };
 
