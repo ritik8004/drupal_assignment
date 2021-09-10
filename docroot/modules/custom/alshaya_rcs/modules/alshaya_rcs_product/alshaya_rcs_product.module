@@ -169,6 +169,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $product_settings = \Drupal::config('alshaya_acm_product.settings');
   $build['#attached']['drupalSettings']['vat_text'] = $product_settings->get('vat_text');
+  $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_enabled'] = $product_settings->get('legal_notice_enabled');
+  $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_label'] = $product_settings->get('legal_notice_label');
+  $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_summary'] = $product_settings->get('legal_notice_summary');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
   $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());

@@ -542,6 +542,7 @@ exports.computePhFilters = function (input, filter) {
           description = rcsGetProductDescription(input);
         }
 
+        // Description markup.
         if (description.value === '') {
           // Remove field wrapper.
           jQuery('.rcs-templates--field-description').find('.desc-wrapper').remove();
@@ -556,6 +557,22 @@ exports.computePhFilters = function (input, filter) {
             jQuery('.rcs-templates--field-description .desc-label').html(description.label);
           }
         }
+
+        // Legal notice markup.
+        let legalNotice = {
+          enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
+          label: drupalSettings.alshayaRcs.legal_notice_label,
+          summary: drupalSettings.alshayaRcs.legal_notice_summary.value,
+        };
+        if (!legalNotice.enabled) {
+          // Remove field wrapper.
+          jQuery('.rcs-templates--field-description').find('.legal-notice').remove();
+        }
+        else {
+          jQuery('.rcs-templates--field-description .legal-notice .desc-label').html(legalNotice.label);
+          jQuery('.rcs-templates--field-description .legal-notice .desc-value').html(legalNotice.summary);
+        }
+
         // Set value.
         value = jQuery('.rcs-templates--field-description').html();
         // Delete template.
