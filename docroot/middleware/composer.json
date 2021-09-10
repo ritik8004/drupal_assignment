@@ -18,6 +18,7 @@
         "symfony/framework-bundle": "4.3.*",
         "symfony/lock": "4.3.*",
         "symfony/monolog-bundle": "^3.5",
+        "symfony/proxy-manager-bridge": "4.4.*",
         "symfony/yaml": "4.3.*"
     },
     "require-dev": {
@@ -48,6 +49,7 @@
         "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php74": "*",
         "symfony/polyfill-php71": "*",
         "symfony/polyfill-php70": "*",
         "symfony/polyfill-php56": "*"
