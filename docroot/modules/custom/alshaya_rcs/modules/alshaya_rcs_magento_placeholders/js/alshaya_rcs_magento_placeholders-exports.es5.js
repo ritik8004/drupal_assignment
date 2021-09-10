@@ -111,7 +111,6 @@ exports.computePhFilters = function (input, filter) {
     case 'title':
     case 'description':
     case 'short_description':
-    case 'short_description.read_more':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }
