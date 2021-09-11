@@ -2,6 +2,7 @@
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Render\Markup;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -12,4 +13,41 @@ function alshaya_rcs_node_view(array &$build, EntityInterface $entity, EntityVie
   }
 
   $build['#attached']['library'][] = 'alshaya_rcs/add_to_cart';
+}
+
+/**
+ * Implements hook_page_bottom().
+ */
+function alshaya_rcs_page_bottom(array &$page_bottom) {
+  // Invoke hook to get default values.
+  $templates = \Drupal::moduleHandler()->invokeAll('rcs_twig_templates');
+
+  $context = \Drupal::routeMatch()->getParameters();
+  $type = array_keys(reset($context))[0];
+  $entity = \Drupal::routeMatch()->getParameter($type);
+
+  // Allow other modules to alter the data.
+  \Drupal::moduleHandler()->alter('rcs_twig_templates', $templates, $entity);
+
+  $scripts = json_encode($templates, JSON_UNESCAPED_UNICODE);
+
+  // Embed twig templates.
+  $page_bottom['rcs_handlebars_twig'] = [
+    '#type'  => 'html_tag',
+    '#tag'   => 'script',
+    '#value' => Markup::create("var rcsTwigTemplates = $scripts;"),
+  ];
+}
+
+/**
+ * Implements hook_rcs_twig_templates().
+ */
+function alshaya_rcs_rcs_twig_templates() {
+  // List of twig templates to be embedded on the page.
+  return [
+    // List of block templates.
+    'block' => [],
+    // List of field templates.
+    'field' => [],
+  ];
 }

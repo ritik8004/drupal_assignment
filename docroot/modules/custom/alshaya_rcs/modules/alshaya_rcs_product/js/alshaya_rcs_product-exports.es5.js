@@ -1,23 +1,3 @@
-const Handlebars = require("handlebars");
-
-/**
- * @todo
- *
- * - create module alshaya_rcs_handlebars to have this code
- * - implement a hook to allow modules to register twig templates
- * - after we call the hoook we populate the contents
- * - create a js file with handlebars helpers
- * - create a js file with twig converter
- * - add tests
- */
-
-/**
- * Implements Drupal.t().
- */
-Handlebars.registerHelper('t', function(str){
-  return Drupal.t(str);
-});
-
 // @codingStandardsIgnoreFile
 
 // This is because the linter is throwing errors where we use backticks here.
@@ -50,75 +30,6 @@ function isProductAvailableForHomeDelivery(entity) {
  */
 function isProductBuyable(entity) {
   return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
-}
-
-/**
- * Converts twig templates to handlebars.
- *
- * @param source
- */
-function convertToHandlebars(source) {
-  let replacements = [
-    // Convert translated strings.
-    { "{{.*?('.*?')(|t).*?}}": "{{t $1}}" },
-    // Make Twig comments become Handlebars strings.
-    { "{#": "{{'" },
-    { "#}": "'}}" },
-    // Convert if statements.
-    { "{% if (.*?) %}": "{{#if $1 }}" },
-    { "{% endif %}": "{{/if}}" },
-  ];
-
-  replacements.forEach(function(item) {
-    let search = Object.entries(item)[0][0];
-    let replace = Object.entries(item)[0][1];
-    source = source.replace(new RegExp(search, 'gm'), replace);
-  });
-
-  return source;
-}
-
-/**
- * Returns the value from object using nested keys i.e. "field.field_name"
- *
- * @param path string
- *   The path for the value inside the object separated by .
- * @param obj
- *   The object.
- * @param separator
- *   The separator, defaults to .
- * @return {*}
- *   The data.
- */
-function resolvePath(path, obj=self, separator='.') {
-  var properties = Array.isArray(path) ? path : path.split(separator)
-  return properties.reduce((prev, curr) => prev && prev[curr], obj)
-}
-
-/**
- * Render Handlebars templates.
- *
- * @param {object} path
- *   The path in the object. i.e "block.block_name"
- *
- * @param {object} data
- *   The data.
- *
- * @returns {object}
- *   Returns the object containing the value and ellipsis information.
- */
-function handlebarsRender(template, data) {
-  // Get the source template.
-  let source = resolvePath(template, rcsTwigTemplates);
-
-  // Convert twig template to handlebar template.
-  source = convertToHandlebars(source);
-
-  // Compile source.
-  let render = Handlebars.compile(source);
-
-  // Return rendered template using data provided.
-  return render(data);
 }
 
 /**
@@ -633,7 +544,7 @@ exports.computePhFilters = function (input, filter) {
       }
 
       // Render twig plugin.
-      value = handlebarsRender(`field.${filter}`, data);
+      value = handlebarsRenderer.render(`field.product.${filter}`, data);
       break;
 
     case 'short_description':
@@ -655,7 +566,7 @@ exports.computePhFilters = function (input, filter) {
       data.read_more = tmp.read_more;
 
       // Render twig plugin.
-      value = handlebarsRender(`field.${filter}`, data);
+      value = handlebarsRenderer.render(`field.product.${filter}`, data);
       break;
 
     case 'content.legal_notice':

@@ -5,7 +5,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
-use Drupal\Core\Render\Markup;
 
 /**
  * Implements hook_theme().
@@ -678,34 +677,16 @@ function alshaya_rcs_product_rcs_graphql_query_fields() {
 }
 
 /**
- * Implements hook_page_bottom().
+ * Implements hook_rcs_twig_templates_alter().
  */
-function alshaya_rcs_product_page_bottom(array &$page_bottom) {
-  $node = \Drupal::routeMatch()->getParameter('node');
-  if (!$node || $node->bundle() !== 'rcs_product') {
+function alshaya_rcs_product_rcs_twig_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->getType() !== 'rcs_product') {
     return;
   }
 
   $path = drupal_get_path('module', 'alshaya_rcs_product');
-
-  // List templates to be rendered on the page.
-  $list = [
-    'block' => [
-      // List of block templates.
-    ],
-    'field' => [
-      // List of field templates.
-      'description' =>  file_get_contents("$path/templates/rcs-field-description.html.twig"),
-      'short_description' => file_get_contents("$path/templates/rcs-field-short-description.html.twig"),
-    ],
-  ];
-
-  $scripts = json_encode($list, JSON_UNESCAPED_UNICODE);
-
-  // Add twig templates for RCS + Handlebars.
-  $page_bottom['rcs_handlebars_twig'] = [
-    '#type'  => 'html_tag',
-    '#tag'   => 'script',
-    '#value' => Markup::create("var rcsTwigTemplates = $scripts;"),
+  $templates['field']['product'] = [
+    'description' => file_get_contents("$path/templates/rcs-field-description.html.twig"),
+    'short_description' => file_get_contents("$path/templates/rcs-field-short-description.html.twig"),
   ];
 }
