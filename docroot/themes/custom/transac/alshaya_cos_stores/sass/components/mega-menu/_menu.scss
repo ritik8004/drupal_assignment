@@ -1,0 +1,36 @@
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    ul {
+      &.menu--one__list {
+        width: 69%;
+        margin-#{$left}: -4.0625rem;
+      }
+    }
+
+    li {
+      &.menu--one__list-item {
+        .menu__link {
+          font-size: 0.875rem;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    &:not(.megamenu-inline-layout) {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          #{$left}: -23%;
+          min-width: 80rem;
+
+          .menu--two__list-item {
+            padding-bottom: 0.75rem;
+          }
+        }
+
+        .menu__links__wrapper {
+          padding: 1.25rem 1rem 0;
+        }
+      }
+    }
+  }
+}

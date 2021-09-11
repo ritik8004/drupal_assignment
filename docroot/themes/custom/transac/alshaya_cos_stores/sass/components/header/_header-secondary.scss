@@ -24,3 +24,13 @@
     height: 1.875rem;
   }
 }
+
+body {
+  @include breakpoint($only-tablet) {
+    margin-top: 4rem;
+
+    html[lang=ar] & {
+      margin-top: 5rem;
+    }
+  }
+}
