@@ -12,6 +12,10 @@
           font-size: 0.875rem;
           text-transform: capitalize;
         }
+
+        .menu--one__link {
+          border-color: $mm_l1_desktop-border;
+        }
       }
     }
 
@@ -31,5 +35,59 @@
         }
       }
     }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .menu--two__list-item {
+    > .menu-two__link-wrapper {
+      .menu-two__link {
+        @include breakpoint($upto-desktop) {
+          padding-#{$left}: 0.625rem;
+        }
+      }
+    }
+  }
+
+  .toggle--sign {
+    .one {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      width: 50%;
+
+      &.shop {
+        width: 50%;
+      }
+    }
+  }
+
+  .mobile--close {
+    span {
+      background-size: inherit;
+      height: 1.4375rem;
+    }
+  }
+
+  .main--menu {
+    .menu__link {
+      text-transform: uppercase;
+    }
+  }
+
+  .menu__list-item {
+    margin-#{$left}: 0;
+    margin-#{$right}: 0;
+    padding-#{$left}: 0.625rem;
+    padding-#{$right}: 0.625rem;
+    text-transform: uppercase;
+
+    .menu--two__list & {
+      padding-#{$left}: 0;
+      padding-#{$right}: 0;
+    }
+  }
+
+  .back--link {
+    @extend .menu__list-item;
   }
 }

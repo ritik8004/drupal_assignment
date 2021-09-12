@@ -300,3 +300,11 @@ header {
     }
   }
 }
+
+.menu__back {
+  @include breakpoint($upto-desktop) {
+    background: url('#{$cos_theme_img_directory_path}/icons/ic-chevronleft.svg') no-repeat;
+    margin-#{$left}: 0.75rem;
+    height: 0.875rem;
+  }
+}
