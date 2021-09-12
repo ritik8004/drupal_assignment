@@ -90,7 +90,7 @@
   #alshaya-algolia-autocomplete {
     @include breakpoint($desktop) {
       width: 16rem;
-      top: -0.1875rem;
+      top: -0.3125rem;
     }
 
     @include breakpoint($only-tablet) {
