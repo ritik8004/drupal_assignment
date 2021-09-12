@@ -10,6 +10,8 @@ $dark-gray: #999;
 $brownish-grey: #666;
 $bright-gray: #eee;
 $silver-gray: #b6b6b6;
+$gray-98: #fafafa;
+$gray-light: #f6f6f6;
 $pale-taupe: #b89978;
 $blood: #a81313;
 $lust-red: #e51b23;
@@ -105,11 +107,19 @@ $accordion_border: $bright-gray;
 $lang_switch: $black-two;
 $lang_switch_active: $black;
 
+// Header.
+$header_border: $bright-gray;
+$header_search_active_bg: $white;
+$header_mobile_menu_close_bg: $black;
+$header_toggle_sign_active_tab: $eerie-black;
+$header_toggle_sign_default: $gray-light;
+
 // Header secondary: ie: top header.
 $header_secondary_bg: $bright-gray;
-$header_secondary_bg_upto_desk: $bright-gray;
+$header_secondary_bg_upto_desk: $white;
 $header_secondary_menu_link_mobile: $black-two;
 $header_secondary_menu_link: $black-two;
+$header_mobile_menu_arrow: $black-two;
 
 // Header my account nav.
 $header_my_account_h3_title: $black-two;
@@ -127,3 +137,29 @@ $breadcrumb_bg: $white;
 $breadcrumb_link: $outer-space;
 $breadcrumb_link_hover: $outer-space;
 $breadcrumb_link_active: $dark-gray;
+
+//  Mini Cart.
+$primary_minicart_quantity_text: $black-two;
+$primary_minicart_quantity_bg: transparent;
+
+//Algolia search bar.
+$algolia-input-text: $outer-space;
+$algolia-input-placeholder-text: $outer-space;
+$algolia-auto-complete-border: $white;
+$algolia-auto-complete-mobile-border: $bright-gray;
+$algolia-auto-complete-border-bottom: $outer-space;
+$algolia-search-clear-text-icon: $outer-space;
+
+// Mega menu.
+$mm_body_overlay: rgba(68, 68, 68, 0.6);
+$mm_l1_border: $bright-gray;
+$mm_l1_desktop-border: $white;
+$mm_l1_link: $eerie-black;
+$mm_l1_link_hover: $eerie-black;
+$mm_l1_link_active_border: $white;
+$mm_l2_link: $eerie-black;
+$mm_l2_link_hover: $eerie-black;
+$mm_l3_link: $eerie-black;
+$mm_highlight_label: $eerie-black;
+$mm_highlight_title: $eerie-black;
+$mm_highlight_description: $eerie-black;
