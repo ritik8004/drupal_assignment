@@ -154,6 +154,8 @@ class AlshayaBazaarVoice {
   public function getDataFromBvReviewFeeds(array $skus, $limit) {
     $config = $this->configFactory->get('bazaar_voice.settings');
     $featured_reviews_limit = $config->get('featured_reviews_limit');
+    $locations = $this->getPdpFilterOptions();
+
     $sanitized_sku = [];
     foreach ($skus as $sku) {
       $sanitized_sku[] = $this->skuManager->getSanitizedSku($sku);
@@ -187,10 +189,22 @@ class AlshayaBazaarVoice {
           // Distributed rating info.
           $rating_distribution = $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution'], $value['ReviewStatistics']['TotalReviewCount']);
           // To get the featured reviews.
-          $bv_featured_reviews = '';
-          if (isset($result['Includes']['Reviews'])) {
-            $bv_featured_reviews = $result['Includes']['Reviews'];
+          $bv_featured_reviews = [];
+          if (!empty($result['Includes']) && isset($result['Includes']['Reviews'])) {
+            foreach ($result['Includes']['Reviews'] as $review) {
+              if ($review['ProductId'] === $value['Id']) {
+                if (strpos($review['ContentLocale'], 'en') !== FALSE
+                  && empty($bv_featured_reviews['en'])) {
+                  $bv_featured_reviews['en'] = $review['Title'];
+                }
+                if (strpos($review['ContentLocale'], 'ar') !== FALSE
+                  && empty($bv_featured_reviews['ar'])) {
+                  $bv_featured_reviews['ar'] = $review['Title'];
+                }
+              }
+            }
           }
+
           $response['ReviewStatistics'][$value['Id']] = [
             'OverallRatingPercentage' => round(($value['ReviewStatistics']['AverageOverallRating'] / 5) * 100),
             'AverageOverallRating' => round($value['ReviewStatistics']['AverageOverallRating'], 1),
@@ -200,6 +214,7 @@ class AlshayaBazaarVoice {
             'RatingStars' => ['rating_' . round($value['ReviewStatistics']['AverageOverallRating'])],
             'ProductRecommendedAverage' => round(($value['ReviewStatistics']['RecommendedCount'] / $value['ReviewStatistics']['TotalReviewCount']) * 100),
             'FeaturedReviews' => $bv_featured_reviews,
+            'locations' => $locations['location_filter'],
           ];
         }
       }
