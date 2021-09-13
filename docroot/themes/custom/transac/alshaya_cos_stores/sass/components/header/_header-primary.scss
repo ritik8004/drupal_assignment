@@ -1,4 +1,8 @@
 header {
+  @include breakpoint($desktop) {
+    border-bottom: 1px solid $header_border;
+  }
+
   .region__header {
     @include breakpoint($desktop) {
       display: flex;
@@ -44,7 +48,7 @@ header {
   }
 
   .c-header__region {
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       border-bottom: 1px solid $header_border;
     }
 
