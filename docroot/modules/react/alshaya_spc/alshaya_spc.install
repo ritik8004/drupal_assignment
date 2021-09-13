@@ -10,13 +10,34 @@ use Drupal\Core\Database\Database;
 use Doctrine\DBAL\DBALException;
 use Drupal\Core\Utility\UpdateException;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update().
+ *
+ * Update the advantage card settings.
+ */
+function alshaya_spc_update_8017() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.advantage_card'],
+    'alshaya_spc',
+    'install'
+  );
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v8');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
 
 /**
  * Implements hook_update_N().
  *
  * Adds Benefit Pay payment method and other related data.
  */
-function alshaya_spc_update_8015() {
+function alshaya_spc_update_8016() {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $benefitPay = $checkout_options_manager->loadPaymentMethod('checkout_com_upapi_benefitpay', 'Benefit Pay');
@@ -38,7 +59,7 @@ function alshaya_spc_update_8015() {
 
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
-  $translations = _alshaya_spc_get_translations('v6');
+  $translations = _alshaya_spc_get_translations('v7');
   if ($translations) {
     alshaya_i18n_save_translations($translations);
   }
@@ -49,7 +70,29 @@ function alshaya_spc_update_8015() {
  *
  * Add translations for CVV error.
  */
+function alshaya_spc_update_8015() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v6');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add click and collect collection point configs and translations.
+ */
 function alshaya_spc_update_8014() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.collection_points'],
+    'alshaya_spc',
+    'install'
+  );
+
   // Add translations.
   module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
   $translations = _alshaya_spc_get_translations('v5');

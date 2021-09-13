@@ -1,4 +1,4 @@
-@javascript @guest @pdp @homeDelivery @bbwaeuat @pbsauat @flsauat @mcsauat @aeoaeuat @aeokwuat @aeosauat
+@javascript @guest @pdp @homeDelivery @bbwaeuat @pbsauat @flsauat @mcsauat
 Feature: SPC Classic PDP block for desktop
 
   Background:

@@ -2,13 +2,30 @@ import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../utilities/strings';
+import {
+  getCncModalButtonText,
+  isCollectionPoint,
+  getPickUpPointTitle,
+  getCncDeliveryTimePrefix,
+} from '../../../../utilities/cnc_util';
+import PriceElement from '../../../../utilities/special-price/PriceElement';
+import collectionPointsEnabled from '../../../../../../js/utilities/pudoAramaxCollection';
 
 const StoreItem = ({
   display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose,
 }) => (
   <>
-    <span className="spc-cnc-store-name">
-      <span className="spc-store-name-wrapper" onClick={(e) => onStoreChoose(e, index)}>
+    <span
+      className={`spc-cnc-store-name ${collectionPointsEnabled ? 'pudo-collection-list' : ''}`}
+      onClick={(e) => onStoreChoose(e, index)}
+    >
+      <ConditionalView condition={collectionPointsEnabled()}>
+        <span className="spc-collection-label-wrapper">
+          <span className={`${isCollectionPoint(store) ? 'collection-point' : 'store'}-icon`} />
+          <span className="pickup-point-title">{getPickUpPointTitle(store)}</span>
+        </span>
+      </ConditionalView>
+      <span className="spc-store-name-wrapper">
         <span className="store-name">{store.name}</span>
         <span className="store-distance">
           {getStringMessage(
@@ -28,8 +45,11 @@ const StoreItem = ({
       <div className="store-address-content">
         <div className="store-address">{parse(store.address)}</div>
         <div className="store-delivery-time">
-          <span className="label--delivery-time">{getStringMessage('cnc_collect_in_store')}</span>
+          <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
           <span className="delivery--time--value">{` ${store.delivery_time}`}</span>
+          <ConditionalView condition={collectionPointsEnabled()}>
+            <PriceElement amount={store.price_amount} />
+          </ConditionalView>
         </div>
         <div className="store-open-hours">
           {
@@ -52,7 +72,7 @@ const StoreItem = ({
               type="button"
               onClick={(e) => onStoreFinalize(e, store.code)}
             >
-              {getStringMessage('cnc_select_this_store')}
+              {getStringMessage(getCncModalButtonText())}
             </button>
           </div>
         </ConditionalView>

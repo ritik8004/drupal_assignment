@@ -8,6 +8,7 @@ import isAuraEnabled from '../../../../js/utilities/helper';
 import DeliveryVATSuffix from '../delivery-vat-suffix';
 import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
+import Advantagecard from '../advantagecard';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -60,7 +61,13 @@ class TotalLineItems extends React.Component {
         }
       });
     }
-
+    if (Advantagecard.isAdvantagecardEnabled()) {
+      const { totals } = this.props;
+      // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
+      if (Advantagecard.isAdvantageCardApplied(totals.items)) {
+        promoData += `<div class="promotion-label"><strong>${Drupal.t('Advantage Card Discount')}</strong></div>`;
+      }
+    }
     return promoData;
   };
 

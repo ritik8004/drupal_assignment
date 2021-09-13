@@ -10,6 +10,7 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -183,6 +184,10 @@ const OrderSummary = (props) => {
                   address={storeAddress.join(', ')}
                   openingHours={storeInfo.store_open_hours}
                   mapLink={storeInfo.view_on_map_link}
+                  {...(collectionPointsEnabled() && storeInfo.pudo_available !== undefined
+                    && { pickUpPointIcon: storeInfo.pudo_available ? 'collection-point' : 'store' })}
+                  {...(collectionPointsEnabled() && storeInfo.collection_point !== undefined
+                    && { pickUpPointTitle: storeInfo.collection_point })}
                 />
                 <OrderSummaryItem label={Drupal.t('Collection by')} value={customerShippingName} />
               </>

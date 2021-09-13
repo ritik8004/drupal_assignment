@@ -233,7 +233,15 @@ class AlshayaSpcController extends ControllerBase {
       $checkout_settings = Settings::get('alshaya_checkout_settings');
       $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
     }
-
+    // Advantage card settings only available if it is enabled.
+    $advantage_card_config = $this->config('alshaya_spc.advantage_card');
+    if ($advantage_card_config->get('advantageCardEnabled')) {
+      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard'] = [
+        'enabled' => $advantage_card_config->get('advantageCardEnabled'),
+        'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
+      ];
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $advantage_card_config->getCacheTags());
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
@@ -395,7 +403,6 @@ class AlshayaSpcController extends ControllerBase {
         'key' => 'cnc_distance',
         'value' => $this->t('@distance miles'),
       ];
-
     }
 
     $strings[] = [
@@ -652,8 +659,15 @@ class AlshayaSpcController extends ControllerBase {
     if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] === $checkout_settings->get('same_day_shipping_method_code')) {
       $delivery_method_description = $this->t('Same day');
     }
+
+    $collection_settings = $this->config('alshaya_spc.collection_points');
+    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
+
     // Get formatted customer phone number.
-    $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    $number = $cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_mobile']
+      ? $order['shipping']['extension_attributes']['collector_mobile']
+      : $order['shipping']['address']['telephone'];
+    $phone_number = $this->orderHelper->getFormattedMobileNumber($number);
 
     // Order Totals.
     $totals = [
@@ -690,7 +704,9 @@ class AlshayaSpcController extends ControllerBase {
         'customer_service_text' => $checkout_settings->get('checkout_customer_service'),
       ],
       'order_details' => [
-        'customer_email' => $order['email'],
+        'customer_email' => ($cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_email'])
+        ? $order['shipping']['extension_attributes']['collector_email']
+        : $order['email'],
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
@@ -702,6 +718,7 @@ class AlshayaSpcController extends ControllerBase {
         'payment' => $orderDetails['payment'],
         'billing' => $orderDetails['billing'],
       ],
+      'cnc_collection_points_enabled' => $cnc_collection_points_enabled ?? FALSE,
     ];
 
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
@@ -721,7 +738,10 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $cache_tags = [];
-    $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
+    $cache_tags = Cache::mergeTags($cache_tags, array_merge(
+      $checkout_settings->getCacheTags(),
+      $collection_settings->getCacheTags(),
+    ));
 
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
@@ -760,6 +780,10 @@ class AlshayaSpcController extends ControllerBase {
         $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey, $base_currency_code);
       }
     }
+
+    if ($cnc_collection_points_enabled) {
+      $build['#attached']['library'][] = 'alshaya_white_label/checkout-confirmation-pudo-aramex';
+    }
     // Adding hook alter for bazaarvoice pixel integration.
     $this->moduleHandler->alter('alshaya_spc_checkout_confirmation_order_build', $build, $order);
     return $build;
@@ -797,7 +821,15 @@ class AlshayaSpcController extends ControllerBase {
           }
           break;
 
+        case 'pudo_fullname':
+          // If full name is not empty.
+          if (!empty($value)) {
+            $status[$key] = TRUE;
+          }
+          break;
+
         case 'mobile':
+        case 'pudo_collector_tel':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
@@ -830,6 +862,7 @@ class AlshayaSpcController extends ControllerBase {
           break;
 
         case 'email':
+        case 'pudo_collector_email':
           // For email validation we do two checks:
           // 1. email domain is valid
           // 2. email is not of an existing customer.
@@ -839,8 +872,10 @@ class AlshayaSpcController extends ControllerBase {
             $status[$key] = 'invalid';
           }
           else {
-            $user = user_load_by_mail($value);
-            $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
+            if ($key == 'email') {
+              $user = user_load_by_mail($value);
+              $status[$key] = ($user instanceof UserInterface) ? 'exists' : '';
+            }
           }
           break;
 

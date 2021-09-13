@@ -15,3 +15,14 @@ alshaya_spc.click_n_collect:
         zoom:
           type: integer
           label: 'map zoom for country.'
+
+alshaya_spc.advantage_card:
+  type: config_object
+  label: 'Advantage Card configuration'
+  mapping:
+    advantageCardEnabled:
+      type: boolean
+      label: 'Advantage card status'
+    advantageCardPrefix:
+      type: string
+      label: 'Advantage card prefix'
