@@ -233,6 +233,18 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'mcqa_dev3',
       ],
     ],
+    'mceg' => [
+      'dev3' => [
+        'magento' => 'mc_apc',
+        'conductor' => 'mceg_dev3',
+      ],
+    ],
+    'mcbh' => [
+      'dev3' => [
+        'magento' => 'mc_apc',
+        'conductor' => 'mcbh_dev3',
+      ],
+    ],
     'pbkw' => [
       'dev2' => [
         'magento' => 'pb_uat',
@@ -323,6 +335,18 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev2' => [
         'magento' => 'aeo_pprod',
         'conductor' => 'aeoeg_dev2',
+      ],
+    ],
+    'aeoeg' => [
+      'dev3' => [
+        'magento' => 'aeo_apc',
+        'conductor' => 'aeoeg_dev3',
+      ],
+    ],
+    'aeobh' => [
+      'dev3' => [
+        'magento' => 'aeo_apc',
+        'conductor' => 'aeobh_dev3',
       ],
     ],
     'bpkw' => [
