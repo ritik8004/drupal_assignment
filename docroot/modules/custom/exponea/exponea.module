@@ -25,6 +25,5 @@ function exponea_page_attachments(array &$attachments) {
       ],
     ];
     $attachments['#attached']['html_head'][] = [$exponea_link, 'link'];
-    $attachments['#attached']['library'][] = 'exponea/gtm_exponea';
   }
 }

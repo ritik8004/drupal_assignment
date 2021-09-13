@@ -1,7 +1,0 @@
-gtm_exponea:
-  version: 1.x
-  js:
-    js/exponea.min.js: { attributes: { defer: true } }
-  dependencies:
-    - alshaya_seo_transac/gtm
-    - core/drupal.debounce
