@@ -34,13 +34,14 @@ $secondary_link: $black-three;
 // Form elements.
 $primary_form_selector_border: $outer-space;
 $primary_form_selector: $black-two;
-$primary_form_link: $outer-space;
+$primary_form_link: $eerie-black;
 $primary_form_input_text: $black-two;
 $primary_input_label: $dark-gray;
 $primary_input_border: $outer-space;
 $primary_input_disabled: $brownish-grey;
 $primary_input_focus_border: $black;
 $primary_input_inline_error: $lust-red;
+$password_tooltip_list: $eerie-black;
 
 // Form Items
 $formitem_label: $dark-gray;
@@ -63,6 +64,11 @@ $primary_radiobtn_filled: $outer-space;
 
 // User Form
 $user_field_link: $outer-space;
+$user_form_text: $eerie-black;
+$my_account_nav: $eerie-black;
+$my_account_nav_active: $dark-gray;
+$my_account_nav_hover: $dark-gray;
+$user_form_layout_divider_color: $bright-gray;
 
 // Tables.
 $primary_th_bg: $brownish-grey;
@@ -200,7 +206,7 @@ $store_finder_individual_hour_border: $bright-gray;
 $store_finder_glossary_alphabet: $eerie-black;
 $store_finder_glossary_text: $eerie-black;
 $store_finder_glossary_icon: $eerie-black;
-$store_finder_glossary_text_hover: rgba(27, 27, 27, 0.7);
+$store_finder_glossary_text_hover: $bright-gray;
 $store_finder_glossary_text_border: $bright-gray;
 $store_finder_glossary_border: $bright-gray;
 
@@ -210,3 +216,12 @@ $store_finder_search_results_tile_link: $eerie-black;
 $store_finder_search_results_tile_icon: $eerie-black;
 $store_finder_search_results_hour_label: $eerie-black;
 $store_finder_search_results_hour_icon_open: $eerie-black;
+
+// Social Auth
+$social-network-text: $eerie-black;
+$social-auth-bg: $white;
+$social-auth-bg-hover: $bright-gray;
+$social_auth_login_button_border: $outer-space;
+$user_login_sub_text: $eerie-black;
+$user_login_link_btn_text: $eerie-black;
+$user_login_section_title: $eerie-black;
