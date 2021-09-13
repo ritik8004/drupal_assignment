@@ -6,7 +6,6 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -114,9 +113,9 @@ class ConfigProduct extends ResourceBase {
         'legal_notice_label',
         'legal_notice_summary',
       ],
-      'alshaya_acm_product.home_delivery',
-      'alshaya_click_collect.settings',
-      'acq_commerce.currency',
+      'alshaya_acm_product.home_delivery' => [],
+      'alshaya_click_collect.settings' => [],
+      'acq_commerce.currency' => [],
     ];
   }
 
@@ -144,32 +143,34 @@ class ConfigProduct extends ResourceBase {
    *   The response containing configuration.
    */
   public function get() {
-    $data = [];
-    $list = $this->getWhiteList();
+    $whitelist = $this->getWhiteList();
+
+    // Switch config language.
+    $language_id = $this->languageManager->getCurrentLanguage()->getId();
+    $language = $this->languageManager->getLanguage($language_id);
+    $this->languageManager->setConfigOverrideLanguage($language);
+
     // Build an array with config data.
-    foreach ($list as $config => $name) {
-      if (is_array($name)) {
-        $data[$config] = $this->getAllConfigs($config);
-        // Keep only items specified in getList().
-        foreach ($data[$config] as $name => $item) {
-          if (!in_array($name, $list[$config])) {
-            unset($data[$config][$name]);
+    $data = [];
+    foreach (array_keys($whitelist) as $config_name) {
+      $values = $this->getConfig($config_name);
+      if (empty($whitelist[$config_name])) {
+        // If individual configs were not specified, get all config values.
+        foreach (array_keys($values->getRawData()) as $item) {
+          // Exclude certain configs.
+          if (in_array($item, ['_core'])) {
+            continue;
           }
+          $data[$config_name][$item] = $values->get($item);
         }
       }
       else {
-        $data[$name] = $this->getAllConfigs($name);
+        // Get listed configs only.
+        foreach ($whitelist[$config_name] as $item) {
+          $data[$config_name][$item] = $values->get($item);
+        }
       }
     }
-
-    // Translate strings.
-    array_walk_recursive($data, function (&$value) {
-      if (is_string($value)) {
-        // @codingStandardsIgnoreStart
-        $value = new TranslatableMarkup($value);
-        // @codingStandardsIgnoreEnd
-      }
-    });
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
@@ -180,7 +181,7 @@ class ConfigProduct extends ResourceBase {
   }
 
   /**
-   * Get all items for a given config name.
+   * Get all values for a given config name, provides cache tag info.
    *
    * @param string $name
    *   The config name.
@@ -188,16 +189,11 @@ class ConfigProduct extends ResourceBase {
    * @return array|mixed
    *   The config.
    */
-  private function getAllConfigs($name) {
+  private function getConfig($name) {
     $config = $this->configFactory->get($name);
-    $configs = $config->getRawData();
-
-    // Remove unwanted item.
-    unset($configs['_core']);
-
     $this->addCacheTags($config->getCacheTags());
 
-    return $configs;
+    return $config;
   }
 
 }
