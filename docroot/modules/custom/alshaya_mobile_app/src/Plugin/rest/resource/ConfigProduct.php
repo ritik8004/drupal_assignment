@@ -177,7 +177,7 @@ class ConfigProduct extends ResourceBase {
     }
     
     // Restore original language.
-    $this->languageManager->setConfigOverrideLanguage($language);
+    $this->languageManager->setConfigOverrideLanguage($original_language);
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
