@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_bazaar_voice\Commands;
 
 use Algolia\AlgoliaSearch\SearchClient;
-use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\alshaya_master\Service\AlshayaEntityHelper;
 use Drush\Commands\DrushCommands;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
@@ -222,18 +221,18 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
                 $fields['bv_rating_distribution_average'] = json_encode($data['ReviewStatistics'][$sanitized_sku]['RatingDistributionAverage']);
                 $fields['bv_recommended_average'] = $data['ReviewStatistics'][$sanitized_sku]['ProductRecommendedAverage'];
                 $featured_reviews = $data['ReviewStatistics'][$sanitized_sku]['FeaturedReviews'];
+                $locations = $data['ReviewStatistics'][$sanitized_sku]['locations'];
+
+                // Prepare bv featured reviews.
                 if (!empty($featured_reviews)) {
-                  foreach ($languages as $language) {
-                    $review_title = [];
-                    $lang = $language->getId();
-                    $reviews = array_filter($featured_reviews, function ($v) use ($lang) {
-                      return stristr($v['ContentLocale'], $lang);
-                    });
-                    foreach ($reviews as $review) {
-                      $review_title[] = $review['Title'];
+                  $fields['bv_featured_reviews'] = '';
+                  foreach ($featured_reviews as $key => $review) {
+                    if ($key === 'en') {
+                      $fields['bv_featured_reviews'] = $review;
                     }
-                    $locale_key_prefix = 'lng:' . AlshayaI18nLanguages::getLocale($lang) . ':';
-                    $fields[$locale_key_prefix . 'bv_featured_reviews'] = json_encode($review_title, JSON_UNESCAPED_UNICODE);
+                    foreach ($locations as $code => $location) {
+                      $fields['lng:' . $key . '_' . $code . ':bv_featured_reviews'] = $review;
+                    }
                   }
                 }
 
