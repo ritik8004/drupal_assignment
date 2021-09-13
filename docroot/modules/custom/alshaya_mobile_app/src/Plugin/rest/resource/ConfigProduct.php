@@ -149,7 +149,7 @@ class ConfigProduct extends ResourceBase {
     $whitelist = $this->getWhiteList();
 
     // Switch config language.
-    $original_language = $language_manager->getConfigOverrideLanguage();
+    $original_language = $this->languageManager->getConfigOverrideLanguage();
     $language_id = $this->languageManager->getCurrentLanguage()->getId();
     $language = $this->languageManager->getLanguage($language_id);
     $this->languageManager->setConfigOverrideLanguage($language);
