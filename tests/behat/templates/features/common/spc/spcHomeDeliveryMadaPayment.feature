@@ -1,4 +1,4 @@
-@javascript @guest @madaPayment @homeDelivery @westelmkwuat @pbsauat @mckwuat @mcsauat @mcaeuat @pbaeuat @pbkwuat @vssauat @mcsauat @tbskwuat @flsauat
+@javascript @guest @madaPayment @homeDelivery @aeoaeuat @aeokwuat @aeosauat @westelmkwuat @pbsauat @mckwuat @mcsauat @mcaeuat @pbaeuat @pbkwuat @vssauat @mcsauat @tbskwuat @flsauat
 Feature: SPC Checkout Home Delivery MADA Card Payment
 
   Background:
@@ -48,6 +48,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I should be on "checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
@@ -124,11 +125,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
@@ -202,6 +199,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
@@ -245,6 +243,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I should be on "checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
@@ -320,11 +319,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
@@ -398,3 +393,4 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file

@@ -220,7 +220,6 @@ magazine_article:
 alshaya_image_lazy_load:
   js:
     vendor/js/blazy.min.js: { minified: true }
-    js/alshaya_image_lazyload.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
@@ -326,10 +325,10 @@ matchback_layout:
     theme:
       css/conditional-sass/matchback-layout/matchback-layout.ltr.css: {}
   dependencies:
-  - core/jquery
-  - core/drupal
-  - alshaya_white_label/slick
-  - alshaya_white_label/alshaya_image_lazy_load
+    - core/jquery
+    - core/drupal
+    - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 matchback_cart_notification:
   css:
@@ -338,13 +337,13 @@ matchback_cart_notification:
 
 tooltip:
   js:
-      js/order-detail.js: {}
+    js/order-detail.js: {}
   css:
     theme:
       css/conditional-sass/tooltip/tooltip.ltr.css: {}
   dependencies:
-  - core/jquery
-  - core/drupal
+    - core/jquery
+    - core/drupal
 
 alshaya-react-animate:
   css:
@@ -495,6 +494,11 @@ secondary-menu:
     theme:
       css/conditional-sass/secondary-menu/secondary-menu.ltr.css: {}
 
+checkout-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: {}
+
 my-account:
   css:
     theme:
@@ -509,6 +513,11 @@ sitemap:
   css:
     theme:
       css/conditional-sass/sitemap/sitemap.ltr.css: {}
+
+checkout-confirmation-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: {}
 
 alshaya-vat-certificate:
   css:
