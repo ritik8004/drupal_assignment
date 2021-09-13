@@ -1,4 +1,11 @@
 variables:
-  spc_single_product_detail_page_coupon: '/buy-marnys-omega-junior-36-syrup.html/'
-  spc_multiple_product_detail_page_coupon: '/buy-marnys-omega-junior-36-syrup.html/'
-  spc_single_product_detail_page_no_coupon: '/buy-aptamil-2-follow-formula-milk-900g.html/'
+  url_product_page: 'buy-alive-womens-50-premium-60-gummies.html'
+  product_listing_page_url: '/shop-bestsellers/'
+  spc_product_listing_page: '/shop-bestsellers/'
+  spc_basket_page: '/shop-bestsellers/'
+  spc_pdp_page: 'buy-alive-womens-50-premium-60-gummies.html'
+  spc_promotion_listing_page: '/buy-alive-womens-50-premium-60-gummies.html/'
+  spc_single_product_detail_page_coupon: 'buy-alive-womens-50-premium-60-gummies.html/'
+  spc_multiple_product_detail_page_coupon: '/buy-alive-womens-50-premium-60-gummies.html/'
+  spc_single_product_detail_page_no_coupon: '/buy-alive-womens-50-premium-60-gummies.html/'
+
