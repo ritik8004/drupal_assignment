@@ -119,6 +119,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
 
   // Clone the default clickable placeholder element from the given html.
   var clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
+  levelObj.name1 = levelObj.name;
 
   let enrichedDataObj = {};
   // Get the enrichment data from the settings.
