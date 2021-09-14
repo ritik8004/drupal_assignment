@@ -103,7 +103,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       'alshaya_white_label/slick_css',
     ];
 
-    if ($common_config['commonAlgoliaSearch']['productFrameEnabled'] || $common_config['commonAlgoliaSearch']['productFrameEnabled'] || $common_config['commonAlgoliaSearch']['productFrameEnabled']) {
+    if ($common_config['commonAlgoliaSearch']['productFrameEnabled'] || $common_config['commonAlgoliaSearch']['promotionFrameEnabled'] || $common_config['commonAlgoliaSearch']['productTitleTrimEnabled']) {
       $libraries[] = 'alshaya_white_label/plp-frame-options';
     }
 
