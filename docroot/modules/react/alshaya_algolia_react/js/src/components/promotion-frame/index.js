@@ -34,7 +34,7 @@ export default class PromotionsFrame extends React.Component {
           && (
           <div className="promotions">
             <span className="sku-promotion-item">
-              <div className="sku-promotion-text sku-promotion-text--ellipse" onClick={(e) => this.openModal(e)}>{promotions[0].text}</div>
+              <div className="sku-promotion-text sku-promotion-text--ellipse" onClick={(e) => this.openModal(e)}>{`${promotions[0].text.substring(0, 30)}...`}</div>
               <Popup
                 open={open}
                 className="algolia-promotion-list"
