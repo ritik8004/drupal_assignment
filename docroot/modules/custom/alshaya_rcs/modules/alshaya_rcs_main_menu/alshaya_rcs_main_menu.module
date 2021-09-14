@@ -139,3 +139,37 @@ function alshaya_rcs_main_menu_node_presave(EntityInterface $entity) {
     }
   }
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function alshaya_rcs_main_menu_node_insert(EntityInterface $node) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+    Cache::invalidateTags(['taxonomy_term:' . $config->get('category.placeholder_tid')]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ */
+function alshaya_rcs_main_menu_node_update(EntityInterface $node) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+  if ($node->bundle() == 'advanced_page'
+    && ($node->get('field_use_as_department_page')->value == 1
+      || $node->original->get('field_use_as_department_page')->value == 1)
+  ) {
+    $item = $config->get('category.placeholder_tid');
+    Cache::invalidateTags(['taxonomy_term:' . $config->get('category.placeholder_tid')]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for node entities.
+ */
+function alshaya_rcs_main_menu_node_delete(EntityInterface $node) {
+  $config = \Drupal::config('rcs_placeholders.settings');
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+    Cache::invalidateTags(['taxonomy_term:' . $config->get('category.placeholder_tid')]);
+  }
+}
