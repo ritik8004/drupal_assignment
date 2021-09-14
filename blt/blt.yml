@@ -52,7 +52,7 @@ modules:
 command-hooks:
   frontend-reqs:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash react-setup.sh ${docroot} && bash frontend-validate.sh ${docroot} && bash frontend-setup.sh ${docroot} && cd ${docroot} && ../vendor/bin/blt js:setup'
+    command: 'bash react-setup.sh ${docroot} && bash frontend-setup.sh ${docroot} && cd ${docroot} && ../vendor/bin/blt js:setup'
   frontend-assets:
     dir: '${repo.root}/blt/scripts'
     command: 'bash frontend-build.sh ${docroot} && bash react-build.sh ${docroot} && cd ${docroot} && ../vendor/bin/blt js:build'
