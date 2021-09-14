@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Aura\CustomerHelper;
 use App\Service\Cart;
+use App\Service\Aura\SearchHelper;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -60,6 +61,13 @@ class LoyaltyClubController {
   protected $cart;
 
   /**
+   * Service for aura search helper.
+   *
+   * @var \App\Service\Aura\SearchHelper
+   */
+  protected $auraSearchHelper;
+
+  /**
    * LoyaltyClubController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -74,6 +82,8 @@ class LoyaltyClubController {
    *   Aura customer helper service.
    * @param \App\Service\Cart $cart
    *   Cart service.
+   * @param \App\Service\Aura\SearchHelper $aura_search_helper
+   *   Aura search helper service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
@@ -81,7 +91,8 @@ class LoyaltyClubController {
     Drupal $drupal,
     Utility $utility,
     CustomerHelper $aura_customer_helper,
-    Cart $cart
+    Cart $cart,
+    SearchHelper $aura_search_helper
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
@@ -89,6 +100,7 @@ class LoyaltyClubController {
     $this->utility = $utility;
     $this->auraCustomerHelper = $aura_customer_helper;
     $this->cart = $cart;
+    $this->auraSearchHelper = $aura_search_helper;
   }
 
   /**
@@ -133,29 +145,58 @@ class LoyaltyClubController {
       $data['statusUpdate']['customerId'] = $customer_id;
       $url = 'customers/apc-status-update';
       $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      $response = TRUE;
+      $customer_data = [];
 
       // On API success, update the user AURA Status in Drupal.
       if ($response) {
-        $auraData = [
-          'uid' => $request_content['uid'],
-          'apcLinkStatus' => $request_content['apcLinkStatus'],
-        ];
-        $updated = $this->drupal->updateUserAuraInfo($auraData);
+        $search_response = $this->auraSearchHelper->search('apcNumber', $data['statusUpdate']['apcIdentifierId']);
 
-        // Check if user aura status was updated successfully in drupal.
-        if (!$updated) {
-          $message = 'Error while trying to update user AURA Status field in Drupal.';
-          $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
-            '@uid' => $request_content['uid'],
-            '@aura_status' => $request_content['apcLinkStatus'],
-            '@customer_id' => $customer_id,
-          ]);
-          return new JsonResponse($this->utility->getErrorResponse($message, 500));
+        if (empty($search_response['error'])) {
+          $auraData = [
+            'uid' => $request_content['uid'],
+            'apcLinkStatus' => $search_response['data']['apc_link'],
+            'tier' => $search_response['data']['tier_code'],
+          ];
+
+          $updated = $this->drupal->updateUserAuraInfo($auraData);
+
+          // Check if user aura status was updated successfully in drupal.
+          if (!$updated) {
+            $message = 'Error while trying to update user AURA Status field in Drupal.';
+            $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
+              '@uid' => $request_content['uid'],
+              '@aura_status' => $request_content['apcLinkStatus'],
+              '@customer_id' => $customer_id,
+            ]);
+            return new JsonResponse($this->utility->getErrorResponse($message, 500));
+          }
+        }
+
+        if ($search_response['data']['is_fully_enrolled']) {
+          $customer_info = $this->auraCustomerHelper->getCustomerInfo($customer_id);
+
+          if (empty($customer_info['error'])) {
+            $customer_data = array_merge($customer_data, $customer_info);
+          }
+
+          $customer_points = $this->auraCustomerHelper->getCustomerPoints($customer_id);
+
+          if (empty($customer_points['error'])) {
+            $customer_data = array_merge($customer_data, $customer_points);
+          }
+
+          $customer_tier = $this->auraCustomerHelper->getCustomerTier($customer_id);
+
+          if (empty($customer_tier['error'])) {
+            $customer_data = array_merge($customer_data, $customer_tier);
+          }
         }
       }
 
       $responseData = [
         'status' => $response,
+        'data' => $customer_data,
       ];
 
       return new JsonResponse($responseData);
