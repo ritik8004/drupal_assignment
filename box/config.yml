@@ -62,7 +62,7 @@ installed_extras:
   - pimpmylog
   - drupalconsole
 
-php_version: '7.3'
+php_version: '7.4'
 php_packages_extra:
   - "php{{ php_version }}-bz2"
   - "php{{ php_version }}-bcmath"
