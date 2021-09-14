@@ -113,8 +113,6 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element
 
   @language @desktop
   Scenario: As a Guest, I should be able to add more quantity in second language
@@ -254,8 +252,6 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element
 
   @language @mobile
   Scenario: As a Guest, I should be able to remove products from the basket in second language (mobile)
@@ -278,5 +274,3 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element
