@@ -163,6 +163,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
     // Override the clickable and non-clickable property.
     if (!enrichedDataObj.item_clickable) {
       clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
+      levelObj.name1 = levelObj.name;
     }
   }
 
