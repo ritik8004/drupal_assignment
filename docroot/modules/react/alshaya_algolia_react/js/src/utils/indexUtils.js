@@ -343,3 +343,39 @@ export function productListIndexStatus() {
   }
   return false;
 }
+
+/**
+ * Get product frame enabled / disabled.
+ *
+ * @returns {boolean}
+ */
+export function isProductFrameEnabled() {
+  if (drupalSettings.algoliaSearch.productFrameEnabled === true) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Get promotion frame enabled / disabled.
+ *
+ * @returns {boolean}
+ */
+export function isPromotionFrameEnabled() {
+  if (drupalSettings.algoliaSearch.promotionFrameEnabled === true) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Get product title trim status.
+ *
+ * @returns {boolean}
+ */
+export function isProductTitleTrimEnabled() {
+  if (drupalSettings.algoliaSearch.productTitleTrimEnabled === true) {
+    return true;
+  }
+  return false;
+}
