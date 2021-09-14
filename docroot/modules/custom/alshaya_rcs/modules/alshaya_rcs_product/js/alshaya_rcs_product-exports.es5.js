@@ -31,6 +31,44 @@ function isProductBuyable(entity) {
   return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
 }
 
+/**
+ * Replace placeholders and get related products.
+ *
+ * @param {object} products
+ *   The product object.
+ * @param {string} sectionTitle
+ *   The translated title for related, upsell.
+ *
+ * @returns {*}
+ *   Html with placeholders replaced.
+ */
+function getProductRecommendation(products, sectionTitle) {
+  // Create the containers for carousel.
+  const related = jQuery('<div />');
+  related.append(jQuery('.rcs-templates--related-product-wrapper').html());
+  related.find('.subtitle').html(sectionTitle);
+
+  // Get Product teaser template with tokens.
+  const productTeaser = jQuery('.rcs-templates--product-teaser').html();
+
+  // Replace tokens and add teaser to the container.
+  let finalMarkup = '';
+  products.forEach((product, index) => {
+    related.find('.owl-carousel').append('<div id="row' + index + '" class="views-row"/>');
+    related.find('#row' + index).append(productTeaser);
+    const attributes = rcsPhGetSetting('placeholderAttributes');
+    finalMarkup = related.html();
+    rcsPhReplaceEntityPh(finalMarkup, 'product_teaser', product, drupalSettings.path.currentLanguage)
+      .forEach(function eachReplacement(r) {
+        const fieldPh = r[0];
+        const entityFieldValue = r[1];
+        finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
+      });
+  });
+
+  return finalMarkup;
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -103,6 +141,39 @@ exports.render = function render(
       }
       break;
 
+    case 'mobile-upsell-products':
+    case 'upsell-products':
+      // Get upsell products.
+      const { upsell_products } = entity || {};
+      if (typeof upsell_products === 'undefined' || upsell_products.length === 0) {
+        break;
+      }
+
+      html = getProductRecommendation(upsell_products, rcsTranslatedText('You may also like', {}, 'alshaya_static_text|pdp_upsell_title'));
+      break;
+
+    case 'mobile-related-products':
+    case 'related-products':
+      // Get related products.
+      const { related_products } = entity || {};
+      if (typeof related_products === 'undefined' || related_products.length === 0) {
+        break;
+      }
+
+      html = getProductRecommendation(related_products, rcsTranslatedText('Related', {}, 'alshaya_static_text|pdp_related_title'));
+      break;
+
+    case 'mobile-crosssell-products':
+    case 'crosssell-products':
+      // Get related products.
+      const { crosssell_products } = entity || {};
+      if (typeof crosssell_products === 'undefined' || crosssell_products.length === 0) {
+        break;
+      }
+
+      html = getProductRecommendation(crosssell_products, rcsTranslatedText('Customers also bought', {}, 'alshaya_static_text|pdp_crosssell_title'));
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
@@ -138,7 +209,7 @@ exports.computePhFilters = function (input, filter) {
       }
       else {
         // Replace the entire price block html with this one.
-        priceBlock.html(price);
+        priceBlock.html(price.html());
       }
 
       value = jQuery(priceBlock).html();
@@ -440,19 +511,15 @@ exports.computePhFilters = function (input, filter) {
       const attributes = rcsPhGetSetting('placeholderAttributes');
       const pageType = rcsPhGetPageType();
 
-      rcsPhReplaceEntityPh(skuBaseForm.html(), pageType, input, drupalSettings.path.currentLanguage)
+      let finalHtml = skuBaseForm.html();
+      rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          for (const attribute of attributes) {
-            jQuery(`[${ attribute } *= '${ fieldPh }']`, skuBaseForm)
-              .each(function eachEntityPhAttributeReplace() {
-                jQuery(this).attr(attribute, jQuery(this).attr(attribute).replace(fieldPh, entityFieldValue));
-              });
-          }
+          skuBaseForm.html(rcsReplaceAll(finalHtml, fieldPh, entityFieldValue));
         });
 
-      value = skuBaseForm.html();
+      value = finalHtml;
       break;
 
     case 'gtm-price':
@@ -479,6 +546,10 @@ exports.computePhFilters = function (input, filter) {
       else {
         value = 'http://schema.org/OutOfStock';
       }
+      break;
+
+    case 'url':
+      value = `${drupalSettings.rcsPhSettings.productPathPrefix}${input.url_key}.html`;
       break;
 
     case 'brand_logo':

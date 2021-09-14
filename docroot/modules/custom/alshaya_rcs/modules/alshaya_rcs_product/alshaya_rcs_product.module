@@ -101,6 +101,18 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'rcs_attribute_brand_logo' => [
       'variables' => [],
     ],
+    'rcs_product_teaser' => [
+      'variables' => [],
+    ],
+    'rcs_product_modal' => [
+      'variables' => [],
+    ],
+    'rcs_modal_product_zoom' => [
+      'variables' => [],
+    ],
+    'rcs_related_products_wrapper' => [
+      'variables' => [],
+    ],
   ];
 }
 
@@ -153,6 +165,10 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_rcs_product/main';
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
   $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
+  $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
+  // Attach product carousel js for relate/US.
+  $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
 
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
@@ -179,6 +195,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
   $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $sku_manager->showImagesFromChildrenAfterAllOptionsSelected();
+
+  $recommended_product_settings = \Drupal::config('alshaya_acm.settings');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $recommended_product_settings->getCacheTags());
 }
 
 /**
@@ -376,6 +395,51 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#value' => render($brand_logo),
     '#attributes' => [
       'class' => 'rcs-templates--brand_logo',
+    ],
+  ];
+
+  $product_teaser = [
+    '#theme' => 'rcs_product_teaser',
+  ];
+  $variables['rcs_templates']['product_teaser'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($product_teaser),
+    '#attributes' => [
+      'class' => 'rcs-templates--product-teaser',
+    ],
+  ];
+  $product_modal = [
+    '#theme' => 'rcs_product_modal',
+  ];
+  $variables['rcs_templates']['product_modal'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($product_modal),
+    '#attributes' => [
+      'class' => 'rcs-templates--product-modal',
+    ],
+  ];
+  $modal_product_zoom = [
+    '#theme' => 'rcs_modal_product_zoom',
+  ];
+  $variables['rcs_templates']['modal_product_zoom'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($modal_product_zoom),
+    '#attributes' => [
+      'class' => 'rcs-templates--modal-product-zoom',
+    ],
+  ];
+  $related_product_wrapper = [
+    '#theme' => 'rcs_related_products_wrapper',
+  ];
+  $variables['rcs_templates']['related_product_wrapper'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#value' => render($related_product_wrapper),
+    '#attributes' => [
+      'class' => 'rcs-templates--related-product-wrapper',
     ],
   ];
 
@@ -671,7 +735,79 @@ function alshaya_rcs_product_rcs_graphql_query_fields() {
     ],
   ];
 
+  $recommended_product_settings = \Drupal::config('alshaya_acm.settings');
+  // Add query for upsell products if display setting is true.
+  if ($recommended_product_settings->get('display_upsell')) {
+    $query_fields['products']['items']['upsell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
+  }
+
+  // Add query for related products if display setting is true.
+  if ($recommended_product_settings->get('display_related')) {
+    $query_fields['products']['items']['related_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
+  }
+
+  // Add query for crosssell products if display setting is true.
+  if ($recommended_product_settings->get('display_crosssell')) {
+    $query_fields['products']['items']['crosssell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
+  }
+
   return $query_fields;
+}
+
+/**
+ * Get field query for recommended products.
+ *
+ * @return array
+ *   Fields array.
+ */
+function _alshaya_rcs_product_get_recommended_product_field_query() {
+  return [
+    'sku',
+    'id',
+    'name',
+    'url_key',
+    'is_buyable',
+    'stock_status',
+    'price' => [
+      'regularPrice' => [
+        'amount' => [
+          'currency',
+          'value',
+        ],
+      ],
+      'maximalPrice' => [
+        'amount' => [
+          'currency',
+          'value',
+        ],
+      ],
+    ],
+    'media_gallery' => [
+      'url',
+      'label',
+      '... on ProductVideo' => [
+        'video_content' => [
+          'media_type',
+          'video_provider',
+          'video_url',
+          'video_title',
+          'video_description',
+          'video_metadata',
+        ],
+      ],
+    ],
+    'gtm_attributes' => [
+      'id',
+      'name',
+      'variant',
+      'price',
+      'brand',
+      'category',
+      'dimension2',
+      'dimension3',
+      'dimension4',
+    ],
+  ];
 }
 
 /**
