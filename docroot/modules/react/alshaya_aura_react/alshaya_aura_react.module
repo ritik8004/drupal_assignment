@@ -168,11 +168,10 @@ function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings,
 
   // Add `paidWithAura` and `balancePayable` in totals to show
   // with order summary for order confirmation page.
-  if (isset($order['base_total_paid'])) {
-    $settings['order_details']['totals']['paidWithAura'] = $order['base_total_paid'] ?? 0;
-  }
-  if (isset($order['base_total_due'])) {
-    $settings['order_details']['totals']['balancePayable'] = $order['base_total_due'] ?? 0;
+  if (isset($order['extension']['aura_payment_value'])) {
+    $settings['order_details']['totals']['paidWithAura'] = $order['extension']['aura_payment_value'] ?? 0;
+    $settings['order_details']['totals']['balancePayable']
+     = $order['base_grand_total'] - $order['extension']['aura_payment_value'];
   }
 }
 
