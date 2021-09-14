@@ -51,13 +51,12 @@ function handleSignUp(auraUserDetails) {
   dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: auraUserData });
 }
 
-function updateUsersLoyaltyStatus(cardNumber, auraStatus, link) {
+function updateUsersLoyaltyStatus(cardNumber, link) {
   // API call to update user's loyalty status.
   const apiUrl = 'post/loyalty-club/apc-status-update';
   const data = {
     uid: getUserDetails().id,
     apcIdentifierId: cardNumber,
-    apcLinkStatus: auraStatus,
     link,
   };
 
@@ -115,17 +114,35 @@ function handleNotYou(cardNumber) {
  */
 function handleLinkYourCard(cardNumber) {
   let stateValues = {};
-  const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
   removeInlineError('.error-placeholder');
   addInlineLoader('.link-card-wrapper');
-  const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'Y');
+  const apiData = updateUsersLoyaltyStatus(cardNumber, 'Y');
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
-        if (result.data.status) {
+        if (result.data.status && result.data.data.auraStatus) {
+          const {
+            auraStatus,
+            tier,
+            auraPoints,
+            auraPointsToExpire,
+            auraPointsExpiryDate,
+            auraOnHoldPoints,
+            firstName,
+            lastName,
+          } = result.data.data;
+
           stateValues = {
-            loyaltyStatus: auraStatus,
+            loyaltyStatus: auraStatus || 0,
+            tier: tier || '',
+            points: auraPoints || 0,
+            cardNumber: cardNumber || '',
+            expiringPoints: auraPointsToExpire || 0,
+            expiryDate: auraPointsExpiryDate || '',
+            pointsOnHold: auraOnHoldPoints || 0,
+            firstName: firstName || '',
+            lastName: lastName || '',
           };
         }
       } else {
@@ -144,12 +161,10 @@ function handleLinkYourCard(cardNumber) {
  * Helper function to handle manual link your card.
  */
 function handleManualLinkYourCard(cardNumber, mobile, otp) {
-  const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
   const data = {
     type: 'withOtp',
     uid: getUserDetails().id,
     apcIdentifierId: cardNumber,
-    apcLinkStatus: auraStatus,
     link: 'Y',
     phoneNumber: mobile,
     otp,
@@ -164,7 +179,29 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
     apiData.then((result) => {
       if (result.data !== undefined) {
         if (result.data.status && result.data.error === undefined) {
-          dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: { loyaltyStatus: auraStatus } });
+          const {
+            auraStatus,
+            tier,
+            auraPoints,
+            auraPointsToExpire,
+            auraPointsExpiryDate,
+            auraOnHoldPoints,
+            firstName,
+            lastName,
+          } = result.data.data;
+
+          const stateValues = {
+            loyaltyStatus: auraStatus || 0,
+            tier: tier || '',
+            points: auraPoints || 0,
+            cardNumber: cardNumber || '',
+            expiringPoints: auraPointsToExpire || 0,
+            expiryDate: auraPointsExpiryDate || '',
+            pointsOnHold: auraOnHoldPoints || 0,
+            firstName: firstName || '',
+            lastName: lastName || '',
+          };
+          dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
           removeFullScreenLoader();
           return;
         }
