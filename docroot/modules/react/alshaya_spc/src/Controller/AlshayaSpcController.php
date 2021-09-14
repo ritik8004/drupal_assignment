@@ -26,6 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 
 /**
  * Class Alshaya Spc Controller.
@@ -110,6 +111,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $spcHelper;
 
   /**
+   * Address Book Manager object.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
@@ -134,6 +142,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Acm checkout com api helper.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
    *   Spc helper service.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   Address Book Manager object.
    */
   public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
@@ -145,7 +155,8 @@ class AlshayaSpcController extends ControllerBase {
                               LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
                               AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
-                              AlshayaSpcHelper $spc_helper) {
+                              AlshayaSpcHelper $spc_helper,
+                              AlshayaAddressBookManager $address_book_manager) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -157,6 +168,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->moduleHandler = $module_handler;
     $this->checkoutComApiHelper = $checkout_com_api_helper;
     $this->spcHelper = $spc_helper;
+    $this->addressBookManager = $address_book_manager;
   }
 
   /**
@@ -174,7 +186,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('language_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_checkoutcom.api_helper'),
-      $container->get('alshaya_spc.helper')
+      $container->get('alshaya_spc.helper'),
+      $container->get('alshaya_addressbook.manager')
     );
   }
 
@@ -196,6 +209,9 @@ class AlshayaSpcController extends ControllerBase {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
+    // Get magento field mappings.
+    $field_mapping = $this->addressBookManager->getMagentoFieldMappings();
+
     $build = [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -210,6 +226,7 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
@@ -219,6 +236,8 @@ class AlshayaSpcController extends ControllerBase {
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
+            'magento_field_mappings' => $field_mapping,
+            'address_fields' => _alshaya_spc_get_address_fields(),
           ],
         ],
       ],

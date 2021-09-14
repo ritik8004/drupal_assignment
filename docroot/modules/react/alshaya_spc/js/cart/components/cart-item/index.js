@@ -22,6 +22,7 @@ import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
 import AdvantageCardExcludedItem from '../advantage-card';
+import CartShippingMethods from '../cart-shipping-methods';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -189,6 +190,7 @@ export default class CartItem extends React.Component {
       couponCode,
       selectFreeGift,
       totalsItems,
+      cartShippingMethods,
     } = this.props;
 
     const {
@@ -298,6 +300,14 @@ export default class CartItem extends React.Component {
               sku={sku}
               couponCode={couponCode}
               selectFreeGift={selectFreeGift}
+            />
+          </ConditionalView>
+        </div>
+        <div className="spc-cart-shipping-methods shipping-methods">
+          <ConditionalView condition={cartShippingMethods !== null}>
+            <CartShippingMethods
+              sku={sku}
+              cartShippingMethods={cartShippingMethods}
             />
           </ConditionalView>
         </div>

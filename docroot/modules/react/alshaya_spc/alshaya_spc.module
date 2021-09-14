@@ -362,6 +362,10 @@ function alshaya_spc_preprocess_page(&$variables) {
         'key' => 'backend_obsolete_version',
         'value' => t('We have upgraded your experience, please refresh the page and try again.'),
       ],
+      [
+        'key' => 'check_area_availability',
+        'value' => t('Check availability in your area'),
+      ],
     ],
   ];
   $variables['page']['content']['commerce_backend'] = $strings;

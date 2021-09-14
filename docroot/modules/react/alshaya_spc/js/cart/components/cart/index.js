@@ -26,6 +26,8 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
+import DeliveryAreaSelect from '../delivery-area-select';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -43,6 +45,7 @@ export default class Cart extends React.Component {
       inStock: true,
       messageType: null,
       message: null,
+      cartShippingMethods: null,
     };
   }
 
@@ -145,6 +148,9 @@ export default class Cart extends React.Component {
     // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
+    // Event to trigger to show labels for delivery methods.
+    document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+
     // Display message from cookies.
     const qtyMismatchError = Cookies.get('middleware_payment_error');
 
@@ -219,6 +225,19 @@ export default class Cart extends React.Component {
     };
   }
 
+  displayShippingMethods = (event) => {
+    const currentArea = event.detail;
+    getCartShippingMethods(currentArea).then(
+      (response) => {
+        if (response !== null) {
+          this.setState({
+            cartShippingMethods: response,
+          });
+        }
+      },
+    );
+  }
+
   render() {
     const {
       wait,
@@ -233,6 +252,7 @@ export default class Cart extends React.Component {
       actionMessage,
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
+      cartShippingMethods,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -306,6 +326,7 @@ export default class Cart extends React.Component {
               <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
+            <DeliveryAreaSelect />
             <DeliveryInOnlyCity />
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
@@ -313,6 +334,7 @@ export default class Cart extends React.Component {
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
               totals={totals}
+              cartShippingMethods={cartShippingMethods}
             />
           </div>
           <div className="spc-sidebar">
