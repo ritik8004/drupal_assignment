@@ -24,12 +24,13 @@
       color: $oos_btn_bg;
       border: 1px solid $oos_btn_bg;
       display: block;
-      padding: 0.5rem 1.25rem;
+      padding: 0.5rem 0.625rem;
       font-size: 0.75rem;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
       cursor: pointer;
+      border-radius: 0.125rem;
 
       @include breakpoint($only-mobile) {
         padding: 0.5rem;
