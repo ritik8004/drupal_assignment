@@ -156,3 +156,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
+
+  alshaya_white_label/plp-frame-options:
+      css:
+        theme:
+          css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css

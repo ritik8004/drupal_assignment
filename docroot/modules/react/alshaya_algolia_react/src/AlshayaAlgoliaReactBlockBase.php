@@ -34,6 +34,7 @@ abstract class AlshayaAlgoliaReactBlockBase extends BlockBase implements Contain
       'config:alshaya_search_api.listing_settings',
       'config:alshaya_acm_product.settings',
       'config:alshaya_algolia_react.settings',
+      'config:alshaya_algolia_react.product_frames',
     ]);
   }
 
