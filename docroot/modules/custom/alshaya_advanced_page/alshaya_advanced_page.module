@@ -394,7 +394,9 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
 function alshaya_advanced_page_node_insert(EntityInterface $node) {
   if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
     $term = $node->get('field_product_category')->entity;
-    Cache::invalidateTags(['term:' . $term->id()]);
+    if ($term instanceof TermInterface) {
+      Cache::invalidateTags(['term:' . $term->id()]);
+    }
   }
 }
 
