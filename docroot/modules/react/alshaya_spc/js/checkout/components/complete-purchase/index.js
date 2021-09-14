@@ -56,22 +56,23 @@ export default class CompletePurchase extends React.Component {
     // Flag to track pseudo payment method.
     let isPseudoPaymentMedthod = false;
 
-    // Dispatch the event for all payment method
-    // except checkout_com_upapi method.
-    // For checkout_com_upapi method this
-    // handle in its own component.
-    // Also check if payment method in cart is a pseudo method
+    // Check if payment method in cart is a pseudo method
     // or not and accordingly dispatch event.
-    if (drupalSettings.payment_methods[cart.cart.payment.method]
-      && cart.cart.payment.method !== 'checkout_com_upapi') {
-      setTimeout(() => {
-        dispatchCustomEvent('orderPaymentMethod', {
-          payment_method: Object
-            .values(drupalSettings.payment_methods)
-            .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
-            .shift().gtm_name,
-        });
-      }, 5000);
+    if (drupalSettings.payment_methods[cart.cart.payment.method]) {
+      // Dispatch the event for all payment method
+      // except checkout_com_upapi method.
+      // For checkout_com_upapi method this
+      // handle in its own component.
+      if (cart.cart.payment.method !== 'checkout_com_upapi') {
+        setTimeout(() => {
+          dispatchCustomEvent('orderPaymentMethod', {
+            payment_method: Object
+              .values(drupalSettings.payment_methods)
+              .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+              .shift().gtm_name,
+          });
+        }, 5000);
+      }
     } else {
       // If cart payment method is not in drupalSettings,
       // then it's a pseudo payment method.
