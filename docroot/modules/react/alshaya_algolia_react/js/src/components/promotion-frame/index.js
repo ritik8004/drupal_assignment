@@ -30,7 +30,7 @@ export default class PromotionsFrame extends React.Component {
 
     return (
       <>
-        {(typeof promotions[0].context === 'undefined' || promotions[0].context.includes('web') || !promotions[0].context.length)
+        {(promotions.length > 0 && (typeof promotions[0].context === 'undefined' || promotions[0].context.includes('web') || !promotions[0].context.length))
           && (
           <div className="promotions">
             <span className="sku-promotion-item">
