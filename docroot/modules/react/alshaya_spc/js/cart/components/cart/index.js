@@ -148,8 +148,10 @@ export default class Cart extends React.Component {
     // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
-    // Event to trigger to show labels for delivery methods.
-    document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+    // Show labels for delivery methods if express delivery enabled.
+    if (drupalSettings.cart.expressDeliveryEnabled) {
+      document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+    }
 
     // Display message from cookies.
     const qtyMismatchError = Cookies.get('middleware_payment_error');
@@ -326,7 +328,9 @@ export default class Cart extends React.Component {
               <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
-            <DeliveryAreaSelect />
+            <ConditionalView condition={drupalSettings.cart.expressDeliveryEnabled === true}>
+              <DeliveryAreaSelect />
+            </ConditionalView>
             <DeliveryInOnlyCity />
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}

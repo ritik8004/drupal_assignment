@@ -26,3 +26,11 @@ alshaya_spc.advantage_card:
     advantageCardPrefix:
       type: string
       label: 'Advantage card prefix'
+
+alshaya_spc.express_delivery:
+  type: config_object
+  label: 'Express delivery configuration'
+  mapping:
+    expressDeliveryEnabled:
+      type: boolean
+      label: 'Express delivery status'

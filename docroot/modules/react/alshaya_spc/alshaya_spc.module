@@ -313,6 +313,12 @@ function alshaya_spc_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
+  // Advantage card settings only available if it is enabled.
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  if ($express_delivery_config->get('expressDeliveryEnabled')) {
+    $page['#attached']['drupalSettings']['cart']['expressDeliveryEnabled'] = $express_delivery_config->get('expressDeliveryEnabled');
+  }
+
   // Add the prefix for rest and store code.
   $page['#attached']['drupalSettings']['cart']['url'] .= '/rest/' . $store_settings[$current_language];
 

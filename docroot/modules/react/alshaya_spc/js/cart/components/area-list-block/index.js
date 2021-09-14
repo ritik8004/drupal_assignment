@@ -18,6 +18,7 @@ export default class AreaListBlock extends React.Component {
       areaListItems: [],
       items: [],
       activeItem: null,
+      governateDefaultLabel: drupalSettings.alshaya_spc.address_fields.area_parent.label,
     };
   }
 
@@ -26,12 +27,9 @@ export default class AreaListBlock extends React.Component {
    */
   componentDidMount() {
     showFullScreenLoader();
+    const { governateDefaultLabel } = this.state;
     const areaSelected = getStorageInfo('deliveryinfo-areadata');
     let defaultOptions = [];
-    let areaParentFieldLabel = '';
-    if (drupalSettings.alshaya_spc.address_fields) {
-      areaParentFieldLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
-    }
     getGovernatesList().then(
       (response) => {
         const options = [];
@@ -59,7 +57,7 @@ export default class AreaListBlock extends React.Component {
           } else {
             defaultOptions = [{
               value: 'none',
-              label: Drupal.t(`Select ${areaParentFieldLabel}`),
+              label: Drupal.t(`Select ${governateDefaultLabel}`),
             }];
           }
           this.setState({
@@ -168,7 +166,7 @@ export default class AreaListBlock extends React.Component {
 
   render() {
     const {
-      governateOptions, governateDefault, items, activeItem,
+      governateOptions, governateDefault, items, activeItem, governateDefaultLabel,
     } = this.state;
     const { closeModal } = this.props;
     return (
@@ -179,6 +177,7 @@ export default class AreaListBlock extends React.Component {
             <a className="close-modal" onClick={closeModal}>Close</a>
           </div>
           <div className="area-list-block-content">
+            <div className="governate-label">{`${Drupal.t('Select')} ${governateDefaultLabel}`}</div>
             <div className="governate-drop-down">
               <Select
                 classNamePrefix="governateSelect"
@@ -190,9 +189,11 @@ export default class AreaListBlock extends React.Component {
                 isSearchable
               />
             </div>
+            <div className="area-label">{`${Drupal.t('Search area')}`}</div>
             <div className="spc-filter-panel-search-form-item">
-              <input className="spc-filter-panel-search-field" type="text" placeholder={Drupal.t('Select Area')} onChange={this.filterList} />
+              <input className="spc-filter-panel-search-field" type="text" placeholder={Drupal.t('e.g. Dubai')} onChange={this.filterList} />
             </div>
+            <div className="area-list-label">{`${Drupal.t('Select an area')}`}</div>
             <ConditionalView condition={items.length !== 0}>
               <ul id="delivery-area-list-items" className="area-list-wrapper">
                 {items.map((item) => (

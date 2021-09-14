@@ -9,7 +9,7 @@ export default class DeliveryAreaSelect extends React.Component {
     super(props);
     this.state = {
       isModelOpen: false,
-      areaLabel: 'Select Area',
+      areaLabel: Drupal.t('Select Area'),
     };
   }
 
@@ -60,7 +60,7 @@ export default class DeliveryAreaSelect extends React.Component {
     return (
       <div id="delivery-area-select">
         <div className="delivery-area-label">
-          <span>{`${Drupal.t('Deliver to:')} `}</span>
+          <span>{`${Drupal.t('Deliver to')}: `}</span>
           <span>{areaLabel}</span>
           <br />
           <span onClick={() => this.openModal()} className="delivery-area-button">

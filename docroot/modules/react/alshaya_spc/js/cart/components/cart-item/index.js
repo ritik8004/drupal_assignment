@@ -204,6 +204,7 @@ export default class CartItem extends React.Component {
         url,
         price,
         maxSaleQty,
+        parentSKU,
       },
     } = this.state;
     const cartImage = {
@@ -307,6 +308,7 @@ export default class CartItem extends React.Component {
           <ConditionalView condition={cartShippingMethods !== null}>
             <CartShippingMethods
               sku={sku}
+              parentSKU={parentSKU}
               cartShippingMethods={cartShippingMethods}
             />
           </ConditionalView>
