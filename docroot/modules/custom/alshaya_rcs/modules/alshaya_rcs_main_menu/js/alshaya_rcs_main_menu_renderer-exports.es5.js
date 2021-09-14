@@ -117,16 +117,8 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   const levelIdentifier = `level-${level}`;
   const ifChildren = levelObj.children && levelObj.children.length > 0;
 
-  // Clone the relevant placeholder element from the given html.
-  var clonePhEle = null;
-  if (levelObj.is_anchor) {
-    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
-  }
-  else {
-    // For non-clickable the placeholder name is different.
-    levelObj.name1 = levelObj.name;
-    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
-  }
+  // Clone the default clickable placeholder element from the given html.
+  var clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
 
   let enrichedDataObj = {};
   // Get the enrichment data from the settings.
@@ -166,6 +158,11 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
     // Attach image icon with label.
     if (typeof enrichedDataObj.icon !== 'undefined') {
       levelObj.icon_url = enrichedDataObj.icon.icon_url;
+    }
+
+    // Override the clickable and non-clickable property.
+    if (!enrichedDataObj.item_clickable) {
+      clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
     }
   }
 
