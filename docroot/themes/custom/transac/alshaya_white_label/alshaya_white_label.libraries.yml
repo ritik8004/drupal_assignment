@@ -528,3 +528,8 @@ slug-banner:
   css:
     theme:
       css/conditional-sass/slug-banner/slug-banner.ltr.css: {}
+
+plp-frame-options:
+  css:
+    theme:
+      css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: {}
