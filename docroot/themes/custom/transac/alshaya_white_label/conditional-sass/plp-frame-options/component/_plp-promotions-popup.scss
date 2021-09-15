@@ -1,0 +1,104 @@
+.promotions-popup-wrapper {
+  .promotions-popup {
+    &-title {
+      font-family: $alshaya-bold;
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+      margin-bottom: 0.375rem;
+      text-align: center;
+      color: $plp-popup-title;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.25rem;
+      }
+    }
+
+    &-subtitle {
+      font-size: 0.9375rem;
+      text-align: center;
+      padding-bottom: 1.625rem;
+      border-bottom: 1px solid $plp-popup_header_border;
+      margin-bottom: 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+.algolia-promotion-list-content {
+  width: 100% !important;
+  max-width: 41.25rem;
+  padding: 2.1875rem 0.9375rem !important;
+
+  @include breakpoint($only-mobile) {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+    padding: 1.25rem 0.9375rem !important;
+  }
+
+  .close {
+    cursor: pointer;
+    position: absolute;
+    #{$right}: 0;
+    color: transparent;
+    top: 0;
+    background: $primary_btn_bg;
+    width: 2rem;
+    height: 2rem;
+
+    @include icon('close') {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      color: $primary_btn_text;
+      position: absolute;
+      #{$left}: -0.5rem;
+      top: -0.5rem;
+    }
+  }
+}
+
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .c-products__item.promotion-frame {
+    .promotions-popup-wrapper {
+      .promotions {
+        margin: 0;
+      }
+
+      .sku-promotion {
+        &-item {
+          text-align: $left;
+          margin: 0;
+
+          &:not(:first-child) {
+            margin-top: 2.625rem;
+          }
+        }
+
+        &-text {
+          font-size: 1rem;
+          color: $plp_promotion_link;
+          margin-bottom: 0.625rem;
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.75rem;
+          }
+        }
+
+        &-link {
+          font-size: 0.9375rem;
+          color: $plp-popup-title;
+          text-decoration: underline;
+          margin: 0;
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+}

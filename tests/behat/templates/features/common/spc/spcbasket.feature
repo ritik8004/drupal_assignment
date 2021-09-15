@@ -1,4 +1,4 @@
-@javascript @smoke @hmaeuat @mckwuat @vsaeuat @aeoaeuat @aeokwuat @aeosauat @tbskwuat @westelmaeuat @westelmsauat @westelmkwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
+@javascript @smoke @bpaeuat @bpkwuat @bpsauat @tbseguat @hmaeuat @mckwuat @vsaeuat @aeoaeuat @aeokwuat @aeosauat @tbskwuat @westelmaeuat @westelmsauat @westelmkwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test basket page
 
   Background:
