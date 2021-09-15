@@ -324,13 +324,15 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <SectionTitle animationDelayValue="0.4s">
-              <span>{`${Drupal.t('my shopping bag')} `}</span>
-              <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
-            </SectionTitle>
-            <ConditionalView condition={drupalSettings.cart.expressDeliveryEnabled === true}>
-              <DeliveryAreaSelect />
-            </ConditionalView>
+            <div className="spc-title-wrapper">
+              <SectionTitle animationDelayValue="0.4s">
+                <span>{`${Drupal.t('my shopping bag')} `}</span>
+                <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
+              </SectionTitle>
+              <ConditionalView condition={drupalSettings.cart.expressDeliveryEnabled === true}>
+                <DeliveryAreaSelect />
+              </ConditionalView>
+            </div>
             <DeliveryInOnlyCity />
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}

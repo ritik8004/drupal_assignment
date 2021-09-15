@@ -317,6 +317,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
   if ($express_delivery_config->get('status')) {
     $page['#attached']['drupalSettings']['cart']['expressDeliveryEnabled'] = TRUE;
+    $page['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
   }
 
   // Add the prefix for rest and store code.
