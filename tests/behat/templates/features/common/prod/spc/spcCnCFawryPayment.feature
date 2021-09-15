@@ -1,68 +1,70 @@
-@javascript @guest @codPayment @homeDelivery @vssaprod @westelmkwprod @tbsegprod
-Feature: SPC Checkout Home Delivery COD
+@javascript @checkoutPayment @auth @clickCollect @fawry @tbsegprod
+Feature: SPC Checkout using Click & Collect store for Guest user using Fawry payment method
 
   Background:
     Given I am on "{spc_basket_page}"
     And I wait 5 seconds
     And I wait for the page to load
 
-  @cod @hd
-  Scenario: As a Guest, I should be able to checkout using COD
+  @cnc @fawry
+  Scenario: As a Guest user, I should be able to checkout using click and collect with Fawry payment
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on Add-to-cart button
+    And I wait for AJAX to finish
     And I wait 10 seconds
-    And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     Then I should be on "/cart/login" page
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
-    Then the "delivery-method-home_delivery" checkbox should be checked
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
+    And I select the collection store
+    And I scroll to the "#spc-payment-methods" element
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
+    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And the element "div.fawry-prefix-description" should exist
+    And the element "input[name=fawry-email]" should exist
+    And the element "input[name=fawry-mobile-number]" should exist
+    And I scroll to the ".spc-section-billing-address" element
+    When I add CnC billing address with following:
+      | spc-area-select-selected-city | {region_option} |
+      | spc-area-select-selected      | {city_option}   |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | locality                      | {locality}    |
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
+    And I fill in the following:
+      | fullname | {anon_username} |
+      | mobile   | {mobile}        |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
-    And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods" element
+    Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
-  @cod @hd @language @desktop
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  @cnc @language @desktop @fawry
+  Scenario: As a Guest user, I should be able to checkout using click and collect with Fawry payment in second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait 5 seconds
+    And I wait for AJAX to finish
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on Add-to-cart button
+    And I wait for AJAX to finish
     And I wait 10 seconds
-    And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -73,36 +75,39 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
-    Then the "delivery-method-home_delivery" checkbox should be checked
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
+    And I select the collection store
+    And I scroll to the "#spc-payment-methods" element
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
+    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And the element "div.fawry-prefix-description" should exist
+    And the element "input[name=fawry-email]" should exist
+    And the element "input[name=fawry-mobile-number]" should exist
+    And I scroll to the ".spc-section-billing-address" element
+    When I add CnC billing address with following:
+      | spc-area-select-selected-city | {language_region_option} |
+      | spc-area-select-selected-city | {language_city_option} |
+      | address_line1                 | {street}      |
+      | dependent_locality            | {building}    |
+      | address_line2                 | {floor}       |
+      | sorting_code                  | {landmark}    |
+      | postal_code                   | {postal_code} |
     And I fill in the following:
       | fullname | {anon_username} |
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
-    And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods" element
+    And I wait for AJAX to finish
+    Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
-  @cod @hd @language @mobile
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  @cnc @language @mobile @fawry
+  Scenario: As a Guest user, I should be able to checkout using click and collect with Fawry payment
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -110,8 +115,8 @@ Feature: SPC Checkout Home Delivery COD
     And I wait 10 seconds
     And I wait for the page to load
     And I click on Add-to-cart button
+    And I wait for AJAX to finish
     And I wait 10 seconds
-    And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -122,30 +127,28 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
-    Then the "delivery-method-home_delivery" checkbox should be checked
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
-    And I wait for the page to load
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    When fill in billing address with following:
+    And I select the collection store
+    And I scroll to the "#spc-payment-methods" element
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
+    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And the element "div.fawry-prefix-description" should exist
+    And the element "input[name=fawry-email]" should exist
+    And the element "input[name=fawry-mobile-number]" should exist
+    And I scroll to the ".spc-section-billing-address" element
+    When I add CnC billing address with following:
+      | spc-area-select-selected-city | {language_region_option} |
       | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I wait for the page to load
-    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
-    And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods" element
+    Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
