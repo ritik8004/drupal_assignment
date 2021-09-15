@@ -23,6 +23,7 @@ $bright-blue: #2182d5;
 // Global elements.
 $primary_text: $outer-space;
 $primary_link: $eerie-black;
+$primary_text: $eerie-black;
 $primary_link: $dark-gray;
 $content_pagetitle: $outer-space;
 $content_pagetitle_border: $gray;
@@ -234,3 +235,10 @@ $social_auth_login_button_border: $outer-space;
 $user_login_sub_text: $eerie-black;
 $user_login_link_btn_text: $eerie-black;
 $user_login_section_title: $eerie-black;
+
+// 404
+$maintenance_container_bg: $white;
+$maintenance_container_border: $white;
+$maintenance_container_border_top: $white;
+$maintenance_body_bg: $white;
+$maintenance_link: $brownish-grey;
