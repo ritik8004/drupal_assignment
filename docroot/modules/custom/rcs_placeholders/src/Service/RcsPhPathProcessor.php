@@ -204,15 +204,8 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public function getEnrichedEntity(string $type, string $slug) {
     $entity = NULL;
     $storage = NULL;
-    // Filter out the front slash.
-    if ($slug[0] == '/') {
-      $slug = substr($slug, 1);
-    }
-    // Remove the back slash if present.
-    $slug_length = strlen($slug) - 1;
-    if ($slug[$slug_length] == '/') {
-      $slug = substr($slug, 0, $slug_length);
-    }
+    // Filter out the front and back slash.
+    $slug = trim($slug, '/');
 
     if ($type == 'product') {
       $storage = $this->nodeStorage;
