@@ -13,8 +13,8 @@ const FixedFields = ({
   showFullName = true,
   subTitle,
   type,
-  showCollectorForm,
-  updateCollectorFormVisibility,
+  // showCollectorForm,
+  // updateCollectorFormVisibility,
 }) => {
   let defaultValue = '';
   if (defaultVal.length !== 0 && defaultVal.length !== 'undefined') {
@@ -65,7 +65,7 @@ const FixedFields = ({
           label={getStringMessage('ci_mobile_number')}
         />
         {/* Show checkbox for collector info only for CnC. */}
-        <ConditionalView condition={collectionPointsEnabled() === true && type === 'cnc'}>
+        {/* <ConditionalView condition={ collectionPointsEnabled() === true && type === 'cnc'}>
           <div className="spc-pudo-checkout-contact-info-checkbox-wrapper">
             <input
               type="checkbox"
@@ -75,11 +75,13 @@ const FixedFields = ({
               onChange={(e) => updateCollectorFormVisibility(e.target.checked)}
               defaultChecked={showCollectorForm}
             />
-            <label htmlFor="spc-checkout-contact-info-checkbox" className="spc-pudo-checkout-contact-info-checkbox">
+            <label
+              htmlFor="spc-checkout-contact-info-checkbox"
+              className="spc-pudo-checkout-contact-info-checkbox">
               {getStringMessage('cnc_contact_info_checkbox')}
             </label>
           </div>
-        </ConditionalView>
+        </ConditionalView> */}
         <input type="hidden" name="address_id" value={defaultValue !== '' && defaultValue.address_id !== null ? defaultValue.address_id : 0} />
       </div>
     </div>
