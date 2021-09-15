@@ -10,6 +10,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -134,7 +135,7 @@ function alshaya_rcs_main_menu_node_view(array &$build, EntityInterface $entity,
 function alshaya_rcs_main_menu_node_presave(EntityInterface $entity) {
   if ($entity->getType() == 'advanced_page') {
     // Unset the category slug if department page is unchecked.
-    if ($entity->get('field_use_as_department_page')->value == 0) {
+    if ($entity->get('field_use_as_department_page')->getString() == 0) {
       unset($entity->field_category_slug);
     }
   }
@@ -145,8 +146,8 @@ function alshaya_rcs_main_menu_node_presave(EntityInterface $entity) {
  */
 function alshaya_rcs_main_menu_node_insert(EntityInterface $node) {
   $config = \Drupal::config('rcs_placeholders.settings');
-  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
-    Cache::invalidateTags(['taxonomy_term:' . $config->get('category.placeholder_tid')]);
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString() == 1) {
+    _alshaya_rcs_main_menu_invalidate_enriched_term_cache($node);
   }
 }
 
@@ -154,13 +155,11 @@ function alshaya_rcs_main_menu_node_insert(EntityInterface $node) {
  * Implements hook_ENTITY_TYPE_update() for node entities.
  */
 function alshaya_rcs_main_menu_node_update(EntityInterface $node) {
-  $config = \Drupal::config('rcs_placeholders.settings');
   if ($node->bundle() == 'advanced_page'
-    && ($node->get('field_use_as_department_page')->value == 1
-      || $node->original->get('field_use_as_department_page')->value == 1)
+    && ($node->get('field_use_as_department_page')->getString() == 1
+      || $node->original->get('field_use_as_department_page')->getString() == 1)
   ) {
-    $item = $config->get('category.placeholder_tid');
-    Cache::invalidateTags(['taxonomy_term:' . $config->get('category.placeholder_tid')]);
+    _alshaya_rcs_main_menu_invalidate_enriched_term_cache($node);
   }
 }
 
@@ -169,7 +168,26 @@ function alshaya_rcs_main_menu_node_update(EntityInterface $node) {
  */
 function alshaya_rcs_main_menu_node_delete(EntityInterface $node) {
   $config = \Drupal::config('rcs_placeholders.settings');
-  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
-    Cache::invalidateTags(['taxonomy_term:' . $config->get('category.placeholder_tid')]);
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString() == 1) {
+    _alshaya_rcs_main_menu_invalidate_enriched_term_cache($node);
+  }
+}
+
+/**
+ * Invalidate enriched term cache tags.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $node.
+ */
+function _alshaya_rcs_main_menu_invalidate_enriched_term_cache(EntityInterface $node) {
+  $path_processor = \Drupal::service('Drupal\rcs_placeholders\Service\RcsPhPathProcessor');
+  $category_slug = $node->get('field_category_slug')->getString();
+  // Proceed only if category slug is present.
+  if ($category_slug) {
+    $term = $path_processor->getEnrichedEntity('category', $category_slug);
+    if ($term instanceof TermInterface) {
+      // Invalidate the default RCS Term tags.
+      $default_term_id = \Drupal::config('rcs_placeholders.settings')->get('category.placeholder_tid');
+      Cache::invalidateTags(array_merge($term->getCacheTags(), ['taxonomy_term:' . $default_term_id]));
+    }
   }
 }
