@@ -17,6 +17,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\alshaya_product_list\Plugin\Block\AlshayaAlgoliaReactProductList;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_search_api_db_query_alter().
@@ -82,6 +83,9 @@ function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = '
 
   switch ($op) {
     case 'add':
+      /** @var \Drupal\search_api\Entity\Index $index */
+      $index = Index::load('product');
+
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
           // We use add even when resetting. Remove facet if available.
@@ -89,7 +93,7 @@ function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = '
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']], $index->status());
       }
       break;
 

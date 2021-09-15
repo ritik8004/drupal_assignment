@@ -23,14 +23,6 @@ function alshaya_mc_update_8321() {
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
 
-  // Adding fields in search_api index
-  $manager->updateConfigs(
-    ['search_api.index.product'],
-    'alshaya_product',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-
   // Re-indexing all the products.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 
@@ -40,7 +32,6 @@ function alshaya_mc_update_8321() {
     'gender' => 'finalprice',
     'promogender' => 'promofinalprice',
     'plpgender' => 'plpfinalprice',
-    'productlistgender' => 'productlistfinalprice',
   ];
   foreach ($blocks as $facet_block_id => $price_filter_block_id) {
     $facet_block = Block::load($facet_block_id);
