@@ -220,7 +220,15 @@ class AlshayaSpcController extends ControllerBase {
       $checkout_settings = Settings::get('alshaya_checkout_settings');
       $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
     }
-
+    // Advantage card settings only available if it is enabled.
+    $advantage_card_config = $this->config('alshaya_spc.advantage_card');
+    if ($advantage_card_config->get('advantageCardEnabled')) {
+      $build['#attached']['drupalSettings']['alshaya_spc']['advantageCard'] = [
+        'enabled' => $advantage_card_config->get('advantageCardEnabled'),
+        'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
+      ];
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $advantage_card_config->getCacheTags());
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
