@@ -32,7 +32,6 @@ function alshaya_mc_update_8321() {
     'gender' => 'finalprice',
     'promogender' => 'promofinalprice',
     'plpgender' => 'plpfinalprice',
-    'productlistgender' => 'productlistfinalprice',
   ];
   foreach ($blocks as $facet_block_id => $price_filter_block_id) {
     $facet_block = Block::load($facet_block_id);
