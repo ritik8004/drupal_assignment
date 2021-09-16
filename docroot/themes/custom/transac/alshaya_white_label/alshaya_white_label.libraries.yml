@@ -528,3 +528,8 @@ slug-banner:
   css:
     theme:
       css/conditional-sass/slug-banner/slug-banner.ltr.css: {}
+
+sameday-express-delivery:
+  css:
+    theme:
+      css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: {}

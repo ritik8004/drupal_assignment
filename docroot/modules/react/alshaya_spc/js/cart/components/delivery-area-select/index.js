@@ -61,8 +61,7 @@ export default class DeliveryAreaSelect extends React.Component {
       <div id="delivery-area-select">
         <div className="delivery-area-label">
           <span>{`${Drupal.t('Deliver to')}: `}</span>
-          <span>{areaLabel}</span>
-          <br />
+          <span className="delivery-area-name">{areaLabel}</span>
           <span onClick={() => this.openModal()} className="delivery-area-button">
             Arrow
           </span>
