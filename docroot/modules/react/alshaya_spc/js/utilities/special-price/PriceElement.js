@@ -3,11 +3,13 @@ import { getAmountWithCurrency } from '../checkout_util';
 
 const PriceElement = ({ amount: priceAmount, format }) => {
   if (typeof priceAmount === 'undefined'
-    || priceAmount === '0.00' || priceAmount === null) {
+    || parseFloat(priceAmount).toFixed(2) === '0.00'
+    || priceAmount === null) {
     return (null);
   }
 
-  if (priceAmount.toUpperCase() === 'FREE') {
+  if (Number.isNaN(parseFloat(priceAmount))
+    && priceAmount.toUpperCase() === 'FREE') {
     return (Drupal.t('Free'));
   }
 
