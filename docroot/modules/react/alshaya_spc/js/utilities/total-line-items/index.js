@@ -7,6 +7,7 @@ import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
 import Advantagecard from '../advantagecard';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -62,9 +63,8 @@ class TotalLineItems extends React.Component {
     if (Advantagecard.isAdvantagecardEnabled()) {
       const { totals } = this.props;
       // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
-      if ((typeof totals.items !== 'undefined'
-        && Advantagecard.isAdvantageCardApplied(totals.items))
-        || (typeof totals.advatage_card !== 'undefined' && totals.advatage_card)) {
+      if ((hasValue(totals.items) && Advantagecard.isAdvantageCardApplied(totals.items))
+        || (hasValue(totals.advatage_card))) {
         promoData += `<div class="promotion-label"><strong>${Drupal.t('Advantage Card Discount')}</strong></div>`;
       }
     }

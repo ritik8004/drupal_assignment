@@ -669,10 +669,9 @@ class AlshayaSpcController extends ControllerBase {
       $totals['shipping_incl_tax'] = $order['totals']['shipping'] ?? 0;
     }
 
-    // Advantage crad related config for order confirmation page.
+    // Advantage card related config for order confirmation page.
     $advantage_card_config = $this->config('alshaya_spc.advantage_card');
-    if ($advantage_card_config->get('advantageCardEnabled')
-      && $order['coupon'] === 'advantage_card') {
+    if ($advantage_card_config->get('advantageCardEnabled') && $order['coupon'] === 'advantage_card') {
       $totals['advatage_card'] = TRUE;
     }
     // Get Products.
