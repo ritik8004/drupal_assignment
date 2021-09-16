@@ -106,7 +106,7 @@ class LoyaltyClubOtpController {
       return new JsonResponse($this->utility->getErrorResponse(AuraErrorCodes::MOBILE_ALREADY_REGISTERED_MSG, AuraErrorCodes::MOBILE_ALREADY_REGISTERED_CODE));
     }
 
-    $response_data = $this->auraOtpHelper->sendOtp($mobile, 'reg');
+    $response_data = $this->auraOtpHelper->sendOtp($chosenCountryCode . $mobile, 'reg');
 
     return new JsonResponse($response_data);
   }
