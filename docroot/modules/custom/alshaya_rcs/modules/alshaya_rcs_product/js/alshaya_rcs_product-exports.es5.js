@@ -655,10 +655,6 @@ exports.computePhFilters = function (input, filter) {
       value = handlebarsRenderer.render(`field.product.${filter}`, data);
       break;
 
-    case 'content.legal_notice':
-      // @todo add this field
-      break;
-
     default:
       console.log(`Unknown JS filter ${filter}.`)
   }
