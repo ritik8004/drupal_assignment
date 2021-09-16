@@ -21,7 +21,7 @@ exports.getEntity = async function getEntity(langcode) {
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
-      const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
+      const productUrlKey = rcsWindowLocation().pathname.match(/(buy-(.*?))\./);
       request.data = JSON.stringify({
         query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
       });
