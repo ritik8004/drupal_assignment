@@ -904,7 +904,7 @@ class SkuManager {
       $promotion_nids = array_unique($promotion_nids);
 
       $query = $this->nodeStorage->getQuery();
-      $query->condition('nid', $promotion_nids, 'IN');
+      $query->condition('field_acq_promotion_rule_id', $promotion_nids, 'IN');
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
       if (!empty($context)) {
@@ -929,7 +929,7 @@ class SkuManager {
    */
   protected function fetchPromotionBySkus(array $skus) {
     $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
-    $query->fields('node_field', ['entity_id']);
+    $query->fields('node_field', ['field_acq_promotion_rule_id_value']);
     $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
     $query->condition('mapping.sku', $skus, 'IN');
     return $query->execute()->fetchCol();
@@ -946,10 +946,10 @@ class SkuManager {
       return $full_catalog_promo_nids->data;
     }
     // Fetch promotion nodes which apply to the entire catalog of products.
-    $query = $this->connection->select('node', 'n');
-    $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
+    $query = $this->connection->select('node__field_acq_promotion_rule_id', 'n');
+    $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.entity_id');
     $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
-    $query->fields('n', ['nid']);
+    $query->fields('n', ['field_acq_promotion_rule_id_value']);
     $query->distinct();
     $full_catalog_promo_nids = $query->execute()->fetchCol();
 
