@@ -28,9 +28,9 @@ alshaya_spc.advantage_card:
       label: 'Advantage card prefix'
 
 alshaya_spc.express_delivery:
-  type: config_object
+  type: config_objecst
   label: 'Express delivery configuration'
   mapping:
-    expressDeliveryEnabled:
+    status:
       type: boolean
       label: 'Express delivery status'

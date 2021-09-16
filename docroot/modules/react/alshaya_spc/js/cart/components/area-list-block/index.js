@@ -160,7 +160,7 @@ export default class AreaListBlock extends React.Component {
       closeModal();
       dispatchCustomEvent('handleAreaSelect', activeItem);
       // Show delivery methods with cart items.
-      dispatchCustomEvent('displayDeliveryMethods', currentArea);
+      dispatchCustomEvent('displayShippingMethods', currentArea);
     }
   };
 

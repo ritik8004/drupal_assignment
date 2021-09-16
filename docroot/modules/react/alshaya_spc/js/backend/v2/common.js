@@ -1256,17 +1256,21 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
     // Associate cart to customer.
     const response = await callMagentoApi(url, 'GET', {});
 
-    if (!hasValue(response.data) || hasValue(response.data.error)) {
-      logger.error('Error occurred while fetching governates, Response: @response.', {
-        '@response': JSON.stringify(response.data),
+    if (!_isUndefined(response.data.error) && response.data.error) {
+      logger.error('Error in getting shipping methods for cart. Error: @error', {
+        '@error': response.data.error_message,
       });
-      return null;
+
+      return getFormattedError(response.data.error_code, response.data.error_message);
     }
 
-    // If no city available, return empty.
     if (_isEmpty(response.data)) {
-      return null;
+      const message = 'Got empty response while getting shipping methods.';
+      logger.notice(message);
+
+      return getFormattedError(600, message);
     }
+
     return response.data;
   } catch (error) {
     logger.error('Error occurred while fetching governates data. Message: @message.', {
