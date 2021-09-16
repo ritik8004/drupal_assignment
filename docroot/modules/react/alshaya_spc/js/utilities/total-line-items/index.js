@@ -62,7 +62,9 @@ class TotalLineItems extends React.Component {
     if (Advantagecard.isAdvantagecardEnabled()) {
       const { totals } = this.props;
       // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
-      if (Advantagecard.isAdvantageCardApplied(totals.items)) {
+      if ((typeof totals.items !== 'undefined'
+        && Advantagecard.isAdvantageCardApplied(totals.items))
+        || (typeof totals.advatage_card !== 'undefined' && totals.advatage_card)) {
         promoData += `<div class="promotion-label"><strong>${Drupal.t('Advantage Card Discount')}</strong></div>`;
       }
     }
