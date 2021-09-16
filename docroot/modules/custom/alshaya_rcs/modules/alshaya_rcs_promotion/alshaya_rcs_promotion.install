@@ -30,7 +30,7 @@ function alshaya_rcs_promotion_install() {
       $existing_promotion_block_weight = $prev_block->getWeight();
       $prev_block->disable()->save();
       // Load the RCS Block and Change the weight.
-      if ($new_block_id && $existing_promotion_block_weight !== NULL) {
+      if ($new_block_id) {
         $new_block = Block::load($new_block_id);
         if ($new_block instanceof BlockInterface) {
           $new_block->setWeight($existing_promotion_block_weight);
