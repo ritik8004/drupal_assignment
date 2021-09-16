@@ -106,8 +106,10 @@
   }
 }
 
-.spc-aura-cart-rewards-block {
-  .block-content.registered-user-unlinked-card .actions {
+.spc-aura-cart-rewards-block,
+.spc-aura-checkout-rewards-block {
+  .block-content.registered-user-unlinked-card .actions,
+  .block-content.registered-user-unlinked-card {
     .spc-aura-unlink-card-wrapper {
       &.link-card-wrapper.loading {
         button.spc-aura-link-card-submit {
