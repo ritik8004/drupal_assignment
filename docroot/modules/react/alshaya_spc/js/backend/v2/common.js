@@ -1248,7 +1248,7 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
   };
 
   filters.push(countryFilters);
-
+  // @todo pending cofirmation from MDC on using api call for each click.
   let url = '/V1/deliverymatrix/address-locations/search?';
   const params = prepareFilterUrl(filters);
   url = url.concat(params);
