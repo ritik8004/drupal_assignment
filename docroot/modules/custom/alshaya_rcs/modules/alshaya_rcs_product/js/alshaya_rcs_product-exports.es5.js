@@ -164,8 +164,14 @@ exports.computePhFilters = function (input, filter) {
       value = drupalSettings.vat_text;
       break;
 
-     case 'image':
-      value = input.media_gallery[1].url;
+    case 'image':
+      value = ((typeof input.media_gallery.length > 0)
+          && (typeof input.media_gallery[0].url !== 'undefined'
+            || input.media_gallery[0].url
+            || input.media_gallery[0].url !== '')
+        )
+        ? input.media_gallery[0].url
+        : '';
       break;
 
     case 'thumbnail_count':
@@ -467,9 +473,13 @@ exports.computePhFilters = function (input, filter) {
 
     case 'first_image':
       // @todo: Use the correct image key.
-      value = (typeof input.media_gallery[1].url === 'undefined' || !input.media_gallery[1].url || input.media_gallery[1].url === '')
-        ? drupalSettings.alshayaRcs.default_meta_image
-        : input.media_gallery[1].url;
+      value = ((typeof input.media_gallery.length > 0)
+          && (typeof input.media_gallery[0].url !== 'undefined'
+            || input.media_gallery[0].url
+            || input.media_gallery[0].url !== '')
+        )
+        ? input.media_gallery[0].url
+        : drupalSettings.alshayaRcs.default_meta_image
       break;
 
     case 'schema_stock':
