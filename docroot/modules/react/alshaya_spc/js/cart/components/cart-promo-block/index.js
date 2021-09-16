@@ -184,7 +184,7 @@ export default class CartPromoBlock extends React.Component {
             document.dispatchEvent(event);
           }
           if (result.response_message.status === 'error_coupon'
-          && !Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
+            && !Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
             const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
             document.getElementById('promo-message').innerHTML = result.response_message.msg;
             document.getElementById('promo-message').classList.add('error');
