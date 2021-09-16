@@ -3,9 +3,14 @@
     "type": "project",
     "description": "Provides a middleware for the Alshaya spc.",
     "require": {
-        "php": "^7.1.3",
+        "php": ">=7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "composer/package-versions-deprecated": "1.11.99.3",
+        "doctrine/common": "^2",
+        "doctrine/doctrine-bundle": "^2",
+        "doctrine/doctrine-migrations-bundle": "^2",
+        "doctrine/orm": "^2",
         "springimport/magento2-api-v1": "^1.0",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",
@@ -13,7 +18,7 @@
         "symfony/framework-bundle": "4.3.*",
         "symfony/lock": "4.3.*",
         "symfony/monolog-bundle": "^3.5",
-        "symfony/orm-pack": "^1.0",
+        "symfony/proxy-manager-bridge": "4.4.*",
         "symfony/yaml": "4.3.*"
     },
     "require-dev": {
@@ -23,7 +28,7 @@
             "*": "dist"
         },
         "sort-packages": true,
-        "platform": {"php": "7.2"}
+        "platform": {"php": "7.4"}
     },
     "autoload": {
         "psr-4": {
@@ -44,6 +49,7 @@
         "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php74": "*",
         "symfony/polyfill-php71": "*",
         "symfony/polyfill-php70": "*",
         "symfony/polyfill-php56": "*"

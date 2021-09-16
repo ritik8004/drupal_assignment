@@ -394,12 +394,14 @@
     var sku = $(form).attr('data-sku');
     var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
     var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-    var variants = drupalSettings[productKey][sku]['variants'];
+    var productData = window.commerceBackend.getProductData(sku, productKey);
+    var variants = productData.variants;
     var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+    var combinations = window.commerceBackend.getConfigurableCombinations(sku);
 
     if (selectedSku) {
       $(select).removeProp('selected').removeAttr('selected');
-      var attributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][selectedCode];
+      var attributeValue = combinations.bySku[selectedSku][selectedCode];
       var attributeOption = select.find('option[value="' + attributeValue + '"]');
 
       if (attributeOption) {

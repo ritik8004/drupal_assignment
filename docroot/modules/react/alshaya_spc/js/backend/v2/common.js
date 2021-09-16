@@ -24,6 +24,7 @@ import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -537,6 +538,19 @@ const formatCart = (cartData) => {
     if (!_isEmpty(extensionAttributes.store_code)) {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
+
+    // If collection point feature is enabled, extract collectors details
+    // from shipping data.
+    if (collectionPointsEnabled()) {
+      data.shipping.collector_name = extensionAttributes.collector_name;
+      data.shipping.collector_email = extensionAttributes.collector_email;
+      data.shipping.collector_mobile = extensionAttributes.collector_mobile;
+      data.shipping.collection_point = extensionAttributes.collection_point;
+      data.shipping.pickup_date = extensionAttributes.pickup_date;
+      data.shipping.price_amount = extensionAttributes.price_amount;
+      data.shipping.pudo_available = extensionAttributes.pudo_available;
+    }
+
     delete data.shipping.extension_attributes;
   }
 
@@ -628,6 +642,7 @@ const getProcessedCartData = async (cartData) => {
       base_grand_total_without_surcharge: cartData.totals.base_grand_total,
       discount_amount: cartData.totals.discount_amount,
       surcharge: 0,
+      items: cartData.totals.items,
     },
     items: [],
   };

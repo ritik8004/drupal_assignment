@@ -1,0 +1,18 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .c-products__item.product-title-trim {
+    .field--name-name {
+      a {
+        .suggested-text {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          line-height: 1.25rem;
+          max-height: 2.8125rem;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}

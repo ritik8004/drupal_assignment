@@ -27,20 +27,24 @@ class ReviewCommentRender extends React.Component {
           <span id={`${commentId}-comment-user-date`} className="comment-user-date">{getTimeAgoDate(SubmissionTime, countryCode, getLanguageCode())}</span>
         </div>
         <div className="comment-description">
-          <div id={`${commentId}-comment-description-text`} className="comment-description-text">
-            {
-              CommentText.split('\n').map((item, idx) => (
-                <span key={idx.toString()}>
-                  {item}
-                  <br />
-                </span>
-              ))
-            }
-          </div>
+          { CommentText && (
+            <div id={`${commentId}-comment-description-text`} className="comment-description-text">
+              {
+                CommentText.split('\n').map((item, idx) => (
+                  <span key={idx.toString()}>
+                    {item}
+                    <br />
+                  </span>
+                ))
+              }
+            </div>
+          )}
         </div>
-        <ConditionalView condition={enableTranslation && CommentText.length < charsLimit}>
-          <TranslateByGoogle id={commentId} contentLocale={contentLocale.substring(0, 2)} contentType="comment" />
-        </ConditionalView>
+        { CommentText && (
+          <ConditionalView condition={enableTranslation && CommentText.length < charsLimit}>
+            <TranslateByGoogle id={commentId} contentLocale={contentLocale.substring(0, 2)} contentType="comment" />
+          </ConditionalView>
+        )}
       </div>
     );
   }

@@ -22,9 +22,11 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
   /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
   $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+
   // Disable BazaarVoice Rating and Review in PDP
   // if checkbox is checked in bazaarVoice Settings Form.
-  if ($basic_configs['pdp_rating_reviews']) {
+  if ($basic_configs['pdp_rating_reviews']
+    || (empty($basic_configs['endpoint']) || empty($basic_configs['passkey']))) {
     return;
   }
 

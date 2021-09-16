@@ -50,9 +50,6 @@ modules:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [views_ui]
 command-hooks:
-  frontend-test:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-validate.sh ${docroot}'
   frontend-reqs:
     dir: '${repo.root}/blt/scripts'
     command: 'bash react-setup.sh ${docroot} && bash frontend-setup.sh ${docroot} && cd ${docroot} && ../vendor/bin/blt js:setup'

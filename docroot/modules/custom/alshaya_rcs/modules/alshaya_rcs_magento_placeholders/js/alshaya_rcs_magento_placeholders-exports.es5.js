@@ -57,9 +57,8 @@ exports.render = function render(
       break;
 
     case 'lhn_block':
-      // Render lhn based on the page type.
-      if (pageType === 'category'
-      && typeof globalThis.renderRcsLhn !== 'undefined') {
+      // Render lhn based block.
+      if (typeof globalThis.renderRcsLhn !== 'undefined') {
         html += globalThis.renderRcsLhn.render(
           settings,
           inputs,
@@ -74,6 +73,37 @@ exports.render = function render(
         html += globalThis.renderRcsSuperCategoryMenu.render(
           settings,
           inputs,
+          innerHtml
+        );
+      }
+      break;
+
+    case 'promotion_page':
+      // Render rcs promotion, if available.
+      if (drupalSettings.rcsPage.type === 'promotion' &&
+        typeof globalThis.renderRcsPromotion !== 'undefined') {
+        html += globalThis.renderRcsPromotion.render(
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
+    case 'mobile-upsell-products':
+    case 'upsell-products':
+    case 'mobile-related-products':
+    case 'related-products':
+    case 'mobile-crosssell-products':
+    case 'crosssell-products':
+      // Render super category block.
+      if (typeof globalThis.renderRcsProduct !== 'undefined') {
+        html += globalThis.renderRcsProduct.render(
+          settings,
+          placeholder,
+          params,
+          inputs,
+          entity,
+          langcode,
           innerHtml
         );
       }
@@ -107,6 +137,7 @@ exports.computePhFilters = function (input, filter) {
     case 'first_image':
     case 'schema_stock':
     case 'brand_logo':
+    case 'url':
     case 'stock_qty':
     case 'title':
     case 'description':
