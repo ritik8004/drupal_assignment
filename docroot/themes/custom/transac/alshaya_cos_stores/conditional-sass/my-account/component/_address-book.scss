@@ -1,0 +1,19 @@
+.address {
+  .address--primary {
+    letter-spacing: 0;
+  }
+}
+
+.c-address-book {
+  .block-system > a {
+    top: -0.75rem;
+
+    @include breakpoint($tablet) {
+      text-transform: uppercase;
+    }
+  }
+
+  .address--content {
+    font-weight: normal;
+  }
+}
