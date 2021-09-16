@@ -22,6 +22,7 @@ import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
 import AdvantageCardExcludedItem from '../advantage-card';
+import CartShippingMethods from '../cart-shipping-methods';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -189,6 +190,7 @@ export default class CartItem extends React.Component {
       couponCode,
       selectFreeGift,
       totalsItems,
+      cartShippingMethods,
     } = this.props;
 
     const {
@@ -202,6 +204,7 @@ export default class CartItem extends React.Component {
         url,
         price,
         maxSaleQty,
+        parentSKU,
       },
     } = this.state;
     const cartImage = {
@@ -288,18 +291,28 @@ export default class CartItem extends React.Component {
             </div>
           </div>
         </div>
-        <div className="spc-promotions free-gift-container">
-          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />)}
-
-          <ConditionalView condition={freeGiftPromotion !== null}>
-            <CartPromotionFreeGift
-              key={`${sku}-free-gift`}
-              promo={freeGiftPromotion}
-              sku={sku}
-              couponCode={couponCode}
-              selectFreeGift={selectFreeGift}
-            />
-          </ConditionalView>
+        <div className="spc-cart-item-bottom-wrapper">
+          <div className="spc-promotions free-gift-container">
+            {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />)}
+            <ConditionalView condition={freeGiftPromotion !== null}>
+              <CartPromotionFreeGift
+                key={`${sku}-free-gift`}
+                promo={freeGiftPromotion}
+                sku={sku}
+                couponCode={couponCode}
+                selectFreeGift={selectFreeGift}
+              />
+            </ConditionalView>
+          </div>
+          <div className="spc-cart-shipping-methods shipping-methods">
+            <ConditionalView condition={cartShippingMethods !== null}>
+              <CartShippingMethods
+                sku={sku}
+                parentSKU={parentSKU}
+                cartShippingMethods={cartShippingMethods}
+              />
+            </ConditionalView>
+          </div>
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />

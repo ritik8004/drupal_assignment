@@ -26,6 +26,8 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
+import DeliveryAreaSelect from '../delivery-area-select';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -43,6 +45,7 @@ export default class Cart extends React.Component {
       inStock: true,
       messageType: null,
       message: null,
+      cartShippingMethods: null,
     };
   }
 
@@ -145,6 +148,11 @@ export default class Cart extends React.Component {
     // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
+    // Show labels for delivery methods if express delivery enabled.
+    if (drupalSettings.cart.expressDeliveryEnabled) {
+      document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+    }
+
     // Display message from cookies.
     const qtyMismatchError = Cookies.get('middleware_payment_error');
 
@@ -219,6 +227,19 @@ export default class Cart extends React.Component {
     };
   }
 
+  displayShippingMethods = (event) => {
+    const currentArea = event.detail;
+    getCartShippingMethods(currentArea).then(
+      (response) => {
+        if (response !== null) {
+          this.setState({
+            cartShippingMethods: response,
+          });
+        }
+      },
+    );
+  }
+
   render() {
     const {
       wait,
@@ -233,6 +254,7 @@ export default class Cart extends React.Component {
       actionMessage,
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
+      cartShippingMethods,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -302,10 +324,15 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <SectionTitle animationDelayValue="0.4s">
-              <span>{`${Drupal.t('my shopping bag')} `}</span>
-              <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
-            </SectionTitle>
+            <div className="spc-title-wrapper">
+              <SectionTitle animationDelayValue="0.4s">
+                <span>{`${Drupal.t('my shopping bag')} `}</span>
+                <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
+              </SectionTitle>
+              <ConditionalView condition={drupalSettings.cart.expressDeliveryEnabled === true}>
+                <DeliveryAreaSelect />
+              </ConditionalView>
+            </div>
             <DeliveryInOnlyCity />
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
@@ -313,6 +340,7 @@ export default class Cart extends React.Component {
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
               totals={totals}
+              cartShippingMethods={cartShippingMethods}
             />
           </div>
           <div className="spc-sidebar">

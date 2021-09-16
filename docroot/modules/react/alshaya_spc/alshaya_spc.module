@@ -313,6 +313,13 @@ function alshaya_spc_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
+  // Add express delivery flag in drupal settings if feature is enabled.
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  if ($express_delivery_config->get('status')) {
+    $page['#attached']['drupalSettings']['cart']['expressDeliveryEnabled'] = TRUE;
+    $page['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
+  }
+
   // Add the prefix for rest and store code.
   $page['#attached']['drupalSettings']['cart']['url'] .= '/rest/' . $store_settings[$current_language];
 
@@ -361,6 +368,10 @@ function alshaya_spc_preprocess_page(&$variables) {
       [
         'key' => 'backend_obsolete_version',
         'value' => t('We have upgraded your experience, please refresh the page and try again.'),
+      ],
+      [
+        'key' => 'check_area_availability',
+        'value' => t('Check availability in your area'),
       ],
     ],
   ];
