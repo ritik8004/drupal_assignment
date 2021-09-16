@@ -643,6 +643,7 @@ const getProcessedCartData = async (cartData) => {
       discount_amount: cartData.totals.discount_amount,
       surcharge: 0,
       items: cartData.totals.items,
+      allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
     items: [],
   };

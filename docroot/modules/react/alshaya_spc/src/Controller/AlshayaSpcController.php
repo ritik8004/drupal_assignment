@@ -958,6 +958,15 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
 
+    // Advantage crad related config for Checkout.
+    $advantage_card_config = $this->config('alshaya_spc.advantage_card');
+    if ($advantage_card_config->get('advantageCardEnabled')) {
+      $settings['alshaya_spc']['advantageCard'] = [
+        'enabled' => $advantage_card_config->get('advantageCardEnabled'),
+        'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
+      ];
+    }
+
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
 
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);
