@@ -645,7 +645,7 @@ exports.computePhFilters = function (input, filter) {
       let description = {
         label: '',
         value: input.description.html,
-        legalNotice: {
+        legal_notice: {
           enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
           label: drupalSettings.alshayaRcs.legal_notice_label,
           summary: drupalSettings.alshayaRcs.legal_notice_summary.value,
