@@ -107,7 +107,7 @@ fields:
     description: 'Sku applicable for non refundable or not.'
 
   same_day_delivery:
-    label: 'Same Day Delivery Available'
+    label: 'Is same day delivery'
     type: 'string'
     description: 'Sku applicable for same day delivery or not.'
 

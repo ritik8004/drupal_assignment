@@ -10,6 +10,8 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 use Drupal\user\Entity\Role;
+use Drupal\block\BlockInterface;
+use Drupal\block\Entity\Block;
 
 function alshaya_acm_product_update_8073() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -38,6 +40,16 @@ function alshaya_acm_product_update_8073() {
   $all_facet_block = Block::load('alshaya_search_facets_block_all');
   if ($all_facet_block instanceof BlockInterface) {
     Block::load('deliveryways')->setWeight(($all_facet_block->getWeight())-1)->save();
+  }
+  $facet_ids = [
+    'plp_delivery_ways',
+    'promo_delivery_ways',
+    'delivery_ways',
+  ];
+  foreach ($facet_ids as $facet_id) {
+    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+      ->set('widget.type', 'delivery_ways')
+      ->save();
   }
 }
 

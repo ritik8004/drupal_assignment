@@ -425,10 +425,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $identifier = $this->identifireSuffixUpdate('attr_delivery_ways', $page_type);
             $facet_values = $this->loadFacetValues($identifier, $page_type);
             if (isset($facet_values['Express Day Delivery Available'])) {
-              $facet_values['Express Day Delivery Available'] = $facet_values['Express Day Delivery Available'].',express';
+              $facet_values['Express Day Delivery Available'] = $facet_values['Express Day Delivery Available'] . ',express';
             }
             if (isset($facet_values['Same Day Delivery Available'])) {
-              $facet_values['Same Day Delivery Available'] = $facet_values['Same Day Delivery Available'].',same';
+              $facet_values['Same Day Delivery Available'] = $facet_values['Same Day Delivery Available'] . ',same';
             }
           }
 
