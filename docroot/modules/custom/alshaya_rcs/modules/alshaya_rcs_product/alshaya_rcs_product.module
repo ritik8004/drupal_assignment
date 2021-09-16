@@ -816,3 +816,15 @@ function _alshaya_rcs_product_get_recommended_product_field_query() {
 function template_preprocess_rcs_sku_base_form(&$variables) {
   $variables['#attached']['library'][] = 'alshaya_spc/add_to_cart';
 }
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_rcs_product_field_widget_entity_reference_paragraphs_form_alter(&$element, &$form_state, $context) {
+  if ($element['#paragraph_type'] == 'product_carousel_category'
+    && isset($element['subform']['field_category_carousel'])
+    && isset($element['subform']['field_category_carousel_slug'])) {
+    // Hide the entity reference field when the text field is present on the form.
+    $element['subform']['field_category_carousel']['#access'] = false;
+  }
+}
