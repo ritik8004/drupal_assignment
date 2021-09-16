@@ -41,7 +41,6 @@ $primary_input_border: $outer-space;
 $primary_input_disabled: $brownish-grey;
 $primary_input_focus_border: $black;
 $primary_input_inline_error: $lust-red;
-$password_tooltip_list: $eerie-black;
 
 // Form Items
 $formitem_label: $dark-gray;
@@ -52,21 +51,20 @@ $primary_empty_btn: $white;
 $primary_empty_btn_border: $outer-space;
 $primary_brand_button: $outer-space;
 $primary_button_disabled: $brownish-grey;
-$returned_btn_bg: $bright-gray;
 $complete_btn_bg: $green;
 
 // Checkbox & Radio.
-$primary_checkbox_empty: $outer-space;
-$primary_checkbox_filled: $outer-space;
+$primary_checkbox_empty: $eerie-black;
+$primary_checkbox_filled: $eerie-black;
 $primary_radiobtn_label: $dark-gray;
-$primary_radiobtn_empty: $outer-space;
-$primary_radiobtn_filled: $outer-space;
+$primary_radiobtn_empty: $eerie-black;
+$primary_radiobtn_filled: $eerie-black;
 
 // User Form
 $user_field_link: $outer-space;
 $user_form_text: $eerie-black;
 $my_account_nav: $eerie-black;
-$my_account_nav_active: $dark-gray;
+$my_account_nav_active: $eerie-black;
 $my_account_nav_hover: $dark-gray;
 $user_form_layout_divider_color: $bright-gray;
 
@@ -79,7 +77,7 @@ $highlights_subtitle_hover: $outer-space;
 
 // Dropdown.
 $primary_dropdown_arrow_bg: transparent;
-$primary_dropdown_text: $black-two;
+// $primary_dropdown_text: $black-two;
 $primary_dropdown_border: $outer-space;
 $primary_dropdown_option_hover: $bright-gray;
 $primary_dropdown_option_border: $bright-gray;
@@ -102,13 +100,13 @@ $footer_link_hover: $eerie-black;
 $social-icons-bg: $bright-gray;
 
 // Titles.
-$page_title: $outer-space;
-$block_title: $outer-space;
-$title: $outer-space;
-$sub_title: $outer-space;
+$page_title: $eerie-black;
+$block_title: $eerie-black;
+$title: $eerie-black;
+$sub_title: $eerie-black;
 $label_black: $black-two;
 $label_dark: $black;
-$user_sidebar_block_title: $outer-space;
+$user_sidebar_block_title: $eerie-black;
 
 // Copyright
 $copyright_footer_bg: $bright-gray;
@@ -142,9 +140,11 @@ $header_secondary_bg_upto_desk: $white;
 $header_secondary_menu_link_mobile: $black-two;
 $header_secondary_menu_link: $black-two;
 $header_mobile_menu_arrow: $black-two;
+$header_c_menu_text: $eerie-black;
 
 // Header my account nav.
 $header_my_account_h3_title: $black-two;
+$header_my_account_icon: $black-two;
 
 // Back to top
 $btt_bg: $gray-98;
@@ -232,3 +232,37 @@ $maintenance_container_border: $white;
 $maintenance_container_border_top: $white;
 $maintenance_body_bg: $white;
 $maintenance_link: $brownish-grey;
+
+// Partialfulfillment
+$cancel-item-link: $lust-red;
+$cancel-item-list-header: $eerie-black;
+$cancel-item-refund-text: $brownish-grey;
+$cancel-item-image-border: $bright-gray;
+$cancel-item-image-label-text: $eerie-black;
+
+// Order detail, recent orders, order list page.
+$order_search_form_label: $eerie-black;
+$order_search_form_icon: $white;
+$order_search_form_border: $eerie-black;
+$order_detail_delivery_details_row_content: $eerie-black;
+
+// Address form.
+$address_form_radio: $eerie-black;
+$address_button_border: $eerie-black;
+$address_button_text: $eerie-black;
+$address_book_delete_cancel: $eerie-black;
+$address_book_delete_close: $black;
+$address_pp_delete_closebtn: $black;
+$address_book_delete_close_icon: $white;
+
+// My Account pages
+$my_account_mobile_back_link: $eerie-black;
+$password_tooltip_list: $eerie-black;
+$user_nav_link: $eerie-black;
+$user_nav_mobile_link: $eerie-black;
+$user_nav_mobile_title2: $eerie-black;
+$user_order_list_text: $eerie-black;
+$user_order_list_dark: $eerie-black;
+
+// Block Alshaya ACM customer .block-alshaya-acm-customer
+$block_acm_customer_txt: $eerie-black;
