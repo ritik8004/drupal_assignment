@@ -57,6 +57,14 @@
           {% endif %}
         </div>
 
+        {% if content.express_delivery_text %}
+          <div class="express-delivery">
+            <div class="express-delivery-text">
+              <p>{{ content.express_delivery_text }}</p>
+            </div>
+          </div>
+        {% endif %}
+
         {% if content.same_day_delivery_text %}
           <div class="same-day-delivery">
             <div class="same-day-content">
@@ -120,13 +128,16 @@
               <div class="product-out-of-stock-layer"></div>
               <div class="field__content">
                 {{ content.home_delivery }}
-
                 {% if content.click_and_collect %}
                   {{ content.click_and_collect }}
                 {% endif %}
               </div>
             </div>
           {% endif %}
+
+           {% if content.express_delivery %}
+              {{content.express_delivery}}
+            {% endif %}
 
         </div>
 

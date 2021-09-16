@@ -28,6 +28,7 @@ import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
 import DeliveryAreaSelect from '../delivery-area-select';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -229,6 +230,7 @@ export default class Cart extends React.Component {
 
   displayShippingMethods = (event) => {
     const currentArea = event.detail;
+    showFullScreenLoader();
     getCartShippingMethods(currentArea).then(
       (response) => {
         if (response !== null) {
@@ -236,6 +238,7 @@ export default class Cart extends React.Component {
             cartShippingMethods: response,
           });
         }
+        removeFullScreenLoader();
       },
     );
   }

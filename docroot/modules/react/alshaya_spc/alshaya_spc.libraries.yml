@@ -104,3 +104,12 @@ commerce_backend.checkout.v2:
     dist/backend_checkout_v2.bundle.js: {}
   dependencies:
     - alshaya_spc/security
+
+express_delivery:
+  version: 1.x
+  footer: true
+  js:
+    dist/expressdelivery.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - alshaya_spc/cart_utilities

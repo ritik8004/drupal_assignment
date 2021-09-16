@@ -628,9 +628,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
          // Same day delivery.
-         if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['same_day_delivery']['text'])) {
+        if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['same_day_delivery']['text'])) {
           $build['same_day_delivery_text']['#markup'] = $flags_config['same_day_delivery']['text'];
           $build['same_day_delivery_sub_text']['#markup'] = $flags_config['same_day_delivery']['sub_text'];
+        }
+
+        // Express Delivery
+        if ($flags_status['express_delivery']['status'] && !empty($flags_config['express_delivery']['text'])) {
+          $build['express_delivery_text']['#markup'] = $flags_config['express_delivery']['text'];
         }
 
         // Delivery in only city.
@@ -890,6 +895,10 @@ function alshaya_acm_product_get_flags_config() {
     $return['same_day_delivery']['sub_text'] = $config->get('same_day_delivery_sub_text');
   }
 
+  if (!empty($config->get('express_delivery_text'))) {
+    $return['express_delivery']['text'] = $config->get('express_delivery_text');
+  }
+
   if (!empty($config->get('delivery_in_only_city_text')) && !empty($config->get('delivery_in_only_city_key'))) {
     $return['delivery_in_only_city']['text'] = $config->get('delivery_in_only_city_text');
     $return['delivery_in_only_city']['key'] = (int) $config->get('delivery_in_only_city_key');
@@ -920,6 +929,7 @@ function alshaya_acm_product_get_flags_status($sku) {
   return [
     'non_refundable' => ['status' => $sku_entity->get('attr_non_refundable_products')->getString()],
     'same_day_delivery' => ['status' => $sku_entity->get('attr_same_day_delivery')->getString()],
+    'express_delivery' => ['status' => $sku_entity->get('attr_express_delivery')->getString()],
   ];
 
 }

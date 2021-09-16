@@ -123,3 +123,6 @@ alshaya_acm_product.settings:
     delivery_in_only_city_text:
       type: label
       label: 'Delivery in only city'
+    express_delivery_text:
+      type: label
+      label: 'Express Delivery available'

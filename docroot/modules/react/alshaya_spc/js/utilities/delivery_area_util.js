@@ -50,8 +50,9 @@ export const getDeliveryAreaList = (governateId) => window.commerceBackend.getDe
     Drupal.logJavascriptError('get-delivery-areas', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
-export const getCartShippingMethods = (currentArea) => window.commerceBackend.getCartShippingMethod(
-  currentArea,
+export const getCartShippingMethods = (currArea, sku) => window.commerceBackend.getShippingMethods(
+  currArea,
+  sku,
 )
   .then(
     (responseData) => {

@@ -16,6 +16,7 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -376,4 +377,32 @@ function alshaya_spc_preprocess_page(&$variables) {
     ],
   ];
   $variables['page']['content']['commerce_backend'] = $strings;
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if ($context !== 'pdp') {
+    return;
+  }
+  $config = \Drupal::config('alshaya_spc.express_delivery');
+  $express_delivery_enabled = $config->get('expressDeliveryEnabled');
+
+  // Show express delivery options if feature is enabled.
+  // Else show normal delivery options.
+  if ($express_delivery_enabled) {
+    $field_mapping = \Drupal::service('alshaya_addressbook.manager')->getMagentoFieldMappings();
+
+    $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
+    $build['#attached']['drupalSettings']['country_code'] = $country_code;
+    $build['#attached']['drupalSettings']['alshaya_spc']['magento_field_mappings'] =  $field_mapping;
+    $build['#attached']['drupalSettings']['alshaya_spc']['address_fields'] = _alshaya_spc_get_address_fields();
+
+    $build['express_delivery']['#markup'] = '<div id="express-delivery-options"></div>';
+    $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
+    $build['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v2';
+
+    unset($build['home_delivery']);
+  }
 }
