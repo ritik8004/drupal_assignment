@@ -1,5 +1,19 @@
 import React from 'react';
 
+/**
+ * Shipping method tag component function.
+ */
+const ShippingMethodTag = (shippingMethod) => (
+  <div key={shippingMethod.carrier_code} className={`cart-shipping-method ${shippingMethod.carrier_code.toString().toLowerCase()} ${shippingMethod.available ? 'active' : 'in-active'}`}>
+    <span className="carrier-title">{shippingMethod.carrier_title}</span>
+    <span className="information-icon">
+      <span className="method-title">
+        <span>{shippingMethod.method_title}</span>
+      </span>
+    </span>
+  </div>
+);
+
 const CartShippingMethods = (props) => {
   const { cartShippingMethods, sku, parentSKU } = props;
   let shippingMethods = null;
@@ -24,34 +38,14 @@ const CartShippingMethods = (props) => {
     <div className="sku-cart-delivery-methods">
       <div className="shipping-tags-first-row">
         {
-          shippingMethods.filter((el, i) => {
-            return i < 2;
-          }).map(ShippingMethodTag)
+          shippingMethods.filter((el, i) => i < 2).map(ShippingMethodTag)
         }
       </div>
       <div className="shipping-tags-second-row">
         {
-          shippingMethods.filter((el, i) => {
-            return i > 1;
-          }).map(ShippingMethodTag)
+          shippingMethods.filter((el, i) => i > 1).map(ShippingMethodTag)
         }
       </div>
-    </div>
-  );
-};
-
-/**
- * Shipping method tag component function.
- */
-const ShippingMethodTag = (shippingMethod) => {
-  return (
-    <div key={shippingMethod.carrier_code} className={`cart-shipping-method ${shippingMethod.carrier_code.toString().toLowerCase()} ${shippingMethod.available ? 'active' : 'in-active'}`}>
-      <span className="carrier-title">{shippingMethod.carrier_title}</span>
-      <span className="information-icon">
-        <span className="method-title">
-          <span>{shippingMethod.method_title}</span>
-        </span>
-      </span>
     </div>
   );
 };

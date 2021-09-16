@@ -173,11 +173,7 @@
         .information-icon {
           &:hover {
             .method-title {
-              border-color: $spc-cart-delivery-info-inactive-border;
-
-              &::before {
-                border-color: $spc-cart-delivery-info-inactive-border;
-              }
+              display: none;
             }
           }
         }
