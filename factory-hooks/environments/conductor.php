@@ -1451,6 +1451,36 @@ $conductors = [
   'tbsjo_prod' => [
     'site_id' => 447,
   ],
+  'coskw_qa2' => [
+    'hmac_id' => '5f86efc3a4034542a66ef2f4ab6ca44b',
+    'hmac_secret' => 'MjJhYzlhNjUtZjk4OC00',
+    'site_id' => 465,
+  ],
+  'cossa_qa2' => [
+    'hmac_id' => '77459323245344598d6e771a238dcee3',
+    'hmac_secret' => 'YmNmYzIwOGItYzNlZC00',
+    'site_id' => 466,
+  ],
+  'cosae_qa2' => [
+    'hmac_id' => 'ce5ce2adf272456a9a61af18ba6a77c9',
+    'hmac_secret' => 'ODZmZDZmY2MtMWE2ZC00',
+    'site_id' => 467,
+  ],
+  'coseg_qa2' => [
+    'hmac_id' => 'c25fe14ca27846a79b7ebd6e921a4db8',
+    'hmac_secret' => 'MWMyYTAzNzctMmE2MS00',
+    'site_id' => 468,
+  ],
+  'cosbh_qa2' => [
+    'hmac_id' => '199e202dee0346dda2d195f6937bb402',
+    'hmac_secret' => 'N2Y5YTM5OWYtMzc1ZS00',
+    'site_id' => 469,
+  ],
+  'cosqa_qa2' => [
+    'hmac_id' => 'ac141132650249e99ceb581e96d4ad5e',
+    'hmac_secret' => 'ZTZhYmM4ZmEtYTdkMC00',
+    'site_id' => 470,
+  ],
 ];
 
 // Default values for each ACM middleware.

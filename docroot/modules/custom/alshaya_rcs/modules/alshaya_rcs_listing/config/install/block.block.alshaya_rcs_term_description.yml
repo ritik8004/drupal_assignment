@@ -17,8 +17,10 @@ settings:
   provider: alshaya_rcs_listing
   label_display: '0'
 visibility:
-  request_path:
-    id: request_path
-    pages: '/taxonomy/term/*'
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      rcs_category: rcs_category
     negate: false
-    context_mapping: {  }
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'

@@ -355,6 +355,42 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'tbskw_dev',
       ],
     ],
+    'coskw' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'coskw_qa2',
+      ],
+    ],
+    'cossa' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cossa_qa2',
+      ],
+    ],
+    'cosae' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cosae_qa2',
+      ],
+    ],
+    'coseg' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'coseg_qa2',
+      ],
+    ],
+    'cosbh' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cosbh_qa2',
+      ],
+    ],
+    'cosqa' => [
+      'qa2' => [
+        'magento' => 'cos_qa',
+        'conductor' => 'cosqa_qa2',
+      ],
+    ],
   ];
 
   // All 01update should match 01live.

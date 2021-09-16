@@ -14,8 +14,9 @@ rcsGetEnrichedCategories = () => {
       success: function (data) {
         // Store the value in static storage.
         RcsPhStaticStorage.set('enriched_categories', data);
-        return data;
+        enrichedData = data;
       }
     });
   }
+  return enrichedData;
 }

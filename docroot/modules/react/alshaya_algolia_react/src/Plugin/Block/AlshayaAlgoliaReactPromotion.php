@@ -132,13 +132,22 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="alshaya-algolia-plp"></div>',
-      '#attached' => [
-        'library' => $common_config['otherRequiredValues']['libraries'],
-        'drupalSettings' => [
-          'algoliaSearch' => $algoliaSearch,
-          'reactTeaserView' => $reactTeaserView,
+      'inside' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => 'alshaya-algolia-plp',
+          'data-hierarchy' => $algoliaSearch['hierarchy'] ?? '',
+          'data-level' => $algoliaSearch['level'] ?? '',
+          'data-rule-context' => $algoliaSearch['ruleContext'] ?? [],
+          'data-category-field' => $algoliaSearch['category_field'] ?? '',
+          'data-promotion-id' => $algoliaSearch['promotionNodeId'] ?? '',
+        ],
+        '#attached' => [
+          'library' => $common_config['otherRequiredValues']['libraries'],
+          'drupalSettings' => [
+            'algoliaSearch' => $algoliaSearch,
+            'reactTeaserView' => $reactTeaserView,
+          ],
         ],
       ],
     ];

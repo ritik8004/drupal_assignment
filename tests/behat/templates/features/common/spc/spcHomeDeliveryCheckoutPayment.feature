@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @homeDelivery @westelmkwuat @pbsauat @tbskwuat @hmaeuat @flsauat @mcsauat @mcaeuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
+@javascript @guest @checkoutPayment @homeDelivery @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmkwuat @pbsauat @tbskwuat @hmaeuat @flsauat @mcsauat @mcaeuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:
@@ -113,9 +113,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{anon_email}"
-    Then I should see "{language_order_detail}"
+    And I should save the order details in the file
     And I wait 10 seconds
     Then I should save the order details in the file
     And I wait for the page to load
@@ -188,3 +186,4 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I wait 50 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file

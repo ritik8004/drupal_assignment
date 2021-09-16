@@ -1,0 +1,29 @@
+%btn {
+  font-size: 0.875rem;
+  font-family: $alshaya-thin;
+}
+
+%button-wide {
+  font-size: 0.875rem;
+}
+
+%button-brand {
+  font-size: 0.875rem;
+  font-weight: normal;
+}
+
+%page-title {
+  text-transform: uppercase;
+
+  @include breakpoint($mobile) {
+    font-size: 1.25rem;
+  }
+
+  @include breakpoint($tablet) {
+    font-size: 1.25rem;
+  }
+
+  @include breakpoint($desktop) {
+    font-size: 1.25rem;
+  }
+}

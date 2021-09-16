@@ -5,6 +5,17 @@
  * Module file.
  */
 
+ /**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_promotion_theme($existing, $type, $theme, $path) {
+  return [
+    'node__rcs_promotion' => [
+      'variables' => [],
+    ],
+  ];
+}
+
 /**
  * Implements hook_theme_suggestions_page_alter().
  */

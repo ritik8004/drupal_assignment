@@ -37,22 +37,24 @@ const ReviewDescription = ({
             <div id={`${reviewId}-review-title`} className="review-title">{reviewDescriptionData.Title}</div>
             <div id={`${reviewId}-review-date`} className="review-date">{`${date}`}</div>
           </ConditionalView>
-          <div id={`${reviewId}-review-text`} className="review-text">
-            {
-              reviewDescriptionData.ReviewText.split('\n').map((item, idx) => (
+          { reviewDescriptionData.ReviewText && (
+            <div id={`${reviewId}-review-text`} className="review-text">
+              {reviewDescriptionData.ReviewText.split('\n').map((item, idx) => (
                 <span key={idx.toString()}>
                   {item}
                   <br />
                 </span>
-              ))
-            }
-          </div>
-          <ConditionalView
-            condition={enableTranslation
-            && reviewDescriptionData.ReviewText.length < charsLimit}
-          >
-            <TranslateByGoogle id={reviewId} contentLocale={contentLocale} contentType="review" />
-          </ConditionalView>
+              ))}
+            </div>
+          )}
+          { reviewDescriptionData.ReviewText && (
+            <ConditionalView
+              condition={enableTranslation
+              && reviewDescriptionData.ReviewText.length < charsLimit}
+            >
+              <TranslateByGoogle id={reviewId} contentLocale={contentLocale} contentType="review" />
+            </ConditionalView>
+          )}
           <ReviewAdditionalAttributes
             additionalFieldsData={reviewDescriptionData.AdditionalFields}
             additionalFieldsOrder={reviewDescriptionData.AdditionalFieldsOrder}
