@@ -1,4 +1,4 @@
-@javascript @smoke @westelmkwprod @westelmaeprod @aeoaeprod @aeokwprod @aeosaprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @mcaepprod @vskwprod @mckwprod @tbskwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
+@javascript @smoke @bpkwprod @tbsegprod @bpaeprod @bpsaprod @westelmkwprod @westelmaeprod @aeoaeprod @aeokwprod @aeosaprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @mcaepprod @vskwprod @mckwprod @tbskwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
 Feature: Test the My Account functionality
 
   Background:

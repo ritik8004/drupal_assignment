@@ -1,0 +1,36 @@
+.spc-delivery-store-info {
+  .spc-delivery-store-name-wrapper {
+    position: relative;
+    padding-#{$left}: 2.125rem;
+    margin-bottom: 1.125rem;
+
+    .store-icon,
+    .collection-point-icon {
+      &::before {
+        #{$left}: 0;
+      }
+    }
+  }
+
+  .store-open-hours-list,
+  .store-delivery-time {
+    margin-top: 0.625rem;
+  }
+
+  .store-delivery-time {
+    .delivery--time--value {
+      padding-#{$left}: 0.3125rem;
+    }
+  }
+}
+
+.spc-checkout-delivery-information {
+  .delivery-information-preview {
+    .spc-delivery-store-info {
+      .store-name {
+        font-family: $alshaya-thin;
+        color: $spc-delivery-info-text;
+      }
+    }
+  }
+}

@@ -13,8 +13,16 @@
         {{ value }}
       </div>
     </div>
+    {% if legal_notice.enabled %}
+    <div class="legal-notice desc-wrapper">
+      <div class="desc-label">
+        {{ legal_notice.label }}
+      </div>
+      <div class="desc-value">
+        {{ legal_notice.summary }}
+      </div>
+    </div>
     {% endif %}
-    {{ content.legal_notice }}
   </div>
 </div>
 <div class="gradient-holder"></div>

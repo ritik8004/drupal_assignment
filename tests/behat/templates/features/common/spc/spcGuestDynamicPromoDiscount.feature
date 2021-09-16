@@ -52,6 +52,7 @@ Feature: SPC to add dynamic promotions (Add 3 more to get x% discount) for Guest
   And I wait for the page to load
   Then I should be on "/checkout/confirmation" page
   And I wait for the page to load
+    And I should save the order details in the file
   Then I should see "{order_confirm_text}"
   Then I should see "{anon_email}"
   Then I should see "{order_detail}"
@@ -106,6 +107,7 @@ Feature: SPC to add dynamic promotions (Add 3 more to get x% discount) for Guest
   And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
   And I wait 50 seconds
   And I wait for AJAX to finish
+  And I should save the order details in the file
   Then I should see "{language_continue_shopping_text}"
   Then I should see "{anon_email}"
   Then I should see "{language_order_detail}"
@@ -162,6 +164,7 @@ Feature: SPC to add dynamic promotions (Add 3 more to get x% discount) for Guest
   And I wait for the page to load
   Then I should be on "/checkout/confirmation" page
   And I wait for the page to load
+  And I should save the order details in the file
   Then I should see "{order_confirm_text}"
   Then I should see "{anon_email}"
   Then I should see "{order_detail}"

@@ -7,8 +7,6 @@ exports.render = function render(
   inputs,
   innerHtml
 ) {
-  return;
-
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
   let superCategoryHtml = '';

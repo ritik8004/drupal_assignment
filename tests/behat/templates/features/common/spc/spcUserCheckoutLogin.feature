@@ -1,4 +1,4 @@
-@javascript @smoke @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @bbwsauat @mcaeuat @mcsauat @flsauat @hmsauat @tbskwuat @flkwuat @flaeuat @bbwaeuat @vsaeuat @pbaeuat @pbkwuat @pbsauat
+@javascript @smoke @bpaeuat @tbseguat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @bbwsauat @mcaeuat @mcsauat @flsauat @hmsauat @tbskwuat @flkwuat @flaeuat @bbwaeuat @vsaeuat @pbaeuat @pbkwuat @pbsauat
 Feature: Test the Checkout Login functionality
 
   Scenario: As a user, I should be able to see cart content added as anonymous user once I log into the site
