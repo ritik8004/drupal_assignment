@@ -361,6 +361,9 @@ function _alshaya_spc_translations() {
     'The products in your shopping basket are not eligible for the Advantage card discount.' => [
       'ar' => 'المنتجات التي في سلة التسوق الخاصة بك غير مؤهلة للحصول على خصم بطاقة الشايع',
     ],
+    'This product is not eligible for the Advantage card discount.' => [
+      'ar' => 'هذا المنتج غير مؤهل للحصول على خصم بطاقة الشايع',
+    ],
   ];
 
   return $strings;
