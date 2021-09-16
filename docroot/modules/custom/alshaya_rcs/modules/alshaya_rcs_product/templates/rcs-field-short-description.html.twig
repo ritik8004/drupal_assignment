@@ -4,20 +4,20 @@
     <div class="field__content">
       <div class="desc-wrapper">
         {% if label %}
-        <div class="desc-label">
-          {{ label }}
-        </div>
+          <div class="desc-label">
+            {{ label }}
+          </div>
         {% endif %}
         {% if value %}
-        <div class="desc-value">
-          {{ value }}
-        </div>
+          <div class="desc-value">
+            {{ value }}
+          </div>
         {% endif %}
       </div>
     </div>
     {% if read_more %}
-    <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-    <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+      <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+      <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
     {% endif %}
   </div>
 </div>

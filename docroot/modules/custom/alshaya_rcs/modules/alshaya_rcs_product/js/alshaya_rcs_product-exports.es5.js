@@ -615,17 +615,19 @@ exports.computePhFilters = function (input, filter) {
       data = {
         label: '',
         value: input.description.html,
-        legal_notice: {
-          enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
-          label: drupalSettings.alshayaRcs.legal_notice_label,
-          summary: drupalSettings.alshayaRcs.legal_notice_summary.value,
-        },
       }
 
       // Brands can define rcsGetProductDescription() to customize how description is generated.
       if (typeof rcsGetProductDescription === 'function') {
         data = rcsGetProductDescription(input);
       }
+
+      // Add legal notice.
+      data.legal_notice = {
+        enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
+        label: drupalSettings.alshayaRcs.legal_notice_label,
+        summary: drupalSettings.alshayaRcs.legal_notice_summary,
+      };
 
       // Render twig plugin.
       value = handlebarsRenderer.render(`field.product.${filter}`, data);
