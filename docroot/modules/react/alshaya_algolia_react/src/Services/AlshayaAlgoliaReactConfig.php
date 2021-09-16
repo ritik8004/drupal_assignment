@@ -421,6 +421,16 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           if ($widget['type'] === 'swatch_list') {
             $facet_values = $this->loadFacetValues($identifier, $page_type);
           }
+          if ($widget['type'] === 'delivery_ways') {
+            $identifier = $this->identifireSuffixUpdate('attr_delivery_ways', $page_type);
+            $facet_values = $this->loadFacetValues($identifier, $page_type);
+            if (isset($facet_values['Express Day Delivery Available'])) {
+              $facet_values['Express Day Delivery Available'] = $facet_values['Express Day Delivery Available'].',express';
+            }
+            if (isset($facet_values['Same Day Delivery Available'])) {
+              $facet_values['Same Day Delivery Available'] = $facet_values['Same Day Delivery Available'].',same';
+            }
+          }
 
           // For HNM we are using "size_group_list" widget type
           // for size facet. If sizegroup is not enabled then force

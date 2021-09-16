@@ -73,7 +73,17 @@ const WidgetManager = React.memo((props) => {
         />
       );
       break;
-
+    case 'delivery_ways':
+      currentWidget = (
+        <DeliveryTypeFilter
+          name={name}
+          facetValues={filter.facet_values}
+          attribute={filter.identifier}
+          value={value}
+          itemCount={itemCount}
+        />
+      );
+      break;
     case 'checkbox':
     default:
       currentWidget = (

@@ -375,15 +375,17 @@ class AlshayaAlgoliaIndexHelper {
       }, $configured_skus);
     }
 
-    $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
     $object['attr_delivery_ways'] = [];
-    $express_day_label = $sku->get('attr_express_delivery')->getString();
-    $same_day_label = $sku->get('attr_same_day_delivery')->getString();
-    if ($same_day_label == '1') {
-      array_push($object['attr_delivery_ways'], $sku->get('attr_same_day_delivery')->getFieldDefinition()->getLabel());
+    $same_value = t('Same Day Delivery Available', [], ['langcode' => $object['search_api_language'], 'context' => 'same_day_delivery_listing']);
+    $express_value =t('Express Day Delivery Available', [], ['langcode' => $object['search_api_language'], 'context' => 'express_day_delivery_listing']);;
+    $language = $this->languageManager->getLanguage($node->language()->getId());
+    $original_language = $this->languageManager->getConfigOverrideLanguage();
+    $this->languageManager->setConfigOverrideLanguage($language);
+    if ($sku->get('attr_same_day_delivery')->getString() == '1' && isset($object['attr_delivery_ways'])) {
+      array_push($object['attr_delivery_ways'], $same_value);
     }
-    if ($express_day_label == '1') {
-      array_push($object['attr_delivery_ways'], $sku->get('attr_express_delivery')->getFieldDefinition()->getLabel());
+    if ($sku->get('attr_express_delivery')->getString() == '1' && isset($object['attr_delivery_ways'])) {
+      array_push($object['attr_delivery_ways'],  $express_value);
     }
     $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
 

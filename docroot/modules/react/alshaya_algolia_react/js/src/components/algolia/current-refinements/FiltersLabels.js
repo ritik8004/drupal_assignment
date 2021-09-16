@@ -47,6 +47,13 @@ function selectedFiltersLables(attribute, value, filter) {
       break;
     }
 
+    case 'delivery_ways': {
+      const selctionVal = value;
+      selctionText = (selctionVal > 1)
+        ? `${Drupal.t(selctionVal)}` : `${Drupal.t(selctionVal)}`;
+      break;
+    }
+
     case 'checkbox':
     default:
       selctionText = value.trim();
