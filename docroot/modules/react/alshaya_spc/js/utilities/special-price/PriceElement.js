@@ -2,8 +2,13 @@ import React from 'react';
 import { getAmountWithCurrency } from '../checkout_util';
 
 const PriceElement = ({ amount: priceAmount, format }) => {
-  if (typeof priceAmount === 'undefined') {
+  if (typeof priceAmount === 'undefined'
+    || priceAmount === '0.00' || priceAmount === null) {
     return (null);
+  }
+
+  if (priceAmount.toUpperCase() === 'FREE') {
+    return (Drupal.t('Free'));
   }
 
   const priceParts = { ...getAmountWithCurrency(priceAmount, false) };
