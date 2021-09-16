@@ -64,7 +64,7 @@ const Teaser = ({
     } else {
       attribute[key] = value;
     }
-    // Update URL to relative URL so above host mismatch issue.
+    // Update URL to relative URL to avoid host mismatch issue.
     if (key === 'url') {
       attribute[key] = new URL(attribute.url).pathname;
     }
