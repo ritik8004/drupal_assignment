@@ -37,10 +37,12 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
       return;
     }
 
-    // The route object will have the alias of the placeholder node which is the
-    // prefix value, eg. "buy/".
-    // So here we fetch the path of the entity to create the url object.
-    $url = Url::fromUserInput('/' . RcsPhPathProcessor::$entityPath);
+    // By default, the placeholder entity alias would have been fetched and
+    // displayed. For eg. for the rcs product node, the path would have been the
+    // path prefix, like /buy.
+    // So we use the following method to prevent the Drupal routing system from
+    // converting the path to the alias value.
+    $url = Url::fromUri('base:' . RcsPhPathProcessor::$entityPathPrefix . RcsPhPathProcessor::$entityPath);
     $event->setCurrentUrl($url);
     $event->stopPropagation();
   }
