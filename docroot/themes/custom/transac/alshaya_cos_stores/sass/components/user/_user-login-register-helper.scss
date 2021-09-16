@@ -5,3 +5,13 @@
     }
   }
 }
+
+.c-user--node {
+  &.l-two--sf {
+    aside.c-sidebar-first {
+      li {
+        text-transform: unset;
+      }
+    }
+  }
+}

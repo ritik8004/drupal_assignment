@@ -47,6 +47,23 @@
   }
 }
 
+.c-my-account-nav {
+  li {
+    &::after {
+      font-size: 1.625rem;
+      #{$right}: 0.25rem;
+      margin-top: -1.25rem;
+    }
+  }
+
+  li,
+  h3 {
+    padding: 0.9375rem 0.625rem;
+    margin: 0;
+    text-transform: uppercase;
+  }
+}
+
 body {
   @include breakpoint($only-tablet) {
     margin-top: 4rem;
