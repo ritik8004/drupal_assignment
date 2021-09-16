@@ -111,6 +111,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     const {
       closeOTPModal,
       openNewUserModal,
+      chosenCountryCode,
     } = this.props;
 
     if (otp.length === 0) {
@@ -122,7 +123,9 @@ class AuraFormSignUpOTPModal extends React.Component {
     // API call to verify otp.
     const apiUrl = 'post/loyalty-club/verify-otp';
     // Passing type `reg` to denote this otp verification is for user registration.
-    const apiData = postAPIData(apiUrl, { mobile, otp, type: 'reg' });
+    const apiData = postAPIData(apiUrl, {
+      mobile, otp, type: 'reg', chosenCountryCode,
+    });
     showFullScreenLoader();
 
     if (apiData instanceof Promise) {
