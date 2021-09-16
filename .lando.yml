@@ -4,7 +4,7 @@ recipe: drupal8
 config:
   webroot: 'docroot'
   xdebug: true
-  php: '7.3'
+  php: '7.4'
 
 services:
   database:
@@ -17,7 +17,7 @@ services:
     xdebug: true
     app_mount: delegated
     ssl: true
-    type: php:7.3
+    type: php:7.4
     composer_version: 1-latest
     build_as_root:
       - bash /app/.lando/scripts/configure-syslog.sh
