@@ -135,11 +135,12 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
       self::$entityType = 'category';
+      // @todo Remove this when we have proper category prefix available.
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
       self::$entityPathPrefix = $category_prefix;
 
       self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
-
+      // @todo Enable the category enrichment settings.
       $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', self::$entityPath) : NULL;
       if (isset($category)) {
         self::$entityData = $category->toArray();
@@ -203,6 +204,8 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public function getEnrichedEntity(string $type, string $slug) {
     $entity = NULL;
     $storage = NULL;
+    // Filter out the front and back slash.
+    $slug = trim($slug, '/');
 
     if ($type == 'product') {
       $storage = $this->nodeStorage;
