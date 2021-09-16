@@ -21,7 +21,8 @@ exports.getEntity = async function getEntity(langcode) {
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
-      const productUrlKey = rcsWindowLocation().pathname.match(/(buy-(.*?))\./);
+      const productRegex = new RegExp(`(${drupalSettings.rcsPhSettings.productPathPrefix}(.*?))\\.`);
+      const productUrlKey = rcsWindowLocation().pathname.match(productRegex);
       request.data = JSON.stringify({
         query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
       });
@@ -34,7 +35,8 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
 
-      const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
+      const categoryRegex = new RegExp(`${drupalSettings.rcsPhSettings.categoryPathPrefix}(.*?)\/?$`);
+      const categoryUrlKey = rcsWindowLocation().pathname.match(categoryRegex);
       request.data = JSON.stringify({
         query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
       });
