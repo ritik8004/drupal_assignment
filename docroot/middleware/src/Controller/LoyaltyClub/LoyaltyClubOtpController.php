@@ -120,6 +120,7 @@ class LoyaltyClubOtpController {
   public function verifyOtp(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     $mobile = $request_content['mobile'];
+    $chosenCountryCode = $request_content['chosenCountryCode'];
     $otp = $request_content['otp'];
     $type = $request_content['type'];
 
@@ -129,7 +130,7 @@ class LoyaltyClubOtpController {
     }
 
     try {
-      $endpoint = sprintf('/verifyotp/phonenumber/%s/otp/%s/type/%s', $mobile, $otp, $type);
+      $endpoint = sprintf('/verifyotp/phonenumber/%s/otp/%s/type/%s', $chosenCountryCode . $mobile, $otp, $type);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $responseData = [
         'status' => $response,
