@@ -825,16 +825,16 @@ function template_preprocess_rcs_sku_base_form(&$variables) {
 }
 
 /**
- * Implements hook_rcs_twig_templates_alter().
+ * Implements hook_rcs_handlebars_templates_alter().
  */
-function alshaya_rcs_product_rcs_twig_templates_alter(&$templates, $entity) {
-  if (!$entity || $entity->getType() !== 'rcs_product') {
+function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->bundle() !== 'rcs_product') {
     return;
   }
 
   $path = drupal_get_path('module', 'alshaya_rcs_product');
   $templates['field']['product'] = [
-    'description' => file_get_contents("$path/templates/rcs-field-description.html.twig"),
-    'short_description' => file_get_contents("$path/templates/rcs-field-short-description.html.twig"),
+    'description' => file_get_contents("$path/templates/rcs-field-description.handlebars"),
+    'short_description' => file_get_contents("$path/templates/rcs-field-short-description.handlebars"),
   ];
 }

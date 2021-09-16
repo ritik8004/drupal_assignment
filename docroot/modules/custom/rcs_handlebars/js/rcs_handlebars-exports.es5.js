@@ -6,32 +6,6 @@ const Handlebars = require("handlebars");
 Handlebars.registerHelper('t', (str) => Drupal.t(str));
 
 /**
- * Converts twig templates to handlebars.
- *
- * @param source
- */
-function convertTwigToHandlebars(source) {
-  let replacements = [
-    // Convert translated strings.
-    { "{{.*?('.*?')(|t).*?}}": "{{t $1}}" },
-    // Make Twig comments become Handlebars strings.
-    { "{#": "{{'" },
-    { "#}": "'}}" },
-    // Convert if statements.
-    { "{% if (.*?) %}": "{{#if $1 }}" },
-    { "{% endif %}": "{{/if}}" },
-  ];
-
-  replacements.forEach((item) => {
-    let search = Object.entries(item)[0][0];
-    let replace = Object.entries(item)[0][1];
-    source = source.replace(new RegExp(search, 'gm'), replace);
-  });
-
-  return source;
-}
-
-/**
  * Returns the value from object using nested keys i.e. "field.field_name"
  *
  * @param path string
@@ -62,14 +36,11 @@ function resolvePath(path, obj=self, separator='.') {
  */
 function handlebarsRender(template, data) {
   let templates = (typeof window !== 'undefined')
-    ? window.rcsTwigTemplates
-    : rcsTwigTemplates;
+    ? window.rcsHandlebarsTemplates
+    : rcsHandlebarsTemplates;
 
   // Get the source template.
   let source = resolvePath(template, templates);
-
-  // Convert twig template to handlebar template.
-  source = convertTwigToHandlebars(source);
 
   // Compile source.
   let render = Handlebars.compile(source);

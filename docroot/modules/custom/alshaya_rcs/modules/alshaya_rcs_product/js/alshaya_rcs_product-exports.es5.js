@@ -629,7 +629,7 @@ exports.computePhFilters = function (input, filter) {
         summary: drupalSettings.alshayaRcs.legal_notice_summary,
       };
 
-      // Render twig plugin.
+      // Render handlebars plugin.
       value = handlebarsRenderer.render(`field.product.${filter}`, data);
       break;
 
@@ -651,7 +651,7 @@ exports.computePhFilters = function (input, filter) {
       data.value = tmp.value;
       data.read_more = tmp.read_more;
 
-      // Render twig plugin.
+      // Render handlebars plugin.
       value = handlebarsRenderer.render(`field.product.${filter}`, data);
       break;
 
