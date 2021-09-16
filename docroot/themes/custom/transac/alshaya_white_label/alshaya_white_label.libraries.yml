@@ -533,3 +533,8 @@ sameday-express-delivery:
   css:
     theme:
       css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: {}
+
+plp-frame-options:
+  css:
+    theme:
+      css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: {}

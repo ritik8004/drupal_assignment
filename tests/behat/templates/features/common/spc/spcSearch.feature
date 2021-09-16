@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @search @bpaeuat @bpkwuat @bpsauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @mcsauat @mcaeuat @flsauat @bbwsauat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vssauat @vsaeuat
+@javascript @account @smoke @auth @search @tbseguat @bpaeuat @bpkwuat @bpsauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @mcsauat @mcaeuat @flsauat @bbwsauat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vssauat @vsaeuat
 Feature: Test search functionality
 
   Background:
