@@ -7,11 +7,12 @@ import RefinementList from '../algolia/widgets/RefinementList';
 import PriceFilter from '../algolia/widgets/PriceFilter';
 import renderWidget from './RenderWidget';
 import StarRatingFilter from '../algolia/widgets/StarRatingFilter';
+import DeliveryTypeFilter from '../algolia/widgets/DeliveryTypeFilter';
 
 const WidgetManager = React.memo((props) => {
   const
     {
-      facet: filter, itemCount, facet: { name },
+      facet: filter, value, itemCount, facet: { name },
     } = props;
 
   let currentWidget = '';
