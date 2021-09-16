@@ -49,10 +49,7 @@ exports.getEntity = async function getEntity(langcode) {
       // @todo Remove the URL match once we get proper URL of promotion.
       const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") {
-            id
-          }
-        }`
+        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsGraphqlQueryFields.promotions}}`
       });
 
       break;
@@ -74,6 +71,9 @@ exports.getEntity = async function getEntity(langcode) {
   }
   else if (drupalSettings.rcsPage.type == 'promotion' && response.data.promotionUrlResolver) {
     result = response.data.promotionUrlResolver;
+    // Adding name in place of title so that RCS replace the placeholders
+    // properly.
+    result.name = result.title;
   }
 
   return result;

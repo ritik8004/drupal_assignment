@@ -27,3 +27,18 @@ function alshaya_rcs_promotion_theme_suggestions_page_alter(array &$suggestions,
     }
   }
 }
+
+/**
+ * Implements hook_rcs_graphql_query_fields().
+ */
+function alshaya_rcs_promotion_rcs_graphql_query_fields() {
+  $query_fields = [];
+
+  $query_fields['promotions'] = [
+    'id',
+    'title',
+    'description',
+  ];
+
+  return $query_fields;
+}
