@@ -3,7 +3,7 @@ import { getAmountWithCurrency } from '../checkout_util';
 import hasValue from '../../../../js/utilities/conditionsUtility';
 
 const PriceElement = ({ amount: priceAmount, format }) => {
-  if (hasValue(priceAmount)
+  if (!hasValue(priceAmount)
     || parseFloat(priceAmount).toFixed(2) === '0.00') {
     return (null);
   }
