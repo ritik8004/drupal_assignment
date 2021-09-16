@@ -26,7 +26,6 @@
 
     @include breakpoint($upto-desktop) {
       flex-direction: column;
-      gap: 0.625rem;
 
       .shipping-tags-first-row {
         display: flex;
@@ -63,6 +62,8 @@
       }
 
       .shipping-tags-second-row {
+        margin-top: 0.625rem;
+
         .cart-shipping-method {
           justify-content: flex-end;
         }
