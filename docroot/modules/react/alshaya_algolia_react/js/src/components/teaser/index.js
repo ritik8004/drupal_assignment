@@ -64,6 +64,10 @@ const Teaser = ({
     } else {
       attribute[key] = value;
     }
+    // Update URL to relative URL so above host mismatch issue.
+    if (key === 'url') {
+      attribute[key] = new URL(attribute.url).pathname;
+    }
   });
   // Skip if there is no value for current language.
   if (attribute.title === undefined) {
