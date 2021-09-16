@@ -3,6 +3,14 @@ header {
     border-bottom: 1px solid $header_border;
   }
 
+  form,
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
+    @include breakpoint($only-mobile) {
+      z-index: -1;
+    }
+  }
+
   .region__header {
     @include breakpoint($desktop) {
       display: flex;
@@ -193,6 +201,25 @@ header {
 .c-menu-primary {
   @include breakpoint($tablet) {
     height: 0;
+  }
+
+  .hamburger--menu {
+    @include breakpoint($only-mobile) {
+      .logged-in & {
+        padding: 0;
+        #{$left}: 0.5rem;
+        top: 1rem;
+      }
+    }
+  }
+
+  a {
+    text-transform: uppercase;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
   }
 
   .mobile--menu {
