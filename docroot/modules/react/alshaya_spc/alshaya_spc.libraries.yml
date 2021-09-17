@@ -113,3 +113,4 @@ express_delivery:
   dependencies:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
+    - alshaya_spc/commerce_backend.cart.v2

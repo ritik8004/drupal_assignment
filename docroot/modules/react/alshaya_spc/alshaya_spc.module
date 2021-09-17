@@ -317,7 +317,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // Add express delivery flag in drupal settings if feature is enabled.
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
   if ($express_delivery_config->get('status')) {
-    $page['#attached']['drupalSettings']['cart']['expressDeliveryEnabled'] = TRUE;
+    $page['#attached']['drupalSettings']['expressDeliveryEnabled'] = TRUE;
     $page['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
   }
 
@@ -387,7 +387,7 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
     return;
   }
   $config = \Drupal::config('alshaya_spc.express_delivery');
-  $express_delivery_enabled = $config->get('expressDeliveryEnabled');
+  $express_delivery_enabled = $config->get('status');
 
   // Show express delivery options if feature is enabled.
   // Else show normal delivery options.
@@ -401,7 +401,6 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
 
     $build['express_delivery']['#markup'] = '<div id="express-delivery-options"></div>';
     $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-    $build['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v2';
 
     unset($build['home_delivery']);
   }
