@@ -175,7 +175,7 @@ class ConfigProduct extends ResourceBase {
         }
       }
     }
-    
+
     // Restore original language.
     $this->languageManager->setConfigOverrideLanguage($original_language);
 
