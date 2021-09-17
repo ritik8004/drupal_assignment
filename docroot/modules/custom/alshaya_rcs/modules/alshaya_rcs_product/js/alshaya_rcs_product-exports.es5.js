@@ -463,8 +463,12 @@ exports.computePhFilters = function (input, filter) {
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
         const sizeGuide = jQuery('.rcs-templates--size-guide');
-        let sizeGuideAttributes = sizeGuide.attr('data-attributes');
-        sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+        let sizeGuideAttributes = [];
+        if (sizeGuide.length) {
+          let sizeGuideAttributes = sizeGuide.attr('data-attributes');
+          sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+        }
+
         const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
           ? drupalSettings.hidden_form_attributes
           : [];
@@ -637,7 +641,7 @@ exports.computePhFilters = function (input, filter) {
       // Prepare the object data for rendering.
       data = {
         label: '',
-        value: (typeof input.short_description !== 'undefined') ? input.short_description.html : input.description.html,
+        value: input.description.html,
         read_more: false,
       };
 
