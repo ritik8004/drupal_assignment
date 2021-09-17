@@ -307,10 +307,90 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to error handling for 4 digit CVV failure.
+  // Strings related to collection point feature.
   $strings['v5'] = [
+    'Collection Point' => [
+      'ar' => 'نقطة الاستلام',
+    ],
+    'select your preferred collection point' => [
+      'ar' => 'اختر نقطة الاستلام المفضلة',
+    ],
+    'find your collection point' => [
+      'ar' => 'اكتشف أقرب نقطة استلام',
+    ],
+    'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
+      'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
+    ],
+    'The same person placing the order will not collect the order.' => [
+      'ar' => 'الشخص الذي قام بوضع الطلب لن يقوم باستلام الطلب بنفسه',
+    ],
+    'Selected collection point' => [
+      'ar' => 'نقطة الاستلام المختارة.',
+    ],
+    'Collectors Information' => [
+      'ar' => 'بيانات المستلمين',
+    ],
+    'Important Note:' => [
+      'ar' => 'ملاحظة مهمة:',
+    ],
+    'Collect in' => [
+      'ar' => 'الاستلام في',
+    ],
+    'Collector`s mobile number can not be same as contact number' => [
+      'ar' => 'لا يمكن أن يكون رقم هاتف المستلم نفس رقم الاتصال',
+    ],
+    'Your order will be available for pickup at the following collection point' => [
+      'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
+    ],
+  ];
+
+  $strings['v6'] = [
     'Transaction Failed: Invalid CVV' => [
       'ar' => 'فشلت المعاملة: رقم CVV غير صالح',
+    ],
+  ];
+
+  // Strings related to Benefit Pay payment method.
+  $strings['v7'] = [
+    'Continue with Benefit pay' => [
+      'ar' => 'أكمل مع بينفت باي',
+    ],
+    'Please complete your payment by scanning the QR code.' => [
+      'ar' => 'أكمل عملية الدفع عبر مسح رمز QR.',
+    ],
+    'Scan to Pay' => [
+      'ar' => 'امسح وادفع',
+    ],
+    'Pay using BenefitPay App' => [
+      'ar' => 'ادفع باستخدام تطبيق بينفت باي',
+    ],
+    'BenefitPay' => [
+      'ar' => 'بينفت باي',
+    ],
+    'Merchant' => [
+      'ar' => 'التاجر',
+    ],
+    'Amount' => [
+      'ar' => 'المبلغ',
+    ],
+    'Reference number' => [
+      'ar' => 'الرقم المرجعي',
+    ],
+    'How to pay using BenefitPay?' => [
+      'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
+    ],
+  ];
+
+  // Strings related to Advantage card.
+  $strings['v8'] = [
+    'Please enter valid Advantage card code.' => [
+      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+    ],
+    'Advantage Card Discount' => [
+      'ar' => 'خصم بطاقة الشايع',
+    ],
+    'The products in your shopping basket are not eligible for the Advantage card discount.' => [
+      'ar' => 'المنتجات التي في سلة التسوق الخاصة بك غير مؤهلة للحصول على خصم بطاقة الشايع',
     ],
   ];
 

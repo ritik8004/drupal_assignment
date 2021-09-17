@@ -39,12 +39,13 @@
       $('.sku-base-form', node).once('click-collect').on('variant-selected', function (event, variant, code) {
         var sku = $(this).attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode(node.attr('data-vmode'));
+        var productInfo = window.commerceBackend.getProductData(sku, productKey);
 
-        if (drupalSettings[productKey][sku] === undefined) {
+        if (typeof productInfo === 'undefined' || !productInfo) {
           return;
         }
 
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var variantInfo = productInfo['variants'][variant];
         $('#pdp-stores-container', node).data('sku', variant);
 
         if (variantInfo.click_collect) {
@@ -93,23 +94,40 @@
           if ($(this).data('state') !== 'disabled') {
             // Get the permission track the user location.
             $('#pdp-stores-container', node).on('click', function () {
-              if ($(this).hasClass('maps-loaded')) {
-                return;
-              }
+              // Get the input field element.
+              var field = $('.click-collect-form', node).find('input[name="location"]')[0];
+              $(field).once('autocomplete-init').on('keyup', function (e) {
+                // If the input field length is 2 or more, we will load the
+                // google library if not loaded already.
+                if ($(this).val().length >= 2) {
+                  // Do a check if the library is already loaded.
+                  if ($('#pdp-stores-container', node).hasClass('maps-loaded')) {
+                    return;
+                  }
 
-              $(this).addClass('maps-loaded');
+                  // Add a check for identify that library is loaded.
+                  $('#pdp-stores-container', node).addClass('maps-loaded');
 
-              // First load the library from google.
-              Drupal.geolocation.loadGoogle(function () {
-                var field = $('.click-collect-form', node).find('input[name="location"]')[0];
-                new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()}, null, node);
+                  // First load the library from google.
+                  Drupal.geolocation.loadGoogle(function () {
+                    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], { 'country': settings.alshaya_click_collect.country.toLowerCase() });
 
-                Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+                    Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
-                // Try again if we were not able to get location on page load.
-                if (geoPerm === false && typeof $('#pdp-stores-container', node).data('second-try') === 'undefined') {
-                  $('#pdp-stores-container', node).data('second-try', 'done');
-                  Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+                    // Try again if we were not able to get location on page load.
+                    if (geoPerm === false && typeof $('#pdp-stores-container', node).data('second-try') === 'undefined') {
+                      $('#pdp-stores-container', node).data('second-try', 'done');
+                      Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+                    }
+                  });
+                } else {
+                  // If library is loaded and character length is found under
+                  // 3 character, we will clear the events binds with the input.
+                  if ($('#pdp-stores-container', node).hasClass('maps-loaded')) {
+                    $(".pac-container").remove();
+                    google.maps.event.clearInstanceListeners(field);
+                    $('#pdp-stores-container', node).removeClass('maps-loaded');
+                  }
                 }
               });
             });
@@ -196,7 +214,7 @@
   Drupal.click_collect.LocationAccessError = function (drupalSettings) {
     geoPerm = false;
 
-    var context = $('#pdp-stores-container').closest('article.entity--type-node');
+    var context = $('.entity--type-node #pdp-stores-container').closest('.entity--type-node');
     // Display search store form if conditions matched.
     Drupal.pdp.InvokeSearchStoreFormDisplay(context, drupalSettings);
   };

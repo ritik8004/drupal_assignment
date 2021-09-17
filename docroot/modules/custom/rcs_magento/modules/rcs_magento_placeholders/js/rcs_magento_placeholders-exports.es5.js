@@ -1,8 +1,9 @@
 // @codingStandardsIgnoreFile
 
 exports.getEntity = async function getEntity(langcode) {
-  if (typeof drupalSettings.rcsPage === 'undefined') {
-    return null;
+  const pageType = rcsPhGetPageType();
+  if (!pageType) {
+    return;
   }
 
   const request = {
@@ -13,15 +14,15 @@ exports.getEntity = async function getEntity(langcode) {
 
   let result = null;
 
-  switch (drupalSettings.rcsPage.type) {
+  switch (pageType) {
     case 'product':
-    case 'entity':
       request.uri += "graphql";
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
-      const productUrlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
+      const productRegex = new RegExp(`(${drupalSettings.rcsPhSettings.productPathPrefix}(.*?))\\.`);
+      const productUrlKey = rcsWindowLocation().pathname.match(productRegex);
       request.data = JSON.stringify({
         query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
       });
@@ -34,27 +35,47 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
 
-      const categoryUrlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
+      const categoryRegex = new RegExp(`${drupalSettings.rcsPhSettings.categoryPathPrefix}(.*?)\/?$`);
+      const categoryUrlKey = rcsWindowLocation().pathname.match(categoryRegex);
       request.data = JSON.stringify({
         query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
       });
 
       break;
 
+    case 'promotion':
+      // Prepare request parameters.
+      request.uri += "graphql";
+      request.method = "POST",
+      request.headers.push(["Content-Type", "application/json"]);
+      // @todo Remove the URL match once we get proper URL of promotion.
+      const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
+      request.data = JSON.stringify({
+        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsGraphqlQueryFields.promotions}}`
+      });
+
+      break;
+
     default:
       console.log(
-        `Entity type ${drupalSettings.rcsPage.type} not supported for get_entity.`
+        `Entity type ${pageType} not supported for get_entity.`
       );
       return result;
   }
 
   const response = await rcsCommerceBackend.invokeApi(request);
-  if (drupalSettings.rcsPage.type == "product" && response.data.products.total_count) {
+  if (pageType == "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
     RcsPhStaticStorage.set('product_' + result.sku, result);
   }
-  else if (drupalSettings.rcsPage.type == "category" && response.data.categories.total_count) {
+  else if (pageType == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
+  }
+  else if (drupalSettings.rcsPage.type == 'promotion' && response.data.promotionUrlResolver) {
+    result = response.data.promotionUrlResolver;
+    // Adding name in place of title so that RCS replace the placeholders
+    // properly.
+    result.name = result.title;
   }
 
   return result;

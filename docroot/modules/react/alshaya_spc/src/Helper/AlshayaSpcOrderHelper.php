@@ -400,7 +400,9 @@ class AlshayaSpcOrderHelper {
     $orderDetails['delivery_method_description'] = $shipping_info[1] ?? $shipping_info[0];
 
     $shipping_address = $order['shipping']['address'];
-    $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
+    $orderDetails['customerNameShipping'] = $order['shipping']['extension_attributes']['collector_name']
+      ? $order['shipping']['extension_attributes']['collector_name']
+      : $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
 
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
     $orderDetails['shipping_method_code'] = $shipping_method_code;
@@ -425,6 +427,8 @@ class AlshayaSpcOrderHelper {
         $lat = $store_node['lat'];
         $lng = $store_node['lng'];
         $orderDetails['store']['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
+        $orderDetails['store']['collection_point'] = $order['shipping']['extension_attributes']['collection_point'] ?? '';
+        $orderDetails['store']['pudo_available'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
 
         $cc_text = ($cc_type == 'reserve_and_collect')
           ? $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc')
@@ -504,6 +508,15 @@ class AlshayaSpcOrderHelper {
 
       case 'checkout_com_upapi_fawry':
         $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
+        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+
+        break;
+
+      case 'checkout_com_upapi_benefitpay':
+        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'];
+        $orderDetails['payment']['qrData'] = $payment_info['qr_data'];
+        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
         $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
 
         break;

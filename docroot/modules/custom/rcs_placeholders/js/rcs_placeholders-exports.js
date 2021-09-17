@@ -198,3 +198,11 @@ rcsPhReplaceEntityPh = (sourceHtml, entityType, entity, langcode) => {
 rcsPhGetSetting = (setting) => {
   return drupalSettings.rcsPhSettings[setting] || null;
 }
+
+/**
+ * Gets the page type.
+ */
+rcsPhGetPageType = () => typeof drupalSettings.rcsPage !== 'undefined'
+                           && typeof drupalSettings.rcsPage.type !== 'undefined'
+                             ? drupalSettings.rcsPage.type
+                             : null;

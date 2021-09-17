@@ -19,18 +19,6 @@
 }
 
 /**
- * Check if product is available for click and collect.
- *
- * @see alshaya_acm_product_available_click_collect().
- */
-function isProductAvailableForClickAndCollect() {
-  // @todo: Implement the same way as
-  // alshaya_acm_product_available_click_collect(). Currently some attributes
-  // are not available so leaving this as a minimal stub.
-  return drupalSettings.alshaya_click_collect.status;
-}
-
-/**
  * Check if the product is buyable.
  *
  * @param {object} entity
@@ -41,6 +29,44 @@ function isProductAvailableForClickAndCollect() {
  */
 function isProductBuyable(entity) {
   return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
+}
+
+/**
+ * Replace placeholders and get related products.
+ *
+ * @param {object} products
+ *   The product object.
+ * @param {string} sectionTitle
+ *   The translated title for related, upsell.
+ *
+ * @returns {*}
+ *   Html with placeholders replaced.
+ */
+function getProductRecommendation(products, sectionTitle) {
+  // Create the containers for carousel.
+  const related = jQuery('<div />');
+  related.append(jQuery('.rcs-templates--related-product-wrapper').html());
+  related.find('.subtitle').html(sectionTitle);
+
+  // Get Product teaser template with tokens.
+  const productTeaser = jQuery('.rcs-templates--product-teaser').html();
+
+  // Replace tokens and add teaser to the container.
+  let finalMarkup = '';
+  products.forEach((product, index) => {
+    related.find('.owl-carousel').append('<div id="row' + index + '" class="views-row"/>');
+    related.find('#row' + index).append(productTeaser);
+    const attributes = rcsPhGetSetting('placeholderAttributes');
+    finalMarkup = related.html();
+    rcsPhReplaceEntityPh(finalMarkup, 'product_teaser', product, drupalSettings.path.currentLanguage)
+      .forEach(function eachReplacement(r) {
+        const fieldPh = r[0];
+        const entityFieldValue = r[1];
+        finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
+      });
+  });
+
+  return finalMarkup;
 }
 
 exports.render = function render(
@@ -60,7 +86,7 @@ exports.render = function render(
       }
 
       const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
-      const cncEnabled = isProductAvailableForClickAndCollect();
+      const cncEnabled = window.commerceBackend.isProductAvailableForClickAndCollect(entity);
       const isDeliveryOptionsAvailable = isProductAvailableForHomeDelivery(entity) || cncEnabled;
 
       if (isDeliveryOptionsAvailable) {
@@ -79,9 +105,7 @@ exports.render = function render(
         clickAndCollect.attr({
           'data-state': cncEnabled ? 'enabled' : 'disabled',
           'data-product-type': entity.type_id,
-          // @todo: Add method to clean the SKU value as twig's clean_class.
-          // @see: \Drupal\Component\Utility\Html::getClass().
-          'data-sku-clean': entity.sku,
+          'data-sku-clean': window.commerceBackend.cleanCssIdentifier(entity.sku),
         });
 
         const subTitle = cncEnabled
@@ -115,6 +139,39 @@ exports.render = function render(
           innerHtml
         );
       }
+      break;
+
+    case 'mobile-upsell-products':
+    case 'upsell-products':
+      // Get upsell products.
+      const { upsell_products } = entity || {};
+      if (typeof upsell_products === 'undefined' || upsell_products.length === 0) {
+        break;
+      }
+
+      html = getProductRecommendation(upsell_products, rcsTranslatedText('You may also like', {}, 'alshaya_static_text|pdp_upsell_title'));
+      break;
+
+    case 'mobile-related-products':
+    case 'related-products':
+      // Get related products.
+      const { related_products } = entity || {};
+      if (typeof related_products === 'undefined' || related_products.length === 0) {
+        break;
+      }
+
+      html = getProductRecommendation(related_products, rcsTranslatedText('Related', {}, 'alshaya_static_text|pdp_related_title'));
+      break;
+
+    case 'mobile-crosssell-products':
+    case 'crosssell-products':
+      // Get related products.
+      const { crosssell_products } = entity || {};
+      if (typeof crosssell_products === 'undefined' || crosssell_products.length === 0) {
+        break;
+      }
+
+      html = getProductRecommendation(crosssell_products, rcsTranslatedText('Customers also bought', {}, 'alshaya_static_text|pdp_crosssell_title'));
       break;
 
     default:
@@ -152,7 +209,7 @@ exports.computePhFilters = function (input, filter) {
       }
       else {
         // Replace the entire price block html with this one.
-        priceBlock.html(price);
+        priceBlock.html(price.html());
       }
 
       value = jQuery(priceBlock).html();
@@ -164,9 +221,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
       case 'sku-clean':
-        // @todo: Might need to make the value markup safe like what we do for
-        // data-sku-clean for the delivery-block code written above.
-        value = input.sku;
+        value = window.commerceBackend.cleanCssIdentifier(input.sku);
         break;
 
     case 'sku-type':
@@ -180,8 +235,14 @@ exports.computePhFilters = function (input, filter) {
       value = drupalSettings.vat_text;
       break;
 
-     case 'image':
-      value = input.media_gallery[1].url;
+    case 'image':
+      value = ((typeof input.media_gallery.length > 0)
+          && (typeof input.media_gallery[0].url !== 'undefined'
+            || input.media_gallery[0].url
+            || input.media_gallery[0].url !== '')
+        )
+        ? input.media_gallery[0].url
+        : '';
       break;
 
     case 'thumbnail_count':
@@ -370,13 +431,17 @@ exports.computePhFilters = function (input, filter) {
 
       // This wrapper will be removed after processing.
       const tempDivWrapper = jQuery('<div>');
+      let configurableOptions = input.configurable_options;
 
-      if (typeof input.configurable_options !== 'undefined' && input.configurable_options.length > 0) {
+      if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
         const sizeGuide = jQuery('.rcs-templates--size-guide');
         let sizeGuideAttributes = sizeGuide.attr('data-attributes');
         sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+        const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
+          ? drupalSettings.hidden_form_attributes
+          : [];
 
-        input.configurable_options.forEach((option) => {
+        configurableOptions.forEach((option) => {
           // Get the field wrapper div.
           const optionsListWrapper = jQuery('.rcs-templates--form_element_select').clone().children();
           // The list containing the options.
@@ -417,7 +482,7 @@ exports.computePhFilters = function (input, filter) {
           // Add the option values.
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
-            selectOption.attr({value: value.value_index}).text(value.label);
+            selectOption.attr({value: value.value_index}).text(value.store_label);
             configurableOptionsList.append(selectOption);
           });
 
@@ -439,7 +504,7 @@ exports.computePhFilters = function (input, filter) {
           // Replace the placeholder class name.
           optionsListWrapper.attr('class', optionsListWrapper[0].className.replaceAll('ATTRIBUTENAME', formattedAttributeCode));
           // Hide field if supposed to be hidden.
-          if (drupalSettings.add_to_bag.hidden_form_attributes.includes(option.attribute_code)) {
+          if (hiddenFormAttributes.includes(option.attribute_code)) {
             optionsListWrapper.addClass('hidden');
           }
         });
@@ -450,19 +515,17 @@ exports.computePhFilters = function (input, filter) {
 
       // Replace the placeholder attributes in the sku base form template.
       const attributes = rcsPhGetSetting('placeholderAttributes');
-      rcsPhReplaceEntityPh(skuBaseForm.html(), drupalSettings.rcsPage.type, input, drupalSettings.path.currentLanguage)
+      const pageType = rcsPhGetPageType();
+
+      let finalHtml = skuBaseForm.html();
+      rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          for (const attribute of attributes) {
-            jQuery(`[${ attribute } *= '${ fieldPh }']`, skuBaseForm)
-              .each(function eachEntityPhAttributeReplace() {
-                jQuery(this).attr(attribute, jQuery(this).attr(attribute).replace(fieldPh, entityFieldValue));
-              });
-          }
+          skuBaseForm.html(rcsReplaceAll(finalHtml, fieldPh, entityFieldValue));
         });
 
-      value = skuBaseForm.html();
+      value = finalHtml;
       break;
 
     case 'gtm-price':
@@ -477,9 +540,13 @@ exports.computePhFilters = function (input, filter) {
 
     case 'first_image':
       // @todo: Use the correct image key.
-      value = (typeof input.media_gallery[1].url === 'undefined' || !input.media_gallery[1].url || input.media_gallery[1].url === '')
-        ? drupalSettings.alshayaRcs.default_meta_image
-        : input.media_gallery[1].url;
+      value = ((typeof input.media_gallery.length > 0)
+          && (typeof input.media_gallery[0].url !== 'undefined'
+            || input.media_gallery[0].url
+            || input.media_gallery[0].url !== '')
+        )
+        ? input.media_gallery[0].url
+        : drupalSettings.alshayaRcs.default_meta_image
       break;
 
     case 'schema_stock':
@@ -489,6 +556,10 @@ exports.computePhFilters = function (input, filter) {
       else {
         value = 'http://schema.org/OutOfStock';
       }
+      break;
+
+    case 'url':
+      value = `${drupalSettings.rcsPhSettings.productPathPrefix}${input.url_key}.html`;
       break;
 
     case 'brand_logo':

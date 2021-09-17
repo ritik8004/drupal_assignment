@@ -38,13 +38,14 @@
           // replacement.
           $("[id^=rcs-ph-]").once('rcs-ph-process').each(eachBlockPh);
 
-          if (typeof drupalSettings.rcsPage !== 'undefined') {
+          const pageType = rcsPhGetPageType();
+          if (pageType) {
             const attributes = rcsPhGetSetting('placeholderAttributes');
 
             // Identify all the field placeholders and get the replacement
             // value. Parse the html to find all occurrences at apply the
             // replacement.
-            rcsPhReplaceEntityPh(document.documentElement.innerHTML, drupalSettings.rcsPage.type, entity, drupalSettings.path.currentLanguage)
+            rcsPhReplaceEntityPh(document.documentElement.innerHTML, pageType, entity, drupalSettings.path.currentLanguage)
               .forEach(function eachReplacement(r) {
                 const fieldPh = r[0];
                 const entityFieldValue = r[1];
@@ -159,7 +160,7 @@
         );
 
         // Re-attach all behaviors.
-        rcsPhApplyDrupalJs($(this).parent());
+        rcsPhApplyDrupalJs($(this).parent()[0]);
       });
   }
 

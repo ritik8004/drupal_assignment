@@ -1,4 +1,4 @@
-@javascript @smoke @footer @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @mckwuat @vsaeuat @tbskwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
+@javascript @smoke @footer @bpaeuat @tbseguat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @mckwuat @vsaeuat @tbskwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test Footer on the site
 
   Background:
@@ -12,8 +12,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist
@@ -34,8 +32,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist
@@ -64,8 +60,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist

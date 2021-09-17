@@ -172,6 +172,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get Algolia settings for lhn menu.
     $alshaya_algolia_react_setting_values = $this->configFactory->get('alshaya_algolia_react.settings');
 
+    // Get listing page frames settings.
+    $product_frame_settings = $this->configFactory->get('alshaya_algolia_react.product_frames');
+
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = $this->entityTypeManager
         ->getStorage('image_style')
@@ -206,6 +209,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'category_facet_label' => $this->t('Category'),
       'sizeGroupSeparator' => SkuManager::SIZE_GROUP_SEPARATOR,
       'productListIndexStatus' => AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index'),
+      'productFrameEnabled' => $product_frame_settings->get('product_frame'),
+      'promotionFrameEnabled' => $product_frame_settings->get('promotion_frame'),
+      'productTitleTrimEnabled' => $product_frame_settings->get('product_title_trim'),
     ];
 
     $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
