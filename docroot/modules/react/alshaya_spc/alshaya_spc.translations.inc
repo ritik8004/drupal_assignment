@@ -350,8 +350,21 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to Benefit Pay payment method.
+  // Strings related to Advantage card.
   $strings['v7'] = [
+    'Please enter valid Advantage card code.' => [
+      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+    ],
+    'Advantage Card Discount' => [
+      'ar' => 'خصم بطاقة الشايع',
+    ],
+    'This product is not eligible for the Advantage card discount.' => [
+      'ar' => 'هذا المنتج غير مؤهل للحصول على خصم بطاقة الشايع',
+    ],
+  ];
+
+  // Strings related to Benefit Pay payment method.
+  $strings['v8'] = [
     'Continue with Benefit pay' => [
       'ar' => 'أكمل مع بينفت باي',
     ],
@@ -378,19 +391,6 @@ function _alshaya_spc_translations() {
     ],
     'How to pay using BenefitPay?' => [
       'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
-    ],
-  ];
-
-  // Strings related to Advantage card.
-  $strings['v8'] = [
-    'Please enter valid Advantage card code.' => [
-      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
-    ],
-    'Advantage Card Discount' => [
-      'ar' => 'خصم بطاقة الشايع',
-    ],
-    'The products in your shopping basket are not eligible for the Advantage card discount.' => [
-      'ar' => 'المنتجات التي في سلة التسوق الخاصة بك غير مؤهلة للحصول على خصم بطاقة الشايع',
     ],
   ];
 
