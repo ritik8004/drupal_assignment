@@ -207,3 +207,29 @@
     }
   }
 }
+
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+.highlights {
+  .highlighted {
+    &.title_subtitle {
+      @include breakpoint($desktop) {
+        max-width: 17.875rem;
+      }
+    }
+  }
+
+  .hightlight__title {
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+  }
+}

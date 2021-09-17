@@ -1,0 +1,7 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .highlights {
+      margin-top: 1.5rem;
+    }
+  }
+}
