@@ -14,3 +14,8 @@ services:
       - '@entity_type.manager'
       - '@config.factory'
       - '@renderer'
+
+  rcs_placeholders.external_hreflang_get_url_event_subscriber:
+    class: Drupal\rcs_placeholders\EventSubscriber\ExternalHreflangGetCurrentUrlEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
