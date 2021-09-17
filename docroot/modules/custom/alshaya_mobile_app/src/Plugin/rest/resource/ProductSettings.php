@@ -13,14 +13,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a resource to get product config.
  *
  * @RestResource(
- *   id = "config_product",
- *   label = @Translation("Product config"),
+ *   id = "product_general_settings",
+ *   label = @Translation("Product General Settings"),
  *   uri_paths = {
  *     "canonical" = "/rest/v1/config/product"
  *   }
  * )
  */
-class ConfigProduct extends ResourceBase {
+class ProductSettings extends ResourceBase {
 
   /**
    * The language manager.

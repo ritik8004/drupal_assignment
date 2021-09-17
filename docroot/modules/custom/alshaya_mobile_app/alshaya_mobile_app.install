@@ -21,7 +21,7 @@ function alshaya_mobile_app_update_8081() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
-      'rest.resource.config_product'
+      'rest.resource.product_general_settings'
     ],
     'alshaya_mobile_app',
     'install'
