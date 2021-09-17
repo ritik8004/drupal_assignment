@@ -24,7 +24,7 @@ exports.getEntity = async function getEntity(langcode) {
       const productRegex = new RegExp(`(${drupalSettings.rcsPhSettings.productPathPrefix}(.*?))\\.`);
       const productUrlKey = rcsWindowLocation().pathname.match(productRegex);
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
+        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       break;
@@ -38,7 +38,7 @@ exports.getEntity = async function getEntity(langcode) {
       const categoryRegex = new RegExp(`${drupalSettings.rcsPhSettings.categoryPathPrefix}(.*?)\/?$`);
       const categoryUrlKey = rcsWindowLocation().pathname.match(categoryRegex);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
 
       break;
@@ -51,7 +51,7 @@ exports.getEntity = async function getEntity(langcode) {
       // @todo Remove the URL match once we get proper URL of promotion.
       const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsGraphqlQueryFields.promotions}}`
+        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsPhGraphqlQuery.promotions}}`
       });
 
       break;

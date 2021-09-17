@@ -29,9 +29,9 @@ function alshaya_rcs_promotion_theme_suggestions_page_alter(array &$suggestions,
 }
 
 /**
- * Implements hook_rcs_graphql_query_fields().
+ * Implements hook_rcs_placeholders_graphql_query().
  */
-function alshaya_rcs_promotion_rcs_graphql_query_fields() {
+function alshaya_rcs_promotion_rcs_placeholders_graphql_query() {
   $query_fields = [];
 
   $query_fields['promotions'] = [
