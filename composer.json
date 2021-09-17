@@ -222,8 +222,7 @@
                 "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
             },
             "drupal/search_api": {
-                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
+                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
             "drupal/facets": {
                 "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
