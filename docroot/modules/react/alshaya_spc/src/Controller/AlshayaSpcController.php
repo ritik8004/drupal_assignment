@@ -647,14 +647,8 @@ class AlshayaSpcController extends ControllerBase {
       $delivery_method_description = $this->t('Same day');
     }
 
-    $collection_settings = $this->config('alshaya_spc.collection_points');
-    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
-
     // Get formatted customer phone number.
-    $number = $cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_mobile']
-      ? $order['shipping']['extension_attributes']['collector_mobile']
-      : $order['shipping']['address']['telephone'];
-    $phone_number = $this->orderHelper->getFormattedMobileNumber($number);
+    $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
     // Order Totals.
     $totals = [
@@ -688,6 +682,8 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $collection_settings = $this->config('alshaya_spc.collection_points');
+    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
 
     $settings = [
       'site_details' => [
@@ -696,9 +692,7 @@ class AlshayaSpcController extends ControllerBase {
         'customer_service_text' => $checkout_settings->get('checkout_customer_service'),
       ],
       'order_details' => [
-        'customer_email' => ($cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_email'])
-        ? $order['shipping']['extension_attributes']['collector_email']
-        : $order['email'],
+        'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
@@ -802,15 +796,7 @@ class AlshayaSpcController extends ControllerBase {
           }
           break;
 
-        case 'pudo_fullname':
-          // If full name is not empty.
-          if (!empty($value)) {
-            $status[$key] = TRUE;
-          }
-          break;
-
         case 'mobile':
-        case 'pudo_collector_tel':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
@@ -839,7 +825,6 @@ class AlshayaSpcController extends ControllerBase {
           break;
 
         case 'email':
-        case 'pudo_collector_email':
           // For email validation we do two checks:
           // 1. email domain is valid
           // 2. email is not of an existing customer.
