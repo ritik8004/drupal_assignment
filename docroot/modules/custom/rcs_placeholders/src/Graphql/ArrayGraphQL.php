@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\rcs_magento_placeholders\Graphql;
+namespace Drupal\rcs_placeholders\Graphql;
 
 /**
  * Converts arrays to graphql.

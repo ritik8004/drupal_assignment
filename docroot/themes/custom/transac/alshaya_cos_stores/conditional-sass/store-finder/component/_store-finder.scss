@@ -387,15 +387,6 @@
     }
   }
 
-  .get--directions a {
-    &::after {
-      #{$right}: 0.5rem;
-      width: 2.125rem;
-      height: 2.1875rem;
-      top: 0.5625rem;
-    }
-  }
-
   + .ajax-progress-fullscreen {
     background-image: url(#{$cos_theme_img_directory_path}/icons/ic-loader.svg) no-repeat;
     background-size: 4.5rem;
@@ -484,6 +475,6 @@
 
 .scroll-fix {
   .location-content {
-    margin-#{$left}: 1.875rem;
+    margin-#{$left}: 0.875rem;
   }
 }
