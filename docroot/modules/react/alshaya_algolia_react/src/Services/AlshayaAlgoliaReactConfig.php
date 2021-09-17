@@ -423,13 +423,19 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           }
           if ($widget['type'] === 'delivery_ways') {
             $identifier = $this->identifireSuffixUpdate('attr_delivery_ways', $page_type);
-            $facet_values = $this->loadFacetValues($identifier, $page_type);
-            if (isset($facet_values['Express Day Delivery Available'])) {
-              $facet_values['Express Day Delivery Available'] = $facet_values['Express Day Delivery Available'] . ',express';
-            }
-            if (isset($facet_values['Same Day Delivery Available'])) {
-              $facet_values['Same Day Delivery Available'] = $facet_values['Same Day Delivery Available'] . ',same';
-            }
+            $langcode = $this->languageManager->getCurrentLanguage()->getId();
+            $same_value = $this->t(
+              'Same Day Delivery Available',
+              [],
+              [$langcode]
+            );
+            $express_value = $this->t(
+              'Express Day Delivery Available',
+              [],
+              [$langcode]
+            );
+            $facet_values['Express Day Delivery Available'] = $express_value . ',express';
+            $facet_values['Same Day Delivery Available'] = $same_value . ',same';
           }
 
           // For HNM we are using "size_group_list" widget type

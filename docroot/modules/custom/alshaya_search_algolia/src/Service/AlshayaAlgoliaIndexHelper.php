@@ -375,20 +375,8 @@ class AlshayaAlgoliaIndexHelper {
       }, $configured_skus);
     }
     $object['attr_delivery_ways'] = [];
-    $langcode = $object['search_api_language'];
-    $same_value = $this->t(
-      'Same Day Delivery Available',
-      [],
-      ['langcode' => $langcode, 'context' => 'same_day']
-    );
-    $express_value = $this->t(
-      'Express Day Delivery Available',
-      [],
-      ['langcode' => $langcode, 'context' => 'express_day']
-    );
-    $language = $this->languageManager->getLanguage($node->language()->getId());
-    $original_language = $this->languageManager->getConfigOverrideLanguage();
-    $this->languageManager->setConfigOverrideLanguage($language);
+    $same_value = 'Same Day Delivery Available';
+    $express_value = 'Express Day Delivery Available';
     if ($sku->get('attr_same_day_delivery')->getString() == '1' && isset($object['attr_delivery_ways'])) {
       array_push($object['attr_delivery_ways'], $same_value);
     }

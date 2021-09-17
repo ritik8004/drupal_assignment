@@ -20,7 +20,7 @@ const DeliveryTypeFilter = ({
         if (typeof facetValues[item.label] === 'undefined') {
           facetValues[item.label] = item.label;
         }
-        const expressClass = facetValues[item.label].split(',')[1];
+        const [expressValue, expressClass] = facetValues[item.label].split(',');
         return (
           <li
             key={item.label}
@@ -32,7 +32,7 @@ const DeliveryTypeFilter = ({
             }}
           >
             <span className="facet-item__value" data-drupal-facet-item-value={item.value}>
-              <span className="facet-item__label">{item.label}</span>
+              <span className="facet-item__label">{expressValue}</span>
               <span className="facet-item__count">{item.count}</span>
             </span>
           </li>
