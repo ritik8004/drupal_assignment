@@ -38,7 +38,9 @@ function handleSignUp(auraUserDetails) {
     // For anonymous users, store aura data in local storage and update state.
     auraUserData = {
       signUpComplete: true,
-      loyaltyStatus: auraUserDetails.data.apc_link || auraStatus,
+      loyaltyStatus: auraUserDetails.data.apc_link
+        ? parseInt(auraUserDetails.data.apc_link, 10)
+        : auraStatus,
       points: auraUserDetails.data.apc_points || 0,
       cardNumber: auraUserDetails.data.apc_identifier_number || '',
       tier: auraUserDetails.data.tier_info || '',
