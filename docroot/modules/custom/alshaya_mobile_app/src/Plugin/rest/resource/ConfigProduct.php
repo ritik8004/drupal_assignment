@@ -131,6 +131,9 @@ class ConfigProduct extends ResourceBase {
 
   /**
    * Setter for cacheTags.
+   *
+   * @param array $tags
+   *   The array of tags.
    */
   private function addCacheTags($tags) {
     $this->cacheTags = array_unique(array_merge($this->cacheTags, $tags));
@@ -146,6 +149,7 @@ class ConfigProduct extends ResourceBase {
     $whitelist = $this->getWhiteList();
 
     // Switch config language.
+    $original_language = $this->languageManager->getConfigOverrideLanguage();
     $language_id = $this->languageManager->getCurrentLanguage()->getId();
     $language = $this->languageManager->getLanguage($language_id);
     $this->languageManager->setConfigOverrideLanguage($language);
@@ -171,6 +175,9 @@ class ConfigProduct extends ResourceBase {
         }
       }
     }
+    
+    // Restore original language.
+    $this->languageManager->setConfigOverrideLanguage($original_language);
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
