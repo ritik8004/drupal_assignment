@@ -141,7 +141,10 @@ class AlshayaRcsProductHelper {
 
         // Get slug field value from old node alias.
         $slug = $this->aliasManager->getAliasByPath('/node/' . $node_data->id());
-        $slug = ltrim($slug, '/');
+
+        // Remove the path prefix from alias before setting as slug value.
+        $config = $this->configFactory->get('rcs_placeholders.settings');
+        $slug = ltrim($slug, '/' . $config->get('product.path_prefix'));
         $rcs_node->get('field_product_slug')->setValue($slug);
 
         // Save the new node object in rcs content type.
@@ -159,7 +162,7 @@ class AlshayaRcsProductHelper {
       }
       catch (\Exception $exception) {
         $this->logger->error('Error while migrating nodes to RCS content type. message:@message', [
-          '@message:' => $exception->getMessage(),
+          '@message' => $exception->getMessage(),
         ]);
       }
     }
@@ -181,7 +184,7 @@ class AlshayaRcsProductHelper {
     }
     catch (\Exception $exception) {
       $this->logger->error('Error while fetching RCS nodes for deletion. message:@message', [
-        '@message:' => $exception->getMessage(),
+        '@message' => $exception->getMessage(),
       ]);
     }
 
@@ -197,7 +200,7 @@ class AlshayaRcsProductHelper {
       }
       catch (\Exception $exception) {
         $this->logger->error('Error while deleting nodes from RCS content type. message:@message', [
-          '@message:' => $exception->getMessage(),
+          '@message' => $exception->getMessage(),
         ]);
       }
     }
