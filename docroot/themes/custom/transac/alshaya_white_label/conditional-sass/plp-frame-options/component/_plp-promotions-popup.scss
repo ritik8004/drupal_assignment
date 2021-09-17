@@ -19,6 +19,7 @@
       padding-bottom: 1.625rem;
       border-bottom: 1px solid $plp-popup_header_border;
       margin-bottom: 1.5rem;
+      color: $plp-frame-promo-subtitle;
 
       @include breakpoint($only-mobile) {
         font-size: 0.875rem;
