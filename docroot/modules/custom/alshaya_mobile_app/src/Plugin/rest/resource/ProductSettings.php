@@ -99,7 +99,7 @@ class ProductSettings extends ResourceBase {
    * @return array
    *   The list of configs.
    */
-  private function getWhiteList() {
+  private function getConfigList() {
     return [
       'alshaya_acm_product.settings' => [
         'all_products_buyable',
@@ -146,7 +146,7 @@ class ProductSettings extends ResourceBase {
    *   The response containing configuration.
    */
   public function get() {
-    $whitelist = $this->getWhiteList();
+    $list = $this->getConfigList();
 
     // Switch config language.
     $original_language = $this->languageManager->getConfigOverrideLanguage();
@@ -156,9 +156,9 @@ class ProductSettings extends ResourceBase {
 
     // Build an array with config data.
     $data = [];
-    foreach (array_keys($whitelist) as $config_name) {
+    foreach (array_keys($list) as $config_name) {
       $values = $this->getConfig($config_name);
-      if (empty($whitelist[$config_name])) {
+      if (empty($list[$config_name])) {
         // If individual configs were not specified, get all config values.
         foreach (array_keys($values->getRawData()) as $item) {
           // Exclude certain configs.
@@ -170,7 +170,7 @@ class ProductSettings extends ResourceBase {
       }
       else {
         // Get listed configs only.
-        foreach ($whitelist[$config_name] as $item) {
+        foreach ($list[$config_name] as $item) {
           $data[$config_name][$item] = $values->get($item);
         }
       }
