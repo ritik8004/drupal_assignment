@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "product_general_settings",
  *   label = @Translation("Product General Settings"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/config/product"
+ *     "canonical" = "/rest/v1/product-general-settings"
  *   }
  * )
  */
