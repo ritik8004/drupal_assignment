@@ -33,9 +33,16 @@
     }
 
     .product-plp-detail-wrapper {
+      .field--name-name + .price,
+      .field--name-name + .special-price-block {
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0.5rem;
+        }
+      }
+
       .promotions {
         @include breakpoint($only-mobile) {
-          margin: 0.5rem 0.625rem;
+          margin: 0 0.625rem 0.5rem;
         }
 
         .sku-promotion-item {
