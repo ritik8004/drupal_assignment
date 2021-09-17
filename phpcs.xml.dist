@@ -100,10 +100,6 @@
   <rule ref="PSR2.Classes.PropertyDeclaration">
     <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
   </rule>
-  <rule ref="DrupalPractice.CodeAnalysis.VariableAnalysis">
-    <exclude name="DrupalPractice.CodeAnalysis.VariableAnalysis.UnusedVariable"/>
-    <exclude name="DrupalPractice.CodeAnalysis.VariableAnalysis.UndefinedUnsetVariable"/>
-  </rule>
   <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
   <rule ref="PSR2.Namespaces.UseDeclaration">
     <exclude name="PSR2.Namespaces.UseDeclaration.UseAfterNamespace"/>
@@ -238,5 +234,7 @@
   <exclude-pattern>docroot/modules/react/js</exclude-pattern>
   <exclude-pattern>docroot/modules/react/node_modules</exclude-pattern>
   <exclude-pattern>docroot/themes/custom/non_transac/*/dist</exclude-pattern>
+  <exclude-pattern>docroot/themes/custom/transac/*/color</exclude-pattern>
+  <exclude-pattern>docroot/themes/custom/non_transac/*/components/_twig-components</exclude-pattern>
 
 </ruleset>
