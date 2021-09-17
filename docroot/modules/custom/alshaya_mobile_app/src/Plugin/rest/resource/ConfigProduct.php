@@ -135,7 +135,7 @@ class ConfigProduct extends ResourceBase {
    * @param array $tags
    *   The array of tags.
    */
-  private function addCacheTags($tags) {
+  private function addCacheTags(array $tags) {
     $this->cacheTags = array_unique(array_merge($this->cacheTags, $tags));
   }
 
