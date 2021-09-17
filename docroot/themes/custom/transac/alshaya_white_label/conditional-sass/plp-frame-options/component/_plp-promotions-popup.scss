@@ -80,7 +80,7 @@
 
         &-text {
           font-size: 1rem;
-          color: $plp_promotion_link;
+          color: $frame_promo;
           margin-bottom: 0.625rem;
 
           @include breakpoint($only-mobile) {

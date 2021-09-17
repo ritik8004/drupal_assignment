@@ -682,6 +682,11 @@ class AlshayaSpcController extends ControllerBase {
       $totals['shipping_incl_tax'] = $order['totals']['shipping'] ?? 0;
     }
 
+    // Advantage card related config for order confirmation page.
+    $advantage_card_config = $this->config('alshaya_spc.advantage_card');
+    if ($advantage_card_config->get('advantageCardEnabled') && $order['coupon'] === 'advantage_card') {
+      $totals['advatage_card'] = TRUE;
+    }
     // Get Products.
     $productList = [];
     $number_of_items = 0;
@@ -977,6 +982,15 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
+
+    // Advantage crad related config for Checkout.
+    $advantage_card_config = $this->config('alshaya_spc.advantage_card');
+    if ($advantage_card_config->get('advantageCardEnabled')) {
+      $settings['alshaya_spc']['advantageCard'] = [
+        'enabled' => $advantage_card_config->get('advantageCardEnabled'),
+        'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
+      ];
+    }
 
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
 
