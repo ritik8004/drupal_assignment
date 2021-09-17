@@ -11,6 +11,7 @@ $brownish-grey: #666;
 $bright-gray: #eee;
 $silver-gray: #b6b6b6;
 $gray-98: #fafafa;
+$warm-grey-two: #dadada;
 $gray-light: #f6f6f6;
 $pale-taupe: #b89978;
 $blood: #a81313;
@@ -304,3 +305,20 @@ $minicart_notification_text: $dark-gray;
 $minicart_notification_btn_bg: $outer-space;
 $minicart_notification_product_title: $eerie-black;
 $cart_notification_arrow_bg: $white;
+
+// SPC
+$spc-cart-background: $gray-light;
+$spc-empty-text: $eerie-black;
+$spc-checkout_section_title: $outer-space;
+$spc-product-title: $black-two;
+$spc-product-price: $outer-space;
+$spc-product-attributes: $brownish-grey;
+$spc-promo-code-error: $lust-red;
+$spc-promo-code-success: $green;
+$spc-select-border: $warm-grey-two;
+$spc-totals-line-item-color: $outer-space;
+$spc-order-total-suffix-text: $brownish-grey;
+$spc-promo-code-placeholder-text: $silver-gray;
+
+// Product detail page.
+$pdp_product_special_price_text: $blood;
