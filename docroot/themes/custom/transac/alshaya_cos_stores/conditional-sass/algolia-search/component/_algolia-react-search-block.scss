@@ -139,6 +139,7 @@
         border-width: 0.0625rem;
         border-bottom-#{$left}-radius: 0;
         border-bottom-#{$right}-radius: 0;
+        border-color: $algolia-auto-suggest-border;
 
         @include breakpoint($only-mobile) {
           border: none;
