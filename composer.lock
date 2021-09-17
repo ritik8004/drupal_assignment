@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c54517e5e4236a2d1d8efbb5df4747ea",
+    "content-hash": "fc29986a4e1e8303fd228d2d50da02fe",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -10074,9 +10074,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
-                    "Fix more notices": "patches/mobile_number/2978729-custom.patch",
-                    "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
+                    "D9 compability fixes": "https://www.drupal.org/files/issues/2021-09-17/mobile-number-d9-compatibility-3075958-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

@@ -347,6 +347,9 @@
             },
             "drupal/block_content_machine_name": {
                 "Not compatible with Drupal 9 when install with composer": "https://www.drupal.org/files/issues/2021-02-22/3199593-1.patch"
+            },
+            "drupal/mobile_number": {
+                "D9 compability fixes": "https://www.drupal.org/files/issues/2021-09-17/mobile-number-d9-compatibility-3075958-5.patch"
             }
         },
         "installer-paths": {
