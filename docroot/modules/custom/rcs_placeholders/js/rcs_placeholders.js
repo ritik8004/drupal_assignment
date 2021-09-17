@@ -160,7 +160,7 @@
         );
 
         // Re-attach all behaviors.
-        rcsPhApplyDrupalJs($(this).parent());
+        rcsPhApplyDrupalJs($(this).parent()[0]);
       });
   }
 
