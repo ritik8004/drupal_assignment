@@ -159,6 +159,7 @@ $_plp-add-to-cart-disabled-qty: #aeaeb2;
 $_smart_agent_banner: rgb(12, 161, 77);
 $_plp_cta_hover: #e85d17;
 $_plp_secondary_cta_hover: rgba(255, 109, 34, 0.1);
+$_frame_promo_red: #c03;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1742,3 +1743,6 @@ $bp-header-gradient: radial-gradient(circle at 59% 168%, #f44242 0%, #83255d 97%
 // PLP promotion V2
 $plp-popup-title: $black-two;
 $plp-popup_header_border: $warm-grey-two;
+
+// Boots frame.
+$frame_promo: $_frame_promo_red;

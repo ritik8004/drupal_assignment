@@ -1,5 +1,6 @@
 #alshaya-algolia-search,
-#alshaya-algolia-plp {
+#alshaya-algolia-plp,
+#top-results {
   .c-products__item {
     article:hover {
       z-index: -1;
@@ -21,10 +22,10 @@
     }
 
     .sku-promotion-text--ellipse {
-      color: $oos_btn_bg;
-      border: 1px solid $oos_btn_bg;
+      color: $frame_promo;
+      border: 1px solid $frame_promo;
       display: block;
-      padding: 0.5rem 0.625rem;
+      padding: 0.25rem 0.625rem;
       font-size: 0.75rem;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -33,7 +34,7 @@
       border-radius: 0.125rem;
 
       @include breakpoint($only-mobile) {
-        padding: 0.5rem;
+        padding: 0.25rem 0.5rem;
       }
     }
 
