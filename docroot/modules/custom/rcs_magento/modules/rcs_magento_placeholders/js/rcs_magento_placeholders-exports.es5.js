@@ -70,6 +70,8 @@ exports.getEntity = async function getEntity(langcode) {
   }
   else if (pageType == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
+    // Prepare Datalayer placeholder values for department and category pages.
+    result = rcsPhPrepareListingDataLayer(result);
   }
   else if (drupalSettings.rcsPage.type == 'promotion' && response.data.promotionUrlResolver) {
     result = response.data.promotionUrlResolver;
