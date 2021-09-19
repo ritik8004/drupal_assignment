@@ -620,7 +620,7 @@ class AlshayaPromoLabelManager {
           'type' => 'generic',
           'text' => $promotion['text'],
           'promo_web_url' => $url,
-          'promo_node' => $nid,
+          'promo_node' => (int) $promotion['rule_id'],
         ];
       }
 
