@@ -40,7 +40,9 @@ exports.render = function render(
       }
     });
 
-    innerHtmlObj.find('ul').append(buildLhnHtml('', tempInputs, clickable, unclickable, settings));
+    // Get the enrichment data. It's a sync call.
+    let enrichmentData = rcsGetEnrichedCategories();
+    innerHtmlObj.find('ul').append(buildLhnHtml('', tempInputs, clickable, unclickable, settings, enrichmentData));
   }
 
   return innerHtmlObj.html();
@@ -50,14 +52,21 @@ exports.render = function render(
  * Provides the LHN block HTML.
  *
  * @param {string} itemHtml
+ *   The HTML snippit of LHN.
  * @param {object} items
+ *   The object of LHN items.
  * @param {string} clickable
+ *   HTML snippit of clickable item.
  * @param {string} unclickable
+ *   HTML snippit of unclickable item.
  * @param {object} settings
+ *   The drupal settings object.
+ * @param {object} enrichmentData
+ *   Enriched data object.
  * @returns
  *   {string} Full rendered HTML for the LHN block.
  */
-const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings) {
+const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings, enrichmentData) {
   if (!items) {
     return itemHtml;
   }
@@ -65,13 +74,23 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
   items.forEach(item => {
     if (typeof item != "undefined") {
       itemHtml += '<li>';
-      // @todo Add check for clickable and unclickable based on magento response.
-      // Replace placeholders with response value.
-      itemHtml += replaceLhnPlaceHolders(item, clickable, settings);
+      // Check based on enrichment, if clickable is set or not.
+      let html = clickable;
+      if (
+        enrichmentData
+        && enrichmentData[item.url_path]
+        && !enrichmentData[item.url_path].item_clickable) {
+        html = unclickable;
+      }
+      // Replace placeholders with response value and only do this if
+      // show_in_lhn is set as true.
+      if (item.show_in_lhn) {
+        itemHtml += replaceLhnPlaceHolders(item, html, settings);
+      }
 
       if (typeof item.children != "undefined" && item.children !== null) {
         itemHtml += '<ul>';
-        itemHtml = buildLhnHtml(itemHtml, item.children, clickable, unclickable, settings);
+        itemHtml = buildLhnHtml(itemHtml, item.children, clickable, unclickable, settings, enrichmentData);
         itemHtml += '</ul>';
       }
       itemHtml += '</li>';
@@ -85,8 +104,11 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
  * Replace the placeholders with the LHN block items.
  *
  * @param {object} item
+ *   The individual category item object.
  * @param {string} itemHtml
+ *   HTML snippit with placeholders for the item.
  * @param {object} settings
+ *   The drupal settings object.
  * @returns
  *   {string} Single LHN item HTML with proper data.
  */
