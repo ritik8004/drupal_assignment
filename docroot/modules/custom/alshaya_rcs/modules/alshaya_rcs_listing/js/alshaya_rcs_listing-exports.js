@@ -11,7 +11,7 @@ rcsPhPrepareListingDataLayer = (result) => {
   if (result == null) {
     return result;
   }
-  // Prepare the Department Name based on the breadcrumb hirerchy.
+  // Prepare the Department Name based on the breadcrumb hierarchy.
   let breadcrumbTitles = [];
   let breadcrumbIds = [];
   if (result.breadcrumbs && result.breadcrumbs.length) {
