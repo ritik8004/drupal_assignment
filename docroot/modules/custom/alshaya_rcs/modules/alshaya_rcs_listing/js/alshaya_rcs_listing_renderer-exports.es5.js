@@ -11,8 +11,8 @@ exports.render = function render(
   let contexts = [];
 
   // Proceed only if entity is present.
-  if (typeof entity !== 'undefined') {
-    if (typeof entity.breadcrumbs != 'undefined' && entity.breadcrumbs.length) {
+  if (entity !== null) {
+    if (entity.breadcrumbs && entity.breadcrumbs.length) {
       entity.breadcrumbs.forEach(item => {
         hierarchy_list.push(item.category_name);
         // Also, build the rule context.

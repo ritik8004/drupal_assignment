@@ -8,6 +8,6 @@ renderer:
 helpers:
   version: 1.x
   js:
-    js/alshaya_rcs_listing-exports.js: { }
+    js/alshaya_rcs_listing_utility.js: { }
   dependencies:
     - core/jquery
