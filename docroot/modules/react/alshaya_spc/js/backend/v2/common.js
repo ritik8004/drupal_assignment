@@ -213,7 +213,7 @@ const handleResponse = (apiResponse) => {
 
   // In case we don't receive any response data.
   if (typeof apiResponse.data === 'undefined') {
-    logger.error('Error while doing MDC api. Response result is empty. Status code: @status', {
+    logger.warning('Error while doing MDC api. Response result is empty. Status code: @status', {
       '@status': response.status,
     });
 
@@ -699,7 +699,7 @@ const getProcessedCartData = async (cartData) => {
         // Do not show the products which are not available in
         // system but only available in cart.
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
-          logger.error('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+          logger.notice('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
             '@sku': item.sku,
             '@cartId': data.cart_id_int,
             '@stockInfo': JSON.stringify(stockInfo || {}),
@@ -968,13 +968,13 @@ const validateRequestData = async (request) => {
   // Setting custom error code for bad response so that
   // we could distinguish this error.
   if (_isEmpty(request)) {
-    logger.error('Cart update operation not containing any data.');
+    logger.warning('Cart update operation not containing any data.');
     return 500;
   }
 
   // If action info or cart id not available.
   if (_isEmpty(request.extension) || _isUndefined(request.extension.action)) {
-    logger.error('Cart update operation not containing any action. Data: @data.', {
+    logger.warning('Cart update operation not containing any action. Data: @data.', {
       '@data': JSON.stringify(request),
     });
     return 400;
