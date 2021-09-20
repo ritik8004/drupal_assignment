@@ -5,6 +5,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
+        "php": ">=7.4",
         "acquia/acsf-tools": "dev-10.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
@@ -85,7 +86,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
         "drupal/s3fs": "^3.0@alpha",
-        "drupal/search_api_algolia": "^3.0@beta",
+        "drupal/search_api_algolia": "3.0.x-dev@dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
@@ -119,8 +120,7 @@
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
-        "symfony/lock": "4.3.*",
-        "php": ">=7.4"
+        "symfony/lock": "4.3.*"
     },
     "require-dev": {
         "drupal/console": "^1.8",
