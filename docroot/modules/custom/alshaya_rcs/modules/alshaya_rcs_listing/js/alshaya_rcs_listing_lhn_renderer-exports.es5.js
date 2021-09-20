@@ -34,10 +34,8 @@ exports.render = function render(
     // from level 2.
     // @todo Supercategory special case needs to verfied.
     let tempInputs = [];
-    inputs.forEach((input, key) => {
-      if (input.children[0] !== undefined && input.children[0] !== null) {
-        tempInputs[key] = input.children[0];
-      }
+    inputs && inputs[0].children && inputs[0].children.forEach((input, key) => {
+      tempInputs[key] = input;
     });
 
     // Get the enrichment data. It's a sync call.
