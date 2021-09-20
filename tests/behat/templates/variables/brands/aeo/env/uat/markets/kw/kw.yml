@@ -3,6 +3,6 @@ variables:
   spc_basket_page: '/shop-kids/'
   product_listing_page_url: "/shop-kids/"
   np_plp_page: '/shop-kids/'
-  np_plp_product_page: '/buy-ae-logo-pique-tipped-striped-polo-shirt-white.html/'
-  spc_pdp_page: '/buy-aeo-6-boxer-brief-3-pack-multi-0.html/'
+  np_plp_product_page: '/buy-ae-leopard-platform-sneaker-tan.html/'
+  spc_pdp_page: '/buy-ae-leopard-platform-sneaker-tan.html/'
   np_promotion: 0
