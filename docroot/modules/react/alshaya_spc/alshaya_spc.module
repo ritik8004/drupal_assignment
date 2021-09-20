@@ -315,9 +315,13 @@ function alshaya_spc_page_attachments_alter(&$page) {
   }
 
   // Add express delivery flag in drupal settings if feature is enabled.
-  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-  if ($express_delivery_config->get('status')) {
-    $page['#attached']['drupalSettings']['expressDeliveryEnabled'] = TRUE;
+  $config = \Drupal::config('alshaya_spc.express_delivery');
+  if ($config->get('status')) {
+    $page['#attached']['drupalSettings']['expressDelivery'] = [
+      'enabled' => $config->get('status'),
+      'title' => $config->get('title'),
+      'subtitle' => $config->get('subtitle'),
+    ];
     $page['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
   }
 
@@ -390,8 +394,9 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   $express_delivery_enabled = $config->get('status');
 
   // Show express delivery options if feature is enabled.
+  // And product is buyable.
   // Else show normal delivery options.
-  if ($express_delivery_enabled) {
+  if ($express_delivery_enabled && alshaya_acm_product_is_buyable($sku)) {
     $field_mapping = \Drupal::service('alshaya_addressbook.manager')->getMagentoFieldMappings();
 
     $country_code = _alshaya_custom_get_site_level_country_code(TRUE);

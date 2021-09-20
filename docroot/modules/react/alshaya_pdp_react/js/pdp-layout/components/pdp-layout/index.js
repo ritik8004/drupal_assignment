@@ -19,6 +19,7 @@ import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import PpdRatingsReviews from '../pdp-ratings-reviews';
+import DeliveryOptions from '../../../../../alshaya_spc/js/expressdelivery/components/delivery-options';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -72,6 +73,7 @@ const PdpLayout = () => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
+    expressDeliveryText,
   } = productValues;
 
   const emptyRes = (
@@ -217,6 +219,11 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
+          {drupalSettings.expressDelivery.enabled && expressDeliveryText ? (
+            <div className="express-delivery-wrapper">
+              <div className="express-delivery-text">{expressDeliveryText}</div>
+            </div>
+          ) : null}
           <PpdRatingsReviews
             getPanelData={getPanelData}
             removePanelData={removePanelData}
@@ -250,6 +257,9 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
+          {drupalSettings.expressDelivery.enabled ? (
+            <DeliveryOptions />
+          ) : PdpStandardDelivery }
           <PdpStandardDelivery />
           {stockStatus ? (
             <PdpClickCollect />

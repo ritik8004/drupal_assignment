@@ -627,7 +627,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
-         // Same day delivery.
+        // Same day delivery.
         if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['same_day_delivery']['text'])) {
           $build['same_day_delivery_text']['#markup'] = $flags_config['same_day_delivery']['text'];
           $build['same_day_delivery_sub_text']['#markup'] = $flags_config['same_day_delivery']['sub_text'];

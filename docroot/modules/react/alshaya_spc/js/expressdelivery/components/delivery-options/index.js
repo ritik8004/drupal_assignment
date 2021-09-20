@@ -1,4 +1,5 @@
 import React from 'react';
+import HomeDeliverySVG from '../../../../../alshaya_pdp_react/js/svg-component/hd-svg';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { getStorageInfo } from '../../../utilities/storage';
@@ -56,24 +57,66 @@ export default class DeliveryOptions extends React.Component {
     });
   };
 
+  showExpressDeliveryBlock = () => {
+    const { open } = this.state;
+
+    if (open) {
+      this.setState({
+        open: false,
+      });
+      this.expandRef.current.classList.add('close-card');
+    } else {
+      this.setState({
+        open: true,
+      });
+      this.expandRef.current.classList.remove('close-card');
+    }
+  };
+
   render() {
-    const { shippingMethods, panelContent } = this.state;
+    const { expressDelivery } = drupalSettings;
+    const { open, shippingMethods, panelContent } = this.state;
+    // Add correct class.
+    const expandedState = open === true ? 'show' : '';
+    // If expressDelivery is not set we exit.
+    if (expressDelivery === undefined) {
+      return null;
+    }
     if (shippingMethods === null) {
       return null;
     }
     return (
-      <div className="product-delivery-options">
-        <PdpShippingMethods
-          shippingMethods={shippingMethods}
-        />
-        <PdpSelectArea
-          getPanelData={this.getPanelData}
-          removePanelData={this.removePanelData}
-        />
-        <div className="select-area-popup-wrapper">
-          <SelectAreaPanel
-            panelContent={panelContent}
+      <div
+        className="pdp-express-delivery-wrapper card fadeInUp"
+        style={{ animationDelay: '1s' }}
+        ref={this.expandRef}
+      >
+        <div
+          className={`express-delivery-title-wrapper title ${expandedState}`}
+          onClick={() => this.showExpressDeliveryBlock()}
+        >
+          <div className="express-delivery-title">
+            <span className="card-icon-svg">
+              <HomeDeliverySVG />
+            </span>
+            {expressDelivery.title}
+          </div>
+          <div className="accordion" />
+        </div>
+        <div className="content express-delivery-detail">
+          <span>{expressDelivery.subtitle}</span>
+          <PdpShippingMethods
+            shippingMethods={shippingMethods}
           />
+          <PdpSelectArea
+            getPanelData={this.getPanelData}
+            removePanelData={this.removePanelData}
+          />
+          <div className="select-area-popup-wrapper">
+            <SelectAreaPanel
+              panelContent={panelContent}
+            />
+          </div>
         </div>
       </div>
     );

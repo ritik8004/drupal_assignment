@@ -152,7 +152,7 @@ export default class Cart extends React.Component {
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
     // Show labels for delivery methods if express delivery enabled.
-    if (drupalSettings.expressDeliveryEnabled) {
+    if (drupalSettings.expressDelivery.enabled) {
       document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
     }
 
@@ -347,7 +347,7 @@ export default class Cart extends React.Component {
                 <span>{`${Drupal.t('my shopping bag')} `}</span>
                 <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
               </SectionTitle>
-              <ConditionalView condition={drupalSettings.expressDeliveryEnabled === true}>
+              <ConditionalView condition={drupalSettings.expressDelivery.enabled === true}>
                 <DeliveryAreaSelect
                   getPanelData={this.getPanelData}
                   removePanelData={this.removePanelData}
