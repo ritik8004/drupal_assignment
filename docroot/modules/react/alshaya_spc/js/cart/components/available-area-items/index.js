@@ -22,9 +22,8 @@ const AvailableAreaItems = ({
       id={`value${attr}`}
       data-parent-id={parentId}
       className={`area-select-list-item ${activeClass}`}
-      onClick={(e) => handleLiClick(e)}
     >
-      <span className="area-select-item-wrapper">
+      <span onClick={(e) => handleLiClick(e)} className="area-select-item-wrapper">
         <span className="area-select-name">{value}</span>
         <span className={`area-select-standard-delivery ${standardDeliveryClass}`}>{isStandardDelivery}</span>
         <span className={`area-select-sameday-delivery ${samedayDeliveryClass}`}>{isSameDayDelivery}</span>
