@@ -1,7 +1,8 @@
 #top-results {
   @include breakpoint($only-mobile) {
     .ais-Hits-list {
-      display: block !important;
+      display: flex !important;
+      flex-wrap: wrap;
       padding-left: 0.625rem !important;
       padding-right: 0.625rem !important;
 
@@ -23,6 +24,10 @@
 
         .c-products__item {
           margin-bottom: 0;
+
+          article.node--view-mode-search-result {
+            height: 100%;
+          }
         }
 
         .product-plp-detail-wrapper {
@@ -32,9 +37,10 @@
             margin-bottom: 0.5rem !important;
             font-size: 0.75rem !important;
 
-            + .price,
-            + .special-price-block {
+            ~ .price,
+            ~ .special-price-block {
               margin-bottom: 0.5rem;
+              padding: 0 0.25rem;
             }
           }
         }
