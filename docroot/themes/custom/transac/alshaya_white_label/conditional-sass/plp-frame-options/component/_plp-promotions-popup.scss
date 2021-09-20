@@ -6,7 +6,8 @@
       line-height: 1.75rem;
       margin-bottom: 0.375rem;
       text-align: center;
-      color: $plp-popup-title;
+      color: $plp-popup-title
+      text-transform: capitalize;
 
       @include breakpoint($only-mobile) {
         font-size: 1.25rem;
