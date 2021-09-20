@@ -37,7 +37,7 @@ export default class DeliveryAreaSelect extends React.Component {
   openModal = () => {
     // to make sure that markup is present in DOM.
     setTimeout(() => {
-      document.querySelector('body').classList.add('overlay-desc');
+      document.querySelector('body').classList.add('overlay-delivery-area');
     }, 150);
 
     return (
@@ -49,7 +49,7 @@ export default class DeliveryAreaSelect extends React.Component {
 
   closeModal = () => {
     const { removePanelData } = this.props;
-    document.querySelector('body').classList.remove('overlay-desc');
+    document.querySelector('body').classList.remove('overlay-delivery-area');
     setTimeout(() => {
       removePanelData();
     }, 400);
