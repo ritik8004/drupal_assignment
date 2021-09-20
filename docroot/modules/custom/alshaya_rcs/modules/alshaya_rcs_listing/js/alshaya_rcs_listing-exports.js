@@ -1,32 +1,30 @@
 /**
- * Prepares the values for Datalayer attribute placeholders.
+ * Listens to the 'updateResults' event and updated the result object.
  *
- * @param {object} result
- *   An object containing info of listing page.
  * @return {object}
  *   An updated object of listing page containing datalayer attributes.
  */
-rcsPhPrepareListingDataLayer = (result) => {
+document.addEventListener('updateResults', (e) => {
   // Return if result is empty.
-  if (result == null) {
-    return result;
+  if (typeof e.detail.result == 'undefined') {
+    return null;
   }
   // Prepare the Department Name based on the breadcrumb hierarchy.
   let breadcrumbTitles = [];
   let breadcrumbIds = [];
-  if (result.breadcrumbs && result.breadcrumbs.length) {
-    breadcrumbTitles = result.breadcrumbs.map(breadcrumb => breadcrumb.category_name);
-    breadcrumbIds = result.breadcrumbs.map(breadcrumb => breadcrumb.category_id);
+  if (e.detail.result.breadcrumbs && e.detail.result.breadcrumbs.length) {
+    breadcrumbTitles = e.detail.result.breadcrumbs.map(breadcrumb => breadcrumb.category_name);
+    breadcrumbIds = e.detail.result.breadcrumbs.map(breadcrumb => breadcrumb.category_id);
   }
   // Push the current term in the array.
-  breadcrumbTitles.push(result.name);
-  breadcrumbIds.push(result.id);
+  breadcrumbTitles.push(e.detail.result.name);
+  breadcrumbIds.push(e.detail.result.id);
   // Prepare datalayer object.
   let dataLayer = {
     departmentName: breadcrumbTitles.join('|'),
     departmentId: breadcrumbIds.shift(),
-    listingName: result.name,
-    listingId: result.id,
+    listingName: e.detail.result.name,
+    listingId: e.detail.result.id,
     majorCategory: breadcrumbTitles.shift(),
     minorCategory: breadcrumbTitles.shift(),
     subCategory: breadcrumbTitles.shift(),
@@ -41,7 +39,7 @@ rcsPhPrepareListingDataLayer = (result) => {
   });
 
   return {
-    ...result,
+    ...e.detail.result,
     ...dataLayer,
   };
-}
+});

@@ -70,8 +70,6 @@ exports.getEntity = async function getEntity(langcode) {
   }
   else if (pageType == "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
-    // Prepare Datalayer placeholder values for department and category pages.
-    result = rcsPhPrepareListingDataLayer(result);
   }
   else if (drupalSettings.rcsPage.type == 'promotion' && response.data.promotionUrlResolver) {
     result = response.data.promotionUrlResolver;
@@ -79,6 +77,14 @@ exports.getEntity = async function getEntity(langcode) {
     // properly.
     result.name = result.title;
   }
+  // Creating custom event to update the result object.
+  const updateResult = new CustomEvent('updateResults', {
+    detail: {
+      result: result,
+    }
+  });
+  // To trigger the Event
+  document.dispatchEvent(updateResult);
 
   return result;
 };
