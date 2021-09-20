@@ -1,7 +1,16 @@
 #alshaya-algolia-search,
-#alshaya-algolia-plp,
-#top-results {
+#alshaya-algolia-plp {
   .c-products__item.product-frame {
     border: 1px solid $_screeching_white;
+  }
+}
+
+#top-results .ais-Hits-item {
+  @include breakpoint($only-mobile) {
+    border: 1px solid $_screeching_white;
+
+    .alshaya_search_mainimage {
+      height: 12.375rem!important;
+    }
   }
 }
