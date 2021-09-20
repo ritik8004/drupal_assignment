@@ -33,10 +33,11 @@
     }
 
     .product-plp-detail-wrapper {
-      .field--name-name + .price,
-      .field--name-name + .special-price-block {
+      .field--name-name ~ .price,
+      .field--name-name ~ .special-price-block {
         @include breakpoint($only-mobile) {
           margin-bottom: 0.5rem;
+          padding: 0 0.25rem;
         }
       }
 
