@@ -3,7 +3,6 @@ status: true
 dependencies:
   module:
     - alshaya_rcs_main_menu
-    - rcs_placeholders
   theme:
     - alshaya_white_label
 id: alshayarcsshopby
