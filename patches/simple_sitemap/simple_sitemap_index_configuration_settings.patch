@@ -1,0 +1,71 @@
+diff --git a/simple_sitemap.install b/simple_sitemap.install
+index b562765..0e6f009 100644
+--- a/simple_sitemap.install
++++ b/simple_sitemap.install
+@@ -817,3 +817,17 @@ function simple_sitemap_update_8305() {
+     ]
+   );
+ }
++
++/**
++ * Adding new key for indexing sitemap.
++ */
++function simple_sitemap_update_8306() {
++  $config_factory = \Drupal::service('config.factory');
++  $index_sitemap = $config_factory->get('simple_sitemap.settings')->get('index_sitemap');
++  if (empty($index_sitemap)) {
++    $index_sitemap = '0';
++    $config_factory->getEditable('simple_sitemap.settings')
++      ->set('index_sitemap', $index_sitemap)
++      ->save();
++  }
++}
+diff --git a/src/Controller/SimplesitemapController.php b/src/Controller/SimplesitemapController.php
+index 524287f..be45be7 100644
+--- a/src/Controller/SimplesitemapController.php
++++ b/src/Controller/SimplesitemapController.php
+@@ -60,10 +60,15 @@ class SimplesitemapController extends ControllerBase {
+     if (!$output) {
+       throw new NotFoundHttpException();
+     }
++    $index_value = 'noindex';
++    $index_settings_value = $this->generator->getSetting('index_sitemap');
++    if ($index_settings_value === '0') {
++      $index_value = 'index';
++    }
+ 
+     return new Response($output, Response::HTTP_OK, [
+       'Content-type' => 'application/xml; charset=utf-8',
+-      'X-Robots-Tag' => 'noindex, follow',
++      'X-Robots-Tag' => $index_value . ', follow',
+     ]);
+   }
+ 
+diff --git a/src/Form/SimplesitemapSettingsForm.php b/src/Form/SimplesitemapSettingsForm.php
+index 3d65a9f..50296dd 100644
+--- a/src/Form/SimplesitemapSettingsForm.php
++++ b/src/Form/SimplesitemapSettingsForm.php
+@@ -184,6 +184,13 @@ class SimplesitemapSettingsForm extends SimplesitemapFormBase {
+       '#default_value' => $this->generator->getSetting('entities_per_queue_item', 50),
+     ];
+ 
++    $form['simple_sitemap_settings']['advanced']['index_sitemap'] = [
++      '#type' => 'radios',
++      '#title' => t('Index / Unindex XML'),
++      '#default_value' => $this->generator->getSetting('index_sitemap', FALSE),
++      '#options' => [t('Index'), t('Unindex')],
++    ];
++
+     $this->formHelper->displayRegenerateNow($form['simple_sitemap_settings']);
+ 
+     return parent::buildForm($form, $form_state);
+@@ -213,7 +220,8 @@ class SimplesitemapSettingsForm extends SimplesitemapFormBase {
+                'base_url',
+                'default_variant',
+                'disable_language_hreflang',
+-               'entities_per_queue_item'] as $setting_name) {
++               'entities_per_queue_item',
++               'index_sitemap'] as $setting_name) {
+       $this->generator->saveSetting($setting_name, $form_state->getValue($setting_name));
+     }
+     $this->generator->saveSetting('excluded_languages', array_filter($form_state->getValue('excluded_languages')));
