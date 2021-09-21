@@ -1,0 +1,47 @@
+<?php
+
+use Drupal\Core\Template\Attribute;
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function alshaya_rcs_magazine_preprocess_field__node__field_magazine_shop_the_story(&$variables) {
+  $element = &$variables['element'];
+  if ($element['#formatter'] !== 'sku_plain_text') {
+    return;
+  }
+
+  if (!empty($variables['items'])) {
+    // Get the list of skus from the field value.
+    $skus = [];
+    foreach ($variables['items'] as &$item) {
+      $skus[] = $item['content']['#context']['value'];
+    }
+
+    // Replace the output with  the RCS placeholder.
+    $variables['items'] = [
+      [
+        'content' => [
+          '#markup' => '#RCS.magazine_article.skus#',
+        ],
+        'attributes' => new Attribute(),
+      ],
+    ];
+    // Add classes to the field item to allow us to hide the RCS placeholders
+    // and display skeletons on initial load.
+    $variables['items'][0]['attributes']->setAttribute('class', 'rcs rcs-magazine-article');
+
+    // Add classes to the field wrapper to disable slick js on page load
+    // @see magazine_article.js.
+    $variables['attributes']['class'][] = 'rcs';
+    $variables['attributes']['id'][] = 'rcs-ph-magazine_shop_the_story';
+
+    // Add data attributes to the field wrapper to allow us to fetch the data.
+    $variables['attributes']['data-skus'] = json_encode($skus);
+  }
+}
