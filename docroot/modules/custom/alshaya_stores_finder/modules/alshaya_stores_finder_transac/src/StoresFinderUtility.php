@@ -221,6 +221,10 @@ class StoresFinderUtility {
       foreach ($store['open_hours'] as $open_hours) {
         // Check the hours are present or not. ['value'] contains timings.
         // ['Key'] contains week day.
+        if (empty($open_hours['value'])) {
+          continue;
+        }
+
         if (empty($hours[$open_hours['value']])) {
           $hours[$open_hours['value']] = $open_hours['key'];
           $init_day = $open_hours['key'];
