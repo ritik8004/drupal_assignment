@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import PriceElement from '../../../utilities/special-price/PriceElement';
 
 const OrderSummaryItem = (props) => {
   const {
@@ -29,7 +30,15 @@ const OrderSummaryItem = (props) => {
 
   if (type === 'click_and_collect') {
     const {
-      name, address, phone, openingHours, mapLink, pickUpPointIcon, pickUpPointTitle,
+      name,
+      address,
+      phone,
+      openingHours,
+      mapLink,
+      pickUpPointIcon,
+      pickUpPointTitle,
+      collectionDate,
+      collectionCharge,
     } = props;
     return (
       <div className="spc-order-summary-item spc-order-summary-address-item spc-order-summary-cnc fadeInUp" style={{ animationDelay: animationDelayValue }}>
@@ -64,9 +73,16 @@ const OrderSummaryItem = (props) => {
           </div>
           {(collectionPointsEnabled() && pickUpPointTitle !== undefined)
             && (
-              <div className="spc-cnc-confirmation-govtid-msg">
-                {`${Drupal.t('Important Note')}: ${Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}`}
-              </div>
+              <>
+                <div className="store-delivery-time">
+                  <span className="label--delivery-time">{Drupal.t('Collect in')}</span>
+                  <span className="delivery--time--value">{` ${collectionDate}`}</span>
+                  <PriceElement amount={collectionCharge} />
+                </div>
+                <div className="spc-cnc-confirmation-govtid-msg">
+                  {`${Drupal.t('Important Note')}: ${Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}`}
+                </div>
+              </>
             )}
           <span className="spc-store-map-link">
             <a href={mapLink} rel="noopener noreferrer" target="_blank">
