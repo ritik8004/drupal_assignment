@@ -1481,6 +1481,36 @@ $conductors = [
     'hmac_secret' => 'ZTZhYmM4ZmEtYTdkMC00',
     'site_id' => 470,
   ],
+  'coskw_dev' => [
+    'hmac_id' => 'ee759d2ed757406c8bff89d966108a96',
+    'hmac_secret' => 'ODlkMWMzM2ItMGFlZi00',
+    'site_id' => 476,
+  ],
+  'cossa_dev' => [
+    'hmac_id' => '29f08b29a9ba421b90f5d956dd72c45d',
+    'hmac_secret' => 'YzgyMmVmNDQtZTY3Ni00',
+    'site_id' => 477,
+  ],
+  'cosae_dev' => [
+    'hmac_id' => '89525fe8ad1548bd9f7802a74834f76b',
+    'hmac_secret' => 'ZGQ2NTQ1ODktZWVlYi00',
+    'site_id' => 478,
+  ],
+  'coseg_dev' => [
+    'hmac_id' => '5d986f5559424e0893946f840ff7b0f2',
+    'hmac_secret' => 'ZTgxYzUxNzgtMDNkNy00',
+    'site_id' => 479,
+  ],
+  'cosbh_dev' => [
+    'hmac_id' => 'e43f5565eede40a0b6553fff0c58d281',
+    'hmac_secret' => 'YmE3ZGFiMzQtNThmYS00',
+    'site_id' => 480,
+  ],
+  'cosqa_dev' => [
+    'hmac_id' => 'dcecf7d0b2a74511bbf65681325abf50',
+    'hmac_secret' => 'N2VhNGQwYzAtZGVmOS00',
+    'site_id' => 481,
+  ],
 ];
 
 // Default values for each ACM middleware.
