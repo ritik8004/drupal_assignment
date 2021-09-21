@@ -16,6 +16,12 @@ function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
         'lhn_cat_tree' => NULL,
       ],
     ],
+    'alshaya_rcs_promotional_banner' => [
+      'template' => 'alshaya-rcs-promotional-banner',
+      'variables' => [
+        'fields' => NULL,
+      ]
+    ]
   ];
 }
 
@@ -68,6 +74,9 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
       'url_path',
       'description',
       'image',
+      'promo_banner_for_mobile',
+      'promotion_banner_mobile',
+      'promotion_banner',
       'breadcrumbs' => [
         'category_id',
         'category_name',
