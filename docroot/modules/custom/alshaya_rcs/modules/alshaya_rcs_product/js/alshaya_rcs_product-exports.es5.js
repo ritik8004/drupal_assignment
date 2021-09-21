@@ -131,6 +131,17 @@ exports.render = function render(
       }
       break;
 
+    case "shop_by_menu":
+      // Process shop by menu block renderer, if available.
+      if (typeof globalThis.renderRcsShopByMenu !== 'undefined') {
+        html += globalThis.renderRcsShopByMenu.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
     case 'product_category_list':
       // Process rcs plp renderer, if available.
       if (typeof globalThis.renderRcsListing !== 'undefined') {
