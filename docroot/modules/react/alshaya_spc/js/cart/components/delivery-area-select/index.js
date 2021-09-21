@@ -35,10 +35,7 @@ export default class DeliveryAreaSelect extends React.Component {
   }
 
   openModal = () => {
-    // to make sure that markup is present in DOM.
-    setTimeout(() => {
-      document.querySelector('body').classList.add('overlay-delivery-area');
-    }, 150);
+    document.addEventListener('addOverlayClass', this.addOverlayClass);
 
     return (
       <AreaListBlock
@@ -54,6 +51,12 @@ export default class DeliveryAreaSelect extends React.Component {
       removePanelData();
     }, 400);
   };
+
+  addOverlayClass = (event) => {
+    event.preventDefault();
+    // to make sure that markup is present in DOM.
+    document.querySelector('body').classList.add('overlay-delivery-area');
+  }
 
   render() {
     const { areaLabel } = this.state;

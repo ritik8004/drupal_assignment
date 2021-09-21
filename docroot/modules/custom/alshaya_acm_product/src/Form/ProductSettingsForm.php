@@ -130,7 +130,6 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('non_refundable_text', $form_state->getValue('non_refundable_text'));
     $config->set('same_day_delivery_text', $form_state->getValue('same_day_delivery_text'));
     $config->set('same_day_delivery_sub_text', $form_state->getValue('same_day_delivery_sub_text'));
-    $config->set('express_delivery_text', $form_state->getValue('express_delivery_text'));
     $config->set('delivery_in_only_city_text', $form_state->getValue('delivery_in_only_city_text'));
     $config->set('delivery_in_only_city_key', $form_state->getValue('delivery_in_only_city_key'));
 
@@ -361,13 +360,6 @@ class ProductSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Same day delivery sub text'),
       '#description' => $this->t('Please enter text to be shown for pdp.'),
       '#default_value' => $config->get('same_day_delivery_sub_text'),
-    ];
-
-    $form['product_flag']['express_delivery_text'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Express delivery'),
-      '#description' => $this->t('Please enter text to be shown for pdp.'),
-      '#default_value' => $config->get('express_delivery_text'),
     ];
 
     $form['product_flag']['delivery_in_only_city_text'] = [

@@ -34,9 +34,3 @@ alshaya_spc.express_delivery:
     status:
       type: boolean
       label: 'Express delivery status'
-    title:
-      type: string
-      label: 'Express delivery title'
-    subtitle:
-      type: strings
-      label: 'Express delivery sub title'
