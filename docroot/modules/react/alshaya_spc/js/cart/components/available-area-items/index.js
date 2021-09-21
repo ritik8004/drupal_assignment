@@ -24,10 +24,14 @@ const AvailableAreaItems = ({
       className={`area-select-list-item ${activeClass}`}
     >
       <span onClick={(e) => handleLiClick(e)} className="area-select-item-wrapper">
-        <span className="area-select-name">{value}</span>
-        <span className={`area-select-standard-delivery ${standardDeliveryClass}`}>{isStandardDelivery}</span>
-        <span className={`area-select-sameday-delivery ${samedayDeliveryClass}`}>{isSameDayDelivery}</span>
-        <span className={`area-select-express-delivery ${expressDeliveryClass}`}>{isExpressDelivery}</span>
+        <div className="area-select-list-container">
+          <div className="area-select-name">{value}</div>
+          <div className="area-delect-delivery-type">
+            <span className={`area-select-standard-delivery ${standardDeliveryClass}`}>{isStandardDelivery}</span>
+            <span className={`area-select-sameday-delivery ${samedayDeliveryClass}`}>{isSameDayDelivery}</span>
+            <span className={`area-select-express-delivery ${expressDeliveryClass}`}>{isExpressDelivery}</span>
+          </div>
+        </div>
       </span>
     </li>
   );

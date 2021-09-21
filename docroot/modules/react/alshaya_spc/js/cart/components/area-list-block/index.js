@@ -126,13 +126,13 @@ export default class AreaListBlock extends React.Component {
         },
       });
       // Remove the previous active class.
-      const activeElem = document.querySelector('#delivery-area-select ul#delivery-area-list-items li.active');
+      const activeElem = document.querySelector('.spc-delivery-area ul#delivery-area-list-items li.active');
       if (activeElem) {
         activeElem.classList.remove('active');
         activeElem.classList.toggle('in-active');
       }
       // Set active class on the current element.
-      const elem = document.querySelector(`#delivery-area-select ul#delivery-area-list-items li#value${e.currentTarget.parentElement.value}`);
+      const elem = document.querySelector(`.spc-delivery-area ul#delivery-area-list-items li#value${e.currentTarget.parentElement.value}`);
       if (elem.classList.contains('in-active')) {
         elem.classList.remove('in-active');
       }
@@ -171,7 +171,7 @@ export default class AreaListBlock extends React.Component {
     } = this.state;
     const { closeModal } = this.props;
     return (
-      <>
+      <div className="spc-delivery-wrapper">
         <div className="spc-delivery-area">
           <div className="title-block">
             <SectionTitle>{getStringMessage('check_area_availability')}</SectionTitle>
@@ -181,8 +181,8 @@ export default class AreaListBlock extends React.Component {
             <div className="governate-label">{`${Drupal.t('Select')} ${governateDefaultLabel}`}</div>
             <div className="governate-drop-down">
               <Select
-                classNamePrefix="governateSelect"
-                className="governate-select"
+                classNamePrefix="spcSelect"
+                className="spc-select"
                 onChange={this.handleSelect}
                 options={governateOptions}
                 defaultValue={governateDefault}
@@ -193,6 +193,11 @@ export default class AreaListBlock extends React.Component {
             <div className="area-label">{`${Drupal.t('Search area')}`}</div>
             <div className="spc-filter-panel-search-form-item">
               <input className="spc-filter-panel-search-field" type="text" placeholder={Drupal.t('e.g. Dubai')} onChange={this.filterList} />
+            </div>
+            <div className="delivery-type-wrapper">
+              <span className="standard-delivery">{Drupal.t('Standard')}</span>
+              <span className="sameday-delivery">{Drupal.t('Same Day')}</span>
+              <span className="express-delivery">{Drupal.t('Express')}</span>
             </div>
             <div className="area-list-label">{`${Drupal.t('Select an area')}`}</div>
             <ConditionalView condition={items.length !== 0}>
@@ -223,7 +228,7 @@ export default class AreaListBlock extends React.Component {
             </div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

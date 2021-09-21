@@ -60,10 +60,10 @@ export default class DeliveryAreaSelect extends React.Component {
 
   render() {
     const { areaLabel } = this.state;
-    const { getPanelData } = this.props;
+    const { getPanelData, animationDelayValue } = this.props;
 
     return (
-      <div id="delivery-area-select">
+      <div id="delivery-area-select" className="fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <div className="delivery-area-label">
           <span>{`${Drupal.t('Deliver to')}: `}</span>
           <span className="delivery-area-name">{areaLabel}</span>

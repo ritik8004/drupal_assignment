@@ -165,6 +165,7 @@ $sky_blue: #93cdff;
 $aubergine: #353132;
 $_spc-cart-delivery-gray-border: #f1f1f1;
 $_spc-cart-delivery-gray-text: #d2d2d2;
+$_spc-cart-delivery-popup-bg: #faf9f8;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1290,6 +1291,13 @@ $spc-cart-delivery-info: $aubergine;
 $spc-cart-delivery-info-bg: $white-five;
 $spc-cart-delivery-info-inactive-border: $_spc-cart-delivery-gray-border;
 $spc-cart-delivery-info-inactive: $_spc-cart-delivery-gray-text;
+$spc-cart-delivery-popup-bg: $_spc-cart-delivery-popup-bg;
+$spc-cart-delivery-popup-title: $mothercare-black;
+$spc-cart-delivery-popup-border: $grey-light;
+$spc-cart-delivery-popup-search-border: $_gray_222;
+$spc-cart-delivery-popup-search-placeholder: $_ancestral-water;
+$spc-cart-delivery-popup-list-bg: $white-five;
+$spc-cart-delivery-popup-button-shadow: rgba(0, 0, 0, 0.1);
 
 // SPC Checkout.
 $spc-checkout_section_title: $mothercare-black;
@@ -1756,3 +1764,8 @@ $bp-header-gradient: radial-gradient(circle at 59% 168%, #f44242 0%, #83255d 97%
 // PLP promotion V2
 $plp-popup-title: $black-two;
 $plp-popup_header_border: $warm-grey-two;
+
+// Express delivery
+$delivery-modal-overlay: rgba(0, 0, 0, 0.48);
+$delivery-modal-box-shadow: rgba(0, 0, 0, 0.5);
+$delivery-modal-bg: $grey-light-three;

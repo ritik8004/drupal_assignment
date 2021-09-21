@@ -349,6 +349,7 @@ export default class Cart extends React.Component {
               </SectionTitle>
               <ConditionalView condition={drupalSettings.expressDelivery.enabled === true}>
                 <DeliveryAreaSelect
+                  animationDelayValue="0.4s"
                   getPanelData={this.getPanelData}
                   removePanelData={this.removePanelData}
                 />
