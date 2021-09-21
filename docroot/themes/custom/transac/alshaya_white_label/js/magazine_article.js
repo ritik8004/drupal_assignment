@@ -7,7 +7,6 @@
 
 (function ($, Drupal) {
   'use strict';
-
   Drupal.behaviors.magazineArticleSlider = {
     attach: function (context, settings) {
       var optionsShopByStory = {
@@ -42,16 +41,16 @@
       function applyRtl(ocObject, options) {
         if (isRTL()) {
           ocObject.attr('dir', 'rtl');
-          ocObject.slick(
+          ocObject.hide().slick(
             $.extend({}, options, {rtl: true})
-          );
+          ).fadeIn('slow');
         }
         else {
           ocObject.slick(options);
         }
       }
 
-      var shopByStory = $('.field--name-field-magazine-shop-the-story:not(.rcs) .field__items');
+      var shopByStory = $('.field--name-field-magazine-shop-the-story:not(.rcs) .field__items, .field--name-field-magazine-shop-the-story.rcs .rcs-field__items');
       var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
 
       // For tablets and mobile we don't want to apply slickSlider.
