@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "470c7b6ddf0554fd83a933e54f416211",
+    "content-hash": "4c763672740218ae508c60568f93061d",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -11690,7 +11690,8 @@
                 },
                 "patches_applied": {
                     "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
-                    "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
+                    "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch",
+                    "D9 compability fixes": "https://www.drupal.org/files/issues/2021-09-21/restrict-role-login-by-ip-d9-compatibility-3238163-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
