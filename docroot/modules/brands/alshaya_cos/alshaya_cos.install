@@ -14,3 +14,13 @@ function alshaya_cos_install() {
   // Create default content for cos.
   alshaya_cos_create_default_content();
 }
+
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_rcs_magazine module.
+ */
+function alshaya_hm_update_8001() {
+  \Drupal::service('module_installer')->install(['alshaya_rcs_magazine']);
+}
