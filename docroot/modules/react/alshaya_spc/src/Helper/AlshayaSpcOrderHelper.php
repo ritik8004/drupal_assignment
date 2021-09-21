@@ -400,9 +400,7 @@ class AlshayaSpcOrderHelper {
     $orderDetails['delivery_method_description'] = $shipping_info[1] ?? $shipping_info[0];
 
     $shipping_address = $order['shipping']['address'];
-    $orderDetails['customerNameShipping'] = $order['shipping']['extension_attributes']['collector_name']
-      ? $order['shipping']['extension_attributes']['collector_name']
-      : $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
+    $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
 
     $shipping_method_code = $this->checkoutOptionManager->getCleanShippingMethodCode($order['shipping']['method']);
     $orderDetails['shipping_method_code'] = $shipping_method_code;
