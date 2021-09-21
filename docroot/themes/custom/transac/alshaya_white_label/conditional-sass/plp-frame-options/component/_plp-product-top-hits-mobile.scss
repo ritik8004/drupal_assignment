@@ -31,6 +31,12 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between !important;
+
+            .alshaya_search_mainimage img {
+              height: 100%;
+              width: auto;
+              object-fit: scale-down;
+            }
           }
         }
 
