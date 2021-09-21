@@ -65,28 +65,14 @@ const StoreItem = ({
     <ConditionalView condition={display === 'accordion' || display === 'default'}>
       <div className="store-address-content">
         <div className="store-address">{getStoreAddress(store.address)}</div>
-        {/* If collection points is enabled delivery time is shown at the end */}
-        <ConditionalView condition={collectionPointsEnabled()}>
-          <div className="store-open-hours">{getStoreOpenHours(store.open_hours_group)}</div>
-          <div className="store-delivery-time">
-            <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
-            <span className="delivery--time--value">{` ${store.delivery_time}`}</span>
-            <ConditionalView condition={collectionPointsEnabled()}>
-              <PriceElement amount={store.price_amount} />
-            </ConditionalView>
-          </div>
-        </ConditionalView>
-        {/* Default layout for CnC store. */}
-        <ConditionalView condition={!collectionPointsEnabled()}>
-          <div className="store-delivery-time">
-            <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
-            <span className="delivery--time--value">{` ${store.delivery_time}`}</span>
-            <ConditionalView condition={collectionPointsEnabled()}>
-              <PriceElement amount={store.price_amount} />
-            </ConditionalView>
-          </div>
-          <div className="store-open-hours">{getStoreOpenHours(store.open_hours_group)}</div>
-        </ConditionalView>
+        <div className="store-delivery-time">
+          <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
+          <span className="delivery--time--value">{` ${store.delivery_time}`}</span>
+          <ConditionalView condition={collectionPointsEnabled()}>
+            <PriceElement amount={store.price_amount} />
+          </ConditionalView>
+        </div>
+        <div className="store-open-hours">{getStoreOpenHours(store.open_hours_group)}</div>
         <ConditionalView condition={(typeof onStoreFinalize !== 'undefined' && display !== 'accordion')}>
           <div
             className="store-actions"
