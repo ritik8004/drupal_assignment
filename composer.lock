@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc29986a4e1e8303fd228d2d50da02fe",
+    "content-hash": "15a2b00fe0def7f13ad37fd6bf1b593f",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4984,6 +4984,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "Removing unnecessary module_load_include call": "https://www.drupal.org/files/issues/2021-09-17/Removing_unnecessary_module_load_include_call-change_3236355-1.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -10074,6 +10077,9 @@
                     }
                 },
                 "patches_applied": {
+                    "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                    "Fix more notices": "patches/mobile_number/2978729-custom.patch",
+                    "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch",
                     "D9 compability fixes": "https://www.drupal.org/files/issues/2021-09-17/mobile-number-d9-compatibility-3075958-5.patch"
                 }
             },
