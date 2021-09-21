@@ -23,6 +23,7 @@ function alshaya_rcs_main_menu_install() {
   $non_rcs_blocks = [
     'alshayamainmenu',
     'supercategorymenu',
+    'shopby',
   ];
   foreach ($non_rcs_blocks as $block_id) {
     $block = Block::load($block_id);
@@ -112,6 +113,7 @@ function alshaya_rcs_main_menu_uninstall() {
   $non_rcs_blocks = [
     'alshayamainmenu',
     'supercategorymenu',
+    'shopby',
   ];
   foreach ($non_rcs_blocks as $block_id) {
     $block = Block::load($block_id);
