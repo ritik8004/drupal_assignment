@@ -28,6 +28,14 @@ function alshaya_rcs_main_menu_install() {
   foreach ($non_rcs_blocks as $block_id) {
     $block = Block::load($block_id);
     if ($block instanceof BlockInterface) {
+      if ($block_id === 'shopby') {
+        $new_block = Block::load('alshayarcsshopby');
+        // Set weight of new block same as old block.
+        if ($new_block instanceof BlockInterface) {
+          $new_block->setWeight($block->getWeight());
+          $new_block->save();
+        }
+      }
       $block->disable()->save();
     }
   }

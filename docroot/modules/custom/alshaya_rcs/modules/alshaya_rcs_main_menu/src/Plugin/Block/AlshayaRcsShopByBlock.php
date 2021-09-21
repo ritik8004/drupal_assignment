@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -14,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   admin_label = @Translation("Alshaya rcs shop by")
  * )
  */
-class AlshayaRcsShopByBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class AlshayaRcsShopByBlock extends BlockBase {
 
   /**
    * AlshayaMegaMenuBlock constructor.

@@ -99,7 +99,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'navigation_menu':
-    case 'shop_by_block':
       // @todo To optimize the multiple category API call.
       // Early return if the root category is undefined.
       if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {

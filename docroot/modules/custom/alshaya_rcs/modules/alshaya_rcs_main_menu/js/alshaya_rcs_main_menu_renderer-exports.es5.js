@@ -56,17 +56,17 @@ exports.render = function render(
     }
     // Iterate over each L1 item and get the inner markup
     // prepared recursively.
-    if (navigationType === 'shop_by_block') {
-      inputs.forEach(function eachCategory(level1) {
-        // Change item level only if super category is enabled.
-        if (isSuperCategoryEnabled) {
-          // Return from here if L2 element is empty and if the child element is
-          // not associated with the current active super category.
-          if (!level1.children) {
-            return;
-          }
-          level1 = level1.children[0];
+    inputs.forEach(function eachCategory(level1) {
+      // Change item level only if super category is enabled.
+      if (isSuperCategoryEnabled) {
+        // Return from here if L2 element is empty and if the child element is
+        // not associated with the current active super category.
+        if (!level1.children) {
+          return;
         }
+        level1 = level1.children[0];
+      }
+      if (navigationType === 'shop_by_block') {
         menuHtml += getShopByMarkup(
           level1,
           1,
@@ -74,20 +74,8 @@ exports.render = function render(
           settings,
           enrichmentData,
           isSuperCategoryEnabled,
-          navigationType,
         );
-      });
-    } else {
-      inputs.forEach(function eachCategory(level1) {
-        // Change item level only if super category is enabled.
-        if (isSuperCategoryEnabled) {
-          // Return from here if L2 element is empty and if the child element is
-          // not associated with the current active super category.
-          if (!level1.children) {
-            return;
-          }
-          level1 = level1.children[0];
-        }
+      } else {
         menuHtml += getMenuMarkup(
           level1,
           1,
@@ -95,10 +83,9 @@ exports.render = function render(
           settings,
           enrichmentData,
           isSuperCategoryEnabled,
-          navigationType,
         );
-      });
-    }
+      }
+    });
 
     // Remove the placeholders markup.
     if (navigationType === 'shop_by_block') {
@@ -125,7 +112,7 @@ exports.render = function render(
  * @returns
  *  {string} Generated menu markup for given level.
  */
-const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData, isSuperCategoryEnabled, navigationType) {
+const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData, isSuperCategoryEnabled) {
   // We support max depth by L4.
   if (level > parseInt(drupalSettings.alshayaRcs.navigationMenu.menuMaxDepth)) {
     return;
@@ -210,7 +197,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   // If menu has no children further, return with actual markup.
   if (!ifChildren) {
     clonePhEle.find('ul').remove();
-    return navRcsReplacePh(clonePhEle, levelObj);
+    return navRcsReplacePh(clonePhEle, levelObj, 'menuItem');
   }
 
   // If menu has children further.
