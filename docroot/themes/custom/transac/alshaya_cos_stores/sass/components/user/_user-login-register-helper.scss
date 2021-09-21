@@ -1,0 +1,17 @@
+.c-user-password.user-page {
+  .user-pass .form-item {
+    input {
+      margin-top: 0;
+    }
+  }
+}
+
+.c-user--node {
+  &.l-two--sf {
+    aside.c-sidebar-first {
+      li {
+        text-transform: unset;
+      }
+    }
+  }
+}
