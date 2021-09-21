@@ -5,7 +5,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.4",
         "acquia/acsf-tools": "dev-10.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
@@ -120,7 +119,8 @@
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
-        "symfony/lock": "4.3.*"
+        "symfony/lock": "4.3.*",
+        "php": ">=7.4"
     },
     "require-dev": {
         "drupal/console": "^1.8",
