@@ -699,7 +699,7 @@ const getProcessedCartData = async (cartData) => {
         // Do not show the products which are not available in
         // system but only available in cart.
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
-          logger.notice('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
             '@sku': item.sku,
             '@cartId': data.cart_id_int,
             '@stockInfo': JSON.stringify(stockInfo || {}),
@@ -968,13 +968,13 @@ const validateRequestData = async (request) => {
   // Setting custom error code for bad response so that
   // we could distinguish this error.
   if (_isEmpty(request)) {
-    logger.warning('Cart update operation not containing any data.');
+    logger.error('Cart update operation not containing any data.');
     return 500;
   }
 
   // If action info or cart id not available.
   if (_isEmpty(request.extension) || _isUndefined(request.extension.action)) {
-    logger.warning('Cart update operation not containing any action. Data: @data.', {
+    logger.error('Cart update operation not containing any action. Data: @data.', {
       '@data': JSON.stringify(request),
     });
     return 400;

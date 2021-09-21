@@ -128,7 +128,7 @@ const formatShippingEstimatesAddress = (address) => {
  */
 const getHomeDeliveryShippingMethods = async (data) => {
   if (_isEmpty(data.country_id)) {
-    logger.warning('Error in getting shipping methods for HD as country id not available. Data: @data', {
+    logger.error('Error in getting shipping methods for HD as country id not available. Data: @data', {
       '@data': JSON.stringify(data),
     });
 

@@ -1498,7 +1498,7 @@ const isAddressExtensionAttributesValid = (data) => {
   addressFieldsToValidate.forEach((field) => {
     // If field not exists or empty.
     if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
-      logger.warning('Field: @field not available in cart shipping address. Cart id: @cartId', {
+      logger.error('Field: @field not available in cart shipping address. Cart id: @cartId', {
         '@field': field,
         '@cartId': window.commerceBackend.getCartId(),
       });
@@ -1545,7 +1545,7 @@ const validateBeforePaymentFinalise = async () => {
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
-    logger.warning('Error while finalizing payment. No shipping method available. Cart: @cart.', {
+    logger.error('Error while finalizing payment. No shipping method available. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
   } else if (_isUndefined(cartData.shipping.address)
@@ -1554,14 +1554,14 @@ const validateBeforePaymentFinalise = async () => {
   ) {
     // If shipping address not have custom attributes.
     isError = true;
-    logger.warning('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', {
+    logger.error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
   } else if (!isAddressExtensionAttributesValid(cartData)) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     isError = true;
-    logger.warning('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
+    logger.error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
   } else if (_isUndefined(cartData.shipping.address.firstname)
@@ -1569,7 +1569,7 @@ const validateBeforePaymentFinalise = async () => {
   ) {
     // If first/last name not available in shipping address.
     isError = true;
-    logger.warning('Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: @cart.', {
+    logger.error('Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
   } else if (_isUndefined(cartData.cart.billing_address.firstname)
@@ -1577,7 +1577,7 @@ const validateBeforePaymentFinalise = async () => {
   ) {
     // If first/last name not available in billing address.
     isError = true;
-    logger.warning('Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: @cart.', {
+    logger.error('Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
   }
@@ -1945,7 +1945,7 @@ window.commerceBackend.placeOrder = async (data) => {
 
   // Check if shipping method is present else throw error.
   if (_isEmpty(cart.data.shipping.method)) {
-    logger.warning('Error while placing order. No shipping method available. Cart: @cart', {
+    logger.error('Error while placing order. No shipping method available. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
     return {
@@ -1959,7 +1959,7 @@ window.commerceBackend.placeOrder = async (data) => {
 
   // Check if shipping address not have custom attributes.
   if (_isEmpty(cart.data.shipping.address.custom_attributes)) {
-    logger.warning('Error while placing order. Shipping address not contains all info. Cart: @cart', {
+    logger.error('Error while placing order. Shipping address not contains all info. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
     return {
@@ -1974,7 +1974,7 @@ window.commerceBackend.placeOrder = async (data) => {
   if (!isAddressExtensionAttributesValid(cart.data)) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
-    logger.warning('Error while placing order. Shipping address not contains all required extension attributes. Cart: @cart', {
+    logger.error('Error while placing order. Shipping address not contains all required extension attributes. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
     return {
@@ -1989,7 +1989,7 @@ window.commerceBackend.placeOrder = async (data) => {
   // If first/last name not available in shipping address.
   if (_isEmpty(cart.data.shipping.address.firstname)
     || _isEmpty(cart.data.shipping.address.lastname)) {
-    logger.warning('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
+    logger.error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });
     return {
@@ -2004,7 +2004,7 @@ window.commerceBackend.placeOrder = async (data) => {
   // Check If first/last name not available in billing address.
   if (_isEmpty(cart.data.cart.billing_address.firstname)
     || _isEmpty(cart.data.cart.billing_address.lastname)) {
-    logger.warning('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
+    logger.error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });
     return {

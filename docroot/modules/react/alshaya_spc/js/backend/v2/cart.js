@@ -438,7 +438,7 @@ window.commerceBackend.addFreeGift = async (data) => {
   let cart = null;
 
   if (_isEmpty(sku) || _isEmpty(promoCode) || _isEmpty(langCode)) {
-    logger.warning('Missing request header parameters. SKU: @sku, Promo: @promoCode, Langcode: @langCode', {
+    logger.error('Missing request header parameters. SKU: @sku, Promo: @promoCode, Langcode: @langCode', {
       '@sku': sku || '',
       '@promoCode': promoCode || '',
       '@langCode': langCode || '',
