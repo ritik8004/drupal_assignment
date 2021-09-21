@@ -80,7 +80,8 @@ const OrderSummaryItem = (props) => {
                   <PriceElement amount={collectionCharge} />
                 </div>
                 <div className="spc-cnc-confirmation-govtid-msg">
-                  {`${Drupal.t('Important Note')}: ${Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}`}
+                  <span className="spc-cnc-confirmation-govtid-msg-label">{`${Drupal.t('Important Note')}: `}</span>
+                  <span>{Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}</span>
                 </div>
               </>
             )}
