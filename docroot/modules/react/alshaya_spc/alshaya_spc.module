@@ -63,28 +63,13 @@ function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
   ];
 
   $build['#strings'][] = [
-    'key' => 'cnc_contact_info_checkbox',
-    'value' => t('The same person placing the order will not collect the order.'),
-  ];
-
-  $build['#strings'][] = [
     'key' => 'cnc_selected_collection_point',
     'value' => t('Selected collection point'),
   ];
 
   $build['#strings'][] = [
-    'key' => 'cnc_collection_contact_info_title',
-    'value' => t('Collectors Information'),
-  ];
-
-  $build['#strings'][] = [
     'key' => 'cnc_collection_collect_in_store',
     'value' => t('Collect in'),
-  ];
-
-  $build['#strings'][] = [
-    'key' => 'form_error_valid_collector_mobile_number',
-    'value' => t('Collector`s mobile number can not be same as contact number'),
   ];
 
   $build['#attached']['drupalSettings']['cnc_collection_point_map_icon'] = $config->get('click_collect_collection_point_map_icon');

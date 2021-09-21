@@ -37,10 +37,10 @@ const StoreItem = ({
       <ConditionalView condition={display === 'accordion'}>
         <span className="expand-btn" onClick={(e) => onStoreExpand(e, index)}>Expand</span>
       </ConditionalView>
-      <ConditionalView condition={display === 'default'}>
-        <span className="spc-map-list-close" onClick={(e) => onStoreClose(e, index)} />
-      </ConditionalView>
     </span>
+    <ConditionalView condition={display === 'default'}>
+      <span className="spc-map-list-close" onClick={(e) => onStoreClose(e, index)} />
+    </ConditionalView>
     <ConditionalView condition={display === 'accordion' || display === 'default'}>
       <div className="store-address-content">
         <div className="store-address">{parse(store.address)}</div>
