@@ -89,10 +89,11 @@ function alshaya_rcs_main_menu_preprocess_page_title(&$variables) {
 function alshaya_rcs_main_menu_preprocess_page(&$variables) {
   $routematch = \Drupal::routeMatch();
   if ($routematch->getRouteName() == 'entity.node.canonical') {
-    $term = $routematch->getParameter('node');
-    if ($term->bundle() == 'advanced_page') {
+    $node = $routematch->getParameter('node');
+    if ($node->bundle() == 'advanced_page') {
       // Add description placeholder for the advanced page.
       $variables['category_term_description'] = '#rcs.category.description#';
+      $variables['#attached']['library'][] = 'alshaya_rcs_listing/helpers';
     }
   }
 }

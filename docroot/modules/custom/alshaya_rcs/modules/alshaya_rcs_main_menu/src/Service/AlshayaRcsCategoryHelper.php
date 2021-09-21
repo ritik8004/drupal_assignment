@@ -216,7 +216,10 @@ class AlshayaRcsCategoryHelper {
           if (array_key_exists('app', $value) && $context == 'app') {
             continue;
           }
-          $record['icon'][$value['key']] = $this->getImageFromField($key, $term);
+          $image_url = $this->getImageFromField($key, $term);
+          if ($image_url) {
+            $record['icon'][$value['key']] = $image_url;
+          }
         }
       }
 

@@ -340,6 +340,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           url_path
           url_key
           show_on_dpt
+          show_in_lhn
           position
           is_anchor
           display_view_all
