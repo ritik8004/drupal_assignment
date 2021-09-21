@@ -1,0 +1,102 @@
+<div class="rcs-field__items">
+  {{#each data as | item |}}
+  <div class="field__item">
+    <article data-sku="{{ sku }}" role="article" about="/{{ url_key }}" data-vmode="teaser">
+      <a class="above-mobile-block product-link" href="/{{ url_key }}">
+        <div class="image-label-wrapper">
+          {{#if media_gallery }}
+            <img src="{{ media_gallery.0.url }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+          {{/if}}
+          <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
+          </div>
+        </div>
+
+        <h2 class="c-products__item__label">
+          <span>{{ name }}</span>
+        </h2>
+
+        <div class="price-block price-block-{{ sku }}">
+          <div class="price">
+            <div class="price-type__wrapper">
+              <div class="price">
+              <span class="price-wrapper">
+                <div class="price">
+                  <span class="price-currency suffix">{{ price.regularPrice.amount.currency }}</span>
+                  <span class="price-amount">{{ price.regularPrice.amount.value }}</span>
+                </div>
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      {{'@todo ask about promotions'}}
+      {{#if promotions }}
+      <div class="promotions above-mobile-block">
+        {{#each promotions as | promotion |}}
+          <a href="{{ promotion.url }}" hreflang="en">{{ promotion.name }}</a><br>
+        {{/each}}
+      </div>
+      {{/if}}
+
+      <table class="mobile--only--sell {{ show_cart_form }}">
+        <tbody>
+        <tr>
+          <td class="sell--image">
+            {{#if media_gallery }}
+              <a href="/{{ url_key }}" rel="bookmark">
+                <img src="{{ media_gallery.0.url }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+              </a>
+            {{/if}}
+            <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="sell--description">
+            <h2 class="c-products__item__label">
+              <a href="/{{ url_key }}" rel="bookmark"><span>{{ name }}</span></a>
+            </h2>
+            <div class="price-block price-block-{{ sku }}">
+              <div class="price">
+                <div class="price-type__wrapper">
+                  <div class="price">
+                    <span class="price-wrapper">
+                      <div class="price">
+                        <span class="price-currency suffix">{{ price.regularPrice.amount.currency }}</span>
+                        <span class="price-amount">{{ price.regularPrice.amount.value }}</span>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="sell-sku">
+            <div class="field--name-field-skus">
+              <article data-skuid=""></article>
+            </div>
+          </td>
+        </tr>
+
+        {{'@todo ask about promotions'}}
+        {{#if promotions }}
+        <tr>
+          <td colspan="2" class="sell-promotions promotions">
+            {{#each promotions as | promotion |}}
+            <a href="{{ promotion.url }}" hreflang="en">{{ promotion.name }}</a><br>
+            {{/each}}
+          </td>
+        </tr>
+        {{/if}}
+        </tbody>
+      </table>
+    </article>
+  </div>
+  {{/each}}
+</div>
