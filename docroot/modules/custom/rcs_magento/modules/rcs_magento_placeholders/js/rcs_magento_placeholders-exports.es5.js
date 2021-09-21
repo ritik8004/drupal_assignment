@@ -81,6 +81,19 @@ exports.getEntity = async function getEntity(langcode) {
   return result;
 };
 
+/**
+ * Gets data attributes from rcs placeholders.
+ *
+ * @param placeholder
+ *   The placeholder id.
+ * @return {DOMStringMap}
+ *   The data attributes.
+ */
+function getDataAttributes(placeholder) {
+  const element = document.querySelector(`#rcs-ph-${placeholder}`);
+  return element.dataset;
+}
+
 exports.getData = async function getData(placeholder, params, entity, langcode) {
   const request = {
     uri: '',
@@ -91,6 +104,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
   let response = null;
   let result = null;
+  const dataAttributes = getDataAttributes(placeholder);
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
     // Just return empty string so that render() function gets called later.
@@ -128,6 +142,23 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       if (response !== null) {
         // Skip the default category data always.
         result = response.data.category.children[0].children;
+      }
+      break;
+
+    case 'magazine_shop_the_story':
+      request.uri += "graphql";
+      request.method = "POST",
+      request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+      request.data = JSON.stringify({
+        query: `{ products(filter: { sku: { in: ${dataAttributes.skus} }}) ${rcsPhGraphqlQuery.products}}`
+      });
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      // Get exact data from response.
+      if (response !== null) {
+        // Skip the default category data always.
+        result = response.data.products.items[0];
       }
       break;
 
