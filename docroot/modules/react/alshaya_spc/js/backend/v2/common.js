@@ -24,6 +24,7 @@ import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -173,6 +174,28 @@ const getCartSettings = (key) => window.drupalSettings.cart[key];
  */
 const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
 
+const logApiStats = (response) => {
+  try {
+    if (!hasValue(response) || !hasValue(response.config) || !hasValue(response.config.headers)) {
+      return response;
+    }
+
+    const transferTime = Date.now() - response.config.headers.RequestTime;
+    logger.debug('Finished API request @url in @transferTime, ResponseCode: @code, Method: @method.', {
+      '@url': response.config.url,
+      '@transferTime': `${transferTime}ms`,
+      '@code': response.status,
+      '@method': response.config.method,
+    });
+  } catch (error) {
+    logger.error('Failed to log API response time, error: @message', {
+      '@message': error.message,
+    });
+  }
+
+  return response;
+};
+
 /**
  * Handle errors and messages.
  *
@@ -183,6 +206,7 @@ const i18nMagentoUrl = (path) => `${getCartSettings('url')}${path}`;
  *   Returns a promise object.
  */
 const handleResponse = (apiResponse) => {
+  logApiStats(apiResponse);
   const response = {};
   response.data = {};
   response.status = apiResponse.status;
@@ -359,6 +383,9 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
     params.data = data;
   }
 
+  params.headers = params.headers || {};
+  params.headers.RequestTime = Date.now();
+
   return Axios(params)
     .then((response) => handleResponse(response))
     .catch((error) => {
@@ -410,7 +437,35 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
     });
   }
 
-  return Axios(params);
+  params.headers = params.headers || {};
+  params.headers.RequestTime = Date.now();
+
+  return Axios(params)
+    .then((response) => logApiStats(response))
+    .catch((error) => {
+      if (hasValue(error.response) && hasValue(error.response.status)) {
+        logApiStats(error.response);
+        const responseCode = parseInt(error.response.status, 10);
+
+        if (responseCode === 404) {
+          logger.warning('Drupal page no longer available.', { ...params });
+          return null;
+        }
+
+        logger.error('Drupal API call failed.', {
+          responseCode,
+          ...params,
+        });
+        return null;
+      }
+
+      logger.error('Something happened in setting up the request that triggered an error.', {
+        '@error': error.message,
+        ...params,
+      });
+
+      return null;
+    });
 };
 
 /**
@@ -483,6 +538,19 @@ const formatCart = (cartData) => {
     if (!_isEmpty(extensionAttributes.store_code)) {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
+
+    // If collection point feature is enabled, extract collectors details
+    // from shipping data.
+    if (collectionPointsEnabled()) {
+      data.shipping.collector_name = extensionAttributes.collector_name;
+      data.shipping.collector_email = extensionAttributes.collector_email;
+      data.shipping.collector_mobile = extensionAttributes.collector_mobile;
+      data.shipping.collection_point = extensionAttributes.collection_point;
+      data.shipping.pickup_date = extensionAttributes.pickup_date;
+      data.shipping.price_amount = extensionAttributes.price_amount;
+      data.shipping.pudo_available = extensionAttributes.pudo_available;
+    }
+
     delete data.shipping.extension_attributes;
   }
 
@@ -519,7 +587,7 @@ const getProductStatus = async (sku) => {
   }
 
   // Return from static, if available.
-  if (!_isUndefined(staticProductStatus[sku])) {
+  if (typeof staticProductStatus[sku] !== 'undefined') {
     return staticProductStatus[sku];
   }
 
@@ -528,9 +596,7 @@ const getProductStatus = async (sku) => {
   // query string.
   // The query string is added since same APIs are used by MAPP also.
   const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
+  if (!hasValue(response) || !hasValue(response.data) || hasValue(response.data.error)) {
     staticProductStatus[sku] = null;
   } else {
     staticProductStatus[sku] = response.data;
@@ -576,6 +642,8 @@ const getProcessedCartData = async (cartData) => {
       base_grand_total_without_surcharge: cartData.totals.base_grand_total,
       discount_amount: cartData.totals.discount_amount,
       surcharge: 0,
+      items: cartData.totals.items,
+      allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
     items: [],
   };
@@ -630,8 +698,28 @@ const getProcessedCartData = async (cartData) => {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
         const stockInfo = await getProductStatus(item.sku);
+
+        // Do not show the products which are not available in
+        // system but only available in cart.
+        if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
+          logger.error('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+            '@sku': item.sku,
+            '@cartId': data.cart_id_int,
+            '@stockInfo': JSON.stringify(stockInfo || {}),
+          });
+
+          delete data.items[item.sku];
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
         data.items[item.sku].in_stock = stockInfo.in_stock;
         data.items[item.sku].stock = stockInfo.stock;
+
+        // If any item is OOS.
+        if (!hasValue(stockInfo.in_stock) || !hasValue(stockInfo.stock)) {
+          data.in_stock = false;
+        }
       }
 
       if (typeof item.extension_attributes !== 'undefined') {
@@ -664,11 +752,6 @@ const getProcessedCartData = async (cartData) => {
           }
         }
       });
-
-      // If any item is OOS.
-      if (!_isEmpty(data.items[item.sku].stock) || data.items[item.sku].stock === 0) {
-        data.in_stock = false;
-      }
     }
   } else {
     data.items = [];

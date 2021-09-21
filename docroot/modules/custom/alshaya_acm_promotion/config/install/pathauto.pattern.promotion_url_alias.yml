@@ -7,7 +7,7 @@ dependencies:
 id: promotion_url_alias
 label: 'Promotion url alias'
 type: 'canonical_entities:node'
-pattern: '[node:field_acq_promotion_label]'
+pattern: 'promotion/[node:field_acq_promotion_label]'
 selection_criteria:
   fa86c8f3-6918-4bec-b970-837d64c3c895:
     id: node_type

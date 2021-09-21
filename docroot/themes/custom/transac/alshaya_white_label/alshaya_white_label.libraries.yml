@@ -495,6 +495,11 @@ secondary-menu:
     theme:
       css/conditional-sass/secondary-menu/secondary-menu.ltr.css: {}
 
+checkout-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: {}
+
 my-account:
   css:
     theme:
@@ -510,7 +515,22 @@ sitemap:
     theme:
       css/conditional-sass/sitemap/sitemap.ltr.css: {}
 
+checkout-confirmation-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: {}
+
 alshaya-vat-certificate:
   css:
     theme:
       css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: {}
+
+slug-banner:
+  css:
+    theme:
+      css/conditional-sass/slug-banner/slug-banner.ltr.css: {}
+
+plp-frame-options:
+  css:
+    theme:
+      css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: {}

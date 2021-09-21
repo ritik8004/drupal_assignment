@@ -312,6 +312,7 @@ export default class Cart extends React.Component {
               items={items}
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
+              totals={totals}
             />
           </div>
           <div className="spc-sidebar">

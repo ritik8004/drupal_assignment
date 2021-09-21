@@ -169,7 +169,7 @@ export default class Checkout extends React.Component {
   updateCheckoutMessage = (type, message) => {
     this.setState({ messageType: type, errorSuccessMessage: message });
     // Checking length as if no type, means no error.
-    if ((type.length > 0) && (document.getElementsByClassName('.spc-content').length > 0)) {
+    if ((type.length > 0) && (document.getElementsByClassName('spc-content').length > 0)) {
       smoothScrollTo('.spc-content');
     }
   };

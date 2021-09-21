@@ -2419,6 +2419,8 @@ class Cart {
       'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
       'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
+      'items' => $cart_data['totals']['items'] ?? 0,
+      'allExcludedForAdcard' => $cart_data['totals']['extension_attributes']['is_all_items_excluded_for_adv_card'] ?? 0,
     ];
 
     if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {

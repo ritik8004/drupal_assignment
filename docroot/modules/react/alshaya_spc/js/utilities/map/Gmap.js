@@ -130,16 +130,17 @@ export class Gmap {
    * Pass second parameter true to not show infowindo and
    * false to add infowindow and it's close event.
    */
-  setMapMarker = (markerSettings, showInfoWindow = false) => {
+  setMapMarker = (markerSettings, showInfoWindow = false, mapIcon = '') => {
     this.map.mapMarkers = this.map.mapMarkers || [];
     const currentMarkerSettings = { ...markerSettings };
 
     const { active: markerActiveIcon, inActive: markerInActiveIcon } = this.map.settings.map_marker;
+    const mapMarkerIcon = mapIcon || markerInActiveIcon;
 
-    if (typeof markerInActiveIcon === 'string') {
+    if (typeof mapMarkerIcon === 'string') {
       // Add the marker icon.
       currentMarkerSettings.icon = {
-        url: markerInActiveIcon,
+        url: mapMarkerIcon,
       };
     }
 
@@ -165,7 +166,9 @@ export class Gmap {
     let clickedMarker = '';
     currentMarker.addListener('click', () => {
       map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
-      currentMarker.setIcon(markerActiveIcon);
+      currentMarker.setIcon(
+        { url: mapIcon || markerActiveIcon, scaledSize: new google.maps.Size(47, 66) },
+      );
       clickedMarker = currentMarker;
 
       if (currentMarkerSettings.infoWindowSolitary && showInfoWindow === true) {
@@ -191,7 +194,7 @@ export class Gmap {
       if (clickedMarker === currentMarker) {
         return;
       }
-      currentMarker.setIcon(markerActiveIcon);
+      currentMarker.setIcon(mapIcon || markerActiveIcon);
     });
 
     google.maps.event.addListener(currentMarker, 'mouseout', () => {
@@ -223,13 +226,13 @@ export class Gmap {
     return currentMarker;
   };
 
-  resetIcon = (currentMarker) => {
-    const { inActive } = this.map.settings.map_marker;
+  resetIcon = (currentMarker, options = {}) => {
+    const { inActive } = options.map_marker || this.map.settings.map_marker;
     currentMarker.setIcon(inActive);
   }
 
-  highlightIcon = (currentMarker) => {
-    const { active } = this.map.settings.map_marker;
+  highlightIcon = (currentMarker, options = {}) => {
+    const { active } = options.map_marker || this.map.settings.map_marker;
     currentMarker.setIcon(active);
   }
 

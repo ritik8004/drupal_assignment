@@ -6,6 +6,8 @@ import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
+import Advantagecard from '../advantagecard';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -58,7 +60,14 @@ class TotalLineItems extends React.Component {
         }
       });
     }
-
+    if (Advantagecard.isAdvantagecardEnabled()) {
+      const { totals } = this.props;
+      // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
+      if ((hasValue(totals.items) && Advantagecard.isAdvantageCardApplied(totals.items))
+        || (hasValue(totals.advatage_card))) {
+        promoData += `<div class="promotion-label"><strong>${Drupal.t('Advantage Card Discount')}</strong></div>`;
+      }
+    }
     return promoData;
   };
 
@@ -66,7 +75,6 @@ class TotalLineItems extends React.Component {
     const { totals, isCartPage } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
-
     // Using a separate variable(shippingAmount) to update the value
     // not using the variable in props(totals) as it will
     // update the global value.

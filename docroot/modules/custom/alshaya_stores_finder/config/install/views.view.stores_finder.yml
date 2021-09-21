@@ -7,11 +7,13 @@ dependencies:
     - field.storage.node.field_store_open_hours
     - node.type.store
   module:
+    - alshaya_stores_finder
     - better_exposed_filters
     - geolocation
     - key_value_field
     - node
     - user
+    - options
 id: stores_finder
 label: 'Store Finder'
 module: views
@@ -380,6 +382,47 @@ display:
           entity_type: node
           entity_field: langcode
           plugin_id: language
+        field_store_type_value:
+          id: field_store_type_value
+          table: node__field_store_type
+          field: field_store_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: not
+          value:
+            1: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
       sorts:
         created:
           id: created
@@ -417,6 +460,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:alshaya_stores_finder.settings'
         - 'config:field.storage.node.field_latitude_longitude'
         - 'config:field.storage.node.field_store_address'
         - 'config:field.storage.node.field_store_open_hours'
@@ -979,6 +1023,47 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           plugin_id: geolocation_filter_proximity
+        field_store_type_value:
+          id: field_store_type_value
+          table: node__field_store_type
+          field: field_store_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: not
+          value:
+            1: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
       filter_groups:
         operator: AND
         groups:
@@ -992,6 +1077,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:alshaya_stores_finder.settings'
         - 'config:field.storage.node.field_latitude_longitude'
         - 'config:field.storage.node.field_store_address'
         - 'config:field.storage.node.field_store_open_hours'
@@ -1175,6 +1261,47 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           plugin_id: geolocation_filter_proximity
+        field_store_type_value:
+          id: field_store_type_value
+          table: node__field_store_type
+          field: field_store_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: not
+          value:
+            1: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
       filter_groups:
         operator: AND
         groups:
@@ -1546,6 +1673,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:alshaya_stores_finder.settings'
         - 'config:field.storage.node.field_latitude_longitude'
         - 'config:field.storage.node.field_store_address'
         - 'config:field.storage.node.field_store_open_hours'
@@ -1843,6 +1971,45 @@ display:
           entity_type: node
           entity_field: langcode
           plugin_id: language
+        field_store_type_value:
+          id: field_store_type_value
+          table: node__field_store_type
+          field: field_store_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: not
+          value:
+            1: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
       filter_groups:
         operator: AND
         groups:
@@ -2182,6 +2349,47 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           plugin_id: geolocation_filter_proximity
+        field_store_type_value:
+          id: field_store_type_value
+          table: node__field_store_type
+          field: field_store_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: not
+          value:
+            1: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
       filter_groups:
         operator: AND
         groups:
@@ -2537,6 +2745,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:alshaya_stores_finder.settings'
         - 'config:field.storage.node.field_latitude_longitude'
         - 'config:field.storage.node.field_store_address'
         - 'config:field.storage.node.field_store_open_hours'
