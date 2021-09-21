@@ -422,7 +422,7 @@ class ClickCollect extends React.Component {
   };
 
   onMapStoreClose = (e, makerIndex) => {
-    e.target.parentElement.parentElement.classList.remove('selected');
+    e.target.closest('.selected').classList.remove('selected');
     this.selectStoreButtonVisibility(false);
     this.refreshMap();
     this.toggleFullScreen();
