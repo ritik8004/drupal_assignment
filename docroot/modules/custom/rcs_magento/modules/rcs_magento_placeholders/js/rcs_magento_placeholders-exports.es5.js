@@ -77,8 +77,17 @@ exports.getEntity = async function getEntity(langcode) {
     // properly.
     result.name = result.title;
   }
+  // Creating custom event to to perform extra operation and update the result
+  // object.
+  const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+    detail: {
+      result: result,
+    }
+  });
+  // To trigger the Event
+  document.dispatchEvent(updateResult);
 
-  return result;
+  return updateResult.detail.result;
 };
 
 exports.getData = async function getData(placeholder, params, entity, langcode) {
