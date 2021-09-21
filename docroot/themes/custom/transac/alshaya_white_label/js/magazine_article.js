@@ -51,7 +51,7 @@
         }
       }
 
-      var shopByStory = $('.field--name-field-magazine-shop-the-story .field__items');
+      var shopByStory = $('.field--name-field-magazine-shop-the-story:not(.rcs) .field__items');
       var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
 
       // For tablets and mobile we don't want to apply slickSlider.
