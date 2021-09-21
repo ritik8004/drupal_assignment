@@ -20,13 +20,10 @@ services:
     type: php:7.4
     composer_version: 1-latest
     build_as_root:
+      - apt-get update -y
       - bash /app/.lando/scripts/configure-syslog.sh
       - bash /app/.lando/scripts/configure-xhprof.sh
-      # Note that you will want to use the script for the major version of node you want to install
-      # See: https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
-      - curl -sL https://deb.nodesource.com/setup_8.x | bash -
-      - apt-get update -y
-      - apt-get install nodejs -y
+      - bash /app/.lando/scripts/install-npm.sh
       - apt-get install netcat -y
     run_as_root:
       # By default disable XDEBUG, we need it enabled to ensure all configurations are loaded.
@@ -121,6 +118,11 @@ tooling:
     service: appserver
     description: Fix ssh auth sock permission for MacOS users. Lando rebuild fixes the problem as well.
     cmd: "/bin/chgrp www-data /run/host-services/ssh-auth.sock && /bin/chmod g+w /run/host-services/ssh-auth.sock"
+    user: root
+  npm-fix:
+    service: appserver
+    description: Re-install the old / supported npm and node.
+    cmd: "bash /app/.lando/scripts/install-npm.sh"
     user: root
 
 # Exclude those directories which we write a lot on server.

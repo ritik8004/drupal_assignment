@@ -6,7 +6,6 @@ rm -f /var/logs/drupal.log
 
 if [ ! -f /etc/rsyslog.d/50-default.conf ]
 then
-  apt-get update -y
   apt-get install rsyslog -y
   cat /app/.lando/config/rsyslog.conf > /etc/rsyslog.d/50-default.conf
 fi
