@@ -1,5 +1,5 @@
-target_stacks=('alshaya' 'alshaya2' 'alshaya3bis' 'alshaya4' 'alshaya5' 'alshaya6tmp2' 'alshaya7tmp')
-target_env_prefixes=('01' '02' '01' '04' '05' '06' '07')
+target_stacks=('alshaya6tmp2' 'alshaya7tmp')
+target_env_prefixes=('06' '07')
 target_env_suffixes="dev dev2 dev3 test qa2 uat pprod live"
 
 for i in "${!target_stacks[@]}"; do
