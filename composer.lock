@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07f0c969761643c63488dd75bb47b1d2",
+    "content-hash": "26a069e9236896fccb98e7f0bb5b4686",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -12810,13 +12810,6 @@
                 {
                     "name": "id.medion",
                     "homepage": "https://www.drupal.org/user/2542592"
-<<<<<<< 4dc26ad4ab288519233f63f5dc822da74d961dd4
-                },
-                {
-                    "name": "kim.pepper",
-                    "homepage": "https://www.drupal.org/user/370574"
-=======
->>>>>>> CORE-33339: Updated patches for simple_sitemap.
                 }
             ],
             "description": "Protect your website from spam and abuse while letting real people pass through with ease.",
@@ -14387,7 +14380,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Index Sitemap": "patches/simple_sitemap/simple_sitemap_index_configuration_settings.patch"
+                    "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

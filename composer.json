@@ -291,7 +291,7 @@
                 "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2019-11-01/3091689-2.patch"
             },
             "drupal/simple_sitemap": {
-                "Index Sitemap": "patches/simple_sitemap/simple_sitemap_index_configuration_settings.patch"
+                "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
             },
             "drupal/password_policy": {
                 "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
