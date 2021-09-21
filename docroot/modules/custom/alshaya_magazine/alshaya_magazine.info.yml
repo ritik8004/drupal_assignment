@@ -9,4 +9,5 @@ dependencies:
   - drupal:image_style_quality
   - drupal:system
   - drupal:user
+  - video_embed_field:video_embed_field
 package: Alshaya
