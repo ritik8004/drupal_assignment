@@ -89,6 +89,16 @@ exports.render = function render(
       }
       break;
 
+    case 'magazine_shop_the_story':
+      // Add config to each item.
+      inputs.forEach(function(item) {
+        item['show_cart_form'] = (drupalSettings.rcsPhSettings.show_cart_form === 0) ? 'no-cart-form' : '';
+      });
+
+      // Render template.
+      html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: inputs });
+      break;
+
     case 'mobile-upsell-products':
     case 'upsell-products':
     case 'mobile-related-products':

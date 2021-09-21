@@ -158,7 +158,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       // Get exact data from response.
       if (response !== null) {
         // Skip the default category data always.
-        result = response.data.products.items[0];
+        result = response.data.products.items;
       }
       break;
 

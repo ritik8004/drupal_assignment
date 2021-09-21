@@ -4,6 +4,8 @@ description: Alshaya implementation of RCS Magazine.
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
-  - alshaya_rcs:alshaya_rcs
   - rcs_placeholders:rcs_placeholders
+  - rcs_handlebars:rcs_handlebars
+  - alshaya_rcs:alshaya_rcs
+  - alshaya_rcs_product:alshaya_rcs_product
   - alshaya_magazine:alshaya_magazine

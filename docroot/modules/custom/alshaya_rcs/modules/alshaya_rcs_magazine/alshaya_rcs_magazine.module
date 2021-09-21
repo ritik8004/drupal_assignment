@@ -16,32 +16,59 @@ function alshaya_rcs_magazine_preprocess_field__node__field_magazine_shop_the_st
     return;
   }
 
-  if (!empty($variables['items'])) {
-    // Get the list of skus from the field value.
-    $skus = [];
-    foreach ($variables['items'] as &$item) {
-      $skus[] = $item['content']['#context']['value'];
-    }
-
-    // Replace the output with  the RCS placeholder.
-    $variables['items'] = [
-      [
-        'content' => [
-          '#markup' => '#RCS.magazine_article.skus#',
-        ],
-        'attributes' => new Attribute(),
-      ],
-    ];
-    // Add classes to the field item to allow us to hide the RCS placeholders
-    // and display skeletons on initial load.
-    $variables['items'][0]['attributes']->setAttribute('class', 'rcs rcs-magazine-article');
-
-    // Add classes to the field wrapper to disable slick js on page load
-    // @see magazine_article.js.
-    $variables['attributes']['class'][] = 'rcs';
-    $variables['attributes']['id'][] = 'rcs-ph-magazine_shop_the_story';
-
-    // Add data attributes to the field wrapper to allow us to fetch the data.
-    $variables['attributes']['data-skus'] = json_encode($skus);
+  if (empty($variables['items'])) {
+    return;
   }
+
+  // Get the list of skus from the field value.
+  $skus = [];
+  foreach ($variables['items'] as &$item) {
+    $skus[] = $item['content']['#context']['value'];
+  }
+
+  // Replace the output with  the RCS placeholder.
+  $variables['items'] = [
+    [
+      'content' => [
+        '#markup' => '',
+      ],
+      'attributes' => new Attribute(),
+    ],
+  ];
+  // Add classes to the field item to allow us to hide the RCS placeholders
+  // and display skeletons on initial load.
+  $variables['items'][0]['attributes']->setAttribute('class', 'rcs rcs-loading rcs-magazine-article');
+
+  // Add id to let RCS find the placeholder.
+  $variables['items'][0]['attributes']->setAttribute('id', 'rcs-ph-magazine_shop_the_story');
+
+  // Add data attributes to the field wrapper to allow us to fetch the data.
+  $variables['items'][0]['attributes']->setAttribute('data-skus', json_encode($skus));
+
+  // Add classes to the field wrapper to disable slick js on page load
+  // @see magazine_article.js.
+  $variables['attributes']['class'][] = 'rcs';
+
+  // Add Drupal settings.
+  $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $variables['#attached']['drupalSettings'] = [
+    'rcsPhSettings' => [
+      'show_cart_form' => (integer) $product_settings->get('show_cart_form_in_related'),
+    ],
+  ];
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates_alter().
+ */
+function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->bundle() !== 'magazine_article') {
+    return;
+  }
+
+  // Provide template for product teaser.
+  $path = drupal_get_path('module', 'alshaya_rcs_magazine');
+  $templates['field']['magazine_article'] = [
+    'product_teaser' => file_get_contents("$path/templates/product-teaser.handlebars"),
+  ];
 }
