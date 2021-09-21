@@ -388,6 +388,9 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
     case 'add':
       alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 
+      /** @var \Drupal\search_api\Entity\Index $index */
+      $index = Index::load('product');
+
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
           // We use add even when resetting. Remove facet if available.
@@ -395,7 +398,7 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']], $index->status());
       }
       break;
 
