@@ -330,7 +330,7 @@ export default class Cart extends React.Component {
                 <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
               </SectionTitle>
               <ConditionalView condition={drupalSettings.cart.expressDeliveryEnabled === true}>
-                <DeliveryAreaSelect />
+                <DeliveryAreaSelect animationDelayValue="0.4s" />
               </ConditionalView>
             </div>
             <DeliveryInOnlyCity />

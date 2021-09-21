@@ -1,0 +1,21 @@
+.spc-delivery-area {
+  .delivery-type-wrapper {
+    font-family: $hnm-demibold;
+  }
+
+  .actions {
+    div.select-area-link {
+      font-family: $hnm-demibold;
+    }
+  }
+
+  .spc-select {
+    .spcSelect__control {
+      .spcSelect__dropdown-indicator {
+        @include icon(dropdown-expand, before) {
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+}
