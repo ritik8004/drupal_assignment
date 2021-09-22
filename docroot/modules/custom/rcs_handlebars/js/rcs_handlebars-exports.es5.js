@@ -1,7 +1,7 @@
 const Handlebars = require("handlebars");
 
 /**
- * Register helper for Drupal.t().
+ * Register helper for string translations.
  */
 Handlebars.registerHelper('t', (str) => rcsTranslatedText(str));
 
