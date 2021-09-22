@@ -223,9 +223,9 @@ const getLastOrder = async (customerId) => {
   try {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
     if (!hasValue(order.data) || hasValue(order.data.error)) {
-      logger.warning('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
+      logger.warning('Error while fetching last order of customer. CustomerId: @customerId, Response: @response.', {
         '@response': JSON.stringify(order.data),
-        '@customer_id': customerId,
+        '@customerId': customerId,
       });
 
       StaticStorage.set('last_order', {});
@@ -236,9 +236,9 @@ const getLastOrder = async (customerId) => {
     StaticStorage.set('last_order', processedOrder);
     return processedOrder;
   } catch (error) {
-    logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Message: @message.', {
+    logger.error('Error while fetching last order of customer. CustomerId: @customerId, Message: @message.', {
       '@message': error.message,
-      '@customer_id': customerId,
+      '@customerId': customerId,
     });
   }
 
@@ -933,8 +933,8 @@ const applyDefaultShipping = async (order) => {
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
       ) {
-        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cart_id, Address: @address, Billing: @billing.', {
-          '@cart_id': window.commerceBackend.getCartId(),
+        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cartId, Address: @address, Billing: @billing.', {
+          '@cartId': window.commerceBackend.getCartId(),
           '@address': JSON.stringify(address),
           '@billing': JSON.stringify(order.billing_commerce_address),
         });
@@ -972,8 +972,8 @@ const applyDefaults = async (data, customerId) => {
     if (_includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
       // Do nothing, we will let the address from address book used for default flow.
     } else {
-      logger.debug('Applying defaults from last order. Cart: @cart_id.', {
-        '@cart_id': window.commerceBackend.getCartId(),
+      logger.debug('Applying defaults from last order. Cart: @cartId.', {
+        '@cartId': window.commerceBackend.getCartId(),
       });
 
       const response = await applyDefaultShipping(order);
@@ -1788,10 +1788,10 @@ window.commerceBackend.addShippingMethod = async (data) => {
     // Unset as not needed in further processing.
     delete (shippingInfo.shipping_type);
 
-    logger.notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cart_id', {
+    logger.notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cartId', {
       '@data': JSON.stringify(data),
       '@address': JSON.stringify(shippingInfo),
-      '@cart_id': cartId,
+      '@cartId': cartId,
     });
 
     cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
@@ -1808,9 +1808,9 @@ window.commerceBackend.addShippingMethod = async (data) => {
   // Shipping methods.
   const response = await getHomeDeliveryShippingMethods(shippingAddress);
   if (response.error) {
-    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', {
+    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cartId Error message: @error_message', {
       '@data': JSON.stringify(data),
-      '@cart_id': cartId,
+      '@cartId': cartId,
       '@error_message': response.error_message,
     });
 
@@ -2062,9 +2062,9 @@ window.commerceBackend.placeOrder = async (data) => {
 
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
-      logger.notice('Order placed successfully. Cart: @cart OrderId: @order_id, Payment Method: @method.', {
+      logger.notice('Order placed successfully. Cart: @cart OrderId: @orderId, Payment Method: @method.', {
         '@cart': JSON.stringify(cart),
-        '@order_id': orderId,
+        '@orderId': orderId,
         '@method': data.data.paymentMethod.method,
       });
 
