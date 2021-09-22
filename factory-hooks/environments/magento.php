@@ -1098,6 +1098,15 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
+    'bh' => [
+      'store_id' => ['en' => 26, 'ar' => 23],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
+    ],
   ],
   'aeo_uat' => [
     'url' => 'https://aeo-uat.store.alshaya.com',
