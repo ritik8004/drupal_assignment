@@ -8,6 +8,11 @@
     .spc-store-name-wrapper {
       height: auto;
       padding-#{$left}: 0;
+      line-height: 1;
+
+      .store-name {
+        color: $spc-cnc-store-list-distance;
+      }
     }
   }
 
