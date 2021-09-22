@@ -223,7 +223,7 @@ const getLastOrder = async (customerId) => {
   try {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
     if (!hasValue(order.data) || hasValue(order.data.error)) {
-      logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
+      logger.warning('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
         '@response': JSON.stringify(order.data),
         '@customer_id': customerId,
       });
