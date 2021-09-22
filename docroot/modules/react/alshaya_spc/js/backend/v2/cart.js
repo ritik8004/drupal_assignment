@@ -238,7 +238,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (hasValue(response.data) && hasValue(response.data.error)) {
-    logger.error('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
+    logger.warning('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
       '@cartId': cartId,
       '@post': JSON.stringify(itemData),
       '@response': JSON.stringify(response.data),
@@ -506,7 +506,7 @@ window.commerceBackend.addFreeGift = async (data) => {
       const updated = await updateCart(params);
       // If cart update has error.
       if (_isEmpty(updated.data) || (!_isUndefined(updated.data.error) && updated.data.error)) {
-        logger.error('Update cart failed. Cart: @cart', {
+        logger.warning('Update cart failed. Cart: @cart', {
           '@cart': JSON.stringify(cart),
         });
       } else {
