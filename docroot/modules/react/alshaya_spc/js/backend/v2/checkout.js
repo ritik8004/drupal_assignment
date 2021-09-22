@@ -1422,8 +1422,8 @@ const paymentUpdate = async (data) => {
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
     cart.data.message = errorMessage;
     const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
-    logger.warning('Error occurred while placing order. Error: @error', {
-      '@error': message,
+    logger.warning('Error occurred while placing order. Error: @message', {
+      '@message': message,
     });
 
     return cart;
@@ -1633,9 +1633,9 @@ window.commerceBackend.getCartForCheckout = async () => {
       const cartId = window.commerceBackend.getCartId();
 
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
-        logger.error('Error while getting cart: @cartId, Error: @error.', {
+        logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,
-          '@error': cart.data.error_message,
+          '@message': cart.data.error_message,
         });
         return cart.data;
       }
@@ -1658,8 +1658,8 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error('Error while getCartForCheckout controller. Error: @error. Code: @code.', {
-        '@error': error.message,
+      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @code.', {
+        '@message': error.message,
         '@code': error.status,
       });
 
@@ -1808,10 +1808,10 @@ window.commerceBackend.addShippingMethod = async (data) => {
   // Shipping methods.
   const response = await getHomeDeliveryShippingMethods(shippingAddress);
   if (response.error) {
-    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cartId Error message: @error_message', {
+    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cartId Error message: @message', {
       '@data': JSON.stringify(data),
       '@cartId': cartId,
-      '@error_message': response.error_message,
+      '@message': response.error_message,
     });
 
     return { data: response };
