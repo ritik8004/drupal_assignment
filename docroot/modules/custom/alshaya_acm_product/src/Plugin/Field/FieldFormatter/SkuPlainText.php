@@ -109,9 +109,6 @@ class SkuPlainText extends FormatterBase implements ContainerFactoryPluginInterf
 
   /**
    * {@inheritdoc}
-   *
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
-   * @throws \InvalidArgumentException
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $values = $items->getValue();
@@ -121,8 +118,6 @@ class SkuPlainText extends FormatterBase implements ContainerFactoryPluginInterf
 
     $elements = [];
     foreach ($items as $delta => $item) {
-      // The text value has no text format assigned to it, so the user input
-      // should equal the output, including newlines.
       $elements[$delta] = [
         '#type' => 'inline_template',
         '#template' => '{{ value|nl2br }}',
