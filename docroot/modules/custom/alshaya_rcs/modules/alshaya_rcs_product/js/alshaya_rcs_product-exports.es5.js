@@ -40,7 +40,7 @@ function isProductBuyable(entity) {
  * @returns {object}
  *   Returns the object containing the value and ellipsis information.
  */
-function createShortDescription(value) {
+function applyEllipsis(value) {
   const limit = drupalSettings.alshayaRcs.shortDescLimit;
   let read_more = false;
 
@@ -643,8 +643,8 @@ exports.computePhFilters = function (input, filter) {
         read_more: false,
       };
 
-      // Compute ellipsis.
-      let tmp = createShortDescription(data.value);
+      // Apply ellipsis.
+      let tmp = applyEllipsis(data.value);
       data.value = tmp.value;
       data.read_more = tmp.read_more;
 
