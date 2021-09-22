@@ -539,12 +539,9 @@ const formatCart = (cartData) => {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
 
-    // If collection point feature is enabled, extract collectors details
+    // If collection point feature is enabled, extract collection point details
     // from shipping data.
     if (collectionPointsEnabled()) {
-      data.shipping.collector_name = extensionAttributes.collector_name;
-      data.shipping.collector_email = extensionAttributes.collector_email;
-      data.shipping.collector_mobile = extensionAttributes.collector_mobile;
       data.shipping.collection_point = extensionAttributes.collection_point;
       data.shipping.pickup_date = extensionAttributes.pickup_date;
       data.shipping.price_amount = extensionAttributes.price_amount;
@@ -643,6 +640,7 @@ const getProcessedCartData = async (cartData) => {
       discount_amount: cartData.totals.discount_amount,
       surcharge: 0,
       items: cartData.totals.items,
+      allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
     items: [],
   };

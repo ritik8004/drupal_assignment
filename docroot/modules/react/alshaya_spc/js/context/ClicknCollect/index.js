@@ -11,8 +11,6 @@ class ClicknCollectContextProvider extends React.Component {
     let selectedStore = null;
     let cartSelectedStore = null;
     let contactInfo = null;
-    const showCollectorForm = false;
-    const collectorInfo = null;
 
     const {
       cart: {
@@ -55,8 +53,6 @@ class ClicknCollectContextProvider extends React.Component {
       locationAccess: true,
       outsideCountryError: false,
       cartId,
-      showCollectorForm,
-      collectorInfo,
     };
   }
 
@@ -119,26 +115,6 @@ class ClicknCollectContextProvider extends React.Component {
     }));
   }
 
-  updateCollectorFormVisibility = (status) => {
-    const data = { showCollectorForm: status };
-
-    if (status === false) {
-      data.collectorInfo = null;
-    }
-
-    this.setState(data);
-  }
-
-  updateCollectorInfo = (collectorInfo) => {
-    this.setState({
-      collectorInfo: {
-        fullname: collectorInfo.collector_name,
-        email: collectorInfo.collector_email || '',
-        telephone: cleanMobileNumber(collectorInfo.collector_mobile) || '',
-      },
-    });
-  }
-
   render() {
     const { children } = this.props;
 
@@ -154,8 +130,6 @@ class ClicknCollectContextProvider extends React.Component {
             updateModal: this.updateModal,
             updateLocationAccess: this.updateLocationAccess,
             showOutsideCountryError: this.showOutsideCountryError,
-            updateCollectorFormVisibility: this.updateCollectorFormVisibility,
-            updateCollectorInfo: this.updateCollectorInfo,
           }
         }
       >

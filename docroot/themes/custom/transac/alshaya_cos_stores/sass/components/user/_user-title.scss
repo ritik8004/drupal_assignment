@@ -1,0 +1,18 @@
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-order-list,
+.c-user--node,
+.c-address-book,
+.c-payment-cards {
+  .block-page-title-block {
+    .back-link {
+      @include breakpoint($only-mobile) {
+        &::before {
+          color: $my_account_mobile_back_link;
+        }
+      }
+    }
+  }
+}

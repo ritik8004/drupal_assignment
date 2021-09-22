@@ -217,30 +217,3 @@ function _alshaya_search_algolia_sort_settings_submit(&$form, FormStateInterface
   }
 }
 
-/**
- * Implements hook_alshaya_search_api_entity_delete_alter().
- */
-function alshaya_search_algolia_search_api_entity_delete_alter(array &$item_ids, $index, EntityInterface $entity) {
-
-  if ($index->id() === 'alshaya_algolia_product_list_index') {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $sku = $skuManager->getSkuForNode($entity);
-    // Set items id as SKU instead of nid:lancode for _product_list_index.
-    $item_ids[] = $sku;
-
-  }
-}
-
-/**
- * Implements hook_alshaya_search_api_track_items_alter().
- */
-function alshaya_search_algolia_search_api_track_items_alter(array &$item_ids, $index, $id) {
-  // @todo: https://alshayagroup.atlassian.net/browse/CORE-29295.
-  if ($index->id() === 'alshaya_algolia_product_list_index' && strpos($id, ':') === FALSE) {
-    $item_ids = [];
-    // Set items id as SKU instead of enityt/node/nid:lancode which will be used as.
-    // objectID for deleting items in algolia _product_list_index.
-    $item_ids[] = $id;
-  }
-}
