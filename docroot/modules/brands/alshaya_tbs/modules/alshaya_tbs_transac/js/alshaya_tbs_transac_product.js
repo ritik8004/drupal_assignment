@@ -18,6 +18,7 @@ window.rcsFieldDataAlter = function (fieldName, data) {
       break;
 
     case 'short_description':
+      data[fieldName].label = rcsTranslatedText('Features and benefits');
       data[fieldName] = data['description'];
       break;
   }
