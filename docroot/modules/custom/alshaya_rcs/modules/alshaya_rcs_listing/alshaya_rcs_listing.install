@@ -16,12 +16,12 @@ use Drupal\block\BlockInterface;
  */
 function alshaya_rcs_listing_get_block_ids() {
   return [
-    'alshayagridcountblock_plp',
-    'alshaya_algolia_react_plp',
-    'categorylhnblock',
-    'views_block__plp_promotional_banner_block_1',
-    'views_block__alshaya_term_description_block_1',
-    'views_block__product_category_level_2_3_block_2'
+    'alshayagridcountblock_plp' => '',
+    'alshaya_algolia_react_plp' => 'alshaya_algolia_listing_v2',
+    'categorylhnblock' => 'rcs_placeholders_lhn',
+    'views_block__plp_promotional_banner_block_1' => 'alshaya_rcs_promotional_banner',
+    'views_block__alshaya_term_description_block_1' => 'alshaya_rcs_term_description',
+    'views_block__product_category_level_2_3_block_2' => 'rcs_placeholders_department_lhn'
   ];
 }
 
@@ -36,23 +36,22 @@ function alshaya_rcs_listing_install() {
   }
   // Disable the V1 blocks that are not required.
   $blocks = alshaya_rcs_listing_get_block_ids();
-  $existing_term_desc_block_weight = NULL;
-  foreach ($blocks as $block_id) {
-    $block = Block::load($block_id);
-    if ($block instanceof BlockInterface) {
-      // Change the RCS term description block weight based on the view term
-      // description block.
-      if ($block_id == 'views_block__alshaya_term_description_block_1') {
-        $existing_term_desc_block_weight = $block->getWeight();
+  foreach ($blocks as $prev_block_id => $new_block_id) {
+    $existing_block_weight = NULL;
+    $prev_block = Block::load($prev_block_id);
+    if ($prev_block instanceof BlockInterface) {
+      // Change the RCS block weight based on the V1 block weight.
+      $existing_block_weight = $prev_block->getWeight();
+      $prev_block->disable()->save();
+      // Load the RCS Block and Change the weight.
+      if ($new_block_id) {
+        $new_block = Block::load($new_block_id);
+        if ($new_block instanceof BlockInterface) {
+          $new_block->setWeight($existing_block_weight);
+          $new_block->save();
+        }
       }
-      $block->disable()->save();
     }
-  }
-  // Load the RCS Block and Change the weight.
-  if ($existing_term_desc_block_weight !== NULL) {
-    $block = Block::load('alshaya_rcs_term_description');
-    $block->setWeight($existing_term_desc_block_weight);
-    $block->save();
   }
 }
 
@@ -62,8 +61,8 @@ function alshaya_rcs_listing_install() {
 function alshaya_rcs_listing_uninstall() {
   // Enable the V1 blocks.
   $blocks = alshaya_rcs_listing_get_block_ids();
-  foreach ($blocks as $block_id) {
-    $block = Block::load($block_id);
+  foreach ($blocks as $prev_block_id => $new_block_id) {
+    $block = Block::load($prev_block_id);
     if ($block instanceof BlockInterface) {
       $block->enable()->save();
     }

@@ -1401,7 +1401,7 @@ const productRecommendationsSuffix = 'pr-';
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined
         && drupalSettings.gtm.log_errors_to_console) {
-        console.error(errorData);
+        console.log(errorData);
       }
 
       // Track error on GA.

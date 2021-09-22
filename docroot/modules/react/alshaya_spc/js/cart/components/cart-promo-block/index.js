@@ -173,7 +173,18 @@ export default class CartPromoBlock extends React.Component {
             promoValue = `Advantage_Card_${drupalSettings.userDetails.userID}`;
           }
           // If coupon is not valid.
-          if (result.response_message.status === 'error_coupon') {
+          if (Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
+            let messageInfo = null;
+            messageInfo = {
+              type: 'error',
+              message: result.response_message.msg,
+            };
+            dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+            const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
+            document.dispatchEvent(event);
+          }
+          if (result.response_message.status === 'error_coupon'
+            && !Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
             const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
             document.getElementById('promo-message').innerHTML = result.response_message.msg;
             document.getElementById('promo-message').classList.add('error');
@@ -213,7 +224,9 @@ export default class CartPromoBlock extends React.Component {
           }
 
           // Trigger cart update to remove any message on cart.
-          dispatchCustomEvent('spcCartMessageUpdate', {});
+          if (!Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
+            dispatchCustomEvent('spcCartMessageUpdate', {});
+          }
         }
       });
     }

@@ -22,6 +22,8 @@ $blue-cola: #007fdb;
 $bright-blue: #2182d5;
 
 // Global elements.
+$primary_text: $outer-space;
+$primary_link: $eerie-black;
 $primary_text: $eerie-black;
 $primary_link: $dark-gray;
 $content_pagetitle: $outer-space;
@@ -188,6 +190,9 @@ $mm_highlight_title: $eerie-black;
 $mm_highlight_description: $eerie-black;
 $mm_l3_link_hover: $eerie-black;
 
+// Contact Page
+$webform_contact_legend: $outer-space;
+
 // Store finder page.
 // Store finder header form.
 $store_finder_header_desktop: $eerie-black;
@@ -208,7 +213,9 @@ $store_finder_individual_hour_border: $bright-gray;
 $store_finder_glossary_alphabet: $eerie-black;
 $store_finder_glossary_text: $eerie-black;
 $store_finder_glossary_icon: $eerie-black;
+$store_finder_glossary_text_hover: rgba(27, 27, 27, 0.7);
 $store_finder_glossary_text_hover: $brownish-grey;
+$store_finder_glossary_text_hover: $bright-gray;
 $store_finder_glossary_text_border: $bright-gray;
 $store_finder_glossary_border: $bright-gray;
 
