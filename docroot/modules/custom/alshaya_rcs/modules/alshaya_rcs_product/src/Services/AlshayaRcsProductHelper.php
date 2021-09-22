@@ -28,11 +28,11 @@ class AlshayaRcsProductHelper {
   const SOURCE_CONTENT_TYPE_ID = 'acq_product';
 
   /**
-   * The entity type manager service.
+   * Node Storage.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\node\NodeStorageInterface
    */
-  protected $entityTypeManager;
+  protected $nodeStorage;
 
   /**
    * Config Factory.
@@ -91,7 +91,7 @@ class AlshayaRcsProductHelper {
                               AliasManager $alias_manager,
                               Connection $connection,
                               LoggerChannelFactoryInterface $logger_factory) {
-    $this->entityTypeManager = $entity_type_manager;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
@@ -129,11 +129,11 @@ class AlshayaRcsProductHelper {
     foreach ($nodes as $node) {
       try {
         /** @var \Drupal\node\Entity\Node $node_data */
-        $node_data = $this->getNodeStorage()->load($node->nid);
+        $node_data = $this->nodeStorage->load($node->nid);
 
         // Create a new rcs_product node object.
         /** @var \Drupal\node\Entity\Node $rcs_node */
-        $rcs_node = $this->getNodeStorage()->create([
+        $rcs_node = $this->nodeStorage->create([
           'type' => self::RCS_CONTENT_TYPE_ID,
           'title' => $node_data->getTitle(),
           'langcode' => $langcode,
@@ -171,13 +171,6 @@ class AlshayaRcsProductHelper {
   }
 
   /**
-   * Get Node Storage.
-   */
-  public function getNodeStorage() {
-    return $this->entityTypeManager->getStorage('node');
-  }
-
-  /**
    * Rollback node data from RCS content type.
    */
   public function rollbackProductMigration() {
@@ -186,7 +179,7 @@ class AlshayaRcsProductHelper {
 
     // Get all the nodes from rcs content type, except placeholder node.
     try {
-      $query = $this->getNodeStorage()->getQuery();
+      $query = $this->nodeStorage->getQuery();
       $query->condition('type', self::RCS_CONTENT_TYPE_ID);
       $query->condition('nid', $entity_id, '<>');
       $nodes = $query->execute();
@@ -205,7 +198,7 @@ class AlshayaRcsProductHelper {
     // Delete nodes from RCS content type.
     foreach ($nodes as $node) {
       try {
-        $this->getNodeStorage()->load($node)->delete();
+        $this->nodeStorage->load($node)->delete();
       }
       catch (\Exception $exception) {
         $this->logger->error('Error while deleting nodes from RCS content type. message:@message', [
