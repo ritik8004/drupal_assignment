@@ -27,3 +27,14 @@
     }
   }
 }
+
+.map-store-list {
+  .store-icon,
+  .collection-point-icon {
+    &::before {
+      #{$left}: 0;
+      top: 0.3125rem;
+      transform: none;
+    }
+  }
+}
