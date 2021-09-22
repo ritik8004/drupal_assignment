@@ -381,8 +381,8 @@ window.commerceBackend.createCart = async () => {
   const errorMessage = (!_isUndefined(response.data.error_message))
     ? response.data.error_message
     : '';
-  logger.warning('Error while creating cart on MDC. Error: @error', {
-    '@error': errorMessage,
+  logger.warning('Error while creating cart on MDC. Error: @message', {
+    '@message': errorMessage,
   });
   return null;
 };
