@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific to COS brand.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (($entity->bundle() == 'rcs_product')) {
+    $build['#attached']['library'][] = 'alshaya_cos_transac/product';
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$query_fields) {
+  $query_fields['products']['items']['short_description'] = ['html'];
+}
+

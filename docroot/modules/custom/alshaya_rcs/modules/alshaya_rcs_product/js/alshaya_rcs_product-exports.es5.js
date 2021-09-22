@@ -40,7 +40,7 @@ function isProductBuyable(entity) {
  * @returns {object}
  *   Returns the object containing the value and ellipsis information.
  */
-function createShortDescription(value) {
+function applyEllipsis(value) {
   const limit = drupalSettings.alshayaRcs.shortDescLimit;
   let read_more = false;
 
@@ -212,6 +212,12 @@ exports.render = function render(
 exports.computePhFilters = function (input, filter) {
   let value = '';
   let data = {};
+
+  // Allow other modules/brands to alter the field data.
+  if (typeof rcsFieldDataAlter === 'function') {
+    // The parameters are passed by reference.
+    rcsFieldDataAlter(filter, input);
+  }
 
   switch(filter) {
     case 'price':
@@ -607,23 +613,15 @@ exports.computePhFilters = function (input, filter) {
 
       break;
 
-    case 'title':
+    case 'name':
       value = input.name;
-      if (typeof rcsGetProductTitle === 'function') {
-        value = rcsGetProductTitle(input);
-      }
       break;
 
     case 'description':
       // Prepare the object data for rendering.
       data = {
-        label: '',
-        value: input.description.html,
-      }
-
-      // Brands can define rcsGetProductDescription() to customize how description is generated.
-      if (typeof rcsGetProductDescription === 'function') {
-        data = rcsGetProductDescription(input);
+        label: (typeof input.description.label !== 'undefined') ? input.description.label : '',
+        html: input.description.html,
       }
 
       // Add legal notice.
@@ -640,18 +638,13 @@ exports.computePhFilters = function (input, filter) {
     case 'short_description':
       // Prepare the object data for rendering.
       data = {
-        label: '',
+        label: (typeof input.description.label !== 'undefined') ? input.description.label : '',
         value: input.description.html,
         read_more: false,
       };
 
-      // Brands can define rcsGetProductShortDescription() to customize how short description is generated.
-      if (typeof rcsGetProductShortDescription === 'function') {
-        data = rcsGetProductShortDescription(input);
-      }
-
-      // Compute ellipsis.
-      let tmp = createShortDescription(data.value);
+      // Apply ellipsis.
+      let tmp = applyEllipsis(data.value);
       data.value = tmp.value;
       data.read_more = tmp.read_more;
 

@@ -18,8 +18,7 @@ function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, E
   if (($entity->bundle() == 'rcs_product')) {
     $build['#attached']['library'][] = 'alshaya_tbs_transac/product';
   }
-
-  if ($entity->bundle() == 'acq_product') {
+  else if ($entity->bundle() == 'acq_product') {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
