@@ -18,7 +18,6 @@ exports.render = function render(
     // Update the entity object.
     entity.promotion_banner = promotion_banner;
     entity.promo_banner_for_mobile = promotion_banner_mobile;
-
     // Add hide on mobile class based on API response.
     entity.classes = promo_banner_for_mobile ? '' : 'hide-on-mobile';
 
@@ -32,8 +31,11 @@ exports.render = function render(
  * Replace the placeholders with the Promotional Banner block items.
  *
  * @param {object} entity
+ *   The entity object containing category info.
  * @param {string} itemHtml
+ *   The Promotional Banner HTML with Placeholders.
  * @param {object} settings
+ *   The drupalSettings object.
  * @returns
  *   {string} Promotional Banner HTML with proper data.
  */
@@ -42,7 +44,6 @@ const replacePromoBannerPlaceHolders = function (entity, itemHtml, settings) {
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];
-
       // Apply the replacement on all the elements containing the
       // placeholder. We filter to keep only the child element
       // and not the parent ones.
