@@ -12,6 +12,21 @@ use Drupal\Core\Utility\UpdateException;
 use Drupal\taxonomy\Entity\Term;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add click and collect collection point translations.
+ */
+function alshaya_spc_update_8018() {
+  $strings = [
+    'available in collection point within' => [
+      'ar' => 'available in collection point within ar',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_update().
  *
  * Adds Benefit Pay payment method and other related data.

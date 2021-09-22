@@ -333,9 +333,6 @@ function _alshaya_spc_translations() {
     'Your order will be available for pickup at the following collection point' => [
       'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
     ],
-    'available in collection point within' => [
-      'ar' => 'available in collection point within ar',
-    ],
   ];
 
   $strings['v6'] = [
