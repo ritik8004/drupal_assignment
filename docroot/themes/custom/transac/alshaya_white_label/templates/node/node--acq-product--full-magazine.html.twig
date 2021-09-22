@@ -123,6 +123,10 @@
           {% block afterDescription %}
           {% endblock %}
 
+          {% if content.express_delivery %}
+            {{content.express_delivery}}
+          {% endif %}
+
           {% if content.home_delivery or content.click_and_collect %}
             <div class="delivery-options-wrapper">
               <div class="product-out-of-stock-layer"></div>
@@ -134,10 +138,6 @@
               </div>
             </div>
           {% endif %}
-
-           {% if content.express_delivery %}
-              {{content.express_delivery}}
-            {% endif %}
 
         </div>
 

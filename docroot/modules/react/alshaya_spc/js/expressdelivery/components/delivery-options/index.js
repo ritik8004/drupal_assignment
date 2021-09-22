@@ -1,4 +1,5 @@
 import React from 'react';
+import Collapsible from 'react-collapsible';
 import HomeDeliverySVG from '../../../../../alshaya_pdp_react/js/svg-component/hd-svg';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
@@ -58,26 +59,8 @@ export default class DeliveryOptions extends React.Component {
     });
   };
 
-  showExpressDeliveryBlock = () => {
-    const { open } = this.state;
-
-    if (open) {
-      this.setState({
-        open: false,
-      });
-      this.expandRef.current.classList.add('close-card');
-    } else {
-      this.setState({
-        open: true,
-      });
-      this.expandRef.current.classList.remove('close-card');
-    }
-  };
-
   render() {
-    const { open, shippingMethods, panelContent } = this.state;
-    // Add correct class.
-    const expandedState = open === true ? 'show' : '';
+    const { shippingMethods, panelContent } = this.state;
     // If expressDelivery is not enabled we exit.
     if (isExpressDeliveryEnabled() === false) {
       return null;
@@ -85,39 +68,43 @@ export default class DeliveryOptions extends React.Component {
     if (shippingMethods === null) {
       return null;
     }
+
+    const PdpDeliveryOptionAccordion = (
+      <div
+        className="express-delivery-title-wrapper title"
+      >
+        <div className="express-delivery-title">
+          <span className="card-icon-svg">
+            <HomeDeliverySVG />
+          </span>
+          {Drupal.t('Delivery Options')}
+        </div>
+        <span className="express-delivery-subtitle">{Drupal.t('Explore the delivery options applicable to your area.')}</span>
+      </div>
+    );
+
     return (
       <div
-        className="pdp-express-delivery-wrapper card fadeInUp"
-        style={{ animationDelay: '1s' }}
+        className="pdp-express-delivery-wrapper card"
         ref={this.expandRef}
       >
-        <div
-          className={`express-delivery-title-wrapper title ${expandedState}`}
-          onClick={() => this.showExpressDeliveryBlock()}
-        >
-          <div className="express-delivery-title">
-            <span className="card-icon-svg">
-              <HomeDeliverySVG />
-            </span>
-            {Drupal.t('Delivery Options')}
-          </div>
-          <div className="accordion" />
-        </div>
-        <div className="content express-delivery-detail">
-          <span>{Drupal.t('Explore the delivery options applicable to your area.')}</span>
-          <PdpShippingMethods
-            shippingMethods={shippingMethods}
-          />
-          <PdpSelectArea
-            getPanelData={this.getPanelData}
-            removePanelData={this.removePanelData}
-          />
-          <div className="select-area-popup-wrapper">
-            <SelectAreaPanel
-              panelContent={panelContent}
+        <Collapsible trigger={PdpDeliveryOptionAccordion}>
+          <div className="content express-delivery-detail">
+            <PdpShippingMethods
+              shippingMethods={shippingMethods}
             />
+            <PdpSelectArea
+              getPanelData={this.getPanelData}
+              removePanelData={this.removePanelData}
+            />
+            <div className="select-area-popup-wrapper">
+              <SelectAreaPanel
+                panelContent={panelContent}
+              />
+            </div>
           </div>
-        </div>
+        </Collapsible>
+
       </div>
     );
   }
