@@ -153,9 +153,7 @@ class LocalCommand extends BltTasks {
       ->run();
 
     // Now the last thing, dev script, I love it :).
-    $dev_script_path = getenv('LANDO')
-      ? '/app/scripts/install-site-dev.sh'
-      : '/var/www/alshaya/scripts/install-site-dev.sh';
+    $dev_script_path = $this->getConfigValue('repo.root') . '/scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
       $this->_exec('sh ' . $dev_script_path . ' ' . $info['local']['url']);
     }
@@ -240,11 +238,7 @@ class LocalCommand extends BltTasks {
     static $path;
 
     if (!isset($path)) {
-      $path = '/var/www/alshaya/files-private';
-
-      if (getenv('LANDO')) {
-        $path = '/app/files-private';
-      }
+      $path = $this->getConfigValue('repo.root') . '/files-private';
 
       if (!file_exists($path)) {
         $this->say('Creating temp directory at: ' . $path);
@@ -282,7 +276,7 @@ class LocalCommand extends BltTasks {
       return $static[$env][$site];
     }
 
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
 
     if (empty($site) || empty($sites[$site])) {
@@ -296,9 +290,7 @@ class LocalCommand extends BltTasks {
 
     $info['profile'] = $site_data['type'];
 
-    $info['local']['url'] = getenv('LANDO')
-      ? $site . '.alshaya.lndo.site'
-      : 'local.alshaya-' . $site . '.com';
+    $info['local']['url'] = CustomCommand::getSiteUri($site);
     $info['local']['alias'] = 'self';
 
     foreach ($this->stacks as $alias_prefix) {

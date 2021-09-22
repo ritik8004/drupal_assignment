@@ -223,7 +223,7 @@ const getLastOrder = async (customerId) => {
   try {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
     if (!hasValue(order.data) || hasValue(order.data.error)) {
-      logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
+      logger.warning('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
         '@response': JSON.stringify(order.data),
         '@customer_id': customerId,
       });
@@ -350,7 +350,7 @@ const getCartStores = async (lat, lon) => {
 
   // If cart not available in session, log the error and return empty array.
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session');
+    logger.warning('Error while fetching click and collect stores. No cart available in session');
     return [];
   }
 
@@ -426,7 +426,7 @@ const getCartStores = async (lat, lon) => {
 const getCncStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session.');
+    logger.warning('Error while fetching click and collect stores. No cart available in session.');
     return getFormattedError(404, 'No cart in session');
   }
 
@@ -1926,7 +1926,7 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   if (_isObject(cart) && isCartHasOosItem(cart.data)) {
-    logger.error('Error while placing order. Cart has an OOS item. Cart: @cart', {
+    logger.warning('Error while placing order. Cart has an OOS item. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
 
