@@ -12,7 +12,6 @@
  */
 function alshaya_cos_update_8001() {
   \Drupal::service('module_installer')->install(['alshaya_magazine']);
-  //\Drupal::configFactory()->getEditable('field.field.node.magazine_article.field_magazine_paragraphs')->save();
   // Configure ShareThis defaults.
   // Configure for which content type ShareThis widget should appear.
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
