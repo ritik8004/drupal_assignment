@@ -335,7 +335,7 @@ function _alshaya_spc_translations() {
     ],
     'available in collection point within' => [
       'ar' => 'available in collection point within ar',
-    ]
+    ],
   ];
 
   $strings['v6'] = [
