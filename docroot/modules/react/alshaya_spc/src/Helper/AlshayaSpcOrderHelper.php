@@ -411,6 +411,8 @@ class AlshayaSpcOrderHelper {
       $store_code = $order['shipping']['extension_attributes']['store_code'];
       $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
       $orderDetails['view_on_map_link'] = '';
+      $orderDetails['collection_charge'] = $order['shipping']['extension_attributes']['price_amount'] ?? '';
+      $orderDetails['collection_date'] = $order['shipping']['extension_attributes']['pickup_date'] ?? '';
 
       // Getting store node object from store code.
       if ($store_data = $this->storeFinder->getMultipleStoresExtraData([$store_code => []])) {
