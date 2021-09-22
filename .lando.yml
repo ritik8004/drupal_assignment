@@ -9,7 +9,7 @@ config:
 services:
   database:
     app_mount: disabled
-    type: mysql:5.7
+    type: mariadb
     creds:
       user: drupal
       password: drupal
