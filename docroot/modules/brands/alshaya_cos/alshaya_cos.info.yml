@@ -9,3 +9,5 @@ dependencies:
   - alshaya_i18n:alshaya_i18n
   - alshaya_block:alshaya_paragraph_block
   - alshaya_stores_finder:alshaya_stores_migrate
+  - drupal:video_embed_field
+  - alshaya_magazine:alshaya_magazine
