@@ -65,7 +65,7 @@ export default class AreaListBlock extends React.Component {
             governateDefault: defaultOptions,
           });
           removeFullScreenLoader();
-          dispatchCustomEvent('addOverlayClass', {});
+          dispatchCustomEvent('openDeliveryAreaPanel', {});
         }
       },
     );

@@ -30,6 +30,7 @@ import DeliveryAreaSelect from '../delivery-area-select';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -152,7 +153,7 @@ export default class Cart extends React.Component {
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
     // Show labels for delivery methods if express delivery enabled.
-    if (drupalSettings.expressDelivery.enabled) {
+    if (isExpressDeliveryEnabled()) {
       document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
     }
 
@@ -347,7 +348,7 @@ export default class Cart extends React.Component {
                 <span>{`${Drupal.t('my shopping bag')} `}</span>
                 <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
               </SectionTitle>
-              <ConditionalView condition={drupalSettings.expressDelivery.enabled === true}>
+              <ConditionalView condition={isExpressDeliveryEnabled()}>
                 <DeliveryAreaSelect
                   animationDelayValue="0.4s"
                   getPanelData={this.getPanelData}

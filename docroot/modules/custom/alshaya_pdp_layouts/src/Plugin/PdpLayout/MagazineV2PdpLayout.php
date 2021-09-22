@@ -153,7 +153,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $flags_status = alshaya_acm_product_get_flags_status($sku);
     // Express Delivery Text.
     if ($flags_status['express_delivery']['status'] && $express_delivery_config->get('status')) {
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['express_delivery_text'] = $this->t('Express Delivery available');
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['express_delivery'] = TRUE;
     }
 
     // Set delivery options only if product is buyable.

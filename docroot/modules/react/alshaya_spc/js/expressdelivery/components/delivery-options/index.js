@@ -1,5 +1,6 @@
 import React from 'react';
 import HomeDeliverySVG from '../../../../../alshaya_pdp_react/js/svg-component/hd-svg';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { getStorageInfo } from '../../../utilities/storage';
@@ -74,12 +75,11 @@ export default class DeliveryOptions extends React.Component {
   };
 
   render() {
-    const { expressDelivery } = drupalSettings;
     const { open, shippingMethods, panelContent } = this.state;
     // Add correct class.
     const expandedState = open === true ? 'show' : '';
-    // If expressDelivery is not set we exit.
-    if (expressDelivery === undefined) {
+    // If expressDelivery is not enabled we exit.
+    if (isExpressDeliveryEnabled() === false) {
       return null;
     }
     if (shippingMethods === null) {
@@ -99,12 +99,12 @@ export default class DeliveryOptions extends React.Component {
             <span className="card-icon-svg">
               <HomeDeliverySVG />
             </span>
-            {expressDelivery.title}
+            {Drupal.t('Delivery Options')}
           </div>
           <div className="accordion" />
         </div>
         <div className="content express-delivery-detail">
-          <span>{expressDelivery.subtitle}</span>
+          <span>{Drupal.t('Explore the delivery options applicable to your area.')}</span>
           <PdpShippingMethods
             shippingMethods={shippingMethods}
           />

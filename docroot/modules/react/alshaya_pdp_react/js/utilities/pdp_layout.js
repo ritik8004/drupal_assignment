@@ -218,7 +218,6 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let stockQty = '';
   let firstChild = '';
   let promotions = '';
-  let expressDeliveryText = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -257,7 +256,6 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
     promotions = productInfo[skuItemCode].promotionsRaw;
-    expressDeliveryText = productInfo[skuItemCode].express_delivery_text;
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
@@ -333,7 +331,6 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
-    expressDeliveryText,
   };
 };
 

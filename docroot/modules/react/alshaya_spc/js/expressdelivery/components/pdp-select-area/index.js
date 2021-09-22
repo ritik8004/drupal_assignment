@@ -45,7 +45,7 @@ export default class PdpSelectArea extends React.Component {
 
   openModal = () => {
     // to make sure that markup is present in DOM.
-    document.addEventListener('addOverlayClass', this.addOverlayClass);
+    document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
     return (
       <AreaListBlock
         closeModal={() => this.closeModal()}
@@ -53,7 +53,7 @@ export default class PdpSelectArea extends React.Component {
     );
   };
 
-  addOverlayClass = (event) => {
+  openDeliveryAreaPanel = (event) => {
     event.preventDefault();
     // to make sure that markup is present in DOM.
     document.querySelector('body').classList.add('overlay-delivery-area');

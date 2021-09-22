@@ -21,6 +21,7 @@ import Lozenges
 import PpdRatingsReviews from '../pdp-ratings-reviews';
 import DeliveryOptions from '../../../../../alshaya_spc/js/expressdelivery/components/delivery-options';
 import ConditionalView from '../../../../../alshaya_spc/js/common/components/conditional-view';
+import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -74,7 +75,6 @@ const PdpLayout = () => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
-    expressDeliveryText,
   } = productValues;
 
   const emptyRes = (
@@ -220,11 +220,11 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
-          <ConditionalView condition={drupalSettings.expressDelivery.enabled
-            && expressDeliveryText}
+          <ConditionalView condition={isExpressDeliveryEnabled()
+            && checkProductExpressDeliveryStatus(skuItemCode)}
           >
             <div className="express-delivery-wrapper">
-              <div className="express-delivery-text">{expressDeliveryText}</div>
+              <div className="express-delivery-text">{Drupal.t('Express Delivery available')}</div>
             </div>
           </ConditionalView>
           <PpdRatingsReviews
@@ -260,10 +260,10 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
-          <ConditionalView condition={drupalSettings.expressDelivery.enabled}>
+          <ConditionalView condition={isExpressDeliveryEnabled()}>
             <DeliveryOptions />
           </ConditionalView>
-          <ConditionalView condition={!drupalSettings.expressDelivery.enabled}>
+          <ConditionalView condition={!isExpressDeliveryEnabled()}>
             <PdpStandardDelivery />
           </ConditionalView>
           {stockStatus ? (

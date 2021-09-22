@@ -35,7 +35,7 @@ export default class DeliveryAreaSelect extends React.Component {
   }
 
   openModal = () => {
-    document.addEventListener('addOverlayClass', this.addOverlayClass);
+    document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
 
     return (
       <AreaListBlock
@@ -52,7 +52,7 @@ export default class DeliveryAreaSelect extends React.Component {
     }, 400);
   };
 
-  addOverlayClass = (event) => {
+  openDeliveryAreaPanel = (event) => {
     event.preventDefault();
     // to make sure that markup is present in DOM.
     document.querySelector('body').classList.add('overlay-delivery-area');
