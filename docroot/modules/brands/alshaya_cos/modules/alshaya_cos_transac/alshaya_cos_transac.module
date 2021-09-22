@@ -21,6 +21,9 @@ function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, E
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$query_fields) {
-  $query_fields['products']['items']['short_description'] = ['html'];
+  $query_fields['products']['items']['promotions'] = [
+    'type',
+    'label',
+    'url',
+  ];
 }
-

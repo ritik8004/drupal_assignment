@@ -31,11 +31,10 @@
         </div>
       </a>
 
-      {{'@todo ask about promotions'}}
       {{#if promotions }}
       <div class="promotions above-mobile-block">
         {{#each promotions as | promotion |}}
-          <a href="{{ promotion.url }}" hreflang="en">{{ promotion.name }}</a><br>
+          <a href="/{{ url }}" hreflang="en">{{ label }}</a><br>
         {{/each}}
       </div>
       {{/if}}
@@ -84,12 +83,11 @@
           </td>
         </tr>
 
-        {{'@todo ask about promotions'}}
         {{#if promotions }}
         <tr>
           <td colspan="2" class="sell-promotions promotions">
             {{#each promotions as | promotion |}}
-            <a href="{{ promotion.url }}" hreflang="en">{{ promotion.name }}</a><br>
+            <a href="/{{ url }}" hreflang="en">{{ label }}</a><br>
             {{/each}}
           </td>
         </tr>
