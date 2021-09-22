@@ -3,7 +3,7 @@ const Handlebars = require("handlebars");
 /**
  * Register helper for Drupal.t().
  */
-Handlebars.registerHelper('t', (str) => Drupal.t(str));
+Handlebars.registerHelper('t', (str) => rcsTranslatedText(str));
 
 /**
  * Returns the value from object using nested keys i.e. "field.field_name"

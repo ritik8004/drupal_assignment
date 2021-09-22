@@ -4,48 +4,21 @@
  */
 
 /**
- * Provides the product title for RCS Product token replacements.
- * @see alshaya_rcs_product-exports.es5.js
+ * Alter the field data.
  *
+ * @param fieldName
+ *   The field name being processed.
  * @param data
- *    The data.
- *
- * @return {string}
- *    The title.
+ *   The data set.
  */
-window.rcsGetProductTitle = function (data) {
-  // @todo aggregate title when CORE-34014 is done.
-  return data.name;
-};
+window.rcsFieldDataAlter = function (fieldName, data) {
+  switch (fieldName) {
+    case 'description':
+      data[fieldName].label = rcsTranslatedText('Features and benefits');
+      break;
 
-/**
- * Provides the product description for RCS Product token replacements.
- * @see alshaya_rcs_product-exports.es5.js
- *
- * @param data
- *    The data.
- *
- * @return {object}
- *    The object containing label and value.
- */
-window.rcsGetProductDescription = function (data) {
-  // @todo aggregate data, including ingredients, etc. when CORE-34014.
-  return {
-    label: Drupal.t('Features and benefits'),
-    value: data.description.html
-  };
-};
-
-/**
- * Provides the product short description for RCS Product token replacements.
- * @see alshaya_rcs_product-exports.es5.js
- *
- * @param data
- *    The data.
- *
- * @return {object}
- *    The object containing label and value.
- */
-window.rcsGetProductShortDescription = function (data) {
-  return rcsGetProductDescription(data);
+    case 'short_description':
+      data[fieldName] = data['description'];
+      break;
+  }
 };

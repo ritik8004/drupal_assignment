@@ -2,7 +2,7 @@
   <span class="close"></span>
   <h2 class="field__label">{{t 'Product Description' }}</h2>
   <div class="field__content">
-    {{#if value }}
+    {{#if html }}
       <div class="desc-wrapper">
         {{#if label }}
           <div class="desc-label">
@@ -10,10 +10,11 @@
           </div>
         {{/if}}
         <div class="desc-value">
-          {{ value }}
+          {{{ html }}}
         </div>
       </div>
     {{/if}}
+
     {{#if legal_notice.enabled }}
       <div class="legal-notice desc-wrapper">
         <div class="desc-label">
