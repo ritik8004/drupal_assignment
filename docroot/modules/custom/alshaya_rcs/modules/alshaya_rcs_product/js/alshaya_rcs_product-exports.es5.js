@@ -613,7 +613,7 @@ exports.computePhFilters = function (input, filter) {
 
       break;
 
-    case 'title':
+    case 'name':
       value = input.name;
       break;
 
