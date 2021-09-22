@@ -1331,8 +1331,8 @@ $magentos = [
     'magento_secrets' => [
       'consumer_key' => 'nfjdttxqyqdaj81nilo4sab9wl7kkb0x',
       'consumer_secret' => '5szrlic4mwpoxyjl11mhrxux287lykdc',
-      'access_token' => 'qwgohy4l3xnbcz63nhvb5u5soezfizka',
-      'access_token_secret' => 'a5seetf8c166nnkwgk7cbunjxv8l9jdu',
+      'access_token' => 'za6fq085dk474fzhn4onve3p2r2yt1hh',
+      'access_token_secret' => 'kpo41se2e2f0r1n21xsl0qrsg3crr99a',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],
