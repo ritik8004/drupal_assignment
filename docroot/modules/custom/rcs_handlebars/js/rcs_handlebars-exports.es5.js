@@ -35,15 +35,15 @@ function resolvePath(path, obj=self, separator='.') {
  *   Returns the object containing the value and ellipsis information.
  */
 function handlebarsRender(template, data) {
-  let templates = (typeof window !== 'undefined')
+  const templates = (typeof window !== 'undefined')
     ? window.rcsHandlebarsTemplates
     : rcsHandlebarsTemplates;
 
   // Get the source template.
-  let source = resolvePath(template, templates);
+  const source = resolvePath(template, templates);
 
   // Compile source.
-  let render = Handlebars.compile(source);
+  const render = Handlebars.compile(source);
 
   // Return rendered template using data provided.
   return render(data);
