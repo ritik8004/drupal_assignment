@@ -1,4 +1,5 @@
 import React from 'react';
+import _isEmpty from 'lodash/isEmpty';
 import connectRefinementList from '../connectors/connectRefinementList';
 
 const DeliveryTypeFilter = ({
@@ -10,10 +11,16 @@ const DeliveryTypeFilter = ({
     }, 1);
   }
   const deliveryItems = [];
+  if (_isEmpty(items)) {
+    return null;
+  }
   Object.entries(items).forEach(([key, item]) => {
     deliveryItems[key] = item;
   });
   const { facetValues } = props;
+  if (_isEmpty(deliveryItems)) {
+    return null;
+  }
   return (
     <ul>
       {deliveryItems.map((item) => {

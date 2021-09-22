@@ -48,9 +48,9 @@ function selectedFiltersLables(attribute, value, filter) {
     }
 
     case 'delivery_ways': {
-      const selctionVal = value;
-      selctionText = (selctionVal > 1)
-        ? `${Drupal.t(selctionVal)}` : `${Drupal.t(selctionVal)}`;
+      const selectedVal = value;
+      selctionText = (selectedVal > 1)
+        ? `${Drupal.t(selectedVal)}` : `${Drupal.t(selectedVal)}`;
       break;
     }
 
