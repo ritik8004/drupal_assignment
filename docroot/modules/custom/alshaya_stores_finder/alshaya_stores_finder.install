@@ -19,10 +19,17 @@ function alshaya_stores_finder_update_8111() {
   $manager->updateConfigs([
     'field.storage.node.field_store_type',
     'field.field.node.store.field_store_type',
-    'views.view.stores_finder'
   ],
     'alshaya_stores_finder',
     'install'
+  );
+
+  // Add filter in store finder view to display only stores.
+  $manager->updateConfigs(
+    ['views.view.stores_finder'],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
 }
 

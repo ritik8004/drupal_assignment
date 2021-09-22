@@ -40,3 +40,9 @@
     display: none;
   }
 }
+
+.map-store-list {
+  .pudo-collection-list {
+    padding-#{$left}: 2.125rem;
+  }
+}

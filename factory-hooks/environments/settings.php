@@ -358,6 +358,25 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'cos' => [
+      'default' => [
+        'default' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9877008',
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => '7VNXTHS45C',
+            'write_api_key' => '65c08aed95c6d80761359d48d1855867',
+            'search_api_key' => '499f306893efbb300b4ae733b42d5bdd',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9877013',
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
