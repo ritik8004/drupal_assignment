@@ -396,7 +396,7 @@ class AlshayaAlgoliaIndexHelper {
       foreach ($available_translation_langcode as $langcode => $value) {
         $promotion['url_' . $langcode] = Url::fromRoute('entity.node.canonical', ['node' => $nid], ['language' => $this->languageManager->getLanguage($langcode)])->toString();
       }
-      $promotion['id'] = $nid;
+      $promotion['id'] = $node->get('field_acq_promotion_rule_id')->getString();
     });
 
     $object['promotions'] = array_values($promotions);
