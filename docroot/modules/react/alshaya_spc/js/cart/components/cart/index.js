@@ -28,6 +28,9 @@ import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
 import DeliveryAreaSelect from '../delivery-area-select';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
+import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -46,6 +49,7 @@ export default class Cart extends React.Component {
       messageType: null,
       message: null,
       cartShippingMethods: null,
+      panelContent: null,
     };
   }
 
@@ -149,7 +153,7 @@ export default class Cart extends React.Component {
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
     // Show labels for delivery methods if express delivery enabled.
-    if (drupalSettings.cart.expressDeliveryEnabled) {
+    if (isExpressDeliveryEnabled()) {
       document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
     }
 
@@ -229,6 +233,7 @@ export default class Cart extends React.Component {
 
   displayShippingMethods = (event) => {
     const currentArea = event.detail;
+    showFullScreenLoader();
     getCartShippingMethods(currentArea).then(
       (response) => {
         if (response !== null) {
@@ -236,9 +241,24 @@ export default class Cart extends React.Component {
             cartShippingMethods: response,
           });
         }
+        removeFullScreenLoader();
       },
     );
   }
+
+  // Adding panel for area list block.
+  getPanelData = (data) => {
+    this.setState({
+      panelContent: data,
+    });
+  };
+
+  // Removing panel for area list block.
+  removePanelData = () => {
+    this.setState({
+      panelContent: null,
+    });
+  };
 
   render() {
     const {
@@ -255,6 +275,7 @@ export default class Cart extends React.Component {
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
       cartShippingMethods,
+      panelContent,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -329,8 +350,12 @@ export default class Cart extends React.Component {
                 <span>{`${Drupal.t('my shopping bag')} `}</span>
                 <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
               </SectionTitle>
-              <ConditionalView condition={drupalSettings.cart.expressDeliveryEnabled === true}>
-                <DeliveryAreaSelect animationDelayValue="0.4s" />
+              <ConditionalView condition={isExpressDeliveryEnabled()}>
+                <DeliveryAreaSelect
+                  animationDelayValue="0.4s"
+                  getPanelData={this.getPanelData}
+                  removePanelData={this.removePanelData}
+                />
               </ConditionalView>
             </div>
             <DeliveryInOnlyCity />
@@ -366,6 +391,13 @@ export default class Cart extends React.Component {
         <div className="spc-footer">
           <VatFooterText />
         </div>
+        <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <div className="select-area-popup-wrapper">
+            <SelectAreaPanel
+              panelContent={panelContent}
+            />
+          </div>
+        </ConditionalView>
       </>
     );
   }

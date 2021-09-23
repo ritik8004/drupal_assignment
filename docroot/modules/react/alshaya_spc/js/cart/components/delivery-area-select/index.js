@@ -1,5 +1,4 @@
 import React from 'react';
-import Popup from 'reactjs-popup';
 import dispatchCustomEvent from '../../../utilities/events';
 import { getStorageInfo } from '../../../utilities/storage';
 import AreaListBlock from '../area-list-block';
@@ -8,8 +7,7 @@ export default class DeliveryAreaSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModelOpen: false,
-      areaLabel: Drupal.t('Select Area'),
+      areaLabel: Drupal.t('Select'),
     };
   }
 
@@ -37,47 +35,39 @@ export default class DeliveryAreaSelect extends React.Component {
   }
 
   openModal = () => {
-    document.body.classList.add('open-form-modal');
+    document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
 
-    this.setState({
-      isModelOpen: true,
-    });
+    return (
+      <AreaListBlock
+        closeModal={() => this.closeModal()}
+      />
+    );
   };
 
   closeModal = () => {
-    document.body.classList.remove('open-form-modal');
-
-    this.setState({
-      isModelOpen: false,
-    });
+    const { removePanelData } = this.props;
+    document.querySelector('body').classList.remove('overlay-delivery-area');
+    setTimeout(() => {
+      removePanelData();
+    }, 400);
   };
 
-  render() {
-    const {
-      isModelOpen,
-      areaLabel,
-    } = this.state;
+  openDeliveryAreaPanel = (event) => {
+    event.preventDefault();
+    // to make sure that markup is present in DOM.
+    document.querySelector('body').classList.add('overlay-delivery-area');
+  }
 
-    const { animationDelayValue } = this.props;
+  render() {
+    const { areaLabel } = this.state;
+    const { getPanelData, animationDelayValue } = this.props;
 
     return (
       <div id="delivery-area-select" className="fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <div className="delivery-area-label">
           <span>{`${Drupal.t('Deliver to')}: `}</span>
           <span className="delivery-area-name">{areaLabel}</span>
-          <span onClick={() => this.openModal()} className="delivery-area-button">
-            Arrow
-          </span>
-          <Popup
-            open={isModelOpen}
-            className="spc-area-list-popup"
-            closeOnDocumentClick={false}
-            closeOnEscape={false}
-          >
-            <AreaListBlock
-              closeModal={() => this.closeModal()}
-            />
-          </Popup>
+          <span onClick={() => getPanelData(this.openModal())} className="delivery-area-button" />
         </div>
       </div>
     );

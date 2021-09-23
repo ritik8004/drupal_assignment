@@ -1,1 +1,4 @@
 status: false
+delivery_options_order:
+  - same_day_delivery
+  - express_delivery

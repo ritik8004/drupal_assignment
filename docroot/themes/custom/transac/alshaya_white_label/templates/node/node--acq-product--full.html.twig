@@ -79,6 +79,16 @@ set classes = [
           {% endif %}
 
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+          
+          {% if content.delivery_options %}
+            <div class="express-delivery">
+              {% for delivery_option in content.delivery_options %}
+                <div class="express-delivery-text">
+                  <p>{{ delivery_option }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
 
           {% if content.same_day_delivery_text %}
             <div class="same-day-delivery">
@@ -192,6 +202,10 @@ set classes = [
 
             {% block afterDescription %}
             {% endblock %}
+
+            {% if content.express_delivery %}
+              {{content.express_delivery}}
+            {% endif %}
 
             {% if content.home_delivery or content.click_and_collect %}
               <div class="delivery-options-wrapper">

@@ -1333,49 +1333,54 @@ window.commerceBackend.getDeliveryAreaList = async (governateId) => {
  * @returns {Promise<object>}
  *  returns list of governates.
  */
-window.commerceBackend.getCartShippingMethod = async (currentArea) => {
-  const cartData = window.commerceBackend.getCartDataFromStorage();
-  if (cartData !== null) {
-    try {
-      const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
-      const attributes = [];
-      if (currentArea !== null) {
-        Object.keys(currentArea.value).forEach((key) => {
-          const areaItemsObj = {
-            attribute_code: key,
-            value: currentArea.value[key],
-          };
-          attributes.push(areaItemsObj);
-        });
-      }
-      const params = {
-        productAndAddressInformation: {
-          cart_id: cartData.cart.cart_id_int,
-          product_sku: null,
-          address: {
-            custom_attributes: attributes,
-          },
-        },
-      };
-      // Associate cart to customer.
-      const response = await callMagentoApi(url, 'POST', params);
-      if (!hasValue(response.data) || hasValue(response.data.error)) {
-        logger.error('Error occurred while fetching governates, Response: @response.', {
-          '@response': JSON.stringify(response.data),
-        });
-        return null;
-      }
-
-      // If no city available, return empty.
-      if (_isEmpty(response.data)) {
-        return null;
-      }
-      return response.data;
-    } catch (error) {
-      logger.error('Error occurred while fetching governates data. Message: @message.', {
-        '@message': error.message,
-      });
+window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined) => {
+  let cartId = null;
+  if (sku === undefined) {
+    const cartData = window.commerceBackend.getCartDataFromStorage();
+    if (cartData.cart.cart_id !== null) {
+      cartId = cartData.cart.cart_id_int;
     }
+  }
+  const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
+  const attributes = [];
+  if (currentArea !== null) {
+    Object.keys(currentArea.value).forEach((key) => {
+      const areaItemsObj = {
+        attribute_code: key,
+        value: currentArea.value[key],
+      };
+      attributes.push(areaItemsObj);
+    });
+  }
+  try {
+    const params = {
+      productAndAddressInformation: {
+        cart_id: cartId,
+        product_sku: (sku !== undefined) ? sku : null,
+        address: {
+          custom_attributes: attributes,
+        },
+      },
+    };
+
+    // Associate cart to customer.
+    const response = await callMagentoApi(url, 'POST', params);
+    if (!hasValue(response.data) || hasValue(response.data.error)) {
+      logger.error('Error occurred while fetching governates, Response: @response.', {
+        '@response': JSON.stringify(response.data),
+      });
+      return null;
+    }
+
+    // If no city available, return empty.
+    if (_isEmpty(response.data)) {
+      return null;
+    }
+    return response.data;
+  } catch (error) {
+    logger.error('Error occurred while fetching governates data. Message: @message.', {
+      '@message': error.message,
+    });
   }
   return {};
 };
