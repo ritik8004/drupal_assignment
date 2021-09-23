@@ -729,13 +729,13 @@ class ProductResource extends ResourceBase {
         continue;
       }
       // Load promotion object.
-      $promo_obj = $this->nodeStorage->load($nid);
+      $promo_node = $this->nodeStorage->load($nid);
       $promotions[] = [
         'text' => $promotion['text'],
         'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
           '',
           Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl()),
-        'promo_node' => (int) $promo_obj->get('field_acq_promotion_rule_id')->getString(),
+        'promo_node' => (int) $promo_node->get('field_acq_promotion_rule_id')->getString(),
       ];
     }
     return $promotions;
