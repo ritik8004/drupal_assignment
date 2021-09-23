@@ -156,6 +156,66 @@
       cursor: pointer;
     }
   }
+
+  .select-area-popup-wrapper {
+    .spc-checkout-section-title {
+      font-family: $alshaya-bold;
+      text-transform: capitalize;
+      font-size: 1.125rem;
+      margin-bottom: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1rem;
+      }
+    }
+
+    .spc-select {
+      .spcSelect__control {
+        height: 2.375rem;
+        box-shadow: none;
+        cursor: pointer;
+
+        > div:nth-child(2) {
+          .spcSelect__indicator-separator {
+            display: none;
+          }
+
+          .spcSelect__indicator {
+            color: $spc-select-text;
+          }
+        }
+
+        .spcSelect__dropdown-indicator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &::before {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.125s ease-in-out;
+          }
+
+          svg {
+            visibility: hidden;
+          }
+        }
+
+        &--menu-is-open {
+          .spcSelect__dropdown-indicator {
+            &::before {
+              transform: translateY(-50%) rotate(180deg);
+            }
+          }
+        }
+      }
+
+      .spcSelect__menu {
+        z-index: 3;
+      }
+    }
+  }
 }
 
 .magazine-layout-v2 {
