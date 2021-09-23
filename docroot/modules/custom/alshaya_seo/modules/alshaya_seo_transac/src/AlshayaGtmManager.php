@@ -93,6 +93,7 @@ class AlshayaGtmManager {
   const LIST_GTM_MAPPING = [
     'view.search.page' => 'Search Results Page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
+    'entity.taxonomy_term.canonical:rcs_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'entity.node.canonical:rcs_product' => 'PDP',
     'entity.node.canonical:acq_promotion' => 'Promotion',
