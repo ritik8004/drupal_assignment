@@ -4,7 +4,7 @@ import GridButtons from '../grid-buttons';
 
 export default function GridAndCount(props) {
   const { children } = props;
-  const { hideGridSwitch } = drupalSettings.algoliaSearch;
+  const { hideGridToggle } = drupalSettings.algoliaSearch;
   return (
     <div className="block block-alshaya-grid-count-block">
       <div className="total-result-count">
@@ -12,7 +12,7 @@ export default function GridAndCount(props) {
           {children}
         </div>
       </div>
-      <ConditionalView condition={!hideGridSwitch}>
+      <ConditionalView condition={!hideGridToggle}>
         <GridButtons />
       </ConditionalView>
     </div>

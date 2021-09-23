@@ -26,9 +26,9 @@ alshaya_algolia_react.settings:
     items_per_page:
       type: integer
       label: 'Number of items to show for search results.'
-    hide_grid_switch:
+    hide_grid_toggle:
       type: boolean
-      label: 'Hide grid switch option in srp/plp.'
+      label: 'Grid toggle hide/show in srp/plp.'
 
 alshaya_algolia_react.product_frames:
   type: config_object

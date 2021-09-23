@@ -11,7 +11,7 @@
 function alshaya_cos_transac_install() {
   // Hide grid switch option on listing pages.
   \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
-  ->set('hide_grid_switch', 1)
+  ->set('hide_grid_toggle', 1)
   ->save();
 
   // Enable and set alshaya_cos as default theme and set the site logo,
