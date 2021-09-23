@@ -214,7 +214,6 @@ function getVariantsInfo(product) {
       sku: variantInfo.sku,
       parent_sku: product.sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
-      identifier: window.commerceBackend.cleanCssIdentifier(variantInfo.sku),
       // @todo Fetch layout dynamically.
       layout: 'classic',
       gallery: '',
@@ -249,6 +248,7 @@ function processProduct(product) {
     type: product.type_id,
     gtm_attributes: product.gtm_attributes,
     gallery: null,
+    identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
   };
 
   if (productData.type === 'configurable') {
