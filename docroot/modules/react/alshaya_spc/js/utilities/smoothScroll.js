@@ -28,7 +28,7 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
   let homeDelivery = false;
   // Check if we are in HD or CC modal.
   if (container === null || container === undefined) {
-    container = document.querySelector('.spc-cnc-address-form-sidebar');
+    container = document.querySelector('.spc-cnc-selected-store-content');
   }
   // Check if we need to scroll to contact fields.
   if (contactField === true) {
@@ -38,7 +38,7 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
       homeDelivery = true;
     } else {
       addressOffset = document.querySelector('.store-details-wrapper').offsetHeight
-        + document.querySelector('#click-and-collect-selected-store > .spc-checkout-section-title').offsetHeight;
+        + document.querySelector('#click-and-collect-selected-store > .spc-cnc-selected-store-header').offsetHeight;
       contactHeaderOffset = document.querySelector('.spc-contact-information-header').offsetHeight;
     }
   }
