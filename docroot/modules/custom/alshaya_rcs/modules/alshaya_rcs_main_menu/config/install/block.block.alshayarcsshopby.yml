@@ -15,5 +15,5 @@ settings:
   id: alshaya_rcs_shop_by_block
   label: 'Alshaya Rcs Shop by'
   provider: alshaya_rcs_main_menu
-  label_display: visible
+  label_display: '0'
 visibility: {  }

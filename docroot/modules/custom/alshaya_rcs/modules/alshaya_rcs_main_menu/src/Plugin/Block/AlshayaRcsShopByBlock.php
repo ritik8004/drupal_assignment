@@ -2,8 +2,7 @@
 
 namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 
-use Drupal\Core\Block\BlockBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_acm_product_category\Plugin\Block\AlshayaShopByBlock;
 
 /**
  * Provides alshaya rcs shop by block.
@@ -13,32 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   admin_label = @Translation("Alshaya rcs shop by")
  * )
  */
-class AlshayaRcsShopByBlock extends BlockBase {
-
-  /**
-   * AlshayaMegaMenuBlock constructor.
-   *
-   * @param array $configuration
-   *   The configuration.
-   * @param string $plugin_id
-   *   Plugin id.
-   * @param mixed $plugin_definition
-   *   Plugin definition.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition
-    );
-  }
+class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
 
   /**
    * {@inheritdoc}
