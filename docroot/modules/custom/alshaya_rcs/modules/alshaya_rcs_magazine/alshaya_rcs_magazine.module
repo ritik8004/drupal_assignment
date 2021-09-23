@@ -30,14 +30,15 @@ function alshaya_rcs_magazine_preprocess_field__node__field_magazine_shop_the_st
   $variables['items'] = [
     [
       'content' => [
-        '#markup' => '',
+        '#markup' => '<div class="rcs-loading"></div>',
       ],
       'attributes' => new Attribute(),
     ],
   ];
+
   // Add classes to the field item to allow us to hide the RCS placeholders
   // and display skeletons on initial load.
-  $variables['items'][0]['attributes']->setAttribute('class', 'rcs rcs-loading rcs-magazine-article');
+  $variables['items'][0]['attributes']->setAttribute('class', 'rcs rcs-magazine-article');
 
   // Add id to let RCS find the placeholder.
   $variables['items'][0]['attributes']->setAttribute('id', 'rcs-ph-magazine_shop_the_story');
