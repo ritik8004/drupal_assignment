@@ -385,6 +385,13 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to collection point feature.
+  $strings['v9'] = [
+    'Collection Charge' => [
+      'ar' => 'Collection Charge AR',
+    ],
+  ];
+
   return $strings;
 }
 

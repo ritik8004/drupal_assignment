@@ -10,6 +10,8 @@ import ConditionalView from '../../common/components/conditional-view';
 import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
 import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -50,7 +52,13 @@ class CheckoutConfirmation extends React.Component {
 
   render() {
     const {
-      items, totals, number_of_items: itemsTotal, payment,
+      items,
+      totals,
+      number_of_items: itemsTotal,
+      payment,
+      delivery_type_info: {
+        collection_charge: collectionCharge,
+      },
     } = drupalSettings.order_details;
 
     return (
@@ -86,6 +94,10 @@ class CheckoutConfirmation extends React.Component {
               show_checkout_button={false}
               animationDelay="0.4s"
               context="confirmation"
+              {...(collectionPointsEnabled()
+                && hasValue(collectionCharge)
+                && { collectionCharge }
+              )}
             />
           </div>
         </div>
