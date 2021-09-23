@@ -58,7 +58,7 @@
         "drupal/link_attributes": "^1.5",
         "drupal/mailsystem": "^4.1",
         "drupal/media_entity": "^1.8",
-        "drupal/media_entity_actions": "1.x-dev",
+        "drupal/media_entity_actions": "^2.0@alpha",
         "drupal/memcache": "^2.3",
         "drupal/memory_limit_policy": "1.x-dev",
         "drupal/menu_admin_per_menu": "^1.0@RC",
@@ -131,7 +131,7 @@
         "acquia/drupal-spec-tool": "^2.0",
         "drupal/console": "^1.8",
         "drupal/core-dev": "^8.8.11",
-        "drupal/devel": "^2.0",
+        "drupal/devel": "^4.1",
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "mglaman/drupal-check": "^1.1"
