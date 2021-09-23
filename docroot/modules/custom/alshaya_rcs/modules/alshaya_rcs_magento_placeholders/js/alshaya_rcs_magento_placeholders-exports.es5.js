@@ -8,23 +8,8 @@ exports.render = function render(
   innerHtml
 ) {
   let html = "";
-  const pageType = rcsPhGetPageType();
 
   switch (placeholder) {
-    case "delivery-option":
-      if (typeof globalThis.renderRcsProduct !== 'undefined') {
-        html += globalThis.renderRcsProduct.render(
-          settings,
-          placeholder,
-          params,
-          inputs,
-          entity,
-          langcode,
-          innerHtml
-        );
-      }
-      break;
-
     case "navigation_menu":
       // Process rcs navigation renderer, if available.
       if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
@@ -89,12 +74,14 @@ exports.render = function render(
       }
       break;
 
+    case "delivery-option":
     case 'mobile-upsell-products':
     case 'upsell-products':
     case 'mobile-related-products':
     case 'related-products':
     case 'mobile-crosssell-products':
     case 'crosssell-products':
+    case 'classic-gallery':
       // Render super category block.
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         html += globalThis.renderRcsProduct.render(

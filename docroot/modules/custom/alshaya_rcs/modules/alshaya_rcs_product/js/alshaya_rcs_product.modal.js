@@ -10,51 +10,24 @@
 
         // Get the template with placeholders for modal view.
         var content = $('<div>').append($('.rcs-templates--product-modal').clone());
+        // Rename the class by removing the dummy suffix.
+        content
+          .find('.acq-content-product-modal-template')
+          .removeClass('acq-content-product-modal-template')
+          .addClass('acq-content-product-modal');
 
         // Reset cloud zoom image attributes.
         content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', '"#rcs.product_modal._self|image#"');
         content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', '"#rcs.product_modal._self|image#"');
 
-        // Get Product Details.
-        var request = {
-          uri: '',
-          method: 'GET',
-          headers: [],
-        };
-
-        request.uri += "graphql";
-        request.method = "POST";
-        request.headers.push(["Content-Type", "application/json"]);
-        request.headers.push(["Store", settings.alshayaRcs.commerceBackend.store]);
-
         // Get url key for product whose details are required.
         var skuUrlKey = $(this).parent('article').find('.sku-url-key').val();
 
-        // Prepare query for graphQl.
-        request.data = JSON.stringify({
-          query: Drupal.alshayaRcs.getProductQuery(skuUrlKey)
-        });
-        var headers = {};
-
-        request.headers.forEach(function (header) {
-          headers[header[0]] = header[1];
-        });
-
-        $.ajax({
-          url: settings.alshayaRcs.commerceBackend.baseUrl + '/' + request.uri,
-          method: request.method,
-          headers: headers,
-          data: request.data,
-          success: function (response) {
-            // Get product entity from response.
-            var entity = response.data.products.items[0];
-
+        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {url_key: skuUrlKey})
+          .then(function (entity) {
             if (entity === null || typeof entity === 'undefined') {
               return;
             }
-
-            // Get attributes to be replaced.
-            var attributes = rcsPhGetSetting('placeholderAttributes');
 
             // Replace placeholders of modal content with product entity.
             let finalMarkup = content.html();
@@ -86,10 +59,9 @@
             var modalContext = $('.pdp-modal-box');
             rcsPhApplyDrupalJs(modalContext)
           },
-          error: function () {
+          function () {
             console.log('Could not fetch data!');
-          }
-        });
+          });
 
         return false;
       });

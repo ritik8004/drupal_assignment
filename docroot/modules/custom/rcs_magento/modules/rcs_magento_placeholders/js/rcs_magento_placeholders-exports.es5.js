@@ -64,6 +64,8 @@ exports.getEntity = async function getEntity(langcode) {
   const response = await rcsCommerceBackend.invokeApi(request);
   if (pageType == "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
+    result.media_gallery = [{url: 'https://via.placeholder.com/300x400', label: 'a'}, {url: 'https://via.placeholder.com/301x401', label: 'b'}]
+    result.gtm_attributes = {category: 'ancd'};
     RcsPhStaticStorage.set('product_' + result.sku, result);
   }
   else if (pageType == "category" && response.data.categories.total_count) {
@@ -132,6 +134,44 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
     case 'breadcrumb':
       // We do not need to do anything for breadcrumbs.
       // Adding this case to avoid console messages about breadcrumbs.
+      break;
+
+    case 'labels':
+        request.uri += "graphql";
+        request.method = "POST";
+        request.headers.push(["Content-Type", "application/json"]);
+        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+        request.data = JSON.stringify({
+          query: `query{
+            amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
+              items{
+                image
+                name
+                position
+                product_id
+                size
+                txt
+              }
+            }
+          }`
+        });
+
+        response = await rcsCommerceBackend.invokeApi(request);
+        result = response.data.amLabelProvider;
+      break;
+
+    case 'product-recommendation':
+      request.uri += "graphql";
+      request.method = "POST";
+      request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+      request.data = JSON.stringify({
+        query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsGraphqlQueryFields.products}}`
+      });
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items[0];
+      RcsPhStaticStorage.set('product_' + result.sku, result);
       break;
 
     default:

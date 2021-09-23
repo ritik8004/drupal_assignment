@@ -41,7 +41,7 @@
 
   Drupal.behaviors.configurableAttributeBoxes = {
     attach: function (context, settings) {
-      var form = $('.sku-base-form').not('[data-sku *= "#"]');
+      var form = $('.sku-base-form', context).not('[data-sku *= "#"]');
       if (form.length === 0) {
         return;
       }
