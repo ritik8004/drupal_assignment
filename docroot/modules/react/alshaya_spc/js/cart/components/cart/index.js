@@ -391,11 +391,13 @@ export default class Cart extends React.Component {
         <div className="spc-footer">
           <VatFooterText />
         </div>
-        <div className="select-area-popup-wrapper">
-          <SelectAreaPanel
-            panelContent={panelContent}
-          />
-        </div>
+        <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <div className="select-area-popup-wrapper">
+            <SelectAreaPanel
+              panelContent={panelContent}
+            />
+          </div>
+        </ConditionalView>
       </>
     );
   }
