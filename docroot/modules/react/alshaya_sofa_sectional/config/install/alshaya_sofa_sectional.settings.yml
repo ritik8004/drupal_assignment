@@ -1,4 +1,4 @@
-feature_status: true
-# Config for defining category ID for which
+enabled: true
+# Config for defining category IDs for which
 # this feature will work.
-category_id: null
+category_ids: {}
