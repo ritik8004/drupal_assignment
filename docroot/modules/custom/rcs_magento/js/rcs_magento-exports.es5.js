@@ -32,23 +32,3 @@ exports.invokeApi = async function (request) {
     }
   });
 };
-
-/**
- * Get the amount with the proper format for decimals.
- *
- * @param priceAmount
- *   The price amount.
- *
- * @returns {string|*}
- *   Return string with price and currency or return array of price and
- *   currency.
- */
-exports.getFormattedAmount = function (priceAmount) {
-  let amount = priceAmount === null ? 0 : priceAmount;
-
-  // Remove commas if any.
-  amount = amount.toString().replace(/,/g, '');
-  amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
-
-  return amount.toFixed(drupalSettings.alshaya_spc.currency_config.decimal_points);
-};
