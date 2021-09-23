@@ -43,6 +43,7 @@
         "drupal/default_content": "^2.0@alpha",
         "drupal/email_registration": "^1.0",
         "drupal/endroid_qr_code": "^3.0",
+        "drupal/entity_embed": "^1.2",
         "drupal/external_hreflang": "^1.0",
         "drupal/facets": "1.0-alpha11",
         "drupal/field_group": "^3.0@beta",
@@ -351,6 +352,9 @@
             },
             "drupal/conditional_fields": {
                 "Removing unnecessary module_load_include call": "https://www.drupal.org/files/issues/2021-09-17/Removing_unnecessary_module_load_include_call-change_3236355-1.patch"
+            },
+            "drupal/entity_embed": {
+                "Adding defaultTheme to Test case": "https://www.drupal.org/files/issues/2021-09-21/adding_defultTheme_in_testcase-3238298-1.patch"
             }
         },
         "installer-paths": {
