@@ -8,6 +8,7 @@ import {
 import {
   prepareAddressDataForShipping,
 } from '../../../utilities/address_util';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class ShippingMethod extends React.Component {
   constructor(props) {
@@ -26,7 +27,12 @@ export default class ShippingMethod extends React.Component {
     const selectCarrierInfo = `${method.carrier_code}_${method.method_code}`;
 
     // If mathod is already selected in cart.
-    if (cart.cart.shipping.method === selectCarrierInfo) {
+    if (cart.cart.shipping.method === selectCarrierInfo && method.available) {
+      return;
+    }
+
+    // If method is not available.
+    if (!method.available) {
       return;
     }
 
@@ -95,12 +101,13 @@ export default class ShippingMethod extends React.Component {
   render() {
     const { method } = this.props;
     const { selectedOption } = this.state;
+    const methodClass = method.available ? 'active' : 'disabled';
     let price = Drupal.t('FREE');
     if (method.amount > 0) {
       price = <PriceElement amount={method.amount} />;
     }
     return (
-      <div className="shipping-method" onClick={() => this.changeShippingMethod(method)}>
+      <div className={`shipping-method ${methodClass}`} onClick={() => this.changeShippingMethod(method)}>
         <input
           id={`shipping-method-${method.method_code}`}
           className={method.method_code}
@@ -115,6 +122,9 @@ export default class ShippingMethod extends React.Component {
           <span className="method-title">{method.method_title}</span>
           <span className="spc-price">{price}</span>
         </label>
+        <ConditionalView condition={!method.available}>
+          <div className="method-error-message">{method.error_message}</div>
+        </ConditionalView>
       </div>
     );
   }

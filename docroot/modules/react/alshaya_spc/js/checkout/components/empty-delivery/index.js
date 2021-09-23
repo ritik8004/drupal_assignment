@@ -25,6 +25,7 @@ import { makeFullName } from '../../../utilities/cart_customer_util';
 import {
   getCncSectionDescription,
 } from '../../../utilities/cnc_util';
+import { getStorageInfo } from '../../../utilities/storage';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -253,6 +254,20 @@ export default class EmptyDeliveryText extends React.Component {
           telephone: shippingAddress.telephone,
         },
       };
+    }
+
+    const areaSelected = getStorageInfo('deliveryinfo-areadata');
+    if (areaSelected !== null) {
+      const defaultArea = {};
+      Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
+        if (key === 'administrative_area') {
+          defaultArea[val.key] = areaSelected.value.area;
+        } else if (key === 'area_parent') {
+          // Handling for parent area.
+          defaultArea[val.key] = areaSelected.value.governate;
+        }
+      });
+      defaultVal = defaultArea;
     }
 
     const popupClassName = customerHasAddress(mainCart)
