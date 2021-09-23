@@ -32,17 +32,17 @@ export default class WithModal extends React.Component {
     document.addEventListener('closeModal', this.goBackInHistory);
   }
 
-  openAddressContentPopUp = (e) => {
-    if (e.detail && this.key === 'hdInfo') {
-      this.triggerOpenModal();
-    }
-  }
-
   componentWillUnmount() {
     this.isComponentMounted = false;
     window.removeEventListener('keyup', this.onEscape);
     window.removeEventListener('popstate', this.popstate);
     document.removeEventListener('closeModal', this.goBackInHistory);
+  }
+
+  openAddressContentPopUp = (e) => {
+    if (e.detail && this.key === 'hdInfo') {
+      this.triggerOpenModal();
+    }
   }
 
   popstate = (e) => {
