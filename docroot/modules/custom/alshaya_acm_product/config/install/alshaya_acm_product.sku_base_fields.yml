@@ -123,6 +123,7 @@ fields:
     description: 'Sku applicable for express day delivery or not.'
     index: 1
 
+  #dummy field for delivery type
   delivery_ways:
     label: 'Delivery Type'
     cardinality: -1

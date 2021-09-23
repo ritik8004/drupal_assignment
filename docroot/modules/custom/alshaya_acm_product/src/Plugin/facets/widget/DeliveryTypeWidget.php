@@ -15,13 +15,4 @@ use Drupal\facets\Plugin\facets\widget\CheckboxWidget;
  * )
  */
 class DeliveryTypeWidget extends CheckboxWidget {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function build(FacetInterface $facet) {
-    $build = parent::build($facet);
-    return $build;
-  }
-
 }
