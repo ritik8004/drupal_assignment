@@ -100,8 +100,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   }
 
   // Build menu item path prefix.
-  const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
-  // @todo remove this when API return the correct path.
+  const menuPathPrefixFull = `${settings.path.pathPrefix}`;
   const levelObjOrgUrlPath = levelObj.url_path;
   // Append category prefix in L2 if super category is enabled.
   if (isSuperCategoryEnabled) {
@@ -201,7 +200,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
       reprocess = false;
       levelHtml = `<div class="column ${col}">`;
 
-      levelObj.children.forEach(function eachCategory(rcLevelObj) {
+      levelObj.children.every(function eachCategory(rcLevelObj) {
         let l2_cost = (rcLevelObj.children)
           ? rcLevelObj.children.length + 2
           : 2;
@@ -211,7 +210,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         if (l2_cost > ideal_max_col_length) {
           ideal_max_col_length = l2_cost;
           reprocess = true;
-          return;
+          return false;
         }
 
         if ((colTotal + l2_cost) > ideal_max_col_length) {
@@ -223,7 +222,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         // If we have too many columns we try with more items per column.
         if (col >= max_nb_col) {
           ideal_max_col_length++;
-          return;
+          return false;
         }
 
         if (isNewColumn) {
@@ -241,6 +240,8 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         );
 
         colTotal += l2_cost;
+
+        return true;
       });
     } while (reprocess || (col >= max_nb_col));
 
@@ -278,8 +279,6 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
  */
 const navRcsReplacePh = function (phElement, entity) {
   const langcode = drupalSettings.path.currentLanguage;
-  const attributes = drupalSettings.rcsPhSettings.placeholderAttributes;
-
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
   // replacement.
