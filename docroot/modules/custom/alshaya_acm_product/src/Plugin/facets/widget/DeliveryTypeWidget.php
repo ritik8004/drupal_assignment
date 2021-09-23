@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_product\Plugin\facets\widget;
 
-use Drupal\facets\FacetInterface;
 use Drupal\facets\Plugin\facets\widget\CheckboxWidget;
 
 /**
