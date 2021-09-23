@@ -428,14 +428,14 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
               'Same Day Delivery Available',
               [],
               [$langcode,
-              'context' => 'same_day_delivery_listing'
+                'context' => 'same_day_delivery_listing',
               ]
             );
             $express_value = $this->t(
               'Express Day Delivery Available',
               [],
               [$langcode,
-              'context' => 'express_day_delivery_listing'
+                'context' => 'express_day_delivery_listing',
               ]
             );
             $facet_values['Express Day Delivery Available'] = $express_value . ',express';
