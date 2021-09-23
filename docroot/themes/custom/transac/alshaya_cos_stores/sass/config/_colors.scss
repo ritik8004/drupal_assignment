@@ -22,8 +22,6 @@ $blue-cola: #007fdb;
 $bright-blue: #2182d5;
 
 // Global elements.
-$primary_text: $outer-space;
-$primary_link: $eerie-black;
 $primary_text: $eerie-black;
 $primary_link: $dark-gray;
 $content_pagetitle: $outer-space;
@@ -51,6 +49,7 @@ $formitem_label: $dark-gray;
 //Buttons.
 $primary_btn_bg: $outer-space;
 $primary_empty_btn: $white;
+$primary_brand_button_text: $white;
 $primary_empty_btn_border: $outer-space;
 $primary_brand_button: $outer-space;
 $primary_button_disabled: $brownish-grey;
@@ -80,18 +79,11 @@ $highlights_subtitle_hover: $outer-space;
 
 // Dropdown.
 $primary_dropdown_arrow_bg: transparent;
-// $primary_dropdown_text: $black-two;
 $primary_dropdown_border: $outer-space;
 $primary_dropdown_option_hover: $bright-gray;
 $primary_dropdown_option_border: $bright-gray;
 $primary_dropdown_option_disbled: $bright-gray;
 $primary_dropdown_arrow_icon: $outer-space;
-
-//Buttons.
-$primary_btn_bg: $outer-space;
-$primary_brand_button: $outer-space;
-$primary_brand_button_text: $white;
-$primary_brand_button: $outer-space;
 
 // Footer
 $footer_border_top: $bright-gray;
@@ -190,9 +182,6 @@ $mm_highlight_title: $eerie-black;
 $mm_highlight_description: $eerie-black;
 $mm_l3_link_hover: $eerie-black;
 
-// Contact Page
-$webform_contact_legend: $outer-space;
-
 // Store finder page.
 // Store finder header form.
 $store_finder_header_desktop: $eerie-black;
@@ -213,9 +202,7 @@ $store_finder_individual_hour_border: $bright-gray;
 $store_finder_glossary_alphabet: $eerie-black;
 $store_finder_glossary_text: $eerie-black;
 $store_finder_glossary_icon: $eerie-black;
-$store_finder_glossary_text_hover: rgba(27, 27, 27, 0.7);
 $store_finder_glossary_text_hover: $brownish-grey;
-$store_finder_glossary_text_hover: $bright-gray;
 $store_finder_glossary_text_border: $bright-gray;
 $store_finder_glossary_border: $bright-gray;
 
@@ -284,11 +271,14 @@ $block_acm_customer_txt: $eerie-black;
 $algolia-input-text: $eerie-black;
 $algolia-trending-title-text: $eerie-black;
 $algolia-trending-title-border: $bright-gray;
-$algolia-react-progressbar-fill: $eerie-black;
-$algolia-react-search-page-title: $eerie-black;
+$algolia-react-progressbar-fill: $outer-space;
+$algolia-react-search-page-title: $outer-space;
 $algolia-react-sidebar-label-color: $eerie-black;
 $algolia-suggestion-text: $brownish-grey;
 $algolia-auto-suggest-border: $bright-gray;
+$algolia-react-progressbar-text: $outer-space;
+$algolia-react-progressbar: $bright-gray;
+$algolia_react-facet-item-color: $eerie-black;
 
 // Language Switcher
 $lang_switch: $eerie-black;
