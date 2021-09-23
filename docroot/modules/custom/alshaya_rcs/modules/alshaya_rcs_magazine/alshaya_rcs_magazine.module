@@ -70,6 +70,6 @@ function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entit
   // Provide template for product teaser.
   $path = drupal_get_path('module', 'alshaya_rcs_magazine');
   $templates['field']['magazine_article'] = [
-    'product_teaser' => file_get_contents("$path/templates/product-teaser.handlebars"),
+    'product_teaser' => "$path/templates/product-teaser.handlebars",
   ];
 }
