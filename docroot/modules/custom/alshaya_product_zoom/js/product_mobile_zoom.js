@@ -28,7 +28,7 @@
       }
 
       // Modal view for mobile when clicking on PDP image on mobile.
-      $('.acq-content-product #product-full-screen-gallery-container').once('js-event').each(function () {
+      $('.acq-content-product #product-full-screen-gallery-container', context).once('js-event').each(function () {
         var element = $(this);
         var dialogsettings = {
           autoOpen: true,
