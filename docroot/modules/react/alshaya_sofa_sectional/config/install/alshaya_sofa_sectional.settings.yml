@@ -1,0 +1,4 @@
+feature_status: true
+# Config for defining category ID for which
+# this feature will work.
+category_id: null
