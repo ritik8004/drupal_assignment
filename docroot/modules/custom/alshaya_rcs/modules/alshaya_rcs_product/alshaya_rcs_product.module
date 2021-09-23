@@ -834,7 +834,7 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
 
   $path = drupal_get_path('module', 'alshaya_rcs_product');
   $templates['field']['product'] = [
-    'description' => file_get_contents("$path/templates/rcs-field-description.handlebars"),
-    'short_description' => file_get_contents("$path/templates/rcs-field-short-description.handlebars"),
+    'description' => "$path/templates/rcs-field-description.handlebars",
+    'short_description' => "$path/templates/rcs-field-short-description.handlebars",
   ];
 }
