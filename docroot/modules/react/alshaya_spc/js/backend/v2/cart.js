@@ -209,7 +209,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     }
     itemData = {
       cartItem: {
-        sku,
+        sku: data.sku,
         qty: quantity,
         product_option: productOptions,
         quote_id: cartId,
