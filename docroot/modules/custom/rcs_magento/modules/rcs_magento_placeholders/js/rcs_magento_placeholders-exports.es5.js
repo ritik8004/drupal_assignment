@@ -175,7 +175,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsGraphqlQueryFields.products}}`
+        query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       response = await rcsCommerceBackend.invokeApi(request);
