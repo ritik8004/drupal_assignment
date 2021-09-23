@@ -150,7 +150,7 @@ body.overlay-delivery-area {
   .spc-select {
     .spcSelect__control {
       border: 0;
-      border-bottom: 1px solid $spc-cart-delivery-popup-border;
+      border-bottom: 0.0625rem solid $spc-cart-delivery-popup-border;
       border-radius: 0;
       background: $spc-cart-delivery-popup-bg;
     }
@@ -192,7 +192,7 @@ body.overlay-delivery-area {
   }
 
   .spc-filter-panel-search-field {
-    border: 1px solid $spc-cart-delivery-popup-search-border;
+    border: 0.0625rem solid $spc-cart-delivery-popup-search-border;
     width: 100%;
     height: 3rem;
     padding: 0.875rem 0.75rem;
@@ -288,11 +288,13 @@ body.overlay-delivery-area {
       display: flex;
       justify-content: space-between;
       width: 100%;
+      align-items: center;
     }
 
     .area-delect-delivery-type {
       padding-#{$right}: 1.25rem;
       font-size: 0;
+      flex-shrink: 0;
 
       @include breakpoint($only-mobile) {
         padding-#{$right}: 0.3125rem;
