@@ -214,12 +214,6 @@ exports.computePhFilters = function (input, filter) {
   let value = '';
   let data = {};
 
-  // Allow other modules/brands to alter the field data.
-  if (typeof rcsFieldDataAlter === 'function') {
-    // The parameters are passed by reference.
-    rcsFieldDataAlter(filter, input);
-  }
-
   switch(filter) {
     case 'price':
       const priceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.regularPrice.amount.value);
