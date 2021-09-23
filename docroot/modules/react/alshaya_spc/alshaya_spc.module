@@ -318,7 +318,10 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // Add express delivery flag in drupal settings if feature is enabled.
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
   if ($express_delivery_config->get('status')) {
-    $page['#attached']['drupalSettings']['expressDeliveryEnabled'] = $express_delivery_config->get('status');
+    $page['#attached']['drupalSettings']['expressDelivery'] = [
+      'enabled' => TRUE,
+      'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
+    ];
     $page['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
   }
 

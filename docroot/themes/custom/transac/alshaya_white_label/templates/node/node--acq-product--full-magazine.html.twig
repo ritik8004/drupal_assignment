@@ -57,11 +57,13 @@
           {% endif %}
         </div>
 
-        {% if content.express_delivery_text %}
+        {% if content.delivery_options %}
           <div class="express-delivery">
-            <div class="express-delivery-text">
-              <p>{{ content.express_delivery_text }}</p>
-            </div>
+            {% for delivery_option in content.delivery_options %}
+              <div class="express-delivery-text">
+                <p>{{ delivery_option }}</p>
+              </div>
+            {% endfor %}
           </div>
         {% endif %}
 

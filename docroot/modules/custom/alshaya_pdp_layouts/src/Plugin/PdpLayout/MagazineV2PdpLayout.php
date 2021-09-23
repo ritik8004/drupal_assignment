@@ -147,13 +147,19 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
 
-    // Add express delivery flag in drupal settings if feature is enabled.
-    $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
-    // Flags status.
-    $flags_status = alshaya_acm_product_get_flags_status($sku);
-    // Express Delivery Text.
-    if ($flags_status['express_delivery']['status'] && $express_delivery_config->get('status')) {
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['express_delivery'] = TRUE;
+    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+    // Checking if express delivery enabled.
+    if ($express_delivery_config->get('status')) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
+      $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+      $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+      if ($delivery_options !== NULL) {
+        foreach ($delivery_options_order as $option) {
+          if ($delivery_options[$option]['label']) {
+            $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'][$option]['label'] = $delivery_options[$option]['label'];
+          }
+        }
+      }
     }
 
     // Set delivery options only if product is buyable.

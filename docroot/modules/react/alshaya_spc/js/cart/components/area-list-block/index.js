@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
 import ConditionalView from '../../../common/components/conditional-view';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import { getDeliveryAreaList, getGovernatesList } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import SectionTitle from '../../../utilities/section-title';
@@ -26,7 +25,6 @@ export default class AreaListBlock extends React.Component {
    * Pre-populate city/area from storage values.
    */
   componentDidMount() {
-    showFullScreenLoader();
     const { governateDefaultLabel } = this.state;
     const areaSelected = getStorageInfo('deliveryinfo-areadata');
     let defaultOptions = [];
@@ -64,7 +62,6 @@ export default class AreaListBlock extends React.Component {
             governateOptions: options,
             governateDefault: defaultOptions,
           });
-          removeFullScreenLoader();
           dispatchCustomEvent('openDeliveryAreaPanel', {});
         }
       },

@@ -2,8 +2,9 @@
  * Helper function to check if Express delivery is enabled.
  */
 const isExpressDeliveryEnabled = () => {
-  if (typeof drupalSettings.expressDeliveryEnabled !== 'undefined') {
-    return drupalSettings.expressDeliveryEnabled;
+  if (typeof drupalSettings.expressDelivery !== 'undefined'
+    && typeof drupalSettings.expressDelivery.enabled !== 'undefined') {
+    return drupalSettings.expressDelivery.enabled;
   }
 
   return false;
@@ -14,8 +15,9 @@ const isExpressDeliveryEnabled = () => {
  */
 const checkProductExpressDeliveryStatus = (sku) => {
   if (typeof drupalSettings.productInfo !== 'undefined'
-    && typeof drupalSettings.productInfo[sku].express_delivery !== 'undefined') {
-    return drupalSettings.productInfo[sku].express_delivery;
+    && typeof drupalSettings.expressDelivery !== 'undefined'
+    && typeof drupalSettings.productInfo[sku].expressDelivery !== 'undefined') {
+    return drupalSettings.productInfo[sku].expressDelivery;
   }
 
   return false;

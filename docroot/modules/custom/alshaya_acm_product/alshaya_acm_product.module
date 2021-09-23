@@ -635,8 +635,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
         // Express Delivery
-        if ($flags_status['express_delivery']['status'] && $express_delivery_config->get('status')) {
-          $build['express_delivery_text']['#markup'] = t('Express Delivery available');
+        if ($express_delivery_config->get('status')) {
+          $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+          // Show delivery options as per order defined in config.
+          $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+          if ($delivery_options !== NULL) {
+            foreach ($delivery_options_order as $option) {
+              if ($delivery_options[$option]['label']) {
+                $build['delivery_options'][$option]['#markup'] = $delivery_options[$option]['label'];
+              }
+            }
+          }
         }
 
         // Delivery in only city.
@@ -2109,4 +2118,32 @@ function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterfac
   }
 
   $variant['matchback_teaser_image'] = is_string($image) ? $image : '';
+}
+
+/**
+ * Get delivery options for the product.
+ *
+ * @param string $sku
+ *   Sku id.
+ *
+ * @return array
+ *   Array of delivery options config.
+ */
+function alshaya_acm_product_get_delivery_options($sku) {
+  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+
+  if (!($sku_entity instanceof SKU)) {
+    return NULL;
+  }
+
+  return [
+    'same_day_delivery' => [
+      'status' => $sku_entity->get('attr_same_day_delivery')->getString(),
+      'label' => t('Same day Delivery available'),
+    ],
+    'express_delivery' => [
+      'status' => $sku_entity->get('attr_express_delivery')->getString(),
+      'label' => t('Express Delivery available'),
+    ],
+  ];
 }

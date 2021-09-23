@@ -75,6 +75,7 @@ const PdpLayout = () => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
+    deliveryOptions,
   } = productValues;
 
   const emptyRes = (
@@ -142,7 +143,6 @@ const PdpLayout = () => {
       headerButton();
     });
   };
-
 
   useEffect(() => {
     sidebarSticky();
@@ -224,7 +224,9 @@ const PdpLayout = () => {
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >
             <div className="express-delivery-wrapper">
-              <div className="express-delivery-text">{Drupal.t('Express Delivery available')}</div>
+              {deliveryOptions && Object.keys(deliveryOptions).map((option) => (
+                <div key={option} className="express-delivery-text">{deliveryOptions[option].label}</div>
+              ))}
             </div>
           </ConditionalView>
           <PpdRatingsReviews
