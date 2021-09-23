@@ -64,30 +64,37 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   const response = await rcsCommerceBackend.invokeApi(request);
-  if (pageType == "product" && response.data.products.total_count) {
+  if (pageType === "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
     RcsPhStaticStorage.set('product_' + result.sku, result);
   }
-  else if (pageType == "category" && response.data.categories.total_count) {
+  else if (pageType === "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
   }
-  else if (drupalSettings.rcsPage.type == 'promotion' && response.data.promotionUrlResolver) {
+  else if (drupalSettings.rcsPage.type === 'promotion' && response.data.promotionUrlResolver) {
     result = response.data.promotionUrlResolver;
     // Adding name in place of title so that RCS replace the placeholders
     // properly.
     result.name = result.title;
   }
-  // Creating custom event to to perform extra operation and update the result
-  // object.
-  const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
-    detail: {
-      result: result,
-    }
-  });
-  // To trigger the Event
-  document.dispatchEvent(updateResult);
 
-  return updateResult.detail.result;
+  if (result !== null) {
+    // Creating custom event to to perform extra operation and update the result
+    // object.
+    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+      detail: {
+        result: result,
+        pageType: pageType,
+      }
+    });
+
+    // To trigger the Event.rcs_magento_placeholders-exports.es5.js
+    document.dispatchEvent(updateResult);
+
+    return updateResult.detail.result;
+  }
+
+  return result;
 };
 
 /**
