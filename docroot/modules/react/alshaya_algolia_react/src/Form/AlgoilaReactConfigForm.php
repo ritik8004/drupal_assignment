@@ -71,6 +71,13 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#title' => $this->t('Number of items to show for search results.'),
       '#default_value' => $config->get('items_per_page') ?? 12,
     ];
+
+    $form['hide_grid_switch'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Hide grid switch option on listing pages.'),
+      '#default_value' => $config->get('hide_grid_switch'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -84,6 +91,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       ->set('hits', $form_state->getValue('hits'))
       ->set('top_results', $form_state->getValue('top_results'))
       ->set('items_per_page', $form_state->getValue('items_per_page'))
+      ->set('hide_grid_switch', $form_state->getValue('hide_grid_switch'))
       ->save();
 
     parent::submitForm($form, $form_state);

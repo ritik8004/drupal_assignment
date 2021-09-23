@@ -212,6 +212,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'productFrameEnabled' => $product_frame_settings->get('product_frame'),
       'promotionFrameEnabled' => $product_frame_settings->get('promotion_frame'),
       'productTitleTrimEnabled' => $product_frame_settings->get('product_title_trim'),
+      'hideGridSwitch' => $alshaya_algolia_react_setting_values->get('hide_grid_switch') ?? 0,
     ];
 
     $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
