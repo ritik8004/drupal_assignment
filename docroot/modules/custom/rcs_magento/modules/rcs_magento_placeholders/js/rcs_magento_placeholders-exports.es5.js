@@ -66,8 +66,6 @@ exports.getEntity = async function getEntity(langcode) {
   const response = await rcsCommerceBackend.invokeApi(request);
   if (pageType == "product" && response.data.products.total_count) {
     result = response.data.products.items[0];
-    result.media_gallery = [{url: 'https://via.placeholder.com/300x400', label: 'a'}, {url: 'https://via.placeholder.com/301x401', label: 'b'}]
-    result.gtm_attributes = {category: 'ancd'};
     RcsPhStaticStorage.set('product_' + result.sku, result);
   }
   else if (pageType == "category" && response.data.categories.total_count) {
