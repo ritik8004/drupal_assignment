@@ -64,9 +64,10 @@ function getProductRecommendation(products, sectionTitle) {
         const entityFieldValue = r[1];
         finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
       });
+    related.html(finalMarkup);
   });
 
-  return finalMarkup;
+  return related.html();
 }
 
 exports.render = function render(
