@@ -66,7 +66,11 @@ const Teaser = ({
     }
     // Update URL to relative URL to avoid host mismatch issue.
     if (key === 'url') {
-      attribute[key] = new URL(attribute.url).pathname;
+      // Check if the URL is an absolute URL or not.
+      const isAbsolute = (attribute.url.indexOf('://') > 0 || attribute.url.indexOf('//') === 0);
+      if (isAbsolute) {
+        attribute[key] = new URL(attribute.url).pathname;
+      }
     }
   });
   // Skip if there is no value for current language.
