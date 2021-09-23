@@ -94,7 +94,7 @@ class ProductCategoryMappingManager {
     elseif (empty($categories_new)
       || empty($categories_existing)
       || array_diff($categories_new, $categories_existing)
-      || array_diff($categories_new, $categories_existing)) {
+      || array_diff($categories_existing, $categories_new)) {
       // Do nothing here, we will update.
     }
     else {
