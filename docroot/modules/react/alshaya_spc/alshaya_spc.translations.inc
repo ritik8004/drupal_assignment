@@ -390,6 +390,9 @@ function _alshaya_spc_translations() {
     'Collection Charge' => [
       'ar' => 'Collection Charge AR',
     ],
+    'available in collection point within' => [
+      'ar' => 'متوفر في نقطة الاستلام خلال',
+    ],
   ];
 
   return $strings;
