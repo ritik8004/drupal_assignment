@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @auth @vssauat @pbsauat @pbkwuat @tbskwuat @flsauat @bbwsauat @mcsauat @mcaeuat
+@javascript @returnUser @madaPayment @auth @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @vssauat @pbsauat @pbkwuat @tbskwuat @flsauat @bbwsauat @mcsauat @mcaeuat
 Feature: SPC Checkout using Click & Collect store for returning customer
 
   Background:
@@ -61,6 +61,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -147,11 +148,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_returning_user_email}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"
@@ -240,6 +237,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
@@ -297,6 +295,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should be on "checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -386,11 +385,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_returning_user_email}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"
@@ -478,3 +473,4 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file

@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @homeDelivery @pbsauat @mcsauat @pbaeuat @pbkwuat @mcaeuat @bbwkwuat @tbskwuat @flsauat @flaeuat @bbwsauat @mckwuat
+@javascript @returnUser @madaPayment @homeDelivery @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @pbsauat @mcsauat @pbaeuat @pbkwuat @mcaeuat @bbwkwuat @tbskwuat @flsauat @flaeuat @bbwsauat @mckwuat
 Feature: SPC Checkout Home Delivery CC for Returning Customers
 
   Background:
@@ -48,6 +48,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -123,11 +124,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_mada_anon_username}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_mada_anon_username}"
     Then I should see "{language_order_detail}"
@@ -204,6 +201,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
@@ -248,6 +246,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -323,11 +322,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_mada_anon_username}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_mada_anon_username}"
     Then I should see "{language_order_detail}"
@@ -404,3 +399,4 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file

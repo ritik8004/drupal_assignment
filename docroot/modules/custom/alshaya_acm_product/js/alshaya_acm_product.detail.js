@@ -295,10 +295,6 @@
       $(product).find('#product-zoom-container').replaceWith(gallery);
     }
 
-    if (typeof Drupal.blazyRevalidate !== 'undefined') {
-      Drupal.blazyRevalidate();
-    }
-
     if (layout === 'pdp-magazine') {
       // Set timeout so that original behavior attachment is not affected.
       setTimeout(function () {

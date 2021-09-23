@@ -29,7 +29,7 @@ jQuery.fn.select2Option = function (options) {
 
         if ($(this).attr('swatch-image')) {
           liHtml.addClass('li-swatch-image');
-          var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
+          var swatchImage = '<img loading="lazy" src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
           }

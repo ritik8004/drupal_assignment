@@ -50,9 +50,49 @@ const productRecommendationsSuffix = 'pr-';
 
         var variantInfo = drupalSettings[productKey][sku]['group'][variant];
 
+        // Datalayer push for product detail view
+        // when url is changed wrt variant.
+        let lastUrl = location.href;
+        const observer = new MutationObserver(() => {
+          const url = location.href;
+          if (url !== lastUrl) {
+            lastUrl = url;
+            var amount = $(this).attr('gtm-price').replace(/\,/g,'');
+            // Prepare data.
+            var data = {
+              event: 'productDetailView',
+              ecommerce: {
+                currencyCode: drupalSettings.gtm.currency,
+                detail: {
+                  products: {
+                    name: $(this).attr('gtm-name'),
+                    id: $(this).attr('gtm-main-sku'),
+                    price: parseFloat(amount),
+                    category: $(this).attr('gtm-category'),
+                    variant: $(this).attr('gtm-product-sku'),
+                    dimension2: $(this).attr('gtm-sku-type'),
+                    dimension3: $(this).attr('gtm-dimension3'),
+                    dimension4: $(this).attr('gtm-dimension4')
+                  }
+                }
+              }
+            };
+            if ($(this).attr('gtm-brand')) {
+              data.ecommerce.detail.products.brand = $(this).attr('gtm-brand');
+            }
+            // Push into datalayer.
+            dataLayer.push(data);
+          }
+        });
+        observer.observe(document, {subtree: true, childList: true});
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
         $(this).attr('gtm-price', variantInfo['gtm_price']);
+
+        // Detach the observer to avoid multiple occurence.
+        setTimeout(function () {
+          observer.disconnect();
+        }, 500);
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
@@ -1359,7 +1399,7 @@ const productRecommendationsSuffix = 'pr-';
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined
         && drupalSettings.gtm.log_errors_to_console) {
-        console.error(errorData);
+        console.log(errorData);
       }
 
       // Track error on GA.

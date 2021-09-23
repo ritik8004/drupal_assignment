@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connectHighlight } from 'react-instantsearch-dom';
-import { isMobile } from '../../utils';
 
 const Highlight = ({
   highlight, attribute, hit, suffix,
@@ -10,12 +9,6 @@ const Highlight = ({
     attribute,
     hit,
   });
-
-  useEffect(() => {
-    if (isMobile()) {
-      Drupal.blazyRevalidate();
-    }
-  }, [hit]);
 
   return (
     <div className="aa-suggestion">
