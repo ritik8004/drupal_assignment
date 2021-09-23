@@ -634,6 +634,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
         // Express Delivery
         if ($express_delivery_config->get('status')) {
           $delivery_options = alshaya_acm_product_get_delivery_options($sku);
@@ -935,7 +936,6 @@ function alshaya_acm_product_get_flags_status($sku) {
   return [
     'non_refundable' => ['status' => $sku_entity->get('attr_non_refundable_products')->getString()],
     'same_day_delivery' => ['status' => $sku_entity->get('attr_same_day_delivery')->getString()],
-    'express_delivery' => ['status' => $sku_entity->get('attr_express_delivery')->getString()],
   ];
 
 }
@@ -2130,7 +2130,7 @@ function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterfac
  *   Array of delivery options config.
  */
 function alshaya_acm_product_get_delivery_options($sku) {
-  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+  $sku_entity = SKU::loadFromSku($sku);
 
   if (!($sku_entity instanceof SKU)) {
     return NULL;
@@ -2139,11 +2139,11 @@ function alshaya_acm_product_get_delivery_options($sku) {
   return [
     'same_day_delivery' => [
       'status' => $sku_entity->get('attr_same_day_delivery')->getString(),
-      'label' => t('Same day Delivery available'),
+      'label' => t('Same day Delivery available'), [], ['context' => 'sameday_delivery_label'],
     ],
     'express_delivery' => [
       'status' => $sku_entity->get('attr_express_delivery')->getString(),
-      'label' => t('Express Delivery available'),
+      'label' => t('Express Delivery available', [], ['context' => 'express_delivery_label']),
     ],
   ];
 }

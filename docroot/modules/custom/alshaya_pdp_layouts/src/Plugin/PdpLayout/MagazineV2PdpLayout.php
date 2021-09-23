@@ -13,6 +13,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides the default laypout for PDP.
@@ -148,9 +149,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
 
     $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+    $vars['#cache']['tags'] = Cache::mergeTags($vars['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
     // Checking if express delivery enabled.
     if ($express_delivery_config->get('status')) {
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
+      // Show delivery options as per order in express delivery config.
       $delivery_options = alshaya_acm_product_get_delivery_options($sku);
       $delivery_options_order = $express_delivery_config->get('delivery_options_order');
       if ($delivery_options !== NULL) {
@@ -163,6 +166,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     }
 
     // Set delivery options only if product is buyable.
+    // Hide home delivery default options if express delivery enabled.
     if ($is_product_buyable && !($express_delivery_config->get('status'))) {
       // Check if home delivery is available for this product.
       if (alshaya_acm_product_available_home_delivery($sku)) {
