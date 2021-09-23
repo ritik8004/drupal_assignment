@@ -11,7 +11,8 @@
       if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
         return null;
       }
-      console.log('Do something here');
+      // @todo add title/description brand overrides. See CORE-34549.
+      // @todo add image brand overrides. See CORE-34424.
     });
   });
 })(jQuery);
