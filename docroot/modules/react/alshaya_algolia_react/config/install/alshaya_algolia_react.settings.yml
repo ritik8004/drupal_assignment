@@ -3,4 +3,4 @@ max_category_tree_depth: 3
 hits: 4
 top_results: 4
 items_per_page: 36
-hide_grid_toggle: 0
+hide_grid_toggle: false
