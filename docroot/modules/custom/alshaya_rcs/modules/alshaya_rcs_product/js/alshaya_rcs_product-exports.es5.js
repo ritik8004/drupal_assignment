@@ -70,6 +70,26 @@ function getProductRecommendation(products, sectionTitle) {
   return related.html();
 }
 
+/**
+ * Get the amount with the proper format for decimals.
+ *
+ * @param priceAmount
+ *   The price amount.
+ *
+ * @returns {string|*}
+ *   Return string with price and currency or return array of price and
+ *   currency.
+ */
+ function getFormattedAmount(priceAmount) {
+  let amount = priceAmount === null ? 0 : priceAmount;
+
+  // Remove commas if any.
+  amount = amount.toString().replace(/,/g, '');
+  amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+
+  return amount.toFixed(drupalSettings.alshaya_spc.currency_config.decimal_points);
+};
+
 exports.render = function render(
   settings,
   placeholder,
@@ -188,9 +208,8 @@ exports.computePhFilters = function (input, filter) {
 
   switch(filter) {
     case 'price':
-      const priceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.regularPrice.amount.value);
-      const finalPriceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.maximalPrice.amount.value);
-      const discountVal = globalThis.rcsCommerceBackend.calculateDiscount(priceVal, finalPriceVal);
+      const priceVal = getFormattedAmount(input.price_range.maximum_price.regular_price.value);
+      const finalPriceVal = getFormattedAmount(input.price_range.maximum_price.final_price.value);
 
       const price = jQuery('.rcs-templates--price').clone();
       jQuery('.price-amount', price).html(priceVal);
@@ -205,7 +224,7 @@ exports.computePhFilters = function (input, filter) {
         jQuery('.special--price', priceBlock).html(finalPrice.html());
 
         let discount = jQuery('.price--discount').html();
-        discount = discount.replace('@discount', discountVal);
+        discount = discount.replace('@discount', input.price_range.maximum_price.discount.percent_off);
         jQuery('.price--discount', priceBlock).html(discount);
       }
       else {
@@ -534,13 +553,11 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'gtm-price':
-      // @todo: Use the correct price key.
-      value = input.price.maximalPrice.amount.value;
+      value = input.price_range.maximum_price.regular_price.value;
       break;
 
     case 'final_price':
-      // @todo: Use the correct price key.
-      value = input.price.maximalPrice.amount.value;
+      value = input.price_range.maximum_price.regular_price.value;
       break;
 
     case 'first_image':
