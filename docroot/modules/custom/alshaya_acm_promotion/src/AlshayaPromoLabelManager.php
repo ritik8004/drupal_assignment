@@ -324,7 +324,7 @@ class AlshayaPromoLabelManager {
           if (!empty($promotionLabel['dynamic_label'])) {
             $promoDisplay = [
               'link' => $promotion->toUrl()->toString(TRUE)->getGeneratedUrl(),
-              'promotion_nid' => (int) $promotion->id(),
+              'promotion_nid' => (int) $promotion->get('field_acq_promotion_rule_id')->getString(),
               'label' => $promotionLabel['dynamic_label'],
             ];
           }
@@ -620,7 +620,7 @@ class AlshayaPromoLabelManager {
           'type' => 'generic',
           'text' => $promotion['text'],
           'promo_web_url' => $url,
-          'promo_node' => $nid,
+          'promo_node' => (int) $promotion['rule_id'],
         ];
       }
 

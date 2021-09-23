@@ -213,7 +213,7 @@ const handleResponse = (apiResponse) => {
 
   // In case we don't receive any response data.
   if (typeof apiResponse.data === 'undefined') {
-    logger.error('Error while doing MDC api. Response result is empty. Status code: @status', {
+    logger.warning('Error while doing MDC api. Response result is empty. Status code: @status', {
       '@status': response.status,
     });
 
@@ -282,20 +282,20 @@ const handleResponse = (apiResponse) => {
       response.data.error_message = response.message;
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
         '@message': response.data.error_message,
-        '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
-        '@response_code': response.status,
+        '@resultCode': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
+        '@responseCode': response.status,
       });
     } else if (!_isUndefined(apiResponse.data.message) && !_isEmpty(apiResponse.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(apiResponse);
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
         '@message': response.data.error_message,
-        '@result_code': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
-        '@response_code': apiResponse.status,
+        '@resultCode': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
+        '@responseCode': apiResponse.status,
       });
 
       // The following case happens when there is a stock mismatch between
@@ -317,7 +317,7 @@ const handleResponse = (apiResponse) => {
     ) {
       // Other messages.
       const error = apiResponse.data.messages.error[0];
-      logger.info('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.info('Error while doing MDC api call. Error message: @message', {
         '@message': error.message,
       });
       response.data.error_code = error.code;
@@ -329,8 +329,8 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
-    logger.info('Error while doing MDC api call. Error: @error_message', {
-      '@error_message': error.message,
+    logger.info('Error while doing MDC api call. Error: @message', {
+      '@message': error.message,
     });
   } else if (_isArray(apiResponse.data.response_message)
     && !_isUndefined(apiResponse.data.response_message[1])
@@ -339,8 +339,8 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = 400;
     [response.data.error_message] = apiResponse.data.response_message;
-    logger.info('Error while doing MDC api call. Error: @error_message', {
-      '@error_message': JSON.stringify(response.data.response_message),
+    logger.info('Error while doing MDC api call. Error: @message', {
+      '@message': JSON.stringify(response.data.response_message),
     });
   }
 
@@ -399,8 +399,8 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
         return handleResponse(error.request);
       }
 
-      logger.error('Something happened in setting up the request that triggered an error: @error.', {
-        '@error': error.message,
+      logger.error('Something happened in setting up the request that triggered an error: @message.', {
+        '@message': error.message,
       });
 
       return error;
@@ -699,7 +699,7 @@ const getProcessedCartData = async (cartData) => {
         // Do not show the products which are not available in
         // system but only available in cart.
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
-          logger.error('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
             '@sku': item.sku,
             '@cartId': data.cart_id_int,
             '@stockInfo': JSON.stringify(stockInfo || {}),
@@ -1085,10 +1085,10 @@ const updateCart = async (postData) => {
       return response;
     })
     .catch((response) => {
-      logger.warning('Error while updating cart on MDC for action: @action. Error message: @errorMessage, Code: @errorCode', {
+      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @code', {
         '@action': action,
-        '@errorMessage': response.error.message,
-        '@errorCode': response.error.error_code,
+        '@message': response.error.message,
+        '@code': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
       return response;
