@@ -51,7 +51,8 @@
     }
 
     @include breakpoint($desktop) {
-      #{$right}: 1.5rem;
+      #{$right}: 1rem;
+      height: 2.75rem;
     }
   }
 
@@ -139,6 +140,7 @@
         border-width: 0.0625rem;
         border-bottom-#{$left}-radius: 0;
         border-bottom-#{$right}-radius: 0;
+        border-color: $algolia-auto-suggest-border;
 
         @include breakpoint($only-mobile) {
           border: none;

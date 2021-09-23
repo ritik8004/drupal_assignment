@@ -1,0 +1,13 @@
+.spc-promo-code-block {
+  .promo-submit {
+    text-transform: uppercase;
+  }
+
+  #promo-code {
+    font-size: 0.875rem;
+
+    &::placeholder {
+      color: $spc_promo_code_placeholder_text;
+    }
+  }
+}

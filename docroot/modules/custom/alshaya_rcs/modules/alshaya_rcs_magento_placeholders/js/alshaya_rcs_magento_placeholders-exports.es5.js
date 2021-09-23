@@ -96,6 +96,17 @@ exports.render = function render(
       }
       break;
 
+    case 'promotional_banner':
+      // Render promotional banner block.
+      if (typeof globalThis.renderRcsPromotionalBanner !== 'undefined') {
+        html += globalThis.renderRcsPromotionalBanner.render(
+          settings,
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;

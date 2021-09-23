@@ -11,6 +11,7 @@ $brownish-grey: #666;
 $bright-gray: #eee;
 $silver-gray: #b6b6b6;
 $gray-98: #fafafa;
+$warm-grey-two: #dadada;
 $gray-light: #f6f6f6;
 $pale-taupe: #b89978;
 $blood: #a81313;
@@ -21,6 +22,8 @@ $blue-cola: #007fdb;
 $bright-blue: #2182d5;
 
 // Global elements.
+$primary_text: $outer-space;
+$primary_link: $eerie-black;
 $primary_text: $eerie-black;
 $primary_link: $dark-gray;
 $content_pagetitle: $outer-space;
@@ -41,7 +44,6 @@ $primary_input_border: $outer-space;
 $primary_input_disabled: $brownish-grey;
 $primary_input_focus_border: $black;
 $primary_input_inline_error: $lust-red;
-$password_tooltip_list: $eerie-black;
 
 // Form Items
 $formitem_label: $dark-gray;
@@ -52,21 +54,20 @@ $primary_empty_btn: $white;
 $primary_empty_btn_border: $outer-space;
 $primary_brand_button: $outer-space;
 $primary_button_disabled: $brownish-grey;
-$returned_btn_bg: $bright-gray;
 $complete_btn_bg: $green;
 
 // Checkbox & Radio.
-$primary_checkbox_empty: $outer-space;
-$primary_checkbox_filled: $outer-space;
+$primary_checkbox_empty: $eerie-black;
+$primary_checkbox_filled: $eerie-black;
 $primary_radiobtn_label: $dark-gray;
-$primary_radiobtn_empty: $outer-space;
-$primary_radiobtn_filled: $outer-space;
+$primary_radiobtn_empty: $eerie-black;
+$primary_radiobtn_filled: $eerie-black;
 
 // User Form
 $user_field_link: $outer-space;
 $user_form_text: $eerie-black;
 $my_account_nav: $eerie-black;
-$my_account_nav_active: $dark-gray;
+$my_account_nav_active: $eerie-black;
 $my_account_nav_hover: $dark-gray;
 $user_form_layout_divider_color: $bright-gray;
 
@@ -79,7 +80,7 @@ $highlights_subtitle_hover: $outer-space;
 
 // Dropdown.
 $primary_dropdown_arrow_bg: transparent;
-$primary_dropdown_text: $black-two;
+// $primary_dropdown_text: $black-two;
 $primary_dropdown_border: $outer-space;
 $primary_dropdown_option_hover: $bright-gray;
 $primary_dropdown_option_border: $bright-gray;
@@ -102,13 +103,13 @@ $footer_link_hover: $eerie-black;
 $social-icons-bg: $bright-gray;
 
 // Titles.
-$page_title: $outer-space;
-$block_title: $outer-space;
-$title: $outer-space;
-$sub_title: $outer-space;
+$page_title: $eerie-black;
+$block_title: $eerie-black;
+$title: $eerie-black;
+$sub_title: $eerie-black;
 $label_black: $black-two;
 $label_dark: $black;
-$user_sidebar_block_title: $outer-space;
+$user_sidebar_block_title: $eerie-black;
 
 // Copyright
 $copyright_footer_bg: $bright-gray;
@@ -142,9 +143,11 @@ $header_secondary_bg_upto_desk: $white;
 $header_secondary_menu_link_mobile: $black-two;
 $header_secondary_menu_link: $black-two;
 $header_mobile_menu_arrow: $black-two;
+$header_c_menu_text: $eerie-black;
 
 // Header my account nav.
 $header_my_account_h3_title: $black-two;
+$header_my_account_icon: $black-two;
 
 // Back to top
 $btt_bg: $gray-98;
@@ -185,6 +188,10 @@ $mm_l3_link: $eerie-black;
 $mm_highlight_label: $eerie-black;
 $mm_highlight_title: $eerie-black;
 $mm_highlight_description: $eerie-black;
+$mm_l3_link_hover: $eerie-black;
+
+// Contact Page
+$webform_contact_legend: $outer-space;
 
 // Store finder page.
 // Store finder header form.
@@ -206,9 +213,14 @@ $store_finder_individual_hour_border: $bright-gray;
 $store_finder_glossary_alphabet: $eerie-black;
 $store_finder_glossary_text: $eerie-black;
 $store_finder_glossary_icon: $eerie-black;
+$store_finder_glossary_text_hover: rgba(27, 27, 27, 0.7);
+$store_finder_glossary_text_hover: $brownish-grey;
 $store_finder_glossary_text_hover: $bright-gray;
 $store_finder_glossary_text_border: $bright-gray;
 $store_finder_glossary_border: $bright-gray;
+
+// Modal
+$modal_close_bg: $black;
 
 // Store finder search results.
 $store_finder_search_results_counter_bg: $blood;
@@ -232,3 +244,89 @@ $maintenance_container_border: $white;
 $maintenance_container_border_top: $white;
 $maintenance_body_bg: $white;
 $maintenance_link: $brownish-grey;
+
+// Partialfulfillment
+$cancel-item-link: $lust-red;
+$cancel-item-list-header: $eerie-black;
+$cancel-item-refund-text: $brownish-grey;
+$cancel-item-image-border: $bright-gray;
+$cancel-item-image-label-text: $eerie-black;
+
+// Order detail, recent orders, order list page.
+$order_search_form_label: $eerie-black;
+$order_search_form_icon: $white;
+$order_search_form_border: $eerie-black;
+$order_detail_delivery_details_row_content: $eerie-black;
+
+// Address form.
+$address_form_radio: $eerie-black;
+$address_button_border: $eerie-black;
+$address_button_text: $eerie-black;
+$address_book_delete_cancel: $eerie-black;
+$address_book_delete_close: $black;
+$address_pp_delete_closebtn: $black;
+$address_book_delete_close_icon: $white;
+
+// My Account pages
+$my_account_mobile_back_link: $eerie-black;
+$password_tooltip_list: $eerie-black;
+$user_nav_link: $eerie-black;
+$user_nav_mobile_link: $eerie-black;
+$user_nav_mobile_title2: $eerie-black;
+$user_order_list_text: $eerie-black;
+$user_order_list_dark: $eerie-black;
+
+// Block Alshaya ACM customer .block-alshaya-acm-customer
+$block_acm_customer_txt: $eerie-black;
+
+//Algolia search bar.
+
+$algolia-input-text: $eerie-black;
+$algolia-trending-title-text: $eerie-black;
+$algolia-trending-title-border: $bright-gray;
+$algolia-react-progressbar-fill: $eerie-black;
+$algolia-react-search-page-title: $eerie-black;
+$algolia-react-sidebar-label-color: $eerie-black;
+$algolia-suggestion-text: $brownish-grey;
+$algolia-auto-suggest-border: $bright-gray;
+
+// Language Switcher
+$lang_switch: $eerie-black;
+$lang_switch_active: $dark-gray;
+$lang_switch_firsttime_bg: $outer-space;
+$lang_switch_firsttime_border: $outer-space;
+$lang_switch_list: $white;
+$lang_switch_close_icon: $white;
+
+// Notification popup.
+$minicart_notification_border: $eerie-black;
+$minicart_notification_shadow: $white;
+$minicart_notification_text: $dark-gray;
+$minicart_notification_btn_bg: $outer-space;
+$minicart_notification_product_title: $eerie-black;
+$cart_notification_arrow_bg: $white;
+
+// SPC
+$spc-cart-background: $gray-light;
+$spc-empty-text: $eerie-black;
+$spc-checkout_section_title: $outer-space;
+$spc-product-title: $black-two;
+$spc-product-price: $outer-space;
+$spc-product-attributes: $brownish-grey;
+$spc-promo-code-error: $lust-red;
+$spc-promo-code-success: $green;
+$spc-select-border: $warm-grey-two;
+$spc-totals-line-item-color: $outer-space;
+$spc-order-total-suffix-text: $brownish-grey;
+$spc-promo-code-placeholder-text: $silver-gray;
+
+// Product detail page.
+$pdp_product_special_price_text: $blood;
+
+// Checkout Global.
+$checkout_section_titles: $eerie-black;
+$checkout_login_link_text: $eerie-black;
+$checkout_login_submit_button_background: $outer-space;
+$checkout_guest_button_border: $outer-space;
+$checkout_guest_button_txt: $eerie-black;
+$checkout_footer_border-top: $gray;

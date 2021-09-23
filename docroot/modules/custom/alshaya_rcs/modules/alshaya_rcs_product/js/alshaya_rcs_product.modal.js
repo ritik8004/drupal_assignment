@@ -77,6 +77,6 @@
    *   Query string for graphql.
    */
   Drupal.alshayaRcs.getProductQuery = function (urlKey) {
-    return `{products(filter: {url_key: {eq: "`+ urlKey + `"}}) ${rcsGraphqlQueryFields.products}}`;
+    return `{products(filter: {url_key: {eq: "`+ urlKey + `"}}) ${rcsPhGraphqlQuery.products}}`;
   };
 })(jQuery, Drupal);

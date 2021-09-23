@@ -250,3 +250,15 @@ sites:
     module: alshaya_cos
     type: alshaya_transac
     country: ae
+  coseg:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: eg
+  cosbh:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: bh
+  cosqa:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: qa

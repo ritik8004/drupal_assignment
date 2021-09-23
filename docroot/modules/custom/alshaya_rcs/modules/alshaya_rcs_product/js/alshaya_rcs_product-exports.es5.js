@@ -455,8 +455,12 @@ exports.computePhFilters = function (input, filter) {
 
       if (typeof configurableOptions !== 'undefined' && configurableOptions.length > 0) {
         const sizeGuide = jQuery('.rcs-templates--size-guide');
-        let sizeGuideAttributes = '';
-        sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+        let sizeGuideAttributes = [];
+        if (sizeGuide.length) {
+          let sizeGuideAttributes = sizeGuide.attr('data-attributes');
+          sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
+        }
+
         const hiddenFormAttributes = (typeof drupalSettings.hidden_form_attributes !== 'undefined')
           ? drupalSettings.hidden_form_attributes
           : [];
