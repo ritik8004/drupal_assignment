@@ -246,12 +246,14 @@ export default class Cart extends React.Component {
     );
   }
 
+  // Adding panel for area list block.
   getPanelData = (data) => {
     this.setState({
       panelContent: data,
     });
   };
 
+  // Removing panel for area list block.
   removePanelData = () => {
     this.setState({
       panelContent: null,
