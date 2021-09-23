@@ -37,7 +37,7 @@ exports.render = function render(
         hideBreadcrumb = enrichedDataObj.remove_from_breadcrumb
       }
       if (!hideBreadcrumb) {
-        breadcrumb.url = '/' + settings.path.pathPrefix + settings.rcsPhSettings.categoryPathPrefix + breadcrumb.url;
+        breadcrumb.url = '/' + settings.path.pathPrefix + breadcrumb.url;
         breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings);
       }
     });

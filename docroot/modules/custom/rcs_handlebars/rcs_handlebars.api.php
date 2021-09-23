@@ -10,7 +10,8 @@
  */
 function hook_rcs_handlebars_templates() {
   // List of handlebars templates to be embedded on the page.
-  // You need to load the contents of the handlebars file and store in the array.
+  // You can either pass as string or load the contents of the
+  // handlebars template.
   return [
     // List of block templates.
     'block' => [],
