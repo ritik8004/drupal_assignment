@@ -11,7 +11,7 @@
       if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
         return null;
       }
-      console.log('Do something here');
+      // @todo add title/description overrides. See CORE-34431.
     });
   });
 })(jQuery);
