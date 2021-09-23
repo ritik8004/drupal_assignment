@@ -180,7 +180,8 @@ class AlshayaRcsCategoryHelper {
 
       // Get overridden target link.
       $field_target_link_uri = $term->get('field_target_link')->getString();
-      if ($field_target_link_uri) {
+      // Get target link only if the override target link checkbox is checked.
+      if ($term->get('field_override_target_link')->getString() && $field_target_link_uri) {
         $path = UrlHelper::isExternal($field_target_link_uri)
           ? $field_target_link_uri
           : Url::fromUri($field_target_link_uri)->toString(TRUE)->getGeneratedUrl();
