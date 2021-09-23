@@ -20,8 +20,8 @@ import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import PpdRatingsReviews from '../pdp-ratings-reviews';
 import DeliveryOptions from '../../../../../alshaya_spc/js/expressdelivery/components/delivery-options';
-import ConditionalView from '../../../../../alshaya_spc/js/common/components/conditional-view';
 import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
