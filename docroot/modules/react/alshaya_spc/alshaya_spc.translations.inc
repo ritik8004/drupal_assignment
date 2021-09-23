@@ -333,9 +333,6 @@ function _alshaya_spc_translations() {
     'Your order will be available for pickup at the following collection point' => [
       'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
     ],
-    'available in collection point within' => [
-      'ar' => 'available in collection point within ar',
-    ],
   ];
 
   $strings['v6'] = [
@@ -385,6 +382,16 @@ function _alshaya_spc_translations() {
     ],
     'How to pay using BenefitPay?' => [
       'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
+    ],
+  ];
+
+  // Strings related to collection point feature.
+  $strings['v9'] = [
+    'Collection Charge' => [
+      'ar' => 'Collection Charge AR',
+    ],
+    'available in collection point within' => [
+      'ar' => 'متوفر في نقطة الاستلام خلال',
     ],
   ];
 

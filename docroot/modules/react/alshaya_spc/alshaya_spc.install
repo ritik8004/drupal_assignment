@@ -17,13 +17,12 @@ use Drupal\taxonomy\Entity\Term;
  * Add click and collect collection point translations.
  */
 function alshaya_spc_update_8018() {
-  $strings = [
-    'available in collection point within' => [
-      'ar' => 'available in collection point within ar',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v9');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**

@@ -379,7 +379,7 @@
       marker_icon_path = map.settings.google_map_settings.marker_icon_path;
     }
 
-    if (typeof marker_icon_path === 'string') {
+    if (typeof marker_icon_path === 'string' && label_position !== null) {
       // Add the marker icon.
       markerSettings.icon = {
         url: marker_icon_path,
