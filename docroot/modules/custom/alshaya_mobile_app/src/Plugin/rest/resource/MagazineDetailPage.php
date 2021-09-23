@@ -179,6 +179,7 @@ class MagazineDetailPage extends ResourceBase {
     // Path alias of magazine article.
     $alias = $this->requestStack->query->get('url');
     $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+    $res = NULL;
 
     if (!$node instanceof NodeInterface) {
       $this->mobileAppUtility->throwException();
