@@ -11,6 +11,7 @@
  * Enable magazine articles feature.
  */
 function alshaya_cos_update_8001() {
+  \Drupal::service('module_installer')->install(['video_embed_field']);
   \Drupal::service('module_installer')->install(['alshaya_magazine']);
   // Configure ShareThis defaults.
   // Configure for which content type ShareThis widget should appear.
