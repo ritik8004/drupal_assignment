@@ -15,14 +15,13 @@ to provide the contents of Handlebars templates, see rcs_handlebars.api.php. i.e
  */
 function hook_rcs_handlebars_templates() {
   // List of handlebars templates to be embedded on the page.
-  // You need to load the contents of the handlebars file and store in the array.
   return [
     // List of field templates.
     'field' => [
       // Entity name.
       'page' => [
         // Field Name and path.
-        'title' => file_get_contents("/path/template.handlebars"),
+        'title' => "/path/template.handlebars",
       ],
     ],
   ];

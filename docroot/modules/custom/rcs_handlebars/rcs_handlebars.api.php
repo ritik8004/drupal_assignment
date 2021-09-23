@@ -10,8 +10,6 @@
  */
 function hook_rcs_handlebars_templates() {
   // List of handlebars templates to be embedded on the page.
-  // You can either pass as string or load the contents of the
-  // handlebars template.
   return [
     // List of block templates.
     'block' => [],
@@ -20,7 +18,7 @@ function hook_rcs_handlebars_templates() {
       // Entity name.
       'page' => [
         // Field Name and path.
-        'title' => file_get_contents("/path/template.handlebars"),
+        'title' => "/path/template.handlebars",
       ],
     ],
   ];
@@ -35,5 +33,5 @@ function hook_rcs_handlebars_templates_alter(&$templates, $entity) {
   }
 
   // Alter list of handlebars templates.
-  $templates['field']['page']['description'] = '<div>{{ description }}</div>';
+  $templates['field']['page']['description'] = '/path/description.handlebars';
 }
