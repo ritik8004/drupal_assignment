@@ -15,6 +15,20 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_main_menu_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_rcs_dp_app_navigation' => [
+      'template' => 'alshaya-rcs-dp-app-navigation',
+      'variables' => [
+        'data' => NULL,
+      ]
+    ]
+  ];
+}
+
+/**
  * Check for given path, department page exists.
  *
  * Check for given path, department page exists. If department page exists

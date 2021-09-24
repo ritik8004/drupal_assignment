@@ -133,6 +133,17 @@ exports.render = function render(
       }
       break;
 
+    case 'app_navigation':
+      // Render the DP App Navigation block.
+      if (typeof globalThis.renderRcsAppNavigation !== 'undefined') {
+        html += globalThis.renderRcsAppNavigation.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
