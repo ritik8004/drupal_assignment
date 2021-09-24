@@ -173,10 +173,22 @@ export default class Checkout extends React.Component {
     this.updateCheckoutMessage(type, message);
   };
 
+  /**
+   * Set the type and message in state to be shown to the user.
+   *
+   * @param {string} type
+   *   The type of the message, will be added as class on selector.
+   *
+   * @param {string} message
+   *   The message to be displayed to the user.
+   */
   updateCheckoutMessage = (type, message) => {
-    this.setState({ messageType: type, errorSuccessMessage: message });
+    const statusType = type || '';
+    const statusContent = message || '';
+
+    this.setState({ messageType: statusType, errorSuccessMessage: statusContent });
     // Checking length as if no type, means no error.
-    if ((type.length > 0) && (document.getElementsByClassName('spc-content').length > 0)) {
+    if ((statusType.length > 0) && (document.getElementsByClassName('spc-content').length > 0)) {
       smoothScrollTo('.spc-content');
     }
   };
