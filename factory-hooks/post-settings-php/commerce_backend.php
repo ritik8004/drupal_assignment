@@ -9,8 +9,10 @@
  */
 
 $env = 'local';
-if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-  $env = $_ENV['AH_SITE_ENVIRONMENT'];
+
+$ah_env = getenv('AH_SITE_ENVIRONMENT');
+if ($ah_env && $ah_env !== 'ide') {
+  $env = $ah_env;
 }
 
 $settings['middleware_auth'] = '5um6y5nxl3oqms9qw0jai36qkryrrocg';
