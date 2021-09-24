@@ -1,0 +1,414 @@
+# Application 'alshaya7tmp', environment '07dev'.
+07dev:
+  root: /var/www/html/alshaya7tmp.07dev/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07dev
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07dev.enterprise-g1.acquia-sites.com
+  07dev.livedev:
+    parent: '@alshaya7tmp.07dev'
+    root: /mnt/gfs/alshaya7tmp.07dev/livedev/docroot
+  host: alshaya7tmp07dev.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07dev
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07dev2'.
+07dev2:
+  root: /var/www/html/alshaya7tmp.07dev2/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07dev2
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07dev2.enterprise-g1.acquia-sites.com
+  07dev2.livedev:
+    parent: '@alshaya7tmp.07dev2'
+    root: /mnt/gfs/alshaya7tmp.07dev2/livedev/docroot
+  host: alshaya7tmp07dev2.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07dev2
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07dev2up'.
+07dev2up:
+  root: /var/www/html/alshaya7tmp.07dev2up/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07dev2up
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07dev2up.enterprise-g1.acquia-sites.com
+  07dev2up.livedev:
+    parent: '@alshaya7tmp.07dev2up'
+    root: /mnt/gfs/alshaya7tmp.07dev2up/livedev/docroot
+  host: alshaya7tmp07dev2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07dev2up
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07dev3'.
+07dev3:
+  root: /var/www/html/alshaya7tmp.07dev3/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07dev3
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07dev3.enterprise-g1.acquia-sites.com
+  07dev3.livedev:
+    parent: '@alshaya7tmp.07dev3'
+    root: /mnt/gfs/alshaya7tmp.07dev3/livedev/docroot
+  host: alshaya7tmp07dev3.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07dev3
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07dev3up'.
+07dev3up:
+  root: /var/www/html/alshaya7tmp.07dev3up/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07dev3up
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07dev3up.enterprise-g1.acquia-sites.com
+  07dev3up.livedev:
+    parent: '@alshaya7tmp.07dev3up'
+    root: /mnt/gfs/alshaya7tmp.07dev3up/livedev/docroot
+  host: alshaya7tmp07dev3up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07dev3up
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07devup'.
+07devup:
+  root: /var/www/html/alshaya7tmp.07devup/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07devup
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07devup.enterprise-g1.acquia-sites.com
+  07devup.livedev:
+    parent: '@alshaya7tmp.07devup'
+    root: /mnt/gfs/alshaya7tmp.07devup/livedev/docroot
+  host: alshaya7tmp07devup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07devup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07live'.
+07live:
+  root: /var/www/html/alshaya7tmp.07live/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07live
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07live.enterprise-g1.acquia-sites.com
+  07live.livedev:
+    parent: '@alshaya7tmp.07live'
+    root: /mnt/gfs/alshaya7tmp.07live/livedev/docroot
+  host: alshaya7tmp07live.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07live
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07lt'.
+07lt:
+  root: /var/www/html/alshaya7tmp.07lt/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07lt
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07lt.enterprise-g1.acquia-sites.com
+  07lt.livedev:
+    parent: '@alshaya7tmp.07lt'
+    root: /mnt/gfs/alshaya7tmp.07lt/livedev/docroot
+  host: alshaya7tmp07lt.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07lt
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07ltup'.
+07ltup:
+  root: /var/www/html/alshaya7tmp.07ltup/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07ltup
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07ltup.enterprise-g1.acquia-sites.com
+  07ltup.livedev:
+    parent: '@alshaya7tmp.07ltup'
+    root: /mnt/gfs/alshaya7tmp.07ltup/livedev/docroot
+  host: alshaya7tmp07ltup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07ltup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07pprod'.
+07pprod:
+  root: /var/www/html/alshaya7tmp.07pprod/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07pprod
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07pprod.enterprise-g1.acquia-sites.com
+  07pprod.livedev:
+    parent: '@alshaya7tmp.07pprod'
+    root: /mnt/gfs/alshaya7tmp.07pprod/livedev/docroot
+  host: alshaya7tmp07pprod.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07pprod
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07pprodup'.
+07pprodup:
+  root: /var/www/html/alshaya7tmp.07pprodup/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07pprodup
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07pprodup.enterprise-g1.acquia-sites.com
+  07pprodup.livedev:
+    parent: '@alshaya7tmp.07pprodup'
+    root: /mnt/gfs/alshaya7tmp.07pprodup/livedev/docroot
+  host: alshaya7tmp07pprodup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07pprodup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07qa2'.
+07qa2:
+  root: /var/www/html/alshaya7tmp.07qa2/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07qa2
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07qa2.enterprise-g1.acquia-sites.com
+  07qa2.livedev:
+    parent: '@alshaya7tmp.07qa2'
+    root: /mnt/gfs/alshaya7tmp.07qa2/livedev/docroot
+  host: alshaya7tmp07qa2.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07qa2
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07qa2up'.
+07qa2up:
+  root: /var/www/html/alshaya7tmp.07qa2up/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07qa2up
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07qa2up.enterprise-g1.acquia-sites.com
+  07qa2up.livedev:
+    parent: '@alshaya7tmp.07qa2up'
+    root: /mnt/gfs/alshaya7tmp.07qa2up/livedev/docroot
+  host: alshaya7tmp07qa2up.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07qa2up
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07test'.
+07test:
+  root: /var/www/html/alshaya7tmp.07test/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07test
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07test.enterprise-g1.acquia-sites.com
+  07test.livedev:
+    parent: '@alshaya7tmp.07test'
+    root: /mnt/gfs/alshaya7tmp.07test/livedev/docroot
+  host: alshaya7tmp07test.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07test
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07testup'.
+07testup:
+  root: /var/www/html/alshaya7tmp.07testup/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07testup
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07testup.enterprise-g1.acquia-sites.com
+  07testup.livedev:
+    parent: '@alshaya7tmp.07testup'
+    root: /mnt/gfs/alshaya7tmp.07testup/livedev/docroot
+  host: alshaya7tmp07testup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07testup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07uat'.
+07uat:
+  root: /var/www/html/alshaya7tmp.07uat/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07uat
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07uat.enterprise-g1.acquia-sites.com
+  07uat.livedev:
+    parent: '@alshaya7tmp.07uat'
+    root: /mnt/gfs/alshaya7tmp.07uat/livedev/docroot
+  host: alshaya7tmp07uat.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07uat
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07uatup'.
+07uatup:
+  root: /var/www/html/alshaya7tmp.07uatup/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07uatup
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07uatup.enterprise-g1.acquia-sites.com
+  07uatup.livedev:
+    parent: '@alshaya7tmp.07uatup'
+    root: /mnt/gfs/alshaya7tmp.07uatup/livedev/docroot
+  host: alshaya7tmp07uatup.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07uatup
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment '07update'.
+07update:
+  root: /var/www/html/alshaya7tmp.07update/docroot
+  ac-site: alshaya7tmp
+  ac-env: 07update
+  ac-realm: enterprise-g1
+  uri: alshaya7tmp07update.enterprise-g1.acquia-sites.com
+  07update.livedev:
+    parent: '@alshaya7tmp.07update'
+    root: /mnt/gfs/alshaya7tmp.07update/livedev/docroot
+  host: alshaya7tmp07update.ssh.enterprise-g1.acquia-sites.com
+  user: alshaya7tmp.07update
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'dev'.
+dev:
+  root: /var/www/html/alshaya7tmp.dev/docroot
+  ac-site: alshaya7tmp
+  ac-env: dev
+  ac-realm: enterprise-g1
+  uri: alshaya7tmpdev.enterprise-g1.acquia-sites.com
+  dev.livedev:
+    parent: '@alshaya7tmp.dev'
+    root: /mnt/gfs/alshaya7tmp.dev/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'dev2'.
+dev2:
+  root: /var/www/html/alshaya7tmp.dev2/docroot
+  ac-site: alshaya7tmp
+  ac-env: dev2
+  ac-realm: enterprise-g1
+  uri: alshaya7tmpdev2.enterprise-g1.acquia-sites.com
+  dev2.livedev:
+    parent: '@alshaya7tmp.dev2'
+    root: /mnt/gfs/alshaya7tmp.dev2/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'dev3'.
+dev3:
+  root: /var/www/html/alshaya7tmp.dev3/docroot
+  ac-site: alshaya7tmp
+  ac-env: dev3
+  ac-realm: enterprise-g1
+  uri: alshaya7tmpdev3.enterprise-g1.acquia-sites.com
+  dev3.livedev:
+    parent: '@alshaya7tmp.dev3'
+    root: /mnt/gfs/alshaya7tmp.dev3/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'pprod'.
+pprod:
+  root: /var/www/html/alshaya7tmp.pprod/docroot
+  ac-site: alshaya7tmp
+  ac-env: pprod
+  ac-realm: enterprise-g1
+  uri: alshaya7tmppprod.enterprise-g1.acquia-sites.com
+  pprod.livedev:
+    parent: '@alshaya7tmp.pprod'
+    root: /mnt/gfs/alshaya7tmp.pprod/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'prod'.
+prod:
+  root: /var/www/html/alshaya7tmp.prod/docroot
+  ac-site: alshaya7tmp
+  ac-env: prod
+  ac-realm: enterprise-g1
+  uri: alshaya7tmpprod.enterprise-g1.acquia-sites.com
+  prod.livedev:
+    parent: '@alshaya7tmp.prod'
+    root: /mnt/gfs/alshaya7tmp.prod/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'qa2'.
+qa2:
+  root: /var/www/html/alshaya7tmp.qa2/docroot
+  ac-site: alshaya7tmp
+  ac-env: qa2
+  ac-realm: enterprise-g1
+  uri: alshaya7tmpqa2.enterprise-g1.acquia-sites.com
+  qa2.livedev:
+    parent: '@alshaya7tmp.qa2'
+    root: /mnt/gfs/alshaya7tmp.qa2/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'test'.
+test:
+  root: /var/www/html/alshaya7tmp.test/docroot
+  ac-site: alshaya7tmp
+  ac-env: test
+  ac-realm: enterprise-g1
+  uri: alshaya7tmptest.enterprise-g1.acquia-sites.com
+  test.livedev:
+    parent: '@alshaya7tmp.test'
+    root: /mnt/gfs/alshaya7tmp.test/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
+
+
+# Application 'alshaya7tmp', environment 'uat'.
+uat:
+  root: /var/www/html/alshaya7tmp.uat/docroot
+  ac-site: alshaya7tmp
+  ac-env: uat
+  ac-realm: enterprise-g1
+  uri: alshaya7tmpuat.enterprise-g1.acquia-sites.com
+  uat.livedev:
+    parent: '@alshaya7tmp.uat'
+    root: /mnt/gfs/alshaya7tmp.uat/livedev/docroot
+  host: null
+  user: null
+  paths:
+    drush-script: drush9
