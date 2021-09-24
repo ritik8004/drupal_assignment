@@ -4,13 +4,14 @@
 (function main($) {
 
   $(document).ready(function ready() {
-    // Event listner to update the data layer object with the proper category
+    // Event listener to update the data layer object with the proper category
     // data.
     document.addEventListener('alshayaRcsUpdateResults', (e) => {
       // Return if result is empty.
-      if (typeof e.detail.result == 'undefined') {
+      if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'category') {
         return null;
       }
+
       // Prepare the Department Name and Id based on the breadcrumb hierarchy.
       let breadcrumbTitles = [];
       let breadcrumbIds = [];
