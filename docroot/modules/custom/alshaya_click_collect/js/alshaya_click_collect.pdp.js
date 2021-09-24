@@ -94,23 +94,48 @@
           if ($(this).data('state') !== 'disabled') {
             // Get the permission track the user location.
             $('#pdp-stores-container').on('click', function () {
-              if ($(this).hasClass('maps-loaded')) {
+              // Do a check if the library is already loaded.
+              if ($('#pdp-stores-container').hasClass('maps-loaded')) {
                 return;
               }
 
-              $(this).addClass('maps-loaded');
+              // Add a check for identify that library is loaded.
+              $('#pdp-stores-container').addClass('maps-loaded');
 
               // First load the library from google.
               Drupal.geolocation.loadGoogle(function () {
-                var field = $('.click-collect-form').find('input[name="location"]')[0];
-                new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
-
                 Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
                 // Try again if we were not able to get location on page load.
                 if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
                   $('#pdp-stores-container').data('second-try', 'done');
                   Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+                }
+              });
+
+              // Get the input field element.
+              var field = $('.click-collect-form').find('input[name="location"]')[0];
+              $(field).once('autocomplete-init').on('keyup keypress', function (e) {
+                // If the input field length is 2 or more, we will load the
+                // google library if not loaded already.
+                if ($(this).val().length >= 2) {
+                  // Do a check if the autocomplete is already attached with field.
+                  if ($('#pdp-stores-container').hasClass('autocomplete-processed')) {
+                    return;
+                  }
+
+                  // Add a check for identify that library is loaded.
+                  $('#pdp-stores-container').addClass('autocomplete-processed');
+
+                  new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], { 'country': settings.alshaya_click_collect.country.toLowerCase() });
+                } else {
+                  // If library is loaded and character length is found under
+                  // 3 character, we will clear the events binds with the input.
+                  if ($('#pdp-stores-container').hasClass('autocomplete-processed')) {
+                    $(".pac-container").remove();
+                    google.maps.event.clearInstanceListeners(field);
+                    $('#pdp-stores-container').removeClass('autocomplete-processed');
+                  }
                 }
               });
             });
@@ -415,11 +440,6 @@
     $('.click-collect-all-stores').html('');
     $('.click-collect-form .available-store-text').hide();
     $('.click-collect-form .change-location').hide();
-
-    // Bind the js again to main input.
-    var field = $('.click-collect-form').find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()});
-
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
 

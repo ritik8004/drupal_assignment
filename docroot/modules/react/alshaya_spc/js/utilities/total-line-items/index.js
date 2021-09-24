@@ -8,6 +8,7 @@ import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
 import Advantagecard from '../advantagecard';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -72,7 +73,7 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals, isCartPage } = this.props;
+    const { totals, isCartPage, collectionCharge } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
     // Using a separate variable(shippingAmount) to update the value
@@ -103,6 +104,7 @@ class TotalLineItems extends React.Component {
         />
       );
     }
+
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
@@ -127,6 +129,15 @@ class TotalLineItems extends React.Component {
             )}
             title={getStringMessage('cod_surcharge_label')}
             value={totals.surcharge}
+          />
+        </ConditionalView>
+
+        {/* If Collection point feature is enabled, display collection charge if applied. */}
+        <ConditionalView condition={collectionPointsEnabled() && hasValue(collectionCharge)}>
+          <TotalLineItem
+            name="collection-charge"
+            title={Drupal.t('Collection Charge')}
+            value={collectionCharge > 0 ? parseInt(collectionCharge, 10) : collectionCharge}
           />
         </ConditionalView>
 

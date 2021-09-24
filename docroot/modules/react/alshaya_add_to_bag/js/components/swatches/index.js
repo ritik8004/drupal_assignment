@@ -61,7 +61,7 @@ const Swatch = (props) => {
           href="#"
           onClick={(e) => onSwatchSelect(e, attributeName, onClick, isColor)}
         >
-          <img src={data} />
+          <img loading="lazy" src={data} />
         </a>
 
       </ConditionalView>

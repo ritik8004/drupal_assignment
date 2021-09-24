@@ -321,23 +321,14 @@ function _alshaya_spc_translations() {
     'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
       'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
     ],
-    'The same person placing the order will not collect the order.' => [
-      'ar' => 'الشخص الذي قام بوضع الطلب لن يقوم باستلام الطلب بنفسه',
-    ],
     'Selected collection point' => [
       'ar' => 'نقطة الاستلام المختارة.',
-    ],
-    'Collectors Information' => [
-      'ar' => 'بيانات المستلمين',
     ],
     'Important Note:' => [
       'ar' => 'ملاحظة مهمة:',
     ],
     'Collect in' => [
       'ar' => 'الاستلام في',
-    ],
-    'Collector`s mobile number can not be same as contact number' => [
-      'ar' => 'لا يمكن أن يكون رقم هاتف المستلم نفس رقم الاتصال',
     ],
     'Your order will be available for pickup at the following collection point' => [
       'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
@@ -360,6 +351,47 @@ function _alshaya_spc_translations() {
     ],
     'This product is not eligible for the Advantage card discount.' => [
       'ar' => 'هذا المنتج غير مؤهل للحصول على خصم بطاقة الشايع',
+    ],
+  ];
+
+  // Strings related to Benefit Pay payment method.
+  $strings['v8'] = [
+    'Continue with Benefit pay' => [
+      'ar' => 'أكمل مع بينفت باي',
+    ],
+    'Please complete your payment by scanning the QR code.' => [
+      'ar' => 'أكمل عملية الدفع عبر مسح رمز QR.',
+    ],
+    'Scan to Pay' => [
+      'ar' => 'امسح وادفع',
+    ],
+    'Pay using BenefitPay App' => [
+      'ar' => 'ادفع باستخدام تطبيق بينفت باي',
+    ],
+    'BenefitPay' => [
+      'ar' => 'بينفت باي',
+    ],
+    'Merchant' => [
+      'ar' => 'التاجر',
+    ],
+    'Amount' => [
+      'ar' => 'المبلغ',
+    ],
+    'Reference number' => [
+      'ar' => 'الرقم المرجعي',
+    ],
+    'How to pay using BenefitPay?' => [
+      'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
+    ],
+  ];
+
+  // Strings related to collection point feature.
+  $strings['v9'] = [
+    'Collection Charge' => [
+      'ar' => 'رسوم التحصيل',
+    ],
+    'available in collection point within' => [
+      'ar' => 'متوفر في نقطة الاستلام خلال',
     ],
   ];
 

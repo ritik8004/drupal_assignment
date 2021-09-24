@@ -17,6 +17,7 @@ const PdpFreeGift = ({
             <ConditionalView condition={freeGiftImage.length > 0}>
               <div className="free-gift-image">
                 <img
+                  loading="lazy"
                   src={freeGiftImage['#url']}
                   alt={freeGiftImage['#alt']}
                   title={freeGiftImage['#title']}

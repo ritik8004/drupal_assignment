@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @clickCollect @hmaeuat @mcsauat @mcaeuat @flsauat @bbwsauat @vssauat @tbskwuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat @flaeuat @bbwaeuat @vsaeuat
+@javascript @returnUser @checkoutPayment @clickCollect @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @hmaeuat @mcsauat @mcaeuat @flsauat @bbwsauat @vssauat @tbskwuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat @flaeuat @bbwaeuat @vsaeuat
 Feature: SPC Checkout using Click & Collect store for returning customer using Checkout (2D) Card Payment Method
 
   Background:
@@ -42,9 +42,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 5 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
     And I wait for the page to load
     And I wait 20 seconds
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{order_detail}"
@@ -111,9 +111,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
     And I wait for the page to load
     And I wait 20 seconds
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"

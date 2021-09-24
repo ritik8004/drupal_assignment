@@ -26,6 +26,7 @@ const PdpCrossellUpsellImageContent = ({
                 src={productLabels[key].image.url}
                 alt={productLabels[key].image.alt}
                 title={productLabels[key].image.title}
+                loading="lazy"
               />
             </div>
           ))}

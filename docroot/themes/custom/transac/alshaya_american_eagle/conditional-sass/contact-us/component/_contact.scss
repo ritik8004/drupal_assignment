@@ -38,6 +38,12 @@
         #{$right}: 1rem;
         top: 1.25rem;
       }
+
+      &.form-type-select {
+        label.error {
+          top: 3.125rem;
+        }
+      }
     }
 
     .form-submit {

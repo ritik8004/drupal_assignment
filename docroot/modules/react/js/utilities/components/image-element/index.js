@@ -12,6 +12,7 @@ const ImageElement = (props) => {
   return (
     <img
       src={src}
+      loading="lazy"
       alt={alt || parsedTitle}
       title={parsedTitle || ''}
       {...otherProps}

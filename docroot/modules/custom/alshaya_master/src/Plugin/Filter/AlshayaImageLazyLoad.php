@@ -33,31 +33,30 @@ class AlshayaImageLazyLoad extends FilterBase {
 
     $dom = Html::load($text);
 
-    // Apply blazy to all the source and img tag for picture tag.
+    // Apply loading lazy to all the source and img tag for picture tag.
     $picture_list = $dom->getElementsByTagName('picture');
     if ($picture_list->length > 0) {
       /** @var \DOMElement $picture */
       foreach ($picture_list as $picture) {
         foreach ($picture->getElementsByTagName('source') as $source) {
-          $this->applyBlazy($source, 'srcset');
+          $this->applylazy($source);
         }
 
         foreach ($picture->getElementsByTagName('img') ?? [] as $image) {
-          $this->applyBlazy($image, 'src');
+          $this->applylazy($image);
         }
       }
     }
 
-    // Apply blazy to individual img tags. We won't process again if already
-    // processed once.
+    // Apply loading lazy to individual img tags.
+    // We won't process again if already processed once.
     $image_list = $dom->getElementsByTagName('img');
     if ($image_list->length > 0) {
       /** @var \DOMElement $image */
       foreach ($image_list as $image) {
-        $this->applyBlazy($image, 'src');
+        $this->applylazy($image);
       }
     }
-
     if ($this->modified) {
       $text = Html::serialize($dom);
       $text = Html::decodeEntities($text);
@@ -67,15 +66,13 @@ class AlshayaImageLazyLoad extends FilterBase {
   }
 
   /**
-   * Wrapper function to apply blazy to element.
+   * Wrapper function to apply lazy to element.
    *
    * @param \DOMElement $element
    *   DOM element.
-   * @param string $tag
-   *   Tag to change.
    */
-  private function applyBlazy(\DOMElement $element, string $tag) {
-    if (strpos($element->getAttribute('class') ?? '', 'b-lazy') > -1) {
+  private function applylazy(\DOMElement $element) {
+    if (strpos($element->getAttribute('loading') ?? '', 'lazy') > -1) {
       return;
     }
 
@@ -87,16 +84,7 @@ class AlshayaImageLazyLoad extends FilterBase {
     }
 
     $this->modified = TRUE;
-
-    $element->setAttribute('data-' . $tag, $element->getAttribute($tag));
-    $element->setAttribute($tag, 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
-
-    $classes = [
-      $element->getAttribute('class'),
-      'b-lazy',
-    ];
-
-    $element->setAttribute('class', implode(' ', array_filter($classes)));
+    $element->setAttribute('loading', 'lazy');
   }
 
 }

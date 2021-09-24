@@ -18,6 +18,7 @@ const RecommendedProduct = ({ item, itemKey }) => {
                   src={item.extra_data.cart_image.url}
                   alt={item.extra_data.cart_image.alt}
                   title={item.extra_data.cart_image.title}
+                  loading="lazy"
                 />
               )
               : null}

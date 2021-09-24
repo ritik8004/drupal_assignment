@@ -1,4 +1,4 @@
-@javascript @smoke @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbsaprod @pbaepprod @pbkwpprod
+@javascript @smoke @footer @bpkwprod @tbsegprod @bpaeprod @bpsaprod @westelmkwprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbsaprod @pbaepprod @pbkwpprod
 Feature: Test Footer on the site
 
   Background:
@@ -12,8 +12,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist
@@ -34,8 +32,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist
@@ -64,8 +60,6 @@ Feature: Test Footer on the site
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
-    And the element "#block-shopby" should exist
-    And the element "#block-shopby h3.is-accordion" should exist
     And the element "#block-aboutbrand" should exist
     And the element "#block-alshaya-help" should exist
     And the element "#block-sociallinks" should exist

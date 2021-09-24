@@ -54,6 +54,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I should see "Reference number:"
     Then I should see "Complete payment by:"
@@ -129,6 +130,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I wait 90 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -196,4 +198,5 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I wait 90 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I should save the order details in the file
     Then the element ".order-summary-banner-fawry" should exist

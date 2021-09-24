@@ -73,22 +73,6 @@
       img {
         height: auto;
         width: 100%;
-
-        &.b-lazy {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          max-width: 1rem;
-        }
-
-        &.b-lazy.b-loaded {
-          max-width: initial;
-          position: initial;
-          top: initial;
-          left: initial;
-          transform: initial;
-        }
       }
     }
 

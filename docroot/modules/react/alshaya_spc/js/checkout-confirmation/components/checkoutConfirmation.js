@@ -8,6 +8,10 @@ import { removeStorageInfo } from '../../utilities/storage';
 import VatFooterText from '../../utilities/vat-footer';
 import ConditionalView from '../../common/components/conditional-view';
 import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
+import CompleteBenefitPayPayment
+  from './CompleteBenefitPayPayment';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -47,7 +51,15 @@ class CheckoutConfirmation extends React.Component {
   }
 
   render() {
-    const { items, totals, number_of_items: itemsTotal } = drupalSettings.order_details;
+    const {
+      items,
+      totals,
+      number_of_items: itemsTotal,
+      payment,
+      delivery_type_info: {
+        collection_charge: collectionCharge,
+      },
+    } = drupalSettings.order_details;
 
     return (
       <>
@@ -61,6 +73,9 @@ class CheckoutConfirmation extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
+            <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
+              <CompleteBenefitPayPayment payment={payment} totals={totals} />
+            </ConditionalView>
             <OrderSummary />
             <ConditionalView condition={window.innerWidth > 768}>
               <div className="checkout-link submit fadeInUp" style={{ animationDelay: '1s' }}>
@@ -79,6 +94,10 @@ class CheckoutConfirmation extends React.Component {
               show_checkout_button={false}
               animationDelay="0.4s"
               context="confirmation"
+              {...(collectionPointsEnabled()
+                && hasValue(collectionCharge)
+                && { collectionCharge }
+              )}
             />
           </div>
         </div>

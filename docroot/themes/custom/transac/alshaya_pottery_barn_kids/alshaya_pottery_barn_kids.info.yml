@@ -92,3 +92,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css
+
+  alshaya_white_label/slug-banner:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/slug-banner/slug-banner.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/slug-banner/slug-banner.ltr.css
