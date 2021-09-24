@@ -219,3 +219,20 @@ function clear_cache_for_url(string $zone, string $url) {
 
   return invoke_api($api_url, 'POST', $data);
 }
+
+function get_page_rules_for_zone(string $zone) {
+  $data = [
+    'page' => 1,
+    'per_page' => 125,
+  ];
+
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/pagerules';
+  $api_url .= '?' . http_build_query($data);
+
+  return invoke_api($api_url);
+}
+
+function create_page_rule_for_zone(string $zone, array $rule) {
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/pagerules';
+  return invoke_api($api_url, 'POST', $rule);
+}
