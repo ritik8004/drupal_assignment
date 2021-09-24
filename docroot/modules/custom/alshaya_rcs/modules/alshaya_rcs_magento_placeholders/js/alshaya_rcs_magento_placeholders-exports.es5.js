@@ -31,7 +31,20 @@ exports.render = function render(
         html += globalThis.renderRcsNavigationMenu.render(
           settings,
           inputs,
-          innerHtml
+          innerHtml,
+          'navigation_menu'
+        );
+      }
+      break;
+
+    case "shop_by_block":
+      // Process shop by block renderer, if available.
+      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
+        html += globalThis.renderRcsNavigationMenu.render(
+          settings,
+          inputs,
+          innerHtml,
+          'shop_by_block'
         );
       }
       break;

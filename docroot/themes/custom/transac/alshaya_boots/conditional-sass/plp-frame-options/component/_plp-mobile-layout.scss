@@ -1,5 +1,6 @@
 #alshaya-algolia-search,
-#alshaya-algolia-plp {
+#alshaya-algolia-plp,
+#top-results {
   .c-products-list {
     &.product-large,
     &.product-small {
@@ -58,7 +59,13 @@
     .addtobag-config-button-container,
     .is-not-buyable {
       @include breakpoint($only-mobile) {
-        margin: 0 0.625rem 0.5rem;
+        margin: 0 0.625rem;
+      }
+    }
+
+    article {
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.5rem;
       }
     }
   }

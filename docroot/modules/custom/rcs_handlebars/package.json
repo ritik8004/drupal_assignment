@@ -3,16 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build:dev": "webpack --mode=development",
-    "build": "webpack"
-  },
-  "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.15.0",
-    "babel-plugin-rewire": "^1.2.0",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7"
-  },
-  "dependencies": {
-    "handlebars": "^4.7.7"
+    "build:dev": "../node_modules/.bin/webpack --mode=development",
+    "build": "../node_modules/.bin/webpack"
   }
 }
