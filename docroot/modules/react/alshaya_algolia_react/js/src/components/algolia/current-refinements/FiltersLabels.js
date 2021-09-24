@@ -48,7 +48,7 @@ function selectedFiltersLables(attribute, value, filter) {
     }
 
     case 'delivery_ways': {
-      const selectedVal = value.replace(/_/g , " ");
+      const selectedVal = value.replace(/_/g, ' ');
       selctionText = (selectedVal > 1)
         ? `${Drupal.t(selectedVal)}` : `${Drupal.t(selectedVal)}`;
       break;
