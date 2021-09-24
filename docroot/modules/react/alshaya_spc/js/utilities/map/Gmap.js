@@ -165,7 +165,9 @@ export class Gmap {
     const { map } = this;
     let clickedMarker = '';
     currentMarker.addListener('click', () => {
-      map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
+      map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon({
+        url: mapIcon ? tempMarker.icon.url : currentMarkerSettings.icon.url,
+      }));
       currentMarker.setIcon(
         { url: mapIcon || markerActiveIcon, scaledSize: new google.maps.Size(47, 66) },
       );

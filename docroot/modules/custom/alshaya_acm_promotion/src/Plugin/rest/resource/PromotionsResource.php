@@ -195,7 +195,7 @@ class PromotionsResource extends ResourceBase {
         $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
 
         $data = [
-          'id' => (int) $node->id(),
+          'id' => (int) $node->get('field_acq_promotion_rule_id')->getString(),
           'name' => $node->label(),
           'path' => $node_url->getGeneratedUrl(),
           'commerce_id' => (int) $node->get('field_acq_promotion_rule_id')->first()->getString(),

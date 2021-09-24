@@ -1,0 +1,27 @@
+.l-one--w {
+  #alshaya-algolia-search {
+    .c-content__region {
+      width: 100%;
+    }
+  }
+}
+
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        font-size: 0.8125rem;
+        text-transform: uppercase;
+
+        &::after {
+          #{$right}: 1.5rem;
+        }
+      }
+    }
+  }
+
+  .c-page-title {
+    font-weight: normal;
+  }
+}

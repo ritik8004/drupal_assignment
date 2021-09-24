@@ -153,7 +153,7 @@ export default class EmptyDeliveryText extends React.Component {
         }
 
         // On two concurrent requests, update storelist only for user's location.
-        if (openStoreRequests.length > 1) {
+        if (openStoreRequests.length > 1 && response.config) {
           const currentCoords = response.config.url.split('/').slice(-2).map((point) => parseFloat(point));
           const rquestIndex = _findKey(openStoreRequests, {
             coords: {

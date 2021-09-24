@@ -321,23 +321,14 @@ function _alshaya_spc_translations() {
     'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
       'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
     ],
-    'The same person placing the order will not collect the order.' => [
-      'ar' => 'الشخص الذي قام بوضع الطلب لن يقوم باستلام الطلب بنفسه',
-    ],
     'Selected collection point' => [
       'ar' => 'نقطة الاستلام المختارة.',
-    ],
-    'Collectors Information' => [
-      'ar' => 'بيانات المستلمين',
     ],
     'Important Note:' => [
       'ar' => 'ملاحظة مهمة:',
     ],
     'Collect in' => [
       'ar' => 'الاستلام في',
-    ],
-    'Collector`s mobile number can not be same as contact number' => [
-      'ar' => 'لا يمكن أن يكون رقم هاتف المستلم نفس رقم الاتصال',
     ],
     'Your order will be available for pickup at the following collection point' => [
       'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
@@ -350,8 +341,21 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to Benefit Pay payment method.
+  // Strings related to Advantage card.
   $strings['v7'] = [
+    'Please enter valid Advantage card code.' => [
+      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+    ],
+    'Advantage Card Discount' => [
+      'ar' => 'خصم بطاقة الشايع',
+    ],
+    'This product is not eligible for the Advantage card discount.' => [
+      'ar' => 'هذا المنتج غير مؤهل للحصول على خصم بطاقة الشايع',
+    ],
+  ];
+
+  // Strings related to Benefit Pay payment method.
+  $strings['v8'] = [
     'Continue with Benefit pay' => [
       'ar' => 'أكمل مع بينفت باي',
     ],
@@ -381,16 +385,13 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to Advantage card.
-  $strings['v8'] = [
-    'Please enter valid Advantage card code.' => [
-      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+  // Strings related to collection point feature.
+  $strings['v9'] = [
+    'Collection Charge' => [
+      'ar' => 'Collection Charge AR',
     ],
-    'Advantage Card Discount' => [
-      'ar' => 'خصم بطاقة الشايع',
-    ],
-    'The products in your shopping basket are not eligible for the Advantage card discount.' => [
-      'ar' => 'المنتجات التي في سلة التسوق الخاصة بك غير مؤهلة للحصول على خصم بطاقة الشايع',
+    'available in collection point within' => [
+      'ar' => 'متوفر في نقطة الاستلام خلال',
     ],
   ];
 

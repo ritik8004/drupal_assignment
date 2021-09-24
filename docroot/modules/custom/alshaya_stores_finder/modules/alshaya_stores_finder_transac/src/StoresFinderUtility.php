@@ -221,7 +221,13 @@ class StoresFinderUtility {
       foreach ($store['open_hours'] as $open_hours) {
         // Check the hours are present or not. ['value'] contains timings.
         // ['Key'] contains week day.
+        if (empty(trim($open_hours['value']))) {
+          continue;
+        }
+
         if (empty($hours[$open_hours['value']])) {
+          $store['open_hours_group'] = array_merge($store['open_hours_group'], array_flip($hours));
+          $hours = [];
           $hours[$open_hours['value']] = $open_hours['key'];
           $init_day = $open_hours['key'];
         }
@@ -231,7 +237,7 @@ class StoresFinderUtility {
         }
       }
 
-      $store['open_hours_group'] = array_flip($hours);
+      $store['open_hours_group'] = array_merge($store['open_hours_group'], array_flip($hours));
       $store['delivery_time'] = $store_node->get('field_store_sts_label')->getString();
       $store['nid'] = $store_node->id();
       $store['view_on_map_link'] = Url::fromRoute('alshaya_click_collect.cc_store_map_view', ['node' => $store_node->id()])->toString();
