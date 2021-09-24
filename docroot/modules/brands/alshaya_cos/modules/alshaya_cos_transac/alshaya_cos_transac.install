@@ -9,6 +9,11 @@
  * Implements hook_install().
  */
 function alshaya_cos_transac_install() {
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+  ->set('hide_grid_toggle', true)
+  ->save();
+
   // Enable and set alshaya_cos as default theme and set the site logo,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_cos_stores');
