@@ -46,12 +46,6 @@ function alshaya_acm_product_update_8073() {
     'productlistdeliveryways' => 'alshaya_productlist_facets_block_all',
   ];
   foreach ($blocks as $facet_block_id => $all_filter_block_id) {
-    $facet_block = Block::load($facet_block_id);
-    $all_filter_block = Block::load($all_filter_block_id);
-    if (($facet_block instanceof BlockInterface) && ($all_filter_block instanceof BlockInterface)) {
-      $facet_block->setWeight(($all_filter_block->getWeight()) - 1);
-      $facet_block->save();
-    }
     // Add string translation for the block label.
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.' . $facet_block_id)
       ->set('settings.label', 'نوع التوصيل')

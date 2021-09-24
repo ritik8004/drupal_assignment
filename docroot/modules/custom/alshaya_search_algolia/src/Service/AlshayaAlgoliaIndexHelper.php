@@ -375,8 +375,8 @@ class AlshayaAlgoliaIndexHelper {
       }, $configured_skus);
     }
     $object['attr_delivery_ways'] = [];
-    $same_value = 'Same Day Delivery Available';
-    $express_value = 'Express Day Delivery Available';
+    $same_value = 'same_day_delivery_available';
+    $express_value = 'express_day_delivery_available';
     if ($sku->get('attr_same_day_delivery')->getString() == '1' && isset($object['attr_delivery_ways'])) {
       array_push($object['attr_delivery_ways'], $same_value);
     }

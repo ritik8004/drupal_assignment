@@ -12,7 +12,7 @@ import DeliveryTypeFilter from '../algolia/widgets/DeliveryTypeFilter';
 const WidgetManager = React.memo((props) => {
   const
     {
-      facet: filter, value, itemCount, facet: { name },
+      facet: filter, itemCount, facet: { name },
     } = props;
 
   let currentWidget = '';
@@ -80,7 +80,6 @@ const WidgetManager = React.memo((props) => {
           name={name}
           facetValues={filter.facet_values}
           attribute={filter.identifier}
-          value={value}
           itemCount={itemCount}
         />
       );
