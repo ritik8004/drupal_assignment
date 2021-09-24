@@ -198,6 +198,7 @@ export default class AreaListBlock extends React.Component {
               <ul id="delivery-area-list-items" className="area-list-wrapper">
                 {items.map((item) => (
                   <AvailableAreaItems
+                    key={item.location_id}
                     attr={item.location_id}
                     value={item.label}
                     handleLiClick={this.handleLiClick}
