@@ -113,15 +113,12 @@ export default class AreaListBlock extends React.Component {
    * Set active classes on selection of particular area.
    */
   handleLiClick = (e) => {
-    if (e.currentTarget && e.currentTarget.parentElement.value
-    && e.currentTarget.parentElement.attributes['data-parent-id'].nodeValue
-    && e.currentTarget.firstChild
-    && e.currentTarget.firstChild.firstChild) {
+    if (e.currentTarget) {
       this.setState({
         activeItem: {
-          areaId: e.currentTarget.parentElement.value,
-          areaParentId: parseInt(e.currentTarget.parentElement.attributes['data-parent-id'].nodeValue, 10),
-          areaLabel: e.currentTarget.firstChild.firstChild.innerText,
+          areaId: parseInt(e.currentTarget.getAttribute('data-area-id'), 10),
+          areaParentId: parseInt(e.currentTarget.getAttribute('data-parent-id'), 10),
+          areaLabel: e.currentTarget.getAttribute('data-label'),
         },
       });
       // Remove the previous active class.
@@ -131,7 +128,7 @@ export default class AreaListBlock extends React.Component {
         activeElem.classList.toggle('in-active');
       }
       // Set active class on the current element.
-      const elem = document.querySelector(`.spc-delivery-area ul#delivery-area-list-items li#value${e.currentTarget.parentElement.value}`);
+      const elem = document.querySelector(`.spc-delivery-area ul#delivery-area-list-items li#value${e.currentTarget.getAttribute('data-area-id')}`);
       if (elem.classList.contains('in-active')) {
         elem.classList.remove('in-active');
       }

@@ -170,6 +170,7 @@ export default class AddressItem extends React.Component {
     const buttonText = isSelected === true ? Drupal.t('selected') : Drupal.t('select');
 
     // Pre-populate address form with storage area values and blank out other fields.
+    // Checking if delivery area selected by user.
     if (areaUpdated && isSelected) {
       const areaSelected = getDeliveryAreaStorage();
       if (areaSelected !== null) {

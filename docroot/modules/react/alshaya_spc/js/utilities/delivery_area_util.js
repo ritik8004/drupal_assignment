@@ -77,6 +77,9 @@ export const getCartShippingMethods = (currArea, sku) => window.commerceBackend.
     Drupal.logJavascriptError('get-cart-shipping-methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
+/**
+ * Fetching delivery area values choosen by user.
+ */
 export const getDeliveryAreaStorage = () => {
   const deliveryArea = getStorageInfo('deliveryinfo-areadata');
   if (deliveryArea !== null) {
@@ -85,6 +88,9 @@ export const getDeliveryAreaStorage = () => {
   return null;
 };
 
+/**
+ * Storing delivery area values choosen by user.
+ */
 export const setDeliveryAreaStorage = (areaSelected) => {
   removeStorageInfo('deliveryinfo-areadata');
   const { currentLanguage } = drupalSettings.path;

@@ -258,7 +258,7 @@ export default class EmptyDeliveryText extends React.Component {
     }
 
     const areaSelected = getDeliveryAreaStorage();
-    if (areaSelected !== null && isExpressDeliveryEnabled()) {
+    if (isExpressDeliveryEnabled() && areaSelected !== null) {
       const defaultArea = {};
       Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
         if (key === 'administrative_area') {

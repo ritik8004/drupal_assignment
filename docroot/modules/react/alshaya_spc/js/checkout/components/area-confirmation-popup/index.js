@@ -9,13 +9,13 @@ import { getDeliveryAreaStorage, setDeliveryAreaStorage } from '../../../utiliti
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 
-const areaSelected = getDeliveryAreaStorage();
 export default class AreaConfirmationPopup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       lastOrderArea: null,
+      areaSelected: getDeliveryAreaStorage(),
     };
   }
 
@@ -23,6 +23,7 @@ export default class AreaConfirmationPopup extends React.Component {
     const {
       cart: { cart: { shipping: { address } } },
     } = this.props;
+    const { areaSelected } = this.state;
     document.addEventListener('openAreaPopupConfirmation', this.openAreaPopupConfirmation);
 
     document.addEventListener('refreshAreaConfirmationState', this.refreshAreaConfirmationState);
@@ -68,27 +69,31 @@ export default class AreaConfirmationPopup extends React.Component {
    */
   updateDeliveryArea = (e) => {
     e.preventDefault();
-    const { open } = this.state;
+    const { open, areaSelected } = this.state;
     let areaFound = false;
-    if (drupalSettings.user.uid > 0 && areaSelected !== null) {
-      const addressList = getUserAddressList();
-      if (addressList instanceof Promise) {
-        addressList.then((list) => {
-          const areaCheck = list.find((address) => {
-            // If area already exists in address lists.
-            // Make that address as default address of customer.
-            if (areaSelected.value.area === parseInt(address.administrative_area, 10)) {
-              // Show loader.
-              showFullScreenLoader();
-              updateSelectedAddress(address, 'shipping');
-              areaFound = true;
+    if (areaSelected !== null) {
+      if (drupalSettings.user.uid === 0) {
+        dispatchCustomEvent('openAddressContentPopup', open);
+      } else if (drupalSettings.user.uid > 0) {
+        const addressList = getUserAddressList();
+        if (addressList instanceof Promise) {
+          addressList.then((list) => {
+            const areaCheck = list.find((address) => {
+              // If area already exists in address lists.
+              // Make that address as default address of customer.
+              if (areaSelected.value.area === parseInt(address.administrative_area, 10)) {
+                // Show loader.
+                showFullScreenLoader();
+                updateSelectedAddress(address, 'shipping');
+                areaFound = true;
+              }
+              return areaCheck;
+            });
+            if (!areaFound) {
+              dispatchCustomEvent('openAddressContentPopup', open);
             }
-            return areaCheck;
           });
-          if (!areaFound) {
-            dispatchCustomEvent('openAddressContentPopup', open);
-          }
-        });
+        }
       }
     }
     this.closeModal();
@@ -118,6 +123,7 @@ export default class AreaConfirmationPopup extends React.Component {
    * Refresh pop up state accordingly.
    */
   refreshPopupState = (cartData) => {
+    const { areaSelected } = this.state;
     const { address } = cartData.cart.shipping;
     if (areaSelected !== null && drupalSettings.address_fields) {
       const areaFieldKey = drupalSettings.address_fields.administrative_area.key;
@@ -131,7 +137,7 @@ export default class AreaConfirmationPopup extends React.Component {
   }
 
   render() {
-    const { open, lastOrderArea } = this.state;
+    const { open, lastOrderArea, areaSelected } = this.state;
     const currentAreaLabel = gerAreaLabelById(false, lastOrderArea);
     let storageAreaLabel = '';
     if (areaSelected !== null) {

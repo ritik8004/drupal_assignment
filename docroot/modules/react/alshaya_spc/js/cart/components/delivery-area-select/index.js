@@ -3,16 +3,17 @@ import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import AreaListBlock from '../area-list-block';
 
-const currentArea = getDeliveryAreaStorage();
 export default class DeliveryAreaSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       areaLabel: Drupal.t('Select'),
+      currentArea: getDeliveryAreaStorage(),
     };
   }
 
   componentDidMount() {
+    const { currentArea } = this.state;
     document.addEventListener('handleAreaSelect', this.handleAreaSelect);
     if (currentArea !== null) {
       const { currentLanguage } = drupalSettings.path;
