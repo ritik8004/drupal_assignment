@@ -17,7 +17,7 @@ const FixedFields = ({
   // updateCollectorFormVisibility,
 }) => {
   let defaultValue = '';
-  if (defaultVal.length !== 0 && defaultVal.length !== 'undefined') {
+  if (defaultVal.length !== 0 && defaultVal.length !== 'undefined' && defaultVal.static !== undefined) {
     defaultValue = defaultVal.static;
   }
 

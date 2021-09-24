@@ -1,14 +1,14 @@
 import React from 'react';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 const AvailableAreaItems = ({
-  attr, value, parentId, isStandardDelivery,
+  key, attr, value, parentId, isStandardDelivery,
   isSameDayDelivery, isExpressDelivery, handleLiClick,
 }) => {
   const standardDeliveryClass = isStandardDelivery ? 'active' : 'disabled';
   const samedayDeliveryClass = isSameDayDelivery ? 'active' : 'disabled';
   const expressDeliveryClass = isExpressDelivery ? 'active' : 'disabled';
-  const currentArea = getStorageInfo('deliveryinfo-areadata');
+  const currentArea = getDeliveryAreaStorage();
   let activeClass = 'in-active';
   if (currentArea !== null) {
     if (parseInt(currentArea.value.area, 10) === attr) {
@@ -17,7 +17,7 @@ const AvailableAreaItems = ({
   }
   return (
     <li
-      key={attr}
+      key={key}
       value={attr}
       id={`value${attr}`}
       data-parent-id={parentId}

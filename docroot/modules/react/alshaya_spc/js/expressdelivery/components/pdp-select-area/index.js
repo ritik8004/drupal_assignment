@@ -1,7 +1,7 @@
 import React from 'react';
 import AreaListBlock from '../../../cart/components/area-list-block';
 import ConditionalView from '../../../common/components/conditional-view';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import getStringMessage from '../../../utilities/strings';
 
 export default class PdpSelectArea extends React.Component {
@@ -23,7 +23,7 @@ export default class PdpSelectArea extends React.Component {
   }
 
   setAreaLabel() {
-    const currentArea = getStorageInfo('deliveryinfo-areadata');
+    const currentArea = getDeliveryAreaStorage();
     if (currentArea !== null) {
       const { currentLanguage } = drupalSettings.path;
       this.setState({

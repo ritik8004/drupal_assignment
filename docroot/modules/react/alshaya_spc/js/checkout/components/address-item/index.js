@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
   addEditAddressToCustomer,
+  editDefaultAddressFromStorage,
   gerAreaLabelById,
   prepareAddressDataForShipping,
 } from '../../../utilities/address_util';
@@ -17,12 +18,14 @@ import {
 import EditAddressSVG from '../../../svg-component/edit-address-svg';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 export default class AddressItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
+      areaUpdated: props.areaUpdated ? props.areaUpdated : false,
     };
   }
 
@@ -42,6 +45,7 @@ export default class AddressItem extends React.Component {
   closeModal = () => {
     this.setState({
       open: false,
+      areaUpdated: false,
     });
   };
 
@@ -135,9 +139,10 @@ export default class AddressItem extends React.Component {
       headingText,
       showEditButton,
     } = this.props;
+    const { areaUpdated } = this.state;
     const mobDefaultVal = cleanMobileNumber(address.mobile);
     const addressData = [];
-    const editAddressData = {};
+    let editAddressData = {};
     const { open } = this.state;
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[key] !== undefined) {
@@ -164,6 +169,14 @@ export default class AddressItem extends React.Component {
     const selectedClass = isSelected === true ? ' selected' : '';
     const buttonText = isSelected === true ? Drupal.t('selected') : Drupal.t('select');
 
+    // Pre-populate address form with storage area values and blank out other fields.
+    if (areaUpdated && isSelected) {
+      const areaSelected = getDeliveryAreaStorage();
+      if (areaSelected !== null) {
+        editAddressData = editDefaultAddressFromStorage(editAddressData, areaSelected);
+      }
+    }
+
     return (
       <div className={`spc-address-tile${selectedClass}`}>
         <div className="spc-address-metadata">
@@ -189,7 +202,11 @@ export default class AddressItem extends React.Component {
               && (
               <div title={Drupal.t('Edit Address')} className="spc-address-tile-edit" onClick={(e) => this.openModal(e)}>
                 <EditAddressSVG />
-                <Popup open={open} onClose={this.closeModal} closeOnDocumentClick={false}>
+                <Popup
+                  open={areaUpdated && isSelected ? true : open}
+                  onClose={this.closeModal}
+                  closeOnDocumentClick={false}
+                >
                   <>
                     <AddressForm
                       closeModal={this.closeModal}

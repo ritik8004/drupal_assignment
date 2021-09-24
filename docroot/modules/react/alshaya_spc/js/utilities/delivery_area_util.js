@@ -1,5 +1,6 @@
 import hasValue from '../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader } from './checkout_util';
+import { removeStorageInfo, setStorageInfo, getStorageInfo } from './storage';
 import getStringMessage from './strings';
 
 export const getGovernatesList = () => window.commerceBackend.getGovernatesList()
@@ -75,3 +76,26 @@ export const getCartShippingMethods = (currArea, sku) => window.commerceBackend.
   .catch((error) => {
     Drupal.logJavascriptError('get-cart-shipping-methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
+
+export const getDeliveryAreaStorage = () => {
+  const deliveryArea = getStorageInfo('deliveryinfo-areadata');
+  if (deliveryArea !== null) {
+    return deliveryArea;
+  }
+  return null;
+};
+
+export const setDeliveryAreaStorage = (areaSelected) => {
+  removeStorageInfo('deliveryinfo-areadata');
+  const { currentLanguage } = drupalSettings.path;
+  const deliveryArea = {
+    label: {
+      [currentLanguage]: areaSelected.label,
+    },
+    value: {
+      area: areaSelected.area,
+      governate: areaSelected.governate,
+    },
+  };
+  setStorageInfo(deliveryArea, 'deliveryinfo-areadata');
+};

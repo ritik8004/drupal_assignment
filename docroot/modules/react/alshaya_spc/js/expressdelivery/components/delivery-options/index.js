@@ -3,8 +3,7 @@ import Collapsible from 'react-collapsible';
 import HomeDeliverySVG from '../../../../../alshaya_pdp_react/js/svg-component/hd-svg';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
-import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getCartShippingMethods, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import PdpSelectArea from '../pdp-select-area';
 import PdpShippingMethods from '../pdp-shipping-methods';
 import SelectAreaPanel from '../select-area-panel';
@@ -19,7 +18,7 @@ export default class DeliveryOptions extends React.Component {
   }
 
   componentDidMount() {
-    const currentArea = getStorageInfo('deliveryinfo-areadata');
+    const currentArea = getDeliveryAreaStorage();
     const attr = document.getElementsByClassName('sku-base-form');
     const productSku = attr[0].getAttribute('data-sku');
     showFullScreenLoader();

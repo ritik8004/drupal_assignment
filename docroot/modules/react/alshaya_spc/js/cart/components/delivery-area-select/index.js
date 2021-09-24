@@ -1,8 +1,9 @@
 import React from 'react';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
-import { getStorageInfo } from '../../../utilities/storage';
 import AreaListBlock from '../area-list-block';
 
+const currentArea = getDeliveryAreaStorage();
 export default class DeliveryAreaSelect extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,6 @@ export default class DeliveryAreaSelect extends React.Component {
   }
 
   componentDidMount() {
-    const currentArea = getStorageInfo('deliveryinfo-areadata');
     document.addEventListener('handleAreaSelect', this.handleAreaSelect);
     if (currentArea !== null) {
       const { currentLanguage } = drupalSettings.path;
@@ -23,13 +23,12 @@ export default class DeliveryAreaSelect extends React.Component {
     dispatchCustomEvent('displayShippingMethods', currentArea);
   }
 
-  handleAreaSelect = (event) => {
-    event.preventDefault();
-    const currentArea = getStorageInfo('deliveryinfo-areadata');
-    if (currentArea !== null) {
+  handleAreaSelect = (e) => {
+    e.preventDefault();
+    if (e.detail !== null) {
       const { currentLanguage } = drupalSettings.path;
       this.setState({
-        areaLabel: currentArea.label[currentLanguage],
+        areaLabel: e.detail.label[currentLanguage],
       });
     }
   }
