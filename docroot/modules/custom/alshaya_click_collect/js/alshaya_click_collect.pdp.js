@@ -115,7 +115,7 @@
 
               // Get the input field element.
               var field = $('.click-collect-form').find('input[name="location"]')[0];
-              $(field).once('autocomplete-init').on('keyup', function (e) {
+              $(field).once('autocomplete-init').on('keyup keypress', function (e) {
                 // If the input field length is 2 or more, we will load the
                 // google library if not loaded already.
                 if ($(this).val().length >= 2) {
@@ -440,11 +440,6 @@
     $('.click-collect-all-stores').html('');
     $('.click-collect-form .available-store-text').hide();
     $('.click-collect-form .change-location').hide();
-
-    // Bind the js again to main input.
-    var field = $('.click-collect-form').find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()});
-
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
 

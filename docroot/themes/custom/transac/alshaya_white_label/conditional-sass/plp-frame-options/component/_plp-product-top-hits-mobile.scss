@@ -1,0 +1,68 @@
+#top-results {
+  @include breakpoint($only-mobile) {
+    .ais-Hits-list {
+      display: flex !important;
+      flex-wrap: wrap;
+      grid-gap: 0.438rem 0.375rem !important;
+      padding-left: 0.625rem !important;
+      padding-right: 0.625rem !important;
+
+      .ais-Hits-item {
+        display: block;
+        margin-bottom: 0.625rem;
+        position: relative;
+        float: $left;
+        width: calc(100% / 2 - 1.875% + 1.875% / 2);
+
+        &:nth-of-type(2n+1) {
+          margin-#{$left}: 0;
+        }
+
+        &:nth-of-type(2n) {
+          float: $right;
+        }
+
+        .c-products__item {
+          margin-bottom: 0 !important;
+          height: 100%;
+
+          article.node--view-mode-search-result {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between !important;
+
+            .alshaya_search_mainimage img {
+              height: 100%;
+              width: auto;
+              object-fit: scale-down;
+            }
+          }
+        }
+
+        .product-plp-detail-wrapper {
+          font-size: 0.75rem !important;
+
+          .field--name-name {
+            margin-bottom: 0.5rem !important;
+            font-size: 0.75rem !important;
+
+            ~ .price,
+            ~ .special-price-block {
+              margin-bottom: 0.5rem;
+              padding: 0 0.25rem;
+            }
+          }
+        }
+
+        .promotions {
+          margin: 0 0.625rem 0.625rem !important;
+        }
+
+        .addtobag-button-container {
+          margin: 0 0.625rem 0.5rem;
+        }
+      }
+    }
+  }
+}

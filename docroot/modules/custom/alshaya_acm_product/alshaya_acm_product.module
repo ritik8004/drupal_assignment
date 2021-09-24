@@ -1397,7 +1397,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
-
+  // Adding visually-hidden class here as JS is
+  // triggered based on this class to display 'add to basket'
+  // button on mobile view for simple products as well.
+  $form['#attributes']['class'][] = 'visually-hidden';
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
     // Adding parent/main sku in hidden. This can be update/changed
     // by color split if required.
@@ -1412,8 +1415,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     ];
 
     // Hide the form on page load, we want to allow all JS to be applied first.
-    $form['#attributes']['class'][] = 'visually-hidden';
-
     $sku = SKU::loadFromSku($form_state->get('tree_sku'));
     $product_tree = Configurable::deriveProductTree($sku);
 

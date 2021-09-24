@@ -70,7 +70,9 @@ const OrderSummary = () => {
       && storeInfo.store_phone !== null) {
       storePhone = storeInfo.store_phone;
     }
-    etaLabel = Drupal.t('available instore within');
+    etaLabel = (collectionPointsEnabled() && storeInfo.pudo_available === true)
+      ? Drupal.t('available in collection point within')
+      : Drupal.t('available instore within');
   }
 
   const {
@@ -113,6 +115,10 @@ const OrderSummary = () => {
     },
     totals: {
       base_grand_total: baseGrandTotal,
+    },
+    delivery_type_info: {
+      collection_date: collectionDate,
+      collection_charge: collectionCharge,
     },
   } = drupalSettings.order_details;
   const priceTotal = <PriceElement amount={baseGrandTotal} />;
@@ -178,6 +184,10 @@ const OrderSummary = () => {
                     && { pickUpPointIcon: storeInfo.pudo_available ? 'collection-point' : 'store' })}
                   {...(collectionPointsEnabled() && storeInfo.collection_point !== undefined
                     && { pickUpPointTitle: storeInfo.collection_point })}
+                  {...(collectionPointsEnabled() && collectionDate !== undefined
+                    && { collectionDate })}
+                  {...(collectionPointsEnabled() && collectionCharge !== undefined
+                    && { collectionCharge })}
                 />
                 <OrderSummaryItem label={Drupal.t('Collection by')} value={customerShippingName} />
               </>
