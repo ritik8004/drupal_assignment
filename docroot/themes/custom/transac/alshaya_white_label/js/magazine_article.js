@@ -50,9 +50,10 @@
         }
       }
 
+      // We have two selectors:
+      // For V1 we apply slick js immediately after page load.
+      // Fov V2 we wait until the field items are populated by RCS.
       var shopByStory = $('.field--name-field-magazine-shop-the-story:not(.rcs) .field__items, .field--name-field-magazine-shop-the-story.rcs .rcs-field__items');
-      var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
-
       // For tablets and mobile we don't want to apply slickSlider.
       if ($(window).width() > 1023) {
         shopByStory.each(function () {
@@ -60,6 +61,7 @@
         });
       }
 
+      var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
       magazineHeroBanner.each(function () {
         applyRtl($(this), optionsHeroImageBanner);
       });
