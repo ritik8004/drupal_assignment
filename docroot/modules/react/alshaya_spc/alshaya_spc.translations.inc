@@ -395,6 +395,49 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to express delivery feature.
+  $strings['v10'] = [
+    'Express Delivery available' => [
+      'ar' => 'خدمة التوصيل السريع متوفرة',
+    ],
+    'Delivery Options' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Explore the delivery options applicable to your area.' => [
+      'ar' => 'اكتشف خيارات التوصيل المتاحة في منطقتك',
+    ],
+    'Check availability in your area' => [
+      'ar' => 'تحقق من التوفر في منطقتك',
+    ],
+    'Select city' => [
+      'ar' => 'اختر المدينة',
+    ],
+    'Search area' => [
+      'ar' => 'ابحث عن منطقة',
+    ],
+    'Select an area' => [
+      'ar' => 'اختر المنطقة',
+    ],
+    'Same Day Delivery available' => [
+      'ar' => 'التسليم في نفس اليوم متاح',
+    ],
+    'Selected Area' => [
+      'ar' => 'منطقة مختارة',
+    ],
+    'Deliver to' => [
+      'ar' => 'يسلم إلى',
+    ],
+    'Select area' => [
+      'ar' => 'حدد المنطقة',
+    ],
+    'Select this area' => [
+      'ar' => 'حدد هذه المنطقة',
+    ],
+    'Do you want to change your current Delivery Area from @area1 to @area2' => [
+      'ar' => '@area2 إلى area1@ هل تريد تغيير منطقة التسليم الحالية الخاصة بك من',
+    ],
+  ];
+
   return $strings;
 }
 

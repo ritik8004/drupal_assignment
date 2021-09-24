@@ -57,6 +57,7 @@ export default class HomeDeliveryInfo extends React.Component {
     }
     const { areaUpdated } = this.state;
     const data = e.detail;
+    // Checking if delivery area selected matches with current address.
     if (areaUpdated) {
       dispatchCustomEvent('refreshAreaConfirmationState', data);
       this.setState({

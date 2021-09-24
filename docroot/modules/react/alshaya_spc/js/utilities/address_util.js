@@ -192,6 +192,7 @@ export const prepareAddressDataFromForm = (elements) => {
     address[key] = elements[key].value;
   });
 
+  // Save area for customer if express delivery feature enabled.
   if (isExpressDeliveryEnabled()) {
     const areaSelected = {
       label: gerAreaLabelById(false, elements.administrative_area.value),
@@ -870,7 +871,7 @@ export const errorOnDropDownFieldsNotFilled = () => {
 };
 
 /**
- * Prepare address data to update shipping when
+ * Prepare address data to update shipping address.
  */
 export const prepareAddressToUpdate = (address) => {
   const addressUpdate = address;
@@ -883,7 +884,7 @@ export const prepareAddressToUpdate = (address) => {
 };
 
 /**
- * When user changes address.
+ * When user changes address, update the cart.
  */
 export const updateSelectedAddress = (address, type) => {
   // Prepare address data for address info update.
