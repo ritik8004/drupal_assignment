@@ -435,10 +435,15 @@ class AlshayaSpcOrderHelper {
           : $store_node['delivery_time'];
 
         if (!empty($cc_text)) {
-          $orderDetails['delivery_method_description'] = $this->t('@shipping_method_name (@shipping_method_description)', [
-            '@shipping_method_name' => $orderDetails['delivery_method'],
-            '@shipping_method_description' => $cc_text,
-          ]);
+          $orderDetails['delivery_method_description'] = ($orderDetails['store']['pudo_available'] === TRUE)
+            ? $this->t('@shipping_method_description', [
+              '@shipping_method_description' => $cc_text,
+            ])
+            : $this->t('@shipping_method_name (@shipping_method_description)', [
+              '@shipping_method_name' => $orderDetails['delivery_method'],
+              '@shipping_method_description' => $cc_text,
+            ]);
+
           $orderDetails['shipping_method_code'] = $shipping_method_code;
         }
       }

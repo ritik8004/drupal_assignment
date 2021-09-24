@@ -3,4 +3,4 @@ product:
   js:
     js/alshaya_tbs_transac_product.js: {}
   dependencies:
-    - core/drupal
+    - core/jquery

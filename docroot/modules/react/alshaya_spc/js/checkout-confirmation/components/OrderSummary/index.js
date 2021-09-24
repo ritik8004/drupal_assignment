@@ -70,7 +70,9 @@ const OrderSummary = () => {
       && storeInfo.store_phone !== null) {
       storePhone = storeInfo.store_phone;
     }
-    etaLabel = Drupal.t('available instore within');
+    etaLabel = (collectionPointsEnabled() && storeInfo.pudo_available === true)
+      ? Drupal.t('available in collection point within')
+      : Drupal.t('available instore within');
   }
 
   const {

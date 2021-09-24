@@ -7,10 +7,18 @@ import isRTL from '../../utilities/rtl';
 import ConditionalView from '../../common/components/conditional-view';
 import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
   const {
-    items, totals, number_of_items: itemsTotal, payment,
+    items,
+    totals,
+    number_of_items: itemsTotal,
+    payment,
+    delivery_type_info: {
+      collection_charge: collectionCharge,
+    },
   } = drupalSettings.order_details;
   const {
     logo,
@@ -56,6 +64,10 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
             cart_promo={[]}
             show_checkout_button={false}
             context="print"
+            {...(collectionPointsEnabled()
+              && hasValue(collectionCharge)
+              && { collectionCharge }
+            )}
           />
         </div>
       </div>
