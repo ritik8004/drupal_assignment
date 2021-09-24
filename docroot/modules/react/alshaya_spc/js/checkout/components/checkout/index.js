@@ -176,8 +176,8 @@ export default class Checkout extends React.Component {
    *   The message to be displayed to the user.
    */
   updateCheckoutMessage = (type, message) => {
-    const statusType = type === null ? '' : type;
-    const statusContent = message === null ? '' : message;
+    const statusType = type || '';
+    const statusContent = message || '';
 
     this.setState({ messageType: statusType, errorSuccessMessage: statusContent });
     // Checking length as if no type, means no error.
