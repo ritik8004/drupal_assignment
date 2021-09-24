@@ -79,11 +79,11 @@ set classes = [
           {% endif %}
 
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
-          
+
           {% if content.delivery_options %}
             <div class="express-delivery">
-              {% for delivery_option in content.delivery_options %}
-                <div class="express-delivery-text">
+              {% for key,delivery_option in content.delivery_options %}
+                <div class="express-delivery-text {{ key }}">
                   <p>{{ delivery_option }}</p>
                 </div>
               {% endfor %}
