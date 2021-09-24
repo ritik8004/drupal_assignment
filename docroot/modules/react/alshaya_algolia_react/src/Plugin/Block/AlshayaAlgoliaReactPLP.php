@@ -206,6 +206,14 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
       }
     }
 
+    // Check express day option avialble or not and add drupal settings.
+    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+    if ($express_delivery_config->get('status')) {
+      $express_status = [
+        'enabled' => TRUE,
+      ];
+    }
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-plp"></div>',
@@ -214,6 +222,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
         'drupalSettings' => [
           'algoliaSearch' => $algoliaSearch,
           'reactTeaserView' => $reactTeaserView,
+          'expressDelivery' => $express_status,
         ],
       ],
     ];

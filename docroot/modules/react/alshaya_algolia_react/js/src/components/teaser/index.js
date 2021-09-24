@@ -15,6 +15,7 @@ import {
   productListIndexStatus,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -174,7 +175,8 @@ const Teaser = ({
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
           <ConditionalView condition={
-              hit.attr_express_delivery === '1'
+              isExpressDeliveryEnabled()
+              && hit.attr_express_delivery === '1'
             }
           >
             <div className="express_delivery">
