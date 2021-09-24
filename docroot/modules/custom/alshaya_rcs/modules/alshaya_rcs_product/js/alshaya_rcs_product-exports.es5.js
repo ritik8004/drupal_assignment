@@ -64,10 +64,31 @@ function getProductRecommendation(products, sectionTitle) {
         const entityFieldValue = r[1];
         finalMarkup = rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
       });
+    related.html(finalMarkup);
   });
 
-  return finalMarkup;
+  return related.html();
 }
+
+/**
+ * Get the amount with the proper format for decimals.
+ *
+ * @param priceAmount
+ *   The price amount.
+ *
+ * @returns {string|*}
+ *   Return string with price and currency or return array of price and
+ *   currency.
+ */
+ function getFormattedAmount(priceAmount) {
+  let amount = priceAmount === null ? 0 : priceAmount;
+
+  // Remove commas if any.
+  amount = amount.toString().replace(/,/g, '');
+  amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+
+  return amount.toFixed(drupalSettings.alshaya_spc.currency_config.decimal_points);
+};
 
 exports.render = function render(
   settings,
@@ -550,13 +571,11 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'gtm-price':
-      // @todo: Use the correct price key.
-      value = input.price.maximalPrice.amount.value;
+      value = input.price_range.maximum_price.regular_price.value;
       break;
 
     case 'final_price':
-      // @todo: Use the correct price key.
-      value = input.price.maximalPrice.amount.value;
+      value = input.price_range.maximum_price.regular_price.value;
       break;
 
     case 'first_image':

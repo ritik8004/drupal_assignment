@@ -123,7 +123,7 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearchValues = [
       'local_storage_expire' => $common_config['otherRequiredValues']['local_storage_expire'],
       'filters_alias' => array_column($promotion_filters, 'identifier', 'alias'),
-      'promotionNodeId' => $promotion->id(),
+      'promotionNodeId' => $promotion->get('field_acq_promotion_rule_id')->getString(),
     ];
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];

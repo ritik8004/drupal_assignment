@@ -26,21 +26,24 @@ exports.render = function render(
     // Remove the placeholder li elements.
     innerHtmlObj.find('li').remove();
     // @todo Handle special base where we separate URL by - instead of /.
-    const firstLevelTermUrl = rcsWindowLocation().pathname.match(/shop-(.*?)\/(.*?)$/);
-    inputs = inputs.filter((input) => {
-      return input.url_path == firstLevelTermUrl[1];
-    });
-    // Retrive the item from Level 3 as the response that we get from MDC starts
-    // from level 2.
-    // @todo Supercategory special case needs to verfied.
-    let tempInputs = [];
-    inputs && inputs[0].children && inputs[0].children.forEach((input, key) => {
-      tempInputs[key] = input;
-    });
+    const firstLevelTermUrl = rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/(.*?)$`);
+    if (firstLevelTermUrl) {
+      inputs = inputs.filter((input) => {
+        return input.url_path == firstLevelTermUrl[1];
+      });
 
-    // Get the enrichment data. It's a sync call.
-    let enrichmentData = rcsGetEnrichedCategories();
-    innerHtmlObj.find('ul').append(buildLhnHtml('', tempInputs, clickable, unclickable, settings, enrichmentData));
+      // Retrive the item from Level 3 as the response that we get from MDC starts
+      // from level 2.
+      // @todo Supercategory special case needs to verfied.
+      let tempInputs = [];
+      inputs.length && inputs[0].children && inputs[0].children.forEach((input, key) => {
+        tempInputs[key] = input;
+      });
+
+      // Get the enrichment data. It's a sync call.
+      let enrichmentData = rcsGetEnrichedCategories();
+      innerHtmlObj.find('ul').append(buildLhnHtml('', tempInputs, clickable, unclickable, settings, enrichmentData));
+    }
   }
 
   return innerHtmlObj.html();
@@ -65,7 +68,7 @@ exports.render = function render(
  *   {string} Full rendered HTML for the LHN block.
  */
 const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings, enrichmentData) {
-  if (!items) {
+  if (!items.length) {
     return itemHtml;
   }
 
@@ -111,8 +114,8 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
  *   {string} Single LHN item HTML with proper data.
  */
 const replaceLhnPlaceHolders = function (item, itemHtml, settings) {
-  // Change URL based on current language and category prefix.
-  item.url_path = `/${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}${item.url_path}/`;
+  // Change URL based on current language prefix.
+  item.url_path = `/${settings.path.pathPrefix}${item.url_path}/`;
   // lower the level as the response that we get from MDC starts from level 2.
   item.level -= 1;
 

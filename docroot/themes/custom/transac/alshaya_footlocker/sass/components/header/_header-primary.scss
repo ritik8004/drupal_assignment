@@ -234,6 +234,8 @@ header.c-header {
 .block-alshaya-react-mini-cart,
 .static-minicart-wrapper {
   .cart-link {
+    background: none;
+
     &::before {
       content: '';
       mask-image: url('#{$fl_theme_img_directory_path}/icons/shopping-bag-v2.svg');
