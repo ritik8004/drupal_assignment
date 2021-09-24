@@ -1,15 +1,16 @@
 import React from 'react';
 import TotalLineItem from '../total-line-item';
+import VatText from '../vat-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/aura-checkout-order-summary';
 import isAuraEnabled from '../../../../js/utilities/helper';
-import DeliveryVATSuffix from '../delivery-vat-suffix';
 import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
 import Advantagecard from '../advantagecard';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -74,7 +75,7 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals, isCartPage } = this.props;
+    const { totals, isCartPage, collectionCharge } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
@@ -114,42 +115,51 @@ class TotalLineItems extends React.Component {
         />
       );
     }
+
     return (
       <div className="totals">
-        <div className="sub-totals">
-          <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
-          <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
+        <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
+        <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
 
-          <ConditionalView condition={shippingAmount !== null}>
-            <TotalLineItem
-              name="delivery-total"
-              title={Drupal.t('Delivery')}
-              value={shippingAmount > 0 ? shippingAmount : Drupal.t('FREE')}
-            />
-          </ConditionalView>
+        <ConditionalView condition={shippingAmount !== null}>
+          <TotalLineItem
+            name="delivery-total"
+            title={Drupal.t('Delivery')}
+            value={shippingAmount > 0 ? shippingAmount : Drupal.t('FREE')}
+          />
+        </ConditionalView>
 
-          {/* Show surcharge on checkout page only if available. */}
-          <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
-            <TotalLineItem
-              tooltip
-              name="surcharge-total"
-              tooltipContent={replaceCodTokens(
-                getAmountWithCurrency(totals.surcharge),
-                getStringMessage('cod_surcharge_tooltip'),
-              )}
-              title={getStringMessage('cod_surcharge_label')}
-              value={totals.surcharge}
-            />
-          </ConditionalView>
-        </div>
+        {/* Show surcharge on checkout page only if available. */}
+        <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
+          <TotalLineItem
+            tooltip
+            name="surcharge-total"
+            tooltipContent={replaceCodTokens(
+              getAmountWithCurrency(totals.surcharge),
+              getStringMessage('cod_surcharge_tooltip'),
+            )}
+            title={getStringMessage('cod_surcharge_label')}
+            value={totals.surcharge}
+          />
+        </ConditionalView>
 
-        <div className="hero-totals-wrapper">
-          <div className="hero-total">
-            <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
-            <DeliveryVATSuffix
-              shippingAmount={shippingAmount}
-              dontShowVatText={dontShowVatText}
-            />
+        {/* If Collection point feature is enabled, display collection charge if applied. */}
+        <ConditionalView condition={collectionPointsEnabled() && hasValue(collectionCharge)}>
+          <TotalLineItem
+            name="collection-charge"
+            title={Drupal.t('Collection Charge')}
+            value={collectionCharge > 0 ? parseInt(collectionCharge, 10) : collectionCharge}
+          />
+        </ConditionalView>
+
+        <div className="hero-total">
+          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
+          <div className="delivery-vat">
+            <ConditionalView condition={shippingAmount === null}>
+              <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
+            </ConditionalView>
+
+            <VatText />
           </div>
           {isAuraEnabled()
             ? (

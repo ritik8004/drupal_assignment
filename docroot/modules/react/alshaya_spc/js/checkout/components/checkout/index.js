@@ -33,6 +33,8 @@ import validateCartResponse from '../../../utilities/validation_util';
 import { getStorageInfo } from '../../../utilities/storage';
 import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../../js/utilities/conditionsUtility';
 
 window.fetchStore = 'idle';
 
@@ -340,6 +342,10 @@ export default class Checkout extends React.Component {
               show_checkout_button={false}
               animationDelay="0.4s"
               context="checkout"
+              {...(collectionPointsEnabled()
+                && hasValue(cart.cart.shipping.price_amount)
+                && { collectionCharge: cart.cart.shipping.price_amount }
+              )}
             />
           </div>
         </div>

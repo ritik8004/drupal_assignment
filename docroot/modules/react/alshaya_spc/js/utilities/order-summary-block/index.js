@@ -8,6 +8,8 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../checkout_util';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Click handler for `continue checkout`.
@@ -40,6 +42,7 @@ const OrderSummaryBlock = ({
   animationDelay: animationDelayValue,
   context,
   couponCode,
+  collectionCharge,
 }) => {
   const orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
@@ -82,6 +85,10 @@ const OrderSummaryBlock = ({
         <TotalLineItems
           totals={totals}
           isCartPage={showCheckoutButton}
+          {...(collectionPointsEnabled()
+            && hasValue(collectionCharge)
+            && { collectionCharge }
+          )}
         />
         {/* To Be used on cart page only. */}
         {showCheckoutButton
