@@ -174,7 +174,7 @@ const Teaser = ({
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
           <ConditionalView condition={
-              attribute.attr_express_delivery === '1'
+              hit.attr_express_delivery === '1'
             }
           >
             <div className="express_delivery">
