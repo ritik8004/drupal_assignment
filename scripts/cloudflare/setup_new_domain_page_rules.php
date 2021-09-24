@@ -5,6 +5,7 @@ require_once 'common.php';
 
 $domain = $argv[1] ?? '';
 $theme = $argv[2] ?? '';
+$magento_site_code = $argv[3] ?? '';
 
 if (empty($domain)) {
   print 'Please specify the domain to create rules for.';
@@ -14,6 +15,12 @@ if (empty($domain)) {
 
 if (empty($theme)) {
   print 'Please specify the theme name to use for favicon rule.';
+  print PHP_EOL;
+  exit;
+}
+
+if (empty($magento_site_code)) {
+  print 'Please specify the magento site code to use for proxy rules.';
   print PHP_EOL;
   exit;
 }
@@ -40,7 +47,7 @@ $rules['commerce_v2'] = [
     ],
     [
       "id" => "host_header_override",
-      "value" => "ri.store.alshaya.com",
+      "value" => $magento_site_code . ".store.alshaya.com",
     ],
   ],
   "priority" => "97",
