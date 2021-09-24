@@ -131,7 +131,9 @@ const PdpLayout = () => {
       if ((buttonRef !== null) && (buttonRef !== undefined)) {
         const buttonWidth = buttonRef.current.offsetWidth;
         const stickyHederButton = document.querySelector('#sticky-header-btn button');
-        stickyHederButton.style.width = `${buttonWidth}px`;
+        if (stickyHederButton) {
+          stickyHederButton.style.width = `${buttonWidth}px`;
+        }
       }
     };
 
