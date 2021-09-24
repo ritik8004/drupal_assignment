@@ -217,19 +217,10 @@ function template_preprocess_rcs_commerce_price(array &$variables) {
     ? TRUE
     : FALSE;
 
-  $current_language = \Drupal::languageManager()
-    ->getConfigOverrideLanguage()
-    ->getId();
-
-  if (empty($config_data[$current_language])) {
-    $config = \Drupal::configFactory()->get('acq_commerce.currency');
-    $config_data[$current_language]['currency_format'] = $config->get('currency_code');
-    $config_data[$current_language]['currency_code_position'] = $config->get('currency_code_position');
-    $config_data[$current_language]['decimal_points'] = $config->get('decimal_points');
-  }
-
-  $variables['currency_format'] = $config_data[$current_language]['currency_format'];
-  $variables['currency_code_position'] = $config_data[$current_language]['currency_code_position'];
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+  $variables['currency_format'] = $config->get('currency_code');
+  $variables['currency_code_position'] = $config->get('currency_code_position');
+  $variables['decimal_points'] = $config->get('decimal_points');
 }
 
 /**
@@ -600,17 +591,16 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'stock_status',
       'ship_to_store',
       'reserve_and_collect',
-      'price' => [
-        'regularPrice' => [
-          'amount' => [
-            'currency',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value'
+          ],
+          'final_price' => [
             'value',
           ],
-        ],
-        'maximalPrice' => [
-          'amount' => [
-            'currency',
-            'value',
+          'discount' => [
+            'percent_off',
           ],
         ],
       ],
@@ -674,17 +664,16 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             '... on PhysicalProductInterface' => [
               'weight',
             ],
-            'price' => [
-              'regularPrice' => [
-                'amount' => [
-                  'value',
-                  'currency',
+            'price_range' => [
+              'maximum_price' => [
+                'regular_price' => [
+                  'value'
                 ],
-              ],
-              'maximalPrice' => [
-                'amount' => [
+                'final_price' => [
                   'value',
-                  'currency',
+                ],
+                'discount' => [
+                  'percent_off',
                 ],
               ],
             ],
@@ -775,17 +764,16 @@ function _alshaya_rcs_product_get_recommended_product_field_query() {
     'url_key',
     'is_buyable',
     'stock_status',
-    'price' => [
-      'regularPrice' => [
-        'amount' => [
-          'currency',
+    'price_range' => [
+      'maximum_price' => [
+        'regular_price' => [
+          'value'
+        ],
+        'final_price' => [
           'value',
         ],
-      ],
-      'maximalPrice' => [
-        'amount' => [
-          'currency',
-          'value',
+        'discount' => [
+          'percent_off',
         ],
       ],
     ],
