@@ -71,7 +71,7 @@
    */
   Drupal.alshayaSeoGtmProductRecomDy.getRecommendationListName = function (element) {
     var strategyId = element.closest('.dyMonitor').attr('data-dy-var-id');
-    if ($('.dyMonitor').find('div.dy-404').length === 0) {
+    if ($('.dyMonitor').find('div.dy-404').length > 0) {
       return (productRecommendationsSuffix + 'page-404-' + strategyId).toLowerCase();
     }
     var gtmListName = $('body').attr('gtm-list-name');
