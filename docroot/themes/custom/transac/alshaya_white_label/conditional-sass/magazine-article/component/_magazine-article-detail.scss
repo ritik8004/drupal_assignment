@@ -239,29 +239,6 @@ body {
       }
     }
   }
-
-  @include breakpoint($upto-desktop) {
-    .field__items {
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      overflow-y: hidden;
-      white-space: nowrap;
-      padding-bottom: 1.25rem;
-
-      .field__item {
-        width: 29%;
-        display: inline-block;
-        vertical-align: top;
-        white-space: normal;
-
-        @include breakpoint($only-mobile) {
-          width: 37%;
-          margin-#{$right}: 0.625rem;
-        }
-      }
-    }
-  }
 }
 
 .nodetype--magazine_article,

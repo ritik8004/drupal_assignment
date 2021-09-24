@@ -12,11 +12,42 @@
       var optionsShopByStory = {
         arrows: true,
         useTransform: false,
-        slidesToShow: 5,
+        slidesToShow: 4,
         slidesToScroll: 1,
         focusOnSelect: false,
         touchThreshold: 1000,
-        infinite: false
+        infinite: false,
+        accessibility: true,
+        speed: 300,
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 1,
+              infinite: true,
+              dots: false,
+            }
+          },
+          {
+            breakpoint: 740,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+              arrows: false,
+              dots: true,
+            }
+          },
+          {
+            breakpoint: 650,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              arrows: false,
+              dots: true,
+            }
+          }
+        ]
       };
 
       var optionsHeroImageBanner = {
@@ -50,16 +81,16 @@
         }
       }
 
-      // We have two selectors:
-      // For V1 we apply slick js immediately after page load.
-      // Fov V2 we wait until the field items are populated by RCS.
-      var shopByStory = $('.field--name-field-magazine-shop-the-story:not(.rcs) .field__items, .field--name-field-magazine-shop-the-story.rcs .rcs-field__items');
-      // For tablets and mobile we don't want to apply slickSlider.
-      if ($(window).width() > 1023) {
-        shopByStory.each(function () {
-          applyRtl($(this), optionsShopByStory);
-        });
-      }
+      // If RCS is not enabled, we apply slick js immediately after page load.
+      var s1 = '.field--name-field-magazine-shop-the-story:not(.rcs) .field__items';
+
+      // When RCS is enabled, we wait until the field items are populated by RCS.
+      var s2 = '.field--name-field-magazine-shop-the-story.rcs .rcs-field__items';
+
+      var shopByStory = $(s1 + ', ' + s2);
+      shopByStory.each(function () {
+        applyRtl($(this), optionsShopByStory);
+      });
 
       var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
       magazineHeroBanner.each(function () {
