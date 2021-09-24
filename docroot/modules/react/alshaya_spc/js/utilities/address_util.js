@@ -15,6 +15,8 @@ import {
   smoothScrollTo,
 } from './smoothScroll';
 import { setStorageInfo } from './storage';
+import { isExpressDeliveryEnabled } from '../../../js/utilities/expressDeliveryHelper';
+import { setDeliveryAreaStorage } from './delivery_area_util';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -172,7 +174,6 @@ export const prepareCnCAddressFromCartShipping = (address, store) => {
  * @param {*} elements
  */
 export const prepareAddressDataFromForm = (elements) => {
-  const { currentLanguage } = drupalSettings.path;
   const {
     firstname,
     lastname,
@@ -191,16 +192,14 @@ export const prepareAddressDataFromForm = (elements) => {
     address[key] = elements[key].value;
   });
 
-  const areaSelected = {
-    label: {
-      [currentLanguage]: gerAreaLabelById(false, elements.administrative_area.value),
-    },
-    value: {
+  if (isExpressDeliveryEnabled()) {
+    const areaSelected = {
+      label: gerAreaLabelById(false, elements.administrative_area.value),
       area: parseInt(elements.administrative_area.value, 10),
       governate: parseInt(elements.area_parent.value, 10),
-    },
-  };
-  setStorageInfo(areaSelected, 'deliveryinfo-areadata');
+    };
+    setDeliveryAreaStorage(areaSelected);
+  }
 
   return prepareAddressDataForShipping(address);
 };

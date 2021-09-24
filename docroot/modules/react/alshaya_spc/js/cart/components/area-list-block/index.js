@@ -1,10 +1,11 @@
 import React from 'react';
 import Select from 'react-select';
 import ConditionalView from '../../../common/components/conditional-view';
-import { getDeliveryAreaList, getGovernatesList } from '../../../utilities/delivery_area_util';
+import {
+  getDeliveryAreaList, getDeliveryAreaStorage, getGovernatesList, setDeliveryAreaStorage,
+} from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import SectionTitle from '../../../utilities/section-title';
-import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../utilities/strings';
 import AvailableAreaItems from '../available-area-items';
 
@@ -26,7 +27,7 @@ export default class AreaListBlock extends React.Component {
    */
   componentDidMount() {
     const { governateDefaultLabel } = this.state;
-    const areaSelected = getStorageInfo('deliveryinfo-areadata');
+    const areaSelected = getDeliveryAreaStorage();
     let defaultOptions = [];
     getGovernatesList().then(
       (response) => {
@@ -114,12 +115,13 @@ export default class AreaListBlock extends React.Component {
   handleLiClick = (e) => {
     if (e.currentTarget && e.currentTarget.parentElement.value
     && e.currentTarget.parentElement.attributes['data-parent-id'].nodeValue
-    && e.currentTarget.firstChild.innerText) {
+    && e.currentTarget.firstChild
+    && e.currentTarget.firstChild.firstChild) {
       this.setState({
         activeItem: {
           areaId: e.currentTarget.parentElement.value,
           areaParentId: parseInt(e.currentTarget.parentElement.attributes['data-parent-id'].nodeValue, 10),
-          areaLabel: e.currentTarget.firstChild.innerText,
+          areaLabel: e.currentTarget.firstChild.firstChild.innerText,
         },
       });
       // Remove the previous active class.
@@ -143,20 +145,15 @@ export default class AreaListBlock extends React.Component {
   handleSubmit = (activeItem) => {
     if (activeItem !== null) {
       const { closeModal } = this.props;
-      const { currentLanguage } = drupalSettings.path;
-      removeStorageInfo('deliveryinfo-areadata');
-      const currentArea = {
-        label: {
-          [currentLanguage]: activeItem.areaLabel,
-        },
-        value: {
-          area: activeItem.areaId,
-          governate: activeItem.areaParentId,
-        },
+      const areaSelected = {
+        label: activeItem.areaLabel,
+        area: activeItem.areaId,
+        governate: activeItem.areaParentId,
       };
-      setStorageInfo(currentArea, 'deliveryinfo-areadata');
+      setDeliveryAreaStorage(areaSelected);
       closeModal();
-      dispatchCustomEvent('handleAreaSelect', activeItem);
+      const currentArea = getDeliveryAreaStorage();
+      dispatchCustomEvent('handleAreaSelect', currentArea);
       // Show delivery methods with cart items.
       dispatchCustomEvent('displayShippingMethods', currentArea);
     }

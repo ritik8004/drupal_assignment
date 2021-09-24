@@ -16,7 +16,9 @@ import {
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import AreaConfirmationPopup from '../area-confirmation-popup';
-import { getStorageInfo } from '../../../utilities/storage';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -33,7 +35,9 @@ export default class HomeDeliveryInfo extends React.Component {
   componentDidMount() {
     this.isComponentMounted = true;
     document.addEventListener('refreshCartOnAddress', this.eventListener);
-    document.addEventListener('openAddressContentPopup', this.openAddressContentPopUp);
+    if (isExpressDeliveryEnabled()) {
+      document.addEventListener('openAddressContentPopup', this.openAddressContentPopUp);
+    }
   }
 
   componentWillUnmount() {
@@ -71,7 +75,7 @@ export default class HomeDeliveryInfo extends React.Component {
     const addressData = formatAddressDataForEditForm(address);
     let addressDataValue = { ...addressData };
     if (areaUpdated) {
-      const areaSelected = getStorageInfo('deliveryinfo-areadata');
+      const areaSelected = getDeliveryAreaStorage();
       if (areaSelected !== null) {
         addressDataValue = editDefaultAddressFromStorage(addressData, areaSelected);
       }
@@ -160,10 +164,11 @@ export default class HomeDeliveryInfo extends React.Component {
             refreshCart={refreshCart}
           />
         </div>
-        <AreaConfirmationPopup
-          cart={cartVal}
-          refreshCart={refreshCart}
-        />
+        <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <AreaConfirmationPopup
+            cart={cartVal}
+          />
+        </ConditionalView>
       </div>
     );
   }

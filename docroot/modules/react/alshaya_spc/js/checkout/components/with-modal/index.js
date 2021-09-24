@@ -2,6 +2,7 @@ import React from 'react';
 import qs from 'qs';
 import { createBrowserHistory } from 'history';
 import dispatchCustomEvent from '../../../utilities/events';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const history = createBrowserHistory();
 
@@ -17,7 +18,9 @@ export default class WithModal extends React.Component {
   componentDidMount() {
     this.isComponentMounted = true;
 
-    document.addEventListener('openAddressContentPopup', this.openAddressContentPopUp);
+    if (isExpressDeliveryEnabled()) {
+      document.addEventListener('openAddressContentPopup', this.openAddressContentPopUp);
+    }
     // Adding custom "escape" key event listner for popup.
     // As, popup module's default event handler triggers "closeModal" props
     // which is passed to <Popup> component. and as we are handling closemodal

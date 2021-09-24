@@ -18,7 +18,7 @@ import {
 import EditAddressSVG from '../../../svg-component/edit-address-svg';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 export default class AddressItem extends React.Component {
   constructor(props) {
@@ -166,13 +166,12 @@ export default class AddressItem extends React.Component {
     editAddressData.static.telephone = mobDefaultVal;
     editAddressData.static.address_id = address.address_id;
 
-
     const selectedClass = isSelected === true ? ' selected' : '';
     const buttonText = isSelected === true ? Drupal.t('selected') : Drupal.t('select');
 
     // Pre-populate address form with storage area values and blank out other fields.
     if (areaUpdated && isSelected) {
-      const areaSelected = getStorageInfo('deliveryinfo-areadata');
+      const areaSelected = getDeliveryAreaStorage();
       if (areaSelected !== null) {
         editAddressData = editDefaultAddressFromStorage(editAddressData, areaSelected);
       }

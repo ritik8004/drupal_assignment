@@ -25,7 +25,8 @@ import { makeFullName } from '../../../utilities/cart_customer_util';
 import {
   getCncSectionDescription,
 } from '../../../utilities/cnc_util';
-import { getStorageInfo } from '../../../utilities/storage';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -256,8 +257,8 @@ export default class EmptyDeliveryText extends React.Component {
       };
     }
 
-    const areaSelected = getStorageInfo('deliveryinfo-areadata');
-    if (areaSelected !== null) {
+    const areaSelected = getDeliveryAreaStorage();
+    if (areaSelected !== null && isExpressDeliveryEnabled()) {
       const defaultArea = {};
       Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
         if (key === 'administrative_area') {

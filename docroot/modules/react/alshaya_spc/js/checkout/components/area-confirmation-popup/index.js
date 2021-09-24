@@ -5,10 +5,11 @@ import {
   gerAreaLabelById, getAreaParentId, getUserAddressList, updateSelectedAddress,
 } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
+import { getDeliveryAreaStorage, setDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
-import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../utilities/strings';
 
+const areaSelected = getDeliveryAreaStorage();
 export default class AreaConfirmationPopup extends React.Component {
   constructor(props) {
     super(props);
@@ -22,8 +23,6 @@ export default class AreaConfirmationPopup extends React.Component {
     const {
       cart: { cart: { shipping: { address } } },
     } = this.props;
-    const areaSelected = getStorageInfo('deliveryinfo-areadata');
-
     document.addEventListener('openAreaPopupConfirmation', this.openAreaPopupConfirmation);
 
     document.addEventListener('refreshAreaConfirmationState', this.refreshAreaConfirmationState);
@@ -47,22 +46,20 @@ export default class AreaConfirmationPopup extends React.Component {
     });
   };
 
+  /**
+   * Update delivery area storage with last order address.
+   */
   updateDeliveryAreaStorage = (e) => {
     e.preventDefault();
     const { lastOrderArea } = this.state;
-    const { currentLanguage } = drupalSettings.path;
     const areaParentInputValue = getAreaParentId(false, lastOrderArea);
     // Save the updated area/city in localStorage.
     const updatedArea = {
-      label: {
-        [currentLanguage]: gerAreaLabelById(false, lastOrderArea),
-      },
-      value: {
-        area: parseInt(lastOrderArea, 10),
-        governate: parseInt(areaParentInputValue[0].id, 10),
-      },
+      label: gerAreaLabelById(false, lastOrderArea),
+      area: parseInt(lastOrderArea, 10),
+      governate: parseInt(areaParentInputValue[0].id, 10),
     };
-    setStorageInfo(updatedArea, 'deliveryinfo-areadata');
+    setDeliveryAreaStorage(updatedArea);
     this.closeModal();
   }
 
@@ -71,7 +68,6 @@ export default class AreaConfirmationPopup extends React.Component {
    */
   updateDeliveryArea = (e) => {
     e.preventDefault();
-    const areaSelected = getStorageInfo('deliveryinfo-areadata');
     const { open } = this.state;
     let areaFound = false;
     if (drupalSettings.user.uid > 0 && areaSelected !== null) {
@@ -98,43 +94,44 @@ export default class AreaConfirmationPopup extends React.Component {
     this.closeModal();
   }
 
+  /**
+   * Opens delivery area pop up confirmation box.
+   */
   openAreaPopupConfirmation = (e) => {
-    const {
-      cart: { cart: { shipping: { address } } },
-    } = this.props;
-    const areaSelected = getStorageInfo('deliveryinfo-areadata');
+    const { cart } = this.props;
     if (e.detail) {
-      if (areaSelected !== null && drupalSettings.address_fields) {
-        const areaFieldKey = drupalSettings.address_fields.administrative_area.key;
-        if (areaSelected.value.area !== parseInt(address[areaFieldKey], 10)) {
-          this.setState({
-            open: true,
-            lastOrderArea: parseInt(address[areaFieldKey], 10),
-          });
-        }
-      }
+      this.refreshPopupState(cart);
     }
   }
 
+  /**
+   * Checks if area confirmation still not answered by customer.
+   */
   refreshAreaConfirmationState = (e) => {
-    const areaSelected = getStorageInfo('deliveryinfo-areadata');
-    const { address } = e.detail.cart.shipping.address;
-    if (address) {
-      if (areaSelected !== null && drupalSettings.address_fields) {
-        const areaFieldKey = drupalSettings.address_fields.administrative_area.key;
-        if (areaSelected.value.area !== parseInt(address[areaFieldKey], 10)) {
-          this.setState({
-            open: true,
-            lastOrderArea: parseInt(address[areaFieldKey], 10),
-          });
-        }
+    if (e.detail) {
+      this.refreshPopupState(e.detail);
+    }
+  }
+
+  /**
+   * Checks if address matches with storage value.
+   * Refresh pop up state accordingly.
+   */
+  refreshPopupState = (cartData) => {
+    const { address } = cartData.cart.shipping;
+    if (areaSelected !== null && drupalSettings.address_fields) {
+      const areaFieldKey = drupalSettings.address_fields.administrative_area.key;
+      if (areaSelected.value.area !== parseInt(address[areaFieldKey], 10)) {
+        this.setState({
+          open: true,
+          lastOrderArea: parseInt(address[areaFieldKey], 10),
+        });
       }
     }
   }
 
   render() {
     const { open, lastOrderArea } = this.state;
-    const areaSelected = getStorageInfo('deliveryinfo-areadata');
     const currentAreaLabel = gerAreaLabelById(false, lastOrderArea);
     let storageAreaLabel = '';
     if (areaSelected !== null) {
