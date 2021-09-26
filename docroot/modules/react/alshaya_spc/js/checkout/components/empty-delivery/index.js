@@ -22,6 +22,9 @@ import { getUserLocation } from '../../../utilities/map/map_utils';
 import dispatchCustomEvent from '../../../utilities/events';
 import WithModal from '../with-modal';
 import { makeFullName } from '../../../utilities/cart_customer_util';
+import {
+  getCncSectionDescription,
+} from '../../../utilities/cnc_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -148,7 +151,7 @@ export default class EmptyDeliveryText extends React.Component {
         }
 
         // On two concurrent requests, update storelist only for user's location.
-        if (openStoreRequests.length > 1) {
+        if (openStoreRequests.length > 1 && response.config) {
           const currentCoords = response.config.url.split('/').slice(-2).map((point) => parseFloat(point));
           const rquestIndex = _findKey(openStoreRequests, {
             coords: {
@@ -263,7 +266,7 @@ export default class EmptyDeliveryText extends React.Component {
             <div onClick={() => this.openModal(triggerOpenModal)} className="spc-checkout-empty-delivery-text">
               <span>
                 {deliveryType === 'click_and_collect'
-                  ? Drupal.t('select your preferred collection store')
+                  ? getCncSectionDescription()
                   : Drupal.t('please add your contact details and address.')}
               </span>
             </div>

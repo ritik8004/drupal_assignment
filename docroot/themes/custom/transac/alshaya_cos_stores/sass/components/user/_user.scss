@@ -1,0 +1,40 @@
+.messages--error {
+  font-size: 0.75rem;
+}
+
+.user-page {
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-submit {
+      text-transform: uppercase;
+    }
+
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error),
+    .field--name-field-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number2 label:not(.error) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .change-pwd-form {
+    .form-submit {
+      margin-top: 2.5rem;
+    }
+
+    label.form-required:not(.error) {
+      @include breakpoint($desktop) {
+        top: 0.75rem;
+      }
+    }
+  }
+}
+
+.user-login-form {
+  & > a {
+    font-weight: normal;
+  }
+}

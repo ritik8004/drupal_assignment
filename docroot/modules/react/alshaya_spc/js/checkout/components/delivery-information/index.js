@@ -7,6 +7,9 @@ import ClicknCollectDeiveryInfo from '../cnc-delivery';
 import {
   isDeliveryTypeSameAsInCart,
 } from '../../../utilities/checkout_util';
+import {
+  getCncSectionTitle,
+} from '../../../utilities/cnc_util';
 
 export default class DeliveryInformation extends React.Component {
   showEmpty = (cart) => {
@@ -42,7 +45,7 @@ export default class DeliveryInformation extends React.Component {
     let title = '';
     if (cart.delivery_type !== undefined) {
       if (cart.delivery_type === 'click_and_collect') {
-        title = Drupal.t('Collection Store');
+        title = getCncSectionTitle();
       } else {
         title = Drupal.t('delivery information');
       }
@@ -50,7 +53,7 @@ export default class DeliveryInformation extends React.Component {
 
     if (title.length === 0) {
       title = cart.cart.shipping.type === 'click_and_collect'
-        ? Drupal.t('Collection Store')
+        ? getCncSectionTitle()
         : Drupal.t('delivery information');
     }
 

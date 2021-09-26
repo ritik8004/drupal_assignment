@@ -5,9 +5,14 @@ import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import { cleanMobileNumber } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 const FixedFields = ({
-  defaultVal, showEmail, showFullName = true, subTitle, type,
+  defaultVal,
+  showEmail,
+  showFullName = true,
+  subTitle,
+  type,
 }) => {
   let defaultValue = '';
   if (defaultVal.length !== 0 && defaultVal.length !== 'undefined') {
@@ -24,7 +29,10 @@ const FixedFields = ({
         && (
         <div className="spc-contact-information-header">
           <SectionTitle>{getStringMessage('contact_information')}</SectionTitle>
-          <span className="spc-contact-info-desc">{subTitle}</span>
+          {collectionPointsEnabled() === false
+            && (
+              <span className="spc-contact-info-desc">{subTitle}</span>
+            )}
         </div>
         )}
       <div className="spc-checkout-contact-information-fields">

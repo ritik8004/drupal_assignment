@@ -63,7 +63,7 @@ exports.getEntity = async function getEntity(langcode) {
 
       urlKey = rcsWindowLocation().pathname.match(/buy-(.*?)\./);
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${urlKey[1]}" }}) ${rcsGraphqlQueryFields.products}}`
+        query: `{ products(filter: { url_key: { eq: "${urlKey[1]}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       break;
@@ -76,10 +76,21 @@ exports.getEntity = async function getEntity(langcode) {
 
       urlKey = rcsWindowLocation().pathname.match(/shop-(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${urlKey[1]}" }}) ${rcsGraphqlQueryFields.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${urlKey[1]}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
 
       break;
+
+    case 'promotion':
+      // Prepare request parameters.
+      request.uri += "graphql";
+      request.method = "POST",
+        request.headers.push(["Content-Type", "application/json"]);
+      // @todo Remove the URL match once we get proper URL of promotion.
+      const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
+      request.data = JSON.stringify({
+        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsPhGraphqlQuery.promotions}}`
+      });
 
     default:
       console.log(
@@ -89,7 +100,7 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   let response = await rcsCommerceBackend.invokeApi(request);
-  if (pageType == "product") {
+  if (pageType === "product") {
     if (response.data.products.total_count) {
       result = response.data.products.items[0];
       RcsPhStaticStorage.set('product_' + result.sku, result);
@@ -98,8 +109,30 @@ exports.getEntity = async function getEntity(langcode) {
       await handleNoItemsInResponse(request, urlKey);
     }
   }
-  else if (pageType == "category" && response.data.categories.total_count) {
+  else if (pageType === "category" && response.data.categories.total_count) {
     result = response.data.categories.items[0];
+  }
+  else if (drupalSettings.rcsPage.type === 'promotion' && response.data.promotionUrlResolver) {
+    result = response.data.promotionUrlResolver;
+    // Adding name in place of title so that RCS replace the placeholders
+    // properly.
+    result.name = result.title;
+  }
+
+  if (result !== null) {
+    // Creating custom event to to perform extra operation and update the result
+    // object.
+    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+      detail: {
+        result: result,
+        pageType: pageType,
+      }
+    });
+
+    // To trigger the Event.rcs_magento_placeholders-exports.es5.js
+    document.dispatchEvent(updateResult);
+
+    return updateResult.detail.result;
   }
 
   return result;

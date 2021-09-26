@@ -7,6 +7,7 @@
 
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_install().
@@ -22,10 +23,19 @@ function alshaya_rcs_main_menu_install() {
   $non_rcs_blocks = [
     'alshayamainmenu',
     'supercategorymenu',
+    'shopby',
   ];
   foreach ($non_rcs_blocks as $block_id) {
     $block = Block::load($block_id);
     if ($block instanceof BlockInterface) {
+      if ($block_id === 'shopby') {
+        $new_block = Block::load('alshayarcsshopby');
+        // Set weight of new block same as old block.
+        if ($new_block instanceof BlockInterface) {
+          $new_block->setWeight($block->getWeight());
+          $new_block->save();
+        }
+      }
       $block->disable()->save();
     }
   }
@@ -77,7 +87,7 @@ function _alshaya_rcs_main_menu_advance_page_batch_operation(&$sandbox) {
       if ($product_category_id) {
         $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($product_category_id);
         // Proceed only if the term object is present.
-        if (is_object($term)) {
+        if ($term instanceof TermInterface) {
           $path = $term->get('path');
           if (!$path->isEmpty()) {
             // Remove forward slash if present.
@@ -111,6 +121,7 @@ function alshaya_rcs_main_menu_uninstall() {
   $non_rcs_blocks = [
     'alshayamainmenu',
     'supercategorymenu',
+    'shopby',
   ];
   foreach ($non_rcs_blocks as $block_id) {
     $block = Block::load($block_id);

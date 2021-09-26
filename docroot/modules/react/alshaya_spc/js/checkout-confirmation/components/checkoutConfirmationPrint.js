@@ -4,9 +4,22 @@ import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
 import VatFooterText from '../../utilities/vat-footer';
 import isRTL from '../../utilities/rtl';
+import ConditionalView from '../../common/components/conditional-view';
+import CompleteBenefitPayPayment
+  from './CompleteBenefitPayPayment';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
-  const { items, totals, number_of_items: itemsTotal } = drupalSettings.order_details;
+  const {
+    items,
+    totals,
+    number_of_items: itemsTotal,
+    payment,
+    delivery_type_info: {
+      collection_charge: collectionCharge,
+    },
+  } = drupalSettings.order_details;
   const {
     logo,
     customer_service_text: customerServiceText,
@@ -38,6 +51,9 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
       </div>
       <div className="spc-main">
         <div className="spc-content">
+          <ConditionalView condition={payment.methodCode === 'checkout_com_upapi_benefitpay'}>
+            <CompleteBenefitPayPayment payment={payment} totals={totals} />
+          </ConditionalView>
           <OrderSummary />
         </div>
         <div className="spc-sidebar">
@@ -48,6 +64,10 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
             cart_promo={[]}
             show_checkout_button={false}
             context="print"
+            {...(collectionPointsEnabled()
+              && hasValue(collectionCharge)
+              && { collectionCharge }
+            )}
           />
         </div>
       </div>

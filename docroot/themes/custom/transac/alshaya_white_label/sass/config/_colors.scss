@@ -159,6 +159,7 @@ $_plp-add-to-cart-disabled-qty: #aeaeb2;
 $_smart_agent_banner: rgb(12, 161, 77);
 $_plp_cta_hover: #e85d17;
 $_plp_secondary_cta_hover: rgba(255, 109, 34, 0.1);
+$_frame_promo_red: #c03;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1726,3 +1727,23 @@ $hfd-menu-link-color-hover: $black;
 $hfd-menu-background: #f8f8f8;
 $hfd-promo-button-background: #e6e3de;
 $hfd-menu-heighlight-title: #010101;
+
+// Benefit pay
+$bp-section-title: $peacock-blue;
+$bp-QR-code-title: $mothercare-black;
+$bp-merchant-value: $mothercare-black;
+$bp-mobile-pay-button: $error-red;
+$bp-mobile-pay-button-txt: $white-five;
+$bp-mobile-scan-bg: $cerulean-two;
+$bp-box-border: $mothercare-black;
+$bp-footer-link: $mothercare-black;
+$bp-mobile-title-border: $_screeching_white;
+$bp-header-gradient: radial-gradient(circle at 59% 168%, #f44242 0%, #83255d 97%, #e62708 191%);
+
+// PLP promotion V2
+$plp-popup-title: $black-two;
+$plp-popup_header_border: $warm-grey-two;
+
+// Boots frame.
+$frame_promo: $_frame_promo_red;
+$plp-frame-promo-subtitle: $black-two;

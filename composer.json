@@ -85,7 +85,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
         "drupal/s3fs": "^3.0@alpha",
-        "drupal/search_api_algolia": "^3.0@beta",
+        "drupal/search_api_algolia": "3.0.x-dev@dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
@@ -119,7 +119,8 @@
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
-        "symfony/lock": "4.3.*"
+        "symfony/lock": "4.3.*",
+        "php": ">=7.4"
     },
     "require-dev": {
         "drupal/console": "^1.8",
@@ -221,8 +222,7 @@
                 "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
             },
             "drupal/search_api": {
-                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
+                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
             "drupal/facets": {
                 "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
@@ -493,7 +493,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.2"
+            "php": "7.4"
         },
         "sort-packages": true,
         "discard-changes": true

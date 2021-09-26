@@ -1,0 +1,16 @@
+// COS specific font family
+// English fonts.
+// Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
+$cos-regular: 'SuisseIntl-Regular', 'Arial';
+
+// Arabic fonts.
+// Adding En fonts so browser prints English characters & numbers correctly in arabic.
+//$cos-arabic-regular: 'SuisseIntl-Regular', 'Arial';
+
+// Override font variables coming from MC, without this we get a 404 as font files are no longer present in current theme.
+$arial: $cos-regular;
+$alshaya-bold: $cos-regular;
+$alshaya-arabic-bold: $cos-regular;
+$alshaya-thin: $cos-regular;
+$alshaya-thin-nodir: $cos-regular;
+$alshaya-arabic-thin: $cos-regular;

@@ -204,15 +204,16 @@ function getVariantsInfo(product) {
     const variantInfo = variant.product;
     // @todo Add code for commented keys.
     info[variantInfo.sku] = {
-      // cart_image: '',
-      // cart_title: '',
+      // @todo Add proper implementation for cart image.
+      cart_image: jQuery('.logo img').attr('src'),
+      // @todo Add brand specific cart title.
+      cart_title: 'Temp title',
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variant),
       // color_attribute: '',
       // color_value: '',
       sku: variantInfo.sku,
       parent_sku: product.sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
-      identifier: window.commerceBackend.cleanCssIdentifier(variantInfo.sku),
       // @todo Fetch layout dynamically.
       layout: 'classic',
       gallery: '',
@@ -247,6 +248,7 @@ function processProduct(product) {
     type: product.type_id,
     gtm_attributes: product.gtm_attributes,
     gallery: null,
+    identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
   };
 
   if (productData.type === 'configurable') {
@@ -346,7 +348,7 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
     }
   });
 
-  var firstChild = Object.entries(combinations.attribute_sku)[1];
+  var firstChild = Object.entries(combinations.attribute_sku)[0];
   firstChild = Object.entries(firstChild[1]);
   combinations.firstChild = firstChild[0][1];
 
@@ -409,7 +411,7 @@ window.commerceBackend.isProductAvailableForClickAndCollect = function (product)
  *
  * @see http://www.w3.org/TR/CSS21/syndata.html#characters
  */
- window.commerceBackend.cleanCssIdentifier = function (identifier) {
+window.commerceBackend.cleanCssIdentifier = function (identifier) {
   let cleanedIdentifier = identifier;
 
   // In order to keep '__' to stay '__' we first replace it with a different
@@ -437,4 +439,12 @@ window.commerceBackend.isProductAvailableForClickAndCollect = function (product)
   cleanedIdentifier = cleanedIdentifier.replace(/^[0-9]/, '_').replace(/^(-[0-9])|^(--)/, '__');
 
   return cleanedIdentifier.toLowerCase();
+}
+
+/**
+ * Perform some function when product is added to cart.
+ */
+window.commerceBackend.storeProductDataOnAddToCart = function () {
+  // We do nothing here for V2.
+  return;
 }

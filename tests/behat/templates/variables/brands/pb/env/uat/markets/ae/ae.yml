@@ -1,6 +1,6 @@
 variables:
-  product_listing_page_url: '/shop-furniture/living-room/armchairs/'
-  spc_product_listing_page: '/shop-furniture/living-room/armchairs/'
-  spc_basket_page: '/shop-furniture/living-room/armchairs/'
-  spc_pdp_page: ''
-  spc_bank_product: '/shop-decor-cushions/home-decor/mirrors/'
+  product_listing_page_url: '/shop-furniture/'
+  spc_product_listing_page: '/shop-furniture/'
+  spc_basket_page: '/shop-furniture/'
+  spc_pdp_page: 'buy-henley-rug.html'
+  spc_bank_product: '/shop-furniture/living-room/coffee-side-tables/'

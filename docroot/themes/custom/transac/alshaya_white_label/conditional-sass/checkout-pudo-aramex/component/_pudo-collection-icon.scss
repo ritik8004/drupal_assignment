@@ -1,0 +1,40 @@
+.spc-collection-label-wrapper,
+.spc-delivery-store-info {
+  .store-icon {
+    &::before {
+      content: '';
+      background: url(#{$brand_theme_img_directory_path}/assets/brand-store-icon.svg) no-repeat;
+    }
+  }
+
+  .collection-point-icon {
+    &::before {
+      content: '';
+      background: url(#{$brand_theme_img_directory_path}/assets/brand-collection-icon.svg) no-repeat;
+    }
+  }
+
+  .store-icon,
+  .collection-point-icon {
+    &::before {
+      height: 1.5rem;
+      width: 1.5rem;
+      display: inline-block;
+      position: absolute;
+      #{$left}: 3.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+.map-store-list {
+  .store-icon,
+  .collection-point-icon {
+    &::before {
+      #{$left}: 0;
+      top: 0.3125rem;
+      transform: none;
+    }
+  }
+}

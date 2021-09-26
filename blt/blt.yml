@@ -15,6 +15,8 @@ git:
     - 'alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git'
     - 'alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git'
     - 'alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git'
+    - 'alshaya6tmp2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya6tmp2.git'
+    - 'alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git'
 deploy:
   tag_source: true
   gitignore_file: '${repo.root}/blt/config/.gitignore'
@@ -50,9 +52,6 @@ modules:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [views_ui]
 command-hooks:
-  frontend-test:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-validate.sh ${docroot}'
   frontend-reqs:
     dir: '${repo.root}/blt/scripts'
     command: 'bash react-setup.sh ${docroot} && bash frontend-setup.sh ${docroot} && cd ${docroot} && ../vendor/bin/blt js:setup'

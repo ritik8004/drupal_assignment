@@ -164,9 +164,11 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
   \Drupal::theme()->alter('alshaya_performance_preload', $preload);
 
   foreach ($preload ?? [] as $index => $item) {
+    // Ensure preload happens as soon as possible.
     $preload_render = [
       '#type' => 'html_tag',
       '#tag' => 'link',
+      '#weight' => -2,
       '#attributes' => [
         'rel' => 'preload',
         'href' => $item['href'],

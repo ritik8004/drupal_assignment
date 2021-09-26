@@ -5,6 +5,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -69,7 +70,9 @@ const OrderSummary = () => {
       && storeInfo.store_phone !== null) {
       storePhone = storeInfo.store_phone;
     }
-    etaLabel = Drupal.t('available instore within');
+    etaLabel = (collectionPointsEnabled() && storeInfo.pudo_available === true)
+      ? Drupal.t('available in collection point within')
+      : Drupal.t('available instore within');
   }
 
   const {
@@ -112,6 +115,10 @@ const OrderSummary = () => {
     },
     totals: {
       base_grand_total: baseGrandTotal,
+    },
+    delivery_type_info: {
+      collection_date: collectionDate,
+      collection_charge: collectionCharge,
     },
   } = drupalSettings.order_details;
   const priceTotal = <PriceElement amount={baseGrandTotal} />;
@@ -173,6 +180,14 @@ const OrderSummary = () => {
                   address={storeAddress.join(', ')}
                   openingHours={storeInfo.store_open_hours}
                   mapLink={storeInfo.view_on_map_link}
+                  {...(collectionPointsEnabled() && storeInfo.pudo_available !== undefined
+                    && { pickUpPointIcon: storeInfo.pudo_available ? 'collection-point' : 'store' })}
+                  {...(collectionPointsEnabled() && storeInfo.collection_point !== undefined
+                    && { pickUpPointTitle: storeInfo.collection_point })}
+                  {...(collectionPointsEnabled() && collectionDate !== undefined
+                    && { collectionDate })}
+                  {...(collectionPointsEnabled() && collectionCharge !== undefined
+                    && { collectionCharge })}
                 />
                 <OrderSummaryItem label={Drupal.t('Collection by')} value={customerShippingName} />
               </>

@@ -15,6 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
 class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
   /**
+   * Mapping of entity path and url alias.
+   *
+   * @var array
+   */
+  protected static $processedPaths = [];
+
+  /**
    * RCS Entity Type.
    *
    * @var string
@@ -104,11 +111,9 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    *   The processed path.
    */
   public function processInbound($path, Request $request) {
-    static $static = [];
-
     // Use static cache to improve performance.
-    if (isset($static[$path])) {
-      return $static[$path];
+    if (isset(self::$processedPaths[$path])) {
+      return self::$processedPaths[$path];
     }
 
     // The $path value has been processed in case the requested url is the alias
@@ -130,18 +135,18 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
       self::$entityType = 'category';
-      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
+      self::$entityPath = $rcs_path_to_check;
       self::$entityPathPrefix = $category_prefix;
 
-      $static[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
-
+      self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
+      // @todo Enable the category enrichment settings.
       $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', self::$entityPath) : NULL;
       if (isset($category)) {
         self::$entityData = $category->toArray();
-        $static[$rcs_path_to_check] = '/taxonomy/term/' . $category->id();
+        self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $category->id();
       }
 
-      return $static[$rcs_path_to_check];
+      return self::$processedPaths[$rcs_path_to_check];
     }
 
     // Is it a product page?
@@ -152,15 +157,15 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($product_prefix) + 1);
       self::$entityPathPrefix = $product_prefix;
 
-      $static[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
+      self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
 
       $product = $config->get('product.enrichment') ? $this->getEnrichedEntity('product', self::$entityPath) : NULL;
       if (isset($product)) {
         self::$entityData = $product->toArray();
-        $static[$rcs_path_to_check] = '/node/' . $product->id();
+        self::$processedPaths[$rcs_path_to_check] = '/node/' . $product->id();
       }
 
-      return $static[$rcs_path_to_check];
+      return self::$processedPaths[$rcs_path_to_check];
     }
 
     // Is it a promotion page?
@@ -171,17 +176,17 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($promotion_prefix) + 1);
       self::$entityPathPrefix = $promotion_prefix;
 
-      $static[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
+      self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
 
-      return $static[$rcs_path_to_check];
+      return self::$processedPaths[$rcs_path_to_check];
     }
 
     // Set current path as default so we do not process twice for same path.
-    if (empty($static[$path])) {
-      $static[$path] = $path;
+    if (empty(self::$processedPaths[$path])) {
+      self::$processedPaths[$path] = $path;
     }
 
-    return $static[$path];
+    return self::$processedPaths[$path];
   }
 
   /**
@@ -198,6 +203,8 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public function getEnrichedEntity(string $type, string $slug) {
     $entity = NULL;
     $storage = NULL;
+    // Filter out the front and back slash.
+    $slug = trim($slug, '/');
 
     if ($type == 'product') {
       $storage = $this->nodeStorage;
@@ -225,6 +232,20 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    */
   public static function isRcsPage() {
     return self::$entityType != NULL;
+  }
+
+  /**
+   * Returns the flipped mapping of entity path and path alias.
+   *
+   * @param string $path
+   *   The entity path.
+   *
+   * @return string
+   *   Returns the path alias of the entity path.
+   */
+  public static function getOrignalPathFromProcessed(string $path): string {
+    $processed_paths = array_flip(self::$processedPaths);
+    return $processed_paths[$path] ?? $path;
   }
 
 }

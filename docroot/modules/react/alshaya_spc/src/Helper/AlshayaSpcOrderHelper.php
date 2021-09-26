@@ -411,6 +411,8 @@ class AlshayaSpcOrderHelper {
       $store_code = $order['shipping']['extension_attributes']['store_code'];
       $cc_type = $order['shipping']['extension_attributes']['click_and_collect_type'];
       $orderDetails['view_on_map_link'] = '';
+      $orderDetails['collection_charge'] = $order['shipping']['extension_attributes']['price_amount'] ?? '';
+      $orderDetails['collection_date'] = $order['shipping']['extension_attributes']['pickup_date'] ?? '';
 
       // Getting store node object from store code.
       if ($store_data = $this->storeFinder->getMultipleStoresExtraData([$store_code => []])) {
@@ -425,16 +427,23 @@ class AlshayaSpcOrderHelper {
         $lat = $store_node['lat'];
         $lng = $store_node['lng'];
         $orderDetails['store']['view_on_map_link'] = 'https://maps.google.com/?q=' . $lat . ',' . $lng;
+        $orderDetails['store']['collection_point'] = $order['shipping']['extension_attributes']['collection_point'] ?? '';
+        $orderDetails['store']['pudo_available'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
 
         $cc_text = ($cc_type == 'reserve_and_collect')
           ? $this->configFactory->get('alshaya_click_collect.settings')->get('click_collect_rnc')
           : $store_node['delivery_time'];
 
         if (!empty($cc_text)) {
-          $orderDetails['delivery_method_description'] = $this->t('@shipping_method_name (@shipping_method_description)', [
-            '@shipping_method_name' => $orderDetails['delivery_method'],
-            '@shipping_method_description' => $cc_text,
-          ]);
+          $orderDetails['delivery_method_description'] = ($orderDetails['store']['pudo_available'] === TRUE)
+            ? $this->t('@shipping_method_description', [
+              '@shipping_method_description' => $cc_text,
+            ])
+            : $this->t('@shipping_method_name (@shipping_method_description)', [
+              '@shipping_method_name' => $orderDetails['delivery_method'],
+              '@shipping_method_description' => $cc_text,
+            ]);
+
           $orderDetails['shipping_method_code'] = $shipping_method_code;
         }
       }
@@ -504,6 +513,15 @@ class AlshayaSpcOrderHelper {
 
       case 'checkout_com_upapi_fawry':
         $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
+        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+
+        break;
+
+      case 'checkout_com_upapi_benefitpay':
+        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'];
+        $orderDetails['payment']['qrData'] = $payment_info['qr_data'];
+        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
         $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
 
         break;

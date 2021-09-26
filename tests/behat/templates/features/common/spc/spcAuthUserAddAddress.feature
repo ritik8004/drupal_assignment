@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @pbsauat @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @hmeguat @bbwsauat @flsauat @hmkwqa @tbskwuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @bbwaeuat @flkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
+@javascript @account @smoke @auth @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @hmaeuat @hmeguat @bbwsauat @flsauat @hmkwqa @tbskwuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @bbwaeuat @flkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
 Feature: Test the adding address to existing user account
 
   Background:

@@ -8,6 +8,34 @@
 global $magentos;
 
 $magentos = [
+  // COS.
+  'cos_qa' => [
+    'url' => 'https://integration-5ojmyuq-vlvasu2xupli4.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '6ih9p46w6xvqzo0ldex9xdhwuxgoyhyp',
+      'consumer_secret' => 'z90wonowuk21m3k6dv437nuqnekz04a6',
+      'access_token' => 'jhevrjbgghd8xm0tgn6047ggjspn76dl',
+      'access_token_secret' => 'j70evsya47dwxklpbf0kdz88qdjs4hrp',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 18],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 13, 'ar' => 14],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 15, 'ar' => 16],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 11, 'ar' => 12],
+    ],
+  ],
   // The body shop.
   'tbs_qa' => [
     'url' => 'https://tbs-uat.store.alshaya.com',
@@ -1070,6 +1098,15 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
+    'bh' => [
+      'store_id' => ['en' => 26, 'ar' => 23],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
+    ],
   ],
   'aeo_uat' => [
     'url' => 'https://aeo-uat.store.alshaya.com',
@@ -1303,8 +1340,8 @@ $magentos = [
     'magento_secrets' => [
       'consumer_key' => 'nfjdttxqyqdaj81nilo4sab9wl7kkb0x',
       'consumer_secret' => '5szrlic4mwpoxyjl11mhrxux287lykdc',
-      'access_token' => 'qwgohy4l3xnbcz63nhvb5u5soezfizka',
-      'access_token_secret' => 'a5seetf8c166nnkwgk7cbunjxv8l9jdu',
+      'access_token' => 'za6fq085dk474fzhn4onve3p2r2yt1hh',
+      'access_token_secret' => 'kpo41se2e2f0r1n21xsl0qrsg3crr99a',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],

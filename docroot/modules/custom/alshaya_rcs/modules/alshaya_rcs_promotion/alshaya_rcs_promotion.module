@@ -5,6 +5,17 @@
  * Module file.
  */
 
+ /**
+ * Implements hook_theme().
+ */
+function alshaya_rcs_promotion_theme($existing, $type, $theme, $path) {
+  return [
+    'node__rcs_promotion' => [
+      'variables' => [],
+    ],
+  ];
+}
+
 /**
  * Implements hook_theme_suggestions_page_alter().
  */
@@ -15,4 +26,19 @@ function alshaya_rcs_promotion_theme_suggestions_page_alter(array &$suggestions,
       $suggestions[] = 'page__plp';
     }
   }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_promotion_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+
+  $query_fields['promotions'] = [
+    'id',
+    'title',
+    'description',
+  ];
+
+  return $query_fields;
 }

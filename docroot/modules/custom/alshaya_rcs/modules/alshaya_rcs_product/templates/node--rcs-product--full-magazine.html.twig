@@ -137,7 +137,7 @@
 
         </div>
 
-        {# {% include directory ~ '/../alshaya_white_label/templates/partial/mobile-product-related.html.twig' %} #}
+        {% include '@alshaya_rcs_product/mobile-product-related.html.twig' %}
 
       </div>
     {% endblock %}
@@ -150,7 +150,7 @@
 {% endblock %}
 
 {% block desktopCS %}
-  {# {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %} #}
+  {% include '@alshaya_rcs_product/product-related.html.twig' %}
 {% endblock %}
 
 {% block reviewsSection %}

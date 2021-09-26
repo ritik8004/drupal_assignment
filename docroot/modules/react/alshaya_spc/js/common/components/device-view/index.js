@@ -8,7 +8,7 @@ const DeviceView = ({ device, children }) => {
 
   // Return null, if device is "above-mobile" and current display
   // width is of mobile.
-  if (device === 'above-modile' && window.innerWidth < 768) {
+  if (device === 'above-mobile' && window.innerWidth < 768) {
     return (null);
   }
 

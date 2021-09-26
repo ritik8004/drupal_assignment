@@ -5,6 +5,7 @@ namespace Drupal\alshaya_rcs_listing\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,6 +34,13 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
   protected $configFactory;
 
   /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
    * AlshayaCategoryLhnBlock constructor.
    *
    * @param array $configuration
@@ -43,10 +51,18 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
    *   Plugin definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The current route match.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ConfigFactoryInterface $config_factory,
+    RouteMatchInterface $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -58,6 +74,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
+      $container->get('current_route_match'),
     );
   }
 
@@ -108,9 +125,17 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public function access(AccountInterface $account, $return_as_object = FALSE) {
+    // By default other pages ( where this is placed ) should have access to it.
+    $result = AccessResult::allowed();
     $config = $this->configFactory->get(self::ENABLE_DISABLE_CONFIG_KEY);
-    // Not allow if lhn is disabled.
-    return AccessResult::allowedif($config->get('enable_lhn_tree'));
+    // Not allow if lhn is disabled and it's rcs_category page.
+    if ($this->routeMatch->getRouteName() == 'entity.taxonomy_term.canonical') {
+      $term = $this->routeMatch->getParameter('taxonomy_term');
+      $result = $term->bundle() == 'rcs_category' ?
+        AccessResult::allowedif($config->get('enable_lhn_tree')) :
+        $result;
+    }
+    return $result;
   }
 
 }

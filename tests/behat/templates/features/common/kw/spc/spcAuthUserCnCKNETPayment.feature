@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @tbskwuat @mckwuat @flkwuat @bbwkwuat @pbkwuat @hmkwuat @westelmkwuat
+@javascript @KNET @KNetPayment @clickCollect @tbskwuat @mckwuat @flkwuat @bbwkwuat @pbkwuat @hmkwuat @westelmkwuat @bpkwuat
 Feature: SPC Checkout Click and Collect using KNET payment method for authenticated user
 
   Background:
@@ -49,6 +49,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait for the page to load
     And I wait 5 seconds
     Then I should be on "/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @cnc @language @desktop @knet
   Scenario: As an Authenticated user, I should be able to checkout using click and collect with knet
@@ -88,6 +89,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait for the page to load
     And I wait 5 seconds
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @cnc @mobile @knet
   Scenario: As an Authenticated user, I should be able to checkout using click and collect with knet
@@ -125,3 +127,4 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait for the page to load
     And I wait 5 seconds
     Then I should be on "/checkout/confirmation" page
+    And I should save the order details in the file

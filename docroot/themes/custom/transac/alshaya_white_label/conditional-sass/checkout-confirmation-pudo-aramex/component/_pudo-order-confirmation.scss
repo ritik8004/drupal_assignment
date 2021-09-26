@@ -1,0 +1,47 @@
+.spc-order-summary-order-detail {
+  .spc-order-summary-item.spc-order-summary-cnc {
+    display: block;
+
+    .spc-label {
+      display: block;
+      margin-bottom: 1.875rem;
+    }
+
+    .spc-value {
+      text-align: $left;
+      padding-#{$left}: 2.4375rem;
+      max-width: none;
+
+      .spc-address-name {
+        font-family: $alshaya-thin;
+        color: $spc-delivery-info-text;
+      }
+    }
+
+    .pickup-point-title {
+      display: block;
+      font-size: 0.875rem;
+      line-height: 1.125rem;
+      color: $spc-checkout_section_title;
+    }
+
+    .store-delivery-time {
+      font-family: $alshaya-bold;
+      margin-top: -0.5rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.125rem;
+      color: $spc-checkout_section_title;
+    }
+  }
+}
+
+.spc-cnc-confirmation-govtid-msg {
+  font-size: 0.875rem;
+  line-height: normal;
+  color: $spc-checkout-billing-help-text;
+  margin-bottom: 0.625rem;
+
+  &-label {
+    font-family: $alshaya-bold;
+  }
+}

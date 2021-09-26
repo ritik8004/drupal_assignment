@@ -5,7 +5,8 @@
 exports.render = function render(
   settings,
   inputs,
-  innerHtml
+  innerHtml,
+  navigationType
 ) {
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
@@ -14,9 +15,12 @@ exports.render = function render(
     // Check if static storage is having value, If 'YES' then use that else call
     // the API.
     let enrichmentData = rcsGetEnrichedCategories();
+    let menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
 
     // Get the L1 menu list element.
-    const menuListLevel1Ele = innerHtmlObj.find('.menu__list.menu--one__list');
+    if (navigationType === 'shop_by_block') {
+      menuListLevel1Ele = innerHtmlObj.find('div.c-footer-menu');
+    }
 
     // Filter category menu items if include_in_menu flag true.
     inputs = filterAvailableItems(inputs);
@@ -62,18 +66,33 @@ exports.render = function render(
         }
         level1 = level1.children[0];
       }
-      menuHtml += getMenuMarkup(
-        level1,
-        1,
-        innerHtmlObj,
-        settings,
-        enrichmentData,
-        isSuperCategoryEnabled,
-      );
+      if (navigationType === 'shop_by_block') {
+        menuHtml += getShopByMarkup(
+          level1,
+          1,
+          innerHtmlObj,
+          settings,
+          enrichmentData,
+          isSuperCategoryEnabled,
+        );
+      } else {
+        menuHtml += getMenuMarkup(
+          level1,
+          1,
+          innerHtmlObj,
+          settings,
+          enrichmentData,
+          isSuperCategoryEnabled,
+        );
+      }
     });
 
     // Remove the placeholders markup.
-    menuListLevel1Ele.find('li').remove();
+    if (navigationType === 'shop_by_block') {
+      menuListLevel1Ele.find('div.c-footer-menu__tab').remove();
+    } else {
+      menuListLevel1Ele.find('li').remove();
+    }
 
     // Update with the resultant markups.
     menuListLevel1Ele.append(menuHtml);
@@ -100,8 +119,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   }
 
   // Build menu item path prefix.
-  const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
-  // @todo remove this when API return the correct path.
+  const menuPathPrefixFull = `${settings.path.pathPrefix}`;
   const levelObjOrgUrlPath = levelObj.url_path;
   // Append category prefix in L2 if super category is enabled.
   if (isSuperCategoryEnabled) {
@@ -117,16 +135,8 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   const levelIdentifier = `level-${level}`;
   const ifChildren = levelObj.children && levelObj.children.length > 0;
 
-  // Clone the relevant placeholder element from the given html.
-  var clonePhEle = null;
-  if (levelObj.is_anchor) {
-    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
-  }
-  else {
-    // For non-clickable the placeholder name is different.
-    levelObj.name1 = levelObj.name;
-    clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
-  }
+  // Clone the default clickable placeholder element from the given html.
+  var clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.clickable`).clone();
 
   let enrichedDataObj = {};
   // Get the enrichment data from the settings.
@@ -167,6 +177,12 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
     if (typeof enrichedDataObj.icon !== 'undefined') {
       levelObj.icon_url = enrichedDataObj.icon.icon_url;
     }
+
+    // Override the clickable and non-clickable property.
+    if (!enrichedDataObj.item_clickable) {
+      clonePhEle = phHtmlObj.find(`li.${levelIdentifier}.non-clickable`).clone();
+      levelObj.name1 = levelObj.name;
+    }
   }
 
   // Remove icon markup if no icon or add
@@ -180,7 +196,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
   // If menu has no children further, return with actual markup.
   if (!ifChildren) {
     clonePhEle.find('ul').remove();
-    return navRcsReplacePh(clonePhEle, levelObj);
+    return navRcsReplacePh(clonePhEle, levelObj, 'menuItem');
   }
 
   // If menu has children further.
@@ -203,7 +219,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
       reprocess = false;
       levelHtml = `<div class="column ${col}">`;
 
-      levelObj.children.forEach(function eachCategory(rcLevelObj) {
+      levelObj.children.every(function eachCategory(rcLevelObj) {
         let l2_cost = (rcLevelObj.children)
           ? rcLevelObj.children.length + 2
           : 2;
@@ -213,7 +229,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         if (l2_cost > ideal_max_col_length) {
           ideal_max_col_length = l2_cost;
           reprocess = true;
-          return;
+          return false;
         }
 
         if ((colTotal + l2_cost) > ideal_max_col_length) {
@@ -225,7 +241,7 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         // If we have too many columns we try with more items per column.
         if (col >= max_nb_col) {
           ideal_max_col_length++;
-          return;
+          return false;
         }
 
         if (isNewColumn) {
@@ -243,6 +259,8 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
         );
 
         colTotal += l2_cost;
+
+        return true;
       });
     } while (reprocess || (col >= max_nb_col));
 
@@ -271,22 +289,73 @@ const getMenuMarkup = function (levelObj, level, phHtmlObj, settings, enrichment
       clonePhEle.find('ul div.term-image__wrapper').addClass('text-link-para');
     }
   }
-  return navRcsReplacePh(clonePhEle, levelObj);
+  return navRcsReplacePh(clonePhEle, levelObj, 'menuItem');
+};
+
+/**
+ *
+ * @param {object} levelObj
+ * @param {integer} level
+ * @param {string} phHtmlObj
+ * @param {object} settings
+ * @param {object} enrichmentData
+ * @param {boolean} isSuperCategoryEnabled
+ *
+ * @returns
+ *  {string} Generated shop by markup for given level.
+ */
+const getShopByMarkup = function (levelObj, level, phHtmlObj, settings, enrichmentData, isSuperCategoryEnabled) {
+  // We support max depth by L4.
+  if (level > parseInt(drupalSettings.alshayaRcs.navigationMenu.menuMaxDepth)) {
+    return;
+  }
+
+  // Build menu item path prefix.
+  const menuPathPrefixFull = `${settings.path.pathPrefix}${settings.rcsPhSettings.categoryPathPrefix}`;
+  // @todo remove this when API return the correct path.
+  const levelObjOrgUrlPath = levelObj.url_path;
+  // Append category prefix in L2 if super category is enabled.
+  if (isSuperCategoryEnabled) {
+    let urlItems = levelObj.url_path.split('/');
+    if (urlItems.length > 1) {
+      urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
+    }
+    levelObj.url_path = `/${settings.path.pathPrefix}${urlItems.join('/')}/`;
+  } else {
+    levelObj.url_path = `/${menuPathPrefixFull}${levelObjOrgUrlPath}/`;
+  }
+
+  const levelIdentifier = `c-footer-menu__tab`;
+  // Clone the default clickable placeholder element from the given html.
+  var clonePhEle = phHtmlObj.find(`div.${levelIdentifier}`).clone();
+
+  let enrichedDataObj = {};
+  // Get the enrichment data from the settings.
+  if (enrichmentData && enrichmentData[levelObjOrgUrlPath]) {
+    enrichedDataObj = enrichmentData[levelObjOrgUrlPath];
+    // Override label from Drupal.
+    levelObj.name = enrichedDataObj.name;
+
+    // Exclude terms with overridden target link.
+    if (typeof enrichedDataObj.path !== 'undefined') {
+      return '';
+    }
+  }
+
+  return navRcsReplacePh(clonePhEle, levelObj, 'shopbymenuItem');
 };
 
 /**
  * It will take the element, replace the navigation placeholders
  * in that and return the output Html.
  */
-const navRcsReplacePh = function (phElement, entity) {
+const navRcsReplacePh = function (phElement, entity, markupId) {
   const langcode = drupalSettings.path.currentLanguage;
-  const attributes = drupalSettings.rcsPhSettings.placeholderAttributes;
-
   // Identify all the field placeholders and get the replacement
   // value. Parse the html to find all occurrences at apply the
   // replacement.
   let menuItemHtml = phElement[0].outerHTML;
-  rcsPhReplaceEntityPh(menuItemHtml, 'menuItem', entity, langcode)
+  rcsPhReplaceEntityPh(menuItemHtml, markupId, entity, langcode)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];

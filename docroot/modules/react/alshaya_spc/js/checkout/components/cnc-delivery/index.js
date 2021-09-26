@@ -11,6 +11,15 @@ import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
+import getStringMessage from '../../../utilities/strings';
+import {
+  isCollectionPoint,
+  getPickUpPointTitle,
+  getCncDeliveryTimePrefix,
+} from '../../../utilities/cnc_util';
+import ConditionalView from '../../../common/components/conditional-view';
+import PriceElement from '../../../utilities/special-price/PriceElement';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 class ClicknCollectDeiveryInfo extends React.Component {
   isComponentMounted = true;
@@ -122,22 +131,82 @@ class ClicknCollectDeiveryInfo extends React.Component {
     const {
       cart: {
         cart: {
-          shipping: { address: shippingAddress, storeInfo: { name, address } },
+          shipping: {
+            address: shippingAddress, storeInfo: {
+              name, address, open_hours_group: openHoursGroup, delivery_time: deliveryTime,
+            },
+          },
         },
       },
     } = this.props;
 
+    let collectionPoint;
+    let pudoAvailable;
+    let pickupDate;
+    let priceAmount;
+    const { selectedStore } = this.context;
+
+    if (collectionPointsEnabled()) {
+      ({
+        cart: {
+          cart: {
+            shipping: {
+              collection_point: collectionPoint,
+              pudo_available: pudoAvailable,
+              pickup_date: pickupDate,
+              price_amount: priceAmount,
+            },
+          },
+        },
+      } = this.props);
+      pudoAvailable = pudoAvailable || isCollectionPoint(selectedStore);
+    }
+
     const { showSelectedStore } = this.state;
+
+    let hoursArray = [];
+
+    if (collectionPointsEnabled()) {
+      const hoursArrayList = [];
+      if (openHoursGroup) {
+        Object.keys(openHoursGroup).forEach((data) => {
+          hoursArrayList.push(`${data}(${openHoursGroup[data]})`);
+        });
+
+        hoursArray = hoursArrayList.map((data) => (
+          <div className="store-open-hours">
+            {data}
+          </div>
+        ));
+      }
+    }
 
     return (
       <WithModal modalStatusKey="cncDelivery">
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
           <div className="delivery-information-preview">
             <div className="spc-delivery-store-info">
-              <div className="store-name">{name}</div>
+              <div className="spc-delivery-store-name-wrapper">
+                <ConditionalView condition={collectionPointsEnabled()}>
+                  <span className={`${pudoAvailable ? 'collection-point' : 'store'}-icon`} />
+                  <span className="pickup-point-title">{collectionPoint || getPickUpPointTitle(selectedStore)}</span>
+                </ConditionalView>
+                <div className="store-name">{name}</div>
+              </div>
               <div className="store-address">
                 {parse(address)}
               </div>
+              <ConditionalView condition={collectionPointsEnabled()}>
+                <div className="store-open-hours-list">
+                  {hoursArray}
+                </div>
+                <div className="store-delivery-time">
+                  <span className="label--delivery-time">{getStringMessage(getCncDeliveryTimePrefix())}</span>
+                  <span className="delivery--time--value">{pickupDate || deliveryTime}</span>
+                  {priceAmount
+                    && <PriceElement amount={priceAmount} />}
+                </div>
+              </ConditionalView>
               <div
                 className="spc-change-address-link"
                 onClick={() => this.openModal(false, triggerOpenModal)}
@@ -150,7 +219,10 @@ class ClicknCollectDeiveryInfo extends React.Component {
               <div className="contact-name">
                 { makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
               </div>
-              <div className="contact-telephone">{`+${drupalSettings.country_mobile_code} ${cleanMobileNumber(shippingAddress.telephone)}`}</div>
+              <div className="contact-telephone">
+                {`+${drupalSettings.country_mobile_code} `}
+                { cleanMobileNumber(shippingAddress.telephone) }
+              </div>
               <div
                 className="spc-change-address-link"
                 onClick={() => this.openModal(true, triggerOpenModal)}

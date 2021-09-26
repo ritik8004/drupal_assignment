@@ -1,9 +1,16 @@
 import React from 'react';
 import { getAmountWithCurrency } from '../checkout_util';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 const PriceElement = ({ amount: priceAmount, format }) => {
-  if (typeof priceAmount === 'undefined') {
+  if (!hasValue(priceAmount)
+    || parseFloat(priceAmount).toFixed(2) === '0.00') {
     return (null);
+  }
+
+  if (Number.isNaN(parseFloat(priceAmount))
+    && priceAmount.toUpperCase() === 'FREE') {
+    return (Drupal.t('Free'));
   }
 
   const priceParts = { ...getAmountWithCurrency(priceAmount, false) };

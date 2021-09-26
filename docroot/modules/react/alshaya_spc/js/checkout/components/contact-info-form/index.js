@@ -10,6 +10,7 @@ import { validateContactInfo, addressFormInlineErrorScroll } from '../../../util
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -27,6 +28,7 @@ class ContactInfoForm extends React.Component {
     const { contactInfo: { email } } = this.context;
     const name = e.target.elements.fullname.value.trim();
     const { firstname, lastname } = extractFirstAndLastName(name);
+
     const formData = {
       static: {
         firstname,
@@ -160,7 +162,6 @@ class ContactInfoForm extends React.Component {
             Drupal.logJavascriptError('update-shipping', cartResult.response_message.msg, GTM_CONSTANTS.CHECKOUT_ERRORS);
             return null;
           }
-
           updateContactInfo(formData.static);
           dispatchCustomEvent('refreshCartOnCnCSelect', { cart: cartResult });
           return null;
@@ -187,6 +188,12 @@ class ContactInfoForm extends React.Component {
           type="cnc"
         />
         <div className="spc-address-form-actions">
+          {collectionPointsEnabled() === true
+          && (
+            <div className="spc-cnc-store-actions-pudo-msg">
+              {getStringMessage('cnc_valid_govtid_message')}
+            </div>
+          )}
           <button
             id="save-address"
             className="spc-address-form-submit"

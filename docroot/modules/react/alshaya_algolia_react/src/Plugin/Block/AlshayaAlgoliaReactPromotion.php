@@ -123,7 +123,7 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearchValues = [
       'local_storage_expire' => $common_config['otherRequiredValues']['local_storage_expire'],
       'filters_alias' => array_column($promotion_filters, 'identifier', 'alias'),
-      'promotionNodeId' => $promotion->id(),
+      'promotionNodeId' => $promotion->get('field_acq_promotion_rule_id')->getString(),
     ];
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
@@ -132,13 +132,22 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="alshaya-algolia-plp"></div>',
-      '#attached' => [
-        'library' => $common_config['otherRequiredValues']['libraries'],
-        'drupalSettings' => [
-          'algoliaSearch' => $algoliaSearch,
-          'reactTeaserView' => $reactTeaserView,
+      'inside' => [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => 'alshaya-algolia-plp',
+          'data-hierarchy' => $algoliaSearch['hierarchy'] ?? '',
+          'data-level' => $algoliaSearch['level'] ?? '',
+          'data-rule-context' => $algoliaSearch['ruleContext'] ?? [],
+          'data-category-field' => $algoliaSearch['category_field'] ?? '',
+          'data-promotion-id' => $algoliaSearch['promotionNodeId'] ?? '',
+        ],
+        '#attached' => [
+          'library' => $common_config['otherRequiredValues']['libraries'],
+          'drupalSettings' => [
+            'algoliaSearch' => $algoliaSearch,
+            'reactTeaserView' => $reactTeaserView,
+          ],
         ],
       ],
     ];

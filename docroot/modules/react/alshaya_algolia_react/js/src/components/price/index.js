@@ -7,7 +7,7 @@ const PriceBlock = ({
 }) => (
   <div className="price-block">
     {
-        (children !== 'undefined' && children.length > 0)
+        (typeof children !== 'undefined' && children.length > 0)
           ? children
           : <PriceElement {...props} />
       }
@@ -29,13 +29,15 @@ const Price = ({ price, finalPrice }) => {
 
     return (
       <PriceBlock>
-        <div className="has--special--price">
-          <PriceElement amount={price} />
+        <div className="special-price-block">
+          <div className="has--special--price">
+            <PriceElement amount={price} />
+          </div>
+          <div className="special--price">
+            <PriceElement amount={finalPrice} />
+          </div>
+          {discountTxt}
         </div>
-        <div className="special--price">
-          <PriceElement amount={finalPrice} />
-        </div>
-        {discountTxt}
       </PriceBlock>
     );
   }

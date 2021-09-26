@@ -30,6 +30,12 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { getUserLocation } from '../../../utilities/map/map_utils';
 import globalGmap from '../../../utilities/map/Gmap';
 import dispatchCustomEvent from '../../../utilities/events';
+import {
+  getCncModalTitle,
+  getCncModalDescription,
+  getCncModalButtonText,
+} from '../../../utilities/cnc_util';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -67,18 +73,7 @@ class ClickCollect extends React.Component {
 
     if (!this.autocomplete && !!this.searchRef && !!this.searchRef.current) {
       this.searchplaceInput = this.searchRef.current.getElementsByTagName('input').item(0);
-      this.autocomplete = new window.google.maps.places.Autocomplete(
-        this.searchplaceInput,
-        {
-          types: [],
-          componentRestrictions: { country: window.drupalSettings.country_code },
-        },
-      );
-
-      this.autocomplete.addListener(
-        'place_changed',
-        this.placesAutocompleteHandler,
-      );
+      this.searchplaceInput.addEventListener('keyup', this.keyUpHandler);
       this.nearMeBtn = this.searchRef.current.getElementsByTagName('button').item(0);
     }
 
@@ -114,6 +109,26 @@ class ClickCollect extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('markerClick', this.mapMarkerClick);
   }
+
+  /**
+   * Keyup handler for the search input.
+   */
+  keyUpHandler = (e) => {
+    if (e.target.value.length >= 2 && !this.autocomplete) {
+      this.autocomplete = new window.google.maps.places.Autocomplete(
+        this.searchplaceInput,
+        {
+          types: [],
+          componentRestrictions: { country: window.drupalSettings.country_code },
+        },
+      );
+
+      this.autocomplete.addListener(
+        'place_changed',
+        this.placesAutocompleteHandler,
+      );
+    }
+  };
 
   mapMarkerClick = (e) => {
     const index = e.detail.markerSettings.zIndex - 1;
@@ -283,7 +298,10 @@ class ClickCollect extends React.Component {
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
     if (map.map.mapMarkers[makerIndex] !== undefined) {
-      map.highlightIcon(map.map.mapMarkers[makerIndex]);
+      const options = collectionPointsEnabled()
+        ? { map_marker: { active: map.map.mapMarkers[makerIndex].icon } }
+        : {};
+      map.highlightIcon(map.map.mapMarkers[makerIndex], options);
     }
   }
 
@@ -413,14 +431,17 @@ class ClickCollect extends React.Component {
   };
 
   onMapStoreClose = (e, makerIndex) => {
-    e.target.parentElement.parentElement.classList.remove('selected');
+    e.target.closest('.selected').classList.remove('selected');
     this.selectStoreButtonVisibility(false);
     this.refreshMap();
     this.toggleFullScreen();
 
     const map = this.googleMap;
     if (map.map.mapMarkers[makerIndex] !== undefined) {
-      map.resetIcon(map.map.mapMarkers[makerIndex]);
+      const options = collectionPointsEnabled()
+        ? { map_marker: { inActive: map.map.mapMarkers[makerIndex].icon } }
+        : {};
+      map.resetIcon(map.map.mapMarkers[makerIndex], options);
     }
   }
 
@@ -490,7 +511,7 @@ class ClickCollect extends React.Component {
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? 'none' : 'block' }}
           >
-            <SectionTitle>{getStringMessage('cnc_collection_store')}</SectionTitle>
+            <SectionTitle>{getStringMessage(getCncModalTitle())}</SectionTitle>
             <a className="close" onClick={closeModal}>
               &times;
             </a>
@@ -515,7 +536,7 @@ class ClickCollect extends React.Component {
               )}
               <div className="spc-cnc-address-form-content">
                 <SectionTitle>
-                  {getStringMessage('cnc_find_your_nearest_store')}
+                  {getStringMessage(getCncModalDescription())}
                 </SectionTitle>
                 <LocationSearchForm
                   ref={this.searchRef}
@@ -558,7 +579,7 @@ class ClickCollect extends React.Component {
           </div>
           <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
             <button className="select-store" type="button" onClick={(e) => this.finalizeCurrentStore(e)}>
-              {getStringMessage('cnc_select_this_store')}
+              {getStringMessage(getCncModalButtonText())}
             </button>
           </div>
           <SelectedStore

@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
-import Promotions from '../promotions';
+import PromotionsFrame from '../promotion-frame';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
-import { productListIndexStatus } from '../../utils/indexUtils';
+import {
+  isProductFrameEnabled,
+  isProductTitleTrimEnabled,
+  isPromotionFrameEnabled,
+  productListIndexStatus,
+} from '../../utils/indexUtils';
+import Promotions from '../promotions';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -58,14 +64,35 @@ const Teaser = ({
     } else {
       attribute[key] = value;
     }
+    // Update URL to relative URL to avoid host mismatch issue.
+    if (key === 'url') {
+      // Check if the URL is an absolute URL or not.
+      const isAbsolute = (attribute.url.indexOf('://') > 0 || attribute.url.indexOf('//') === 0);
+      if (isAbsolute) {
+        attribute[key] = new URL(attribute.url).pathname;
+      }
+    }
   });
   // Skip if there is no value for current language.
   if (attribute.title === undefined) {
     return null;
   }
 
+  let teaserClass = 'c-products__item views-row';
+  if (isProductFrameEnabled()) {
+    teaserClass = `${teaserClass} product-frame`;
+  }
+
+  if (isPromotionFrameEnabled()) {
+    teaserClass = `${teaserClass} promotion-frame`;
+  }
+
+  if (isProductTitleTrimEnabled()) {
+    teaserClass = `${teaserClass} product-title-trim`;
+  }
+
   return (
-    <div className="c-products__item views-row">
+    <div className={teaserClass}>
       <article
         className="node--view-mode-search-result"
         onClick={(event) => storeClickedItem(event, pageType)}
@@ -122,7 +149,7 @@ const Teaser = ({
             <h2 className="field--name-name">
               <a href={attribute.url} className="product-selected-url">
                 <div className="aa-suggestion">
-                  <span className="suggested-text">
+                  <span className="suggested-text" title={attribute.title && Parser(attribute.title)}>
                     {attribute.title && Parser(attribute.title)}
                   </span>
                 </div>
@@ -146,7 +173,12 @@ const Teaser = ({
             {attribute.rendered_price
               ? Parser(attribute.rendered_price)
               : <Price price={attribute.original_price} final_price={attribute.final_price} />}
-            <Promotions promotions={attribute.promotions} />
+            <ConditionalView condition={isPromotionFrameEnabled()}>
+              <PromotionsFrame promotions={attribute.promotions} />
+            </ConditionalView>
+            <ConditionalView condition={!isPromotionFrameEnabled()}>
+              <Promotions promotions={attribute.promotions} />
+            </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
         </div>
