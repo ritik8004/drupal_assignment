@@ -53,6 +53,7 @@ exports.getEntity = async function getEntity(langcode) {
 
   let result = null;
   let urlKey = '';
+  let response = null;
 
   switch (pageType) {
     case 'product':
@@ -65,7 +66,14 @@ exports.getEntity = async function getEntity(langcode) {
       request.data = JSON.stringify({
         query: `{ products(filter: { url_key: { eq: "${urlKey[1]}" }}) ${rcsPhGraphqlQuery.products}}`
       });
-
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response.data.products.total_count) {
+        result = response.data.products.items[0];
+        RcsPhStaticStorage.set('product_' + result.sku, result);
+      }
+      else {
+        result = 404;
+      }
       break;
 
     case 'category':
@@ -78,19 +86,36 @@ exports.getEntity = async function getEntity(langcode) {
       request.data = JSON.stringify({
         query: `{ categories(filters: { url_path: { eq: "${urlKey[1]}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
-
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response.data.categories.total_count) {
+        result = response.data.categories.items[0];
+      }
+      else {
+        result = 404;
+      }
       break;
 
     case 'promotion':
       // Prepare request parameters.
       request.uri += "graphql";
-      request.method = "POST",
-        request.headers.push(["Content-Type", "application/json"]);
+      request.method = "POST";
+      request.headers.push(["Content-Type", "application/json"]);
       // @todo Remove the URL match once we get proper URL of promotion.
       const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
       request.data = JSON.stringify({
         query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsPhGraphqlQuery.promotions}}`
       });
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response.data.promotionUrlResolver) {
+        result = response.data.promotionUrlResolver;
+        // Adding name in place of title so that RCS replace the placeholders
+        // properly.
+        result.name = result.title;
+      }
+      if (!result || (typeof result.name !== 'string')) {
+        result = 404;
+      }
+      break;
 
     default:
       console.log(
@@ -99,27 +124,10 @@ exports.getEntity = async function getEntity(langcode) {
       return result;
   }
 
-  let response = await rcsCommerceBackend.invokeApi(request);
-  if (pageType === "product") {
-    if (response.data.products.total_count) {
-      result = response.data.products.items[0];
-      RcsPhStaticStorage.set('product_' + result.sku, result);
-    }
-    else {
-      await handleNoItemsInResponse(request, urlKey);
-    }
-  }
-  else if (pageType === "category" && response.data.categories.total_count) {
-    result = response.data.categories.items[0];
-  }
-  else if (drupalSettings.rcsPage.type === 'promotion' && response.data.promotionUrlResolver) {
-    result = response.data.promotionUrlResolver;
-    // Adding name in place of title so that RCS replace the placeholders
-    // properly.
-    result.name = result.title;
-  }
-
-  if (result !== null) {
+  // Handles 404 redirection.
+  if (result === 404) {
+    await handleNoItemsInResponse(request, urlKey);
+  } else if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
     const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
