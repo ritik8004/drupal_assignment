@@ -6,5 +6,6 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_cos:alshaya_cos
+  - alshaya_color_split:alshaya_color_split
 themes:
   - alshaya_cos_stores
