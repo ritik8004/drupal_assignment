@@ -10,7 +10,5 @@ settings:
     target_bundles_drag_drop:
       1_row_2_col:
         enabled: true
-        weight: 33
       1_row_4_col:
         enabled: true
-        weight: 44

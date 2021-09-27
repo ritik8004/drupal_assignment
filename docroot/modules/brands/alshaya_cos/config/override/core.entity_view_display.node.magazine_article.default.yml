@@ -1,6 +1,3 @@
 content:
   sharethis:
     weight: 6
-    region: content
-    settings: {  }
-    third_party_settings: {  }
