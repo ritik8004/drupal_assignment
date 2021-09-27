@@ -15,7 +15,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And the element ".promotion-label" should exist
     And the element ".dynamic-promotion-wrapper" should exist
     And the element ".promotion-text" should exist
@@ -71,7 +71,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And the element ".promotion-label" should exist
     And the element ".dynamic-promotion-wrapper" should exist
     And the element ".promotion-text" should exist
