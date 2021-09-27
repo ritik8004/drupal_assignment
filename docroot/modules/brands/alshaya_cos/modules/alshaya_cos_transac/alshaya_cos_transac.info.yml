@@ -7,5 +7,7 @@ core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_cos:alshaya_cos
   - alshaya_color_split:alshaya_color_split
+  - drupal:video_embed_field
+  - alshaya_magazine:alshaya_magazine
 themes:
   - alshaya_cos_stores
