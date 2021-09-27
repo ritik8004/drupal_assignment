@@ -18,6 +18,15 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 
 /**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_spc_alshaya_spc_cart_build_alter(array &$build) {
+  $config = \Drupal::config('alshaya_spc.collection_points');
+  $build['#attached']['drupalSettings']['cnc_collection_points_enabled'] = $config->get('click_collect_collection_points_enabled');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
+}
+
+/**
  * Implements hook_alshaya_stores_finder_store_update_alter().
  */
 function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $store) {

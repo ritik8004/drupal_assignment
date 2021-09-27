@@ -642,6 +642,8 @@ const getProcessedCartData = async (cartData) => {
       allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
     items: [],
+    ...(collectionPointsEnabled() && hasValue(cartData.shipping))
+      && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
   // Totals.
