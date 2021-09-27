@@ -21,7 +21,7 @@ exports.getEntity = async function getEntity(langcode) {
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
       // Remove .html suffix from the full path.
-      const productUrlKey = drupalSettings.rcsPage.getFullPath.replace('.html', '');
+      const productUrlKey = drupalSettings.rcsPage.fullPath.replace('.html', '');
       request.data = JSON.stringify({
         query: `{ products(filter: { url_key: { eq: "${productUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
       });
@@ -34,7 +34,7 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${drupalSettings.rcsPage.getFullPath}" }}) ${rcsPhGraphqlQuery.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${drupalSettings.rcsPage.fullPath}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
 
       break;
@@ -45,7 +45,7 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
       request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${drupalSettings.rcsPage.getUrlKey}") ${rcsPhGraphqlQuery.promotions}}`
+        query: `{ promotionUrlResolver(url_key: "${drupalSettings.rcsPage.urlKey}") ${rcsPhGraphqlQuery.promotions}}`
       });
 
       break;
