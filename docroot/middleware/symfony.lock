@@ -99,9 +99,6 @@
     "guzzlehttp/psr7": {
         "version": "1.6.1"
     },
-    "jdorn/sql-formatter": {
-        "version": "v1.2.17"
-    },
     "laminas/laminas-code": {
         "version": "3.5.1"
     },
@@ -256,9 +253,6 @@
             "config/packages/test/monolog.yaml"
         ]
     },
-    "symfony/orm-pack": {
-        "version": "v2.1.0"
-    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.13.1"
     },
@@ -314,11 +308,5 @@
     },
     "webimpress/safe-writer": {
         "version": "2.2.0"
-    },
-    "zendframework/zend-code": {
-        "version": "3.4.1"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     }
 }

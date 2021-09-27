@@ -145,7 +145,6 @@
         if (params['get-data'] && data === null) {
           return;
         }
-
         // Pass the data to the rendering engine.
         $(this).html(
           renderer.render(

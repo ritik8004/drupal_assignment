@@ -634,7 +634,6 @@ const getProcessedCartData = async (cartData) => {
     stale_cart: (typeof cartData.stale_cart !== 'undefined') ? cartData.stale_cart : false,
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,
-      shipping_incl_tax: null,
       base_grand_total: cartData.totals.base_grand_total,
       base_grand_total_without_surcharge: cartData.totals.base_grand_total,
       discount_amount: cartData.totals.discount_amount,
@@ -651,11 +650,14 @@ const getProcessedCartData = async (cartData) => {
     data.minicart_total = cartData.totals.base_grand_total;
   }
 
-  if (typeof cartData.shipping !== 'undefined') {
+  if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
+    // We use null to show "Excluding Delivery".
+    data.totals.shipping_incl_tax = null;
+  } else if (cartData.shipping.type !== 'click_and_collect') {
     // For click_n_collect we don't want to show this line at all.
-    if (cartData.shipping.type !== 'click_and_collect') {
-      data.totals.shipping_incl_tax = cartData.totals.shipping_incl_tax;
-    }
+    data.totals.shipping_incl_tax = (hasValue(cartData.totals.shipping_incl_tax))
+      ? cartData.totals.shipping_incl_tax
+      : 0;
   }
 
   if (typeof cartData.cart.extension_attributes.surcharge !== 'undefined' && cartData.cart.extension_attributes.surcharge.amount > 0 && cartData.cart.extension_attributes.surcharge.is_applied) {

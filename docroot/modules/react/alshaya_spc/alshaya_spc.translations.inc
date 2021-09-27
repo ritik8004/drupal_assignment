@@ -385,6 +385,16 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to collection point feature.
+  $strings['v9'] = [
+    'Collection Charge' => [
+      'ar' => 'رسوم التحصيل',
+    ],
+    'available in collection point within' => [
+      'ar' => 'متوفر في نقطة الاستلام خلال',
+    ],
+  ];
+
   return $strings;
 }
 

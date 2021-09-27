@@ -31,7 +31,20 @@ exports.render = function render(
         html += globalThis.renderRcsNavigationMenu.render(
           settings,
           inputs,
-          innerHtml
+          innerHtml,
+          'navigation_menu'
+        );
+      }
+      break;
+
+    case "shop_by_block":
+      // Process shop by block renderer, if available.
+      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
+        html += globalThis.renderRcsNavigationMenu.render(
+          settings,
+          inputs,
+          innerHtml,
+          'shop_by_block'
         );
       }
       break;
@@ -150,6 +163,9 @@ exports.computePhFilters = function (input, filter) {
     case 'brand_logo':
     case 'url':
     case 'stock_qty':
+    case 'title':
+    case 'description':
+    case 'short_description':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }

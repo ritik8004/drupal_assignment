@@ -183,12 +183,16 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $product_settings = \Drupal::config('alshaya_acm_product.settings');
   $build['#attached']['drupalSettings']['vat_text'] = $product_settings->get('vat_text');
+  $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_enabled'] = $product_settings->get('legal_notice_enabled');
+  $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_label'] = $product_settings->get('legal_notice_label');
+  $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_summary'] = $product_settings->get('legal_notice_summary');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
   $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
 
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
+  $build['#attached']['drupalSettings']['alshayaRcs']['shortDescLimit'] = $product_display_settings->get('short_desc_characters');
   $build['#attached']['drupalSettings']['show_configurable_boxes_after'] = $product_display_settings->get('show_configurable_boxes_after');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
 
@@ -219,19 +223,10 @@ function template_preprocess_rcs_commerce_price(array &$variables) {
     ? TRUE
     : FALSE;
 
-  $current_language = \Drupal::languageManager()
-    ->getConfigOverrideLanguage()
-    ->getId();
-
-  if (empty($config_data[$current_language])) {
-    $config = \Drupal::configFactory()->get('acq_commerce.currency');
-    $config_data[$current_language]['currency_format'] = $config->get('currency_code');
-    $config_data[$current_language]['currency_code_position'] = $config->get('currency_code_position');
-    $config_data[$current_language]['decimal_points'] = $config->get('decimal_points');
-  }
-
-  $variables['currency_format'] = $config_data[$current_language]['currency_format'];
-  $variables['currency_code_position'] = $config_data[$current_language]['currency_code_position'];
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+  $variables['currency_format'] = $config->get('currency_code');
+  $variables['currency_code_position'] = $config->get('currency_code_position');
+  $variables['decimal_points'] = $config->get('decimal_points');
 }
 
 /**
@@ -594,23 +589,25 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'id',
       'type_id',
       'name',
+      'description' => [
+        'html',
+      ],
       'url_key',
       'is_buyable',
       'stock_status',
       'ship_to_store',
       'reserve_and_collect',
       'style_code',
-      'price' => [
-        'regularPrice' => [
-          'amount' => [
-            'currency',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value'
+          ],
+          'final_price' => [
             'value',
           ],
-        ],
-        'maximalPrice' => [
-          'amount' => [
-            'currency',
-            'value',
+          'discount' => [
+            'percent_off',
           ],
         ],
       ],
@@ -674,17 +671,16 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             '... on PhysicalProductInterface' => [
               'weight',
             ],
-            'price' => [
-              'regularPrice' => [
-                'amount' => [
-                  'value',
-                  'currency',
+            'price_range' => [
+              'maximum_price' => [
+                'regular_price' => [
+                  'value'
                 ],
-              ],
-              'maximalPrice' => [
-                'amount' => [
+                'final_price' => [
                   'value',
-                  'currency',
+                ],
+                'discount' => [
+                  'percent_off',
                 ],
               ],
             ],
@@ -775,17 +771,16 @@ function _alshaya_rcs_product_get_recommended_product_field_query() {
     'url_key',
     'is_buyable',
     'stock_status',
-    'price' => [
-      'regularPrice' => [
-        'amount' => [
-          'currency',
+    'price_range' => [
+      'maximum_price' => [
+        'regular_price' => [
+          'value'
+        ],
+        'final_price' => [
           'value',
         ],
-      ],
-      'maximalPrice' => [
-        'amount' => [
-          'currency',
-          'value',
+        'discount' => [
+          'percent_off',
         ],
       ],
     ],
@@ -822,4 +817,19 @@ function _alshaya_rcs_product_get_recommended_product_field_query() {
  */
 function template_preprocess_rcs_sku_base_form(&$variables) {
   $variables['#attached']['library'][] = 'alshaya_spc/add_to_cart';
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates_alter().
+ */
+function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  $path = drupal_get_path('module', 'alshaya_rcs_product');
+  $templates['field']['product'] = [
+    'description' => "$path/templates/rcs-field-description.handlebars",
+    'short_description' => "$path/templates/rcs-field-short-description.handlebars",
+  ];
 }
