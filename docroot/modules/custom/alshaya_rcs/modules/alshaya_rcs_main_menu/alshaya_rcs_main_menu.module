@@ -206,3 +206,12 @@ function _alshaya_rcs_main_menu_invalidate_enriched_term_cache(EntityInterface $
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+function alshaya_rcs_main_menu_preprocess_block(&$variables) {
+  if ($variables['plugin_id'] == 'alshaya_rcs_dp_app_navigation') {
+    $variables['attributes']['class'][] = 'block-alshaya-dp-navigation-link';
+  }
+}

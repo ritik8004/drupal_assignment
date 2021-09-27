@@ -1,8 +1,8 @@
 {% if data %}
-  {% if data.l2 %}
+  {% if data.item %}
     <div class="l2-terms menu-terms-link">
       <ul>
-        {% for path, name in data.l2 %}
+        {% for path, name in data.item %}
           <li>
             <a href={{ path }}>{{ name }}</a>
           </li>
@@ -11,10 +11,10 @@
     </div>
   {% endif %}
 
-  {% if data.l3 %}
+  {% if data.item %}
     <div class="l3-terms menu-terms-link">
       <ul>
-        {% for path, name in data.l3 %}
+        {% for path, name in data.item %}
           <li>
             <a href={{ path }}>{{ name }}</a>
           </li>
