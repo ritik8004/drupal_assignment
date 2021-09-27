@@ -48,8 +48,13 @@ function selectedFiltersLables(attribute, value, filter) {
     }
 
     case 'delivery_ways': {
-      const selectedVal = value.replace(/_/g, ' ');
-      selctionText = Drupal.t(selectedVal, {}, { context: 'Filter label' });
+      if (filter.facet_values) {
+        if (value in filter.facet_values) {
+          const selctedFilter = filter.facet_values[value];
+          const [expressFilter] = selctedFilter.split(',');
+          selctionText = expressFilter;
+        }
+      }
       break;
     }
 
