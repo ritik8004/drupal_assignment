@@ -411,7 +411,9 @@
     margin-#{$right}: 1rem;
   }
 
-  .express_delivery {
-    margin: 0.625rem 0 0;
+  .c-products__item {
+    .express_delivery {
+      margin-#{$left}: 0;
+    }
   }
 }
