@@ -3,7 +3,6 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
 import hasValue from '../../../js/utilities/conditionsUtility';
-import collectionPointsEnabled from '../../../js/utilities/pudoAramaxCollection';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -228,13 +227,6 @@ export const addShippingInCart = (action, data) => window.commerceBackend.addShi
         // Trigger event on shipping update, so that
         // other components take necessary action if required.
         dispatchCustomEvent('onShippingAddressUpdate', response.data);
-
-        // If collection point feature is enabled, remove cart from storage if present so that
-        // fresh cart is fetched on cart page to reflect any new modifications on checkout page
-        // like collection charges added etc.
-        if (collectionPointsEnabled()) {
-          window.commerceBackend.removeCartDataFromStorage();
-        }
       }
 
       return response.data;
