@@ -227,7 +227,7 @@ const PdpLayout = () => {
           >
             <div className="express-delivery-wrapper">
               {deliveryOptions && Object.keys(deliveryOptions).map((option) => (
-                <div key={option} className="express-delivery-text">{deliveryOptions[option].label}</div>
+                <div key={option} className={`express-delivery-text ${option}`}>{deliveryOptions[option].label}</div>
               ))}
             </div>
           </ConditionalView>
