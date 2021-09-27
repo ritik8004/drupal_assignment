@@ -18,8 +18,10 @@
       var context = (viewMode === 'full')
         ? 'main'
         : 'related';
-      var variantInfo = drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
-      var price = variantInfo ? variantInfo.priceRaw : 0;
+      var variantInfo = (drupalSettings[productKey][sku]['type'] === 'simple')
+        ? drupalSettings[productKey][sku]
+        : drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
+      var price = variantInfo ? variantInfo.priceRaw.replace(/,/g, '') : 0;
       data = {
         amount: price * quantity,
       };
