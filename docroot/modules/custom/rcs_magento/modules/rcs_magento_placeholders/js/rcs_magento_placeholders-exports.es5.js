@@ -1,17 +1,6 @@
 // @codingStandardsIgnoreFile
 
 /**
- * Utility function to redirect to page.
- *
- * @param {string} url
- *   The url to redirect to.
- */
-function redirectToPage(url) {
-  const location = rcsWindowLocation();
-  location.href = url;
-}
-
-/**
  * Handle 404 case on initial request.
  *
  * @param {object} request
@@ -29,10 +18,10 @@ async function handleNoItemsInResponse(request, urlKey) {
 
   let response = await rcsCommerceBackend.invokeApi(request);
   if (response.data.urlResolver === null) {
-    redirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
+    rcsRedirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
   }
   else if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
-    redirectToPage(response.data.urlResolver.relative_url);
+    rcsRedirectToPage(response.data.urlResolver.relative_url);
   }
   else {
     // @todo use DataDog https://alshayagroup.atlassian.net/browse/CORE-34720
