@@ -44,7 +44,7 @@
 
       .promotions {
         @include breakpoint($only-mobile) {
-          margin: 0 0.625rem 0.5rem;
+          margin: 0 0.625rem;
         }
 
         .sku-promotion-item {
@@ -59,13 +59,17 @@
     .addtobag-config-button-container,
     .is-not-buyable {
       @include breakpoint($only-mobile) {
-        margin: 0 0.625rem;
+        margin: 0.5rem 0.625rem 0;
       }
     }
 
     article {
       @include breakpoint($only-mobile) {
         padding-bottom: 0.5rem;
+      }
+
+      @include breakpoint($tablet) {
+        padding-bottom: 0.75rem;
       }
     }
   }
