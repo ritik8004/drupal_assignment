@@ -20,8 +20,10 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+      // Remove .html suffix from the full path.
+      const productUrlKey = drupalSettings.rcsPage.getFullPath.replace('.html', '');
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${drupalSettings.rcsPage.path}" }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { url_key: { eq: "${productUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       break;
@@ -32,7 +34,7 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${drupalSettings.rcsPage.path}" }}) ${rcsPhGraphqlQuery.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${drupalSettings.rcsPage.getFullPath}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
 
       break;
@@ -42,10 +44,8 @@ exports.getEntity = async function getEntity(langcode) {
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
-      // @todo Remove the URL match once we get proper URL of promotion.
-      const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsPhGraphqlQuery.promotions}}`
+        query: `{ promotionUrlResolver(url_key: "${drupalSettings.rcsPage.getUrlKey}") ${rcsPhGraphqlQuery.promotions}}`
       });
 
       break;
