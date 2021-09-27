@@ -106,6 +106,10 @@ function alshaya_cos_transac_install() {
       // Disable share this for Product CT.
       $configFactory->clear('node_types.acq_product');
     }
+    // Enable share this for Magazine CT.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_magazine')) {
+      $configFactory->set('node_types.magazine_article', 'magazine_article');
+    }
     // Save the changes.
     $configFactory->save();
   }
