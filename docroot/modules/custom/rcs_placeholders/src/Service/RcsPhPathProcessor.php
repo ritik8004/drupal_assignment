@@ -258,8 +258,20 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (empty(self::$entityType)) {
       return '';
     }
+    $url = self::$entityPathPrefix;
+    // Modify the URL based on entity type.
+    switch (self::$entityType) {
+      case 'product':
+        $url .= str_replace('.html', '', self::$entityPath);
+        break;
 
-    return trim(self::$entityPathPrefix . self::$entityPath, '/');
+      default:
+        // Append the entity path.
+        $url .= self::$entityPath;
+        break;
+    }
+
+    return trim($url, '/');
   }
 
 }

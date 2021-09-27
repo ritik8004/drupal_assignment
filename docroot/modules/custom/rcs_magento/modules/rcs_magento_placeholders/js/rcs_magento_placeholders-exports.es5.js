@@ -20,11 +20,8 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
-
-      const productRegex = new RegExp(`(${drupalSettings.rcsPhSettings.productPathPrefix}(.*?))\\.`);
-      const productUrlKey = rcsWindowLocation().pathname.match(productRegex);
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { url_key: { eq: "${drupalSettings.rcsPage.path}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       break;
