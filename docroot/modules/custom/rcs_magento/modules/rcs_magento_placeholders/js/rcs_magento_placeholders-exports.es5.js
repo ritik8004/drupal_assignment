@@ -34,11 +34,8 @@ exports.getEntity = async function getEntity(langcode) {
       request.uri += "graphql";
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
-
-      const categoryRegex = new RegExp(`\/${drupalSettings.path.currentLanguage}\/(.*?)\/?$`);
-      const categoryUrlKey = rcsWindowLocation().pathname.match(categoryRegex);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsPhGraphqlQuery.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${drupalSettings.rcsPage.path}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
 
       break;
