@@ -274,7 +274,38 @@
       }
 
       .spcSelect__menu {
-        z-index: 3;
+        z-index: 5;
+        margin: 0;
+        box-shadow: none;
+
+        .spcSelect__menu-list {
+          padding: 0;
+          border: 1px solid $spc-select-border;
+          border-top-width: 0;
+
+          > div {
+            color: $spc-select-text;
+            border-top: 1px solid $spc-select-border-separator;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            background: $spc-select_bg;
+            cursor: pointer;
+            padding: 0.75rem;
+
+            @include arabic-letter-spacing;
+
+            &.spcSelect__option--is-selected,
+            &:hover {
+              background: $spc-select_bg_hover;
+            }
+
+            &.spcSelect__option--is-disabled {
+              pointer-events: none;
+              opacity: 0.5;
+              background: $greyish !important;
+            }
+          }
+        }
       }
     }
   }
