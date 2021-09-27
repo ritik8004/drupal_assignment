@@ -251,7 +251,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   /**
    * Returns full path with prefix.
    *
-   * @retrun string
+   * @return string
    *   Full path with prefix if available.
    */
   public static function getFullPath() {
