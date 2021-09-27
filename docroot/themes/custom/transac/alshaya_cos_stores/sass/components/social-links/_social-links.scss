@@ -53,6 +53,10 @@
 }
 
 .footer--social {
+  @include breakpoint($only-tablet) {
+    max-width: 14.75rem;
+  }
+
   .c-social-links {
     li {
       &:not(:last-child) {
