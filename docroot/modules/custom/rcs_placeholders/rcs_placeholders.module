@@ -322,9 +322,17 @@ function rcs_placeholders_language_switch_links_alter(array &$links, $type, Url 
       [],
       ['absolute' => TRUE, 'language' => $language]
     )->toString();
-
-    // Add the URL as is, RCS expects the URL to be same in all languages.
-    $url .= RcsPhPathProcessor::$entityPathPrefix . RcsPhPathProcessor::$entityPath;
+    // Manage URL page on entity type.
+    if (RcsPhPathProcessor::$entityType == 'category') {
+      $url = trim($url, '/');
+      // Add the URL as is ( without any prefix ), RCS expects the URL to be
+      // same in all languages.
+      $url .= RcsPhPathProcessor::$entityPath;
+    }
+    else {
+      // Add the URL as is, RCS expects the URL to be same in all languages.
+      $url .= RcsPhPathProcessor::$entityPathPrefix . RcsPhPathProcessor::$entityPath;
+    }
 
     // We use absolute url below to make sure Drupal does not modify it.
     $links[$language->getId()]['url'] = Url::fromUri($url);
