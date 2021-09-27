@@ -135,7 +135,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
       self::$entityType = 'category';
-      self::$entityPath = $rcs_path_to_check;
+      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
       self::$entityPathPrefix = $category_prefix;
 
       self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
@@ -246,6 +246,20 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public static function getOrignalPathFromProcessed(string $path): string {
     $processed_paths = array_flip(self::$processedPaths);
     return $processed_paths[$path] ?? $path;
+  }
+
+  /**
+   * Returns full path with prefix.
+   *
+   * @retrun string
+   *   Full path with prefix if available.
+   */
+  public static function getFullPath() {
+    if (empty(self::$entityType)) {
+      return '';
+    }
+
+    return self::$entityPathPrefix . self::$entityPath;
   }
 
 }
