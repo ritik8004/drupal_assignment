@@ -27,4 +27,5 @@ utility:
   version: 1.x
   js:
     js/alshaya_rcs_product.utility.js: {}
-  # dependencies:
+  dependencies:
+    - rcs_placeholders/helpers
