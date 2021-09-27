@@ -259,7 +259,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       return '';
     }
 
-    return trim(self::$entityPathPrefix . self::$entityPath, '/');
+    return self::$entityPathPrefix . self::$entityPath;
   }
 
 }

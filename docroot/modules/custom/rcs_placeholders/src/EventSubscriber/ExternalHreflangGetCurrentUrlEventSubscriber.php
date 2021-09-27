@@ -42,7 +42,7 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
     // path prefix, like /buy.
     // So we use the following method to prevent the Drupal routing system from
     // converting the path to the alias value.
-    $url = Url::fromUri('base:' . RcsPhPathProcessor::$entityPathPrefix . RcsPhPathProcessor::$entityPath);
+    $url = Url::fromUri('base:' . RcsPhPathProcessor::getFullPath());
     $event->setCurrentUrl($url);
     $event->stopPropagation();
   }

@@ -49,7 +49,7 @@ function rcs_placeholders_preprocess_html(&$variables) {
   if (!empty(RcsPhPathProcessor::$entityType)) {
     $variables['#attached']['drupalSettings']['rcsPage']['type'] = RcsPhPathProcessor::$entityType;
     $variables['#attached']['drupalSettings']['rcsPage']['getUrlKey'] = trim(RcsPhPathProcessor::$entityPath, '/');
-    $variables['#attached']['drupalSettings']['rcsPage']['getFullPath'] = RcsPhPathProcessor::getFullPath();
+    $variables['#attached']['drupalSettings']['rcsPage']['getFullPath'] = trim(RcsPhPathProcessor::getFullPath(), '/');
 
     if($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
       $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = RcsPhPathProcessor::$entityData;
