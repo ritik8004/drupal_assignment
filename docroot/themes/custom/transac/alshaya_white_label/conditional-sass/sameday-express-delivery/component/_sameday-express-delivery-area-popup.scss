@@ -42,7 +42,7 @@ body.overlay-delivery-area {
     }
 
     @include breakpoint($tablet) {
-      transform: translateX(0);
+      transform: translateX(0) !important;
     }
   }
 }
@@ -73,12 +73,17 @@ body.overlay-delivery-area {
   z-index: 14;
   opacity: 0;
 
+  html[lang=ar] & {
+    transform: translateX(-100%);
+  }
+
   @include breakpoint($only-mobile) {
     transform: translateY(100%);
     margin-top: 8.75rem;
   }
 
   @include breakpoint($tablet) {
+    width: 24.0625rem;
     max-width: 24.0625rem;
   }
 }

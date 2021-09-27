@@ -91,6 +91,10 @@
         position: absolute;
         #{$right}: 0.25rem;
         top: 0;
+
+        html[lang=ar] & {
+          top: -0.125rem;
+        }
       }
     }
 
@@ -129,7 +133,7 @@
             position: absolute;
             bottom: 100%;
             border: 1px solid $spc-cart-delivery-info-border;
-            padding: 0.125rem 0.5rem;
+            padding: 0.5rem;
             background: white;
             min-width: 6.875rem;
             z-index: 2;
@@ -150,6 +154,10 @@
               transform: rotate(-135deg);
               background: $spc-cart-delivery-info-bg;
               #{$right}: 0.625rem;
+
+              html[lang=ar] & {
+                transform: rotate(135deg);
+              }
             }
 
             span {
