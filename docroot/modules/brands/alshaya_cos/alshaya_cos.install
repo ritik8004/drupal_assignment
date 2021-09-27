@@ -6,28 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Enable magazine articles feature.
- */
-function alshaya_cos_update_8001() {
-  \Drupal::service('module_installer')->install(['video_embed_field']);
-  \Drupal::service('module_installer')->install(['alshaya_magazine']);
-  // Configure ShareThis defaults.
-  // Configure for which content type ShareThis widget should appear.
-  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
-    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-    // Enable share this for non transac Product CT.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_magazine')) {
-      $configFactory->set('node_types.magazine_article', 'magazine_article');
-    }
-    // Set the option to use large image style button for sharethis.
-    $configFactory->set('button_option', 'stbc_large');
-    $configFactory->save();
-  }
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_cos_install() {
