@@ -176,7 +176,7 @@ const Teaser = ({
           </div>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
-              && hit.attr_express_delivery === '1'
+              && hit.attr_express_delivery >= 1
             }
           >
             <div className="express_delivery">
