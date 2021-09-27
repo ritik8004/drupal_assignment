@@ -40,7 +40,11 @@ const DeliveryTypeFilter = ({
           >
             <span className="facet-item__value" data-drupal-facet-item-value={item.value}>
               <span className="facet-item__label">{expressValue}</span>
-              <span className="facet-item__count">{item.count}</span>
+              <span className="facet-item__count">
+                (
+                {item.count}
+                )
+              </span>
             </span>
           </li>
         );

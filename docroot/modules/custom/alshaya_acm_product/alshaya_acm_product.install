@@ -38,7 +38,6 @@ function alshaya_acm_product_update_8073() {
   // Re-indexing all the products.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 
-  // Adjust Block Facets weight for attr_deliveryways
   $blocks = [
     'deliveryways' => 'alshaya_search_facets_block_all',
     'promodeliveryways' => 'alshaya_promo_facets_block_all',

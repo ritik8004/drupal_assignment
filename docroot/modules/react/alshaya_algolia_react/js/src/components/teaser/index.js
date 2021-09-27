@@ -180,7 +180,7 @@ const Teaser = ({
             }
           >
             <div className="express_delivery">
-              {Drupal.t('Express Delivery')}
+              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
             </div>
           </ConditionalView>
         </div>

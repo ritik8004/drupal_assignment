@@ -438,8 +438,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
                 'context' => 'express_day_delivery_listing',
               ]
             );
-            $facet_values['express_day_delivery_available'] = $express_value . ',express';
-            $facet_values['same_day_delivery_available'] = $same_value . ',same';
+            $facet_values['express_day_delivery_available'] = $express_value . ',express_delivery';
+            $facet_values['same_day_delivery_available'] = $same_value . ',same_day_delivery';
           }
 
           // For HNM we are using "size_group_list" widget type

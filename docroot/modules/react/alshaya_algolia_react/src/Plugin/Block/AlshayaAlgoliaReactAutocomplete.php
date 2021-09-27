@@ -124,6 +124,9 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
 
     // Check express day option avialble or not and add drupal settings.
+    $express_status = [
+      'enabled' => FALSE,
+    ];
     $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
     if ($express_delivery_config->get('status')) {
       $express_status = [
@@ -159,6 +162,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   public function getCacheTags() {
     return Cache::mergeTags(parent::getCacheTags(), [
       'config:alshaya_search.settings',
+      'config:alshaya_spc.express_delivery',
     ]);
   }
 
