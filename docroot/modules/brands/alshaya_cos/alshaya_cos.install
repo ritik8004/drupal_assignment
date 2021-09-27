@@ -9,8 +9,13 @@
  * Implements hook_install().
  */
 function alshaya_cos_install() {
-  \Drupal::moduleHandler()->loadInclude('alshaya_cos', 'inc', 'alshaya_cos.content');
-
+  $module_handler = \Drupal::moduleHandler();
+  $module_handler->loadInclude('alshaya_cos', 'inc', 'alshaya_cos.content');
   // Create default content for cos.
   alshaya_cos_create_default_content();
+
+  if (!$module_handler->moduleExists('alshaya_color_split')) {
+    // Enable catalogue restructuring with this module.
+    \Drupal::service('module_installer')->install(['alshaya_color_split']);
+  }
 }

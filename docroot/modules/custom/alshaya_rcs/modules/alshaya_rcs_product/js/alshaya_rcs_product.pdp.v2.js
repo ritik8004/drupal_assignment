@@ -209,10 +209,10 @@ function getVariantsInfo(product) {
       // @todo Add brand specific cart title.
       cart_title: 'Temp title',
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variant),
-      // color_attribute: '',
+      color_attribute: variant.color_attribute,
       // color_value: '',
       sku: variantInfo.sku,
-      parent_sku: product.sku,
+      parent_sku: variant.parent_sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
       identifier: window.commerceBackend.cleanCssIdentifier(variantInfo.sku),
       // @todo Fetch layout dynamically.
@@ -268,24 +268,6 @@ function processProduct(product) {
   }
 
   return productData;
-}
-
-/**
- * Gets the required data for rcs_product.
- *
- * @param {string} sku
- *   The product sku value.
- *
- * @returns {Object|null}
- *    The processed product data else null if no product is found.
- */
-window.commerceBackend.getProductData = function (sku) {
-  var product = RcsPhStaticStorage.get('product_' + sku);
-  if (product) {
-    return processProduct(product);
-  }
-
-  return null;
 }
 
 /**

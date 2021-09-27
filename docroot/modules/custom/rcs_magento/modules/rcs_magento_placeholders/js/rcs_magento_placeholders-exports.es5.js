@@ -152,3 +152,35 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
   return result;
 };
+
+exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
+  const request = {
+    uri: '/graphql',
+    method: 'GET',
+    headers: [
+      ['Content-Type', 'application/json'],
+      ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
+    ],
+  };
+
+  let response = null;
+  let result = null;
+
+  switch (placeholder) {
+    case 'products-in-style':
+      request.method = 'POST';
+      request.data = JSON.stringify({
+        query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
+      });
+
+      response = rcsCommerceBackend.invokeApiAsync(request);
+      result = response.data.products.items;
+      break;
+
+    default:
+      console.log(`Placeholder ${placeholder} not supported for get_data.`);
+      break;
+  }
+
+  return result;
+}
