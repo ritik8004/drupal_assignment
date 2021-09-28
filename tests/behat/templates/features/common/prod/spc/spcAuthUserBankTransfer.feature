@@ -1,4 +1,4 @@
-@javascript @auth @bank-transfer
+@javascript @auth @bank-transfer @pbksaprod
 Feature: SPC Checkout Home Delivery using Bank Transfer method for Authenticated user
 
   Background:

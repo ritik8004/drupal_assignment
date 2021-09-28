@@ -29,7 +29,7 @@ variables:
   create_account: 'create an account'
   spc_search_keyword: 'body'
   sign_in: 'Sign in'
-  find_store: 'Find Store'
+  find_store: 'Find a Store'
   language_link: 'العربية'
   subtotal: 'Subtotal'
   order_total: 'Order Total'
