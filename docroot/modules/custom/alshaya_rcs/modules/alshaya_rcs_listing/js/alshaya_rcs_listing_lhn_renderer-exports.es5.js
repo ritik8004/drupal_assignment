@@ -68,7 +68,7 @@ exports.render = function render(
  *   {string} Full rendered HTML for the LHN block.
  */
 const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings, enrichmentData) {
-  if (!items.length) {
+  if (!items || !items.length) {
     return itemHtml;
   }
 
@@ -77,15 +77,25 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
       itemHtml += '<li>';
       // Check based on enrichment, if clickable is set or not.
       let html = clickable;
-      if (
-        enrichmentData
-        && enrichmentData[item.url_path]
-        && !enrichmentData[item.url_path].item_clickable) {
-        html = unclickable;
+      let enrichmentDataObj = {};
+      if (enrichmentData && enrichmentData[item.url_path]) {
+        enrichmentDataObj = enrichmentData[item.url_path];
+        // Change HTML based on enrichment attribute of clickable.
+        if (!enrichmentDataObj.item_clickable) {
+          html = unclickable;
+        }
       }
       // Replace placeholders with response value and only do this if
       // show_in_lhn is set as true.
       if (item.show_in_lhn) {
+        // Override the link based on enrichment path attribute.
+        if (typeof enrichmentDataObj.path !== 'undefined') {
+          item.url_path = enrichmentDataObj.path;
+        }
+        else {
+          // Change URL based on current language prefix.
+          item.url_path = `/${settings.path.pathPrefix}${item.url_path}/`;
+        }
         itemHtml += replaceLhnPlaceHolders(item, html, settings);
       }
 
@@ -114,8 +124,6 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
  *   {string} Single LHN item HTML with proper data.
  */
 const replaceLhnPlaceHolders = function (item, itemHtml, settings) {
-  // Change URL based on current language prefix.
-  item.url_path = `/${settings.path.pathPrefix}${item.url_path}/`;
   // lower the level as the response that we get from MDC starts from level 2.
   item.level -= 1;
 
