@@ -36,8 +36,15 @@ exports.render = function render(
         // Proceed only if breadcrumb is not marked as removed.
         hideBreadcrumb = enrichedDataObj.remove_from_breadcrumb
       }
+
       if (!hideBreadcrumb) {
-        breadcrumb.url = '/' + settings.path.pathPrefix + breadcrumb.url;
+        // Perform URL update before applying URL enrichment.
+        // @codingStandardsIgnoreLine
+        breadcrumb.url = Drupal.url(`${breadcrumb.url}/`);
+        // Override the link based on enrichment path attribute.
+        if (enrichedDataObj && typeof enrichedDataObj.path !== 'undefined') {
+          breadcrumb.url = enrichedDataObj.path;
+        }
         breadcrumbHtml += getBreadcrumbMarkup(breadcrumb, innerHtmlObj, settings);
       }
     });
