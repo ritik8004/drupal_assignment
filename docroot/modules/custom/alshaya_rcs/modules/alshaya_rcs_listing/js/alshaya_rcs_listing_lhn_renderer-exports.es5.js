@@ -1,8 +1,3 @@
-// @codingStandardsIgnoreFile
-// This is because the linter is throwing errors where we use backticks here.
-// Once we enable webapack for the custom modules directory, we should look into
-// removing the above ignore line.
-
 // Render function to prepare the markup for LHN Block and replace placeholders
 // with API Response.
 exports.render = function render(
@@ -26,6 +21,7 @@ exports.render = function render(
     // Remove the placeholder li elements.
     innerHtmlObj.find('li').remove();
     // @todo Handle special base where we separate URL by - instead of /.
+    // @codingStandardsIgnoreLine
     const firstLevelTermUrl = rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/(.*?)$`);
     if (firstLevelTermUrl) {
       inputs = inputs.filter((input) => {
@@ -90,7 +86,8 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
       if (item.show_in_lhn) {
         // Override the link based on enrichment path attribute.
         item.url_path = typeof enrichmentDataObj.path !== 'undefined' ?
-        enrichmentDataObj.path : Drupal.url(`${item.url_path}/`);
+          // @codingStandardsIgnoreLine
+          enrichmentDataObj.path : Drupal.url(`${item.url_path}/`);
 
         itemHtml += replaceLhnPlaceHolders(item, html, settings);
       }
