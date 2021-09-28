@@ -144,6 +144,17 @@ exports.render = function render(
       }
       break;
 
+    case 'plp_mobile_menu':
+      // Render the PLP mobile menu block.
+      if (typeof globalThis.renderRcsPlpMobileMenu !== 'undefined') {
+        html += globalThis.renderRcsPlpMobileMenu.render(
+          settings,
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
