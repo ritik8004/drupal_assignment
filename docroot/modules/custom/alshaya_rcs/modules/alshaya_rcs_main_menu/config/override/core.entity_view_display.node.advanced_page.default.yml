@@ -2,8 +2,5 @@ langcode: en
 dependencies:
   config:
     - field.field.node.advanced_page.field_category_slug
-  enforced:
-    module:
-      - alshaya_rcs_main_menu
 hidden:
   field_category_slug: true
