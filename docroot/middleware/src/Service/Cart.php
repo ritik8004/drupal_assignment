@@ -2461,7 +2461,8 @@ class Cart {
     $data['is_error'] = FALSE;
 
     // For CnC, add collection charge for collection points.
-    if ($cart_data['shipping']['type'] === 'click_and_collect'
+    if (!empty($cart_data['shipping'])
+      && $cart_data['shipping']['type'] === 'click_and_collect'
       && $cart_data['shipping']['pudo_available'] === TRUE) {
       $data['collection_charge'] = $cart_data['shipping']['price_amount'] ?? '';
     }

@@ -1,0 +1,29 @@
+fields:
+  color_family:
+    label: 'Colour'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  composition:
+    label: 'Composition'
+    cardinality: -1
+
+  materials:
+    label: 'Materials'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  washing_instructions:
+    label: 'Washing Instructions'
+    cardinality: -1
+
+  article_warning:
+    label: 'Article Warning'
+    type: 'string'
+
+  rgb_color:
+    label: 'RGB color'
+    type: 'string'
