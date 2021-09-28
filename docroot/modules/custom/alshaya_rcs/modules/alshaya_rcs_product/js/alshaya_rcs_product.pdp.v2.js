@@ -223,10 +223,10 @@ function getVariantsInfo(product) {
       // @todo Add brand specific cart title.
       cart_title: 'Temp title',
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variant),
-      // color_attribute: '',
+      color_attribute: variant.color_attribute,
       // color_value: '',
       sku: variantInfo.sku,
-      parent_sku: product.sku,
+      parent_sku: variant.parent_sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
       // @todo Fetch layout dynamically.
       layout: drupalSettings.alshayaRcs.pdpLayout,
