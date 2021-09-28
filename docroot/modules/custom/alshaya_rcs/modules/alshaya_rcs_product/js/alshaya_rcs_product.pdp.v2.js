@@ -229,7 +229,7 @@ function getVariantsInfo(product) {
       parent_sku: product.sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
       // @todo Fetch layout dynamically.
-      layout: 'classic',
+      layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: '',
       stock: {
         qty: variantInfo.stock_data.qty,
@@ -567,10 +567,18 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
 
   let labels = await window.commerceBackend.getLabelsData(sku);
 
+  // Maps gallery value from backend to the appropriate filter.
+  let galleryType = null;
+  switch (drupalSettings.alshayaRcs.pdpLayout) {
+    case 'pdp':
+      galleryType = 'classic-gallery';
+      break;
+  }
+
   const gallery = globalThis.rcsPhRenderingEngine
     .render(
       drupalSettings,
-      'classic-gallery',
+      galleryType,
       {},
       { labels },
       rawProduct,

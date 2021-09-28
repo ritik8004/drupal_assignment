@@ -177,3 +177,16 @@ function _alshaya_cos_get_metatag_translations() {
 
   alshaya_i18n_save_translations($strings);
 }
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_cos_transac_modules_installed($modules) {
+  if (in_array('alshaya_rcs_product', $modules)) {
+    // We set the default layout in the default rcs product node.
+    $rcs_default_node = \Drupal::config('rcs_placeholders.settings')->get('product.placeholder_nid');
+    /** @var \Drupal\node\Entity\Node $rcs_default_node */
+    $rcs_default_node = \Drupal::entityTypeManager()->getStorage('node')->load($rcs_default_node);
+    $rcs_default_node->set('field_select_pdp_layout', 'default')->save();
+  }
+}

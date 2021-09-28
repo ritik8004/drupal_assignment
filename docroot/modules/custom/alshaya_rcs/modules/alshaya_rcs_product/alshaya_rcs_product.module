@@ -200,6 +200,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
   $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $sku_manager->showImagesFromChildrenAfterAllOptionsSelected();
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpLayout'] = $sku_manager->getPdpLayout($entity);
 
   $recommended_product_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $recommended_product_settings->getCacheTags());
