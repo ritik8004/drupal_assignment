@@ -584,6 +584,7 @@ class AlshayaSpcController extends ControllerBase {
               'code' => $cncTerm->get('field_shipping_carrier_code')->getString(),
               'method' => $cncTerm->get('field_shipping_method_code')->getString(),
             ],
+            'page_size' => $spc_cnc_config->get('page_size'),
           ],
           'global_error_message' => _alshaya_spc_global_error_message(),
         ],

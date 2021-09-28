@@ -15,6 +15,9 @@ alshaya_spc.click_n_collect:
         zoom:
           type: integer
           label: 'map zoom for country.'
+    page_size:
+      type: integer
+      label: 'page size to display stores'
 
 alshaya_spc.advantage_card:
   type: config_object

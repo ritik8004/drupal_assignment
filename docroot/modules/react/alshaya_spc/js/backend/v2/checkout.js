@@ -341,11 +341,13 @@ const getStoreInfo = async (storeData) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
+ * @param {int} pageSize
+ *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCartStores = async (lat, lon) => {
+const getCartStores = async (lat, lon, pageSize = 0) => {
   const cartId = window.commerceBackend.getCartId();
 
   // If cart not available in session, log the error and return empty array.
@@ -384,6 +386,11 @@ const getCartStores = async (lat, lon) => {
 
   const storeInfoPromises = [];
   let stores = response.data;
+
+  if (pageSize > 0) {
+    stores = stores.slice(0, pageSize);
+  }
+
   stores.forEach((store) => {
     storeInfoPromises.push(getStoreInfo(store));
   });
@@ -419,11 +426,13 @@ const getCartStores = async (lat, lon) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
+ * @param {int} pageSize
+ *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCncStores = async (lat, lon) => {
+const getCncStores = async (lat, lon, pageSize = 0) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
     logger.warning('Error while fetching click and collect stores. No cart available in session.');
@@ -440,7 +449,7 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  const response = await getCartStores(lat, lon);
+  const response = await getCartStores(lat, lon, pageSize);
 
   // Data added below is to keep the response consistent with V1.
   return { data: response };
@@ -1249,11 +1258,15 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
  *
  * @param {object} coords
  *   The co-ordinates data.
+ * @param {int} pageSize
+ *   The default number of stores to display.
  *
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
+window.commerceBackend.fetchClickNCollectStores = (coords, pageSize = 0) => getCncStores(
+  coords.lat, coords.lng, pageSize,
+);
 
 /**
  * Process payment data before placing order.

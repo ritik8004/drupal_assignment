@@ -41,7 +41,7 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.fetchClickNCollectStores = (coords) => callMiddlewareApi(`cart/stores/${coords.lat}/${coords.lng}`, 'GET');
+window.commerceBackend.fetchClickNCollectStores = (coords, pageSize = 0) => callMiddlewareApi(`cart/stores/${coords.lat}/${coords.lng}/${pageSize}`, 'GET');
 
 /**
  * Places an order.

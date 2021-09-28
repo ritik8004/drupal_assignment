@@ -13,6 +13,7 @@ import {
   getLocationAccess,
   removeFullScreenLoader,
   showFullScreenLoader,
+  getPageSize,
 } from '../../../utilities/checkout_util';
 import ClickCollectContainer from '../click-collect';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
@@ -72,7 +73,7 @@ export default class EmptyDeliveryText extends React.Component {
     const { fetchStoresHelper } = this;
     setTimeout(() => {
       if (window.fetchStore === 'idle') {
-        fetchStoresHelper(getDefaultMapCenter(), true);
+        fetchStoresHelper(getDefaultMapCenter(), true, getPageSize());
       }
     }, 200);
 
@@ -110,7 +111,7 @@ export default class EmptyDeliveryText extends React.Component {
   /**
    * Fetch click n collect stores and update store list.
    */
-  fetchStoresHelper = (coords, defaultCenter = false) => {
+  fetchStoresHelper = (coords, defaultCenter = false, pageSize = 0) => {
     // State from context, whether the modal is open or not.
     const { clickCollectModal, showOutsideCountryError, cartId } = this.context;
     // Add all requests in array to update storeLists only once when
@@ -131,6 +132,7 @@ export default class EmptyDeliveryText extends React.Component {
     const args = {
       coords,
       cartId,
+      pageSize,
     };
     const list = createFetcher(fetchClicknCollectStores).read(args);
 

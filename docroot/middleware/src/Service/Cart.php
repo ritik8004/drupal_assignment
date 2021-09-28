@@ -2093,13 +2093,15 @@ class Cart {
    *   The latitude.
    * @param float $lon
    *   The longitude.
+   * @param int $pageSize
+   *   The number of stores to display.
    *
    * @return array|mixed
    *   Return array of stores.
    *
    * @throws \Exception
    */
-  public function getCartStores($lat, $lon) {
+  public function getCartStores($lat, $lon, $pageSize) {
     $cart_id = $this->getCartId();
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $request_options = [
@@ -2109,6 +2111,10 @@ class Cart {
     try {
       if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options))) {
         return $stores;
+      }
+
+      if ($pageSize > 0) {
+        $stores = array_slice($stores, 0, $pageSize, TRUE);
       }
 
       foreach ($stores as $key => &$store) {

@@ -34,7 +34,7 @@ cart.place_order_system:
     methods: POST
 
 cart.get_cnc_stores:
-    path: /cart/stores/{lat}/{lon}
+    path: /cart/stores/{lat}/{lon}/{pageSize}
     controller: App\Controller\CartController::getCncStores
     methods: GET
 
