@@ -52,9 +52,11 @@
             var options = new Array();
             if (is_configurable) {
               currentSelectedVariant = $(form).find('.selected-parent-sku').val();
-              Object.keys(storedProductData.configurables).forEach(function(key) {
+              const configurableCombinations = window.commerceBackend.getConfigurableCombinations(page_main_sku);
+
+              Object.keys(configurableCombinations.configurables).forEach(function(key) {
                 var option = {
-                  'option_id': storedProductData.configurables[key].attribute_id,
+                  'option_id': configurableCombinations.configurables[key].attribute_id,
                   'option_value': $(form).find('[data-configurable-code="' + key + '"]').val()
                 };
 
