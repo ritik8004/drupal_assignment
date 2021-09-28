@@ -89,13 +89,9 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
       // show_in_lhn is set as true.
       if (item.show_in_lhn) {
         // Override the link based on enrichment path attribute.
-        if (typeof enrichmentDataObj.path !== 'undefined') {
-          item.url_path = enrichmentDataObj.path;
-        }
-        else {
-          // Change URL based on current language prefix.
-          item.url_path = `/${settings.path.pathPrefix}${item.url_path}/`;
-        }
+        item.url_path = typeof enrichmentDataObj.path !== 'undefined' ?
+        enrichmentDataObj.path : Drupal.url(`${item.url_path}/`);
+
         itemHtml += replaceLhnPlaceHolders(item, html, settings);
       }
 

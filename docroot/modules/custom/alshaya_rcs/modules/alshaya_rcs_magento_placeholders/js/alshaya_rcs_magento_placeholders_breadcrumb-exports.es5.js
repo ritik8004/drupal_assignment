@@ -44,7 +44,7 @@ exports.render = function render(
 
       if (!hideBreadcrumb) {
         // Perform URL update before applying URL enrichment.
-        breadcrumb.url = `/${settings.path.pathPrefix}${breadcrumb.url}/`;
+        breadcrumb.url = Drupal.url(`${breadcrumb.url}/`);
         // Override the link based on enrichment path attribute.
         if (enrichedDataObj && typeof enrichedDataObj.path !== 'undefined') {
           breadcrumb.url = enrichedDataObj.path;
