@@ -26,6 +26,8 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../../js/utilities/conditionsUtility';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -68,6 +70,7 @@ export default class Cart extends React.Component {
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
+          ...collectionPointsEnabled() && { collectionCharge: data.collection_charge || '' },
         }));
 
         // The cart is empty.
@@ -233,6 +236,7 @@ export default class Cart extends React.Component {
       actionMessage,
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
+      collectionCharge,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -328,6 +332,10 @@ export default class Cart extends React.Component {
               show_checkout_button
               animationDelay="0.5s"
               context="cart"
+              {...(collectionPointsEnabled()
+                && hasValue(collectionCharge)
+                && { collectionCharge }
+              )}
             />
           </div>
         </div>

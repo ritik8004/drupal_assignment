@@ -20,11 +20,10 @@ exports.getEntity = async function getEntity(langcode) {
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
-
-      const productRegex = new RegExp(`(${drupalSettings.rcsPhSettings.productPathPrefix}(.*?))\\.`);
-      const productUrlKey = rcsWindowLocation().pathname.match(productRegex);
+      // Remove .html suffix from the full path.
+      const productUrlKey = drupalSettings.rcsPage.fullPath.replace('.html', '');
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${productUrlKey[1]}" }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { url_key: { eq: "${productUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       break;
@@ -34,11 +33,8 @@ exports.getEntity = async function getEntity(langcode) {
       request.uri += "graphql";
       request.method = "POST";
       request.headers.push(["Content-Type", "application/json"]);
-
-      const categoryRegex = new RegExp(`\/${drupalSettings.path.currentLanguage}\/(.*?)\/?$`);
-      const categoryUrlKey = rcsWindowLocation().pathname.match(categoryRegex);
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${categoryUrlKey[1]}" }}) ${rcsPhGraphqlQuery.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${drupalSettings.rcsPage.fullPath}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
 
       break;
@@ -48,10 +44,8 @@ exports.getEntity = async function getEntity(langcode) {
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);
-      // @todo Remove the URL match once we get proper URL of promotion.
-      const promotionUrlKey = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
       request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${promotionUrlKey[1]}") ${rcsPhGraphqlQuery.promotions}}`
+        query: `{ promotionUrlResolver(url_key: "${drupalSettings.rcsPage.urlKey}") ${rcsPhGraphqlQuery.promotions}}`
       });
 
       break;
