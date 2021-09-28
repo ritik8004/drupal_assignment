@@ -394,7 +394,7 @@ function _alshaya_spc_translations() {
       'ar' => 'متوفر في نقطة الاستلام خلال',
     ],
     'Holiday' => [
-      'ar' => 'Holiday AR',
+      'ar' => 'الجمعة',
     ],
   ];
 
