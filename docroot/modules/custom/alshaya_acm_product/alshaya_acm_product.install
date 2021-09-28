@@ -35,8 +35,6 @@ function alshaya_acm_product_update_8073() {
     'optional',
     AlshayaConfigManager::MODE_MERGE
   );
-  // Re-indexing all the products.
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 
   $blocks = [
     'deliveryways' => 'alshaya_search_facets_block_all',
