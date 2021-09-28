@@ -366,26 +366,24 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   }
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
 
-  // Show express delivery options if feature is enabled.
-  // And product is buyable.
-  // Else show normal delivery options.
-  if ($express_delivery_config->get('status') && alshaya_acm_product_is_buyable($sku)) {
-    $field_mapping = \Drupal::service('alshaya_addressbook.manager')->getMagentoFieldMappings();
-
-    // Adding address related configs to load area list block.
-    $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
-    $build['#attached']['drupalSettings']['expressDelivery'] = [
-      'enabled' => TRUE,
-      'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
-    ];
-    $build['#attached']['drupalSettings']['country_code'] = $country_code;
-    $build['#attached']['drupalSettings']['alshaya_spc']['magento_field_mappings'] =  $field_mapping;
-    $build['#attached']['drupalSettings']['alshaya_spc']['address_fields'] = _alshaya_spc_get_address_fields();
-
-    $build['express_delivery']['#markup'] = '<div id="express-delivery-options"></div>';
-    $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-    $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
-
-    unset($build['home_delivery']);
+  // Return if express delivery feature is disabled.
+  // And product is not buyable.
+  // Otherwise show express delivery options.
+  if (!($express_delivery_config->get('status')) || !(alshaya_acm_product_is_buyable($sku))) {
+    return;
   }
+  // Adding address related configs to load area list block.
+  $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
+  $build['#attached']['drupalSettings']['expressDelivery'] = [
+    'enabled' => TRUE,
+    'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
+  ];
+  $build['#attached']['drupalSettings']['country_code'] = $country_code;
+  $build['#attached']['drupalSettings']['alshaya_spc']['address_fields'] = _alshaya_spc_get_address_fields();
+
+  $build['express_delivery']['#markup'] = '<div id="express-delivery-options"></div>';
+  $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
+  $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
+
+  unset($build['home_delivery']);
 }

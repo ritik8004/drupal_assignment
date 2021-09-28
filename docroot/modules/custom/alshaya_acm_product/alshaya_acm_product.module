@@ -638,9 +638,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Express Delivery
         if ($express_delivery_config->get('status')) {
           $delivery_options = alshaya_acm_product_get_delivery_options($sku);
-          // Show delivery options as per order defined in config.
-          $delivery_options_order = $express_delivery_config->get('delivery_options_order');
           if ($delivery_options !== NULL) {
+            // Show delivery options as per order defined in config.
+            $delivery_options_order = $express_delivery_config->get('delivery_options_order');
             foreach ($delivery_options_order as $option) {
               if ($delivery_options[$option]['label']) {
                 $build['delivery_options'][$option]['#markup'] = $delivery_options[$option]['label'];

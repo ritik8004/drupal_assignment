@@ -218,7 +218,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let stockQty = '';
   let firstChild = '';
   let promotions = '';
-  let deliveryOptions = '';
+  let deliveryOptions = null;
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
