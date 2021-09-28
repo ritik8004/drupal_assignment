@@ -13,12 +13,12 @@ exports.render = function render(
   let l2Elm = innerHtmlObj.find('div.l2-terms li');
 
   // Export the URL Path from the current URL.
-  const currentUrlPath = rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/?$`);
+  const currentUrlPath = drupalSettings.rcsPage.fullPath;
   if (currentUrlPath) {
     let itemHtml = '';
     let l3Items = [];
     // Now extract the L2 items based on current URL path.
-    let l2Items = getL2Items(currentUrlPath[1], inputs, settings);
+    let l2Items = getL2Items(currentUrlPath, inputs, settings);
     // Now extract all the L2 items marked to be used in App navigation.
     l2Items = getInAppNavigationItems(l2Items);
     if (l2Items) {
