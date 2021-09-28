@@ -241,7 +241,15 @@ class AlshayaSpcController extends ControllerBase {
         'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
       ];
     }
-    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $advantage_card_config->getCacheTags());
+
+    // Add collection point feature config variables.
+    $collection_points_config = $this->config('alshaya_spc.collection_points');
+    $build['#attached']['drupalSettings']['cnc_collection_points_enabled'] = $collection_points_config->get('click_collect_collection_points_enabled');
+
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, array_merge(
+      $advantage_card_config->getCacheTags(),
+      $collection_points_config->getCacheTags(),
+    ));
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
