@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @search @pbkaeprod @pbksaprod @pbkkwprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @flsaprod @vskwprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
+@javascript @account @smoke @auth @search @vssapprod @vskwpprod @vsaepprod @pbkaeprod @pbksaprod @pbkkwprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @flsaprod @vskwprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
 Feature: Test search functionality
 
   Background:

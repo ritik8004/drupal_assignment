@@ -1,4 +1,4 @@
-@javascript @KNetPayment @homeDelivery @auth @pbkkwprod @bpkwprod @westelmkwprod @hmkwprod @mckwprod @bbwkwprod @flkwprod @pbkwprod @tbskwprod @vskwprod @westelmkwprod
+@javascript @KNetPayment @homeDelivery @auth @vskwpprod @pbkkwprod @bpkwprod @westelmkwprod @hmkwprod @mckwprod @bbwkwprod @flkwprod @pbkwprod @tbskwprod @vskwprod @westelmkwprod
 Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
 
   Background:

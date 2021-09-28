@@ -16,7 +16,7 @@ variables:
   ar_filters: 'all filters'
   add_to_cart_link: 'add to cart'
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
-  create_account: 'Create An Account'
+  create_account: 'create an account'
   sign_in: 'Sign In'
   find_store: 'Find A Store'
   language_link: 'العربية'
