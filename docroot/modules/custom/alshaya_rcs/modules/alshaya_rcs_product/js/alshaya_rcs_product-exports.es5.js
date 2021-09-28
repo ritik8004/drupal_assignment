@@ -574,7 +574,7 @@ exports.computePhFilters = function (input, filter) {
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          skuBaseForm.html(rcsReplaceAll(finalHtml, fieldPh, entityFieldValue));
+          finalHtml = rcsReplaceAll(finalHtml, fieldPh, entityFieldValue)
         });
 
       value = finalHtml;
