@@ -36,9 +36,11 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   const request = {
-    uri: '',
-    method: 'GET',
-    headers: [],
+    uri: 'graphql',
+    method: 'POST',
+    headers: [
+      ["Content-Type", "application/json"],
+    ],
   };
 
   let result = null;
@@ -48,9 +50,6 @@ exports.getEntity = async function getEntity(langcode) {
 
   switch (pageType) {
     case 'product':
-      request.uri += "graphql";
-      request.method = "POST";
-      request.headers.push(["Content-Type", "application/json"]);
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
       const productRegex = new RegExp(`(${drupalSettings.rcsPhSettings.productPathPrefix}(.*?))\\.`);
@@ -72,11 +71,6 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'category':
-      // Prepare request parameters.
-      request.uri += "graphql";
-      request.method = "POST";
-      request.headers.push(["Content-Type", "application/json"]);
-
       const categoryRegex = new RegExp(`\/${drupalSettings.path.currentLanguage}\/(.*?)\/?$`);
       matches = rcsWindowLocation().pathname.match(categoryRegex);
       if (matches !== null && typeof matches[1] === 'string') {
@@ -95,26 +89,19 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'promotion':
-      // Prepare request parameters.
-      request.uri += "graphql";
-      request.method = "POST";
-      request.headers.push(["Content-Type", "application/json"]);
       // @todo Remove the URL match once we get proper URL of promotion.
-      matches = rcsWindowLocation().pathname.match(/promotion\/(.*?)\/?$/);
+      matches = rcsWindowLocation().pathname.match(/(promotion\/(.*?))\/?$/);
       if (matches !== null && typeof matches[1] === 'string') {
-        urlKey = matches[1];
+        urlKey = matches[0];
         request.data = JSON.stringify({
           query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
         });
         response = await rcsCommerceBackend.invokeApi(request);
         if (response.data.promotionUrlResolver) {
           result = response.data.promotionUrlResolver;
-          // Adding name in place of title so that RCS replace the placeholders
-          // properly.
-          result.name = result.title;
         }
       }
-      if (!result || (typeof result.name !== 'string')) {
+      if (!result || (typeof result.title !== 'string')) {
         await handleNoItemsInResponse(request, urlKey);
       }
       break;
