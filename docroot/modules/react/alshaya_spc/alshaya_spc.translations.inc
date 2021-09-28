@@ -393,6 +393,9 @@ function _alshaya_spc_translations() {
     'available in collection point within' => [
       'ar' => 'متوفر في نقطة الاستلام خلال',
     ],
+    'Holiday' => [
+      'ar' => 'Holiday AR',
+    ],
   ];
 
   return $strings;
