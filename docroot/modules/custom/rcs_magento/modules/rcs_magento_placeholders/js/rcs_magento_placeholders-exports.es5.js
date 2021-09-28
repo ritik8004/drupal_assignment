@@ -10,7 +10,7 @@
  */
 async function handleNoItemsInResponse(request, urlKey) {
   request.data = JSON.stringify({
-    query: `{urlResolver(url: "${urlKey}.html") {
+    query: `{urlResolver(url: "${urlKey}") {
       redirectCode
       relative_url
     }}`
@@ -25,7 +25,7 @@ async function handleNoItemsInResponse(request, urlKey) {
   }
   else {
     // @todo use DataDog https://alshayagroup.atlassian.net/browse/CORE-34720
-    console.log(`No route/redirect found for ${urlKey}.html.`);
+    console.log(`No route/redirect found for ${urlKey}.`);
   }
 }
 
@@ -53,11 +53,11 @@ exports.getEntity = async function getEntity(langcode) {
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
       // Remove .html suffix from the full path.
-      urlKey = urlKey.replace('.html', '');
+      let prodUrlKey = urlKey.replace('.html', '');
 
       // Build query.
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       // Fetch response.
