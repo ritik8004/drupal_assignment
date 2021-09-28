@@ -8,6 +8,8 @@ import PriceFilter from '../algolia/widgets/PriceFilter';
 import renderWidget from './RenderWidget';
 import StarRatingFilter from '../algolia/widgets/StarRatingFilter';
 import DeliveryTypeFilter from '../algolia/widgets/DeliveryTypeFilter';
+import ConditionalView from '../../../common/components/conditional-view';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const WidgetManager = React.memo((props) => {
   const
@@ -76,12 +78,17 @@ const WidgetManager = React.memo((props) => {
       break;
     case 'delivery_ways':
       currentWidget = (
-        <DeliveryTypeFilter
-          name={name}
-          facetValues={filter.facet_values}
-          attribute={filter.identifier}
-          itemCount={itemCount}
-        />
+        <ConditionalView condition={
+          isExpressDeliveryEnabled()
+        }
+        >
+          <DeliveryTypeFilter
+            name={name}
+            facetValues={filter.facet_values}
+            attribute={filter.identifier}
+            itemCount={itemCount}
+          />
+        </ConditionalView>
       );
       break;
     case 'checkbox':
