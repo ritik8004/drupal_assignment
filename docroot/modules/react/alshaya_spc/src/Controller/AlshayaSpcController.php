@@ -555,7 +555,7 @@ class AlshayaSpcController extends ControllerBase {
 
     $strings[] = [
       'key' => 'delivery_area_question',
-      'value' => $this->t('Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel', [], ['context' => 'delivery_area']),
+      'value' => $this->t('Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel?', [], ['context' => 'delivery_area']),
     ];
 
     $backend_version = $this->spcHelper->getCommerceBackendVersion();

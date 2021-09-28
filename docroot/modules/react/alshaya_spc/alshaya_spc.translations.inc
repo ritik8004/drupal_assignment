@@ -406,8 +406,8 @@ function _alshaya_spc_translations() {
     'Check availability in your area' => [
       'ar' => 'تحقق من التوفر في منطقتك',
     ],
-    'Select city' => [
-      'ar' => 'اختر المدينة',
+    'Select' => [
+      'ar' => 'اختر',
     ],
     'Search area' => [
       'ar' => 'ابحث عن منطقة',
@@ -430,11 +430,20 @@ function _alshaya_spc_translations() {
     'Select this area' => [
       'ar' => 'اختر هذه المنطقة',
     ],
-    'Do you want to change your current Delivery Area from @area1 to @area2' => [
-      'ar' => 'هل تريد تغيير منطقة التسليم الحالية من @ area1 إلى @ area2',
+    'Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel?' => [
+      'ar' => 'هل تريد تغيير منطقة التسليم الحالية من @currentAreaLabel إلى @storageAreaLabel؟',
     ],
     'Delivery Type' => [
       'ar' => 'نوع التوصيل',
+    ],
+    'Standard' => [
+      'ar' => 'العادي',
+    ],
+    'Same Day' => [
+      'ar' => 'نفس اليوم',
+    ],
+    'Express' => [
+      'ar' => 'دمة التوصيل السريع',
     ],
   ];
 

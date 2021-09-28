@@ -58,7 +58,7 @@ export default class AreaListBlock extends React.Component {
           } else {
             defaultOptions = [{
               value: 'none',
-              label: Drupal.t(`Select ${governateDefaultLabel}`),
+              label: getStringMessage('governate_label', { '@label': governateDefaultLabel }),
             }];
           }
           this.setState({
@@ -175,7 +175,7 @@ export default class AreaListBlock extends React.Component {
             <a className="close-modal" onClick={closeModal} />
           </div>
           <div className="area-list-block-content">
-            <div className="governate-label">{`${Drupal.t('Select')} ${governateDefaultLabel}`}</div>
+            <div className="governate-label">{getStringMessage('governate_label', { '@label': governateDefaultLabel })}</div>
             <div className="governate-drop-down">
               <Select
                 classNamePrefix="spcSelect"
