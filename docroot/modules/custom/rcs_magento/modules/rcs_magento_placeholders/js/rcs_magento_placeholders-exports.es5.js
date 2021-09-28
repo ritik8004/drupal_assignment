@@ -1,5 +1,3 @@
-// @codingStandardsIgnoreFile
-
 exports.getEntity = async function getEntity(langcode) {
   const pageType = rcsPhGetPageType();
   if (!pageType) {
