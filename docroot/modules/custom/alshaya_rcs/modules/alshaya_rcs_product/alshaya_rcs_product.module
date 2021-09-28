@@ -597,7 +597,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'stock_status',
       'ship_to_store',
       'reserve_and_collect',
-      'style_code',
       'price_range' => [
         'maximum_price' => [
           'regular_price' => [
