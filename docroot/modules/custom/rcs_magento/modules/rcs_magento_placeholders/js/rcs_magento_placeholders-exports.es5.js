@@ -44,23 +44,24 @@ exports.getEntity = async function getEntity(langcode) {
   };
 
   let result = null;
-  let urlKey = '';
   let response = null;
-  let matches = [];
+  let urlKey = drupalSettings.rcsPage.fullPath;
 
   switch (pageType) {
     case 'product':
+      // Add extra headers.
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
-      const productRegex = new RegExp(`(${drupalSettings.rcsPhSettings.productPathPrefix}(.*?))\\.`);
-      matches = rcsWindowLocation().pathname.match(productRegex);
-      if (matches !== null && typeof matches[1] === 'string') {
-        urlKey = matches[1];
-        request.data = JSON.stringify({
-          query: `{ products(filter: { url_key: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.products}}`
-        });
-        response = await rcsCommerceBackend.invokeApi(request);
-      }
+      // Remove .html suffix from the full path.
+      urlKey = urlKey.replace('.html', '');
+
+      // Build query.
+      request.data = JSON.stringify({
+        query: `{ products(filter: { url_key: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.products}}`
+      });
+
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
         RcsPhStaticStorage.set('product_' + result.sku, result);
@@ -71,15 +72,13 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'category':
-      const categoryRegex = new RegExp(`\/${drupalSettings.path.currentLanguage}\/(.*?)\/?$`);
-      matches = rcsWindowLocation().pathname.match(categoryRegex);
-      if (matches !== null && typeof matches[1] === 'string') {
-        urlKey = matches[1];
-        request.data = JSON.stringify({
-          query: `{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`
-        });
-        response = await rcsCommerceBackend.invokeApi(request);
-      }
+      // Build query.
+      request.data = JSON.stringify({
+        query: `{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`
+      });
+
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
       if (response && response.data.categories.total_count) {
         result = response.data.categories.items[0];
       }
@@ -89,17 +88,15 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'promotion':
-      // @todo Remove the URL match once we get proper URL of promotion.
-      matches = rcsWindowLocation().pathname.match(/(promotion\/(.*?))\/?$/);
-      if (matches !== null && typeof matches[1] === 'string') {
-        urlKey = matches[0];
-        request.data = JSON.stringify({
-          query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
-        });
-        response = await rcsCommerceBackend.invokeApi(request);
-        if (response.data.promotionUrlResolver) {
-          result = response.data.promotionUrlResolver;
-        }
+      // Build query.
+      request.data = JSON.stringify({
+        query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
+      });
+
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response.data.promotionUrlResolver) {
+        result = response.data.promotionUrlResolver;
       }
       if (!result || (typeof result.title !== 'string')) {
         await handleNoItemsInResponse(request, urlKey);
