@@ -34,3 +34,9 @@ alshaya_spc.express_delivery:
     status:
       type: boolean
       label: 'Express delivery status'
+    delivery_options_order:
+      type: sequence
+      label: 'Delivery options order'
+      sequence:
+        type: string
+        label: 'Delivery option type'

@@ -400,9 +400,6 @@ function _alshaya_spc_translations() {
     'Express Delivery available' => [
       'ar' => 'خدمة التوصيل السريع متوفرة',
     ],
-    'Delivery Options' => [
-      'ar' => 'خيارات التوصيل',
-    ],
     'Explore the delivery options applicable to your area.' => [
       'ar' => 'اكتشف خيارات التوصيل المتاحة في منطقتك',
     ],
@@ -419,22 +416,25 @@ function _alshaya_spc_translations() {
       'ar' => 'اختر المنطقة',
     ],
     'Same Day Delivery available' => [
-      'ar' => 'التسليم في نفس اليوم متاح',
+      'ar' => 'التوصيل في نفس اليوم متاح',
     ],
     'Selected Area' => [
-      'ar' => 'منطقة مختارة',
+      'ar' => 'مناطق معينة',
     ],
     'Deliver to' => [
-      'ar' => 'يسلم إلى',
+      'ar' => 'التوصيل إلى',
     ],
     'Select area' => [
-      'ar' => 'حدد المنطقة',
+      'ar' => 'اختيار المنطقة',
     ],
     'Select this area' => [
-      'ar' => 'حدد هذه المنطقة',
+      'ar' => 'اختر هذه المنطقة',
     ],
     'Do you want to change your current Delivery Area from @area1 to @area2' => [
-      'ar' => '@area2 إلى area1@ هل تريد تغيير منطقة التسليم الحالية الخاصة بك من',
+      'ar' => 'هل تريد تغيير منطقة التسليم الحالية من @ area1 إلى @ area2',
+    ],
+    'Delivery Type' => [
+      'ar' => 'نوع التوصيل',
     ],
   ];
 

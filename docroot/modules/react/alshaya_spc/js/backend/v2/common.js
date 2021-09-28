@@ -1288,14 +1288,14 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
  *  returns list of governates.
  */
 window.commerceBackend.getGovernatesList = async () => {
-  if (!drupalSettings.alshaya_spc.magento_field_mappings) {
-    logger.error('Error in getting magento field mappings');
+  if (!drupalSettings.alshaya_spc.address_fields) {
+    logger.error('Error in getting address fields mappings');
 
     return {};
   }
-  const mapping = drupalSettings.alshaya_spc.magento_field_mappings;
+  const mapping = drupalSettings.alshaya_spc.address_fields;
   // Use the magento field name from mapping.
-  const responseData = await getLocations('attribute_id', mapping.area_parent);
+  const responseData = await getLocations('attribute_id', mapping.area_parent.key);
 
   if (responseData !== null && responseData.total_count > 0) {
     return responseData;

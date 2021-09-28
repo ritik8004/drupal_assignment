@@ -304,6 +304,7 @@ export default class CartItem extends React.Component {
               />
             </ConditionalView>
           </div>
+          {/* Displaying cart shipping methods when express delivery enabled */}
           <div className="spc-cart-shipping-methods shipping-methods">
             <ConditionalView condition={cartShippingMethods !== null}>
               <CartShippingMethods

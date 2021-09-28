@@ -18,7 +18,6 @@ export default class AreaListBlock extends React.Component {
       areaListItems: [],
       items: [],
       activeItem: null,
-      governateDefaultLabel: drupalSettings.alshaya_spc.address_fields.area_parent.label,
     };
   }
 
@@ -26,9 +25,12 @@ export default class AreaListBlock extends React.Component {
    * Pre-populate city/area from storage values.
    */
   componentDidMount() {
-    const { governateDefaultLabel } = this.state;
+    let governateDefaultLabel = '';
     const areaSelected = getDeliveryAreaStorage();
     let defaultOptions = [];
+    if (drupalSettings.alshaya_spc.address_fields) {
+      governateDefaultLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
+    }
     getGovernatesList().then(
       (response) => {
         const options = [];
@@ -158,15 +160,19 @@ export default class AreaListBlock extends React.Component {
 
   render() {
     const {
-      governateOptions, governateDefault, items, activeItem, governateDefaultLabel,
+      governateOptions, governateDefault, items, activeItem,
     } = this.state;
     const { closeModal } = this.props;
+    let governateDefaultLabel = '';
+    if (drupalSettings.alshaya_spc.address_fields) {
+      governateDefaultLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
+    }
     return (
       <div className="spc-delivery-wrapper">
         <div className="spc-delivery-area">
           <div className="title-block">
             <SectionTitle>{getStringMessage('check_area_availability')}</SectionTitle>
-            <a className="close-modal" onClick={closeModal}>Close</a>
+            <a className="close-modal" onClick={closeModal} />
           </div>
           <div className="area-list-block-content">
             <div className="governate-label">{`${Drupal.t('Select')} ${governateDefaultLabel}`}</div>
