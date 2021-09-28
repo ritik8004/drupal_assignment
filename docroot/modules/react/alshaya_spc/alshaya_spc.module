@@ -350,7 +350,11 @@ function alshaya_spc_preprocess_page(&$variables) {
       ],
       [
         'key' => 'check_area_availability',
-        'value' => t('Check availability in your area'),
+        'value' => t('Check availability in your area', [], ['context' => 'delivery_area']),
+      ],
+      [
+        'key' => 'governate_label',
+        'value' => t('Select @label', [], ['context' => 'delivery_area']),
       ],
     ],
   ];
