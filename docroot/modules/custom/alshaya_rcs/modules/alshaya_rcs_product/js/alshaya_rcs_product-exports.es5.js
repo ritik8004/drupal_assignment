@@ -14,7 +14,7 @@
  *
  * @see alshaya_acm_product_available_home_delivery().
  */
- function isProductAvailableForHomeDelivery(entity) {
+function isProductAvailableForHomeDelivery(entity) {
   return isProductBuyable(entity);
 }
 
@@ -29,6 +29,33 @@
  */
 function isProductBuyable(entity) {
   return drupalSettings.alshayaRcs.isAllProductsBuyable || parseInt(entity.is_buyable, 10);
+}
+
+/**
+ * Create short text with ellipsis and Read more button.
+ *
+ * @param {string} value
+ *   The field value.
+ *
+ * @returns {object}
+ *   Returns the object containing the value and ellipsis information.
+ */
+function applyEllipsis(value) {
+  const limit = drupalSettings.alshayaRcs.shortDescLimit;
+  let read_more = false;
+
+  // Strip html tags.
+  value = jQuery('<p>' + value + '</p>').text();
+
+  if (value.length > limit) {
+    value = value.slice(0, limit) + '...';
+    read_more = true;
+  }
+
+  return {
+    value: value,
+    read_more: read_more,
+  };
 }
 
 /**
@@ -376,12 +403,12 @@ exports.render = function render(
 
 exports.computePhFilters = function (input, filter) {
   let value = '';
+  let data = {};
 
   switch(filter) {
     case 'price':
-      const priceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.regularPrice.amount.value);
-      const finalPriceVal = globalThis.rcsCommerceBackend.getFormattedAmount(input.price.maximalPrice.amount.value);
-      const discountVal = globalThis.rcsCommerceBackend.calculateDiscount(priceVal, finalPriceVal);
+      const priceVal = getFormattedAmount(input.price_range.maximum_price.regular_price.value);
+      const finalPriceVal = getFormattedAmount(input.price_range.maximum_price.final_price.value);
 
       const price = jQuery('.rcs-templates--price').clone();
       jQuery('.price-amount', price).html(priceVal);
@@ -396,7 +423,7 @@ exports.computePhFilters = function (input, filter) {
         jQuery('.special--price', priceBlock).html(finalPrice.html());
 
         let discount = jQuery('.price--discount').html();
-        discount = discount.replace('@discount', discountVal);
+        discount = discount.replace('@discount', input.price_range.maximum_price.discount.percent_off);
         jQuery('.price--discount', priceBlock).html(discount);
       }
       else {
@@ -613,6 +640,45 @@ exports.computePhFilters = function (input, filter) {
         value = jQuery('.rcs-templates--brand_logo').clone().append(image).html();
       }
 
+      break;
+
+    case 'name':
+      value = input.name;
+      break;
+
+    case 'description':
+      // Prepare the object data for rendering.
+      data = {
+        label: (typeof input.description.label !== 'undefined') ? input.description.label : '',
+        html: input.description.html,
+      }
+
+      // Add legal notice.
+      data.legal_notice = {
+        enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
+        label: drupalSettings.alshayaRcs.legal_notice_label,
+        summary: drupalSettings.alshayaRcs.legal_notice_summary,
+      };
+
+      // Render handlebars plugin.
+      value = handlebarsRenderer.render(`field.product.${filter}`, data);
+      break;
+
+    case 'short_description':
+      // Prepare the object data for rendering.
+      data = {
+        label: (typeof input.description.label !== 'undefined') ? input.description.label : '',
+        value: input.description.html,
+        read_more: false,
+      };
+
+      // Apply ellipsis.
+      let tmp = applyEllipsis(data.value);
+      data.value = tmp.value;
+      data.read_more = tmp.read_more;
+
+      // Render handlebars plugin.
+      value = handlebarsRenderer.render(`field.product.${filter}`, data);
       break;
 
     default:

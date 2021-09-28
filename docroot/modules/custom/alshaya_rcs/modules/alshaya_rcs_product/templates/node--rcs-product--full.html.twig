@@ -29,7 +29,7 @@ set classes = [
           {% block productBrand %}
           {% endblock %}
 
-          <h1><span>#rcs.product.name#</span></h1>
+          <h1><span>#rcs.product._self|name#</span></h1>
 
           {% block pricePrefix %}
           {% endblock %}
@@ -105,78 +105,13 @@ set classes = [
 
             {% block shortDescBlock %}
               <div class="short-description-wrapper">
-                <div class="content--short-description">
-                  <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-                  <div class="field__content-wrapper">
-                    <div class="field__content">
-                      <div class="desc-wrapper">
-                        {% if content.short_desc.label|render %}
-                          <div class="desc-label">
-                            {{ content.short_desc.label }}
-                          </div>
-                        {% endif %}
-                        {% if content.short_desc.value|render %}
-                          <div class="desc-value">
-                            {{ content.short_desc.value }}
-                          </div>
-                        {% endif %}
-                      </div>
-                      {% for desc in content.description %}
-                        {% if desc.value|render %}
-                          <div class="desc-wrapper">
-                            {% if desc.label|render %}
-                              <div class="desc-label">
-                                {{ desc.label }}
-                              </div>
-                            {% endif %}
-
-                            <div class="desc-value">
-                              {{ desc.value }}
-                            </div>
-                          </div>
-                        {% endif %}
-                      {% endfor %}
-                      {{ content.legal_notice }}
-                    </div>
-                    {% if content.description %}
-                      {% if content.read_more_style.value|render %}
-                        <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-                        <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-                      {% else %}
-                        <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                        <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
-                      {% endif %}
-                    {% endif %}
-                  </div>
-                </div>
+                #rcs.product._self|short_description#
               </div>
             {% endblock %}
 
             {% block descBlock %}
               <div class="description-wrapper">
-                <div class="content--description">
-                  <span class="close"></span>
-                  <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-                  <div class="field__content">
-                    {% for desc in content.description  %}
-                      {% if desc.value|render %}
-                        <div class="desc-wrapper">
-                          {% if desc.label|render %}
-                            <div class="desc-label">
-                              {{ desc.label }}
-                            </div>
-                          {% endif %}
-
-                          <div class="desc-value">
-                            {{ desc.value }}
-                          </div>
-                        </div>
-                      {% endif %}
-                    {% endfor %}
-                    {{ content.legal_notice }}
-                  </div>
-                </div>
-                <div class="gradient-holder"></div>
+                #rcs.product._self|description#
               </div>
             {% endblock %}
 

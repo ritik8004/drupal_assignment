@@ -1,23 +1,37 @@
 #alshaya-algolia-search,
 #alshaya-algolia-plp,
 #top-results {
-  .c-products__item {
-    article:hover {
-      z-index: -1;
-      position: static;
+  .c-products__item.promotion-frame {
+    article {
+      &:hover {
+        z-index: -1;
+        position: static;
 
-      .product-plp-detail-wrapper {
-        transform: none;
-      }
+        .product-plp-detail-wrapper {
+          transform: none;
+        }
 
-      &::after {
-        content: unset;
+        &::after {
+          content: unset;
+        }
       }
     }
 
     .product-plp-detail-wrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
       .promotions {
         margin: 0.5rem 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .sku-promotion-item {
+        margin-bottom: 0;
       }
     }
 
@@ -41,11 +55,15 @@
     .addtobag-button-container,
     .addtobag-config-button-container,
     .is-not-buyable {
-      margin-bottom: 1.25rem;
-
       @include breakpoint($only-mobile) {
         margin-top: 0;
       }
+    }
+
+    .field--name-field-skus {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
   }
 }

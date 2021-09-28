@@ -92,10 +92,12 @@ export default class Checkout extends React.Component {
     document.addEventListener('alshayaPostpayInit', () => {
       this.setState({ isPostpayInitialised: true });
     });
+    document.addEventListener('onShippingAddressUpdate', this.onShippingUpdate, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
+    document.removeEventListener('onShippingAddressUpdate', this.onShippingUpdate, false);
   }
 
   processCheckout = (result) => {
@@ -168,10 +170,22 @@ export default class Checkout extends React.Component {
     this.updateCheckoutMessage(type, message);
   };
 
+  /**
+   * Set the type and message in state to be shown to the user.
+   *
+   * @param {string} type
+   *   The type of the message, will be added as class on selector.
+   *
+   * @param {string} message
+   *   The message to be displayed to the user.
+   */
   updateCheckoutMessage = (type, message) => {
-    this.setState({ messageType: type, errorSuccessMessage: message });
+    const statusType = type || '';
+    const statusContent = message || '';
+
+    this.setState({ messageType: statusType, errorSuccessMessage: statusContent });
     // Checking length as if no type, means no error.
-    if ((type.length > 0) && (document.getElementsByClassName('spc-content').length > 0)) {
+    if ((statusType.length > 0) && (document.getElementsByClassName('spc-content').length > 0)) {
       smoothScrollTo('.spc-content');
     }
   };
@@ -234,6 +248,13 @@ export default class Checkout extends React.Component {
         cart={cart}
       />
     );
+  };
+
+  // Remove cart from localStorage on shipping address update so that
+  // fresh cart is fetched on cart page to reflect any new modifications from
+  // checkout page like delivery/collection charges etc.
+  onShippingUpdate = () => {
+    window.commerceBackend.removeCartDataFromStorage();
   };
 
   render() {
