@@ -21,4 +21,5 @@ react_pollyfill:
 axios:
   version: 1.x
   js:
-    js/axios.min.js: { preprocess: false, minified: true }
+    ./../node_modules/axios/dist/axios.min.js: { minified: true }
+    ./../node_modules/axios/dist/axios.min.map: { minified: true }
