@@ -6,6 +6,7 @@ react:
   dependencies:
     - core/drupal
     - alshaya_react/react_pollyfill
+    - alshaya_react/axios
 
 react_pollyfill:
   version: 1.x
@@ -16,3 +17,9 @@ react_pollyfill:
     dist/object.bundle.js: {}
   dependencies:
     - core/drupal
+
+axios:
+  version: 1.x
+  js:
+    ./../node_modules/axios/dist/axios.min.js: { minified: true }
+    ./../node_modules/axios/dist/axios.min.map: { minified: true }
