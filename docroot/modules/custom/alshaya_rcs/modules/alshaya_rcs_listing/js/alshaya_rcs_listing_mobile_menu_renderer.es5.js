@@ -48,7 +48,7 @@ const getAllChildElements = function (entity) {
 
 
 /**
- * Replace the placeholders with the App navigation block items.
+ * Replace the placeholders with the Mobile menu block items.
  *
  * @param {object} item
  *   The individual item object containing category info.
@@ -57,7 +57,7 @@ const getAllChildElements = function (entity) {
  * @param {object} settings
  *   The drupalSettings object.
  * @returns
- *   {string} App navigation HTML with proper data.
+ *   {string} Mobile menu HTML with proper data.
  */
 const replacePlpMobileMenuPlaceHolders = function (item, itemHtml, settings) {
   // Add lang code in URL path.

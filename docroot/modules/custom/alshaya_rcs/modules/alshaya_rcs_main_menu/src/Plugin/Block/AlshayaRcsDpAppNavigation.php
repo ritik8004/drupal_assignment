@@ -26,7 +26,8 @@ class AlshayaRcsDpAppNavigation extends BlockBase {
     if ($node instanceof NodeInterface) {
       $data = [
         'item' => [
-          '#rcs.app_nav.url_path#' => '#rcs.app_nav.name#',
+          'name' => '#rcs.app_nav.name#',
+          'path' => '#rcs.app_nav.url_path#',
         ],
       ];
     }

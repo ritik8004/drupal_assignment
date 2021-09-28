@@ -25,7 +25,6 @@ class AlshayaRcsPlpMobileMenu extends BlockBase {
       '#data' => [
         'name' => '#rcs.plp_mobile_menu.name#',
         'path' => '#rcs.plp_mobile_menu.url_path#',
-        'classes' => '#rcs.plp_mobile_menu.class#',
       ],
       '#attributes' => [
         'class' => [

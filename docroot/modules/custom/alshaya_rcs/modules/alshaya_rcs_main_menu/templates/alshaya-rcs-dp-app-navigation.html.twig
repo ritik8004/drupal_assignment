@@ -2,11 +2,9 @@
   {% if data.item %}
     <div class="l2-terms menu-terms-link">
       <ul>
-        {% for path, name in data.item %}
-          <li>
-            <a href={{ path }}>{{ name }}</a>
-          </li>
-        {% endfor %}
+        <li>
+          <a href={{ data.item.path }}>{{ data.item.name }}</a>
+        </li>
       </ul>
     </div>
   {% endif %}
@@ -14,11 +12,9 @@
   {% if data.item %}
     <div class="l3-terms menu-terms-link">
       <ul>
-        {% for path, name in data.item %}
-          <li>
-            <a href={{ path }}>{{ name }}</a>
-          </li>
-        {% endfor %}
+        <li>
+          <a href={{ data.item.path }}>{{ data.item.name }}</a>
+        </li>
       </ul>
     </div>
   {% endif %}
