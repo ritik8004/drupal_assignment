@@ -59,7 +59,8 @@
           if (postContent.length > 0) {
             footerBottom = footerSecondary.outerHeight() + postContent.position().top + postContent.outerHeight();
             adjustRegion = postContent;
-          } else {
+          }
+          else {
             footerBottom = footer.position().top + footer.outerHeight();
             adjustRegion = footer;
           }
