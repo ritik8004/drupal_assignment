@@ -102,7 +102,7 @@ function getProductRecommendation(products, sectionTitle) {
  *   Return string with price and currency or return array of price and
  *   currency.
  */
- function getFormattedAmount(priceAmount) {
+function getFormattedAmount(priceAmount) {
   let amount = priceAmount === null ? 0 : priceAmount;
 
   // Remove commas if any.
@@ -111,6 +111,7 @@ function getProductRecommendation(products, sectionTitle) {
 
   return amount.toFixed(drupalSettings.alshaya_spc.currency_config.decimal_points);
 };
+exports.getFormattedAmount = getFormattedAmount;
 
 exports.render = function render(
   settings,
@@ -559,10 +560,6 @@ exports.computePhFilters = function (input, filter) {
         // Add the configurable options to the form.
         jQuery('#configurable_ajax', skuBaseForm).append(tempDivWrapper.children());
       }
-
-      // Replace the placeholder attributes in the sku base form template.
-      const attributes = rcsPhGetSetting('placeholderAttributes');
-      const pageType = rcsPhGetPageType();
 
       let finalHtml = skuBaseForm.html();
       rcsPhReplaceEntityPh(finalHtml, 'product_add_to_cart', input, drupalSettings.path.currentLanguage)
