@@ -19,6 +19,9 @@ import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import PpdRatingsReviews from '../pdp-ratings-reviews';
+import DeliveryOptions from '../../../../../alshaya_spc/js/expressdelivery/components/delivery-options';
+import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -72,6 +75,7 @@ const PdpLayout = () => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
+    deliveryOptions,
   } = productValues;
 
   const emptyRes = (
@@ -141,7 +145,6 @@ const PdpLayout = () => {
       headerButton();
     });
   };
-
 
   useEffect(() => {
     sidebarSticky();
@@ -219,6 +222,16 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
+          <ConditionalView condition={isExpressDeliveryEnabled()
+            && checkProductExpressDeliveryStatus(skuItemCode)}
+          >
+            <div className="express-delivery-wrapper">
+              {deliveryOptions !== null && Object.keys(deliveryOptions).length > 0
+                && Object.keys(deliveryOptions).map((option) => (
+                  <div key={option} className={`express-delivery-text ${option}`}>{deliveryOptions[option].label}</div>
+                ))}
+            </div>
+          </ConditionalView>
           <PpdRatingsReviews
             getPanelData={getPanelData}
             removePanelData={removePanelData}
@@ -252,7 +265,12 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
-          <PdpStandardDelivery />
+          <ConditionalView condition={isExpressDeliveryEnabled()}>
+            <DeliveryOptions />
+          </ConditionalView>
+          <ConditionalView condition={!isExpressDeliveryEnabled()}>
+            <PdpStandardDelivery />
+          </ConditionalView>
           {stockStatus ? (
             <PdpClickCollect />
           ) : null}

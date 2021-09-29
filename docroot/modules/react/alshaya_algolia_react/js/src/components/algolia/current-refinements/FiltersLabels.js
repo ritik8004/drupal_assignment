@@ -47,6 +47,17 @@ function selectedFiltersLables(attribute, value, filter) {
       break;
     }
 
+    case 'delivery_ways': {
+      if (filter.facet_values) {
+        if (value in filter.facet_values) {
+          const selctedFilter = filter.facet_values[value];
+          const [expressFilter] = selctedFilter.split(',');
+          selctionText = expressFilter;
+        }
+      }
+      break;
+    }
+
     case 'checkbox':
     default:
       selctionText = value.trim();

@@ -1,0 +1,14 @@
+.acq-content-product {
+  .express-delivery-title-wrapper {
+    @include icon(chevrondown, after) {
+      #{$right}: 0.9375rem;
+      font-size: 0.5rem;
+    }
+  }
+
+  .select-area-popup-wrapper {
+    .spc-checkout-section-title {
+      font-family: $hnm-demibold;
+    }
+  }
+}

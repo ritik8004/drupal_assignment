@@ -210,6 +210,7 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
@@ -219,6 +220,7 @@ class AlshayaSpcController extends ControllerBase {
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
+            'address_fields' => _alshaya_spc_get_address_fields(),
           ],
         ],
       ],
@@ -241,6 +243,17 @@ class AlshayaSpcController extends ControllerBase {
         'advantageCardPrefix'  => $advantage_card_config->get('advantageCardPrefix'),
       ];
     }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $advantage_card_config->getCacheTags());
+
+    $express_delivery_config = $this->config('alshaya_spc.express_delivery');
+    // Show express delivery options if feature is enabled.
+    if ($express_delivery_config->get('status')) {
+      $build['#attached']['drupalSettings']['expressDelivery'] = [
+        'enabled' => TRUE,
+      ];
+      $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $express_delivery_config->getCacheTags());
 
     // Add collection point feature config variables.
     $collection_points_config = $this->config('alshaya_spc.collection_points');
@@ -549,6 +562,11 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
+    $strings[] = [
+      'key' => 'delivery_area_question',
+      'value' => $this->t('Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel?', [], ['context' => 'delivery_area']),
+    ];
+
     $backend_version = $this->spcHelper->getCommerceBackendVersion();
 
     $build = [
@@ -643,6 +661,16 @@ class AlshayaSpcController extends ControllerBase {
       $build['#attached']['drupalSettings']['cart']['siteInfo'] = alshaya_get_site_country_code();
       $build['#attached']['drupalSettings']['cart']['addressFields'] = Settings::get('alshaya_address_fields', []);
     }
+
+    $express_delivery_config = $this->config('alshaya_spc.express_delivery');
+    // Show express delivery options if feature is enabled.
+    if ($express_delivery_config->get('status')) {
+      $build['#attached']['drupalSettings']['expressDelivery'] = [
+        'enabled' => TRUE,
+      ];
+      $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $express_delivery_config->getCacheTags());
 
     $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
     return $build;
