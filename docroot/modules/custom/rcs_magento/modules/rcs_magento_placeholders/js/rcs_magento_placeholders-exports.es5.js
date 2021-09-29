@@ -43,12 +43,10 @@ exports.getEntity = async function getEntity(langcode) {
 
   let result = null;
   let response = null;
-  let urlKey = '';
+  let urlKey = drupalSettings.rcsPage.fullPath;
 
   switch (pageType) {
     case 'product':
-      urlKey = drupalSettings.rcsPage.fullPath;
-
       // Add extra headers.
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
 
@@ -72,8 +70,6 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'category':
-      urlKey = drupalSettings.rcsPage.fullPath;
-
       // Build query.
       request.data = JSON.stringify({
         query: `{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`
