@@ -374,7 +374,17 @@ class AlshayaAlgoliaIndexHelper {
         return $item['value'];
       }, $configured_skus);
     }
-
+    // Add value to dummy dummy field attr_delivery_ways.
+    // It is depend on status of attr_express_delivery,attr_same_day_delivery.
+    $object['attr_delivery_ways'] = [];
+    $same_value = 'same_day_delivery_available';
+    $express_value = 'express_day_delivery_available';
+    if ($sku->get('attr_same_day_delivery')->getString() == '1') {
+      array_push($object['attr_delivery_ways'], $same_value);
+    }
+    if ($sku->get('attr_express_delivery')->getString() == '1') {
+      array_push($object['attr_delivery_ways'], $express_value);
+    }
     $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
 
     // Set color / size and other configurable attributes data.
