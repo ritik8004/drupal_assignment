@@ -890,7 +890,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           'image' => $this->getImages($block, 'field_image'),
         ];
       }
-      elseif ($item['plugin_id'] == 'alshaya_dp_navigation_link') {
+      elseif ($item['plugin_id'] == 'alshaya_dp_navigation_link' || $item['plugin_id'] == 'alshaya_rcs_dp_app_navigation') {
         return $this->prepareAppNavigationLinks($item);
       }
     }, $items);

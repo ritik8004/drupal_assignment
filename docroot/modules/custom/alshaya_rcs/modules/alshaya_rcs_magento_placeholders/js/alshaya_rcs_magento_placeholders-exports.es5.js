@@ -133,6 +133,28 @@ exports.render = function render(
       }
       break;
 
+    case 'app_navigation':
+      // Render the DP App Navigation block.
+      if (typeof globalThis.renderRcsAppNavigation !== 'undefined') {
+        html += globalThis.renderRcsAppNavigation.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
+    case 'plp_mobile_menu':
+      // Render the PLP mobile menu block.
+      if (typeof globalThis.renderRcsPlpMobileMenu !== 'undefined') {
+        html += globalThis.renderRcsPlpMobileMenu.render(
+          settings,
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
