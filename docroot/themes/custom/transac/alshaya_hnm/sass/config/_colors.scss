@@ -718,10 +718,18 @@ $spc_checkout_as_guest_text_hover: $gray44;
 $spc_checkout_as_guest_border_hover: $gray44;
 $spc_checkout_button_background: $gray44;
 $spc-cart-free-gifts-link: $gray44;
+$spc-cart-delivery-info-border: $hnm-black-three;
+$spc-cart-delivery-popup-title: $hnm-black-four;
+$spc-cart-delivery-popup-bg: $seashell_grey;
+$spc-cart-delivery-popup-border: $grey7;
+$spc-cart-delivery-popup-search-border: $hnm-black-three;
+$spc-cart-delivery-popup-search-placeholder: $light_grey;
 
 // SPC Checkout
 $spc-checkout-page-title-border: $hnm-black;
 $spc-deliver-button: $hnm-black-three;
+$spc-delivery-area-popup-border: $hnm-black-two;
+$spc-delivery-area-popup-text: $hnm-black-two;
 
 // SPC CnC.
 $spc-cnc-toggle-bg-active: $hnm-black-three;
@@ -784,3 +792,6 @@ $plp-quick-view-product-size-text-disabled: $pdp_swatch_disabled;
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $gray44;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
+// Express delivery
+$pdp-delivery-section-subtitle: $gray44;
