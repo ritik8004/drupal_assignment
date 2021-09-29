@@ -1,21 +1,9 @@
 {% if data %}
-  {% if data.item %}
-    <div class="l2-terms menu-terms-link">
-      <ul>
-        <li>
-          <a href={{ data.item.path }}>{{ data.item.name }}</a>
-        </li>
-      </ul>
-    </div>
-  {% endif %}
-
-  {% if data.item %}
-    <div class="l3-terms menu-terms-link">
-      <ul>
-        <li>
-          <a href={{ data.item.path }}>{{ data.item.name }}</a>
-        </li>
-      </ul>
-    </div>
-  {% endif %}
+  <div class="{{ data.class }} menu-terms-link">
+    <ul>
+      <li>
+        <a href={{ data.path }}>{{ data.name }}</a>
+      </li>
+    </ul>
+  </div>
 {% endif %}

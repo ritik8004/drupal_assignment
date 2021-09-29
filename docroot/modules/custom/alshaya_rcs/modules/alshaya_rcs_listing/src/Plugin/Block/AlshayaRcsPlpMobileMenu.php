@@ -3,6 +3,9 @@
 namespace Drupal\alshaya_rcs_listing\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a PLP mobile menu block.
@@ -13,7 +16,43 @@ use Drupal\Core\Block\BlockBase;
  *   category = @Translation("RCS Placeholders"),
  * )
  */
-class AlshayaRcsPlpMobileMenu extends BlockBase {
+class AlshayaRcsPlpMobileMenu extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Constructs an AlshayaRcsPlpMobileMenu object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->languageManager = $language_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('language_manager'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -23,8 +62,9 @@ class AlshayaRcsPlpMobileMenu extends BlockBase {
     return [
       '#theme' => 'alshaya_rcs_plp_mobile_menu',
       '#data' => [
-        'name' => '#rcs.plp_mobile_menu.name#',
-        'path' => '#rcs.plp_mobile_menu.url_path#',
+        'name' => '#rcs.plpMobileMenu.name#',
+        'path' => '#rcs.plpMobileMenu.url_path#',
+        'langcode' => $this->languageManager->getCurrentLanguage()->getId(),
       ],
       '#attributes' => [
         'class' => [

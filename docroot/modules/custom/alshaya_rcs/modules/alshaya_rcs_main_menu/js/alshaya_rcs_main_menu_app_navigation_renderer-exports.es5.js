@@ -1,7 +1,5 @@
-// @codingStandardsIgnoreFile
-// This is because the linter is throwing errors where we use backticks here.
-// Once we enable webapack for the custom modules directory, we should look into
-// removing the above ignore line.
+// Render function to prepare the markup for DP App navigation Block and replace
+// placeholders with API Response.
 exports.render = function render(
   settings,
   inputs,
@@ -9,67 +7,89 @@ exports.render = function render(
 ) {
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
-  // Extract L2 HTML.
-  let l2Elm = innerHtmlObj.find('div.l2-terms li');
+  // Get child category tree based on current category.
+  inputs = getCurrentCategoryNextLevelItems(settings.rcsPage.fullPath, inputs, settings);
+  // Get the proper mobile menu markup.
+  let mobileMenuHtml = getAppNavigationMarkup(
+    inputs,
+    2,
+    innerHtmlObj,
+    settings,
+    3,
+  );
 
-  // Export the URL Path from the current URL.
-  const currentUrlPath = drupalSettings.rcsPage.fullPath;
-  if (currentUrlPath) {
-    let itemHtml = '';
-    let l3Items = [];
-    // Now extract the L2 items based on current URL path.
-    let l2Items = getL2Items(currentUrlPath, inputs, settings);
-    // Now extract all the L2 items marked to be used in App navigation.
-    l2Items = getInAppNavigationItems(l2Items);
-    if (l2Items) {
-      l2Items.forEach(item => {
-        itemHtml += replaceAppNavigationPlaceHolders(item, l2Elm[0].outerHTML, settings);
-        // Prepare the L3 items array.
-        if (item.hasOwnProperty('children') && item.children.length) {
-          l3Items = l3Items.concat(item.children);
-        }
-      });
-      // Update the L2 Elm object.
-      l2Elm.html(itemHtml);
-
-      // Extract L3 HTML.
-      let l3Elm = innerHtmlObj.find('div.l3-terms li');
-      // Reset itemHtml;
-      itemHtml = '';
-      l3Items = getInAppNavigationItems(l3Items);
-      if (l3Items) {
-        l3Items.forEach(item => {
-          itemHtml += replaceAppNavigationPlaceHolders(item, l3Elm[0].outerHTML, settings);
-        });
-        // Update the L3 Elm object.
-        l3Elm.html(itemHtml);
-      }
-    }
-  }
-
-  return innerHtmlObj.html();
+  return mobileMenuHtml;
 }
 
 /**
- * Get all L2 items based on current URL path.
+ * Returns the app navigation markup.
+ *
+ * @param {object} inputs
+ *   Object containing categories based on level.
+ * @param {integer} level
+ *   The level for which markup needs to be prepared.
+ * @param {object} innerHtmlObj
+ *   The object containing the full markup of the app navigation block.
+ * @param {object} settings
+ *   Drupal settings object.
+ * @param {integer} maxLevel
+ *   The max level that needs to be traversed.
+ * @returns
+ *   {string} Full markup of the app navigation block.
+ */
+const getAppNavigationMarkup = function(inputs, level, innerHtmlObj, settings, maxLevel) {
+  // Proceed only if maxLevel is not reached or the inputs is not empty.
+  if (!inputs || level > maxLevel) {
+    return '';
+  }
+  // Get the placeholder.
+  let placeHolderObj = innerHtmlObj.find('div.menu-terms-link ul');
+  let nextLevelItems = [];
+  let itemHtml = '';
+  // Now extract all the items marked to be used in App navigation.
+  let items = getInAppNavigationItems(inputs);
+  if (items) {
+    items.forEach(item => {
+      itemHtml += replaceAppNavigationPlaceHolders(item, placeHolderObj.html(), settings);
+      // Prepare the nextLevel items array.
+      if (item.hasOwnProperty('children') && item.children.length) {
+        nextLevelItems = nextLevelItems.concat(item.children);
+      }
+    });
+  }
+  // Get the div wrapper as the level finished here.
+  let wrapperHtml = innerHtmlObj.clone();
+  wrapperHtml.find('div.menu-terms-link').html(placeHolderObj.clone().html(itemHtml));
+  // Replace the class placeholder with level based class.
+  wrapperHtml = replaceAppNavigationPlaceHolders({
+    'classes': `l${level}-terms`,
+  }, wrapperHtml.html(), settings);
+  // Prepare and call the function with next level items.
+  wrapperHtml += getAppNavigationMarkup(nextLevelItems, level+1, innerHtmlObj, settings, maxLevel);
+
+  return wrapperHtml;
+}
+
+/**
+ * Get the next level items based on current category.
  *
  * @param {string} currentUrlPath
  *   Current URL path.
  * @param {object} inputs
  *   Object containing all category items.
  * @returns
- *   An array of l2 elements of current URL path category.
+ *   An array of next level elements.
  */
-const getL2Items = function(currentUrlPath, inputs) {
+const getCurrentCategoryNextLevelItems = function(currentUrlPath, inputs) {
   // Iterate through the inputs items and compare the current URL path.
-  let l2Items = [];
+  let nextLevelItems = [];
   inputs.forEach(item => {
     if (item.hasOwnProperty('children') && item.url_path === currentUrlPath) {
-      l2Items = item.children;
+      nextLevelItems = item.children;
     }
   });
 
-  return l2Items;
+  return nextLevelItems;
 }
 
 /**
@@ -104,8 +124,8 @@ const getInAppNavigationItems = function(items) {
  */
 const replaceAppNavigationPlaceHolders = function (item, itemHtml, settings) {
   // Add lang code in URL path.
-  item.url_path = `/${settings.path.pathPrefix}${item.url_path}/`
-  rcsPhReplaceEntityPh(itemHtml, 'app_nav', item, settings.path.currentLanguage)
+  item.url_path = Drupal.url(`${item.url_path}/`);
+  rcsPhReplaceEntityPh(itemHtml, 'appNav', item, settings.path.currentLanguage)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];

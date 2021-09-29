@@ -1,7 +1,5 @@
-// @codingStandardsIgnoreFile
-// This is because the linter is throwing errors where we use backticks here.
-// Once we enable webapack for the custom modules directory, we should look into
-// removing the above ignore line.
+// Render function to prepare the markup for PLP mobile menu Block and replace
+// placeholders with API Response.
 exports.render = function render(
   settings,
   entity,
@@ -61,8 +59,8 @@ const getAllChildElements = function (entity) {
  */
 const replacePlpMobileMenuPlaceHolders = function (item, itemHtml, settings) {
   // Add lang code in URL path.
-  item.url_path = `/${settings.path.pathPrefix}${item.url_path}/`
-  rcsPhReplaceEntityPh(itemHtml, 'plp_mobile_menu', item, settings.path.currentLanguage)
+  item.url_path = Drupal.url(`${item.url_path}/`);
+  rcsPhReplaceEntityPh(itemHtml, 'plpMobileMenu', item, settings.path.currentLanguage)
     .forEach(function eachReplacement(r) {
       const fieldPh = r[0];
       const entityFieldValue = r[1];
