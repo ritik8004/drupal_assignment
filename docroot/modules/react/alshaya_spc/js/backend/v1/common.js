@@ -82,7 +82,11 @@ const isAnonymousUserWithoutCart = () => (
  */
 const i18nMiddleWareUrl = (path) => {
   const langcode = window.drupalSettings.path.currentLanguage;
-  return `${window.drupalSettings.alshaya_spc.middleware_url}/${path}?lang=${langcode}`;
+  const urlparts = path.split('?');
+
+  return (urlparts.length >= 2)
+    ? `${window.drupalSettings.alshaya_spc.middleware_url}/${urlparts[0]}?lang=${langcode}&${urlparts[1]}`
+    : `${window.drupalSettings.alshaya_spc.middleware_url}/${path}?lang=${langcode}`;
 };
 
 /**

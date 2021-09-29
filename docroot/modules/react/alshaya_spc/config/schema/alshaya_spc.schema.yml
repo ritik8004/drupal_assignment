@@ -15,6 +15,9 @@ alshaya_spc.click_n_collect:
         zoom:
           type: integer
           label: 'map zoom for country.'
+    cnc_stores_limit:
+      type: integer
+      label: 'CnC stores limit'
 
 alshaya_spc.advantage_card:
   type: config_object
