@@ -24,7 +24,7 @@ function alshaya_spc_update_8018() {
     alshaya_i18n_save_translations($translations);
   }
 
-  // Add page_size config.
+  // Add cnc_stores_limit config.
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_spc.click_n_collect'],
