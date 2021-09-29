@@ -95,9 +95,10 @@ exports.normalize = function normalize(
     });
   }
 
-  // Push the last crumb without a url.
+  // Push the last crumb with url as enrichment is based on url_path.
+  // By default the last element click is restricted by CSS.
   normalized.push({
-    url: null,
+    url: data.url_path,
     text: data.name,
   });
 
