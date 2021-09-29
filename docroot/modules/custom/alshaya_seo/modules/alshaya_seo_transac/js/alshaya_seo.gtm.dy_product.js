@@ -10,7 +10,9 @@
 
   // Trigger product impressions on scroll.
   $(document).once('gtm-dy').on('scroll', debounce(function (event) {
-    Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoGtmProductRecomDy.prepareProductImpressions, $('.dy_unit'), drupalSettings, event);
+    if ($('.dy_unit').length > 0) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoGtmProductRecomDy.prepareProductImpressions, $('.dy_unit'), drupalSettings, event);
+    }
   }, 500));
 
   // Trigger product impressions on click of slider next/prev buttons.
