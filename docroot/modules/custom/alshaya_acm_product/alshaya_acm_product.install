@@ -27,13 +27,13 @@ function alshaya_acm_product_update_8073() {
     ['search_api.index.product'],
     'alshaya_product',
     'install',
-    AlshayaConfigManager::MODE_MERGE
+    AlshayaConfigManager::MODE_RESAVE
   );
   $manager->updateConfigs(
     ['search_api.index.acquia_search_index'],
     'alshaya_search',
     'optional',
-    AlshayaConfigManager::MODE_MERGE
+    AlshayaConfigManager::MODE_RESAVE
   );
 
   $blocks = [
