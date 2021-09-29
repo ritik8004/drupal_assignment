@@ -19,7 +19,7 @@
                 height: 0;
                 border-left: 0.25rem solid transparent;
                 border-right: 0.25rem solid transparent;
-                border-top: 0.25rem solid;
+                border-top: 0.25rem solid $header_secondary_menu_link_arrow;
                 margin-left: 0.5rem;
                 position: absolute;
                 right: -0.8rem;
@@ -32,7 +32,7 @@
             a.menu--one__link {
               &::after {
                 border-top: 0;
-                border-bottom: 0.25rem solid;
+                border-bottom: 0.25rem solid $header_secondary_menu_link_arrow;
               }
             }
           }
@@ -48,6 +48,18 @@
       ul.menu--one__list {
         .menu__in {
           margin-top: -2.25rem;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .secondary-main-menu-wrapper {
+    .secondary--main--menu {
+      li.menu--one__list-item {
+        .menu--one__link {
+          font-family: $we-regular;
         }
       }
     }
