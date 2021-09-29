@@ -11,18 +11,33 @@ import {
   getAddressPopupClassName,
   formatAddressDataForEditForm,
   gerAreaLabelById,
+  editDefaultAddressFromStorage,
 } from '../../../utilities/address_util';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
+import AreaConfirmationPopup from '../area-confirmation-popup';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
 export default class HomeDeliveryInfo extends React.Component {
   isComponentMounted = false;
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      areaUpdated: false,
+    };
+  }
+
   componentDidMount() {
     this.isComponentMounted = true;
     document.addEventListener('refreshCartOnAddress', this.eventListener);
+    if (isExpressDeliveryEnabled()) {
+      document.addEventListener('openAddressContentPopup', this.openAddressContentPopUp);
+    }
   }
 
   componentWillUnmount() {
@@ -40,7 +55,15 @@ export default class HomeDeliveryInfo extends React.Component {
     if (this.isComponentMounted) {
       dispatchCustomEvent('closeModal', 'hdInfo');
     }
+    const { areaUpdated } = this.state;
     const data = e.detail;
+    // Checking if delivery area selected matches with current address.
+    if (areaUpdated) {
+      dispatchCustomEvent('refreshAreaConfirmationState', data);
+      this.setState({
+        areaUpdated: false,
+      });
+    }
     const { refreshCart } = this.props;
     refreshCart(data);
   };
@@ -48,7 +71,24 @@ export default class HomeDeliveryInfo extends React.Component {
   /**
    * Format address for edit address.
    */
-  formatAddressData = (address) => formatAddressDataForEditForm(address)
+  formatAddressData = (address) => {
+    const { areaUpdated } = this.state;
+    const addressData = formatAddressDataForEditForm(address);
+    let addressDataValue = { ...addressData };
+    if (areaUpdated) {
+      const areaSelected = getDeliveryAreaStorage();
+      if (areaSelected !== null) {
+        addressDataValue = editDefaultAddressFromStorage(addressData, areaSelected);
+      }
+    }
+    return addressDataValue;
+  }
+
+  openAddressContentPopUp = () => {
+    this.setState({
+      areaUpdated: true,
+    });
+  }
 
   render() {
     const {
@@ -56,6 +96,7 @@ export default class HomeDeliveryInfo extends React.Component {
       cart: cartVal,
       refreshCart,
     } = this.props;
+    const { areaUpdated } = this.state;
     const addressData = [];
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
       if (address[val.key] !== undefined && val.visible === true) {
@@ -75,7 +116,7 @@ export default class HomeDeliveryInfo extends React.Component {
 
     return (
       <div className="delivery-information-preview">
-        <WithModal modalStatusKey="hdInfo">
+        <WithModal modalStatusKey="hdInfo" areaUpdated={areaUpdated}>
           {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
             <>
               <div className="spc-delivery-customer-info">
@@ -111,6 +152,7 @@ export default class HomeDeliveryInfo extends React.Component {
                         ? this.formatAddressData(address)
                         : null
                     }
+                    areaUpdated={areaUpdated}
                   />
                 </React.Suspense>
               </Popup>
@@ -123,6 +165,11 @@ export default class HomeDeliveryInfo extends React.Component {
             refreshCart={refreshCart}
           />
         </div>
+        <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <AreaConfirmationPopup
+            cart={cartVal}
+          />
+        </ConditionalView>
       </div>
     );
   }

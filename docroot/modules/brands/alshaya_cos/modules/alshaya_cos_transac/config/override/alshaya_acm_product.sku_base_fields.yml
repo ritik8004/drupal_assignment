@@ -6,23 +6,29 @@ fields:
     index: 1
     facet: 1
 
-  composition:
-    label: 'Composition'
-    cardinality: -1
-
   materials:
     label: 'Materials'
-    cardinality: -1
+    type: 'string'
     index: 1
     facet: 1
 
+  gender:
+    label: 'Gender'
+    index: 1
+    facet: 1
+
+  composition:
+    label: 'Composition'
+    description: 'Product Composition.'
+    type: 'text_long'
+
   washing_instructions:
     label: 'Washing Instructions'
-    cardinality: -1
+    type: 'text_long'
 
   article_warning:
     label: 'Article Warning'
-    type: 'string'
+    type: 'text_long'
 
   rgb_color:
     label: 'RGB color'

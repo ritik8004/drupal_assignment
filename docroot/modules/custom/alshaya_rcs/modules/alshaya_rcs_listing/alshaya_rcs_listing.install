@@ -21,7 +21,8 @@ function alshaya_rcs_listing_get_block_ids() {
     'categorylhnblock' => 'rcs_placeholders_lhn',
     'views_block__plp_promotional_banner_block_1' => 'alshaya_rcs_promotional_banner',
     'views_block__alshaya_term_description_block_1' => 'alshaya_rcs_term_description',
-    'views_block__product_category_level_2_3_block_2' => 'rcs_placeholders_department_lhn'
+    'views_block__product_category_level_2_3_block_2' => 'rcs_placeholders_department_lhn',
+    'views_block__product_category_level_3_block_2' => 'alshaya_rcs_plp_mobile_menu',
   ];
 }
 
@@ -48,6 +49,8 @@ function alshaya_rcs_listing_install() {
         $new_block = Block::load($new_block_id);
         if ($new_block instanceof BlockInterface) {
           $new_block->setWeight($existing_block_weight);
+          // Update the block region based on the previous block.
+          $new_block->setRegion($prev_block->getRegion());
           $new_block->save();
         }
       }

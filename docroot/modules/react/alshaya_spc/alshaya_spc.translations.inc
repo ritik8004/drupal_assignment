@@ -393,6 +393,61 @@ function _alshaya_spc_translations() {
     'available in collection point within' => [
       'ar' => 'متوفر في نقطة الاستلام خلال',
     ],
+    'Holiday' => [
+      'ar' => 'الجمعة',
+    ],
+  ];
+
+  // Strings related to express delivery feature.
+  $strings['v10'] = [
+    'Express Delivery available' => [
+      'ar' => 'خدمة التوصيل السريع متوفرة',
+    ],
+    'Explore the delivery options applicable to your area.' => [
+      'ar' => 'اكتشف خيارات التوصيل المتاحة في منطقتك',
+    ],
+    'Check availability in your area' => [
+      'ar' => 'تحقق من التوفر في منطقتك',
+    ],
+    'Select' => [
+      'ar' => 'اختر',
+    ],
+    'Search area' => [
+      'ar' => 'ابحث عن منطقة',
+    ],
+    'Select an area' => [
+      'ar' => 'اختر المنطقة',
+    ],
+    'Same Day Delivery available' => [
+      'ar' => 'التوصيل في نفس اليوم متاح',
+    ],
+    'Selected Area' => [
+      'ar' => 'مناطق معينة',
+    ],
+    'Deliver to' => [
+      'ar' => 'التوصيل إلى',
+    ],
+    'Select area' => [
+      'ar' => 'اختيار المنطقة',
+    ],
+    'Select this area' => [
+      'ar' => 'اختر هذه المنطقة',
+    ],
+    'Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel?' => [
+      'ar' => 'هل تريد تغيير منطقة التسليم الحالية من @currentAreaLabel إلى @storageAreaLabel؟',
+    ],
+    'Delivery Type' => [
+      'ar' => 'نوع التوصيل',
+    ],
+    'Standard' => [
+      'ar' => 'العادي',
+    ],
+    'Same Day' => [
+      'ar' => 'نفس اليوم',
+    ],
+    'Express' => [
+      'ar' => 'دمة التوصيل السريع',
+    ],
   ];
 
   return $strings;

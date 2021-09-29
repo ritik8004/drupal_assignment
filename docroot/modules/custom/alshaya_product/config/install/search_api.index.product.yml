@@ -67,6 +67,16 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_delivery_ways:
+    label: 'SKUs » SKU Reference » Different Delivery Types'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_delivery_ways'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   final_price:
     label: 'SKUs » SKU Reference » Final Price'
     datasource_id: 'entity:node'
