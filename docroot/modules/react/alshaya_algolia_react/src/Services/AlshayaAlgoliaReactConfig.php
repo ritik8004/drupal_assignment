@@ -432,14 +432,24 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
               ]
             );
             $express_value = $this->t(
-              'Express Day Delivery Available',
+              'Express Delivery Available',
               [],
               [$langcode,
                 'context' => 'express_day_delivery_listing',
               ]
             );
-            $facet_values['express_day_delivery_available'] = $express_value . ',express_delivery';
-            $facet_values['same_day_delivery_available'] = $same_value . ',same_day_delivery';
+            $facet_values = $this->loadFacetValues($identifier, $page_type);
+            if (isset($facet_values['express_day_delivery_available'])) {
+              $facet_values['express_day_delivery_available'] = $express_value . ',express_delivery';
+            }
+            if (isset($facet_values['same_day_delivery_available'])) {
+              $facet_values['same_day_delivery_available'] = $same_value . ',same_day_delivery';
+            }
+            // If feature enabled then only show facet.
+            $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+            if (!($express_delivery_config->get('status'))) {
+              continue;
+            }
           }
 
           // For HNM we are using "size_group_list" widget type
