@@ -1,5 +1,3 @@
-// @codingStandardsIgnoreFile
-
 /**
  * Handle 404 case on initial request.
  *
