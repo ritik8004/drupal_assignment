@@ -11,21 +11,23 @@
     }
 
     var data = e.detail.result;
-    var description = data.description;
 
     // Add extra data to product description.
     // This will be rendered using handlebars templates to add P tags and H3 titles.
-    description.show_product_detail_title = (data.composition || data.washing_instructions || data.article_warning);
-    description.composition = data.composition;
-    description.washing_instructions = data.washing_instructions;
-    description.article_warning = data.article_warning;
-    description.product_guide = ''; // @todo create a new config for this.
-    description.sku = data.sku;
-    e.detail.result.description = description;
+    // @todo Create a new config for product_guide to store the text.
+    e.detail.result.description = {
+      html: data.description.html,
+      composition: data.composition,
+      washing_instructions: data.washing_instructions,
+      article_warning: data.article_warning,
+      product_guide: 'Make sure that your favorite items remain long-loved pieces for years to come; Read our product care guide.',
+      sku: data.sku,
+      show_product_detail_title: (data.composition || data.washing_instructions || data.article_warning),
+    };
 
     // Append field values to short_description.
     // The text will be trimmed if the description is longer than 160 characters.
-    var short_description = { html: description.html };
+    var short_description = { html: data.description.html };
     short_description.html += (data.composition) ? '' + data.composition : '';
     short_description.html += (data.washing_instructions) ? '' + data.washing_instructions : '';
     short_description.html += (data.article_warning) ? '' + data.article_warning : '';
