@@ -587,6 +587,7 @@ class AlshayaSpcController extends ControllerBase {
             'page_size' => $spc_cnc_config->get('page_size'),
           ],
           'global_error_message' => _alshaya_spc_global_error_message(),
+          'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
         ],
       ],
       '#cache' => [

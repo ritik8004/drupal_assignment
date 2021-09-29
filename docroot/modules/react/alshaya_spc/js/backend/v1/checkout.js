@@ -41,7 +41,12 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.fetchClickNCollectStores = (coords, pageSize = 0) => callMiddlewareApi(`cart/stores/${coords.lat}/${coords.lng}/${pageSize}`, 'GET');
+window.commerceBackend.fetchClickNCollectStores = (coords, cncStoresLimit) => {
+  if (cncStoresLimit > 0) {
+    return callMiddlewareApi(`cart/stores/${coords.lat}/${coords.lng}?cncStoresLimit=${cncStoresLimit}`, 'GET');
+  }
+  return callMiddlewareApi(`cart/stores/${coords.lat}/${coords.lng}`, 'GET');
+};
 
 /**
  * Places an order.

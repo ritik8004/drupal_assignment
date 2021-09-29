@@ -1059,13 +1059,11 @@ class CartController {
    *   The latitude.
    * @param float $lon
    *   The longitude.
-   * @param int $pageSize
-   *   The number of stores to display.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Return stores list or error message.
    */
-  public function getCncStores(float $lat, float $lon, int $pageSize) {
+  public function getCncStores(float $lat, float $lon) {
     if (empty($this->cart->getCartId())) {
       $this->logger->error('Error while fetching click and collect stores. No cart available in session');
       return new JsonResponse(
@@ -1074,7 +1072,10 @@ class CartController {
     }
 
     try {
-      $result = $this->cart->getCartStores($lat, $lon, $pageSize);
+      $cncStoresLimit = $this->request->get('cncStoresLimit');
+      $result = !empty($cncStoresLimit)
+        ? $this->cart->getCartStores($lat, $lon, $cncStoresLimit)
+        : $this->cart->getCartStores($lat, $lon);
       return new JsonResponse($result);
     }
     catch (\Exception $e) {

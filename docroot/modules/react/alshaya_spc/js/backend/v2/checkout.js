@@ -341,13 +341,13 @@ const getStoreInfo = async (storeData) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
- * @param {int} pageSize
+ * @param {int} cncStoresLimit
  *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCartStores = async (lat, lon, pageSize = 0) => {
+const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   const cartId = window.commerceBackend.getCartId();
 
   // If cart not available in session, log the error and return empty array.
@@ -387,8 +387,9 @@ const getCartStores = async (lat, lon, pageSize = 0) => {
   const storeInfoPromises = [];
   let stores = response.data;
 
-  if (pageSize > 0) {
-    stores = stores.slice(0, pageSize);
+  // If cncStoresLimit is greater than 0, then only display that many stores else display all.
+  if (cncStoresLimit > 0) {
+    stores = stores.slice(0, cncStoresLimit);
   }
 
   stores.forEach((store) => {
@@ -426,13 +427,13 @@ const getCartStores = async (lat, lon, pageSize = 0) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
- * @param {int} pageSize
+ * @param {int} cncStoresLimit
  *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCncStores = async (lat, lon, pageSize = 0) => {
+const getCncStores = async (lat, lon, cncStoresLimit = 0) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
     logger.warning('Error while fetching click and collect stores. No cart available in session.');
@@ -449,7 +450,7 @@ const getCncStores = async (lat, lon, pageSize = 0) => {
     return [];
   }
 
-  const response = await getCartStores(lat, lon, pageSize);
+  const response = await getCartStores(lat, lon, cncStoresLimit);
 
   // Data added below is to keep the response consistent with V1.
   return { data: response };
@@ -1258,14 +1259,14 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
  *
  * @param {object} coords
  *   The co-ordinates data.
- * @param {int} pageSize
+ * @param {int} cncStoresLimit
  *   The default number of stores to display.
  *
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.fetchClickNCollectStores = (coords, pageSize = 0) => getCncStores(
-  coords.lat, coords.lng, pageSize,
+window.commerceBackend.fetchClickNCollectStores = (coords, cncStoresLimit = 0) => getCncStores(
+  coords.lat, coords.lng, cncStoresLimit,
 );
 
 /**

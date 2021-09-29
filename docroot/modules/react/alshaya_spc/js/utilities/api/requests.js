@@ -7,12 +7,12 @@ import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
 
 export const fetchClicknCollectStores = (args) => {
-  const { coords, cartId, pageSize } = args;
+  const { coords, cartId, cncStoresLimit } = args;
   if (cartId === undefined) {
     return new Promise((resolve) => resolve(null));
   }
 
-  return window.commerceBackend.fetchClickNCollectStores(coords, pageSize);
+  return window.commerceBackend.fetchClickNCollectStores(coords, cncStoresLimit);
 };
 
 export const fetchCartData = async () => {

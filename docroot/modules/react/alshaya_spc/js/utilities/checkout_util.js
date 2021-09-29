@@ -647,10 +647,7 @@ export const binValidation = (bin) => {
   return valid;
 };
 
-export const getPageSize = () => {
-  if (typeof drupalSettings.map !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.map, 'page_size')) {
-    return drupalSettings.map.page_size || 0;
-  }
-  return 0;
-};
+/**
+ * Helper to get cnc store limit config.
+ */
+export const getCnCStoresLimit = () => drupalSettings.cnc_stores_limit || 0;
