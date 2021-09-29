@@ -85,6 +85,7 @@ exports.normalize = function normalize(
       normalized.push({
         url: deepestCategory.breadcrumbs[i].category_url_path,
         text: deepestCategory.breadcrumbs[i].category_name,
+        data_url: deepestCategory.breadcrumbs[i].category_url_path,
       });
     });
 
@@ -92,13 +93,13 @@ exports.normalize = function normalize(
     normalized.push({
       url: deepestCategory.url_path,
       text: deepestCategory.name,
+      data_url: deepestCategory.url_path,
     });
   }
 
-  // Push the last crumb with url as enrichment is based on url_path.
-  // By default the last element click is restricted by CSS.
+  // Push the last crumb without a url.
   normalized.push({
-    url: data.url_path,
+    url: null,
     text: data.name,
   });
 

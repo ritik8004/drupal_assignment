@@ -38,11 +38,11 @@ exports.normalize = function normalize(
   }
 
   if (!Array.isArray(data.breadcrumbs) || data.breadcrumbs.length < 1) {
-    // For root level categories, push name with URL as it will be required for
-    // enrichment.
+    // For root level categories, push name without a url.
     normalized.push({
-      url: data.url_path,
+      url: null,
       text: data.name,
+      data_url: data.url_path,
     });
 
     return normalized;
@@ -53,14 +53,15 @@ exports.normalize = function normalize(
     normalized.push({
       url: data.breadcrumbs[i].category_url_path,
       text: data.breadcrumbs[i].category_name,
+      data_url: data.breadcrumbs[i].category_url_path,
     });
   });
 
-  // Push the last crumb with url as enrichment is based on url_path.
-  // By default the last element click is restricted by CSS.
+  // Push the last crumb without a url.
   normalized.push({
-    url: data.url_path,
+    url: null,
     text: data.name,
+    data_url: data.url_path,
   });
 
   return normalized;

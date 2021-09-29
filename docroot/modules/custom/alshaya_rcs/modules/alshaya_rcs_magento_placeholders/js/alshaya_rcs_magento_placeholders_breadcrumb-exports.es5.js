@@ -26,8 +26,8 @@ exports.render = function render(
       // Get the enrichment data from the settings.
       let enrichedDataObj = {};
       let hideBreadcrumb = 0;
-      if (enrichmentData && enrichmentData[breadcrumb.url]) {
-        enrichedDataObj = enrichmentData[breadcrumb.url];
+      if (enrichmentData && enrichmentData[breadcrumb.data_url]) {
+        enrichedDataObj = enrichmentData[breadcrumb.data_url];
 
         // Add no-link class if item is set as not clickable.
         if (!enrichedDataObj.item_clickable) {
@@ -39,7 +39,7 @@ exports.render = function render(
 
       if (!hideBreadcrumb) {
         // Perform URL update before applying URL enrichment.
-        breadcrumb.url = Drupal.url(`${breadcrumb.url}/`);
+        breadcrumb.url = breadcrumb.url ? Drupal.url(`${breadcrumb.url}/`) : '';
         // Override the link based on enrichment path attribute.
         if (enrichedDataObj && typeof enrichedDataObj.path !== 'undefined') {
           breadcrumb.url = enrichedDataObj.path;
