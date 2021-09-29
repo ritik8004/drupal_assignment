@@ -14,6 +14,7 @@ const AddressContent = (props) => {
     type,
     formContext,
     shippingAsBilling = null,
+    areaUpdated,
   } = props;
 
   if (drupalSettings.user.uid > 0
@@ -28,6 +29,7 @@ const AddressContent = (props) => {
         processAddress={processAddress}
         type={type}
         formContext={formContext}
+        areaUpdated={areaUpdated}
       />
     );
   }
