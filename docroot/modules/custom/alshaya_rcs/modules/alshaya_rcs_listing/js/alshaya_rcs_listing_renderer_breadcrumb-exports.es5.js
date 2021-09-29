@@ -1,7 +1,7 @@
 const rcsPhBreadcrumbRenderer = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
 
 /**
- * Breadcrumb renderer for product pages.
+ * Breadcrumb renderer for listing pages.
  *
  * @param settings
  *    Drupal settings.
@@ -38,9 +38,10 @@ exports.normalize = function normalize(
   }
 
   if (!Array.isArray(data.breadcrumbs) || data.breadcrumbs.length < 1) {
-    // For root level categories, push only name.
+    // For root level categories, push name with URL as it will be required for
+    // enrichment.
     normalized.push({
-      url: null,
+      url: data.url_path,
       text: data.name,
     });
 
@@ -55,9 +56,10 @@ exports.normalize = function normalize(
     });
   });
 
-  // Push the last crumb without a url.
+  // Push the last crumb with url as enrichment is based on url_path.
+  // By default the last element click is restricted by CSS.
   normalized.push({
-    url: null,
+    url: data.url_path,
     text: data.name,
   });
 
