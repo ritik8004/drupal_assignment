@@ -20,11 +20,13 @@ function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, E
 /**
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
-function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$query_fields) {
-  $query_fields['products']['items']['short_description'] = ['html'];
-}
-
-function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(array &$queries) {
-  // Add style code for catalogue restructuring.
-  array_push($queries['products']['items'], 'style_code');
+function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$queries) {
+  array_push($queries['products']['items'],
+    'style_code',
+    'color',
+    'asset_type',
+    'size',
+    'composition',
+    'washing_instructions',
+    'article_warning');
 }

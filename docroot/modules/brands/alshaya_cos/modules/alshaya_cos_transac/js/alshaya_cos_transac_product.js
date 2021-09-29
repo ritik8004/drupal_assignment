@@ -9,7 +9,19 @@
     if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
       return;
     }
-    // @todo add title/description brand overrides. See CORE-34549.
+
+    var data = e.detail.result;
+
+    // Title/description brand overrides. See CORE-34549.
+    var e.detail.result.description.html = data.description.html
+      + data.composition
+      + data.washing_instructions
+      + data.article_warning
+      + 'Make sure that your favourite item remain...'
+      + data.sku;
+
+    var e.detail.result.short_description;
+
     // @todo add image brand overrides. See CORE-34424.
   });
 })(jQuery);
