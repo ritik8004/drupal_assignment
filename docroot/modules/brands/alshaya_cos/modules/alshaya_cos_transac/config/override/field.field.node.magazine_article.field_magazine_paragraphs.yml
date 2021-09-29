@@ -1,0 +1,14 @@
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.1_row_2_col
+    - paragraphs.paragraphs_type.1_row_4_col
+settings:
+  handler_settings:
+    target_bundles:
+      1_row_2_col: 1_row_2_col
+      1_row_4_col: 1_row_4_col
+    target_bundles_drag_drop:
+      1_row_2_col:
+        enabled: true
+      1_row_4_col:
+        enabled: true

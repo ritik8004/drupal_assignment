@@ -18,7 +18,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
@@ -48,7 +48,6 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
-
   @hd @language @desktop @fawry
   Scenario: As an Authenticated user, I should be able to checkout using Fawry Payment in second language
     When I follow "{language_link}"
@@ -62,7 +61,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -80,7 +79,6 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
-
   @hd @language @mobile @fawry
   Scenario: As an Authenticated user, I should be able to checkout using Fawry payment (mobile) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
@@ -94,7 +92,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load

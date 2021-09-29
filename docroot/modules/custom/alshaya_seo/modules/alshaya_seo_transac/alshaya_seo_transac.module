@@ -695,7 +695,8 @@ function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter
  * Implements hook_block_view_alter().
  */
 function alshaya_seo_transac_block_view_alter(array &$build, BlockPluginInterface $block) {
-  if ($block->getPluginId() == 'alshaya_algolia_react_plp') {
+  if ($block->getPluginId() == 'alshaya_algolia_react_plp'
+    || $block->getPluginId() == 'alshaya_algolia_listing_v2') {
     $build['#pre_render'][] = '_alshaya_seo_transac_alshaya_algolia_react_plp_prerender';
   }
 }
