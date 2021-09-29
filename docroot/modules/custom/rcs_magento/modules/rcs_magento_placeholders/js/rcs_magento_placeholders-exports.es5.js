@@ -1,3 +1,32 @@
+/**
+ * Handle 404 case on initial request.
+ *
+ * @param {object} request
+ *   The request object.
+ * @param {string} urlKey
+ *   The url key.
+ */
+async function handleNoItemsInResponse(request, urlKey) {
+  request.data = JSON.stringify({
+    query: `{urlResolver(url: "${urlKey}") {
+      redirectCode
+      relative_url
+    }}`
+  });
+
+  let response = await rcsCommerceBackend.invokeApi(request);
+  if (response.data.urlResolver === null) {
+    rcsRedirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
+  }
+  else if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
+    rcsRedirectToPage(response.data.urlResolver.relative_url);
+  }
+  else {
+    // @todo use DataDog https://alshayagroup.atlassian.net/browse/CORE-34720
+    console.log(`No route/redirect found for ${urlKey}.`);
+  }
+}
+
 exports.getEntity = async function getEntity(langcode) {
   const pageType = rcsPhGetPageType();
   if (!pageType) {
@@ -5,47 +34,73 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   const request = {
-    uri: '',
-    method: 'GET',
-    headers: [],
+    uri: 'graphql',
+    method: 'POST',
+    headers: [
+      ["Content-Type", "application/json"],
+    ],
   };
 
   let result = null;
+  let response = null;
+  let urlKey = drupalSettings.rcsPage.fullPath;
 
   switch (pageType) {
     case 'product':
-      request.uri += "graphql";
-      request.method = "POST";
-      request.headers.push(["Content-Type", "application/json"]);
+      // Add extra headers.
       request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+
       // Remove .html suffix from the full path.
-      const productUrlKey = drupalSettings.rcsPage.fullPath.replace('.html', '');
+      let prodUrlKey = urlKey.replace('.html', '');
+
+      // Build query.
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${productUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response && response.data.products.total_count) {
+        result = response.data.products.items[0];
+        RcsPhStaticStorage.set('product_' + result.sku, result);
+      }
+      else {
+        await handleNoItemsInResponse(request, urlKey);
+      }
       break;
 
     case 'category':
-      // Prepare request parameters.
-      request.uri += "graphql";
-      request.method = "POST";
-      request.headers.push(["Content-Type", "application/json"]);
+      // Build query.
       request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${drupalSettings.rcsPage.fullPath}" }}) ${rcsPhGraphqlQuery.categories}}`
+        query: `{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`
       });
 
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response && response.data.categories.total_count) {
+        result = response.data.categories.items[0];
+      }
+      else {
+        await handleNoItemsInResponse(request, urlKey);
+      }
       break;
 
     case 'promotion':
-      // Prepare request parameters.
-      request.uri += "graphql";
-      request.method = "POST",
-      request.headers.push(["Content-Type", "application/json"]);
+      urlKey = drupalSettings.rcsPage.urlKey;
+
+      // Build query.
       request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${drupalSettings.rcsPage.urlKey}") ${rcsPhGraphqlQuery.promotions}}`
+        query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
       });
 
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
+      if (response.data.promotionUrlResolver) {
+        result = response.data.promotionUrlResolver;
+      }
+      if (!result || (typeof result.title !== 'string')) {
+        await handleNoItemsInResponse(request, urlKey);
+      }
       break;
 
     default:
@@ -53,21 +108,6 @@ exports.getEntity = async function getEntity(langcode) {
         `Entity type ${pageType} not supported for get_entity.`
       );
       return result;
-  }
-
-  const response = await rcsCommerceBackend.invokeApi(request);
-  if (pageType === "product" && response.data.products.total_count) {
-    result = response.data.products.items[0];
-    RcsPhStaticStorage.set('product_' + result.sku, result);
-  }
-  else if (pageType === "category" && response.data.categories.total_count) {
-    result = response.data.categories.items[0];
-  }
-  else if (drupalSettings.rcsPage.type === 'promotion' && response.data.promotionUrlResolver) {
-    result = response.data.promotionUrlResolver;
-    // Adding name in place of title so that RCS replace the placeholders
-    // properly.
-    result.name = result.title;
   }
 
   if (result !== null) {
