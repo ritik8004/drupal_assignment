@@ -1,8 +1,3 @@
-// @codingStandardsIgnoreFile
-// This is because the linter is throwing errors where we use backticks here.
-// Once we enable webapack for the custom modules directory, we should look into
-// removing the above ignore line.
-
 /**
  * Check if product is available for home delivery.
  *
@@ -574,7 +569,7 @@ exports.computePhFilters = function (input, filter) {
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          skuBaseForm.html(rcsReplaceAll(finalHtml, fieldPh, entityFieldValue));
+          finalHtml = rcsReplaceAll(finalHtml, fieldPh, entityFieldValue)
         });
 
       value = finalHtml;
