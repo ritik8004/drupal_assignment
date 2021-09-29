@@ -1,12 +1,14 @@
 (function ($, Drupal) {
   Drupal.behaviors.postpayPDP = {
     attach: function (context, settings) {
-      $('.sku-base-form').each(function () {
-        setPostpayWidgetAmount(this);
-      });
+      document.addEventListener('alshayaPostpayInit', () => {
+        $('.sku-base-form').each(function () {
+          setPostpayWidgetAmount(this);
+        });
 
-      $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
-        setPostpayWidgetAmount(this, variant, event);
+        $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+          setPostpayWidgetAmount(this, variant, event);
+        });
       });
     }
   };
