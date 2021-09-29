@@ -330,3 +330,61 @@ $checkout_login_submit_button_background: $outer-space;
 $checkout_guest_button_border: $outer-space;
 $checkout_guest_button_txt: $eerie-black;
 $checkout_footer_border-top: $gray;
+$checkout_footer_txt: $brownish-grey;
+
+// Accordion
+$accordion_title: $outer-space;
+
+// Product listing page and search page.
+$plp_filter_active_tick: $eerie-black;
+$plp_facet_clear_text: $eerie-black;
+$plp_selected_filter_label_text: $outer-space;
+$plp_facet_filter_bg: $bright-gray;
+$plp_facet_filter_link: $outer-space;
+$plp_facet_summary_filter_icon: $outer-space;
+$plp_all_filter_filter_arrow: $eerie-black;
+$plp_filter_icon: $outer-space;
+$plp_filter_selected_text: $dark-gray;
+$plp_clear_all_text_disabled: $outer-space;
+
+// PLP Product tile.
+$plp_tile_product_title: $black-two;
+$plp_tile_product_title_hover: $eerie-black;
+$plp_tile_product_special_price: $blood;
+
+// PLP Filter bar.
+$plp_filterbar_clearall_border: $eerie-black;
+$plp_filterbar_clearall_text: $eerie-black;
+$plp_search_count: $outer-space;
+
+// PLP All filter colors
+$plp_all_filter_title: $page_title;
+$plp_clear_all_btn_disabled: $bright-gray;
+$plp_clear_all_btn_text: $outer-space;
+$plp_all_filter_button_color: $primary_btn_bg;
+
+// Dynamic Promotions.
+$promo_dynamic_label_bg: $eerie-black;
+$promo_dynamic_label_txt: $eerie-black;
+$promo_dynamic_label_txt_bg: $eerie-black;
+
+// Basket
+$basket_available_code: $eerie-black;
+
+// Basket top promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $outer-space;
+$basket_fixed_percentage_active_header_promo_txt: $outer-space;
+$basket_free_delivery_inactive_header_promo_bg: $outer-space;
+$basket_free_delivery_active_header_promo_txt: $outer-space;
+
+// Basket top OOS.
+$basket_header_oos_bg: $blood;
+$basket_header_oos_txt: $white;
+
+// Magazine article feature
+$magazine-textarea-color: $outer-space;
+$magazine-label-color: $dark-gray;
+$magazine-article-read-more-bg-color: $white;
+$magazine-article-title: $black-two;
+$magazine-article-link-hover: $brownish-grey;
+$magazine-article-back-to-feed: $outer-space;
