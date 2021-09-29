@@ -423,7 +423,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           }
           if ($widget['type'] === 'delivery_ways') {
             // If feature enabled then only show facet.
-            $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+            $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
             if (!($express_delivery_config->get('status'))) {
               continue;
             }
