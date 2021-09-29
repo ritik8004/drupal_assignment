@@ -21,7 +21,6 @@ exports.render = function render(
     // Remove the placeholder li elements.
     innerHtmlObj.find('li').remove();
     // @todo Handle special base where we separate URL by - instead of /.
-    // @codingStandardsIgnoreLine
     const firstLevelTermUrl = rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/(.*?)$`);
     if (firstLevelTermUrl) {
       inputs = inputs.filter((input) => {
@@ -86,7 +85,6 @@ const buildLhnHtml = function (itemHtml, items, clickable, unclickable, settings
       if (item.show_in_lhn) {
         // Override the link based on enrichment path attribute.
         item.url_path = typeof enrichmentDataObj.path !== 'undefined' ?
-          // @codingStandardsIgnoreLine
           enrichmentDataObj.path : Drupal.url(`${item.url_path}/`);
 
         itemHtml += replaceLhnPlaceHolders(item, html, settings);
