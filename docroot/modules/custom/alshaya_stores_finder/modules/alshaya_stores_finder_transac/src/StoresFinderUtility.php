@@ -222,6 +222,9 @@ class StoresFinderUtility {
         // Check the hours are present or not. ['value'] contains timings.
         // ['Key'] contains week day.
         if (empty(trim($open_hours['value']))) {
+          $store['open_hours_group'] = array_merge($store['open_hours_group'], array_flip($hours));
+          $hours = [];
+          $hours[(string) $this->t('Holiday')] = $open_hours['key'];
           continue;
         }
 
