@@ -82,7 +82,7 @@ export default class AddressList extends React.Component {
     }
 
     const {
-      cart, closeModal, headingText, showEditButton, type, formContext,
+      cart, closeModal, headingText, showEditButton, type, formContext, areaUpdated,
     } = this.props;
 
     const addressItem = [];
@@ -107,6 +107,7 @@ export default class AddressList extends React.Component {
           processAddress={this.processAddress}
           showEditButton={showEditButton}
           refreshAddressList={this.refreshAddressList}
+          areaUpdated={areaUpdated}
         />,
       );
     });
