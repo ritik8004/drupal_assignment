@@ -422,6 +422,11 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $facet_values = $this->loadFacetValues($identifier, $page_type);
           }
           if ($widget['type'] === 'delivery_ways') {
+            // If feature enabled then only show facet.
+            $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+            if (!($express_delivery_config->get('status'))) {
+              continue;
+            }
             $identifier = $this->identifireSuffixUpdate('attr_delivery_ways', $page_type);
             $langcode = $this->languageManager->getCurrentLanguage()->getId();
             $same_value = $this->t(
@@ -444,11 +449,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             }
             if (isset($facet_values['same_day_delivery_available'])) {
               $facet_values['same_day_delivery_available'] = $same_value . ',same_day_delivery';
-            }
-            // If feature enabled then only show facet.
-            $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-            if (!($express_delivery_config->get('status'))) {
-              continue;
             }
           }
 
