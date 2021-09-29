@@ -1421,6 +1421,10 @@ const productRecommendationsSuffix = 'pr-';
         console.log(errorData);
       }
 
+      if (Drupal.logViaDataDog !== undefined) {
+        Drupal.logViaDataDog('warning', 'Log from Drupal.logJavascriptError.', errorData);
+      }
+
       // Track error on GA.
       if (drupalSettings.gtm.log_errors_to_ga !== undefined
         && drupalSettings.gtm.log_errors_to_ga
