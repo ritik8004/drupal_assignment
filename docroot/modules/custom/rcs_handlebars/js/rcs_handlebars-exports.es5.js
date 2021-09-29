@@ -39,6 +39,10 @@ function handlebarsRender(template, data) {
     ? window.rcsHandlebarsTemplates
     : rcsHandlebarsTemplates;
 
+  if (!templates || templates.length === 0) {
+    return '';
+  }
+
   // Get the source template.
   const source = resolvePath(template, templates);
 

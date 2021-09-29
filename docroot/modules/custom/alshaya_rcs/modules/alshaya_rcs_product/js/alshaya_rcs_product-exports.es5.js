@@ -626,10 +626,7 @@ exports.computePhFilters = function (input, filter) {
 
     case 'description':
       // Prepare the object data for rendering.
-      data = {
-        label: (typeof input.description.label !== 'undefined') ? input.description.label : '',
-        html: input.description.html,
-      }
+      data = input.description;
 
       // Add legal notice.
       data.legal_notice = {
@@ -644,14 +641,11 @@ exports.computePhFilters = function (input, filter) {
 
     case 'short_description':
       // Prepare the object data for rendering.
-      data = {
-        label: (typeof input.description.label !== 'undefined') ? input.description.label : '',
-        value: input.description.html,
-        read_more: false,
-      };
+      data = (input.short_description) ? input.short_description : input.description;
+      data.read_more = false;
 
       // Apply ellipsis.
-      let tmp = applyEllipsis(data.value);
+      let tmp = applyEllipsis(data.html);
       data.value = tmp.value;
       data.read_more = tmp.read_more;
 
