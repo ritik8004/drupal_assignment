@@ -158,7 +158,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $delivery_options_order = $express_delivery_config->get('delivery_options_order');
       if ($delivery_options !== NULL) {
         foreach ($delivery_options_order as $option) {
-          if ($delivery_options[$option]['label']) {
+          if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
             $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'][$option]['label'] = $delivery_options[$option]['label'];
           }
         }
