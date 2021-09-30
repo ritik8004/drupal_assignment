@@ -12,7 +12,7 @@
       var optionsShopByStory = {
         arrows: true,
         useTransform: false,
-        slidesToShow: 4,
+        slidesToShow: 5,
         slidesToScroll: 1,
         focusOnSelect: false,
         touchThreshold: 1000,
@@ -21,30 +21,33 @@
         speed: 300,
         responsive: [
           {
-            breakpoint: 1024,
+            breakpoint: 930,
             settings: {
-              slidesToShow: 3,
+              slidesToShow: 4,
               slidesToScroll: 1,
               infinite: true,
               dots: false,
             }
           },
           {
-            breakpoint: 740,
+            breakpoint: 790,
             settings: {
-              slidesToShow: 2,
+              slidesToShow: 3,
               slidesToScroll: 1,
-              arrows: false,
-              dots: true,
             }
           },
           {
             breakpoint: 650,
             settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+            }
+          },
+          {
+            breakpoint: 400,
+            settings: {
               slidesToShow: 1,
               slidesToScroll: 1,
-              arrows: false,
-              dots: true,
             }
           }
         ]
