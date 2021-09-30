@@ -22,6 +22,10 @@
       }
     }
 
+    .store-distance {
+      #{$right}: 0;
+    }
+
     .spc-store-name-wrapper {
       display: flex;
       width: 100%;
