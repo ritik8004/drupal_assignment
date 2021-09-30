@@ -2,7 +2,7 @@ import React from 'react';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 const AvailableAreaItems = ({
-  key, attr, value, parentId, isStandardDelivery,
+  attr, value, parentId, isStandardDelivery,
   isSameDayDelivery, isExpressDelivery, handleLiClick,
 }) => {
   const standardDeliveryClass = isStandardDelivery ? 'active' : 'disabled';
@@ -17,7 +17,6 @@ const AvailableAreaItems = ({
   }
   return (
     <li
-      key={key}
       value={attr}
       id={`value${attr}`}
       data-parent-id={parentId}
