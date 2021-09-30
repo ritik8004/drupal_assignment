@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 import { removeFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 function getMiddleWareUrl() {
@@ -17,7 +17,7 @@ function fetchAPIData(apiUrl) {
     : `?langcode=${getLanguageCode()}`;
   const url = getMiddleWareUrl() + apiUrl + langcode;
 
-  return axios.get(url)
+  return Axios.get(url)
     .then((response) => {
       const event = new CustomEvent('showMessage', {
         bubbles: true,
@@ -44,7 +44,7 @@ function fetchAPIData(apiUrl) {
 function postAPICall(apiUrl, data) {
   const url = getMiddleWareUrl() + apiUrl;
 
-  return axios.post(url, data)
+  return Axios.post(url, data)
     .then((response) => {
       const event = new CustomEvent('showMessage', {
         bubbles: true,
