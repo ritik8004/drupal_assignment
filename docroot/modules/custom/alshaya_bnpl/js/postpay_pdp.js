@@ -1,13 +1,17 @@
 (function ($, Drupal) {
-  document.addEventListener('alshayaPostpayInit', () => {
-    $('.sku-base-form').each(function () {
-      setPostpayWidgetAmount(this);
-    });
+  Drupal.behaviors.postpayPDP = {
+    attach: function (context, settings) {
+      document.addEventListener('alshayaPostpayInit', () => {
+        $('.sku-base-form').each(function () {
+          setPostpayWidgetAmount(this);
+        });
 
-    $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
-      setPostpayWidgetAmount(this, variant, event);
-    });
-  });
+        $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+          setPostpayWidgetAmount(this, variant, event);
+        });
+      });
+    }
+  };
 
   function setPostpayWidgetAmount(element, variant, event) {
     var product = $(element).closest('[gtm-type="gtm-product-link"]');
