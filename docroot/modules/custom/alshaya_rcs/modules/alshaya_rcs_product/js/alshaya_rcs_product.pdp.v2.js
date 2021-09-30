@@ -200,13 +200,13 @@ function getVariantConfigurableOptions(product, variantAttributes) {
  * @param {string} langcode (optional)
  *   The specific langcode to get the product url for.
  */
- function getProductUrls(urlKey, langcode) {
+function getProductUrls(urlKey, langcode = null) {
   const urls = {};
   drupalSettings.alshayaRcs.languages.forEach(function (language) {
     urls[language] = `/${language}/${urlKey}.html`;
   });
 
-  return (typeof langcode !== 'undefined') ? urls[langcode] : urls;
+  return langcode ? urls[langcode] : urls;
 }
 
 /**
@@ -246,7 +246,7 @@ function getMaxSaleQtyMessage(maxSaleQty) {
   let message = '';
 
   if (Drupal.hasValue(maxSaleQty) && maxSaleQty > 0 && !hideMaxLimitMsg) {
-     message = handlebarsRenderer.render('product.order_quantity_limit', {
+      message = handlebarsRenderer.render('product.order_quantity_limit', {
       message: Drupal.t('Limited to @max_sale_qty per customer', {'@max_sale_qty': maxSaleQty}),
       limit_reached: false,
     });
@@ -295,7 +295,6 @@ function getVariantsInfo(product) {
       promotionsRaw: [],
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
-      // @todo Add proper url value here.
       url: getProductUrls(product.url_key),
     }
 
