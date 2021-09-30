@@ -172,7 +172,7 @@ exports.computePhFilters = function (input, filter) {
     case 'brand_logo':
     case 'url':
     case 'stock_qty':
-    case 'title':
+    case 'name':
     case 'description':
     case 'short_description':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
