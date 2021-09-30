@@ -196,9 +196,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
                 image
                 name
                 position
-                product_id
-                size
-                txt
               }
             }
           }`

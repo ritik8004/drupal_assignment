@@ -347,7 +347,7 @@ exports.render = function render(
 
       jQuery('#product-image-gallery-mobile', gallery).html(mobileGallery.html());
 
-      // Get the labels data
+      // Get the labels data.
       const labels = inputs.labels;
       if (labels.length) {
         const labelsData = {};
@@ -373,6 +373,8 @@ exports.render = function render(
             const individualLabel = jQuery('<div>').addClass('label');
             const img = jQuery('<img>').attr({
               src: labelData.image,
+              alt: labelData.name,
+              title: labelData.name,
             });
             individualLabel.append(img);
             positionLabels.append(individualLabel);
