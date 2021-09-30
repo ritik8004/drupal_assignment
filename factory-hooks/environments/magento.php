@@ -1237,6 +1237,9 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
   ],
   'mu_uat' => [
     'url' => 'https://muji-uat.store.alshaya.com',
