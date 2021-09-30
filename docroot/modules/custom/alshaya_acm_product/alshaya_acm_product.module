@@ -642,7 +642,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             // Show delivery options as per order defined in config.
             $delivery_options_order = $express_delivery_config->get('delivery_options_order');
             foreach ($delivery_options_order as $option) {
-              if ($delivery_options[$option]['label']) {
+              if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
                 $build['delivery_options'][$option]['#markup'] = $delivery_options[$option]['label'];
               }
             }

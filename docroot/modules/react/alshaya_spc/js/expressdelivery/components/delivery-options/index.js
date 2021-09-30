@@ -18,19 +18,8 @@ export default class DeliveryOptions extends React.Component {
   }
 
   componentDidMount() {
-    const currentArea = getDeliveryAreaStorage();
-    const attr = document.getElementsByClassName('sku-base-form');
-    const productSku = attr[0].getAttribute('data-sku');
-    showFullScreenLoader();
-    getCartShippingMethods(currentArea, productSku).then(
-      (response) => {
-        if (response !== null) {
-          this.checkShippingMethods(response, productSku);
-        }
-        removeFullScreenLoader();
-      },
-    );
-    document.addEventListener('handleAreaSelect', this.handleAreaSelect);
+    this.fetchShippingMethods();
+    document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
   }
 
   checkShippingMethods = (response, productSku) => {
@@ -44,6 +33,26 @@ export default class DeliveryOptions extends React.Component {
         });
       }
     }
+  }
+
+  displayShippingMethods = (event) => {
+    event.preventDefault();
+    this.fetchShippingMethods();
+  }
+
+  fetchShippingMethods = () => {
+    const currentArea = getDeliveryAreaStorage();
+    const attr = document.getElementsByClassName('sku-base-form');
+    const productSku = attr[0].getAttribute('data-sku');
+    showFullScreenLoader();
+    getCartShippingMethods(currentArea, productSku).then(
+      (response) => {
+        if (response !== null) {
+          this.checkShippingMethods(response, productSku);
+        }
+        removeFullScreenLoader();
+      },
+    );
   }
 
   getPanelData = (data) => {
