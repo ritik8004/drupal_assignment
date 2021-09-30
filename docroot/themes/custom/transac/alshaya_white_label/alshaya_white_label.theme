@@ -874,6 +874,27 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
     }
   }
 
+  //Preload GTA Script as link.
+  $gta_link = [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => 'preconnect',
+        'href' => 'https://www.google-analytics.com',
+      ],
+    ];
+  $attachments['#attached']['html_head'][] = [$gta_link, 'gta-link'];
+
+  //Preload GTM Script as link.
+  $gtm_link = [
+    '#tag' => 'link',
+    '#attributes' => [
+      'rel' => 'preload',
+      'href' => 'https://www.googletagmanager.com/gtm.js?id=GTM-PJ3GP9',
+      'as' => 'script',
+    ],
+  ];
+  $attachments['#attached']['html_head'][] = [$gtm_link, 'gtm-link'];
+
   // For performance testing & debugging purposes adding a quick bypass for
   // escaping GTM JS on a page.
   // Usage: ?GTM=BLOCK.
