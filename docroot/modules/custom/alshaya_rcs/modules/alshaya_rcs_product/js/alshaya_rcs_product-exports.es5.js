@@ -662,7 +662,7 @@ exports.computePhFilters = function (input, filter) {
         break;
       }
 
-      let labels = jQuery('<div/>');
+      const labels = [];
       promotions.forEach((promotion, index) => {
         const { context } = promotion || {};
         if (typeof context === 'undefined' || !context.includes('web')) {
@@ -672,10 +672,10 @@ exports.computePhFilters = function (input, filter) {
         link.attr('href', Drupal.url(promotion.url));
         link.attr('hreflang', drupalSettings.path.currentLanguage);
         link.text(promotion.label);
-        labels.append(link);
+        labels.push(jQuery('<div>').append(link).html());
       });
 
-      value = labels.html();
+      value = labels.join('<br/>');
       break;
 
     default:
