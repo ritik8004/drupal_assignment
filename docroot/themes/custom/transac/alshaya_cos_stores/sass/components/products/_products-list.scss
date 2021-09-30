@@ -333,6 +333,7 @@
   opacity: 0;
   transition: opacity 0.2s ease-out;
   width: 100%;
+  z-index: 1;
 }
 
 .block-views-blockproduct-category-level-3-block-2 {
@@ -372,6 +373,15 @@
     @include breakpoint($only-mobile) {
       padding-#{$left}: 0.5rem;
       padding-#{$right}: 0.5rem;
+    }
+  }
+}
+
+article[data-vmode=search_result] {
+  &:hover {
+    .alshaya_search_hoverimage {
+      transition: opacity 0.2s ease-in;
+      opacity: 1;
     }
   }
 }
