@@ -41,6 +41,7 @@ variables:
   language_checkout_link: 'continue to checkout'
   second_language_link: 'العربية'
   mobile_language_class: 'en'
+  mobile: '55566677'
   language_short: 'en'
   language_cc_mada_payment_type: 'Credit / Debit Card'
   cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
