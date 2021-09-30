@@ -17,7 +17,7 @@ var config = {
   externals: {
     react: 'React',
     'react-dom': 'ReactDOM',
-    'axios': 'axios'
+    axios: 'axios',
   },
   module: {
     rules: [

@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import getStringMessage from '../../utilities/strings';
 import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../utilities/storage';
@@ -115,7 +115,7 @@ const callMiddlewareApi = (url, method, data) => {
     ajaxCallParams.data = data;
   }
 
-  return Axios(ajaxCallParams)
+  return axios(ajaxCallParams)
     .then((response) => backendCheck(response));
 };
 
