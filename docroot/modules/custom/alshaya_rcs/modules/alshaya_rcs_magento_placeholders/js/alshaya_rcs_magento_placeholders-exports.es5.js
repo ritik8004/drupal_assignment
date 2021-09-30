@@ -96,8 +96,11 @@ exports.render = function render(
       JSON.parse(dataAttributes.skus).forEach((sku) => {
         const i = inputs.findIndex(i => i.sku === sku);
         const item = inputs[i];
+        item['url_key'] = `${item.url_key}.html`;
+
         // Add settings.
         item['show_cart_form'] = (drupalSettings.rcsPhSettings.show_cart_form === 0) ? 'no-cart-form' : '';
+        item['lang_code'] = drupalSettings.path.currentLanguage;
 
         // Assets.
         if (drupalSettings.rcsPhSettings.configurable_use_parent_images) {
@@ -105,7 +108,6 @@ exports.render = function render(
         }
         const assets = JSON.parse(item.variants[0].product.assets_teaser);
         item['images'] = assets[0].styles;
-        item['url_key'] = `${drupalSettings.path.currentLanguage}/${item.url_key}.html`;
 
         // Push item.
         data.push(item);
