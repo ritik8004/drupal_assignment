@@ -48,7 +48,8 @@ function rcs_placeholders_preprocess_html(&$variables) {
   // enrichment.
   if (!empty(RcsPhPathProcessor::$entityType)) {
     $variables['#attached']['drupalSettings']['rcsPage']['type'] = RcsPhPathProcessor::$entityType;
-    $variables['#attached']['drupalSettings']['rcsPage']['path'] = RcsPhPathProcessor::$entityPath;
+    $variables['#attached']['drupalSettings']['rcsPage']['urlKey'] = RcsPhPathProcessor::getUrlKey();
+    $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::getFullPath();
 
     if($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
       $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = RcsPhPathProcessor::$entityData;
@@ -324,7 +325,7 @@ function rcs_placeholders_language_switch_links_alter(array &$links, $type, Url 
     )->toString();
 
     // Add the URL as is, RCS expects the URL to be same in all languages.
-    $url .= RcsPhPathProcessor::$entityPathPrefix . RcsPhPathProcessor::$entityPath;
+    $url .= RcsPhPathProcessor::getFullPath(FALSE);
 
     // We use absolute url below to make sure Drupal does not modify it.
     $links[$language->getId()]['url'] = Url::fromUri($url);

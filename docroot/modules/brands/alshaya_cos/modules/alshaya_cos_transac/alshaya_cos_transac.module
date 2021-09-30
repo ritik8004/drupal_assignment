@@ -20,8 +20,12 @@ function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, E
 /**
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
-function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$query_fields) {
-  $query_fields['products']['items']['promotions'] = [
+function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(array &$queries) {
+  // Add style code for catalogue restructuring.
+  array_push($queries['products']['items'], 'style_code');
+
+  // Add fields for promotions;
+  $queries['products']['items']['promotions'] = [
     'type',
     'label',
     'url',

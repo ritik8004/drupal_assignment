@@ -397,8 +397,9 @@ class AlshayaSpcOrderHelper {
 
     $shipping_info = explode(' - ', $order['shipping_description']);
     $orderDetails['delivery_method'] = $shipping_info[0];
-    $orderDetails['delivery_method_description'] = $shipping_info[1] ?? $shipping_info[0];
-
+    $orderDetails['delivery_method_description'] = ($order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup')
+      ? $shipping_info[0]
+      : ($shipping_info[1] ?? $shipping_info[0]);
     $shipping_address = $order['shipping']['address'];
     $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
 

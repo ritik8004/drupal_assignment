@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\alshaya_color_split\AlshayaColorSplitConfig;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -169,6 +170,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
+  $build['#attached']['library'][] = 'alshaya_rcs_product/utility';
 
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
@@ -202,6 +204,10 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $recommended_product_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $recommended_product_settings->getCacheTags());
+
+  $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
+  $color_split_config = \Drupal::config('alshaya_color_split.settings');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
 }
 
 /**

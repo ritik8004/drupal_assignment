@@ -22,3 +22,10 @@ rcs_product_modal:
     js/alshaya_rcs_product.modal.js: {}
   dependencies:
     - alshaya_rcs/add_to_cart
+
+utility:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product.utility.js: {}
+  dependencies:
+    - rcs_placeholders/helpers

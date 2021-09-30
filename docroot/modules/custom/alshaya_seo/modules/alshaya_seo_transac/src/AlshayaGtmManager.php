@@ -93,6 +93,7 @@ class AlshayaGtmManager {
   const LIST_GTM_MAPPING = [
     'view.search.page' => 'Search Results Page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
+    'entity.taxonomy_term.canonical:rcs_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'entity.node.canonical:rcs_product' => 'PDP',
     'entity.node.canonical:acq_promotion' => 'Promotion',
@@ -1023,7 +1024,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
-      'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
+      'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
