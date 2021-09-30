@@ -2093,13 +2093,15 @@ class Cart {
    *   The latitude.
    * @param float $lon
    *   The longitude.
+   * @param int $cncStoresLimit
+   *   The number of stores to display.
    *
    * @return array|mixed
    *   Return array of stores.
    *
    * @throws \Exception
    */
-  public function getCartStores($lat, $lon) {
+  public function getCartStores($lat, $lon, $cncStoresLimit = NULL) {
     $cart_id = $this->getCartId();
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $request_options = [
@@ -2109,6 +2111,11 @@ class Cart {
     try {
       if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options))) {
         return $stores;
+      }
+
+      // If cncStoresLimit is set, only load that many stores.
+      if (!empty($cncStoresLimit)) {
+        $stores = array_slice($stores, 0, $cncStoresLimit, TRUE);
       }
 
       foreach ($stores as $key => &$store) {
@@ -2461,7 +2468,8 @@ class Cart {
     $data['is_error'] = FALSE;
 
     // For CnC, add collection charge for collection points.
-    if ($cart_data['shipping']['type'] === 'click_and_collect'
+    if (!empty($cart_data['shipping'])
+      && $cart_data['shipping']['type'] === 'click_and_collect'
       && $cart_data['shipping']['pudo_available'] === TRUE) {
       $data['collection_charge'] = $cart_data['shipping']['price_amount'] ?? '';
     }

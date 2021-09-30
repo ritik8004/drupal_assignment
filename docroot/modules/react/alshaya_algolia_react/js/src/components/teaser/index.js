@@ -15,6 +15,7 @@ import {
   productListIndexStatus,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -173,6 +174,16 @@ const Teaser = ({
             </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
+          <ConditionalView condition={
+              isExpressDeliveryEnabled()
+              && hit.attr_express_delivery !== undefined
+              && hit.attr_express_delivery[0] === '1'
+            }
+          >
+            <div className="express_delivery">
+              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
+            </div>
+          </ConditionalView>
         </div>
         <AddToBagContainer
           url={attribute.url}
