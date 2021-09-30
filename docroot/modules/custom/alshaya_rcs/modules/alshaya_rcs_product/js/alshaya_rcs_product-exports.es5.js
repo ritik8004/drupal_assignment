@@ -656,6 +656,28 @@ exports.computePhFilters = function (input, filter) {
       value = handlebarsRenderer.render(`field.product.${filter}`, data);
       break;
 
+    case 'promotions':
+      const {promotions} = input || {};
+      if (typeof promotions === 'undefined' || promotions === null) {
+        break;
+      }
+
+      let labels = jQuery('<div/>');
+      promotions.forEach((promotion, index) => {
+        const { context } = promotion || {};
+        if (typeof context === 'undefined' || !context.includes('web')) {
+          return;
+        }
+        const link = jQuery("<a>");
+        link.attr('href', Drupal.url(promotion.url));
+        link.attr('hreflang', drupalSettings.path.currentLanguage);
+        link.text(promotion.label);
+        labels.append(link);
+      });
+
+      value = labels.html();
+      break;
+
     default:
       console.log(`Unknown JS filter ${filter}.`)
   }

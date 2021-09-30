@@ -660,6 +660,15 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
         'max_sale_qty',
         'qty',
       ],
+      'promotions' => [
+        'context',
+        'rule_id',
+        'url',
+        'label',
+        'text',
+        'type',
+        'description',
+      ],
       '... on ConfigurableProduct' => [
         'configurable_options' => [
           'attribute_uid',
@@ -726,6 +735,15 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
               ],
             ],
             'gift_message_available',
+            'promotions' => [
+              'context',
+              'rule_id',
+              'url',
+              'label',
+              'text',
+              'type',
+              'description',
+            ],
           ],
           'attributes' => [
             'label',
