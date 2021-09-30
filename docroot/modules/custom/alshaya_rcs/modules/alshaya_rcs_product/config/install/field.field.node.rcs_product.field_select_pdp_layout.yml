@@ -14,6 +14,8 @@ label: 'Select PDP Layout'
 description: ''
 required: true
 translatable: false
+skip_translation_check: false
+default_value: {  }
 default_value_callback: ''
 settings: {  }
 field_type: list_string
