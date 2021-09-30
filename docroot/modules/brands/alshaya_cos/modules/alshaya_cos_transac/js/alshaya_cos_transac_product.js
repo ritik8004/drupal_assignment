@@ -14,12 +14,13 @@
 
     // Add extra data to product description.
     // This will be rendered using handlebars templates to add P tags and H3 titles.
-    // @todo Create a new config for product_guide to store the text.
     e.detail.result.description = {
       html: data.description.html,
       composition: data.composition,
       washing_instructions: data.washing_instructions,
       article_warning: data.article_warning,
+      // @TODO Create a new config for product_guide to store the text below with link to product guides page.
+      // See https://alshayagroup.atlassian.net/browse/CORE-34431?focusedCommentId=595906.
       product_guide: 'Make sure that your favorite items remain long-loved pieces for years to come; Read our product care guide.',
       sku: data.sku,
       show_product_detail_title: (data.composition || data.washing_instructions || data.article_warning),
