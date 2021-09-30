@@ -52,7 +52,7 @@ variables:
   language_short: 'ar'
   street: 'Street A'
   building: 'Building B'
-  locality: ''
+  locality: 'Block N'
   floor: 'Floor C'
   landmark: 'Near Landmark D'
   postal_code: '23456'
