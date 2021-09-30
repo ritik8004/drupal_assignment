@@ -184,6 +184,41 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       // Adding this case to avoid console messages about breadcrumbs.
       break;
 
+    case 'labels':
+        request.uri += "graphql";
+        request.method = "POST";
+        request.headers.push(["Content-Type", "application/json"]);
+        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+        request.data = JSON.stringify({
+          query: `query{
+            amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
+              items{
+                image
+                name
+                position
+              }
+            }
+          }`
+        });
+
+        response = await rcsCommerceBackend.invokeApi(request);
+        result = response.data.amLabelProvider;
+      break;
+
+    case 'product-recommendation':
+      request.uri += "graphql";
+      request.method = "POST";
+      request.headers.push(["Content-Type", "application/json"]);
+      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+      request.data = JSON.stringify({
+        query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsPhGraphqlQuery.products}}`
+      });
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items[0];
+      RcsPhStaticStorage.set('product_' + result.sku, result);
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;

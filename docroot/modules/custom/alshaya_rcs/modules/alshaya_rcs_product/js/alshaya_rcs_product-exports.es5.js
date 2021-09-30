@@ -218,6 +218,179 @@ exports.render = function render(
       html = getProductRecommendation(crosssell_products, rcsTranslatedText('Customers also bought', {}, 'alshaya_static_text|pdp_crosssell_title'));
       break;
 
+    case 'classic-gallery':
+      const gallery = jQuery('.rcs-templates--rcs-product-zoom');
+      const mediaCollection = entity.media_gallery;
+
+      // If no media, return;
+      if (!mediaCollection.length) {
+        html = '';
+        break;
+      }
+
+      mediaCollection.forEach((media) => {
+        const galleryElement = jQuery('<li></li>');
+
+        const galleryElementAnchor = jQuery('<a></a>');
+        galleryElementAnchor.attr({
+          href: media.url,
+          class: 'imagegallery__thumbnails__image a-gallery',
+        });
+
+        const galleryElementImg = jQuery('<img />');
+        galleryElementImg.attr({
+          class: 'b-lazy',
+          // @todo: Replace with lazy loaded image.
+          src: media.url,
+          'data-src': media.url,
+          alt: media.label,
+          title: media.label,
+        });
+
+        galleryElementAnchor.append(galleryElementImg);
+        galleryElement.append(galleryElementAnchor);
+        jQuery('#product-full-screen-gallery', gallery).append(galleryElement);
+      });
+
+      // Get the template for the thumbnails.
+      const thumbnailTemplate = jQuery('.rcs-templates--product_thumbnails').clone();
+
+      // This is the list that will hold the thumbnails.
+      const thumbnails = jQuery('<ul id="lightSlider"></ul>');
+
+      mediaCollection.forEach((media) => {
+        // @todo: Fetch the type from the input.
+        const type = 'image';
+        switch (type) {
+          case 'youtube':
+            break;
+
+          case 'vimeo':
+            break;
+
+          case 'pdp-video':
+            break;
+
+          // Image.
+          default:
+            const imageUrl = media.url;
+            const imageLabel = media.label;
+            // Get the image element from the template and start adding the
+            // required attributes.
+            const element = jQuery('.default', thumbnailTemplate).clone();
+            const anchor = jQuery('a', element);
+
+            anchor.attr({
+              // @todo: Replace this with the zoomed image.
+              'data-zoom-url': imageUrl,
+              // @todo: Replace this with the medium image.
+              href: imageUrl,
+            });
+
+            jQuery('img', anchor).attr({
+              src:  imageUrl,
+              'data-src': imageUrl,
+              alt: imageLabel,
+              title: imageLabel,
+            });
+
+            // Append the li element to the list.
+            thumbnails.append(element);
+        }
+      });
+
+      if (mediaCollection.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) {
+        thumbnails.addClass('pager-yes');
+      }
+      else {
+        thumbnails.addClass('pager-no');
+      }
+
+      jQuery('.cloudzoom__thumbnails', gallery).html(thumbnails);
+
+      // Get the template for the mobile.
+      const mobileGalleryTemplate = jQuery('.rcs-templates--product_gallery_mobile').clone();
+      const mobileGallery = jQuery('<div>');
+
+      mediaCollection.forEach((media) => {
+        // @todo: Fetch the type from the input.
+        const type = 'image';
+        switch (type) {
+          case 'youtube':
+            break;
+
+          case 'vimeo':
+            break;
+
+          case 'pdp-video':
+            break;
+
+          // Image.
+          default:
+            const imageUrl = media.url;
+            const imageLabel = media.label;
+            // Get the image element from the template and start adding the
+            // required attributes.
+            const element = jQuery('.default', mobileGalleryTemplate).clone();
+
+            jQuery('img', element).attr({
+              src:  imageUrl,
+              'data-src': imageUrl,
+              alt: imageLabel,
+              title: imageLabel,
+            });
+
+            // Append the li element to the list.
+            mobileGallery.append(element);
+        }
+      });
+
+      jQuery('#product-image-gallery-mobile', gallery).html(mobileGallery.html());
+
+      // Get the labels data.
+      const labels = inputs.labels;
+      if (labels.length) {
+        const labelsData = {};
+        labels.forEach(function (label) {
+          // Don't render labels with unknown positions.
+          if (!(['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(label.position))) {
+            return;
+          }
+
+          if (typeof labelsData[label.position] === 'undefined') {
+            labelsData[label.position] = [];
+          }
+          // Group the labels by position.
+          labelsData[label.position].push(label);
+        });
+
+        const productLabels = jQuery('<div class="product-labels"><div class="labels-wrapper" data-type="pdp" data-sku="#rcs.product._self|sku#" data-main-sku="#rcs.product._self|sku#"></div></div>');
+        const labelsWrapper = productLabels.find('.labels-wrapper');
+
+        Object.keys(labelsData).forEach(function (position) {
+          const positionLabels = jQuery('<div>').addClass(`labels-container ${position}`);
+          labelsData[position].forEach(function (labelData) {
+            const individualLabel = jQuery('<div>').addClass('label');
+            const img = jQuery('<img>').attr({
+              src: labelData.image,
+              alt: labelData.name,
+              title: labelData.name,
+            });
+            individualLabel.append(img);
+            positionLabels.append(individualLabel);
+          });
+          labelsWrapper.append(positionLabels);
+        });
+
+        // jQuery('.product-labels .labels-wrapper', gallery).html(productLabels.html());
+        const productLabelsMarkup = productLabels.html();
+        jQuery('.cloudzoom__herocontainer', gallery).append(productLabelsMarkup);
+        jQuery('.mobilegallery', gallery).append(productLabelsMarkup);
+      }
+
+      html += gallery.html();
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for render.`);
       break;
@@ -280,7 +453,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'image':
-      value = ((typeof input.media_gallery.length > 0)
+      value = ((input.media_gallery.length > 0)
           && (typeof input.media_gallery[0].url !== 'undefined'
             || input.media_gallery[0].url
             || input.media_gallery[0].url !== '')
@@ -293,157 +466,6 @@ exports.computePhFilters = function (input, filter) {
       // @todo: Fetch this from the correct key.
       mediaCollection = input.media_gallery;
       value = mediaCollection.length;
-      break;
-
-    case 'product_thumbnails':
-      // Get the template for the thumbnails.
-      const thumbnailTemplate = jQuery('.rcs-templates--product_thumbnails').clone();
-
-      // @todo: Fetch this dynamically from the correct key.
-      mediaCollection = input.media_gallery;
-      // If no media, return;
-      if (!mediaCollection.length) {
-        value = '';
-        return;
-      }
-
-      // This is the list that will hold the thumbnails.
-      const thumbnails = jQuery('<ul id="lightSlider"></ul>');
-
-      mediaCollection.forEach((media) => {
-        // @todo: Fetch the type from the input.
-        const type = 'image';
-        switch (type) {
-          case 'youtube':
-            break;
-
-          case 'vimeo':
-            break;
-
-          case 'pdp-video':
-            break;
-
-          // Image.
-          default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
-            // Get the image element from the template and start adding the
-            // required attributes.
-            const element = jQuery('.default', thumbnailTemplate).clone();
-            const anchor = jQuery('a', element);
-
-            anchor.attr({
-              // @todo: Replace this with the zoomed image.
-              'data-zoom-url': imageUrl,
-              // @todo: Replace this with the medium image.
-              href: imageUrl,
-            });
-
-            jQuery('img', anchor).attr({
-              src:  imageUrl,
-              'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            thumbnails.append(element);
-        }
-      });
-
-      if (mediaCollection.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) {
-        thumbnails.addClass('pager-yes');
-      }
-      else {
-        thumbnails.addClass('pager-no');
-      }
-
-      value = thumbnails.prop('outerHTML');
-
-      break;
-
-    case 'product_full_screen_gallery':
-      const gallery = jQuery('<ul/>');
-      mediaCollection = input.media_gallery;
-
-      mediaCollection.forEach((media) => {
-        const galleryElement = jQuery('<li></li>');
-
-        const galleryElementAnchor = jQuery('<a></a>');
-        galleryElementAnchor.attr({
-          href: media.url,
-          class: 'imagegallery__thumbnails__image a-gallery',
-        });
-
-        const galleryElementImg = jQuery('<img />');
-        galleryElementImg.attr({
-          class: 'b-lazy',
-          // @todo: Replace with lazy loaded image.
-          src: media.url,
-          'data-src': media.url,
-          alt: media.label,
-          title: media.label,
-        });
-
-        galleryElementAnchor.append(galleryElementImg);
-        galleryElement.append(galleryElementAnchor);
-        gallery.append(galleryElement);
-      });
-
-      value = gallery.html();
-      break;
-
-    case 'product_mobile_gallery':
-      // Get the template for the thumbnails.
-      const mobileGalleryTemplate = jQuery('.rcs-templates--product_gallery_mobile').clone();
-
-      // @todo: Fetch this dynamically from the correct key.
-      mediaCollection = input.media_gallery;
-      // If no media, return;
-      if (!mediaCollection.length) {
-        value = '';
-        return;
-      }
-
-      // This is the list that will hold the thumbnails.
-      const mobileGallery = jQuery('#product-image-gallery-mobile');
-      // Remove the placeholder from the markup.
-      mobileGallery.html('');
-
-      mediaCollection.forEach((media) => {
-        // @todo: Fetch the type from the input.
-        const type = 'image';
-        switch (type) {
-          case 'youtube':
-            break;
-
-          case 'vimeo':
-            break;
-
-          case 'pdp-video':
-            break;
-
-          // Image.
-          default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
-            // Get the image element from the template and start adding the
-            // required attributes.
-            const element = jQuery('.default', mobileGalleryTemplate).clone();
-
-            jQuery('img', element).attr({
-              src:  imageUrl,
-              'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            mobileGallery.append(element);
-        }
-      });
-
-      value = mobileGallery.html();
       break;
 
     case 'add_to_cart':
@@ -566,7 +588,7 @@ exports.computePhFilters = function (input, filter) {
         .forEach(function eachReplacement(r) {
           const fieldPh = r[0];
           const entityFieldValue = r[1];
-          finalHtml = rcsReplaceAll(finalHtml, fieldPh, entityFieldValue)
+          finalHtml = rcsReplaceAll(finalHtml, fieldPh, entityFieldValue);
         });
 
       value = finalHtml;
@@ -582,7 +604,7 @@ exports.computePhFilters = function (input, filter) {
 
     case 'first_image':
       // @todo: Use the correct image key.
-      value = ((typeof input.media_gallery.length > 0)
+      value = ((input.media_gallery.length > 0)
           && (typeof input.media_gallery[0].url !== 'undefined'
             || input.media_gallery[0].url
             || input.media_gallery[0].url !== '')

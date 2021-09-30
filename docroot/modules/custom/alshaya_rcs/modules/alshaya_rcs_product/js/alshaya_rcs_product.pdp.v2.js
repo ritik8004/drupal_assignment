@@ -56,17 +56,26 @@ function mergeDeep(target, source) {
  *
  * @param {string} sku
  *   The product sku value.
+ * @param {string} productKey
+ *   The product view mode.
+ * @param {Boolean} processed
+ *   Whether we require the processed product data or not.
  *
- * @returns {Object|null}
- *    The processed product data else null if no product is found.
+ * @returns {Object}
+ *    The product data.
  */
-window.commerceBackend.getProductData = function (sku) {
+window.commerceBackend.getProductData = function (sku, productKey, processed) {
   if (typeof sku === 'undefined' || !sku) {
     var allStorageData = RcsPhStaticStorage.getAll();
     var productData = {};
     Object.keys(allStorageData).forEach(function (key) {
       if (key.startsWith('product_')) {
-        productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
+        if (typeof processed === 'undefined' || processed) {
+          productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
+        }
+        else {
+          productData[allStorageData[key].sku] = allStorageData[key];
+        }
       }
     });
 
@@ -75,7 +84,12 @@ window.commerceBackend.getProductData = function (sku) {
 
   var product = RcsPhStaticStorage.get('product_' + sku);
   if (product) {
-    return processProduct(product);
+    if (typeof processed === 'undefined' || processed) {
+      return processProduct(product);
+    }
+    else {
+      return product;
+    }
   }
 
   return null;
@@ -280,7 +294,7 @@ function getVariantsInfo(product) {
       parent_sku: variant.parent_sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
       // @todo Fetch layout dynamically.
-      layout: 'classic',
+      layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: '',
       stock: {
         qty: variantInfo.stock_data.qty,
@@ -335,6 +349,7 @@ function getVariantsInfo(product) {
  */
 function processProduct(product) {
   var productData = {
+    id: product.id,
     sku: product.sku,
     type: product.type_id,
     gtm_attributes: product.gtm_attributes,
@@ -547,3 +562,179 @@ window.commerceBackend.storeProductDataOnAddToCart = function () {
   // We do nothing here for V2.
   return;
 }
+
+/**
+ * Gets the siblings and parent of the given sku.
+ *
+ * @param {string} sku
+ *   The given sku.
+ *
+ * @returns
+ *   An object containing the product skus in the keys and the product entities
+ * in the values.
+ * If sku is simple and is the main product, then sku is returned.
+ * If sku is simple a child product, then all the siblings and parent are
+ * returned.
+ * If sku is configurable, then the sku and its children are returned.
+ */
+function getSkuSiblingsAndParent(sku) {
+  const allProducts = window.commerceBackend.getProductData(null, null, false);
+  const data = {};
+
+  Object.keys(allProducts).forEach(function eachMainProduct(mainProductSku) {
+    const mainProduct = allProducts[mainProductSku];
+
+    if (mainProduct.sku === sku) {
+      data[sku] = mainProduct;
+      if (mainProduct.type_id === 'configurable') {
+        mainProduct.variants.forEach(function eachVariantProduct(variant) {
+          data[variant.product.sku] = variant.product;
+        });
+      }
+    }
+    else {
+      if (mainProduct.type_id === 'configurable') {
+        mainProduct.variants.forEach(function eachVariantProduct(variant) {
+          if (variant.product.sku === sku) {
+            data[mainProduct.sku] = mainProduct;
+            mainProduct.variants.forEach(function eachVariantProduct(variant) {
+              data[variant.product.sku] = variant.product;
+            });
+          }
+        });
+      }
+    }
+  });
+
+  return data;
+}
+
+/**
+ * Gets the labels data for the given product ID.
+ *
+ * @param sku
+ *   The sku value.
+ *
+ * @returns object
+ *   The labels data for the given product ID.
+ */
+window.commerceBackend.getLabelsData = async function (sku) {
+  if (typeof staticDataStore.labels === 'undefined') {
+    staticDataStore.labels = {};
+    staticDataStore.labels[sku] = null;
+  }
+
+  if (staticDataStore.labels[sku]) {
+    return staticDataStore.labels[sku];
+  }
+
+  const products = getSkuSiblingsAndParent(sku);
+  const productIds = {};
+  Object.keys(products).forEach(function (sku) {
+    staticDataStore.labels[sku] = [];
+    productIds[products[sku].id] = sku;
+  });
+
+  const labels = await globalThis.rcsPhCommerceBackend
+                                              .getData('labels', { productIds: Object.keys(productIds) }, null, drupalSettings.path.currentLanguage, '')
+
+  if (Array.isArray(labels) && labels.length) {
+    labels.forEach(function (productLabels) {
+      if (!productLabels.items.length) {
+        return;
+      }
+      const productId = productLabels.items[0].product_id;
+      const sku = productIds[productId];
+      staticDataStore.labels[sku] = productLabels.items;
+    });
+  }
+
+  return staticDataStore.labels[sku];
+}
+
+/**
+ * Renders the gallery for the given SKU.
+ *
+ * @param {object} product
+ *   The jQuery product object.
+ * @param {string} layout
+ *   The layout value.
+ * @param {string} productGallery
+ *   The gallery for the product.
+ * @param {string} sku
+ *   The SKU value.
+ * @param {string} parentSku
+ *   The parent SKU value if exists.
+ */
+window.commerceBackend.updateGallery = async function (product, layout, productGallery, sku, parentSku) {
+  let rawProduct = null;
+  const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
+  const productData = window.commerceBackend.getProductData(mainSku, null, false);
+
+  if (typeof parentSku === 'undefined') {
+    rawProduct = productData;
+  }
+  else {
+    Object.values(productData.variants).forEach(function (productVariant) {
+      if (sku === productVariant.product.sku) {
+        rawProduct = productVariant.product;
+      }
+    });
+  }
+
+  let labels = await window.commerceBackend.getLabelsData(sku);
+
+  // Maps gallery value from backend to the appropriate filter.
+  let galleryType = null;
+  switch (drupalSettings.alshayaRcs.pdpLayout) {
+    case 'pdp':
+      galleryType = 'classic-gallery';
+      break;
+  }
+
+  const gallery = globalThis.rcsPhRenderingEngine
+    .render(
+      drupalSettings,
+      galleryType,
+      {},
+      { labels },
+      rawProduct,
+      drupalSettings.path.currentLanguage,
+      null,
+    );
+
+  if (gallery === '' || gallery === null) {
+    return;
+  }
+
+  if (jQuery(product).find('.gallery-wrapper').length > 0) {
+    // Since matchback products are also inside main PDP, when we change the variant
+    // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
+    // first one which will be of main PDP to update main PDP gallery only.
+    jQuery(product).find('.gallery-wrapper').first().replaceWith(gallery);
+  }
+  else {
+    jQuery(product).find('#product-zoom-container').replaceWith(gallery);
+  }
+
+  if (layout === 'pdp-magazine') {
+    // Set timeout so that original behavior attachment is not affected.
+    setTimeout(function () {
+      Drupal.behaviors.magazine_gallery.attach(document);
+      Drupal.behaviors.pdpVideoPlayer.attach(document);
+    }, 1);
+  }
+  else {
+    // Hide the thumbnails till JS is applied.
+    // We use opacity through a class on parent to ensure JS get's applied
+    // properly and heights are calculated properly.
+    jQuery('#product-zoom-container', product).addClass('whiteout');
+    setTimeout(function () {
+      Drupal.behaviors.alshaya_product_zoom.attach(document);
+      Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
+
+      // Show thumbnails again.
+      jQuery('#product-zoom-container', product).removeClass('whiteout');
+    }, 1);
+  }
+};
