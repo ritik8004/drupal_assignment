@@ -1,0 +1,7 @@
+sofa_sectional:
+  version: 1.x
+  footer: true
+  js:
+    dist/sofasectional.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
