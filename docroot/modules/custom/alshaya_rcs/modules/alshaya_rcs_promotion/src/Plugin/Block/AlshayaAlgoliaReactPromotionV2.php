@@ -91,8 +91,13 @@ class AlshayaAlgoliaReactPromotionV2 extends AlshayaAlgoliaReactBlockBase {
       'alshaya_rcs_promotion/renderer',
       'alshaya_algolia_react/plpv2',
     );
+
     // Remove the v1 PLP library.
     $libraries = array_diff($common_config['otherRequiredValues']['libraries'], ['alshaya_algolia_react/plp']);
+
+    // Add helpers.
+    $libraries[] = 'alshaya_rcs_promotion/helpers';
+
     return [
       'inside' => [
         '#type' => 'html_tag',

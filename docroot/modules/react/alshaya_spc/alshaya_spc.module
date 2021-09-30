@@ -16,6 +16,7 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -347,7 +348,46 @@ function alshaya_spc_preprocess_page(&$variables) {
         'key' => 'backend_obsolete_version',
         'value' => t('We have upgraded your experience, please refresh the page and try again.'),
       ],
+      [
+        'key' => 'check_area_availability',
+        'value' => t('Check availability in your area', [], ['context' => 'delivery_area']),
+      ],
+      [
+        'key' => 'governate_label',
+        'value' => t('Select @label', [], ['context' => 'delivery_area']),
+      ],
     ],
   ];
   $variables['page']['content']['commerce_backend'] = $strings;
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if ($context !== 'pdp') {
+    return;
+  }
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+
+  // Return if express delivery feature is disabled.
+  // And product is not buyable.
+  // Otherwise show express delivery options.
+  if (!($express_delivery_config->get('status')) || !(alshaya_acm_product_is_buyable($sku))) {
+    return;
+  }
+  // Adding address related configs to load area list block.
+  $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
+  $build['#attached']['drupalSettings']['expressDelivery'] = [
+    'enabled' => TRUE,
+    'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
+  ];
+  $build['#attached']['drupalSettings']['country_code'] = $country_code;
+  $build['#attached']['drupalSettings']['alshaya_spc']['address_fields'] = _alshaya_spc_get_address_fields();
+
+  $build['express_delivery']['#markup'] = '<div id="express-delivery-options"></div>';
+  $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
+  $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
+
+  unset($build['home_delivery']);
 }

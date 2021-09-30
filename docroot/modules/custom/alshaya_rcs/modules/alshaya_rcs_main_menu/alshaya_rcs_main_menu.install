@@ -10,6 +10,20 @@ use Drupal\block\BlockInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
+ * Get list of blocks which needs to be enabled/disabled.
+ *
+ * @return array
+ *   An array of block ids.
+ */
+function alshaya_rcs_main_menu_get_block_ids() {
+  return [
+    'alshayamainmenu' => 'alshayarcsmainmenu',
+    'supercategorymenu' => 'alshaya_rcs_supercategory_menu',
+    'shopby' => 'alshayarcsshopby',
+  ];
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_rcs_main_menu_install() {
@@ -19,24 +33,25 @@ function alshaya_rcs_main_menu_install() {
     alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
   }
 
-  // Disable existing V1 block.
-  $non_rcs_blocks = [
-    'alshayamainmenu',
-    'supercategorymenu',
-    'shopby',
-  ];
-  foreach ($non_rcs_blocks as $block_id) {
-    $block = Block::load($block_id);
-    if ($block instanceof BlockInterface) {
-      if ($block_id === 'shopby') {
-        $new_block = Block::load('alshayarcsshopby');
-        // Set weight of new block same as old block.
+  // Disable the V1 blocks that are not required.
+  $blocks = alshaya_rcs_main_menu_get_block_ids();
+  foreach ($blocks as $prev_block_id => $new_block_id) {
+    $existing_block_weight = NULL;
+    $prev_block = Block::load($prev_block_id);
+    if ($prev_block instanceof BlockInterface) {
+      // Change the RCS block weight based on the V1 block weight.
+      $existing_block_weight = $prev_block->getWeight();
+      $prev_block->disable()->save();
+      // Load the RCS Block and Change the weight.
+      if ($new_block_id) {
+        $new_block = Block::load($new_block_id);
         if ($new_block instanceof BlockInterface) {
-          $new_block->setWeight($block->getWeight());
+          $new_block->setWeight($existing_block_weight);
+          // Update the block region based on the previous block.
+          $new_block->setRegion($prev_block->getRegion());
           $new_block->save();
         }
       }
-      $block->disable()->save();
     }
   }
 
@@ -117,14 +132,10 @@ function _alshaya_rcs_main_menu_advance_page_batch_operation(&$sandbox) {
  * Implements hook_uninstall().
  */
 function alshaya_rcs_main_menu_uninstall() {
-  // Enable existing V1 block.
-  $non_rcs_blocks = [
-    'alshayamainmenu',
-    'supercategorymenu',
-    'shopby',
-  ];
-  foreach ($non_rcs_blocks as $block_id) {
-    $block = Block::load($block_id);
+  // Enable the V1 blocks.
+  $blocks = alshaya_rcs_main_menu_get_block_ids();
+  foreach ($blocks as $prev_block_id => $new_block_id) {
+    $block = Block::load($prev_block_id);
     if ($block instanceof BlockInterface) {
       $block->enable()->save();
     }

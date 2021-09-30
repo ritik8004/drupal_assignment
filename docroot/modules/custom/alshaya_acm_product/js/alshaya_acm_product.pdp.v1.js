@@ -11,11 +11,17 @@ window.commerceBackend = window.commerceBackend || {};
  *   The product sku value.
  * @param {string} productKey
  *   The product view mode.
+ * @param {Boolean} processed
+ *   Whether we require the processed product data or not.
  *
  * @returns {Object}
  *    The product data.
  */
-window.commerceBackend.getProductData = function (sku, productKey) {
+window.commerceBackend.getProductData = function (sku, productKey, processed) {
+  if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
+    return null;
+  }
+
   return drupalSettings[productKey][sku];
 }
 
@@ -107,3 +113,54 @@ window.commerceBackend.storeProductDataOnAddToCart = function (viewMode, product
 window.commerceBackend.getConfigurableCombinations = function (sku) {
   return drupalSettings.configurableCombinations[sku];
 }
+
+/**
+ * Renders the gallery for the given SKU.
+ *
+ * @param {object} product
+ *   The jQuery product object.
+ * @param {string} layout
+ *   The layout value.
+ * @param {string} productGallery
+ *   The gallery for the product.
+ * @param {string} sku
+ *   The sku value.
+ * @param {string} parentSku
+ *   The parent SKU value if exists.
+ */
+window.commerceBackend.updateGallery = function (product, layout, gallery, sku, parentSku) {
+  if (gallery === '' || gallery === null) {
+    return;
+  }
+
+  if ($(product).find('.gallery-wrapper').length > 0) {
+    // Since matchback products are also inside main PDP, when we change the variant
+    // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
+    // first one which will be of main PDP to update main PDP gallery only.
+    $(product).find('.gallery-wrapper').first().replaceWith(gallery);
+  }
+  else {
+    $(product).find('#product-zoom-container').replaceWith(gallery);
+  }
+
+  if (layout === 'pdp-magazine') {
+    // Set timeout so that original behavior attachment is not affected.
+    setTimeout(function () {
+      Drupal.behaviors.magazine_gallery.attach(document);
+      Drupal.behaviors.pdpVideoPlayer.attach(document);
+    }, 1);
+  }
+  else {
+    // Hide the thumbnails till JS is applied.
+    // We use opacity through a class on parent to ensure JS get's applied
+    // properly and heights are calculated properly.
+    $('#product-zoom-container', product).addClass('whiteout');
+    setTimeout(function () {
+      Drupal.behaviors.alshaya_product_zoom.attach(document);
+      Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
+
+      // Show thumbnails again.
+      $('#product-zoom-container', product).removeClass('whiteout');
+    }, 1);
+  }
+};

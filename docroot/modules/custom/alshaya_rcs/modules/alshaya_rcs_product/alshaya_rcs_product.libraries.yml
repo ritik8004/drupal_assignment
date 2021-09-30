@@ -9,6 +9,10 @@ rcs_product_info:
   version: 1.x
   js:
     js/alshaya_rcs_product.pdp.v2.js: {}
+  dependencies:
+    - rcs_handlebars/main
+    - rcs_placeholders/helpers
+    - alshaya_rcs_product/main
 
 schema_org:
   js:

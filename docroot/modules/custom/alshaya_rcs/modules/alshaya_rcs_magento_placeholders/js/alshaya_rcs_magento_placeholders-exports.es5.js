@@ -8,23 +8,8 @@ exports.render = function render(
   innerHtml
 ) {
   let html = "";
-  const pageType = rcsPhGetPageType();
 
   switch (placeholder) {
-    case "delivery-option":
-      if (typeof globalThis.renderRcsProduct !== 'undefined') {
-        html += globalThis.renderRcsProduct.render(
-          settings,
-          placeholder,
-          params,
-          inputs,
-          entity,
-          langcode,
-          innerHtml
-        );
-      }
-      break;
-
     case "navigation_menu":
       // Process rcs navigation renderer, if available.
       if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
@@ -120,12 +105,14 @@ exports.render = function render(
       html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: inputs });
       break;
 
+    case "delivery-option":
     case 'mobile-upsell-products':
     case 'upsell-products':
     case 'mobile-related-products':
     case 'related-products':
     case 'mobile-crosssell-products':
     case 'crosssell-products':
+    case 'classic-gallery':
       // Render super category block.
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         html += globalThis.renderRcsProduct.render(
@@ -144,6 +131,28 @@ exports.render = function render(
       // Render promotional banner block.
       if (typeof globalThis.renderRcsPromotionalBanner !== 'undefined') {
         html += globalThis.renderRcsPromotionalBanner.render(
+          settings,
+          entity,
+          innerHtml
+        );
+      }
+      break;
+
+    case 'app_navigation':
+      // Render the DP App Navigation block.
+      if (typeof globalThis.renderRcsAppNavigation !== 'undefined') {
+        html += globalThis.renderRcsAppNavigation.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
+    case 'plp_mobile_menu':
+      // Render the PLP mobile menu block.
+      if (typeof globalThis.renderRcsPlpMobileMenu !== 'undefined') {
+        html += globalThis.renderRcsPlpMobileMenu.render(
           settings,
           entity,
           innerHtml
@@ -181,7 +190,7 @@ exports.computePhFilters = function (input, filter) {
     case 'brand_logo':
     case 'url':
     case 'stock_qty':
-    case 'title':
+    case 'name':
     case 'description':
     case 'short_description':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {

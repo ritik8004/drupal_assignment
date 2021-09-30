@@ -31,6 +31,17 @@ rcsWindowLocation = () => {
     : global.location;
 }
 
+/**
+ * Utility function to redirect to page.
+ *
+ * @param {string} url
+ *   The url to redirect to.
+ */
+function rcsRedirectToPage(url) {
+  const location = rcsWindowLocation();
+  location.href = url;
+}
+
 rcsTranslatedText = (str, args, options) => {
   if (rcsPhIsBrowserContext()) {
     return Drupal.t(str, args, options);

@@ -89,3 +89,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css
+
+  alshaya_white_label/magazine_article:
+    css:
+      theme:
+        css/conditional-sass/magazine-article/magazine-article.ltr.css: css/conditional-sass/magazine-article/magazine-article.ltr.css

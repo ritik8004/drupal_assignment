@@ -50,22 +50,32 @@ function mergeDeep(target, source) {
   return output;
   }
 }
+
 /**
  * Gets the required data for rcs_product.
  *
  * @param {string} sku
  *   The product sku value.
+ * @param {string} productKey
+ *   The product view mode.
+ * @param {Boolean} processed
+ *   Whether we require the processed product data or not.
  *
- * @returns {Object|null}
- *    The processed product data else null if no product is found.
+ * @returns {Object}
+ *    The product data.
  */
-window.commerceBackend.getProductData = function (sku) {
+window.commerceBackend.getProductData = function (sku, productKey, processed) {
   if (typeof sku === 'undefined' || !sku) {
     var allStorageData = RcsPhStaticStorage.getAll();
     var productData = {};
     Object.keys(allStorageData).forEach(function (key) {
       if (key.startsWith('product_')) {
-        productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
+        if (typeof processed === 'undefined' || processed) {
+          productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
+        }
+        else {
+          productData[allStorageData[key].sku] = allStorageData[key];
+        }
       }
     });
 
@@ -74,7 +84,12 @@ window.commerceBackend.getProductData = function (sku) {
 
   var product = RcsPhStaticStorage.get('product_' + sku);
   if (product) {
-    return processProduct(product);
+    if (typeof processed === 'undefined' || processed) {
+      return processProduct(product);
+    }
+    else {
+      return product;
+    }
   }
 
   return null;
@@ -192,6 +207,69 @@ function getVariantConfigurableOptions(product, variantAttributes) {
 }
 
 /**
+ * Get the product urls for the different languages.
+ *
+ * @param {string} urlKey
+ *   The url key value of the product.
+ * @param {string} langcode (optional)
+ *   The specific langcode to get the product url for.
+ */
+function getProductUrls(urlKey, langcode = null) {
+  const urls = {};
+  drupalSettings.alshayaRcs.languages.forEach(function (language) {
+    urls[language] = `/${language}/${urlKey}.html`;
+  });
+
+  return langcode ? urls[langcode] : urls;
+}
+
+/**
+ * Gets the max sale quantity for the product.
+ *
+ * @param {object} product
+ *   The product object.
+ *
+ * @returns {Number}
+ *   The max sale quantity for the product or 0.
+ */
+function getMaxSaleQuantity(product) {
+  return Drupal.hasValue(product.stock_data.max_sale_qty) ? product.stock_data.max_sale_qty : 0;
+}
+
+/**
+ * Get to know if quantity limit is enabled.
+ *
+ * @returns {Boolean}
+ *   true if quantity limit is enabled, else false.
+ */
+function isQuantityLimitEnabled() {
+  return drupalSettings.alshayaRcs.quantityLimitEnabled;
+}
+
+/**
+ * Get the max sale quantity message.
+ *
+ * @param {Number} maxSaleQty
+ *   The max sale quantity value.
+ *
+ * @returns {String}
+ *   The message.
+ */
+function getMaxSaleQtyMessage(maxSaleQty) {
+  const hideMaxLimitMsg = drupalSettings.alshayaRcs.hide_max_qty_limit_message;
+  let message = '';
+
+  if (Drupal.hasValue(maxSaleQty) && maxSaleQty > 0 && !hideMaxLimitMsg) {
+      message = handlebarsRenderer.render('product.order_quantity_limit', {
+      message: Drupal.t('Limited to @max_sale_qty per customer', {'@max_sale_qty': maxSaleQty}),
+      limit_reached: false,
+    });
+  }
+
+  return message;
+}
+
+/**
  * Gets the variants for the given product entity.
  *
  * @param {object} product
@@ -202,8 +280,9 @@ function getVariantsInfo(product) {
 
   product.variants.forEach(function (variant) {
     const variantInfo = variant.product;
+    const variantSku = variantInfo.sku;
     // @todo Add code for commented keys.
-    info[variantInfo.sku] = {
+    info[variantSku] = {
       // @todo Add proper implementation for cart image.
       cart_image: jQuery('.logo img').attr('src'),
       // @todo Add brand specific cart title.
@@ -215,17 +294,43 @@ function getVariantsInfo(product) {
       parent_sku: variant.parent_sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
       // @todo Fetch layout dynamically.
-      layout: 'classic',
+      layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: '',
       stock: {
         qty: variantInfo.stock_data.qty,
         // We get only enabled products in the API.
         status: 1,
-        maxSaleQty: variantInfo.stock_data.max_sale_qty,
       },
       // @todo Implement this.
       description: '',
-      price: rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
+      price: globalThis.rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
+      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
+      // @todo Add promotions value here.
+      promotionsRaw: [],
+      // @todo Add free gift promotion value here.
+      freeGiftPromotion: [],
+      url: getProductUrls(product.url_key),
+    }
+
+    // Set max sale quantity data.
+    info[variantSku].maxSaleQty = 0;
+    info[variantSku].max_sale_qty_parent = false;
+
+    if (isQuantityLimitEnabled()) {
+      let maxSaleQuantity = product.maxSaleQty;
+      // If max sale quantity is available at parent level, we use that.
+      if (product.maxSaleQty > 0) {
+        info[variantSku].max_sale_qty_parent = true;
+      }
+
+      // If order limit is not set for parent then get the order limit for each
+      // variant.
+      maxSaleQuantity = maxSaleQuantity > 0 ? maxSaleQuantity : getMaxSaleQuantity(variantInfo);
+      if (maxSaleQuantity > 0) {
+        info[variantSku].maxSaleQty = maxSaleQuantity;
+        info[variantSku].stock.maxSaleQty = maxSaleQuantity;
+        info[variantSku].stock.orderLimitMsg = getMaxSaleQtyMessage(maxSaleQuantity);
+      }
     }
   });
 
@@ -244,23 +349,50 @@ function getVariantsInfo(product) {
  */
 function processProduct(product) {
   var productData = {
+    id: product.id,
     sku: product.sku,
     type: product.type_id,
     gtm_attributes: product.gtm_attributes,
     gallery: null,
     identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
+    // @todo Add proper implementation for cart image.
+    cart_image: jQuery('.logo img').attr('src'),
+    // @todo Add brand specific cart title.
+    cart_title: 'Temp title',
+    url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
+    priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
+    // @todo Add promotions value here.
+    promotionsRaw: [],
+    // @todo Add free gift promotion value here.
+    freeGiftPromotion: [],
+    is_non_refundable: product.non_refundable_products,
   };
 
-  if (productData.type === 'configurable') {
+  let maxSaleQty = 0;
+
+  if (productData.type === 'simple') {
+    maxSaleQty = isQuantityLimitEnabled() ? getMaxSaleQuantity(product) : maxSaleQty;
+  }
+  else if (productData.type === 'configurable') {
     productData.configurables = getConfigurables(product);
     productData.variants = getVariantsInfo(product);
+
+    if (isQuantityLimitEnabled()) {
+      maxSaleQty = getMaxSaleQuantity(product);
+    }
+  }
+
+  if (maxSaleQty > 0) {
+    productData.maxSaleQty = maxSaleQty;
+    productData.max_sale_qty_parent = false;
+    productData.orderLimitMsg = getMaxSaleQtyMessage(maxSaleQty);
   }
 
   // Add general bazaar voice data to product data if present.
   if (typeof drupalSettings.alshaya_bazaar_voice !== 'undefined') {
     var bazaarVoiceData = drupalSettings.alshaya_bazaar_voice;
     bazaarVoiceData.product = {
-      url: '/' + drupalSettings.path.currentLanguage + '/buy-' + product.url_key + '.html',
+      url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
       title: product.name,
       image_url: '',
     }
@@ -430,3 +562,179 @@ window.commerceBackend.storeProductDataOnAddToCart = function () {
   // We do nothing here for V2.
   return;
 }
+
+/**
+ * Gets the siblings and parent of the given sku.
+ *
+ * @param {string} sku
+ *   The given sku.
+ *
+ * @returns
+ *   An object containing the product skus in the keys and the product entities
+ * in the values.
+ * If sku is simple and is the main product, then sku is returned.
+ * If sku is simple a child product, then all the siblings and parent are
+ * returned.
+ * If sku is configurable, then the sku and its children are returned.
+ */
+function getSkuSiblingsAndParent(sku) {
+  const allProducts = window.commerceBackend.getProductData(null, null, false);
+  const data = {};
+
+  Object.keys(allProducts).forEach(function eachMainProduct(mainProductSku) {
+    const mainProduct = allProducts[mainProductSku];
+
+    if (mainProduct.sku === sku) {
+      data[sku] = mainProduct;
+      if (mainProduct.type_id === 'configurable') {
+        mainProduct.variants.forEach(function eachVariantProduct(variant) {
+          data[variant.product.sku] = variant.product;
+        });
+      }
+    }
+    else {
+      if (mainProduct.type_id === 'configurable') {
+        mainProduct.variants.forEach(function eachVariantProduct(variant) {
+          if (variant.product.sku === sku) {
+            data[mainProduct.sku] = mainProduct;
+            mainProduct.variants.forEach(function eachVariantProduct(variant) {
+              data[variant.product.sku] = variant.product;
+            });
+          }
+        });
+      }
+    }
+  });
+
+  return data;
+}
+
+/**
+ * Gets the labels data for the given product ID.
+ *
+ * @param sku
+ *   The sku value.
+ *
+ * @returns object
+ *   The labels data for the given product ID.
+ */
+window.commerceBackend.getLabelsData = async function (sku) {
+  if (typeof staticDataStore.labels === 'undefined') {
+    staticDataStore.labels = {};
+    staticDataStore.labels[sku] = null;
+  }
+
+  if (staticDataStore.labels[sku]) {
+    return staticDataStore.labels[sku];
+  }
+
+  const products = getSkuSiblingsAndParent(sku);
+  const productIds = {};
+  Object.keys(products).forEach(function (sku) {
+    staticDataStore.labels[sku] = [];
+    productIds[products[sku].id] = sku;
+  });
+
+  const labels = await globalThis.rcsPhCommerceBackend
+                                              .getData('labels', { productIds: Object.keys(productIds) }, null, drupalSettings.path.currentLanguage, '')
+
+  if (Array.isArray(labels) && labels.length) {
+    labels.forEach(function (productLabels) {
+      if (!productLabels.items.length) {
+        return;
+      }
+      const productId = productLabels.items[0].product_id;
+      const sku = productIds[productId];
+      staticDataStore.labels[sku] = productLabels.items;
+    });
+  }
+
+  return staticDataStore.labels[sku];
+}
+
+/**
+ * Renders the gallery for the given SKU.
+ *
+ * @param {object} product
+ *   The jQuery product object.
+ * @param {string} layout
+ *   The layout value.
+ * @param {string} productGallery
+ *   The gallery for the product.
+ * @param {string} sku
+ *   The SKU value.
+ * @param {string} parentSku
+ *   The parent SKU value if exists.
+ */
+window.commerceBackend.updateGallery = async function (product, layout, productGallery, sku, parentSku) {
+  let rawProduct = null;
+  const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
+  const productData = window.commerceBackend.getProductData(mainSku, null, false);
+
+  if (typeof parentSku === 'undefined') {
+    rawProduct = productData;
+  }
+  else {
+    Object.values(productData.variants).forEach(function (productVariant) {
+      if (sku === productVariant.product.sku) {
+        rawProduct = productVariant.product;
+      }
+    });
+  }
+
+  let labels = await window.commerceBackend.getLabelsData(sku);
+
+  // Maps gallery value from backend to the appropriate filter.
+  let galleryType = null;
+  switch (drupalSettings.alshayaRcs.pdpLayout) {
+    case 'pdp':
+      galleryType = 'classic-gallery';
+      break;
+  }
+
+  const gallery = globalThis.rcsPhRenderingEngine
+    .render(
+      drupalSettings,
+      galleryType,
+      {},
+      { labels },
+      rawProduct,
+      drupalSettings.path.currentLanguage,
+      null,
+    );
+
+  if (gallery === '' || gallery === null) {
+    return;
+  }
+
+  if (jQuery(product).find('.gallery-wrapper').length > 0) {
+    // Since matchback products are also inside main PDP, when we change the variant
+    // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
+    // first one which will be of main PDP to update main PDP gallery only.
+    jQuery(product).find('.gallery-wrapper').first().replaceWith(gallery);
+  }
+  else {
+    jQuery(product).find('#product-zoom-container').replaceWith(gallery);
+  }
+
+  if (layout === 'pdp-magazine') {
+    // Set timeout so that original behavior attachment is not affected.
+    setTimeout(function () {
+      Drupal.behaviors.magazine_gallery.attach(document);
+      Drupal.behaviors.pdpVideoPlayer.attach(document);
+    }, 1);
+  }
+  else {
+    // Hide the thumbnails till JS is applied.
+    // We use opacity through a class on parent to ensure JS get's applied
+    // properly and heights are calculated properly.
+    jQuery('#product-zoom-container', product).addClass('whiteout');
+    setTimeout(function () {
+      Drupal.behaviors.alshaya_product_zoom.attach(document);
+      Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
+
+      // Show thumbnails again.
+      jQuery('#product-zoom-container', product).removeClass('whiteout');
+    }, 1);
+  }
+};
