@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_sofa_sectional_page_attachments_alter(array &$page) {
+  // @todo attach library only when the feature is enabled,
+  // current page is a PDP page and one of the product category
+  // matches the category_ids in config.
+  // Attach the sofa_sectional library.
+  $page['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
+}
