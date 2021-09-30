@@ -106,7 +106,15 @@ exports.render = function render(
       // Add config to each item.
       inputs.forEach(function(item) {
         item['show_cart_form'] = (drupalSettings.rcsPhSettings.show_cart_form === 0) ? 'no-cart-form' : '';
+        if (drupalSettings.rcsPhSettings.configurable_use_parent_images) {
+          //
+        }
+        const assets = JSON.parse(item.variants[0].product.assets_teaser);
+        item['images'] = assets[0].styles;
+        item['url_key'] = `${drupalSettings.path.currentLanguage}/${item.url_key}.html`;
       });
+      media = inputs.assets_teaser
+
 
       // Render template.
       html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: inputs });

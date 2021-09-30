@@ -4,8 +4,8 @@
     <article data-sku="{{ sku }}" role="article" about="/{{ url_key }}" data-vmode="teaser">
       <a class="above-mobile-block product-link" href="/{{ url_key }}">
         <div class="image-label-wrapper">
-          {{#if media_gallery }}
-            <img src="{{ media_gallery.0.url }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+          {{#if images }}
+            <img src="{{ images.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
           {{/if}}
           <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
           </div>
@@ -43,9 +43,9 @@
         <tbody>
         <tr>
           <td class="sell--image">
-            {{#if media_gallery }}
+            {{#if images }}
               <a href="/{{ url_key }}" rel="bookmark">
-                <img src="{{ media_gallery.0.url }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+                <img src="{{ images.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
               </a>
             {{/if}}
             <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
