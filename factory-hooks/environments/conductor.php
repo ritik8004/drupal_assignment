@@ -1198,6 +1198,11 @@ $conductors = [
     'hmac_secret' => 'YTQ0NjE0NzEtYTExNS00',
     'site_id' => 237,
   ],
+  'muqa_qa' => [
+    'hmac_id' => '5c70d907124c4b9ba9c54efd18471650',
+    'hmac_secret' => 'MThkMjJmNGYtMmQ0Ny00',
+    'site_id' => 496,
+  ],
   'mukw_uat' => [
     'hmac_id' => 'e8dc16861254494e80c36dd3255aab5d',
     'hmac_secret' => 'OTY0OTRjZTYtYzMyZC00',
