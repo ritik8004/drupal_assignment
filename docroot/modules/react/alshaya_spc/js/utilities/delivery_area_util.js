@@ -83,7 +83,10 @@ export const getCartShippingMethods = (currArea, sku) => window.commerceBackend.
 export const getDeliveryAreaStorage = () => {
   const deliveryArea = getStorageInfo('deliveryinfo-areadata');
   if (deliveryArea !== null) {
-    return deliveryArea;
+    const { currentLanguage } = drupalSettings.path;
+    if (currentLanguage in deliveryArea.label) {
+      return deliveryArea;
+    }
   }
   return null;
 };

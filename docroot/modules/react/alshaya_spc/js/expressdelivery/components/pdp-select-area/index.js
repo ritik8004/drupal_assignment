@@ -44,7 +44,6 @@ export default class PdpSelectArea extends React.Component {
   };
 
   openModal = () => {
-    // to make sure that markup is present in DOM.
     document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
     return (
       <AreaListBlock
