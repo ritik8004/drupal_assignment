@@ -52,10 +52,11 @@ function alshaya_rcs_magazine_preprocess_field__node__field_magazine_shop_the_st
 
   // Add Drupal settings.
   $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $variables['#attached']['drupalSettings'] = [
     'rcsPhSettings' => [
       'show_cart_form' => (integer) $product_settings->get('show_cart_form_in_related'),
-      'configurable_use_parent_images' => (integer) $product_settings->get('configurable_use_parent_images'),
+      'configurable_use_parent_images' => $product_display_settings->get('configurable_use_parent_images'),
     ],
   ];
 }
