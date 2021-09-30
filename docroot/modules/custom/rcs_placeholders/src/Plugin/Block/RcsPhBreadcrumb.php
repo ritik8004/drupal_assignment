@@ -55,7 +55,11 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
         // Placeholder for breadcrumbs.
         Link::fromTextAndUrl(
           '#rcs.breadcrumb.text#',
-          Url::fromUserInput('#rcs.breadcrumb.url#')
+          Url::fromUserInput('#rcs.breadcrumb.url#', [
+            'attributes' => [
+              'class' => ['#rcs.breadcrumb.classes#'],
+            ],
+          ]),
         ),
       ],
     ];

@@ -1,7 +1,7 @@
 const rcsPhBreadcrumbRenderer = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
 
 /**
- * Breadcrumb renderer for product pages.
+ * Breadcrumb renderer for listing pages.
  *
  * @param settings
  *    Drupal settings.
@@ -38,10 +38,11 @@ exports.normalize = function normalize(
   }
 
   if (!Array.isArray(data.breadcrumbs) || data.breadcrumbs.length < 1) {
-    // For root level categories, push only name.
+    // For root level categories, push name without a url.
     normalized.push({
       url: null,
       text: data.name,
+      data_url: data.url_path,
     });
 
     return normalized;
@@ -52,6 +53,7 @@ exports.normalize = function normalize(
     normalized.push({
       url: data.breadcrumbs[i].category_url_path,
       text: data.breadcrumbs[i].category_name,
+      data_url: data.breadcrumbs[i].category_url_path,
     });
   });
 
@@ -59,6 +61,7 @@ exports.normalize = function normalize(
   normalized.push({
     url: null,
     text: data.name,
+    data_url: data.url_path,
   });
 
   return normalized;

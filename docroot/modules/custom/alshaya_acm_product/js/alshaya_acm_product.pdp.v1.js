@@ -102,6 +102,19 @@ window.commerceBackend.storeProductDataOnAddToCart = function (viewMode, product
 }
 
 /**
+ * Gets the configurable combinations for the given sku.
+ *
+ * @param {string} sku
+ *   The sku value.
+ *
+ * @returns {object}
+ *   The object containing the configurable combinations for the given sku.
+ */
+window.commerceBackend.getConfigurableCombinations = function (sku) {
+  return drupalSettings.configurableCombinations[sku];
+}
+
+/**
  * Renders the gallery for the given SKU.
  *
  * @param {object} product

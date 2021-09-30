@@ -50,6 +50,7 @@ function mergeDeep(target, source) {
   return output;
   }
 }
+
 /**
  * Gets the required data for rcs_product.
  *
@@ -206,6 +207,69 @@ function getVariantConfigurableOptions(product, variantAttributes) {
 }
 
 /**
+ * Get the product urls for the different languages.
+ *
+ * @param {string} urlKey
+ *   The url key value of the product.
+ * @param {string} langcode (optional)
+ *   The specific langcode to get the product url for.
+ */
+ function getProductUrls(urlKey, langcode) {
+  const urls = {};
+  drupalSettings.alshayaRcs.languages.forEach(function (language) {
+    urls[language] = `/${language}/${urlKey}.html`;
+  });
+
+  return (typeof langcode !== 'undefined') ? urls[langcode] : urls;
+}
+
+/**
+ * Gets the max sale quantity for the product.
+ *
+ * @param {object} product
+ *   The product object.
+ *
+ * @returns {Number}
+ *   The max sale quantity for the product or 0.
+ */
+function getMaxSaleQuantity(product) {
+  return Drupal.hasValue(product.stock_data.max_sale_qty) ? product.stock_data.max_sale_qty : 0;
+}
+
+/**
+ * Get to know if quantity limit is enabled.
+ *
+ * @returns {Boolean}
+ *   true if quantity limit is enabled, else false.
+ */
+function isQuantityLimitEnabled() {
+  return drupalSettings.alshayaRcs.quantityLimitEnabled;
+}
+
+/**
+ * Get the max sale quantity message.
+ *
+ * @param {Number} maxSaleQty
+ *   The max sale quantity value.
+ *
+ * @returns {String}
+ *   The message.
+ */
+function getMaxSaleQtyMessage(maxSaleQty) {
+  const hideMaxLimitMsg = drupalSettings.alshayaRcs.hide_max_qty_limit_message;
+  let message = '';
+
+  if (Drupal.hasValue(maxSaleQty) && maxSaleQty > 0 && !hideMaxLimitMsg) {
+     message = handlebarsRenderer.render('product.order_quantity_limit', {
+      message: Drupal.t('Limited to @max_sale_qty per customer', {'@max_sale_qty': maxSaleQty}),
+      limit_reached: false,
+    });
+  }
+
+  return message;
+}
+
+/**
  * Gets the variants for the given product entity.
  *
  * @param {object} product
@@ -216,8 +280,9 @@ function getVariantsInfo(product) {
 
   product.variants.forEach(function (variant) {
     const variantInfo = variant.product;
+    const variantSku = variantInfo.sku;
     // @todo Add code for commented keys.
-    info[variantInfo.sku] = {
+    info[variantSku] = {
       // @todo Add proper implementation for cart image.
       cart_image: jQuery('.logo img').attr('src'),
       // @todo Add brand specific cart title.
@@ -235,11 +300,38 @@ function getVariantsInfo(product) {
         qty: variantInfo.stock_data.qty,
         // We get only enabled products in the API.
         status: 1,
-        maxSaleQty: variantInfo.stock_data.max_sale_qty,
       },
       // @todo Implement this.
       description: '',
-      price: rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
+      price: globalThis.rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
+      priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
+      // @todo Add promotions value here.
+      promotionsRaw: [],
+      // @todo Add free gift promotion value here.
+      freeGiftPromotion: [],
+      // @todo Add proper url value here.
+      url: getProductUrls(product.url_key),
+    }
+
+    // Set max sale quantity data.
+    info[variantSku].maxSaleQty = 0;
+    info[variantSku].max_sale_qty_parent = false;
+
+    if (isQuantityLimitEnabled()) {
+      let maxSaleQuantity = product.maxSaleQty;
+      // If max sale quantity is available at parent level, we use that.
+      if (product.maxSaleQty > 0) {
+        info[variantSku].max_sale_qty_parent = true;
+      }
+
+      // If order limit is not set for parent then get the order limit for each
+      // variant.
+      maxSaleQuantity = maxSaleQuantity > 0 ? maxSaleQuantity : getMaxSaleQuantity(variantInfo);
+      if (maxSaleQuantity > 0) {
+        info[variantSku].maxSaleQty = maxSaleQuantity;
+        info[variantSku].stock.maxSaleQty = maxSaleQuantity;
+        info[variantSku].stock.orderLimitMsg = getMaxSaleQtyMessage(maxSaleQuantity);
+      }
     }
   });
 
@@ -264,18 +356,44 @@ function processProduct(product) {
     gtm_attributes: product.gtm_attributes,
     gallery: null,
     identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
+    // @todo Add proper implementation for cart image.
+    cart_image: jQuery('.logo img').attr('src'),
+    // @todo Add brand specific cart title.
+    cart_title: 'Temp title',
+    url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
+    priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
+    // @todo Add promotions value here.
+    promotionsRaw: [],
+    // @todo Add free gift promotion value here.
+    freeGiftPromotion: [],
+    is_non_refundable: product.non_refundable_products,
   };
 
-  if (productData.type === 'configurable') {
+  let maxSaleQty = 0;
+
+  if (productData.type === 'simple') {
+    maxSaleQty = isQuantityLimitEnabled() ? getMaxSaleQuantity(product) : maxSaleQty;
+  }
+  else if (productData.type === 'configurable') {
     productData.configurables = getConfigurables(product);
     productData.variants = getVariantsInfo(product);
+
+    if (isQuantityLimitEnabled()) {
+      maxSaleQty = getMaxSaleQuantity(product);
+    }
+  }
+
+  if (maxSaleQty > 0) {
+    productData.maxSaleQty = maxSaleQty;
+    productData.max_sale_qty_parent = false;
+    productData.orderLimitMsg = getMaxSaleQtyMessage(maxSaleQty);
   }
 
   // Add general bazaar voice data to product data if present.
   if (typeof drupalSettings.alshaya_bazaar_voice !== 'undefined') {
     var bazaarVoiceData = drupalSettings.alshaya_bazaar_voice;
     bazaarVoiceData.product = {
-      url: '/' + drupalSettings.path.currentLanguage + '/buy-' + product.url_key + '.html',
+      url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
       title: product.name,
       image_url: '',
     }

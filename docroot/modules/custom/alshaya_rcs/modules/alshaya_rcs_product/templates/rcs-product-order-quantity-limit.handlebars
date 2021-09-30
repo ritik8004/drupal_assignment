@@ -1,0 +1,9 @@
+{{#if message }}
+  {{#if limit_reached }}
+    <span class="order-qty-limit-msg-inner-wrapper limit-reached">
+  {{else }}
+    <span class="order-qty-limit-msg-inner-wrapper">
+  {{/if}}
+    {{ message }}
+  </span>
+{{/if}}

@@ -173,6 +173,13 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
   $build['#attached']['library'][] = 'alshaya_rcs_product/utility';
 
+  $acm_settings = \Drupal::config('alshaya_acm.settings');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
+  $isQuantityLimitEnabled = $acm_settings->get('quantity_limit_enabled');
+  if ($isQuantityLimitEnabled) {
+    $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
+  }
+
   $build['price_block'] = [
     '#theme' => 'rcs_commerce_price',
   ];
@@ -204,12 +211,16 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $sku_manager->showImagesFromChildrenAfterAllOptionsSelected();
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpLayout'] = $sku_manager->getPdpLayout($entity);
 
-  $recommended_product_settings = \Drupal::config('alshaya_acm.settings');
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $recommended_product_settings->getCacheTags());
+  $build['#attached']['drupalSettings']['alshayaRcs']['quantityLimitEnabled'] = $isQuantityLimitEnabled;
+  $build['#attached']['drupalSettings']['alshayaRcs']['hide_max_qty_limit_message'] = $acm_settings->get('hide_max_qty_limit_message');
 
   $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
   $color_split_config = \Drupal::config('alshaya_color_split.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
+
+  // Provide the languages to build the product urls.
+  $languages = \Drupal::languageManager()->getLanguages();
+  $build['#attached']['drupalSettings']['alshayaRcs']['languages'] = array_keys($languages);
 }
 
 /**
@@ -650,6 +661,10 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'meta_keyword',
       'og_meta_title',
       'og_meta_description',
+      'stock_data' => [
+        'max_sale_qty',
+        'qty',
+      ],
       '... on ConfigurableProduct' => [
         'configurable_options' => [
           'attribute_uid',
@@ -836,4 +851,6 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
     'description' => "$path/templates/rcs-field-description.handlebars",
     'short_description' => "$path/templates/rcs-field-short-description.handlebars",
   ];
+
+  $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
 }

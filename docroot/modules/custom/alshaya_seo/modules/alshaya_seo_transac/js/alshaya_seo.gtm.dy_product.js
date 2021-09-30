@@ -10,7 +10,14 @@
 
   // Trigger product impressions on scroll.
   $(document).once('gtm-dy').on('scroll', debounce(function (event) {
-    Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoGtmProductRecomDy.prepareProductImpressions, $('.dy_unit'), drupalSettings, event);
+    if ($('.dy_unit').length > 0) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(
+        Drupal.alshayaSeoGtmProductRecomDy.prepareProductImpressions,
+        $('.dy_unit'),
+        drupalSettings,
+        event
+      );
+    }
   }, 500));
 
   // Trigger product impressions on click of slider next/prev buttons.
@@ -70,11 +77,17 @@
    *    The list name.
    */
   Drupal.alshayaSeoGtmProductRecomDy.getRecommendationListName = function (element) {
+    var gtmListName = $('body').attr('gtm-list-name');
     var strategyId = element.closest('.dyMonitor').attr('data-dy-var-id');
+
+    if (typeof gtmListName === 'undefined') {
+      return (productRecommendationsSuffix + 'page-' + strategyId).toLowerCase();
+    }
+
     if ($('.dyMonitor').find('div.dy-404').length > 0) {
       return (productRecommendationsSuffix + 'page-404-' + strategyId).toLowerCase();
     }
-    var gtmListName = $('body').attr('gtm-list-name');
+
     var label = $('.dy-recommendations__title-container').find('.dy-recommendations__title.title--eng').text();
 
     return (productRecommendationsSuffix + gtmListName.replace('placeholder', label) + '-' + strategyId).toLowerCase();
