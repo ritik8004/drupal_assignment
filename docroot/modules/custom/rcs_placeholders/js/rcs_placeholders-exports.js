@@ -32,6 +32,19 @@ rcsWindowLocation = () => {
 }
 
 /**
+ * Gets data attributes from rcs placeholders.
+ *
+ * @param placeholder
+ *   The placeholder id.
+ * @return {DOMStringMap}
+ *   The data attributes.
+ */
+rcsGetDataAttributes = (placeholder) => {
+  const element = document.querySelector(`#rcs-ph-${placeholder}`);
+  return element.dataset;
+};
+
+/**
  * Utility function to redirect to page.
  *
  * @param {string} url

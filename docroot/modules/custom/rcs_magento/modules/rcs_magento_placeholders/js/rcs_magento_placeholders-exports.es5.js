@@ -129,19 +129,6 @@ exports.getEntity = async function getEntity(langcode) {
   return result;
 };
 
-/**
- * Gets data attributes from rcs placeholders.
- *
- * @param placeholder
- *   The placeholder id.
- * @return {DOMStringMap}
- *   The data attributes.
- */
-function getDataAttributes(placeholder) {
-  const element = document.querySelector(`#rcs-ph-${placeholder}`);
-  return element.dataset;
-}
-
 exports.getData = async function getData(placeholder, params, entity, langcode) {
   const request = {
     uri: '',
@@ -152,7 +139,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
   let response = null;
   let result = null;
-  const dataAttributes = getDataAttributes(placeholder);
+  const dataAttributes = rcsGetDataAttributes(placeholder);
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
     // Just return empty string so that render() function gets called later.

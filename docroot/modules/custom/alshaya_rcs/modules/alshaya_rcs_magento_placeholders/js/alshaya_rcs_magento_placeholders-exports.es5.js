@@ -88,21 +88,31 @@ exports.render = function render(
       break;
 
     case 'magazine_shop_the_story':
-      // Add config to each item.
-      inputs.forEach(function(item) {
+      let data = [];
+
+      // Sort results in the same order as in the CMS.
+      // @todo check if these overrides are for all brands.
+      const dataAttributes = rcsGetDataAttributes(placeholder);
+      JSON.parse(dataAttributes.skus).forEach((sku) => {
+        const i = inputs.findIndex(i => i.sku === sku);
+        const item = inputs[i];
+        // Add settings.
         item['show_cart_form'] = (drupalSettings.rcsPhSettings.show_cart_form === 0) ? 'no-cart-form' : '';
+
+        // Assets.
         if (drupalSettings.rcsPhSettings.configurable_use_parent_images) {
           //
         }
         const assets = JSON.parse(item.variants[0].product.assets_teaser);
         item['images'] = assets[0].styles;
         item['url_key'] = `${drupalSettings.path.currentLanguage}/${item.url_key}.html`;
-      });
-      media = inputs.assets_teaser
 
+        // Push item.
+        data.push(item);
+      });
 
       // Render template.
-      html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: inputs });
+      html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: data });
       break;
 
     case "delivery-option":

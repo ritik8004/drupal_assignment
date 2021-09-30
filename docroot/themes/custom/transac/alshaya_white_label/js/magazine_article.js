@@ -21,33 +21,33 @@
         speed: 300,
         responsive: [
           {
-            breakpoint: 930,
+            breakpoint: 970,
             settings: {
               slidesToShow: 4,
               slidesToScroll: 1,
               infinite: true,
-              dots: false,
+              dots: false
             }
           },
           {
-            breakpoint: 790,
+            breakpoint: 830,
             settings: {
               slidesToShow: 3,
-              slidesToScroll: 1,
+              slidesToScroll: 1
             }
           },
           {
             breakpoint: 650,
             settings: {
               slidesToShow: 2,
-              slidesToScroll: 1,
+              slidesToScroll: 1
             }
           },
           {
             breakpoint: 400,
             settings: {
               slidesToShow: 1,
-              slidesToScroll: 1,
+              slidesToScroll: 1
             }
           }
         ]
