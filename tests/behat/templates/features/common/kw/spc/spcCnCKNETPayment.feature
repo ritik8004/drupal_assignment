@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @tbskwuat @mckwuat @flkwuat @bbwkwuat @pbkwuat @hmkwuat @westelmkwuat @bpkwuat
+@javascript @KNET @KNetPayment @clickCollect @pbkkwuat @tbskwuat @mckwuat @flkwuat @bbwkwuat @pbkwuat @hmkwuat @westelmkwuat @bpkwuat
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
