@@ -1,8 +1,9 @@
-#hits {
-  padding-top: 1.25rem;
-
-  @include breakpoint($upto-desktop) {
-    padding-top: 0.5rem;
+#hits,
+#plp-hits {
+  .chrome & {
+    @include breakpoint($desktop) {
+      padding-top: 2.1875rem;
+    }
   }
 
   .js-pager__items.pager {
