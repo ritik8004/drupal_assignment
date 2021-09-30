@@ -214,13 +214,22 @@ body.overlay-delivery-area {
     font-family: $alshaya-bold;
     display: flex;
 
+    @include breakpoint($only-mobile) {
+      padding: 0;
+    }
+
     span {
       display: flex;
       align-items: center;
+      margin: 0;
 
       &:nth-child(2),
       &:nth-child(3) {
         padding-#{$left}: 1.25rem;
+
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: 0.9375rem;
+        }
       }
 
       &::before {
@@ -229,6 +238,10 @@ body.overlay-delivery-area {
         height: 1.5rem;
         display: inline-block;
         margin-#{$right}: 0.625rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 0.375rem;
+        }
       }
 
       &.sameday-delivery {
