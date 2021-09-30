@@ -1694,13 +1694,11 @@ window.commerceBackend.getCartForCheckout = async () => {
  *   Shipping address info.
  * @param {string} action
  *   Action to perform.
- * @param {bool} updateBillingDetails
- *   Whether billing needs to update or not.
  *
  * @returns {Promise<object>}
  *   Cart data.
  * */
-const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
+const addCncShippingInfo = async (shippingData, action) => {
   const { store } = { ...shippingData };
 
   // Create the address object with static data and store cart address.
@@ -1746,14 +1744,14 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
   ) {
     return cart;
   }
-  const cartData = cart.data;
 
   // Setting city value as 'NONE' so that, we can
   // identify if billing address added is default one and
   // not actually added by the customer on FE.
-  if (updateBillingDetails
-    || _isEmpty(cartData.billing_address) || _isEmpty(cartData.billing_address.city)
-    || cartData.billing_address.city === 'NONE') {
+  if (_isEmpty(cart.data.cart.billing_address)
+    || _isEmpty(cart.data.cart.billing_address.city)
+    || cart.data.cart.billing_address.city === 'NONE'
+  ) {
     params.shipping.shipping_address.city = 'NONE';
     // Adding billing address.
     cart = await updateBilling(params.shipping.shipping_address);
@@ -1808,7 +1806,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
       '@cartId': cartId,
     });
 
-    cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
+    cart = await addCncShippingInfo(shippingInfo, data.action);
 
     // Process cart data.
     cart.data = await getProcessedCheckoutData(cart.data);
