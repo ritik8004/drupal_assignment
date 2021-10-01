@@ -21,7 +21,6 @@ slack_file="/var/www/html/$subscription.$target_env/scripts/deployment/post_to_s
 
 echo -e "\n"
 
-## In case install/config file have been updated, we reset the sites.
 if echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
   echo "Change in FE detected, clearing cache."
   sh $slack_file "Doing drush crf to reflect FE changes on $subscription.$target_env."
