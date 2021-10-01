@@ -156,6 +156,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       foreach ($vars['#attached']['library'] as $key => $library) {
         if ($library === 'alshaya_spc/express_delivery') {
           unset($vars['#attached']['library'][$key]);
+          break;
         }
       }
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
