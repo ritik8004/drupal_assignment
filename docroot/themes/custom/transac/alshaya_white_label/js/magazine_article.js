@@ -7,6 +7,7 @@
 
 (function ($, Drupal) {
   'use strict';
+
   Drupal.behaviors.magazineArticleSlider = {
     attach: function (context, settings) {
       var optionsShopByStory = {
@@ -16,41 +17,7 @@
         slidesToScroll: 1,
         focusOnSelect: false,
         touchThreshold: 1000,
-        infinite: false,
-        accessibility: true,
-        speed: 300,
-        responsive: [
-          {
-            breakpoint: 970,
-            settings: {
-              slidesToShow: 4,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: false
-            }
-          },
-          {
-            breakpoint: 830,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1
-            }
-          },
-          {
-            breakpoint: 650,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1
-            }
-          },
-          {
-            breakpoint: 400,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1
-            }
-          }
-        ]
+        infinite: false
       };
 
       var optionsHeroImageBanner = {

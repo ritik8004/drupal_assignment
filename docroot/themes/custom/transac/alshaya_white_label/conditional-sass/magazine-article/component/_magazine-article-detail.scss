@@ -192,7 +192,7 @@ body {
       text-align: $left;
 
       @include breakpoint($only-mobile) {
-        margin: 0 0.5rem;
+        margin: 0;
       }
     }
 
@@ -236,6 +236,29 @@ body {
         display: inline-block;
         margin-left: 0.125rem;
         margin-right: 0.125rem;
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .field__items {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding-bottom: 1.25rem;
+
+      .field__item {
+        width: 29%;
+        display: inline-block;
+        vertical-align: top;
+        white-space: normal;
+
+        @include breakpoint($only-mobile) {
+          width: 37%;
+          margin-#{$right}: 0.625rem;
+        }
       }
     }
   }
