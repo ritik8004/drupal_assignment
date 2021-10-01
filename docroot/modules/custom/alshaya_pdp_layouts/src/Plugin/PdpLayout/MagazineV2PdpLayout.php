@@ -152,6 +152,12 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#cache']['tags'] = Cache::mergeTags($vars['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
     // Checking if express delivery enabled.
     if ($express_delivery_config->get('status')) {
+      $vars['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v2';
+      foreach ($vars['#attached']['library'] as $key => $library) {
+        if ($library === 'alshaya_spc/express_delivery') {
+          unset($vars['#attached']['library'][$key]);
+        }
+      }
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
       // Show delivery options as per order in express delivery config.
       $delivery_options = alshaya_acm_product_get_delivery_options($sku);
