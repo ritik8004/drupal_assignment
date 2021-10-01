@@ -295,16 +295,12 @@
             "drupal/wbm2cm": {
                 "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
             },
-            "drupal/media_entity": {
-                "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
-            },
             "drupal/views_infinite_scroll": {
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
             },
             "drupal/restrict_role_login_by_ip": {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
-                "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch",
-                "D9 compability fixes": "https://www.drupal.org/files/issues/2021-09-21/restrict-role-login-by-ip-d9-compatibility-3238163-2.patch"
+                "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
             },
             "drupal/seckit": {
                 "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch",
