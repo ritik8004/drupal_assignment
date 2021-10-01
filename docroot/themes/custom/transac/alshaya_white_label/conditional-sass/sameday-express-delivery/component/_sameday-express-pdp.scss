@@ -11,6 +11,7 @@
     font-size: 0.8125rem;
     padding: 0.5rem 1rem;
     border: 1px solid $spc-cart-express-delivery-border;
+    width: 14.6875rem;
 
     &:nth-child(2) {
       margin-top: 0.625rem;
@@ -125,6 +126,10 @@
     align-items: center;
     line-height: 1rem;
     width: 16.5rem;
+
+    @include breakpoint($only-mobile) {
+      width: 15.3125rem;
+    }
 
     @include breakpoint($only-tablet) {
       width: 12.1875rem;
