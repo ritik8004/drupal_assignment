@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import { getbazaarVoiceSettings } from './request';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getStorageInfo, setStorageInfo } from '../storage';
@@ -24,7 +24,7 @@ export function getTranslations(params, fromLang, toLang) {
   url += `&source=${fromLang}`;
   url += `&target=${toLang}`;
 
-  return Axios.post(url)
+  return axios.post(url)
     .then((response) => {
       dispatchCustomEvent('showMessage', { data: response });
       return response;

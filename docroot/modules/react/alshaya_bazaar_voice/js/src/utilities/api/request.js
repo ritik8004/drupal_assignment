@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export function getLanguageCode() {
@@ -45,7 +45,7 @@ export function getUserDetails(productId = undefined) {
 }
 
 export function doRequest(url) {
-  return Axios.get(url)
+  return axios.get(url)
     .then((response) => {
       dispatchCustomEvent('showMessage', { data: response });
       return response;
@@ -57,7 +57,7 @@ export function doRequest(url) {
 }
 
 export function postRequest(url, data) {
-  return Axios.post(url, data)
+  return axios.post(url, data)
     .then((response) => {
       dispatchCustomEvent('showMessage', { data: response });
       return response;
