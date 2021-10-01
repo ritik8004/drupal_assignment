@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import qs from 'qs';
 import _isArray from 'lodash/isArray';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -386,7 +386,7 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
   params.headers = params.headers || {};
   params.headers.RequestTime = Date.now();
 
-  return Axios(params)
+  return axios(params)
     .then((response) => handleResponse(response))
     .catch((error) => {
       if (error.response) {
@@ -440,7 +440,7 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
   params.headers = params.headers || {};
   params.headers.RequestTime = Date.now();
 
-  return Axios(params)
+  return axios(params)
     .then((response) => logApiStats(response))
     .catch((error) => {
       if (hasValue(error.response) && hasValue(error.response.status)) {

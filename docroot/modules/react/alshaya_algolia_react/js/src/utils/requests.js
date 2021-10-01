@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import _invert from 'lodash/invert';
 
 function getStorageKey(facetName) {
@@ -59,7 +59,7 @@ export function makeFacetAliasApiRequest(facetName) {
   const requestUri = Drupal.url(`facets-aliases/${facetName}`);
   if (!apiReqeustInQueue[facetName]) {
     apiReqeustInQueue[facetName] = true;
-    Axios.get(requestUri).then((response) => {
+    axios.get(requestUri).then((response) => {
       setFacetStorage(facetName, response.data);
     }).catch(() => delete apiReqeustInQueue[facetName]);
   }
@@ -75,11 +75,11 @@ export async function asyncFacetValuesRequest(apiRequests, inverted = true) {
   const requestUrls = [];
   apiRequests.forEach((facetKey) => {
     apiReqeustInQueue[facetKey] = true;
-    requestUrls[facetKey] = Axios.get(Drupal.url(`facets-aliases/${facetKey}`));
+    requestUrls[facetKey] = axios.get(Drupal.url(`facets-aliases/${facetKey}`));
   });
   // fetch data from a url endpoint
   try {
-    const response = await Axios.all(Object.values(requestUrls));
+    const response = await axios.all(Object.values(requestUrls));
     const data = [];
     Object.keys(requestUrls).forEach((key, index) => {
       if (response[index].data && Object.keys(response[index].data).length > 0) {
