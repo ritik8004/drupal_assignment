@@ -213,6 +213,7 @@ body.overlay-delivery-area {
     font-size: 0.75rem;
     font-family: $alshaya-bold;
     display: flex;
+    justify-content: center;
 
     @include breakpoint($only-mobile) {
       padding: 0;
