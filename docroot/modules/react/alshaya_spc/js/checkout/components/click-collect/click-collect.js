@@ -536,7 +536,7 @@ class ClickCollect extends React.Component {
               )}
               {outsideCountryError === true
               && (
-                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable">
+                <CheckoutMessage type="warning" context="click-n-collect-store-modal modal location-disable outside-country-error">
                   {parse(getStringMessage('location_outside_country_cnc'))}
                   <button type="button" onClick={(e) => this.dismissErrorMessage(e, 'outsidecountry')}>
                     {getStringMessage('dismiss')}
