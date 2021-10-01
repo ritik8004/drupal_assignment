@@ -201,6 +201,9 @@ class PromotionProductListResource extends ResourceBase {
             $this->mobileAppUtility->throwException();
           }
         }
+        else {
+          $this->mobileAppUtility->throwException();
+        }
       }
       // If node is not of promotion type or active.
       if ($node->bundle() != self::NODE_BUNDLE || !$node->isPublished()) {
