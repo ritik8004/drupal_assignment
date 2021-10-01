@@ -754,6 +754,11 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
           'category_url_path',
         ],
       ],
+      'promotions' => [
+        'type',
+        'label',
+        'url',
+      ],
     ],
   ];
 

@@ -75,3 +75,36 @@ function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entit
     'product_teaser' => "$path/templates/product-teaser.handlebars",
   ];
 }
+
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_rcs_magazine_rcs_placeholders_graphql_query_alter(&$queries) {
+  // Add media fields.
+  array_push($queries['products']['items'],
+    'asset_ids',
+    'asset_type',
+    'assets_pdp',
+    'assets_cart',
+    'assets_swatch',
+    'assets_teaser',
+  );
+
+  $queries['products']['items']['... on ConfigurableProduct'] = [
+    'variants' => [
+      'product' => [
+        'asset_ids',
+        'asset_type',
+        'assets_pdp',
+        'assets_plp',
+        'assets_cart',
+        'assets_swatch',
+        'assets_teaser',
+        'rgb_color',
+        'color',
+        'swatch_image',
+      ]
+    ]
+  ];
+}

@@ -41,41 +41,6 @@ function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$queries) {
     'composition',
     'washing_instructions',
     'article_warning');
-
-  // Add fields for promotions;
-  $queries['products']['items']['promotions'] = [
-    'type',
-    'label',
-    'url',
-  ];
-
-  // Add media fields.
-  // @todo check if these fields should be in custom modules
-  array_push($queries['products']['items'],
-    'asset_ids',
-    'asset_type',
-    'assets_pdp',
-    'assets_cart',
-    'assets_swatch',
-    'assets_teaser',
-  );
-
-  $queries['products']['items']['... on ConfigurableProduct'] = [
-    'variants' => [
-      'product' => [
-        'asset_ids',
-        'asset_type',
-        'assets_pdp',
-        'assets_plp',
-        'assets_cart',
-        'assets_swatch',
-        'assets_teaser',
-        'rgb_color',
-        'color',
-        'swatch_image',
-      ]
-    ]
-  ];
 }
 
 /**
