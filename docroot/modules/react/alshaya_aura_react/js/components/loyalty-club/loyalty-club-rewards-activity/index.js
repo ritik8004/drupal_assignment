@@ -38,11 +38,11 @@ class LoyaltyClubRewardsActivity extends React.Component {
     this.fetchRewardActivity('', '', 1, '');
   }
 
-  fetchRewardActivity = (fromDate = '', toDate = '', maxResults = 0, channel = '') => {
+  fetchRewardActivity = (fromDate = '', toDate = '', maxResults = 0, type = '') => {
     addInlineLoader('.reward-activity');
     // API call to get reward activity for logged in users.
     const { rewardActivityTimeLimit } = getAuraConfig();
-    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${channel}&duration=${rewardActivityTimeLimit}`;
+    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${type}&duration=${rewardActivityTimeLimit}`;
     const apiData = getAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -52,17 +52,19 @@ class LoyaltyClubRewardsActivity extends React.Component {
           this.setState({
             activity: result.data.data || null,
             wait: false,
+            fromDate,
+            toDate,
+            type,
           });
           this.setFromAndToDate(result.data.data);
 
           statement = result.data.data;
         }
 
-        if (Array.isArray(statement) && statement.length === 0) {
-          this.setState({
-            noStatement: true,
-          });
-        }
+        const hideHeader = !!((Array.isArray(statement) && statement.length === 0));
+        this.setState({
+          noStatement: hideHeader,
+        });
         removeInlineLoader('.reward-activity');
       });
     }
@@ -102,7 +104,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     Object.entries(activity).forEach(([, transaction]) => {
       statement.push(
-        <div className="statement-row" key={transaction.date + transaction.orderNo + transaction.orderTotal}>
+        <div className="statement-row" key={transaction.auraPoints + transaction.orderNo}>
           <span className="order-id">{transaction.orderNo}</span>
           <span className="date">{formatDate(transaction.date, 'DD-Mon-YYYY')}</span>
           <span className="amount">{`${transaction.currencyCode} ${transaction.orderTotal}`}</span>
@@ -144,9 +146,6 @@ class LoyaltyClubRewardsActivity extends React.Component {
       : '';
 
     this.fetchRewardActivity(fromDate, toDate, 0, type);
-    this.setState({
-      type,
-    });
   };
 
   handleDateChange = (selectedOption) => {
@@ -156,10 +155,6 @@ class LoyaltyClubRewardsActivity extends React.Component {
     const { type } = this.state;
 
     this.fetchRewardActivity(fromDate, toDate, 0, type);
-    this.setState({
-      fromDate,
-      toDate,
-    });
   };
 
   render() {
