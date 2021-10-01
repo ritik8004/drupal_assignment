@@ -284,7 +284,7 @@
       <tr class="delivery-charge-row">
         <td class="desktop-only">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
-        <td class="right--align">{{ "Delivery charge"|t }}</td>
+        <td class="right--align">{{ order_details.is_pudo_pickup ? "Collection Charge"|t : "Delivery charge"|t }}</td>
         <td class="blend">
           {{ order_details.delivery_charge }}
         </td>
