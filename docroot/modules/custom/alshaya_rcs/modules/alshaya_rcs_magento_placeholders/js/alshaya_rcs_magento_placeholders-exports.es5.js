@@ -87,7 +87,7 @@ exports.render = function render(
       }
       break;
 
-    case 'magazine_shop_the_story':
+    case 'field_magazine_shop_the_story':
       let data = [];
 
       // Sort results in the same order as in the CMS.
@@ -103,9 +103,6 @@ exports.render = function render(
         item['lang_code'] = drupalSettings.path.currentLanguage;
 
         // Assets.
-        if (drupalSettings.rcsPhSettings.configurable_use_parent_images) {
-          //
-        }
         const assets = JSON.parse(item.variants[0].product.assets_teaser);
         item['images'] = assets[0].styles;
 

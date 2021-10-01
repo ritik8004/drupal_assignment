@@ -57,10 +57,12 @@
       // When RCS is enabled, we wait until the field items are populated by RCS.
       var s2 = '.field--name-field-magazine-shop-the-story.rcs .rcs-field__items';
 
-      var shopByStory = $(s1 + ', ' + s2);
-      shopByStory.each(function () {
-        applyRtl($(this), optionsShopByStory);
-      });
+      // For tablets and mobile we don't want to apply slickSlider.
+      if ($(window).width() > 1023) {
+        $(s1 + ', ' + s2).each(function () {
+          applyRtl($(this), optionsShopByStory);
+        });
+      }
 
       var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
       magazineHeroBanner.each(function () {

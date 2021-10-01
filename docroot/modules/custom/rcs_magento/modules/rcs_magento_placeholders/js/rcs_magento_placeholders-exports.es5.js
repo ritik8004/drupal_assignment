@@ -180,7 +180,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       }
       break;
 
-    case 'magazine_shop_the_story':
+    case 'field_magazine_shop_the_story':
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);

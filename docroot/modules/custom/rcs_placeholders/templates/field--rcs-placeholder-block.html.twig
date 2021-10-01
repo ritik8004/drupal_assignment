@@ -38,24 +38,30 @@
  */
 #}
 {%
-set classes = [
-'field',
-'field--name-' ~ field_name|clean_class,
-'field--type-' ~ field_type|clean_class,
-'field--label-' ~ label_display,
+  set classes = [
+  'rcs',
+  'field',
+  'field--name-' ~ field_name|clean_class,
+  'field--type-' ~ field_type|clean_class,
+  'field--label-' ~ label_display,
+  label_display == 'inline' ? 'clearfix',
 ]
 %}
 {%
-set title_classes = [
-'field__label',
-'magazine-shop-the-story__label',
-label_display == 'visually_hidden' ? 'visually-hidden',
+  set title_classes = [
+  'field__label',
+  field_name|clean_class  ~ '__label',
+  label_display == 'visually_hidden' ? 'visually-hidden',
 ]
 %}
-
+{%
+  set field_id = field_name
+%}
 <div{{ attributes.addClass(classes) }}>
   <div{{ title_attributes.addClass(title_classes) }}>
     <span class="label-separator"> {{ label }} </span>
   </div>
-  <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+  <div id="rcs-ph-{{ field_id }}" {{ content_attributes }}">
+    <div class="rcs-loading"></div>
+  </div>
 </div>
