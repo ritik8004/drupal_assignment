@@ -45,7 +45,7 @@
         "drupal/endroid_qr_code": "^3.0",
         "drupal/entity_embed": "^1.2",
         "drupal/external_hreflang": "^1.0",
-        "drupal/facets": "1.0-alpha11",
+        "drupal/facets": "^1.8",
         "drupal/field_group": "^3.0@beta",
         "drupal/form_options_attributes": "^1.0",
         "drupal/geolocation": "^3.7",
@@ -221,23 +221,6 @@
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
                 "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
-            },
-            "drupal/facets": {
-                "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
-                "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
-                "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
-                "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
-                "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
-                "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
-                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch",
-                "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch",
-                "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
-                "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
-                "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2020-02-12/3095601-8.patch",
-                "CORE-16705 Resolve undefined index": "https://www.drupal.org/files/issues/2020-04-15/undefined-index-settings-3127730-1.patch",
-                "CORE-25698 improve performance": "patches/facets/CORE-25698_facets_WidgetPluginBase.patch",
-                "Fix Facets Summary Block Deriver definitions getter": "https://www.drupal.org/files/issues/2018-07-17/facets-summary_block_deriver_fix-2986243-02.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
