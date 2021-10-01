@@ -7,6 +7,14 @@
           color: $spc-delivery-info-text;
         }
       }
+
+      .spc-cnc-store-name.pudo-collection-list {
+        position: relative;
+
+        .store-distance {
+          #{$right}: 0;
+        }
+      }
     }
   }
 }
