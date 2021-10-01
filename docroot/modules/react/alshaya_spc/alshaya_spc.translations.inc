@@ -390,9 +390,6 @@ function _alshaya_spc_translations() {
     'Collection Charge' => [
       'ar' => 'رسوم الاستلام',
     ],
-    'Collection charge' => [
-      'ar' => 'رسوم الاستلام',
-    ],
     'available in collection point within' => [
       'ar' => 'متوفر في نقطة الاستلام خلال',
     ],

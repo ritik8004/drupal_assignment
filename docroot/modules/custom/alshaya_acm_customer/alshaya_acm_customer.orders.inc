@@ -214,7 +214,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['delivery_method'] = $shipping_info[0];
 
   $orderDetails['is_pudo_pickup'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
-  $orderDetails['delivery_charge'] = ($orderDetails['is_pudo_pickup'] === TRUE)
+  $orderDetails['delivery_charge'] = $orderDetails['is_pudo_pickup']
     ? alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount'])
     : alshaya_acm_price_format($order['totals']['shipping']);
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
