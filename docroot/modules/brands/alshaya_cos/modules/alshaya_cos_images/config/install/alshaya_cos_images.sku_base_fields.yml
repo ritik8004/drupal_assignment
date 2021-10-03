@@ -1,0 +1,5 @@
+fields:
+  assets:
+    label: 'Assets'
+    type: 'text_long'
+    translatable: 0
