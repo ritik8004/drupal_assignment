@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 import { placeOrder, removeFullScreenLoader } from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
@@ -56,7 +56,7 @@ const ApplePay = {
   onValidateMerchant: (event) => {
     const controllerUrl = Drupal.url('checkoutcom/applepay/validate');
     const validationUrl = `${controllerUrl}?u=${event.validationURL}`;
-    axios.get(validationUrl).then((merchantSession) => {
+    Axios.get(validationUrl).then((merchantSession) => {
       applePaySessionObject.completeMerchantValidation(merchantSession.data);
     }).catch((error) => {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 import dispatchCustomEvent from '../events';
 
 const PromotionsDynamicLabelsUtil = {
@@ -18,7 +18,7 @@ const PromotionsDynamicLabelsUtil = {
     // We set cacheable=1 so it is always treated as anonymous user request.
     apiUrl = `${apiUrl}?cacheable=1&context=web&${Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData)}`;
 
-    axios.get(apiUrl).then((response) => {
+    Axios.get(apiUrl).then((response) => {
       if (response.data.cart_labels !== undefined || response.data.products_labels !== undefined) {
         dispatchCustomEvent('applyDynamicPromotions', response.data);
       }
