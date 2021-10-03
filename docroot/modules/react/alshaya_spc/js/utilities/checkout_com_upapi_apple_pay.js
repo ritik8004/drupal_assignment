@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 import {
   getUpapiApplePayConfig,
   placeOrder,
@@ -62,7 +62,7 @@ const CheckoutComUpapiApplePay = {
   onValidateMerchant: (event) => {
     const controllerUrl = Drupal.url('checkoutcom/upapi/applepay/validate');
     const validationUrl = `${controllerUrl}?u=${event.validationURL}`;
-    axios.get(validationUrl).then((merchantSession) => {
+    Axios.get(validationUrl).then((merchantSession) => {
       applePaySessionObject.completeMerchantValidation(merchantSession.data);
     }).catch((error) => {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
@@ -91,7 +91,7 @@ const CheckoutComUpapiApplePay = {
         },
       },
     };
-    axios.post(url, params, {
+    Axios.post(url, params, {
       headers: {
         Authorization: upApiApplePayConfig.public_key,
       },

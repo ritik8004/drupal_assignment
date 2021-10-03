@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 import {
   getStorageInfo,
   removeStorageInfo,
@@ -183,7 +183,7 @@ const getApiEndpoint = (action, params = {}) => {
  * @returns {string}
  *   Thge ip address.
  */
-const getIp = () => axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
+const getIp = () => Axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
   .then((response) => {
     if (typeof response.data === 'undefined' || response.data === '') {
       return '';
