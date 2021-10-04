@@ -11,7 +11,6 @@ import {
 import QuantitySelector from '../../../../js/utilities/components/quantity-selector';
 import ErrorMessage from '../../../../js/utilities/components/error-message';
 import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
-import getStringMessage from '../../../../js/utilities/strings';
 
 export default class SofaSectionalForm extends React.Component {
   constructor(props) {
@@ -273,7 +272,7 @@ export default class SofaSectionalForm extends React.Component {
           options={getQuantityDropdownValues()}
           onChange={this.onQuantityChanged}
           quantity={quantity}
-          label={getStringMessage('quantity')}
+          label={Drupal.t('Quantity')}
         />
         <ErrorMessage message={errorMessage} />
         <div className="config-form-addtobag-button-wrapper">
@@ -285,7 +284,7 @@ export default class SofaSectionalForm extends React.Component {
             // Disable add to cart button if max sale limit has reached.
             disabled={isMaxSaleQtyReached(selectedVariant, productInfo)}
           >
-            {getStringMessage('add_to_cart')}
+            {Drupal.t('add to cart')}
           </button>
         </div>
       </>

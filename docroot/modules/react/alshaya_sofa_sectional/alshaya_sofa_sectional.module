@@ -6,21 +6,7 @@
  */
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\Core\Cache\Cache;
 use Drupal\node\Entity\Node;
-
-/**
- * Implements hook_theme().
- */
-function alshaya_sofa_sectional_theme() {
-  return [
-    'sofa_sectional_strings' => [
-      'variables' => [
-        'strings' => [],
-      ],
-    ],
-  ];
-}
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -35,19 +21,6 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
     return;
   };
 
+  // @todo add cache tags.
   $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
-}
-
-/**
- * Implements hook_preprocess_page().
- */
-function alshaya_sofa_sectional_preprocess_page(&$variables) {
-  \Drupal::moduleHandler()->loadInclude('alshaya_sofa_sectional', 'inc', 'alshaya_sofa_sectional.static_strings');
-  $sofa_sectional_strings = [
-    '#strings' => _alshaya_sofa_sectional_strings(),
-    '#theme' => 'sofa_sectional_strings',
-  ];
-
-  // @todo check if the other way available to pass the strings.
-  $variables['page']['content']['sofa_sectional_strings'] = $sofa_sectional_strings;
 }
