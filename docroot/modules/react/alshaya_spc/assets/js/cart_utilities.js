@@ -142,6 +142,7 @@
       'isNonRefundable': data.isNonRefundable,
       'created': new Date().getTime(),
       'stock': data.stock,
+      'cncEnabled': data.cncEnabled,
     };
 
     localStorage.setItem(key, JSON.stringify(productData));

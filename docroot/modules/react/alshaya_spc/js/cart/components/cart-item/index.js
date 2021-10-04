@@ -35,8 +35,7 @@ export default class CartItem extends React.Component {
 
   componentDidMount() {
     const { item } = this.props;
-    const parentSKU = item.product_type === 'configurable' ? item.parentSKU : null;
-    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, parentSKU);
+    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, item.parentSKU);
   }
 
   componentDidUpdate() {

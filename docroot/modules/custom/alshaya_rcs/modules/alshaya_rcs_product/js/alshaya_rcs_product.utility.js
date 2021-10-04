@@ -64,8 +64,10 @@
     Drupal.alshayaSpc.getLocalStorageProductData(sku, function (product) {
       stock = {
         stock: product.stock.qty,
+        in_stock: product.stock.in_stock,
+        cnc_enabled: product.cncEnabled,
+        max_sale_qty: product.maxSaleQty,
       };
-      stock.in_stock = product.stock.in_stock;
     });
 
     return stock;
