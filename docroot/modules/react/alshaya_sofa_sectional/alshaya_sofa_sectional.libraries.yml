@@ -5,3 +5,4 @@ sofa_sectional:
     dist/sofasectional.bundle.js: { }
   dependencies:
     - alshaya_react/react
+    - alshaya_spc/cart_utilities
