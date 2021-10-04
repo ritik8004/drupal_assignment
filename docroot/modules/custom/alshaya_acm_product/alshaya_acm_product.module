@@ -432,6 +432,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['pdp_express_delivery_option'] = [
+    'variables' => [
+      'title' => NULL,
+      'subtitle' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -637,6 +644,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
         // Express Delivery
         if ($express_delivery_config->get('status')) {
+          $build['express_delivery'] = [
+            '#theme' => 'pdp_express_delivery_option',
+            '#title' => t('Delivery Options'),
+            '#subtitle' => t('Explore the delivery options applicable to your area.'),
+          ];
           $delivery_options = alshaya_acm_product_get_delivery_options($sku);
           if ($delivery_options !== NULL) {
             // Show delivery options as per order defined in config.
