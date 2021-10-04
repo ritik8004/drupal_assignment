@@ -29,7 +29,7 @@ variables:
   promo_code: 'have a promo code?'
   excluding_delivery: 'excluding delivery'
   vat: ''
-  mobile: '55667788'
+  mobile: '556677889'
   checkout_link: 'continue to checkout'
   language_link: 'العربية'
   language_create_account: 'تسجيل مستخدم جديد'
