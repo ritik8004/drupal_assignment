@@ -72,12 +72,11 @@
 
         Object.entries(cart_data.items).forEach(function (productItem) {
           const product = productItem[1];
-          const parentSKU = product.product_type === 'configurable' ? product.extension_attributes.parent_product_sku : null;
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice,
             cartDataLayer: Object.assign({}, cartDataLayer),
-            parentSKU,
+            parentSKU: product.parentSKU,
           });
         });
       }
@@ -126,7 +125,6 @@
     var items = JSON.parse(JSON.stringify(cart_data.items));
     Object.entries(items).forEach(function (productItem) {
       const product = productItem[1];
-      const parentSKU = product.product_type === 'configurable' ? product.extension_attributes.parent_product_sku : null;
       Drupal.alshayaSpc.getProductData(
         product.sku,
         function (product, extraData) {
@@ -142,7 +140,7 @@
         {
         qty: product.qty,
         finalPrice: product.finalPrice,
-        parentSKU,
+        parentSKU: product.parentSKU,
       });
     });
   };
