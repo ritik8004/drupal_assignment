@@ -96,9 +96,6 @@ exports.getEntity = async function getEntity(langcode) {
       if (response.data.promotionUrlResolver) {
         result = response.data.promotionUrlResolver;
       }
-      if (!result || (typeof result.title !== 'string')) {
-        await handleNoItemsInResponse(request, urlKey);
-      }
       break;
 
     default:
