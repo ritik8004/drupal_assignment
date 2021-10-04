@@ -81,11 +81,11 @@ function alshaya_rcs_product_migrate_field_carousel_slug() {
   $query->distinct(true);
   $result = $query->execute()->fetchAll();
 
-  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
-  $entityTypeManager = \Drupal::entityTypeManager()->getStorage('paragraph');
+  $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
 
   foreach ($result as $item) {
-    $paragraph = $entityTypeManager->loadRevision($item->revision_id);
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = $paragraph_storage->loadRevision($item->revision_id);
 
     // Remove prefix.
     $value = str_replace('shop-', '', $item->alias);
