@@ -5,7 +5,9 @@
  * Module file.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Cache\Cache;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_theme().
@@ -21,29 +23,19 @@ function alshaya_sofa_sectional_theme() {
 }
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_ENTITY_TYPE_view().
  */
-function alshaya_sofa_sectional_page_attachments_alter(array &$page) {
-  // @todo attach library only when the feature is enabled,
-  // current page is a PDP page and one of the product category
-  // matches the category_ids in config.
-  // Attach the sofa_sectional library.
-  $page['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
+function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityViewDisplay $display, $view_mode) {
+  if ($entity->bundle() !== 'acq_product' && $view_mode !== 'full') {
+    return;
+  }
 
-  // Pass config for showing/hiding quantity selector in configurable product form.
-  $page['#attached']['drupalSettings']['sofa_sectional']['show_quantity'] = \Drupal::service('acq_sku.cart_form_helper')->showQuantity();
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:acq_sku.configurable_form_settings']);
+  // Don't process further if sofa sectional feature is disabled.
+  if (!\Drupal::config('alshaya_sofa_sectional.settings')->get('enabled')) {
+    return;
+  };
 
-  // Send the cart quantity options to be used while displaying quantity
-  // dropdown. Adding the setting to global namespace.
-  $page['#attached']['drupalSettings']['sofa_sectional']['cart_quantity_options'] = _alshaya_acm_get_cart_quantity_options();
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:alshaya_acm.cart_config']);
-
-  // Pass max sale quantity status and whether message show be shown.
-  $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
-  $page['#attached']['drupalSettings']['sofa_sectional']['max_sale_quantity_enabled'] = $alshaya_acm_settings->get('quantity_limit_enabled');
-  $page['#attached']['drupalSettings']['sofa_sectional']['max_sale_hide_message'] = $alshaya_acm_settings->get('hide_max_qty_limit_message');
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $alshaya_acm_settings->getCacheTags());
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
 }
 
 /**

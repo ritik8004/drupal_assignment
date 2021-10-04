@@ -15,9 +15,9 @@ export const getHiddenFormAttributes = () => (typeof drupalSettings.lpn !== 'und
  *   The list of allowed values for quantity.
  */
 export const getQuantityDropdownValues = () => (
-  drupalSettings.sofa_sectional.show_quantity
-    && typeof drupalSettings.sofa_sectional.cart_quantity_options === 'object'
-    ? Object.values(drupalSettings.sofa_sectional.cart_quantity_options)
+  drupalSettings.showQuantity
+    && typeof drupalSettings.cartQuantityOptions === 'object'
+    ? Object.values(drupalSettings.cartQuantityOptions)
     : []
 );
 
@@ -25,8 +25,8 @@ export const getQuantityDropdownValues = () => (
  * Helper function to check if max sale quantity message is enabled.
  */
 export const isHideMaxSaleMsg = () => {
-  if (typeof drupalSettings.sofa_sectional !== 'undefined') {
-    return drupalSettings.sofa_sectional.max_sale_hide_message;
+  if (typeof drupalSettings.maxSaleHideMessage !== 'undefined') {
+    return drupalSettings.maxSaleHideMessage;
   }
 
   return false;
@@ -36,8 +36,8 @@ export const isHideMaxSaleMsg = () => {
  * Helper function to check if max sale quantity condition is enabled.
  */
 export const isMaxSaleQtyEnabled = () => {
-  if (typeof drupalSettings.sofa_sectional !== 'undefined') {
-    return drupalSettings.sofa_sectional.max_sale_quantity_enabled;
+  if (typeof drupalSettings.maxSaleQuantityEnabled !== 'undefined') {
+    return drupalSettings.maxSaleQuantityEnabled;
   }
 
   return false;
