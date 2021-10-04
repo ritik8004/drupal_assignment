@@ -1,4 +1,4 @@
-(function (Drupal, jQuery) {
+(function (Drupal, $) {
   window.commerceBackend = window.commerceBackend || {};
 
   /**
@@ -10,7 +10,7 @@
    *   (optional) The parent sku value.
    */
   window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null) {
-    return jQuery.ajax({
+    return $.ajax({
       url: Drupal.url('rest/v2/product/' + btoa(sku)) + '?context=cart',
       type: 'GET',
       dataType: 'json',
@@ -70,7 +70,7 @@
     // Rules are added in CF to disable caching for urls having the following
     // query string.
     // The query string is added since same APIs are used by MAPP also.
-    return await jQuery.ajax({
+    return await $.ajax({
       url: Drupal.url(`rest/v1/product-status/${btoa(sku)}`),
       data: { _cf_cache_bypass: '1' }
     }).then(function (response) {
