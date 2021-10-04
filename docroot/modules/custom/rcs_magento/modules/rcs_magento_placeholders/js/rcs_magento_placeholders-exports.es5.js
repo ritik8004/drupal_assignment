@@ -139,7 +139,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
   let response = null;
   let result = null;
-  const dataAttributes = rcsGetDataAttributes(placeholder);
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
     // Just return empty string so that render() function gets called later.
