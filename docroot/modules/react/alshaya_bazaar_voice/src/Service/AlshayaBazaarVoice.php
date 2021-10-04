@@ -430,8 +430,8 @@ class AlshayaBazaarVoice {
       $basic_configs['max_age'] = $config->get('max_age');
       // Get Configs for Google translation API.
       $google_translations_api = Settings::get('google_translations_api');
-      $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'];
-      $basic_configs['google_api_key'] = $google_translations_api['api_key'];
+      $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'] ?? '';
+      $basic_configs['google_api_key'] = $google_translations_api['api_key'] ?? '';
     }
     $basic_configs['api_version'] = $config->get('api_version');
     $basic_configs['locale'] = $config->get('locale');
