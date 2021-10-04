@@ -286,6 +286,7 @@ function getVariantsInfo(product) {
         qty: variantInfo.stock_data.qty,
         // We get only enabled products in the API.
         status: 1,
+        in_stock: variantInfo.stock_status === 'IN_STOCK',
       },
       // @todo Implement this.
       description: '',
@@ -352,6 +353,12 @@ function processProduct(product) {
     // @todo Add free gift promotion value here.
     freeGiftPromotion: [],
     is_non_refundable: product.non_refundable_products,
+    stock: {
+      qty: product.stock_data.qty,
+      // We get only enabled products in the API.
+      status: 1,
+      in_stock: product.stock_status === 'IN_STOCK',
+    },
   };
 
   let maxSaleQty = 0;

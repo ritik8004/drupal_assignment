@@ -145,6 +145,10 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
     ],
   );
 
+  // Provide the languages to build the product urls.
+  $languages = \Drupal::languageManager()->getLanguages();
+  $attachments['#attached']['drupalSettings']['alshayaRcs']['languages'] = array_keys($languages);
+
   // Alter the attachments for the schema metadata.
   // We pass empty array as a variable here in order to avoid PHP error.
   $product_schema_data = [];
@@ -170,7 +174,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
-  $build['#attached']['library'][] = 'alshaya_rcs_product/utility';
+  $build['#attached']['library'][] = 'alshaya_rcs_product/grouped_products';
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
@@ -215,10 +219,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
   $color_split_config = \Drupal::config('alshaya_color_split.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
-
-  // Provide the languages to build the product urls.
-  $languages = \Drupal::languageManager()->getLanguages();
-  $build['#attached']['drupalSettings']['alshayaRcs']['languages'] = array_keys($languages);
 }
 
 /**
@@ -848,4 +848,23 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
   ];
 
   $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
+  // Alter the product utility library to replace the base JS file with the
+  // utility file provided by this module.
+  if ($extension === 'alshaya_acm_product' && isset($libraries['product_utility'])) {
+    foreach ($libraries['product_utility']['js'] as $source => $options) {
+      if ($source === 'js/alshaya_acm_product.utility.js') {
+        unset($libraries['product_utility']['js'][$source]);
+        $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
+        $options['dependencies'] = ['rcs_magento_placeholders/rcs_magento_placeholders'];
+        $libraries['product_utility']['js']["/$self_module_path/js/alshaya_rcs_product.utility.js"] = $options;
+        break;
+      }
+    }
+  }
 }

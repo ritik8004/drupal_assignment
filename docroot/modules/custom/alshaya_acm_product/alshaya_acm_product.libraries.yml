@@ -62,3 +62,8 @@ acq_product_info:
   version: 1.x
   js:
     js/alshaya_acm_product.pdp.v1.js: {}
+
+product_utility:
+  version: 1.x
+  js:
+    js/alshaya_acm_product.utility.js: {}

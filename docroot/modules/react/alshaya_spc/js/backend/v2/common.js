@@ -578,7 +578,7 @@ const staticProductStatus = [];
  * @param {Promise<string|null>} sku
  *  The sku for which the status is required.
  */
-const getProductStatus = async (sku) => {
+const getProductStatus = async (sku, parentSku) => {
   if (typeof sku === 'undefined' || !sku) {
     return null;
   }
@@ -588,16 +588,7 @@ const getProductStatus = async (sku) => {
     return staticProductStatus[sku];
   }
 
-  // Bypass CloudFlare to get fresh stock data.
-  // Rules are added in CF to disable caching for urls having the following
-  // query string.
-  // The query string is added since same APIs are used by MAPP also.
-  const response = await callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
-  if (!hasValue(response) || !hasValue(response.data) || hasValue(response.data.error)) {
-    staticProductStatus[sku] = null;
-  } else {
-    staticProductStatus[sku] = response.data;
-  }
+  staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSku);
 
   return staticProductStatus[sku];
 };
@@ -680,6 +671,7 @@ const getProcessedCartData = async (cartData) => {
     data.items = {};
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
+      const parentSKU = item.product_type === 'configurable' ? item.extension_attributes.parent_product_sku : null;
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
@@ -691,6 +683,7 @@ const getProcessedCartData = async (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
+        parentSKU,
       };
 
       // Get stock data on cart and checkout pages.
@@ -698,7 +691,7 @@ const getProcessedCartData = async (cartData) => {
       if (spcPageType === 'cart' || spcPageType === 'checkout') {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
-        const stockInfo = await getProductStatus(item.sku);
+        const stockInfo = await getProductStatus(item.sku, parentSKU);
 
         // Do not show the products which are not available in
         // system but only available in cart.

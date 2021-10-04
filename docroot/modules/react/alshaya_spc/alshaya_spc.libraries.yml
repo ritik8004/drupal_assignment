@@ -5,6 +5,7 @@ cart_utilities:
     - core/jquery
     - core/drupal
     - alshaya_react/react_pollyfill
+    - alshaya_acm_product/product_utility
 
 mini_cart:
   version: 1.x
