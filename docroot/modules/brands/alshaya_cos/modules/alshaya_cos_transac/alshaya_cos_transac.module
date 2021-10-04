@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
+  $cos_classic_gallery = \Drupal::config('alshaya_acm_product.settings')->get('cos_classic_gallery');
+  // Set flag to identify cos classic gallery enabled.
+  if ($cos_classic_gallery) {
+    $vars['cos_classic_gallery'] = $cos_classic_gallery;
+  }
+}
