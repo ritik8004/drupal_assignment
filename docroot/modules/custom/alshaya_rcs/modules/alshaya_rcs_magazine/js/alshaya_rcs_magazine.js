@@ -1,7 +1,7 @@
 /**
  * Listens to the 'alshayaRcsUpdateResults' event and updated the result object.
  */
-(function main($) {
+(function main(drupalSettings) {
   // Event listener to update the data layer object with the proper category
   // data.
   document.addEventListener('alshayaRcsUpdateResults', (e) => {
@@ -29,4 +29,4 @@
       }
     });
   });
-})(jQuery);
+})(drupalSettings);

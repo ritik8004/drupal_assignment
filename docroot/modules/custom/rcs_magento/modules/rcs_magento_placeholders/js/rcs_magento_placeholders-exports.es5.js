@@ -139,6 +139,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
   let response = null;
   let result = null;
+
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
     // Just return empty string so that render() function gets called later.
@@ -180,6 +181,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'field_magazine_shop_the_story':
+      const dataAttributes = rcsGetDataAttributes(placeholder);
       request.uri += "graphql";
       request.method = "POST",
       request.headers.push(["Content-Type", "application/json"]);

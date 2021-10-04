@@ -51,21 +51,17 @@
         }
       }
 
-      // If RCS is not enabled, we apply slick js immediately after page load.
-      var s1 = '.field--name-field-magazine-shop-the-story:not(.rcs) .field__items';
-
-      // When RCS is enabled, we wait until the field items are populated by RCS.
-      var s2 = '.field--name-field-magazine-shop-the-story.rcs .field__items';
+      var shopByStory = $('.field--name-field-magazine-shop-the-story .field__items');
+      var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
 
       // For tablets and mobile we don't want to apply slickSlider.
       if ($(window).width() > 1023) {
-        $(s1 + ', ' + s2).each(function () {
+        shopByStory.once('magazine-shop-the-story').each(function () {
           applyRtl($(this), optionsShopByStory);
         });
       }
 
-      var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
-      magazineHeroBanner.each(function () {
+      magazineHeroBanner.once('magazine-hero-banner').each(function () {
         applyRtl($(this), optionsHeroImageBanner);
       });
     }
