@@ -26,7 +26,6 @@ const config = {
   externals: {
     react: 'React',
     'react-dom': 'ReactDOM',
-    axios: 'axios',
   },
   module: {
     rules: [

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 import { getbazaarVoiceSettings, getUserBazaarVoiceSettings } from './request';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 
@@ -27,7 +27,7 @@ export function fetchAPIData(apiUri, params, context = '') {
   }
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
-  return axios.get(url)
+  return Axios.get(url)
     .then((response) => {
       dispatchCustomEvent('showMessage', { data: response });
       return response;
@@ -42,7 +42,7 @@ export function postAPIData(apiUri, params, productId = undefined) {
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}`;
 
-  return axios.post(url, params, {
+  return Axios.post(url, params, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -61,7 +61,7 @@ export function postAPIPhoto(apiUri, params) {
   const bazaarVoiceSettings = getbazaarVoiceSettings();
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
-  return axios.post(url)
+  return Axios.post(url)
     .then((response) => {
       dispatchCustomEvent('showMessage', { data: response });
       return response;
