@@ -86,8 +86,6 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'promotion':
-      urlKey = drupalSettings.rcsPage.urlKey;
-
       // Build query.
       request.data = JSON.stringify({
         query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
@@ -197,8 +195,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'labels':
-      request.data = JSON.stringify({
-        query: `query{
+        request.data = JSON.stringify({
+          query: `query{
             amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
               items{
                 image

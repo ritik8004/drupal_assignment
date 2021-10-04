@@ -71,6 +71,8 @@ const Teaser = ({
       const isAbsolute = (attribute.url.indexOf('://') > 0 || attribute.url.indexOf('//') === 0);
       if (isAbsolute) {
         attribute[key] = new URL(attribute.url).pathname;
+      } else {
+        attribute[key] = attribute.url[0] !== '/' ? `/${attribute.url}` : attribute.url;
       }
     }
   });
