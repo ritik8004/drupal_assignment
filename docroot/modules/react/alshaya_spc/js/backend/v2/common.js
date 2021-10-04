@@ -578,7 +578,7 @@ const staticProductStatus = [];
  * @param {Promise<string|null>} sku
  *  The sku for which the status is required.
  */
-const getProductStatus = async (sku, parentSku) => {
+const getProductStatus = async (sku) => {
   if (typeof sku === 'undefined' || !sku) {
     return null;
   }
@@ -588,7 +588,7 @@ const getProductStatus = async (sku, parentSku) => {
     return staticProductStatus[sku];
   }
 
-  staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku, parentSku);
+  staticProductStatus[sku] = await window.commerceBackend.getProductStatus(sku);
 
   return staticProductStatus[sku];
 };
@@ -691,7 +691,7 @@ const getProcessedCartData = async (cartData) => {
       if (spcPageType === 'cart' || spcPageType === 'checkout') {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
-        const stockInfo = await getProductStatus(item.sku, parentSKU);
+        const stockInfo = await getProductStatus(item.sku);
 
         // Do not show the products which are not available in
         // system but only available in cart.

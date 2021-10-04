@@ -53,10 +53,8 @@
    *
    * @param {string} sku
    *   The sku value.
-   * @param {string} parentSKU
-   *   The parent sku value.
    */
-  window.commerceBackend.getProductStatus = async function (sku, parentSKU) {
+  window.commerceBackend.getProductStatus = async function (sku) {
     let stock = null;
     // Product data, containing stock information, is already present in local
     // storage before this function is invoked. So no need to call a separate
