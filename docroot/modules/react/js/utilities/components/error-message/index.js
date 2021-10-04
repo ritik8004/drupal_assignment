@@ -1,5 +1,5 @@
 import React from 'react';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import ConditionalView from '../conditional-view';
 
 const ErrorMessage = (props) => {
   const { message } = props;
