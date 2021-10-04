@@ -48,12 +48,6 @@ function alshaya_sofa_sectional_preprocess_page(&$variables) {
     '#theme' => 'sofa_sectional_strings',
   ];
 
-  $status = \Drupal::requestStack()->getCurrentRequest()->attributes->get('exception');
-  // For 404 page, page.content is not rendered so we add it to pre_content.
-  if ($status && $status->getStatusCode() == 404){
-    $variables['page']['pre_content']['sofa_sectional_strings'] = $sofa_sectional_strings;
-  }
-  else {
-    $variables['page']['content']['sofa_sectional_strings'] = $sofa_sectional_strings;
-  }
+  // @todo check if the other way available to pass the strings.
+  $variables['page']['content']['sofa_sectional_strings'] = $sofa_sectional_strings;
 }
