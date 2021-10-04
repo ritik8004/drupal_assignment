@@ -5,14 +5,22 @@
  * Module file.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\node\Entity\Node;
+
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_ENTITY_TYPE_view().
  */
-function alshaya_sofa_sectional_page_attachments_alter(array &$page) {
-  // @todo attach library only when the feature is enabled,
-  // current page is a PDP page and one of the product category
-  // matches the category_ids in config.
-  // Attach the sofa_sectional library.
-  $page['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
-  $page['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
+function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityViewDisplay $display, $view_mode) {
+  if ($entity->bundle() !== 'acq_product' && $view_mode !== 'full') {
+    return;
+  }
+
+  // Don't process further if sofa sectional feature is disabled.
+  if (!\Drupal::config('alshaya_sofa_sectional.settings')->get('enabled')) {
+    return;
+  };
+
+  // @todo add cache tags.
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
 }
