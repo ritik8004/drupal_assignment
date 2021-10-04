@@ -94,7 +94,9 @@ exports.render = function render(
       const dataAttributes = rcsGetBlockDataAttributes(placeholder);
       JSON.parse(dataAttributes.skus).forEach((sku) => {
         const i = inputs.findIndex(i => i.sku === sku);
-        data.push(inputs[i]);
+        if (inputs[i]) {
+          data.push(inputs[i]);
+        }
       });
 
       // Render template.
