@@ -39,7 +39,7 @@ rcsWindowLocation = () => {
  * @return {DOMStringMap}
  *   The data attributes.
  */
-rcs_magento_placeholders-exports.es5.js = (placeholder) => {
+rcsGetBlockDataAttributes = (placeholder) => {
   const element = document.querySelector(`#rcs-ph-${placeholder}`);
   return element.dataset;
 };

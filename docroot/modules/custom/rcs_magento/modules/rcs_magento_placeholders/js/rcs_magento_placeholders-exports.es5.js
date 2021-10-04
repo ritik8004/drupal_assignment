@@ -120,7 +120,7 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
-    // To trigger the Event.rcs_magento_placeholders-exports.es5.js
+    // To trigger the Event.
     document.dispatchEvent(updateResult);
 
     return updateResult.detail.result;
@@ -238,7 +238,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       }
     });
 
-    // To trigger the Event.rcs_magento_placeholders-exports.es5.js
+    // To trigger the Event.
     document.dispatchEvent(updateResult);
   }
 
