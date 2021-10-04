@@ -1,0 +1,20 @@
+.magazine-layout-node {
+  .modal-share-this {
+    .share-icon {
+      text-indent: -9999px;
+
+      @include breakpoint($desktop) {
+        top: -4.5rem;
+        #{$left}: 18rem;
+      }
+
+      &::before {
+        content: '';
+        background: url('#{$cos_theme_img_directory_path}/icons/share.svg') center center no-repeat;
+        border: 1px solid $primary_border;
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+  }
+}
