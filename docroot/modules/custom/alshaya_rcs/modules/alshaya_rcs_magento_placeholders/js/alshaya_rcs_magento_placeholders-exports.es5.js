@@ -91,7 +91,7 @@ exports.render = function render(
       let data = [];
 
       // Sort results in the same order as in the CMS.
-      const dataAttributes = rcsGetDataAttributes(placeholder);
+      const dataAttributes = rcsGetBlockDataAttributes(placeholder);
       JSON.parse(dataAttributes.skus).forEach((sku) => {
         const i = inputs.findIndex(i => i.sku === sku);
         data.push(inputs[i]);

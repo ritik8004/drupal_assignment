@@ -131,9 +131,12 @@ exports.getEntity = async function getEntity(langcode) {
 
 exports.getData = async function getData(placeholder, params, entity, langcode) {
   const request = {
-    uri: '',
-    method: 'GET',
-    headers: [],
+    uri: 'graphql',
+    method: 'POST',
+    headers: [
+      ['Content-Type', 'application/json'],
+      ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
+    ],
     language: langcode,
   };
 
@@ -155,11 +158,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       }
 
       // Prepare request parameters.
-      request.uri += "graphql";
-      request.method = "POST",
-      request.headers.push(["Content-Type", "application/json"]);
-      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
-
       request.data = JSON.stringify({
         // @todo: we are using 'category' API for now which is going to be
         // deprecated, but only available API to support both 2.3 and 2.4
@@ -181,11 +179,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'field_magazine_shop_the_story':
-      const dataAttributes = rcsGetDataAttributes(placeholder);
-      request.uri += "graphql";
-      request.method = "POST",
-      request.headers.push(["Content-Type", "application/json"]);
-      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+      const dataAttributes = rcsGetBlockDataAttributes(placeholder);
       request.data = JSON.stringify({
         query: `{ products(filter: { sku: { in: ${dataAttributes.skus} }}) ${rcsPhGraphqlQuery.products}}`
       });
@@ -203,12 +197,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'labels':
-        request.uri += "graphql";
-        request.method = "POST";
-        request.headers.push(["Content-Type", "application/json"]);
-        request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
-        request.data = JSON.stringify({
-          query: `query{
+      request.data = JSON.stringify({
+        query: `query{
             amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
               items{
                 image
@@ -217,17 +207,13 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
               }
             }
           }`
-        });
+      });
 
-        response = await rcsCommerceBackend.invokeApi(request);
-        result = response.data.amLabelProvider;
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.amLabelProvider;
       break;
 
     case 'product-recommendation':
-      request.uri += "graphql";
-      request.method = "POST";
-      request.headers.push(["Content-Type", "application/json"]);
-      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
       request.data = JSON.stringify({
         query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsPhGraphqlQuery.products}}`
       });
@@ -262,7 +248,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
-    method: 'GET',
+    method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],
       ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
@@ -274,7 +260,6 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
 
   switch (placeholder) {
     case 'products-in-style':
-      request.method = 'POST';
       request.data = JSON.stringify({
         query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
       });
