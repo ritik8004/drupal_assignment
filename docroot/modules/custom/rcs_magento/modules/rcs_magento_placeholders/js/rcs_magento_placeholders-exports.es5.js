@@ -240,17 +240,19 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
   }
 
-  // Creating custom event to to perform extra operation and update the result
-  // object.
-  const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
-    detail: {
-      result: result,
-      placeholder: placeholder,
-    }
-  });
+  if (result !== null) {
+    // Creating custom event to to perform extra operation and update the result
+    // object.
+    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+      detail: {
+        result: result,
+        placeholder: placeholder,
+      }
+    });
 
-  // To trigger the Event.rcs_magento_placeholders-exports.es5.js
-  document.dispatchEvent(updateResult);
+    // To trigger the Event.rcs_magento_placeholders-exports.es5.js
+    document.dispatchEvent(updateResult);
+  }
 
   return result;
 };
