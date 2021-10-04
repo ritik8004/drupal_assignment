@@ -8,7 +8,7 @@ import {
   isMaxSaleQtyReached,
   isHideMaxSaleMsg,
 } from '../../utilities/sofasectional';
-import QuantitySelector from '../quantity-selector';
+import QuantitySelector from '../../../../js/utilities/components/quantity-selector';
 import ErrorMessage from '../../../../js/utilities/components/error-message';
 import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
 import getStringMessage from '../../../../js/utilities/strings';
