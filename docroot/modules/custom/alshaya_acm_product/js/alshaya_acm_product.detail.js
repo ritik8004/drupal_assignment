@@ -134,7 +134,7 @@
         // Fill the view mode form field.
         $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
 
-        var productData = window.commerceBackend.getProductData(sku);
+        var productData = window.commerceBackend.getProductData(sku, productKey);
         if (!productData) {
           return;
         }
