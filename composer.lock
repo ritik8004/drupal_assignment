@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3644368d377178e2097efd9fe43b4c6",
+    "content-hash": "a858938c4858b0cc6c4522db3f982759",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -3959,10 +3959,6 @@
                     "homepage": "https://www.drupal.org/user/45874"
                 },
                 {
-                    "name": "m4olivei",
-                    "homepage": "https://www.drupal.org/user/410384"
-                },
-                {
                     "name": "marcelovani",
                     "homepage": "https://www.drupal.org/user/854220"
                 },
@@ -6987,6 +6983,14 @@
                 {
                     "name": "borisson_",
                     "homepage": "https://www.drupal.org/user/2393360"
+                },
+                {
+                    "name": "drunken monkey",
+                    "homepage": "https://www.drupal.org/user/205582"
+                },
+                {
+                    "name": "mkalkbrenner",
+                    "homepage": "https://www.drupal.org/user/124705"
                 }
             ],
             "description": "The Facet module allows site builders to easily create and manage faceted search interfaces.",
@@ -8326,7 +8330,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-3.0-beta1",
-                    "datestamp": "1618261123",
+                    "datestamp": "1609758293",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -9468,7 +9472,8 @@
                 },
                 "branch-alias": {
                     "dev-8.x-2.x": "2.x-dev"
-                }
+                },
+                "patches_applied": []
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
@@ -11109,27 +11114,31 @@
         },
         {
             "name": "drupal/pcb",
-            "version": "1.7.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/pcb.git",
-                "reference": "8.x-1.7"
+                "reference": "8.x-2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "47931b4cf46d94d0ec3e95bfaf70e009af6d1cb3"
+                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "4dc102d0c3d102238c2e4e7cc480a0ab864353ad"
             },
             "require": {
-                "drupal/core": "^8.7||^9.0",
-                "php": ">=7.1.0"
+                "drupal/core": "^8.7.7||^9.0",
+                "php": ">=7.2.0"
+            },
+            "require-dev": {
+                "drupal/memcache": "^2.0",
+                "drupal/redis": "^1.4"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1577033583",
+                    "version": "8.x-2.3",
+                    "datestamp": "1625386216",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11139,9 +11148,6 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
-                },
-                "patches_applied": {
-                    "PCB module having issue with memcache": "patches/pcb/pcb_memcache_issue_resolved.patch"
                 }
             },
             "autoload": {
@@ -11778,7 +11784,7 @@
             "extra": {
                 "drupal": {
                     "version": "2.0.0",
-                    "datestamp": "1633019789",
+                    "datestamp": "1633020298",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14380,7 +14386,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.8",
-                    "datestamp": "1615218916",
+                    "datestamp": "1614959012",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
