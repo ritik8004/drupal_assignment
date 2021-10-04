@@ -3,14 +3,16 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import FormElement from '../form-element';
 import {
   getAllowedAttributeValues,
-  getHiddenFormAttributes,
-  getQuantityDropdownValues,
   isMaxSaleQtyReached,
-  isHideMaxSaleMsg,
 } from '../../utilities/sofasectional';
 import QuantitySelector from '../../../../js/utilities/components/quantity-selector';
 import ErrorMessage from '../../../../js/utilities/components/error-message';
-import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
+import {
+  isDisplayConfigurableBoxes,
+  getHiddenFormAttributes,
+  getQuantityDropdownValues,
+  isHideMaxSaleMsg,
+} from '../../../../js/utilities/display';
 
 export default class SofaSectionalForm extends React.Component {
   constructor(props) {

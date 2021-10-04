@@ -1,47 +1,4 @@
-/**
- * Returns the array of hidden/lpn form attribute names.
- *
- * @returns array
- *  The array of hidden form attribute names.
- */
-export const getHiddenFormAttributes = () => (typeof drupalSettings.lpn !== 'undefined'
-  ? drupalSettings.lpn.lpn_attribute
-  : []);
-
-/**
- * Returns the allowed values for quantity for the quantity dropdown.
- *
- * @returns array
- *   The list of allowed values for quantity.
- */
-export const getQuantityDropdownValues = () => (
-  drupalSettings.showQuantity
-    && typeof drupalSettings.cartQuantityOptions === 'object'
-    ? Object.values(drupalSettings.cartQuantityOptions)
-    : []
-);
-
-/**
- * Helper function to check if max sale quantity message is enabled.
- */
-export const isHideMaxSaleMsg = () => {
-  if (typeof drupalSettings.maxSaleHideMessage !== 'undefined') {
-    return drupalSettings.maxSaleHideMessage;
-  }
-
-  return false;
-};
-
-/**
- * Helper function to check if max sale quantity condition is enabled.
- */
-export const isMaxSaleQtyEnabled = () => {
-  if (typeof drupalSettings.maxSaleQuantityEnabled !== 'undefined') {
-    return drupalSettings.maxSaleQuantityEnabled;
-  }
-
-  return false;
-};
+import { isMaxSaleQtyEnabled } from '../../../js/utilities/display';
 
 /**
  * Gets the attributes which are enabled for display.
