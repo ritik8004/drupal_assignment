@@ -1,0 +1,19 @@
+.magazine-back-to-feed {
+  #{$left}: calc((100% - 77rem) / 2);
+  text-transform: unset;
+  opacity: 1;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.magazine-backfeed {
+  &.mobile-only-block {
+    .magazine-back-to-feed {
+      &::before {
+        margin-top: 0;
+      }
+    }
+  }
+}

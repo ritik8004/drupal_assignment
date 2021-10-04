@@ -19,8 +19,8 @@
 
   .footer--categories {
     @include breakpoint($desktop) {
-      width: 12%;
-      margin-#{$right}: 3rem;
+      width: 22%;
+      margin-#{$right}: 1rem;
     }
   }
 
@@ -30,11 +30,12 @@
 
   .footer--abouthelp {
     @include breakpoint($only-tablet) {
-      width: 45%;
+      width: 66%;
+      display: inline-flex;
     }
 
     @include breakpoint($desktop) {
-      width: 78%;
+      width: 68%;
     }
   }
 
@@ -48,6 +49,11 @@
   }
 
   .c-footer-menu--help {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+      padding-#{$left}: 2.75rem;
+    }
+
     h3 {
       @include breakpoint($only-mobile) {
         border-bottom: 1px solid $accordion_border;
@@ -121,6 +127,11 @@
     margin: 1rem 1.25rem 2.5rem;
   }
 
+  @include breakpoint($only-tablet) {
+    max-width: 14.75rem;
+    min-width: 17.75rem;
+  }
+
   .form {
     &-submit {
       height: 2.5rem;
@@ -129,6 +140,8 @@
 
       @include breakpoint($only-tablet) {
         #{$right}: 0;
+        font-size: 0.75rem;
+        padding: 0.625rem 1rem;
       }
     }
 
@@ -186,8 +199,6 @@
   .language-switcher-language-url {
     ul {
       li {
-        margin-top: 1.25rem;
-
         a {
           text-transform: unset;
         }
@@ -203,6 +214,47 @@
             content: "";
           }
         }
+      }
+    }
+  }
+}
+
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+.highlights {
+  .highlighted {
+    &.title_subtitle {
+      @include breakpoint($desktop) {
+        max-width: 17.875rem;
+      }
+    }
+  }
+
+  .hightlight__title {
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.c-footer-menu {
+  &--category,
+  a {
+    text-transform: unset;
+  }
+
+  .cols-6 & {
+    &:last-child:not(:only-child) {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0.5rem;
       }
     }
   }

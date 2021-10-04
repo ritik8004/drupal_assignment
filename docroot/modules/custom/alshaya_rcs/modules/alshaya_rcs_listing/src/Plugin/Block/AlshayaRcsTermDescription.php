@@ -3,8 +3,6 @@
 namespace Drupal\alshaya_rcs_listing\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a dynamic term description for commerce pages.
@@ -15,17 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   category = @Translation("RCS Placeholders"),
  * )
  */
-class AlshayaRcsTermDescription extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition);
-  }
+class AlshayaRcsTermDescription extends BlockBase {
 
   /**
    * {@inheritdoc}

@@ -15,6 +15,7 @@ import {
   productListIndexStatus,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -63,6 +64,16 @@ const Teaser = ({
       }
     } else {
       attribute[key] = value;
+    }
+    // Update URL to relative URL to avoid host mismatch issue.
+    if (key === 'url') {
+      // Check if the URL is an absolute URL or not.
+      const isAbsolute = (attribute.url.indexOf('://') > 0 || attribute.url.indexOf('//') === 0);
+      if (isAbsolute) {
+        attribute[key] = new URL(attribute.url).pathname;
+      } else {
+        attribute[key] = attribute.url[0] !== '/' ? `/${attribute.url}` : attribute.url;
+      }
     }
   });
   // Skip if there is no value for current language.
@@ -173,6 +184,16 @@ const Teaser = ({
             </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
+          <ConditionalView condition={
+              isExpressDeliveryEnabled()
+              && hit.attr_express_delivery !== undefined
+              && hit.attr_express_delivery[0] === '1'
+            }
+          >
+            <div className="express_delivery">
+              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
+            </div>
+          </ConditionalView>
         </div>
         <AddToBagContainer
           url={attribute.url}

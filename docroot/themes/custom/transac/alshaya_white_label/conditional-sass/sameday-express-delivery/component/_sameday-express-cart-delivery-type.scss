@@ -1,0 +1,221 @@
+.alias--cart {
+  .spc-content {
+    .spc-title-wrapper {
+      @include breakpoint($desktop) {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+    }
+  }
+
+  .spc-cart-items {
+    .spc-cart-item-bottom-wrapper {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .spc-cart-shipping-methods {
+    padding-top: 1.5rem;
+  }
+
+  .sku-cart-delivery-methods {
+    display: flex;
+    font-size: 0.6875rem;
+
+    @include breakpoint($upto-desktop) {
+      flex-direction: column;
+
+      .shipping-tags-first-row {
+        display: flex;
+      }
+
+      .shipping-tags-first-row,
+      .shipping-tags-second-row {
+        .cart-shipping-method {
+          display: flex;
+
+          .information-icon {
+            @include icon(infomation, after) {
+              top: initial;
+            }
+
+            &:hover {
+              .method-title {
+                transform: translateY(-0.625rem);
+              }
+            }
+          }
+        }
+      }
+
+      .carrier-title {
+        display: inline-block;
+        white-space: nowrap;
+      }
+
+      .carrier-title,
+      .information-icon {
+        display: flex;
+        align-items: center;
+      }
+
+      .shipping-tags-second-row {
+        margin-top: 0.625rem;
+
+        .cart-shipping-method {
+          justify-content: flex-end;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .shipping-tags-first-row {
+        display: flex;
+      }
+
+      .shipping-tags-second-row {
+        padding-#{$left}: 0.625rem;
+      }
+    }
+
+    .carrier-title {
+      padding: 0.125rem 0.4375rem;
+      padding-#{$right}: 1.5rem;
+    }
+
+    .information-icon {
+      @include icon(infomation, after) {
+        font-size: 1rem;
+        position: absolute;
+        #{$right}: 0.25rem;
+        top: 0;
+
+        html[lang=ar] & {
+          top: -0.125rem;
+        }
+      }
+    }
+
+    .cart-shipping-method {
+      padding-#{$left}: 0.625rem;
+      position: relative;
+
+      &:first-child {
+        padding-#{$left}: 0;
+      }
+
+      &.active {
+        &.standard {
+          .carrier-title {
+            border: 1px solid $spc-cart-standard-delivery-border;
+          }
+        }
+
+        &.sameday {
+          .carrier-title {
+            border: 1px solid $spc-cart-sameday-delivery-border;
+          }
+        }
+
+        &.express {
+          .carrier-title {
+            border: 1px solid $spc-cart-express-delivery-border;
+          }
+        }
+      }
+
+      .information-icon {
+        &:hover {
+          .method-title {
+            display: block;
+            position: absolute;
+            bottom: 100%;
+            border: 1px solid $spc-cart-delivery-info-border;
+            padding: 0.5rem;
+            background: white;
+            min-width: 6.875rem;
+            z-index: 2;
+            transform: translateY(-0.9375rem);
+            #{$right}: -0.3125rem;
+            border-radius: 0.125rem;
+
+            &::before {
+              content: '';
+              position: absolute;
+              width: 0.75rem;
+              height: 0.75rem;
+              border-#{$left}: 1px solid $spc-cart-delivery-info;
+              border-top: 1px solid $spc-cart-delivery-info;
+              border-#{$right}: none;
+              border-bottom: none;
+              bottom: -0.4375rem;
+              transform: rotate(-135deg);
+              background: $spc-cart-delivery-info-bg;
+              #{$right}: 0.625rem;
+
+              html[lang=ar] & {
+                transform: rotate(135deg);
+              }
+            }
+
+            span {
+              position: relative;
+              z-index: 1;
+            }
+          }
+        }
+      }
+
+      &.in-active {
+        .carrier-title {
+          border: 1px solid $spc-cart-delivery-info-inactive-border;
+        }
+
+        .carrier-title,
+        .information-icon {
+          color: $spc-cart-delivery-info-inactive;
+        }
+
+        .information-icon {
+          &:hover {
+            .method-title {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .method-title {
+      display: none;
+    }
+  }
+
+  #delivery-area-select {
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 0.625rem;
+    }
+
+    .delivery-area-name {
+      font-family: $alshaya-bold;
+      padding-#{$left}: 0.3125rem;
+    }
+
+    .delivery-area-button {
+      font-size: 0;
+
+      @include icon('chevrondown') {
+        font-size: 0.5rem;
+        cursor: pointer;
+        padding-#{$left}: 0.3125rem;
+      }
+    }
+  }
+}

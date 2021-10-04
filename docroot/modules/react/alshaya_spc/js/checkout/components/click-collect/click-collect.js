@@ -36,6 +36,7 @@ import {
   getCncModalButtonText,
 } from '../../../utilities/cnc_util';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import { logger } from '../../../backend/v2/utility';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -380,6 +381,14 @@ class ClickCollect extends React.Component {
 
     // Find the store object with the given store-code from the store list.
     const store = _find(storeList, { code: storeCode });
+
+    if (store === undefined || store.name === undefined) {
+      logger.error('Unable to find store from list.', {
+        storeCode,
+        storeList,
+      });
+    }
+
     dispatchCustomEvent('storeSelected', { store });
     updateSelectStore(store);
     this.setState({
@@ -431,7 +440,7 @@ class ClickCollect extends React.Component {
   };
 
   onMapStoreClose = (e, makerIndex) => {
-    e.target.parentElement.parentElement.classList.remove('selected');
+    e.target.closest('.selected').classList.remove('selected');
     this.selectStoreButtonVisibility(false);
     this.refreshMap();
     this.toggleFullScreen();

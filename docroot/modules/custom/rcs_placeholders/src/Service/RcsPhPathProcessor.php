@@ -135,7 +135,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
       self::$entityType = 'category';
-      // @todo Remove this when we have proper category prefix available.
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
       self::$entityPathPrefix = $category_prefix;
 
@@ -247,6 +246,47 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public static function getOrignalPathFromProcessed(string $path): string {
     $processed_paths = array_flip(self::$processedPaths);
     return $processed_paths[$path] ?? $path;
+  }
+
+  /**
+   * Returns full path with prefix.
+   *
+   * @param bool $trim
+   *   Trim the front slash from start and end.
+   *
+   * @return string
+   *   Full path with prefix if available.
+   */
+  public static function getFullPath(bool $trim = TRUE) {
+    if (empty(self::$entityType)) {
+      return '';
+    }
+    $url = self::$entityPathPrefix . self::$entityPath;
+    // Trim the front slash.
+    if ($trim) {
+      $url = trim($url, '/');
+    }
+
+    return $url;
+  }
+
+  /**
+   * Returns url key.
+   *
+   * @param bool $trim
+   *   Trim the front slash from start and end.
+   *
+   * @return string
+   *   The URL key of the current entity path.
+   */
+  public static function getUrlKey(bool $trim = TRUE) {
+    $url = self::$entityPath;
+    // Trim the front slash.
+    if ($trim) {
+      $url = trim($url, '/');
+    }
+
+    return $url;
   }
 
 }

@@ -151,8 +151,8 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
     // Check for errors.
     if (!_isUndefined(response.data.error) && response.data.error) {
-      logger.error('Error in getting shipping methods for HD. Error: @error', {
-        '@error': response.data.error_message,
+      logger.warning('Error in getting shipping methods for HD. Error: @message', {
+        '@message': response.data.error_message,
       });
 
       return getFormattedError(response.data.error_code, response.data.error_message);

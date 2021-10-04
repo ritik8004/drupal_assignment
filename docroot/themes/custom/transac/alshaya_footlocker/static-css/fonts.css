@@ -1,8 +1,8 @@
 @font-face {
   font-family: "Roboto-Bold";
   src:
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Bold.woff2") format("woff2"),
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Bold.woff") format("woff");
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/roboto-bold.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/roboto-bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -11,8 +11,8 @@
 @font-face {
   font-family: "Roboto-Regular";
   src:
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Regular.woff2") format("woff2"),
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/Roboto-Regular.woff") format("woff");
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/roboto-regular.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/roboto-regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -21,8 +21,8 @@
 @font-face {
   font-family: "DroidArabicKufi_Bold";
   src:
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidArabicKufi_Bold.woff2") format("woff2"),
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidArabicKufi_Bold.woff") format("woff");
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidArabicKufi-Bold.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidArabicKufi-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -31,8 +31,8 @@
 @font-face {
   font-family: "DroidKufi_Regular";
   src:
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidKufi_Regular.woff2") format("woff2"),
-    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidKufi_Regular.woff") format("woff");
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidKufi-Regular.woff2") format("woff2"),
+    url("https://www.footlocker.com.kw/themes/custom/transac/alshaya_footlocker/fonts/DroidKufi-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

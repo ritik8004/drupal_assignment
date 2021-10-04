@@ -185,6 +185,7 @@
       button[type="submit"] {
         height: 3.1875rem;
         font-family: $tbs-semibold;
+        text-transform: none;
 
         @include breakpoint($only-tablet) {
           margin-top: 1.45rem;

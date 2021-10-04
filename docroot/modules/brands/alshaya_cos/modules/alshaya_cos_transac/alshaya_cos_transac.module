@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific to COS brand.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_cos_transac_module_implements_alter(&$implementations, $hook) {
+  // Make sure the hook on the brand overrides runs last.
+  if ($hook == 'rcs_handlebars_templates_alter') {
+    $group = $implementations['alshaya_cos_transac'];
+    unset($implementations['alshaya_cos_transac']);
+    $implementations['alshaya_cos_transac'] = $group;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (($entity->bundle() == 'rcs_product')) {
+    $build['#attached']['library'][] = 'alshaya_cos_transac/product';
+  }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$queries) {
+  array_push($queries['products']['items'],
+    'style_code',
+    'color',
+    'asset_type',
+    'size',
+    'composition',
+    'washing_instructions',
+    'article_warning');
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates_alter().
+ */
+function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  $path = drupal_get_path('module', 'alshaya_cos_transac');
+  // Override default template for description.
+  $templates['field']['product']['description'] = "$path/templates/rcs-field-description.handlebars";
+}

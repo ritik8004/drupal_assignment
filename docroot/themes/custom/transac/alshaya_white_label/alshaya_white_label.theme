@@ -422,7 +422,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/super-menu';
   }
 
-  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {
+  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link' || $variables['plugin_id'] == 'alshaya_rcs_dp_app_navigation') {
     $variables['#attached']['library'][] = 'alshaya_white_label/app-navigation-links';
   }
 

@@ -180,7 +180,8 @@ class AlshayaRcsCategoryHelper {
 
       // Get overridden target link.
       $field_target_link_uri = $term->get('field_target_link')->getString();
-      if ($field_target_link_uri) {
+      // Get target link only if the override target link checkbox is checked.
+      if ($term->get('field_override_target_link')->getString() && $field_target_link_uri) {
         $path = UrlHelper::isExternal($field_target_link_uri)
           ? $field_target_link_uri
           : Url::fromUri($field_target_link_uri)->toString(TRUE)->getGeneratedUrl();
@@ -216,7 +217,10 @@ class AlshayaRcsCategoryHelper {
           if (array_key_exists('app', $value) && $context == 'app') {
             continue;
           }
-          $record['icon'][$value['key']] = $this->getImageFromField($key, $term);
+          $image_url = $this->getImageFromField($key, $term);
+          if ($image_url) {
+            $record['icon'][$value['key']] = $image_url;
+          }
         }
       }
 

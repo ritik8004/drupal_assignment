@@ -187,7 +187,7 @@
                     {% for item in order_details.store_open_hours %}
                       <div>
                         <span class="key-value-key dark">{{ item.key }}</span>
-                        <span class="key-value-value">{{ item.value }}</span>
+                        <span class="key-value-value">{{ item.value|default('Holiday'|t) }}</span>
                       </div>
                     {% endfor %}
                   </div>

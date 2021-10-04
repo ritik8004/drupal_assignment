@@ -3,6 +3,7 @@
     ul {
       &.menu--one__list {
         width: 64%;
+        padding-left: 0.75rem;
       }
     }
 
@@ -11,6 +12,18 @@
         .menu__link {
           font-size: 0.875rem;
           text-transform: capitalize;
+        }
+
+        &:nth-child(2) {
+          a {
+            padding-#{$left}: 0;
+          }
+        }
+
+        &:last-child {
+          a {
+            padding-#{$right}: 0;
+          }
         }
 
         .menu--one__link {
@@ -22,7 +35,7 @@
     &:not(.megamenu-inline-layout) {
       li.menu--one__list-item {
         ul.menu--two__list {
-          #{$left}: -12%;
+          #{$left}: -11%;
           min-width: 79rem;
 
           .menu--two__list-item {

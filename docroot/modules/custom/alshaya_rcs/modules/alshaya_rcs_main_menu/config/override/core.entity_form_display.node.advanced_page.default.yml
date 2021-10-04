@@ -2,9 +2,6 @@ langcode: en
 dependencies:
   config:
     - field.field.node.advanced_page.field_category_slug
-  enforced:
-    module:
-      - alshaya_rcs_main_menu
 third_party_settings:
   field_group:
     group_department_page_settings:

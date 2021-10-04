@@ -89,6 +89,7 @@
         padding-bottom: 1rem;
         color: $spc-cnc-store-item-text-impress;
         position: relative;
+        width: 92%;
 
         .spc-store-name-wrapper {
           display: inline-block;
@@ -97,7 +98,6 @@
           .store-distance {
             float: $right;
             color: $spc-cnc-store-list-distance;
-            padding-#{$right}: 2rem;
           }
         }
       }
@@ -117,8 +117,8 @@
 
     .spc-map-list-close {
       position: absolute;
-      top: -0.5rem;
-      #{$right}: -0.75rem;
+      top: 0.625rem;
+      #{$right}: 0.6875rem;
 
       @include icon('close') {
         font-size: 2rem;

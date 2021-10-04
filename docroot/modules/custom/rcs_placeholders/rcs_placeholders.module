@@ -10,8 +10,10 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\rcs_placeholders\Graphql\ArrayGraphQL;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 
 /**
@@ -46,7 +48,8 @@ function rcs_placeholders_preprocess_html(&$variables) {
   // enrichment.
   if (!empty(RcsPhPathProcessor::$entityType)) {
     $variables['#attached']['drupalSettings']['rcsPage']['type'] = RcsPhPathProcessor::$entityType;
-    $variables['#attached']['drupalSettings']['rcsPage']['path'] = RcsPhPathProcessor::$entityPath;
+    $variables['#attached']['drupalSettings']['rcsPage']['urlKey'] = RcsPhPathProcessor::getUrlKey();
+    $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::getFullPath();
 
     if($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
       $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = RcsPhPathProcessor::$entityData;
@@ -322,9 +325,36 @@ function rcs_placeholders_language_switch_links_alter(array &$links, $type, Url 
     )->toString();
 
     // Add the URL as is, RCS expects the URL to be same in all languages.
-    $url .= RcsPhPathProcessor::$entityPathPrefix . RcsPhPathProcessor::$entityPath;
+    $url .= RcsPhPathProcessor::getFullPath(FALSE);
 
     // We use absolute url below to make sure Drupal does not modify it.
     $links[$language->getId()]['url'] = Url::fromUri($url);
   }
+}
+
+/**
+ * Implements hook_page_bottom().
+ */
+function rcs_placeholders_page_bottom(array &$page_bottom) {
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  // Invoke hook to get default values.
+  $queries = \Drupal::moduleHandler()->invokeAll('rcs_placeholders_graphql_query');
+
+  // Allow other modules to alter the data.
+  \Drupal::moduleHandler()->alter('rcs_placeholders_graphql_query', $queries);
+
+  // Convert array to graphql.
+  foreach ($queries as $query => $fields) {
+    $queries[$query] = ArrayGraphQL::convert($fields);
+  }
+
+  // Add inline script to the page bottom.
+  $page_bottom['rcs_placeholders_graphql_query'] = [
+    '#type'  => 'html_tag',
+    '#tag'   => 'script',
+    '#value' => Markup::create('var rcsPhGraphqlQuery = ' . json_encode($queries) . ';'),
+  ];
 }
