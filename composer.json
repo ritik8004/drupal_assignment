@@ -340,9 +340,6 @@
             "drupal/metatag": {
                 "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2021-08-03/metatag-3077442-6.patch"
             },
-            "drupal/pcb": {
-                "PCB module having issue with memcache": "patches/pcb/pcb_memcache_issue_resolved.patch"
-            },
             "drupal/block_content_machine_name": {
                 "Not compatible with Drupal 9 when install with composer": "https://www.drupal.org/files/issues/2021-02-22/3199593-1.patch"
             },
