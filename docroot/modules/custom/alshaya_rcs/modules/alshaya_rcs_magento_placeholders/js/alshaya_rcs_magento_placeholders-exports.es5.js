@@ -99,10 +99,11 @@ exports.render = function render(
         item['url_key'] = `${item.url_key}.html`;
 
         // Add settings.
-        item['show_cart_form'] = (drupalSettings.rcsPhSettings.show_cart_form === 0) ? 'no-cart-form' : '';
         item['lang_code'] = drupalSettings.path.currentLanguage;
+        // This setting is not being used by any brand, setting default value.
+        item['show_cart_form'] = 'no-cart-form';
 
-        // Assets.
+        // Assets. @todo move this to alshaya_rcs_magazine on alshayaRcsUpdateResults event.
         const assets = JSON.parse(item.variants[0].product.assets_teaser);
         item['images'] = assets[0].styles;
 
