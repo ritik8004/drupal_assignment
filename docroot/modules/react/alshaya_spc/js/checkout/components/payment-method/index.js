@@ -149,12 +149,13 @@ export default class PaymentMethod extends React.Component {
   };
 
   render() {
-    const { method } = this.props;
     const {
+      method,
       isSelected,
       changePaymentMethod,
       cart,
       animationOffset,
+      disablePaymentMethod,
     } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
 
@@ -176,6 +177,11 @@ export default class PaymentMethod extends React.Component {
     if (method.code === 'postpay') {
       additionalClasses = drupalSettings.postpay_widget_info.postpay_mode_class;
     }
+
+    // Add `in-active` class if disablePaymentMethod property is true.
+    additionalClasses = disablePaymentMethod
+      ? `${additionalClasses} in-active`
+      : additionalClasses;
 
     return (
       <>

@@ -145,6 +145,7 @@ class AuraHelper {
       'rewardActivityTimeLimit' => $alshaya_aura_config->get('aura_reward_activity_time_limit_in_months'),
       'signUpTermsAndConditionsLink' => $alshaya_aura_config->get('aura_signup_terms_and_conditions_link'),
       'isoCurrencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
+      'auraUnsupportedPaymentMethods' => $alshaya_aura_config->get('aura_unsupported_payment_methods'),
     ];
 
     return $config;
