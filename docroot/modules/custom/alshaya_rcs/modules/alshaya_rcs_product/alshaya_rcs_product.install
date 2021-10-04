@@ -71,10 +71,10 @@ function alshaya_rcs_product_uninstall() {
  * Helper to migrate data from term to text field.
  */
 function alshaya_rcs_product_migrate_field_carousel_slug() {
-  $query = \Drupal::database()->select('paragraph_revision__field_category_carousel', 'prfc');
-  $query->addField('prfc', 'revision_id');
-  $query->addField('prfc', 'entity_id');
-  $query->innerJoin('taxonomy_term_field_data', 'td', 'td.tid = prfc.field_category_carousel_target_id');
+  $query = \Drupal::database()->select('paragraph__field_category_carousel', 'pfc');
+  $query->addField('pfc', 'revision_id');
+  $query->addField('pfc', 'entity_id');
+  $query->innerJoin('taxonomy_term_field_data', 'td', 'td.tid = pfc.field_category_carousel_target_id');
   $query->addField('td', 'tid');
   $query->addField('td', 'name');
   $query->addField('pa', 'alias');
