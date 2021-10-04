@@ -374,7 +374,17 @@ class AlshayaAlgoliaIndexHelper {
         return $item['value'];
       }, $configured_skus);
     }
-
+    // Add value to dummy dummy field attr_delivery_ways.
+    // It is depend on status of attr_express_delivery,attr_same_day_delivery.
+    $object['attr_delivery_ways'] = [];
+    $same_value = 'same_day_delivery_available';
+    $express_value = 'express_day_delivery_available';
+    if ($sku->get('attr_same_day_delivery')->getString() == '1') {
+      array_push($object['attr_delivery_ways'], $same_value);
+    }
+    if ($sku->get('attr_express_delivery')->getString() == '1') {
+      array_push($object['attr_delivery_ways'], $express_value);
+    }
     $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
 
     // Set color / size and other configurable attributes data.
@@ -396,7 +406,7 @@ class AlshayaAlgoliaIndexHelper {
       foreach ($available_translation_langcode as $langcode => $value) {
         $promotion['url_' . $langcode] = Url::fromRoute('entity.node.canonical', ['node' => $nid], ['language' => $this->languageManager->getLanguage($langcode)])->toString();
       }
-      $promotion['id'] = $nid;
+      $promotion['id'] = $node->get('field_acq_promotion_rule_id')->getString();
     });
 
     $object['promotions'] = array_values($promotions);

@@ -16,6 +16,18 @@ function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
         'lhn_cat_tree' => NULL,
       ],
     ],
+    'alshaya_rcs_promotional_banner' => [
+      'template' => 'alshaya-rcs-promotional-banner',
+      'variables' => [
+        'fields' => NULL,
+      ]
+    ],
+    'alshaya_rcs_plp_mobile_menu' => [
+      'template' => 'alshaya-rcs-plp-mobile-menu',
+      'variables' => [
+        'data' => NULL,
+      ]
+    ],
   ];
 }
 
@@ -37,6 +49,7 @@ function alshaya_rcs_listing_preprocess_page(&$variables) {
 
       // Taking the sidebar visibility check from config for PLP.
       $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
+      $variables['#attached']['library'][] = 'alshaya_rcs_listing/helpers';
     }
   }
 }
@@ -54,9 +67,9 @@ function alshaya_rcs_listing_theme_suggestions_page_alter(array &$suggestions, a
 }
 
 /**
- * Implements hook_rcs_graphql_query_fields().
+ * Implements hook_rcs_placeholders_graphql_query().
  */
-function alshaya_rcs_listing_rcs_graphql_query_fields() {
+function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
   $query_fields = [];
 
   $query_fields['categories'] = [
@@ -68,6 +81,15 @@ function alshaya_rcs_listing_rcs_graphql_query_fields() {
       'url_path',
       'description',
       'image',
+      'promo_banner_for_mobile',
+      'promotion_banner_mobile',
+      'promotion_banner',
+      'children' => [
+        'id',
+        'name',
+        'url_path',
+        'category_quick_link_plp_mob'
+      ],
       'breadcrumbs' => [
         'category_id',
         'category_name',

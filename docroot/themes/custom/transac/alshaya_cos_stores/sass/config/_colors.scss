@@ -11,6 +11,7 @@ $brownish-grey: #666;
 $bright-gray: #eee;
 $silver-gray: #b6b6b6;
 $gray-98: #fafafa;
+$warm-grey-two: #dadada;
 $gray-light: #f6f6f6;
 $pale-taupe: #b89978;
 $blood: #a81313;
@@ -48,6 +49,7 @@ $formitem_label: $dark-gray;
 //Buttons.
 $primary_btn_bg: $outer-space;
 $primary_empty_btn: $white;
+$primary_brand_button_text: $white;
 $primary_empty_btn_border: $outer-space;
 $primary_brand_button: $outer-space;
 $primary_button_disabled: $brownish-grey;
@@ -77,18 +79,11 @@ $highlights_subtitle_hover: $outer-space;
 
 // Dropdown.
 $primary_dropdown_arrow_bg: transparent;
-// $primary_dropdown_text: $black-two;
 $primary_dropdown_border: $outer-space;
 $primary_dropdown_option_hover: $bright-gray;
 $primary_dropdown_option_border: $bright-gray;
 $primary_dropdown_option_disbled: $bright-gray;
 $primary_dropdown_arrow_icon: $outer-space;
-
-//Buttons.
-$primary_btn_bg: $outer-space;
-$primary_brand_button: $outer-space;
-$primary_brand_button_text: $white;
-$primary_brand_button: $outer-space;
 
 // Footer
 $footer_border_top: $bright-gray;
@@ -185,6 +180,7 @@ $mm_l3_link: $eerie-black;
 $mm_highlight_label: $eerie-black;
 $mm_highlight_title: $eerie-black;
 $mm_highlight_description: $eerie-black;
+$mm_l3_link_hover: $eerie-black;
 
 // Store finder page.
 // Store finder header form.
@@ -275,11 +271,14 @@ $block_acm_customer_txt: $eerie-black;
 $algolia-input-text: $eerie-black;
 $algolia-trending-title-text: $eerie-black;
 $algolia-trending-title-border: $bright-gray;
-$algolia-react-progressbar-fill: $eerie-black;
-$algolia-react-search-page-title: $eerie-black;
+$algolia-react-progressbar-fill: $outer-space;
+$algolia-react-search-page-title: $outer-space;
 $algolia-react-sidebar-label-color: $eerie-black;
 $algolia-suggestion-text: $brownish-grey;
 $algolia-auto-suggest-border: $bright-gray;
+$algolia-react-progressbar-text: $outer-space;
+$algolia-react-progressbar: $bright-gray;
+$algolia_react-facet-item-color: $eerie-black;
 
 // Language Switcher
 $lang_switch: $eerie-black;
@@ -296,3 +295,103 @@ $minicart_notification_text: $dark-gray;
 $minicart_notification_btn_bg: $outer-space;
 $minicart_notification_product_title: $eerie-black;
 $cart_notification_arrow_bg: $white;
+
+// SPC
+$spc-cart-background: $gray-light;
+$spc-empty-text: $eerie-black;
+$spc-checkout_section_title: $outer-space;
+$spc-product-title: $black-two;
+$spc-product-price: $outer-space;
+$spc-product-attributes: $brownish-grey;
+$spc-promo-code-error: $lust-red;
+$spc-promo-code-success: $green;
+$spc-select-border: $warm-grey-two;
+$spc-totals-line-item-color: $outer-space;
+$spc-order-total-suffix-text: $brownish-grey;
+$spc-promo-code-placeholder-text: $silver-gray;
+$spc-promo-code-border: $warm-grey-two;
+$spc-cart-promo-code-submit-enabled: $white;
+$spc-order-summary-product-area-bg: $bright-gray;
+$spc-checkout-delivery-method-txt: $brownish-grey;
+$spc-deliver-button: $outer-space;
+$spc-delivery-customer-info-highlight: $outer-space;
+$spc-delivery-info-text: $brownish-grey;
+$spc-checkout-payment-method-txt: $black-two;
+$spc-cc-placeholder: $brownish-grey;
+$spc-deliver-button: $black;
+$spc-deliver-button: $black;
+$spc-tooltip-bg: $white;
+$spc-tooltip-text: $outer-space;
+$spc-tooltip-border: $outer-space;
+$spc_tooltip_icon: $outer-space;
+$spc_tooltip_icon_border: $outer-space;
+$spc-deliver-button: $outer-space;
+
+// Product detail page.
+$pdp_product_special_price_text: $blood;
+
+// Checkout Global.
+$checkout_section_titles: $eerie-black;
+$checkout_login_link_text: $eerie-black;
+$checkout_login_submit_button_background: $outer-space;
+$checkout_guest_button_border: $outer-space;
+$checkout_guest_button_txt: $eerie-black;
+$checkout_footer_border-top: $gray;
+$checkout_footer_txt: $brownish-grey;
+
+// Accordion
+$accordion_title: $outer-space;
+
+// Product listing page and search page.
+$plp_filter_active_tick: $eerie-black;
+$plp_facet_clear_text: $eerie-black;
+$plp_selected_filter_label_text: $outer-space;
+$plp_facet_filter_bg: $bright-gray;
+$plp_facet_filter_link: $outer-space;
+$plp_facet_summary_filter_icon: $outer-space;
+$plp_all_filter_filter_arrow: $eerie-black;
+$plp_filter_icon: $outer-space;
+$plp_filter_selected_text: $dark-gray;
+$plp_clear_all_text_disabled: $outer-space;
+
+// PLP Product tile.
+$plp_tile_product_title: $black-two;
+$plp_tile_product_title_hover: $eerie-black;
+$plp_tile_product_special_price: $blood;
+
+// PLP Filter bar.
+$plp_filterbar_clearall_border: $eerie-black;
+$plp_filterbar_clearall_text: $eerie-black;
+$plp_search_count: $outer-space;
+
+// PLP All filter colors
+$plp_all_filter_title: $page_title;
+$plp_clear_all_btn_disabled: $bright-gray;
+$plp_clear_all_btn_text: $outer-space;
+$plp_all_filter_button_color: $primary_btn_bg;
+
+// Dynamic Promotions.
+$promo_dynamic_label_bg: $eerie-black;
+$promo_dynamic_label_txt: $eerie-black;
+$promo_dynamic_label_txt_bg: $eerie-black;
+
+// Basket
+$basket_available_code: $eerie-black;
+
+// Basket top promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $outer-space;
+$basket_fixed_percentage_active_header_promo_txt: $outer-space;
+$basket_free_delivery_inactive_header_promo_bg: $outer-space;
+$basket_free_delivery_active_header_promo_txt: $outer-space;
+
+// Basket top OOS.
+$basket_header_oos_bg: $blood;
+$basket_header_oos_txt: $white;
+
+// Magazine article feature
+$magazine-textarea-color: $outer-space;
+$magazine-label-color: $dark-gray;
+$magazine-article-read-more-bg-color: $white;
+$magazine-article-title: $black-two;
+$magazine-article-link-hover: $brownish-grey;
+$magazine-article-back-to-feed: $outer-space;

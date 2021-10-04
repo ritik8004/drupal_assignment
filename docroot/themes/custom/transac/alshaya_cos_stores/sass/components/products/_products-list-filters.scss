@@ -1,0 +1,111 @@
+.c-plp .c-content__region {
+  .all-filters,
+  .all-filters-algolia {
+    max-width: 23.4375rem;
+
+    .filter__inner {
+      .views-exposed-form,
+      .c-facet {
+        &.c-accordion,
+        &.c-collapse-item {
+          text-transform: uppercase;
+
+          &::after {
+            font-size: 1.75rem;
+            #{$right}: 0.25rem;
+          }
+
+          .c-accordion__title,
+          .c-collapse__title {
+            text-transform: uppercase;
+            padding: 1.25rem 1rem;
+
+            .selected-facets {
+              margin-#{$right}: 1.5rem;
+              color: $plp_filter_selected_text;
+            }
+          }
+        }
+      }
+
+      .block-views-exposed-filter-blockalshaya-product-list-block-1,
+      .block-views-exposed-filter-blockalshaya-product-list-block-2,
+      .block-views-exposed-filter-blockalshaya-product-list-block-3,
+      .block-views-exposed-filter-blocksearch-page {
+        fieldset.form-wrapper {
+          .fieldset-legend {
+            padding: 1.3125rem 1rem;
+            text-transform: uppercase;
+
+            .sort-for-label {
+              margin-#{$right}: 1.5rem;
+              text-transform: uppercase;
+              color: $plp_filter_selected_text;
+            }
+          }
+        }
+      }
+    }
+
+    .filter__head {
+      height: 3.5rem;
+      box-shadow: 0 0.0625rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+
+      .filter-sort-title {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .all-filters .filter,
+  .all-filters-algolia .filter {
+    &__foot {
+      .facet-all-apply,
+      .facet-apply-all,
+      .all-filters-close {
+        font-size: 0.875rem;
+      }
+
+      .block-facets-summary-blockfilter-bar-promotions,
+      .block-facets-summary-blockfilter-bar-plp,
+      .block-facets-summary-blockfilter-bar-productlist,
+      .block-facets-summary-blockfilter-bar {
+        ul {
+          li.clear-all {
+            a {
+              font-size: 0.875rem !important;
+              text-transform: uppercase;
+            }
+          }
+        }
+      }
+
+      .facet-all-clear,
+      .facet-clear-all {
+        color: $plp_clear_all_text_disabled;
+      }
+
+      .facet-clear-all {
+        a {
+          color: $plp_facet_clear_text;
+        }
+      }
+    }
+  }
+
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blockalshaya-product-list-block-3,
+  .block-views-exposed-filter-blocksearch-page {
+    legend {
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      color: $plp_facet_filter_link;
+
+      &::after {
+        #{$right}: 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  }
+}

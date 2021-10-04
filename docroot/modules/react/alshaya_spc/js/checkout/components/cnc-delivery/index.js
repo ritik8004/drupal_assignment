@@ -140,8 +140,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
       },
     } = this.props;
 
-    let collectorName;
-    let collectorMobile;
     let collectionPoint;
     let pudoAvailable;
     let pickupDate;
@@ -153,8 +151,6 @@ class ClicknCollectDeiveryInfo extends React.Component {
         cart: {
           cart: {
             shipping: {
-              collector_name: collectorName,
-              collector_mobile: collectorMobile,
               collection_point: collectionPoint,
               pudo_available: pudoAvailable,
               pickup_date: pickupDate,
@@ -221,13 +217,11 @@ class ClicknCollectDeiveryInfo extends React.Component {
             <div className="spc-delivery-contact-info">
               <div className="contact-info-label">{Drupal.t('Collection by')}</div>
               <div className="contact-name">
-                { collectorName || makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
+                { makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || '') }
               </div>
               <div className="contact-telephone">
                 {`+${drupalSettings.country_mobile_code} `}
-                { collectorMobile
-                  ? cleanMobileNumber(collectorMobile)
-                  : cleanMobileNumber(shippingAddress.telephone)}
+                { cleanMobileNumber(shippingAddress.telephone) }
               </div>
               <div
                 className="spc-change-address-link"

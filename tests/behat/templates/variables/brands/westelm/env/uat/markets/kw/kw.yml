@@ -1,6 +1,6 @@
 variables:
-  url_product_page: 'buy-pearce-upholstered-armchair.html'
-  product_listing_page_url: '/shop-new-arrivals/test-new/new-products/'
-  spc_product_listing_page: '/shop-new-arrivals/test-new/new-products/'
-  spc_basket_page: '/shop-new-arrivals/test-new/new-products/'
-  spc_pdp_page: 'buy-pearce-upholstered-armchair.html'
+  url_product_page: 'buy-mid-century-art-display-round-coffee-table.html'
+  product_listing_page_url: '/shop-furniture/'
+  spc_product_listing_page: '/shop-furniture/'
+  spc_basket_page: '/shop-furniture/'
+  spc_pdp_page: 'buy-mid-century-art-display-round-coffee-table.html'

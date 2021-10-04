@@ -20,7 +20,7 @@ Feature: SPC to verify Smart Agent user functionality
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And the element ".smart-agent-session-banner" should exist
     And the element ".spc-checkout-smart-agent-share-message" should exist
     And the element "div.share-options" should exist
@@ -101,7 +101,7 @@ Feature: SPC to verify Smart Agent user functionality
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And the element ".smart-agent-session-banner" should exist
     And the element ".spc-checkout-smart-agent-share-message" should exist
     And the element "div.share-options" should exist
@@ -181,7 +181,7 @@ Feature: SPC to verify Smart Agent user functionality
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And the element ".smart-agent-session-banner" should exist
     And the element ".spc-checkout-smart-agent-share-message" should exist
     And the element "div.share-options" should exist
@@ -240,5 +240,3 @@ Feature: SPC to verify Smart Agent user functionality
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see an ".smart-agent-header-wrapper" element
-
-

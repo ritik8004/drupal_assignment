@@ -646,3 +646,8 @@ export const binValidation = (bin) => {
 
   return valid;
 };
+
+/**
+ * Helper to get cnc store limit config.
+ */
+export const getCnCStoresLimit = () => drupalSettings.cnc_stores_limit || 0;

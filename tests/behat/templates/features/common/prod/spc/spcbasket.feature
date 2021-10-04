@@ -1,4 +1,4 @@
-@javascript @smoke @westelmkwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
+@javascript @smoke @westelmkwprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
 Feature: Test basket page
 
   Background:
@@ -14,6 +14,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait 30 seconds
     And I wait for AJAX to finish
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -59,7 +60,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     Then the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-image img" should exist
@@ -88,7 +89,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     Then I should see "{promo_code}"
     And I wait 5 seconds
@@ -107,7 +108,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -132,7 +133,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -153,7 +154,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -206,7 +207,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And I should see an ".totals" element
     And I should see an ".grand-total" element
     And I should see an ".value .price .price-currency" element
@@ -226,7 +227,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     And I wait 5 seconds
     And I should see an ".totals" element
@@ -248,7 +249,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -270,7 +271,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load

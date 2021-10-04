@@ -172,6 +172,11 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_delivery_ways:
+    label: Delivery Ways
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_delivery_ways'
+    type: text
   # Used for promotions facet on Search.
   # Value set in SKUManager::processIndexItem().
   field_acq_promotion_label:

@@ -7,7 +7,7 @@ const AdvantageCardExcludedItem = (props) => {
   } = props;
   if (Advantagecard.isAdvantagecardEnabled()
     && Advantagecard.isAdvantageCardEligibleProduct(totalsItems, id) === 'false') {
-    return Drupal.t('The products in your shopping basket are not eligible for the Advantage card discount.');
+    return Drupal.t('This product is not eligible for the Advantage card discount.');
   }
   return null;
 };

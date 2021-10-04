@@ -19,9 +19,6 @@ dependencies:
     - field.field.taxonomy_term.rcs_category.field_term_font_color
     - image.style.thumbnail
     - taxonomy.vocabulary.rcs_category
-  enforced:
-    module:
-      - alshaya_rcs_main_menu
   module:
     - field_group
     - jquery_minicolors

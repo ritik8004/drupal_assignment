@@ -34,3 +34,23 @@
     }
   }
 }
+
+#click-and-collect-selected-store {
+  .store-details-wrapper {
+    .store-delivery-time {
+      font-family: $alshaya-bold;
+    }
+
+    .store-open-hours {
+      margin-top: 0.625rem;
+      margin-bottom: 0.625rem;
+    }
+  }
+}
+
+.map-store-list ul li.select-store,
+#google-map-cnc .gm-style .gm-style-iw-d {
+  .store-delivery-time {
+    font-family: $alshaya-bold !important;
+  }
+}

@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @vssapprod @vskwprod @mckwpprod @tbskwprod @vsaepprod @pbsapprod @pbaepprod @mcaeprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwprod  @vssaprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod
+@javascript @auth @checkoutPayment @homeDelivery @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @vssapprod @vskwprod @mckwpprod @tbskwprod @vsaepprod @pbsapprod @pbaepprod @mcaeprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwprod  @vssaprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Authenticated user
 
   Background:
@@ -19,6 +19,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
+    And I wait 30 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
@@ -93,7 +94,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load

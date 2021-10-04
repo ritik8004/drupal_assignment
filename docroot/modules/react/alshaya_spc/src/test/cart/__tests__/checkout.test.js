@@ -639,12 +639,12 @@ describe('Checkout', () => {
       it('With shipping data', async () => {
         // Keep a copy of original.
         const original = _cloneDeep(shippingData);
-        await addCncShippingInfo(shippingData, 'update shipping', false);
+        await addCncShippingInfo(shippingData, 'update shipping');
 
         // Make sure the original object was not changed.
         expect(original).toEqual(shippingData);
 
-        expect(axios.mock.calls.length).toBe(2);
+        expect(axios.mock.calls.length).toBe(1);
 
         // We cannot check the result of updateCart() but we can check if it
         // is being called with the correct parameters provided by addShippingInfo().

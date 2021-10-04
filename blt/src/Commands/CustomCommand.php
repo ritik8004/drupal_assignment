@@ -255,9 +255,8 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site ($list):");
     }
-    $uri = getenv('LANDO')
-      ? $site . '.alshaya.lndo.site'
-      : 'local.alshaya-' . $site . '.com';
+
+    $uri = self::getSiteUri($site);
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -304,9 +303,8 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site:, ($list):");
     }
-    $uri = getenv('LANDO')
-      ? $site . '.alshaya.lndo.site'
-      : 'local.alshaya-' . $site . '.com';
+
+    $uri = self::getSiteUri($site);
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -355,17 +353,20 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('local:reset-local-settings');
 
-    $is_lando = getenv('LANDO') ?? FALSE;
+    $app_root = $this->getConfigValue('repo.root');
     $sudo_prefix = '';
 
-    if ($is_lando) {
-      $app_root = '/app';
-
+    if (getenv('LANDO')) {
       // Flush memcache.
       $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
+    elseif (getenv('AH_SITE_ENVIRONMENT')) {
+      $this->taskDrush()
+        ->drush('cr')
+        ->uri($uri)
+        ->run();
+    }
     else {
-      $app_root = '/var/www/alshaya';
       $sudo_prefix = 'sudo ';
       // Restart memcache to avoid issues because of old configs.
       $this->_exec($sudo_prefix . 'service memcached restart');
@@ -533,6 +534,28 @@ class CustomCommand extends BltTasks {
     $this->taskExec('npm install')
       ->dir($this->getConfigValue('repo.root') . '/docroot/modules/custom')
       ->run();
+  }
+
+  /**
+   * Get the site url for local.
+   *
+   * @param string $site_code
+   *   Site Code.
+   *
+   * @return string
+   *   URL.
+   */
+  public static function getSiteUri($site_code) {
+    if (getenv('LANDO')) {
+      return $site_code . '.alshaya.lndo.site';
+    }
+
+    if (getenv('AH_SITE_ENVIRONMENT') === 'ide') {
+      // Cloud IDE doesn't support multiple sites.
+      return getenv('ACQUIA_APPLICATION_UUID') . '.web.ahdev.cloud';
+    }
+
+    return 'local.alshaya-' . $site_code . '.com';
   }
 
 }

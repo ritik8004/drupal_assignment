@@ -85,6 +85,7 @@ exports.normalize = function normalize(
       normalized.push({
         url: deepestCategory.breadcrumbs[i].category_url_path,
         text: deepestCategory.breadcrumbs[i].category_name,
+        data_url: deepestCategory.breadcrumbs[i].category_url_path,
       });
     });
 
@@ -92,6 +93,7 @@ exports.normalize = function normalize(
     normalized.push({
       url: deepestCategory.url_path,
       text: deepestCategory.name,
+      data_url: deepestCategory.url_path,
     });
   }
 
