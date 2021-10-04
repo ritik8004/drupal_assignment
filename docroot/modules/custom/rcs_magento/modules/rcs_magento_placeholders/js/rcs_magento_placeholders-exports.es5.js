@@ -96,6 +96,9 @@ exports.getEntity = async function getEntity(langcode) {
       if (response.data.promotionUrlResolver) {
         result = response.data.promotionUrlResolver;
       }
+      if (!result || (typeof result.title !== 'string')) {
+        rcsRedirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
+      }
       break;
 
     default:
