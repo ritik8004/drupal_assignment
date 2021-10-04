@@ -91,24 +91,10 @@ exports.render = function render(
       let data = [];
 
       // Sort results in the same order as in the CMS.
-      // @todo check if these overrides are for all brands.
       const dataAttributes = rcsGetDataAttributes(placeholder);
       JSON.parse(dataAttributes.skus).forEach((sku) => {
         const i = inputs.findIndex(i => i.sku === sku);
-        const item = inputs[i];
-        item['url_key'] = `${item.url_key}.html`;
-
-        // Add settings.
-        item['lang_code'] = drupalSettings.path.currentLanguage;
-        // This setting is not being used by any brand, setting default value.
-        item['show_cart_form'] = 'no-cart-form';
-
-        // Assets. @todo move this to alshaya_rcs_magazine on alshayaRcsUpdateResults event.
-        const assets = JSON.parse(item.variants[0].product.assets_teaser);
-        item['images'] = assets[0].styles;
-
-        // Push item.
-        data.push(item);
+        data.push(inputs[i]);
       });
 
       // Render template.

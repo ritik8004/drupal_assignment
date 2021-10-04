@@ -1,11 +1,21 @@
 <?php
 
-use Drupal\Core\Template\Attribute;
-
 /**
  * @file
  * Module file.
  */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_rcs_magazine_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (($entity->bundle() == 'magazine_article')) {
+    $build['#attached']['library'][] = 'alshaya_rcs_magazine/main';
+  }
+}
 
 /**
  * Implements hook_rcs_handlebars_templates_alter().

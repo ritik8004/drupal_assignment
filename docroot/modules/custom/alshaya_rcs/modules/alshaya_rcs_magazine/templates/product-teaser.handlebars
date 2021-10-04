@@ -1,11 +1,11 @@
 <div class="field__items">
   {{#each data as | item |}}
   <div class="field__item">
-    <article data-sku="{{ sku }}" role="article" about="/{{ lang_code }}/{{ url_key }}" data-vmode="teaser">
-      <a class="above-mobile-block product-link" href="/{{ lang_code }}/{{ url_key }}">
+    <article data-sku="{{ sku }}" role="article" about="{{ url }}" data-vmode="teaser">
+      <a class="above-mobile-block product-link" href="{{ url }}">
         <div class="image-label-wrapper">
-          {{#if images }}
-            <img src="{{ images.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+          {{#if image }}
+            <img src="{{ image.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
           {{/if}}
           <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
           </div>
@@ -43,9 +43,9 @@
         <tbody>
         <tr>
           <td class="sell--image">
-            {{#if images }}
-              <a href="/{{ lang_code }}/{{ url_key }}" rel="bookmark">
-                <img src="{{ images.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+            {{#if image }}
+              <a href="{{ url }}" rel="bookmark">
+                <img src="{{ image.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
               </a>
             {{/if}}
             <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
@@ -56,7 +56,7 @@
         <tr>
           <td class="sell--description">
             <h2 class="c-products__item__label">
-              <a href="/{{ lang_code }}/{{ url_key }}" rel="bookmark"><span>{{ name }}</span></a>
+              <a href="{{ url }}" rel="bookmark"><span>{{ name }}</span></a>
             </h2>
             <div class="price-block price-block-{{ sku }}">
               <div class="price">

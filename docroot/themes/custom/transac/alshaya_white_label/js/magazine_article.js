@@ -55,7 +55,7 @@
       var s1 = '.field--name-field-magazine-shop-the-story:not(.rcs) .field__items';
 
       // When RCS is enabled, we wait until the field items are populated by RCS.
-      var s2 = '.field--name-field-magazine-shop-the-story.rcs .rcs-field__items';
+      var s2 = '.field--name-field-magazine-shop-the-story.rcs .field__items';
 
       // For tablets and mobile we don't want to apply slickSlider.
       if ($(window).width() > 1023) {
