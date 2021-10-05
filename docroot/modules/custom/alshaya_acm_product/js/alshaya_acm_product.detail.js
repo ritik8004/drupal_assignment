@@ -27,7 +27,7 @@
   Drupal.behaviors.alshayaAcmProductPdp = {
     attach: function (context, settings) {
 
-      var node = $('.entity--type-node').not('[data-sku *= "#"]');
+      var node = $('.entity--type-node', context).not('[data-sku *= "#"]');
       if (node.length === 0) {
         return;
       }
@@ -97,7 +97,7 @@
         });
       });
 
-      $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
+      $('.form-select[data-configurable-code]', skuBaseForm).once('bind-js').on('change', function () {
         var form = $(this).parents('form');
         var sku = $(form).attr('data-sku');
         var combinations = window.commerceBackend.getConfigurableCombinations(sku);
@@ -143,7 +143,9 @@
         Drupal.disableLimitExceededProducts(sku, sku);
 
         node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, productData.layout, productData.gallery);
+        if (productData.type === 'simple') {
+          window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, productData.sku);
+        }
 
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
@@ -157,13 +159,13 @@
           $('.price-block-' + productData.identifier, node).html(variantInfo.price);
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-            Drupal.updateGallery(node, productData.layout, productData.gallery);
+            window.commerceBackend.updateGallery(node, productData.layout, productData.gallery);
           }
           else if (viewMode === 'matchback_mobile' && $(window).width() < 768) {
             Drupal.updateMatchbackMobileImage(node, variantInfo['matchback_teaser_image']);
           }
           else {
-            Drupal.updateGallery(node, productData.layout, variantInfo.gallery);
+            window.commerceBackend.updateGallery(node, productData.layout, variantInfo.gallery, variantInfo.sku, sku);
           }
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
@@ -233,12 +235,13 @@
         var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode($(this).parents('article.entity--type-node').attr('data-vmode'));
 
-        if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
+        var productData = window.commerceBackend.getProductData(sku, productKey);
+        if (!productData) {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
+        window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, sku);
       });
 
       if (!isRcsPdp()) {
@@ -302,43 +305,6 @@
     }
     else {
       $(product).find('.matchback-image-wrapper img').attr('src', matchback_mobile_image);
-    }
-  };
-
-  Drupal.updateGallery = function (product, layout, gallery) {
-    if (gallery === '' || gallery === null) {
-      return;
-    }
-
-    if ($(product).find('.gallery-wrapper').length > 0) {
-      // Since matchback products are also inside main PDP, when we change the variant
-      // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
-      // first one which will be of main PDP to update main PDP gallery only.
-      $(product).find('.gallery-wrapper').first().replaceWith(gallery);
-    }
-    else {
-      $(product).find('#product-zoom-container').replaceWith(gallery);
-    }
-
-    if (layout === 'pdp-magazine') {
-      // Set timeout so that original behavior attachment is not affected.
-      setTimeout(function () {
-        Drupal.behaviors.magazine_gallery.attach(document);
-        Drupal.behaviors.pdpVideoPlayer.attach(document);
-      }, 1);
-    }
-    else {
-      // Hide the thumbnails till JS is applied.
-      // We use opacity through a class on parent to ensure JS get's applied
-      // properly and heights are calculated properly.
-      $('#product-zoom-container', product).addClass('whiteout');
-      setTimeout(function () {
-        Drupal.behaviors.alshaya_product_zoom.attach(document);
-        Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
-
-        // Show thumbnails again.
-        $('#product-zoom-container', product).removeClass('whiteout');
-      }, 1);
     }
   };
 

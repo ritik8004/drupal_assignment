@@ -86,8 +86,6 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'promotion':
-      urlKey = drupalSettings.rcsPage.urlKey;
-
       // Build query.
       request.data = JSON.stringify({
         query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
@@ -99,7 +97,7 @@ exports.getEntity = async function getEntity(langcode) {
         result = response.data.promotionUrlResolver;
       }
       if (!result || (typeof result.title !== 'string')) {
-        await handleNoItemsInResponse(request, urlKey);
+        rcsRedirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
       }
       break;
 
@@ -131,9 +129,12 @@ exports.getEntity = async function getEntity(langcode) {
 
 exports.getData = async function getData(placeholder, params, entity, langcode) {
   const request = {
-    uri: '',
-    method: 'GET',
-    headers: [],
+    uri: 'graphql',
+    method: 'POST',
+    headers: [
+      ['Content-Type', 'application/json'],
+      ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
+    ],
     language: langcode,
   };
 
@@ -154,11 +155,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       }
 
       // Prepare request parameters.
-      request.uri += "graphql";
-      request.method = "POST",
-      request.headers.push(["Content-Type", "application/json"]);
-      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
-
       request.data = JSON.stringify({
         // @todo: we are using 'category' API for now which is going to be
         // deprecated, but only available API to support both 2.3 and 2.4
@@ -182,6 +178,33 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
     case 'breadcrumb':
       // We do not need to do anything for breadcrumbs.
       // Adding this case to avoid console messages about breadcrumbs.
+      break;
+
+    case 'labels':
+        request.data = JSON.stringify({
+          query: `query{
+            amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
+              items{
+                image
+                name
+                position
+              }
+            }
+          }`
+        });
+
+        response = await rcsCommerceBackend.invokeApi(request);
+        result = response.data.amLabelProvider;
+      break;
+
+    case 'product-recommendation':
+      request.data = JSON.stringify({
+        query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsPhGraphqlQuery.products}}`
+      });
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items[0];
+      RcsPhStaticStorage.set('product_' + result.sku, result);
       break;
 
     default:
