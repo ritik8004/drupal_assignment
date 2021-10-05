@@ -58,7 +58,7 @@
       }
 
       @include breakpoint($tablet) {
-        margin-top: 0.75rem !important;
+        margin: 0.75rem 0 !important;
       }
     }
   }
