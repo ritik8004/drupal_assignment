@@ -165,7 +165,7 @@ class AuraCheckoutRewards extends React.Component {
 
     const active = this.isActive();
     const activeClass = active ? 'active' : 'in-active';
-    const price = cart.cart.cart_total || 0;
+    const price = cart.cart.totals.base_grand_total_without_surcharge || 0;
 
     if (wait) {
       return (
