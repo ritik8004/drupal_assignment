@@ -24,15 +24,3 @@
     }
   }
 }
-
-.spc-checkout-warning-message-container + .spc-cnc-address-form-content {
-  #click-and-collect-list-view {
-    height: 10.938rem;
-  }
-}
-
-.spc-checkout-warning-message-container.outside-country-error + .spc-cnc-address-form-content {
-  #click-and-collect-list-view {
-    height: 6.9375rem;
-  }
-}
