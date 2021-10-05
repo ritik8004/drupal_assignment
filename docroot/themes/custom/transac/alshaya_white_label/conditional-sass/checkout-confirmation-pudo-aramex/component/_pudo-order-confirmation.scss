@@ -54,7 +54,7 @@
 
     .spc-store-open-hours {
       @include breakpoint($only-mobile) {
-        margin: 0.5rem 0 0.75rem;
+        margin: 0.5rem 0 0.75rem !important;
       }
 
       @include breakpoint($tablet) {
