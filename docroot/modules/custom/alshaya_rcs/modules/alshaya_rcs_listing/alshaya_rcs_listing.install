@@ -62,7 +62,7 @@ function alshaya_rcs_listing_install() {
     'field.storage.paragraph.field_category_carousel_slug',
     'field.field.paragraph.product_carousel_category.field_category_carousel_slug',
   ];
-  alshaya_config_install_configs($paragraph_configs, 'alshaya_paragraphs_transac', 'optional');
+  alshaya_config_install_configs($paragraph_configs, 'alshaya_rcs_listing', 'install');
   \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
 
   // Migrate data.
