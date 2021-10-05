@@ -30,6 +30,7 @@ export default class DeliveryOptions extends React.Component {
         this.setState({
           shippingMethods: shippingMethodObj.applicable_shipping_methods,
         }, () => {
+          // Set accordion height for delivery options after content loads.
           dispatchCustomEvent('setDeliveryOptionAccordionHeight', {});
         });
       }
