@@ -13,6 +13,11 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 class SkuAssetManager {
 
   /**
+   * Constant to denote that the current asset has no angle data associated.
+   */
+  const LP_DEFAULT_ANGLE = 'NO_ANGLE';
+
+  /**
    * The Config factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactory
