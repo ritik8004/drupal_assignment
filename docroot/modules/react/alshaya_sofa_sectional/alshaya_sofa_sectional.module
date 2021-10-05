@@ -13,12 +13,19 @@ use Drupal\node\Entity\Node;
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityViewDisplay $display, $view_mode) {
+  // Get sofa sectional configuration.
+  $config = \Drupal::config('alshaya_sofa_sectional.settings');
+
+  if (!$config->get('enabled')) {
+    return;
+  }
+
   if ($entity->bundle() !== 'acq_product' && $view_mode !== 'full') {
     return;
   }
 
-  // Get sofa sectional category ids from config.
-  $category_ids = \Drupal::config('alshaya_sofa_sectional.settings')->get('category_ids');
+  // Get category ids from config.
+  $category_ids = $config->get('category_ids');
 
   // Get category ids from product field.
   $categories = $entity->get('field_category')->getValue();
