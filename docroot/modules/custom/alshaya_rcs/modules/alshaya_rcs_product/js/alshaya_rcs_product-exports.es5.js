@@ -164,17 +164,6 @@ exports.render = function render(
       html += deliveryOptionsWrapper.html();
       break;
 
-    case "navigation_menu":
-      // Process rcs navigation renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html += globalThis.renderRcsNavigationMenu.render(
-          settings,
-          inputs,
-          innerHtml
-        );
-      }
-      break;
-
     case 'product_category_list':
       // Process rcs plp renderer, if available.
       if (typeof globalThis.renderRcsListing !== 'undefined') {
@@ -673,25 +662,29 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'promotions':
-      const {promotions} = input || {};
+      const promotions = input.promotions || {};
       if (typeof promotions === 'undefined' || promotions === null) {
         break;
       }
+      data.sku = input.sku;
 
-      let labels = jQuery('<div/>');
+      let promotionsList = [];
       promotions.forEach((promotion, index) => {
-        const { context } = promotion || {};
+        const context = promotion.context || {};
         if (typeof context === 'undefined' || !context.includes('web')) {
           return;
         }
-        const link = jQuery("<a>");
-        link.attr('href', Drupal.url(promotion.url));
-        link.attr('hreflang', drupalSettings.path.currentLanguage);
-        link.text(promotion.label);
-        labels.append(link);
+        // Prepare the data object.
+        promotionsList.push({
+          link: Drupal.url(promotion.url),
+          hreflang: drupalSettings.path.currentLanguage,
+          label: promotion.label,
+        });
       });
+      data.promotions = promotionsList;
 
-      value = labels.html();
+      // Render handlebars plugin.
+      value = handlebarsRenderer.render(`product.${filter}`, data);
       break;
 
     default:

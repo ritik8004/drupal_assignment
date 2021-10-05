@@ -94,16 +94,22 @@
   };
 
   Drupal.alshayaPromotions.refreshDynamicLabels = function (sku, cartData) {
-    var cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData);
-    // We set cacheable=1 so it is always treated as anonymous user request.
-    jQuery.ajax({
-      url: Drupal.url('rest/v1/promotions/dynamic-label-product/' + btoa(sku)) + '?cacheable=1&context=web&' + cartDataUrl,
-      method: 'GET',
-      async: true,
-      success: function (response) {
-        Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
-      }
-    });
+    const response = Drupal.alshayaPromotions.getV2DynamicLabel(sku, cartData);
+    if (response && typeof response.data !== 'undefined') {
+      Drupal.alshayaPromotions.updateDynamicLabel(sku, response.data.dynamicPromotionLabel);
+    }
+    else {
+      var cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData);
+      // We set cacheable=1 so it is always treated as anonymous user request.
+      jQuery.ajax({
+        url: Drupal.url('rest/v1/promotions/dynamic-label-product/' + btoa(sku)) + '?cacheable=1&context=web&' + cartDataUrl,
+        method: 'GET',
+        async: true,
+        success: function (response) {
+          Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
+        }
+      });
+    }
   };
 
   Drupal.alshayaPromotions.displayDynamicLabels = function (sku) {
@@ -122,5 +128,46 @@
       $('[data-sku="' + sku + '"]').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
     }
   };
+
+  // Call Magento graphql endpoint to get Dynamic Promotion info.
+  Drupal.alshayaPromotions.getV2DynamicLabel = function(sku, cartData, viewMode = 'links') {
+    let response = null;
+    if (typeof drupalSettings.alshayaRcs !== 'undefined') {
+      // Prepare cart object.
+      let cartInfo = [];
+      for (const key in cartData.items) {
+        cartInfo.push(`{
+            sku: "${cartData.items[key].sku}",
+            qty: ${parseInt(cartData.items[key].qty)}
+          }`);
+      }
+      // Prepare graphql query here.
+      const request = {
+        uri: 'graphql',
+        method: 'POST',
+        headers: [
+          ["Content-Type", "application/json"],
+        ],
+      };
+      request.data = JSON.stringify({
+        query: `{dynamicPromotionLabel(
+            sku: "${sku}"
+            context: "web"
+            view_mode: "${viewMode}"
+            cart: {
+              items: [
+                ${cartInfo}
+              ]
+            }
+          ) {
+            label
+          }}`
+      });
+
+      response = rcsCommerceBackend.invokeApiAsync(request);
+    }
+
+    return response;
+  }
 
 })(jQuery, Drupal, drupalSettings);

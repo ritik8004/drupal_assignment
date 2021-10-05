@@ -176,6 +176,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
   $build['#attached']['library'][] = 'alshaya_rcs_product/grouped_products';
+  // Attach promotion lable js.
+  $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
@@ -871,6 +873,7 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
   ];
 
   $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
+  $templates['product']['promotions'] = "$path/templates/rcs-product-promotions.handlebars";
 }
 
 /**
