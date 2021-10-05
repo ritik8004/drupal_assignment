@@ -629,6 +629,11 @@ function alshaya_white_label_preprocess_node(&$variables) {
         /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+        // Classic gallery for cos PDP magazine layout.
+        $cos_classic_gallery = \Drupal::config('alshaya_acm_product.settings')->get('cos_classic_gallery');
+        if ($cos_classic_gallery && $pdp_layout == 'pdp-magazine') {
+          $variables['#attached']['drupalSettings']['cos_classic_gallery'] = $cos_classic_gallery;
+        }
         $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
         $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
         $pdp_plugin->getRenderArray($variables);
