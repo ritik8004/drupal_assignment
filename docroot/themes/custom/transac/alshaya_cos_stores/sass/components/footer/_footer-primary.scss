@@ -249,6 +249,12 @@
   &--category,
   a {
     text-transform: unset;
+    text-align: $left;
+  }
+
+  a {
+    padding-top: 0.9375rem;
+    padding-bottom: 0;
   }
 
   .cols-6 & {
@@ -257,5 +263,13 @@
         padding-#{$left}: 0.5rem;
       }
     }
+  }
+}
+
+.c-footer-is-accordion {
+  .accordion--body {
+    padding-#{$left}: 1.25rem;
+    padding-bottom: 1.875rem;
+    border-bottom: 1px solid $accordion_border;
   }
 }
