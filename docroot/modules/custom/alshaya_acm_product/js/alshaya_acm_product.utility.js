@@ -84,4 +84,29 @@
       return stock;
     });
   }
+
+  /**
+   * Triggers stock refresh of the provided skus.
+   *
+   * @param {object} data
+   *   The object of sku values and their requested quantity, like {sku1: qty1}.
+   * @returns {Promise}
+   *   The stock status for all skus.
+   */
+  window.commerceBackend.triggerStockRefresh = async function (data) {
+    return callDrupalApi(
+      '/spc/checkout-event',
+      'POST',
+      {
+        form_params: {
+          action: 'refresh stock',
+          skus_quantity: data,
+        },
+      },
+    ).catch((error) => {
+      logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
+        '@message': error.message,
+      });
+    });
+  }
 })(Drupal, jQuery);

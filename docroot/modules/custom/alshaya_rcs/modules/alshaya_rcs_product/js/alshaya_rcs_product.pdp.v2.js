@@ -554,11 +554,3 @@ window.commerceBackend.cleanCssIdentifier = function (identifier) {
 
   return cleanedIdentifier.toLowerCase();
 }
-
-/**
- * Perform some function when product is added to cart.
- */
-window.commerceBackend.storeProductDataOnAddToCart = function () {
-  // We do nothing here for V2.
-  return;
-}

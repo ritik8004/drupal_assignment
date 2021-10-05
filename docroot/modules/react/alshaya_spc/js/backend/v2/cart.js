@@ -4,7 +4,6 @@ import _isUndefined from 'lodash/isUndefined';
 import _isString from 'lodash/isString';
 import _isNumber from 'lodash/isNumber';
 import {
-  callDrupalApi,
   callMagentoApi,
   getCartSettings,
   isAnonymousUserWithoutCart,
@@ -83,29 +82,6 @@ const returnExistingCartWithError = (code, message) => ({
     error_message: message,
     response_message: [message, 'error'],
   },
-});
-
-/**
- * Triggers the stock refresh process for the provided skus.
- *
- * @param {object} data
- *   Data containing sku and stock quantity information.
- *
- * @returns {Promise<object>}
- */
-const triggerStockRefresh = (data) => callDrupalApi(
-  '/spc/checkout-event',
-  'POST',
-  {
-    form_params: {
-      action: 'refresh stock',
-      skus_quantity: data,
-    },
-  },
-).catch((error) => {
-  logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
-    '@message': error.message,
-  });
 });
 
 /**
@@ -277,9 +253,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     const exceptionType = getExceptionMessageType(response.data.error_message);
     if (exceptionType === 'OOS') {
-      await triggerStockRefresh({ [sku]: 0 });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: 0 });
     } else if (exceptionType === 'not_enough') {
-      await triggerStockRefresh({ [sku]: quantity });
+      await window.commerceBackend.triggerStockRefresh({ [sku]: quantity });
     }
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
