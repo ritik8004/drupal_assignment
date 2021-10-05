@@ -36,7 +36,6 @@
         mobilegallery.on('afterChange', function (event, slick) {
           // Hide Labels on video slides.
           Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
-          Drupal.blazy.revalidate();
         });
 
         Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), context);
@@ -119,7 +118,6 @@
       if ($(window).width() < 768 && freeGiftsZoomContainer.length > 0 && !freeGiftsZoomContainer.hasClass('free-gifts-product-zoom-processed')) {
         freeGiftsZoomContainer.addClass('free-gifts-product-zoom-processed');
         var mobilegallery = $('#product-image-gallery-mobile', freeGiftsZoomContainer);
-        Drupal.blazy.revalidate();
         Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), freeGiftsZoomContainer);
         if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
           // Do initial setup again for slick dots.
@@ -391,7 +389,6 @@
 
     var gallery = $('#product-full-screen-gallery');
     Drupal.getSlickOptions('slickModalOptions').currentSlide = currentSlide;
-    Drupal.blazy.revalidate();
     Drupal.productZoomApplyRtl(gallery, Drupal.getSlickOptions('slickModalOptions'), document);
     // Create Instagram Dots.
     if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
