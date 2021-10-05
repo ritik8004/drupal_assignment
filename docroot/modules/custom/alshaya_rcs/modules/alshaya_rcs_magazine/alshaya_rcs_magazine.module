@@ -39,13 +39,8 @@ function alshaya_rcs_magazine_rcs_placeholders_graphql_query_alter(&$queries) {
   // Add media fields.
   array_push($queries['products']['items'],
     'assets_teaser',
+    'end_user_url',
   );
 
-  $queries['products']['items']['... on ConfigurableProduct'] = [
-    'variants' => [
-      'product' => [
-        'assets_teaser',
-      ]
-    ]
-  ];
+  array_push($queries['products']['items']['... on ConfigurableProduct']['variants']['product'], 'assets_teaser');
 }
