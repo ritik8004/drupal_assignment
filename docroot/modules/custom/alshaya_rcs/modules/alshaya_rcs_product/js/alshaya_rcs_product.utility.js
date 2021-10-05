@@ -1,4 +1,4 @@
-(function (Drupal, $) {
+(function (Drupal) {
   window.commerceBackend = window.commerceBackend || {};
 
   /**
@@ -83,4 +83,4 @@
       window.commerceBackend.processAndStoreProductData(parentSku, sku, 'productInfo');
     });
    }
-})(Drupal, jQuery);
+})(Drupal);
