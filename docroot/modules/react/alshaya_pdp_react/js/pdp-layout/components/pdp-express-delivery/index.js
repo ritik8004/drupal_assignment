@@ -41,6 +41,7 @@ class PdpExpressDelivery extends React.Component {
 
   render() {
     const { open } = this.state;
+    const { variantSelected } = this.props;
     // Add correct class.
     const expandedState = open === true ? 'show' : '';
     return (
@@ -64,7 +65,9 @@ class PdpExpressDelivery extends React.Component {
           </div>
           <div className="express-delivery-subtitle">{Drupal.t('Explore the delivery options applicable to your area.')}</div>
         </div>
-        <DeliveryOptions />
+        <DeliveryOptions
+          variantSelected={variantSelected}
+        />
       </div>
     );
   }
