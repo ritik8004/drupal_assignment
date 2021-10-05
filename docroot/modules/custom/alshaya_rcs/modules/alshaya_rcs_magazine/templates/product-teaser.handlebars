@@ -1,3 +1,4 @@
+{{'Handlebars template for product teaser, see docroot/themes/custom/transac/alshaya_hnm/templates/node/node--acq-product--teaser.html.twig'}}
 <div class="field__items">
   {{#each data as | item |}}
   <div class="field__item">
@@ -16,18 +17,7 @@
         </h2>
 
         <div class="price-block price-block-{{ sku }}">
-          <div class="price">
-            <div class="price-type__wrapper">
-              <div class="price">
-              <span class="price-wrapper">
-                <div class="price">
-                  <span class="price-currency suffix">{{ price.regularPrice.amount.currency }}</span>
-                  <span class="price-amount">{{ price.regularPrice.amount.value }}</span>
-                </div>
-              </span>
-              </div>
-            </div>
-          </div>
+          {{{render 'block.product.price' price_details }}}
         </div>
       </a>
 
@@ -59,18 +49,7 @@
               <a href="{{ url }}" rel="bookmark"><span>{{ name }}</span></a>
             </h2>
             <div class="price-block price-block-{{ sku }}">
-              <div class="price">
-                <div class="price-type__wrapper">
-                  <div class="price">
-                    <span class="price-wrapper">
-                      <div class="price">
-                        <span class="price-currency suffix">{{ price.regularPrice.amount.currency }}</span>
-                        <span class="price-amount">{{ price.regularPrice.amount.value }}</span>
-                      </div>
-                    </span>
-                  </div>
-                </div>
-              </div>
+              {{{render 'block.product.price' price_details }}}
             </div>
           </td>
         </tr>
