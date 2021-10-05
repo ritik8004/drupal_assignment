@@ -177,6 +177,8 @@
                   var maxSaleQtyParent = productInfo.max_sale_qty_parent;
                   var gtmAttributes = productInfo.gtm_attributes;
                   var isNonRefundable = productInfo.is_non_refundable;
+                  var stock = productInfo.stock;
+                  var cncEnabled = productInfo.click_collect;
 
                   if (productInfo.type === 'configurable') {
                     var productVariantInfo = productInfo['variants'][productData.variant];
@@ -194,6 +196,8 @@
                       productUrl = productVariantInfo.url[langcode];
                     }
                     gtmAttributes.price = productVariantInfo.gtm_price || price;
+                    stock = Drupal.hasValue(productVariantInfo.stock) ? productVariantInfo.stock : stock;
+                    cncEnabled = Drupal.hasValue(productVariantInfo.click_collect) ? productVariantInfo.click_collect : cncEnabled;
                   }
                   else if (productInfo.group !== undefined) {
                     var productVariantInfo = productInfo.group[productData.sku];
@@ -229,6 +233,8 @@
                     maxSaleQtyParent: maxSaleQtyParent,
                     gtmAttributes: gtmAttributes,
                     isNonRefundable: isNonRefundable,
+                    stock: stock,
+                    cncEnabled,
                   });
 
                   // Triggering event to notify react component.

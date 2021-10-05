@@ -218,7 +218,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
-    method: 'GET',
+    method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],
       ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
@@ -230,13 +230,25 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
 
   switch (placeholder) {
     case 'products-in-style':
-      request.method = 'POST';
       request.data = JSON.stringify({
         query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       response = rcsCommerceBackend.invokeApiAsync(request);
       result = response.data.products.items;
+      break;
+
+    // Get the product data for the given sku.
+    case 'product':
+      // Build query.
+      request.data = JSON.stringify({
+        query: `{ products(filter: { sku: { eq: "${params.sku}" }}) ${rcsPhGraphqlQuery.products}}`
+      });
+      response = rcsCommerceBackend.invokeApiAsync(request);
+      if (response && response.data.products.total_count) {
+        result = response.data.products.items[0];
+        RcsPhStaticStorage.set('product_' + result.sku, result);
+      }
       break;
 
     default:

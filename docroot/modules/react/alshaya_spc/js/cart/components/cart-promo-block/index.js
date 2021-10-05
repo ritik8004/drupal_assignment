@@ -35,7 +35,7 @@ export default class CartPromoBlock extends React.Component {
 
     // Get cart items product data.
     Object.keys(items).forEach((key) => {
-      Drupal.alshayaSpc.getProductData(key, this.productDataCallback);
+      Drupal.alshayaSpc.getProductData(key, this.productDataCallback, items[key].parentSKU);
     });
   }
 

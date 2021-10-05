@@ -7,7 +7,9 @@ window.commerceBackend = window.commerceBackend || {};
 /**
  * Local static data store.
  */
-staticDataStore = {};
+let staticDataStore = {
+  cnc_status: {}
+};
 
 /**
  * Utility function to check if an item is an object or not.
@@ -287,11 +289,11 @@ function getVariantsInfo(product) {
       cart_image: jQuery('.logo img').attr('src'),
       // @todo Add brand specific cart title.
       cart_title: 'Temp title',
-      click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variant),
-      color_attribute: variant.color_attribute,
+      click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
+      color_attribute: variantInfo.color_attribute,
       // color_value: '',
       sku: variantInfo.sku,
-      parent_sku: variant.parent_sku,
+      parent_sku: variantInfo.parent_sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
       // @todo Fetch layout dynamically.
       layout: drupalSettings.alshayaRcs.pdpLayout,
@@ -300,6 +302,7 @@ function getVariantsInfo(product) {
         qty: variantInfo.stock_data.qty,
         // We get only enabled products in the API.
         status: 1,
+        in_stock: variantInfo.stock_status === 'IN_STOCK',
       },
       // @todo Implement this.
       description: '',
@@ -366,6 +369,12 @@ function processProduct(product) {
     // @todo Add free gift promotion value here.
     freeGiftPromotion: [],
     is_non_refundable: product.non_refundable_products,
+    stock: {
+      qty: product.stock_data.qty,
+      // We get only enabled products in the API.
+      status: 1,
+      in_stock: product.stock_status === 'IN_STOCK',
+    },
   };
 
   let maxSaleQty = 0;
@@ -502,12 +511,17 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
  * @see alshaya_acm_product_available_click_collect().
  */
 window.commerceBackend.isProductAvailableForClickAndCollect = function (product) {
+  if (Drupal.hasValue(staticDataStore.cnc_status[product.sku])) {
+    return staticDataStore.cnc_status[product.sku];
+  }
   // Product could be either available for ship to store or for reserve and
   // collect. In both cases click and collect option will be considered as
   // available.
   // Magento provides for 2 for disabled and 1 for enabled.
-  return (drupalSettings.alshaya_click_collect.status === 'enabled')
+  staticDataStore.cnc_status[product.sku] = (drupalSettings.alshaya_click_collect.status === 'enabled')
     && (parseInt(product.ship_to_store, 10) === 1 || parseInt(product.reserve_and_collect, 10) === 1);
+
+  return staticDataStore.cnc_status[product.sku];
 }
 
 /**

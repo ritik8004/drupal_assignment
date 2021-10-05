@@ -104,51 +104,9 @@
       };
     }
 
-    $.ajax({
-      url: Drupal.url('rest/v2/product/' + btoa(sku)) + '?context=cart',
-      type: 'GET',
-      dataType: 'json',
-      beforeSend: function(xmlhttprequest, options) {
-        options.requestOrigin = 'getProductData';
-        return options;
-      },
-      success: function (response) {
-        getProductDataRequests[sku]['api'] = 'finished';
-        var image = '';
-        if (response.extra_data !== undefined
-          && response.extra_data['cart_image'] !== undefined
-          && response.extra_data['cart_image']['url'] !== undefined) {
-          image = response.extra_data['cart_image']['url'];
-        }
-
-        let attrOptions = response.configurable_values;
-        if (attrOptions.length < 1
-          && response.grouping_attribute_with_swatch !== undefined
-          && response.grouping_attribute_with_swatch) {
-          attrOptions = Drupal.alshayaSpc.getGroupingOptions(response.attributes);
-        }
-
-        var parentSKU = response.parent_sku !== null
-          ? response.parent_sku
-          : response.sku;
-
-        var data = Drupal.alshayaSpc.storeProductData({
-          id: response.id,
-          sku: response.sku,
-          parentSKU: parentSKU,
-          title: response.title,
-          url: response.link,
-          image: image,
-          price: response.original_price,
-          options: attrOptions,
-          promotions: response.promotions,
-          freeGiftPromotion: response.freeGiftPromotion || null,
-          maxSaleQty: response.max_sale_qty,
-          maxSaleQtyParent: response.max_sale_qty_parent,
-          isNonRefundable: Drupal.alshayaSpc.getAttributeVal(response.attributes, 'non_refundable_products'),
-          gtmAttributes: response.gtm_attributes,
-        });
-      }
+    const parentSKU = Drupal.hasValue(extraData.parentSKU) ? extraData.parentSKU : null;
+    window.commerceBackend.getProductDataFromBackend(sku, parentSKU).then(function () {
+      getProductDataRequests[sku]['api'] = 'finished';
     });
   };
 
@@ -183,6 +141,8 @@
       'gtmAttributes': data.gtmAttributes,
       'isNonRefundable': data.isNonRefundable,
       'created': new Date().getTime(),
+      'stock': data.stock,
+      'cncEnabled': data.cncEnabled,
     };
 
     localStorage.setItem(key, JSON.stringify(productData));

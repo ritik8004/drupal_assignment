@@ -27,9 +27,9 @@ rcs_product_modal:
   dependencies:
     - alshaya_rcs/add_to_cart
 
-utility:
+grouped_products:
   version: 1.x
   js:
-    js/alshaya_rcs_product.utility.js: {}
+    js/alshaya_rcs_product.grouped_products.js: {}
   dependencies:
     - rcs_placeholders/helpers
