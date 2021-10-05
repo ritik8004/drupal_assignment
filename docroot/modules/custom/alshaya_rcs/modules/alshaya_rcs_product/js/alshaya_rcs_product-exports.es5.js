@@ -657,18 +657,16 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'promotions':
-      const {promotions} = input || {};
-      if (typeof promotions === 'undefined' || promotions === null) {
+      if (input.promotions === null) {
         break;
       }
 
       const labels = [];
-      promotions.forEach((promotion, index) => {
-        const { context } = promotion || {};
-        if (typeof context === 'undefined' || !context.includes('web')) {
+      input.promotions.forEach((promotion, index) => {
+        if (!promotion.context.includes('web') || promotion.type !== 'cart_rule') {
           return;
         }
-        const link = jQuery("<a>");
+        const link = jQuery('<a>');
         link.attr('href', Drupal.url(promotion.url));
         link.attr('hreflang', drupalSettings.path.currentLanguage);
         link.text(promotion.label);
