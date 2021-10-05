@@ -94,7 +94,8 @@ class AuraProgressWrapper extends React.Component {
     const tierClass = currentTierLevel || 'no-tier';
 
     // Progress Percentage;
-    const progressRatio = (userPoints / nextTierThreshold) * 100;
+    let progressRatio = (userPoints / nextTierThreshold) * 100;
+    progressRatio = (progressRatio > 100) ? 100 : progressRatio;
     const progress = `${progressRatio}%`;
 
     // Decide if we need to show dot.
