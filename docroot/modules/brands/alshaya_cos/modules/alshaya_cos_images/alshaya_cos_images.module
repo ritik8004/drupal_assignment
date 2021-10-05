@@ -14,14 +14,15 @@ use Drupal\alshaya_cos_images\SkuAssetManager;
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_cos_images_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
-  print "<pre>"; print_r('ddd');die;
   // Process assets data & create attributes which are needed for sorting
   // the assets while displaying them.
   $existing_assets = !empty($existing_data['attr_assets'])
     ? unserialize($existing_data['attr_assets'][0]['value'])
     : [];
 
-  $sku->get('attr_assets')->setValue(_alshaya_cos_images_acq_sku_process_assets($product, $existing_assets));
+  if (is_array($existing_assets)) {
+    $sku->get('attr_assets')->setValue(_alshaya_cos_images_acq_sku_process_assets($product, $existing_assets));
+  }
 }
 
 /**
@@ -39,10 +40,6 @@ function _alshaya_cos_images_acq_sku_process_assets(array $product, array $exist
   $existing_assets_mapping = [];
 
   foreach ($existing_assets ?? [] as $key => $asset) {
-    if (empty($asset['fid'])) {
-      continue;
-    }
-
     $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
     $existing_assets_mapping[$id] = $asset;
   }
@@ -56,18 +53,6 @@ function _alshaya_cos_images_acq_sku_process_assets(array $product, array $exist
       // won't match and hence we will not use old downloaded image.
       $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
 
-      if (isset($existing_assets_mapping[$id])) {
-        $assets[$key]['fid'] = $existing_assets_mapping[$id]['fid'];
-        $assets[$key]['drupal_uri'] = $existing_assets_mapping[$id]['drupal_uri'];
-        unset($existing_assets_mapping[$id]);
-      }
-      else {
-        // Ensure fid and drupal_uri are not available in assets if we are
-        // not re-using.
-        unset($assets[$key]['fid']);
-        unset($assets[$key]['drupal_uri']);
-      }
-
       if (empty($asset['Data']['AssetType']) && ($asset['is_old_format'] && empty($asset['Type']))) {
         continue;
       }
@@ -80,15 +65,6 @@ function _alshaya_cos_images_acq_sku_process_assets(array $product, array $exist
         $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
       }
       $assets[$key]['sortFacingType'] = $face_type;
-    }
-  }
-
-  $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
-  foreach ($existing_assets_mapping ?? [] as $asset) {
-    $file = $fileStorage->load($asset['fid']);
-
-    if ($file instanceof FileInterface) {
-      $file->delete();
     }
   }
 

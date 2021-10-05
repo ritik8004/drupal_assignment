@@ -81,12 +81,9 @@ class SkuAssetManager {
         continue;
       }
       $asset['drupal_uri'] = $asset['pims_image']['url'];
-      $asset['fid'] = $asset['Data']['AssetId'];
     }
 
-    return array_filter($assets, function ($row) {
-      return !empty($row['fid']);
-    });
+    return $assets;
   }
 
   /**
@@ -178,19 +175,7 @@ class SkuAssetManager {
     $sku_asset_type_weights = $alshaya_cos_images_config->get('weights')[$page_type];
     // Fetch angle config.
     $sort_angle_weights = $alshaya_cos_images_config->get('weights')['angle'];
-    // Check if there are any overrides for category this product page is
-    // tagged with.
-    $config_overrides = $this->overrideConfig($sku, $page_type);
 
-    if (!empty($config_overrides)) {
-      if (isset($config_overrides['weights']['angle'])) {
-        $sort_angle_weights = $config_overrides['weights']['angle'];
-      }
-
-      if (isset($config_overrides['weights'][$page_type])) {
-        $sku_asset_type_weights = $config_overrides['weights'][$page_type];
-      }
-    }
     // Create multi-dimensional array of assets keyed by their asset type.
     if (!empty($assets)) {
       $grouped_assets = [];
@@ -272,60 +257,6 @@ class SkuAssetManager {
     }
 
     return $assets;
-  }
-
-  /**
-   * Helper function to check & override assets config.
-   *
-   * @param string $sku
-   *   Sku code for Product whose assets are being filtered.
-   * @param string $page_type
-   *   Attributes for which we checking the override.
-   *
-   * @return array
-   *   Overridden config in context of the category product belongs to.
-   */
-  public function overrideConfig($sku, $page_type) {
-    // @todo Check and remove this include.
-    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-    $alshaya_cos_images_settings = $this->configFactory->get('alshaya_cos_images.settings');
-    $overrides = $alshaya_cos_images_settings->get('overrides');
-
-    // No further processing if overrides is empty.
-    if (empty($overrides)) {
-      return [];
-    }
-
-    $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
-    $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
-
-    $tid = NULL;
-
-    // Identify the category for the product being displayed.
-    switch ($page_type) {
-      case 'plp':
-        if (($currentRoute['route_name'] === 'entity.taxonomy_term.canonical') && (!empty($currentRoute['route_params']['taxonomy_term']))) {
-          $taxonomy_term = $currentRoute['route_params']['taxonomy_term'];
-          $tid = $taxonomy_term->id();
-        }
-        break;
-
-      case 'pdp':
-      case 'teaser':
-      case 'swatch':
-        $sku = !($sku instanceof SKU) ? SKU::loadFromSku($sku) : $sku;
-        $product_node = $this->skuManager->getDisplayNode($sku);
-        if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
-          // Use the first term found with an override for
-          // location identifier.
-          $tid = $terms[0]['target_id'];
-
-        }
-        break;
-    }
-
-    return !empty($tid) && isset($overrides[$tid]) ? $overrides[$tid] : [];
   }
 
   /**
