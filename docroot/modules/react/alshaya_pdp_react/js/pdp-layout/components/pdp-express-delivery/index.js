@@ -53,13 +53,15 @@ class PdpExpressDelivery extends React.Component {
           className={`express-delivery-title-wrapper title ${expandedState}`}
           onClick={() => this.showExpressDeliveryBlock()}
         >
-          <PdpSectionTitle>
-            <span className="card-icon-svg">
-              <HomeDeliverySVG />
-            </span>
-            {Drupal.t('Delivery Options')}
-          </PdpSectionTitle>
-          <div className="magv2-accordion" />
+          <div className="express-delivery-title">
+            <PdpSectionTitle>
+              <span className="card-icon-svg">
+                <HomeDeliverySVG />
+              </span>
+              {Drupal.t('Delivery Options')}
+            </PdpSectionTitle>
+            <div className="magv2-accordion" />
+          </div>
           <div className="express-delivery-subtitle">{Drupal.t('Explore the delivery options applicable to your area.')}</div>
         </div>
         <DeliveryOptions />

@@ -167,6 +167,7 @@ body.overlay-delivery-area {
 
   .spcSelect__value-container {
     padding-#{$left}: 0;
+    height: 2.375rem;
   }
 
   .spcSelect__single-value {
@@ -183,7 +184,7 @@ body.overlay-delivery-area {
     position: relative;
 
     @include icon(search, after) {
-      color: $algolia-search-icon;
+      color: $sameday-express-delivery-drawer-search;
       font-size: 1.5rem;
       height: 2.75rem;
       display: inline-flex;
@@ -279,11 +280,13 @@ body.overlay-delivery-area {
       margin-bottom: 0.3125rem;
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       &.active {
         .area-select-item-wrapper {
           @include icon(radio-filled, before) {
             font-size: 3rem;
+            color: $sameday-express-delivery-radio-button;
           }
         }
       }
@@ -388,6 +391,40 @@ body.overlay-delivery-area {
 
     a.select-area-link {
       color: $spc-cart-delivery-popup-list-bg;
+    }
+  }
+}
+
+.magazine-layout-v2 {
+  .magv2-sidebar {
+    .spc-delivery-wrapper {
+      max-width: 23.4375rem;
+    }
+
+    .spc-delivery-area {
+      .title-block {
+        font-family: $alshaya-bold;
+        color: $magv2-popup-header-label;
+        font-size: 1.25rem;
+        align-items: center;
+      }
+
+      .spc-checkout-section-title {
+        padding: 0 2rem;
+      }
+
+      .close-modal {
+        @include icon('close') {
+          font-size: 2.5rem;
+          width: 2rem;
+          height: 2rem;
+          color: $magv2-panel-close-icon;
+        }
+      }
+
+      .area-list-block-content {
+        margin-top: 2rem;
+      }
     }
   }
 }
