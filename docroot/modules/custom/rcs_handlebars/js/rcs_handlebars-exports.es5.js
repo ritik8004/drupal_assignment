@@ -1,11 +1,6 @@
 const Handlebars = require("handlebars");
 
 /**
- * Register helper for string translations.
- */
-Handlebars.registerHelper('t', (str) => rcsTranslatedText(str));
-
-/**
  * Returns the value from object using nested keys i.e. "field.field_name"
  *
  * @param path string
@@ -59,3 +54,46 @@ exports.render = function render(
 ) {
   return handlebarsRender(template, data);
 };
+
+/**
+ * Helpers
+ */
+
+/**
+ * Register helper for string translations.
+ */
+Handlebars.registerHelper('t', (str) => rcsTranslatedText(str));
+
+/**
+ * Register helper render other templates.
+ */
+Handlebars.registerHelper('render', (template, data) => handlebarsRender(template, data));
+
+/**
+ * Register helper format numbers.
+ */
+Handlebars.registerHelper('formatNumber', (number, digits) => number.toFixed(digits).toLocaleString());
+
+/**
+ * Register helpers for comparison i.e.
+ *
+ * {{#if (or
+ *       (eq section1 "foo")
+ *       (ne section2 "bar"))}}
+ *   .. content
+ * {{/if}}
+ */
+Handlebars.registerHelper({
+  eq: (v1, v2) => v1 === v2,
+  ne: (v1, v2) => v1 !== v2,
+  lt: (v1, v2) => v1 < v2,
+  gt: (v1, v2) => v1 > v2,
+  lte: (v1, v2) => v1 <= v2,
+  gte: (v1, v2) => v1 >= v2,
+  and() {
+    return Array.prototype.every.call(arguments, Boolean);
+  },
+  or() {
+    return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
+  }
+});
