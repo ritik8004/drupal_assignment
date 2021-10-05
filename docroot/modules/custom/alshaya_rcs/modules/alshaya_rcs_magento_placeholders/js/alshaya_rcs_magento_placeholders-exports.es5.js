@@ -93,6 +93,7 @@ exports.render = function render(
       JSON.parse(params.skus).forEach((sku) => {
         const i = inputs.findIndex(i => i.sku === sku);
         if (inputs[i]) {
+          // Render price block template.
           data.push(inputs[i]);
         }
       });

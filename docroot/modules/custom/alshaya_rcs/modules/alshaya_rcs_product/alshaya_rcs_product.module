@@ -616,9 +616,11 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'price_range' => [
         'maximum_price' => [
           'regular_price' => [
+            'currency',
             'value'
           ],
           'final_price' => [
+            'currency',
             'value',
           ],
           'discount' => [
@@ -693,9 +695,11 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             'price_range' => [
               'maximum_price' => [
                 'regular_price' => [
+                  'currency',
                   'value'
                 ],
                 'final_price' => [
+                  'currency',
                   'value',
                 ],
                 'discount' => [
@@ -847,15 +851,18 @@ function template_preprocess_rcs_sku_base_form(&$variables) {
  * Implements hook_rcs_handlebars_templates_alter().
  */
 function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity) {
-  if (!$entity || $entity->bundle() !== 'rcs_product') {
-    return;
+  $path = drupal_get_path('module', 'alshaya_rcs_product');
+
+  if (!$entity || $entity->bundle() === 'rcs_product') {
+    $templates['field']['product'] = [
+      'description' => "$path/templates/rcs-field-description.handlebars",
+      'short_description' => "$path/templates/rcs-field-short-description.handlebars",
+    ];
+    $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
   }
 
-  $path = drupal_get_path('module', 'alshaya_rcs_product');
-  $templates['field']['product'] = [
-    'description' => "$path/templates/rcs-field-description.handlebars",
-    'short_description' => "$path/templates/rcs-field-short-description.handlebars",
-  ];
-
-  $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
+  if (!$entity || $entity->bundle() === 'magazine_article') {
+    $templates['block']['product']['price'] = "$path/templates/rcs-product-price-block.handlebars";
+    $templates['block']['product']['price_item'] = "$path/templates/rcs-product-price-item-block.handlebars";
+  }
 }
