@@ -107,9 +107,18 @@ class ClickCollect extends React.Component {
   }
 
   componentDidUpdate() {
-    const { outsideCountryError } = this.context;
+    const {
+      outsideCountryError,
+      locationAccess,
+    } = this.context;
+
     if (outsideCountryError) {
       smoothScrollTo('.spc-cnc-address-form-sidebar .spc-checkout-section-title');
+    }
+
+    if (locationAccess === false || outsideCountryError === true) {
+      // Adjust list height so it is scrollable, when we have a location error.
+      this.dynamicListHeightWhenLocationError();
     }
   }
 
