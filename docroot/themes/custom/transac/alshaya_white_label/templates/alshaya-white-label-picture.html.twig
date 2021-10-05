@@ -2,6 +2,7 @@
   <picture>
     <source media="(min-width: 768px)" data-srcset="{{ file_url(desktop_image) }}">
     <source media="(max-width: 767px)" data-srcset="{{ file_url(mobile_image) }}">
-    <img class="b-lazy" data-src="{{ file_url(default_image) }}" src="{{ lazy_load_placeholder }}"/>
+    <img loading="lazy" src="{{ file_url(default_image) }}"/>clear
+
   </picture>
 </div>

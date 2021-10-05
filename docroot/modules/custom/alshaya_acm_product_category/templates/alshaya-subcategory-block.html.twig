@@ -4,7 +4,7 @@
       <div class="sub-category" data-tid="{{ term.tid }}">
         {% if term.image is not empty %}
           <div class="sub-category-image">
-            <img src="{{ term.image.url }}" alt="{{ term.image.alt }}" title="{{ term.image.alt }}" />
+            <img loading="lazy" src="{{ term.image.url }}" alt="{{ term.image.alt }}" title="{{ term.image.alt }}" />
           </div>
         {% endif %}
 

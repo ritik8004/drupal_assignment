@@ -47,7 +47,6 @@ import {
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
-import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -224,9 +223,9 @@ const getLastOrder = async (customerId) => {
   try {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
     if (!hasValue(order.data) || hasValue(order.data.error)) {
-      logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Response: @response.', {
+      logger.warning('Error while fetching last order of customer. CustomerId: @customerId, Response: @response.', {
         '@response': JSON.stringify(order.data),
-        '@customer_id': customerId,
+        '@customerId': customerId,
       });
 
       StaticStorage.set('last_order', {});
@@ -237,9 +236,9 @@ const getLastOrder = async (customerId) => {
     StaticStorage.set('last_order', processedOrder);
     return processedOrder;
   } catch (error) {
-    logger.error('Error while fetching last order of customer. CustomerId: @customer_id, Message: @message.', {
+    logger.error('Error while fetching last order of customer. CustomerId: @customerId, Message: @message.', {
       '@message': error.message,
-      '@customer_id': customerId,
+      '@customerId': customerId,
     });
   }
 
@@ -342,16 +341,18 @@ const getStoreInfo = async (storeData) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
+ * @param {int} cncStoresLimit
+ *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCartStores = async (lat, lon) => {
+const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   const cartId = window.commerceBackend.getCartId();
 
   // If cart not available in session, log the error and return empty array.
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session');
+    logger.warning('Error while fetching click and collect stores. No cart available in session');
     return [];
   }
 
@@ -385,6 +386,12 @@ const getCartStores = async (lat, lon) => {
 
   const storeInfoPromises = [];
   let stores = response.data;
+
+  // If cncStoresLimit is greater than 0, then only display that many stores else display all.
+  if (cncStoresLimit > 0) {
+    stores = stores.slice(0, cncStoresLimit);
+  }
+
   stores.forEach((store) => {
     storeInfoPromises.push(getStoreInfo(store));
   });
@@ -420,14 +427,16 @@ const getCartStores = async (lat, lon) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
+ * @param {int} cncStoresLimit
+ *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCncStores = async (lat, lon) => {
+const getCncStores = async (lat, lon, cncStoresLimit = 0) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
-    logger.error('Error while fetching click and collect stores. No cart available in session.');
+    logger.warning('Error while fetching click and collect stores. No cart available in session.');
     return getFormattedError(404, 'No cart in session');
   }
 
@@ -441,7 +450,7 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  const response = await getCartStores(lat, lon);
+  const response = await getCartStores(lat, lon, cncStoresLimit);
 
   // Data added below is to keep the response consistent with V1.
   return { data: response };
@@ -934,8 +943,8 @@ const applyDefaultShipping = async (order) => {
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
       ) {
-        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cart_id, Address: @address, Billing: @billing.', {
-          '@cart_id': window.commerceBackend.getCartId(),
+        logger.debug('Setting shipping/billing address from user last HD order. Cart: @cartId, Address: @address, Billing: @billing.', {
+          '@cartId': window.commerceBackend.getCartId(),
           '@address': JSON.stringify(address),
           '@billing': JSON.stringify(order.billing_commerce_address),
         });
@@ -973,8 +982,8 @@ const applyDefaults = async (data, customerId) => {
     if (_includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
       // Do nothing, we will let the address from address book used for default flow.
     } else {
-      logger.debug('Applying defaults from last order. Cart: @cart_id.', {
-        '@cart_id': window.commerceBackend.getCartId(),
+      logger.debug('Applying defaults from last order. Cart: @cartId.', {
+        '@cartId': window.commerceBackend.getCartId(),
       });
 
       const response = await applyDefaultShipping(order);
@@ -1250,11 +1259,15 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
  *
  * @param {object} coords
  *   The co-ordinates data.
+ * @param {int} cncStoresLimit
+ *   The default number of stores to display.
  *
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
+window.commerceBackend.fetchClickNCollectStores = (coords, cncStoresLimit = 0) => getCncStores(
+  coords.lat, coords.lng, cncStoresLimit,
+);
 
 /**
  * Process payment data before placing order.
@@ -1423,8 +1436,8 @@ const paymentUpdate = async (data) => {
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
     cart.data.message = errorMessage;
     const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
-    logger.warning('Error occurred while placing order. Error: @error', {
-      '@error': message,
+    logger.warning('Error occurred while placing order. Error: @message', {
+      '@message': message,
     });
 
     return cart;
@@ -1634,9 +1647,9 @@ window.commerceBackend.getCartForCheckout = async () => {
       const cartId = window.commerceBackend.getCartId();
 
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
-        logger.error('Error while getting cart: @cartId, Error: @error.', {
+        logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,
-          '@error': cart.data.error_message,
+          '@message': cart.data.error_message,
         });
         return cart.data;
       }
@@ -1659,8 +1672,8 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error('Error while getCartForCheckout controller. Error: @error. Code: @code.', {
-        '@error': error.message,
+      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @code.', {
+        '@message': error.message,
         '@code': error.status,
       });
 
@@ -1681,13 +1694,11 @@ window.commerceBackend.getCartForCheckout = async () => {
  *   Shipping address info.
  * @param {string} action
  *   Action to perform.
- * @param {bool} updateBillingDetails
- *   Whether billing needs to update or not.
  *
  * @returns {Promise<object>}
  *   Cart data.
  * */
-const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
+const addCncShippingInfo = async (shippingData, action) => {
   const { store } = { ...shippingData };
 
   // Create the address object with static data and store cart address.
@@ -1721,11 +1732,6 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
       extension_attributes: {
         click_and_collect_type: hasValue(store.rnc_available) ? 'reserve_and_collect' : 'ship_to_store',
         store_code: store.code,
-        ...(collectionPointsEnabled() && {
-          collector_name: shippingData.collector_name,
-          collector_email: shippingData.collector_email,
-          collector_mobile: shippingData.collector_mobile,
-        }),
       },
     },
   };
@@ -1738,14 +1744,14 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
   ) {
     return cart;
   }
-  const cartData = cart.data;
 
   // Setting city value as 'NONE' so that, we can
   // identify if billing address added is default one and
   // not actually added by the customer on FE.
-  if (updateBillingDetails
-    || _isEmpty(cartData.billing_address) || _isEmpty(cartData.billing_address.city)
-    || cartData.billing_address.city === 'NONE') {
+  if (_isEmpty(cart.data.cart.billing_address)
+    || _isEmpty(cart.data.cart.billing_address.city)
+    || cart.data.cart.billing_address.city === 'NONE'
+  ) {
     params.shipping.shipping_address.city = 'NONE';
     // Adding billing address.
     cart = await updateBilling(params.shipping.shipping_address);
@@ -1794,13 +1800,13 @@ window.commerceBackend.addShippingMethod = async (data) => {
     // Unset as not needed in further processing.
     delete (shippingInfo.shipping_type);
 
-    logger.notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cart_id', {
+    logger.notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cartId', {
       '@data': JSON.stringify(data),
       '@address': JSON.stringify(shippingInfo),
-      '@cart_id': cartId,
+      '@cartId': cartId,
     });
 
-    cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
+    cart = await addCncShippingInfo(shippingInfo, data.action);
 
     // Process cart data.
     cart.data = await getProcessedCheckoutData(cart.data);
@@ -1814,10 +1820,10 @@ window.commerceBackend.addShippingMethod = async (data) => {
   // Shipping methods.
   const response = await getHomeDeliveryShippingMethods(shippingAddress);
   if (response.error) {
-    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', {
+    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cartId Error message: @message', {
       '@data': JSON.stringify(data),
-      '@cart_id': cartId,
-      '@error_message': response.error_message,
+      '@cartId': cartId,
+      '@message': response.error_message,
     });
 
     return { data: response };
@@ -1932,7 +1938,7 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   if (_isObject(cart) && isCartHasOosItem(cart.data)) {
-    logger.error('Error while placing order. Cart has an OOS item. Cart: @cart', {
+    logger.warning('Error while placing order. Cart has an OOS item. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
 
@@ -2068,9 +2074,9 @@ window.commerceBackend.placeOrder = async (data) => {
 
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
-      logger.notice('Order placed successfully. Cart: @cart OrderId: @order_id, Payment Method: @method.', {
+      logger.notice('Order placed successfully. Cart: @cart OrderId: @orderId, Payment Method: @method.', {
         '@cart': JSON.stringify(cart),
-        '@order_id': orderId,
+        '@orderId': orderId,
         '@method': data.data.paymentMethod.method,
       });
 

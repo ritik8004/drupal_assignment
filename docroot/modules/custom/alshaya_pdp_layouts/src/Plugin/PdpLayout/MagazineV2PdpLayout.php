@@ -13,6 +13,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides the default laypout for PDP.
@@ -147,8 +148,26 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
 
+    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+    $vars['#cache']['tags'] = Cache::mergeTags($vars['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
+    // Checking if express delivery enabled.
+    if ($express_delivery_config->get('status')) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
+      // Show delivery options as per order in express delivery config.
+      $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+      $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+      if ($delivery_options !== NULL) {
+        foreach ($delivery_options_order as $option) {
+          if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
+            $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'][$option]['label'] = $delivery_options[$option]['label'];
+          }
+        }
+      }
+    }
+
     // Set delivery options only if product is buyable.
-    if ($is_product_buyable) {
+    // Hide home delivery default options if express delivery enabled.
+    if ($is_product_buyable && !($express_delivery_config->get('status'))) {
       // Check if home delivery is available for this product.
       if (alshaya_acm_product_available_home_delivery($sku)) {
         $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
@@ -330,7 +349,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           'sku' => $sku,
           'thumbnails' => $thumbnails,
           'pager_flag' => $pager_flag,
-          'lazy_load_placeholder' => $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder'),
         ];
 
       }

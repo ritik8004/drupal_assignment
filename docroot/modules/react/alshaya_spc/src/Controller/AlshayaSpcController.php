@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 
 /**
  * Class Alshaya Spc Controller.
@@ -95,6 +96,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * Checkout.com API Helper.
+   *
+   * @var \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper
+   */
+  protected $checkoutComApiHelper;
+
+  /**
    * SPC helper.
    *
    * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
@@ -122,6 +130,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Language manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper
+   *   Acm checkout com api helper.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
    *   Spc helper service.
    */
@@ -134,6 +144,7 @@ class AlshayaSpcController extends ControllerBase {
                               AlshayaSpcOrderHelper $order_helper,
                               LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
+                              AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
                               AlshayaSpcHelper $spc_helper) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
@@ -144,6 +155,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->orderHelper = $order_helper;
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
+    $this->checkoutComApiHelper = $checkout_com_api_helper;
     $this->spcHelper = $spc_helper;
   }
 
@@ -161,6 +173,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_spc.order_helper'),
       $container->get('language_manager'),
       $container->get('module_handler'),
+      $container->get('alshaya_acm_checkoutcom.api_helper'),
       $container->get('alshaya_spc.helper')
     );
   }
@@ -197,6 +210,7 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
@@ -206,6 +220,7 @@ class AlshayaSpcController extends ControllerBase {
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
+            'address_fields' => _alshaya_spc_get_address_fields(),
           ],
         ],
       ],
@@ -229,6 +244,25 @@ class AlshayaSpcController extends ControllerBase {
       ];
     }
     $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $advantage_card_config->getCacheTags());
+
+    $express_delivery_config = $this->config('alshaya_spc.express_delivery');
+    // Show express delivery options if feature is enabled.
+    if ($express_delivery_config->get('status')) {
+      $build['#attached']['drupalSettings']['expressDelivery'] = [
+        'enabled' => TRUE,
+      ];
+      $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $express_delivery_config->getCacheTags());
+
+    // Add collection point feature config variables.
+    $collection_points_config = $this->config('alshaya_spc.collection_points');
+    $build['#attached']['drupalSettings']['cnc_collection_points_enabled'] = $collection_points_config->get('click_collect_collection_points_enabled');
+
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, array_merge(
+      $advantage_card_config->getCacheTags(),
+      $collection_points_config->getCacheTags(),
+    ));
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
@@ -528,6 +562,11 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
+    $strings[] = [
+      'key' => 'delivery_area_question',
+      'value' => $this->t('Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel?', [], ['context' => 'delivery_area']),
+    ];
+
     $backend_version = $this->spcHelper->getCommerceBackendVersion();
 
     $build = [
@@ -565,6 +604,7 @@ class AlshayaSpcController extends ControllerBase {
             ],
           ],
           'global_error_message' => _alshaya_spc_global_error_message(),
+          'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
         ],
       ],
       '#cache' => [
@@ -623,6 +663,16 @@ class AlshayaSpcController extends ControllerBase {
       $build['#attached']['drupalSettings']['cart']['addressFields'] = Settings::get('alshaya_address_fields', []);
     }
 
+    $express_delivery_config = $this->config('alshaya_spc.express_delivery');
+    // Show express delivery options if feature is enabled.
+    if ($express_delivery_config->get('status')) {
+      $build['#attached']['drupalSettings']['expressDelivery'] = [
+        'enabled' => TRUE,
+      ];
+      $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $express_delivery_config->getCacheTags());
+
     $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
     return $build;
   }
@@ -647,14 +697,8 @@ class AlshayaSpcController extends ControllerBase {
       $delivery_method_description = $this->t('Same day');
     }
 
-    $collection_settings = $this->config('alshaya_spc.collection_points');
-    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
-
     // Get formatted customer phone number.
-    $number = $cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_mobile']
-      ? $order['shipping']['extension_attributes']['collector_mobile']
-      : $order['shipping']['address']['telephone'];
-    $phone_number = $this->orderHelper->getFormattedMobileNumber($number);
+    $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
     // Order Totals.
     $totals = [
@@ -688,6 +732,8 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $collection_settings = $this->config('alshaya_spc.collection_points');
+    $cnc_collection_points_enabled = $collection_settings->get('click_collect_collection_points_enabled');
 
     $settings = [
       'site_details' => [
@@ -696,9 +742,7 @@ class AlshayaSpcController extends ControllerBase {
         'customer_service_text' => $checkout_settings->get('checkout_customer_service'),
       ],
       'order_details' => [
-        'customer_email' => ($cnc_collection_points_enabled && $order['shipping']['extension_attributes']['collector_email'])
-        ? $order['shipping']['extension_attributes']['collector_email']
-        : $order['email'],
+        'customer_email' => $order['email'],
         'order_number' => $order['increment_id'],
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
@@ -720,6 +764,13 @@ class AlshayaSpcController extends ControllerBase {
     // Get static text for Fawry payment.
     if ($orderDetails['payment']['methodCode'] === 'checkout_com_upapi_fawry') {
       $strings = array_merge($strings, CheckoutComUpapiFawry::getFawryStaticText());
+    }
+
+    if ($orderDetails['payment']['methodCode'] === 'checkout_com_upapi_benefitpay') {
+      $checkoutcomConfig = $this->checkoutComApiHelper->getCheckoutcomUpApiConfig();
+      $settings['order_details']['payment']['benefitpayMerchantId'] = $checkoutcomConfig['benefit_pay_merchant_id'];
+      $settings['order_details']['payment']['benefitpayAppId'] = $checkoutcomConfig['benefit_pay_app_id'];
+      $settings['order_details']['payment']['benefitpaySecretKey'] = $checkoutcomConfig['benefit_pay_secret_key'];
     }
 
     $cache_tags = [];
@@ -802,15 +853,7 @@ class AlshayaSpcController extends ControllerBase {
           }
           break;
 
-        case 'pudo_fullname':
-          // If full name is not empty.
-          if (!empty($value)) {
-            $status[$key] = TRUE;
-          }
-          break;
-
         case 'mobile':
-        case 'pudo_collector_tel':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
@@ -839,7 +882,6 @@ class AlshayaSpcController extends ControllerBase {
           break;
 
         case 'email':
-        case 'pudo_collector_email':
           // For email validation we do two checks:
           // 1. email domain is valid
           // 2. email is not of an existing customer.

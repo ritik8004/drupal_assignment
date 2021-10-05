@@ -71,10 +71,9 @@ class SearchGallery extends React.PureComponent {
         <div className="alshaya_search_mainimage" ref={this.mainImageRef} data-sku-image={`${mainImageUrl}`}>
           <div className="img-wrapper">
             <ImageElement
-              src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-              data-src={mainImageUrl}
+              src={mainImageUrl}
               title={title}
-              className="b-lazy"
+              loading="lazy"
             />
             {initSlider ? this.onHoverAppendMarkup(sliderStatus, thumbnails) : ''}
           </div>

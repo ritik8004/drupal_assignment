@@ -39,9 +39,6 @@ function showSearchResultContainer() {
 }
 
 function hideSearchResultContainer() {
-  if (typeof Drupal.blazy !== 'undefined') {
-    Drupal.blazy.revalidate();
-  }
   Array.prototype.forEach.call(contentDiv.parentNode.children, (element) => {
     const searchContainerElm = element;
     searchContainerElm.style.display = null;
@@ -51,7 +48,6 @@ function hideSearchResultContainer() {
   searchResultDiv.style.display = 'none';
   searchResultDiv.classList.remove('show-algolia-result');
   pageStandard.className = defaultClasses;
-  Drupal.blazyRevalidate();
 }
 
 function toggleSearchResultsContainer() {

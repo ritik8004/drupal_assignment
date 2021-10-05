@@ -85,7 +85,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
         "drupal/s3fs": "^3.0@alpha",
-        "drupal/search_api_algolia": "^3.0@beta",
+        "drupal/search_api_algolia": "3.0.x-dev@dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
@@ -222,8 +222,7 @@
                 "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2020-04-21/2922201-16.patch"
             },
             "drupal/search_api": {
-                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
+                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
             "drupal/facets": {
                 "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
@@ -277,7 +276,8 @@
                 "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
                 "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                 "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
-                "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch"
+                "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
+                "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -292,7 +292,7 @@
                 "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2019-11-01/3091689-2.patch"
             },
             "drupal/simple_sitemap": {
-                "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014_CORE_14106.patch"
+                "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
             },
             "drupal/password_policy": {
                 "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",

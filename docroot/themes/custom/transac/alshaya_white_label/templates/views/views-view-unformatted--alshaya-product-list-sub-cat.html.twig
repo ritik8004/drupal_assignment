@@ -31,7 +31,7 @@
   {% if row.content.tid %}
     <term class="term-header {{ row.content.label|clean_class }}" id="{{ row.content.tid }}">
       {% if row.content.image %}
-        <div class="term-image"><img src="{{ row.content.image }}"/></div>
+        <div class="term-image"><img loading="lazy" src="{{ row.content.image }}"/></div>
       {% endif %}
       {% if row.content.label %}
         <div class="term-title">{{ row.content.label }}</div>

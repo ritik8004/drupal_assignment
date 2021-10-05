@@ -28,19 +28,6 @@
     open: productMatchbackDialogOpen
   };
 
-  /**
-   * Call blazyRevalidate() on afterChange of slick sliders.
-   *
-   * @param {object} carousel
-   * The carousel element.
-   */
-  function applyMatchbackHorizontalLazyLoad(carousel) {
-    // Lazy Load on carousels.
-    carousel.on('afterChange', function () {
-      Drupal.blazyRevalidate();
-    });
-  }
-
   // Call applyMatchbackRtl() to initialise slick.
   function applyMatchbackRtl(ocObject, options) {
 
@@ -74,7 +61,6 @@
   // Call matchbackSlider() to apply slick and instagram dots.
   function matchbackSlider(ocObject) {
     applyMatchbackRtl(ocObject, optionMatchback);
-    applyMatchbackHorizontalLazyLoad(ocObject);
   }
 
   // Call matchbackZoomModal() to open matchback zoom image in modal.

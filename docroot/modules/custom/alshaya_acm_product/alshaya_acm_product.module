@@ -627,10 +627,26 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
-         // Same day delivery.
-         if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['same_day_delivery']['text'])) {
+        // Same day delivery.
+        if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['same_day_delivery']['text'])) {
           $build['same_day_delivery_text']['#markup'] = $flags_config['same_day_delivery']['text'];
           $build['same_day_delivery_sub_text']['#markup'] = $flags_config['same_day_delivery']['sub_text'];
+        }
+
+        $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
+        // Express Delivery
+        if ($express_delivery_config->get('status')) {
+          $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+          if ($delivery_options !== NULL) {
+            // Show delivery options as per order defined in config.
+            $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+            foreach ($delivery_options_order as $option) {
+              if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
+                $build['delivery_options'][$option]['#markup'] = $delivery_options[$option]['label'];
+              }
+            }
+          }
         }
 
         // Delivery in only city.
@@ -1381,7 +1397,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
-
+  // Adding visually-hidden class here as JS is
+  // triggered based on this class to display 'add to basket'
+  // button on mobile view for simple products as well.
+  $form['#attributes']['class'][] = 'visually-hidden';
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
     // Adding parent/main sku in hidden. This can be update/changed
     // by color split if required.
@@ -1396,8 +1415,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     ];
 
     // Hide the form on page load, we want to allow all JS to be applied first.
-    $form['#attributes']['class'][] = 'visually-hidden';
-
     $sku = SKU::loadFromSku($form_state->get('tree_sku'));
     $product_tree = Configurable::deriveProductTree($sku);
 
@@ -2102,4 +2119,32 @@ function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterfac
   }
 
   $variant['matchback_teaser_image'] = is_string($image) ? $image : '';
+}
+
+/**
+ * Get delivery options for the product.
+ *
+ * @param string $sku
+ *   Sku id.
+ *
+ * @return array
+ *   Array of delivery options config.
+ */
+function alshaya_acm_product_get_delivery_options($sku) {
+  $sku_entity = SKU::loadFromSku($sku);
+
+  if (!($sku_entity instanceof SKU)) {
+    return NULL;
+  }
+
+  return [
+    'same_day_delivery' => [
+      'status' => $sku_entity->get('attr_same_day_delivery')->getString(),
+      'label' => t('Same Day Delivery available'), [], ['context' => 'sameday_delivery_label'],
+    ],
+    'express_delivery' => [
+      'status' => $sku_entity->get('attr_express_delivery')->getString(),
+      'label' => t('Express Delivery available', [], ['context' => 'express_delivery_label']),
+    ],
+  ];
 }

@@ -1,5 +1,7 @@
 variables:
-  spc_product_listing_page: '/shop-mens/accessories-0/'
-  spc_basket_page: '/shop-mens/accessories-0/'
-  spc_pdp_page: 'buy-nike-cl99-trucker-cap-obsidian-white-black.html'
-  product_listing_page_url: '/shop-mens/accessories-0/'
+  spc_product_listing_page: '/shop-womens/shoes/basketball/'
+  spc_basket_page: '/shop-womens/shoes/basketball/'
+  spc_pdp_page: 'buy-foot-locker-3-pack-active-dry-crew-socks-grey-white-black.html'
+  product_listing_page_url: '/shop-womens/shoes/basketball/'
+  np_plp_product_page: 'buy-foot-locker-3-pack-active-dry-crew-socks-grey-white-black.html'
+  np_plp_page: 'shop-womens/shoes/basketball'

@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Set Mobile Number maxlength to 8.
+ */
+function alshaya_kw_update_8006() {
+  $settings = \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings');
+  $settings->set('maxlength', 8);
+  $settings->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install config for spc click n collect.
  */
 function alshaya_kw_update_8005() {

@@ -20,7 +20,7 @@
   Drupal.theme.cartNotificationMarkup = function (data) {
     var markup = '<div class="notification">';
     markup += '<div class="col-1">';
-    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    markup += '<img loading="lazy" src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
     markup += '<span class="qty">' + Drupal.t('Qty') + ': ' + data.quantity + '</span></div>';
     markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
     markup += Drupal.t('has been added to your cart.');
@@ -34,7 +34,7 @@
     var markup = '<div class="matchback-notification notification">';
     markup += '<div class="matchback-cart-notification-close"></div>';
     markup += '<div class="col-1">';
-    markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
+    markup += '<img loading="lazy" src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
     markup += '</div>';
     markup += '<div class="col-2">';
     markup += '<div class="name">' + data.name + '</div>';
@@ -206,6 +206,10 @@
         else if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
           $('#cart_notification, #magv2_cart_notification, #static_minicart_notification').addClass('cart-notification-animate');
           $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
+          setTimeout(function () {
+              $('#cart_notification, #magv2_cart_notification, #static_minicart_notification').fadeOut();
+              $('#cart_notification, #magv2_cart_notification, #static_minicart_notification').removeClass('cart-notification-animate');
+          }, drupalSettings.addToCartNotificationTime * 1000);
         }
         // Above Mobile res / default PDP / new PDP.
         else {

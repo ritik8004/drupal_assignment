@@ -1,0 +1,21 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp,
+#top-results {
+  .c-products__item.promotion-frame {
+    .product-plp-detail-wrapper {
+      .promotions {
+        @include breakpoint($tablet) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .addtobag-button-container,
+    .addtobag-config-button-container,
+    .is-not-buyable {
+      @include breakpoint($tablet) {
+        margin-top: 0.75rem;
+      }
+    }
+  }
+}
