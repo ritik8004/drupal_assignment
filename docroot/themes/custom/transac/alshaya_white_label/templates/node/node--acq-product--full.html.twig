@@ -211,7 +211,9 @@ set classes = [
             {% if content.home_delivery or content.click_and_collect %}
               <div class="delivery-options-wrapper">
                 <div class="product-out-of-stock-layer"></div>
-                <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% if not content.express_delivery %}
+                  <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% endif %}
                 <div class="field__content">
                   {{ content.home_delivery }}
 
