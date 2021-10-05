@@ -18,6 +18,9 @@ class PdpExpressDelivery extends React.Component {
     document.addEventListener('setDeliveryOptionAccordionHeight', this.setDeliveryOptionAccordionHeight, false);
   }
 
+  /**
+   * Show delivery options on click of arrow button.
+   */
   showExpressDeliveryBlock = () => {
     const { open } = this.state;
 
@@ -34,6 +37,9 @@ class PdpExpressDelivery extends React.Component {
     }
   };
 
+  /**
+   * Adjust accordion height as per delivery options content.
+   */
   setDeliveryOptionAccordionHeight = (event) => {
     event.preventDefault();
     setupAccordionHeight(this.expandRef);
