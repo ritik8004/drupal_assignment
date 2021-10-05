@@ -30,7 +30,7 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
   if (container === null || container === undefined) {
     // If we are in mobile the scroll is on popup.
     if (window.innerWidth < 768) {
-      container = document.querySelector('.popup-content ');
+      container = document.querySelector('.popup-content');
     } else {
       container = document.querySelector('.spc-cnc-selected-store-content');
     }
