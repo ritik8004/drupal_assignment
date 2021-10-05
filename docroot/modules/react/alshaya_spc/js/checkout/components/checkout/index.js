@@ -92,12 +92,10 @@ export default class Checkout extends React.Component {
     document.addEventListener('alshayaPostpayInit', () => {
       this.setState({ isPostpayInitialised: true });
     });
-    document.addEventListener('onShippingAddressUpdate', this.onShippingUpdate, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
-    document.removeEventListener('onShippingAddressUpdate', this.onShippingUpdate, false);
   }
 
   processCheckout = (result) => {
@@ -248,13 +246,6 @@ export default class Checkout extends React.Component {
         cart={cart}
       />
     );
-  };
-
-  // Remove cart from localStorage on shipping address update so that
-  // fresh cart is fetched on cart page to reflect any new modifications from
-  // checkout page like delivery/collection charges etc.
-  onShippingUpdate = () => {
-    window.commerceBackend.removeCartDataFromStorage();
   };
 
   render() {
