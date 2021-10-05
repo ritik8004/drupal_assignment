@@ -70,7 +70,7 @@
         "drupal/migrate_tools": "^5.0",
         "drupal/mimemail": "^1.0@alpha",
         "drupal/mobile_app_links": "^1.0",
-        "drupal/mobile_number": "^1.0@alpha",
+        "drupal/mobile_number": "^2.0@alpha",
         "drupal/paragraphs": "^1.6",
         "drupal/password_policy": "^3.0",
         "drupal/path_redirect_import": "^1.0@beta",
@@ -260,10 +260,7 @@
                 "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch"
             },
             "drupal/mobile_number": {
-                "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
-                "Fix more notices": "patches/mobile_number/2978729-custom.patch",
-                "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch",
-                "D9 compability fixes": "https://www.drupal.org/files/issues/2021-09-17/mobile-number-d9-compatibility-3075958-5.patch"
+                "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
             "drupal/redirect": {
                 "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/2021-02-22/redirect-query-wildcard-2885889-8.x-1.6.patch"
