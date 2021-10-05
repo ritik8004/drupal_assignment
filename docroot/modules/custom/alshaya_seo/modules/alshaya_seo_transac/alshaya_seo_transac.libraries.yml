@@ -63,6 +63,7 @@ product_list:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
+
 search_list:
   version: 1.x
   js:
@@ -71,6 +72,7 @@ search_list:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
+
 product_slider:
   version: 1.x
   js:
