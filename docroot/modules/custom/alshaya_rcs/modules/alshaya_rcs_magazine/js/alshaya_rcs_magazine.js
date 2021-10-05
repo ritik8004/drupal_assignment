@@ -15,17 +15,25 @@
     data.forEach((item) => {
       // Add settings.
       item['lang_code'] = drupalSettings.path.currentLanguage;
+
       // This setting is not being used by any brand, setting default value.
       item['show_cart_form'] = 'no-cart-form';
-      // Product url.
-      item['url'] = `/${item.lang_code}/${item.url_key}.html`;
+
+      // Relative url.
+      // @todo Move to a function.
+      const url = new URL(item.end_user_url);
+      item['url'] = url.toString().substring(url.origin.length);
+
+      // Price logic CORE-34151.
+      // @todo Get from/to prices from Graphql for non-simple prods.
+      item['price_details'] = item.price_range.maximum_price;
+      item['price_details']['display_mode'] = 'simple';
 
       // Assets.
+      item['image'] = item.assets_teaser;
       if (item.type_id === 'configurable') {
         const assets = JSON.parse(item.variants[0].product.assets_teaser);
         item['image'] = assets[0].styles;
-      } else {
-        item['image'] = item.assets_teaser;
       }
     });
   });
