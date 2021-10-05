@@ -12,12 +12,15 @@
     }
   }
 
-  .store-open-hours-list,
-  .store-delivery-time {
-    margin-top: 0.625rem;
+  .store-open-hours-list {
+    margin-top: 0.5rem;
   }
 
   .store-delivery-time {
+    font-family: $alshaya-bold;
+    color: $spc-cnc-store-item-text-impress;
+    margin-top: 0.75rem;
+
     .delivery--time--value {
       padding-#{$left}: 0.3125rem;
     }
