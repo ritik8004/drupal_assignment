@@ -177,9 +177,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'field_magazine_shop_the_story':
-      const dataAttributes = rcsGetBlockDataAttributes(placeholder);
       request.data = JSON.stringify({
-        query: `{ products(filter: { sku: { in: ${dataAttributes.skus} }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       response = await rcsCommerceBackend.invokeApi(request);

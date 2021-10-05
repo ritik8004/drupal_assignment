@@ -34,7 +34,7 @@ class RcsSkuFieldPlaceholder extends FormatterBase implements ContainerFactoryPl
     foreach ($items as $delta => $item) {
       $data[$delta] = $item->value;
     }
-    $elements['#content_attributes']['data-skus'] = Json::encode($data);
+    $elements['#content_attributes']['data-param-skus'] = Json::encode($data);
 
     return $elements;
   }

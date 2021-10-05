@@ -89,10 +89,8 @@ exports.render = function render(
 
     case 'field_magazine_shop_the_story':
       let data = [];
-
       // Sort results in the same order as in the CMS.
-      const dataAttributes = rcsGetBlockDataAttributes(placeholder);
-      JSON.parse(dataAttributes.skus).forEach((sku) => {
+      JSON.parse(params.skus).forEach((sku) => {
         const i = inputs.findIndex(i => i.sku === sku);
         if (inputs[i]) {
           data.push(inputs[i]);
