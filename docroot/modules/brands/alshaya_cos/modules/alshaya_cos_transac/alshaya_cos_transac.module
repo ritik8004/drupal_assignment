@@ -9,9 +9,9 @@
  * Implements hook_preprocess_template().
  */
 function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
-  $cos_classic_gallery = \Drupal::config('alshaya_acm_product.settings')->get('cos_classic_gallery');
-  // Set flag to identify cos classic gallery enabled.
-  if ($cos_classic_gallery) {
-    $vars['cos_classic_gallery'] = $cos_classic_gallery;
+  $pdp_magazine_override = \Drupal::config('alshaya_acm_product.settings')->get('pdp_magazine_override');
+  // Set pdp_magazine_override to show swatch images in mobile with classic gallery in magazine layout.
+  if ($pdp_magazine_override) {
+    $vars['pdp_magazine_override'] = $pdp_magazine_override;
   }
 }

@@ -23,8 +23,8 @@ class MagazinePdpLayout extends PdpLayoutBase {
    * {@inheritdoc}
    */
   public function getRenderArray(array &$variables) {
-    $cos_classic_gallery = \Drupal::config('alshaya_acm_product.settings')->get('cos_classic_gallery');
-    if ($cos_classic_gallery) {
+    $pdp_magazine_override = \Drupal::config('alshaya_acm_product.settings')->get('pdp_magazine_override');
+    if ($pdp_magazine_override) {
       // Classic gallery for cos PDP magazine layout.
       $variables['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
       $variables['#attached']['library'][] = 'alshaya_white_label/attribute';

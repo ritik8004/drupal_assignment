@@ -725,9 +725,9 @@ class SkuImagesManager {
    */
   public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE) {
     $gallery = [];
-    $cos_classic_gallery = \Drupal::config('alshaya_acm_product.settings')->get('cos_classic_gallery');
+    $pdp_magazine_override = \Drupal::config('alshaya_acm_product.settings')->get('pdp_magazine_override');
     // Set Classic gallery to COS Magazine layout PDP.
-    if ($cos_classic_gallery && $context == 'pdp-magazine') {
+    if ($pdp_magazine_override && $context == 'pdp-magazine') {
       $context = 'pdp';
     }
 

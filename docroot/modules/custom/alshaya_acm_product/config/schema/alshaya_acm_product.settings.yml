@@ -123,6 +123,6 @@ alshaya_acm_product.settings:
     delivery_in_only_city_text:
       type: label
       label: 'Delivery in only city'
-    cos_classic_gallery:
+    pdp_magazine_override:
       type: boolean
-      label: 'Cos classic gallery for magazine layout'
+      label: 'PDP Magazine Override'
