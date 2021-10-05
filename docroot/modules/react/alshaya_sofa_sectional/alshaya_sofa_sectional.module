@@ -13,14 +13,17 @@ use Drupal\node\Entity\Node;
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityViewDisplay $display, $view_mode) {
+  if ($entity->bundle() !== 'acq_product' && $view_mode !== 'full') {
+    return;
+  }
+
+  // Add cache tag.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
+
   // Get sofa sectional configuration.
   $config = \Drupal::config('alshaya_sofa_sectional.settings');
 
   if (!$config->get('enabled')) {
-    return;
-  }
-
-  if ($entity->bundle() !== 'acq_product' && $view_mode !== 'full') {
     return;
   }
 
@@ -38,7 +41,4 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
     $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
     $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
   }
-
-  // Add cache tag.
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
 }
