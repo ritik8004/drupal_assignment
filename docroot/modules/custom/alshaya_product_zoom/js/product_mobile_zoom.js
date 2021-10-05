@@ -53,7 +53,6 @@
             var gallery = $('#product-full-screen-gallery-container.ui-dialog-content #product-full-screen-gallery');
             if (!gallery.hasClass('slick-initialized')) {
               // Slick Slider initialisation.
-              Drupal.blazy.revalidate();
               applyRtl(gallery, slickModalOptions);
               // Sync dots on startup.
               Drupal.behaviors.pdpInstagranDots.syncDots(gallery, currentmobSlide, false);
