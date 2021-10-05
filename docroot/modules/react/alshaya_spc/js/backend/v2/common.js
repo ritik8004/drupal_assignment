@@ -1330,6 +1330,26 @@ window.commerceBackend.getDeliveryAreaList = async (governateId) => {
 };
 
 /**
+ * Gets individual area detail.
+ *
+ * @returns {Promise<object>}
+ *  returns details of area if area id is valid.
+ */
+window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
+  if (areaId !== undefined) {
+    const responseData = await getLocations('location_id', areaId);
+    if (responseData !== null && responseData.total_count > 0) {
+      return responseData;
+    }
+    logger.warning('No details found for area Id : @areaId, API Response: @response.', {
+      '@response': JSON.stringify(responseData),
+      '@areaId': areaId,
+    });
+  }
+  return {};
+};
+
+/**
  * Gets governates list items.
  *
  * @returns {Promise<object>}
