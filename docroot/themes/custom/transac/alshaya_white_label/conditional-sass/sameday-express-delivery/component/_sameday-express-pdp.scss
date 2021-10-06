@@ -82,15 +82,21 @@
     letter-spacing: 0.0625rem;
     margin-bottom: 0.3125rem;
 
-    &::after {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      width: 1.75rem;
-      top: 50%;
-      transition: transform 0.3s ease-in-out;
-      transform: translateY(-50%);
+    &.ui-state-active {
+      .c-accordion__title {
+        &::after {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    .c-accordion__title {
+      &::after {
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 
@@ -121,7 +127,6 @@
       font-family: $alshaya-bold;
       text-transform: capitalize;
       font-size: 1.125rem;
-      margin-bottom: 1.25rem;
 
       @include breakpoint($only-mobile) {
         font-size: 1rem;
@@ -152,7 +157,6 @@
           &::before {
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
             transition: transform 0.125s ease-in-out;
           }
 
@@ -164,7 +168,7 @@
         &--menu-is-open {
           .spcSelect__dropdown-indicator {
             &::before {
-              transform: translateY(-50%) rotate(180deg);
+              transform: translateY(-50%) rotate(270deg);
             }
           }
         }
@@ -177,7 +181,7 @@
 
         .spcSelect__menu-list {
           padding: 0;
-          border: 1px solid $spc-select-border;
+          border: 1px solid $express-delivery-menu-list-border;
           border-top-width: 0;
 
           > div {
@@ -227,6 +231,8 @@
 
     @include breakpoint($only-tablet) {
       width: 12.1875rem;
+      padding-#{$right}: 0.3125rem;
+      padding-#{$left}: 0.1875rem;
     }
 
     &:last-child {
@@ -239,6 +245,10 @@
       height: 1.5rem;
       display: inline-block;
       margin-#{$right}: 0.625rem;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 0.3125rem;
+      }
     }
 
     &.standard {
@@ -362,6 +372,10 @@
     .cart-shipping-method {
       width: 19rem;
 
+      @include breakpoint($only-tablet) {
+        width: auto;
+      }
+
       .carrier-title {
         font-size: 1rem;
       }
@@ -394,15 +408,9 @@
             align-items: center;
             justify-content: center;
 
-            @include icon(chevrondown, before) {
-              font-size: 1.5rem;
-              transform: translateY(-50%);
-            }
-
             &::before {
               position: absolute;
               top: 50%;
-              transform: translateY(-50%);
               transition: transform 0.125s ease-in-out;
             }
 
@@ -420,7 +428,7 @@
           &--menu-is-open {
             .spcSelect__dropdown-indicator {
               &::before {
-                transform: translateY(-50%) rotate(180deg);
+                transform: translateY(-50%) rotate(270deg);
               }
             }
           }
@@ -433,7 +441,7 @@
 
           .spcSelect__menu-list {
             padding: 0;
-            border: 1px solid $spc-select-border;
+            border: 1px solid $express-delivery-menu-list-border;
             border-top-width: 0;
 
             > div {
