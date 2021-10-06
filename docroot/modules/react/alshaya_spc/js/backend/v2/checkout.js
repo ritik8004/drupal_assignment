@@ -1040,18 +1040,17 @@ const applyDefaults = async (data, customerId) => {
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
-  if (!_isUndefined(cartData.error)) {
+  // In case of errors, return the error object.
+  if (hasValue(cartData) && hasValue(cartData.error) && cartData.error) {
     return cartData;
   }
 
-  if (_isEmpty(cartData)) {
+  // If the cart object is empty, return null.
+  if (!hasValue(cartData)) {
     return null;
   }
 
   let data = _cloneDeep(cartData);
-  if (typeof data.error !== 'undefined' && data.error === true) {
-    return data;
-  }
 
   // Check whether CnC enabled or not.
   const cncStatus = await getCncStatusForCart(data);
