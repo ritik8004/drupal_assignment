@@ -4,8 +4,6 @@ namespace Drupal\alshaya_cos_images;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Routing\CurrentRouteMatch;
 
 /**
  * Sku Asset Manager Class.
@@ -25,36 +23,13 @@ class SkuAssetManager {
   protected $configFactory;
 
   /**
-   * The current route match service.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  protected $currentRouteMatch;
-
-  /**
-   * Module Handler service object.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config Factory service.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
-   *   Current route matcher service.
-   *   The entity type manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   Module Handler service object.
    */
-  public function __construct(ConfigFactory $configFactory,
-                              CurrentRouteMatch $currentRouteMatch,
-                              ModuleHandlerInterface $moduleHandler) {
+  public function __construct(ConfigFactory $configFactory) {
     $this->configFactory = $configFactory;
-    $this->currentRouteMatch = $currentRouteMatch;
-    $this->moduleHandler = $moduleHandler;
   }
 
   /**
