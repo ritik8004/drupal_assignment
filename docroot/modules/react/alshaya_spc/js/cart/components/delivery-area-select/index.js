@@ -87,8 +87,10 @@ export default class DeliveryAreaSelect extends React.Component {
       <div id="delivery-area-select" className="fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <div className="delivery-area-label">
           <span>{`${Drupal.t('Deliver to')}: `}</span>
-          <span className="delivery-area-name">{areaLabel}</span>
-          <span onClick={() => getPanelData(this.openModal())} className="delivery-area-button" />
+          <div onClick={() => getPanelData(this.openModal())}>
+            <span className="delivery-area-name">{areaLabel}</span>
+            <span className="delivery-area-button" />
+          </div>
         </div>
       </div>
     );
