@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
+  $pdp_gallery_type = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_type');
+  // Set pdp_gallery_type to show swatch images in mobile with classic gallery in magazine layout.
+  if ($pdp_gallery_type == 'classic') {
+    $vars['pdp_gallery_type'] = $pdp_gallery_type;
+  }
+}
