@@ -15,37 +15,7 @@
     // The product will be fetched and saved in static storage.
     await globalThis.rcsPhCommerceBackend.getDataAsync('product', {sku: mainSKU});
 
-    // Fetch the processed product data from the static storage.
-    var product = window.commerceBackend.getProductData(mainSKU);
-    var productSku = sku;
-    var options = [];
-    var is_configurable = typeof product.variants !== 'undefined';
-    var url = product.url;
-
-    if (is_configurable) {
-      product = product.variants[sku];
-      options = product.configurableOptions;
-      url = product.url[drupalSettings.path.currentLanguage];
-    }
-
-    var stock = Drupal.hasValue(product.stock) ? product.stock : stock;
-
-    Drupal.alshayaSpc.storeProductData({
-      sku: productSku,
-      parentSKU: mainSKU,
-      title: product.cart_title,
-      url,
-      image: product.cart_image,
-      price: product.priceRaw,
-      options: options,
-      promotions: product.promotionsRaw,
-      freeGiftPromotion: product.freeGiftPromotion || [],
-      maxSaleQty: product.max_sale_qty,
-      maxSaleQtyParent: product.max_sale_qty_parent,
-      isNonRefundable: product.is_non_refundable,
-      gtmAttributes: product.gtm_attributes,
-      stock: stock,
-    });
+    window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   }
 
   /**
@@ -69,5 +39,48 @@
     });
 
     return stock;
+  }
+
+  /**
+   * Triggers stock refresh of the provided skus.
+   *
+   * @param {object} data
+   *   The object of sku values and their requested quantity, like {sku1: qty1}.
+   * @returns {Promise}
+   *   The stock status for all skus.
+   */
+  window.commerceBackend.triggerStockRefresh = async function (data) {
+    const cartData = Drupal.alshayaSpc.getCartData();
+    const skus = {};
+
+    Object.values(cartData.items).forEach(function (item) {
+      const sku = item.sku;
+      if (!Drupal.hasValue(data[sku])) {
+        return;
+      }
+
+      Drupal.alshayaSpc.getLocalStorageProductData(sku, function (productData) {
+        // Check if error is triggered when stock data in local storage is
+        // greater than the requested quantity.
+        if (productData.stock.qty > data[sku]) {
+          skus[item.parentSKU] = sku;
+          Drupal.alshayaSpc.removeLocalStorageProductData(sku);
+        }
+      });
+    });
+
+    const skuValues = Object.keys(skus);
+    if (!skuValues.length) {
+      return;
+    }
+
+    // Fetch the product data for the given skus which also saves them to the
+    // static storage.
+    globalThis.rcsPhCommerceBackend.getDataAsync('product', {sku: skuValues, op: 'in'});
+
+    // Now store the product data to local storage.
+    Object.entries(skus).forEach(function ([ parentSku, sku ]) {
+      window.commerceBackend.processAndStoreProductData(parentSku, sku, 'productInfo');
+    });
   }
 })(Drupal);

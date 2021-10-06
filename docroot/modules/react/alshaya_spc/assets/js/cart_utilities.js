@@ -70,6 +70,13 @@
     return false;
   }
 
+  Drupal.alshayaSpc.removeLocalStorageProductData = function (sku) {
+    drupalSettings.alshayaSpc.languages.forEach(function (langcode) {
+      var key = ['product', langcode, sku].join(':');
+      localStorage.removeItem(key);
+    });
+  }
+
   Drupal.alshayaSpc.getProductData = function (sku, callback, extraData) {
     extraData = extraData || {};
 
@@ -190,6 +197,90 @@
     }
     return groupingOptions;
   };
+
+  /**
+   * Processes product data and stores it to local storage.
+   *
+   * @param {string} viewMode
+   *   The product view mode, eg. matchback.
+   * @param {object} productData
+   *   An object containing some processed product data.
+   */
+  window.commerceBackend.processAndStoreProductData = function (parentSku, variantSku, viewMode) {
+    var productInfo = window.commerceBackend.getProductData(parentSku, viewMode);
+    var options = [];
+    var productUrl = productInfo.url;
+    var price = productInfo.priceRaw;
+    var promotions = productInfo.promotionsRaw;
+    var freeGiftPromotion = productInfo.freeGiftPromotion;
+    var productDataSKU = parentSku;
+    var parentSKU = parentSku;
+    var maxSaleQty = productInfo.maxSaleQty;
+    var maxSaleQtyParent = productInfo.max_sale_qty_parent;
+    var gtmAttributes = productInfo.gtm_attributes;
+    var isNonRefundable = productInfo.is_non_refundable;
+    var productName = productInfo.cart_title;
+    var productImage = productInfo.cart_image;
+    var stock = productInfo.stock;
+    var cncEnabled = productInfo.click_collect;
+
+    if (productInfo.type === 'configurable') {
+      var productVariantInfo = productInfo['variants'][variantSku];
+      productDataSKU = variantSku;
+      price = productVariantInfo.priceRaw;
+      parentSKU = productVariantInfo.parent_sku;
+      promotions = productVariantInfo.promotionsRaw;
+      freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
+      options = productVariantInfo.configurableOptions;
+      maxSaleQty = productVariantInfo.maxSaleQty;
+      maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
+
+      if (typeof productVariantInfo.url !== 'undefined') {
+        var langcode = $('html').attr('lang');
+        productUrl = productVariantInfo.url[langcode];
+      }
+      gtmAttributes.price = productVariantInfo.gtm_price || price;
+      stock = Drupal.hasValue(productVariantInfo.stock) ? productVariantInfo.stock : stock;
+      cncEnabled = Drupal.hasValue(productVariantInfo.click_collect) ? productVariantInfo.click_collect : cncEnabled;
+    }
+    else if (typeof productInfo.group !== 'undefined') {
+      var productVariantInfo = productInfo.group[parentSku];
+      price = productVariantInfo.priceRaw;
+      parentSKU = productVariantInfo.parent_sku;
+      promotions = productVariantInfo.promotionsRaw;
+      freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
+      if (typeof productVariantInfo.grouping_options !== 'undefined'
+        && productVariantInfo.grouping_options.length > 0) {
+        options = productVariantInfo.grouping_options;
+      }
+      maxSaleQty = productVariantInfo.maxSaleQty;
+      maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
+
+      var langcode = $('html').attr('lang');
+      productUrl = productVariantInfo.url[langcode];
+      gtmAttributes.price = productVariantInfo.gtm_price || price;
+    }
+
+    // Store proper variant sku in gtm data now.
+    gtmAttributes.variant = productDataSKU;
+    Drupal.alshayaSpc.storeProductData({
+      sku: productDataSKU,
+      parentSKU: parentSKU,
+      title: productName,
+      url: productUrl,
+      image: productImage,
+      price: price,
+      options: options,
+      promotions: promotions,
+      freeGiftPromotion: freeGiftPromotion,
+      maxSaleQty: maxSaleQty,
+      maxSaleQtyParent: maxSaleQtyParent,
+      gtmAttributes: gtmAttributes,
+      isNonRefundable: isNonRefundable,
+      stock: stock,
+      cncEnabled,
+    });
+  }
 
   Drupal.behaviors.spcCartUtilities = {
     attach: function(context) {

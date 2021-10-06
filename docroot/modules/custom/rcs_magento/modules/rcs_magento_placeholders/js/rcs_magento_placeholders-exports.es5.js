@@ -241,13 +241,23 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
     // Get the product data for the given sku.
     case 'product':
       // Build query.
+      const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
+      // We do it this way so that the quotes around the array elements are
+      // escaped after stringify like [\"abcd\", \"xyz\"].
+      // If this does not happen, then grapqhl response gives malformed request
+      // error.
+      const filterValue = operator === 'in' ? JSON.stringify(params.sku).replace(/"/g, '\\"') : `\\"${params.sku}\\"`;
       request.data = JSON.stringify({
-        query: `{ products(filter: { sku: { eq: "${params.sku}" }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { sku: { ${operator}: filterValue }}) ${rcsPhGraphqlQuery.products}}`
       });
+      request.data = request.data.replace('filterValue', filterValue);
+
       response = rcsCommerceBackend.invokeApiAsync(request);
+
       if (response && response.data.products.total_count) {
-        result = response.data.products.items[0];
-        RcsPhStaticStorage.set('product_' + result.sku, result);
+        response.data.products.items.forEach(function (product) {
+          RcsPhStaticStorage.set('product_' + product.sku, product);
+        });
       }
       break;
 

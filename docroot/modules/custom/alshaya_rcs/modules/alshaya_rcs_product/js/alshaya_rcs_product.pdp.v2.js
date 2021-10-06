@@ -218,7 +218,7 @@ function getVariantConfigurableOptions(product, variantAttributes) {
  */
 function getProductUrls(urlKey, langcode = null) {
   const urls = {};
-  drupalSettings.alshayaRcs.languages.forEach(function (language) {
+  drupalSettings.alshayaSpc.languages.forEach(function (language) {
     urls[language] = `/${language}/${urlKey}.html`;
   });
 
@@ -567,14 +567,6 @@ window.commerceBackend.cleanCssIdentifier = function (identifier) {
   cleanedIdentifier = cleanedIdentifier.replace(/^[0-9]/, '_').replace(/^(-[0-9])|^(--)/, '__');
 
   return cleanedIdentifier.toLowerCase();
-}
-
-/**
- * Perform some function when product is added to cart.
- */
-window.commerceBackend.storeProductDataOnAddToCart = function () {
-  // We do nothing here for V2.
-  return;
 }
 
 /**
