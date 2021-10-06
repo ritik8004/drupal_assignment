@@ -13,6 +13,8 @@ import {
   isUserAuthenticated,
   logger,
   removeCartIdFromStorage,
+  detectCFChallenge,
+  detectCaptcha,
 } from './utility';
 import {
   cartErrorCodes,
@@ -226,6 +228,11 @@ const handleResponse = (apiResponse) => {
     };
     return new Promise((resolve) => resolve(error));
   }
+
+  // If the response contains Captcha, the page will be reloaded once per session.
+  detectCaptcha(apiResponse);
+  // If the response contains a CF Challenge, the page will be reloaded once per session.
+  detectCFChallenge(apiResponse);
 
   // Treat each status code.
   if (apiResponse.status === 202) {
@@ -603,7 +610,13 @@ const getProductStatus = async (sku) => {
  *   The processed cart data.
  */
 const getProcessedCartData = async (cartData) => {
-  if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
+  // In case of errors, return the error object.
+  if (hasValue(cartData) && hasValue(cartData.error) && cartData.error) {
+    return cartData;
+  }
+
+  // If the cart object is empty, return null.
+  if (!hasValue(cartData) || !hasValue(cartData.cart)) {
     return null;
   }
 
@@ -903,14 +916,11 @@ const associateCartToCustomer = async (guestCartId) => {
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
   const cart = await getCart(force);
-  if (_isNull(cart) || _isUndefined(cart.data)) {
+  if (!hasValue(cart) || !hasValue(cart.data)) {
     return null;
   }
 
-  // If we don't have any errors, process the cart data.
-  if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
-    cart.data = await getProcessedCartData(cart.data);
-  }
+  cart.data = await getProcessedCartData(cart.data);
 
   return cart;
 };
@@ -1317,6 +1327,26 @@ window.commerceBackend.getDeliveryAreaList = async (governateId) => {
     logger.warning('No areas found under governate Id : @governateId, API Response: @response.', {
       '@response': JSON.stringify(responseData),
       '@governateId': governateId,
+    });
+  }
+  return {};
+};
+
+/**
+ * Gets individual area detail.
+ *
+ * @returns {Promise<object>}
+ *  returns details of area if area id is valid.
+ */
+window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
+  if (areaId !== undefined) {
+    const responseData = await getLocations('location_id', areaId);
+    if (responseData !== null && responseData.total_count > 0) {
+      return responseData;
+    }
+    logger.warning('No details found for area Id : @areaId, API Response: @response.', {
+      '@response': JSON.stringify(responseData),
+      '@areaId': areaId,
     });
   }
   return {};

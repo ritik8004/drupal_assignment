@@ -8,6 +8,7 @@ gtm:
     - core/jquery.once
     - core/underscore
     - alshaya_master/common_functions
+    - alshaya_master/jquery_is_in_viewport
 
 gtm_algolia:
   version: 1.x
@@ -62,6 +63,7 @@ product_list:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
+
 search_list:
   version: 1.x
   js:
@@ -70,6 +72,7 @@ search_list:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
+
 product_slider:
   version: 1.x
   js:
@@ -92,14 +95,6 @@ gtm_pdp_default:
   version: 1.x
   js:
     js/alshaya_seo.gtm.pdp_default.js: {}
-  dependencies:
-    - alshaya_seo_transac/gtm
-    - core/drupal.debounce
-
-dy_product_recom:
-  version: 1.x
-  js:
-    js/alshaya_seo.gtm.dy_product.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce

@@ -16,6 +16,23 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Re-saving the stock resource to moved outside mobile app.
+ * Add new settings for local storage cache time for product data.
+ */
+function alshaya_acm_product_update_8074() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add attr_delivery_ways to facets in algolia.
  */
 function alshaya_acm_product_update_8073() {
@@ -32,13 +49,13 @@ function alshaya_acm_product_update_8073() {
     ['search_api.index.product'],
     'alshaya_product',
     'install',
-    AlshayaConfigManager::MODE_MERGE
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
   $manager->updateConfigs(
     ['search_api.index.acquia_search_index'],
     'alshaya_search',
     'optional',
-    AlshayaConfigManager::MODE_MERGE
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
 
   $blocks = [

@@ -213,7 +213,19 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $shipping_info = explode(' - ', $order['shipping_description']);
   $orderDetails['delivery_method'] = $shipping_info[0];
 
-  $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
+  $orderDetails['is_pudo_pickup'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
+
+  if ($orderDetails['is_pudo_pickup']) {
+    // We get `price_amount` i.e collection charge values like "5" or "Free"
+    // so the below check to display accordingly.
+    $orderDetails['delivery_charge'] = ($order['shipping']['extension_attributes']['price_amount'] > 0)
+      ? alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount'])
+      : $order['shipping']['extension_attributes']['price_amount'];
+  }
+  else {
+    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
+  }
+
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {

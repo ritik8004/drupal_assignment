@@ -606,13 +606,17 @@ class AlshayaAlgoliaIndexHelper {
     // @see \Drupal\alshaya_acm_product\SkuImagesManager::getGallery.
     $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search', FALSE);
     $images = [];
-
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      if (isset($media_item['pims_image'])) {
+        $media_item = $media_item['pims_image'];
+      }
+
       $images[] = [
         'url' => $this->skuImagesHelper->getImageStyleUrl($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
       ];
     }
+
     return $images;
   }
 

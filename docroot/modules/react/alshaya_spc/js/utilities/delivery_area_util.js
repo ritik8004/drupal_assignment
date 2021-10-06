@@ -77,6 +77,31 @@ export const getCartShippingMethods = (currArea, sku) => window.commerceBackend.
     Drupal.logJavascriptError('get-cart-shipping-methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
+export const getDeliveryAreaValue = (areaId) => window.commerceBackend.getDeliveryAreaValue(
+  areaId,
+)
+  .then(
+    (responseData) => {
+      if (typeof responseData !== 'object') {
+        removeFullScreenLoader();
+        return null;
+      }
+
+      if (hasValue(responseData.error)) {
+        return responseData;
+      }
+
+      return responseData;
+    },
+    () => ({
+      error: true,
+      error_message: getStringMessage('global_error'),
+    }),
+  )
+  .catch((error) => {
+    Drupal.logJavascriptError('get-delivery-area-value', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+  });
+
 /**
  * Fetching delivery area values choosen by user.
  */
