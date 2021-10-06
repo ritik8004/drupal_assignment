@@ -204,6 +204,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
+          'alshaya_acm_promotion/label_manager',
           'alshaya_acm_promotion/basket_labels_manager',
           'alshaya_white_label/free_gifts',
         ],
