@@ -9,7 +9,7 @@ field_name: field_category_carousel_slug
 entity_type: paragraph
 bundle: product_carousel_category
 label: 'Category Slug'
-description: ''
+description: 'The slug must match the slug of a Magento category.'
 required: true
 translatable: false
 skip_translation_check: 0
