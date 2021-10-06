@@ -81,6 +81,15 @@ function alshaya_rcs_listing_uninstall() {
       $block->enable()->save();
     }
   }
+
+  // Uninstall configs.
+  $configs = [
+    'field.field.paragraph.product_carousel_category.field_category_carousel_slug',
+    'field.storage.paragraph.field_category_carousel_slug',
+  ];
+  foreach ($configs as $name) {
+    Drupal::configFactory()->getEditable($name)->delete();
+  }
 }
 
 /**
