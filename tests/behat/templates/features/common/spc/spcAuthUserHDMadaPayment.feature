@@ -1,4 +1,4 @@
-@javascript @auth @madaPayment @homeDelivery @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbkwuat @flsauat @tbskwuat @mcsauat @mcaeuat @pbaeuat @pbsauat @hmaeuat @mckwuat @bbwaeuat @bbwsauat @vssauat @vsaeuat @bbwkwuat @auth @hmkwuat @hmsauat @flkwuat @flaeuat
+@javascript @auth @madaPayment @homeDelivery @mujikwuat @mujisauat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbkwuat @flsauat @tbskwuat @mcsauat @mcaeuat @pbaeuat @pbsauat @hmaeuat @mckwuat @bbwaeuat @bbwsauat @vssauat @vsaeuat @bbwkwuat @auth @hmkwuat @hmsauat @flkwuat @flaeuat
 Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
 
   Background:

@@ -52,9 +52,6 @@
 
       // Close Promo panel when clicked anywhere outside.
       var $promo_panel_content = $('.promo__panel > .field--name-field-paragraph-content', context);
-      $promo_panel_content.on('afterChange', function (event, slick) {
-        Drupal.blazy.revalidate();
-      });
 
       $('body', context).on('click', function (e) {
         if (!$(e.target).closest($promo_panel_content).length && !$(e.target).closest($offer_toggler).length) {

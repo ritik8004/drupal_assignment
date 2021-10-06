@@ -6,7 +6,7 @@ const Promotion = ({ promotion }) => (
   <span className="sku-promotion-item">
     {(drupalSettings.algoliaSearch.pageSubType !== 'undefined'
       && drupalSettings.algoliaSearch.pageSubType === 'promotion'
-      && Number(drupalSettings.path.currentPath.slice(5)) === promotion.id) ? (
+      && drupalSettings.algoliaSearch.promotionNodeId === promotion.id) ? (
         <span className="sku-promotion-text">{promotion.text}</span>
       ) : (
         <>

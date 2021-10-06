@@ -19,9 +19,9 @@ import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import PpdRatingsReviews from '../pdp-ratings-reviews';
-import DeliveryOptions from '../../../../../alshaya_spc/js/expressdelivery/components/delivery-options';
 import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import PdpExpressDelivery from '../pdp-express-delivery';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -267,7 +267,9 @@ const PdpLayout = () => {
             removePanelData={removePanelData}
           />
           <ConditionalView condition={isExpressDeliveryEnabled()}>
-            <DeliveryOptions />
+            <PdpExpressDelivery
+              variantSelected={variant}
+            />
           </ConditionalView>
           <ConditionalView condition={!isExpressDeliveryEnabled()}>
             <PdpStandardDelivery />
