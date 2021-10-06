@@ -57,14 +57,6 @@ function alshaya_rcs_listing_install() {
     }
   }
 
-  // Add a new field for carousel slug.
-  $paragraph_configs = [
-    'field.storage.paragraph.field_category_carousel_slug',
-    'field.field.paragraph.product_carousel_category.field_category_carousel_slug',
-  ];
-  alshaya_config_install_configs($paragraph_configs, 'alshaya_rcs_listing', 'install');
-  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
-
   // Migrate data.
   alshaya_rcs_listing_migrate_field_carousel_slug();
 }
