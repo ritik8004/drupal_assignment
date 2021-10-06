@@ -1,4 +1,4 @@
-@javascript @KNetPayment @guest @homeDelivery @pbkkwuat @pbkwuat @tbskwuat @mckwuat @flkwuat @bbwkwuat @hmkwuat @westelmkwuat @bpkwuat
+@javascript @KNetPayment @guest @homeDelivery
 Feature: SPC Checkout Home Delivery Knet Payment for Guest User
 
   Background:
