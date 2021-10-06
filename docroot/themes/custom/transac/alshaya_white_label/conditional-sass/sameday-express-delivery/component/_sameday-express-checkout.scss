@@ -57,14 +57,4 @@
       }
     }
   }
-
-  .shipping-method {
-    &.disabled {
-      label,
-      .carrier-title,
-      .method-title {
-        opacity: 0.2;
-      }
-    }
-  }
 }

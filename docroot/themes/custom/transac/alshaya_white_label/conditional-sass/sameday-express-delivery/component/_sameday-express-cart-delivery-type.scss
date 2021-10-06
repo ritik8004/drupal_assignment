@@ -23,6 +23,7 @@
   .sku-cart-delivery-methods {
     display: flex;
     font-size: 0.6875rem;
+    color: $spc-cart-delivery-tags;
 
     @include breakpoint($upto-desktop) {
       flex-direction: column;
@@ -38,7 +39,7 @@
 
           .information-icon {
             @include icon(infomation, after) {
-              top: initial;
+              top: 0.0625rem;
             }
 
             &:hover {
@@ -90,7 +91,7 @@
         font-size: 1rem;
         position: absolute;
         #{$right}: 0.25rem;
-        top: 0;
+        top: -0.125rem;
 
         html[lang=ar] & {
           top: -0.125rem;
@@ -194,6 +195,8 @@
   }
 
   #delivery-area-select {
+    color: $spc-cart-delivery-area-select;
+
     @include breakpoint($only-mobile) {
       text-align: center;
       margin-bottom: 1.25rem;
@@ -201,6 +204,17 @@
 
     @include breakpoint($only-tablet) {
       margin-bottom: 0.625rem;
+    }
+
+    .delivery-area-label {
+      display: flex;
+      justify-content: center;
+
+      > div {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
     }
 
     .delivery-area-name {
@@ -212,9 +226,30 @@
       font-size: 0;
 
       @include icon('chevrondown') {
-        font-size: 0.5rem;
-        cursor: pointer;
+        font-size: 1.25rem;
         padding-#{$left}: 0.3125rem;
+      }
+    }
+  }
+
+  .spc-select {
+    .spcSelect__menu {
+      z-index: 5;
+
+      .spcSelect__menu-list {
+        border-color: $express-delivery-menu-list-border;
+      }
+    }
+  }
+
+  .spc-delivery-area {
+    #delivery-area-list-items {
+      li.area-select-list-item.active {
+        .area-select-item-wrapper {
+          &::before {
+            color: $spc-cart-express-delivery-radio-button;
+          }
+        }
       }
     }
   }
