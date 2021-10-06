@@ -35,7 +35,8 @@ function handlebarsRender(template, data) {
     : rcsHandlebarsTemplates;
 
   if (!templates || templates.length === 0) {
-    return '';
+    // Something went wrong during cache clear.
+    throw new Error("No handlebars templates found on the page.");
   }
 
   // Get the source template.
