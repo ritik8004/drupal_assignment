@@ -117,6 +117,15 @@ export default class SofaSectionalForm extends React.Component {
 
     // Get the selected variant based on the attributes combination.
     const selectedVariant = this.getSelectedVariant(formAttributeValues);
+    if (typeof selectedVariant !== 'undefined') {
+      // Set selected variant sku in hidden input required by jquery.
+      document.getElementById('selected_variant_sku').value = selectedVariant;
+
+      // Dispatch custom event with selected variant to trigger jquery event variant-selected,
+      // which will update gallery, price block, limits etc.
+      const customEvent = new CustomEvent('react-variant-select', { detail: { variant: selectedVariant } });
+      document.dispatchEvent(customEvent);
+    }
 
     // Check max sale quantity limit for the selected Sku.
     const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productInfo)
@@ -278,6 +287,7 @@ export default class SofaSectionalForm extends React.Component {
         />
         <ErrorMessage message={errorMessage} />
         <div className="config-form-addtobag-button-wrapper">
+          <input type="hidden" name="selected_variant_sku" id="selected_variant_sku" value={selectedVariant} />
           <button
             className="config-form-addtobag-button"
             id={`config-form-addtobag-button-${sku}`}
