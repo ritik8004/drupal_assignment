@@ -49,7 +49,7 @@
    * @returns {Promise}
    *   The stock status for all skus.
    */
-   window.commerceBackend.triggerStockRefresh = async function (data) {
+  window.commerceBackend.triggerStockRefresh = async function (data) {
     const cartData = Drupal.alshayaSpc.getCartData();
     const skus = {};
 
@@ -82,5 +82,5 @@
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {
       window.commerceBackend.processAndStoreProductData(parentSku, sku, 'productInfo');
     });
-   }
+  }
 })(Drupal);
