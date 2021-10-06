@@ -13,6 +13,7 @@ import {
   getQuantityDropdownValues,
   isHideMaxSaleMsg,
 } from '../../../../js/utilities/display';
+import SelectionSummary from '../selection-summary';
 
 export default class SofaSectionalForm extends React.Component {
   constructor(props) {
@@ -270,6 +271,7 @@ export default class SofaSectionalForm extends React.Component {
             </div>
           );
         })}
+        <SelectionSummary />
         <QuantitySelector
           options={getQuantityDropdownValues()}
           onChange={this.onQuantityChanged}
