@@ -300,7 +300,7 @@
     }
 
     // COS claasic gallery for magazine layout.
-    if (layout === 'pdp-magazine' && drupalSettings.pdp_magazine_override) {
+    if (layout === 'pdp-magazine' && drupalSettings.pdp_gallery_type == 'classic') {
       layout = 'pdp';
     }
     if (layout === 'pdp-magazine') {

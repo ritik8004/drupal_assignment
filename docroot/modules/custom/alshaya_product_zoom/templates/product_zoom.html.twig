@@ -89,7 +89,7 @@
   </div>
   {% endblock %}
   {# Add swatch images as magazine  #}
-  {% if pdp_magazine_override %}
+  {% if pdp_gallery_type == 'classic' %}
     {% block magazineGallery %}
       <div class="magazine__gallery--container">
         <div class="magazine-product-description">
