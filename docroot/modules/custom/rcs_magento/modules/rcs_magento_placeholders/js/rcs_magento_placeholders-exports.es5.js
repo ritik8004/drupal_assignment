@@ -242,11 +242,11 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
     case 'product':
       // Build query.
       const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
-      const filterValue = operator === 'in' ? JSON.stringify(params.sku).replace(/"/g, '\\"') : `\\"${params.sku}\\"`;
       // We do it this way so that the quotes around the array elements are
       // escaped after stringify like [\"abcd\", \"xyz\"].
       // If this does not happen, then grapqhl response gives malformed request
       // error.
+      const filterValue = operator === 'in' ? JSON.stringify(params.sku).replace(/"/g, '\\"') : `\\"${params.sku}\\"`;
       request.data = JSON.stringify({
         query: `{ products(filter: { sku: { ${operator}: filterValue }}) ${rcsPhGraphqlQuery.products}}`
       });
