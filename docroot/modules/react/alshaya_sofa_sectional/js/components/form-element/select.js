@@ -31,6 +31,8 @@ const SelectList = (props) => {
       ? option.label[groupData.defaultGroup]
       : option.label;
 
+    optionClone.value = option.value_id;
+
     if (!allowedValues.includes(option.value_id)
       && !allowedValues.includes(parseInt(option.value_id, 10))) {
       optionClone.isDisabled = true;

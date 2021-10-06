@@ -8,7 +8,6 @@ import {
 import QuantitySelector from '../../../../js/utilities/components/quantity-selector';
 import ErrorMessage from '../../../../js/utilities/components/error-message';
 import {
-  isDisplayConfigurableBoxes,
   getHiddenFormAttributes,
   getQuantityDropdownValues,
   isHideMaxSaleMsg,
@@ -207,7 +206,6 @@ export default class SofaSectionalForm extends React.Component {
     let defaultValue = null;
     let isHidden = null;
     let allowedValues = null;
-    const widget = isDisplayConfigurableBoxes() ? 'unordered' : 'select';
 
     const groupData = {};
     let { groupCode } = this.state;
@@ -253,7 +251,7 @@ export default class SofaSectionalForm extends React.Component {
               </ConditionalView>
               <ConditionalView condition={!isSwatch}>
                 <FormElement
-                  type={widget}
+                  type="unordered"
                   attributeName={attribute[0]}
                   options={attribute[1].values}
                   label={attribute[1].label}
