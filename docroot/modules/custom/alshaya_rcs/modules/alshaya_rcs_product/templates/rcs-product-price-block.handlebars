@@ -17,7 +17,7 @@
         </div>
         {{#if discount.percent_off }}
           <div class="price--discount">
-            ({{t 'Save' }} {{ discount.percent_off }}%)
+              ({{t 'Save @discount%' discount=discount.percent_off }})
           </div>
         {{/if}}
       {{/if}}
@@ -33,27 +33,6 @@
     {{/if}}
 
   {{else}}
-    <div class="price">
-      {{#if (eq final_price.value regular_price.value) }}
-        <div class="simple-price--wrapper price-wrapper price">
-          {{{render 'block.product.price_item' regular_price }}}
-        </div>
-      {{else }}
-        {{'@todo Use price range fields from GraphQl'}}
-        <span class="simple-price--wrapper price-wrapper price">
-          <span class="price-currency suffix">{{ final_price.currency }}</span>
-          <span class="price-amount">{{formatNumber regular_price.value 2 }}</span>
-        </span>
-        <span class="min-max-separator">-</span>
-        <span class="simple-price--wrapper price-wrapper price">
-          <span class="price-amount">{{formatNumber final_price.value 2 }}</span>
-        </span>
-      {{/if}}
-      {{#if discount.percent_off }}
-        <div class="price--discount">
-          ({{t 'Save' }} {{ discount.percent_off }}%)
-        </div>
-      {{/if}}
-    </div>
+    {{'@todo Use price range fields from GraphQl'}}
   {{/if}}
 </div>

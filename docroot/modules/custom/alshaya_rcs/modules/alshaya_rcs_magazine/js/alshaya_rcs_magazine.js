@@ -10,7 +10,8 @@
       return;
     }
 
-    var data = e.detail.result;
+    let data = e.detail.result;
+    let currencyConfig = drupalSettings.alshaya_spc.currency_config;
 
     data.forEach((item) => {
       // Add settings.
@@ -21,18 +22,24 @@
 
       // Relative url.
       // @todo Move to a function.
-      const url = new URL(item.end_user_url);
+      let url = new URL(item.end_user_url);
       item['url'] = url.toString().substring(url.origin.length);
 
       // Price logic CORE-34151.
       // @todo Get from/to prices from Graphql for non-simple prods.
-      item['price_details'] = item.price_range.maximum_price;
+      item['price_details'] = item.price_range.minimum_price;
       item['price_details']['display_mode'] = 'simple';
+      item['price_details']['regular_price']['currency_code'] = currencyConfig.currency_code;
+      item['price_details']['regular_price']['currency_code_position'] = currencyConfig.currency_code_position;
+      item['price_details']['regular_price']['decimal_points'] = currencyConfig.decimal_points;
+      item['price_details']['final_price']['currency_code'] = currencyConfig.currency_code;
+      item['price_details']['final_price']['currency_code_position'] = currencyConfig.currency_code_position;
+      item['price_details']['final_price']['decimal_points'] = currencyConfig.decimal_points;
 
       // Assets.
       item['image'] = item.assets_teaser;
       if (item.type_id === 'configurable') {
-        const assets = JSON.parse(item.variants[0].product.assets_teaser);
+        let assets = JSON.parse(item.variants[0].product.assets_teaser);
         item['image'] = assets[0].styles;
       }
     });

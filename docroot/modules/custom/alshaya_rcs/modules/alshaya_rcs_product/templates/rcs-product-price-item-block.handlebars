@@ -2,8 +2,13 @@
   <div class="price">
     <span class="price--wrapper price-wrapper price">
       <div class="price">
-        <span class="price-currency suffix">{{ currency }}</span>
-        <span class="price-amount">{{formatNumber value 2 }}</span>
+        {{#if (eq currency_code_position 'before') }}
+          <span class="price-currency suffix">{{ currency_code }}</span>
+        {{/if}}
+        <span class="price-amount">{{formatNumber value decimal_points }}</span>
+        {{#if (ne currency_code_position 'before') }}
+          <span class="price-currency suffix">{{ currency_code }}</span>
+        {{/if}}
       </div>
     </span>
   </div>
