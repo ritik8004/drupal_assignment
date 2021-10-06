@@ -78,6 +78,16 @@
         }
       }
     }
+
+    .aura-guest-user-link-card-otp-form {
+      @include breakpoint($only-mobile) {
+        height: 100%;
+
+        .aura-modal-form {
+          height: calc(100% - 3.5rem);
+        }
+      }
+    }
   }
 }
 
