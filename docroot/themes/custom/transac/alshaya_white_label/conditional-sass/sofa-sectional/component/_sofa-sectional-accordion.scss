@@ -1,0 +1,105 @@
+.c-pdp .sku-base-form {
+  .sofa-section-accordion {
+    label {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 2.5rem;
+      padding-top: 0.625rem;
+      padding-bottom: 0.625rem;
+    }
+  }
+
+  .sofa-section-card {
+    @include breakpoint($only-mobile) {
+      display: block;
+      width: calc(100% + 1rem);
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+    }
+  }
+}
+
+.sofa-section-accordion {
+  border-left: 1px solid $pdp_title_section_border;
+  border-right: 1px solid $pdp_title_section_border;
+
+  @include breakpoint($only-mobile) {
+    border: none;
+  }
+
+  .Collapsible__trigger {
+    @include icon(chevrondown, after) {
+      color: $accordion_title_icon;
+    }
+
+    position: relative;
+    border-top: 1px solid $accordion_border;
+    color: $accordion_title;
+    font-size: 0.875rem;
+    font-weight: normal;
+    height: 3.75rem;
+    line-height: 2.9375rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-transform: lowercase;
+    outline: none;
+    cursor: pointer;
+    display: block;
+
+    &::after {
+      @include u-center--vertically;
+
+      font-size: 1.5rem;
+      #{$right}: 0.375rem;
+    }
+
+    &.is-open {
+      @include icon(chevronup, after);
+
+      border-bottom: none;
+    }
+
+    span {
+      line-height: normal;
+    }
+
+    .config-name {
+      font-size: 0.75rem;
+      margin-bottom: 0.3125rem;
+    }
+
+    .config-value {
+      color: $sofa-sectional-title;
+    }
+  }
+
+  .Collapsible__contentInner {
+    .attribute-options-list {
+      margin: 0;
+      padding: 1.25rem 0.625rem;
+      border-top: 1px solid $accordion_border;
+      background: $sofa-sectional-bg;
+
+      li {
+        list-style: none;
+        padding: 0.78125rem 0.9375rem;
+        border: 1px solid $accordion_border;
+        margin-bottom: 1.25rem;
+        background: $sofa-sectional-config-item-bg;
+        cursor: pointer;
+        font-size: 0.75rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &.active {
+          border: 1px solid $_sofa-section-grey2;
+        }
+      }
+    }
+  }
+}

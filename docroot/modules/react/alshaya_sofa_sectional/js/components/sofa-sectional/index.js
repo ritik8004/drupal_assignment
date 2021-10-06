@@ -243,7 +243,7 @@ export default class SofaSectionalForm extends React.Component {
             groupData.groupAlternates = attribute[1].alternates;
           }
           return (
-            <div key={attribute[0]} className={`attribute-wrapper attribute-wrapper_${attribute[0]}`}>
+            <div key={attribute[0]} className={`sofa-section-card sofa-section-accordion attribute-wrapper attribute-wrapper_${attribute[0]}`}>
               <ConditionalView condition={isSwatch}>
                 <FormElement
                   type="swatch"
