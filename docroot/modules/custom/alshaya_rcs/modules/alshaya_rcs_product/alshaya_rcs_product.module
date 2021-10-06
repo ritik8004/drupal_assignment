@@ -146,10 +146,6 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
     ],
   );
 
-  // Provide the languages to build the product urls.
-  $languages = \Drupal::languageManager()->getLanguages();
-  $attachments['#attached']['drupalSettings']['alshayaRcs']['languages'] = array_keys($languages);
-
   // Alter the attachments for the schema metadata.
   // We pass empty array as a variable here in order to avoid PHP error.
   $product_schema_data = [];

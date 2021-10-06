@@ -288,7 +288,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $api_settings = Settings::get('alshaya_api.settings');
   $store_settings = Settings::get('magento_lang_prefix');
-  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $language_manager = \Drupal::languageManager();
+  $current_language = $language_manager->getCurrentLanguage()->getId();
 
   // We proxy the requests via cloudflare, so we use the current domain as is
   // without any language suffix so HTTP_HOST is enough.
@@ -304,6 +305,9 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $page['#attached']['drupalSettings']['cart']['retryMaxAttempts'] = Settings::get('alshaya_checkout_settings')['max_native_update_attempts'] ?? 10;
   $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
+
+  $languages = $language_manager->getLanguages();
+  $page['#attached']['drupalSettings']['alshayaSpc']['languages'] = array_keys($languages);
 }
 
 /**

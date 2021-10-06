@@ -71,10 +71,10 @@
   }
 
   Drupal.alshayaSpc.removeLocalStorageProductData = function (sku) {
-    var langcode = $('html').attr('lang');
-    var key = ['product', langcode, sku].join(':');
-
-    localStorage.removeItem(key);
+    drupalSettings.alshayaSpc.languages.forEach(function (langcode) {
+      var key = ['product', langcode, sku].join(':');
+      localStorage.removeItem(key);
+    });
   }
 
   Drupal.alshayaSpc.getProductData = function (sku, callback, extraData) {
