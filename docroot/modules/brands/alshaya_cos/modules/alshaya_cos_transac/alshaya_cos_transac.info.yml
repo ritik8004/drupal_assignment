@@ -9,5 +9,6 @@ dependencies:
   - alshaya_color_split:alshaya_color_split
   - drupal:video_embed_field
   - alshaya_magazine:alshaya_magazine
+  - alshaya_cos_images:alshaya_cos_images
 themes:
   - alshaya_cos_stores
