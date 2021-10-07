@@ -1,4 +1,4 @@
-pdp_gallery_pager_limit: 8
+pdp_gallery_pager_limit: 5
 cross_up_sell_items_settings:
   pdp_carousel_items_size_0: 2
   pdp_carousel_items_size_768: 2
