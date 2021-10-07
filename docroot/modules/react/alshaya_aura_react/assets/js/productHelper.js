@@ -21,7 +21,7 @@
       var variantInfo = (drupalSettings[productKey][sku]['type'] === 'simple')
         ? drupalSettings[productKey][sku]
         : drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
-      var price = variantInfo ? variantInfo.discountedPrice.replace(/,/g, '') : 0;
+      var price = variantInfo ? variantInfo.finalPrice.replace(/,/g, '') : 0;
       data = {
         amount: price * quantity,
       };
