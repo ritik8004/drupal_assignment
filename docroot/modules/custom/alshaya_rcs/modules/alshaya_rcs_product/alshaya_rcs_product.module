@@ -614,17 +614,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'ship_to_store',
       'reserve_and_collect',
       'price_range' => [
-        'minimum_price' => [
-          'regular_price' => [
-            'value'
-          ],
-          'final_price' => [
-            'value',
-          ],
-          'discount' => [
-            'percent_off',
-          ],
-        ],
         'maximum_price' => [
           'regular_price' => [
             'value'
@@ -702,17 +691,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
               'weight',
             ],
             'price_range' => [
-              'minimum_price' => [
-                'regular_price' => [
-                  'value'
-                ],
-                'final_price' => [
-                  'value',
-                ],
-                'discount' => [
-                  'percent_off',
-                ],
-              ],
               'maximum_price' => [
                 'regular_price' => [
                   'value'
