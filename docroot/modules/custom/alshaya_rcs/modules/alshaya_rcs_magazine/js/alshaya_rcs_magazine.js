@@ -25,17 +25,24 @@
       let url = new URL(item.end_user_url);
       item['url'] = url.toString().substring(url.origin.length);
 
-      // Prepare price data.
-      item['price_details'] = item.price_range.minimum_price;
+      // Prepare price item.
       // @todo Get from/to prices from Graphql for non-simple prods.
-      item['price_details']['display_mode'] = 'simple';
-      // Add currency settings.
-      item['price_details']['regular_price']['currency_code'] = currencyConfig.currency_code;
-      item['price_details']['regular_price']['currency_code_position'] = currencyConfig.currency_code_position;
-      item['price_details']['regular_price']['decimal_points'] = currencyConfig.decimal_points;
-      item['price_details']['final_price']['currency_code'] = currencyConfig.currency_code;
-      item['price_details']['final_price']['currency_code_position'] = currencyConfig.currency_code_position;
-      item['price_details']['final_price']['decimal_points'] = currencyConfig.decimal_points;
+      item['price_details'] = {
+        display_mode: 'simple',
+      };
+      item['price_details']['discount'] = item.price_range.maximum_price.discount;
+      item['price_details']['regular_price'] = {
+        value: item.price_range.maximum_price.regular_price.value,
+        currency_code: currencyConfig.currency_code,
+        currency_code_position: currencyConfig.currency_code_position,
+        decimal_points: currencyConfig.decimal_points,
+      };
+      item['price_details']['final_price'] = {
+        value: item.price_range.maximum_price.final_price.value,
+        currency_code: currencyConfig.currency_code,
+        currency_code_position: currencyConfig.currency_code_position,
+        decimal_points: currencyConfig.decimal_points,
+      };
 
       // Prepare Assets.
       item['image'] = item.assets_teaser;

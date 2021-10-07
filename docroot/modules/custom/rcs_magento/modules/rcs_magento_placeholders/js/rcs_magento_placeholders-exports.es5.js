@@ -178,7 +178,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
     case 'field_magazine_shop_the_story':
       request.data = JSON.stringify({
-        query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.magazine_shop_the_story}}`
       });
 
       response = await rcsCommerceBackend.invokeApi(request);
