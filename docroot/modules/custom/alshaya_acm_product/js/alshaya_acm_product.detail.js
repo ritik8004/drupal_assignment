@@ -597,15 +597,4 @@
     return selectedSku;
   };
 
-  document.addEventListener('react-variant-select', function ({ detail }) {
-    const { variant } = detail;
-    $('.sku-base-form').trigger(
-      'variant-selected',
-      [
-        variant,
-        null
-      ]
-    );
-  });
-
 })(jQuery, Drupal, drupalSettings);
