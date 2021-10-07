@@ -3,6 +3,8 @@
  * Alshaya RCS Promotions Label Manager.
  */
 
+// @todo Split this file into two, One containing all common code and one
+// containing the specific functions.
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
