@@ -42,9 +42,9 @@
       function applyRtl(ocObject, options) {
         if (isRTL()) {
           ocObject.attr('dir', 'rtl');
-          ocObject.hide().slick(
+          ocObject.slick(
             $.extend({}, options, {rtl: true})
-          ).fadeIn('slow');
+          );
         }
         else {
           ocObject.slick(options);
