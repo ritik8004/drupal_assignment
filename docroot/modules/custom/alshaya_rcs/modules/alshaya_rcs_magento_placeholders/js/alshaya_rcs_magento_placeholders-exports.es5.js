@@ -87,6 +87,20 @@ exports.render = function render(
       }
       break;
 
+    case 'field_magazine_shop_the_story':
+      let data = [];
+      // Sort results in the same order as in the CMS.
+      JSON.parse(params.skus).forEach((sku) => {
+        const i = inputs.findIndex(i => i.sku === sku);
+        if (inputs[i]) {
+          data.push(inputs[i]);
+        }
+      });
+
+      // Render template.
+      html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: data });
+      break;
+
     case "delivery-option":
     case 'mobile-upsell-products':
     case 'upsell-products':

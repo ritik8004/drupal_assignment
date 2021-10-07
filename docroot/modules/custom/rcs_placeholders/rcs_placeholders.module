@@ -29,7 +29,33 @@ function rcs_placeholders_theme($existing, $type, $theme, $path) {
       'base hook' => 'node',
       'variables' => [],
     ],
+    // A generic field template to render fields as placeholder blocks.
+    'field__rcs_placeholder_block' => [
+      'variables' => [
+        'items' => [],
+        'content_attributes' => [],
+        'title' => null,
+        'label_display' => null,
+        'language' => null,
+        'field_name' => null,
+        'field_type' => null,
+        'field_translatable' => null,
+        'entity_type' => null,
+        'bundle' => null,
+        'object' => null,
+        'formatter' => null,
+        'is_multiple' => null,
+        'third_party_settings' => null,
+      ],
+    ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_field__rcs_placeholder_block().
+ */
+function rcs_placeholders_preprocess_field__rcs_placeholder_block(&$variables) {
+  $variables['label'] = $variables['title'];
 }
 
 /**

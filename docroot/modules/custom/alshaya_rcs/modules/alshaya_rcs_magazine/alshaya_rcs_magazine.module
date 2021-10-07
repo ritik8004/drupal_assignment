@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_rcs_magazine_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (($entity->bundle() == 'magazine_article')) {
+    $build['#attached']['library'][] = 'alshaya_rcs_magazine/main';
+  }
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates_alter().
+ */
+function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entity) {
+  if (!$entity || $entity->bundle() !== 'magazine_article') {
+    return;
+  }
+
+  // Provide template for product teaser.
+  $path = drupal_get_path('module', 'alshaya_rcs_product');
+  $templates['field']['magazine_article'] = [
+    'product_teaser' => "$path/templates/rcs-product-teaser.handlebars",
+  ];
+  $templates['block']['product']['price'] = "$path/templates/rcs-product-price-block.handlebars";
+  $templates['block']['product']['price_item'] = "$path/templates/rcs-product-price-item-block.handlebars";
+}
+
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+
+  $query_fields['magazine_shop_the_story'] = [
+    'total_count',
+    'items' => [
+      'sku',
+      'type_id',
+      'name',
+      'url_key',
+      'end_user_url',
+      'assets_teaser',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value'
+          ],
+          'final_price' => [
+            'value',
+          ],
+          'discount' => [
+            'percent_off',
+          ],
+        ],
+      ],
+      '... on ConfigurableProduct' => [
+        'variants' => [
+          'product' => [
+            'assets_teaser',
+          ],
+        ],
+      ],
+      'promotions' => [
+        'type',
+        'label',
+        'url',
+      ],
+    ],
+  ];
+
+  return $query_fields;
+}

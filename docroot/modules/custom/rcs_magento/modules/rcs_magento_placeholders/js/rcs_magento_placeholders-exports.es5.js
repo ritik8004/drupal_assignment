@@ -118,7 +118,7 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
-    // To trigger the Event.rcs_magento_placeholders-exports.es5.js
+    // To trigger the Event.
     document.dispatchEvent(updateResult);
 
     return updateResult.detail.result;
@@ -140,6 +140,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
   let response = null;
   let result = null;
+
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
     // Just return empty string so that render() function gets called later.
@@ -175,6 +176,18 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       }
       break;
 
+    case 'field_magazine_shop_the_story':
+      request.data = JSON.stringify({
+        query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.magazine_shop_the_story}}`
+      });
+
+      response = await rcsCommerceBackend.invokeApi(request);
+      // Get exact data from response.
+      if (response !== null) {
+        result = response.data.products.items;
+      }
+      break;
+
     case 'breadcrumb':
       // We do not need to do anything for breadcrumbs.
       // Adding this case to avoid console messages about breadcrumbs.
@@ -191,10 +204,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
               }
             }
           }`
-        });
+      });
 
-        response = await rcsCommerceBackend.invokeApi(request);
-        result = response.data.amLabelProvider;
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.amLabelProvider;
       break;
 
     case 'product-recommendation':
@@ -210,6 +223,20 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
+  }
+
+  if (result !== null) {
+    // Creating custom event to to perform extra operation and update the result
+    // object.
+    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+      detail: {
+        result: result,
+        placeholder: placeholder,
+      }
+    });
+
+    // To trigger the Event.
+    document.dispatchEvent(updateResult);
   }
 
   return result;
