@@ -15,3 +15,14 @@ function alshaya_cos_transac_preprocess_product_zoom(&$vars) {
     $vars['pdp_gallery_type'] = $pdp_gallery_type;
   }
 }
+
+/**
+ * Implements hook_alshaya_search_algolia_object_alter().
+ */
+function alshaya_cos_transac_alshaya_search_algolia_object_alter(array &$object) {
+  $materials = $object['attr_materials'];
+  if ($materials) {
+    $materials = json_decode(reset($materials), TRUE);
+    $object['attr_materials'] = $materials;
+  }
+}

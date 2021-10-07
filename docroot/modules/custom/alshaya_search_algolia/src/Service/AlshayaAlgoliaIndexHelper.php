@@ -496,6 +496,9 @@ class AlshayaAlgoliaIndexHelper {
     $object['new_arrivals'] = $sku->get('created')->getString();
     $this->updatePrettyPathAlias($object);
     unset($object['field_category_aliases']);
+
+    // Allow other modules to add/alter object data.
+    $this->moduleHandler->alter('alshaya_search_algolia_object', $object);
   }
 
   /**
