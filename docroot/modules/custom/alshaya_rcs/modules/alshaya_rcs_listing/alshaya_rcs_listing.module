@@ -102,3 +102,15 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
 
   return $query_fields;
 }
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_rcs_listing_field_widget_entity_reference_paragraphs_form_alter(&$element, &$form_state, $context) {
+  if ($element['#paragraph_type'] == 'product_carousel_category'
+    && isset($element['subform']['field_category_carousel'])
+    && isset($element['subform']['field_category_carousel_slug'])) {
+    // Hide the entity reference field when the text field is present on the form.
+    $element['subform']['field_category_carousel']['#access'] = false;
+  }
+}

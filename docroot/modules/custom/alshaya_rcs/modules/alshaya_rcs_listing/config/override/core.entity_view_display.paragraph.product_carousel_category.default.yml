@@ -1,0 +1,12 @@
+dependencies:
+  config:
+    - field.field.paragraph.product_carousel_category.field_category_carousel_slug
+content:
+  field_category_carousel_slug:
+    type: string
+    weight: 1
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
