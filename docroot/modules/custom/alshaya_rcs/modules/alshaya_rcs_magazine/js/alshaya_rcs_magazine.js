@@ -13,6 +13,7 @@
     let data = e.detail.result;
     let currencyConfig = drupalSettings.alshaya_spc.currency_config;
 
+    // @todo Find a better way to reuse this in other modules that will render product teasers.
     data.forEach((item) => {
       // Add settings.
       item['lang_code'] = drupalSettings.path.currentLanguage;
