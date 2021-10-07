@@ -13,8 +13,10 @@
  */
 function alshaya_get_site_environment() {
   $env = 'local';
-  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-    $env = $_ENV['AH_SITE_ENVIRONMENT'];
+
+  $ah_env = getenv('AH_SITE_ENVIRONMENT');
+  if ($ah_env && $ah_env !== 'ide') {
+    $env = $ah_env;
   }
   elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
     $env = 'travis';

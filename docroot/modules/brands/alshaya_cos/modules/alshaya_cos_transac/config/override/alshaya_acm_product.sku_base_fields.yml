@@ -33,3 +33,8 @@ fields:
   rgb_color:
     label: 'RGB color'
     type: 'string'
+
+  assets:
+    label: 'Assets'
+    type: 'text_long'
+    translatable: 0

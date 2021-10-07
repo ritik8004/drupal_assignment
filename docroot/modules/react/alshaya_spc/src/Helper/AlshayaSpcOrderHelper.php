@@ -364,6 +364,10 @@ class AlshayaSpcOrderHelper {
     // Load the first image.
     $media_image = $this->skuImagesManager->getFirstImage($sku, $context);
 
+    if (isset($media_image['pims_image']) && !empty($media_image['pims_image'])) {
+      $media_image = $media_image['pims_image'];
+    }
+
     // If we have image for the product.
     if (!empty($media_image)) {
       $image = $this->skuImagesHelper->getImageStyleUrl($media_image, $image_style);
@@ -519,11 +523,11 @@ class AlshayaSpcOrderHelper {
         break;
 
       case 'checkout_com_upapi_benefitpay':
-        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'];
-        $orderDetails['payment']['qrData'] = $payment_info['qr_data'];
-        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
-        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
-        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'] ?? '';
+        $orderDetails['payment']['qrData'] = $payment_info['qr_data'] ?? '';
+        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'] ?? '';
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'] ?? '';
+        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'] ?? '';
 
         break;
     }

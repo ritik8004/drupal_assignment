@@ -3,12 +3,14 @@
     attach: function (context, settings) {
       var skuBaseForm = $('.sku-base-form').not('[data-sku *= "#"]');
 
-      skuBaseForm.each(function () {
-        setPostpayWidgetAmount(this);
-      });
+      document.addEventListener('alshayaPostpayInit', () => {
+        skuBaseForm.each(function () {
+          setPostpayWidgetAmount(this);
+        });
 
-      skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
-        setPostpayWidgetAmount(this, variant, event);
+        skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+          setPostpayWidgetAmount(this, variant, event);
+        });
       });
     }
   };

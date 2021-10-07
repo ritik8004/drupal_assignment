@@ -45,7 +45,16 @@ export default class AreaListBlock extends React.Component {
             defaultOptions = options.find(
               (element) => element.value === areaSelected.value.governate,
             );
-            getDeliveryAreaList(areaSelected.value.governate).then(
+          } else if (options.length > 0) {
+            [defaultOptions] = options;
+          } else {
+            defaultOptions = [{
+              value: 'none',
+              label: getStringMessage('governate_label', { '@label': governateDefaultLabel }),
+            }];
+          }
+          if (defaultOptions.value !== 'none') {
+            getDeliveryAreaList(defaultOptions.value).then(
               (result) => {
                 if (result !== null && Object.keys(result.items).length > 0) {
                   this.setState({
@@ -55,11 +64,6 @@ export default class AreaListBlock extends React.Component {
                 }
               },
             );
-          } else {
-            defaultOptions = [{
-              value: 'none',
-              label: getStringMessage('governate_label', { '@label': governateDefaultLabel }),
-            }];
           }
           this.setState({
             governateOptions: options,
@@ -141,7 +145,8 @@ export default class AreaListBlock extends React.Component {
   /**
    * Set new value of city/area in storage and refresh list on submit.
    */
-  handleSubmit = (activeItem) => {
+  handleSubmit = (e, activeItem) => {
+    e.preventDefault();
     if (activeItem !== null) {
       const { closeModal } = this.props;
       const areaSelected = {
@@ -216,7 +221,7 @@ export default class AreaListBlock extends React.Component {
             <div className="actions">
               <div className="select-area-link submit">
                 <a
-                  onClick={() => this.handleSubmit(activeItem)}
+                  onClick={(e) => this.handleSubmit(e, activeItem)}
                   href="#"
                   className="select-area-link"
                 >

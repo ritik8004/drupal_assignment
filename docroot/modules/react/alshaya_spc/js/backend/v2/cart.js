@@ -486,7 +486,7 @@ window.commerceBackend.addFreeGift = async (data) => {
           '@cart': JSON.stringify(cart),
         });
       } else {
-        if (!_isEmpty(updated.data) && _isUndefined(updated.data.error)) {
+        if (hasValue(updated) && hasValue(updated.data)) {
           updated.data = await getProcessedCartData(updated.data);
         }
         cart = updated;

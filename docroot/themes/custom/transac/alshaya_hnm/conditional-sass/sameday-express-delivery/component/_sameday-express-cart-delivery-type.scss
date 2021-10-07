@@ -3,5 +3,36 @@
     .delivery-area-name {
       font-family: $hnm-demibold;
     }
+
+    .delivery-area-label {
+      > div {
+        display: block;
+      }
+    }
+
+    .delivery-area-button {
+      &::before {
+        font-size: 0.5rem;
+      }
+    }
+  }
+
+  .sku-cart-delivery-methods {
+    .information-icon {
+      &::after {
+        top: 0;
+      }
+    }
+
+    .shipping-tags-first-row,
+    .shipping-tags-second-row {
+      .cart-shipping-method {
+        .information-icon {
+          &::after {
+            top: initial;
+          }
+        }
+      }
+    }
   }
 }
