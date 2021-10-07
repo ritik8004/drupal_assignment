@@ -22,4 +22,8 @@ StaticStorage.clear = () => {
   window.spcStaticStorage = {};
 };
 
+StaticStorage.delete = (key) => {
+  delete window.spcStaticStorage[key];
+};
+
 export default StaticStorage;

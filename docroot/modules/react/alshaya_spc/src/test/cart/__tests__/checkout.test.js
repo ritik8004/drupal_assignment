@@ -665,6 +665,12 @@ describe('Checkout', () => {
     });
 
     describe('Test getStoreInfo()', () => {
+      beforeEach(() => {
+        // This is set at global level in checkout.js so that is why we create
+        // this storeage before each iteration.
+        StaticStorage.set('storeInfo', {});
+      });
+
       const getStoreInfo = utilsRewire.__get__('getStoreInfo');
 
       it('When proper store data parameter is provided', async () => {
@@ -694,6 +700,9 @@ describe('Checkout', () => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
+          // This is set at global level in checkout.js so that is why we create
+          // this storeage before each iteration.
+          StaticStorage.set('storeInfo', {});
       });
 
       it('When proper store data parameter is provided', async () => {
