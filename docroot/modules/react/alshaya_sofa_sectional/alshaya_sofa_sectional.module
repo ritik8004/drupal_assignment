@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
 
@@ -16,12 +17,28 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
     return;
   }
 
-  // Don't process further if sofa sectional feature is disabled.
-  if (!\Drupal::config('alshaya_sofa_sectional.settings')->get('enabled')) {
-    return;
-  };
+  // Add cache tag.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
 
-  // @todo add cache tags.
-  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
-  $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
+  // Get sofa sectional configuration.
+  $config = \Drupal::config('alshaya_sofa_sectional.settings');
+
+  if (!$config->get('enabled')) {
+    return;
+  }
+
+  // Get category ids from config.
+  $category_ids = $config->get('category_ids');
+
+  // Get category ids from product field.
+  $categories = $entity->get('field_category')->getValue();
+  $categories = array_column($categories, 'target_id');
+
+  // Check if category ids from field are present in config.
+  $categories = array_intersect($categories, $category_ids);
+  if (!empty($categories)) {
+    // If category ids present in config attach library.
+    $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
+    $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
+  }
 }
