@@ -63,6 +63,31 @@ $magentos = [
       'store_id' => ['en' => 32, 'ar' => 29],
     ],
   ],
+  'cos_prod' => [
+    'url' => 'https://cos.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 64],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 52, 'ar' => 55],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 58, 'ar' => 61],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 7, 'ar' => 4],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 13, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+  ],
   // The body shop.
   'tbs_qa' => [
     'url' => 'https://tbs-uat.store.alshaya.com',
