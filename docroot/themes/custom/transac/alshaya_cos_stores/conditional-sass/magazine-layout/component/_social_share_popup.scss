@@ -5,7 +5,7 @@
 
       @include breakpoint($desktop) {
         top: -4.5rem;
-        #{$left}: 18rem;
+        #{$left}: 20rem;
       }
 
       &::before {
@@ -14,6 +14,25 @@
         border: 1px solid $primary_border;
         width: 3rem;
         height: 3rem;
+
+        @include breakpoint($only-mobile) {
+          border: 0;
+          width: 2.5rem;
+          height: 2.5rem;
+          position: relative;
+          top: 0.125rem;
+        }
+      }
+    }
+  }
+}
+
+html {
+  &.social-modal-overlay {
+    .close-icon {
+      @include icon(close, before) {
+        background: none;
+        font-size: 2rem;
       }
     }
   }

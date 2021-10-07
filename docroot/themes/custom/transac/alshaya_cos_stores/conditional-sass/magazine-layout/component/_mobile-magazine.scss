@@ -3,19 +3,47 @@
     .promotions {
       a {
         font-size: 1rem;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    h1 {
+      @include breakpoint($only-mobile) {
+        margin: 0.25rem;
       }
     }
   }
 
   .content-sidebar-wrapper {
     @include breakpoint($tablet) {
-      padding-#{$left}: 2rem;
+      padding-#{$left}: 0;
+
+      &.sidebar-fixed {
+        padding-#{$left}: 0;
+        width: 23.125rem;
+        top: 1.0625rem;
+      }
+
+      &.sidebar-fixed.contain {
+        padding-#{$left}: 0;
+      }
     }
 
     .content__title_wrapper {
       .promotion-discount-wrapper {
         .promotions {
           margin-bottom: 0;
+        }
+      }
+
+      h1 {
+        span {
+          @include breakpoint($only-mobile) {
+            font-size: 0.75rem;
+          }
         }
       }
     }
@@ -27,7 +55,25 @@
         margin-#{$left}: 0;
         height: 3rem;
         text-transform: uppercase;
-        min-width: 16.75rem;
+
+        @include breakpoint($tablet) {
+          min-width: 18.75rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin-top: 3rem;
+        }
+      }
+
+      .size-tray-link {
+        @include icon(chevrondown, after) {
+          font-weight: bold;
+          #{$right}: 0.875rem;
+          font-size: 1rem;
+        }
+
+        color: $size-tray-empty-btn-text;
+        border-color: $size-tray-empty-btn-border;
       }
     }
   }
