@@ -1,6 +1,6 @@
 /**
  * @file
- * Alshaya Promotions Label Manager.
+ * Alshaya RCS Promotions Label Manager.
  */
 
 (function ($, Drupal, drupalSettings) {
@@ -48,7 +48,6 @@
 
   /**
    * Js to initialize dynamic promotion labels.
-   * @param context
    */
   Drupal.alshayaPromotions.initializeDynamicPromotions = function () {
     // Slide down the dynamic label.
@@ -93,6 +92,14 @@
     }
   };
 
+  /**
+   * Refresh the dynamic promotion label after cart update.
+   *
+   * @param {string} sku
+   *   The SKU of the product.
+   * @param {object} cartData
+   *   The cart data object.
+   */
   Drupal.alshayaPromotions.refreshDynamicLabels = function (sku, cartData) {
     const response = Drupal.alshayaPromotions.getV2DynamicLabel(sku, cartData);
     if (response && typeof response.data !== 'undefined') {
@@ -112,6 +119,12 @@
     }
   };
 
+  /**
+   * Display the dynamic lable of the product.
+   *
+   * @param {string} sku
+   *   The SKU value of the product.
+   */
   Drupal.alshayaPromotions.displayDynamicLabels = function (sku) {
     var cartData = Drupal.alshayaSpc.getCartData();
     if (!cartData) {
@@ -121,6 +134,14 @@
     Drupal.alshayaPromotions.refreshDynamicLabels(sku, cartData);
   };
 
+  /**
+   * Update the dynamic promotion label of the product.
+   *
+   * @param {string} sku
+   *   The SKU value of the product.
+   * @param {object} response
+   *   The response object containing the dynamic promotion label.
+   */
   Drupal.alshayaPromotions.updateDynamicLabel = function (sku, response) {
     // If label info available in response.
     if (response.label !== undefined && response.label !== null) {
@@ -129,7 +150,19 @@
     }
   };
 
-  // Call Magento graphql endpoint to get Dynamic Promotion info.
+  /**
+   * Call Magento graphql endpoint to get Dynamic Promotion info.
+   *
+   * @param {string} sku
+   *   The SKU value of the product.
+   * @param {object} cartData
+   *   The object containing the current cart data.
+   * @param {string} viewMode
+   *   The type of response we expect from magento.
+   *
+   * @returns {object}
+   *   An oject containing the dynamic promotion label.
+   */
   Drupal.alshayaPromotions.getV2DynamicLabel = function (sku, cartData, viewMode = 'links') {
     let response = null;
     if (typeof drupalSettings.alshayaRcs !== 'undefined') {
