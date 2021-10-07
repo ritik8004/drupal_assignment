@@ -1,4 +1,5 @@
 import React from 'react';
+import Collapsible from 'react-collapsible';
 
 /**
  * Unorderedlist component.
@@ -71,32 +72,37 @@ const UnorderedList = (props) => {
   classes = isHidden ? `${classes} form-element-hidden` : `${classes}`;
   classes = isGroup ? `${classes} group-wrapper` : `${classes}`;
 
+  const SofaSectionConfigAccordion = (
+    <label>
+      <span className="config-name">
+        {label}
+      </span>
+      <span className="config-value">
+        {selectedValueLabel}
+      </span>
+    </label>
+  );
+
   return (
     <div className={classes}>
-      <label>
-        <span>
-          {`${label}: `}
-        </span>
-        <span className="selected-text">
-          {selectedValueLabel}
-        </span>
-      </label>
-      { isGroup && (
-        <div className="group-anchor-wrapper">
-          {Object.keys(groupData.groupAlternates).map((alternate) => (
-            <a
-              href="#"
-              key={alternate}
-              onClick={(e) => groupData.setGroupCode(e, alternate)}
-              className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
-                ? 'active' : 'in-active'}
-            >
-              {groupData.groupAlternates[alternate]}
-            </a>
-          ))}
-        </div>
-      )}
-      <ul className={`attribute-options-list ${attributeName}`} name={attributeName}>{listItems}</ul>
+      <Collapsible trigger={SofaSectionConfigAccordion}>
+        { isGroup && (
+          <div className="group-anchor-wrapper">
+            {Object.keys(groupData.groupAlternates).map((alternate) => (
+              <a
+                href="#"
+                key={alternate}
+                onClick={(e) => groupData.setGroupCode(e, alternate)}
+                className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
+                  ? 'active' : 'in-active'}
+              >
+                {groupData.groupAlternates[alternate]}
+              </a>
+            ))}
+          </div>
+        )}
+        <ul className={`attribute-options-list ${attributeName}`} name={attributeName}>{listItems}</ul>
+      </Collapsible>
     </div>
   );
 };
