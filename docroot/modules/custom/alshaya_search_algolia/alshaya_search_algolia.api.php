@@ -35,5 +35,15 @@ function hook_alshaya_search_algolia_ranking_sorting_alter(array &$replica_setti
 }
 
 /**
+ * Add/Alter attribute data to be indexed.
+ *
+ * @param array $object
+ *   Array of index object.
+ */
+function hook_alshaya_search_algolia_object_alter(array &$object) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
