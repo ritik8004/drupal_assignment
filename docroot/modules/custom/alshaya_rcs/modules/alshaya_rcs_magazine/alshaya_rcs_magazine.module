@@ -28,7 +28,7 @@ function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entit
   // Provide template for product teaser.
   $path = drupal_get_path('module', 'alshaya_rcs_product');
   $templates['field']['magazine_article'] = [
-    'product_teaser' => "$path/templates/product-teaser.handlebars",
+    'product_teaser' => "$path/templates/rcs-product-teaser.handlebars",
   ];
   $templates['block']['product']['price'] = "$path/templates/rcs-product-price-block.handlebars";
   $templates['block']['product']['price_item'] = "$path/templates/rcs-product-price-item-block.handlebars";
