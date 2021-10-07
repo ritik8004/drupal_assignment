@@ -851,5 +851,6 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
     'description' => "$path/templates/rcs-field-description.handlebars",
     'short_description' => "$path/templates/rcs-field-short-description.handlebars",
   ];
+
   $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
 }
