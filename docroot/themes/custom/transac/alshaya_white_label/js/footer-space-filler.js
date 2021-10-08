@@ -6,6 +6,19 @@
 (function ($, Drupal) {
   'use strict';
 
+  /**
+   * Fill space by adding white space.
+   *
+   * @param {*} region
+   *   jQuery object.
+   * @param {integer} fillValue
+   *   Value on space in pixels.
+   */
+  function spaceFill(region, fillValue) {
+    region.addClass('auto-margin-processed');
+    region.css('margin-top', fillValue + 'px');
+  }
+
   Drupal.behaviors.footerSpaceFiller = {
     attach: function (context, settings) {
       // Blacklisted pages.
@@ -13,41 +26,49 @@
         return false;
       }
 
-      // Check if we have empty space below the footer,
-      // Add that much space above it so that footer is touches the screen bottom.
-      var checkoutFooter = false;
-      var footerBottom;
-      var difference;
-      if ($('body').hasClass('alias--cart-checkout-login') || $('body').hasClass('alias--cart-checkout-delivery')
-       || $('body').hasClass('alias--cart-checkout-payment') || $('body').hasClass('alias--cart-checkout-confirmation')
-       || $('body').hasClass('alias--cart-login')) {
-        checkoutFooter = true;
-      }
-
       $(window).on('load', function () {
+        // Check if we have empty space below the footer,
+        // Add that much space above it so that footer is touches the screen bottom.
+        var checkoutFooter = false;
+        var postContent = $('.c-post-content');
+        var footerSecondary = $('.c-footer-secondary');
+        var footer = $('footer');
+        var footerBottom;
+        var difference;
+        if ($('body').hasClass('alias--checkout')
+          || $('body').hasClass('alias--checkout-confirmation')
+          || $('body').hasClass('alias--cart-login')) {
+          checkoutFooter = true;
+        }
         // Check viewport height.
         var windowHeight = $(window).height();
         // Normal Page.
         if (!checkoutFooter) {
-          footerBottom = $('footer').position().top + $('footer').outerHeight();
+          footerBottom = footer.position().top + footer.outerHeight();
           if (windowHeight > footerBottom) {
             difference = windowHeight - footerBottom;
-            $('footer').addClass('auto-margin-processed');
-            $('footer').css('margin-top', difference + 'px');
+            spaceFill(footer, difference);
           }
         }
         // Checkout Page.
         else {
           // On Checkout page, the footer is actually post content + footer secondary.
-          footerBottom = $('.c-post-content').position().top + $('.c-post-content').outerHeight()
-            + $('.c-footer-secondary').outerHeight();
+          // On some sites we dont have content in post content.
+          var adjustRegion;
+
+          if (postContent.length > 0) {
+            footerBottom = footerSecondary.outerHeight() + postContent.position().top + postContent.outerHeight();
+            adjustRegion = postContent;
+          }
+          else {
+            footerBottom = footer.position().top + footer.outerHeight();
+            adjustRegion = footer;
+          }
           if (windowHeight > footerBottom) {
             difference = windowHeight - footerBottom;
-            $('.c-post-content').addClass('auto-margin-processed');
-            $('.c-post-content').css('margin-top', difference + 'px');
+            spaceFill(adjustRegion, difference);
           }
         }
-        return;
       });
     }
   };
