@@ -1,15 +1,42 @@
 import React from 'react';
 import SofaSectionalConfigItem from '../common/sofa-sectional-config-item';
 
-const SelectionSummary = () => {
-  const SelectionConfigItems = [
-    { name: 'Configuration: ', value: 'None Selected' },
-    { name: 'Width: ', value: 'None Selected' },
-    { name: 'Sectional Depth: ', value: 'None Selected' },
-    { name: 'Fabric and Color: ', value: 'Frost Gray, Performance Coastal Linen' },
-    { name: 'Leg style: ', value: 'Dark Pewter' },
-    { name: 'Delivery: ', value: 'Made to Order (ships in 6-9 weeks)' },
-  ];
+const SelectionSummary = (props) => {
+  const {
+    selectedAttributes,
+    configurableAttributes,
+    selectedVariant,
+    sku,
+    productInfo,
+  } = props;
+
+  const selectAttributeKeys = Object.keys(selectedAttributes);
+
+  if (selectAttributeKeys === null) {
+    return (null);
+  }
+
+  const configurableAttributeKey = Object.keys(configurableAttributes);
+
+  if (configurableAttributeKey.length !== selectAttributeKeys.length) {
+    return (null);
+  }
+
+  const SelectionConfigItems = [];
+
+  Object.entries(selectedAttributes).forEach(([key, attributeId]) => {
+    let configItem = {};
+    const { label, values } = configurableAttributes[key];
+    values.forEach((attribute) => {
+      if (attribute.value_id === attributeId) {
+        configItem = {
+          name: label,
+          value: attribute.label,
+        };
+        SelectionConfigItems.push(configItem);
+      }
+    });
+  });
 
   const configItems = [];
 
@@ -17,6 +44,7 @@ const SelectionSummary = () => {
     SelectionConfigItems.forEach((config) => {
       configItems.push(
         <SofaSectionalConfigItem
+          key={config.name}
           name={config.name}
           value={config.value}
         />,
@@ -25,17 +53,20 @@ const SelectionSummary = () => {
     return configItems;
   };
 
+  const { variants } = productInfo[sku];
+  const productDetails = variants[selectedVariant];
+
   return (
     <div className="sofa-section-card sofa-selection-summary-wrapper">
       <div className="sofa-selection-summary-title">
         {Drupal.t('your selection summary')}
       </div>
       <div className="sofa-selection-summary-subtitle">
-        {Drupal.t('Andes 3-Piece Chaise Sectional')}
+        {productDetails.cart_title}
       </div>
       <div className="sofa-selection-summary-image-preview">
         <img
-          src="https://assets.weimgs.com/weimgs/ab/images/wcm/products/202133/0009/img7d.jpg"
+          src={productDetails.cart_image}
           alt="product image"
           title="product image"
           loading="lazy"

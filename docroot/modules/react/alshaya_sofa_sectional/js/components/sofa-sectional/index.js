@@ -278,7 +278,16 @@ export default class SofaSectionalForm extends React.Component {
             </div>
           );
         })}
-        <SelectionSummary />
+        { selectedVariant
+          && (
+          <SelectionSummary
+            selectedAttributes={formAttributeValues}
+            configurableAttributes={configurableAttributes}
+            selectedVariant={selectedVariant}
+            sku={sku}
+            productInfo={productInfo}
+          />
+          )}
         <QuantitySelector
           options={getQuantityDropdownValues()}
           onChange={this.onQuantityChanged}
