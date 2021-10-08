@@ -292,7 +292,7 @@ const getSavedStoreData = (key) => {
   const savedStoreData = getStorageInfo(key);
 
   if (savedStoreData !== null) {
-    const expireTime = drupalSettings.storeInfoCacheTime * 60 * 1000;
+    const expireTime = drupalSettings.cncStoreInfoCacheTime * 60 * 1000;
     const currentTime = new Date().getTime();
 
     if ((currentTime - savedStoreData.created) < expireTime) {

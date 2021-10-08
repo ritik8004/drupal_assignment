@@ -28,6 +28,3 @@ $settings['alshaya_checkout_settings']['max_native_update_attempts'] = 1;
 // Specify the mode to use to validate the cart.
 // Modes - full cart update (full) or simple refresh action (refresh).
 $settings['alshaya_checkout_settings']['cart_refresh_mode'] = 'refresh';
-
-// Set caching time for store info to 4hrs i.e. 240 mins by default.
-$settings['alshaya_checkout_settings']['store_info_cache_time'] = 240;
