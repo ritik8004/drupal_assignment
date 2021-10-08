@@ -132,8 +132,7 @@ window.commerceBackend.setCartDataInStorage = (data) => {
  *  Whether we should remove all items.
  */
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
-  StaticStorage.delete('cart');
-  StaticStorage.delete('cart_raw');
+  StaticStorage.clear();
 
   removeStorageInfo('cart_data');
 
