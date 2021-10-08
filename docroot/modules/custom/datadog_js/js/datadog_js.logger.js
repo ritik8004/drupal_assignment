@@ -10,6 +10,8 @@
       // Make sure context is defined.
       context = context || {};
 
+      context.logSource = 'drupal_module';
+
       // Get the status from supported list of status of DataDog.
       var status = 'debug';
 
