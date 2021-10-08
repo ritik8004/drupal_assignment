@@ -225,11 +225,13 @@ const PdpLayout = () => {
           <ConditionalView condition={isExpressDeliveryEnabled()
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >
-            <div className="express-delivery-wrapper">
+            <div className="express-delivery">
               {deliveryOptions && deliveryOptions !== null
                 && Object.keys(deliveryOptions).length > 0
                 && Object.keys(deliveryOptions).map((option) => (
-                  <div key={option} className={`express-delivery-text ${option}`}>{deliveryOptions[option].label}</div>
+                  <div key={option} className={`express-delivery-text ${option}`}>
+                    <span>{deliveryOptions[option].label}</span>
+                  </div>
                 ))}
             </div>
           </ConditionalView>
