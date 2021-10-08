@@ -605,6 +605,7 @@ class AlshayaSpcController extends ControllerBase {
           ],
           'global_error_message' => _alshaya_spc_global_error_message(),
           'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
+          'storeInfoCacheTime' => Settings::get('alshaya_checkout_settings')['store_info_cache_time'],
         ],
       ],
       '#cache' => [

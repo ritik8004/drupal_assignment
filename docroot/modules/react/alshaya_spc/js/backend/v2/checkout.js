@@ -47,6 +47,7 @@ import {
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -63,11 +64,6 @@ const invisibleCharacter = '&#8203;';
  * @returns bool
  */
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
-
-// We set the storage here itself and not inside the function in which it is
-// used as the function can be called parallely and we may end up initializing
-// it multiple times for each parallel call thus leading to loss of data.
-StaticStorage.set('storeInfo', {});
 
 /**
  * Get CnC status for cart based on skus in cart.
@@ -284,39 +280,77 @@ const getDefaultPaymentFromOrder = async (order) => {
 };
 
 /**
+ * Gets the store data saved in local storage.
+ *
+ * @param {string} key
+ *   The identifier key in the localStorage for the store data.
+ *
+ * @returns {object|null}
+ *   Returns the store data object if found else null.
+ */
+const getSavedStoreData = (key) => {
+  const savedStoreData = getStorageInfo(key);
+
+  if (savedStoreData !== null) {
+    const expireTime = drupalSettings.storeInfoCacheTime * 60 * 1000;
+    const currentTime = new Date().getTime();
+
+    if ((currentTime - savedStoreData.created) < expireTime) {
+      return savedStoreData;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Sets the store data in the local storage.
+ *
+ * @param {string} key
+ *   The identifier key in the localStorage for the store data.
+ * @param {object} data
+ *   The store data object.
+ */
+const setStoreData = (key, data) => {
+  const currentTime = new Date().getTime();
+  // eslint-disable-next-line no-param-reassign
+  data.created = currentTime;
+
+  setStorageInfo(data, key);
+};
+
+/**
  * Gets the data for a particular store.
  *
- * @param {string} store
+ * @param {string} storeInformation
  *   The store ID.
  *
  * @returns {Promise<object|null>}
  *   Returns a promise which resolves to an array of data for the given store or
  * an empty array in case of any issue.
  */
-const getStoreInfo = async (storeData) => {
-  let store = { ...storeData };
+const getStoreInfo = async (storeInformation) => {
+  let store = { ...storeInformation };
 
   if (typeof store.code === 'undefined' || !store.code) {
     return null;
   }
 
-  const staticStoreData = StaticStorage.get('storeInfo');
+  const storageKey = `storeInfo:${store.code}`;
+  let storeData = getSavedStoreData(storageKey);
 
-  if (hasValue(staticStoreData[store.code])
-    || (hasValue(staticStoreData[store.code]) && staticStoreData[store.code] === '')) {
-    // Check if some value was returned by the API call.
-    return staticStoreData[store.code];
+  if (hasValue(storeData)) {
+    return storeData.data;
   }
 
-  staticStoreData[store.code] = '';
+  storeData = { data: {} };
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
-    staticStoreData[store.code] = '';
-    StaticStorage.set('storeInfo', staticStoreData);
+    setStoreData(storageKey, storeData);
     return null;
   }
   const storeInfo = response.data;
@@ -349,8 +383,8 @@ const getStoreInfo = async (storeData) => {
     delete store.rnc_config;
   }
 
-  staticStoreData[store.code] = store;
-  StaticStorage.set('storeInfo', staticStoreData);
+  storeData.data = store;
+  setStoreData(storageKey, storeData);
   return store;
 };
 
