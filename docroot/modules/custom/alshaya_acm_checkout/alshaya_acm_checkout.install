@@ -13,7 +13,7 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Update checkout config to include cache time for cnc store info.
+ * [6.7.0] Update checkout config to include cache time for cnc store info.
  */
 function alshaya_acm_checkout_update_8013() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
