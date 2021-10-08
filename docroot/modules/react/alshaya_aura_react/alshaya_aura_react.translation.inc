@@ -308,16 +308,16 @@ function _alshaya_aura_react_translations() {
       'ar' => 'الرقم الذي أدخلته غير صحيح. يرجى إعادة إدخال رقم النقاط التي ترغب في استخدامها.',
     ],
     'Online' => [
-      'ar' => 'Online ar',
+      'ar' => 'خارج الشبكة',
     ],
     'Offline' => [
-      'ar' => 'Offline ar',
+      'ar' => 'على الانترنت',
     ],
     'All Transactions' => [
-      'ar' => 'All Transactions ar',
+      'ar' => 'جميع المعاملات',
     ],
     'Online / Offline' => [
-      'ar' => 'Online / Offline ar',
+      'ar' => 'على الانترنت / خارج الشبكة',
     ],
   ];
 }
