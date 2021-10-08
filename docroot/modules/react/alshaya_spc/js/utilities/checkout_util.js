@@ -398,7 +398,8 @@ export const customStockErrorMessage = (cartResult) => {
 export const cartValidationOnUpdate = (cartResult, redirect) => {
   let sameNumberOfItems = true;
   // If no error or OOS.
-  if (cartResult.error === undefined
+  if (cartResult
+    && cartResult.error === undefined
     && cartResult.in_stock !== false
     && cartResult.is_error === false
     && (cartResult.response_message === null

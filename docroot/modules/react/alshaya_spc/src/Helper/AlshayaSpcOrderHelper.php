@@ -519,11 +519,11 @@ class AlshayaSpcOrderHelper {
         break;
 
       case 'checkout_com_upapi_benefitpay':
-        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'];
-        $orderDetails['payment']['qrData'] = $payment_info['qr_data'];
-        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
-        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
-        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'] ?? '';
+        $orderDetails['payment']['qrData'] = $payment_info['qr_data'] ?? '';
+        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'] ?? '';
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'] ?? '';
+        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'] ?? '';
 
         break;
     }

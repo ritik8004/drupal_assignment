@@ -1,9 +1,8 @@
 import React from 'react';
-import Collapsible from 'react-collapsible';
-import HomeDeliverySVG from '../../../../../alshaya_pdp_react/js/svg-component/hd-svg';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import { getCartShippingMethods, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import dispatchCustomEvent from '../../../utilities/events';
 import PdpSelectArea from '../pdp-select-area';
 import PdpShippingMethods from '../pdp-shipping-methods';
 import SelectAreaPanel from '../select-area-panel';
@@ -18,8 +17,19 @@ export default class DeliveryOptions extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchShippingMethods();
+    const { variantSelected } = this.props;
+    if (variantSelected !== undefined) {
+      this.fetchShippingMethods(variantSelected);
+    }
+    // Updating shipping methods as per selection of variant.
+    document.addEventListener('onSkuVariantSelect', this.updateShippingOnVariantSelect, false);
     document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+  }
+
+  updateShippingOnVariantSelect = (e) => {
+    if (e.detail && e.detail.data !== '') {
+      this.fetchShippingMethods(e.detail.data);
+    }
   }
 
   checkShippingMethods = (response, productSku) => {
@@ -30,6 +40,9 @@ export default class DeliveryOptions extends React.Component {
       if (shippingMethodObj && Object.keys(shippingMethodObj).length !== 0) {
         this.setState({
           shippingMethods: shippingMethodObj.applicable_shipping_methods,
+        }, () => {
+          // Set accordion height for delivery options after content loads.
+          dispatchCustomEvent('setDeliveryOptionAccordionHeight', {});
         });
       }
     }
@@ -37,22 +50,31 @@ export default class DeliveryOptions extends React.Component {
 
   displayShippingMethods = (event) => {
     event.preventDefault();
-    this.fetchShippingMethods();
+    const { variantSelected } = this.props;
+    let productSku = null;
+    // Get product sku from props variable for new pdp.
+    // And for old pdp, we are fetching from page html.
+    if (variantSelected !== undefined) {
+      productSku = variantSelected;
+    } else if (document.querySelector('[name="selected_variant_sku"]') !== null) {
+      productSku = document.querySelector('[name="selected_variant_sku"]').getAttribute('value');
+    }
+    this.fetchShippingMethods(productSku);
   }
 
-  fetchShippingMethods = () => {
-    const currentArea = getDeliveryAreaStorage();
-    const attr = document.getElementsByClassName('sku-base-form');
-    const productSku = attr[0].getAttribute('data-sku');
-    showFullScreenLoader();
-    getCartShippingMethods(currentArea, productSku).then(
-      (response) => {
-        if (response !== null) {
-          this.checkShippingMethods(response, productSku);
-        }
-        removeFullScreenLoader();
-      },
-    );
+  fetchShippingMethods = (productSku) => {
+    if (productSku !== null) {
+      const currentArea = getDeliveryAreaStorage();
+      showFullScreenLoader();
+      getCartShippingMethods(currentArea, productSku).then(
+        (response) => {
+          if (response !== null) {
+            this.checkShippingMethods(response, productSku);
+          }
+          removeFullScreenLoader();
+        },
+      );
+    }
   }
 
   getPanelData = (data) => {
@@ -77,42 +99,20 @@ export default class DeliveryOptions extends React.Component {
       return null;
     }
 
-    const PdpDeliveryOptionAccordion = (
-      <div
-        className="express-delivery-title-wrapper title"
-      >
-        <div className="express-delivery-title">
-          <span className="card-icon-svg">
-            <HomeDeliverySVG />
-          </span>
-          {Drupal.t('Delivery Options')}
-        </div>
-        <span className="express-delivery-subtitle">{Drupal.t('Explore the delivery options applicable to your area.')}</span>
-      </div>
-    );
-
     return (
-      <div
-        className="pdp-express-delivery-wrapper card"
-        ref={this.expandRef}
-      >
-        <Collapsible trigger={PdpDeliveryOptionAccordion}>
-          <div className="content express-delivery-detail">
-            <PdpShippingMethods
-              shippingMethods={shippingMethods}
-            />
-            <PdpSelectArea
-              getPanelData={this.getPanelData}
-              removePanelData={this.removePanelData}
-            />
-            <div className="select-area-popup-wrapper">
-              <SelectAreaPanel
-                panelContent={panelContent}
-              />
-            </div>
-          </div>
-        </Collapsible>
-
+      <div className="content express-delivery-detail">
+        <PdpShippingMethods
+          shippingMethods={shippingMethods}
+        />
+        <PdpSelectArea
+          getPanelData={this.getPanelData}
+          removePanelData={this.removePanelData}
+        />
+        <div className="select-area-popup-wrapper">
+          <SelectAreaPanel
+            panelContent={panelContent}
+          />
+        </div>
       </div>
     );
   }

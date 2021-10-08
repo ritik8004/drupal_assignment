@@ -63,18 +63,18 @@ class CompleteBenefitPayPayment extends React.Component {
       inAppScript.async = true;
       inAppScript.src = '/modules/react/alshaya_spc/assets/js/benefit_pay_in_app.min.js';
       inAppScript.id = 'benefit-pay-in-app';
-      document.head.appendChild(inAppScript);
+      document.body.appendChild(inAppScript);
       inAppScript.onload = () => {
         // We only want to auto open payment modal once so checking
         // `benefit_pay_modal_auto_opened` from storage to check if this is user's
         // first visit of confirmation page or user is reloading the page.
-        if (typeof InApp !== 'undefined' && !localStorage.getItem('benefit_pay_modal_auto_opened')) {
+        if (typeof window.InApp !== 'undefined' && !localStorage.getItem('benefit_pay_modal_auto_opened')) {
           this.openInAppModal();
         }
       };
     }
 
-    if (typeof InApp !== 'undefined') {
+    if (typeof window.InApp !== 'undefined') {
       this.openInAppModal();
     }
   }
