@@ -307,6 +307,17 @@ function _alshaya_aura_react_translations() {
     'The number you’ve entered is invalid. Please re-enter the number of points you’d like to redeem.' => [
       'ar' => 'الرقم الذي أدخلته غير صحيح. يرجى إعادة إدخال رقم النقاط التي ترغب في استخدامها.',
     ],
-
+    'Online' => [
+      'ar' => 'Online ar',
+    ],
+    'Offline' => [
+      'ar' => 'Offline ar',
+    ],
+    'All Transactions' => [
+      'ar' => 'All Transactions ar',
+    ],
+    'Online / Offline' => [
+      'ar' => 'Online / Offline ar',
+    ],
   ];
 }
