@@ -45,7 +45,7 @@ fi
 if ([ $setup == 1 ])
 then
   cd $docrootDir/modules/react
-  npm install
+  npm ci
 
   ignoredDirs=( "node_modules" "alshaya_react" "js" "dist" )
 
