@@ -28,6 +28,14 @@
     }
     else {
       variant = $('.selected-variant-sku', element).val();
+      // Check if we are in mag-v2 layout
+      // due to different markup the initial variant fetch will fail.
+      if (typeof variant === 'undefined') {
+        if ($('body').hasClass('magazine-layout-v2')) {
+          // variantselected is an attribute in magv2 form.
+          variant = $(element).attr('variantselected');
+        }
+      }
     }
     var variantPrice = (drupalSettings[productKey][sku]['type'] != 'simple') ?
       drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
