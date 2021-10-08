@@ -22,7 +22,7 @@ function getTransactionDateOptions() {
   for (let i = 0; i < parseInt(rewardActivityTimeLimit, 10); i++) {
     const monthYear = date.toLocaleString('default', { month: 'short', year: 'numeric' });
     dates[i] = {
-      value: monthYear,
+      value: `1 ${monthYear}`,
       label: monthYear,
     };
     date.setMonth(date.getMonth() - 1);
