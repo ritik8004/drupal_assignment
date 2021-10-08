@@ -115,3 +115,7 @@ express_delivery:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
     - alshaya_spc/commerce_backend.cart.v2
+
+dynamic_promotion_label:
+  js:
+    dist/dynamic_promotion_label.bundle.js: {}
