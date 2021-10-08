@@ -20,10 +20,9 @@ function getTransactionDateOptions() {
   const { rewardActivityTimeLimit } = getAuraConfig();
 
   for (let i = 0; i < parseInt(rewardActivityTimeLimit, 10); i++) {
-    const monthYear = date.toLocaleString(drupalSettings.path.currentLanguage, { month: 'short', year: 'numeric' });
     dates[i] = {
-      value: `1 ${monthYear}`,
-      label: monthYear,
+      value: `1 ${date.toLocaleString('default', { month: 'short', year: 'numeric' })}`,
+      label: date.toLocaleString(drupalSettings.path.currentLanguage, { month: 'short', year: 'numeric' }),
     };
     date.setMonth(date.getMonth() - 1);
   }

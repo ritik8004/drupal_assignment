@@ -319,5 +319,8 @@ function _alshaya_aura_react_translations() {
     'Online / Offline' => [
       'ar' => 'على الانترنت / خارج الشبكة',
     ],
+    'Order No.' => [
+      'ar' => 'رقم الطلب',
+    ],
   ];
 }
