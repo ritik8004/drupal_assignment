@@ -211,8 +211,9 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'product-recommendation':
+      // @TODO Review this query to use only fields that are required for the display.
       request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${params.url_key}" }}) ${rcsPhGraphqlQuery.products}}`
+        query: `{ products(filter: { sku: { eq: "${params.sku}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
       response = await rcsCommerceBackend.invokeApi(request);

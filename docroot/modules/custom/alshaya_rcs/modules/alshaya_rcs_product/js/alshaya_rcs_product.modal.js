@@ -5,7 +5,7 @@
 
   Drupal.behaviors.alshayaRcsModalBehavior = {
     attach: function (context, settings) {
-      $('.open-modal-pdp').once('pdp-modal-processed').on('click', function (e) {
+      $('.open-modal-pdp, #dy-recommendation a.product-quick-view-link').once('pdp-modal-processed').on('click', function (e) {
         e.preventDefault();
 
         // Get the template with placeholders for modal view.
@@ -20,10 +20,14 @@
         content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', '"#rcs.product_modal._self|image#"');
         content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', '"#rcs.product_modal._self|image#"');
 
-        // Get url key for product whose details are required.
-        var skuUrlKey = $(this).parent('article').find('.sku-url-key').val();
+        // Try to get sku from the element clicked. Works with DY block.
+        var sku = $(this).data('sku');
+        if (!sku) {
+          // Try to get sku from parent article. Works with RCS recommended block.
+          sku = $(this).parent('article').data('sku');
+        }
 
-        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {url_key: skuUrlKey})
+        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku})
           .then(function (entity) {
             if (entity === null || typeof entity === 'undefined') {
               return;
