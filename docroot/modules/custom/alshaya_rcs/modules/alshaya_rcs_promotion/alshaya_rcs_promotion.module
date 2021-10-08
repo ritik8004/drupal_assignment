@@ -104,10 +104,5 @@ function _alshaya_rcs_promotion_update_library(
   $self_module_path = drupal_get_path('module', 'alshaya_rcs_promotion');
   $libraries[$existing_library_name]['js']["/$self_module_path/$new_js_path"] = $options;
   // Check if dependency array exists.
-  if (array_key_exists('dependencies', $libraries[$existing_library_name])) {
-    array_merge($libraries[$existing_library_name]['dependencies'], $dependencies);
-  }
-  else {
-    $libraries[$existing_library_name]['dependencies'] = $dependencies;
-  }
+  array_merge($libraries[$existing_library_name]['dependencies'] ?? [], $dependencies);
 }
