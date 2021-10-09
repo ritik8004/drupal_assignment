@@ -88,3 +88,19 @@
     }
   }
 }
+
+.basic-details-wrapper .field--name-field-skus {
+  .form-item-configurables-size {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+  }
+
+  .sku-base-form {
+    .form-item {
+      @include breakpoint($only-tablet) {
+        padding-top: 0;
+      }
+    }
+  }
+}
