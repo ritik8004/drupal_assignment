@@ -18,6 +18,10 @@
   }
 
   .content-sidebar-wrapper {
+    @include breakpoint($only-tablet) {
+      width: 41%;
+    }
+
     @include breakpoint($tablet) {
       padding-#{$left}: 0;
 
@@ -29,6 +33,13 @@
 
       &.sidebar-fixed.contain {
         padding-#{$left}: 0;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      &.sidebar-fixed {
+        width: 18.4375rem;
+        top: 0.4375rem;
       }
     }
 
@@ -56,6 +67,10 @@
         height: 3rem;
         text-transform: uppercase;
 
+        @include breakpoint($only-tablet) {
+          margin-top: 2.5rem;
+        }
+
         @include breakpoint($tablet) {
           min-width: 18.75rem;
         }
@@ -75,6 +90,12 @@
         color: $size-tray-empty-btn-text;
         border-color: $size-tray-empty-btn-border;
       }
+    }
+  }
+
+  .content__main {
+    @include breakpoint($only-tablet) {
+      width: 52%;
     }
   }
 }

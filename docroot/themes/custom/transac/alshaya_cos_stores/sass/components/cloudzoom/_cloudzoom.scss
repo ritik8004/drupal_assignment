@@ -17,6 +17,7 @@
     @include breakpoint($only-tablet) {
       height: 7.75rem !important;
       padding: 0;
+      width: 5.8125rem !important;
     }
 
     @include breakpoint($tablet) {
@@ -41,7 +42,6 @@
 
     @include breakpoint($only-tablet) {
       border: 0 !important;
-      border-bottom: 0.1875rem solid $gallery_arrows_border !important;
     }
   }
 
