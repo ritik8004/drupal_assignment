@@ -87,10 +87,10 @@ export default class PdpSelectArea extends React.Component {
         <div className="delivery-area-label">
           <ConditionalView condition={areaLabel !== null}>
             <span>{`${Drupal.t('Selected Area')}: `}</span>
-            <span onClick={() => getPanelData(this.openModal())} className="delivery-area-name">{areaLabel}</span>
+            <span onClick={() => getPanelData(this.openModal())} className="delivery-area-name delivery-loader">{areaLabel}</span>
           </ConditionalView>
           <ConditionalView condition={areaLabel === null}>
-            <span className="availability-link" onClick={() => getPanelData(this.openModal())}>{getStringMessage('check_area_availability')}</span>
+            <span className="availability-link delivery-loader" onClick={() => getPanelData(this.openModal())}>{getStringMessage('check_area_availability')}</span>
           </ConditionalView>
         </div>
       </div>

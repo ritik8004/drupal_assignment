@@ -78,6 +78,7 @@ export default class DeliveryOptions extends React.Component {
   }
 
   getPanelData = (data) => {
+    document.querySelector('.delivery-loader').classList.add('loading');
     this.setState({
       panelContent: data,
     });

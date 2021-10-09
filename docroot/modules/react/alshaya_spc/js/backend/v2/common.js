@@ -1310,6 +1310,7 @@ window.commerceBackend.getGovernatesList = async () => {
   const responseData = await getLocations('attribute_id', mapping.area_parent.key);
 
   if (responseData !== null && responseData.total_count > 0) {
+    document.querySelector('.delivery-loader').classList.remove('loading');
     return responseData;
   }
   logger.warning('No governates found in the list as count is zero, API Response: @response.', {
