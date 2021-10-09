@@ -21,7 +21,7 @@
     top: 6.25rem;
   }
 
-  @include breakpoint($tablet) {
-    top: 6.25rem;
+  @include breakpoint($only-tablet) {
+    top: 9.5rem;
   }
 }
