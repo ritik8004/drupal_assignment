@@ -5,6 +5,10 @@
  * Module file.
  */
 
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
 /**
  * Implements hook_preprocess_template().
  */
@@ -31,14 +35,16 @@ function alshaya_cos_transac_alshaya_search_algolia_object_alter(array &$object)
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'acq_product') {
+  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
-    $return = _alshaya_cos_transac_get_product_description($sku_entity);
-    $build['description'] = $return['description'];
-    $build['short_desc'] = $return['short_desc'];
+    if ($sku_entity instanceof SKU) {
+      $return = _alshaya_cos_transac_get_product_description($sku_entity);
+      $build['description'] = $return['description'];
+      $build['short_desc'] = $return['short_desc'];
+    }
   }
 }
 
@@ -46,9 +52,11 @@ function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, E
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_cos_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
-  $return = _alshaya_cos_transac_get_product_description($sku_entity);
-  $build['short_desc'] = $return['short_desc'];
-  $build['description'] = $return['description'];
+  if ($view_mode == 'modal') {
+    $return = _alshaya_cos_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $return['short_desc'];
+    $build['description'] = $return['description'];
+  }
 }
 
 /**
@@ -61,11 +69,10 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
   $description_value = '';
-  $child = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
+  $desc = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
 
-  $sku_entity->get('attr_description')->getValue();
-  if ($body = $sku_entity->get('attr_description')->getValue()) {
-    $description_value .= $body[0]['value'];
+  if (!empty($desc)) {
+    $description_value .= $desc;
   }
 
   // Render the wrapper div for composition always so that the same can be
@@ -78,8 +85,9 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     '#theme' => 'product_composition_markup',
     '#title' => t('Product Detail'),
   ];
+
   if (!empty($composition)) {
-    $composition_markup['#composition']['#markup'] = $composition .' / '. $washing_instructions;
+    $composition_markup['#composition']['#markup'] = implode(", ", json_decode($composition)) . ' / ' . $washing_instructions;
   }
 
   $description_value .= render($composition_markup);
@@ -89,10 +97,17 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
   $description_value .= render($warning);
 
+  $item_code = [
+    '#theme' => 'product_item_code_markup',
+    '#title' => t('Product No:'),
+    '#item_code' => $sku_entity->getSku(),
+  ];
+
+  $description_value .= render($item_code);
+
   $description['value'] = [
     '#markup' => $description_value,
   ];
-
 
   // Add all variables to $build in the sequence in
   // which they should be displayed.
