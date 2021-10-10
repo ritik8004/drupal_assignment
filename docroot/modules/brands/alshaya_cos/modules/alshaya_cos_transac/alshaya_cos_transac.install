@@ -76,10 +76,6 @@ function alshaya_cos_transac_install() {
       'en' => 'COS Store',
       'ar' => 'متجر COS',
     ],
-    'Product Description' => [
-      'en' => 'What does it do for you?',
-      'ar' => 'ما الذي تفعله من اجلك؟',
-    ],
     'get email offers and the latest news from @site_name' => [
       'en' => 'Enjoy 10% off your first order',
       'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
