@@ -21,10 +21,10 @@ const PromotionsDynamicLabelsUtil = {
     const productLabels = {};
     Object.keys(cartData.items).forEach((key) => {
       const response = Drupal.alshayaPromotions.getRcsDynamicLabel(cartData.items[key].sku, cartData, 'api');
-      if (response && typeof response.data !== 'undefined') {
+      if (response && response.label) {
         productLabels[key] = {
           sku: cartData.items[key].sku,
-          labels: JSON.parse(response.data.dynamicPromotionLabel.label),
+          labels: JSON.parse(response.label),
         };
       }
     });
