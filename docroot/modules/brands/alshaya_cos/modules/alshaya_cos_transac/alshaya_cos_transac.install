@@ -122,16 +122,16 @@ function alshaya_cos_transac_install() {
   $weight = \Drupal::entityTypeManager()->getStorage('block')
     ->load('alshayaalgoliareactautocomplete')->getWeight();
 
+  $weight = $weight - 1;
   $block = \Drupal::entityTypeManager()->getStorage('block')
-    ->load('alshayamainmenu')
-    ->setRegion('header')
-    ->setWeight($weight - 1)
-    ->save();
+    ->load('alshayamainmenu');
+  $block->setRegion('header');
+  $block->setWeight($weight);
+  $block->save();
 
-  $block = \Drupal::entityTypeManager()->getStorage('block')
-    ->load('branding')
-    ->setWeight($weight - 1)
-    ->save();
+  $block = \Drupal::entityTypeManager()->getStorage('block')->load('branding');
+  $block->setWeight($weight - 1);
+  $block->save();
 }
 
 /**
