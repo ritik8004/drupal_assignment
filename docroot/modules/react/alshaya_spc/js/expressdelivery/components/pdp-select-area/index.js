@@ -77,6 +77,8 @@ export default class PdpSelectArea extends React.Component {
     event.preventDefault();
     // to make sure that markup is present in DOM.
     document.querySelector('body').classList.add('overlay-delivery-area');
+    // remove class loading when the delivery panel opens.
+    document.querySelector('.delivery-loader').classList.remove('loading');
   }
 
   render() {
@@ -87,10 +89,10 @@ export default class PdpSelectArea extends React.Component {
         <div className="delivery-area-label">
           <ConditionalView condition={areaLabel !== null}>
             <span>{`${Drupal.t('Selected Area')}: `}</span>
-            <span onClick={() => getPanelData(this.openModal())} className="delivery-area-name">{areaLabel}</span>
+            <span onClick={() => getPanelData(this.openModal())} className="delivery-area-name delivery-loader">{areaLabel}</span>
           </ConditionalView>
           <ConditionalView condition={areaLabel === null}>
-            <span className="availability-link" onClick={() => getPanelData(this.openModal())}>{getStringMessage('check_area_availability')}</span>
+            <span className="availability-link delivery-loader" onClick={() => getPanelData(this.openModal())}>{getStringMessage('check_area_availability')}</span>
           </ConditionalView>
         </div>
       </div>
