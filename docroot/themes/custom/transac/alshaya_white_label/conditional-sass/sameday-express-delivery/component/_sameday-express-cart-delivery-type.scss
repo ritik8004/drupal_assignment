@@ -39,7 +39,11 @@
 
           .information-icon {
             @include icon(infomation, after) {
-              top: 0.0625rem;
+              top: 0.1875rem;
+
+              html[lang=ar] & {
+                top: 0.125rem;
+              }
             }
 
             &:hover {
@@ -83,18 +87,23 @@
 
     .carrier-title {
       padding: 0.125rem 0.4375rem;
+      padding-bottom: 0.1875rem;
       padding-#{$right}: 1.5rem;
     }
 
     .information-icon {
       @include icon(infomation, after) {
-        font-size: 1rem;
+        font-size: 0.8125rem;
         position: absolute;
         #{$right}: 0.25rem;
-        top: -0.125rem;
+        top: 0;
 
         html[lang=ar] & {
-          top: -0.125rem;
+          top: -0.0625rem;
+
+          @include breakpoint($only-mobile) {
+            top: -0.125rem;
+          }
         }
       }
     }
@@ -155,6 +164,7 @@
               transform: rotate(-135deg);
               background: $spc-cart-delivery-info-bg;
               #{$right}: 0.625rem;
+              border-radius: 0.125rem;
 
               html[lang=ar] & {
                 transform: rotate(135deg);
