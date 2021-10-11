@@ -312,9 +312,8 @@ const getSavedStoreData = (key) => {
  *   The store data object.
  */
 const setStoreData = (key, data) => {
-  const currentTime = new Date().getTime();
   // eslint-disable-next-line no-param-reassign
-  data.created = currentTime;
+  data.created = new Date().getTime();
 
   setStorageInfo(data, key);
 };
