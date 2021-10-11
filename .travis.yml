@@ -101,10 +101,6 @@ before_install:
   # that forces us to retry composer install several times.
   # Symptom is a Github download ending with 404 while the URL is valid.
   - composer install --no-interaction || composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
-  # Build middleware.
-  - source ${BUILD_DIR}/blt/scripts/middleware-build.sh "${BUILD_DIR}/docroot/middleware"
-  # Build appointment middleware.
-  - source ${BUILD_DIR}/blt/scripts/middleware-build.sh "${BUILD_DIR}/docroot/appointment"
   # Exit build early if only documentation was changed in a Pull Request.
   - source ${BLT_DIR}/scripts/travis/exit_early
 
