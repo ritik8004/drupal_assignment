@@ -78,6 +78,7 @@ export default class DeliveryOptions extends React.Component {
   }
 
   getPanelData = (data) => {
+    // Adds loading class for showing loader on onclick of delivery panel.
     document.querySelector('.delivery-loader').classList.add('loading');
     this.setState({
       panelContent: data,

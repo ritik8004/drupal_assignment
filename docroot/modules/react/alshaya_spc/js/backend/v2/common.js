@@ -229,11 +229,6 @@ const handleResponse = (apiResponse) => {
     return new Promise((resolve) => resolve(error));
   }
 
-  // If the response contains date, then remove class loading.
-  if (apiResponse.data !== null && apiResponse.data.total_count > 0) {
-    document.querySelector('.delivery-loader').classList.remove('loading');
-  }
-
   // If the response contains Captcha, the page will be reloaded once per session.
   detectCaptcha(apiResponse);
   // If the response contains a CF Challenge, the page will be reloaded once per session.

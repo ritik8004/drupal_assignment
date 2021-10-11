@@ -77,6 +77,8 @@ export default class PdpSelectArea extends React.Component {
     event.preventDefault();
     // to make sure that markup is present in DOM.
     document.querySelector('body').classList.add('overlay-delivery-area');
+    // remove class loading when the delivery panel opens.
+    document.querySelector('.delivery-loader').classList.remove('loading');
   }
 
   render() {
