@@ -13,6 +13,11 @@
         vertical-align: top;
       }
     }
+
+    h1,
+    span {
+      margin-top: 0;
+    }
   }
 
   &__main {
