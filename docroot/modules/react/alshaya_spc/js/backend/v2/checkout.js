@@ -335,7 +335,7 @@ const getStoreInfo = async (storeInformation) => {
     return null;
   }
 
-  const storageKey = `storeInfo:${store.code}`;
+  const storageKey = `storeInfo:${drupalSettings.path.currentLanguage}:${store.code}`;
   let storeData = getSavedStoreData(storageKey);
 
   if (hasValue(storeData)) {
