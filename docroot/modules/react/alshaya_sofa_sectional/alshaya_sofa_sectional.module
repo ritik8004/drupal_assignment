@@ -8,6 +8,9 @@
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_color_split\AlshayaColorSplitManager;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -42,4 +45,90 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
     $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
     $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_skubaseform_alter().
+ */
+function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SKUInterface $sku_entity) {
+  // Get sofa sectional configuration.
+  $config = \Drupal::config('alshaya_sofa_sectional.settings');
+
+  if (!$config->get('enabled') || empty($sku_entity)) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager */
+  $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+  // Get the sku from the Sku entity.
+  $sku = $sku_entity->getSku();
+
+  // Initialize max sale quantity to zero.
+  $max_sale_qty = 0;
+
+  // Get Alshaya acm configurations.
+  $alshaya_acm_config = \Drupal::config('alshaya_acm.settings');
+  if ($alshaya_acm_config->get('quantity_limit_enabled')) {
+    // We will take lower value for quantity options from
+    // available quantity and order limit.
+    $plugin = $sku_entity->getPluginInstance();
+    $max_sale_qty = $plugin->getMaxSaleQty($sku);
+  }
+
+  $quantity = $sku_manager->getStockQuantity($sku_entity);
+  $form['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
+
+  // Get the product's buyable status.
+  $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
+  $form['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
+
+  // Check if product is in stock.
+  $stock_status = $sku_manager->isProductInStock($sku_entity);
+  $form['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $stock_status;
+
+  $configurables = $form['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'];
+
+  // Get the swatches data.
+  $swatches = $sku_images_manager->getAllSwatchData($sku_entity);
+  if (!empty($swatches)) {
+    foreach ($swatches as $attribute_code => $attribute_values) {
+      // Mark the attributes which are swatches.
+      if (in_array($attribute_code, array_keys($configurables))
+      && !$configurables[$attribute_code]['is_swatch']) {
+        $configurables[$attribute_code]['is_swatch'] = TRUE;
+        $configurables[$attribute_code]['swatches'] = [];
+        foreach ($swatches[$attribute_code] as $swatch) {
+          $is_color_swatch = $isColorSplitEnabled && ($swatch['swatch_type'] == AlshayaColorSplitManager::PDP_SWATCH_RGB);
+          $configurables[$attribute_code]['swatches'][] = [
+            'label' => $swatch['display_label'],
+            'data' => $swatch['display_value'] ?? $swatch['image_url'] ?? NULL,
+            'value' => $swatch['value'],
+            'type' => $is_color_swatch ? 'color' : $swatch['swatch_type'],
+            'child_sku_code' => $swatch['child_sku_code'],
+          ];
+        }
+      }
+
+      // Get Alshaya acm product display configurations.
+      $product_display_config = \Drupal::config('alshaya_acm_product.display_settings');
+      foreach ($configurables[$attribute_code]['swatches'] as $key => $value) {
+        if (is_null($value['data'])) {
+          $multiple_attributes_for_color = $product_display_config->get('color_attribute_config');
+          // If site uses multiple attributes for color.
+          if ($multiple_attributes_for_color && $multiple_attributes_for_color['support_multiple_attributes']) {
+            $color_code_attribute = $multiple_attributes_for_color['configurable_color_code_attribute'];
+            $child_node = SKU::loadFromSku($value['child_sku_code'], $langcode);
+            $configurables[$attribute_code]['swatches'][$key]['data'] = $color_code_attribute ? $child_node->get($color_code_attribute)->getString() : NULL;
+          }
+        }
+      }
+    }
+  }
+
+  // Reassign with the updates values.
+  $form['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $configurables;
 }

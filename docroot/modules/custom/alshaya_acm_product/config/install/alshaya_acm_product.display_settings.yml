@@ -16,6 +16,9 @@ swatch_plp_limit: 3
 swatches:
   pdp: {  }
   plp: {  }
+# Added swatch attibute specific media roles like
+# 'swatch_image' or 'configuration_attr_image'.
+swatches_roles: { }
 short_desc_characters: 160
 short_desc_text_summary: true
 hide_not_required_option: false

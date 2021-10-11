@@ -42,7 +42,6 @@ const Swatch = (props) => {
     <li
       className={isColor ? 'li-swatch-color' : 'li-swatch-image'}
     >
-      <span className="swatch-label">{label}</span>
       <ConditionalView condition={isColor}>
         <a
           id={`value${value}`}
@@ -65,6 +64,7 @@ const Swatch = (props) => {
         </a>
 
       </ConditionalView>
+      <span className="swatch-label">{label}</span>
     </li>
   );
 };

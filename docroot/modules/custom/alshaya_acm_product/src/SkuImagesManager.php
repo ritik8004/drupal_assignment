@@ -1030,11 +1030,13 @@ class SkuImagesManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity.
+   * @param string $media_role
+   *   Media role for the swatch attribute.
    *
    * @return string|null
    *   URL of swatch image or null
    */
-  public function getPdpSwatchImageUrl(SKU $sku) {
+  public function getPdpSwatchImageUrl(SKU $sku, $media_role = self::SWATCH_IMAGE_ROLE) {
     $media = $this->getSkuMediaItems($sku);
 
     $static = &drupal_static(__FUNCTION__, NULL);
@@ -1042,7 +1044,7 @@ class SkuImagesManager {
 
     foreach ($media as $item) {
       if (isset($item['roles'])
-        && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])) {
+        && in_array($media_role, $item['roles'])) {
         $image = $this->getSwatchImageFromMedia($item);
         if ($image) {
           $static[$sku->getSku()] = $image;
@@ -1098,6 +1100,66 @@ class SkuImagesManager {
     }
 
     return $swatches;
+  }
+
+  /**
+   * Get all Swatches Data for particular configurable sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Swatches data.
+   */
+  public function getAllSwatchData(SKUInterface $sku): array {
+    $swatches = [];
+    $swatch_attributes = $this->skuManager->getPdpSwatchAttributes();
+
+    $combinations = $this->skuManager->getConfigurableCombinations($sku);
+    foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
+      // Process only for swatch attributes.
+      if (!in_array($attribute_code, $swatch_attributes)) {
+        continue;
+      }
+
+      foreach ($attribute_data as $value => $child_sku_codes) {
+        foreach ($child_sku_codes as $child_sku_code) {
+          $child = SKU::loadFromSku($child_sku_code);
+          $data = $this->productInfoHelper->getValue($child, 'swatch', $attribute_code, '');
+          if (empty($data)) {
+            continue;
+          }
+
+          $data['value'] = $value;
+          $data['child_sku_code'] = $child_sku_code;
+          $data['child_id'] = $child->id();
+          $swatches[$attribute_code][$value] = $data;
+
+          break;
+        }
+      }
+    }
+
+    return $swatches;
+  }
+
+  /**
+   * Get swatch attribute specific media entity roles.
+   *
+   * @param string $attribute_code
+   *   Swatch attribute code.
+   *
+   * @return string
+   *   Media role name. Default SWATCH_IMAGE_ROLE.
+   */
+  public function getSwatchAttributRole($attribute_code): string {
+    $swatches_roles = $this->configFactory->get('alshaya_acm_product.display_settings')->get('swatches_roles');
+    if (isset($swatches_roles[$attribute_code])) {
+      return $swatches_roles[$attribute_code];
+    }
+
+    // Return default swatch image role.
+    return self::SWATCH_IMAGE_ROLE;
   }
 
   /**
