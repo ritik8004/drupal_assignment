@@ -153,13 +153,14 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
   // Add the library which adds adds the schema script tag.
   $attachments['#attached']['library'][] = 'alshaya_rcs_product/schema_org';
 
-  // Product Modal.
-  $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
-
-  // Remove alshaya_dynamic_yield library.
+  // Replace DY library.
   foreach ($attachments['#attached']['library'] as $key => $value) {
     if ($value == 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal') {
+      // Remove original library.
       unset($attachments['#attached']['library'][$key]);
+      // Add RCC library.
+      $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
+      break;
     }
   }
 }
