@@ -104,8 +104,8 @@
    */
   Drupal.alshayaPromotions.refreshDynamicLabels = function (sku, cartData) {
     const response = Drupal.alshayaPromotions.getRcsDynamicLabel(sku, cartData);
-    if (response && typeof response.data !== 'undefined') {
-      Drupal.alshayaPromotions.updateDynamicLabel(sku, response.data.dynamicPromotionLabel);
+    if (response && response.label) {
+      Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
     }
   };
 
@@ -188,6 +188,8 @@
       });
 
       response = rcsCommerceBackend.invokeApiAsync(request);
+      // Update the response variable based on response.
+      response = response.data.dynamicPromotionLabel;
     }
 
     return response;
