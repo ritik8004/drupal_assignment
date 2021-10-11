@@ -273,7 +273,7 @@ export default class SofaSectionalForm extends React.Component {
                   setAttribute={this.setAttribute}
                   allowedValues={allowedValues}
                   groupData={groupData}
-                  index={parseInt(index, 10)}
+                  index={parseInt(index + 1, 10)}
                 />
               </ConditionalView>
             </div>
