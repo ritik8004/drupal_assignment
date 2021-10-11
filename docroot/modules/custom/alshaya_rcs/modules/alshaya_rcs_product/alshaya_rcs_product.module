@@ -152,6 +152,16 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
   \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
   // Add the library which adds adds the schema script tag.
   $attachments['#attached']['library'][] = 'alshaya_rcs_product/schema_org';
+
+  // Product Modal.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
+
+  // Remove alshaya_dynamic_yield library.
+  foreach ($attachments['#attached']['library'] as $key => $value) {
+    if ($value == 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal') {
+      unset($attachments['#attached']['library'][$key]);
+    }
+  }
 }
 
 /**
@@ -167,7 +177,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_rcs_product/main';
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
   $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
-  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
