@@ -222,7 +222,7 @@ export default class SofaSectionalForm extends React.Component {
 
     return (
       <>
-        {Object.entries(configurableAttributes).map((attribute) => {
+        {Object.entries(configurableAttributes).map((attribute, index) => {
           isSwatch = typeof attribute[1].is_swatch !== 'undefined'
             ? attribute[1].is_swatch
             : false;
@@ -273,6 +273,7 @@ export default class SofaSectionalForm extends React.Component {
                   setAttribute={this.setAttribute}
                   allowedValues={allowedValues}
                   groupData={groupData}
+                  index={parseInt(index, 10)}
                 />
               </ConditionalView>
             </div>

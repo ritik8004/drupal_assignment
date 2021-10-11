@@ -19,6 +19,7 @@ const UnorderedList = (props) => {
     allowedValues,
     onClick,
     groupData,
+    index,
   } = props;
   let selectedValueLabel = null;
   const { isGroup } = groupData;
@@ -74,12 +75,19 @@ const UnorderedList = (props) => {
 
   const SofaSectionConfigAccordion = (
     <label>
-      <span className="config-name">
-        {label}
-      </span>
-      <span className="config-value">
-        {selectedValueLabel}
-      </span>
+      <div className="config-number-wrapper">
+        <span className="config-index-number">
+          {index}
+        </span>
+      </div>
+      <div className="config-text-wrapper">
+        <span className="config-name">
+          {label}
+        </span>
+        <span className="config-value">
+          {selectedValueLabel}
+        </span>
+      </div>
     </label>
   );
 

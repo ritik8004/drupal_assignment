@@ -1,5 +1,5 @@
 import React from 'react';
-import SofaSectionalConfigItem from '../common/sofa-sectional-config-item';
+import SofaSectionalSummaryConfigItem from '../common/sofa-sectional-summary-config-item';
 
 const SelectionSummary = (props) => {
   const {
@@ -43,7 +43,7 @@ const SelectionSummary = (props) => {
   const GetSummaryConfig = () => {
     SelectionConfigItems.forEach((config) => {
       configItems.push(
-        <SofaSectionalConfigItem
+        <SofaSectionalSummaryConfigItem
           key={config.name}
           name={config.name}
           value={config.value}

@@ -2,22 +2,33 @@
   .sofa-section-accordion {
     label {
       display: flex;
-      flex-direction: column;
       justify-content: center;
+      align-items: center;
       height: 100%;
       padding-#{$left}: 0.625rem;
       padding-#{$right}: 2.5rem;
       padding-top: 0.625rem;
       padding-bottom: 0.625rem;
-    }
-  }
 
-  .sofa-section-card {
-    @include breakpoint($only-mobile) {
-      display: block;
-      width: calc(100% + 1rem);
-      margin-left: -0.5rem;
-      margin-right: -0.5rem;
+      &.active {
+        .config-number-wrapper {
+          .config-index-number {
+            color: $sofa-sectional-config-item-bg;
+            background: $sofa-sectional-active-accordion;
+            border: 1px solid $sofa-sectional-active-accordion;
+          }
+        }
+
+        .config-name {
+          margin-bottom: 0.3125rem;
+        }
+      }
+
+      &:not(.active) {
+        .config-name {
+          font-size: 1rem;
+        }
+      }
     }
   }
 }
@@ -52,7 +63,8 @@
     &::after {
       @include u-center--vertically;
 
-      font-size: 1.5rem;
+      font-size: 1.75rem;
+      font-weight: 700;
       #{$right}: 0.375rem;
     }
 
@@ -60,34 +72,69 @@
       @include icon(chevronup, after);
 
       border-bottom: none;
+
+      &::after {
+        font-weight: 700;
+      }
     }
 
     span {
-      line-height: normal;
+      line-height: 1.2;
     }
 
     .config-name {
       font-size: 0.75rem;
-      margin-bottom: 0.3125rem;
+      color: $sofa-sectional-title;
     }
 
     .config-value {
       color: $sofa-sectional-title;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .config-index-number {
+      font-size: 1.125rem;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      margin-#{$right}: 0.9375rem;
+      text-align: center;
+      border: 1px solid $sofa-sectional-title;
+      color: $sofa-sectional-title;
+      display: block;
+      line-height: 2.1875rem;
+      border-radius: 50%;
+    }
+
+    .config-text-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: calc(100% - 6.25rem);
     }
   }
 
   .Collapsible__contentInner {
     .attribute-options-list {
       margin: 0;
-      padding: 1.25rem 0.625rem;
+      padding: 0.625rem 0;
       border-top: 1px solid $accordion_border;
       background: $sofa-sectional-bg;
 
+      @include breakpoint($only-mobile) {
+        display: flex;
+        overflow-x: scroll;
+      }
+
+      @include breakpoint($tablet) {
+        padding: 1.25rem 0.625rem;
+      }
+
       li {
         list-style: none;
-        padding: 0.78125rem 0.9375rem;
         border: 1px solid $accordion_border;
-        margin-bottom: 1.25rem;
         background: $sofa-sectional-config-item-bg;
         cursor: pointer;
         font-size: 0.75rem;
@@ -98,6 +145,35 @@
 
         &.active {
           border: 1px solid $_sofa-section-grey2;
+        }
+
+        @include breakpoint($only-mobile) {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 0.625rem;
+          margin: 0 0.625rem;
+          width: 8.125rem;
+          height: 10.625rem;
+          flex-shrink: 0;
+          text-align: center;
+
+          &:first-child {
+            margin-#{$left}: 0.9375rem;
+          }
+
+          &:not(:first-child) {
+            margin-#{$left}: 0;
+          }
+
+          &.active {
+            border: 0.1875rem solid $_sofa-section-grey2;
+          }
+        }
+
+        @include breakpoint($tablet) {
+          margin-bottom: 1.25rem;
+          padding: 0.78125rem 0.9375rem;
         }
       }
     }
