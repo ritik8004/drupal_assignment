@@ -212,6 +212,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
   $build['#attached']['drupalSettings']['alshayaRcs']['shortDescLimit'] = $product_display_settings->get('short_desc_characters');
   $build['#attached']['drupalSettings']['show_configurable_boxes_after'] = $product_display_settings->get('show_configurable_boxes_after');
+  $build['#attached']['drupalSettings']['alshayaRcs']['use_parent_images'] = $product_display_settings->get('configurable_use_parent_images');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
 
   $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
@@ -876,6 +877,7 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
   $templates['field']['product'] = [
     'description' => "$path/templates/rcs-field-description.handlebars",
     'short_description' => "$path/templates/rcs-field-short-description.handlebars",
+    'product_zoom' => "$path/templates/rcs-classic-gallery.handlebars",
   ];
 
   $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";

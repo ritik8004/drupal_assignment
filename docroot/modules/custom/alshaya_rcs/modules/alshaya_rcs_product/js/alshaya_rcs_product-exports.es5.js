@@ -246,8 +246,21 @@ exports.render = function render(
       break;
 
     case 'classic-gallery':
-      const gallery = jQuery('.rcs-templates--rcs-product-zoom');
-      const mediaCollection = entity.media_gallery;
+      const gallery = jQuery('.rcs-templates--rcs-product-zoom').clone();
+      let mediaCollection = [];
+
+      switch (drupalSettings.alshayaRcs.use_parent_images) {
+        case 'never':
+          // Get the images from the variants.
+          entity.variants.forEach(function (variant) {
+          mediaCollection = mediaCollection.concat(variant.product.media_gallery);
+          });
+          break;
+
+        default:
+          mediaCollection = entity.media_gallery;
+          break;
+      }
 
       // If no media, return;
       if (!mediaCollection.length) {
@@ -257,21 +270,22 @@ exports.render = function render(
 
       mediaCollection.forEach((media) => {
         const galleryElement = jQuery('<li></li>');
+        const imageUrl = media.styles.product_zoom_medium_606x504;
 
         const galleryElementAnchor = jQuery('<a></a>');
         galleryElementAnchor.attr({
-          href: media.url,
+          href: imageUrl,
           class: 'imagegallery__thumbnails__image a-gallery',
         });
 
         const galleryElementImg = jQuery('<img />');
         galleryElementImg.attr({
-          class: 'b-lazy',
+          loading: 'lazy',
           // @todo: Replace with lazy loaded image.
-          src: media.url,
-          'data-src': media.url,
-          alt: media.label,
-          title: media.label,
+          src: imageUrl,
+          'data-src': imageUrl,
+          // alt: media.label,
+          // title: media.label,
         });
 
         galleryElementAnchor.append(galleryElementImg);
@@ -300,8 +314,8 @@ exports.render = function render(
 
           // Image.
           default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
+            const imageUrl = media.styles.pdp_gallery_thumbnail;
+            // const imageLabel = media.label;
             // Get the image element from the template and start adding the
             // required attributes.
             const element = jQuery('.default', thumbnailTemplate).clone();
@@ -309,16 +323,16 @@ exports.render = function render(
 
             anchor.attr({
               // @todo: Replace this with the zoomed image.
-              'data-zoom-url': imageUrl,
+              'data-zoom-url': media.styles.pdp_gallery_thumbnail,
               // @todo: Replace this with the medium image.
-              href: imageUrl,
+              href: media.styles.pdp_gallery_thumbnail,
             });
 
             jQuery('img', anchor).attr({
-              src:  imageUrl,
-              'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
+              src:  media.styles.pdp_gallery_thumbnail,
+              'data-src': media.styles.pdp_gallery_thumbnail,
+              // alt: imageLabel,
+              // title: imageLabel,
             });
 
             // Append the li element to the list.
@@ -354,8 +368,8 @@ exports.render = function render(
 
           // Image.
           default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
+            const imageUrl = media.styles.product_zoom_medium_606x504;
+            // const imageLabel = media.label;
             // Get the image element from the template and start adding the
             // required attributes.
             const element = jQuery('.default', mobileGalleryTemplate).clone();
@@ -363,8 +377,8 @@ exports.render = function render(
             jQuery('img', element).attr({
               src:  imageUrl,
               'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
+              // alt: imageLabel,
+              // title: imageLabel,
             });
 
             // Append the li element to the list.

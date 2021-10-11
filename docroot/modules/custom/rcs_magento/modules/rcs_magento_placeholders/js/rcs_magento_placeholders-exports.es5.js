@@ -62,6 +62,7 @@ exports.getEntity = async function getEntity(langcode) {
       response = await rcsCommerceBackend.invokeApi(request);
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
+        result.gtm_attributes = {category: 'abcd', name: 'abcd', id: 'name'}
         RcsPhStaticStorage.set('product_' + result.sku, result);
       }
       else {
@@ -106,6 +107,18 @@ exports.getEntity = async function getEntity(langcode) {
         `Entity type ${pageType} not supported for get_entity.`
       );
       return result;
+  }
+
+  if (drupalSettings.alshayaRcs.isColorSplitEnabled) {
+    const groupedProductsEvent = new CustomEvent('alshayaRcsGroupedProducts', {
+      detail: {
+        result: result,
+        pageType: pageType,
+      }
+    });
+
+    // To trigger the Event.
+    document.dispatchEvent(groupedProductsEvent);
   }
 
   if (result !== null) {

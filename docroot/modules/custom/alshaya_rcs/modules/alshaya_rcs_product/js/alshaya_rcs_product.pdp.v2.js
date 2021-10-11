@@ -710,7 +710,8 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
       galleryType,
       {},
       { labels },
-      rawProduct,
+      // rawProduct,
+      productData,
       drupalSettings.path.currentLanguage,
       null,
     );
