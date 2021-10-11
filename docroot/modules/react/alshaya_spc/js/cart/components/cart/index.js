@@ -250,6 +250,8 @@ export default class Cart extends React.Component {
 
   // Adding panel for area list block.
   getPanelData = (data) => {
+    // Adds loading class for showing loader on onclick of delivery panel.
+    document.querySelector('.delivery-loader').classList.add('loading');
     this.setState({
       panelContent: data,
     });
