@@ -8,6 +8,11 @@
       $('.open-modal-pdp, #dy-recommendation a.product-quick-view-link').once('pdp-modal-processed').on('click', function (e) {
         e.preventDefault();
 
+        // Display loader.
+        if (typeof Drupal.cartNotification.spinner_start === 'function') {
+          Drupal.cartNotification.spinner_start();
+        }
+
         // Get the template with placeholders for modal view.
         var content = $('<div>').append($('.rcs-templates--product-modal').clone());
         // Rename the class by removing the dummy suffix.
@@ -61,7 +66,7 @@
 
             // Call behaviours with modal context.
             var modalContext = $('.pdp-modal-box');
-            rcsPhApplyDrupalJs(modalContext)
+            rcsPhApplyDrupalJs(modalContext);
           },
           function () {
             console.log('Could not fetch data!');
