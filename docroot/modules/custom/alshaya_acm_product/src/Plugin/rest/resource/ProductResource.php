@@ -494,7 +494,6 @@ class ProductResource extends ResourceBase {
           }
           elseif ($alternates = $this->optionsHelper->getSizeGroup($key)) {
             $data['configurableCombinations'][$data['sku']]['configurables'][$key]['isGroup'] = TRUE;
-            $data['configurableCombinations'][$data['sku']]['configurables'][$key]['showLabel'] = TRUE;
             $data['configurableCombinations'][$data['sku']]['configurables'][$key]['alternates'] = $alternates;
             $combinations = $this->skuManager->getConfigurableCombinations($sku);
             foreach ($configurable['values'] as $value => $label) {
