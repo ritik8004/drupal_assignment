@@ -420,7 +420,7 @@
             "PhantomInstaller\\Installer::installPhantomJS"
         ],
         "post-install-cmd": [
-            "cd docroot/proxy && composer install"
+            "bash scripts/setup/composer-install.sh"
         ],
         "post-create-project-cmd": [
             "blt internal:create-project:init-repo"
