@@ -51,6 +51,12 @@
     }
   }
 
+  .slick-prev {
+    @include breakpoint($desktop) {
+      top: -0.875rem !important;
+    }
+  }
+
   &.pager-yes {
     .slick-next,
     .slick-prev {
