@@ -17,6 +17,7 @@ const FormElement = (props) => {
     isHidden,
     allowedValues,
     groupData,
+    index,
   } = props;
 
   let element = null;
@@ -39,6 +40,7 @@ const FormElement = (props) => {
           isHidden={isHidden}
           allowedValues={allowedValues}
           groupData={groupData}
+          index={index}
         />
       );
       break;

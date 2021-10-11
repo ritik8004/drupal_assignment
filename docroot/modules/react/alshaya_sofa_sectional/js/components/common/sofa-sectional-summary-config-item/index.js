@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SofaSectionalConfigItem = ({ name, value }) => (
+const SofaSectionalSummaryConfigItem = ({ name, value }) => (
   <div className="sofa-section-config-item-wrapper">
     <div className="sofa-section-config-item-title">
       {name}
@@ -11,4 +11,4 @@ const SofaSectionalConfigItem = ({ name, value }) => (
   </div>
 );
 
-export default SofaSectionalConfigItem;
+export default SofaSectionalSummaryConfigItem;
