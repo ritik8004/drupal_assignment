@@ -30,6 +30,27 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
     return;
   }
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $sku_string = $skuManager->getSkuForNode($entity);
+
+  /** @var \Drupal\acq_sku\SKU  $sku_entity */
+  $sku = SKU::loadFromSku($sku_string);
+
+  // Return if sku in not available,
+  if (!($sku instanceof SKU)) {
+    return;
+  }
+
+  // Check and return if Sku is not in stock,
+  // if sku is simple sku and not buyable.
+  if (!$skuManager->isProductInStock($sku)
+    || $sku->bundle() == 'simple'
+    || !alshaya_acm_product_is_buyable($sku)) {
+    return;
+  }
+
   // Get category ids from config.
   $category_ids = $config->get('category_ids');
 
