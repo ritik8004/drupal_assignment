@@ -29,8 +29,8 @@ const getPaymentMethods = async () => {
     return null;
   }
 
-  // Change the payment methods based on shipping method and cart total.
-  const staticCacheKey = `payment_methods_${cart.data.shipping.type}_${cart.data.totals.base_grand_total}`;
+  // Change the payment methods based on shipping method.
+  const staticCacheKey = `payment_methods_${cart.data.shipping.type}`;
   const cached = StaticStorage.get(staticCacheKey);
   if (!_isEmpty(cached)) {
     return cached;
