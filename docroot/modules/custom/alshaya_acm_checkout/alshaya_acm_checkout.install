@@ -13,6 +13,22 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * [6.7.0] Update checkout config to include cache time for cnc store info.
+ */
+function alshaya_acm_checkout_update_8013() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update checkout config to include card bin numbers for bin validation.
  */
 function alshaya_acm_checkout_update_8012() {
