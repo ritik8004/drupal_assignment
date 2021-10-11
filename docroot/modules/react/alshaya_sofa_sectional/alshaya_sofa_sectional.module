@@ -47,7 +47,8 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
   // if sku is simple sku and not buyable.
   if (!$skuManager->isProductInStock($sku)
     || $sku->bundle() == 'simple'
-    || !alshaya_acm_product_is_buyable($sku)) {
+    || !alshaya_acm_product_is_buyable($sku)
+    || \Drupal::config('alshaya_acm.cart_config')->get('checkout_feature') === 'disabled') {
     return;
   }
 
