@@ -102,7 +102,7 @@ function stickyMobileCartPreview() {
           cartPreview[0].style.top = 0;
         }
       } else {
-        Drupal.logJavascriptError('sticky cart preview failure', 'Cart preview element not found', GTM_CONSTANTS.CART_ERRORS);
+        Drupal.alshayaLogger('warning', 'sticky cart preview failure', 'Cart preview element not found');
       }
     }
   });
