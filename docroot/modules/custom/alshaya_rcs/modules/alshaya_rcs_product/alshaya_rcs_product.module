@@ -152,6 +152,17 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
   \Drupal::moduleHandler()->alter('page_attachments_schema_data', $attachments, $product_schema_data);
   // Add the library which adds adds the schema script tag.
   $attachments['#attached']['library'][] = 'alshaya_rcs_product/schema_org';
+
+  // Replace DY library.
+  foreach ($attachments['#attached']['library'] as $key => $value) {
+    if ($value == 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal') {
+      // Remove original library.
+      unset($attachments['#attached']['library'][$key]);
+      // Add RCC library.
+      $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
+      break;
+    }
+  }
 }
 
 /**
