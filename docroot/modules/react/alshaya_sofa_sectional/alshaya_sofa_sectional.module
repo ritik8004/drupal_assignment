@@ -67,29 +67,6 @@ function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SK
   // Get the sku from the Sku entity.
   $sku = $sku_entity->getSku();
 
-  // Initialize max sale quantity to zero.
-  $max_sale_qty = 0;
-
-  // Get Alshaya acm configurations.
-  $alshaya_acm_config = \Drupal::config('alshaya_acm.settings');
-  if ($alshaya_acm_config->get('quantity_limit_enabled')) {
-    // We will take lower value for quantity options from
-    // available quantity and order limit.
-    $plugin = $sku_entity->getPluginInstance();
-    $max_sale_qty = $plugin->getMaxSaleQty($sku);
-  }
-
-  $quantity = $sku_manager->getStockQuantity($sku_entity);
-  $form['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
-
-  // Get the product's buyable status.
-  $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
-  $form['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
-
-  // Check if product is in stock.
-  $stock_status = $sku_manager->isProductInStock($sku_entity);
-  $form['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $stock_status;
-
   $configurables = $form['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'];
 
   // Get the swatches data.
@@ -110,20 +87,6 @@ function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SK
             'type' => $is_color_swatch ? 'color' : $swatch['swatch_type'],
             'child_sku_code' => $swatch['child_sku_code'],
           ];
-        }
-      }
-
-      // Get Alshaya acm product display configurations.
-      $product_display_config = \Drupal::config('alshaya_acm_product.display_settings');
-      foreach ($configurables[$attribute_code]['swatches'] as $key => $value) {
-        if (is_null($value['data'])) {
-          $multiple_attributes_for_color = $product_display_config->get('color_attribute_config');
-          // If site uses multiple attributes for color.
-          if ($multiple_attributes_for_color && $multiple_attributes_for_color['support_multiple_attributes']) {
-            $color_code_attribute = $multiple_attributes_for_color['configurable_color_code_attribute'];
-            $child_node = SKU::loadFromSku($value['child_sku_code'], $langcode);
-            $configurables[$attribute_code]['swatches'][$key]['data'] = $color_code_attribute ? $child_node->get($color_code_attribute)->getString() : NULL;
-          }
         }
       }
     }
