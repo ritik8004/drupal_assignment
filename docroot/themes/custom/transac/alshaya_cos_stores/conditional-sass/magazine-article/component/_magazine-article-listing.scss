@@ -1,0 +1,75 @@
+.path--magazine {
+  .page-standard {
+    @include container(77rem);
+  }
+
+  .block-page-title-block {
+    h1 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      padding-bottom: 0;
+      border-bottom: 0;
+      margin-bottom: 2rem;
+      text-transform: unset;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  .view-magazine-articles {
+    @include container(77rem);
+
+    .view-items {
+      display: flex;
+      flex-flow: row wrap;
+
+      .views-row {
+        width: calc(100% / 3 - 1.797% + 1.797% / 3 - 0.01px);
+        margin-bottom: 5%;
+        margin-#{$left}: 1.797%;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin-#{$left}: 0;
+        }
+
+        &:nth-of-type(3n+1) {
+          @include breakpoint($tablet) {
+            margin-#{$left}: 0;
+          }
+        }
+      }
+    }
+  }
+
+  article {
+    > div {
+      > a .field--name-field-magazine-homepage-image {
+        margin-bottom: 1.25rem;
+      }
+    }
+  }
+
+  .read-more {
+    text-align: $left;
+
+    a {
+      font-weight: normal;
+      font-size: 0.875rem;
+      text-transform: unset;
+      padding: 0;
+
+      &:hover {
+        background-color: transparent;
+        border-color: transparent;
+        color: $magazine-article-link-hover;
+
+        &::before {
+          color: $magazine-article-link-hover;
+        }
+      }
+    }
+  }
+}

@@ -66,6 +66,12 @@
 
 body {
   @include breakpoint($only-tablet) {
+    html[lang=ar] & {
+      margin-top: 3.75rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
     margin-top: 4rem;
 
     html[lang=ar] & {
