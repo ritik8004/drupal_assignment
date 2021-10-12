@@ -13,16 +13,20 @@ import {
   isHideMaxSaleMsg,
 } from '../../../../js/utilities/display';
 import SelectionSummary from '../selection-summary';
+import ClearOptions from '../clear-options';
 
 export default class SofaSectionalForm extends React.Component {
   constructor(props) {
     super(props);
     const { productInfo, configurableCombinations } = drupalSettings;
     const sku = Object.keys(productInfo)[0];
-    const selectedVariant = configurableCombinations[sku].firstChild;
+    let selectedVariant = configurableCombinations[sku].firstChild;
 
     // Set the default attributes.
     const firstChildAttributes = configurableCombinations[sku].bySku[selectedVariant];
+
+    // Reset selectedVariant to null.
+    selectedVariant = null;
 
     // Check max sale quantity limit for the display Sku.
     const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productInfo)
@@ -191,6 +195,15 @@ export default class SofaSectionalForm extends React.Component {
     // @todo: add click handler for add to cart button.
   }
 
+  /**
+   * Clears selected options.
+   */
+  handleClearOptions = () => {
+    this.setState({
+      selectedVariant: null,
+    });
+  };
+
   render() {
     const { productInfo, configurableCombinations } = drupalSettings;
     const {
@@ -222,24 +235,15 @@ export default class SofaSectionalForm extends React.Component {
 
     return (
       <>
-        <div className="sofa-section-select-option-wrapper">
-          <div className="sofa-section-select-option">
-            {Drupal.t('Select options 1 to @length', { '@length': Object.keys(configurableAttributes).length })}
-          </div>
-          <div className="sofa-section-clear-option-btn-wrapper">
-            <button
-              className="sofa-section-clear-option-btn"
-              type="button"
-            >
-              {Drupal.t('Clear Options')}
-            </button>
-          </div>
-        </div>
+        <ClearOptions
+          handleClearOptions={this.handleClearOptions}
+          noOfOptions={Object.keys(configurableAttributes).length}
+        />
         {Object.entries(configurableAttributes).map((attribute, index) => {
           isSwatch = typeof attribute[1].is_swatch !== 'undefined'
             ? attribute[1].is_swatch
             : false;
-          defaultValue = formAttributeValues[attribute[0]];
+          defaultValue = (selectedVariant !== null) ? formAttributeValues[attribute[0]] : null;
           isHidden = typeof hiddenAttributes !== 'undefined'
             ? hiddenAttributes.includes(attribute[0])
             : false;
@@ -310,7 +314,12 @@ export default class SofaSectionalForm extends React.Component {
         />
         <ErrorMessage message={errorMessage} />
         <div className="config-form-addtobag-button-wrapper">
-          <input type="hidden" name="selected_variant_sku" id="selected_variant_sku" value={selectedVariant} />
+          <input
+            type="hidden"
+            name="selected_variant_sku"
+            id="selected_variant_sku"
+            value={(selectedVariant !== null ? selectedVariant : '')}
+          />
           <button
             className="config-form-addtobag-button"
             id={`config-form-addtobag-button-${sku}`}
