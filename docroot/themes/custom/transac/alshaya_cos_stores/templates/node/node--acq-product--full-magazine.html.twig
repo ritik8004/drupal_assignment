@@ -37,43 +37,9 @@
           {{ content.article_id }}
         </div>
         {% if content.description %}
-          {% if content.read_more_style.value|render %}
-            <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-            <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-          {% else %}
-            <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-            <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
-          {% endif %}
+            <span class="read-more-description-link-mobile">{{ 'read more'|t }}</span>
         {% endif %}
       </div>
     </div>
-  </div>
-{% endblock %}
-
-{% block descBlock %}
-  <div class="description-wrapper">
-    <div class="content--description">
-      <span class="close"></span>
-      <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-      <div class="field__content">
-        {% for desc in content.description  %}
-          {% if desc.value|render %}
-            <div class="desc-wrapper">
-              {% if desc.label|render %}
-                <div class="desc-label">
-                  {{ desc.label }}
-                </div>
-              {% endif %}
-
-              <div class="desc-value">
-                {{ desc.value }}
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-        {{ content.legal_notice }}
-      </div>
-    </div>
-    <div class="gradient-holder"></div>
   </div>
 {% endblock %}
