@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://www.potterybarn.com.sa/ar'
+  url_base_uri: 'https://pbksa3-pprod.factory.alshaya.com/ar/'
   language_collection_filter: ''
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'
