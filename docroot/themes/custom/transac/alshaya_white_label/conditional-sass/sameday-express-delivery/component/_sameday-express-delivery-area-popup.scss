@@ -452,3 +452,11 @@ body.overlay-delivery-area {
     }
   }
 }
+
+.delivery-loader {
+  &.loading {
+    @include componentLoader(transparent, 'after') {
+      background-position: $left;
+    }
+  }
+}
