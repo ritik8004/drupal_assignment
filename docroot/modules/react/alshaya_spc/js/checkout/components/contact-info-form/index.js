@@ -6,32 +6,21 @@ import {
   showFullScreenLoader, validateInfo,
 } from '../../../utilities/checkout_util';
 import FixedFields from '../fixed-fields';
-import PudoCollectorFields from '../pudo-collector-fields';
 import { validateContactInfo, addressFormInlineErrorScroll } from '../../../utilities/address_util';
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
-import {
-  validateCollectorInfo,
-} from '../../../utilities/cnc_util';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
 
   handleSubmit = (e, store) => {
-    const { showCollectorForm } = this.context;
     e.preventDefault();
 
     const contactInfoError = validateContactInfo(e, (drupalSettings.user.uid === 0));
     if (contactInfoError) {
       addressFormInlineErrorScroll();
-      return;
-    }
-
-    // If collection point feature is enabled, validate collectors information
-    // and return if error.
-    if (collectionPointsEnabled() && showCollectorForm && validateCollectorInfo(e)) {
       return;
     }
 
@@ -58,13 +47,6 @@ class ContactInfoForm extends React.Component {
       carrier_info: { ...drupalSettings.map.cnc_shipping },
     };
 
-    // If collection point feature is enabled, add collectors information.
-    if (collectionPointsEnabled() && showCollectorForm === true) {
-      formData.collector_name = e.target.elements.collectorFullname.value.trim() || '';
-      formData.collector_email = e.target.elements.collectorEmail.value || '';
-      formData.collector_mobile = `+${drupalSettings.country_mobile_code}${cleanMobileNumber(e.target.elements.collectorMobile.value)}`;
-    }
-
     this.processShippingUpdate(formData);
   };
 
@@ -72,7 +54,6 @@ class ContactInfoForm extends React.Component {
    * Validate mobile number and email address and on success process shipping address update.
    */
   processShippingUpdate = (formData) => {
-    const { showCollectorForm } = this.context;
     const validationData = {
       mobile: formData.static.telephone,
       fullname: {
@@ -89,13 +70,6 @@ class ContactInfoForm extends React.Component {
       validationData.email = formData.static.email;
     }
 
-    // If collection point feature is enabled, validate collector's information.
-    if (collectionPointsEnabled() && showCollectorForm === true) {
-      validationData.pudo_collector_tel = formData.collector_mobile;
-      validationData.pudo_collector_email = formData.collector_email;
-      validationData.pudo_fullname = formData.collector_name;
-    }
-
     const validationRequest = validateInfo(validationData);
     // API call to validate mobile number and email address.
     return validationRequest.then((result) => {
@@ -103,42 +77,6 @@ class ContactInfoForm extends React.Component {
         // Show errors if any, else call update cart api to update shipping address.
         // Flag to determine if there any error.
         let isError = false;
-
-        // Validate PUDO collector info.
-        if (collectionPointsEnabled() && showCollectorForm === true) {
-          // If invalid full name.
-          if (result.data.pudo_fullname === false) {
-            document.getElementById('collectorFullname-error').innerHTML = getStringMessage('form_error_full_name');
-            document.getElementById('collectorFullname-error').classList.add('error');
-            isError = true;
-          } else {
-            // Remove error class and any error message.
-            document.getElementById('collectorFullname-error').innerHTML = '';
-            document.getElementById('collectorFullname-error').classList.remove('error');
-          }
-          // If invalid email.
-          if (result.data.pudo_collector_email !== undefined) {
-            if (result.data.pudo_collector_email === 'invalid') {
-              document.getElementById('collectorEmail-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.pudo_collector_email });
-              document.getElementById('collectorEmail-error').classList.add('error');
-              isError = true;
-            } else {
-              document.getElementById('collectorEmail-error').innerHTML = '';
-              document.getElementById('collectorEmail-error').classList.remove('error');
-            }
-          }
-
-          // If invalid mobile number.
-          if (result.data.pudo_collector_tel === false) {
-            document.getElementById('collectorMobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
-            document.getElementById('collectorMobile-error').classList.add('error');
-            isError = true;
-          } else {
-            // Remove error class and any error message.
-            document.getElementById('collectorMobile-error').innerHTML = '';
-            document.getElementById('collectorMobile-error').classList.remove('error');
-          }
-        }
 
         // If invalid full name.
         if (result.data.fullname === false) {
@@ -195,7 +133,7 @@ class ContactInfoForm extends React.Component {
   updateShipping = (formData) => {
     const cartInfo = addShippingInCart('update shipping', formData);
     if (cartInfo instanceof Promise) {
-      const { updateContactInfo, updateCollectorInfo, showCollectorForm } = this.context;
+      const { updateContactInfo } = this.context;
       cartInfo
         .then((cartResult) => {
           removeFullScreenLoader();
@@ -225,12 +163,6 @@ class ContactInfoForm extends React.Component {
             return null;
           }
           updateContactInfo(formData.static);
-
-          // If collection point feature is enabled, update collector's information.
-          if (collectionPointsEnabled() && showCollectorForm === true) {
-            updateCollectorInfo(formData);
-          }
-
           dispatchCustomEvent('refreshCartOnCnCSelect', { cart: cartResult });
           return null;
         })
@@ -242,9 +174,7 @@ class ContactInfoForm extends React.Component {
 
   render() {
     const { store, subTitle } = this.props;
-    const {
-      contactInfo, showCollectorForm, updateCollectorFormVisibility, collectorInfo,
-    } = this.context;
+    const { contactInfo } = this.context;
 
     return (
       <form
@@ -256,17 +186,7 @@ class ContactInfoForm extends React.Component {
           defaultVal={contactInfo ? { static: contactInfo } : []}
           subTitle={subTitle}
           type="cnc"
-          showCollectorForm={showCollectorForm}
-          updateCollectorFormVisibility={updateCollectorFormVisibility}
         />
-        {collectionPointsEnabled() === true
-          && showCollectorForm === true
-          && (
-            <PudoCollectorFields
-              defaultVal={collectorInfo ? { static: collectorInfo } : []}
-              showCollectorForm={showCollectorForm}
-            />
-          )}
         <div className="spc-address-form-actions">
           {collectionPointsEnabled() === true
           && (

@@ -1520,12 +1520,104 @@
             ],
             "authors": [
                 {
-                    "name": "Greg Anderson",
-                    "email": "greg.1.anderson@greenknowe.org"
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
                 }
             ],
-            "description": "Initialize Symfony Console commands from annotated command class methods.",
-            "time": "2020-10-11T04:30:03+00:00"
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Eliasis",
+                "Hurad",
+                "ImageCMS",
+                "Kanboard",
+                "Lan Management System",
+                "MODX Evo",
+                "MantisBT",
+                "Mautic",
+                "Maya",
+                "OXID",
+                "Plentymarkets",
+                "Porto",
+                "RadPHP",
+                "SMF",
+                "Starbug",
+                "Thelia",
+                "Whmcs",
+                "WolfCMS",
+                "agl",
+                "aimeos",
+                "annotatecms",
+                "attogram",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "cockpit",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "eZ Platform",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "itop",
+                "joomla",
+                "known",
+                "kohana",
+                "laravel",
+                "lavalite",
+                "lithium",
+                "magento",
+                "majima",
+                "mako",
+                "mediawiki",
+                "miaoxing",
+                "modulework",
+                "modx",
+                "moodle",
+                "osclass",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "processwire",
+                "puppet",
+                "pxcms",
+                "reindex",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "sydes",
+                "sylius",
+                "symfony",
+                "tastyigniter",
+                "typo3",
+                "wordpress",
+                "yawik",
+                "zend",
+                "zikula"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-04-28T06:42:17+00:00"
         },
         {
             "name": "consolidation/comments",
@@ -5800,6 +5892,7 @@
                     "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                     "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
                     "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
+                    "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-01-14/3143958-11-subprofile-support-8.9.x.patch",
                     "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch",
@@ -10262,6 +10355,10 @@
                     "role": "Maintainer"
                 },
                 {
+                    "name": "heddn",
+                    "homepage": "https://www.drupal.org/user/1463982"
+                },
+                {
                     "name": "mikeryan",
                     "homepage": "https://www.drupal.org/user/4420"
                 }
@@ -12561,8 +12658,7 @@
                     }
                 },
                 "patches_applied": {
-                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                    "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12593,17 +12689,11 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "3.0.0-beta1",
+            "version": "dev-3.0.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "3.0.0-beta1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta1.zip",
-                "reference": "3.0.0-beta1",
-                "shasum": "242350c2676b61aebc066ac7eaefa9ddd26de6f3"
+                "reference": "2ce6d60086dd012ecf7dfefbb17fff99c5698cfa"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -12615,12 +12705,20 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-3.0.x": "3.0.x-dev"
+                },
                 "drupal": {
-                    "version": "3.0.0-beta1",
-                    "datestamp": "1624863519",
+                    "version": "3.0.0-alpha1+2-dev",
+                    "datestamp": "1624863214",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
                     }
                 },
                 "patches_applied": {
@@ -12662,7 +12760,8 @@
             "support": {
                 "source": "https://git.drupal.org/project/search_api_algolia.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_algolia"
-            }
+            },
+            "time": "2021-09-20T10:42:11+00:00"
         },
         {
             "name": "drupal/search_api_autocomplete",
@@ -13697,10 +13796,6 @@
                 {
                     "name": "himanshu-dixit",
                     "homepage": "https://www.drupal.org/user/3513954"
-                },
-                {
-                    "name": "wells",
-                    "homepage": "https://www.drupal.org/user/2452278"
                 }
             ],
             "description": "Harmonizes social networking services in Drupal",
@@ -13993,7 +14088,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.1",
-                    "datestamp": "1601040732",
+                    "datestamp": "1601040759",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14447,8 +14542,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc1+5-dev",
-                    "datestamp": "1587625115",
+                    "version": "8.x-1.0-rc2+1-dev",
+                    "datestamp": "1621266348",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -27464,9 +27559,12 @@
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=7.4"
+    },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.3"
-    }
+        "php": "7.4"
+    },
+    "plugin-api-version": "1.1.0"
 }

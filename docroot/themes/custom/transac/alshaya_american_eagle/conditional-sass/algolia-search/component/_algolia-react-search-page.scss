@@ -35,4 +35,10 @@
       }
     }
   }
+
+  .c-products__item {
+    .express_delivery {
+      margin-#{$left}: 0;
+    }
+  }
 }

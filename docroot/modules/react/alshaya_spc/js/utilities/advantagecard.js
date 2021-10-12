@@ -58,6 +58,21 @@ const Advantagecard = {
     return true;
   },
 
+  // Helper function for Advantage card status.
+  isAllItemsExcludedForAdvCard: (totals) => {
+    if (typeof drupalSettings.alshaya_spc.advantageCard !== 'undefined'
+      && drupalSettings.user.uid
+      && drupalSettings.alshaya_spc.advantageCard.enabled
+      && typeof drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix !== 'undefined'
+      && drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix
+      && typeof totals.allExcludedForAdcard !== 'undefined'
+      && totals.allExcludedForAdcard === 'true') {
+      return true;
+    }
+
+    return false;
+  },
+
 };
 
 export default Advantagecard;

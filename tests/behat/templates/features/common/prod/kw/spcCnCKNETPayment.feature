@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @bpkwprod @westelmkwprod @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @tbskwprod @vskwprod @westelmkwprod
+@javascript @KNET @KNetPayment @checkoutPayment @clickCollect @westelmkwpprod @vskwpprod @pbkkwprod @bpkwprod @westelmkwprod @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @vskwprod @westelmkwprod
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
@@ -15,7 +15,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 50 seconds

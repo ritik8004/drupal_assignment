@@ -80,6 +80,17 @@ set classes = [
 
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
+          {# Delivery options will load if express delivery enabled. #}
+          {% if content.delivery_options %}
+            <div class="express-delivery">
+              {% for key,delivery_option in content.delivery_options %}
+                <div class="express-delivery-text {{ key }}">
+                  <span>{{ delivery_option }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
           {% if content.same_day_delivery_text %}
             <div class="same-day-delivery">
               <div class="same-day-content">
@@ -193,10 +204,16 @@ set classes = [
             {% block afterDescription %}
             {% endblock %}
 
+            {% if content.express_delivery %}
+              {{content.express_delivery}}
+            {% endif %}
+
             {% if content.home_delivery or content.click_and_collect %}
               <div class="delivery-options-wrapper">
                 <div class="product-out-of-stock-layer"></div>
-                <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% if not content.express_delivery %}
+                  <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% endif %}
                 <div class="field__content">
                   {{ content.home_delivery }}
 

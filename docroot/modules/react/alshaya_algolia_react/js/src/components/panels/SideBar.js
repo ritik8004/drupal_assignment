@@ -6,7 +6,7 @@ export default function SideBar(props) {
     <aside className="c-sidebar-first">
       <div className="c-sidebar-first__region">
         <div className="region region__sidebar-first clearfix">
-          { drupalSettings.algoliaSearch.enable_lhn_tree_search
+          { drupalSettings.algoliaSearch.enable_lhn_tree_search > 0
             && (
             <div className="c-facet__blocks">
               {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined) && (

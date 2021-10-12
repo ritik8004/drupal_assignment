@@ -95,6 +95,10 @@
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
+          // Trigger an event on variant select.
+          // Sending selected variant sku in the parameter.
+          var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: $('[name="selected_variant_sku"]', form).val() }});
+          document.dispatchEvent(currentSelectedVariantEvent);
           form.trigger(
             'variant-selected',
             [
@@ -295,6 +299,10 @@
       $(product).find('#product-zoom-container').replaceWith(gallery);
     }
 
+    // COS claasic gallery for magazine layout.
+    if (layout === 'pdp-magazine' && drupalSettings.pdp_gallery_type == 'classic') {
+      layout = 'pdp';
+    }
     if (layout === 'pdp-magazine') {
       // Set timeout so that original behavior attachment is not affected.
       setTimeout(function () {

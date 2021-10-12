@@ -1,0 +1,60 @@
+.spc-checkout-delivery-information {
+  .popup-overlay {
+    .delivery-area-popup-content {
+      max-width: 26.3125rem;
+      height: 14.8125rem;
+
+      @include breakpoint($only-mobile) {
+        max-width: 20.125rem;
+        height: 10.3125rem;
+      }
+
+      .delivery-area-block {
+        padding: 3.25rem 3.375rem;
+        height: 100%;
+        text-align: center;
+
+        @include breakpoint($only-mobile) {
+          padding: 1.375rem 0.4375rem;
+        }
+      }
+
+      .delivery-area-question {
+        color: $spc-delivery-area-popup-text;
+      }
+
+      .delivery-area-options {
+        padding-top: 2.8125rem;
+        color: $spc-delivery-area-popup-text;
+        font-size: 0.8125rem;
+
+        @include breakpoint($only-mobile) {
+          padding-top: 2rem;
+        }
+      }
+
+      button {
+        &#delivery-area-yes,
+        &#delivery-area-no {
+          width: 9.125rem;
+          height: 2.875rem;
+          background: $spc-delivery-area-popup-bg;
+          border: 0.0625rem solid $spc-delivery-area-popup-border;
+          border-radius: 0.25rem;
+
+          @include breakpoint($only-mobile) {
+            width: 8.25rem;
+          }
+        }
+
+        &#delivery-area-no {
+          margin-#{$left}: 1.25rem;
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: 1.125rem;
+          }
+        }
+      }
+    }
+  }
+}

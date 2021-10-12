@@ -26,6 +26,13 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
+import DeliveryAreaSelect from '../delivery-area-select';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
+import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import hasValue from '../../../../../js/utilities/conditionsUtility';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -43,6 +50,8 @@ export default class Cart extends React.Component {
       inStock: true,
       messageType: null,
       message: null,
+      cartShippingMethods: null,
+      panelContent: null,
     };
   }
 
@@ -68,6 +77,7 @@ export default class Cart extends React.Component {
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
+          ...collectionPointsEnabled() && { collectionCharge: data.collection_charge || '' },
         }));
 
         // The cart is empty.
@@ -145,6 +155,11 @@ export default class Cart extends React.Component {
     // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
+    // Show labels for delivery methods if express delivery enabled.
+    if (isExpressDeliveryEnabled()) {
+      document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+    }
+
     // Display message from cookies.
     const qtyMismatchError = Cookies.get('middleware_payment_error');
 
@@ -219,6 +234,37 @@ export default class Cart extends React.Component {
     };
   }
 
+  displayShippingMethods = (event) => {
+    const currentArea = event.detail;
+    showFullScreenLoader();
+    getCartShippingMethods(currentArea).then(
+      (response) => {
+        if (response !== null) {
+          this.setState({
+            cartShippingMethods: response,
+          });
+        }
+        removeFullScreenLoader();
+      },
+    );
+  }
+
+  // Adding panel for area list block.
+  getPanelData = (data) => {
+    // Adds loading class for showing loader on onclick of delivery panel.
+    document.querySelector('.delivery-loader').classList.add('loading');
+    this.setState({
+      panelContent: data,
+    });
+  };
+
+  // Removing panel for area list block.
+  removePanelData = () => {
+    this.setState({
+      panelContent: null,
+    });
+  };
+
   render() {
     const {
       wait,
@@ -233,6 +279,9 @@ export default class Cart extends React.Component {
       actionMessage,
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
+      cartShippingMethods,
+      panelContent,
+      collectionCharge,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -302,10 +351,19 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <SectionTitle animationDelayValue="0.4s">
-              <span>{`${Drupal.t('my shopping bag')} `}</span>
-              <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
-            </SectionTitle>
+            <div className="spc-title-wrapper">
+              <SectionTitle animationDelayValue="0.4s">
+                <span>{`${Drupal.t('my shopping bag')} `}</span>
+                <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
+              </SectionTitle>
+              <ConditionalView condition={isExpressDeliveryEnabled()}>
+                <DeliveryAreaSelect
+                  animationDelayValue="0.4s"
+                  getPanelData={this.getPanelData}
+                  removePanelData={this.removePanelData}
+                />
+              </ConditionalView>
+            </div>
             <DeliveryInOnlyCity />
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
@@ -313,6 +371,7 @@ export default class Cart extends React.Component {
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
               totals={totals}
+              cartShippingMethods={cartShippingMethods}
             />
           </div>
           <div className="spc-sidebar">
@@ -328,6 +387,10 @@ export default class Cart extends React.Component {
               show_checkout_button
               animationDelay="0.5s"
               context="cart"
+              {...(collectionPointsEnabled()
+                && hasValue(collectionCharge)
+                && { collectionCharge }
+              )}
             />
           </div>
         </div>
@@ -338,6 +401,13 @@ export default class Cart extends React.Component {
         <div className="spc-footer">
           <VatFooterText />
         </div>
+        <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <div className="select-area-popup-wrapper">
+            <SelectAreaPanel
+              panelContent={panelContent}
+            />
+          </div>
+        </ConditionalView>
       </>
     );
   }

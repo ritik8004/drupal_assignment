@@ -1,0 +1,20 @@
+.c-breadcrumb {
+  li {
+    font-weight: normal;
+    text-transform: uppercase;
+
+    &:last-of-type {
+      font-weight: normal;
+    }
+
+    &:last-of-type a {
+      font-weight: normal;
+    }
+
+    &::after {
+      content: '/';
+      padding-#{$left}: 0;
+      padding-#{$right}: 0;
+    }
+  }
+}

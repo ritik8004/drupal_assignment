@@ -1,0 +1,27 @@
+.spc-delivery-area {
+  .delivery-type-wrapper {
+    font-family: $hnm-demibold;
+  }
+
+  .actions {
+    div.select-area-link {
+      font-family: $hnm-demibold;
+    }
+  }
+
+  .spc-checkout-section-title {
+    margin-bottom: 1.25rem;
+  }
+
+  .title-block {
+    padding-top: 1.875rem;
+    justify-content: space-evenly;
+    align-items: baseline;
+  }
+
+  .close-modal {
+    &::before {
+      font-size: 1rem;
+    }
+  }
+}

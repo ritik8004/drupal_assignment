@@ -725,6 +725,11 @@ class SkuImagesManager {
    */
   public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE) {
     $gallery = [];
+    $pdp_gallery_type = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_type');
+    // Set Classic gallery to COS Magazine layout PDP.
+    if ($pdp_gallery_type == 'classic' && $context == 'pdp-magazine') {
+      $context = 'pdp';
+    }
 
     $media = $this->getProductMedia($sku, $context, FALSE);
 

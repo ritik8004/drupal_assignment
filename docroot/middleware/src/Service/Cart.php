@@ -2038,6 +2038,10 @@ class Cart {
 
     $cart['shipping']['clickCollectType'] = $cart['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
     $cart['shipping']['storeCode'] = $cart['shipping']['extension_attributes']['store_code'] ?? '';
+    $cart['shipping']['collection_point'] = $cart['shipping']['extension_attributes']['collection_point'] ?? '';
+    $cart['shipping']['pickup_date'] = $cart['shipping']['extension_attributes']['pickup_date'] ?? '';
+    $cart['shipping']['price_amount'] = $cart['shipping']['extension_attributes']['price_amount'] ?? '';
+    $cart['shipping']['pudo_available'] = $cart['shipping']['extension_attributes']['pudo_available'] ?? '';
     unset($cart['shipping']['extension_attributes']);
 
     // Remove shipping info if address in cart is available but not available
@@ -2089,13 +2093,15 @@ class Cart {
    *   The latitude.
    * @param float $lon
    *   The longitude.
+   * @param int $cncStoresLimit
+   *   The number of stores to display.
    *
    * @return array|mixed
    *   Return array of stores.
    *
    * @throws \Exception
    */
-  public function getCartStores($lat, $lon) {
+  public function getCartStores($lat, $lon, $cncStoresLimit = NULL) {
     $cart_id = $this->getCartId();
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $request_options = [
@@ -2105,6 +2111,11 @@ class Cart {
     try {
       if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options))) {
         return $stores;
+      }
+
+      // If cncStoresLimit is set, only load that many stores.
+      if (!empty($cncStoresLimit)) {
+        $stores = array_slice($stores, 0, $cncStoresLimit, TRUE);
       }
 
       foreach ($stores as $key => &$store) {
@@ -2420,6 +2431,7 @@ class Cart {
       'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
       'items' => $cart_data['totals']['items'] ?? 0,
+      'allExcludedForAdcard' => $cart_data['totals']['extension_attributes']['is_all_items_excluded_for_adv_card'] ?? 0,
     ];
 
     if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
@@ -2454,6 +2466,13 @@ class Cart {
     $data['in_stock'] = TRUE;
     // If there are any error at cart item level.
     $data['is_error'] = FALSE;
+
+    // For CnC, add collection charge for collection points.
+    if (!empty($cart_data['shipping'])
+      && $cart_data['shipping']['type'] === 'click_and_collect'
+      && $cart_data['shipping']['pudo_available'] === TRUE) {
+      $data['collection_charge'] = $cart_data['shipping']['price_amount'] ?? '';
+    }
 
     try {
       $data['items'] = [];

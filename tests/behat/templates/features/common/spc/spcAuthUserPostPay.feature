@@ -1,4 +1,4 @@
-@javascript @auth @PostPay @homeDelivery @pbaeuat @bbwaeuat @flaeuat @flsauat @aeoaeuat
+@javascript @auth @PostPay @homeDelivery @pbaeuat @bbwaeuat @flaeuat @flsauat @aeoaeuat @hmaeuat
 Feature: SPC Checkout Home Delivery using Installments with PostPay method for Authenticated user
 
   Background:
@@ -20,7 +20,7 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for A
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And the element "div.block-content .postpay" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
@@ -57,7 +57,7 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for A
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And the element "div.block-content .postpay" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
