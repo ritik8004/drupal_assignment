@@ -313,7 +313,7 @@ export default class SofaSectionalForm extends React.Component {
           label={Drupal.t('Quantity')}
         />
         <ErrorMessage message={errorMessage} />
-        <div className="config-form-addtobag-button-wrapper">
+        <div className="sofa-sectional-addtobag-button-wrapper">
           <input
             type="hidden"
             name="selected_variant_sku"
@@ -321,9 +321,9 @@ export default class SofaSectionalForm extends React.Component {
             value={(selectedVariant !== null ? selectedVariant : '')}
           />
           <button
-            className="config-form-addtobag-button"
-            id={`config-form-addtobag-button-${sku}`}
-            type="button"
+            className="sofa-sectional-addtobag-button edit-add-to-cart"
+            id={`sofa-sectional-addtobag-button-${sku}`}
+            type="submit"
             onClick={this.handleAddToBagClick}
             // Disable add to cart button if max sale limit has reached.
             disabled={isMaxSaleQtyReached(selectedVariant, productInfo)}
