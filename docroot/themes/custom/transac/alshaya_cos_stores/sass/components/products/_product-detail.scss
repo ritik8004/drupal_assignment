@@ -86,16 +86,11 @@
   .c-accordion {
     &__title {
       text-transform: uppercase;
-      padding: 5px 0 0;
-      border-top-color: #e8e8e8;
+      padding: 0.3125rem 0 0;
 
       .subtitle {
         text-transform: none;
       }
-    }
-
-    &-delivery-options {
-      border-bottom-color: #e8e8e8;
     }
   }
 }
