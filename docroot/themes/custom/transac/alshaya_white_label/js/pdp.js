@@ -30,7 +30,7 @@
         var mobileStickyHeaderHeight = $('.branding__menu').height();
 
         $(document).on('click', '.read-more-description-link-mobile', function () {
-          if (drupalSettings.pdp_gallery_type == 'classic') {
+          if (drupalSettings.pdp_gallery_type === 'classic') {
             $(this).parent().parent().parent().find('.c-accordion__title').toggleClass('ui-state-active');
           }
           $(this).parent().toggleClass('show-detail');
@@ -39,7 +39,7 @@
           $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
         });
         $(document).on('click', '.show-less-link', function () {
-          if (drupalSettings.pdp_gallery_type == 'classic') {
+          if (drupalSettings.pdp_gallery_type === 'classic') {
             $(this).parent().parent().parent().find('.c-accordion__title').toggleClass('ui-state-active');
           }
           $(this).parent().toggleClass('show-detail');
