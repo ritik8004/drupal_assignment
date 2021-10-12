@@ -9,12 +9,23 @@
     }
   }
 
-  .spc-select {
-    .spcSelect__control {
-      .spcSelect__dropdown-indicator {
-        @include icon(dropdown-expand, before) {
-          font-size: 2rem;
-        }
+  .spc-checkout-section-title {
+    margin-bottom: 1.25rem;
+  }
+
+  .close-modal {
+    &::before {
+      font-size: 1rem;
+      padding-top: 1.875rem;
+      padding-#{$right}: 0.9375rem;
+      top: 0.3125rem;
+
+      html[lang=ar] & {
+        top: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-top: 1.0625rem;
       }
     }
   }

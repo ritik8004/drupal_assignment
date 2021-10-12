@@ -1,12 +1,14 @@
 (function ($, Drupal) {
   Drupal.behaviors.postpayPDP = {
     attach: function (context, settings) {
-      $('.sku-base-form').each(function () {
-        setPostpayWidgetAmount(this);
-      });
+      document.addEventListener('alshayaPostpayInit', () => {
+        $('.sku-base-form').each(function () {
+          setPostpayWidgetAmount(this);
+        });
 
-      $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
-        setPostpayWidgetAmount(this, variant, event);
+        $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+          setPostpayWidgetAmount(this, variant, event);
+        });
       });
     }
   };
@@ -26,6 +28,14 @@
     }
     else {
       variant = $('.selected-variant-sku', element).val();
+      // Check if we are in mag-v2 layout
+      // due to different markup the initial variant fetch will fail.
+      if (typeof variant === 'undefined') {
+        if ($('body').hasClass('magazine-layout-v2')) {
+          // variantselected is an attribute in magv2 form.
+          variant = $(element).attr('variantselected');
+        }
+      }
     }
     var variantPrice = (drupalSettings[productKey][sku]['type'] != 'simple') ?
       drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :

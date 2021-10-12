@@ -19,9 +19,9 @@ import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import PpdRatingsReviews from '../pdp-ratings-reviews';
-import DeliveryOptions from '../../../../../alshaya_spc/js/expressdelivery/components/delivery-options';
 import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import PdpExpressDelivery from '../pdp-express-delivery';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -225,11 +225,13 @@ const PdpLayout = () => {
           <ConditionalView condition={isExpressDeliveryEnabled()
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >
-            <div className="express-delivery-wrapper">
+            <div className="express-delivery">
               {deliveryOptions && deliveryOptions !== null
                 && Object.keys(deliveryOptions).length > 0
                 && Object.keys(deliveryOptions).map((option) => (
-                  <div key={option} className={`express-delivery-text ${option}`}>{deliveryOptions[option].label}</div>
+                  <div key={option} className={`express-delivery-text ${option}`}>
+                    <span>{deliveryOptions[option].label}</span>
+                  </div>
                 ))}
             </div>
           </ConditionalView>
@@ -267,7 +269,9 @@ const PdpLayout = () => {
             removePanelData={removePanelData}
           />
           <ConditionalView condition={isExpressDeliveryEnabled()}>
-            <DeliveryOptions />
+            <PdpExpressDelivery
+              variantSelected={variant}
+            />
           </ConditionalView>
           <ConditionalView condition={!isExpressDeliveryEnabled()}>
             <PdpStandardDelivery />
