@@ -1153,13 +1153,22 @@ class SkuImagesManager {
    *   Media role name. Default SWATCH_IMAGE_ROLE.
    */
   public function getSwatchAttributRole($attribute_code): string {
-    $swatches_roles = $this->configFactory->get('alshaya_acm_product.display_settings')->get('swatches_roles');
-    if (isset($swatches_roles[$attribute_code])) {
-      return $swatches_roles[$attribute_code];
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$attribute_code])) {
+      return $static[$attribute_code];
     }
 
-    // Return default swatch image role.
-    return self::SWATCH_IMAGE_ROLE;
+    // Assigne default role to attribute.
+    $static[$attribute_code] = self::SWATCH_IMAGE_ROLE;
+
+    // Check if the attribute has a different swatch role.
+    $swatches_roles = $this->configFactory->get('alshaya_acm_product.display_settings')->get('swatches_roles');
+    if (isset($swatches_roles[$attribute_code])) {
+      $static[$attribute_code] = $swatches_roles[$attribute_code];
+    }
+
+    return $static[$attribute_code];
   }
 
   /**

@@ -69,6 +69,9 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
     $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
     $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
     $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
+
+    // Add a unique class if PDP has a sofa and sectional form.
+    $build['#attributes']['class'][] = 'has-sofa-sectional-form';
   }
 }
 
