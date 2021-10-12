@@ -89,7 +89,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#attributes' => [
         'id' => 'rcs-ph-lhn_block',
         'data-param-get-data' => 'false',
-        'class' => ['block-alshaya-category-lhn-block'],
+        'class' => ['block-alshaya-category-lhn-block', 'rcs-loading'],
         'data-param-entity-to-get' => 'navigation_menu',
       ],
     ];

@@ -41,6 +41,7 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
       '#attributes' => [
         'id' => 'rcs-ph-breadcrumb',
         'data-param-get-data' => 'false',
+        'class' => ['rcs-loading'],
       ],
     ];
 

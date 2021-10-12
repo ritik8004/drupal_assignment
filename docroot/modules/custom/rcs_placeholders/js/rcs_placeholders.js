@@ -80,6 +80,9 @@
               });
           }
 
+          // Remove loaders and show elements.
+          $('.field.rcs-loading').removeClass('rcs-loading');
+
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
         });
@@ -157,6 +160,12 @@
             $(this)[0].innerHTML
           )
         );
+
+        // Remove loader and show element.
+        const element = document.getElementById(blockPhId[0]);
+        if (element) {
+          element.classList.remove('rcs-loading');
+        }
 
         // Re-attach all behaviors.
         rcsPhApplyDrupalJs($(this).parent()[0]);

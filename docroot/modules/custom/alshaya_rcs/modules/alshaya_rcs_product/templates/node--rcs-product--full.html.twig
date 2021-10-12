@@ -24,18 +24,24 @@ set classes = [
     {% block contentSidebar %}
       {% block titleBlock %}
         <div class="content__title_wrapper">
-          <div>#rcs.product._self|brand_logo#</div>
+          <div class="field rcs-loading">
+            <div class="content">#rcs.product._self|brand_logo#</div>
+          </div>
 
           {% block productBrand %}
           {% endblock %}
 
-          <h1><span>#rcs.product._self|name#</span></h1>
+          <h1>
+            <div class="field rcs-loading">
+              <span class="content">#rcs.product._self|name#</span>
+            </div>
+          </h1>
 
           {% block pricePrefix %}
           {% endblock %}
 
-          <div class="price-block price-block-#rcs.product._self|sku-clean#">
-            #rcs.product._self|price#
+          <div class="price-block price-block-#rcs.product._self|sku-clean# field rcs-loading">
+            <span class="content">#rcs.product._self|price#</span>
           </div>
 
           {% if content.postpay %}
@@ -43,14 +49,20 @@ set classes = [
             <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
-          <div class="promotions promotions-full-view-mode">#rcs.product._self|promotions#</div>
+          <div class="promotions promotions-full-view-mode field rcs-loading">
+            <span class="content">#rcs.product._self|promotions#</span>
+          </div>
 
-          <div class="vat-text">#rcs.product._self|vat_text#</div>
+          <div class="vat-text field rcs-loading">
+            <span class="content">#rcs.product._self|vat_text#</span>
+          </div>
 
           {% block itemCode %}
             <div class="content--item-code">
               <span class="field__label">{{ 'Item Code'|t }}:</span>
-              <span class="field__value">#rcs.product._self|sku#</span>
+              <span class="field__value field rcs-loading">
+                <span class="content">#rcs.product._self|sku#</span>
+              </span>
             </div>
           {% endblock %}
 
@@ -92,9 +104,13 @@ set classes = [
                 <article>
                   <div class="field field--name-sku field--type-string field--label-above">
                     <div class="field__label">SKU</div>
-                    <div class="field__item">#rcs.product._self|sku#</div>
+                    <div class="field__item field rcs-loading">
+                      <span class="content">#rcs.product._self|sku#</span>
+                    </div>
                   </div>
-                  <div>#rcs.product._self|add_to_cart#</div>
+                  <div class="field rcs-loading">
+                    <span class="content">#rcs.product._self|add_to_cart#</span>
+                  </div>
                 </article>
                 </div>
               </div>
@@ -104,14 +120,14 @@ set classes = [
             </div>
 
             {% block shortDescBlock %}
-              <div class="short-description-wrapper">
-                #rcs.product._self|short_description#
+              <div class="short-description-wrapper field rcs-loading">
+                <span class="content">#rcs.product._self|short_description#</span>
               </div>
             {% endblock %}
 
             {% block descBlock %}
-              <div class="description-wrapper">
-                #rcs.product._self|description#
+              <div class="description-wrapper field rcs-loading">
+                <span class="content">#rcs.product._self|description#</span>
               </div>
             {% endblock %}
 
@@ -120,7 +136,9 @@ set classes = [
             {% block afterDescription %}
             {% endblock %}
 
-            <div id="rcs-ph-delivery-option"></div>
+            <div id="rcs-ph-delivery-option">
+              <div class="rcs-loading"></div>
+            </div>
 
             {{ content.sharethis }}
 

@@ -32,6 +32,7 @@ class AlshayaRcsPromotionalBanner extends BlockBase {
           '#attributes' => [
             'id' => 'rcs-ph-promotional_banner',
             'data-param-entity-to-get' => 'category',
+            'class' => ['rcs-loading'],
           ],
         ],
       ],
