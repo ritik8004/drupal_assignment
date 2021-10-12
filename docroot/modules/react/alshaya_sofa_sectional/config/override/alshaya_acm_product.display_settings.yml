@@ -1,0 +1,8 @@
+swatches:
+  pdp:
+    - configuration
+    - fabric_color
+# Added swatch attibute specific media roles like
+# 'swatch_image' or 'configuration_attr_image'.
+swatches_roles:
+  configuration: 'configuration_attr_image'

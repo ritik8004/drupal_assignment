@@ -1587,6 +1587,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // add to cart form on every change on the form & the form state cache doesn't
   // get re-used. Instead, keeps flooding key_value_expire table.
   $form_state->disableCache();
+
+  // Allow other modules to take some action after the form data are altered.
+  \Drupal::moduleHandler()->alter('alshaya_acm_product_skubaseform', $form, $sku_entity);
 }
 
 /**

@@ -1,5 +1,6 @@
 import React from 'react';
 import Swatch from '../swatches';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
 
 /**
  * SwatchList component.
@@ -20,6 +21,7 @@ const SwatchList = (props) => {
     allowedValues,
   } = props;
   let selectedSwatchLabel;
+  let selectedSwatchImage;
   let classes = 'form-swatch-list-wrapper';
   classes = isHidden ? `${classes} form-element-hidden` : `${classes}`;
   /* disable eslint to disable eqeqeq rule for Swatch. */
@@ -27,6 +29,7 @@ const SwatchList = (props) => {
   const swatchItems = swatches.map((swatch) => {
     if (defaultValue == swatch.value) {
       selectedSwatchLabel = swatch.label;
+      selectedSwatchImage = swatch.data;
     }
     return (
       <Swatch
@@ -47,13 +50,20 @@ const SwatchList = (props) => {
   /* eslint-disable */
   return (
     <div className={classes}>
-      <label>
+      <label className={selectedSwatchLabel ? 'active' : ''}>
+        <ConditionalView condition={selectedSwatchImage !== null}>
+          <span className='selected-image'>
+            <img loading="lazy" src={selectedSwatchImage} />
+          </span>
+        </ConditionalView>
         <span>
-          {`${label}: `}
+          {label}
         </span>
-        <span className="selected-text">
-          {selectedSwatchLabel}
-        </span>
+        <ConditionalView condition={selectedSwatchLabel !== null}>
+          <span className="selected-text">
+            {selectedSwatchLabel}
+          </span>
+        </ConditionalView>
       </label>
       <ul className={`swatch-list ${attributeName}`} name={attributeName}>
         {swatchItems}

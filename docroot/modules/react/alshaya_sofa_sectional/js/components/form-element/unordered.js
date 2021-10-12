@@ -74,7 +74,7 @@ const UnorderedList = (props) => {
   classes = isGroup ? `${classes} group-wrapper` : `${classes}`;
 
   const SofaSectionConfigAccordion = (
-    <label>
+    <label className={selectedValueLabel ? 'active' : ''}>
       <div className="config-number-wrapper">
         <span className="config-index-number">
           {index}
