@@ -52,7 +52,7 @@ class CheckoutConfirmation extends React.Component {
   }
 
   onPrintError = (errorLocation, error) => {
-    logger.debug('Error launching checkout print. ErrorLocation: @errorLocation, error: @error', {
+    logger.warning('Error launching checkout print. ErrorLocation: @errorLocation, error: @error', {
       '@errorLocation': errorLocation,
       '@error': error,
     });
@@ -61,7 +61,7 @@ class CheckoutConfirmation extends React.Component {
   onAfterPrint = () => {
     // We want to log a alert when the print window was opened and closed successfully.
     // User has either printed or cancelled from print window.
-    logger.info('Checkout order print finished and print window closed. react-to-print: @hook called', {
+    logger.debug('Checkout order print finished and print window closed. react-to-print: @hook called', {
       '@hook': 'onAfterPrint',
     });
   };
