@@ -88,17 +88,21 @@ function stickyMobileCartPreview() {
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
     if (window.innerWidth < 768) {
-      const cartOffsetTop = menuHeight + breadCrumbHeight + preContentHeight - cartPreviewOffset;
-      if (window.pageYOffset > cartOffsetTop) {
-        if (!cartPreview[0].classList.contains('sticky')) {
-          cartPreview[0].classList.add('sticky');
-          document.getElementsByClassName('spc-main')[0].style.paddingTop = `${cartPreview[0].offsetHeight}px`;
-          cartPreview[0].style.top = `${menuHeight}px`;
+      if (cartPreview[0]) {
+        const cartOffsetTop = menuHeight + breadCrumbHeight + preContentHeight - cartPreviewOffset;
+        if (window.pageYOffset > cartOffsetTop) {
+          if (!cartPreview[0].classList.contains('sticky')) {
+            cartPreview[0].classList.add('sticky');
+            document.getElementsByClassName('spc-main')[0].style.paddingTop = `${cartPreview[0].offsetHeight}px`;
+            cartPreview[0].style.top = `${menuHeight}px`;
+          }
+        } else {
+          cartPreview[0].classList.remove('sticky');
+          document.getElementsByClassName('spc-main')[0].style.paddingTop = 0;
+          cartPreview[0].style.top = 0;
         }
       } else {
-        cartPreview[0].classList.remove('sticky');
-        document.getElementsByClassName('spc-main')[0].style.paddingTop = 0;
-        cartPreview[0].style.top = 0;
+        Drupal.alshayaLogger('warning', 'sticky cart preview failure', 'Cart preview element not found');
       }
     }
   });

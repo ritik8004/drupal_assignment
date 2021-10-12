@@ -27,6 +27,7 @@ cart:
     - alshaya_react/react
     - alshaya_product_zoom/cloud_zoom_pdp_gallery
     - alshaya_spc/cart_utilities
+    - alshaya_master/common_functions
 
 checkout:
   version: 1.x

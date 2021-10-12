@@ -36,7 +36,7 @@ import {
   getCncModalButtonText,
 } from '../../../utilities/cnc_util';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
-import { logger } from '../../../backend/v2/utility';
+import logger from '../../../utilities/logger';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
