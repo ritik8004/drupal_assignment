@@ -20,16 +20,6 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
     return;
   }
 
-  // Add cache tag.
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
-
-  // Get sofa sectional configuration.
-  $config = \Drupal::config('alshaya_sofa_sectional.settings');
-
-  if (!$config->get('enabled')) {
-    return;
-  }
-
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -38,17 +28,30 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
   /** @var \Drupal\acq_sku\SKU  $sku_entity */
   $sku = SKU::loadFromSku($sku_string);
 
-  // Return if sku in not available,
+  // Return if sku in not available.
   if (!($sku instanceof SKU)) {
     return;
   }
 
-  // Check and return if Sku is not in stock,
-  // if sku is simple sku and not buyable.
+  // Don't show the react form for following conditions,
+  // if Sku is not in stock,
+  // if Sku is a simple sku,
+  // if Sku is not buyable,
+  // if checkout is disable.
   if (!$skuManager->isProductInStock($sku)
     || $sku->bundle() == 'simple'
     || !alshaya_acm_product_is_buyable($sku)
     || \Drupal::config('alshaya_acm.cart_config')->get('checkout_feature') === 'disabled') {
+    return;
+  }
+
+  // Add cache tag.
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
+
+  // Get sofa sectional configuration.
+  $config = \Drupal::config('alshaya_sofa_sectional.settings');
+
+  if (!$config->get('enabled')) {
     return;
   }
 
