@@ -426,10 +426,15 @@ class ClickCollect extends React.Component {
 
     // Find the store object with the given store-code from the store list.
     const store = _find(storeList, { code: storeCode });
-
-    if (store === undefined || store.name === undefined) {
+    if (store === undefined) {
       logger.error('Unable to find store from list.', {
         storeCode,
+        storeList,
+      });
+    }
+    if (store !== undefined && store.name === undefined) {
+      logger.error('Unable to find store name in the store found in list', {
+        store,
         storeList,
       });
     }
