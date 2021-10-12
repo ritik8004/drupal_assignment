@@ -222,6 +222,19 @@ export default class SofaSectionalForm extends React.Component {
 
     return (
       <>
+        <div className="sofa-section-select-option-wrapper">
+          <div className="sofa-section-select-option">
+            {Drupal.t('Select options 1 to @length', { '@length': Object.keys(configurableAttributes).length })}
+          </div>
+          <div className="sofa-section-clear-option-btn-wrapper">
+            <button
+              className="sofa-section-clear-option-btn"
+              type="button"
+            >
+              {Drupal.t('Clear Options')}
+            </button>
+          </div>
+        </div>
         {Object.entries(configurableAttributes).map((attribute, index) => {
           isSwatch = typeof attribute[1].is_swatch !== 'undefined'
             ? attribute[1].is_swatch
