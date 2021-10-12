@@ -79,12 +79,11 @@ function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SK
         $configurables[$attribute_code]['is_swatch'] = TRUE;
         $configurables[$attribute_code]['swatches'] = [];
         foreach ($swatches[$attribute_code] as $swatch) {
-          $is_color_swatch = $isColorSplitEnabled && ($swatch['swatch_type'] == AlshayaColorSplitManager::PDP_SWATCH_RGB);
           $configurables[$attribute_code]['swatches'][] = [
             'label' => $swatch['display_label'],
             'data' => $swatch['display_value'] ?? $swatch['image_url'] ?? NULL,
             'value' => $swatch['value'],
-            'type' => $is_color_swatch ? 'color' : $swatch['swatch_type'],
+            'type' => $swatch['swatch_type'],
             'child_sku_code' => $swatch['child_sku_code'],
           ];
         }
