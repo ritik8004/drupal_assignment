@@ -45,6 +45,16 @@ class CheckoutConfirmation extends React.Component {
     }
   }
 
+  onPrintError = (errorLocation, error) => {
+    Drupal.logJavascriptError(errorLocation, error, GTM_CONSTANTS.CHECKOUT_CONFIRMATION_ERRORS);
+  };
+
+  onAfterPrint = () => {
+    // We want to log a notice when the print window was opened and closed.
+    // User has either printed or cancelled from print window.
+    Drupal.logViaDataDog('notice', 'Checkout order print finished and print window closed', 'onAfterPrint hook called');
+  };
+
   componentDidMount() {
     // Make sidebar sticky.
     stickySidebar();
@@ -69,6 +79,8 @@ class CheckoutConfirmation extends React.Component {
           <ReactToPrint
             trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('print confirmation')}</div>}
             content={() => this.componentRef}
+            onPrintError={(errorLocation, error) => this.onPrintError(errorLocation, error)}
+            onAfterPrint={() => this.onAfterPrint()}
           />
         </div>
         <div className="spc-main">
