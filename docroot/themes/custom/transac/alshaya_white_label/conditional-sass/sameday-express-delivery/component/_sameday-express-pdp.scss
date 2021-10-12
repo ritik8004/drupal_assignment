@@ -4,6 +4,26 @@
       margin-top: 0.3125rem;
       margin-bottom: 1.5625rem;
     }
+
+    &.mobile {
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+
+    &.desktop {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+
+      @include breakpoint($tablet) {
+        display: block;
+      }
+    }
   }
 
   #express-delivery-options {
