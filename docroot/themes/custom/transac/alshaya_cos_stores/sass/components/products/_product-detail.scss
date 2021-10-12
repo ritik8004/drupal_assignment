@@ -86,10 +86,16 @@
   .c-accordion {
     &__title {
       text-transform: uppercase;
+      padding: 5px 0 0;
+      border-top-color: #e8e8e8;
 
       .subtitle {
         text-transform: none;
       }
+    }
+
+    &-delivery-options {
+      border-bottom-color: #e8e8e8;
     }
   }
 }
@@ -106,6 +112,51 @@
       @include breakpoint($only-tablet) {
         padding-top: 0;
       }
+    }
+  }
+}
+
+.short-description-wrapper:not(.matchback-description-wrapper) {
+  .c-pdp & {
+    margin-bottom: 1.25rem;
+  }
+}
+
+.short-description-wrapper {
+  .field {
+    &__label {
+      font-size: 0.875rem;
+      font-weight: normal;
+      text-transform: uppercase;
+      border: none;
+      cursor: default;
+    }
+
+    &__content {
+      padding: 0 0 0.9375rem;
+    }
+  }
+
+  .desc-value {
+    p {
+      margin: 0;
+      padding: 0 0 0.625rem;
+    }
+  }
+
+  .read-more-description-link-mobile,
+  .show-less-link {
+    font-weight: normal;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .read-more-description-link-mobile:not(.matchback-readmore) {
+    @include breakpoint($tablet) {
+      display: block !important;
     }
   }
 }
