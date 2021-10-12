@@ -7,7 +7,6 @@ const GTM_CONSTANTS = {
   CHECKOUT_ERRORS: 'checkout errors',
   PAYMENT_ERRORS: 'other payment errors',
   GENUINE_PAYMENT_ERRORS: 'payment errors',
-  CHECKOUT_CONFIRMATION_ERRORS: 'checkout confirmation errors',
 };
 
 const productRecommendationsSuffix = 'pr-';
