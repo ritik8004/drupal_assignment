@@ -178,6 +178,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_rcs_product/main';
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
   $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_modal';
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
