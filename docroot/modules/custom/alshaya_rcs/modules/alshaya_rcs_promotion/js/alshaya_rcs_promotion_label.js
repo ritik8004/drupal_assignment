@@ -103,21 +103,9 @@
    *   The cart data object.
    */
   Drupal.alshayaPromotions.refreshDynamicLabels = function (sku, cartData) {
-    const response = Drupal.alshayaPromotions.getV2DynamicLabel(sku, cartData);
-    if (response && typeof response.data !== 'undefined') {
-      Drupal.alshayaPromotions.updateDynamicLabel(sku, response.data.dynamicPromotionLabel);
-    }
-    else {
-      var cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData);
-      // We set cacheable=1 so it is always treated as anonymous user request.
-      jQuery.ajax({
-        url: Drupal.url('rest/v1/promotions/dynamic-label-product/' + btoa(sku)) + '?cacheable=1&context=web&' + cartDataUrl,
-        method: 'GET',
-        async: true,
-        success: function (response) {
-          Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
-        }
-      });
+    const response = Drupal.alshayaPromotions.getRcsDynamicLabel(sku, cartData);
+    if (response && response.label) {
+      Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
     }
   };
 
@@ -165,7 +153,7 @@
    * @returns {object}
    *   An oject containing the dynamic promotion label.
    */
-  Drupal.alshayaPromotions.getV2DynamicLabel = function (sku, cartData, viewMode = 'links') {
+  Drupal.alshayaPromotions.getRcsDynamicLabel = function (sku, cartData, viewMode = 'links') {
     let response = null;
     if (typeof drupalSettings.alshayaRcs !== 'undefined') {
       // Prepare cart object.
@@ -200,6 +188,8 @@
       });
 
       response = rcsCommerceBackend.invokeApiAsync(request);
+      // Update the response variable based on response.
+      response = response.data.dynamicPromotionLabel;
     }
 
     return response;

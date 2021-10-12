@@ -1,5 +1,7 @@
 import Axios from 'axios';
-import dispatchCustomEvent from '../events';
+import dispatchCustomEvent from './utilities/events';
+
+window.dynamicPromotion = window.dynamicPromotion || {};
 
 const PromotionsDynamicLabelsUtil = {
   apply: (cartData) => {
@@ -19,12 +21,12 @@ const PromotionsDynamicLabelsUtil = {
     apiUrl = `${apiUrl}?cacheable=1&context=web&${Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData)}`;
 
     Axios.get(apiUrl).then((response) => {
-      if (response.data.cart_labels !== undefined || response.data.products_labels !== undefined) {
+      if (response.data.cart_labels !== undefined
+        || response.data.products_labels !== undefined) {
         dispatchCustomEvent('applyDynamicPromotions', response.data);
       }
     });
   },
-
 };
 
-export default PromotionsDynamicLabelsUtil;
+window.dynamicPromotion.apply = (cartData) => PromotionsDynamicLabelsUtil.apply(cartData);

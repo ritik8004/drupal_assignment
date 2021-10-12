@@ -200,11 +200,12 @@ function _alshaya_rcs_main_menu_invalidate_enriched_term_cache(EntityInterface $
   if ($category_slug) {
     $term = $path_processor->getEnrichedEntity('category', $category_slug);
     if ($term instanceof TermInterface) {
-      // Invalidate the default RCS Term tags.
-      $default_term_id = \Drupal::config('rcs_placeholders.settings')->get('category.placeholder_tid');
-      Cache::invalidateTags(array_merge($term->getCacheTags(), ['taxonomy_term:' . $default_term_id]));
+      Cache::invalidateTags($term->getCacheTags());
     }
   }
+  // Invalidate the default RCS Term tags.
+  $default_term_id = \Drupal::config('rcs_placeholders.settings')->get('category.placeholder_tid');
+  Cache::invalidateTags(['taxonomy_term:' . $default_term_id]);
 }
 
 /**

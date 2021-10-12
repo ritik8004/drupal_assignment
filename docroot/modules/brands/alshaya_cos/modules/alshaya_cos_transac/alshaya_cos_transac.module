@@ -4,9 +4,9 @@
  * @file
  * Module file with hooks specific to COS brand.
  */
-
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -17,15 +17,6 @@ function alshaya_cos_transac_module_implements_alter(&$implementations, $hook) {
     $group = $implementations['alshaya_cos_transac'];
     unset($implementations['alshaya_cos_transac']);
     $implementations['alshaya_cos_transac'] = $group;
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view().
- */
-function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if (($entity->bundle() == 'rcs_product')) {
-    $build['#attached']['library'][] = 'alshaya_cos_transac/product';
   }
 }
 
@@ -76,4 +67,97 @@ function alshaya_cos_transac_alshaya_search_algolia_object_alter(array &$object)
     $materials = json_decode(reset($materials), TRUE);
     $object['attr_materials'] = $materials;
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_cos_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
+    if ($sku_entity instanceof SKU) {
+      $return = _alshaya_cos_transac_get_product_description($sku_entity);
+      $build['description'] = $return['description'];
+      $build['short_desc'] = $return['short_desc'];
+    }
+  }
+  if (($entity->bundle() == 'rcs_product')) {
+    $build['#attached']['library'][] = 'alshaya_cos_transac/product';
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_cos_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $return = _alshaya_cos_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $return['short_desc'];
+    $build['description'] = $return['description'];
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_cos_transac_get_product_description($sku_entity) {
+  $return = [];
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
+  $description_value = '';
+  $desc = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
+
+  if (!empty($desc)) {
+    $description_value .= $desc;
+  }
+
+  // Render the wrapper div for composition always so that the same can be
+  // filled with data on variant selection.
+  // Prepare the description variable.
+  $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
+  $washing_instructions = $skuManager->fetchProductAttribute($sku_entity, 'attr_washing_instructions', $search_direction);
+
+  $composition_markup = [
+    '#theme' => 'product_composition_markup',
+    '#title' => t('Product Detail'),
+  ];
+
+  if (!empty($composition)) {
+    $composition_markup['#composition']['#markup'] = implode(", ", json_decode($composition)) . ' / ' . $washing_instructions;
+  }
+
+  $description_value .= render($composition_markup);
+
+  // Render the wrapper div for article warning always so that the same
+  // can be filled with data on variant selection.
+  $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
+  $description_value .= render($warning);
+
+  $item_code = [
+    '#theme' => 'product_item_code_markup',
+    '#title' => t('Product No:'),
+    '#item_code' => $sku_entity->getSku(),
+  ];
+
+  $description_value .= render($item_code);
+
+  $description['value'] = [
+    '#markup' => $description_value,
+  ];
+
+  // Add all variables to $build in the sequence in
+  // which they should be displayed.
+  $return['description'][] = $description;
+
+  /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+  $product_helper = \Drupal::service('alshaya_acm_product.helper');
+  $short_desc = $product_helper->createShortDescription($description['value']['#markup']);
+  $return['short_desc']['value'] = strip_tags($short_desc['html']);
+
+  return $return;
 }

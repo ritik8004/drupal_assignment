@@ -204,6 +204,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
+          'alshaya_spc/dynamic_promotion_label',
           'alshaya_acm_promotion/basket_labels_manager',
           'alshaya_white_label/free_gifts',
         ],
@@ -605,6 +606,7 @@ class AlshayaSpcController extends ControllerBase {
           ],
           'global_error_message' => _alshaya_spc_global_error_message(),
           'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
+          'cncStoreInfoCacheTime' => $checkout_settings->get('cnc_store_info_cache_time'),
         ],
       ],
       '#cache' => [

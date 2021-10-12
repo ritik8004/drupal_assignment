@@ -4,6 +4,7 @@ cart_utilities:
   dependencies:
     - core/jquery
     - core/drupal
+    - core/jquery.once
     - alshaya_react/react_pollyfill
     - alshaya_acm_product/product_utility
 
@@ -115,3 +116,7 @@ express_delivery:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
     - alshaya_spc/commerce_backend.cart.v2
+
+dynamic_promotion_label:
+  js:
+    dist/dynamic_promotion_label.bundle.js: {}

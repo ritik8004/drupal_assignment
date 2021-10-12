@@ -15,7 +15,6 @@ import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stick
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
-import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
@@ -94,7 +93,7 @@ export default class Cart extends React.Component {
         if (cartData instanceof Promise) {
           cartData.then((result) => {
             if (typeof result.error === 'undefined') {
-              PromotionsDynamicLabelsUtil.apply(result);
+              window.dynamicPromotion.apply(result);
             }
           });
         }
@@ -251,6 +250,8 @@ export default class Cart extends React.Component {
 
   // Adding panel for area list block.
   getPanelData = (data) => {
+    // Adds loading class for showing loader on onclick of delivery panel.
+    document.querySelector('.delivery-loader').classList.add('loading');
     this.setState({
       panelContent: data,
     });
