@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { placeOrder, removeFullScreenLoader } from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
-import { logger } from '../backend/v2/utility';
+import logger from './logger';
 
 let applePaySessionObject;
 
