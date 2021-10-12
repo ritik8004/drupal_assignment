@@ -2,7 +2,8 @@ import _isEmpty from 'lodash/isEmpty';
 import _isUndefined from 'lodash/isUndefined';
 import _isString from 'lodash/isString';
 import md5 from 'md5';
-import { getApiEndpoint, logger } from './utility';
+import { getApiEndpoint } from './utility';
+import logger from '../../utilities/logger';
 import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
 

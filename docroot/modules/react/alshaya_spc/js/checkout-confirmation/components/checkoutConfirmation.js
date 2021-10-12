@@ -12,6 +12,7 @@ import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import logger from '../../utilities/logger';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -45,20 +46,25 @@ class CheckoutConfirmation extends React.Component {
     }
   }
 
-  onPrintError = (errorLocation, error) => {
-    Drupal.logJavascriptError(errorLocation, error, GTM_CONSTANTS.CHECKOUT_CONFIRMATION_ERRORS);
-  };
-
-  onAfterPrint = () => {
-    // We want to log a notice when the print window was opened and closed.
-    // User has either printed or cancelled from print window.
-    Drupal.logViaDataDog('notice', 'Checkout order print finished and print window closed', 'onAfterPrint hook called');
-  };
-
   componentDidMount() {
     // Make sidebar sticky.
     stickySidebar();
   }
+
+  onPrintError = (errorLocation, error) => {
+    logger.debug('Error launching checkout print. ErrorLocation: @errorLocation, error: @error', {
+      '@errorLocation': errorLocation,
+      '@error': error,
+    });
+  };
+
+  onAfterPrint = () => {
+    // We want to log a alert when the print window was opened and closed successfully.
+    // User has either printed or cancelled from print window.
+    logger.info('Checkout order print finished and print window closed. react-to-print: @hook called', {
+      '@hook': 'onAfterPrint',
+    });
+  };
 
   render() {
     const {

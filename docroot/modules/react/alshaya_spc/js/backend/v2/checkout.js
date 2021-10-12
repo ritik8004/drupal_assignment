@@ -33,9 +33,9 @@ import {
 import {
   getApiEndpoint,
   isUserAuthenticated,
-  logger,
   getIp,
 } from './utility';
+import logger from '../../utilities/logger';
 import cartActions from '../../utilities/cart_actions';
 import {
   getPaymentMethods,
