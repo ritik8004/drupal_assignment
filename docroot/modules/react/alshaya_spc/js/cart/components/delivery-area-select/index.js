@@ -77,6 +77,8 @@ export default class DeliveryAreaSelect extends React.Component {
     event.preventDefault();
     // to make sure that markup is present in DOM.
     document.querySelector('body').classList.add('overlay-delivery-area');
+    // remove class loading when the delivery panel opens.
+    document.querySelector('.delivery-loader').classList.remove('loading');
   }
 
   render() {
@@ -88,7 +90,7 @@ export default class DeliveryAreaSelect extends React.Component {
         <div className="delivery-area-label">
           <span>{`${Drupal.t('Deliver to')}: `}</span>
           <div onClick={() => getPanelData(this.openModal())}>
-            <span className="delivery-area-name">{areaLabel}</span>
+            <span className="delivery-area-name delivery-loader">{areaLabel}</span>
             <span className="delivery-area-button" />
           </div>
         </div>
