@@ -10,19 +10,10 @@
  *
  * Alshaya sofa sectional translations.
  */
-function alshaya_sofa_sectional_install() {
+function alshaya_sofa_sectional_update_8001() {
   // Add translations.
-  $strings = [
-    'your selection summary' => [
-      'ar' => '',
-    ],
-    'Select options 1 to @length' => [
-      'ar' => '',
-    ],
-    'Clear Options' => [
-      'ar' => '',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
+  module_load_include('inc', 'alshaya_sofa_sectional', 'alshaya_sofa_sectional.translations');
+  if ($translations = _alshaya_sofa_sectional_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
