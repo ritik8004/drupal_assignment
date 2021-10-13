@@ -15,13 +15,11 @@
           var context = $('#alshaya-algolia-plp');
           // To adjust the grid view mode.
           if (typeof storage_value.grid_type !== 'undefined') {
-            Drupal.algolia.adjustAlgoliaGridView(context, 'view-algolia-plp', storageKey, storage_value);
+            Drupal.algolia.adjustAlgoliaGridView(context, 'back-to-plp', storageKey, storage_value);
           }
 
           if (typeof storage_value.sku !== 'undefined') {
-            // Adds the 'back-to-plp' class into the product list wrapper.
-            Drupal.algolia.adjustAlgoliaPlp(context, 'back-to-plp');
-            Drupal.algolia.scrollToAlgoliaProduct(context, '.back-to-plp', storageKey, storage_value);
+            Drupal.algolia.scrollToAlgoliaProduct(context, '.view-algolia-plp', storageKey, storage_value);
           }
         }
     });

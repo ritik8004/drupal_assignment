@@ -7,6 +7,7 @@
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -116,6 +117,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
     $description_value .= $desc;
   }
 
+  $description_value .= '<h2>' . t('Product Detail') . '</h2>';
   // Render the wrapper div for composition always so that the same can be
   // filled with data on variant selection.
   // Prepare the description variable.
@@ -124,11 +126,10 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
 
   $composition_markup = [
     '#theme' => 'product_composition_markup',
-    '#title' => t('Product Detail'),
   ];
-
-  if (!empty($composition)) {
-    $composition_markup['#composition']['#markup'] = implode(", ", json_decode($composition)) . ' / ' . $washing_instructions;
+  $markupText = _alshaya_cos_transac_get_formated_text($composition, $washing_instructions);
+  if (!empty($markupText)) {
+    $composition_markup['#composition']['#markup'] = $markupText;
   }
 
   $description_value .= render($composition_markup);
@@ -136,7 +137,18 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   // Render the wrapper div for article warning always so that the same
   // can be filled with data on variant selection.
   $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
-  $description_value .= render($warning);
+  if (!empty($warning)) {
+    $warning_markup = [
+      '#theme' => 'product_article_warning_markup',
+      '#warning' => ['#markup' => $warning],
+    ];
+  }
+  $description_value .= render($warning_markup);
+
+  $config = \Drupal::config('alshaya_acm_product.settings');
+  if (!empty($config->get('legal_notice_enabled'))) {
+    $description_value .= render($config->get('legal_notice_summary')['value']);
+  }
 
   $item_code = [
     '#theme' => 'product_item_code_markup',
@@ -160,4 +172,80 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $return['short_desc']['value'] = strip_tags($short_desc['html']);
 
   return $return;
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $parent_sku = $skuManager->getParentSkuBySku($child);
+  $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', 'self');
+  $washing_instructions = $skuManager->fetchProductAttribute($child, 'attr_washing_instructions', 'self');
+  $markupText = _alshaya_cos_transac_get_formated_text($composition, $washing_instructions);
+  $composition_markup = '';
+  if (!empty($markupText)) {
+    $markup = [
+      '#theme' => 'product_composition_markup',
+      '#composition' => [
+        '#markup' => $markupText,
+      ],
+    ];
+
+    $composition_markup = render($markup);
+  }
+
+  $variant['description'][] = [
+    'selector' => '.composition-wrapper',
+    'markup' => $composition_markup,
+  ];
+
+  $warning = $skuManager->fetchProductAttribute($child, 'attr_article_warning', 'self');
+  $warning_markup = '';
+  if (!empty($warning)) {
+    $markup = [
+      '#theme' => 'product_article_warning_markup',
+      '#warning' => [
+        '#markup' => $warning,
+      ],
+    ];
+
+    $warning_markup = render($markup);
+  }
+
+  $variant['description'][] = [
+    'selector' => '.warning-wrapper',
+    'markup' => $warning_markup,
+  ];
+
+  $item_code = [
+    '#theme' => 'product_item_code_markup',
+    '#title' => t('Product No:'),
+    '#item_code' => $parent_sku->getSku(),
+  ];
+
+  $item_code_value = render($item_code);
+
+  $variant['description'][] = [
+    'selector' => '.item-code-wrapper',
+    'markup' => $item_code_value,
+  ];
+}
+
+/**
+ * Get formatted Markup text with '/' for composition and Washing instruction.
+ */
+function _alshaya_cos_transac_get_formated_text($composition, $washing_instructions) {
+  $markupText = '';
+  if (!empty($composition)) {
+    $markupText .= implode(", ", json_decode($composition));
+  }
+  if (!empty($composition) && !empty($washing_instructions)) {
+    $markupText .= ' / ';
+  }
+  if (!empty($washing_instructions)) {
+    $markupText .= $washing_instructions;
+  }
+  return $markupText;
 }
