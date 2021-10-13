@@ -1,4 +1,4 @@
-import { logger } from '../backend/v2/utility';
+import logger from './logger';
 
 const getStringMessage = (key, replacement) => {
   try {
