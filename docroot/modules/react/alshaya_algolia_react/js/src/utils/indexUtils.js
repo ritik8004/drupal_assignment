@@ -379,3 +379,15 @@ export function isProductTitleTrimEnabled() {
   }
   return false;
 }
+
+/**
+ * Get product elements alignment status.
+ *
+ * @returns {boolean}
+ */
+export function isProductElementAlignmentEnabled() {
+  if (drupalSettings.algoliaSearch.productElementAlignmentEnabled === true) {
+    return true;
+  }
+  return false;
+}
