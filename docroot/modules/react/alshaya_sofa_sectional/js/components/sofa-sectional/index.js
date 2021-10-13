@@ -199,9 +199,16 @@ export default class SofaSectionalForm extends React.Component {
    * Clears selected options.
    */
   handleClearOptions = () => {
+    const { sku } = this.state;
+
     this.setState({
       selectedVariant: null,
     });
+
+    // Dispatch custom event with selected variant to trigger jquery event variant-selected,
+    // which will update gallery, price block, limits etc.
+    const customEvent = new CustomEvent('react-variant-select', { detail: { variant: sku } });
+    document.dispatchEvent(customEvent);
   };
 
   render() {
