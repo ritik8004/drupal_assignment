@@ -27,7 +27,7 @@
       flex-direction: column;
 
       > div {
-        padding-left: 1rem;
+        padding-#{$left}: 1rem;
       }
     }
   }
