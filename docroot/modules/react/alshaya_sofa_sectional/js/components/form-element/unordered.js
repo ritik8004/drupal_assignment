@@ -34,6 +34,7 @@ const UnorderedList = (props) => {
       && !allowedValues.includes(option.value_id)
       && !allowedValues.includes(parseInt(option.value_id, 10))) {
       classes.push(disabledClass);
+      return null;
     }
 
     /* eslint-disable eqeqeq */

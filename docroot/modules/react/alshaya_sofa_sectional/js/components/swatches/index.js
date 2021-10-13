@@ -32,8 +32,10 @@ const Swatch = (props) => {
   if (isSelected) {
     classes.push(activeClass);
   }
-  if ((allowedValues.length > 0) && !allowedValues.includes(value)) {
+
+  if ((allowedValues.length > 0) && !allowedValues.includes(value.toString())) {
     classes.push(disabledClass);
+    return null;
   }
 
   const isColor = (type === 'color' || type === 'text');
