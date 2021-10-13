@@ -81,6 +81,10 @@ body.overlay-delivery-area {
   @include breakpoint($tablet) {
     width: 24.0625rem;
     max-width: 24.0625rem;
+
+    html[lang=ar] & {
+      transform: translateX(-100%);
+    }
   }
 }
 
