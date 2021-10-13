@@ -86,7 +86,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $composition_markup = [
     '#theme' => 'product_composition_markup',
   ];
-  $markupText = _alshaya_cos_transac_get_comosition_washing_ins_markup_text($composition, $washing_instructions);
+  $markupText = _alshaya_cos_transac_get_formated_text($composition, $washing_instructions);
   if (!empty($markupText)) {
     $composition_markup['#composition']['#markup'] = $markupText;
   }
@@ -142,7 +142,7 @@ function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterfac
   $parent_sku = $skuManager->getParentSkuBySku($child);
   $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', 'self');
   $washing_instructions = $skuManager->fetchProductAttribute($child, 'attr_washing_instructions', 'self');
-  $markupText = _alshaya_cos_transac_get_comosition_washing_ins_markup_text($composition, $washing_instructions);
+  $markupText = _alshaya_cos_transac_get_formated_text($composition, $washing_instructions);
   $composition_markup = '';
   if (!empty($markupText)) {
     $markup = [
@@ -195,7 +195,7 @@ function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterfac
 /**
  * Get formatted Markup text with '/' for composition and Washing instruction.
  */
-function _alshaya_cos_transac_get_comosition_washing_ins_markup_text($composition, $washing_instructions) {
+function _alshaya_cos_transac_get_formated_text($composition, $washing_instructions) {
   $markupText = '';
   if (!empty($composition)) {
     $markupText .= implode(", ", json_decode($composition));
