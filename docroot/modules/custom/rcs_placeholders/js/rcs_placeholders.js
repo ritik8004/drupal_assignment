@@ -81,7 +81,7 @@
           }
 
           // Remove loaders and show elements.
-          $('.field.rcs-loading').removeClass('rcs-loading');
+          $('.field.rcs-loading').addClass('rcs-loaded');
 
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
@@ -164,7 +164,7 @@
         // Remove loader and show element.
         const element = document.getElementById(blockPhId[0]);
         if (element) {
-          element.classList.remove('rcs-loading');
+          element.classList.add('rcs-loaded');
         }
 
         // Re-attach all behaviors.

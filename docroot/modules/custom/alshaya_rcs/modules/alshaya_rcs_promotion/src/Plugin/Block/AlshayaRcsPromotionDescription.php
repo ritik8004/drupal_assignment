@@ -23,7 +23,7 @@ class AlshayaRcsPromotionDescription extends BlockBase {
       'inside' => [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['c-page-title__description', 'rcs-loading'],
+          'class' => ['c-page-title__description'],
         ],
         '#children' => '#rcs.promotion.description#',
       ],

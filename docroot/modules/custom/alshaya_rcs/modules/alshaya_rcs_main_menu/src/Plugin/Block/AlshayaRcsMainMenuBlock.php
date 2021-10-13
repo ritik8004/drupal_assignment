@@ -252,7 +252,6 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           '#attributes' => [
             'id' => 'rcs-ph-navigation_menu',
             'data-rcs-dependency' => 'none',
-            'class' => ['rcs-loading'],
           ],
         ],
       ],
