@@ -325,13 +325,14 @@
 
     @include breakpoint($only-mobile) {
       margin: 0 auto;
-      padding: 0.4375rem 0.5rem;
+      padding: 0.1875rem 0.5rem;
+      width: 13.6875rem;
     }
 
     @include breakpoint($only-tablet) {
       font-size: 0.75rem;
       width: 12.5rem;
-      padding: 0.4375rem;
+      padding: 0.1875rem 0.4375rem;
     }
 
     span {
