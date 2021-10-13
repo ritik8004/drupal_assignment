@@ -103,7 +103,7 @@ function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SK
     foreach ($swatches as $attribute_code => $attribute_values) {
       // Mark the attributes which are swatches.
       if (in_array($attribute_code, array_keys($configurables))
-      && !$configurables[$attribute_code]['is_swatch']) {
+      && !isset($configurables[$attribute_code]['is_swatch'])) {
         $configurables[$attribute_code]['is_swatch'] = TRUE;
         $configurables[$attribute_code]['swatches'] = [];
         foreach ($swatches[$attribute_code] as $swatch) {

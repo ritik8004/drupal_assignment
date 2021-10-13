@@ -18,7 +18,7 @@ function alshaya_furnitures_update_8006() {
     ['alshaya_acm_product.sku_base_fields'],
     'alshaya_acm_product',
     'install',
-    AlshayaConfigManager::MODE_MERGE
+    AlshayaConfigManager::MODE_RESAVE
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
 }
