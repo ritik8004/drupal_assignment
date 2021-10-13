@@ -32,27 +32,19 @@
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
-        <div class="field rcs-loading">
-          <span class="content">#rcs.product._self|brand_logo#</span>
-        </div>
+        <div>#rcs.product._self|brand_logo#</div>
 
         {% block productBrand %}
         {% endblock %}
 
-        <h1>
-          <div class="field rcs-loading">
-            <span class="content">#rcs.product.name#</span>
-          </div>
-        </h1>
+        <h1><span>#rcs.product.name#</span></h1>
 
         {% block pricePrefix %}
         {% endblock %}
 
         <div class="info-wrapper">
           <div class="price-block {{ content.price_block_identifier }}">
-            <div class="field rcs-loading">
-              <span class="content">#rcs.product._self|price#</span>
-            </div>
+            #rcs.product._self|price#
           </div>
 
           {% if content.postpay %}
@@ -67,14 +59,10 @@
               {% endif %}
             </div>
 
-            <div class="promotions promotions-full-view-mode field rcs-loading">
-              <span class="content">#rcs.product._self|promotions#</span>
-            </div>
+            <div class="promotions promotions-full-view-mode">#rcs.product._self|promotions#</div>
           </div>
 
-          <div class="vat-text field rcs-loading">
-            <span class="content">#rcs.product._self|vat_text#</span>
-          </div>
+          <div class="vat-text">#rcs.product._self|vat_text#</div>
         </div>
 
         {% if content.same_day_delivery_text %}
@@ -108,13 +96,9 @@
               <article>
                 <div class="field field--name-sku field--type-string field--label-above">
                   <div class="field__label">SKU</div>
-                  <div class="field__item field rcs-loading">
-                    <span class="content">#rcs.product._self|sku#</span>
-                  </div>
+                  <div class="field__item">#rcs.product._self|sku#</div>
                 </div>
-                <div class="field rcs-loading">
-                  <span class="content">#rcs.product._self|add_to_cart#</span>
-                </div>
+                <div>#rcs.product._self|add_to_cart#</div>
               </article>
             </div>
           </div>
@@ -149,9 +133,7 @@
           {% block afterDescription %}
           {% endblock %}
 
-          <div id="rcs-ph-delivery-option">
-            <div class="rcs-loading"></div>
-          </div>
+          <div id="rcs-ph-delivery-option"></div>
 
         </div>
 

@@ -15,9 +15,7 @@
     <div class="content__title_wrapper">
 
       {% if content.brand_logo %}
-        <div class="field rcs-loading">
-          <div class="content">#rcs.product._self|brand_logo#</div>
-        </div>
+        <div>#rcs.product_modal._self|brand_logo#</div>
       {% endif %}
 
       {% block productBrand %}
@@ -25,8 +23,8 @@
 
       {{ title_prefix }}
       {% if not page %}
-        <h2{{ title_attributes.addClass("c-products__item__label field rcs-loading") }}>
-          <span class="content">#rcs.product_modal.name#</span>
+        <h2{{ title_attributes.addClass("c-products__item__label") }}>
+          #rcs.product_modal.name#
         </h2>
       {% endif %}
       {{ title_suffix }}
@@ -34,8 +32,8 @@
       {% block pricePrefix %}
       {% endblock %}
 
-      <div class="price-block {{ content.price_block_identifier }} field rcs-loading">
-        <span class="content">#rcs.product_modal._self|price#</span>
+      <div class="price-block {{ content.price_block_identifier }}">
+        #rcs.product_modal._self|price#
       </div>
 
       {% if content.postpay %}
@@ -50,16 +48,12 @@
       {% endif %}
 
       {% if vat_text %}
-        <div class="vat-text field rcs-loading">
-          <span class="content">#rcs.product_modal._self|vat_text#</span>
-        </div>
+        <div class="vat-text">#rcs.product_modal._self|vat_text#</div>
       {% endif %}
 
       <div class="content--item-code">
         <span class="field__label">{{ 'Item Code'|t }}:</span>
-        <span class="field rcs-loading">
-          <span class="content">#rcs.product_modal._self|sku#</span>
-        </span>
+        #rcs.product_modal._self|sku#
       </div>
 
     </div>
@@ -73,9 +67,7 @@
       {% endblock %}
 
       <div class="basic-details-wrapper">
-        <div class="field--name-field-skus field rcs-loading">
-          <span class="content">#rcs.product_modal._self|add_to_cart#</span>
-        </div>
+        <div class="field--name-field-skus">#rcs.product_modal._self|add_to_cart#</div>
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message"></div>
         {% endif %}
