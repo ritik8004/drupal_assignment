@@ -303,8 +303,7 @@ export default class SofaSectionalForm extends React.Component {
             </div>
           );
         })}
-        { selectedVariant
-          && (
+        <ConditionalView condition={selectedVariant !== null}>
           <SelectionSummary
             selectedAttributes={formAttributeValues}
             configurableAttributes={configurableAttributes}
@@ -312,7 +311,7 @@ export default class SofaSectionalForm extends React.Component {
             sku={sku}
             productInfo={productInfo}
           />
-          )}
+        </ConditionalView>
         <QuantitySelector
           options={getQuantityDropdownValues()}
           onChange={this.onQuantityChanged}
@@ -333,7 +332,8 @@ export default class SofaSectionalForm extends React.Component {
             type="submit"
             onClick={this.handleAddToBagClick}
             // Disable add to cart button if max sale limit has reached.
-            disabled={isMaxSaleQtyReached(selectedVariant, productInfo)}
+            disabled={(isMaxSaleQtyReached(selectedVariant, productInfo)
+              || selectedVariant === null)}
           >
             {Drupal.t('add to cart')}
           </button>
