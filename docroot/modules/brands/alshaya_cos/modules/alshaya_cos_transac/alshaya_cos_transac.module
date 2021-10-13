@@ -140,9 +140,6 @@ function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterfac
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $parent_sku = $skuManager->getParentSkuBySku($child);
-
-  $search_direction = $child->getType() == 'configurable' ? 'children' : 'self';
-
   $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', 'self');
   $washing_instructions = $skuManager->fetchProductAttribute($child, 'attr_washing_instructions', 'self');
 
