@@ -81,7 +81,7 @@
           }
 
           // Remove loaders and show elements.
-          $('.field.rcs-loading').addClass('rcs-loaded');
+          $('.rcs-page').addClass('rcs-loaded');
 
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);

@@ -5,7 +5,7 @@ set classes = [
   view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 ]
 %}
-<article data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes }} {{ gtm_attributes }}>
+<article data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes.addClass(classes) }} {{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     {% block mainContent %}
       <div class="content__main {{ image_slider_position_pdp }}">
@@ -24,12 +24,12 @@ set classes = [
     {% block contentSidebar %}
       {% block titleBlock %}
         <div class="content__title_wrapper">
-          <div>#rcs.product._self|brand_logo#</div>
+          <div class="field field-brand-logo">#rcs.product._self|brand_logo#</div>
 
           {% block productBrand %}
           {% endblock %}
 
-          <h1><span>#rcs.product._self|name#</span></h1>
+          <h1><span class="field field-product-name">#rcs.product._self|name#</span></h1>
 
           {% block pricePrefix %}
           {% endblock %}
