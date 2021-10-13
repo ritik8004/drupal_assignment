@@ -209,6 +209,9 @@ export default class PaymentMethod extends React.Component {
                 </div>
               </ConditionalView>
             </label>
+            <ConditionalView condition={method.code === 'cashondelivery'}>
+              <div>{Drupal.t('Cash on delivery is not available along with the Aura points.')}</div>
+            </ConditionalView>
 
             <PaymentMethodIcon methodName={method.code} />
           </div>

@@ -175,6 +175,19 @@ function getRecognitionAccrualRatio() {
   return recognitionAccrualRatio;
 }
 
+/**
+ * Helper function to get payment methods unsupported with Aura.
+ */
+ function getAuraUnSupoortedPaymentMethods() {
+  let auraUnsupportedPaymentMethods = '';
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'recognitionAccrualRatio')) {
+    recognitionAccrualRatio = parseInt(drupalSettings.aura.recognitionAccrualRatio.toString(), 10);
+  }
+
+  return recognitionAccrualRatio;
+}
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
