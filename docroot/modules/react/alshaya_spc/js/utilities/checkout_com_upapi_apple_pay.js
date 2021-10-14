@@ -8,7 +8,7 @@ import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
 import { addPaymentMethodInCart } from './update_cart';
 import cartActions from './cart_actions';
-import { logger } from '../backend/v2/utility';
+import logger from './logger';
 
 let applePaySessionObject;
 

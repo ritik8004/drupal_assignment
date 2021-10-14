@@ -239,9 +239,9 @@ class CustomCommand extends BltTasks {
    * @description Setup local dev environment.
    */
   public function refreshLocal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
-    $list = implode(array_keys($sites), ", ");
+    $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall ($list):");
     }
@@ -287,9 +287,9 @@ class CustomCommand extends BltTasks {
    * @description Reinstall local dev environment.
    */
   public function refreshLocalDrupal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
-    $list = implode(array_keys($sites), ", ");
+    $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall, ($list):");
     }
@@ -551,6 +551,13 @@ class CustomCommand extends BltTasks {
     }
 
     if (getenv('AH_SITE_ENVIRONMENT') === 'ide') {
+      // Store the site code in file.
+      file_put_contents('/home/ide/project/site.txt', $site_code);
+
+      if (getenv('SERVER_NAME')) {
+        return getenv('SERVER_NAME');
+      }
+
       // Cloud IDE doesn't support multiple sites.
       return getenv('ACQUIA_APPLICATION_UUID') . '.web.ahdev.cloud';
     }

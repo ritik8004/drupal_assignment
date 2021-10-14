@@ -59,7 +59,7 @@ class MiddlewareLogFormatter implements FormatterInterface {
   private function getMessagePlaceholder(array $context) {
     $variables = [];
     foreach ($context as $key => $variable) {
-      if (!empty($key) && ($key[0] === '@' || $key[0] === '%' || $key[0] === '!')) {
+      if (!empty($key) && is_array($key) && ($key[0] === '@' || $key[0] === '%' || $key[0] === '!')) {
         $variables[$key] = $variable;
       }
     }

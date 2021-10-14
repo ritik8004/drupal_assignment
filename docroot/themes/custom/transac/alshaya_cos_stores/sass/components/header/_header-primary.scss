@@ -3,14 +3,6 @@ header {
     border-bottom: 1px solid $header_border;
   }
 
-  form,
-  .block-cart-mini-block,
-  .block-alshaya-react-mini-cart {
-    @include breakpoint($only-mobile) {
-      z-index: -1;
-    }
-  }
-
   .region__header {
     @include breakpoint($desktop) {
       display: flex;
@@ -135,8 +127,9 @@ header {
       top: 0.625rem;
 
       html[lang=ar] & {
-        top: 0.875rem;
+        top: 0.6825rem;
         right: -0.4375rem;
+        margin-top: 0;
       }
     }
 
@@ -159,6 +152,7 @@ header {
 
     @include breakpoint($only-mobile) {
       #{$left}: -1.5rem;
+      top: 0.25rem;
     }
 
     &::before,

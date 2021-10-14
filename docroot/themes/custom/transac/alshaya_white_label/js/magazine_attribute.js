@@ -359,7 +359,7 @@
         });
       });
 
-      if ($(window).width() > 767) {
+      if ($(window).width() > 767 && drupalSettings.pdp_gallery_type !== 'classic') {
         // JS to make sidebar sticky beyond Mobile.
         // PDP Sidebar.
         var sidebarWrapper = $('.content-sidebar-wrapper');

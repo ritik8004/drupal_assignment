@@ -33,9 +33,9 @@ import {
 import {
   getApiEndpoint,
   isUserAuthenticated,
-  logger,
   getIp,
 } from './utility';
+import logger from '../../utilities/logger';
 import cartActions from '../../utilities/cart_actions';
 import {
   getPaymentMethods,
@@ -47,6 +47,7 @@ import {
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -279,27 +280,76 @@ const getDefaultPaymentFromOrder = async (order) => {
 };
 
 /**
+ * Gets the store data saved in local storage.
+ *
+ * @param {string} key
+ *   The identifier key in the localStorage for the store data.
+ *
+ * @returns {object|null}
+ *   Returns the store data object if found else null.
+ */
+const getSavedStoreData = (key) => {
+  const savedStoreData = getStorageInfo(key);
+
+  if (savedStoreData !== null) {
+    const expireTime = drupalSettings.cncStoreInfoCacheTime * 60 * 1000;
+    const currentTime = new Date().getTime();
+
+    if ((currentTime - savedStoreData.created) < expireTime) {
+      return savedStoreData;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Sets the store data in the local storage.
+ *
+ * @param {string} key
+ *   The identifier key in the localStorage for the store data.
+ * @param {object} data
+ *   The store data object.
+ */
+const setStoreData = (key, data) => {
+  // eslint-disable-next-line no-param-reassign
+  data.created = new Date().getTime();
+
+  setStorageInfo(data, key);
+};
+
+/**
  * Gets the data for a particular store.
  *
- * @param {string} store
+ * @param {string} storeInformation
  *   The store ID.
  *
  * @returns {Promise<object|null>}
  *   Returns a promise which resolves to an array of data for the given store or
  * an empty array in case of any issue.
  */
-const getStoreInfo = async (storeData) => {
-  let store = { ...storeData };
+const getStoreInfo = async (storeInformation) => {
+  let store = { ...storeInformation };
 
   if (typeof store.code === 'undefined' || !store.code) {
     return null;
   }
+
+  const storageKey = `storeInfo:${drupalSettings.path.currentLanguage}:${store.code}`;
+  let storeData = getSavedStoreData(storageKey);
+
+  if (hasValue(storeData)) {
+    return storeData.data;
+  }
+
+  storeData = { data: {} };
 
   // Fetch store info from Drupal.
   const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
   if (_isEmpty(response.data)
     || (!_isUndefined(response.data.error) && response.data.error)
   ) {
+    setStoreData(storageKey, storeData);
     return null;
   }
   const storeInfo = response.data;
@@ -331,6 +381,9 @@ const getStoreInfo = async (storeData) => {
   if (typeof store.rnc_config !== 'undefined') {
     delete store.rnc_config;
   }
+
+  storeData.data = store;
+  setStoreData(storageKey, storeData);
   return store;
 };
 
@@ -356,11 +409,24 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     return [];
   }
 
+  let staticStoresData = StaticStorage.get('cartStores');
+  if (staticStoresData === null) {
+    staticStoresData = {};
+  }
+
+  const staticStorageKey = `${lat}_${lon}`;
+  if (typeof staticStoresData[staticStorageKey] !== 'undefined') {
+    return staticStoresData[staticStorageKey];
+  }
+
+  staticStoresData[staticStorageKey] = [];
+
   const url = getApiEndpoint('getCartStores', { cartId, lat, lon });
   const response = await callMagentoApi(url, 'GET', {});
 
   // If no stores available, return empty.
   if (_isEmpty(response.data)) {
+    StaticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -371,6 +437,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
       '@response': JSON.stringify(response.data),
     });
 
+    StaticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -381,6 +448,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
       '@response': JSON.stringify(response.data),
     });
 
+    StaticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -399,8 +467,8 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   try {
     stores = await Promise.all(storeInfoPromises);
 
-    // Remove null values.
-    stores = stores.filter((value) => value != null);
+    // Remove null/empty values.
+    stores = stores.filter((value) => value != null && value !== '');
 
     // Sort the stores first by distance and then by rnc.
     if (stores.length > 1) {
@@ -409,7 +477,9 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
         .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
     }
 
-    return stores;
+    staticStoresData[staticStorageKey] = stores;
+    StaticStorage.set('cartStores', staticStoresData);
+    return staticStoresData[staticStorageKey];
   } catch (error) {
     logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @message.', {
       '@cartId': cartId,
@@ -417,6 +487,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     });
   }
 
+  StaticStorage.set('cartStores', staticStoresData);
   return [];
 };
 

@@ -364,6 +364,10 @@ class AlshayaSpcOrderHelper {
     // Load the first image.
     $media_image = $this->skuImagesManager->getFirstImage($sku, $context);
 
+    if (isset($media_image['pims_image']) && !empty($media_image['pims_image'])) {
+      $media_image = $media_image['pims_image'];
+    }
+
     // If we have image for the product.
     if (!empty($media_image)) {
       $image = $this->skuImagesHelper->getImageStyleUrl($media_image, $image_style);
