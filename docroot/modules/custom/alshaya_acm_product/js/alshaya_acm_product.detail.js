@@ -133,6 +133,11 @@
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
           if (typeof variantInfo === 'undefined') {
+            // Check if the parent SKU is passed in event details and
+            // add initial price block for the case of parent SKU.
+            if (sku === variant) {
+              $('.price-block-' + drupalSettings[productKey][sku].identifier, node).html(drupalSettings[productKey][sku].price);
+            }
             return;
           }
 

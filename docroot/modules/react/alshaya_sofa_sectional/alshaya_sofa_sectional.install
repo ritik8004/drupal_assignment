@@ -5,12 +5,25 @@
  * Contains install, update, uninstall hooks for alshaya_sofa_sectional module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
- * Implements hook_update_N().
+ * Implements hook_install().
  *
- * Alshaya sofa sectional translations.
+ * Install new SKU fields for Sofa and Sectional products.
+ * Add alshaya sofa sectional translations.
  */
-function alshaya_sofa_sectional_update_8001() {
+function alshaya_sofa_sectional_install() {
+  // Install new SKU fields for Sofa and Sectional products.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
   // Add translations.
   module_load_include('inc', 'alshaya_sofa_sectional', 'alshaya_sofa_sectional.translations');
   if ($translations = _alshaya_sofa_sectional_get_translations()) {

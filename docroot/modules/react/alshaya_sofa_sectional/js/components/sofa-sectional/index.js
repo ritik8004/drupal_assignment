@@ -199,9 +199,16 @@ export default class SofaSectionalForm extends React.Component {
    * Clears selected options.
    */
   handleClearOptions = () => {
+    const { sku } = this.state;
+
     this.setState({
       selectedVariant: null,
     });
+
+    // Dispatch custom event with selected variant to trigger jquery event variant-selected,
+    // which will update gallery, price block, limits etc.
+    const customEvent = new CustomEvent('react-variant-select', { detail: { variant: sku } });
+    document.dispatchEvent(customEvent);
   };
 
   render() {
@@ -232,6 +239,7 @@ export default class SofaSectionalForm extends React.Component {
 
     const groupData = {};
     let { groupCode } = this.state;
+    let firstSwatch = true;
 
     return (
       <>
@@ -250,6 +258,13 @@ export default class SofaSectionalForm extends React.Component {
           allowedValues = typeof allowedAttributeValues[attribute[0]] !== 'undefined'
             ? allowedAttributeValues[attribute[0]]
             : [];
+
+          // Show all the attribute options for the first
+          // swatch attribute only.
+          if (isSwatch && firstSwatch) {
+            allowedValues = [];
+            firstSwatch = false;
+          }
 
           // Prepare grouped filters data.
           groupData.isGroup = attribute[1].is_group;
@@ -273,7 +288,7 @@ export default class SofaSectionalForm extends React.Component {
                   onChange={this.onSwatchClick}
                   isHidden={isHidden}
                   setAttribute={this.setAttribute}
-                  allowedValues={[]}
+                  allowedValues={allowedValues}
                   index={parseInt(index + 1, 10)}
                 />
               </ConditionalView>
@@ -297,8 +312,7 @@ export default class SofaSectionalForm extends React.Component {
             </div>
           );
         })}
-        { selectedVariant
-          && (
+        <ConditionalView condition={selectedVariant !== null}>
           <SelectionSummary
             selectedAttributes={formAttributeValues}
             configurableAttributes={configurableAttributes}
@@ -306,7 +320,7 @@ export default class SofaSectionalForm extends React.Component {
             sku={sku}
             productInfo={productInfo}
           />
-          )}
+        </ConditionalView>
         <QuantitySelector
           options={getQuantityDropdownValues()}
           onChange={this.onQuantityChanged}
@@ -327,7 +341,8 @@ export default class SofaSectionalForm extends React.Component {
             type="submit"
             onClick={this.handleAddToBagClick}
             // Disable add to cart button if max sale limit has reached.
-            disabled={isMaxSaleQtyReached(selectedVariant, productInfo)}
+            disabled={(isMaxSaleQtyReached(selectedVariant, productInfo)
+              || selectedVariant === null)}
           >
             {Drupal.t('add to cart')}
           </button>
