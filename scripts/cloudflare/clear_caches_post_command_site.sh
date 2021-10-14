@@ -16,6 +16,10 @@ if [ ! "$command" = "" ]
 then
   echo "drush --root=$docroot -l https://$site $command"
   drush --root=$docroot -l https://$site $command
+
+  # For all the cases (cr or crf) we do clear Varnish too.
+  drush --root=$docroot -l https://$site p-invalidate everything -y
+
   sleep $sleep
 fi
 

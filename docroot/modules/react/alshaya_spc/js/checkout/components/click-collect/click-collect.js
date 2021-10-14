@@ -423,13 +423,21 @@ class ClickCollect extends React.Component {
     if (window.innerWidth < 768) {
       this.toggleFullScreen(false);
     }
-
+    // Log a debug to know what is the store code being passed.
+    logger.debug('Store code @code selected by the user. Store Code JSON: @storeCodeJson', {
+      '@code': storeCode,
+      '@storeCodeJson': JSON.stringify(storeCode),
+    });
     // Find the store object with the given store-code from the store list.
     const store = _find(storeList, { code: storeCode });
-
-    if (store === undefined || store.name === undefined) {
+    if (store === undefined) {
       logger.error('Unable to find store from list.', {
         storeCode,
+        storeList,
+      });
+    } else if (store !== undefined && store.name === undefined) {
+      logger.error('Unable to find store name in the store found in list', {
+        store,
         storeList,
       });
     }

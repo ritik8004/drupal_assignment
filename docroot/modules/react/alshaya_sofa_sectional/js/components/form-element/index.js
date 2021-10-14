@@ -75,6 +75,7 @@ const FormElement = (props) => {
           isHidden={isHidden}
           // We want all swatches to be enabled always.
           allowedValues={allowedValues}
+          index={index}
         />
       );
       break;
