@@ -274,6 +274,7 @@ export default class SofaSectionalForm extends React.Component {
                   isHidden={isHidden}
                   setAttribute={this.setAttribute}
                   allowedValues={[]}
+                  index={parseInt(index + 1, 10)}
                 />
               </ConditionalView>
               <ConditionalView condition={!isSwatch}>

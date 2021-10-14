@@ -1,4 +1,5 @@
 import React from 'react';
+import Collapsible from 'react-collapsible';
 import Swatch from '../swatches';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 
@@ -19,10 +20,11 @@ const SwatchList = (props) => {
     disabledClass,
     isHidden,
     allowedValues,
+    index,
   } = props;
   let selectedSwatchLabel;
   let selectedSwatchImage;
-  let classes = 'form-swatch-list-wrapper';
+  let classes = 'form-swatch-list-wrapper form-list-wrapper';
   classes = isHidden ? `${classes} form-element-hidden` : `${classes}`;
   /* disable eslint to disable eqeqeq rule for Swatch. */
   /* eslint-disable */
@@ -47,27 +49,42 @@ const SwatchList = (props) => {
       />
     );
   });
-  /* eslint-disable */
-  return (
-    <div className={classes}>
-      <label className={selectedSwatchLabel ? 'active' : ''}>
-        <ConditionalView condition={selectedSwatchImage !== null}>
-          <span className='selected-image'>
-            <img loading="lazy" src={selectedSwatchImage} />
-          </span>
-        </ConditionalView>
-        <span>
+
+  const SofaSectionConfigSwatchAccordion = (
+    <label className={selectedSwatchLabel ? 'active' : ''}>
+      <div className="config-number-wrapper">
+        <span className="config-index-number">
+          {index}
+        </span>
+      </div>
+      <ConditionalView condition={selectedSwatchImage !== null && selectedSwatchImage !== undefined}>
+        <span className='selected-image'>
+          <img loading="lazy" src={selectedSwatchImage} />
+        </span>
+      </ConditionalView>
+      <div className="config-text-wrapper">
+        <span className="config-name">
           {label}
         </span>
-        <ConditionalView condition={selectedSwatchLabel !== null}>
-          <span className="selected-text">
+        <ConditionalView condition={selectedSwatchLabel !== null && selectedSwatchLabel !== undefined}>
+          <span className="config-value selected-text">
             {selectedSwatchLabel}
           </span>
         </ConditionalView>
-      </label>
-      <ul className={`swatch-list ${attributeName}`} name={attributeName}>
-        {swatchItems}
-      </ul>
+      </div>
+    </label>
+  );
+
+  /* eslint-disable */
+  return (
+    <div className={classes}>
+      <Collapsible trigger={SofaSectionConfigSwatchAccordion}>
+        <div className="attribute-options-list">
+          <ul className={`swatch-list ${attributeName}`} name={attributeName}>
+            {swatchItems}
+          </ul>
+        </div>
+      </Collapsible>
     </div>
   );
 };
