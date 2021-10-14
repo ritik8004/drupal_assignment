@@ -73,7 +73,7 @@ const UnorderedList = (props) => {
   classes = isHidden ? `${classes} form-element-hidden` : `${classes}`;
   classes = isGroup ? `${classes} group-wrapper` : `${classes}`;
 
-  const SofaSectionConfigAccordion = (
+  const SofaSectionConfigItemAccordion = (
     <label className={selectedValueLabel ? 'active' : ''}>
       <div className="config-number-wrapper">
         <span className="config-index-number">
@@ -93,7 +93,7 @@ const UnorderedList = (props) => {
 
   return (
     <div className={classes}>
-      <Collapsible trigger={SofaSectionConfigAccordion}>
+      <Collapsible trigger={SofaSectionConfigItemAccordion}>
         { isGroup && (
           <div className="group-anchor-wrapper">
             {Object.keys(groupData.groupAlternates).map((alternate) => (

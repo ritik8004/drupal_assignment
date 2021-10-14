@@ -105,6 +105,8 @@
       }
 
       &--menu-is-open {
+        border-bottom: none;
+
         .alshayaSelect__dropdown-indicator {
           &::before {
             transform: translateY(-50%) rotate(180deg);
@@ -125,7 +127,6 @@
 
         > div {
           color: $spc-select-text;
-          border-top: 1px solid $sofa-sectional-title;
           font-size: 0.875rem;
           letter-spacing: 1px;
           background: $spc-select_bg;
@@ -165,6 +166,7 @@
     width: auto;
     vertical-align: middle;
     margin-#{$right}: 0;
+    margin-top: 1.5625rem;
 
     @include breakpoint($only-mobile) {
       display: block;
@@ -175,6 +177,7 @@
     display: inline-block;
     vertical-align: middle;
     margin: 0;
+    margin-top: 1.5625rem;
 
     @include breakpoint($only-mobile) {
       display: block;

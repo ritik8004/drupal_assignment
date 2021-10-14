@@ -47,7 +47,7 @@
     }
 
     position: relative;
-    border-top: 1px solid $accordion_border;
+    border-bottom: 1px solid $accordion_border;
     color: $accordion_title;
     font-size: 0.875rem;
     font-weight: normal;
@@ -99,7 +99,7 @@
       font-size: 1.125rem;
       width: 2.1875rem;
       height: 2.1875rem;
-      margin-#{$right}: 0.9375rem;
+      margin-#{$right}: 0.75rem;
       text-align: center;
       border: 1px solid $sofa-sectional-title;
       color: $sofa-sectional-title;
@@ -118,6 +118,8 @@
   }
 
   .Collapsible__contentInner {
+    border-bottom: 1px solid $accordion_border;
+
     .attribute-options-list {
       margin: 0;
       padding: 0.625rem 0;
@@ -145,13 +147,20 @@
         }
 
         &.active {
-          border: 1px solid $_sofa-section-grey2;
+          border: 1px solid $sofa-sectional-active-border;
+        }
+
+        &.disabled {
+          background: linear-gradient(to bottom right, $sofa-sectional-config-item-bg 49%, $accordion_border 49%, $accordion_border 51%, $sofa-sectional-config-item-bg 51%);
+          background-color: $sofa-sectional-config-item-bg;
+          pointer-events: none;
         }
 
         @include breakpoint($only-mobile) {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: space-around;
           padding: 0 0.625rem;
           margin: 0 0.625rem;
           width: 8.125rem;
@@ -168,7 +177,7 @@
           }
 
           &.active {
-            border: 0.1875rem solid $_sofa-section-grey2;
+            border: 0.125rem solid $sofa-sectional-active-border;
           }
         }
 
