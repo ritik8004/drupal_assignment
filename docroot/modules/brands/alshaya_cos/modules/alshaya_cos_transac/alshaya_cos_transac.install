@@ -81,6 +81,27 @@ function alshaya_cos_transac_install() {
       'en' => 'Enjoy 10% off your first order',
       'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
     ],
+    'Make sure that your favorite items remain long-loved pieces for years to come, read our product care guide.' => [
+      'ar' => 'تأكد من الحفاظ على قطعك المفضلة لسنوات عديدة، اقرأ دليل العناية بالمنتجات.'
+    ],
+    'read more' => [
+      'er' => 'اقرأ المزيد'
+    ],
+    'read less' => [
+      'er' => 'اقرأ  أقل'
+    ],
+    'Product Description' => [
+      'er' => 'وصف المنتج'
+    ],
+    'Product Detail' => [
+      'er' => 'تفاصيل المنتج'
+    ],
+    'Product No:' => [
+      'er' => 'رمز المنتج'
+    ],
+    'size guide' => [
+      'er' => 'دليل المقاسات'
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
