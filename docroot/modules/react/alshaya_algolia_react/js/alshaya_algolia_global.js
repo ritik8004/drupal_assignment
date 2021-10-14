@@ -102,18 +102,4 @@
     return Math.ceil(resultsCount / drupalSettings.algoliaSearch.itemsPerPage);
   }
 
-  /**
-   * Add a wrapper class to perform scroll.
-   *
-   * @param context
-   *   The current context.
-   * @param className
-   *   The className that will be added into wrapper.
-   */
-  Drupal.algolia.adjustAlgoliaPlp = function (context, className) {
-    var algoliaProductList = $('.c-products-list', context);
-    algoliaProductList.addClass(className);
-  }
-
-
 })(jQuery, Drupal);
