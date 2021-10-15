@@ -2,6 +2,7 @@
  * Global variable which will contain acq_product related data/methods among
  * other things.
  */
+
 window.commerceBackend = window.commerceBackend || {};
 
 /**
@@ -285,10 +286,8 @@ function getVariantsInfo(product) {
     const variantSku = variantInfo.sku;
     // @todo Add code for commented keys.
     info[variantSku] = {
-      // @todo Add proper implementation for cart image.
-      cart_image: jQuery('.logo img').attr('src'),
-      // @todo Add brand specific cart title.
-      cart_title: 'Temp title',
+      cart_image: '',
+      cart_title: product.name,
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
       color_attribute: variantInfo.color_attribute,
       // color_value: '',
@@ -313,6 +312,12 @@ function getVariantsInfo(product) {
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
       url: getProductUrls(product.url_key),
+    };
+
+    // Image.
+    const assets = JSON.parse(variant.product.assets_teaser);
+    if (Drupal.hasValue(assets)) {
+      info[variantSku].cart_image = assets[0].styles.product_teaser;
     }
 
     // Set max sale quantity data.
@@ -358,10 +363,8 @@ function processProduct(product) {
     gtm_attributes: product.gtm_attributes,
     gallery: null,
     identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
-    // @todo Add proper implementation for cart image.
-    cart_image: jQuery('.logo img').attr('src'),
-    // @todo Add brand specific cart title.
-    cart_title: 'Temp title',
+    cart_image: '',
+    cart_title: product.name,
     url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
     priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
     // @todo Add promotions value here.
@@ -376,6 +379,12 @@ function processProduct(product) {
       in_stock: product.stock_status === 'IN_STOCK',
     },
   };
+
+  // Image.
+  const assets = JSON.parse(product.assets_teaser);
+  if (Drupal.hasValue(assets)) {
+    productData.cart_image = assets[0].styles.product_teaser;
+  }
 
   let maxSaleQty = 0;
 
