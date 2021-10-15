@@ -69,6 +69,7 @@ function alshaya_cos_transac_install() {
   // Setting all products buyable to be false by default.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 0)
+    ->set('pdp_layout', 'magazine')
     ->save();
 
   $strings = [
@@ -79,6 +80,24 @@ function alshaya_cos_transac_install() {
     'get email offers and the latest news from @site_name' => [
       'en' => 'Enjoy 10% off your first order',
       'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
+    ],
+    'read more' => [
+      'ar' => 'اقرأ المزيد'
+    ],
+    'read less' => [
+      'ar' => 'اقرأ  أقل'
+    ],
+    'Product Description' => [
+      'ar' => 'وصف المنتج'
+    ],
+    'Product Detail' => [
+      'ar' => 'تفاصيل المنتج'
+    ],
+    'Product No:' => [
+      'ar' => 'رمز المنتج'
+    ],
+    'size guide' => [
+      'ar' => 'دليل المقاسات'
     ],
   ];
 
@@ -103,17 +122,19 @@ function alshaya_cos_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
     // Get the sharethis configuration.
     $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-    if ($configFactory->get('node_types.acq_product')) {
-      // Disable share this for Product CT.
-      $configFactory->clear('node_types.acq_product');
-    }
+
+    // Enable share this for Products.
+    $configFactory->set('node_types.acq_product', 'acq_product');
+
     // Enable share this for Magazine CT.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_magazine')) {
       $configFactory->set('node_types.magazine_article', 'magazine_article');
     }
+
     // Save the changes.
     $configFactory->save();
   }
+
   // Reset region and weight for alshaya main menu block.
   $weight = \Drupal::entityTypeManager()->getStorage('block')
     ->load('alshayaalgoliareactautocomplete')->getWeight();

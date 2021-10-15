@@ -9,6 +9,7 @@ import AddToBagContainer from '../../../../../js/utilities/components/addtobag-c
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
 import {
+  isProductElementAlignmentEnabled,
   isProductFrameEnabled,
   isProductTitleTrimEnabled,
   isPromotionFrameEnabled,
@@ -92,6 +93,10 @@ const Teaser = ({
 
   if (isProductTitleTrimEnabled()) {
     teaserClass = `${teaserClass} product-title-trim`;
+  }
+
+  if (isProductElementAlignmentEnabled()) {
+    teaserClass = `${teaserClass} product-element-alignment`;
   }
 
   return (

@@ -16,9 +16,9 @@ import {
   getApiEndpoint,
   getCartIdFromStorage,
   isUserAuthenticated,
-  logger,
   removeCartIdFromStorage,
 } from './utility';
+import logger from '../../utilities/logger';
 import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';

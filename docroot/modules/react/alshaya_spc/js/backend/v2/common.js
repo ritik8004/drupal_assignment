@@ -11,11 +11,11 @@ import {
   getApiEndpoint,
   getCartIdFromStorage,
   isUserAuthenticated,
-  logger,
   removeCartIdFromStorage,
   detectCFChallenge,
   detectCaptcha,
 } from './utility';
+import logger from '../../utilities/logger';
 import {
   cartErrorCodes,
   getDefaultErrorMessage,
