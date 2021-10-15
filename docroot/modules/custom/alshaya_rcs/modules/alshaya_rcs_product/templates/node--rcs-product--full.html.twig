@@ -5,7 +5,9 @@ set classes = [
   view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 ]
 %}
-<article data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes.addClass(classes) }} {{ attributes }} {{ gtm_attributes }}>
+{% set attributes = attributes.addClass(classes) %}
+
+<article data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     {% block mainContent %}
       <div class="content__main {{ image_slider_position_pdp }}">
