@@ -245,7 +245,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
 exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
   const request = {
-    uri: 'graphql',
+    uri: '/graphql',
     method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],
