@@ -44,13 +44,19 @@ class SkuImagesHelperPims extends SkuImagesHelper {
   public function getSkuImage(array $media,
                               string $style_name,
                               string $rel_image_style = '') {
+
+    $label = $media['label'];
+    if (isset($media['pims_image']) && !empty($media['pims_image'])) {
+      $media = $media['pims_image'];
+    }
+
     $image = [
       '#theme' => 'image',
       '#uri' => $this->getImageStyleUrl($media, $style_name),
       '#attributes' => [
         'src' => $this->getImageStyleUrl($media, $style_name),
-        'title' => $media['label'],
-        'alt' => $media['label'],
+        'title' => $label,
+        'alt' => $label,
       ],
     ];
 
