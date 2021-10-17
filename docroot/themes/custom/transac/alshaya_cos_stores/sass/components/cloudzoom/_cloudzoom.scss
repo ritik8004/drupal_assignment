@@ -104,3 +104,19 @@
     }
   }
 }
+
+.product-zoom-processed {
+  .slider__counter {
+    @include breakpoint($only-mobile) {
+      position: absolute;
+      top: 1.25rem;
+      z-index: 1;
+      #{$left}: 1.25rem;
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+}
