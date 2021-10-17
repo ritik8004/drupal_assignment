@@ -1,6 +1,6 @@
 #lightSlider {
   @include breakpoint($desktop) {
-    height: 39.875rem;
+    height: 45rem;
   }
 
   @include breakpoint($only-tablet) {
@@ -9,15 +9,16 @@
 
   .slick-slide {
     @include breakpoint($desktop) {
-      height: 8.0625rem !important;
+      height: 7.25rem !important;
       width: 5rem !important;
       padding: 0;
+      margin-top: 0;
+      margin-bottom: 1.25rem;
     }
 
     @include breakpoint($only-tablet) {
-      height: 7.75rem !important;
-      padding: 0;
-      width: 5.8125rem !important;
+      height: 7.25rem !important;
+      width: 5.75rem !important;
     }
 
     @include breakpoint($tablet) {
@@ -38,16 +39,16 @@
       background: $gallery_arrows_border;
       #{$left}: 0;
       bottom: 0;
+
+      @include breakpoint($only-tablet) {
+        width: 88%;
+        #{$right}: 0;
+        margin: 0 auto;
+      }
     }
 
     @include breakpoint($only-tablet) {
       border: 0 !important;
-    }
-  }
-
-  .slick-next {
-    @include breakpoint($desktop) {
-      bottom: auto;
     }
   }
 
@@ -58,6 +59,12 @@
   }
 
   &.pager-yes {
+    padding: 1.5rem 0;
+
+    @include breakpoint($only-tablet) {
+      padding: 0 3rem;
+    }
+
     .slick-next,
     .slick-prev {
       #drupal-modal & {
