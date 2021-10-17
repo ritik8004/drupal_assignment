@@ -330,6 +330,12 @@
             },
             "drupal/entity_embed": {
                 "Adding defaultTheme to Test case": "https://www.drupal.org/files/issues/2021-09-21/adding_defultTheme_in_testcase-3238298-1.patch"
+            },
+            "drupal/simple_sitemap": {
+                "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
+            },
+            "drupal/password_policy": {
+                "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2021-10-17/change_pwd_page_integration-2933746-9.patch"
             }
         },
         "installer-paths": {
