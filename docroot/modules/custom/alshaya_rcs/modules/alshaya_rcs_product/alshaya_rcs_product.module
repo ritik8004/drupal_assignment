@@ -255,6 +255,14 @@ function template_preprocess_rcs_commerce_price(array &$variables) {
  * Implements hook_preprocess_html().
  */
 function alshaya_rcs_product_preprocess_html(array &$variables) {
+  // Skip product rcs_templates for rcs category.
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      return;
+    }
+  }
+
   $variables['rcs_templates'] = [
     '#type' => 'container',
     '#attributes' => [
