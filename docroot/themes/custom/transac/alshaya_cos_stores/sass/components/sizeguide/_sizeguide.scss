@@ -1,15 +1,15 @@
 // Size Guide Link theme
 .size-guide-form-and-link-wrapper {
-  position: relative;
+  display: flex;
+  flex-flow: column wrap;
 }
 
 .size-guide-link {
-  #{$right}: inherit;
-  #{$left}: 0;
+  position: static;
   font-size: 0.875rem;
   text-transform: uppercase;
   text-decoration: underline;
-  padding-top: 0;
+  order: 2;
 
   @include breakpoint($only-mobile) {
     position: relative;
