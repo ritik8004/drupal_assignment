@@ -42,7 +42,7 @@ class PdpExpressDelivery extends React.Component {
    */
   setDeliveryOptionAccordionHeight = (event) => {
     event.preventDefault();
-    setupAccordionHeight(this.expandRef);
+    setupAccordionHeight(React.createRef());
   }
 
   render() {
