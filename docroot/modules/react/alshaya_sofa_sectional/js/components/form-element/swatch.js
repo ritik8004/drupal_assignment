@@ -78,7 +78,7 @@ const SwatchList = (props) => {
   /* eslint-disable */
   return (
     <div className={classes}>
-      <Collapsible trigger={SofaSectionConfigSwatchAccordion}>
+      <Collapsible trigger={SofaSectionConfigSwatchAccordion} open="true">
         <div className="attribute-options-list">
           <ul className={`swatch-list ${attributeName}`} name={attributeName}>
             {swatchItems}

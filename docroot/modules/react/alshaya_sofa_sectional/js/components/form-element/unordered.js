@@ -94,7 +94,7 @@ const UnorderedList = (props) => {
 
   return (
     <div className={classes}>
-      <Collapsible trigger={SofaSectionConfigItemAccordion}>
+      <Collapsible trigger={SofaSectionConfigItemAccordion} open="true">
         { isGroup && (
           <div className="group-anchor-wrapper">
             {Object.keys(groupData.groupAlternates).map((alternate) => (
