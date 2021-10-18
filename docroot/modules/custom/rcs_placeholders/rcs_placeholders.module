@@ -85,6 +85,10 @@ function rcs_placeholders_preprocess_html(&$variables) {
   // We need to override default cache context as we use the placeholder term
   // for different categories.
   $variables['#cache']['contexts'][] = 'url';
+
+  // Add page type to node markup to be able to do the initial skeleton.
+  $variables['attributes']['class'][] = 'rcs-page';
+  $variables['attributes']['class'][] = 'page-type-' . RcsPhPathProcessor::$entityType;
 }
 
 /**
@@ -320,7 +324,7 @@ function rcs_placeholders_block_access(Block $block, $operation, AccountInterfac
     $entity = \Drupal::routeMatch()->getParameter('node');
   }
 
-  $rcs_entity = $entity && in_array($entity->bundle(), ['rcs_category', 'rcs_product']);
+  $rcs_entity = $entity && in_array($entity->bundle(), ['rcs_category', 'rcs_product', 'rcs_promotion']);
 
   // We don't want to display the default breadcrumb on PLP/PDP.
   if ($rcs_entity && $block->getPluginId() === 'system_breadcrumb_block') {
