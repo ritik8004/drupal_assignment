@@ -448,6 +448,9 @@ function _alshaya_spc_translations() {
     'Express' => [
       'ar' => 'دمة التوصيل السريع',
     ],
+    'Express Delivery' => [
+      'ar' => 'دمة التوصيل السريع',
+    ],
   ];
 
   return $strings;
