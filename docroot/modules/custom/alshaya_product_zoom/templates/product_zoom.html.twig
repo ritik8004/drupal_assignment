@@ -47,10 +47,6 @@
   </div>
   {% endblock %}
   {% block mobileGallery %}
-    {% if pdp_gallery_type == 'classic' %}
-      {# Add slider counter #}
-      <div class="slider__counter"></div>
-    {% endif %}
     <div class="mobilegallery">
       <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
         {% for thumbs in thumbnails %}
@@ -98,16 +94,6 @@
       <div class="magazine__gallery--container">
         <div class="magazine-product-description">
           <div class="magazine-swatch-placeholder"></div>
-          <div class="magazine-desc-wrapper">
-            {% if product_attribute_labels %}
-              <ul class="collection-labels">
-                {% for key, product_attribute_label in product_attribute_labels %}
-                  <li class="{{ key }}">{{ product_attribute_label }}</li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-            {{ description }}
-          </div>
         </div>
       </div>
     {% endblock %}
