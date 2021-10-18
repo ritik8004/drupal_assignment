@@ -1,6 +1,195 @@
 import { isMaxSaleQtyEnabled } from '../../../js/utilities/display';
 
 /**
+ * Ajax call for updating the cart.
+ */
+export const updateCart = (postData) => window.commerceBackend.addUpdateRemoveCartItem(postData);
+
+/**
+ * Handle the response once the cart is updated.
+ */
+export const handleUpdateCartRespose = (response, productData) => {
+  const productInfo = productData;
+
+  // Return response data if the error present to process it by component itself.
+  if (response.data.error === true) {
+    return response.data;
+  }
+
+  if (response.data.cart_id) {
+    if ((typeof response.data.items[productInfo.sku] !== 'undefined')) {
+      const cartItem = response.data.items[productInfo.sku];
+      productInfo.totalQty = cartItem.qty;
+    }
+
+    // Dispatch event to refresh the react minicart component.
+    const refreshMiniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data() { return response.data; }, productInfo } });
+    document.dispatchEvent(refreshMiniCartEvent);
+
+    // Dispatch event to refresh the cart data.
+    const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
+    document.dispatchEvent(refreshCartEvent);
+
+    // Show minicart notification.
+    Drupal.cartNotification.triggerNotification(productInfo);
+  }
+
+  return response;
+};
+
+/**
+ * Add or update products to the cart.
+ */
+export const triggerUpdateCart = (requestData) => {
+  // Prepare post data.
+  const postData = {
+    action: requestData.action,
+    sku: requestData.sku,
+    quantity: requestData.qty,
+    cart_id: requestData.cartId,
+    options: requestData.options,
+    variant: (typeof requestData.variant !== 'undefined') ? requestData.variant : requestData.sku,
+  };
+
+  // Call update cart api function.
+  return updateCart(postData).then(
+    (response) => {
+      // Prepare product data.
+      const productData = {
+        quantity: requestData.qty,
+        sku: requestData.sku,
+        variant: requestData.variant,
+        image: requestData.productImage,
+        product_name: requestData.productCartTitle,
+      };
+
+      return handleUpdateCartRespose(
+        response,
+        productData,
+      );
+    },
+  );
+};
+
+/**
+ *
+ * @param {object} productData
+ *  An object of product's data attributes.
+ */
+export const pushSeoGtmData = (productData) => {
+  // Prepare and push product's variables to GTM using dataLayer.
+  if (productData.error && typeof Drupal.alshayaSeoGtmPushAddToCartFailure !== 'undefined') {
+    const message = typeof productData.options !== 'undefined'
+      ? `Update cart failed for Product [${productData.sku}] ${productData.options}`
+      : `Update cart failed for Product [${productData.sku}] `;
+    Drupal.alshayaSeoGtmPushAddToCartFailure(
+      message,
+      productData.error_message,
+    );
+
+    return;
+  }
+
+  // Prepare and push product's variables to GTM using dataLayer.
+  if (typeof Drupal.alshaya_seo_gtm_get_product_values !== 'undefined'
+    && typeof Drupal.alshayaSeoGtmPushAddToCart !== 'undefined') {
+    // Get the seo GTM product values.
+    let gtmProduct = productData.element.closest('[gtm-type="gtm-product-link"]');
+    // The product drawer is coming in page end in DOM,
+    // so element.closest is not right selector when quick view is open.
+    if (gtmProduct === null) {
+      gtmProduct = document.querySelector(`article[data-sku="${productData.sku}"]`);
+    }
+    const product = Drupal.alshaya_seo_gtm_get_product_values(
+      gtmProduct,
+    );
+
+    // Set the product quantity.
+    product.quantity = Math.abs(productData.qty);
+
+    // Set product variant to the selected variant.
+    if (product.dimension2 !== 'simple' && typeof productData.variant !== 'undefined') {
+      product.variant = productData.variant;
+    } else {
+      product.variant = product.id;
+    }
+
+    Drupal.alshayaSeoGtmPushAddToCart(product);
+  }
+};
+
+/**
+ * Get the array of selected options for cart operation.
+ *
+ * @param {object} configurableAttributes
+ *   The cofigurable attributes data.
+ * @param {object} formAttributeValues
+ *   The selected attribute names and values.
+ * @param {boolean} retainPseudoAttribute
+ *   Whether to let the pseudo attribute remain in the returned array.
+ *
+ * @returns array
+ *   The array of selected options.
+ */
+export const getSelectedOptionsForCart = (
+  configurableAttributes,
+  formAttributeValues,
+  retainPseudoAttribute,
+) => {
+  const options = [];
+  // Prepare the array of selected options.
+  Object.keys(configurableAttributes).forEach((attributeName) => {
+    if (!retainPseudoAttribute && configurableAttributes[attributeName].is_pseudo_attribute) {
+      return;
+    }
+    const option = {
+      option_id: configurableAttributes[attributeName].attribute_id,
+      option_value: formAttributeValues[attributeName],
+    };
+    options.push(option);
+  });
+
+  return options;
+};
+
+/**
+ * Get the array of selected options for sending to GTM.
+ *
+ * @param {object} configurableAttributes
+ *   The cofigurable attributes data.
+ * @param {object} formAttributeValues
+ *   The selected attribute names and values.
+ *
+ * @returns array
+ *   The array of selected options for GTM.
+ */
+export const getSelectedOptionsForGtm = (
+  configurableAttributes,
+  formAttributeValues,
+) => {
+  let optionsForGtm = getSelectedOptionsForCart(configurableAttributes, formAttributeValues, true);
+
+  optionsForGtm = optionsForGtm.map((option) => {
+    const attributeNames = Object.keys(configurableAttributes);
+    for (let i = 0; i < attributeNames.length; i++) {
+      const attributeId = configurableAttributes[attributeNames[i]].attribute_id;
+      const optionId = option.option_id;
+      if (attributeId.toString() === optionId.toString()) {
+        for (let j = 0; j < configurableAttributes[attributeNames[i]].values.length; j++) {
+          if (configurableAttributes[attributeNames[i]].values[j].value_id
+            === option.option_value) {
+            return `${configurableAttributes[attributeNames[i]].label}: ${configurableAttributes[attributeNames[i]].values[j].label}`;
+          }
+        }
+      }
+    }
+    return true;
+  });
+
+  return optionsForGtm.join(', ');
+};
+
+/**
  * Gets the attributes which are enabled for display.
  * @see Drupal.refreshConfigurables().
  *

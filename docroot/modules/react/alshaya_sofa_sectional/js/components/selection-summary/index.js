@@ -6,7 +6,6 @@ const SelectionSummary = (props) => {
     selectedAttributes,
     configurableAttributes,
     selectedVariant,
-    sku,
     productInfo,
   } = props;
 
@@ -53,7 +52,7 @@ const SelectionSummary = (props) => {
     return configItems;
   };
 
-  const { variants } = productInfo[sku];
+  const { variants } = productInfo;
   const productDetails = variants[selectedVariant];
 
   return (
