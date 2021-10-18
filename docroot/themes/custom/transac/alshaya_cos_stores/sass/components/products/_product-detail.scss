@@ -98,7 +98,9 @@
 
 .basic-details-wrapper .field--name-field-skus {
   .form-item-configurables-size {
-    order: 1;
+    @include breakpoint($tablet) {
+      order: 1;
+    }
 
     @include breakpoint($only-tablet) {
       margin-top: 0;
