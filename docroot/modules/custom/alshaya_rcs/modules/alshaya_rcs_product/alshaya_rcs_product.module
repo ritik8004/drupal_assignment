@@ -183,8 +183,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
   $build['#attached']['library'][] = 'alshaya_rcs_product/grouped_products';
-  // Attach promotion lable js.
+  // Attach promotion label js.
   $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
+  $build['#attached']['library'][] = 'alshaya_rcs_product/product_options';
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
@@ -227,9 +228,14 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['quantityLimitEnabled'] = $isQuantityLimitEnabled;
   $build['#attached']['drupalSettings']['alshayaRcs']['hide_max_qty_limit_message'] = $acm_settings->get('hide_max_qty_limit_message');
 
-  $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
-  $color_split_config = \Drupal::config('alshaya_color_split.settings');
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
+  $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = FALSE;
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_color_split')) {
+    $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = TRUE;
+    $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
+    $build['#attached']['drupalSettings']['alshayaRcs']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
+    $color_split_config = \Drupal::config('alshaya_color_split.settings');
+    $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
+  }
 }
 
 /**
@@ -685,9 +691,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
           'attribute_uid',
           'label',
           'position',
-          'use_default',
           'attribute_code',
-          'product_id',
           'values' => [
             'value_index',
             'store_label',
@@ -702,8 +706,8 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             'ship_to_store',
             'reserve_and_collect',
             'attribute_set_id',
-            '... on PhysicalProductInterface' => [
-              'weight',
+            'swatch_data' => [
+       	      'swatch_type',
             ],
             'price_range' => [
               'maximum_price' => [
@@ -718,15 +722,11 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
                 ],
               ],
             ],
-            'special_price',
-            'special_from_date',
-            'special_to_date',
             'is_returnable',
             'stock_data' => [
               'qty',
               'max_sale_qty',
             ],
-            'swatch_image',
             'media_gallery' => [
               'url',
               'label',
@@ -745,7 +745,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
                 ],
               ],
             ],
-            'gift_message_available',
           ],
           'attributes' => [
             'label',
@@ -787,6 +786,16 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   if ($recommended_product_settings->get('display_crosssell')) {
     $query_fields['products']['items']['crosssell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
   }
+
+  $query_fields['product_options'] = [
+    'items' => [
+      'attribute_code',
+      'attribute_options' => [
+        'label',
+        'value',
+      ],
+    ],
+  ];
 
   return $query_fields;
 }

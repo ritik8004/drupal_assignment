@@ -15,7 +15,7 @@
   }
 
   // Add the styled products.
-  document.addEventListener('alshayaRcsUpdateResults', function getProductsInStyle(e) {
+  document.addEventListener('alshayaRcsGroupedProducts', function getProductsInStyle(e) {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined'
       || typeof e.detail.result.style_code === 'undefined'

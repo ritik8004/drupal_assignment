@@ -8,6 +8,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_color_split\AlshayaColorSplitConfig;
 
 /**
  * Implements hook_module_implements_alter().
@@ -27,12 +28,16 @@ function alshaya_cos_transac_module_implements_alter(&$implementations, $hook) {
 function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$queries) {
   array_push($queries['products']['items'],
     'style_code',
-    'color',
     'asset_type',
     'size',
     'composition',
     'washing_instructions',
-    'article_warning');
+    'article_warning'
+  );
+
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_color_split')) {
+    array_push($queries['products']['items']['... on ConfigurableProduct']['variants']['product'], 'color');
+  }
 }
 
 /**

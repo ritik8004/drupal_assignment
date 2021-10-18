@@ -163,6 +163,13 @@ function getConfigurables(product) {
     return staticDataStore[staticKey];
   }
 
+  // Sort the configurable options according to position.
+  // @todo Ask if this should be done as done in
+  // Configurable::getSortedConfigurableAttributes().
+  product.configurable_options = product.configurable_options.sort(function (optionA, optionB) {
+    return (optionA.position > optionB.position) - (optionA.position < optionB.position);
+  });
+
   const configurables = {};
   product.configurable_options.forEach(function (option) {
     configurables[option.attribute_code] = {
