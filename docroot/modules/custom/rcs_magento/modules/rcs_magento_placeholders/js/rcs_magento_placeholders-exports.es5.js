@@ -34,7 +34,7 @@ exports.getEntity = async function getEntity(langcode) {
   }
 
   const request = {
-    uri: 'graphql',
+    uri: '/graphql',
     method: 'POST',
     headers: [
       ["Content-Type", "application/json"],
@@ -129,7 +129,7 @@ exports.getEntity = async function getEntity(langcode) {
 
 exports.getData = async function getData(placeholder, params, entity, langcode) {
   const request = {
-    uri: 'graphql',
+    uri: '/graphql',
     method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],
@@ -245,7 +245,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
 exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
   const request = {
-    uri: 'graphql',
+    uri: '/graphql',
     method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],
