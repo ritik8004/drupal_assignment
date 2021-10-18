@@ -99,6 +99,12 @@ const Teaser = ({
     teaserClass = `${teaserClass} product-element-alignment`;
   }
 
+  const showRating = (hit.attr_bv_total_review_count !== undefined
+    && hit.attr_bv_total_review_count > 0
+    && showReviewsRating !== undefined
+    && showReviewsRating === 1
+    && overallRating !== '');
+
   return (
     <div className={teaserClass}>
       <article
@@ -163,14 +169,14 @@ const Teaser = ({
                 </div>
               </a>
             </h2>
-            <ConditionalView condition={
-                hit.attr_bv_total_review_count !== undefined
-                && hit.attr_bv_total_review_count > 0
-                && showReviewsRating !== undefined
-                && showReviewsRating === 1
-                && overallRating !== ''
-              }
-            >
+
+            {/* Adding placeholder div for alignment
+            if rating is not available and boots frame feature is enabled. */}
+            <ConditionalView condition={!showRating && isProductElementAlignmentEnabled()}>
+              <div className="alignment-placeholder" />
+            </ConditionalView>
+
+            <ConditionalView condition={showRating}>
               <div className="listing-inline-star">
                 <DisplayStar starPercentage={overallRating} />
                 (
