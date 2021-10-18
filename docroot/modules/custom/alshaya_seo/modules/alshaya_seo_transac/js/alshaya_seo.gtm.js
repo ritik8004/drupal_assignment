@@ -34,6 +34,10 @@ const productRecommendationsSuffix = 'pr-';
           variant = event.detail.variant;
         }
         var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        // Return if variant data not available.
+        if (typeof variantInfo === 'undefined') {
+          return;
+        }
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
