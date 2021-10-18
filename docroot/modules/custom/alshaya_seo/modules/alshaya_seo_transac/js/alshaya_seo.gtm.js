@@ -37,6 +37,7 @@ const productRecommendationsSuffix = 'pr-';
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
+        product.attr('gtm-main-sku', variantInfo['parent_sku']);
 
         Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange(product);
       });
