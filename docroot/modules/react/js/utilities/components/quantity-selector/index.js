@@ -20,17 +20,12 @@ const QuantitySelector = (props) => {
   };
 
   const quantityOptions = options.map((option) => {
-    const optionList = {};
-
-    optionList.value = option;
-    optionList.label = option;
-
     /* eslint-disable eqeqeq */
-    if (optionList.value == quantity) {
-      selectedValue = optionList;
+    if (option.value == quantity) {
+      selectedValue = option;
     }
 
-    return optionList;
+    return option;
   });
 
 
@@ -44,6 +39,7 @@ const QuantitySelector = (props) => {
         value={selectedValue}
         defaultValue={selectedValue}
         isSearchable={false}
+        isOptionDisabled={(option) => option.disabled}
       />
       <label>
         {label}

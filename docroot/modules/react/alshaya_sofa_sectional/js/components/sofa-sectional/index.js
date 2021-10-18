@@ -207,7 +207,7 @@ export default class SofaSectionalForm extends React.Component {
 
     // Dispatch custom event with selected variant to trigger jquery event variant-selected,
     // which will update gallery, price block, limits etc.
-    const customEvent = new CustomEvent('react-variant-select', { detail: { variant: sku } });
+    const customEvent = new CustomEvent('react-variant-select', { detail: { sku } });
     document.dispatchEvent(customEvent);
   };
 
@@ -240,6 +240,34 @@ export default class SofaSectionalForm extends React.Component {
     const groupData = {};
     let { groupCode } = this.state;
     let firstSwatch = true;
+
+    const qty = getQuantityDropdownValues();
+    const options = [];
+    const variantInfo = (selectedVariant !== null)
+      ? productInfo[sku].variants[selectedVariant]
+      : undefined;
+
+    // Set quantity option disabled if option is greater
+    // than stock quantity or max sale quantity.
+    qty.forEach((val) => {
+      let option = {};
+      if (typeof variantInfo !== 'undefined'
+        && (val > variantInfo.stock.qty
+        || (variantInfo.stock.maxSaleQty !== 0
+        && val > variantInfo.stock.maxSaleQty))) {
+        option = {
+          label: val,
+          value: val,
+          disabled: true,
+        };
+      } else {
+        option = {
+          label: val,
+          value: val,
+        };
+      }
+      options.push(option);
+    });
 
     return (
       <>
@@ -322,7 +350,7 @@ export default class SofaSectionalForm extends React.Component {
           />
         </ConditionalView>
         <QuantitySelector
-          options={getQuantityDropdownValues()}
+          options={options}
           onChange={this.onQuantityChanged}
           quantity={quantity}
           label={Drupal.t('Quantity')}

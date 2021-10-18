@@ -83,6 +83,12 @@ class AlshayaSofaSectionalConfigForm extends ConfigFormBase {
       $options[$term->id()] = $term->getName();
     }
 
+    $form['sofa_sectional_status'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable / Disable sofa and sectional form'),
+      '#default_value' => $this->config('alshaya_sofa_sectional.settings')->get('enabled'),
+    ];
+
     $form['sofa_sectional_categories'] = [
       '#type' => 'select',
       '#multiple' => TRUE,
@@ -102,6 +108,7 @@ class AlshayaSofaSectionalConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_sofa_sectional.settings');
     $categories = $form_state->getValue('sofa_sectional_categories');
     $config->set('category_ids', array_values($categories));
+    $config->set('enabled', $form_state->getValue('sofa_sectional_status'));
     $config->save();
     parent::submitForm($form, $form_state);
   }
