@@ -1,4 +1,4 @@
-@javascript @smoke @bpaeuat @bpkwuat @bpsauat @hmaeuat @mckwuat @vsaeuat @aeoaeuat @aeokwuat @aeosauat @tbskwuat @westelmaeuat @westelmsauat @westelmkwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
+@javascript @smoke @pbkkwuat @pbksauat @mujikwuat @mujisauat @mujiaeuat @pbkaeuat @bpaeuat @bpkwuat @bpsauat @tbseguat @hmaeuat @mckwuat @vsaeuat @aeoaeuat @aeokwuat @aeosauat @tbskwuat @westelmaeuat @westelmsauat @westelmkwuat @vssauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test basket page
 
   Background:
@@ -13,6 +13,7 @@ Feature: Test basket page
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
+    And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -56,7 +57,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     Then the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-image img" should exist
@@ -85,7 +86,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     Then I should see "{promo_code}"
     And I wait 5 seconds
@@ -104,7 +105,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -113,8 +114,6 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element
 
   @language @desktop
   Scenario: As a Guest, I should be able to add more quantity in second language
@@ -129,7 +128,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -150,7 +149,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -203,7 +202,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     And I should see an ".totals" element
     And I should see an ".grand-total" element
     And I should see an ".value .price .price-currency" element
@@ -223,7 +222,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     And I wait 5 seconds
     And I should see an ".totals" element
@@ -245,7 +244,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -254,8 +253,6 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element
 
   @language @mobile
   Scenario: As a Guest, I should be able to remove products from the basket in second language (mobile)
@@ -269,7 +266,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -278,5 +275,3 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element

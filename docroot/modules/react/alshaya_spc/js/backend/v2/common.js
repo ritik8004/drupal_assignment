@@ -13,6 +13,8 @@ import {
   isUserAuthenticated,
   logger,
   removeCartIdFromStorage,
+  detectCFChallenge,
+  detectCaptcha,
 } from './utility';
 import {
   cartErrorCodes,
@@ -213,7 +215,7 @@ const handleResponse = (apiResponse) => {
 
   // In case we don't receive any response data.
   if (typeof apiResponse.data === 'undefined') {
-    logger.error('Error while doing MDC api. Response result is empty. Status code: @status', {
+    logger.warning('Error while doing MDC api. Response result is empty. Status code: @status', {
       '@status': response.status,
     });
 
@@ -226,6 +228,11 @@ const handleResponse = (apiResponse) => {
     };
     return new Promise((resolve) => resolve(error));
   }
+
+  // If the response contains Captcha, the page will be reloaded once per session.
+  detectCaptcha(apiResponse);
+  // If the response contains a CF Challenge, the page will be reloaded once per session.
+  detectCFChallenge(apiResponse);
 
   // Treat each status code.
   if (apiResponse.status === 202) {
@@ -282,20 +289,20 @@ const handleResponse = (apiResponse) => {
       response.data.error_message = response.message;
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
         '@message': response.data.error_message,
-        '@result_code': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
-        '@response_code': response.status,
+        '@resultCode': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
+        '@responseCode': response.status,
       });
     } else if (!_isUndefined(apiResponse.data.message) && !_isEmpty(apiResponse.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(apiResponse);
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
         '@message': response.data.error_message,
-        '@result_code': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
-        '@response_code': apiResponse.status,
+        '@resultCode': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
+        '@responseCode': apiResponse.status,
       });
 
       // The following case happens when there is a stock mismatch between
@@ -317,7 +324,7 @@ const handleResponse = (apiResponse) => {
     ) {
       // Other messages.
       const error = apiResponse.data.messages.error[0];
-      logger.info('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', {
+      logger.info('Error while doing MDC api call. Error message: @message', {
         '@message': error.message,
       });
       response.data.error_code = error.code;
@@ -329,8 +336,8 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
-    logger.info('Error while doing MDC api call. Error: @error_message', {
-      '@error_message': error.message,
+    logger.info('Error while doing MDC api call. Error: @message', {
+      '@message': error.message,
     });
   } else if (_isArray(apiResponse.data.response_message)
     && !_isUndefined(apiResponse.data.response_message[1])
@@ -339,8 +346,8 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = 400;
     [response.data.error_message] = apiResponse.data.response_message;
-    logger.info('Error while doing MDC api call. Error: @error_message', {
-      '@error_message': JSON.stringify(response.data.response_message),
+    logger.info('Error while doing MDC api call. Error: @message', {
+      '@message': JSON.stringify(response.data.response_message),
     });
   }
 
@@ -399,8 +406,8 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
         return handleResponse(error.request);
       }
 
-      logger.error('Something happened in setting up the request that triggered an error: @error.', {
-        '@error': error.message,
+      logger.error('Something happened in setting up the request that triggered an error: @message.', {
+        '@message': error.message,
       });
 
       return error;
@@ -539,12 +546,9 @@ const formatCart = (cartData) => {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
 
-    // If collection point feature is enabled, extract collectors details
+    // If collection point feature is enabled, extract collection point details
     // from shipping data.
     if (collectionPointsEnabled()) {
-      data.shipping.collector_name = extensionAttributes.collector_name;
-      data.shipping.collector_email = extensionAttributes.collector_email;
-      data.shipping.collector_mobile = extensionAttributes.collector_mobile;
       data.shipping.collection_point = extensionAttributes.collection_point;
       data.shipping.pickup_date = extensionAttributes.pickup_date;
       data.shipping.price_amount = extensionAttributes.price_amount;
@@ -615,7 +619,13 @@ const getProductStatus = async (sku) => {
  *   The processed cart data.
  */
 const getProcessedCartData = async (cartData) => {
-  if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
+  // In case of errors, return the error object.
+  if (hasValue(cartData) && hasValue(cartData.error) && cartData.error) {
+    return cartData;
+  }
+
+  // If the cart object is empty, return null.
+  if (!hasValue(cartData) || !hasValue(cartData.cart)) {
     return null;
   }
 
@@ -637,14 +647,16 @@ const getProcessedCartData = async (cartData) => {
     stale_cart: (typeof cartData.stale_cart !== 'undefined') ? cartData.stale_cart : false,
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,
-      shipping_incl_tax: null,
       base_grand_total: cartData.totals.base_grand_total,
       base_grand_total_without_surcharge: cartData.totals.base_grand_total,
       discount_amount: cartData.totals.discount_amount,
       surcharge: 0,
       items: cartData.totals.items,
+      allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
     items: [],
+    ...(collectionPointsEnabled() && hasValue(cartData.shipping))
+      && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
   // Totals.
@@ -653,11 +665,14 @@ const getProcessedCartData = async (cartData) => {
     data.minicart_total = cartData.totals.base_grand_total;
   }
 
-  if (typeof cartData.shipping !== 'undefined') {
+  if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
+    // We use null to show "Excluding Delivery".
+    data.totals.shipping_incl_tax = null;
+  } else if (cartData.shipping.type !== 'click_and_collect') {
     // For click_n_collect we don't want to show this line at all.
-    if (cartData.shipping.type !== 'click_and_collect') {
-      data.totals.shipping_incl_tax = cartData.totals.shipping_incl_tax;
-    }
+    data.totals.shipping_incl_tax = (hasValue(cartData.totals.shipping_incl_tax))
+      ? cartData.totals.shipping_incl_tax
+      : 0;
   }
 
   if (typeof cartData.cart.extension_attributes.surcharge !== 'undefined' && cartData.cart.extension_attributes.surcharge.amount > 0 && cartData.cart.extension_attributes.surcharge.is_applied) {
@@ -701,7 +716,7 @@ const getProcessedCartData = async (cartData) => {
         // Do not show the products which are not available in
         // system but only available in cart.
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
-          logger.error('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
             '@sku': item.sku,
             '@cartId': data.cart_id_int,
             '@stockInfo': JSON.stringify(stockInfo || {}),
@@ -908,14 +923,11 @@ const associateCartToCustomer = async (guestCartId) => {
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
   const cart = await getCart(force);
-  if (_isNull(cart) || _isUndefined(cart.data)) {
+  if (!hasValue(cart) || !hasValue(cart.data)) {
     return null;
   }
 
-  // If we don't have any errors, process the cart data.
-  if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
-    cart.data = await getProcessedCartData(cart.data);
-  }
+  cart.data = await getProcessedCartData(cart.data);
 
   return cart;
 };
@@ -1087,10 +1099,10 @@ const updateCart = async (postData) => {
       return response;
     })
     .catch((response) => {
-      logger.warning('Error while updating cart on MDC for action: @action. Error message: @errorMessage, Code: @errorCode', {
+      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @code', {
         '@action': action,
-        '@errorMessage': response.error.message,
-        '@errorCode': response.error.error_code,
+        '@message': response.error.message,
+        '@code': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
       return response;
@@ -1120,19 +1132,26 @@ window.commerceBackend.pushAgentDetailsInCart = async () => {
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
-  const response = await getCart();
-  if (_isNull(response) || _isUndefined(response.data)) {
-    return null;
+  let email = StaticStorage.get('cartCustomerEmail');
+  if (email !== null) {
+    return email;
   }
 
-  const cart = response.data;
-  if (!_isUndefined(cart.customer)
-    && !_isUndefined(cart.customer.email)
-    && !_isEmpty(cart.customer.email)
-  ) {
-    return cart.customer.email;
+  const response = await getCart();
+  if (_isNull(response) || _isUndefined(response.data)) {
+    email = '';
+  } else {
+    const cart = response.data;
+    if (hasValue(cart.customer)
+      && hasValue(cart.customer.email)
+      && cart.customer.email !== ''
+    ) {
+      email = cart.customer.email;
+    }
   }
-  return null;
+
+  StaticStorage.set('cartCustomerEmail', email);
+  return email;
 };
 
 /**
@@ -1180,6 +1199,231 @@ const getFormattedError = (code, message) => ({
   },
 });
 
+/**
+ * Helper function to prepare filter url query string.
+ *
+ * @param array $filters
+ *   Array containing all filters, must contain field and value, can contain
+ *   condition_type too or all that is supported by Magento.
+ * @param string $base
+ *   Filter Base, mostly searchCriteria.
+ * @param int $group_id
+ *   Filter group id, mostly 0.
+ *
+ * @return string
+ *   Prepared URL query string.
+ */
+const prepareFilterUrl = (filters, base = 'searchCriteria', groupId = 0) => {
+  let url = '';
+
+  filters.forEach((filter, index) => {
+    Object.keys(filter).forEach((key) => {
+      // Prepared string like below.
+      // searchCriteria[filter_groups][0][filters][0][field]=field
+      // This is how Magento search criteria in APIs work.
+      url = url.concat(`${base}[filter_groups][${groupId}][filters][${index}][${key}]=${filter[key]}`);
+      url = url.concat('&');
+    });
+  });
+
+  return url;
+};
+
+/**
+ * Function to get locations for delivery matrix.
+ *
+ * @param string $filterField
+ *   The field name to filter on.
+ * @param string $filterValue
+ *   The value of the field to filter on.
+ *
+ * @return mixed
+ *   Response from API.
+ */
+const getLocations = async (filterField = 'attribute_id', filterValue = 'governate') => {
+  const filters = [];
+  // Add filter for field values.
+  const fieldFilters = {
+    field: filterField,
+    value: filterValue,
+    condition_type: 'eq',
+  };
+
+  filters.push(fieldFilters);
+
+  // Always add status check.
+  const statusFilters = {
+    field: 'status',
+    value: '1',
+    condition_type: 'eq',
+  };
+  filters.push(statusFilters);
+
+  // Filter by Country.
+  const countryFilters = {
+    field: 'country_id',
+    value: drupalSettings.country_code,
+    condition_type: 'eq',
+  };
+
+  filters.push(countryFilters);
+  // @todo pending cofirmation from MDC on using api call for each click.
+  let url = '/V1/deliverymatrix/address-locations/search?';
+  const params = prepareFilterUrl(filters);
+  url = url.concat(params);
+  try {
+    // Associate cart to customer.
+    const response = await callMagentoApi(url, 'GET', {});
+
+    if (!_isUndefined(response.data.error) && response.data.error) {
+      logger.error('Error in getting shipping methods for cart. Error: @error', {
+        '@error': response.data.error_message,
+      });
+
+      return getFormattedError(response.data.error_code, response.data.error_message);
+    }
+
+    if (_isEmpty(response.data)) {
+      const message = 'Got empty response while getting shipping methods.';
+      logger.notice(message);
+
+      return getFormattedError(600, message);
+    }
+
+    return response.data;
+  } catch (error) {
+    logger.error('Error occurred while fetching governates data. Message: @message.', {
+      '@message': error.message,
+    });
+  }
+
+  return null;
+};
+
+/**
+ * Gets governates list items.
+ *
+ * @returns {Promise<object>}
+ *  returns list of governates.
+ */
+window.commerceBackend.getGovernatesList = async () => {
+  if (!drupalSettings.alshaya_spc.address_fields) {
+    logger.error('Error in getting address fields mappings');
+
+    return {};
+  }
+  const mapping = drupalSettings.alshaya_spc.address_fields;
+  // Use the magento field name from mapping.
+  const responseData = await getLocations('attribute_id', mapping.area_parent.key);
+
+  if (responseData !== null && responseData.total_count > 0) {
+    return responseData;
+  }
+  logger.warning('No governates found in the list as count is zero, API Response: @response.', {
+    '@response': JSON.stringify(responseData),
+  });
+
+  return {};
+};
+
+/**
+ * Gets area List items.
+ *
+ * @returns {Promise<object>}
+ *  returns list of area under a governate if governate id is valid.
+ */
+window.commerceBackend.getDeliveryAreaList = async (governateId) => {
+  if (governateId !== undefined) {
+    const responseData = await getLocations('parent_id', governateId);
+    if (responseData !== null && responseData.total_count > 0) {
+      return responseData;
+    }
+    logger.warning('No areas found under governate Id : @governateId, API Response: @response.', {
+      '@response': JSON.stringify(responseData),
+      '@governateId': governateId,
+    });
+  }
+  return {};
+};
+
+/**
+ * Gets individual area detail.
+ *
+ * @returns {Promise<object>}
+ *  returns details of area if area id is valid.
+ */
+window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
+  if (areaId !== undefined) {
+    const responseData = await getLocations('location_id', areaId);
+    if (responseData !== null && responseData.total_count > 0) {
+      return responseData;
+    }
+    logger.warning('No details found for area Id : @areaId, API Response: @response.', {
+      '@response': JSON.stringify(responseData),
+      '@areaId': areaId,
+    });
+  }
+  return {};
+};
+
+/**
+ * Gets governates list items.
+ *
+ * @returns {Promise<object>}
+ *  returns list of governates.
+ */
+window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined) => {
+  let cartId = null;
+  if (sku === undefined) {
+    const cartData = window.commerceBackend.getCartDataFromStorage();
+    if (cartData.cart.cart_id !== null) {
+      cartId = cartData.cart.cart_id_int;
+    }
+  }
+  const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
+  const attributes = [];
+  if (currentArea !== null) {
+    Object.keys(currentArea.value).forEach((key) => {
+      const areaItemsObj = {
+        attribute_code: key,
+        value: currentArea.value[key],
+      };
+      attributes.push(areaItemsObj);
+    });
+  }
+  try {
+    const params = {
+      productAndAddressInformation: {
+        cart_id: cartId,
+        product_sku: (sku !== undefined) ? sku : null,
+        address: {
+          custom_attributes: attributes,
+        },
+      },
+    };
+
+    // Associate cart to customer.
+    const response = await callMagentoApi(url, 'POST', params);
+    if (!hasValue(response.data) || hasValue(response.data.error)) {
+      logger.error('Error occurred while fetching governates, Response: @response.', {
+        '@response': JSON.stringify(response.data),
+      });
+      return null;
+    }
+
+    // If no city available, return empty.
+    if (_isEmpty(response.data)) {
+      return null;
+    }
+    return response.data;
+  } catch (error) {
+    logger.error('Error occurred while fetching governates data. Message: @message.', {
+      '@message': error.message,
+    });
+  }
+  return {};
+};
+
 export {
   isAnonymousUserWithoutCart,
   isAuthenticatedUserWithoutCart,
@@ -1200,4 +1444,6 @@ export {
   matchStockQuantity,
   isCartHasOosItem,
   getProductStatus,
+  getLocations,
+  prepareFilterUrl,
 };

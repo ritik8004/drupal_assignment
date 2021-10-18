@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @homeDelivery @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmkwuat @pbsauat @tbskwuat @hmaeuat @flsauat @mcsauat @mcaeuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
+@javascript @guest @checkoutPayment @homeDelivery @mujikwuat @mujisauat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmkwuat @pbsauat @tbskwuat @hmaeuat @flsauat @mcsauat @mcaeuat @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:
@@ -146,7 +146,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     Then I should see "{language_order_total}"
     And I should see "{language_vat}"
     And I should see "{language_continue_shopping_text}"
-
 
   @cc @hd @language @mobile @checkout_com
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language

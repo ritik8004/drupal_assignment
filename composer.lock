@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d5a458238013f778c6b39e1c89d2707",
+    "content-hash": "66a07ebab6f4460baccfa55709fd2e7a",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -5800,6 +5800,7 @@
                     "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                     "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
                     "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
+                    "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-01-14/3143958-11-subprofile-support-8.9.x.patch",
                     "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch",
@@ -11178,6 +11179,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2021-10-17/change_pwd_page_integration-2933746-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12561,8 +12565,7 @@
                     }
                 },
                 "patches_applied": {
-                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                    "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12842,7 +12845,8 @@
                 },
                 "patches_applied": {
                     "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                    "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
+                    "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch",
+                    "Issue 3029421: Remove handler schema/fieldtypes checking": "https://www.drupal.org/files/issues/2020-06-05/3029421-4-Remove-check-on-Acquia-Search.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13395,6 +13399,9 @@
                     "services": {
                         "drush.services.yml": "^9 || ^10"
                     }
+                },
+                "patches_applied": {
+                    "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -26989,6 +26996,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
+            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
@@ -27464,9 +27472,12 @@
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=7.4"
+    },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.3"
-    }
+        "php": "7.4"
+    },
+    "plugin-api-version": "1.1.0"
 }

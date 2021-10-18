@@ -124,7 +124,8 @@
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
-        "symfony/lock": "4.3.*"
+        "symfony/lock": "4.3.*",
+        "php": ">=7.4"
     },
     "require-dev": {
         "acquia/blt-require-dev": "11.x-dev",
@@ -220,8 +221,7 @@
                 "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch"
             },
             "drupal/search_api": {
-                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
-                "CORE-31041 disabled skus not deleted for product list index": "https://www.drupal.org/files/issues/2021-07-12/search_api_entity_delete_alter.patch"
+                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -258,7 +258,8 @@
                 "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
                 "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                 "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
-                "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch"
+                "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
+                "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
@@ -329,6 +330,12 @@
             },
             "drupal/entity_embed": {
                 "Adding defaultTheme to Test case": "https://www.drupal.org/files/issues/2021-09-21/adding_defultTheme_in_testcase-3238298-1.patch"
+            },
+            "drupal/simple_sitemap": {
+                "Index Sitemap": "https://www.drupal.org/files/issues/2021-09-21/simple_sitemap_index_configuration_settings.patch"
+            },
+            "drupal/password_policy": {
+                "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2021-10-17/change_pwd_page_integration-2933746-9.patch"
             }
         },
         "installer-paths": {
@@ -429,7 +436,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.3"
+            "php": "7.4"
         },
         "sort-packages": true,
         "discard-changes": true

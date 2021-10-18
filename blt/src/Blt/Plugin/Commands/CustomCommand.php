@@ -239,9 +239,9 @@ class CustomCommand extends BltTasks {
    * @description Setup local dev environment.
    */
   public function refreshLocal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
-    $list = implode(array_keys($sites), ", ");
+    $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall ($list):");
     }
@@ -255,9 +255,8 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site ($list):");
     }
-    $uri = getenv('LANDO')
-      ? $site . '.alshaya.lndo.site'
-      : 'local.alshaya-' . $site . '.com';
+
+    $uri = self::getSiteUri($site);
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -288,9 +287,9 @@ class CustomCommand extends BltTasks {
    * @description Reinstall local dev environment.
    */
   public function refreshLocalDrupal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
-    $list = implode(array_keys($sites), ", ");
+    $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall, ($list):");
     }
@@ -304,9 +303,8 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site:, ($list):");
     }
-    $uri = getenv('LANDO')
-      ? $site . '.alshaya.lndo.site'
-      : 'local.alshaya-' . $site . '.com';
+
+    $uri = self::getSiteUri($site);
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -355,17 +353,20 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('local:reset-local-settings');
 
-    $is_lando = getenv('LANDO') ?? FALSE;
+    $app_root = $this->getConfigValue('repo.root');
     $sudo_prefix = '';
 
-    if ($is_lando) {
-      $app_root = '/app';
-
+    if (getenv('LANDO')) {
       // Flush memcache.
       $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
+    elseif (getenv('AH_SITE_ENVIRONMENT')) {
+      $this->taskDrush()
+        ->drush('cr')
+        ->uri($uri)
+        ->run();
+    }
     else {
-      $app_root = '/var/www/alshaya';
       $sudo_prefix = 'sudo ';
       // Restart memcache to avoid issues because of old configs.
       $this->_exec($sudo_prefix . 'service memcached restart');
@@ -533,6 +534,35 @@ class CustomCommand extends BltTasks {
     $this->taskExec('npm install')
       ->dir($this->getConfigValue('repo.root') . '/docroot/modules/custom')
       ->run();
+  }
+
+  /**
+   * Get the site url for local.
+   *
+   * @param string $site_code
+   *   Site Code.
+   *
+   * @return string
+   *   URL.
+   */
+  public static function getSiteUri($site_code) {
+    if (getenv('LANDO')) {
+      return $site_code . '.alshaya.lndo.site';
+    }
+
+    if (getenv('AH_SITE_ENVIRONMENT') === 'ide') {
+      // Store the site code in file.
+      file_put_contents('/home/ide/project/site.txt', $site_code);
+
+      if (getenv('SERVER_NAME')) {
+        return getenv('SERVER_NAME');
+      }
+
+      // Cloud IDE doesn't support multiple sites.
+      return getenv('ACQUIA_APPLICATION_UUID') . '.web.ahdev.cloud';
+    }
+
+    return 'local.alshaya-' . $site_code . '.com';
   }
 
 }

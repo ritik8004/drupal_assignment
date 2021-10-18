@@ -1,0 +1,123 @@
+.c-footer__logo--verisign,
+.c-footer__logo--visa,
+.c-footer__logo--mastercard {
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 4.3125rem;
+}
+
+.c-footer__logo--visa,
+.c-footer__logo--verisign {
+  width: 3.3125rem;
+}
+
+.c-footer__copy {
+  .field--name-body {
+    p {
+      font-size: 0.75rem;
+      margin-bottom: 0;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 8rem;
+        text-align: $left;
+      }
+
+      & + p {
+        display: block;
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 1rem 1.25rem;
+  }
+
+  .c-footer-secondary & {
+    .country-ae & {
+      html[lang=ar] & {
+        padding: 1.875rem 0;
+      }
+    }
+  }
+}
+
+.c-footer-secondary {
+  @include breakpoint($tablet) {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .l-container {
+    @include container(77rem);
+
+    .path--cart & {
+      @include container(77rem);
+    }
+  }
+}
+
+.region__footer-secondary {
+  .c-footer__copy {
+    @include breakpoint($tablet) {
+      float: $left;
+
+      .country-ae & {
+        float: $left;
+        width: auto;
+      }
+    }
+
+    // @include breakpoint($only-mobile) {
+    //   flex-basis: 100%;
+    //   border-top: 0.0625rem solid $copyright_footer_border_mobile;
+    //   border-bottom: 0.0625rem solid $copyright_footer_border_mobile;
+    // }
+
+    .path--cart & {
+      @include breakpoint($tablet) {
+        flex-basis: 69%;
+      }
+    }
+
+    .path--cart.alias--cart & {
+      @include breakpoint($tablet) {
+        flex-basis: 85%;
+      }
+    }
+  }
+
+  .c-footer__logos {
+    @include breakpoint($tablet) {
+      float: $right;
+    }
+
+    // @include breakpoint($only-mobile) {
+    //   background-color: $copyright_footer_bg;
+    // }
+
+    li {
+      &:not(:last-child) {
+        @include breakpoint($tablet) {
+          margin-#{$right}: 1.5rem;
+        }
+      }
+    }
+
+    ul {
+      .alias--cart-checkout-payment &,
+      .alias--cart-checkout-delivery &,
+      .alias--cart & {
+        margin-bottom: 3rem;
+      }
+    }
+  }
+}

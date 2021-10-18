@@ -1,5 +1,6 @@
 #alshaya-algolia-search,
-#alshaya-algolia-plp {
+#alshaya-algolia-plp,
+#top-results {
   .c-products-list {
     &.product-large,
     &.product-small {
@@ -32,16 +33,38 @@
       }
     }
 
-    .product-plp-detail-wrapper {
-      .promotions {
+    &.promotion-frame {
+      .product-plp-detail-wrapper {
+        .promotions {
+          @include breakpoint($only-mobile) {
+            margin: 0.5rem 0.625rem;
+          }
+
+          .sku-promotion-item {
+            @include breakpoint($only-mobile) {
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      article {
         @include breakpoint($only-mobile) {
-          margin: 0.5rem 0.625rem;
+          padding-bottom: 0.5rem;
         }
 
-        .sku-promotion-item {
-          @include breakpoint($only-mobile) {
-            margin: 0;
-          }
+        @include breakpoint($tablet) {
+          padding-bottom: 0.75rem;
+        }
+      }
+    }
+
+    .product-plp-detail-wrapper {
+      .field--name-name ~ .price,
+      .field--name-name ~ .special-price-block {
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0.5rem;
+          padding: 0 0.25rem;
         }
       }
     }
@@ -50,7 +73,7 @@
     .addtobag-config-button-container,
     .is-not-buyable {
       @include breakpoint($only-mobile) {
-        margin: 0 0.625rem 0.5rem;
+        margin: 0.5rem 0.625rem 0;
       }
     }
   }

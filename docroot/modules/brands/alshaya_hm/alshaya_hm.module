@@ -346,12 +346,28 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
     // Get parent sku.
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+    // Express Delivery.
     $parent_sku = $skuManager->getParentSkuBySku($vars['sku']) ?? $vars['sku'];
     if (!empty($parent_sku)) {
       /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
       $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
       $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
       $vars['product_attribute_labels'] = $labels;
+      if ($express_delivery_config->get('status')) {
+        $sku = $parent_sku->getSku();
+        $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+        if ($delivery_options !== NULL) {
+          // Show delivery options as per order defined in config.
+          $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+          foreach ($delivery_options_order as $option) {
+            if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
+              $options[$option]['#markup'] = $delivery_options[$option]['label'];
+            }
+          }
+        }
+        $vars['delivery_options'] = $options ?? '';
+      }
     }
   }
 }

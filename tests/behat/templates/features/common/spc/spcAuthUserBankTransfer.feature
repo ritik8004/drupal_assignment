@@ -1,4 +1,4 @@
-@javascript @auth @bank-transfer @pbaeuat
+@javascript @auth @bank-transfer @pbaeuat @hmaeuat @mcsauat
 Feature: SPC Checkout Home Delivery using Bank Transfer method for Authenticated user
 
   Background:

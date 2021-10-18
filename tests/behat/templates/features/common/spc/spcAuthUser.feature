@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @bpaeuat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @bpaeqa @tbskwuat @bbwsauat @mcsaqa @flsauat @hmaeuat @vskwqa @vsaeqa @flkwuat @hmkwqa @mckwuat @vsaeuat @vssauat @bbwkwuat @bbwaeuat @hmkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
+@javascript @account @smoke @auth @mujikwuat @mujisauat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @bpaeqa @tbskwuat @bbwsauat @mcsaqa @flsauat @hmaeuat @vskwqa @vsaeqa @flkwuat @hmkwqa @mckwuat @vsaeuat @vssauat @bbwkwuat @bbwaeuat @hmkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
 Feature: Test the My Account functionality
 
   Background:
@@ -36,6 +36,8 @@ Feature: Test the My Account functionality
       | field_address[0][address][dependent_locality]        | {building}    |
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
+      | field_address[0][address][sorting_code]              | {landmark}    |
+      | field_address[0][address][postal_code]               | {postal_code} |
     And I press "op"
     When I wait for AJAX to finish
     And I wait for the page to load

@@ -2835,9 +2835,9 @@ JS;
    */
   public function iShouldSaveTheOrderDetailsInTheFile() {
     $session = $this->getSession();
-    $email_id = $session->evaluateScript('return $(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(0).text()');
-    $order_id = $session->evaluateScript('return $(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(1).text()');
-    $payment_method = $session->evaluateScript('return $(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(3).text()');
+    $email_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(0).text()');
+    $order_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(1).text()');
+    $payment_method = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(3).text()');
     $order_detail = [
       'email' => $email_id,
       'order_id' => $order_id,
