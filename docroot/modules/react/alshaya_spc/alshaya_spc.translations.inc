@@ -400,7 +400,7 @@ function _alshaya_spc_translations() {
 
   // Strings related to express delivery feature.
   $strings['v10'] = [
-    'Express Delivery available' => [
+    'Express Delivery Available' => [
       'ar' => 'خدمة التوصيل السريع متوفرة',
     ],
     'Explore the delivery options applicable to your area.' => [
@@ -418,7 +418,7 @@ function _alshaya_spc_translations() {
     'Select an area' => [
       'ar' => 'اختر المنطقة',
     ],
-    'Same Day Delivery available' => [
+    'Same Day Delivery Available' => [
       'ar' => 'التوصيل في نفس اليوم متاح',
     ],
     'Selected Area' => [
