@@ -16,7 +16,7 @@ use Drupal\acq_commerce\SKUInterface;
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityViewDisplay $display, $view_mode) {
-  if ($entity->bundle() !== 'acq_product' && $view_mode !== 'full') {
+  if ($entity->bundle() !== 'acq_product' || $view_mode !== 'full') {
     return;
   }
 

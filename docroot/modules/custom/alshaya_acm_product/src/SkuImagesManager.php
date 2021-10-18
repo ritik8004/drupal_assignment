@@ -1164,7 +1164,7 @@ class SkuImagesManager {
 
     // Check if the attribute has a different swatch role.
     $swatches_roles = $this->configFactory->get('alshaya_acm_product.display_settings')->get('swatches_roles');
-    if (isset($swatches_roles[$attribute_code])) {
+    if ($swatches_roles && isset($swatches_roles[$attribute_code])) {
       $static[$attribute_code] = $swatches_roles[$attribute_code];
     }
 
