@@ -81,6 +81,10 @@ body.overlay-delivery-area {
   @include breakpoint($tablet) {
     width: 24.0625rem;
     max-width: 24.0625rem;
+
+    html[lang=ar] & {
+      transform: translateX(-100%);
+    }
   }
 }
 
@@ -449,6 +453,14 @@ body.overlay-delivery-area {
       .area-list-block-content {
         margin-top: 2rem;
       }
+    }
+  }
+}
+
+.delivery-loader {
+  &.loading {
+    @include componentLoader(transparent, 'after') {
+      background-position: $left;
     }
   }
 }

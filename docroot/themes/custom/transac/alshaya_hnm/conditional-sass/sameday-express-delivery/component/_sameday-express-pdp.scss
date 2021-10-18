@@ -9,4 +9,11 @@
   #express-delivery-options {
     border-bottom: none;
   }
+
+  @include breakpoint($only-mobile) {
+    .simple-swatch-effect + .express-delivery,
+    .product-swatch + .express-delivery {
+      margin-top: 1.8125rem;
+    }
+  }
 }

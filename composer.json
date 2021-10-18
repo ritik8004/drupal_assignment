@@ -259,7 +259,8 @@
                 "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                 "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log_v4.patch",
                 "CORE-30818 - Allow only file upload without video url field": "https://www.drupal.org/files/issues/2021-06-24/media-video-url-issue.patch",
-                "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch"
+                "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch",
+                "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
