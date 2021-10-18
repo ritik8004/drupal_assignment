@@ -59,16 +59,14 @@
 
         {# Delivery options will load if express delivery enabled. #}
         {% if content.delivery_options %}
-          <div class="express-delivery desktop">
-            {% for key,delivery_option in content.delivery_options %}
-              <div class="express-delivery-text {{ key }}">
-                <span>{{ delivery_option }}</span>
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        {% if content.same_day_delivery_text %}
+            <div class="express-delivery">
+              {% for key,delivery_option in content.delivery_options %}
+                <div class="express-delivery-text {{ key }}">
+                  <span>{{ delivery_option }}</span>
+                </div>
+              {% endfor %}
+            </div>
+        {% elseif content.same_day_delivery_text %}
           <div class="same-day-delivery">
             <div class="same-day-content">
               <p>{{ content.same_day_delivery_text }}</p>
