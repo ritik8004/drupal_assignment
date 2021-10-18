@@ -47,6 +47,10 @@
   </div>
   {% endblock %}
   {% block mobileGallery %}
+    {% if pdp_gallery_type == 'classic' %}
+      {# Add slider counter #}
+      <div class="slider__counter"></div>
+    {% endif %}
     <div class="mobilegallery">
       <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
         {% for thumbs in thumbnails %}
