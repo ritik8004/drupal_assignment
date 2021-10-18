@@ -7,9 +7,9 @@ import DeliveryOptions from '../../../../../alshaya_spc/js/expressdelivery/compo
 class PdpExpressDelivery extends React.Component {
   constructor(props) {
     super(props);
+    this.expandRef = React.createRef();
     this.state = {
       open: true,
-      expandRef: React.createRef(),
     };
   }
 
@@ -22,18 +22,18 @@ class PdpExpressDelivery extends React.Component {
    * Show delivery options on click of arrow button.
    */
   showExpressDeliveryBlock = () => {
-    const { open, expandRef } = this.state;
+    const { open } = this.state;
 
     if (open) {
       this.setState({
         open: false,
       });
-      expandRef.current.classList.add('close-card');
+      this.expandRef.current.classList.add('close-card');
     } else {
       this.setState({
         open: true,
       });
-      expandRef.current.classList.remove('close-card');
+      this.expandRef.current.classList.remove('close-card');
     }
   };
 
@@ -42,12 +42,11 @@ class PdpExpressDelivery extends React.Component {
    */
   setDeliveryOptionAccordionHeight = (event) => {
     event.preventDefault();
-    const { expandRef } = this.state;
-    setupAccordionHeight(expandRef);
+    setupAccordionHeight(React.createRef());
   }
 
   render() {
-    const { open, expandRef } = this.state;
+    const { open } = this.state;
     const { variantSelected } = this.props;
     // Add correct class.
     const expandedState = open === true ? 'show' : '';
@@ -55,7 +54,7 @@ class PdpExpressDelivery extends React.Component {
       <div
         className="pdp-express-delivery-wrapper card fadeInUp"
         style={{ animationDelay: '1s' }}
-        ref={expandRef}
+        ref={this.expandRef}
       >
         <div
           className={`express-delivery-title-wrapper title ${expandedState}`}
