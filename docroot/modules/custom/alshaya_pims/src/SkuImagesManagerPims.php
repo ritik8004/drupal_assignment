@@ -91,8 +91,8 @@ class SkuImagesManagerPims extends SkuImagesManager {
       $file_uri = (isset($media_item['file'])) ? $media_item['file'] : '';
 
       // For asset type attribute we need below changes e.g. hm and cos.
-      if (!empty($media_item['drupal_uri']) && isset($media['pims_image']['styles'])) {
-        $file_uri = $media_item['drupal_uri'];
+      if (!empty($asset['pims_image']['url']) && isset($media['pims_image']['styles'])) {
+        $file_uri = $asset['pims_image']['url'];
         $media_item = $media_item['pims_image'];
       }
 
