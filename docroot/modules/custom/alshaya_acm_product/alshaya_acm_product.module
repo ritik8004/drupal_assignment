@@ -2154,11 +2154,11 @@ function alshaya_acm_product_get_delivery_options($sku) {
   return [
     'same_day_delivery' => [
       'status' => $sku_entity->get('attr_same_day_delivery')->getString(),
-      'label' => t('Same Day Delivery available'), [], ['context' => 'sameday_delivery_label'],
+      'label' => t('Same Day Delivery Available'), [], ['context' => 'sameday_delivery_label'],
     ],
     'express_delivery' => [
       'status' => $sku_entity->get('attr_express_delivery')->getString(),
-      'label' => t('Express Delivery available', [], ['context' => 'express_delivery_label']),
+      'label' => t('Express Delivery Available', [], ['context' => 'express_delivery_label']),
     ],
   ];
 }
