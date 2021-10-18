@@ -225,7 +225,7 @@ const getLastOrder = async (customerId) => {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
     if (!hasValue(order.data) || hasValue(order.data.error)) {
       logger.warning('Error while fetching last order of customer. CustomerId: @customerId, Response: @response.', {
-        '@response': JSON.stringify(order.data),
+        '@response': JSON.stringify(order),
         '@customerId': customerId,
       });
 
@@ -2129,11 +2129,25 @@ window.commerceBackend.placeOrder = async (data) => {
         return { data: result };
       }
 
-      if (!hasValue(response.data) || hasValue(response.data.error)) {
+      if (hasValue(response.data) && hasValue(response.data.error)) {
         return response;
       }
 
       const orderId = parseInt(response.data, 10);
+      if (!orderId) {
+        logger.error('Place order returned an empty order id. Response: @response Cart: @cart .', {
+          '@response': JSON.stringify(response),
+          '@cart': JSON.stringify(cart),
+        });
+
+        result.error = true;
+        result.error_code = 604;
+        result.success = false;
+        result.error_message = getDefaultErrorMessage();
+        return { data: result };
+      }
+
+      // Proceed with checkout.
       const secureOrderId = btoa(JSON.stringify({
         order_id: orderId,
         email: cart.data.cart.billing_address.email,
