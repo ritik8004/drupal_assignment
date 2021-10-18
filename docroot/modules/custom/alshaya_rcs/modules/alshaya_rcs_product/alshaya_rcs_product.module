@@ -255,14 +255,6 @@ function template_preprocess_rcs_commerce_price(array &$variables) {
  * Implements hook_preprocess_html().
  */
 function alshaya_rcs_product_preprocess_html(array &$variables) {
-  // Skip product rcs_templates for rcs category.
-  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
-    $term = \Drupal::request()->attributes->get('taxonomy_term');
-    if ($term->bundle() == 'rcs_category') {
-      return;
-    }
-  }
-
   $variables['rcs_templates'] = [
     '#type' => 'container',
     '#attributes' => [
@@ -394,17 +386,27 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
-  $sku_base_form = [
-    '#theme' => 'rcs_sku_base_form',
-  ];
-  $variables['rcs_templates']['sku_base_form'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($sku_base_form),
-    '#attributes' => [
-      'class' => 'rcs-templates--sku-base-form',
-    ],
-  ];
+  $skip_sku_base_form = FALSE;
+  // Skip product rcs_templates of sku_base_form for rcs category.
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $skip_sku_base_form = TRUE;
+    }
+  }
+  if (!$skip_sku_base_form) {
+    $sku_base_form = [
+      '#theme' => 'rcs_sku_base_form',
+    ];
+    $variables['rcs_templates']['sku_base_form'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => render($sku_base_form),
+      '#attributes' => [
+        'class' => 'rcs-templates--sku-base-form',
+      ],
+    ];
+  }
 
   // We pass this as html so that in the JS, we can fetch the data from here and
   // we can call other apis to add to this data if required.
