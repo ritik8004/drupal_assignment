@@ -15,8 +15,9 @@
     }
 
     h1,
-    span {
+    h1 span {
       margin-top: 0;
+      color: $primary_text;
     }
 
     h1 {
@@ -101,6 +102,10 @@
 
 .basic-details-wrapper .field--name-field-skus {
   .form-item-configurables-size {
+    @include breakpoint($tablet) {
+      order: 1;
+    }
+
     @include breakpoint($only-tablet) {
       margin-top: 0;
     }

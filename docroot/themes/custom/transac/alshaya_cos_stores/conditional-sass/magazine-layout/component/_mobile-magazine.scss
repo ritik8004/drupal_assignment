@@ -72,7 +72,7 @@
         text-transform: uppercase;
 
         @include breakpoint($only-tablet) {
-          margin-top: 2.5rem;
+          margin-top: 2rem;
         }
 
         @include breakpoint($tablet) {
@@ -80,7 +80,7 @@
         }
 
         @include breakpoint($desktop) {
-          margin-top: 3rem;
+          margin-top: 2rem;
         }
       }
 
