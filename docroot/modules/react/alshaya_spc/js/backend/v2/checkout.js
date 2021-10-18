@@ -2129,7 +2129,7 @@ window.commerceBackend.placeOrder = async (data) => {
         return { data: result };
       }
 
-      if (hasValue(response.data) && hasValue(response.data.error)) {
+      if (!hasValue(response.data) || hasValue(response.data.error)) {
         return response;
       }
 
