@@ -135,7 +135,7 @@ AddOutputFilterByType DEFLATE application/x-font-ttf
   RewriteCond %{HTTP_HOST} !\.cloud$ [NC]
   # Don't redirect on all *.hm.com domains.
   RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
-  RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
   # VirtualDocumentRoot and the rewrite rules are not working properly.
