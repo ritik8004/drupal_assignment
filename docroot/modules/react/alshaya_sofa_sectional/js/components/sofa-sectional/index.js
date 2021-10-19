@@ -225,6 +225,11 @@ export default class SofaSectionalForm extends React.Component {
       formAttributeValues,
       false,
     );
+    // Prepare options for GTM.
+    const optionsForGtm = getSelectedOptionsForGtm(
+      configurableAttributes,
+      formAttributeValues,
+    );
 
     // Retrieve the title and image to show in the minicart notification.
     let cartTitle = null;
@@ -254,23 +259,9 @@ export default class SofaSectionalForm extends React.Component {
       productImage: cartImage,
       productCartTitle: cartTitle,
       cartId,
+      optionsForGtm,
     }).then((response) => {
       if (response.error) {
-        // Stop the full screen loader.
-        Drupal.cartNotification.spinner_stop();
-
-        // Trigger GTM.
-        const optionsForGtm = getSelectedOptionsForGtm(
-          configurableAttributes,
-          formAttributeValues,
-        );
-        pushSeoGtmData({
-          sku,
-          error: true,
-          error_message: response.error_message,
-          options: optionsForGtm,
-        });
-
         // Set the error message to display on re-render.
         this.setState({ errorMessage: response.error_message });
         return;
