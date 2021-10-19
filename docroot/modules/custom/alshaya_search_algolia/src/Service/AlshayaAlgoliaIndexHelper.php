@@ -610,7 +610,7 @@ class AlshayaAlgoliaIndexHelper {
     $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search', FALSE);
     $images = [];
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
-      if (isset($media_item['pims_image'])) {
+      if (isset($media_item['pims_image']['styles'])) {
         $media_item = $media_item['pims_image'];
       }
 
