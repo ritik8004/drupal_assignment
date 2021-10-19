@@ -59,7 +59,7 @@
 
         {# Delivery options will load if express delivery enabled. #}
         {% if content.delivery_options %}
-            <div class="express-delivery">
+            <div class="express-delivery desktop">
               {% for key,delivery_option in content.delivery_options %}
                 <div class="express-delivery-text {{ key }}">
                   <span>{{ delivery_option }}</span>
