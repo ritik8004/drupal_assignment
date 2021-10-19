@@ -3,7 +3,7 @@ import { isMaxSaleQtyEnabled } from '../../../js/utilities/display';
 /**
  * Handle the response once the cart is updated.
  */
-export const handleUpdateCartRespose = (response, productData) => {
+export const handleUpdateCartRespose = (response, productData, postData) => {
   const productInfo = productData;
 
   // Return response data if the error present to process it by component itself.
@@ -26,7 +26,17 @@ export const handleUpdateCartRespose = (response, productData) => {
     document.dispatchEvent(refreshCartEvent);
 
     // Show minicart notification.
-    Drupal.cartNotification.triggerNotification(productInfo);
+    const form = document.getElementsByClassName('sku-base-form')[0];
+    const cartNotificationEvent = new CustomEvent('product-add-to-cart-success', {
+      bubbles: true,
+      detail: {
+        productData: productInfo,
+        cartData: response.data,
+        postData,
+        noGtm: true,
+      },
+    });
+    form.dispatchEvent(cartNotificationEvent);
   }
 
   return response;
@@ -61,6 +71,7 @@ export const triggerUpdateCart = (requestData) => {
       return handleUpdateCartRespose(
         response,
         productData,
+        postData,
       );
     },
   );
