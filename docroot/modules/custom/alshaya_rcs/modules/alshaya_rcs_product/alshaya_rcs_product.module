@@ -386,15 +386,16 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
-  $skip_sku_base_form = FALSE;
+  $is_category_page = FALSE;
   // Skip product rcs_templates of sku_base_form for rcs category.
+  // @todo To find a better solution to resolve the breadcrumb issue of PLP.
   if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = \Drupal::request()->attributes->get('taxonomy_term');
     if ($term->bundle() == 'rcs_category') {
-      $skip_sku_base_form = TRUE;
+      $is_category_page = TRUE;
     }
   }
-  if (!$skip_sku_base_form) {
+  if (!$is_category_page) {
     $sku_base_form = [
       '#theme' => 'rcs_sku_base_form',
     ];
