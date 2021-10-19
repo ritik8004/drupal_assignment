@@ -409,7 +409,7 @@ exports.computePhFilters = function (input, filter) {
         jQuery('.has--special--price', priceBlock).html(price.html());
         jQuery('.special--price', priceBlock).html(finalPrice.html());
 
-        let discount = jQuery('.price--discount').html();
+        let discount = jQuery('.price--discount', priceBlock).html();
         discount = discount.replace('@discount', Math.round(input.price_range.maximum_price.discount.percent_off));
         jQuery('.price--discount', priceBlock).html(discount);
       }
