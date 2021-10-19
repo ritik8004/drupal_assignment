@@ -1,11 +1,6 @@
 import { isMaxSaleQtyEnabled } from '../../../js/utilities/display';
 
 /**
- * Ajax call for updating the cart.
- */
-export const updateCart = (postData) => window.commerceBackend.addUpdateRemoveCartItem(postData);
-
-/**
  * Handle the response once the cart is updated.
  */
 export const handleUpdateCartRespose = (response, productData) => {
@@ -52,7 +47,7 @@ export const triggerUpdateCart = (requestData) => {
   };
 
   // Call update cart api function.
-  return updateCart(postData).then(
+  return window.commerceBackend.addUpdateRemoveCartItem(postData).then(
     (response) => {
       // Prepare product data.
       const productData = {
