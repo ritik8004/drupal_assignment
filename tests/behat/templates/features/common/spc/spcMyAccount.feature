@@ -1,4 +1,4 @@
-@javascript @smoke @bpaeuat @tbseguat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @flsauat @bbwsauat @mcsauat @mcaeuat @pbaeuat @vssauat @mcsauat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat
+@javascript @smoke @pbkkwuat @mujikwuat @mujisauat @mujiaeuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @flsauat @bbwsauat @mcsauat @mcaeuat @pbaeuat @vssauat @mcsauat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat
 Feature: Test the My Account functionality
 
   Background:
@@ -54,6 +54,8 @@ Feature: Test the My Account functionality
       | field_address[0][address][dependent_locality]        | {building}    |
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
+      | field_address[0][address][sorting_code]              | {landmark}    |
+      | field_address[0][address][postal_code]               | {postal_code} |
     And I press "op"
     When I wait for AJAX to finish
     And I wait for the page to load

@@ -11,11 +11,11 @@ import {
   getApiEndpoint,
   getCartIdFromStorage,
   isUserAuthenticated,
-  logger,
   removeCartIdFromStorage,
   detectCFChallenge,
   detectCaptcha,
 } from './utility';
+import logger from '../../utilities/logger';
 import {
   cartErrorCodes,
   getDefaultErrorMessage,
@@ -1132,19 +1132,26 @@ window.commerceBackend.pushAgentDetailsInCart = async () => {
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
-  const response = await getCart();
-  if (_isNull(response) || _isUndefined(response.data)) {
-    return null;
+  let email = StaticStorage.get('cartCustomerEmail');
+  if (email !== null) {
+    return email;
   }
 
-  const cart = response.data;
-  if (!_isUndefined(cart.customer)
-    && !_isUndefined(cart.customer.email)
-    && !_isEmpty(cart.customer.email)
-  ) {
-    return cart.customer.email;
+  const response = await getCart();
+  if (_isNull(response) || _isUndefined(response.data)) {
+    email = '';
+  } else {
+    const cart = response.data;
+    if (hasValue(cart.customer)
+      && hasValue(cart.customer.email)
+      && cart.customer.email !== ''
+    ) {
+      email = cart.customer.email;
+    }
   }
-  return null;
+
+  StaticStorage.set('cartCustomerEmail', email);
+  return email;
 };
 
 /**

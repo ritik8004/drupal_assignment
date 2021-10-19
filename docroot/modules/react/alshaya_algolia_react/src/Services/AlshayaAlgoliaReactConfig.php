@@ -212,8 +212,18 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'productFrameEnabled' => $product_frame_settings->get('product_frame'),
       'promotionFrameEnabled' => $product_frame_settings->get('promotion_frame'),
       'productTitleTrimEnabled' => $product_frame_settings->get('product_title_trim'),
+      'productElementAlignmentEnabled' => FALSE,
       'hideGridToggle' => $alshaya_algolia_react_setting_values->get('hide_grid_toggle') ?? 0,
     ];
+
+    // Set product elements alignment to true only
+    // when all three options i.e promotion frame,
+    // product title trim and product element alignment are enabled.
+    if ($product_frame_settings->get('promotion_frame')
+      && $product_frame_settings->get('product_title_trim')
+      && $product_frame_settings->get('product_element_alignment')) {
+      $response['commonAlgoliaSearch']['productElementAlignmentEnabled'] = TRUE;
+    }
 
     $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
 

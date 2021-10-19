@@ -543,3 +543,8 @@ plp-frame-options:
   css:
     theme:
       css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: {}
+
+sofa-sectional:
+  css:
+    theme:
+      css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}

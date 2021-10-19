@@ -1,6 +1,7 @@
 import _isEmpty from 'lodash/isEmpty';
 import { callMagentoApi, getCart } from './common';
-import { getApiEndpoint, logger } from './utility';
+import { getApiEndpoint } from './utility';
+import logger from '../../utilities/logger';
 import StaticStorage from './staticStorage';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
@@ -29,8 +30,8 @@ const getPaymentMethods = async () => {
     return null;
   }
 
-  // Change the payment methods based on shipping method and cart total.
-  const staticCacheKey = `payment_methods_${cart.data.shipping.type}_${cart.data.totals.base_grand_total}`;
+  // Change the payment methods based on shipping method.
+  const staticCacheKey = `payment_methods_${cart.data.shipping.type}`;
   const cached = StaticStorage.get(staticCacheKey);
   if (!_isEmpty(cached)) {
     return cached;
