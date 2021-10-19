@@ -1,9 +1,14 @@
 import React from 'react';
+import _debounce from 'lodash/debounce';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import FormElement from '../form-element';
 import {
   getAllowedAttributeValues,
   isMaxSaleQtyReached,
+  getSelectedOptionsForCart,
+  triggerUpdateCart,
+  pushSeoGtmData,
+  getSelectedOptionsForGtm,
 } from '../../utilities/sofasectional';
 import QuantitySelector from '../../../../js/utilities/components/quantity-selector';
 import ErrorMessage from '../../../../js/utilities/components/error-message';
@@ -28,8 +33,14 @@ export default class SofaSectionalForm extends React.Component {
     // Reset selectedVariant to null.
     selectedVariant = null;
 
+    // Store reference to the config form.
+    this.formRef = React.createRef();
+
+    // Add debounce for the form Add button handler.
+    this.onAddClicked = _debounce(this.onAddClicked, 300);
+
     // Check max sale quantity limit for the display Sku.
-    const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productInfo)
+    const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productInfo[sku])
       && !isHideMaxSaleMsg())
       ? Drupal.t('Purchase limit has been reached')
       : null;
@@ -132,7 +143,7 @@ export default class SofaSectionalForm extends React.Component {
     }
 
     // Check max sale quantity limit for the selected Sku.
-    const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productInfo)
+    const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productInfo[sku])
       && !isHideMaxSaleMsg())
       ? Drupal.t('Purchase limit has been reached')
       : null;
@@ -192,7 +203,87 @@ export default class SofaSectionalForm extends React.Component {
    */
   handleAddToBagClick = (e) => {
     e.preventDefault();
-    // @todo: add click handler for add to cart button.
+    this.onAddClicked();
+  }
+
+  /**
+   * Debounced Event handler for add to bag.
+   */
+  onAddClicked = () => {
+    const { productInfo, configurableCombinations } = drupalSettings;
+    const {
+      sku,
+      quantity,
+      formAttributeValues,
+      selectedVariant,
+    } = this.state;
+    const configurableAttributes = configurableCombinations[sku].configurables;
+    const productData = productInfo[sku];
+
+    const options = getSelectedOptionsForCart(
+      configurableAttributes,
+      formAttributeValues,
+      false,
+    );
+
+    // Retrieve the title and image to show in the minicart notification.
+    let cartTitle = null;
+    let cartImage = null;
+    const variants = Object.values(productData.variants);
+    for (let index = 0; index < variants.length; index++) {
+      if (variants[index].sku === selectedVariant) {
+        cartTitle = variants[index].cart_title;
+        cartImage = variants[index].cart_image;
+        break;
+      }
+    }
+
+    // Get the cart id.
+    const cartData = Drupal.alshayaSpc.getCartData();
+    const cartId = (cartData !== null) ? cartData.cart_id : null;
+
+    // Start the full screen spinner.
+    Drupal.cartNotification.spinner_start();
+
+    triggerUpdateCart({
+      action: 'add item',
+      sku,
+      qty: quantity,
+      variant: selectedVariant,
+      options,
+      productImage: cartImage,
+      productCartTitle: cartTitle,
+      cartId,
+    }).then((response) => {
+      if (response.error) {
+        // Stop the full screen loader.
+        Drupal.cartNotification.spinner_stop();
+
+        // Trigger GTM.
+        const optionsForGtm = getSelectedOptionsForGtm(
+          configurableAttributes,
+          formAttributeValues,
+        );
+        pushSeoGtmData({
+          sku,
+          error: true,
+          error_message: response.error_message,
+          options: optionsForGtm,
+        });
+
+        // Set the error message to display on re-render.
+        this.setState({ errorMessage: response.error_message });
+        return;
+      }
+
+      // Push product values to GTM.
+      pushSeoGtmData({
+        sku,
+        qty: quantity,
+        element: this.formRef.current,
+        variant: selectedVariant,
+      });
+    });
   }
 
   /**
@@ -220,6 +311,7 @@ export default class SofaSectionalForm extends React.Component {
       quantity,
       errorMessage,
     } = this.state;
+    const productData = productInfo[sku];
     const configurableAttributes = configurableCombinations[sku].configurables;
     const hiddenAttributes = getHiddenFormAttributes();
     const combinationsHierarchy = configurableCombinations[sku].combinations;
@@ -303,7 +395,7 @@ export default class SofaSectionalForm extends React.Component {
             groupData.groupAlternates = attribute[1].alternates;
           }
           return (
-            <div key={attribute[0]} className={`sofa-section-card sofa-section-accordion attribute-wrapper attribute-wrapper_${attribute[0]}`}>
+            <div key={attribute[0]} className={`sofa-section-card sofa-section-accordion attribute-wrapper attribute-wrapper_${attribute[0]}`} ref={this.formRef}>
               <ConditionalView condition={isSwatch}>
                 <FormElement
                   type="swatch"
@@ -345,17 +437,16 @@ export default class SofaSectionalForm extends React.Component {
             selectedAttributes={formAttributeValues}
             configurableAttributes={configurableAttributes}
             selectedVariant={selectedVariant}
-            sku={sku}
-            productInfo={productInfo}
+            productInfo={productData}
           />
         </ConditionalView>
+        <ErrorMessage message={errorMessage} />
         <QuantitySelector
           options={options}
           onChange={this.onQuantityChanged}
           quantity={quantity}
           label={Drupal.t('Quantity')}
         />
-        <ErrorMessage message={errorMessage} />
         <div className="sofa-sectional-addtobag-button-wrapper">
           <input
             type="hidden"
@@ -364,12 +455,12 @@ export default class SofaSectionalForm extends React.Component {
             value={(selectedVariant !== null ? selectedVariant : '')}
           />
           <button
-            className="sofa-sectional-addtobag-button edit-add-to-cart"
+            className="sofa-sectional-addtobag-button"
             id={`sofa-sectional-addtobag-button-${sku}`}
             type="submit"
             onClick={this.handleAddToBagClick}
             // Disable add to cart button if max sale limit has reached.
-            disabled={(isMaxSaleQtyReached(selectedVariant, productInfo)
+            disabled={(isMaxSaleQtyReached(selectedVariant, productData)
               || selectedVariant === null)}
           >
             {Drupal.t('add to cart')}
