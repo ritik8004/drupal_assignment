@@ -386,17 +386,28 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
-  $sku_base_form = [
-    '#theme' => 'rcs_sku_base_form',
-  ];
-  $variables['rcs_templates']['sku_base_form'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($sku_base_form),
-    '#attributes' => [
-      'class' => 'rcs-templates--sku-base-form',
-    ],
-  ];
+  $is_category_page = FALSE;
+  // Skip product rcs_templates of sku_base_form for rcs category.
+  // @todo To find a better solution to resolve the breadcrumb issue of PLP.
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $is_category_page = TRUE;
+    }
+  }
+  if (!$is_category_page) {
+    $sku_base_form = [
+      '#theme' => 'rcs_sku_base_form',
+    ];
+    $variables['rcs_templates']['sku_base_form'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => render($sku_base_form),
+      '#attributes' => [
+        'class' => 'rcs-templates--sku-base-form',
+      ],
+    ];
+  }
 
   // We pass this as html so that in the JS, we can fetch the data from here and
   // we can call other apis to add to this data if required.
