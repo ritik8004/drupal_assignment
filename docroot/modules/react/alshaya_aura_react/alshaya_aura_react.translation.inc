@@ -13,7 +13,7 @@ function _alshaya_aura_react_translations() {
     'My AURA' => [
       'ar' => 'حساب أورا الخاص بي',
     ],
-    'Already an AURA member?' => [
+    'Already an Aura member?' => [
       'ar' => 'هل أنت عضو في أورا؟',
     ],
     'Link your card' => [
@@ -64,7 +64,7 @@ function _alshaya_aura_react_translations() {
     'Your points will instantly be credited to your account. You’ll be able to redeem them after 14 days as per the returns & refunds policies.' => [
       'ar' => 'سيتم إضافة نقاطك على الفور إلى حسابك، سوف تتمكن من استبدال النقاط بعد 14 يوم طبقاً لسياسات الاسترداد والإرجاع.',
     ],
-    'Say hello to AURA' => [
+    'Say hello to Aura' => [
       'ar' => 'مرحباً بكم في أورا',
     ],
     'Send One Time PIN' => [
@@ -124,7 +124,7 @@ function _alshaya_aura_react_translations() {
     'Bespoke lifestyles.' => [
       'ar' => 'أسلوب حياة أفضل.',
     ],
-    'Good things come to those with taste. Say hello to AURA, a lifestyle program catered to your taste for refined brands and experiences.' => [
+    'Good things come to those with taste. Say hello to Aura, a lifestyle program catered to your taste for refined brands and experiences.' => [
       'ar' => 'لأن أصحاب الذوق الرفيع يستحقون كل ما هو أفضل. مرحباً بكم في أورا، برنامج المكافآت الذي يقدم لكم ماركاتكم المفضلة من خلال تجربة تسوق تُحسن أسلوب حياتكم.',
     ],
     'Learn more' => [
@@ -190,7 +190,7 @@ function _alshaya_aura_react_translations() {
     'Link card using' => [
       'ar' => 'ربط البطاقة باستخدام',
     ],
-    'Incorrect AURA card number. Please re-enter a valid AURA card number.' => [
+    'Incorrect Aura card number. Please re-enter a valid Aura card number.' => [
       'ar' => 'رقم AURA غير صحيح. يرجى إعادة إدخال رقم بطاقة AURA صحيح.',
     ],
     'Your loyalty points will be credited to this account.' => [

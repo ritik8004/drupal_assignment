@@ -44,7 +44,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'otp_modal_title',
-      'value' => t('Say hello to AURA'),
+      'value' => t('Say hello to Aura'),
     ],
     [
       'key' => 'resend_code',
@@ -148,7 +148,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_already_member_question',
-      'value' => t('Already an AURA member?'),
+      'value' => t('Already an Aura member?'),
     ],
     [
       'key' => 'checkout_not_member_question',
@@ -160,7 +160,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_no_card_found_try_again',
-      'value' => t('Incorrect AURA card number. Please re-enter a valid AURA card number.'),
+      'value' => t('Incorrect Aura card number. Please re-enter a valid Aura card number.'),
     ],
     [
       'key' => 'checkout_points_to_be_credited_message',
@@ -260,7 +260,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'invalid_card_number',
-      'value' => t('Incorrect AURA card number. Please re-enter a valid AURA card number.'),
+      'value' => t('Incorrect Aura card number. Please re-enter a valid Aura card number.'),
     ],
     [
       'key' => 'points_exceed_order_total',

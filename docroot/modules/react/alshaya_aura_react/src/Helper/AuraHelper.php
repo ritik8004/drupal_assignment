@@ -131,8 +131,6 @@ class AuraHelper {
     $country_code = _alshaya_custom_get_site_level_country_code();
     $alshaya_aura_config = $this->configFactory->get('alshaya_aura_react.settings');
     $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
-    $dictionary_api_mobile_country_code_list = $this->apiHelper->getAuraApiConfig([AuraDictionaryApiConstants::EXT_PHONE_PREFIX],
-    $this->languageManager->getCurrentLanguage()->getId());
 
     $config = [
       'siteName' => $this->configFactory->get('system.site')->get('name'),

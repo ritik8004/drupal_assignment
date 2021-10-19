@@ -160,7 +160,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     return (
       <div className="aura-new-user-form">
         <div className="aura-modal-header">
-          <SectionTitle>{Drupal.t('Say hello to AURA')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Say hello to Aura')}</SectionTitle>
           <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">
