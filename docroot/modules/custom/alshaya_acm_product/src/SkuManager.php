@@ -2338,6 +2338,7 @@ class SkuManager {
    *   Array of configurable field values.
    */
   public function getConfigurableValues(SKUInterface $sku): array {
+    // @todo Need to move this to V2 for configurable attributes.
     $configurableFieldValues = [];
 
     if ($sku->bundle() == 'configurable') {

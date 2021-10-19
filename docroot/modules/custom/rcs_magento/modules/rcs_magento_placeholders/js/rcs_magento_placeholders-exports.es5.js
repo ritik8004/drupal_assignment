@@ -231,6 +231,17 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
       RcsPhStaticStorage.set('product_' + result.sku, result);
+
+      if (drupalSettings.alshayaRcs.isColorSplitEnabled) {
+        const groupedProductsEvent = new CustomEvent('alshayaRcsGroupedProducts', {
+          detail: {
+            result: result,
+            pageType: null,
+          }
+        });
+
+        document.dispatchEvent(groupedProductsEvent);
+      }
       break;
 
     default:
@@ -250,6 +261,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
     // To trigger the Event.
     document.dispatchEvent(updateResult);
+    return updateResult.detail.result;
   }
 
   return result;
@@ -257,7 +269,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
 
 exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
   const request = {
-    uri: '/graphql',
+    uri: 'graphql',
     method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],

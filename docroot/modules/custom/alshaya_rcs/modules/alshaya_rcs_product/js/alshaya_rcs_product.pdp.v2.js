@@ -166,7 +166,7 @@ function getConfigurables(product) {
   const configurables = {};
   product.configurable_options.forEach(function (option) {
     configurables[option.attribute_code] = {
-      attribute_id: atob(option.attribute_uid),
+      attribute_id: parseInt(atob(option.attribute_uid), 10),
       code: option.attribute_code,
       label: option.label,
       position: option.position,
@@ -200,7 +200,7 @@ function getVariantConfigurableOptions(product, variantAttributes) {
 
   return variantAttributes.map(function (attribute) {
     return {
-      attribute_id: attribute.code,
+      attribute_id: `attr_${attribute.code}`,
       label: productConfigurables[attribute.code].label,
       value: attribute.label,
       value_id: attribute.value_index,
@@ -467,13 +467,17 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
       combinations.attribute_sku[configurableCodes[i]] = typeof combinations.attribute_sku[configurableCodes[i]] !== 'undefined'
         ? combinations.attribute_sku[configurableCodes[i]]
         : {};
-      combinations.attribute_sku[configurableCodes[i]][attributeVal] = variantSku;
+
+      combinations.attribute_sku[configurableCodes[i]][attributeVal] = typeof combinations.attribute_sku[configurableCodes[i]][attributeVal] !== 'undefined'
+        ? combinations.attribute_sku[configurableCodes[i]][attributeVal]
+        : [];
+      combinations.attribute_sku[configurableCodes[i]][attributeVal].push(variantSku);
     }
   });
 
   var firstChild = Object.entries(combinations.attribute_sku)[0];
   firstChild = Object.entries(firstChild[1]);
-  combinations.firstChild = firstChild[0][1];
+  combinations.firstChild = firstChild[0][1][0];
 
   // @todo: Add check for simple product.
   // @todo Add sorting for the configurable options based on weights.

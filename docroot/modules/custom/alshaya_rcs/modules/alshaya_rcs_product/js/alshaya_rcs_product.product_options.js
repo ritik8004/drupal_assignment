@@ -1,7 +1,8 @@
 (function () {
   document.addEventListener('alshayaRcsUpdateResults', function getProductOptionsData(e) {
     // Return if result is empty.
-    if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
+    if (typeof e.detail.result === 'undefined'
+      || (e.detail.pageType !== 'product' && e.detail.placeholder !== 'product-recommendation')) {
       return;
     }
 
