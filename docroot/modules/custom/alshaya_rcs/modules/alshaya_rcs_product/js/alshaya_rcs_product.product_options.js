@@ -33,5 +33,12 @@
       attribute_code: drupalSettings.alshayaRcs.colorAttribute,
       values: attributeValues,
     });
+
+    // Sort the configurable options according to position.
+    // @todo Ask if this should be done as done in
+    // Configurable::getSortedConfigurableAttributes().
+    mainProduct.configurable_options = mainProduct.configurable_options.sort(function (optionA, optionB) {
+      return (optionA.position > optionB.position) - (optionA.position < optionB.position);
+    });
   });
 })();

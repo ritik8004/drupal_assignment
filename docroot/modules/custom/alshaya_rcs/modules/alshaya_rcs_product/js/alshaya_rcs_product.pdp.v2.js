@@ -163,13 +163,6 @@ function getConfigurables(product) {
     return staticDataStore[staticKey];
   }
 
-  // Sort the configurable options according to position.
-  // @todo Ask if this should be done as done in
-  // Configurable::getSortedConfigurableAttributes().
-  product.configurable_options = product.configurable_options.sort(function (optionA, optionB) {
-    return (optionA.position > optionB.position) - (optionA.position < optionB.position);
-  });
-
   const configurables = {};
   product.configurable_options.forEach(function (option) {
     configurables[option.attribute_code] = {
@@ -452,12 +445,14 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
     firstChild: '',
   };
 
+  const rawProductData = window.commerceBackend.getProductData(sku, false, false);
+
   productData.variants = Object.keys(productData.variants).map(function (variantSku) {
     const variant = productData.variants[variantSku];
     const variantConfigurableAttributes = {};
     variant.configurableOptions.forEach(function (variantConfigurableOption) {
       variantConfigurableAttributes[variantConfigurableOption.attribute_id] = variantConfigurableOption.value_id;
-    })
+    });
 
     for (var i = 0; i < configurableCodes.length; i++) {
       if (typeof variantConfigurableAttributes[configurableCodes[i]] === 'undefined') {
