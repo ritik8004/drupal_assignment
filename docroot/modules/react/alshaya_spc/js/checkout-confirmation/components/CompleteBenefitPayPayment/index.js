@@ -54,6 +54,8 @@ class CompleteBenefitPayPayment extends React.Component {
   loadBenefitPayModal = () => {
     const scriptExists = document.getElementById('benefit-pay-in-app');
 
+    // Check if benefit pay script is already added on the page by
+    // checking the element id added by the script.
     if (!scriptExists) {
       const inAppScript = document.createElement('script');
       inAppScript.async = true;
@@ -61,6 +63,7 @@ class CompleteBenefitPayPayment extends React.Component {
       inAppScript.id = 'benefit-pay-in-app';
       document.body.appendChild(inAppScript);
       inAppScript.onload = () => {
+        // Automatically open the Benefit Pay widget modal when user lands on the confirmation page.
         // We only want to auto open payment modal once so checking
         // `benefit_pay_modal_auto_opened` from storage to check if this is user's
         // first visit of confirmation page or user is reloading the page.
