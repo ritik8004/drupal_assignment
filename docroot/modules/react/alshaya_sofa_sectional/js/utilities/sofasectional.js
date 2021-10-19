@@ -63,10 +63,26 @@ export const triggerUpdateCart = (requestData) => {
       const productData = {
         quantity: requestData.qty,
         sku: requestData.sku,
+        parentSku: requestData.sku,
+        options: requestData.optionsForGtm,
         variant: requestData.variant,
         image: requestData.productImage,
         product_name: requestData.productCartTitle,
       };
+
+      if (response.data.error) {
+        // Prepare and dispatch the add to cart failed event.
+        const form = document.getElementsByClassName('sku-base-form')[0];
+        const productAddToCartFailed = new CustomEvent('product-add-to-cart-failed', {
+          bubbles: true,
+          detail: {
+            postData,
+            productData,
+            message: response.error_message,
+          },
+        });
+        form.dispatchEvent(productAddToCartFailed);
+      }
 
       return handleUpdateCartRespose(
         response,
@@ -83,19 +99,6 @@ export const triggerUpdateCart = (requestData) => {
  *  An object of product's data attributes.
  */
 export const pushSeoGtmData = (productData) => {
-  // Prepare and push product's variables to GTM using dataLayer.
-  if (productData.error && typeof Drupal.alshayaSeoGtmPushAddToCartFailure !== 'undefined') {
-    const message = typeof productData.options !== 'undefined'
-      ? `Update cart failed for Product [${productData.sku}] ${productData.options}`
-      : `Update cart failed for Product [${productData.sku}] `;
-    Drupal.alshayaSeoGtmPushAddToCartFailure(
-      message,
-      productData.error_message,
-    );
-
-    return;
-  }
-
   // Prepare and push product's variables to GTM using dataLayer.
   if (typeof Drupal.alshaya_seo_gtm_get_product_values !== 'undefined'
     && typeof Drupal.alshayaSeoGtmPushAddToCart !== 'undefined') {
@@ -192,7 +195,7 @@ export const getSelectedOptionsForGtm = (
     return true;
   });
 
-  return optionsForGtm.join(', ');
+  return optionsForGtm;
 };
 
 /**
