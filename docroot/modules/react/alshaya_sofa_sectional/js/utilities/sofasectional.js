@@ -329,11 +329,8 @@ export const isMaxSaleQtyReached = (selectedVariant, productData) => {
   }
 
   // Get the product max sale quantity for the selected variant only.
-  for (let index = 0; index < productData.variants.length; index++) {
-    if (productData.variants[index].sku === selectedVariant) {
-      maxSaleQtyOfSelectedVariant = productData.variants[index].max_sale_qty;
-      break;
-    }
+  if (selectedVariant !== null) {
+    maxSaleQtyOfSelectedVariant = parseInt(productData.variants[selectedVariant].maxSaleQty, 10);
   }
 
   // Check if max sale quantity limit has been reached.
@@ -351,12 +348,12 @@ export const isMaxSaleQtyReached = (selectedVariant, productData) => {
 
     // If max sale for parent sku enable, we will sum all the child variants
     // quantity in cart and consider the global qty limit.
-    for (let index = 0; index < productData.variants.length; index++) {
-      const childSku = productData.variants[index].sku;
+    Object.entries(productData.variants).forEach((variant) => {
+      const childSku = variant.sku;
       if (typeof cartData.items[childSku] !== 'undefined') {
         cartQtyForVariant += cartData.items[childSku].qty;
       }
-    }
+    });
 
     // Check if max sale quantity limit has been reached.
     if (cartQtyForVariant >= maxSaleQtyOfSelectedVariant
