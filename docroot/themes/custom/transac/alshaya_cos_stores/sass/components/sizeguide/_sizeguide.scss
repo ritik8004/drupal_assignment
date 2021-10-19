@@ -9,7 +9,7 @@
   font-size: 0.875rem;
   text-transform: uppercase;
   text-decoration: underline;
-  padding-top: 0;
+  padding-top: 0.25rem;
 
   @include breakpoint($only-mobile) {
     position: relative;
