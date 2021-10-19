@@ -1,0 +1,10 @@
+alshaya_sofa_sectional.settings:
+  type: config_object
+  label: 'Alshaya sofa and sectional settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Show / hide sofa and sectional feature for different PDP pages.'
+    category_id:
+      type: array
+      label: 'Category IDs for which this feature will work on PDP pages.'

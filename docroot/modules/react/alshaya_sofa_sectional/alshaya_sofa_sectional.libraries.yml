@@ -1,0 +1,15 @@
+sofa_sectional:
+  version: 1.x
+  footer: true
+  js:
+    dist/sofasectional.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - alshaya_spc/cart_utilities
+
+sofa_sectional_utilities:
+  js:
+    assets/js/sofa_sectional_utilities.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
