@@ -288,7 +288,7 @@ const getDefaultPaymentFromOrder = async (order) => {
  * @returns {object|null}
  *   Returns the store data object if found else null.
  */
-const getSavedStoreData = (key) => {
+const getSavedDrupalStoreData = (key) => {
   const savedStoreData = getStorageInfo(key);
 
   if (savedStoreData !== null) {
@@ -311,7 +311,7 @@ const getSavedStoreData = (key) => {
  * @param {object} data
  *   The store data object.
  */
-const setStoreData = (key, data) => {
+const setDrupalStoreData = (key, data) => {
   // eslint-disable-next-line no-param-reassign
   data.created = new Date().getTime();
 
@@ -336,23 +336,28 @@ const getStoreInfo = async (storeInformation) => {
   }
 
   const storageKey = `storeInfo:${drupalSettings.path.currentLanguage}:${store.code}`;
-  let storeData = getSavedStoreData(storageKey);
+  let storeData = getSavedDrupalStoreData(storageKey);
+  let storeInfo = null;
 
   if (hasValue(storeData)) {
-    return storeData.data;
-  }
+    storeInfo = storeData.data;
+  } else {
+    storeData = {};
 
-  storeData = { data: {} };
+    // Fetch store info from Drupal.
+    const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
+    if (_isEmpty(response.data)
+      || (!_isUndefined(response.data.error) && response.data.error)
+    ) {
+      setDrupalStoreData(storageKey, storeData);
+      return null;
+    }
+    storeInfo = response.data;
 
-  // Fetch store info from Drupal.
-  const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
-    setStoreData(storageKey, storeData);
-    return null;
+    // Set the Drupal store data into storage.
+    storeData.data = storeInfo;
+    setDrupalStoreData(storageKey, storeData);
   }
-  const storeInfo = response.data;
 
   // Get the complete data about the store by combining the received data from
   // Magento with the processed store data stored in Drupal.
@@ -382,8 +387,6 @@ const getStoreInfo = async (storeInformation) => {
     delete store.rnc_config;
   }
 
-  storeData.data = store;
-  setStoreData(storageKey, storeData);
   return store;
 };
 
