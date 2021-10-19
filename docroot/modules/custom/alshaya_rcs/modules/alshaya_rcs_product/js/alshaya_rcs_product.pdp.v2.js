@@ -447,19 +447,17 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
 
   const rawProductData = window.commerceBackend.getProductData(sku, false, false);
 
-  productData.variants = Object.keys(productData.variants).map(function (variantSku) {
-    const variant = productData.variants[variantSku];
-    const variantConfigurableAttributes = {};
-    variant.configurableOptions.forEach(function (variantConfigurableOption) {
-      variantConfigurableAttributes[variantConfigurableOption.attribute_id] = variantConfigurableOption.value_id;
-    });
+  rawProductData.variants.forEach(function (variant) {
+    const product = variant.product;
+    const variantSku = variant.product.sku;
+    let attributeVal = null;
 
-    for (var i = 0; i < configurableCodes.length; i++) {
-      if (typeof variantConfigurableAttributes[configurableCodes[i]] === 'undefined') {
-        delete(productData.variants[variantSku]);
+    for (let i = 0; i < configurableCodes.length; i++) {
+      attributeVal = product[configurableCodes[i]];
+
+      if (typeof attributeVal === 'undefined') {
         return;
       }
-      var attributeVal = variantConfigurableAttributes[configurableCodes[i]];
 
       combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
         ? combinations.by_sku[variantSku]
