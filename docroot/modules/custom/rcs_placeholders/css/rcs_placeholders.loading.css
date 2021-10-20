@@ -1,0 +1,40 @@
+.page-type-product:not(.rcs-loaded) .content__main .gallery-wrapper,
+.page-type-product:not(.rcs-loaded) .content__title_wrapper,
+.page-type-product:not(.rcs-loaded) .content__sidebar,
+.page-type-promotion:not(.rcs-loaded) #alshaya-algolia-plp,
+#rcs-ph-navigation_menu:not(.rcs-loaded) ul,
+#rcs-ph-breadcrumb:not(.rcs-loaded) ol,
+#rcs-ph-lhn_block:not(.rcs-loaded),
+#rcs-ph-promotional_banner:not(.rcs-loaded),
+#rcs-ph-upsell-products:not(.rcs-loaded),
+#rcs-ph-related-products:not(.rcs-loaded),
+#rcs-ph-crosssell-products:not(.rcs-loaded),
+#rcs-ph-field_magazine_shop_the_story:not(.rcs-loaded) .example {
+  -webkit-animation: loading 1s infinite;
+  animation: loading 1s infinite;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(#eee),
+    color-stop(#ddd),
+    color-stop(#eee),
+    to(#ddd)
+  );
+  background-image: -o-linear-gradient(left, #eee, #ddd, #eee, #ddd);
+  background-image: linear-gradient(90deg, #eee, #ddd, #eee, #ddd);
+  background-size: 400% 100%;
+  background-position: 100% 0;
+}
+
+@-webkit-keyframes loading {
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes loading {
+  to {
+    background-position: 0 0;
+  }
+}
