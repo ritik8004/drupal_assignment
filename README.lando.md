@@ -31,9 +31,6 @@ separately._
 * The lando package will have the compatible docker as well inside it.
 * Post installation, follow the recommendations in the [Performance](#Performance) section below.
 
-Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
-as per the instructions above.
-
 All steps are executed on your host OS.
 
   * `lando start` - this will configure and set up your containers and services.
@@ -60,8 +57,10 @@ Having mysql exposed on localhost is useful for connecting to mysql from clients
 
 ### MySQL
 
-If you're adding new sites, as things stand, you'll need to add restart lando
-after adding the line to blt/alshaya_local_sites.yml file.
+If you're adding new sites
+* Add the new site as described in [README file](./README.md#create-a-new-site)
+* No need to rebuild like in vagrant
+* After adding entry in blt/alshaya_local_sites.yml just run `lando create-databases`
 
 ### Varnish
 
