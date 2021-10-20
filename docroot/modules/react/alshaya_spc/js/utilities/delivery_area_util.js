@@ -11,6 +11,12 @@ export const getGovernatesList = () => window.commerceBackend.getGovernatesList(
         return null;
       }
 
+      if (responseData && Object.keys(responseData).length === 0
+        && Object.getPrototypeOf(responseData) === Object.prototype) {
+        removeFullScreenLoader();
+        return null;
+      }
+
       if (hasValue(responseData.error)) {
         return responseData;
       }
