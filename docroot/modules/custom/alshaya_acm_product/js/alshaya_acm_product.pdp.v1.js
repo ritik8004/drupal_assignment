@@ -57,14 +57,14 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
     return;
   }
 
-  if ($(product).find('.gallery-wrapper').length > 0) {
+  if (jQuery(product).find('.gallery-wrapper').length > 0) {
     // Since matchback products are also inside main PDP, when we change the variant
     // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
     // first one which will be of main PDP to update main PDP gallery only.
-    $(product).find('.gallery-wrapper').first().replaceWith(gallery);
+    jQuery(product).find('.gallery-wrapper').first().replaceWith(gallery);
   }
   else {
-    $(product).find('#product-zoom-container').replaceWith(gallery);
+    jQuery(product).find('#product-zoom-container').replaceWith(gallery);
   }
 
   if (layout === 'pdp-magazine') {
@@ -78,13 +78,13 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
     // Hide the thumbnails till JS is applied.
     // We use opacity through a class on parent to ensure JS get's applied
     // properly and heights are calculated properly.
-    $('#product-zoom-container', product).addClass('whiteout');
+    jQuery('#product-zoom-container', product).addClass('whiteout');
     setTimeout(function () {
       Drupal.behaviors.alshaya_product_zoom.attach(document);
       Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
 
       // Show thumbnails again.
-      $('#product-zoom-container', product).removeClass('whiteout');
+      jQuery('#product-zoom-container', product).removeClass('whiteout');
     }, 1);
   }
 };
