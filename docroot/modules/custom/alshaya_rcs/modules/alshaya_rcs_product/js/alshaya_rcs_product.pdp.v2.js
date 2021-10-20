@@ -290,8 +290,8 @@ function getVariantsInfo(product) {
       // @todo Add brand specific cart title.
       cart_title: 'Temp title',
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
-      color_attribute: variantInfo.color_attribute,
-      // color_value: '',
+      color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
+      color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
       sku: variantInfo.sku,
       parent_sku: variantInfo.parent_sku,
       configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
@@ -449,7 +449,7 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
 
   rawProductData.variants.forEach(function (variant) {
     const product = variant.product;
-    const variantSku = variant.product.sku;
+    const variantSku = product.sku;
     let attributeVal = null;
 
     for (let i = 0; i < configurableCodes.length; i++) {
@@ -480,7 +480,6 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
   combinations.firstChild = firstChild[0][1][0];
 
   // @todo: Add check for simple product.
-  // @todo Add sorting for the configurable options based on weights.
   Object.keys(combinations.by_sku).forEach(function (sku) {
     const combinationString = getSelectedCombination(combinations.by_sku[sku]);
     combinations.by_attribute[combinationString] = sku;

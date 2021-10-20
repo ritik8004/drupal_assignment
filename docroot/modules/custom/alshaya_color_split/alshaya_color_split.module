@@ -321,7 +321,6 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   // Do nothing for free gifts.
-  // @todo: Add this check for V2 in JS.
   if ($skuManager->isSkuFreeGift($child)) {
     return;
   }
@@ -352,7 +351,6 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
     return;
   }
 
-  // @todo: Do this for V2.
   $variant['title'] = $productInfoHelper->getTitle($parent_sku, 'pdp');
 
   // Add language for all urls for language switcher block.
@@ -382,7 +380,6 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
     ? render($promotion_label['free_gift_promotions'])
     : '';
 
-  // @todo: What to do for V2 here?
   $variant['color_value'] = $node ? $node->get('field_product_color')->getString() : '';
 }
 

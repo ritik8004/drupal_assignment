@@ -584,7 +584,6 @@ exports.computePhFilters = function (input, filter) {
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {
-              // @todo Find a better way of doing this.
               const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
               selectOption.attr({'swatch-image': getPdpSwatchImageUrl(childSku)});
             }
