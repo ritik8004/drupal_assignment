@@ -1,0 +1,19 @@
+.rcs-page:not(.rcs-loaded) .c-page-title__description > * {
+  display: none;
+}
+
+.rcs-page:not(.rcs-loaded) .c-page-title__description,
+.rcs-page:not(.rcs-loaded)
+  .c-content__region
+  .term-description-mobile-only.c-page-title__description {
+  width: 90%;
+  height: 1.5rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .rcs-page:not(.rcs-loaded) .c-page-title__description {
+    height: 1.5rem;
+    width: 100%;
+  }
+}

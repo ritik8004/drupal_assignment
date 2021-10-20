@@ -23,3 +23,15 @@ rcs_ph_promotional_banner:
   css:
     component:
       css/rcs_ph_promotional_banner.css: {}
+
+rcs_ph_plp_mobile_menu:
+  version: 1.x
+  css:
+    component:
+      css/rcs_ph_plp_mobile_menu.css: {}
+
+rcs_ph_term_description:
+  version: 1.x
+  css:
+    component:
+      css/rcs_ph_term_description.css: {}
