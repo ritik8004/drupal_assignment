@@ -15,7 +15,9 @@ const FixedFields = ({
   type,
 }) => {
   let defaultValue = '';
-  if (defaultVal.length !== 0 && defaultVal.length !== 'undefined') {
+  // Adding check for static fields when pre-populating form
+  // with default address values.
+  if (defaultVal.length !== 0 && defaultVal.length !== 'undefined' && defaultVal.static !== undefined) {
     defaultValue = defaultVal.static;
   }
 

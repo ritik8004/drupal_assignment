@@ -1076,7 +1076,10 @@ class CartController {
     }
 
     try {
-      $result = $this->cart->getCartStores($lat, $lon);
+      $cncStoresLimit = $this->request->get('cncStoresLimit');
+      $result = !empty($cncStoresLimit)
+        ? $this->cart->getCartStores($lat, $lon, $cncStoresLimit)
+        : $this->cart->getCartStores($lat, $lon);
       return new JsonResponse($result);
     }
     catch (\Exception $e) {

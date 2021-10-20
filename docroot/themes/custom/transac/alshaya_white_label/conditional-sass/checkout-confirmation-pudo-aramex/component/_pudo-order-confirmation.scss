@@ -27,7 +27,6 @@
 
     .store-delivery-time {
       font-family: $alshaya-bold;
-      margin-top: -0.5rem;
       margin-bottom: 0.75rem;
       line-height: 1.125rem;
       color: $spc-checkout_section_title;
@@ -39,9 +38,28 @@
   font-size: 0.875rem;
   line-height: normal;
   color: $spc-checkout-billing-help-text;
-  margin-bottom: 0.625rem;
+  margin-bottom: 1.5rem;
 
   &-label {
     font-family: $alshaya-bold;
+  }
+}
+
+.spc-order-summary-order-preview,
+.spc-order-summary-order-detail {
+  .spc-order-summary-item.spc-order-summary-address-item {
+    .spc-store-name-wrapper {
+      padding-bottom: 0.9375rem;
+    }
+
+    .spc-store-open-hours {
+      @include breakpoint($only-mobile) {
+        margin: 0.5rem 0 0.75rem !important;
+      }
+
+      @include breakpoint($tablet) {
+        margin: 0.75rem 0 !important;
+      }
+    }
   }
 }

@@ -34,9 +34,14 @@ const productRecommendationsSuffix = 'pr-';
           variant = event.detail.variant;
         }
         var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        // Return if variant data not available.
+        if (typeof variantInfo === 'undefined') {
+          return;
+        }
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
+        product.attr('gtm-main-sku', variantInfo['parent_sku']);
 
         Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange(product);
       });
@@ -59,7 +64,14 @@ const productRecommendationsSuffix = 'pr-';
         $(this).attr('gtm-price', variantInfo['gtm_price']);
       });
 
-      $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
+      $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function (event) {
+        // Return if noGtm flag is set to true. For example, in sofa
+        // and sectional feature GTM is handled in react so we
+        // don't need GTM push to be handled here in the listner.
+        if (typeof event.detail.noGtm !== 'undefined' && event.detail.noGtm) {
+          return;
+        }
+
         var addedProduct = $(this).closest('[gtm-type="gtm-product-link"]');
         if (addedProduct.length === 0) {
           return;
@@ -1419,6 +1431,10 @@ const productRecommendationsSuffix = 'pr-';
       if (drupalSettings.gtm.log_errors_to_console !== undefined
         && drupalSettings.gtm.log_errors_to_console) {
         console.log(errorData);
+      }
+
+      if (Drupal.logViaDataDog !== undefined) {
+        Drupal.logViaDataDog('warning', 'Log from Drupal.logJavascriptError.', errorData);
       }
 
       // Track error on GA.

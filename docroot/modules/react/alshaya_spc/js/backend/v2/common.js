@@ -11,9 +11,11 @@ import {
   getApiEndpoint,
   getCartIdFromStorage,
   isUserAuthenticated,
-  logger,
   removeCartIdFromStorage,
+  detectCFChallenge,
+  detectCaptcha,
 } from './utility';
+import logger from '../../utilities/logger';
 import {
   cartErrorCodes,
   getDefaultErrorMessage,
@@ -226,6 +228,11 @@ const handleResponse = (apiResponse) => {
     };
     return new Promise((resolve) => resolve(error));
   }
+
+  // If the response contains Captcha, the page will be reloaded once per session.
+  detectCaptcha(apiResponse);
+  // If the response contains a CF Challenge, the page will be reloaded once per session.
+  detectCFChallenge(apiResponse);
 
   // Treat each status code.
   if (apiResponse.status === 202) {
@@ -612,7 +619,13 @@ const getProductStatus = async (sku) => {
  *   The processed cart data.
  */
 const getProcessedCartData = async (cartData) => {
-  if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
+  // In case of errors, return the error object.
+  if (hasValue(cartData) && hasValue(cartData.error) && cartData.error) {
+    return cartData;
+  }
+
+  // If the cart object is empty, return null.
+  if (!hasValue(cartData) || !hasValue(cartData.cart)) {
     return null;
   }
 
@@ -642,6 +655,8 @@ const getProcessedCartData = async (cartData) => {
       allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
     items: [],
+    ...(collectionPointsEnabled() && hasValue(cartData.shipping))
+      && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
   // Totals.
@@ -908,14 +923,11 @@ const associateCartToCustomer = async (guestCartId) => {
 const getCartWithProcessedData = async (force = false) => {
   // @todo implement missing logic, see CartController:getCart().
   const cart = await getCart(force);
-  if (_isNull(cart) || _isUndefined(cart.data)) {
+  if (!hasValue(cart) || !hasValue(cart.data)) {
     return null;
   }
 
-  // If we don't have any errors, process the cart data.
-  if (!_isEmpty(cart.data) && _isUndefined(cart.data.error)) {
-    cart.data = await getProcessedCartData(cart.data);
-  }
+  cart.data = await getProcessedCartData(cart.data);
 
   return cart;
 };
@@ -1120,19 +1132,26 @@ window.commerceBackend.pushAgentDetailsInCart = async () => {
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
-  const response = await getCart();
-  if (_isNull(response) || _isUndefined(response.data)) {
-    return null;
+  let email = StaticStorage.get('cartCustomerEmail');
+  if (email !== null) {
+    return email;
   }
 
-  const cart = response.data;
-  if (!_isUndefined(cart.customer)
-    && !_isUndefined(cart.customer.email)
-    && !_isEmpty(cart.customer.email)
-  ) {
-    return cart.customer.email;
+  const response = await getCart();
+  if (_isNull(response) || _isUndefined(response.data)) {
+    email = '';
+  } else {
+    const cart = response.data;
+    if (hasValue(cart.customer)
+      && hasValue(cart.customer.email)
+      && cart.customer.email !== ''
+    ) {
+      email = cart.customer.email;
+    }
   }
-  return null;
+
+  StaticStorage.set('cartCustomerEmail', email);
+  return email;
 };
 
 /**
@@ -1180,6 +1199,241 @@ const getFormattedError = (code, message) => ({
   },
 });
 
+/**
+ * Helper function to prepare filter url query string.
+ *
+ * @param array $filters
+ *   Array containing all filters, must contain field and value, can contain
+ *   condition_type too or all that is supported by Magento.
+ * @param string $base
+ *   Filter Base, mostly searchCriteria.
+ * @param int $group_id
+ *   Filter group id, mostly 0.
+ *
+ * @return string
+ *   Prepared URL query string.
+ */
+const prepareFilterUrl = (filters, base = 'searchCriteria', groupId = 0) => {
+  let url = '';
+
+  filters.forEach((filter, index) => {
+    Object.keys(filter).forEach((key) => {
+      // Prepared string like below.
+      // searchCriteria[filter_groups][0][filters][0][field]=field
+      // This is how Magento search criteria in APIs work.
+      url = url.concat(`${base}[filter_groups][${groupId}][filters][${index}][${key}]=${filter[key]}`);
+      url = url.concat('&');
+    });
+  });
+
+  return url;
+};
+
+/**
+ * Function to get locations for delivery matrix.
+ *
+ * @param string $filterField
+ *   The field name to filter on.
+ * @param string $filterValue
+ *   The value of the field to filter on.
+ *
+ * @return mixed
+ *   Response from API.
+ */
+const getLocations = async (filterField = 'attribute_id', filterValue = 'governate') => {
+  const filters = [];
+  // Add filter for field values.
+  const fieldFilters = {
+    field: filterField,
+    value: filterValue,
+    condition_type: 'eq',
+  };
+
+  filters.push(fieldFilters);
+
+  // Always add status check.
+  const statusFilters = {
+    field: 'status',
+    value: '1',
+    condition_type: 'eq',
+  };
+  filters.push(statusFilters);
+
+  // Filter by Country.
+  const countryFilters = {
+    field: 'country_id',
+    value: drupalSettings.country_code,
+    condition_type: 'eq',
+  };
+
+  filters.push(countryFilters);
+  // @todo pending cofirmation from MDC on using api call for each click.
+  let url = '/V1/deliverymatrix/address-locations/search?';
+  const params = prepareFilterUrl(filters);
+  url = url.concat(params);
+  try {
+    // Associate cart to customer.
+    const response = await callMagentoApi(url, 'GET', {});
+
+    if (!_isUndefined(response.data.error) && response.data.error) {
+      logger.error('Error in getting shipping methods for cart. Error: @error', {
+        '@error': response.data.error_message,
+      });
+
+      return getFormattedError(response.data.error_code, response.data.error_message);
+    }
+
+    if (_isEmpty(response.data)) {
+      const message = 'Got empty response while getting shipping methods.';
+      logger.notice(message);
+
+      return getFormattedError(600, message);
+    }
+
+    return response.data;
+  } catch (error) {
+    logger.error('Error occurred while fetching governates data. Message: @message.', {
+      '@message': error.message,
+    });
+  }
+
+  return null;
+};
+
+/**
+ * Gets governates list items.
+ *
+ * @returns {Promise<object>}
+ *  returns list of governates.
+ */
+window.commerceBackend.getGovernatesList = async () => {
+  if (!drupalSettings.alshaya_spc.address_fields) {
+    logger.error('Error in getting address fields mappings');
+
+    return {};
+  }
+  if (drupalSettings.alshaya_spc.address_fields
+    && !(drupalSettings.alshaya_spc.address_fields.area_parent.visible)) {
+    return {};
+  }
+  const mapping = drupalSettings.alshaya_spc.address_fields;
+  // Use the magento field name from mapping.
+  const responseData = await getLocations('attribute_id', mapping.area_parent.key);
+
+  if (responseData !== null && responseData.total_count > 0) {
+    return responseData;
+  }
+  logger.warning('No governates found in the list as count is zero, API Response: @response.', {
+    '@response': JSON.stringify(responseData),
+  });
+
+  return {};
+};
+
+/**
+ * Gets area List items.
+ *
+ * @returns {Promise<object>}
+ *  returns list of area under a governate if governate id is valid.
+ */
+window.commerceBackend.getDeliveryAreaList = async (governateId) => {
+  let responseData = null;
+  if (governateId !== undefined) {
+    // Get all area items if governate is none.
+    if (governateId !== 'none') {
+      responseData = await getLocations('parent_id', governateId);
+    } else {
+      responseData = await getLocations('attribute_id', 'area');
+    }
+    if (responseData !== null && responseData.total_count > 0) {
+      return responseData;
+    }
+    logger.warning('No areas found under governate Id : @governateId, API Response: @response.', {
+      '@response': JSON.stringify(responseData),
+      '@governateId': governateId,
+    });
+  }
+  return {};
+};
+
+/**
+ * Gets individual area detail.
+ *
+ * @returns {Promise<object>}
+ *  returns details of area if area id is valid.
+ */
+window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
+  if (areaId !== undefined) {
+    const responseData = await getLocations('location_id', areaId);
+    if (responseData !== null && responseData.total_count > 0) {
+      return responseData;
+    }
+    logger.warning('No details found for area Id : @areaId, API Response: @response.', {
+      '@response': JSON.stringify(responseData),
+      '@areaId': areaId,
+    });
+  }
+  return {};
+};
+
+/**
+ * Gets governates list items.
+ *
+ * @returns {Promise<object>}
+ *  returns list of governates.
+ */
+window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined) => {
+  let cartId = null;
+  if (sku === undefined) {
+    const cartData = window.commerceBackend.getCartDataFromStorage();
+    if (cartData.cart.cart_id !== null) {
+      cartId = cartData.cart.cart_id_int;
+    }
+  }
+  const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
+  const attributes = [];
+  if (currentArea !== null) {
+    Object.keys(currentArea.value).forEach((key) => {
+      const areaItemsObj = {
+        attribute_code: key,
+        value: currentArea.value[key],
+      };
+      attributes.push(areaItemsObj);
+    });
+  }
+  try {
+    const params = {
+      productAndAddressInformation: {
+        cart_id: cartId,
+        product_sku: (sku !== undefined) ? sku : null,
+        address: {
+          custom_attributes: attributes,
+        },
+      },
+    };
+
+    // Associate cart to customer.
+    const response = await callMagentoApi(url, 'POST', params);
+    if (!hasValue(response.data) || hasValue(response.data.error)) {
+      logger.error('Error occurred while fetching governates, Response: @response.', {
+        '@response': JSON.stringify(response.data),
+      });
+      return null;
+    }
+
+    // If no city available, return empty.
+    if (_isEmpty(response.data)) {
+      return null;
+    }
+    return response.data;
+  } catch (error) {
+    logger.error('Error occurred while fetching governates data. Message: @message.', {
+      '@message': error.message,
+    });
+  }
+  return {};
+};
+
 export {
   isAnonymousUserWithoutCart,
   isAuthenticatedUserWithoutCart,
@@ -1200,4 +1454,6 @@ export {
   matchStockQuantity,
   isCartHasOosItem,
   getProductStatus,
+  getLocations,
+  prepareFilterUrl,
 };

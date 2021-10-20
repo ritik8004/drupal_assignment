@@ -98,6 +98,7 @@ convert_to_select2:
   js:
     js/convert_to_select2.js: {}
   dependencies:
+    - core/jquery.once
     - alshaya_white_label/select2
 
 slick:
@@ -144,6 +145,8 @@ ucfix:
 stickybutton:
   js:
     js/pdp-stickybutton.js: {}
+  dependencies:
+    - core/jquery.once
 
 utils:
   js:
@@ -206,6 +209,8 @@ magazine_socialSharepopup:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
+  dependencies:
+    - core/jquery.once
 
 magazine_article:
   css:
@@ -591,7 +596,17 @@ slug-banner:
     theme:
       css/conditional-sass/slug-banner/slug-banner.ltr.css: {}
 
+sameday-express-delivery:
+  css:
+    theme:
+      css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: {}
+
 plp-frame-options:
   css:
     theme:
       css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: {}
+
+sofa-sectional:
+  css:
+    theme:
+      css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}

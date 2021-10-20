@@ -36,6 +36,58 @@ $magentos = [
       'store_id' => ['en' => 11, 'ar' => 12],
     ],
   ],
+  'cos_uat' => [
+    'url' => 'https://cos-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'wtgpz97ze9lu9rw0hi7s7w8wz7xamyfz',
+      'consumer_secret' => 'kqk08wiexk97ibpq0tmecjo8bpjfcl8f',
+      'access_token' => 'pt6ixknt79yv3c2sge6hohci5e58m3zm',
+      'access_token_secret' => 'bjp2mcotraje0uolzm2dda2g672wwl9h',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 26],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 35, 'ar' => 38],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 41, 'ar' => 44],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 23, 'ar' => 20],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 17, 'ar' => 14],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+  ],
+  'cos_prod' => [
+    'url' => 'https://cos.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 64],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 52, 'ar' => 55],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 58, 'ar' => 61],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 7, 'ar' => 4],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 13, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+  ],
   // The body shop.
   'tbs_qa' => [
     'url' => 'https://tbs-uat.store.alshaya.com',
@@ -1391,6 +1443,9 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
   'mu_uat' => [

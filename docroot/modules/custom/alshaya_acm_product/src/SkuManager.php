@@ -3454,7 +3454,11 @@ class SkuManager {
       foreach ($this->getAttributesToIndex() as $key => $field) {
         $field_key = 'attr_' . $key;
         $field_data = $child->get($field_key)->getValue();
-
+        // We don't need values from child sku.
+        // Express delivery attribute will be considered at parent level.
+        if ($field_key == 'attr_express_delivery') {
+          continue;
+        }
         if (!empty($field_data)) {
           $size_group = '';
           if ($field_key == 'attr_size' && $sizeGroupingEnabled) {

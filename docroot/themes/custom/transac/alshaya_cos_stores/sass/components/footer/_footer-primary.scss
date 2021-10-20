@@ -19,7 +19,7 @@
 
   .footer--categories {
     @include breakpoint($desktop) {
-      width: 22%;
+      width: 19%;
       margin-#{$right}: 1rem;
     }
   }
@@ -35,7 +35,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 68%;
+      width: 75%;
     }
   }
 
@@ -246,16 +246,36 @@
 }
 
 .c-footer-menu {
+  @include breakpoint($desktop) {
+    width: 100%;
+  }
+
   &--category,
   a {
     text-transform: unset;
+    text-align: $left;
+  }
+
+  a {
+    padding-top: 0.9375rem;
+    padding-bottom: 0;
   }
 
   .cols-6 & {
     &:last-child:not(:only-child) {
       @include breakpoint($desktop) {
-        padding-#{$left}: 0.5rem;
+        padding-#{$left}: 0;
       }
+    }
+  }
+}
+
+.c-footer-is-accordion {
+  .accordion--body {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.25rem;
+      padding-bottom: 1.875rem;
+      border-bottom: 1px solid $accordion_border;
     }
   }
 }

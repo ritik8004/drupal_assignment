@@ -53,7 +53,6 @@
             var gallery = $('#product-full-screen-gallery-container.ui-dialog-content #product-full-screen-gallery');
             if (!gallery.hasClass('slick-initialized')) {
               // Slick Slider initialisation.
-              Drupal.blazy.revalidate();
               applyRtl(gallery, slickModalOptions);
               // Sync dots on startup.
               Drupal.behaviors.pdpInstagranDots.syncDots(gallery, currentmobSlide, false);
@@ -99,6 +98,16 @@
             mobileDialog.showModal();
           }
         });
+        if (typeof drupalSettings.pdp_gallery_type !== 'undefined' && drupalSettings.pdp_gallery_type == 'classic') {
+          // Slick slider counter for mobile.
+          var $status = $('.slider__counter');
+          var $slickElement = $('#product-image-gallery-mobile');
+          $slickElement.on('init reInit afterChange', function (event, slick, currentSlide, nextSlide) {
+            // currentSlide is undefined on init -- set it to 0 in this case (currentSlide is 0 based)
+            var i = (currentSlide ? currentSlide : 0) + 1;
+            $status.text(i + '/' + slick.slideCount);
+          });
+        }
       });
     }
   };

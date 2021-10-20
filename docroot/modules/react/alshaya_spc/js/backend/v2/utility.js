@@ -4,42 +4,7 @@ import {
   removeStorageInfo,
   setStorageInfo,
 } from '../../utilities/storage';
-
-/**
- * Logs messages in the backend.
- *
- * @todo This is a placeholder for logger.
- *
- * @param {string} level
- *   The error level.
- * @param {string} message
- *   The message.
- * @param {string} context
- *   The context.
- */
-const logger = {
-  send: (level, message, context) => {
-    if (typeof Drupal.logViaDataDog !== 'undefined') {
-      Drupal.logViaDataDog(level, message, context);
-      return;
-    }
-
-    // Avoid console log in npm tests.
-    if (typeof drupalSettings.jest !== 'undefined') {
-      return;
-    }
-
-    console.debug(level, Drupal.formatString(message, context));
-  },
-  emergency: (message, context) => logger.send('emergency', message, context),
-  alert: (message, context) => logger.send('alert', message, context),
-  critical: (message, context) => logger.send('critical', message, context),
-  error: (message, context) => logger.send('error', message, context),
-  warning: (message, context) => logger.send('warning', message, context),
-  notice: (message, context) => logger.send('notice', message, context),
-  info: (message, context) => logger.send('info', message, context),
-  debug: (message, context) => logger.send('debug', message, context),
-};
+import logger from '../../utilities/logger';
 
 /**
  * Get user role authenticated or anonymous.
@@ -194,12 +159,55 @@ const getIp = () => Axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
     }).filter((value) => value != null)[0];
   });
 
+/**
+ * Helper to detect Captcha.
+ *
+ * @param <object> response
+ *   The API response.
+ */
+const detectCaptcha = (response) => {
+  // Check status code.
+  if (response.status !== 403) {
+    return;
+  }
+
+  // Check that content contains a string.
+  if (response.data.indexOf('captcha-bypass') < 0) {
+    return;
+  }
+
+  // Log.
+  logger.debug('API response contains Captcha.');
+};
+
+/**
+ * Helper to detect CloudFlare javascript challenge.
+ *
+ * @param <object> response
+ *   The API response.
+ */
+const detectCFChallenge = (response) => {
+  // Check status code.
+  if (response.status !== 503) {
+    return;
+  }
+
+  // Check that content contains a string.
+  if (response.data.indexOf('DDos') < 0) {
+    return;
+  }
+
+  // Log.
+  logger.debug('API response contains CF Challenge.');
+};
+
 /* eslint-disable import/prefer-default-export */
 export {
-  logger,
   getApiEndpoint,
   isUserAuthenticated,
   getIp,
   getCartIdFromStorage,
   removeCartIdFromStorage,
+  detectCFChallenge,
+  detectCaptcha,
 };
