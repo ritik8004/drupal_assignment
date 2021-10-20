@@ -13,6 +13,7 @@
 (function main($) {
 
   var pageEntity = null;
+  const classRcsLoaded = 'rcs-loaded';
 
   $(document).ready(function ready() {
     if (
@@ -85,6 +86,14 @@
 
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
+
+          // Add class to remove skeleton CSS on RCS Placeholders.
+          const rcsPhContainers = [
+            '.page-type-product',
+            '.page-type-promotion',
+            '.rcs-page',
+          ];
+          $(rcsPhContainers.join()).addClass(classRcsLoaded);
         });
     }
   });
@@ -161,11 +170,8 @@
           )
         );
 
-        // Remove loader and show element.
-        const element = document.getElementById(blockPhId[0]);
-        if (element) {
-          element.classList.add('rcs-loaded');
-        }
+        // Add class to remove skeleton CSS on RCS Placeholders.
+        $(this).addClass(classRcsLoaded);
 
         // Re-attach all behaviors.
         rcsPhApplyDrupalJs($(this).parent()[0]);

@@ -1,3 +1,38 @@
 .rcs-template {
   display: none;
 }
+
+/* Hide H1 until RCS is rendered */
+.rcs-page:not(.rcs-loaded) h1 {
+  display: none;
+}
+
+/* Hide fields until RCS is rendered */
+.rcs-page:not(.rcs-loaded) .field {
+  color: transparent;
+}
+
+.page-type-product:not(.rcs-loaded) .content__main .gallery-wrapper {
+  height: 500px;
+}
+
+.page-type-product:not(.rcs-loaded) .content__title_wrapper {
+  height: 327px;
+}
+
+.page-type-product:not(.rcs-loaded) .content__title_wrapper div,
+.page-type-product:not(.rcs-loaded) .content__title_wrapper span {
+  display: none;
+}
+
+.page-type-product:not(.rcs-loaded) .content__sidebar {
+  height: 327px;
+  color: transparent;
+}
+.page-type-product:not(.rcs-loaded) .content__sidebar div {
+  display: none;
+}
+
+.page-type-promotion:not(.rcs-loaded) #alshaya-algolia-plp {
+  height: 500px;
+}
