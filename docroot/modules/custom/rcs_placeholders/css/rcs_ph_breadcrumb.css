@@ -1,0 +1,7 @@
+#rcs-ph-breadcrumb:not(.rcs-loaded) ol {
+  height: 55px;
+}
+
+#rcs-ph-breadcrumb:not(.rcs-loaded) li {
+  display: none;
+}

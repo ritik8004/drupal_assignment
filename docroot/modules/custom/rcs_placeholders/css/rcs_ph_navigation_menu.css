@@ -1,0 +1,7 @@
+#rcs-ph-navigation_menu:not(.rcs-loaded) ul {
+  height: 55px;
+}
+
+#rcs-ph-navigation_menu:not(.rcs-loaded) li {
+  display: none;
+}

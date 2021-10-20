@@ -64,6 +64,10 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
       ],
     ];
 
+    $build['#attached'] = [
+      'library' => ['rcs_placeholders/rcs_ph_breadcrumb'],
+    ];
+
     return $build;
   }
 

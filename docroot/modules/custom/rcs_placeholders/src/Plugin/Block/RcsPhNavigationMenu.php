@@ -21,6 +21,9 @@ class RcsPhNavigationMenu extends BlockBase {
   public function build() {
     return [
       '#markup' => '<div id="rcs-ph-navigation_menu" data-rcs-dependency="none"><span></span></div>',
+      '#attached' => [
+        'library' => ['rcs_placeholders/rcs_ph_navigation_menu'],
+      ],
     ];
   }
 
