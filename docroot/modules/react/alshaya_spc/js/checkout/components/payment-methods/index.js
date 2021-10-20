@@ -20,10 +20,10 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import {
   isFullPaymentDoneByAura,
   isPaymentMethodSetAsAura,
+  isUnsupportedPaymentMethod,
 } from '../../../aura-loyalty/components/utilities/checkout_helper';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
-import { getAuraConfig } from '../../../../../alshaya_aura_react/js/utilities/helper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -319,9 +319,7 @@ export default class PaymentMethods extends React.Component {
       // using aura points then disable the payment methods that are
       // not supported with Aura.
       if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
-        const { auraUnsupportedPaymentMethods } = getAuraConfig();
-        const unsupportedPaymentMethodsArray = auraUnsupportedPaymentMethods.split(',');
-        disablePaymentMethod = unsupportedPaymentMethodsArray.includes(method.code);
+        disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
       }
 
       this.paymentMethodRefs[method.code] = React.createRef();

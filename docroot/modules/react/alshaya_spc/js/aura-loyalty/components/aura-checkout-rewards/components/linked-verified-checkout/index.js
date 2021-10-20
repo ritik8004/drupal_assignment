@@ -15,6 +15,7 @@ const AuraLinkedVerifiedCheckout = (props) => {
     expiryDate,
     cardNumber,
     totals,
+    paymentMethodInCart,
   } = props;
   const pointsToEarn = getPriceToPoint(price);
 
@@ -40,6 +41,7 @@ const AuraLinkedVerifiedCheckout = (props) => {
         pointsInAccount={pointsInAccount}
         cardNumber={cardNumber}
         totals={totals}
+        paymentMethodInCart={paymentMethodInCart}
       />
       <div className="spc-aura-checkout-messages">
         <PointsExpiryMessage points={expiringPoints} date={expiryDate} />

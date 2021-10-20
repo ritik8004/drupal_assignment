@@ -12,6 +12,7 @@ import PointsString from './points-string';
 import { getElementValueByType } from './link_card_sign_up_modal_helper';
 import { validateElementValueByType } from './validation_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { getAuraConfig } from '../../../../../alshaya_aura_react/js/utilities/helper';
 
 /**
  * Utility function to get user input value.
@@ -171,6 +172,16 @@ function isFullPaymentDoneByAura(cart) {
   return false;
 }
 
+/**
+ * Utility function to check if given payment method is unsupported with Aura.
+ */
+function isUnsupportedPaymentMethod(paymentMethod) {
+  const { auraUnsupportedPaymentMethods } = getAuraConfig();
+  const unsupportedPaymentMethodsArray = auraUnsupportedPaymentMethods.split(',');
+
+  return unsupportedPaymentMethodsArray.includes(paymentMethod);
+}
+
 export {
   getUserInput,
   processCheckoutCart,
@@ -178,4 +189,5 @@ export {
   redeemAuraPoints,
   isPaymentMethodSetAsAura,
   isFullPaymentDoneByAura,
+  isUnsupportedPaymentMethod,
 };

@@ -7,7 +7,7 @@ import {
   removeError,
 } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
-import { redeemAuraPoints } from '../../utilities/checkout_helper';
+import { redeemAuraPoints, isUnsupportedPaymentMethod } from '../../utilities/checkout_helper';
 import {
   getUserDetails,
   getPointToPriceRatio,
@@ -250,8 +250,10 @@ class AuraFormRedeemPoints extends React.Component {
     } = this.state;
 
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
-
-    const { totals } = this.props;
+    const { totals, paymentMethodInCart } = this.props;
+    const disableRedemption = (isUnsupportedPaymentMethod(paymentMethodInCart) === true)
+      ? true
+      : !enableSubmit;
 
     return (
       <div className="spc-aura-redeem-points-form-wrapper">
@@ -283,7 +285,7 @@ class AuraFormRedeemPoints extends React.Component {
               type="submit"
               className="spc-aura-redeem-form-submit spc-aura-button"
               onClick={() => this.redeemPoints()}
-              disabled={!enableSubmit}
+              disabled={disableRedemption}
             >
               { getStringMessage('checkout_use_points') }
             </button>

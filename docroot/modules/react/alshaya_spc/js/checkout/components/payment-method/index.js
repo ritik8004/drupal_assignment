@@ -24,6 +24,8 @@ import CheckoutComUpapiApplePay
 import PaymentMethodCheckoutComUpapiFawry
   from '../payment-method-checkout-com-upapi-fawry';
 import cartActions from '../../../utilities/cart_actions';
+import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -209,7 +211,11 @@ export default class PaymentMethod extends React.Component {
                 </div>
               </ConditionalView>
             </label>
-            <ConditionalView condition={method.code === 'cashondelivery'}>
+            <ConditionalView condition={isAuraEnabled()
+              && method.code === 'cashondelivery'
+              && disablePaymentMethod === true
+              && !isFullPaymentDoneByAura(cart)}
+            >
               <div>{Drupal.t('Cash on delivery is not available along with the Aura points.')}</div>
             </ConditionalView>
 
