@@ -52,6 +52,8 @@
     // Alter the configurable variants list of the main product.
     // We will re-populate the variants.
     mainProduct.variants = [];
+    // This will store the color values of the styled product.
+    const colorAttributeValues = [];
 
     styleProducts.forEach(function (styleProduct) {
       // Check if product is in stock.
@@ -74,10 +76,21 @@
         return;
       }
 
+      // Stores values of processed colors, so that they are not re-processed.
+      const processedColors = [];
       styleProduct.variants.forEach(function (variant) {
         // These values will be used later on.
         variant.product.parent_sku = styleProduct.sku;
         variant.product.color_attribute = drupalSettings.alshayaRcs.colorAttribute;
+
+        if (!processedColors.includes(variant.product.color)) {
+          processedColors.push(variant.product.color);
+          // Get the labels for the color attribute.
+          const allOptionsForColorAttribute = globalThis.rcsPhCommerceBackend.getDataAsync('product-option', { attributeCode: variant.product.color_attribute });
+          // Update the array with the color values.
+          colorAttributeValues.push({value_index: variant.product.color, store_label: allOptionsForColorAttribute[variant.product.color]});
+        }
+
         mainProduct.variants.push(variant);
       });
 
@@ -98,6 +111,20 @@
       Object.keys(mainProductConfigurableOptionsObject[mainProductOption.attribute_code]).forEach(function (value_index) {
         mainProduct.configurable_options[key].values.push(mainProductConfigurableOptionsObject[mainProductOption.attribute_code][value_index]);
       });
+    });
+
+    // Push color to the configurable options of the main product.
+    mainProduct.configurable_options.push({
+      attribute_uid: btoa(drupalSettings.psudo_attribute),
+      label: drupalSettings.alshayaRcs.colorLabel,
+      position: -1,
+      attribute_code: drupalSettings.alshayaRcs.colorAttribute,
+      values: colorAttributeValues,
+    });
+
+    // Sort the configurable options according to position.
+    mainProduct.configurable_options = mainProduct.configurable_options.sort(function (optionA, optionB) {
+      return (optionA.position > optionB.position) - (optionA.position < optionB.position);
     });
 
     RcsPhStaticStorage.set('product_' + mainProduct.sku, mainProduct);

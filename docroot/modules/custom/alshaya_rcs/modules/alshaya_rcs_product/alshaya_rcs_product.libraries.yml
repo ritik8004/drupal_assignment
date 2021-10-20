@@ -33,10 +33,3 @@ grouped_products:
     js/alshaya_rcs_product.grouped_products.js: {}
   dependencies:
     - rcs_placeholders/helpers
-
-product_options:
-  version: 1.x
-  js:
-    js/alshaya_rcs_product.product_options.js: {}
-  dependencies:
-    - rcs_placeholders/helpers
