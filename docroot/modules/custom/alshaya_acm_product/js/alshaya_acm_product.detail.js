@@ -116,10 +116,6 @@
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
-          // Trigger an event on variant select.
-          // Sending selected variant sku in the parameter.
-          var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: $('[name="selected_variant_sku"]', form).val() }});
-          document.dispatchEvent(currentSelectedVariantEvent);
           form.trigger(
             'variant-selected',
             [

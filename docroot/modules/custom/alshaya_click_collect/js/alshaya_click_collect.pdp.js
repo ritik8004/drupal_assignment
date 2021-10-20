@@ -46,6 +46,11 @@
         }
 
         var variantInfo = productInfo['variants'][variant];
+        // Return if variant data not available.
+        if (typeof variantInfo === 'undefined') {
+          return;
+        }
+
         $('#pdp-stores-container', node).data('sku', variant);
 
         if (variantInfo.click_collect) {
