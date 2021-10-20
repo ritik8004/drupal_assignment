@@ -1,7 +1,10 @@
-#rcs-ph-lhn_block:not(.rcs-loaded) {
-  height: 188px;
+#rcs-ph-lhn_block:not(.rcs-loaded) li > * {
+  display: none;
 }
 
-#rcs-ph-lhn_block:not(.rcs-loaded) li {
-  display: none;
+@media (min-width: 1024px) {
+  #rcs-ph-lhn_block:not(.rcs-loaded) li {
+    height: 2.5rem;
+    margin-bottom: 0.25rem;
+  }  
 }

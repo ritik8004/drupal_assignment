@@ -1,7 +1,19 @@
-#rcs-ph-breadcrumb:not(.rcs-loaded) ol {
-  height: 55px;
-}
+@media (min-width: 768px) {
+  #rcs-ph-breadcrumb:not(.rcs-loaded) ol {
+    display: flex;
+  }
+  
+  #rcs-ph-breadcrumb:not(.rcs-loaded) li {
+    height: 1.5rem;
+    width: 8rem;
+    margin-right: 0.25rem;
+  }
 
-#rcs-ph-breadcrumb:not(.rcs-loaded) li {
-  display: none;
+  #rcs-ph-breadcrumb:not(.rcs-loaded) li::after {
+    color: transparent;
+  }
+  
+  #rcs-ph-breadcrumb:not(.rcs-loaded) li > * {
+    display: none;
+  }
 }

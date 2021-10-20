@@ -118,10 +118,6 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
       ],
     ];
 
-    $build['#attached'] = [
-      'library' => ['alshaya_rcs/rcs_ph_lhn_block'],
-    ];
-
     return $build;
   }
 

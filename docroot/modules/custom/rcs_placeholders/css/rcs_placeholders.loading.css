@@ -2,14 +2,17 @@
 .page-type-product:not(.rcs-loaded) .content__title_wrapper,
 .page-type-product:not(.rcs-loaded) .content__sidebar,
 .page-type-promotion:not(.rcs-loaded) #alshaya-algolia-plp,
-#rcs-ph-navigation_menu:not(.rcs-loaded) ul,
-#rcs-ph-breadcrumb:not(.rcs-loaded) ol,
-#rcs-ph-lhn_block:not(.rcs-loaded),
+.rcs-page:not(.rcs-loaded) h1 .field,
+.rcs-page:not(.rcs-loaded) .c-page-title__description,
+#rcs-ph-navigation_menu:not(.rcs-loaded) li,
+#rcs-ph-breadcrumb:not(.rcs-loaded) li,
+#rcs-ph-lhn_block:not(.rcs-loaded) li,
 #rcs-ph-promotional_banner:not(.rcs-loaded),
 #rcs-ph-upsell-products:not(.rcs-loaded),
 #rcs-ph-related-products:not(.rcs-loaded),
 #rcs-ph-crosssell-products:not(.rcs-loaded),
-#rcs-ph-field_magazine_shop_the_story:not(.rcs-loaded) .example {
+#rcs-ph-field_magazine_shop_the_story:not(.rcs-loaded),
+#rcs-ph-plp_mobile_menu:not(.rcs-loaded) {
   -webkit-animation: loading 1s infinite;
   animation: loading 1s infinite;
   background-image: -webkit-gradient(

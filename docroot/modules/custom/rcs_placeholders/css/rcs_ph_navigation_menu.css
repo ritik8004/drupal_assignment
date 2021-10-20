@@ -1,7 +1,11 @@
-#rcs-ph-navigation_menu:not(.rcs-loaded) ul {
-  height: 55px;
-}
-
-#rcs-ph-navigation_menu:not(.rcs-loaded) li {
-  display: none;
+@media (min-width: 1024px) {
+  #rcs-ph-navigation_menu:not(.rcs-loaded) li {
+    height: 2.5rem;
+    width: 8rem;
+    display: inline-block;
+  }
+  
+  #rcs-ph-navigation_menu:not(.rcs-loaded) li > * {
+    display: none;
+  }
 }

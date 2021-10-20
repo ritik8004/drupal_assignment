@@ -1,7 +1,27 @@
-#rcs-ph-promotional_banner:not(.rcs-loaded) {
-  height: 827px;
-}
-
 #rcs-ph-promotional_banner:not(.rcs-loaded) div {
   display: none;
+}
+
+#rcs-ph-promotional_banner {
+  min-height: 12rem;
+}
+
+#rcs-ph-promotional_banner:not(.rcs-loaded) {
+  height: 16rem;
+}
+
+@media (min-width: 768px) {
+  #rcs-ph-promotional_banner {
+    min-height: 20rem;
+  }
+  
+  #rcs-ph-promotional_banner:not(.rcs-loaded) {
+    height: 32rem;
+  }  
+}
+
+@media (min-width: 1024px) {
+  #rcs-ph-promotional_banner:not(.rcs-loaded) {
+    height: 40rem;
+  }
 }

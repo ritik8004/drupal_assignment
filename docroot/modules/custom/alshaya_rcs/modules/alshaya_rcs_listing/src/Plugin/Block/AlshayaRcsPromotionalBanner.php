@@ -35,9 +35,6 @@ class AlshayaRcsPromotionalBanner extends BlockBase {
           ],
         ],
       ],
-      '#attached' => [
-        'library' => ['alshaya_rcs/rcs_ph_promotional_banner'],
-      ],
     ];
   }
 

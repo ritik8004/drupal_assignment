@@ -81,9 +81,6 @@
               });
           }
 
-          // Remove loaders and show elements.
-          $('.rcs-page').addClass('rcs-loaded');
-
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
 
