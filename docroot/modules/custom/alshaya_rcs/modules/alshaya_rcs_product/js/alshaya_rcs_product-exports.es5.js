@@ -136,9 +136,19 @@ function getChildSkuFromAttribute(sku, attribute, option_id) {
   return combinations.attribute_sku[attribute][option_id][0];
 }
 
+/**
+ * Get the swatch image url for the provided sku.
+ *
+ * @param {string} sku
+ *   The SKU value.
+ *
+ * @returns {string}
+ *   The swatch image url.
+ */
 function getPdpSwatchImageUrl(sku) {
-  // @todo Add proper implementation for this.
-  return 'https://via.placeholder.com/100x200';
+  // @todo Add proper implementation for this once
+  // https://alshayagroup.atlassian.net/browse/CORE-35237 is resolved.
+  return jQuery('.logo img').attr('src');
 }
 
 exports.render = function render(
