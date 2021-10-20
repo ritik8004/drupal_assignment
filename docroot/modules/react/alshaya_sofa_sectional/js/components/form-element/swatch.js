@@ -57,20 +57,29 @@ const SwatchList = (props) => {
           {index}
         </span>
       </div>
+
       <ConditionalView condition={selectedSwatchImage !== null && selectedSwatchImage !== undefined}>
         <span className='selected-image'>
           <img loading="lazy" src={selectedSwatchImage} />
         </span>
       </ConditionalView>
+
       <div className="config-text-wrapper">
         <span className="config-name">
           {label}
         </span>
+
+        <ConditionalView condition={attributeName === 'fabric_color'}>
+          <span className="fabric-color-icon">
+          </span>
+        </ConditionalView>
+
         <ConditionalView condition={selectedSwatchLabel !== null && selectedSwatchLabel !== undefined}>
           <span className="config-value selected-text">
             {selectedSwatchLabel}
           </span>
         </ConditionalView>
+
       </div>
     </label>
   );
