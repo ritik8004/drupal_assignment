@@ -48,6 +48,8 @@ export default class Checkout extends React.Component {
       messageType: null,
       errorSuccessMessage: null,
       isPostpayInitialised: false,
+      gaTrackingId: null,
+      gaClientId: null,
     };
   }
 
@@ -84,6 +86,9 @@ export default class Checkout extends React.Component {
       // In case of error, do nothing.
       Drupal.logJavascriptError('checkout', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
+
+    // Select analytics data.
+    this.selectAnalyticData();
 
     // Make sidebar sticky.
     stickySidebar();
@@ -248,6 +253,17 @@ export default class Checkout extends React.Component {
     );
   };
 
+  selectAnalyticData = () => {
+    if (typeof window.ga === 'function' && window.ga.loaded && window.ga.getAll().length) {
+      this.setState({
+        gaTrackingId: window.ga.getAll()[0].get('clientId'),
+        gaClientId: window.ga.getAll()[0].get('trackingId'),
+      });
+      return;
+    }
+    setTimeout(this.selectAnalyticData, 500);
+  }
+
   render() {
     const {
       wait,
@@ -255,6 +271,8 @@ export default class Checkout extends React.Component {
       errorSuccessMessage,
       messageType,
       isPostpayInitialised,
+      gaTrackingId,
+      gaClientId,
     } = this.state;
     // While page loads and all info available.
 
@@ -354,6 +372,8 @@ export default class Checkout extends React.Component {
         <div className="spc-footer">
           <VatFooterText />
         </div>
+        <input type="hidden" id="spc-ga-tracking-id" defaultValue={gaTrackingId} />
+        <input type="hidden" id="spc-ga-client-id" defaultValue={gaClientId} />
       </>
     );
   }
