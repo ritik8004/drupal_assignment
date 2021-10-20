@@ -84,7 +84,7 @@
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
 
-          // Add class to remove skeleton CSS on RCS Placeholders.
+          // Add class to remove loader styles on RCS Placeholders.
           const rcsPhContainers = [
             '.page-type-product',
             '.page-type-promotion',
@@ -167,7 +167,7 @@
           )
         );
 
-        // Add class to remove skeleton CSS on RCS Placeholders.
+        // Add class to remove loader styles on RCS Placeholders.
         $(this).addClass(classRcsLoaded);
 
         // Re-attach all behaviors.
