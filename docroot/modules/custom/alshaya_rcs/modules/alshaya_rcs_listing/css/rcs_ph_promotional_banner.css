@@ -1,0 +1,7 @@
+#rcs-ph-promotional_banner:not(.rcs-loaded) {
+  height: 827px;
+}
+
+#rcs-ph-promotional_banner:not(.rcs-loaded) div {
+  display: none;
+}

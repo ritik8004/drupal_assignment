@@ -11,3 +11,15 @@ helpers:
     js/alshaya_rcs_listing_utility.js: { }
   dependencies:
     - core/jquery
+
+rcs_ph_lhn_block:
+  version: 1.x
+  css:
+    component:
+      css/rcs_ph_lhn_block.css: {}
+
+rcs_ph_promotional_banner:
+  version: 1.x
+  css:
+    component:
+      css/rcs_ph_promotional_banner.css: {}

@@ -1,0 +1,7 @@
+#rcs-ph-lhn_block:not(.rcs-loaded) {
+  height: 188px;
+}
+
+#rcs-ph-lhn_block:not(.rcs-loaded) li {
+  display: none;
+}
