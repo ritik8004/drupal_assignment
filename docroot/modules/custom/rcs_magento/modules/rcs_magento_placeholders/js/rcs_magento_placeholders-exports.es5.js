@@ -325,15 +325,9 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
         query: `{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`
       });
 
-      response = rcsCommerceBackend.invokeApiAsync(request);
+      result = rcsCommerceBackend.invokeApiAsync(request);
 
-      if (typeof response.errors === 'undefined') {
-        result = {};
-        response.data.customAttributeMetadata.items[0].attribute_options.forEach(function (option) {
-          result[option.value] = option.label;
-        });
-        RcsPhStaticStorage.set(staticKey, result);
-      }
+      RcsPhStaticStorage.set(staticKey, result);
       break;
 
     default:

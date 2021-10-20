@@ -580,7 +580,8 @@ exports.computePhFilters = function (input, filter) {
           // Add the option values.
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
-            selectOption.attr({value: value.value_index}).text(value.store_label);
+            const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            selectOption.attr({value: value.value_index}).text(label);
             configurableOptionsList.append(selectOption);
 
             if (optionIsSwatch) {

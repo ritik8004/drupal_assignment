@@ -151,22 +151,6 @@ function getSelectedCombination(configurables) {
 }
 
 /**
- * Gets the attribute label.
- *
- * @param {string} attrName
- *   The attribute name.
- * @param {string} attrValue
- *   The attribute value.
- *
- * @returns {string}
- *   The attribute label.
- */
-function getAttributeValueLabel(attrName, attrValue) {
-  const allOptionsForAttribute = globalThis.rcsPhCommerceBackend.getDataAsync('product-option', { attributeCode: attrName });
-  return allOptionsForAttribute[attrValue];
-}
-
-/**
  * Gets the configurables for the given product entity.
  *
  * @param {object} product
@@ -219,7 +203,7 @@ function getVariantConfigurableOptions(product, variant) {
     variantConfigurableOptions.push({
       attribute_id: `attr_${attributeCode}`,
       label: productConfigurables[attributeCode].label,
-      value: getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
+      value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
       value_id: variant.product[attributeCode],
     });
   });
