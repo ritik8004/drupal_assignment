@@ -1,0 +1,6 @@
+#rcs-ph-upsell-products:not(.rcs-loaded),
+#rcs-ph-related-products:not(.rcs-loaded),
+#rcs-ph-crosssell-products:not(.rcs-loaded) {
+  width: 100%;
+  height: 150px;
+}
