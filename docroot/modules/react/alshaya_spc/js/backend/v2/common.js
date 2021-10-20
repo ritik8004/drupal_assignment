@@ -1312,6 +1312,10 @@ window.commerceBackend.getGovernatesList = async () => {
 
     return {};
   }
+  if (drupalSettings.alshaya_spc.address_fields
+    && !(drupalSettings.alshaya_spc.address_fields.area_parent.visible)) {
+    return {};
+  }
   const mapping = drupalSettings.alshaya_spc.address_fields;
   // Use the magento field name from mapping.
   const responseData = await getLocations('attribute_id', mapping.area_parent.key);
@@ -1333,8 +1337,14 @@ window.commerceBackend.getGovernatesList = async () => {
  *  returns list of area under a governate if governate id is valid.
  */
 window.commerceBackend.getDeliveryAreaList = async (governateId) => {
+  let responseData = null;
   if (governateId !== undefined) {
-    const responseData = await getLocations('parent_id', governateId);
+    // Get all area items if governate is none.
+    if (governateId !== 'none') {
+      responseData = await getLocations('parent_id', governateId);
+    } else {
+      responseData = await getLocations('attribute_id', 'area');
+    }
     if (responseData !== null && responseData.total_count > 0) {
       return responseData;
     }

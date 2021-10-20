@@ -19,7 +19,7 @@
 
   .footer--categories {
     @include breakpoint($desktop) {
-      width: 22%;
+      width: 19%;
       margin-#{$right}: 1rem;
     }
   }
@@ -35,7 +35,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 68%;
+      width: 75%;
     }
   }
 
@@ -246,6 +246,10 @@
 }
 
 .c-footer-menu {
+  @include breakpoint($desktop) {
+    width: 100%;
+  }
+
   &--category,
   a {
     text-transform: unset;
@@ -260,7 +264,7 @@
   .cols-6 & {
     &:last-child:not(:only-child) {
       @include breakpoint($desktop) {
-        padding-#{$left}: 0.5rem;
+        padding-#{$left}: 0;
       }
     }
   }
