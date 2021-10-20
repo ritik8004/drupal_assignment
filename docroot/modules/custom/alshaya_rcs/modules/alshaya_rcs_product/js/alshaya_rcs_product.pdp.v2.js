@@ -151,6 +151,22 @@ function getSelectedCombination(configurables) {
 }
 
 /**
+ * Gets the attribute label.
+ *
+ * @param {string} attrName
+ *   The attribute name.
+ * @param {string} attrValue
+ *   The attribute value.
+ *
+ * @returns {string}
+ *   The attribute label.
+ */
+function getAttributeValueLabel(attrName, attrValue) {
+  const allOptionsForAttribute = globalThis.rcsPhCommerceBackend.getDataAsync('product-option', { attributeCode: attrName });
+  return allOptionsForAttribute[attrValue];
+}
+
+/**
  * Gets the configurables for the given product entity.
  *
  * @param {object} product
@@ -188,24 +204,27 @@ function getConfigurables(product) {
  * Get the configurable options for the given variant.
  *
  * @param product
- *  The product entity.
+ *  The main product object.
  * @param {object} variant
  *   The variant object.
  *
  * @return {array}
  *   The array of variant configurable options.
  */
-function getVariantConfigurableOptions(product, variantAttributes) {
+function getVariantConfigurableOptions(product, variant) {
   const productConfigurables = getConfigurables(product);
+  const variantConfigurableOptions = [];
 
-  return variantAttributes.map(function (attribute) {
-    return {
-      attribute_id: `attr_${attribute.code}`,
-      label: productConfigurables[attribute.code].label,
-      value: attribute.label,
-      value_id: attribute.value_index,
-    }
+  Object.keys(productConfigurables).forEach(function (attributeCode) {
+    variantConfigurableOptions.push({
+      attribute_id: `attr_${attributeCode}`,
+      label: productConfigurables[attributeCode].label,
+      value: getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
+      value_id: variant.product[attributeCode],
+    });
   });
+
+  return variantConfigurableOptions;
 }
 
 /**
@@ -294,7 +313,7 @@ function getVariantsInfo(product) {
       color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
       sku: variantInfo.sku,
       parent_sku: variantInfo.parent_sku,
-      configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
+      configurableOptions: getVariantConfigurableOptions(product, variant),
       // @todo Fetch layout dynamically.
       layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: '',
