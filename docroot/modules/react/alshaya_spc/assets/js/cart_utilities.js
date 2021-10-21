@@ -58,7 +58,7 @@
 
     var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
     var currentTime = new Date().getTime();
-    if (data !== null && ((currentTime - data.created) < expireTime)) {
+    if (data !== null && ((currentTime - data.created) > expireTime)) {
       try {
         callback(data, extraData);
       }

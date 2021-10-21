@@ -53,6 +53,7 @@
     const cartData = Drupal.alshayaSpc.getCartData();
     const skus = {};
 
+    //@todo Ask: Why are we looping all cart items if we are only interested in the sku pased in data?
     Object.values(cartData.items).forEach(function (item) {
       const sku = item.sku;
       if (!Drupal.hasValue(data[sku])) {
