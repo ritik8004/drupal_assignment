@@ -185,9 +185,10 @@ do
   deployment_identifier=$(cat "$server_root/deployment_identifier")
 done
 
-log_message_and_details "Code deployment finished"
-# 5 more seconds as it tends to be a problem with commands on first site.
-sleep 5
+log_message_and_details "Code deployment finished, we will wait for 30 more seconds."
+
+# Wait 30 more seconds to ensure code is deployed on all webs.
+sleep 30
 
 if [ "$mode" = "updb" ]
 then
