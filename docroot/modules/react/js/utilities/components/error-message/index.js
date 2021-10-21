@@ -7,7 +7,9 @@ const ErrorMessage = (props) => {
 
   return (
     <ConditionalView condition={condition}>
-      <div className="error-message">{message}</div>
+      <div className="errors-container">
+        <div className="error error-message">{message}</div>
+      </div>
     </ConditionalView>
   );
 };

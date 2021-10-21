@@ -95,10 +95,6 @@
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
-          // Trigger an event on variant select.
-          // Sending selected variant sku in the parameter.
-          var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: $('[name="selected_variant_sku"]', form).val() }});
-          document.dispatchEvent(currentSelectedVariantEvent);
           form.trigger(
             'variant-selected',
             [
@@ -348,6 +344,17 @@
     if (combinations[selectedCode][selectedValue] === 1) {
       return;
     }
+
+    if (typeof combinations[selectedCode][selectedValue] !== 'object' || combinations[selectedCode][selectedValue] === null) {
+      Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, combinations: @combinations, selectedCode: @selectedCode, selectedValue: @selectedValue', {
+        '@sku': sku,
+        '@combinations': combinations,
+        '@selectedCode': selectedCode,
+        '@selectedValue': selectedValue,
+      });
+      return;
+    }
+
     var nextCode = Object.keys(combinations[selectedCode][selectedValue])[0];
     var nextValues = Object.keys(combinations[selectedCode][selectedValue][nextCode]);
     Drupal.alshayaAcmProductSelectConfiguration(form, nextCode, nextValues);

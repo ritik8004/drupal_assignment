@@ -83,6 +83,8 @@ const UnorderedList = (props) => {
       </div>
       <div className="config-text-wrapper">
         <span className="config-name">
+          {Drupal.t('select')}
+          {' '}
           {label}
         </span>
         <span className="config-value">
