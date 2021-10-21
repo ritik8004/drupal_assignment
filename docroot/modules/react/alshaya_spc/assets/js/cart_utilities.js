@@ -71,7 +71,7 @@
   }
 
   Drupal.alshayaSpc.removeLocalStorageProductData = function (sku) {
-    drupalSettings.alshayaSpc.languages.forEach(function (langcode) {
+    drupalSettings.alshaya_spc.languages.forEach(function (langcode) {
       var key = ['product', langcode, sku].join(':');
       localStorage.removeItem(key);
     });
