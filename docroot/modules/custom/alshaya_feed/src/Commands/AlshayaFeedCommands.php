@@ -113,7 +113,7 @@ class AlshayaFeedCommands extends DrushCommands {
    */
   public static function batchStart($total, &$context) {
     $logger = \Drupal::logger('alshaya_feed');
-    $logger->info(t('Products feed generation started.'));
+    $logger->info('Products feed generation started.');
     $context['results']['total'] = $total;
     $context['results']['count'] = 0;
     $context['results']['products'] = [];
@@ -175,7 +175,7 @@ class AlshayaFeedCommands extends DrushCommands {
             )
         );
         // Add to logs about all product feeds.
-        $logger->info(t('Generated @count products feed in time: @time.'), [
+        $logger->info('Generated @count products feed in time: @time.', [
           '@count' => $results['count'],
           '@time' => $execution_time,
         ]);
@@ -190,11 +190,11 @@ class AlshayaFeedCommands extends DrushCommands {
       \Drupal::service('messenger')
         ->addMessage(t('An error occurred while processing @operation with arguments : @args'), [
           '@operation' => $error_operation[0],
-          '@args' => print_r($error_operation[0]),
+          '@args' => json_encode($error_operation[0]),
         ]);
-      $logger->error(t('An error occurred while processing @operation with arguments : @args'), [
+      $logger->error('An error occurred while processing @operation with arguments : @args', [
         '@operation' => $error_operation[0],
-        '@args' => print_r($error_operation[0]),
+        '@args' => json_encode($error_operation[0]),
       ]);
 
     }
