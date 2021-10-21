@@ -161,12 +161,12 @@ class AlshayaFeedCommands extends DrushCommands {
    *   A list of all the operations that had not been completed by batch API.
    */
   public static function batchFinish($success, array $results, array $operations) {
+    $logger = \Drupal::logger('alshaya_feed');
     if ($success) {
       if ($results['count']) {
         // Display Script End time.
         $time_end = microtime(TRUE);
         $execution_time = ($time_end - $results['timestart']) / 60;
-
         \Drupal::service('messenger')->addMessage(
           \Drupal::translation()
             ->formatPlural(
@@ -176,9 +176,15 @@ class AlshayaFeedCommands extends DrushCommands {
               ['@time' => $execution_time]
             )
         );
+        // Add to logs about all product feeds.
+        $logger->info(t('Generated @count products feed in time: @time.'), [
+          '@count' => $results['count'],
+          '@time' => $execution_time,
+        ]);
       }
       else {
         \Drupal::service('messenger')->addMessage(t('No new products to generate.'));
+        $logger->notice(t('No new products to generate.'));
       }
     }
     else {
@@ -188,6 +194,11 @@ class AlshayaFeedCommands extends DrushCommands {
           '@operation' => $error_operation[0],
           '@args' => print_r($error_operation[0]),
         ]);
+      $logger->error(t('An error occurred while processing @operation with arguments : @args'), [
+        '@operation' => $error_operation[0],
+        '@args' => print_r($error_operation[0]),
+      ]);
+
     }
   }
 
