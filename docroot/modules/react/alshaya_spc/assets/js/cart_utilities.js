@@ -255,7 +255,25 @@
           }
         }
       });
+      // Set analytics data in hidden field.
+      Drupal.SpcPopulateDataFromGA();
     }
   }
+
+  Drupal.SpcPopulateDataFromGA = function () {
+    // Check if ga is loaded.
+    if (typeof window.ga === 'function' && window.ga.loaded && ga.getAll().length) {
+      // Use GA function queue.
+      ga(function () {
+        $('#spc-ga-client-id').val(ga.getAll()[0].get('clientId'));
+        $('#spc-ga-tracking-id').val(ga.getAll()[0].get('trackingId'));
+      });
+
+      return;
+    }
+
+    // Try to read again.
+    setTimeout(Drupal.SpcPopulateDataFromGA, 500);
+  };
 
 })(jQuery, Drupal);
