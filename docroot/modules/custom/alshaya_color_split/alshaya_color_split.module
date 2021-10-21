@@ -467,7 +467,7 @@ function alshaya_color_split_pathauto_alias_alter(&$alias, array $context) {
 function alshaya_color_split_rcs_placeholders_graphql_query_alter(&$queries) {
   array_push(
     $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
-    'color',
+    AlshayaColorSplitConfig::get('attribute_code_color_id'),
   );
 }
 

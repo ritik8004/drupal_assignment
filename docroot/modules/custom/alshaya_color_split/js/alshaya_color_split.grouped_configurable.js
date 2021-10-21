@@ -16,10 +16,10 @@
         var sku = $(this).attr('data-sku');
         var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
         var productInfo = window.commerceBackend.getProductData(sku, productKey);
-        if (productInfo === 'null') {
+        if (productInfo === null) {
           return;
         }
-        var variantInfo = productInfo['variants'][variant];
+        var variantInfo = productInfo.variants[variant];
 
         // We can have mix of color split and normal products.
         // Avoid processing further if we have a product which is normal but
@@ -79,7 +79,7 @@
    * @returns {array}
    *   The array of configurable attributes.
    */
-   function getProductConfigurableAttributes(product) {
+  function getProductConfigurableAttributes(product) {
     return product.variants[0].attributes.map(function (attribute) {
       return attribute.code;
     });
@@ -110,7 +110,7 @@
     // the attribute code and then the value index of the options.
     // Eg: {size: {11: {value_index: 10, store_label: "XS"}}}
     // Doing so, will reduce the amount of processing required.
-    let mainProductConfigurableOptionsObject = {};
+    var mainProductConfigurableOptionsObject = {};
     mainProduct.configurable_options.forEach(function (option) {
       mainProductConfigurableOptionsObject[option.attribute_code] = {};
       // Copy the options of the main product to this object.
@@ -134,7 +134,7 @@
 
       // Check if the attributes are the same of the main product and the style
       // products.
-      let isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
+      var isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
       mainProductAttributes.forEach(function (mainProductAttribute) {
         if (!styleProductAttributes.includes(mainProductAttribute)) {
           isAttributesSame = false;
