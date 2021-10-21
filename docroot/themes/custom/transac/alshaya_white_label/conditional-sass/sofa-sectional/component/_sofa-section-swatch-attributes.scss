@@ -66,9 +66,13 @@
           background: none;
         }
 
-        &.active {
+        &.active,
+        &:hover {
           border: none;
+          outline: none;
+        }
 
+        &.active {
           a {
             border: 1px solid $sofa-sectional-active-border;
             position: relative;
@@ -84,6 +88,12 @@
               top: 22%;
               #{$left}: 42%;
             }
+          }
+        }
+
+        &:not(.active) {
+          a:hover {
+            border: 1px solid $accordion_border;
           }
         }
 

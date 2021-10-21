@@ -9,6 +9,7 @@
       padding-#{$right}: 2.5rem;
       padding-top: 0.625rem;
       padding-bottom: 0.625rem;
+      text-transform: capitalize;
 
       &.active {
         .config-number-wrapper {
@@ -26,7 +27,7 @@
 
       &:not(.active) {
         .config-name {
-          font-size: 1rem;
+          font-size: 0.875rem;
         }
       }
     }
@@ -146,8 +147,11 @@
           margin-bottom: 0;
         }
 
-        &.active {
+        &.active,
+        &:hover {
           border: 1px solid $sofa-sectional-active-border;
+          outline: 0.125rem solid $sofa-sectional-active-border;
+          outline-offset: -2px;
         }
 
         &.disabled {
@@ -174,10 +178,6 @@
 
           &:not(:first-child) {
             margin-#{$left}: 0;
-          }
-
-          &.active {
-            border: 0.125rem solid $sofa-sectional-active-border;
           }
         }
 
