@@ -52,13 +52,11 @@ class SofaSectionalHelper {
   /**
    * Detects if the Sofa and Sectional feature is applicable for product.
    */
-  public function isSofaSectionalFeatureApplicable(Node $entity, $view_mode = 'full') {
+  public function isSofaSectionalFeatureApplicable(Node $entity) {
     // Return if feature is not enabled,
-    // entity isn't a product and
-    // view mode is not 'full'.
+    // entity isn't a product.
     if (!$this->isSofaSectionalFeatureEnabled()
-      || $entity->bundle() !== 'acq_product'
-      || $view_mode !== 'full') {
+      || $entity->bundle() !== 'acq_product') {
       return FALSE;
     }
 
