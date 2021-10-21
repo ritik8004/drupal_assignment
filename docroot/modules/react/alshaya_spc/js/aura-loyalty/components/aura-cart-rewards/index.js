@@ -158,7 +158,7 @@ class AuraCartRewards extends React.Component {
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
           <AuraNotLinkedNoData
-            price={totals.base_grand_total_without_surcharge}
+            price={totals.subtotal_incl_tax}
             loyaltyStatus={loyaltyStatus}
           />
         </ConditionalView>
@@ -166,7 +166,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Linked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
           <AuraLinkedVerified
-            price={totals.base_grand_total_without_surcharge}
+            price={totals.subtotal_incl_tax}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
             loyaltyStatus={loyaltyStatus}
