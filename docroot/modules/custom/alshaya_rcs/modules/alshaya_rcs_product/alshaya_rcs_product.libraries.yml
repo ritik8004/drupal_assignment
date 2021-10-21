@@ -26,10 +26,3 @@ rcs_product_modal:
     js/alshaya_rcs_product.modal.js: {}
   dependencies:
     - alshaya_spc/add_to_cart
-
-grouped_products:
-  version: 1.x
-  js:
-    js/alshaya_rcs_product.grouped_products.js: {}
-  dependencies:
-    - rcs_placeholders/helpers

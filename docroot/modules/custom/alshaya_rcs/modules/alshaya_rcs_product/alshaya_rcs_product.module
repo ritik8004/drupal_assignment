@@ -1,10 +1,8 @@
 <?php
 
-use Drupal\alshaya_color_split\AlshayaColorSplitConfig;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 
 /**
@@ -182,7 +180,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
-  $build['#attached']['library'][] = 'alshaya_rcs_product/grouped_products';
   // Attach promotion label js.
   $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
 
@@ -226,15 +223,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $build['#attached']['drupalSettings']['alshayaRcs']['quantityLimitEnabled'] = $isQuantityLimitEnabled;
   $build['#attached']['drupalSettings']['alshayaRcs']['hide_max_qty_limit_message'] = $acm_settings->get('hide_max_qty_limit_message');
-
-  $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = FALSE;
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_color_split')) {
-    $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = TRUE;
-    $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
-    $build['#attached']['drupalSettings']['alshayaRcs']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
-    $color_split_config = \Drupal::config('alshaya_color_split.settings');
-    $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
-  }
 }
 
 /**

@@ -63,6 +63,17 @@ exports.getEntity = async function getEntity(langcode) {
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
         RcsPhStaticStorage.set('product_' + result.sku, result);
+
+        // Alter the product entity.
+        const alterProductsEvent = new CustomEvent('alterProductEntity', {
+          detail: {
+            result: result,
+            pageType: pageType,
+          }
+        });
+
+        // To trigger the Event.
+        document.dispatchEvent(alterProductsEvent);
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -106,18 +117,6 @@ exports.getEntity = async function getEntity(langcode) {
         `Entity type ${pageType} not supported for get_entity.`
       );
       return result;
-  }
-
-  if (drupalSettings.alshayaRcs.isColorSplitEnabled) {
-    const groupedProductsEvent = new CustomEvent('alshayaRcsGroupedProducts', {
-      detail: {
-        result: result,
-        pageType: pageType,
-      }
-    });
-
-    // To trigger the Event.
-    document.dispatchEvent(groupedProductsEvent);
   }
 
   if (result !== null) {
@@ -232,16 +231,15 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       result = response.data.products.items[0];
       RcsPhStaticStorage.set('product_' + result.sku, result);
 
-      if (drupalSettings.alshayaRcs.isColorSplitEnabled) {
-        const groupedProductsEvent = new CustomEvent('alshayaRcsGroupedProducts', {
-          detail: {
-            result: result,
-            pageType: null,
-          }
-        });
+      // Alter the product entity.
+      const alterProductsEvent = new CustomEvent('alterProductEntity', {
+        detail: {
+          result: result,
+          pageType: null,
+        }
+      });
 
-        document.dispatchEvent(groupedProductsEvent);
-      }
+      document.dispatchEvent(alterProductsEvent);
       break;
 
     default:
