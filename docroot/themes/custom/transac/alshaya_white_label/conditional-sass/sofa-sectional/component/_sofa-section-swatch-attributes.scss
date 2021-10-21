@@ -91,6 +91,12 @@
           }
         }
 
+        &:not(.active) {
+          a:hover {
+            border: 1px solid $accordion_border;
+          }
+        }
+
         a {
           height: 5rem;
           width: 5rem;
