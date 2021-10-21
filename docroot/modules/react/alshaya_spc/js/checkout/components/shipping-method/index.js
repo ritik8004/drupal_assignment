@@ -9,7 +9,6 @@ import {
   prepareAddressDataForShipping,
 } from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 export default class ShippingMethod extends React.Component {
   constructor(props) {
@@ -124,7 +123,7 @@ export default class ShippingMethod extends React.Component {
           <span className="method-title">{method.method_title}</span>
           <span className="spc-price">{price}</span>
         </label>
-        <ConditionalView condition={isExpressDeliveryEnabled() && !method.available}>
+        <ConditionalView condition={!method.available}>
           <div className="method-error-message">{method.error_message}</div>
         </ConditionalView>
       </div>

@@ -282,9 +282,7 @@ const PdpLayout = () => {
             removePanelData={removePanelData}
           />
           <ConditionalView condition={isExpressDeliveryEnabled()}>
-            <PdpExpressDelivery
-              variantSelected={variant}
-            />
+            <PdpExpressDelivery />
           </ConditionalView>
           <ConditionalView condition={!isExpressDeliveryEnabled()}>
             <PdpStandardDelivery />
