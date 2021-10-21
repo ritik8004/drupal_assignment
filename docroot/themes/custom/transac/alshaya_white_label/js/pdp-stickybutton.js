@@ -16,7 +16,7 @@
     var defaultAddToCart = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
     var sofaSectionalAddToCart = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .sofa-sectional-addtobag-button');
     // Add to cart button.
-    var button = $('.sofa-sectional-addtobag-button').length > 0 ? sofaSectionalAddToCart : defaultAddToCart;
+    var button = sofaSectionalAddToCart.length > 0 ? sofaSectionalAddToCart : defaultAddToCart;
     // This is the wrapper that holds delivery options.
     var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
     var windowBottom;
