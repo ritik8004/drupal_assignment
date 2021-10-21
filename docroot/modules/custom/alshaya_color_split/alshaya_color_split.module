@@ -488,6 +488,7 @@ function alshaya_color_split_page_attachments(array &$attachments) {
   }
 
   $attachments['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
+  $attachments['#attached']['library'][] = 'alshaya_color_split/rcs_grouped_products';
 
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');

@@ -3,6 +3,7 @@ helpers:
   js:
     js/rcs_placeholders.static_storage.js: { }
     js/rcs_placeholders-exports.js: { }
+    js/eventManager.js: {}
   dependencies:
     - core/jquery
 

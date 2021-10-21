@@ -63,17 +63,6 @@ exports.getEntity = async function getEntity(langcode) {
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
         RcsPhStaticStorage.set('product_' + result.sku, result);
-
-        // Alter the product entity.
-        const alterProductsEvent = new CustomEvent('alterProductEntity', {
-          detail: {
-            result: result,
-            pageType: pageType,
-          }
-        });
-
-        // To trigger the Event.
-        document.dispatchEvent(alterProductsEvent);
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -122,15 +111,12 @@ exports.getEntity = async function getEntity(langcode) {
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+    const updateResult = window.EventManager.fire('alshayaRcsUpdateResults', {
       detail: {
         result: result,
         pageType: pageType,
       }
     });
-
-    // To trigger the Event.
-    document.dispatchEvent(updateResult);
 
     return updateResult.detail.result;
   }
@@ -231,15 +217,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       result = response.data.products.items[0];
       RcsPhStaticStorage.set('product_' + result.sku, result);
 
-      // Alter the product entity.
-      const alterProductsEvent = new CustomEvent('alterProductEntity', {
-        detail: {
-          result: result,
-          pageType: null,
-        }
-      });
-
-      document.dispatchEvent(alterProductsEvent);
       break;
 
     default:
@@ -250,7 +227,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+    const updateResult = window.EventManager.fire('alshayaRcsUpdateResults', {
       detail: {
         result: result,
         placeholder: placeholder,
