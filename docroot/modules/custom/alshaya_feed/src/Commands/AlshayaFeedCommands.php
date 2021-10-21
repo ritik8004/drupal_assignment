@@ -167,6 +167,7 @@ class AlshayaFeedCommands extends DrushCommands {
         // Display Script End time.
         $time_end = microtime(TRUE);
         $execution_time = ($time_end - $results['timestart']) / 60;
+
         \Drupal::service('messenger')->addMessage(
           \Drupal::translation()
             ->formatPlural(
