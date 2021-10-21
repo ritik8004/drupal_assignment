@@ -190,11 +190,11 @@ class AlshayaFeedCommands extends DrushCommands {
       \Drupal::service('messenger')
         ->addMessage(t('An error occurred while processing @operation with arguments : @args'), [
           '@operation' => $error_operation[0],
-          '@args' => json_encode($error_operation[0]),
+          '@args' => json_encode($error_operation[1]),
         ]);
       $logger->error('An error occurred while processing @operation with arguments : @args', [
         '@operation' => $error_operation[0],
-        '@args' => json_encode($error_operation[0]),
+        '@args' => json_encode($error_operation[1]),
       ]);
 
     }
