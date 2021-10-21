@@ -61,8 +61,8 @@ function _alshaya_aura_react_translations() {
     'Loyalty benefits' => [
       'ar' => 'مكافآت الولاء',
     ],
-    'Your points will instantly be credited to your account. You’ll be able to redeem them after 14 days as per the returns & refunds policies.' => [
-      'ar' => 'سيتم إضافة نقاطك على الفور إلى حسابك، سوف تتمكن من استبدال النقاط بعد 14 يوم طبقاً لسياسات الاسترداد والإرجاع.',
+    'Your points will be credited to your account. You will be able to redeem them 14 days after delivery as per Aura Terms & Conditions and Alshaya exchange and refund policies.' => [
+      'ar' => 'سيتم إيداع النقاط في حسابك. يمكنك استبدالها بعد 14 يوم من التوصيل طبقا للشروط والأحكام الخاصة ببرنامج أورا وسياسات الاستبدال والاسترجاع الخاصة بالشايع.',
     ],
     'Say hello to AURA' => [
       'ar' => 'مرحباً بكم في أورا',
