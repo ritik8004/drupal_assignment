@@ -47,6 +47,10 @@
       .promotion-discount-wrapper {
         .promotions {
           margin-bottom: 0;
+
+          @include breakpoint($desktop) {
+            margin-top: 0;
+          }
         }
       }
 
@@ -68,7 +72,7 @@
         text-transform: uppercase;
 
         @include breakpoint($only-tablet) {
-          margin-top: 2.5rem;
+          margin-top: 2rem;
         }
 
         @include breakpoint($tablet) {
@@ -76,7 +80,7 @@
         }
 
         @include breakpoint($desktop) {
-          margin-top: 3rem;
+          margin-top: 2rem;
         }
       }
 

@@ -166,7 +166,7 @@
       }
       // Prepare graphql query here.
       const request = {
-        uri: 'graphql',
+        uri: '/graphql',
         method: 'POST',
         headers: [
           ["Content-Type", "application/json"],

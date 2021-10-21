@@ -167,6 +167,9 @@ $_spc-cart-delivery-gray-border: #f1f1f1;
 $_spc-cart-delivery-gray-text: #d2d2d2;
 $_spc-cart-delivery-popup-bg: #faf9f8;
 $_frame_promo_red: #c03;
+$_sofa-section-grey: #d9d9d9;
+$_sofa-section-grey2: #1a1a1a;
+$_sofa-section-brown: #866347;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -858,6 +861,7 @@ $checkout_tab_mob_active_border: $marine-blue-two;
 // Checkout delivery options.
 $checkout_delivery_optn_odd_row: $white-four;
 $checkout_delivery_optn_shipping_method_title: $brownish-grey;
+$checkout_delivery_optn_shipping_method_error: $new-pdp-blue;
 
 // Checkout Payment.
 $checkout_payment_form_border: $greyish;
@@ -1789,3 +1793,13 @@ $express-delivery-menu-list-border: $mothercare-black;
 // Boots frame.
 $frame_promo: $_frame_promo_red;
 $plp-frame-promo-subtitle: $black-two;
+
+// Sofa and sectional.
+$sofa-sectional-bg: $grey-light-three;
+$sofa-sectional-title: $new-pdp-blue;
+$sofa-sectional-text: $brownish-grey;
+$sofa-sectional-border: $_sofa-section-grey;
+$sofa-sectional-config-item-bg: $white-five;
+$sofa-sectional-active-accordion: $brownish-grey;
+$sofa-sectional-btn-border: $_sofa-section-brown;
+$sofa-sectional-active-border: $_sofa-section-grey2;

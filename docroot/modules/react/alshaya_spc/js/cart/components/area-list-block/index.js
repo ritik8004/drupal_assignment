@@ -12,6 +12,7 @@ import AvailableAreaItems from '../available-area-items';
 export default class AreaListBlock extends React.Component {
   constructor(props) {
     super(props);
+    this.parentVisibility = drupalSettings.alshaya_spc.address_fields.area_parent.visible;
     this.state = {
       governateOptions: '',
       governateDefault: '',
@@ -27,7 +28,10 @@ export default class AreaListBlock extends React.Component {
   componentDidMount() {
     let governateDefaultLabel = '';
     const areaSelected = getDeliveryAreaStorage();
-    let defaultOptions = [];
+    let defaultOptions = {
+      value: 'none',
+      label: getStringMessage('governate_label', { '@label': governateDefaultLabel }),
+    };
     if (drupalSettings.alshaya_spc.address_fields) {
       governateDefaultLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
     }
@@ -47,30 +51,23 @@ export default class AreaListBlock extends React.Component {
             );
           } else if (options.length > 0) {
             [defaultOptions] = options;
-          } else {
-            defaultOptions = [{
-              value: 'none',
-              label: getStringMessage('governate_label', { '@label': governateDefaultLabel }),
-            }];
           }
-          if (defaultOptions.value !== 'none') {
-            getDeliveryAreaList(defaultOptions.value).then(
-              (result) => {
-                if (result !== null && Object.keys(result.items).length > 0) {
-                  this.setState({
-                    areaListItems: result.items,
-                    items: result.items,
-                  });
-                }
-              },
-            );
-          }
-          this.setState({
-            governateOptions: options,
-            governateDefault: defaultOptions,
-          });
-          dispatchCustomEvent('openDeliveryAreaPanel', {});
         }
+        getDeliveryAreaList(defaultOptions.value).then(
+          (result) => {
+            if (result !== null && Object.keys(result.items).length > 0) {
+              this.setState({
+                areaListItems: result.items,
+                items: result.items,
+              });
+            }
+          },
+        );
+        this.setState({
+          governateOptions: options,
+          governateDefault: defaultOptions,
+        });
+        dispatchCustomEvent('openDeliveryAreaPanel', {});
       },
     );
   }
@@ -180,18 +177,20 @@ export default class AreaListBlock extends React.Component {
             <a className="close-modal" onClick={closeModal} />
           </div>
           <div className="area-list-block-content">
-            <div className="governate-label">{getStringMessage('governate_label', { '@label': governateDefaultLabel })}</div>
-            <div className="governate-drop-down">
-              <Select
-                classNamePrefix="spcSelect"
-                className="spc-select"
-                onChange={this.handleSelect}
-                options={governateOptions}
-                defaultValue={governateDefault}
-                value={governateDefault}
-                isSearchable
-              />
-            </div>
+            <ConditionalView condition={this.parentVisibility}>
+              <div className="governate-label">{getStringMessage('governate_label', { '@label': governateDefaultLabel })}</div>
+              <div className="governate-drop-down">
+                <Select
+                  classNamePrefix="spcSelect"
+                  className="spc-select"
+                  onChange={this.handleSelect}
+                  options={governateOptions}
+                  defaultValue={governateDefault}
+                  value={governateDefault}
+                  isSearchable
+                />
+              </div>
+            </ConditionalView>
             <div className="area-label">{`${Drupal.t('Search area')}`}</div>
             <div className="spc-filter-panel-search-form-item">
               <input className="spc-filter-panel-search-field" type="text" placeholder={Drupal.t('e.g. Dubai')} onChange={this.filterList} />

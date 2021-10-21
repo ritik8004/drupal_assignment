@@ -865,6 +865,18 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ? $view_mode
           : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
+
+        // Pass config for showing/hiding quantity selector in configurable product form.
+        $build['#attached']['drupalSettings']['showQuantity'] = \Drupal::service('acq_sku.cart_form_helper')->showQuantity();
+
+        // Send the cart quantity options to be used while displaying quantity
+        // dropdown. Adding the setting to global namespace.
+        $build['#attached']['drupalSettings']['cartQuantityOptions'] = _alshaya_acm_get_cart_quantity_options();
+
+        // Send the flag for max sale quantity enabled or not and
+        // if the max sale error message to hide or not.
+        $build['#attached']['drupalSettings']['maxSaleQuantityEnabled'] = $quantity_limit_enabled;
+        $build['#attached']['drupalSettings']['maxSaleHideMessage'] = \Drupal::config('alshaya_acm.settings')->get('hide_max_qty_limit_message');
       }
 
       if (isset($context)) {
@@ -1577,6 +1589,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // add to cart form on every change on the form & the form state cache doesn't
   // get re-used. Instead, keeps flooding key_value_expire table.
   $form_state->disableCache();
+
+  // Allow other modules to take some action after the form data are altered.
+  \Drupal::moduleHandler()->alter('alshaya_acm_product_skubaseform', $form, $sku_entity);
 }
 
 /**
@@ -2154,11 +2169,11 @@ function alshaya_acm_product_get_delivery_options($sku) {
   return [
     'same_day_delivery' => [
       'status' => $sku_entity->get('attr_same_day_delivery')->getString(),
-      'label' => t('Same Day Delivery available'), [], ['context' => 'sameday_delivery_label'],
+      'label' => t('Same Day Delivery Available'), [], ['context' => 'sameday_delivery_label'],
     ],
     'express_delivery' => [
       'status' => $sku_entity->get('attr_express_delivery')->getString(),
-      'label' => t('Express Delivery available', [], ['context' => 'express_delivery_label']),
+      'label' => t('Express Delivery Available', [], ['context' => 'express_delivery_label']),
     ],
   ];
 }
