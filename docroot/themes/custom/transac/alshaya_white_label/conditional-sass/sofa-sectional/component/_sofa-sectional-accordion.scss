@@ -146,8 +146,11 @@
           margin-bottom: 0;
         }
 
-        &.active {
+        &.active,
+        &:hover {
           border: 1px solid $sofa-sectional-active-border;
+          outline: 0.125rem solid $sofa-sectional-active-border;
+          outline-offset: -2px;
         }
 
         &.disabled {
@@ -174,10 +177,6 @@
 
           &:not(:first-child) {
             margin-#{$left}: 0;
-          }
-
-          &.active {
-            border: 0.125rem solid $sofa-sectional-active-border;
           }
         }
 
