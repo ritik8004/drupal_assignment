@@ -9,6 +9,7 @@
       padding-#{$right}: 2.5rem;
       padding-top: 0.625rem;
       padding-bottom: 0.625rem;
+      text-transform: capitalize;
 
       &.active {
         .config-number-wrapper {
@@ -26,7 +27,7 @@
 
       &:not(.active) {
         .config-name {
-          font-size: 1rem;
+          font-size: 0.875rem;
         }
       }
     }

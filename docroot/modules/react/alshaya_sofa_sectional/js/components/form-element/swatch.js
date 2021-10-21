@@ -66,6 +66,8 @@ const SwatchList = (props) => {
 
       <div className="config-text-wrapper">
         <span className="config-name">
+          {Drupal.t('select')}
+          {' '}
           {label}
         </span>
 
