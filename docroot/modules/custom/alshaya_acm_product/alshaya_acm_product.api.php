@@ -178,5 +178,21 @@ function hook_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array 
 }
 
 /**
+ * Allow other modules to alter the SKU form data.
+ *
+ * On PDP page, we render the add to cart form i.e. SKU base form.
+ * This hook will allow other modules to alter the SKU base form data
+ * after the sku base form alter executes in `alshaya_acm_product.module`.
+ *
+ * @param array $form
+ *   Nested array of form elements that comprise the form.
+ * @param \Drupal\acq_commerce\SKUInterface $sku_entity
+ *   SKU Entity.
+ */
+function hook_alshaya_acm_product_skubaseform_alter(array &$form, SKUInterface $sku_entity) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

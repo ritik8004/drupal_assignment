@@ -1,7 +1,12 @@
 import _isEmpty from 'lodash/isEmpty';
 import { callMagentoApi, getCart } from './common';
-import { getApiEndpoint, logger } from './utility';
+import { getApiEndpoint } from './utility';
+import logger from '../../utilities/logger';
 import StaticStorage from './staticStorage';
+import { addPaymentMethodInCart } from '../../utilities/update_cart';
+import cartActions from '../../utilities/cart_actions';
+
+window.commerceBackend = window.commerceBackend || {};
 
 /**
  * Gets payment methods.
@@ -25,8 +30,8 @@ const getPaymentMethods = async () => {
     return null;
   }
 
-  // Change the payment methods based on shipping method and cart total.
-  const staticCacheKey = `payment_methods_${cart.data.shipping.type}_${cart.data.totals.base_grand_total}`;
+  // Change the payment methods based on shipping method.
+  const staticCacheKey = `payment_methods_${cart.data.shipping.type}`;
   const cached = StaticStorage.get(staticCacheKey);
   if (!_isEmpty(cached)) {
     return cached;
@@ -76,6 +81,57 @@ const getPaymentMethodSetOnCart = async () => {
   }
 
   return null;
+};
+
+/**
+ * Checkout.com Apple pay update payment method.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.saveApplePayPayment = (data) => {
+  logger.debug('Inside window.commerceBackend.saveApplePayPayment.');
+
+  const paymentData = {
+    payment: {
+      method: 'checkout_com_applepay',
+      additional_data: {
+        data: data.paymentData.data,
+        ephemeralPublicKey: data.paymentData.header.ephemeralPublicKey,
+        publicKeyHash: data.paymentData.header.publicKeyHash,
+        transactionId: data.paymentData.header.transactionId,
+        signature: data.paymentData.signature,
+        version: data.paymentData.version,
+        paymentMethodDisplayName: data.paymentMethod.displayName,
+        paymentMethodNetwork: data.paymentMethod.network,
+        paymentMethodType: data.paymentMethod.type,
+      },
+    },
+  };
+
+  return addPaymentMethodInCart(cartActions.cartPaymentUpdate, paymentData).then((response) => {
+    if (!_isEmpty(response.response_message)
+      && !_isEmpty(response.response_message.status)
+      && response.response_message.status === 'success') {
+      return {
+        data: {
+          success: true,
+        },
+      };
+    }
+
+    return response;
+  }).catch((response) => {
+    logger.error('Error while finalizing payment. Error message: @message, Code: @code.', {
+      '@message': !_isEmpty(response.error) ? response.error.message : response,
+      '@code': !_isEmpty(response.error) ? response.error.error_code : '',
+    });
+
+    return response;
+  });
 };
 
 export {

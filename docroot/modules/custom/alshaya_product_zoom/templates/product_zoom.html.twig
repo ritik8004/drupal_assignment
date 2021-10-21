@@ -47,6 +47,10 @@
   </div>
   {% endblock %}
   {% block mobileGallery %}
+    {% if pdp_gallery_type == 'classic' %}
+      {# Add slider counter #}
+      <div class="slider__counter"></div>
+    {% endif %}
     <div class="mobilegallery">
       <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
         {% for thumbs in thumbnails %}
@@ -88,6 +92,16 @@
     {% endif %}
   </div>
   {% endblock %}
+  {# Add swatch images as magazine  #}
+  {% if pdp_gallery_type == 'classic' %}
+    {% block magazineGallery %}
+      <div class="magazine__gallery--container">
+        <div class="magazine-product-description">
+          <div class="magazine-swatch-placeholder"></div>
+        </div>
+      </div>
+    {% endblock %}
+  {% endif %}
   {% block modalGallery %}
     <div id="product-full-screen-gallery-container" style="display: none;">
       <div class="imagegallery__wrapper thumbnail-count-{{ thumbnails|length }}">

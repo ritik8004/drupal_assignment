@@ -1,0 +1,23 @@
+// Size Guide Link theme
+.size-guide-form-and-link-wrapper {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.size-guide-link {
+  position: static;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  text-decoration: underline;
+  padding-top: 0.25rem;
+
+  @include breakpoint($only-mobile) {
+    position: relative;
+    text-transform: capitalize;
+    text-decoration: none;
+  }
+
+  @include breakpoint($tablet) {
+    order: 2;
+  }
+}

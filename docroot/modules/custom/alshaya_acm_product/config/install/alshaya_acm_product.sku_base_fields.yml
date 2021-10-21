@@ -116,3 +116,17 @@ fields:
     type: 'string'
     description: 'Sku Barcode.'
     translatable: 0
+
+  express_delivery:
+    label: 'Express Day Delivery Available'
+    type: 'string'
+    description: 'Sku applicable for express day delivery or not.'
+    index: 1
+
+  #dummy field for delivery type
+  delivery_ways:
+    label: 'Delivery Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+    translatable: 0

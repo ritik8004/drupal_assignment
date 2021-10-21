@@ -63,3 +63,12 @@ if (!(getenv('AH_SITE_ENVIRONMENT'))) {
       : str_replace('alshaya-', '', $hostname_parts[1]);
   }
 }
+elseif (getenv('AH_SITE_ENVIRONMENT') === 'ide') {
+  // This is the way we could achieve multi-site in Cloud IDE.
+  $host_site_code = trim(file_get_contents('/home/ide/project/site.txt'));
+
+  $sites['default'] = 'g';
+  $sites['127.0.0.1'] = 'g';
+  $sites[getenv('SERVER_NAME')] = 'g';
+  $sites[getenv('ACQUIA_APPLICATION_UUID') . '.web.ahdev.cloud'] = 'g';
+}

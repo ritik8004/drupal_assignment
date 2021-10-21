@@ -629,6 +629,11 @@ function alshaya_white_label_preprocess_node(&$variables) {
         /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+        // Classic gallery for cos PDP magazine layout.
+        $pdp_gallery_type = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_type');
+        if ($pdp_gallery_type == 'classic' && $pdp_layout == 'pdp-magazine') {
+          $variables['#attached']['drupalSettings']['pdp_gallery_type'] = $pdp_gallery_type;
+        }
         $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
         $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
         $pdp_plugin->getRenderArray($variables);
@@ -873,6 +878,27 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
       unset($attachments['#attached']['library'][$index]);
     }
   }
+
+  //Preload GTA Script as link.
+  $gta_link = [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => 'preconnect',
+        'href' => 'https://www.google-analytics.com',
+      ],
+    ];
+  $attachments['#attached']['html_head'][] = [$gta_link, 'gta-link'];
+
+  //Preload GTM Script as link.
+  $gtm_link = [
+    '#tag' => 'link',
+    '#attributes' => [
+      'rel' => 'preload',
+      'href' => 'https://www.googletagmanager.com/gtm.js?id=GTM-PJ3GP9',
+      'as' => 'script',
+    ],
+  ];
+  $attachments['#attached']['html_head'][] = [$gtm_link, 'gtm-link'];
 
   // For performance testing & debugging purposes adding a quick bypass for
   // escaping GTM JS on a page.
