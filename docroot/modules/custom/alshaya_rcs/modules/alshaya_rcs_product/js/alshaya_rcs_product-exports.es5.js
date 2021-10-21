@@ -469,20 +469,26 @@ exports.computePhFilters = function (input, filter) {
       const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
       skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
 
-      // @todo Check for how to fetch the max sale quantity.
-      const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-      const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
-      // Remove the quantity filter.
-      quantityDroprown.html('');
+      if (drupalSettings.alshayaRcs.showQuantity) {
+        // @todo Check for how to fetch the max sale quantity.
+        const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
+        const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
+        // Remove the quantity filter.
+        quantityDroprown.html('');
 
-      for (let i = 1; i <= quantity; i++) {
-        if (i === 1) {
-          quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-          continue;
+        for (let i = 1; i <= quantity; i++) {
+          if (i === 1) {
+            quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
+            continue;
+          }
+          quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
         }
-        quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+        jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
       }
-      jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
+      else {
+        jQuery('.js-form-item-quantity', skuBaseForm).remove();
+      }
+
 
       // This wrapper will be removed after processing.
       const tempDivWrapper = jQuery('<div>');

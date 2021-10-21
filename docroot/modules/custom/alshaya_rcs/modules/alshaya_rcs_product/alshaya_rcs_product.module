@@ -230,6 +230,10 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
   $color_split_config = \Drupal::config('alshaya_color_split.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
+
+  $configurable_form_settings = \Drupal::config('acq_sku.configurable_form_settings');
+  $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
 }
 
 /**
