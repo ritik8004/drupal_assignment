@@ -308,7 +308,6 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $languages = $language_manager->getLanguages();
   $page['#attached']['drupalSettings']['alshayaSpc']['languages'] = array_keys($languages);
-  $page['#attached']['drupalSettings']['alshayaSpc']['productExpirationTime'] = array_keys($languages);
 
   // Add product settings.
   $product_config = \Drupal::config('alshaya_acm_product.settings');
