@@ -113,10 +113,7 @@ class AlshayaFeedCommands extends DrushCommands {
    */
   public static function batchStart($total, &$context) {
     $logger = \Drupal::logger('alshaya_feed');
-    $time = microtime(TRUE);
-    $logger->info(t('Products feed generation started in time: @time.'), [
-      '@time' => $time,
-    ]);
+    $logger->info(t('Products feed generation started.'));
     $context['results']['total'] = $total;
     $context['results']['count'] = 0;
     $context['results']['products'] = [];
