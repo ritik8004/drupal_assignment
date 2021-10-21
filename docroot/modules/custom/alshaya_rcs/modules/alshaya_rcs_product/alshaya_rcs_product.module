@@ -6,6 +6,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Implements hook_theme().
@@ -688,6 +689,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             'ship_to_store',
             'reserve_and_collect',
             'attribute_set_id',
+            'assets_teaser',
             'swatch_data' => [
        	      'swatch_type',
             ],
@@ -904,4 +906,100 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Add data attributes.
+  $data = [];
+  // Updated recent order build array.
+  if (array_key_exists('recent_order', $build)) {
+    $orders = $build['recent_order'];
+    foreach ($orders as $id => $order) {
+      // Iterate over each order item.
+      foreach ($order['#order']['items'] as $key => $item) {
+        $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
+        $data[] = $item['extension_attributes']['parent_product_sku'];
+
+        // Fetch attributes from the order array.
+        $extension_attributes = json_decode($order['#order']['items'][$item['sku']]['extension_attributes']['product_options'][0], TRUE);
+        foreach ($extension_attributes['attributes_info'] as $attr_key => $value) {
+          $build['recent_order'][$id]['#order']['items'][$key]['attributes'][] = [
+            'label' => $value['label'],
+            'value' => $value['value'],
+          ];
+        }
+      }
+    }
+
+    $build['#theme_wrappers'] = [
+      'container' => [
+        '#attributes' => [
+          'id' => 'rcs-ph-order_teaser',
+          'class' => ['block-alshaya-acm-customer'],
+          'data-param-skus' => Json::encode($data),
+        ]
+      ]
+    ];
+
+    $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = FALSE;
+    $build['#attached']['library'][] = 'alshaya_rcs_product/grouped_products';
+    // Add color split configuration.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_color_split')) {
+      $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = TRUE;
+      $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
+      $build['#attached']['drupalSettings']['alshayaRcs']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
+      $color_split_config = \Drupal::config('alshaya_color_split.settings');
+      $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Add data attributes.
+  $data = [];
+  // Update the product image with RCS Token.
+  foreach ($build['#products'] as $key => $item) {
+    $build['#products'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
+    $data[$key] = $item['extension_attributes']['parent_product_sku'];
+    // Attribute placeholders.
+    $build['#products'][$key]['attributes'][] = [
+      'label' => '#rcs.orderDetails.attribute_label#',
+      'value' => '#rcs.orderDetails.attribute_value#',
+    ];
+  }
+  $build['#theme_wrappers'] = [
+    'container' => [
+      '#attributes' => [
+        'id' => 'rcs-ph-order_teaser',
+        'data-param-skus' => Json::encode($data),
+      ]
+    ]
+  ];
+}
+
+/**
+ * Get order teaser image render array.
+ *
+ * @param array $item.
+ *   An array containing product info.
+ *
+ * @return array
+ *   An render array of image.
+ */
+function _alshaya_rcs_product_get_order_teaser_image(array $item) {
+  return [
+    '#theme' => 'image',
+    '#attributes' => [
+      'src' => '#rcs.orderDetails.image#',
+      'title' => $item['name'],
+      'alt' => $item['name'],
+      'data-sku' => $item['extension_attributes']['parent_product_sku'],
+    ],
+  ];
 }
