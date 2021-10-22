@@ -1061,13 +1061,23 @@ class SkuImagesManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param string $context
+   *   Context in which we need to get swatch data.
    *
    * @return array
    *   Swatches data.
    */
-  public function getSwatchData(SKUInterface $sku): array {
+  public function getSwatchData(SKUInterface $sku, $context = NULL): array {
     $swatches = [];
     $swatch_attributes = $this->skuManager->getPdpSwatchAttributes();
+
+    if ($context && $context == 'plp') {
+      // Get swatch attributes to exclude on PLP.
+      $swatch_attributes_to_exclude = $this->skuManager->getSwatchAttributesToExcludeOnPlp();
+      if (!empty($swatch_attributes_to_exclude)) {
+        $swatch_attributes = array_diff($swatch_attributes, $swatch_attributes_to_exclude);
+      }
+    }
 
     $combinations = $this->skuManager->getConfigurableCombinations($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {

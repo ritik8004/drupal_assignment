@@ -16,6 +16,23 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add new settings for swatch attribute images roles and
+ * for excluding swatch attributes from PLP pages.
+ */
+function alshaya_acm_product_update_8075() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-saving the stock resource to moved outside mobile app.
  * Add new settings for local storage cache time for product data.
  */
