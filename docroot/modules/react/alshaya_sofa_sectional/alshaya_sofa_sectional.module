@@ -11,83 +11,43 @@ use Drupal\node\Entity\Node;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_color_split\AlshayaColorSplitManager;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_sofa_sectional\Services\SofaSectionalHelper;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityViewDisplay $display, $view_mode) {
-  if ($entity->bundle() !== 'acq_product' || $view_mode !== 'full') {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  $sku_string = $skuManager->getSkuForNode($entity);
-
-  /** @var \Drupal\acq_sku\SKU  $sku_entity */
-  $sku = SKU::loadFromSku($sku_string);
-
-  // Return if sku in not available.
-  if (!($sku instanceof SKU)) {
-    return;
-  }
-
-  // Don't show the react form for following conditions,
-  // if Sku is not in stock,
-  // if Sku is a simple sku,
-  // if Sku is not buyable,
-  // if checkout is disable.
-  if (!$skuManager->isProductInStock($sku)
-    || $sku->bundle() == 'simple'
-    || !alshaya_acm_product_is_buyable($sku)
-    || \Drupal::config('alshaya_acm.cart_config')->get('checkout_feature') === 'disabled') {
-    return;
-  }
-
   // Add cache tag.
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
 
-  // Get sofa sectional configuration.
-  $config = \Drupal::config('alshaya_sofa_sectional.settings');
-
-  if (!$config->get('enabled')) {
+  // Return if the feature is not applicable on the entity and display mode.
+  if ($view_mode !== 'full' || !\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($entity)) {
     return;
   }
 
-  // Get category ids from config.
-  $category_ids = $config->get('category_ids');
+  // Attach Sofa and Sectional libraries.
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
+  $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
 
-  // Get category ids from product field.
-  $categories = $entity->get('field_category')->getValue();
-  $categories = array_column($categories, 'target_id');
-
-  // Check if category ids from field are present in config.
-  $categories = array_intersect($categories, $category_ids);
-  if (!empty($categories)) {
-    // If category ids present in config attach library.
-    $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
-    $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
-    $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
-
-    // Add a unique class if PDP has a sofa and sectional form.
-    $build['#attributes']['class'][] = 'has-sofa-sectional-form';
-  }
+  // Add a unique class if PDP has a sofa and sectional form.
+  $build['#attributes']['class'][] = 'has-sofa-sectional-form';
 }
 
 /**
  * Implements hook_alshaya_acm_product_skubaseform_alter().
  */
 function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SKUInterface $sku_entity) {
-  // Get sofa sectional configuration.
-  $config = \Drupal::config('alshaya_sofa_sectional.settings');
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-  if (!$config->get('enabled') || empty($sku_entity)) {
+  // Get the current node from the sku entity.
+  $node = $skuManager->getDisplayNode($sku_entity);
+
+  // Return if feature isn't applicable for this entity.
+  if (!\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($node)) {
     return;
   }
-
-  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
   /** @var \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager */
   $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');

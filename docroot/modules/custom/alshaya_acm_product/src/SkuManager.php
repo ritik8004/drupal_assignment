@@ -2211,6 +2211,18 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get swatch attributes to exclude from PLP.
+   *
+   * @return array
+   *   Array containing attributes to exclude.
+   */
+  public function getSwatchAttributesToExcludeOnPlp() {
+    static $value = NULL;
+    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('exclude_swatches_on_plp') ?? [];
+    return $value;
+  }
+
+  /**
    * Wrapper function to get value of swatch attribute for given SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
