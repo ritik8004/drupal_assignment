@@ -18,7 +18,15 @@ export default class DeliveryOptions extends React.Component {
 
   componentDidMount() {
     this.fetchShippingMethods();
+    // Updating shipping methods as per selection of variant.
+    document.addEventListener('onSkuVariantSelect', this.updateShippingOnVariantSelect, false);
     document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+  }
+
+  updateShippingOnVariantSelect = (e) => {
+    if (e.detail && e.detail.data !== '') {
+      this.fetchShippingMethods(e.detail.data);
+    }
   }
 
   checkShippingMethods = (response, productSku) => {
@@ -42,10 +50,15 @@ export default class DeliveryOptions extends React.Component {
     this.fetchShippingMethods();
   }
 
-  fetchShippingMethods = () => {
+  fetchShippingMethods = (variantSelected) => {
     const currentArea = getDeliveryAreaStorage();
-    const attr = document.getElementsByClassName('sku-base-form');
-    const productSku = attr[0].getAttribute('data-sku');
+    let productSku = null;
+    if (variantSelected !== undefined) {
+      productSku = variantSelected;
+    } else {
+      const attr = document.getElementsByClassName('sku-base-form');
+      productSku = attr[0].getAttribute('data-sku');
+    }
     showFullScreenLoader();
     getCartShippingMethods(currentArea, productSku).then(
       (response) => {
