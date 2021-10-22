@@ -1,6 +1,7 @@
 import _isArray from 'lodash/isArray';
 import _isEmpty from 'lodash/isEmpty';
 import _isUndefined from 'lodash/isUndefined';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Contains cart error codes.
@@ -17,7 +18,16 @@ const cartErrorCodes = {
  * @return string
  *   Default error message.
  */
-const getDefaultErrorMessage = () => 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.';
+const getDefaultErrorMessage = () => {
+  // Check if localised message is available.
+  if (hasValue(drupalSettings.add_to_bag)
+    && hasValue(drupalSettings.add_to_bag.global_error_message)
+  ) {
+    return drupalSettings.add_to_bag.global_error_message;
+  }
+  // Fallback message.
+  return Drupal.t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.');
+};
 
 /**
  * Provides the type of the exception message for a message.
