@@ -4,6 +4,7 @@ const ClearOptions = (props) => {
   const {
     handleClearOptions,
     noOfOptions,
+    selectedVariant,
   } = props;
 
   return (
@@ -16,6 +17,8 @@ const ClearOptions = (props) => {
           className="sofa-section-clear-option-btn"
           type="button"
           onClick={handleClearOptions}
+          // Disable button if no options are selected.
+          disabled={selectedVariant === null}
         >
           {Drupal.t('Clear Options')}
         </button>
