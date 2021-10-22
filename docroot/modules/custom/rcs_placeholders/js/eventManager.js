@@ -1,7 +1,9 @@
-/* EventManager
+/* EventManager (modified).
  *
  * Copyright (c) 2009, Howard Rauscher
  * Licensed under the MIT License
+ *
+ * Ref: https://gist.github.com/howardr/118668/ecd43be756079494f85d303ef69e9e04ef72031e
  */
 function EventManager() {
   this.listeners = {};
