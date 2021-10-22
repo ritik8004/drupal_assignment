@@ -13515,17 +13515,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "3.0.0-beta2",
+            "version": "3.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "3.0.0-beta2"
+                "reference": "3.0.0-beta3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta2.zip",
-                "reference": "3.0.0-beta2",
-                "shasum": "99562c8043b688129ee7d5cb425350197b969ca9"
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta3.zip",
+                "reference": "3.0.0-beta3",
+                "shasum": "1cb726c306696623180ebe06f9f94a3393634eb5"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -13538,8 +13538,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta2",
-                    "datestamp": "1634804900",
+                    "version": "3.0.0-beta3",
+                    "datestamp": "1634877221",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -13589,8 +13589,7 @@
             "support": {
                 "source": "https://git.drupal.org/project/search_api_algolia.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_algolia"
-            },
-            "time": "2021-09-20T10:42:11+00:00"
+            }
         },
         {
             "name": "drupal/search_api_autocomplete",
