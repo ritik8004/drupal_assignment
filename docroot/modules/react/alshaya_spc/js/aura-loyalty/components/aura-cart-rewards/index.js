@@ -130,7 +130,7 @@ class AuraCartRewards extends React.Component {
 
   render() {
     const allAuraStatus = getAllAuraStatus();
-    const { price } = this.props;
+    const { totals } = this.props;
 
     const {
       wait,
@@ -158,7 +158,7 @@ class AuraCartRewards extends React.Component {
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
           <AuraNotLinkedNoData
-            price={price}
+            price={totals.base_grand_total_without_surcharge}
             loyaltyStatus={loyaltyStatus}
           />
         </ConditionalView>
@@ -166,7 +166,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Linked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
           <AuraLinkedVerified
-            price={price}
+            price={totals.base_grand_total_without_surcharge}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
             loyaltyStatus={loyaltyStatus}
@@ -176,7 +176,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Linked Loyalty Card - Pending Enrollment */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
           <AuraLinkedNotVerified
-            price={price}
+            price={totals.base_grand_total_without_surcharge}
             loyaltyStatus={loyaltyStatus}
           />
         </ConditionalView>
@@ -184,7 +184,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Unlinked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
           <AuraNotLinkedData
-            price={price}
+            price={totals.base_grand_total_without_surcharge}
             cardNumber={cardNumber}
             loyaltyStatus={loyaltyStatus}
           />

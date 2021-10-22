@@ -2,7 +2,7 @@ diff --git a/.htaccess b/.htaccess
 index 83cb71a04..9fc946b67 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -111,6 +111,18 @@ AddEncoding gzip svgz
+@@ -111,6 +111,21 @@ AddEncoding gzip svgz
    # uncomment the following:
    # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
    # RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
@@ -15,8 +15,11 @@ index 83cb71a04..9fc946b67 100644
 +  # Don't redirect local dev sites.
 +  RewriteCond %{HTTP_HOST} !^local\. [NC]
 +  RewriteCond %{HTTP_HOST} !\.site$ [NC]
++  RewriteCond %{HTTP_HOST} !\.cloud$ [NC]
 +  # Don't redirect on all *.hm.com domains.
 +  RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
++  # Don't redirect on all *.cosstores.com domains.
++  RewriteCond %{HTTP_HOST} !\.cosstores\.com$ [NC]
 +  RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
    # Modify the RewriteBase if you are using Drupal in a subdirectory or in a

@@ -1268,6 +1268,11 @@ $conductors = [
     'hmac_secret' => 'YTQ0NjE0NzEtYTExNS00',
     'site_id' => 237,
   ],
+  'muqa_qa' => [
+    'hmac_id' => '5c70d907124c4b9ba9c54efd18471650',
+    'hmac_secret' => 'MThkMjJmNGYtMmQ0Ny00',
+    'site_id' => 496,
+  ],
   'mukw_uat' => [
     'hmac_id' => 'e8dc16861254494e80c36dd3255aab5d',
     'hmac_secret' => 'OTY0OTRjZTYtYzMyZC00',
@@ -1600,6 +1605,57 @@ $conductors = [
     'hmac_id' => 'dcecf7d0b2a74511bbf65681325abf50',
     'hmac_secret' => 'N2VhNGQwYzAtZGVmOS00',
     'site_id' => 481,
+  ],
+  'coskw_uat' => [
+    'hmac_id' => 'c3b4274eeb21451387723cc29799c749',
+    'hmac_secret' => 'MDRkOGRkOWQtZDYyMy00',
+    'site_id' => 490,
+  ],
+  'cossa_uat' => [
+    'hmac_id' => '4b818394dea44850a0f751faf1118161',
+    'hmac_secret' => 'MTdjMWJmZTktOWE1MS00',
+    'site_id' => 491,
+  ],
+  'cosae_uat' => [
+    'hmac_id' => '84803bb1fd764846a021f0a1a7d2619d',
+    'hmac_secret' => 'ZTIyZDliZjktODQxYi00',
+    'site_id' => 492,
+  ],
+  'coseg_uat' => [
+    'hmac_id' => '80e344c3cdde4725b8b330ad1d7dcfef',
+    'hmac_secret' => 'YzFjM2ZiNWUtZjU0Mi00',
+    'site_id' => 493,
+  ],
+  'cosbh_uat' => [
+    'hmac_id' => '7a1b8ccc4ada4d82b0b5fb38c33c6be5',
+    'hmac_secret' => 'NWNhM2IyMTQtZDI1OS00',
+    'site_id' => 494,
+  ],
+  'cosqa_uat' => [
+    'hmac_id' => '2ba30adf80584a44b99d832de959cf7e',
+    'hmac_secret' => 'NWM3YWEwMjQtOGFmNi00',
+    'site_id' => 495,
+  ],
+  'coskw_prod' => [
+    'site_id' => 497,
+  ],
+  'cossa_prod' => [
+    'site_id' => 498,
+  ],
+  'cosae_prod' => [
+    'site_id' => 499,
+  ],
+  'coseg_prod' => [
+    'site_id' => 500,
+  ],
+  'cosbh_prod' => [
+    'site_id' => 501,
+  ],
+  'cosqa_prod' => [
+    'site_id' => 502,
+  ],
+  'cosjo_prod' => [
+    'site_id' => 503,
   ],
 ];
 

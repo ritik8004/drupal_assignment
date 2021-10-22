@@ -17,9 +17,9 @@ import {
   getApiEndpoint,
   getCartIdFromStorage,
   isUserAuthenticated,
-  logger,
   removeCartIdFromStorage,
 } from './utility';
+import logger from '../../utilities/logger';
 import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
@@ -510,7 +510,7 @@ window.commerceBackend.addFreeGift = async (data) => {
           '@cart': JSON.stringify(cart),
         });
       } else {
-        if (!_isEmpty(updated.data) && _isUndefined(updated.data.error)) {
+        if (hasValue(updated) && hasValue(updated.data)) {
           updated.data = await getProcessedCartData(updated.data);
         }
         cart = updated;

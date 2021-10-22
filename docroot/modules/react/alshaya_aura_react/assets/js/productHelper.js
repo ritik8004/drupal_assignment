@@ -21,7 +21,7 @@
       var variantInfo = (drupalSettings[productKey][sku]['type'] === 'simple')
         ? drupalSettings[productKey][sku]
         : drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
-      var price = variantInfo ? variantInfo.priceRaw.replace(/,/g, '') : 0;
+      var price = variantInfo ? variantInfo.finalPrice.replace(/,/g, '') : 0;
       data = {
         amount: price * quantity,
       };
@@ -30,7 +30,7 @@
     return { data, context };
   };
 
-  // Event dispatcher on variant/quantity change to update aura accrual points. 
+  // Event dispatcher on variant/quantity change to update aura accrual points.
   Drupal.dispatchProductUpdateEvent = function (element) {
     var data = Drupal.getSelectedVariantDetails(element);
     const event = new CustomEvent('auraProductUpdate', {

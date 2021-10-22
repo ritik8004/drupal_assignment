@@ -33,9 +33,9 @@ import {
 import {
   getApiEndpoint,
   isUserAuthenticated,
-  logger,
   getIp,
 } from './utility';
+import logger from '../../utilities/logger';
 import cartActions from '../../utilities/cart_actions';
 import {
   getPaymentMethods,
@@ -47,6 +47,7 @@ import {
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -224,7 +225,7 @@ const getLastOrder = async (customerId) => {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
     if (!hasValue(order.data) || hasValue(order.data.error)) {
       logger.warning('Error while fetching last order of customer. CustomerId: @customerId, Response: @response.', {
-        '@response': JSON.stringify(order.data),
+        '@response': JSON.stringify(order),
         '@customerId': customerId,
       });
 
@@ -279,30 +280,84 @@ const getDefaultPaymentFromOrder = async (order) => {
 };
 
 /**
+ * Gets the store data saved in local storage.
+ *
+ * @param {string} key
+ *   The identifier key in the localStorage for the store data.
+ *
+ * @returns {object|null}
+ *   Returns the store data object if found else null.
+ */
+const getSavedDrupalStoreData = (key) => {
+  const savedStoreData = getStorageInfo(key);
+
+  if (savedStoreData !== null) {
+    const expireTime = drupalSettings.cncStoreInfoCacheTime * 60 * 1000;
+    const currentTime = new Date().getTime();
+
+    if ((currentTime - savedStoreData.created) < expireTime) {
+      return savedStoreData;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Sets the store data in the local storage.
+ *
+ * @param {string} key
+ *   The identifier key in the localStorage for the store data.
+ * @param {object} data
+ *   The store data object.
+ */
+const setDrupalStoreData = (key, data) => {
+  // eslint-disable-next-line no-param-reassign
+  data.created = new Date().getTime();
+
+  setStorageInfo(data, key);
+};
+
+/**
  * Gets the data for a particular store.
  *
- * @param {string} store
+ * @param {string} storeInformation
  *   The store ID.
  *
  * @returns {Promise<object|null>}
  *   Returns a promise which resolves to an array of data for the given store or
  * an empty array in case of any issue.
  */
-const getStoreInfo = async (storeData) => {
-  let store = { ...storeData };
+const getStoreInfo = async (storeInformation) => {
+  let store = { ...storeInformation };
 
   if (typeof store.code === 'undefined' || !store.code) {
     return null;
   }
 
-  // Fetch store info from Drupal.
-  const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
-    return null;
+  const storageKey = `storeInfo:${drupalSettings.path.currentLanguage}:${store.code}`;
+  let storeData = getSavedDrupalStoreData(storageKey);
+  let storeInfo = null;
+
+  if (hasValue(storeData)) {
+    storeInfo = storeData.data;
+  } else {
+    storeData = {};
+
+    // Fetch store info from Drupal.
+    const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
+    if (_isEmpty(response.data)
+      || (!_isUndefined(response.data.error) && response.data.error)
+    ) {
+      setDrupalStoreData(storageKey, storeData);
+      return null;
+    }
+    storeInfo = response.data;
+
+    // Set the Drupal store data into storage.
+    storeData.data = storeInfo;
+    setDrupalStoreData(storageKey, storeData);
   }
-  const storeInfo = response.data;
 
   // Get the complete data about the store by combining the received data from
   // Magento with the processed store data stored in Drupal.
@@ -331,6 +386,7 @@ const getStoreInfo = async (storeData) => {
   if (typeof store.rnc_config !== 'undefined') {
     delete store.rnc_config;
   }
+
   return store;
 };
 
@@ -341,11 +397,13 @@ const getStoreInfo = async (storeData) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
+ * @param {int} cncStoresLimit
+ *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCartStores = async (lat, lon) => {
+const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   const cartId = window.commerceBackend.getCartId();
 
   // If cart not available in session, log the error and return empty array.
@@ -354,11 +412,24 @@ const getCartStores = async (lat, lon) => {
     return [];
   }
 
+  let staticStoresData = StaticStorage.get('cartStores');
+  if (staticStoresData === null) {
+    staticStoresData = {};
+  }
+
+  const staticStorageKey = `${lat}_${lon}`;
+  if (typeof staticStoresData[staticStorageKey] !== 'undefined') {
+    return staticStoresData[staticStorageKey];
+  }
+
+  staticStoresData[staticStorageKey] = [];
+
   const url = getApiEndpoint('getCartStores', { cartId, lat, lon });
   const response = await callMagentoApi(url, 'GET', {});
 
   // If no stores available, return empty.
   if (_isEmpty(response.data)) {
+    StaticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -369,6 +440,7 @@ const getCartStores = async (lat, lon) => {
       '@response': JSON.stringify(response.data),
     });
 
+    StaticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -379,11 +451,18 @@ const getCartStores = async (lat, lon) => {
       '@response': JSON.stringify(response.data),
     });
 
+    StaticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
   const storeInfoPromises = [];
   let stores = response.data;
+
+  // If cncStoresLimit is greater than 0, then only display that many stores else display all.
+  if (cncStoresLimit > 0) {
+    stores = stores.slice(0, cncStoresLimit);
+  }
+
   stores.forEach((store) => {
     storeInfoPromises.push(getStoreInfo(store));
   });
@@ -391,8 +470,8 @@ const getCartStores = async (lat, lon) => {
   try {
     stores = await Promise.all(storeInfoPromises);
 
-    // Remove null values.
-    stores = stores.filter((value) => value != null);
+    // Remove null/empty values.
+    stores = stores.filter((value) => value != null && value !== '');
 
     // Sort the stores first by distance and then by rnc.
     if (stores.length > 1) {
@@ -401,7 +480,9 @@ const getCartStores = async (lat, lon) => {
         .sort((store1, store2) => store2.rnc_available - store1.rnc_available);
     }
 
-    return stores;
+    staticStoresData[staticStorageKey] = stores;
+    StaticStorage.set('cartStores', staticStoresData);
+    return staticStoresData[staticStorageKey];
   } catch (error) {
     logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @message.', {
       '@cartId': cartId,
@@ -409,6 +490,7 @@ const getCartStores = async (lat, lon) => {
     });
   }
 
+  StaticStorage.set('cartStores', staticStoresData);
   return [];
 };
 
@@ -419,11 +501,13 @@ const getCartStores = async (lat, lon) => {
  *   The latitude value.
  * @param {string} lon
  *   The longitude value.
+ * @param {int} cncStoresLimit
+ *   The default number of stores to display.
  *
  * @returns {Promise<array>}
  *   The list of stores.
  */
-const getCncStores = async (lat, lon) => {
+const getCncStores = async (lat, lon, cncStoresLimit = 0) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
     logger.warning('Error while fetching click and collect stores. No cart available in session.');
@@ -440,7 +524,7 @@ const getCncStores = async (lat, lon) => {
     return [];
   }
 
-  const response = await getCartStores(lat, lon);
+  const response = await getCartStores(lat, lon, cncStoresLimit);
 
   // Data added below is to keep the response consistent with V1.
   return { data: response };
@@ -1030,18 +1114,17 @@ const applyDefaults = async (data, customerId) => {
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
-  if (!_isUndefined(cartData.error)) {
+  // In case of errors, return the error object.
+  if (hasValue(cartData) && hasValue(cartData.error) && cartData.error) {
     return cartData;
   }
 
-  if (_isEmpty(cartData)) {
+  // If the cart object is empty, return null.
+  if (!hasValue(cartData)) {
     return null;
   }
 
   let data = _cloneDeep(cartData);
-  if (typeof data.error !== 'undefined' && data.error === true) {
-    return data;
-  }
 
   // Check whether CnC enabled or not.
   const cncStatus = await getCncStatusForCart(data);
@@ -1249,11 +1332,15 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
  *
  * @param {object} coords
  *   The co-ordinates data.
+ * @param {int} cncStoresLimit
+ *   The default number of stores to display.
  *
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.fetchClickNCollectStores = (coords) => getCncStores(coords.lat, coords.lng);
+window.commerceBackend.fetchClickNCollectStores = (coords, cncStoresLimit = 0) => getCncStores(
+  coords.lat, coords.lng, cncStoresLimit,
+);
 
 /**
  * Process payment data before placing order.
@@ -1680,13 +1767,11 @@ window.commerceBackend.getCartForCheckout = async () => {
  *   Shipping address info.
  * @param {string} action
  *   Action to perform.
- * @param {bool} updateBillingDetails
- *   Whether billing needs to update or not.
  *
  * @returns {Promise<object>}
  *   Cart data.
  * */
-const addCncShippingInfo = async (shippingData, action, updateBillingDetails) => {
+const addCncShippingInfo = async (shippingData, action) => {
   const { store } = { ...shippingData };
 
   // Create the address object with static data and store cart address.
@@ -1732,14 +1817,14 @@ const addCncShippingInfo = async (shippingData, action, updateBillingDetails) =>
   ) {
     return cart;
   }
-  const cartData = cart.data;
 
   // Setting city value as 'NONE' so that, we can
   // identify if billing address added is default one and
   // not actually added by the customer on FE.
-  if (updateBillingDetails
-    || _isEmpty(cartData.billing_address) || _isEmpty(cartData.billing_address.city)
-    || cartData.billing_address.city === 'NONE') {
+  if (_isEmpty(cart.data.cart.billing_address)
+    || _isEmpty(cart.data.cart.billing_address.city)
+    || cart.data.cart.billing_address.city === 'NONE'
+  ) {
     params.shipping.shipping_address.city = 'NONE';
     // Adding billing address.
     cart = await updateBilling(params.shipping.shipping_address);
@@ -1794,7 +1879,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
       '@cartId': cartId,
     });
 
-    cart = await addCncShippingInfo(shippingInfo, data.action, updateBillingInfo);
+    cart = await addCncShippingInfo(shippingInfo, data.action);
 
     // Process cart data.
     cart.data = await getProcessedCheckoutData(cart.data);
@@ -2052,6 +2137,20 @@ window.commerceBackend.placeOrder = async (data) => {
       }
 
       const orderId = parseInt(response.data, 10);
+      if (!orderId) {
+        logger.error('Place order returned an empty order id. Response: @response Cart: @cart .', {
+          '@response': JSON.stringify(response),
+          '@cart': JSON.stringify(cart),
+        });
+
+        result.error = true;
+        result.error_code = 604;
+        result.success = false;
+        result.error_message = getDefaultErrorMessage();
+        return { data: result };
+      }
+
+      // Proceed with checkout.
       const secureOrderId = btoa(JSON.stringify({
         order_id: orderId,
         email: cart.data.cart.billing_address.email,

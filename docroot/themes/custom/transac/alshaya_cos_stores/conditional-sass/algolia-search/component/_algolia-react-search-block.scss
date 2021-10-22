@@ -34,7 +34,7 @@
   }
 
   @include breakpoint($desktop) {
-    width: 14.812rem !important;
+    width: 21.812rem !important;
     padding: 0;
   }
 
@@ -92,6 +92,7 @@
     @include breakpoint($desktop) {
       width: 16rem;
       top: -0.1825rem;
+      #{$right}: -5.9375rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -347,7 +348,7 @@ body {
     .show-all-filters-algolia,
     .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
-        top: 3rem;
+        top: 3.625rem;
       }
     }
   }

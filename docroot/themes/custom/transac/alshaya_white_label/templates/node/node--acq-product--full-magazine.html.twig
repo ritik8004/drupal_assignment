@@ -57,7 +57,16 @@
           {% endif %}
         </div>
 
-        {% if content.same_day_delivery_text %}
+        {# Delivery options will load if express delivery enabled. #}
+        {% if content.delivery_options %}
+          <div class="express-delivery desktop">
+            {% for key,delivery_option in content.delivery_options %}
+              <div class="express-delivery-text {{ key }}">
+                <span>{{ delivery_option }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% elseif content.same_day_delivery_text %}
           <div class="same-day-delivery">
             <div class="same-day-content">
               <p>{{ content.same_day_delivery_text }}</p>
@@ -129,12 +138,15 @@
           {% block afterDescription %}
           {% endblock %}
 
+          {% if content.express_delivery %}
+            {{content.express_delivery}}
+          {% endif %}
+
           {% if content.home_delivery or content.click_and_collect %}
             <div class="delivery-options-wrapper">
               <div class="product-out-of-stock-layer"></div>
               <div class="field__content">
                 {{ content.home_delivery }}
-
                 {% if content.click_and_collect %}
                   {{ content.click_and_collect }}
                 {% endif %}

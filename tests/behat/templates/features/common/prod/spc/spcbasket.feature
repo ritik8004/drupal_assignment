@@ -1,4 +1,4 @@
-@javascript @smoke @westelmkwprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
+@javascript @smoke @pbkaepprod @pbksapprod @pbkkwpprod @aeoaepprod @aeokwpprod @aeosapprod @pbkkwprod @pbksaprod @bpaepprod @bpsapprod @bpkwpprod @westelmaepprod @westelmsapprod @westelmkwpprod @vskwpprod @pbkaeprod @westelmkwprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
 Feature: Test basket page
 
   Background:
@@ -117,8 +117,6 @@ Feature: Test basket page
     And I should not see an ".value .price .price-currency" element
     And I should not see an ".value .price .price-amount" element
     Then I should not see an ".delivery-vat" element
-    Then I should see an ".dy-404__headline" element
-    Then I should see an ".dy-404__description" element
 
   @language @desktop
   Scenario: As a Guest, I should be able to add more quantity in second language
