@@ -111,7 +111,7 @@ exports.getEntity = async function getEntity(langcode) {
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = window.EventManager.fire('alshayaRcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('alshayaRcsUpdateResults', {
       detail: {
         result: result,
         pageType: pageType,
@@ -227,15 +227,13 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = window.EventManager.fire('alshayaRcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('alshayaRcsUpdateResults', {
       detail: {
         result: result,
         placeholder: placeholder,
       }
     });
 
-    // To trigger the Event.
-    document.dispatchEvent(updateResult);
     return updateResult.detail.result;
   }
 
