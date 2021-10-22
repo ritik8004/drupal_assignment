@@ -307,6 +307,11 @@ function _alshaya_aura_react_translations() {
     'The number you’ve entered is invalid. Please re-enter the number of points you’d like to redeem.' => [
       'ar' => 'الرقم الذي أدخلته غير صحيح. يرجى إعادة إدخال رقم النقاط التي ترغب في استخدامها.',
     ],
-
+    'Cash on delivery is not available along with the Aura points.' => [
+      'ar' => 'Cash on delivery is not available along with the Aura points. AR',
+    ],
+    'Aura points can not be redeemed with cash on delivery.' => [
+      'ar' => 'Aura points can not be redeemed with cash on delivery. AR',
+    ],
   ];
 }
