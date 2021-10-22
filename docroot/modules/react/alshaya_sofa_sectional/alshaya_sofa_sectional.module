@@ -20,16 +20,18 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
   // Add cache tag.
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
 
-  // Check if the feature is applicable on the entity.
-  if (\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($entity) || $view_mode !== 'full') {
-    // If category ids present in config attach library.
-    $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
-    $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
-    $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
-
-    // Add a unique class if PDP has a sofa and sectional form.
-    $build['#attributes']['class'][] = 'has-sofa-sectional-form';
+  // Return if the feature is not applicable on the entity and display mode.
+  if ($view_mode !== 'full' || !\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($entity)) {
+    return;
   }
+
+  // Attach Sofa and Sectional libraries.
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
+  $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
+
+  // Add a unique class if PDP has a sofa and sectional form.
+  $build['#attributes']['class'][] = 'has-sofa-sectional-form';
 }
 
 /**
