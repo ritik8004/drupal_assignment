@@ -146,6 +146,7 @@ class LoyaltyClubController {
       $url = 'customers/apc-status-update';
       $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
       $customer_data = [];
+      $responseData = [];
 
       // On API success, update the user AURA Status in Drupal.
       if ($response) {
@@ -191,14 +192,13 @@ class LoyaltyClubController {
             $customer_data = array_merge($customer_data, $customer_tier);
           }
         }
+
+        $responseData['data'] = !empty($customer_data)
+          ? $customer_data
+          : ['auraStatus' => (int) $search_response['data']['apc_link']];
       }
 
-      $responseData = [
-        'status' => $response,
-        'data' => !empty($customer_data)
-        ? $customer_data
-        : ['auraStatus' => (int) $search_response['data']['apc_link']],
-      ];
+      $responseData['status'] = $response;
 
       return new JsonResponse($responseData);
     }
