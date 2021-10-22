@@ -62,7 +62,7 @@ RcsEventManager = {
 
     // Now call the event listeners with the arguments.
     listeners.forEach(function (callback) {
-      callback.call(window, args);
+      callback.call(this, args);
     });
 
     // Return args so calling function can have updated object in response.
