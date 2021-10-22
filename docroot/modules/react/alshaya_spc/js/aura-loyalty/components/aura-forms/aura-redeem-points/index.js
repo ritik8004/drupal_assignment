@@ -58,6 +58,7 @@ class AuraFormRedeemPoints extends React.Component {
 
   // Set points and money in state to prefill redemption input elements.
   updatePointsAndMoney = () => {
+    removeError('spc-aura-link-api-response-message');
     const { totals } = this.props;
 
     // If amount paid with aura is not present in cart totals, we calculate

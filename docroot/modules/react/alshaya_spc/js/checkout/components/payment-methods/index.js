@@ -249,6 +249,14 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    // If aura enabled and aura points redeemed then do not allow
+    // to select any payment method that is unsupported with aura.
+    if (isAuraEnabled()
+      && cart.cart.totals.paidWithAura > 0
+      && isUnsupportedPaymentMethod(method)) {
+      return;
+    }
+
     // If method is already selected in cart we simply
     // trigger the events.
     if (method && cart.cart.payment.method === method) {

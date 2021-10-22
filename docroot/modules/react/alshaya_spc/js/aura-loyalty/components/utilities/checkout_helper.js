@@ -177,9 +177,8 @@ function isFullPaymentDoneByAura(cart) {
  */
 function isUnsupportedPaymentMethod(paymentMethod) {
   const { auraUnsupportedPaymentMethods } = getAuraConfig();
-  const unsupportedPaymentMethodsArray = auraUnsupportedPaymentMethods.split(',');
 
-  return unsupportedPaymentMethodsArray.includes(paymentMethod);
+  return auraUnsupportedPaymentMethods.includes(paymentMethod);
 }
 
 export {
