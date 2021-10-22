@@ -208,7 +208,18 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
           return;
         }
       }
-      showError('otp-error', getStringMessage('form_error_invalid_otp'));
+
+      // Show error based on error code,
+      // if error code is 500 show error message,
+      // by default show invalid OTP error message.
+      switch (result.data.error_code) {
+        case '500':
+          showError('otp-error', result.data.error_message);
+          break;
+
+        default:
+          showError('otp-error', getStringMessage('form_error_invalid_otp'));
+      }
       removeFullScreenLoader();
     });
   }
