@@ -41,7 +41,7 @@ RcsEventManager = {
   },
   fire: function (name, args) {
     if (typeof rcsSubscribedEvents[name] === 'undefined') {
-      return;
+      return args;
     }
 
     // A flat array which will hold the listeners.
