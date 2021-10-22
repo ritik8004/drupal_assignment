@@ -22,7 +22,7 @@ class RcsPhNavigationMenu extends BlockBase {
     return [
       '#markup' => '<div id="rcs-ph-navigation_menu" data-rcs-dependency="none"><span></span></div>',
       '#attached' => [
-        'library' => ['rcs_placeholders/rcs_ph_navigation_menu'],
+        'library' => ['alshaya_white_label/rcs-ph-navigation-menu'],
       ],
     ];
   }

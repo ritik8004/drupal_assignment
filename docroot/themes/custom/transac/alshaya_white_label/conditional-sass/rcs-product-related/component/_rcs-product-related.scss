@@ -1,0 +1,13 @@
+#rcs-ph-upsell-products:not(.rcs-loaded),
+#rcs-ph-related-products:not(.rcs-loaded),
+#rcs-ph-crosssell-products:not(.rcs-loaded) {
+  @include breakpoint($tablet) {
+    width: 100%;
+    height: 12rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+  }
+  @include breakpoint($desktop) {
+    height: 16rem;
+  }
+}

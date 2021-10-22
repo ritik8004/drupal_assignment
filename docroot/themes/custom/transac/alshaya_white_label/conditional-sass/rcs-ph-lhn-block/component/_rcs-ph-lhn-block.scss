@@ -1,0 +1,9 @@
+#rcs-ph-lhn_block:not(.rcs-loaded) li {
+  & > * {
+    display: none;
+  }
+  @include breakpoint($desktop) {
+    height: 2.5rem;
+    margin-bottom: 0.25rem;
+  }
+}

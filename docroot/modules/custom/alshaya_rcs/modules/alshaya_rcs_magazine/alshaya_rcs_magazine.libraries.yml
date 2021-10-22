@@ -1,8 +1,5 @@
 main:
   version: 1.x
-  css:
-    component:
-      css/alshaya_rcs_magazine.css: {}
   js:
     js/alshaya_rcs_magazine.js: {}
   dependencies:

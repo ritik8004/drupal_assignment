@@ -1,0 +1,12 @@
+#rcs-ph-navigation_menu:not(.rcs-loaded) li {
+  @include breakpoint($desktop) {
+    height: 2.5rem;
+    width: 8rem;
+    display: inline-block;
+    margin-right: 0.25rem;
+
+    & > * {
+      display: none;
+    }
+  }
+}

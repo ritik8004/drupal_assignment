@@ -22,7 +22,7 @@ class AlshayaRcsTermDescription extends BlockBase {
     return [
       '#markup' => '<div class="field c-page-title__description"><span>#rcs.category.description#</span></div>',
       '#attached' => [
-        'library' => 'alshaya_rcs_listing/rcs_ph_term_description',
+        'library' => 'alshaya_white_label/rcs-ph-term-description',
       ],
     ];
   }

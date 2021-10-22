@@ -14,21 +14,7 @@ rcs_placeholders:
   css:
     component:
       css/rcs_placeholders.css: {}
-    state:
-      css/rcs_placeholders.loading.css: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
     - rcs_placeholders/helpers
-
-rcs_ph_breadcrumb:
-  version: 1.x
-  css:
-    component:
-      css/rcs_ph_breadcrumb.css: {}
-
-rcs_ph_navigation_menu:
-  version: 1.x
-  css:
-    component:
-      css/rcs_ph_navigation_menu.css: {}

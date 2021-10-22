@@ -1,7 +1,3 @@
-.rcs-page:not(.rcs-loaded) .c-page-title__description > * {
-  display: none;
-}
-
 .rcs-page:not(.rcs-loaded) .c-page-title__description,
 .rcs-page:not(.rcs-loaded)
   .c-content__region
@@ -11,8 +7,11 @@
   margin: 0 auto;
 }
 
-@media (min-width: 768px) {
-  .rcs-page:not(.rcs-loaded) .c-page-title__description {
+.rcs-page:not(.rcs-loaded) .c-page-title__description {
+  & > * {
+    display: none;
+  }
+  @include breakpoint($tablet) {
     height: 1.5rem;
     width: 100%;
   }

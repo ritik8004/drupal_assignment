@@ -65,7 +65,7 @@ class RcsPhBreadcrumb extends BlockBase implements ContainerFactoryPluginInterfa
     ];
 
     $build['#attached'] = [
-      'library' => ['rcs_placeholders/rcs_ph_breadcrumb'],
+      'library' => ['alshaya_white_label/rcs-ph-breadcrumb'],
     ];
 
     return $build;

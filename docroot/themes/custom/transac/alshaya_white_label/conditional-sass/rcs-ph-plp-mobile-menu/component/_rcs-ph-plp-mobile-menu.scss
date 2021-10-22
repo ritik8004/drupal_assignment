@@ -2,8 +2,8 @@
   width: 90%;
   height: 2rem;
   margin: auto;
-}
 
-#rcs-ph-plp_mobile_menu:not(.rcs-loaded) > * {
-  display: none;
+  & > * {
+    display: none;
+  }
 }
