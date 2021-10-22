@@ -15,7 +15,11 @@
       }
 
       &.disabled {
-        opacity: 0.2;
+        label,
+        .carrier-title,
+        .method-title {
+          opacity: 0.2;
+        }
       }
 
       .carrier-title,
@@ -38,6 +42,11 @@
         position: absolute;
         top: 1.25rem;
         #{$right}: 0;
+      }
+
+      .method-error-message {
+        color: $checkout_delivery_optn_shipping_method_error;
+        padding-top: 0.75rem;
       }
     }
 

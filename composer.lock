@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bd597efd52dee34fcf552d680d20141",
+    "content-hash": "dcfd22ad329ff4931dfd8dd8c00018fc",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13515,11 +13515,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "dev-3.0.x",
+            "version": "3.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "2ce6d60086dd012ecf7dfefbb17fff99c5698cfa"
+                "reference": "3.0.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta2.zip",
+                "reference": "3.0.0-beta2",
+                "shasum": "99562c8043b688129ee7d5cb425350197b969ca9"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -13531,15 +13537,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.0.x": "3.0.x-dev"
-                },
                 "drupal": {
-                    "version": "3.0.0-alpha1+2-dev",
-                    "datestamp": "1624863214",
+                    "version": "3.0.0-beta2",
+                    "datestamp": "1634804900",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
