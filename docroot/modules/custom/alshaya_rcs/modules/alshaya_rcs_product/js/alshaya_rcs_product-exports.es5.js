@@ -113,6 +113,44 @@ function getFormattedAmount(priceAmount) {
 };
 exports.getFormattedAmount = getFormattedAmount;
 
+/**
+ * Get SKU based on attribute option id.
+ *
+ * @param {string} $sku
+ *   The parent sku value.
+ * @param {string} attribute
+ *   Attribute to search for.
+ * @param {Number} option_id
+ *   Option id for selected attribute.
+ *
+ * @return {string}
+ *   SKU value matching the attribute option id.
+ */
+function getChildSkuFromAttribute(sku, attribute, option_id) {
+  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+
+  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
+    console.log(`No combination available for attribute ${attribute} and option ${option_id} for SKU ${sku}`);
+  }
+
+  return combinations.attribute_sku[attribute][option_id][0];
+}
+
+/**
+ * Get the swatch image url for the provided sku.
+ *
+ * @param {string} sku
+ *   The SKU value.
+ *
+ * @returns {string}
+ *   The swatch image url.
+ */
+function getPdpSwatchImageUrl(sku) {
+  // @todo Add proper implementation for this once
+  // https://alshayagroup.atlassian.net/browse/CORE-35237 is resolved.
+  return jQuery('.logo img').attr('src');
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -522,7 +560,6 @@ exports.computePhFilters = function (input, filter) {
             'data-selected-title': option.label,
             'data-drupal-selector': `edit-configurables-${formattedAttributeCode}`,
             id: `edit-configurables-${formattedAttributeCode}`,
-            // class: 'form-item-configurable-swatch form-select required valid visually-hidden',
             class: 'form-select required valid',
             name: `configurables[${option.attribute_code}]`,
             'aria-require': true,
@@ -530,7 +567,9 @@ exports.computePhFilters = function (input, filter) {
           });
 
           // Check if the attribute is a swatch attribute.
+          let optionIsSwatch = false;
           if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
+            optionIsSwatch = true;
             configurableOptionsList.addClass('form-item-configurable-swatch');
             optionsListWrapper.addClass('configurable-swatch');
           }
@@ -547,8 +586,14 @@ exports.computePhFilters = function (input, filter) {
           // Add the option values.
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
-            selectOption.attr({value: value.value_index}).text(value.store_label);
+            const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            selectOption.attr({value: value.value_index}).text(label);
             configurableOptionsList.append(selectOption);
+
+            if (optionIsSwatch) {
+              const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
+              selectOption.attr({'swatch-image': getPdpSwatchImageUrl(childSku)});
+            }
           });
 
           if (sizeGuideAttributes.includes(option.attribute_code)) {

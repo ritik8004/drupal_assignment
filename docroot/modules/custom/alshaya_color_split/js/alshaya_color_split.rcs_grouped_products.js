@@ -1,4 +1,6 @@
-(function (drupalSettings) {
+(function () {
+  'use strict';
+
   /**
    * Get the array of configurable attribute codes for the product.
    *
@@ -39,7 +41,7 @@
     // the attribute code and then the value index of the options.
     // Eg: {size: {11: {value_index: 10, store_label: "XS"}}}
     // Doing so, will reduce the amount of processing required.
-    let mainProductConfigurableOptionsObject = {};
+    var mainProductConfigurableOptionsObject = {};
     mainProduct.configurable_options.forEach(function (option) {
       mainProductConfigurableOptionsObject[option.attribute_code] = {};
       // Copy the options of the main product to this object.
@@ -52,6 +54,8 @@
     // Alter the configurable variants list of the main product.
     // We will re-populate the variants.
     mainProduct.variants = [];
+    // This will store the color values of the styled product.
+    const colorAttributeValues = [];
 
     styleProducts.forEach(function (styleProduct) {
       // Check if product is in stock.
@@ -61,7 +65,7 @@
 
       // Check if the attributes are the same of the main product and the style
       // products.
-      let isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
+      var isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
       mainProductAttributes.forEach(function (mainProductAttribute) {
         if (!styleProductAttributes.includes(mainProductAttribute)) {
           isAttributesSame = false;
@@ -74,10 +78,21 @@
         return;
       }
 
+      // Stores values of processed colors, so that they are not re-processed.
+      const processedColors = [];
       styleProduct.variants.forEach(function (variant) {
         // These values will be used later on.
         variant.product.parent_sku = styleProduct.sku;
-        variant.product.color_attribute = drupalSettings.alshayaRcs.colorAttribute;
+        variant.product.color_attribute = drupalSettings.alshayaColorSplit.colorAttribute;
+
+        if (!processedColors.includes(variant.product.color)) {
+          processedColors.push(variant.product.color);
+          // Get the labels for the color attribute.
+          const allOptionsForColorAttribute = globalThis.rcsPhCommerceBackend.getDataAsync('product-option', { attributeCode: variant.product.color_attribute });
+          // Update the array with the color values.
+          colorAttributeValues.push({value_index: variant.product.color, store_label: allOptionsForColorAttribute[variant.product.color]});
+        }
+
         mainProduct.variants.push(variant);
       });
 
@@ -100,6 +115,20 @@
       });
     });
 
+    // Push color to the configurable options of the main product.
+    mainProduct.configurable_options.push({
+      attribute_uid: btoa(drupalSettings.psudo_attribute),
+      label: drupalSettings.alshayaColorSplit.colorLabel,
+      position: -1,
+      attribute_code: drupalSettings.alshayaColorSplit.colorAttribute,
+      values: colorAttributeValues,
+    });
+
+    // Sort the configurable options according to position.
+    mainProduct.configurable_options = mainProduct.configurable_options.sort(function (optionA, optionB) {
+      return (optionA.position > optionB.position) - (optionA.position < optionB.position);
+    });
+
     RcsPhStaticStorage.set('product_' + mainProduct.sku, mainProduct);
   }, 1);
-})(drupalSettings);
+})();
