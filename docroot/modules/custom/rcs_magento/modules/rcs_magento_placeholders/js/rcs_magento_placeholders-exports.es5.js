@@ -111,15 +111,12 @@ exports.getEntity = async function getEntity(langcode) {
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('alshayaRcsUpdateResults', {
       detail: {
         result: result,
         pageType: pageType,
       }
     });
-
-    // To trigger the Event.
-    document.dispatchEvent(updateResult);
 
     return updateResult.detail.result;
   }
@@ -219,6 +216,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
       RcsPhStaticStorage.set('product_' + result.sku, result);
+
       break;
 
     default:
@@ -229,15 +227,14 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = new CustomEvent('alshayaRcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('alshayaRcsUpdateResults', {
       detail: {
         result: result,
         placeholder: placeholder,
       }
     });
 
-    // To trigger the Event.
-    document.dispatchEvent(updateResult);
+    return updateResult.detail.result;
   }
 
   return result;
@@ -287,6 +284,23 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
           RcsPhStaticStorage.set('product_' + product.sku, product);
         });
       }
+      break;
+
+    case 'product-option':
+      const staticKey = `product_options_${params.attributeCode}`;
+      const staticOption = RcsPhStaticStorage.get(staticKey);
+
+      if (staticOption !== null) {
+        return staticOption;
+      }
+
+      request.data = JSON.stringify({
+        query: `{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`
+      });
+
+      result = rcsCommerceBackend.invokeApiAsync(request);
+
+      RcsPhStaticStorage.set(staticKey, result);
       break;
 
     default:

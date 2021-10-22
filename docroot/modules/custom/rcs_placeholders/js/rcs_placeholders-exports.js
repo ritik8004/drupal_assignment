@@ -217,3 +217,4 @@ rcsPhGetPageType = () => typeof drupalSettings.rcsPage !== 'undefined'
                            && typeof drupalSettings.rcsPage.type !== 'undefined'
                              ? drupalSettings.rcsPage.type
                              : null;
+

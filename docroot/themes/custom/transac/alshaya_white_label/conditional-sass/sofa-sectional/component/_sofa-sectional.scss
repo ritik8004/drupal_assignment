@@ -39,5 +39,11 @@
         background: $sofa-sectional-btn-border;
       }
     }
+
+    button[disabled] {
+      cursor: pointer;
+      background: none !important;
+      pointer-events: none;
+    }
   }
 }

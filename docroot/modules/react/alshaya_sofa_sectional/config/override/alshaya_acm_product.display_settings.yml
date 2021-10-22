@@ -8,3 +8,6 @@ swatches_roles:
   configuration: 'configuration_attr_image'
 # Exclude configuration swatch images from the image gallery.
 media_roles_to_hide_in_gallery: 'thumbnail,swatch_image,configuration_attr_image'
+# Exclude configuration swatch attributes from the PLP pages.
+exclude_swatches_on_plp:
+  - configuration
