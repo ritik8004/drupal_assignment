@@ -309,7 +309,7 @@ class AuraFormRedeemPoints extends React.Component {
         {totals.balancePayable <= 0
           && <span id="payment-method-aura_payment" />}
         {disableRedemption && paymentMethodInCart === 'cashondelivery'
-          && <div>{Drupal.t('Aura points can not be redeemed with cash on delivery.')}</div>}
+          && <div className="spc-aura-cod-disabled-message">{Drupal.t('Aura points can not be redeemed with cash on delivery.')}</div>}
       </div>
     );
   }
