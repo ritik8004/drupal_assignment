@@ -1,0 +1,11 @@
+.nodetype--advanced_page {
+  .node--type-advanced-page {
+    margin-top: 0;
+
+    .c-content__primary {
+      @include breakpoint($desktop) {
+        max-width: 100%;
+      }
+    }
+  }
+}
