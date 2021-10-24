@@ -89,12 +89,22 @@ class AuraProgressWrapper extends React.Component {
       );
     }
 
+    let currentTierLevel = getUserAuraTier();
+
+    // If user is already in tier3 i.e VIP, show the progress bar
+    // for tier2 to tier3 as there is no tier beyond tier3.
+    // Hardcoding the tier keys directly here as the assumption is that
+    // these won't change and FE of the progress bar is also dependent on this.
+    if (currentTierLevel === 'Tier3') {
+      currentTierLevel = 'Tier2';
+    }
+
     // Current User tier class so we can change gradient for progress bar.
-    const currentTierLevel = getUserAuraTier();
     const tierClass = currentTierLevel || 'no-tier';
 
     // Progress Percentage;
-    const progressRatio = (userPoints / nextTierThreshold) * 100;
+    let progressRatio = (userPoints / nextTierThreshold) * 100;
+    progressRatio = (progressRatio > 100) ? 100 : progressRatio;
     const progress = `${progressRatio}%`;
 
     // Decide if we need to show dot.

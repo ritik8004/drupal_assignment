@@ -1,4 +1,4 @@
-@javascript @smoke @bpaeuat @tbseguat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @flsauat @bbwsauat @mcsauat @mcaeuat @pbaeuat @vssauat @mcsauat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat
+@javascript @smoke @pbkkwuat @mujikwuat @mujisauat @mujiaeuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @flsauat @bbwsauat @mcsauat @mcaeuat @pbaeuat @vssauat @mcsauat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat
 Feature: Test the My Account functionality
 
   Background:

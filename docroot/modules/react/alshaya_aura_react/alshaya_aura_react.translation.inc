@@ -61,8 +61,8 @@ function _alshaya_aura_react_translations() {
     'Loyalty benefits' => [
       'ar' => 'مكافآت الولاء',
     ],
-    'Your points will instantly be credited to your account. You’ll be able to redeem them after 14 days as per the returns & refunds policies.' => [
-      'ar' => 'سيتم إضافة نقاطك على الفور إلى حسابك، سوف تتمكن من استبدال النقاط بعد 14 يوم طبقاً لسياسات الاسترداد والإرجاع.',
+    'Your points will be credited to your account. You will be able to redeem them 14 days after delivery as per Aura Terms & Conditions and Alshaya exchange and refund policies.' => [
+      'ar' => 'سيتم إيداع النقاط في حسابك. يمكنك استبدالها بعد 14 يوم من التوصيل طبقا للشروط والأحكام الخاصة ببرنامج أورا وسياسات الاستبدال والاسترجاع الخاصة بالشايع.',
     ],
     'Say hello to AURA' => [
       'ar' => 'مرحباً بكم في أورا',
@@ -307,6 +307,26 @@ function _alshaya_aura_react_translations() {
     'The number you’ve entered is invalid. Please re-enter the number of points you’d like to redeem.' => [
       'ar' => 'الرقم الذي أدخلته غير صحيح. يرجى إعادة إدخال رقم النقاط التي ترغب في استخدامها.',
     ],
-
+    'Online' => [
+      'ar' => 'خارج الشبكة',
+    ],
+    'Offline' => [
+      'ar' => 'على الانترنت',
+    ],
+    'All Transactions' => [
+      'ar' => 'جميع المعاملات',
+    ],
+    'Online / Offline' => [
+      'ar' => 'على الانترنت / خارج الشبكة',
+    ],
+    'Order No.' => [
+      'ar' => 'رقم الطلب',
+    ],
+    'Cash on delivery is not available along with the Aura points.' => [
+      'ar' => 'Cash on delivery is not available along with the Aura points. AR',
+    ],
+    'Aura points can not be redeemed with cash on delivery.' => [
+      'ar' => 'Aura points can not be redeemed with cash on delivery. AR',
+    ],
   ];
 }

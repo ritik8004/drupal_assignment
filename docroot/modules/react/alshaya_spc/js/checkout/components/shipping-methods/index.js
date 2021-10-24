@@ -15,9 +15,18 @@ const ShippingMethods = ({ cart, refreshCart }) => {
     }
 
     const carrirerInfo = `${method.carrier_code}_${method.method_code}`;
-    const selected = cart.cart.shipping.method === carrirerInfo
-      ? method.method_code
-      : '';
+    // After recent change in api response, need to check if method is applicable.
+    let selected = '';
+    if (cart.cart.shipping.method === carrirerInfo && method.available) {
+      selected = method.method_code;
+    } else {
+      // If last order method not available, then find the first available method.
+      const selectedMethod = cart.cart.shipping.methods.find(
+        (element) => element.available === true,
+      );
+      selected = selectedMethod.method_code;
+    }
+
     methods.push(<ShippingMethod
       selected={selected}
       key={key}

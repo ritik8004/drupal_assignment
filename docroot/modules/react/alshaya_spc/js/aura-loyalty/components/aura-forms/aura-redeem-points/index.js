@@ -257,7 +257,10 @@ class AuraFormRedeemPoints extends React.Component {
       : !enableSubmit;
 
     return (
-      <div className="spc-aura-redeem-points-form-wrapper">
+      <div className={disableRedemption
+        ? 'spc-aura-redeem-points-form-wrapper in-active'
+        : 'spc-aura-redeem-points-form-wrapper'}
+      >
         <span className="label">{ getStringMessage('checkout_use_your_points') }</span>
         <div className="form-items">
           <div className="inputs">
@@ -267,6 +270,7 @@ class AuraFormRedeemPoints extends React.Component {
                 placeholder="0"
                 onChangeCallback={this.convertPointsToMoney}
                 value={points}
+                disabled={disableRedemption}
               />
               <span className="spc-aura-redeem-points-separator">=</span>
               <AuraRedeemPointsTextField
@@ -304,9 +308,8 @@ class AuraFormRedeemPoints extends React.Component {
         <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
         {totals.balancePayable <= 0
           && <span id="payment-method-aura_payment" />}
-        <div className="spc-aura-cod-disabled-message">
-          {Drupal.t('Aura points can not be redeemed with cash on delivery')}
-        </div>
+        {disableRedemption && paymentMethodInCart === 'cashondelivery'
+          && <div>{Drupal.t('Aura points can not be redeemed with cash on delivery.')}</div>}
       </div>
     );
   }

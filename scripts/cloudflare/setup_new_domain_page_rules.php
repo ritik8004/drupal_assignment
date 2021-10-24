@@ -74,6 +74,30 @@ $rules['commerce_v2_callback'] = [
   "status" => "active",
 ];
 
+$rules['cache_react_dist'] = [
+  "targets" => [
+    [
+      "target" => "url",
+      "constraint" => [
+        "operator" => "matches",
+        "value" => "*" . $domain_clean . "/modules/react/*/dist/*",
+      ],
+    ],
+  ],
+  "actions" => [
+    [
+      "id" => "browser_cache_ttl",
+      "value" => 0,
+    ],
+    [
+      "id" => "edge_cache_ttl",
+      "value" => 2678400,
+    ],
+  ],
+  "priority" => 96,
+  "status" => "active",
+];
+
 // ALX InStorE.
 $rules['alx_v2'] = [
   "targets" => [

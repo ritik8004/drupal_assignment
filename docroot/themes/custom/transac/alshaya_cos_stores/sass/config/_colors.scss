@@ -95,10 +95,10 @@ $footer_link_hover: $eerie-black;
 $social-icons-bg: $bright-gray;
 
 // Titles.
-$page_title: $eerie-black;
-$block_title: $eerie-black;
-$title: $eerie-black;
-$sub_title: $eerie-black;
+$page_title: $outer-space;
+$block_title: $outer-space;
+$title: $outer-space;
+$sub_title: $outer-space;
 $label_black: $black-two;
 $label_dark: $black;
 $user_sidebar_block_title: $eerie-black;
@@ -182,6 +182,9 @@ $mm_highlight_title: $eerie-black;
 $mm_highlight_description: $eerie-black;
 $mm_l3_link_hover: $eerie-black;
 
+// Homepage Slider
+$hp_slider_dots: $eerie-black;
+
 // Store finder page.
 // Store finder header form.
 $store_finder_header_desktop: $eerie-black;
@@ -207,7 +210,8 @@ $store_finder_glossary_text_border: $bright-gray;
 $store_finder_glossary_border: $bright-gray;
 
 // Modal
-$modal_close_bg: $black;
+$modal_close_bg: $white;
+$modal_close_icon: $eerie-black;
 
 // Store finder search results.
 $store_finder_search_results_counter_bg: $blood;
@@ -327,9 +331,6 @@ $spc_tooltip_icon: $outer-space;
 $spc_tooltip_icon_border: $outer-space;
 $spc-deliver-button: $outer-space;
 
-// Product detail page.
-$pdp_product_special_price_text: $blood;
-
 // Checkout Global.
 $checkout_section_titles: $eerie-black;
 $checkout_login_link_text: $eerie-black;
@@ -358,6 +359,7 @@ $plp_clear_all_text_disabled: $outer-space;
 $plp_tile_product_title: $black-two;
 $plp_tile_product_title_hover: $eerie-black;
 $plp_tile_product_special_price: $blood;
+$plp_tite_product_promo_text: $blood;
 
 // PLP Filter bar.
 $plp_filterbar_clearall_border: $eerie-black;
@@ -387,3 +389,38 @@ $basket_free_delivery_active_header_promo_txt: $outer-space;
 // Basket top OOS.
 $basket_header_oos_bg: $blood;
 $basket_header_oos_txt: $white;
+
+// Magazine article feature
+$magazine-textarea-color: $outer-space;
+$magazine-label-color: $dark-gray;
+$magazine-article-read-more-bg-color: $white;
+$magazine-article-title: $black-two;
+$magazine-article-link-hover: $brownish-grey;
+$magazine-article-back-to-feed: $outer-space;
+
+// Product detail page.
+$pdp_product_special_price_text: $blood;
+$pdp_product_discount_price: $blood;
+$pdp_product_price: $eerie-black;
+$pdp_product_discount_text: $blood;
+$pdp_size_option_selected_text: $eerie-black;
+$pdp_size_option_selected_bg: $white;
+$pdp_size_option_border: $bright-gray;
+$pdp_size_option_text: $eerie-black;
+$pdp_swatch_selected_border: $eerie-black;
+$pdp_cc_btn_bg: $outer-space;
+$pdp_accordion_title: $eerie-black;
+$pdp_title_section_border: $bright-gray;
+$pdp_skus_border: $bright-gray;
+$gallery_arrows_border: $outer-space;
+$pdp_sidebar_label: $eerie-black;
+$pdp_sidebar_link: $outer-space;
+
+// PDP Magazine layput
+$colour-swatches-show-list-button: $eerie-black;
+$size-tray-empty-btn-text: $outer-space;
+$size-tray-empty-btn-border: $bright-gray;
+$pdp_sizeguide_link: $eerie-black;
+$colour-swatches-simple-effect-bg: $gray-light;
+$sharethis-icon-bg: $white;
+$sharethis-label-color: $eerie-black;

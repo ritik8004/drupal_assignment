@@ -397,8 +397,9 @@ class AlshayaSpcOrderHelper {
 
     $shipping_info = explode(' - ', $order['shipping_description']);
     $orderDetails['delivery_method'] = $shipping_info[0];
-    $orderDetails['delivery_method_description'] = $shipping_info[1] ?? $shipping_info[0];
-
+    $orderDetails['delivery_method_description'] = ($order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup')
+      ? $shipping_info[0]
+      : ($shipping_info[1] ?? $shipping_info[0]);
     $shipping_address = $order['shipping']['address'];
     $orderDetails['customerNameShipping'] = $shipping_address['firstname'] . ' ' . $shipping_address['lastname'];
 
@@ -518,11 +519,11 @@ class AlshayaSpcOrderHelper {
         break;
 
       case 'checkout_com_upapi_benefitpay':
-        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'];
-        $orderDetails['payment']['qrData'] = $payment_info['qr_data'];
-        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
-        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
-        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+        $orderDetails['payment']['methodTitle'] = $payment_info['method_title'] ?? '';
+        $orderDetails['payment']['qrData'] = $payment_info['qr_data'] ?? '';
+        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'] ?? '';
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'] ?? '';
+        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'] ?? '';
 
         break;
     }

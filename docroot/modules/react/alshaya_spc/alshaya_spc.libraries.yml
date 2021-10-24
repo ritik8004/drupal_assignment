@@ -4,6 +4,7 @@ cart_utilities:
   dependencies:
     - core/jquery
     - core/drupal
+    - core/jquery.once
     - alshaya_react/react_pollyfill
 
 mini_cart:
@@ -25,6 +26,7 @@ cart:
     - alshaya_react/react
     - alshaya_product_zoom/cloud_zoom_pdp_gallery
     - alshaya_spc/cart_utilities
+    - alshaya_master/common_functions
 
 checkout:
   version: 1.x
@@ -104,3 +106,13 @@ commerce_backend.checkout.v2:
     dist/backend_checkout_v2.bundle.js: {}
   dependencies:
     - alshaya_spc/security
+
+express_delivery:
+  version: 1.x
+  footer: true
+  js:
+    dist/expressdelivery.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - alshaya_spc/cart_utilities
+    - alshaya_spc/commerce_backend.cart.v2

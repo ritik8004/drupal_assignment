@@ -18,6 +18,7 @@ import { processCheckoutCart } from '../utilities/checkout_helper';
 import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import hasValue from '../../../../../js/utilities/conditionsUtility';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -84,16 +85,18 @@ class AuraCheckoutRewards extends React.Component {
   attachCardInCart = () => {
     const { cart } = this.props;
 
-    // We don't need to attach card for logged in users or if card is already attached.
-    if (getUserDetails().id || cart.cart.loyaltyCard) {
+    // We don't need to attach card for logged in users.
+    if (getUserDetails().id) {
       return;
     }
 
     const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
-    if (localStorageValues === null
-      || localStorageValues.cardNumber === undefined
-      || localStorageValues.cardNumber.length === 0) {
+    // In case loyalty card already exists in cart,
+    // attach loyalty card only if it's different.
+    if (!hasValue(localStorageValues)
+      || !hasValue(localStorageValues.cardNumber)
+      || localStorageValues.cardNumber === cart.cart.loyaltyCard) {
       return;
     }
 
@@ -165,7 +168,7 @@ class AuraCheckoutRewards extends React.Component {
 
     const active = this.isActive();
     const activeClass = active ? 'active' : 'in-active';
-    const price = cart.cart.cart_total || 0;
+    const price = cart.cart.totals.base_grand_total_without_surcharge || 0;
 
     if (wait) {
       return (
