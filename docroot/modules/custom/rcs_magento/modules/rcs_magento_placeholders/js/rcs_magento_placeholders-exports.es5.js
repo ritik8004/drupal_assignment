@@ -232,28 +232,18 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'order_teaser':
-      request.data = JSON.stringify({
-        query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.products}}`
-      });
-
-      response = await rcsCommerceBackend.invokeApi(request);
-      // Get exact data from response.
-      if (response !== null) {
-        result = response.data.products.items;
-      }
-
-      if (drupalSettings.alshayaRcs.isColorSplitEnabled) {
-        // Dispatch grouped product event for individual product items.
-        result.forEach(item => {
-          const groupedProductsEvent = new CustomEvent('alshayaRcsGroupedProducts', {
-            detail: {
-              result: item,
-              pageType: null,
-            }
-          });
-          document.dispatchEvent(groupedProductsEvent);
+      if (params.skus) {
+        request.data = JSON.stringify({
+          query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.products}}`
         });
+
+        response = await rcsCommerceBackend.invokeApi(request);
+        // Get exact data from response.
+        if (response !== null) {
+          result = response.data.products.items;
+        }
       }
+
       break;
 
     default:

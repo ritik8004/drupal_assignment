@@ -906,6 +906,20 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       }
     }
   }
+  // Alter the order print library to replace the base JS file with the order
+  // print file provided by this module.
+  if ($extension === 'alshaya_acm_customer'
+    && isset($libraries['order_print'])
+    && isset($libraries['order_print']['js']['js/order-print.js'])) {
+
+    $options = $libraries['order_print']['js']['js/order-print.js'];
+    unset($libraries['order_print']['js']['js/order-print.js']);
+    $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
+    $libraries['order_print']['js']["/$self_module_path/js/alshaya_rcs_order_print.js"] = $options;
+    $libraries['order_print']['dependencies'] = [
+      'rcs_magento_placeholders/rcs_magento_placeholders',
+    ];
+  }
 }
 
 /**
@@ -922,15 +936,6 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
       foreach ($order['#order']['items'] as $key => $item) {
         $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
         $data[] = $item['extension_attributes']['parent_product_sku'];
-
-        // Fetch attributes from the order array.
-        $extension_attributes = json_decode($order['#order']['items'][$item['sku']]['extension_attributes']['product_options'][0], TRUE);
-        foreach ($extension_attributes['attributes_info'] as $attr_key => $value) {
-          $build['recent_order'][$id]['#order']['items'][$key]['attributes'][] = [
-            'label' => $value['label'],
-            'value' => $value['value'],
-          ];
-        }
       }
     }
 
@@ -944,16 +949,8 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
       ]
     ];
 
-    $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = FALSE;
-    $build['#attached']['library'][] = 'alshaya_rcs_product/grouped_products';
-    // Add color split configuration.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_color_split')) {
-      $build['#attached']['drupalSettings']['alshayaRcs']['isColorSplitEnabled'] = TRUE;
-      $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
-      $build['#attached']['drupalSettings']['alshayaRcs']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
-      $color_split_config = \Drupal::config('alshaya_color_split.settings');
-      $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
-    }
+    _alshaya_color_split_attach_info($build);
+
   }
 }
 
@@ -964,14 +961,25 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   // Add data attributes.
   $data = [];
   // Update the product image with RCS Token.
-  foreach ($build['#products'] as $key => $item) {
-    $build['#products'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
+  foreach ($build['#products'] as $key => &$item) {
+    // Add name placeholder if the product type is simple.
+    if ($item['type'] === 'simple') {
+      $item['name'] = '#rcs.orderDetails.name#';
+    }
+    $item['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
     $data[$key] = $item['extension_attributes']['parent_product_sku'];
     // Attribute placeholders.
-    $build['#products'][$key]['attributes'][] = [
-      'label' => '#rcs.orderDetails.attribute_label#',
-      'value' => '#rcs.orderDetails.attribute_value#',
+    $item['attributes'][] = [
+      'label' => '#rcs.orderDetailAttribute.attr_label#',
+      'value' => '#rcs.orderDetailAttribute.attr_value#',
     ];
+    // If 'applied_rule_ids' is set and price is 0, set the free gift label.
+    // Using base_price instead of price here as the price is set as markup.
+    if (isset($item['applied_rule_ids']) && (int) $item['base_price'] == 0) {
+      $item['free_gift_label'] = t('Free Gift with Purchase');
+      $item['price'] = t('Free');
+      $item['total'] = '';
+    }
   }
   $build['#theme_wrappers'] = [
     'container' => [
@@ -981,6 +989,8 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       ]
     ]
   ];
+
+  _alshaya_color_split_attach_info($build);
 }
 
 /**
@@ -999,7 +1009,10 @@ function _alshaya_rcs_product_get_order_teaser_image(array $item) {
       'src' => '#rcs.orderDetails.image#',
       'title' => $item['name'],
       'alt' => $item['name'],
-      'data-sku' => $item['extension_attributes']['parent_product_sku'],
+      'class' => ['rcs-image'],
+      'data-parent-sku' => $item['extension_attributes']['parent_product_sku'],
+      'data-item-sku' => $item['sku'],
+      '#skip_lazy_loading' => TRUE,
     ],
   ];
 }
