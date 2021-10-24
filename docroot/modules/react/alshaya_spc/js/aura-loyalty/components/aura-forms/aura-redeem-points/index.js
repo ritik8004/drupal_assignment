@@ -304,6 +304,9 @@ class AuraFormRedeemPoints extends React.Component {
         <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
         {totals.balancePayable <= 0
           && <span id="payment-method-aura_payment" />}
+        <div className="spc-aura-cod-disabled-message">
+          {Drupal.t('Aura points can not be redeemed with cash on delivery')}
+        </div>
       </div>
     );
   }

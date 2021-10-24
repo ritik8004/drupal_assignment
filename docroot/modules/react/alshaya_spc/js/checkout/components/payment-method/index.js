@@ -211,16 +211,17 @@ export default class PaymentMethod extends React.Component {
                 </div>
               </ConditionalView>
             </label>
-            <ConditionalView condition={isAuraEnabled()
-              && method.code === 'cashondelivery'
-              && disablePaymentMethod === true
-              && !isFullPaymentDoneByAura(cart)}
-            >
-              <div>{Drupal.t('Cash on delivery is not available along with the Aura points.')}</div>
-            </ConditionalView>
-
             <PaymentMethodIcon methodName={method.code} />
           </div>
+          <ConditionalView condition={isAuraEnabled()
+          && method.code === 'cashondelivery'
+          && disablePaymentMethod === true
+          && !isFullPaymentDoneByAura(cart)}
+          >
+            <div className="payment-method-bottom-panel no-payment-description">
+              {Drupal.t('Cash on delivery is not available along with the Aura points.')}
+            </div>
+          </ConditionalView>
 
           <ConditionalView condition={isSelected && method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
             <div className={`payment-method-bottom-panel ${method.code}`}>

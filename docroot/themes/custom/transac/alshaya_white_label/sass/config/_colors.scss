@@ -252,6 +252,8 @@ $aura-myaccount-vip-mobile: linear-gradient(151deg, #7f2482 1%, #25035a 65%, #16
 $aura-myaccount-vip-mobile-ar: linear-gradient(-151deg, #7f2482 1%, #25035a 65%, #160235);
 $aura-myaccount-user-dp-star: #4a90e2;
 $aura-myaccount-user-dp-vip: #bd10e0;
+$_aura-disabled: #979797;
+$_aura-disabled-desc: #31281b;
 $pinterest-red: #bc091d;
 $_stylefinder-pink-bg: #f7afca;
 $_stylefinder-pink-active-bg: #ef5f96;
@@ -1713,6 +1715,9 @@ $aura-spc-cart-unlinked-highlight: $aura-purpleTwo;
 $aura-spc-cart-unlinked-desc: $night-blue;
 $aura-spc-checkout-block-bg-gradient: $aura-gradient-15;
 $aura-spc-checkout-block-bg-gradient-ar: $aura-gradient-15-ar;
+$aura-spc-cod-disabled-text: $_aura-disabled-desc;
+$aura-spc-cod-disabled-elements: $_aura-disabled;
+$aura-spc-rewards-block-disabled-elements: $grey-gate;
 
 // Aura My Account.
 $aura-loyalty-club-title-1: $aura-blue;
