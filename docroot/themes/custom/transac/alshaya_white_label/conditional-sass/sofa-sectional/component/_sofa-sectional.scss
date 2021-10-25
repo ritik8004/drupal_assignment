@@ -46,6 +46,8 @@
       cursor: pointer;
       background: none !important;
       pointer-events: none;
+      color: $sofa-sectional-disabled-clear-option-text;
+      border-color: $sofa-sectional-disabled-clear-option-border;
     }
   }
 }
