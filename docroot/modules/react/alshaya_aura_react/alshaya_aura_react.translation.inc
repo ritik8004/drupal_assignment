@@ -323,10 +323,10 @@ function _alshaya_aura_react_translations() {
       'ar' => 'رقم الطلب',
     ],
     'Cash on delivery is not available along with the Aura points.' => [
-      'ar' => 'Cash on delivery is not available along with the Aura points. AR',
+      'ar' => 'الدفع نقداً عند الاستلام غير متوفر للاستخدام مع نقاط أورا.',
     ],
     'Aura points can not be redeemed with cash on delivery.' => [
-      'ar' => 'Aura points can not be redeemed with cash on delivery. AR',
+      'ar' => 'لا يمكن استبدال نقاط أورا عند استخدام خيار الدفع عند الاسلام.',
     ],
   ];
 }
