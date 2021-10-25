@@ -590,7 +590,7 @@ class AlshayaSearchApiQueryExecute {
    */
   public function prepareResponseFromResult(array $result_set) {
     $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
-    if ($category_status) {
+    if (!$category_status) {
       // Get all facets for the given facet source.
       $facets = $this->facetManager->getEnabledFacets();
       // Prepare an array of key/value where key will be the facet id and value
@@ -684,6 +684,7 @@ class AlshayaSearchApiQueryExecute {
   public function prepareFacetData(array $result_set) {
     $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
     $facets_data = $result_set['processed_facets'];
+
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
