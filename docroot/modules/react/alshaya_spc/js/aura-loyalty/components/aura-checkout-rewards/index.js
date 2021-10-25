@@ -168,7 +168,13 @@ class AuraCheckoutRewards extends React.Component {
 
     const active = this.isActive();
     const activeClass = active ? 'active' : 'in-active';
-    const price = cart.cart.totals.subtotal_incl_tax || 0;
+    // Get price points from total without delivery charges.
+    let price = 0;
+    const { totals } = cart.cart || {};
+    if (typeof totals.base_grand_total_without_surcharge !== 'undefined'
+      && typeof totals.shipping_incl_tax !== 'undefined') {
+      price = totals.base_grand_total_without_surcharge - totals.shipping_incl_tax;
+    }
 
     if (wait) {
       return (
