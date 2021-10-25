@@ -15,6 +15,7 @@ use Drupal\simple_sitemap\Simplesitemap;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Cache\MemoryCache\MemoryCacheInterface;
 
 /**
  * Class Alshaya Entity Url Generator.
@@ -64,7 +65,8 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
                               UrlGeneratorManager $url_generator_manager,
                               ProductCategoryTree $product_category,
                               ProductCategoryHelper $product_category_helper,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              MemoryCacheInterface $memory_cache) {
     parent::__construct(
       $configuration,
       $plugin_id,
@@ -74,7 +76,8 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
       $language_manager,
       $entity_type_manager,
       $entityHelper,
-      $url_generator_manager
+      $url_generator_manager,
+      $memory_cache
     );
 
     $this->productCategory = $product_category;
@@ -101,7 +104,8 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
       $container->get('plugin.manager.simple_sitemap.url_generator'),
       $container->get('alshaya_acm_product_category.product_category_tree'),
       $container->get('alshaya_acm_product.category_helper'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('entity.memory_cache')
     );
   }
 
