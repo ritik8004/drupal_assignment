@@ -43,7 +43,7 @@
     return $.param(data);
   };
 
-  // @Todo this function name is incorrect, it should be something like refresh instead of get
+  // @Todo this function name is incorrect, it should be something like productInLocalStorage
   Drupal.alshayaSpc.getLocalStorageProductData = function(sku, callback, extraData) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
