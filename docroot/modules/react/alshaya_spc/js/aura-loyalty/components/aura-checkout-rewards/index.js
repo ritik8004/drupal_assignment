@@ -199,6 +199,7 @@ class AuraCheckoutRewards extends React.Component {
             expiryDate={expiryDate}
             cardNumber={cardNumber}
             totals={cart.cart.totals}
+            paymentMethodInCart={cart.cart.payment.method || ''}
           />
         </ConditionalView>
 

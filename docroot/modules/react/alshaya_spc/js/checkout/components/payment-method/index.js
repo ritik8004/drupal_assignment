@@ -24,6 +24,8 @@ import CheckoutComUpapiApplePay
 import PaymentMethodCheckoutComUpapiFawry
   from '../payment-method-checkout-com-upapi-fawry';
 import cartActions from '../../../utilities/cart_actions';
+import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -149,12 +151,13 @@ export default class PaymentMethod extends React.Component {
   };
 
   render() {
-    const { method } = this.props;
     const {
+      method,
       isSelected,
       changePaymentMethod,
       cart,
       animationOffset,
+      disablePaymentMethod,
     } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
 
@@ -177,6 +180,11 @@ export default class PaymentMethod extends React.Component {
       additionalClasses = drupalSettings.postpay_widget_info.postpay_mode_class;
     }
 
+    // Add `in-active` class if disablePaymentMethod property is true.
+    additionalClasses = disablePaymentMethod
+      ? `${additionalClasses} in-active`
+      : additionalClasses;
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -188,6 +196,8 @@ export default class PaymentMethod extends React.Component {
               defaultChecked={isSelected}
               value={method.code}
               name="payment-method"
+              {...(disablePaymentMethod
+                && { disabled: disablePaymentMethod })}
             />
 
             <label className="radio-sim radio-label">
@@ -203,9 +213,17 @@ export default class PaymentMethod extends React.Component {
                 </div>
               </ConditionalView>
             </label>
-
             <PaymentMethodIcon methodName={method.code} />
           </div>
+          <ConditionalView condition={isAuraEnabled()
+          && method.code === 'cashondelivery'
+          && disablePaymentMethod === true
+          && !isFullPaymentDoneByAura(cart)}
+          >
+            <div className="payment-method-bottom-panel no-payment-description">
+              {Drupal.t('Cash on delivery is not available along with the Aura points.')}
+            </div>
+          </ConditionalView>
 
           <ConditionalView condition={isSelected && method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
             <div className={`payment-method-bottom-panel ${method.code}`}>

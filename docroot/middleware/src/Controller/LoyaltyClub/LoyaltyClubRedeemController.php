@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Cart;
 use App\Service\Aura\RedemptionHelper;
+use App\Service\Config\SystemSettings;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -52,6 +53,13 @@ class LoyaltyClubRedeemController {
   protected $redemptionHelper;
 
   /**
+   * System Settings service.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
+
+  /**
    * LoyaltyClubRedeemController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -64,19 +72,23 @@ class LoyaltyClubRedeemController {
    *   Cart service.
    * @param \App\Service\Aura\RedemptionHelper $redemption_helper
    *   RedemptionHelper service.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
   public function __construct(
       MagentoApiWrapper $magento_api_wrapper,
       LoggerInterface $logger,
       Utility $utility,
       Cart $cart,
-      RedemptionHelper $redemption_helper
+      RedemptionHelper $redemption_helper,
+      SystemSettings $settings
     ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->utility = $utility;
     $this->cart = $cart;
     $this->redemptionHelper = $redemption_helper;
+    $this->settings = $settings;
   }
 
   /**
@@ -93,6 +105,18 @@ class LoyaltyClubRedeemController {
     if (!$cart_id) {
       $message = 'Error while trying to redeem aura points. Cart is not available for the user.';
       $this->logger->error($message);
+      return new JsonResponse($this->utility->getErrorResponse($message, Response::HTTP_NOT_FOUND));
+    }
+
+    // Check if payment method in cart is supported with aura.
+    $auraUnsupportedPaymentMethods = $this->settings->getSettings('aura_unsupported_payment_methods');
+    $paymentMethodSetOnCart = $this->cart->getPaymentMethodSetOnCart();
+
+    if (in_array($paymentMethodSetOnCart, $auraUnsupportedPaymentMethods)) {
+      $message = 'Error while trying to redeem aura points. Selected payment method is unsupported with Aura.';
+      $this->logger->error($message . 'Unsupported payment methods: @unsupported_payment_methods', [
+        '@unsupported_payment_methods' => json_encode($auraUnsupportedPaymentMethods),
+      ]);
       return new JsonResponse($this->utility->getErrorResponse($message, Response::HTTP_NOT_FOUND));
     }
 

@@ -20,6 +20,7 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import {
   isFullPaymentDoneByAura,
   isPaymentMethodSetAsAura,
+  isUnsupportedPaymentMethod,
 } from '../../../aura-loyalty/components/utilities/checkout_helper';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
@@ -248,6 +249,14 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    // If aura enabled and aura points redeemed then do not allow
+    // to select any payment method that is unsupported with aura.
+    if (isAuraEnabled()
+      && cart.cart.totals.paidWithAura > 0
+      && isUnsupportedPaymentMethod(method)) {
+      return;
+    }
+
     // If method is already selected in cart we simply
     // trigger the events.
     if (method && cart.cart.payment.method === method) {
@@ -309,6 +318,7 @@ export default class PaymentMethods extends React.Component {
 
   render = () => {
     const methods = [];
+    let disablePaymentMethod = '';
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
@@ -317,6 +327,13 @@ export default class PaymentMethods extends React.Component {
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
     Object.entries(activePaymentMethods).forEach(([, method], index) => {
+      // If aura enabled and customer is paying some amount of the order
+      // using aura points then disable the payment methods that are
+      // not supported with Aura.
+      if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
+        disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
+      }
+
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
       methods.push(<PaymentMethod
@@ -328,6 +345,10 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
+        {...(isAuraEnabled()
+          && disablePaymentMethod
+          && { disablePaymentMethod }
+        )}
       />);
     });
 
