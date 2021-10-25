@@ -950,7 +950,6 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
     ];
 
     _alshaya_color_split_attach_info($build);
-
   }
 }
 
