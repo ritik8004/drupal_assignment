@@ -310,6 +310,7 @@ class AlshayaSearchApiQueryExecute {
   public function prepareExecuteQuery(QueryInterface $query, string $page_type, ?string $keyword = '') {
     // Get all facets for the given facet source.
     $facets = $this->facetManager->getFacetsByFacetSourceId($this->getFacetSourceId());
+
     // Prepare an array of key/value where key will be the facet id and value
     // will be the facet object.
     // Example - ['skus_sku_reference_final_price' => facet_object_here].
