@@ -12,7 +12,7 @@ rcs_placeholders:
   js:
     js/rcs_placeholders.js: {}
   css:
-    component:
+    base:
       css/rcs_placeholders.css: {}
   dependencies:
     - core/jquery
