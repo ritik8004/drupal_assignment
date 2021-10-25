@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d99bcd24ac9f1e011a3771586c41c02d",
+    "content-hash": "4772c95ea710701d35ba3e279c2a2234",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13516,11 +13516,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "dev-3.0.x",
+            "version": "3.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "2ce6d60086dd012ecf7dfefbb17fff99c5698cfa"
+                "reference": "3.0.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta3.zip",
+                "reference": "3.0.0-beta3",
+                "shasum": "1cb726c306696623180ebe06f9f94a3393634eb5"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
@@ -13532,15 +13538,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.0.x": "3.0.x-dev"
-                },
                 "drupal": {
-                    "version": "3.0.0-alpha1+2-dev",
-                    "datestamp": "1624863214",
+                    "version": "3.0.0-beta3",
+                    "datestamp": "1634877221",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
@@ -13587,8 +13590,7 @@
             "support": {
                 "source": "https://git.drupal.org/project/search_api_algolia.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_algolia"
-            },
-            "time": "2021-09-20T10:42:11+00:00"
+            }
         },
         {
             "name": "drupal/search_api_autocomplete",
