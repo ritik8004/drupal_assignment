@@ -62,6 +62,11 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
 
   $page['#attached']['drupalSettings']['aura'] = $settings;
+
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+
+  // Attach the library for Aura backend based on the commerce backend version.
+  $page['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
 }
 
 /**

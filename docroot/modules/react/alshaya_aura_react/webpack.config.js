@@ -7,6 +7,8 @@ var config = {
     my_accounts: './js/my-accounts',
     header: './js/header',
     pdp: './js/pdp',
+    aura_backend_v1: './js/backend/v1/',
+    aura_backend_v2: './js/backend/v2/',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
