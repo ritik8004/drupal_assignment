@@ -196,6 +196,8 @@ export default class PaymentMethod extends React.Component {
               defaultChecked={isSelected}
               value={method.code}
               name="payment-method"
+              {...(disablePaymentMethod
+                && { disabled: disablePaymentMethod })}
             />
 
             <label className="radio-sim radio-label">
