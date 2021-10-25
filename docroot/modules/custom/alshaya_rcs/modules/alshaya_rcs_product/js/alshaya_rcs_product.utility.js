@@ -31,6 +31,7 @@
   window.commerceBackend.getProductStatus = async function (sku) {
     let stock = null;
     // Product data, containing stock information, is already present in local
+    // @todo we fetch from local storage but in getDataAsync() we store in a static variable???
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
     // @todo What if the data is not in local storage? should we call Drupal.alshayaSpc.getProductData() instead?
