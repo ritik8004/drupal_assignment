@@ -43,6 +43,7 @@
     return $.param(data);
   };
 
+  // @Todo this function name is incorrect, it should be something like refresh instead of get
   Drupal.alshayaSpc.getLocalStorageProductData = function(sku, callback, extraData) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
@@ -58,7 +59,7 @@
 
     var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
     var currentTime = new Date().getTime();
-    if (data !== null && ((currentTime - data.created) > expireTime)) {
+    if (data !== null && ((currentTime - data.created) < expireTime)) {
       try {
         callback(data, extraData);
       }
@@ -286,6 +287,7 @@
     attach: function(context) {
       // Ajax success to trigger callbacks once api request from
       // Drupal.alshayaSpc.getProductData finished.
+      // @todo this no longer works for graphql
       $(document).once('getProductData-success').ajaxSuccess(function( event, xhr, settings ) {
         if (!settings.hasOwnProperty('requestOrigin') || settings.requestOrigin !== 'getProductData') {
           return;

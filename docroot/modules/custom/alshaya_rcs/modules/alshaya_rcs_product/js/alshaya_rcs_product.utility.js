@@ -33,6 +33,7 @@
     // Product data, containing stock information, is already present in local
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
+    // @todo What if the data is not in local storage? should we call Drupal.alshayaSpc.getProductData() instead?
     Drupal.alshayaSpc.getLocalStorageProductData(sku, function (product) {
       stock = {
         stock: product.stock.qty,
@@ -64,7 +65,7 @@
         return;
       }
 
-      Drupal.alshayaSpc.getLocalStorageProductData(sku, function (productData) {
+      Drupal.alshayaSpc.getProductData(sku, function (productData) {
         // Check if error is triggered when stock data in local storage is
         // greater than the requested quantity.
         if (productData.stock.qty > data[sku]) {
