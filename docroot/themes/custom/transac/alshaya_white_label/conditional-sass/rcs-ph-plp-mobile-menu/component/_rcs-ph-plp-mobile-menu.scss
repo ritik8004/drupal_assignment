@@ -1,9 +1,10 @@
 #rcs-ph-plp_mobile_menu:not(.rcs-loaded) {
   width: 90%;
-  height: 2rem;
   margin: auto;
 
   & > * {
-    display: none;
+    visibility: hidden;
   }
+
+  @include plain-loader;
 }

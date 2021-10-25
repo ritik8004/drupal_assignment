@@ -593,3 +593,8 @@ rcs-product-related:
   css:
     theme:
       css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css: {}
+
+rcs-shop-by-block:
+  css:
+    theme:
+      css/conditional-sass/rcs-shop-by-block/rcs-shop-by-block.ltr.css: {}

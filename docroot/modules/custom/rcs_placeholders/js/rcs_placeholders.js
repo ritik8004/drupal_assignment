@@ -84,13 +84,8 @@
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
 
-          // Add class to remove loader styles on RCS Placeholders.
-          const rcsPhContainers = [
-            '.page-type-product',
-            '.page-type-promotion',
-            '.rcs-page',
-          ];
-          $(rcsPhContainers.join()).addClass(classRcsLoaded);
+          // Add class to remove loader styles after RCS info is filled.
+          $('.rcs-page').addClass(classRcsLoaded);
         });
     }
   });

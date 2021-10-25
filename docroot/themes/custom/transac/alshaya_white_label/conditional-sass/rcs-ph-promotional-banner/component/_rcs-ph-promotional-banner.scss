@@ -1,21 +1,8 @@
-#rcs-ph-promotional_banner {
-  /* 'min-height' is added to avoid large layout shifts in between RCS load and banner image load. */
-  min-height: 12rem;
-  @include breakpoint($tablet) {
-    min-height: 20rem;
-  }
+.page-type-promotion:not(.rcs-loaded) #alshaya-algolia-plp,
+#rcs-ph-promotional_banner:not(.rcs-loaded) {
+  @include plain-loader;
 
-  & :not(.rcs-loaded) {
-    height: 16rem;
-    @include breakpoint($tablet) {
-      height: 32rem;
-    }
-    @include breakpoint($desktop) {
-      height: 40rem;
-    }
-
-    & div {
-      display: none;
-    }
+  & > * {
+    visibility: hidden;
   }
 }

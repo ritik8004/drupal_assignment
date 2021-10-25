@@ -1,7 +1,7 @@
 #rcs-ph-field_magazine_shop_the_story:not(.rcs-loaded) {
-  height: 16rem;
-
   & > * {
-    display: none;
+    visibility: hidden;
   }
+
+  @include plain-loader;
 }

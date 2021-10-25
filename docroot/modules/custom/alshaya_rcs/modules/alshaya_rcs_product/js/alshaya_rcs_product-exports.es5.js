@@ -423,6 +423,9 @@ exports.render = function render(
       break;
   }
 
+  // Add class to remove loader styles after RCS info is filled.
+  jQuery('.page-type-product').addClass('rcs-loaded');
+
   return html;
 };
 

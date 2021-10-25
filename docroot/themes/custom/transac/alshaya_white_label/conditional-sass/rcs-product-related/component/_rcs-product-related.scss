@@ -1,13 +1,19 @@
+.page-type-product:not(.rcs-loaded) .content__main .gallery-wrapper,
 #rcs-ph-upsell-products:not(.rcs-loaded),
 #rcs-ph-related-products:not(.rcs-loaded),
 #rcs-ph-crosssell-products:not(.rcs-loaded) {
-  @include breakpoint($tablet) {
-    width: 100%;
-    height: 12rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0;
+  @include plain-loader;
+
+  & > * {
+    visibility: hidden;
   }
-  @include breakpoint($desktop) {
-    height: 16rem;
+}
+
+.page-type-product:not(.rcs-loaded) .content__title_wrapper,
+.page-type-product:not(.rcs-loaded) .content__sidebar {
+  @include text-block-loader;
+
+  & > * {
+    visibility: hidden;
   }
 }

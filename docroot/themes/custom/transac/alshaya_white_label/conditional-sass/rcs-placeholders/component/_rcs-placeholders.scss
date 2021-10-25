@@ -1,88 +1,16 @@
-/* Base styles on elements containing RCS placeholders to hide content and provide initial structure. */
 .rcs-page:not(.rcs-loaded) {
+  & h1,
   & .field {
-    color: transparent;
+    color: $no-color;
+
+    & > * {
+      visibility: hidden;
+    }
+
+    @include plain-loader;
   }
 
   & .c-plp .c-page-title {
     border: 0;
-  }
-}
-
-.page-type-product:not(.rcs-loaded) {
-  & .content__main .gallery-wrapper {
-    height: 24rem;
-    @include breakpoint($desktop) {
-      height: 32rem;
-    }
-  }
-
-  & > * {
-    display: none;
-  }
-
-  & .content__sidebar {
-    height: 24rem;
-    color: transparent;
-
-    & div {
-      display: none;
-    }
-
-    @include breakpoint($tablet) {
-      height: 16rem;
-      margin-bottom: 1rem;
-    }
-    @include breakpoint($desktop) {
-      height: 24rem;
-      width: 28%;
-    }
-  }
-
-  & .content__title_wrapper {
-    @include breakpoint($tablet) {
-      height: 16rem;
-      margin-bottom: 1rem;
-    }
-    @include breakpoint($desktop) {
-      height: 24rem;
-      width: 28%;
-      margin-bottom: 1.5rem;
-    }
-  }
-}
-
-.page-type-promotion:not(.rcs-loaded) #alshaya-algolia-plp {
-  height: 24rem;
-  @include breakpoint($desktop) {
-    height: 32rem;
-  }
-}
-
-/* Uniform loader style for RCS Placeholder elements. */
-.page-type-product:not(.rcs-loaded) .content__main .gallery-wrapper,
-.page-type-product:not(.rcs-loaded) .content__title_wrapper,
-.page-type-product:not(.rcs-loaded) .content__sidebar,
-.page-type-promotion:not(.rcs-loaded) #alshaya-algolia-plp,
-.rcs-page:not(.rcs-loaded) h1 .field,
-.rcs-page:not(.rcs-loaded) .c-page-title__description,
-#rcs-ph-navigation_menu:not(.rcs-loaded) li,
-#rcs-ph-breadcrumb:not(.rcs-loaded) li,
-#rcs-ph-lhn_block:not(.rcs-loaded) li,
-#rcs-ph-promotional_banner:not(.rcs-loaded),
-#rcs-ph-upsell-products:not(.rcs-loaded),
-#rcs-ph-related-products:not(.rcs-loaded),
-#rcs-ph-crosssell-products:not(.rcs-loaded),
-#rcs-ph-field_magazine_shop_the_story:not(.rcs-loaded),
-#rcs-ph-plp_mobile_menu:not(.rcs-loaded) {
-  animation: loading 1s infinite;
-  background-image: linear-gradient(90deg, #eee, #ddd, #eee, #ddd);
-  background-size: 400% 100%;
-  background-position: 100% 0;
-}
-
-@keyframes loading {
-  to {
-    background-position: 0 0;
   }
 }

@@ -3,17 +3,15 @@
     display: flex;
 
     & li {
-      height: 1.5rem;
-      width: 8rem;
+      width: 4rem;
       margin-right: 0.25rem;
 
-      & ::after {
-        color: transparent;
+      &::after,
+      & > * {
+        visibility: hidden;
       }
 
-      & > * {
-        display: none;
-      }
+      @include plain-loader;
     }
   }
 }
