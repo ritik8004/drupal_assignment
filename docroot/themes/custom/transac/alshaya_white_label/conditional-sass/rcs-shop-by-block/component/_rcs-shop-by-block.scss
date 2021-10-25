@@ -1,0 +1,7 @@
+#rcs-ph-shop_by_block:not(.rcs-loaded) {
+  @include plain-loader;
+
+  & > * {
+    visibility: hidden;
+  }
+}

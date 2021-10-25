@@ -272,6 +272,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         // Attach required JS libraries.
         'library' => [
           'alshaya_rcs_main_menu/renderer',
+          'alshaya_white_label/rcs-ph-navigation-menu',
         ],
       ],
       '#cache' => [

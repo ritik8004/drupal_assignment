@@ -14,6 +14,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 function alshaya_rcs_magazine_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'magazine_article')) {
     $build['#attached']['library'][] = 'alshaya_rcs_magazine/main';
+    $build['#attached']['library'][] = 'alshaya_white_label/rcs-alshaya-magazine';
   }
 }
 

@@ -46,6 +46,7 @@ function alshaya_rcs_listing_preprocess_page(&$variables) {
       // Add description placeholder for mobile view.
       $variables['category_term_name'] = $term->getName();
       $variables['category_term_description'] = '#rcs.category.description#';
+      $variables['#attached']['library'][] = 'alshaya_white_label/rcs-ph-term-description';
 
       // Taking the sidebar visibility check from config for PLP.
       $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');

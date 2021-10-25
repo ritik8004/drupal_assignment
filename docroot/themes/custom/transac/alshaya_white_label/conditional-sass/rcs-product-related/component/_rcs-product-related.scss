@@ -1,0 +1,19 @@
+.page-type-product:not(.rcs-loaded) .content__main .gallery-wrapper,
+#rcs-ph-upsell-products:not(.rcs-loaded),
+#rcs-ph-related-products:not(.rcs-loaded),
+#rcs-ph-crosssell-products:not(.rcs-loaded) {
+  @include plain-loader;
+
+  & > * {
+    visibility: hidden;
+  }
+}
+
+.page-type-product:not(.rcs-loaded) .content__title_wrapper,
+.page-type-product:not(.rcs-loaded) .content__sidebar {
+  @include text-block-loader;
+
+  & > * {
+    visibility: hidden;
+  }
+}
