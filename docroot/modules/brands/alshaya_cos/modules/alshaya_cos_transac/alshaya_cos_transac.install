@@ -9,10 +9,8 @@
  * Implements hook_install().
  */
 function alshaya_cos_transac_install() {
-  // Hide grid toggle option on listing pages.
-  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
-  ->set('hide_grid_toggle', true)
-  ->save();
+  // Install alshaya_algolia_react module.
+  \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
 
   // Enable and set alshaya_cos as default theme and set the site logo,
   // favicon icon and email logo path.
@@ -134,21 +132,28 @@ function alshaya_cos_transac_install() {
     // Save the changes.
     $configFactory->save();
   }
+  // Check if alshaya_algolia_react exist to override the configs.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_algolia_react')) {
+    // Hide grid toggle option on listing pages.
+    \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+      ->set('hide_grid_toggle', true)
+      ->save();
 
-  // Reset region and weight for alshaya main menu block.
-  $weight = \Drupal::entityTypeManager()->getStorage('block')
-    ->load('alshayaalgoliareactautocomplete')->getWeight();
+    // Reset region and weight for alshaya main menu block.
+    $weight = \Drupal::entityTypeManager()->getStorage('block')
+      ->load('alshayaalgoliareactautocomplete')->getWeight();
 
-  $weight = $weight - 1;
-  $block = \Drupal::entityTypeManager()->getStorage('block')
-    ->load('alshayamainmenu');
-  $block->setRegion('header');
-  $block->setWeight($weight);
-  $block->save();
+    $weight = $weight - 1;
+    $block = \Drupal::entityTypeManager()->getStorage('block')
+      ->load('alshayamainmenu');
+    $block->setRegion('header');
+    $block->setWeight($weight);
+    $block->save();
 
-  $block = \Drupal::entityTypeManager()->getStorage('block')->load('branding');
-  $block->setWeight($weight - 1);
-  $block->save();
+    $block = \Drupal::entityTypeManager()->getStorage('block')->load('branding');
+    $block->setWeight($weight - 1);
+    $block->save();
+  }
 }
 
 /**
