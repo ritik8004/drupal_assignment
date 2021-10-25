@@ -19,14 +19,19 @@ const cartErrorCodes = {
  *   Default error message.
  */
 const getDefaultErrorMessage = () => {
+  let message = '';
   // Check if localised message is available.
-  if (hasValue(drupalSettings.add_to_bag)
-    && hasValue(drupalSettings.add_to_bag.global_error_message)
+  if (hasValue(drupalSettings.global_error_message)) {
+    message = drupalSettings.global_error_message;
+  } else if (hasValue(drupalSettings.add_to_bag
+    && hasValue(drupalSettings.add_to_bag.global_error_message))
   ) {
-    return drupalSettings.add_to_bag.global_error_message;
+    message = drupalSettings.add_to_bag.global_error_message;
+  } else {
+    // Fallback message.
+    message = Drupal.t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.');
   }
-  // Fallback message.
-  return Drupal.t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.');
+  return message;
 };
 
 /**
