@@ -150,6 +150,8 @@ class SearchPageProductListResource extends ResourceBase {
    *   The response products data.
    */
   public function get() {
+    // Get the config value for not executing search query.
+    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
     // Get search keyword.
     $search_keyword = $this->currentRequest->query->get(self::KEYWORD_KEY, '');
 
@@ -165,7 +167,9 @@ class SearchPageProductListResource extends ResourceBase {
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
 
     // Filter the empty products.
-    $response_data['products'] = array_filter($response_data['products']);
+    if (!$category_status) {
+      $response_data['products'] = array_filter($response_data['products']);
+    }
 
     // Get spell check results, if avaialable.
     $message['message']['spellcheck'] = $this->prepareSpellCheckResults($result_set, $search_keyword) ?? NULL;

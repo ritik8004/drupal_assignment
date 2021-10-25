@@ -210,6 +210,9 @@ class PromotionProductListResource extends ResourceBase {
         $this->mobileAppUtility->throwException();
       }
 
+      // Get the config value for not executing search query.
+      $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
+
       // Get language specific version of node.
       $node = $this->entityRepository->getTranslationFromContext($node, $this->languageManager->getCurrentLanguage()->getId());
 
@@ -229,8 +232,9 @@ class PromotionProductListResource extends ResourceBase {
       $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
 
       // Filter the empty products.
-      $response_data['products'] = array_filter($response_data['products']);
-
+      if (!$category_status) {
+        $response_data['products'] = array_filter($response_data['products']);
+      }
       return (new ModifiedResourceResponse($response_data));
     }
 
@@ -249,6 +253,20 @@ class PromotionProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(int $rule_id) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
+
+    // Get the config value for not executing search query.
+    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
+
+    $response['algolia_data'] = [
+      'filter_field' => 'promotion_nid',
+      'filter_value' => $rule_id,
+      'rule_contexts' => '',
+    ];
+
+    // Return only algolia data if the config value is set to false.
+    if (!$category_status) {
+      return $response;
+    }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
       $index = $storage->load('product');
@@ -310,11 +328,6 @@ class PromotionProductListResource extends ResourceBase {
 
       // Prepare and execute query and pass result set.
       $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
-      $response['algolia_data'] = [
-        'filter_field' => 'promotion_nid',
-        'filter_value' => $rule_id,
-        'rule_contexts' => '',
-      ];
 
       return $response;
     }

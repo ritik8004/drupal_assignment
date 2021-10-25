@@ -15,6 +15,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Set the default value for the plp_category_status.
+ */
+function alshaya_mobile_app_update_8081() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings');
+  $config->set('plp_category_status', FALSE)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.5.0] Add new Product Exclude Linked,
  * Skus Product List resource and
  * Deeplink Resource v2.

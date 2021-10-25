@@ -310,7 +310,6 @@ class AlshayaSearchApiQueryExecute {
   public function prepareExecuteQuery(QueryInterface $query, string $page_type, ?string $keyword = '') {
     // Get all facets for the given facet source.
     $facets = $this->facetManager->getFacetsByFacetSourceId($this->getFacetSourceId());
-
     // Prepare an array of key/value where key will be the facet id and value
     // will be the facet object.
     // Example - ['skus_sku_reference_final_price' => facet_object_here].
@@ -589,11 +588,28 @@ class AlshayaSearchApiQueryExecute {
    *   Response array.
    */
   public function prepareResponseFromResult(array $result_set) {
+    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
+    if ($category_status) {
+      // Get all facets for the given facet source.
+      $facets = $this->facetManager->getEnabledFacets();
+      // Prepare an array of key/value where key will be the facet id and value
+      // will be the facet object.
+      // Example - ['skus_sku_reference_final_price' => facet_object_here].
+      foreach ($facets as $facet) {
+        $this->processedFacetsArray[$facet->id()] = $facet;
+        // Storing price facet temporary to use later for special handling.
+        if ($facet->getFieldIdentifier() == 'final_price') {
+          $this->priceFacet = $facet;
+        }
+      }
+      $result_set['processed_facets'] = $this->processedFacetsArray;
+    }
+
     // Prepare facet data.
     $facet_result = $this->prepareFacetData($result_set);
 
     // Prepare product data.
-    $product_data = $this->prepareProductData($result_set);
+    $product_data = isset($result_set['search_api_results']) ?? $this->prepareProductData($result_set);
 
     // Process the price facet for special handling.
     // Get price facet key.
@@ -619,6 +635,14 @@ class AlshayaSearchApiQueryExecute {
     // Removing weight key as now no longer required.
     foreach ($facet_result as &$fr) {
       unset($fr['weight']);
+    }
+
+    if (!$category_status) {
+      return [
+        'filters' => $facet_result,
+        'default_sort' => $this->defaultSort,
+        'total' => $this->getResultTotalCount(),
+      ];
     }
 
     // Prepare final result.
@@ -657,6 +681,7 @@ class AlshayaSearchApiQueryExecute {
    *   Facet data.
    */
   public function prepareFacetData(array $result_set) {
+    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
     $facets_data = $result_set['processed_facets'];
     // Prepare facet data first.
     $facet_result = [];
@@ -673,7 +698,7 @@ class AlshayaSearchApiQueryExecute {
       }
       // If no result available for a facet, skip that.
       $facet_results = $facet->getResults();
-      if (empty($facet_results)) {
+      if (empty($facet_results) && $category_status) {
         continue;
       }
 
@@ -721,7 +746,7 @@ class AlshayaSearchApiQueryExecute {
         'key' => $key,
         'label' => $facet_block->label(),
         'weight' => $facet_block->getWeight(),
-        'options' => $facet_option_data,
+        'options' => ($category_status) ?? $facet_option_data,
       ];
     }
 
