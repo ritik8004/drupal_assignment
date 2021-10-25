@@ -66,7 +66,8 @@
         return;
       }
 
-      Drupal.alshayaSpc.getProductData(sku, function (productData) {
+      // @todo What if the data is not in local storage? should we call Drupal.alshayaSpc.getProductData() instead?
+      Drupal.alshayaSpc.getLocalStorageProductData(sku, function (productData) {
         // Check if error is triggered when stock data in local storage is
         // greater than the requested quantity.
         if (productData.stock.qty > data[sku]) {
