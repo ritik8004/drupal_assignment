@@ -93,6 +93,7 @@
       overflow-y: visible;
       white-space: nowrap;
       display: flex;
+      max-height: none;
 
       &.product-count-1 {
         .product-item {

@@ -357,6 +357,7 @@ export default class SofaSectionalForm extends React.Component {
         <ClearOptions
           handleClearOptions={this.handleClearOptions}
           noOfOptions={Object.keys(configurableAttributes).length}
+          selectedVariant={selectedVariant}
         />
         {Object.entries(configurableAttributes).map((attribute, index) => {
           isSwatch = typeof attribute[1].is_swatch !== 'undefined'
