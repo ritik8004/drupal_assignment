@@ -104,7 +104,8 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
       $container->get('plugin.manager.simple_sitemap.url_generator'),
       $container->get('alshaya_acm_product_category.product_category_tree'),
       $container->get('alshaya_acm_product.category_helper'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('entity.memory_cache')
     );
   }
 
