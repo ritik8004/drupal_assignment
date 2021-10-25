@@ -15,8 +15,13 @@
     }
 
     h1,
-    span {
+    h1 span {
       margin-top: 0;
+      color: $primary_text;
+    }
+
+    h1 {
+      width: 100%;
     }
   }
 
@@ -97,6 +102,10 @@
 
 .basic-details-wrapper .field--name-field-skus {
   .form-item-configurables-size {
+    @include breakpoint($tablet) {
+      order: 1;
+    }
+
     @include breakpoint($only-tablet) {
       margin-top: 0;
     }
@@ -111,13 +120,14 @@
   }
 }
 
-.short-description-wrapper:not(.matchback-description-wrapper) {
-  .c-pdp & {
-    margin-bottom: 1.25rem;
-  }
-}
-
 .short-description-wrapper {
+  &:not(.matchback-description-wrapper) {
+    .c-pdp & {
+      margin-bottom: 0.875rem;
+      color: $primary_text;
+    }
+  }
+
   .field {
     &__label {
       font-size: 0.875rem;
@@ -129,13 +139,35 @@
 
     &__content {
       padding: 0 0 0.9375rem;
+
+      .desc-wrapper {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          font-weight: normal;
+          text-transform: uppercase;
+          padding-bottom: 0.375rem;
+        }
+
+        .composition-wrapper {
+          margin-bottom: 1rem;
+        }
+
+        a {
+          text-decoration: underline;
+          color: $content_link_color;
+        }
+      }
     }
   }
 
   .desc-value {
     p {
       margin: 0;
-      padding: 0 0 0.625rem;
+      padding-bottom: 1rem;
     }
   }
 
