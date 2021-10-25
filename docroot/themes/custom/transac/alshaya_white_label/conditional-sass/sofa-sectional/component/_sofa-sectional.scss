@@ -6,12 +6,13 @@
     padding-top: 0.625rem;
     padding-bottom: 0.9375rem;
     border-bottom: 1px solid $accordion_border;
+    text-transform: capitalize;
 
     @include breakpoint($only-mobile) {
       width: calc(100% + 1rem);
       margin-left: -0.5rem;
       margin-right: -0.5rem;
-      padding: 0 0.5rem 0.9375rem;
+      padding: 0 1.25rem 0.9375rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -22,6 +23,7 @@
       font-size: 0.9375rem;
       line-height: 1.0625rem;
       color: $sofa-sectional-title;
+      font-weight: 600;
     }
 
     .sofa-section-clear-option-btn {
