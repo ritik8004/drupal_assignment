@@ -1,6 +1,10 @@
 (function (Drupal) {
   window.commerceBackend = window.commerceBackend || {};
 
+  const staticStorage = {
+    attrLabels: {},
+  };
+
   /**
    * Fetch the product data from backend.
    *
@@ -82,5 +86,35 @@
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {
       window.commerceBackend.processAndStoreProductData(parentSku, sku, 'productInfo');
     });
+  }
+
+  /**
+   * Gets the attribute label.
+   *
+   * @param {string} attrName
+   *   The attribute name.
+   * @param {string} attrValue
+   *   The attribute value.
+   *
+   * @returns {string}
+   *   The attribute label.
+   */
+  window.commerceBackend.getAttributeValueLabel = function (attrName, attrValue) {
+    if (Drupal.hasValue(staticStorage['attrLabels'][attrName])) {
+      return staticStorage['attrLabels'][attrName][attrValue];
+    }
+
+    const response = globalThis.rcsPhCommerceBackend.getDataAsync('product-option', { attributeCode: attrName });
+    allOptionsForAttribute = {};
+
+    // Process the data to extract what we require and format it into an object.
+    response.data.customAttributeMetadata.items[0].attribute_options.forEach(function (option) {
+      allOptionsForAttribute[option.value] = option.label;
+    });
+
+    // Set to static storage.
+    staticStorage['attrLabels'][attrName] = allOptionsForAttribute;
+
+    return allOptionsForAttribute[attrValue];
   }
 })(Drupal);

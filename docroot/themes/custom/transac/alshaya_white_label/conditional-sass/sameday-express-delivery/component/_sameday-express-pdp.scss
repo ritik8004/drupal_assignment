@@ -1,5 +1,7 @@
 .acq-content-product {
   .express-delivery {
+    margin: 0.5rem 0 1rem;
+
     @include breakpoint($only-mobile) {
       margin-top: 0.3125rem;
       margin-bottom: 1.5625rem;

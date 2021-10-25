@@ -1,0 +1,69 @@
+@mixin plain-loader() {
+  animation: plain-bg-load 1s infinite;
+  background-image:
+    linear-gradient(
+      100deg,
+      $_transparent_overlay,
+      $primary_ripple_color 50%,
+      $_transparent_overlay 80%
+    ),
+    linear-gradient(
+      90deg,
+      $loader-gradient-1,
+      $loader-gradient-2,
+      $loader-gradient-1
+    );
+  background-repeat: no-repeat;
+  background-size: 400% 100%, 100% 100%;
+  background-position: 100% 0, 0 0;
+
+  @keyframes plain-bg-load {
+    to {
+      background-position: 0 0, 0 0;
+    }
+  }
+}
+
+@mixin text-block-loader() {
+  animation: text-bg-load 1s infinite;
+  background-image:
+    linear-gradient(
+      100deg,
+      $_transparent_overlay,
+      $primary_ripple_color 50%,
+      $_transparent_overlay 80%
+    ),
+    linear-gradient(
+      90deg,
+      $loader-gradient-1,
+      $loader-gradient-2,
+      $loader-gradient-1
+    ),
+    linear-gradient(
+      90deg,
+      $loader-gradient-1,
+      $loader-gradient-2,
+      $loader-gradient-1
+    ),
+    linear-gradient(
+      90deg,
+      $loader-gradient-1,
+      $loader-gradient-2,
+      $loader-gradient-1
+    ),
+    linear-gradient(
+      90deg,
+      $loader-gradient-1,
+      $loader-gradient-2,
+      $loader-gradient-1
+    );
+  background-repeat: no-repeat;
+  background-size: 400% 7rem, 100% 1rem, 100% 1rem, 100% 1rem, 75% 1rem;
+  background-position: 100% 0, 0 0, 0 2rem, 0 4rem, 0 6rem;
+
+  @keyframes text-bg-load {
+    to {
+      background-position: 0 0, 0 0, 0 2rem, 0 4rem, 0 6rem;
+    }
+  }
+}

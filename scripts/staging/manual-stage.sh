@@ -102,7 +102,7 @@ do
   algolia_v2_enabled=""
   if [[ ${target_env:2} == "pprod" ]];
   then
-    algolia_v2_enabled=$(ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sapi-l | grep enabled | grep alshaya_algolia_product_list_index | wc -l")
+    algolia_v2_enabled=$(ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri ev \"echo \Drupal::entityTypeManager()->getStorage('search_api_index')->load('alshaya_algolia_product_list_index')->get('status')\"")
   fi
 
   echo
@@ -129,6 +129,7 @@ do
     then
       echo "Algolia V2 was enabled on site $current_site so we enable again."
       ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri pm:enable alshaya_algolia_react"
+      ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri alshaya-algolia-react enable"
       ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-dis product"
       ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-en alshaya_algolia_product_list_index"
       ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri crf"

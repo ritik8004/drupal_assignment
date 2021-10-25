@@ -15,7 +15,7 @@
   }
 
   // Add the styled products.
-  document.addEventListener('alshayaRcsUpdateResults', function getProductsInStyle(e) {
+  RcsEventManager.addListener('alshayaRcsUpdateResults', function getProductsInStyle(e) {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined'
       || typeof e.detail.result.style_code === 'undefined'
@@ -101,5 +101,5 @@
     });
 
     RcsPhStaticStorage.set('product_' + mainProduct.sku, mainProduct);
-  });
+  }, 1);
 })(drupalSettings);

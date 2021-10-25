@@ -113,6 +113,44 @@ function getFormattedAmount(priceAmount) {
 };
 exports.getFormattedAmount = getFormattedAmount;
 
+/**
+ * Get SKU based on attribute option id.
+ *
+ * @param {string} $sku
+ *   The parent sku value.
+ * @param {string} attribute
+ *   Attribute to search for.
+ * @param {Number} option_id
+ *   Option id for selected attribute.
+ *
+ * @return {string}
+ *   SKU value matching the attribute option id.
+ */
+function getChildSkuFromAttribute(sku, attribute, option_id) {
+  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+
+  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
+    console.log(`No combination available for attribute ${attribute} and option ${option_id} for SKU ${sku}`);
+  }
+
+  return combinations.attribute_sku[attribute][option_id][0];
+}
+
+/**
+ * Get the swatch image url for the provided sku.
+ *
+ * @param {string} sku
+ *   The SKU value.
+ *
+ * @returns {string}
+ *   The swatch image url.
+ */
+function getPdpSwatchImageUrl(sku) {
+  // @todo Add proper implementation for this once
+  // https://alshayagroup.atlassian.net/browse/CORE-35237 is resolved.
+  return jQuery('.logo img').attr('src');
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -385,6 +423,9 @@ exports.render = function render(
       break;
   }
 
+  // Add class to remove loader styles after RCS info is filled.
+  jQuery('.page-type-product').addClass('rcs-loaded');
+
   return html;
 };
 
@@ -409,8 +450,8 @@ exports.computePhFilters = function (input, filter) {
         jQuery('.has--special--price', priceBlock).html(price.html());
         jQuery('.special--price', priceBlock).html(finalPrice.html());
 
-        let discount = jQuery('.price--discount').html();
-        discount = discount.replace('@discount', input.price_range.maximum_price.discount.percent_off);
+        let discount = jQuery('.price--discount', priceBlock).html();
+        discount = discount.replace('@discount', Math.round(input.price_range.maximum_price.discount.percent_off));
         jQuery('.price--discount', priceBlock).html(discount);
       }
       else {
@@ -469,20 +510,26 @@ exports.computePhFilters = function (input, filter) {
       const skuBaseForm = jQuery('.rcs-templates--sku-base-form').clone();
       skuBaseForm.find('.sku-base-form-template').removeClass('sku-base-form-template').addClass('sku-base-form');
 
-      // @todo Check for how to fetch the max sale quantity.
-      const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
-      const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
-      // Remove the quantity filter.
-      quantityDroprown.html('');
+      if (drupalSettings.alshayaRcs.showQuantity) {
+        // @todo Check for how to fetch the max sale quantity.
+        const quantity = parseInt(drupalSettings.alshaya_spc.cart_config.max_cart_qty, 10);
+        const quantityDroprown = jQuery('.edit-quantity', skuBaseForm);
+        // Remove the quantity filter.
+        quantityDroprown.html('');
 
-      for (let i = 1; i <= quantity; i++) {
-        if (i === 1) {
-          quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
-          continue;
+        for (let i = 1; i <= quantity; i++) {
+          if (i === 1) {
+            quantityDroprown.append('<option value="' + i + '" selected="selected">' + i + '</option>');
+            continue;
+          }
+          quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
         }
-        quantityDroprown.append('<option value="' + i + '">' + i + '</option>');
+        jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
       }
-      jQuery('.js-form-item-quantity', skuBaseForm).children(quantityDroprown);
+      else {
+        jQuery('.js-form-item-quantity', skuBaseForm).remove();
+      }
+
 
       // This wrapper will be removed after processing.
       const tempDivWrapper = jQuery('<div>');
@@ -516,7 +563,6 @@ exports.computePhFilters = function (input, filter) {
             'data-selected-title': option.label,
             'data-drupal-selector': `edit-configurables-${formattedAttributeCode}`,
             id: `edit-configurables-${formattedAttributeCode}`,
-            // class: 'form-item-configurable-swatch form-select required valid visually-hidden',
             class: 'form-select required valid',
             name: `configurables[${option.attribute_code}]`,
             'aria-require': true,
@@ -524,7 +570,9 @@ exports.computePhFilters = function (input, filter) {
           });
 
           // Check if the attribute is a swatch attribute.
+          let optionIsSwatch = false;
           if (drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code)) {
+            optionIsSwatch = true;
             configurableOptionsList.addClass('form-item-configurable-swatch');
             optionsListWrapper.addClass('configurable-swatch');
           }
@@ -541,8 +589,14 @@ exports.computePhFilters = function (input, filter) {
           // Add the option values.
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
-            selectOption.attr({value: value.value_index}).text(value.store_label);
+            const label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            selectOption.attr({value: value.value_index}).text(label);
             configurableOptionsList.append(selectOption);
+
+            if (optionIsSwatch) {
+              const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
+              selectOption.attr({'swatch-image': getPdpSwatchImageUrl(childSku)});
+            }
           });
 
           if (sizeGuideAttributes.includes(option.attribute_code)) {

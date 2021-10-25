@@ -1,0 +1,6 @@
+services:
+  alshaya_sofa_sectional.helper:
+    class: Drupal\alshaya_sofa_sectional\Services\SofaSectionalHelper
+    arguments:
+      - '@config.factory'
+      - '@alshaya_acm_product.skumanager'

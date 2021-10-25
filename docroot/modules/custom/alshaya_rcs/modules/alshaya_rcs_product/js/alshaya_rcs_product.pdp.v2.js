@@ -167,7 +167,7 @@ function getConfigurables(product) {
   const configurables = {};
   product.configurable_options.forEach(function (option) {
     configurables[option.attribute_code] = {
-      attribute_id: atob(option.attribute_uid),
+      attribute_id: parseInt(atob(option.attribute_uid), 10),
       code: option.attribute_code,
       label: option.label,
       position: option.position,
@@ -189,24 +189,27 @@ function getConfigurables(product) {
  * Get the configurable options for the given variant.
  *
  * @param product
- *  The product entity.
+ *  The main product object.
  * @param {object} variant
  *   The variant object.
  *
  * @return {array}
  *   The array of variant configurable options.
  */
-function getVariantConfigurableOptions(product, variantAttributes) {
+function getVariantConfigurableOptions(product, variant) {
   const productConfigurables = getConfigurables(product);
+  const variantConfigurableOptions = [];
 
-  return variantAttributes.map(function (attribute) {
-    return {
-      attribute_id: attribute.code,
-      label: productConfigurables[attribute.code].label,
-      value: attribute.label,
-      value_id: attribute.value_index,
-    }
+  Object.keys(productConfigurables).forEach(function (attributeCode) {
+    variantConfigurableOptions.push({
+      attribute_id: `attr_${attributeCode}`,
+      label: productConfigurables[attributeCode].label,
+      value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
+      value_id: variant.product[attributeCode],
+    });
   });
+
+  return variantConfigurableOptions;
 }
 
 /**
@@ -289,11 +292,11 @@ function getVariantsInfo(product) {
       cart_image: '',
       cart_title: product.name,
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
-      color_attribute: variantInfo.color_attribute,
-      // color_value: '',
+      color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
+      color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
       sku: variantInfo.sku,
       parent_sku: variantInfo.parent_sku,
-      configurableOptions: getVariantConfigurableOptions(product, variant.attributes),
+      configurableOptions: getVariantConfigurableOptions(product, variant),
       // @todo Fetch layout dynamically.
       layout: drupalSettings.alshayaRcs.pdpLayout,
       gallery: '',
@@ -454,19 +457,19 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
     firstChild: '',
   };
 
-  productData.variants = Object.keys(productData.variants).map(function (variantSku) {
-    const variant = productData.variants[variantSku];
-    const variantConfigurableAttributes = {};
-    variant.configurableOptions.forEach(function (variantConfigurableOption) {
-      variantConfigurableAttributes[variantConfigurableOption.attribute_id] = variantConfigurableOption.value_id;
-    })
+  const rawProductData = window.commerceBackend.getProductData(sku, false, false);
 
-    for (var i = 0; i < configurableCodes.length; i++) {
-      if (typeof variantConfigurableAttributes[configurableCodes[i]] === 'undefined') {
-        delete(productData.variants[variantSku]);
+  rawProductData.variants.forEach(function (variant) {
+    const product = variant.product;
+    const variantSku = product.sku;
+    let attributeVal = null;
+
+    for (let i = 0; i < configurableCodes.length; i++) {
+      attributeVal = product[configurableCodes[i]];
+
+      if (typeof attributeVal === 'undefined') {
         return;
       }
-      var attributeVal = variantConfigurableAttributes[configurableCodes[i]];
 
       combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
         ? combinations.by_sku[variantSku]
@@ -476,16 +479,19 @@ window.commerceBackend.getConfigurableCombinations = function (sku) {
       combinations.attribute_sku[configurableCodes[i]] = typeof combinations.attribute_sku[configurableCodes[i]] !== 'undefined'
         ? combinations.attribute_sku[configurableCodes[i]]
         : {};
-      combinations.attribute_sku[configurableCodes[i]][attributeVal] = variantSku;
+
+      combinations.attribute_sku[configurableCodes[i]][attributeVal] = typeof combinations.attribute_sku[configurableCodes[i]][attributeVal] !== 'undefined'
+        ? combinations.attribute_sku[configurableCodes[i]][attributeVal]
+        : [];
+      combinations.attribute_sku[configurableCodes[i]][attributeVal].push(variantSku);
     }
   });
 
   var firstChild = Object.entries(combinations.attribute_sku)[0];
   firstChild = Object.entries(firstChild[1]);
-  combinations.firstChild = firstChild[0][1];
+  combinations.firstChild = firstChild[0][1][0];
 
   // @todo: Add check for simple product.
-  // @todo Add sorting for the configurable options based on weights.
   Object.keys(combinations.by_sku).forEach(function (sku) {
     const combinationString = getSelectedCombination(combinations.by_sku[sku]);
     combinations.by_attribute[combinationString] = sku;

@@ -13,6 +13,7 @@
 (function main($) {
 
   var pageEntity = null;
+  const classRcsLoaded = 'rcs-loaded';
 
   $(document).ready(function ready() {
     if (
@@ -82,6 +83,9 @@
 
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
+
+          // Add class to remove loader styles after RCS info is filled.
+          $('.rcs-page').addClass(classRcsLoaded);
         });
     }
   });
@@ -157,6 +161,9 @@
             $(this)[0].innerHTML
           )
         );
+
+        // Add class to remove loader styles on RCS Placeholders.
+        $(this).addClass(classRcsLoaded);
 
         // Re-attach all behaviors.
         rcsPhApplyDrupalJs($(this).parent()[0]);

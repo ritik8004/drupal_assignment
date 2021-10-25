@@ -4,7 +4,7 @@
 (function main($) {
   // Event listener to update the data layer object with the proper category
   // data.
-  document.addEventListener('alshayaRcsUpdateResults', (e) => {
+  RcsEventManager.addListener('alshayaRcsUpdateResults', (e) => {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'category') {
       return null;

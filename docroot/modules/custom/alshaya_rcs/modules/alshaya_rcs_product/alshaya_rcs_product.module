@@ -1,10 +1,8 @@
 <?php
 
-use Drupal\alshaya_color_split\AlshayaColorSplitConfig;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 
 /**
@@ -182,8 +180,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
-  $build['#attached']['library'][] = 'alshaya_rcs_product/grouped_products';
-  // Attach promotion lable js.
+  // Attach promotion label js.
   $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
@@ -227,9 +224,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['quantityLimitEnabled'] = $isQuantityLimitEnabled;
   $build['#attached']['drupalSettings']['alshayaRcs']['hide_max_qty_limit_message'] = $acm_settings->get('hide_max_qty_limit_message');
 
-  $build['#attached']['drupalSettings']['alshayaRcs']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
-  $color_split_config = \Drupal::config('alshaya_color_split.settings');
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $color_split_config->getCacheTags());
+  $configurable_form_settings = \Drupal::config('acq_sku.configurable_form_settings');
+  $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
 }
 
 /**
@@ -386,17 +383,28 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     ],
   ];
 
-  $sku_base_form = [
-    '#theme' => 'rcs_sku_base_form',
-  ];
-  $variables['rcs_templates']['sku_base_form'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($sku_base_form),
-    '#attributes' => [
-      'class' => 'rcs-templates--sku-base-form',
-    ],
-  ];
+  $is_category_page = FALSE;
+  // Skip product rcs_templates of sku_base_form for rcs category.
+  // @todo To find a better solution to resolve the breadcrumb issue of PLP.
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = \Drupal::request()->attributes->get('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $is_category_page = TRUE;
+    }
+  }
+  if (!$is_category_page) {
+    $sku_base_form = [
+      '#theme' => 'rcs_sku_base_form',
+    ];
+    $variables['rcs_templates']['sku_base_form'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => render($sku_base_form),
+      '#attributes' => [
+        'class' => 'rcs-templates--sku-base-form',
+      ],
+    ];
+  }
 
   // We pass this as html so that in the JS, we can fetch the data from here and
   // we can call other apis to add to this data if required.
@@ -686,9 +694,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
           'attribute_uid',
           'label',
           'position',
-          'use_default',
           'attribute_code',
-          'product_id',
           'values' => [
             'value_index',
             'store_label',
@@ -704,8 +710,8 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             'ship_to_store',
             'reserve_and_collect',
             'attribute_set_id',
-            '... on PhysicalProductInterface' => [
-              'weight',
+            'swatch_data' => [
+       	      'swatch_type',
             ],
             'price_range' => [
               'maximum_price' => [
@@ -720,15 +726,11 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
                 ],
               ],
             ],
-            'special_price',
-            'special_from_date',
-            'special_to_date',
             'is_returnable',
             'stock_data' => [
               'qty',
               'max_sale_qty',
             ],
-            'swatch_image',
             'media_gallery' => [
               'url',
               'label',
@@ -747,7 +749,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
                 ],
               ],
             ],
-            'gift_message_available',
           ],
           'attributes' => [
             'label',
@@ -789,6 +790,16 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   if ($recommended_product_settings->get('display_crosssell')) {
     $query_fields['products']['items']['crosssell_products'] = _alshaya_rcs_product_get_recommended_product_field_query();
   }
+
+  $query_fields['product_options'] = [
+    'items' => [
+      'attribute_code',
+      'attribute_options' => [
+        'label',
+        'value',
+      ],
+    ],
+  ];
 
   return $query_fields;
 }

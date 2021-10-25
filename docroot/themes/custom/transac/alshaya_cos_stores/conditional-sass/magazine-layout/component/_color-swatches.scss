@@ -160,9 +160,13 @@
     }
   }
 
-  @include breakpoint($only-mobile) {
-    .select2Option {
+  .select2Option {
+    @include breakpoint($only-mobile) {
       display: block;
+    }
+
+    h4 {
+      color: $colour-swatches-show-list-button;
     }
   }
 

@@ -45,18 +45,13 @@ class SkuImagesHelperPims extends SkuImagesHelper {
                               string $style_name,
                               string $rel_image_style = '') {
 
-    $label = $media['label'];
-    if (isset($media['pims_image']) && !empty($media['pims_image'])) {
-      $media = $media['pims_image'];
-    }
-
     $image = [
       '#theme' => 'image',
       '#uri' => $this->getImageStyleUrl($media, $style_name),
       '#attributes' => [
         'src' => $this->getImageStyleUrl($media, $style_name),
-        'title' => $label,
-        'alt' => $label,
+        'title' => $media['label'],
+        'alt' => $media['label'],
       ],
     ];
 
@@ -79,6 +74,10 @@ class SkuImagesHelperPims extends SkuImagesHelper {
    *   Image url.
    */
   public function getImageStyleUrl(array $media, string $style_name) {
+    if (isset($media['pims_image']['styles'])) {
+      $media = $media['pims_image'];
+    }
+
     if (!empty($media['styles']) && !empty($media['styles'][$style_name])) {
       return $media['styles'][$style_name];
     }
