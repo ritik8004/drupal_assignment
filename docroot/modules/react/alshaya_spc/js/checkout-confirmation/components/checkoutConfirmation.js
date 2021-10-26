@@ -52,9 +52,9 @@ class CheckoutConfirmation extends React.Component {
   }
 
   onPrintError = (errorLocation, error) => {
-    logger.warning('Error launching checkout print. ErrorLocation: @errorLocation, error: @error', {
+    logger.warning('Error launching checkout print. ErrorLocation: @errorLocation, error: @message', {
       '@errorLocation': errorLocation,
-      '@error': error,
+      '@message': error,
     });
   };
 
