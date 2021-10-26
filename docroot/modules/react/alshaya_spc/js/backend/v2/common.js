@@ -897,10 +897,6 @@ const associateCartToCustomer = async (guestCartId) => {
     return;
   }
 
-  logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
-    '@customerId': window.drupalSettings.userDetails.customerId,
-    '@guestCartId': guestCartId,
-  });
 
   // Clear local storage.
   removeCartIdFromStorage();
@@ -908,6 +904,12 @@ const associateCartToCustomer = async (guestCartId) => {
 
   // Reload cart.
   await getCart(true);
+
+  logger.notice('Guest Cart id @guestCartId associated to customer @customerId with Cart id @cartId.', {
+    '@customerId': window.drupalSettings.userDetails.customerId,
+    '@guestCartId': guestCartId,
+    '@cartId': window.commerceBackend.getCartId(),
+  });
 };
 
 /**

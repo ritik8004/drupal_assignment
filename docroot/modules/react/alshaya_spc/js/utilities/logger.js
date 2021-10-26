@@ -1,8 +1,6 @@
 /**
  * Logs messages in the backend.
  *
- * @todo This is a placeholder for logger.
- *
  * @param {string} level
  *   The error level.
  * @param {string} message
@@ -12,6 +10,17 @@
  */
 const logger = {
   send: (level, message, context) => {
+    // Add customer Id.
+    if (typeof drupalSettings.userDetails !== 'undefined'
+      && typeof drupalSettings.userDetails.customerId !== 'undefined'
+      && drupalSettings.userDetails.customerId > 0
+      && typeof context['@customerId'] === 'undefined'
+    ) {
+      /* eslint no-param-reassign: "off" */
+      message = `${message} Customer Id: @customerId`;
+      context['@customerId'] = drupalSettings.userDetails.customerId;
+    }
+
     if (typeof Drupal.logViaDataDog !== 'undefined') {
       Drupal.logViaDataDog(level, message, context);
       return;
