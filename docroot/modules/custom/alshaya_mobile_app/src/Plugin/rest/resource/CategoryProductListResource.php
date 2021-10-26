@@ -251,7 +251,7 @@ class CategoryProductListResource extends ResourceBase {
     // Filter the empty products.
     // Array values being used to re-set the array index
     // if there any empty item in b/w.
-    if (!$category_status) {
+    if ($category_status) {
       $response_data['products'] = array_values(array_filter($response_data['products']));
     }
 

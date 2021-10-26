@@ -232,7 +232,7 @@ class PromotionProductListResource extends ResourceBase {
       $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
 
       // Filter the empty products.
-      if (!$category_status) {
+      if ($category_status) {
         $response_data['products'] = array_filter($response_data['products']);
       }
       return (new ModifiedResourceResponse($response_data));
