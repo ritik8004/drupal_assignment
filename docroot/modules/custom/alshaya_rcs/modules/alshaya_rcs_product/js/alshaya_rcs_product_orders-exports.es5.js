@@ -80,7 +80,7 @@ const replaceOrderPlaceHolders = function (variant, product, itemHtml, settings)
     htmlElms = replaceIndividualPlaceHolder(
       imagePlaceHolder[0].outerHTML,
       'orderDetails',
-      { 'image': assests.product_teaser, 'name': product.name },
+      { 'image': assests[0].styles.product_teaser, 'name': product.name },
       settings,
     );
     imagePlaceHolder.replaceWith(htmlElms);

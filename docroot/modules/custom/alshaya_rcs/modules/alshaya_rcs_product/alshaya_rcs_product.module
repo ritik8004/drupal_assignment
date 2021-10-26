@@ -944,7 +944,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
         '#attributes' => [
           'id' => 'rcs-ph-order_teaser',
           'class' => ['block-alshaya-acm-customer'],
-          'data-param-skus' => Json::encode($data),
+          'data-param-skus' => Json::encode(array_unique($data)),
         ]
       ]
     ];
@@ -984,7 +984,7 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
     'container' => [
       '#attributes' => [
         'id' => 'rcs-ph-order_teaser',
-        'data-param-skus' => Json::encode($data),
+        'data-param-skus' => Json::encode(array_unique($data)),
       ]
     ]
   ];

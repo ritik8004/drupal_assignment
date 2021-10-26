@@ -4,7 +4,9 @@
   Drupal.behaviors.alshayaRcsOrderPrint = {
     attach: function (context, settings) {
       if ($("#rcs-ph-order_teaser").hasClass('rcs-loaded')) {
-        window.print();
+        setTimeout(function() {
+          window.print();
+        }, 1000);
       }
     }
   }
