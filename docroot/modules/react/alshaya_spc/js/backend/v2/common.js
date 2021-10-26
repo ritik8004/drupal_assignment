@@ -1013,9 +1013,9 @@ const validateRequestData = async (request) => {
 
     // This is serious.
     if (cartCustomerId !== drupalSettings.userDetails.customerId) {
-      logger.error('Mismatch session customer id: @sessionCustomerId and cart customer id: @customerId.', {
-        '@sessionCustomerId': drupalSettings.userDetails.customerId,
-        '@customerId': cartCustomerId,
+      logger.error('Mismatch session customer id: @customerId and cart customer id: @cartCustomerId.', {
+        '@customerId': drupalSettings.userDetails.customerId,
+        '@cartCustomerId': cartCustomerId,
       });
       return 400;
     }
