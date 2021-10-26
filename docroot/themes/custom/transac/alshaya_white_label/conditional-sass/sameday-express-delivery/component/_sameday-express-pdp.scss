@@ -192,10 +192,6 @@
     line-height: 1rem;
     width: 16.5rem;
 
-    @include breakpoint($only-mobile) {
-      width: 15.3125rem;
-    }
-
     @include breakpoint($only-tablet) {
       width: 12.1875rem;
       padding-#{$right}: 0.3125rem;
@@ -398,8 +394,6 @@
     }
 
     .cart-shipping-method {
-      width: 19rem;
-
       @include breakpoint($only-tablet) {
         width: auto;
       }
