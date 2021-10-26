@@ -589,8 +589,8 @@ class AlshayaSearchApiQueryExecute {
    *   Response array.
    */
   public function prepareResponseFromResult(array $result_set) {
-    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
-    if (!$category_status) {
+    $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+    if (!$algolia_listing_status) {
       // Get all facets for the given facet source.
       $facets = $this->facetManager->getEnabledFacets();
       // Prepare an array of key/value where key will be the facet id and value
@@ -638,7 +638,7 @@ class AlshayaSearchApiQueryExecute {
       unset($fr['weight']);
     }
 
-    if (!$category_status) {
+    if (!$algolia_listing_status) {
       return [
         'filters' => $facet_result,
         'default_sort' => $this->defaultSort,
@@ -682,7 +682,7 @@ class AlshayaSearchApiQueryExecute {
    *   Facet data.
    */
   public function prepareFacetData(array $result_set) {
-    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
+    $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
     $facets_data = $result_set['processed_facets'];
 
     // Prepare facet data first.
@@ -700,7 +700,7 @@ class AlshayaSearchApiQueryExecute {
       }
       // If no result available for a facet, skip that.
       $facet_results = $facet->getResults();
-      if (empty($facet_results) && $category_status) {
+      if (empty($facet_results) && $algolia_listing_status) {
         continue;
       }
 
@@ -748,7 +748,7 @@ class AlshayaSearchApiQueryExecute {
         'key' => $key,
         'label' => $facet_block->label(),
         'weight' => $facet_block->getWeight(),
-        'options' => ($category_status) ? $facet_option_data : '',
+        'options' => ($algolia_listing_status) ? $facet_option_data : '',
       ];
     }
 

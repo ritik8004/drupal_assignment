@@ -225,7 +225,7 @@ class CategoryProductListResource extends ResourceBase {
       $this->mobileAppUtility->throwException();
     }
     // Get the config value for not executing search query.
-    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
+    $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
 
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($id);
@@ -251,7 +251,7 @@ class CategoryProductListResource extends ResourceBase {
     // Filter the empty products.
     // Array values being used to re-set the array index
     // if there any empty item in b/w.
-    if ($category_status) {
+    if ($algolia_listing_status) {
       $response_data['products'] = array_values(array_filter($response_data['products']));
     }
 
@@ -337,39 +337,8 @@ class CategoryProductListResource extends ResourceBase {
 
     // Get term details in current language for meta info (department name).
     $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid);
-
     if (isset($term_details['hierarchy'])) {
       $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
-    }
-
-    // Get the config value for not executing search query.
-    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
-
-    // Get term details in current language for filters.
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
-      $langcode,
-      $tid
-    );
-    $filter_field = $term_details['category_field'];
-    if (Settings::get('mobile_app_plp_index_new', FALSE)) {
-      // Append 'en' in 'filter_field' of 'algolia_data'.
-      // for ex:
-      // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
-      $category_field = explode('.', $term_details['category_field']);
-      $category_field_temp[] = $category_field[0] . '.' . $langcode . '.';
-      array_shift($category_field);
-      $filter_field = implode(array_merge($category_field_temp, $category_field));
-    }
-    $response['algolia_data'] = [
-      'filter_field' => $filter_field,
-      'filter_value' => $term_details['hierarchy'],
-      'rule_contexts' => $term_details['ruleContext'],
-    ];
-
-    // Return only algolia data if the config value is set to false.
-    if (!$category_status) {
-      return $response;
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
@@ -398,8 +367,37 @@ class CategoryProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get the config value for not executing search query.
+      $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
       if ((AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) && (Settings::get('mobile_app_plp_index_new', FALSE))) {
         $langcode = 'en';
+      }
+
+      // Get term details in current language for filters.
+      $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
+        $langcode,
+        $tid
+      );
+
+      $filter_field = $term_details['category_field'];
+      if (Settings::get('mobile_app_plp_index_new', FALSE)) {
+        // Append 'en' in 'filter_field' of 'algolia_data'.
+        // for ex:
+        // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
+        $category_field = explode('.', $term_details['category_field']);
+        $category_field_temp[] = $category_field[0] . '.' . $langcode . '.';
+        array_shift($category_field);
+        $filter_field = implode(array_merge($category_field_temp, $category_field));
+      }
+      $response['algolia_data'] = [
+        'filter_field' => $filter_field,
+        'filter_value' => $term_details['hierarchy'],
+        'rule_contexts' => $term_details['ruleContext'],
+      ];
+      // Return only algolia data if the config value is set to false.
+      if (!$algolia_listing_status) {
+        return $response;
       }
 
       $index = $storage->load('alshaya_algolia_index');

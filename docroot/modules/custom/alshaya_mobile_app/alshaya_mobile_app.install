@@ -19,7 +19,7 @@ use Drupal\user\Entity\Role;
  */
 function alshaya_mobile_app_update_8081() {
   $config = \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings');
-  $config->set('plp_category_status', FALSE)->save();
+  $config->set('listing_respond_algolia_data', FALSE)->save();
 }
 
 /**

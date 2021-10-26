@@ -11,7 +11,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class Search Page Product List Resource.
@@ -93,13 +92,6 @@ class SearchPageProductListResource extends ResourceBase {
   protected $currentRequest;
 
   /**
-   * The config factory object.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -118,8 +110,6 @@ class SearchPageProductListResource extends ResourceBase {
    *   Alshaya search api query execute.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   Request stack.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config factory object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -128,13 +118,11 @@ class SearchPageProductListResource extends ResourceBase {
                               LoggerInterface $logger,
                               ParseModePluginManager $parse_mode_manager,
                               AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute,
-                              RequestStack $requestStack,
-                              ConfigFactoryInterface $config_factory) {
+                              RequestStack $requestStack) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->parseModeManager = $parse_mode_manager;
     $this->alshayaSearchApiQueryExecute = $alshaya_search_api_query_execute;
     $this->currentRequest = $requestStack->getCurrentRequest();
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -149,8 +137,7 @@ class SearchPageProductListResource extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('plugin.manager.search_api.parse_mode'),
       $container->get('alshaya_mobile_app.alshaya_search_api_query_execute'),
-      $container->get('request_stack'),
-      $container->get('config.factory')
+      $container->get('request_stack')
     );
   }
 
@@ -163,8 +150,6 @@ class SearchPageProductListResource extends ResourceBase {
    *   The response products data.
    */
   public function get() {
-    // Get the config value for not executing search query.
-    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
     // Get search keyword.
     $search_keyword = $this->currentRequest->query->get(self::KEYWORD_KEY, '');
 
@@ -180,9 +165,7 @@ class SearchPageProductListResource extends ResourceBase {
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
 
     // Filter the empty products.
-    if ($category_status) {
-      $response_data['products'] = array_filter($response_data['products']);
-    }
+    $response_data['products'] = array_filter($response_data['products']);
 
     // Get spell check results, if avaialable.
     $message['message']['spellcheck'] = $this->prepareSpellCheckResults($result_set, $search_keyword) ?? NULL;

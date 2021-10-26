@@ -211,7 +211,7 @@ class PromotionProductListResource extends ResourceBase {
       }
 
       // Get the config value for not executing search query.
-      $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
+      $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
 
       // Get language specific version of node.
       $node = $this->entityRepository->getTranslationFromContext($node, $this->languageManager->getCurrentLanguage()->getId());
@@ -232,7 +232,7 @@ class PromotionProductListResource extends ResourceBase {
       $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
 
       // Filter the empty products.
-      if ($category_status) {
+      if ($algolia_listing_status) {
         $response_data['products'] = array_filter($response_data['products']);
       }
       return (new ModifiedResourceResponse($response_data));
@@ -253,20 +253,6 @@ class PromotionProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(int $rule_id) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
-
-    // Get the config value for not executing search query.
-    $category_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('plp_category_status');
-
-    $response['algolia_data'] = [
-      'filter_field' => 'promotion_nid',
-      'filter_value' => $rule_id,
-      'rule_contexts' => '',
-    ];
-
-    // Return only algolia data if the config value is set to false.
-    if (!$category_status) {
-      return $response;
-    }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
       $index = $storage->load('product');
@@ -296,6 +282,20 @@ class PromotionProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get the config value for not executing search query.
+      $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+
+      $response['algolia_data'] = [
+        'filter_field' => 'promotion_nid',
+        'filter_value' => $rule_id,
+        'rule_contexts' => '',
+      ];
+
+      // Return only algolia data if the config value is set to false.
+      if (!$algolia_listing_status) {
+        return $response;
+      }
+
       $index = $storage->load('alshaya_algolia_index');
 
       /** @var \Drupal\search_api\Query\QueryInterface $query */
