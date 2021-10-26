@@ -11,9 +11,9 @@
 const logger = {
   send: (level, message, context) => {
     // Add customer Id.
-    if (typeof drupalSettings.userDetails !== 'undefined'
+    if (typeof context !== 'undefined'
+      && typeof drupalSettings.userDetails !== 'undefined'
       && typeof drupalSettings.userDetails.customerId !== 'undefined'
-      && drupalSettings.userDetails.customerId > 0
       && typeof context['@customerId'] === 'undefined'
     ) {
       /* eslint no-param-reassign: "off" */
