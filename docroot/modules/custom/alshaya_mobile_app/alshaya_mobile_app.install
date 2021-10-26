@@ -17,9 +17,9 @@ use Drupal\user\Entity\Role;
  *
  * Set the default value for the plp_category_status.
  */
-function alshaya_mobile_app_update_8081() {
+function alshaya_mobile_app_update_8084() {
   $config = \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings');
-  $config->set('listing_respond_algolia_data', FALSE)->save();
+  $config->set('listing_respond_algolia_data', TRUE)->save();
 }
 
 /**
