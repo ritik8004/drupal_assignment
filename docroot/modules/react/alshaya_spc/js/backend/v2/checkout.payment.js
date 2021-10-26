@@ -125,9 +125,9 @@ window.commerceBackend.saveApplePayPayment = (data) => {
 
     return response;
   }).catch((response) => {
-    logger.error('Error while finalizing payment. Error message: @message, Code: @code.', {
+    logger.error('Error while finalizing payment. Error message: @message, Code: @errorCode.', {
       '@message': !_isEmpty(response.error) ? response.error.message : response,
-      '@code': !_isEmpty(response.error) ? response.error.error_code : '',
+      '@errorCode': !_isEmpty(response.error) ? response.error.error_code : '',
     });
 
     return response;
