@@ -67,9 +67,13 @@ export default class PaymentMethod extends React.Component {
     // incorrect. So we update the payment method so that the proper V2 redirect
     // URL is set.
     const analytics = {};
-    if (typeof window.ga === 'function' && window.ga.loaded) {
-      analytics.clientId = window.ga.getAll()[0].get('clientId');
-      analytics.trackingId = window.ga.getAll()[0].get('trackingId');
+    const trackingIdEle = document.getElementById('spc-ga-tracking-id');
+    if (trackingIdEle) {
+      analytics.trackingId = trackingIdEle.value;
+    }
+    const clientIdEle = document.getElementById('spc-ga-client-id');
+    if (clientIdEle) {
+      analytics.clientId = clientIdEle.value;
     }
 
     const data = {
