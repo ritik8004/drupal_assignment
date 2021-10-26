@@ -180,7 +180,7 @@ class SearchPageProductListResource extends ResourceBase {
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
 
     // Filter the empty products.
-    if (!$category_status) {
+    if ($category_status) {
       $response_data['products'] = array_filter($response_data['products']);
     }
 
