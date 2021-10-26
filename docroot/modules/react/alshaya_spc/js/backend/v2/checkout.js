@@ -2170,9 +2170,9 @@ window.commerceBackend.placeOrder = async (data) => {
       return { data: result };
     })
     .catch((response) => {
-      logger.error('Error while placing order. Error message: @message, Code: @responseCode.', {
+      logger.error('Error while placing order. Error message: @message, Code: @errorCode.', {
         '@message': !_isEmpty(response.error) ? response.error.message : response,
-        '@responseCode': !_isEmpty(response.error) ? response.error.error_code : '',
+        '@errorCode': !_isEmpty(response.error) ? response.error.error_code : '',
       });
 
       // @todo all the error handling.

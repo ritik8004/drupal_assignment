@@ -830,8 +830,8 @@ const getCart = async (force = false) => {
         || (hasValue(response.data) && response.data.error_code === 404)
         || (hasValue(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      logger.warning('getCart() returned error: @responseCode.', {
-        '@responseCode': response.data.error_code,
+      logger.warning('getCart() returned error: @errorCode.', {
+        '@errorCode': response.data.error_code,
       });
 
       clearInvalidCart();
@@ -1099,10 +1099,10 @@ const updateCart = async (postData) => {
       return response;
     })
     .catch((response) => {
-      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @responseCode', {
+      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @errorCode', {
         '@action': action,
         '@message': response.error.message,
-        '@responseCode': response.error.error_code,
+        '@errorCode': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
       return response;
