@@ -17,7 +17,16 @@
           callback: function () {
             if (destination) {
               window.location.href = destination;
+              // Log the social login.
+              Drupal.alshayaLogger('notice', 'User performed social authentication on @authLink and redirected to @destination', {
+                '@destination': destination,
+                '@authLink': authLink,
+              });
             } else {
+              // Log the social login.
+              Drupal.alshayaLogger('warning', 'User performed social authentication on @authLink and failed.', {
+                '@authLink': authLink,
+              });
               window.location.reload();
             }
           }

@@ -10,3 +10,10 @@ clear_autofill:
   dependencies:
     - core/jquery
     - core/drupal
+
+user_action_logger:
+  js:
+    js/user_action_logger.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
