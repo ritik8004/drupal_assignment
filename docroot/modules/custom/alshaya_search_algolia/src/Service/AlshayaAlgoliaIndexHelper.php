@@ -860,7 +860,8 @@ class AlshayaAlgoliaIndexHelper {
    */
   public function getAlgoliaSwatchData(SKUInterface $sku): array {
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
-    $swatches = $this->skuImagesManager->getSwatchData($sku);
+    // Add context value for PLP to use in PLP related index data like swatches.
+    $swatches = $this->skuImagesManager->getSwatchData($sku, 'plp');
 
     if (empty($swatches) || empty($swatches['swatches'])) {
       return [];

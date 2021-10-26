@@ -192,7 +192,8 @@
       position: relative;
 
       .alshaya_search_mainimage {
-        height: auto;
+        height: 100%;
+        opacity: 1;
       }
     }
 
@@ -372,6 +373,10 @@
   opacity: 0;
   transition: opacity 0.2s ease-out;
   width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: $default_background_color;
 }
 
 .block-views-blockproduct-category-level-3-block-2 {
