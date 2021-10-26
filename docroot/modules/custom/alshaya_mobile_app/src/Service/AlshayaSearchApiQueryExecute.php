@@ -610,7 +610,7 @@ class AlshayaSearchApiQueryExecute {
     $facet_result = $this->prepareFacetData($result_set);
 
     // Prepare product data.
-    $product_data = isset($result_set['search_api_results']) ?? $this->prepareProductData($result_set);
+    $product_data = isset($result_set['search_api_results']) ? $this->prepareProductData($result_set) : '';
 
     // Process the price facet for special handling.
     // Get price facet key.
@@ -748,7 +748,7 @@ class AlshayaSearchApiQueryExecute {
         'key' => $key,
         'label' => $facet_block->label(),
         'weight' => $facet_block->getWeight(),
-        'options' => ($category_status) ?? $facet_option_data,
+        'options' => ($category_status) ? $facet_option_data : '',
       ];
     }
 
