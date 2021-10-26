@@ -9,6 +9,8 @@
       padding-#{$right}: 2.5rem;
       padding-top: 0.625rem;
       padding-bottom: 0.625rem;
+      text-transform: capitalize;
+      cursor: pointer;
 
       &.active {
         .config-number-wrapper {
@@ -26,7 +28,7 @@
 
       &:not(.active) {
         .config-name {
-          font-size: 1rem;
+          font-size: 0.875rem;
         }
       }
     }
@@ -146,8 +148,11 @@
           margin-bottom: 0;
         }
 
-        &.active {
+        &.active,
+        &:hover {
           border: 1px solid $sofa-sectional-active-border;
+          outline: 0.125rem solid $sofa-sectional-active-border;
+          outline-offset: -2px;
         }
 
         &.disabled {
@@ -175,15 +180,41 @@
           &:not(:first-child) {
             margin-#{$left}: 0;
           }
-
-          &.active {
-            border: 0.125rem solid $sofa-sectional-active-border;
-          }
         }
 
         @include breakpoint($tablet) {
           margin-bottom: 1.25rem;
           padding: 0.78125rem 0.9375rem;
+        }
+      }
+    }
+  }
+
+  .form-swatch-list-wrapper {
+    .Collapsible__trigger {
+      label:not(.active) {
+        .config-text-wrapper {
+          flex-direction: row;
+          justify-content: initial;
+          align-items: center;
+
+          .fabric-color-icon {
+            content: "";
+            background: url('#{$base_theme_img_directory_path}/icons/fabric-color-icon.svg') no-repeat;
+            background-size: contain;
+            display: inline-block;
+            height: 2.5rem;
+            width: 3.125rem;
+            margin: 0 0.625rem;
+          }
+        }
+      }
+
+      .active {
+        .config-text-wrapper {
+          .fabric-color-icon {
+            display: none;
+          }
         }
       }
     }
