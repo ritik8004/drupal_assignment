@@ -183,10 +183,10 @@ const logApiStats = (response) => {
     }
 
     const transferTime = Date.now() - response.config.headers.RequestTime;
-    logger.debug('Finished API request @url in @transferTime, ResponseCode: @code, Method: @method.', {
+    logger.debug('Finished API request @url in @transferTime, ResponseCode: @responseCode, Method: @method.', {
       '@url': response.config.url,
       '@transferTime': `${transferTime}ms`,
-      '@code': response.status,
+      '@responseCode': response.status,
       '@method': response.config.method,
     });
   } catch (error) {
@@ -215,8 +215,8 @@ const handleResponse = (apiResponse) => {
 
   // In case we don't receive any response data.
   if (typeof apiResponse.data === 'undefined') {
-    logger.warning('Error while doing MDC api. Response result is empty. Status code: @status', {
-      '@status': response.status,
+    logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
+      '@responseCode': response.status,
     });
 
     const error = {
@@ -276,8 +276,8 @@ const handleResponse = (apiResponse) => {
 
     // Check for empty resonse data.
     if (_isNull(apiResponse) || _isUndefined(apiResponse.data)) {
-      logger.warning('Error while doing MDC api. Response result is empty. Status code: @code', {
-        '@code': response.status,
+      logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
+        '@responseCode': response.status,
       });
       response.data.error_code = 500;
     } else if (apiResponse.status === 404
@@ -830,8 +830,8 @@ const getCart = async (force = false) => {
         || (hasValue(response.data) && response.data.error_code === 404)
         || (hasValue(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      logger.warning('getCart() returned error: @code.', {
-        '@code': response.data.error_code,
+      logger.warning('getCart() returned error: @errorCode.', {
+        '@errorCode': response.data.error_code,
       });
 
       clearInvalidCart();
@@ -1099,10 +1099,10 @@ const updateCart = async (postData) => {
       return response;
     })
     .catch((response) => {
-      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @code', {
+      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @errorCode', {
         '@action': action,
         '@message': response.error.message,
-        '@code': response.error.error_code,
+        '@errorCode': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
       return response;

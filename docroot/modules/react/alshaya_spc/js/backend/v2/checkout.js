@@ -1745,9 +1745,9 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @code.', {
+      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @responseCode.', {
         '@message': error.message,
-        '@code': error.status,
+        '@responseCode': error.status,
       });
 
       return {
@@ -2170,9 +2170,9 @@ window.commerceBackend.placeOrder = async (data) => {
       return { data: result };
     })
     .catch((response) => {
-      logger.error('Error while placing order. Error message: @message, Code: @code.', {
+      logger.error('Error while placing order. Error message: @message, Code: @errorCode.', {
         '@message': !_isEmpty(response.error) ? response.error.message : response,
-        '@code': !_isEmpty(response.error) ? response.error.error_code : '',
+        '@errorCode': !_isEmpty(response.error) ? response.error.error_code : '',
       });
 
       // @todo all the error handling.
