@@ -3,11 +3,11 @@
 namespace Drupal\alshaya_algolia_react\Services;
 
 use Drupal\alshaya_acm_product\SkuImagesHelper;
+use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaSortHelper;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
-use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -154,18 +154,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    */
   public function getAlgoliaReactCommonConfig(string $page_type, string $sub_page = '') {
     $lang = $this->languageManager->getCurrentLanguage()->getId();
-
-    $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
-    // Set Algolia index name from Drupal index eg: 01live_bbwae_en.
-    $index_name = $index['algolia_index_name'] . '_' . $lang;
-    // Get current index name based on page type.
-    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
-      $index = $this->configFactory->get('search_api.index.alshaya_algolia_product_list_index')->get('options');
-      // Set Algolia index name from Drupal index
-      // eg: 01live_bbwae_product_list.
-      $index_name = $index['algolia_index_name'];
-    }
-
+    // Get algolia index name.
+    $index_name = AlshayaAlgoliaSortHelper::getAlgoliaIndexName($lang, $page_type);
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     $currency = $this->configFactory->get('acq_commerce.currency');
     $product_category_settings = $this->configFactory->get('alshaya_acm_product_category.settings');
@@ -272,86 +262,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   }
 
   /**
-   * Get sort by list options to show.
-   *
-   * @param string $index_name
-   *   The algolia index to use.
-   * @param string $page_type
-   *   Page Type.
-   *
-   * @return array
-   *   The array of options with key and label.
-   */
-  protected function getSortByOptions($index_name, $page_type): array {
-    if ($page_type === 'search') {
-      $position = $this->configFactory->get('alshaya_search.settings');
-
-      $enabled_sorts = array_filter($position->get('sort_options'), function ($item) {
-        return ($item != '');
-      });
-
-      $labels = AlshayaDynamicConfigValueBase::schemaArrayToKeyValue(
-        (array) $position->get('sort_options_labels')
-      );
-
-    }
-    else {
-      $enabled_sorts = $this->plpSortOptions->getCurrentPagePlpSortOptions();
-
-      // Remove un-supported sorting options.
-      unset($enabled_sorts['stock_quantity']);
-
-      $labels = $this->plpSortLabels->getSortOptionsLabels();
-      $labels = $this->plpSortOptions->sortGivenOptions($labels);
-    }
-
-    $sort_items = [];
-    foreach ($labels as $label_key => $label_value) {
-      if (empty($label_value)) {
-        continue;
-      }
-
-      $sort_index_key = '';
-      [$sort_key, $sort_order] = preg_split('/\s+/', $label_key);
-
-      // We used different keys for listing and search.
-      // For now till we completely migrate we will need to do workaround to map
-      // them to match the search keys.
-      $sort_key_mapping = [
-        'name_1' => 'title',
-        'nid' => 'search_api_relevance',
-      ];
-
-      $index_sort_key = $sort_key_mapping[$sort_key] ?? $sort_key;
-
-      if ($index_sort_key == 'search_api_relevance') {
-        $sort_index_key = $index_name;
-      }
-      elseif (in_array($sort_key, $enabled_sorts)) {
-        $sort_index_key = $index_name . '_' . $index_sort_key . '_' . strtolower($sort_order);
-        // Get index name by page type.
-        if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
-          // Get sort index name for listing
-          // eg: 01live_bbwae_product_list_en_title_asc.
-          $sort_index_key = $index_name . '_'
-            . $this->languageManager->getCurrentLanguage()->getId() . '_'
-            . $index_sort_key . '_'
-            . strtolower($sort_order);
-        }
-      }
-
-      if (!empty($sort_index_key)) {
-        $sort_items[] = [
-          'value' => $sort_index_key,
-          'label' => $label_value,
-        ];
-      }
-
-    }
-    return $sort_items;
-  }
-
-  /**
    * Return filters to show for current site.
    *
    * The function gets all the filters for the existing search api
@@ -380,7 +290,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'label' => $this->t('Sort by'),
         'widget' => [
           'type' => 'sort_by',
-          'items' => $this->getSortByOptions($index_name, $page_type),
+          'items' => AlshayaAlgoliaSortHelper::getSortByOptions($index_name, $page_type),
         ],
         // We want to display filters on the first position.
         'weight' => -100,

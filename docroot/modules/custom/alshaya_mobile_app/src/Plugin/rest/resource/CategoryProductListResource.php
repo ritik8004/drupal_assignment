@@ -47,6 +47,11 @@ class CategoryProductListResource extends ResourceBase {
   const PARSE_MODE_CONJUNCTION = 'OR';
 
   /**
+   * Page Type.
+   */
+  const PAGE_TYPE = 'listing';
+
+  /**
    * Entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -244,7 +249,7 @@ class CategoryProductListResource extends ResourceBase {
     AlshayaRequestContextManager::updateDefaultContext('app');
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
+    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1', self::PAGE_TYPE);
 
     // Filter the empty products.
     // Array values being used to re-set the array index

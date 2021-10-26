@@ -48,6 +48,11 @@ class PromotionProductListResource extends ResourceBase {
   const NODE_BUNDLE = 'acq_promotion';
 
   /**
+   * Page Type.
+   */
+  const PAGE_TYPE = 'listing';
+
+  /**
    * Facet source ID.
    */
   const FACET_SOURCE_ID = 'search_api:views_block__alshaya_product_list__block_2';
@@ -226,7 +231,7 @@ class PromotionProductListResource extends ResourceBase {
 
       // Prepare response from result set.
       $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-      $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
+      $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2', self::PAGE_TYPE);
 
       // Filter the empty products.
       $response_data['products'] = array_filter($response_data['products']);
