@@ -43,22 +43,6 @@ export default class PaymentMethod extends React.Component {
   validateBeforePlaceOrder = async () => {
     const { method } = this.props;
 
-    const analytics = {};
-    if (typeof window.ga === 'function' && window.ga.loaded) {
-      analytics.clientId = window.ga.getAll()[0].get('clientId');
-      analytics.trackingId = window.ga.getAll()[0].get('trackingId');
-    }
-
-    const data = {
-      payment: {
-        method: method.code,
-        additional_data: {},
-        analytics,
-      },
-    };
-
-    await addPaymentMethodInCart('update payment', data);
-
     // Do additional process for some payment methods.
     if (method.code === 'checkout_com') {
       return this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
@@ -75,6 +59,28 @@ export default class PaymentMethod extends React.Component {
     if (method.code === 'checkout_com_upapi_applepay') {
       return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
     }
+
+    // Now update the payment method data in the cart.
+    // This is done so that if the site has switched from V1 to V2 for the
+    // commer backend and if a cart has payment method like checkoutcom KNET
+    // set, then the redirect url is set to the V1 middleware route, which is
+    // incorrect. So we update the payment method so that the proper V2 redirect
+    // URL is set.
+    const analytics = {};
+    if (typeof window.ga === 'function' && window.ga.loaded) {
+      analytics.clientId = window.ga.getAll()[0].get('clientId');
+      analytics.trackingId = window.ga.getAll()[0].get('trackingId');
+    }
+
+    const data = {
+      payment: {
+        method: method.code,
+        additional_data: {},
+        analytics,
+      },
+    };
+
+    await addPaymentMethodInCart('update payment', data);
 
     return true;
   };
