@@ -225,7 +225,7 @@ class CategoryProductListResource extends ResourceBase {
       $this->mobileAppUtility->throwException();
     }
     // Get the config value for not executing search query.
-    $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+    $algolia_config = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
 
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($id);
@@ -251,8 +251,11 @@ class CategoryProductListResource extends ResourceBase {
     // Filter the empty products.
     // Array values being used to re-set the array index
     // if there any empty item in b/w.
-    if ($algolia_listing_status) {
+    if ($algolia_config && !empty($response_data['products'])) {
       $response_data['products'] = array_values(array_filter($response_data['products']));
+    }
+    else {
+      unset($response_data['products']);
     }
 
     // Get sub categories for the current term.
@@ -368,7 +371,7 @@ class CategoryProductListResource extends ResourceBase {
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
       // Get the config value for not executing search query.
-      $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+      $algolia_config = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
       if ((AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) && (Settings::get('mobile_app_plp_index_new', FALSE))) {
         $langcode = 'en';
@@ -396,7 +399,7 @@ class CategoryProductListResource extends ResourceBase {
         'rule_contexts' => $term_details['ruleContext'],
       ];
       // Return only algolia data if the config value is set to false.
-      if (!$algolia_listing_status) {
+      if (!$algolia_config) {
         return $response;
       }
 

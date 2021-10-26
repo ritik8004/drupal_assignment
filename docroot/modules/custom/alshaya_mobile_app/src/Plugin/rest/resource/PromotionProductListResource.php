@@ -211,7 +211,7 @@ class PromotionProductListResource extends ResourceBase {
       }
 
       // Get the config value for not executing search query.
-      $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+      $algolia_config = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
 
       // Get language specific version of node.
       $node = $this->entityRepository->getTranslationFromContext($node, $this->languageManager->getCurrentLanguage()->getId());
@@ -232,8 +232,11 @@ class PromotionProductListResource extends ResourceBase {
       $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
 
       // Filter the empty products.
-      if ($algolia_listing_status) {
+      if ($algolia_config && !empty($response_data['products'])) {
         $response_data['products'] = array_filter($response_data['products']);
+      }
+      else {
+        unset($response_data['products']);
       }
       return (new ModifiedResourceResponse($response_data));
     }
@@ -283,7 +286,7 @@ class PromotionProductListResource extends ResourceBase {
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
       // Get the config value for not executing search query.
-      $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+      $algolia_config = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
 
       $response['algolia_data'] = [
         'filter_field' => 'promotion_nid',
@@ -292,7 +295,7 @@ class PromotionProductListResource extends ResourceBase {
       ];
 
       // Return only algolia data if the config value is set to false.
-      if (!$algolia_listing_status) {
+      if (!$algolia_config) {
         return $response;
       }
 

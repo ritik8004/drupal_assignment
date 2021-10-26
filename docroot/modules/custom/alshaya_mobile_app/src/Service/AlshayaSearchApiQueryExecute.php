@@ -589,8 +589,8 @@ class AlshayaSearchApiQueryExecute {
    *   Response array.
    */
   public function prepareResponseFromResult(array $result_set) {
-    $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
-    if (!$algolia_listing_status) {
+    $algolia_config = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+    if (!$algolia_config) {
       // Get all facets for the given facet source.
       $facets = $this->facetManager->getEnabledFacets();
       // Prepare an array of key/value where key will be the facet id and value
@@ -610,7 +610,7 @@ class AlshayaSearchApiQueryExecute {
     $facet_result = $this->prepareFacetData($result_set);
 
     // Prepare product data.
-    $product_data = isset($result_set['search_api_results']) ? $this->prepareProductData($result_set) : '';
+    $product_data = isset($result_set['search_api_results']) ? $this->prepareProductData($result_set) : [];
 
     // Process the price facet for special handling.
     // Get price facet key.
@@ -636,14 +636,6 @@ class AlshayaSearchApiQueryExecute {
     // Removing weight key as now no longer required.
     foreach ($facet_result as &$fr) {
       unset($fr['weight']);
-    }
-
-    if (!$algolia_listing_status) {
-      return [
-        'filters' => $facet_result,
-        'default_sort' => $this->defaultSort,
-        'total' => $this->getResultTotalCount(),
-      ];
     }
 
     // Prepare final result.
@@ -682,7 +674,7 @@ class AlshayaSearchApiQueryExecute {
    *   Facet data.
    */
   public function prepareFacetData(array $result_set) {
-    $algolia_listing_status = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+    $algolia_config = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
     $facets_data = $result_set['processed_facets'];
 
     // Prepare facet data first.
@@ -700,7 +692,7 @@ class AlshayaSearchApiQueryExecute {
       }
       // If no result available for a facet, skip that.
       $facet_results = $facet->getResults();
-      if (empty($facet_results) && $algolia_listing_status) {
+      if (empty($facet_results) && $algolia_config) {
         continue;
       }
 
@@ -748,7 +740,7 @@ class AlshayaSearchApiQueryExecute {
         'key' => $key,
         'label' => $facet_block->label(),
         'weight' => $facet_block->getWeight(),
-        'options' => ($algolia_listing_status) ? $facet_option_data : '',
+        'options' => ($algolia_config) ? $facet_option_data : [],
       ];
     }
 
