@@ -10,7 +10,7 @@
  */
 function _alshaya_aura_react_translations() {
   return [
-    'My AURA' => [
+    'My Aura' => [
       'ar' => 'حساب أورا الخاص بي',
     ],
     'Already an Aura member?' => [
