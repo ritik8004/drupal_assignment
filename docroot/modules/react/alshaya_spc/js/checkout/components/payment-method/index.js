@@ -40,8 +40,25 @@ export default class PaymentMethod extends React.Component {
     setUpapiApplePayCofig();
   }
 
-  validateBeforePlaceOrder = () => {
+  validateBeforePlaceOrder = async () => {
     const { method } = this.props;
+
+    const analytics = {};
+    if (typeof window.ga === 'function' && window.ga.loaded) {
+      analytics.clientId = window.ga.getAll()[0].get('clientId');
+      analytics.trackingId = window.ga.getAll()[0].get('trackingId');
+    }
+
+    const data = {
+      payment: {
+        method: method.code,
+        additional_data: {},
+        analytics,
+      },
+    };
+
+    await addPaymentMethodInCart('update payment', data);
+
     // Do additional process for some payment methods.
     if (method.code === 'checkout_com') {
       return this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
