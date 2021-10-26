@@ -466,8 +466,8 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
         return null;
       }
 
-      logger.error('Something happened in setting up the request that triggered an error.', {
-        '@error': error.message,
+      logger.error('Something happened in setting up the request that triggered an error: @message.', {
+        '@message': error.message,
         ...params,
       });
 
@@ -1276,8 +1276,8 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
     const response = await callMagentoApi(url, 'GET', {});
 
     if (!_isUndefined(response.data.error) && response.data.error) {
-      logger.error('Error in getting shipping methods for cart. Error: @error', {
-        '@error': response.data.error_message,
+      logger.error('Error in getting shipping methods for cart. Error: @message', {
+        '@message': response.data.error_message,
       });
 
       return getFormattedError(response.data.error_code, response.data.error_message);
