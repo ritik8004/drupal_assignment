@@ -88,6 +88,10 @@
         flex-wrap: wrap;
         justify-content: flex-end;
       }
+
+      .shipping-tags-second-row {
+        padding-#{$left}: 0.625rem;
+      }
     }
 
     .carrier-title {
