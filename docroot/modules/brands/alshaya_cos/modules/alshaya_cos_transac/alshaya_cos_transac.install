@@ -9,8 +9,8 @@
  * Implements hook_install().
  */
 function alshaya_cos_transac_install() {
-  // Install alshaya_algolia_react module.
-  \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
+  // Enable algolia as default search index.
+  \Drupal::service('module_installer')->install(['alshaya_search_algolia']);
 
   // Enable and set alshaya_cos as default theme and set the site logo,
   // favicon icon and email logo path.
@@ -138,27 +138,29 @@ function alshaya_cos_transac_install() {
  * Implements hook_modules_installed().
  */
 function alshaya_cos_transac_modules_installed($modules) {
-  if (in_array('alshaya_algolia_react', $modules)) {
-    // Hide grid toggle option on listing pages.
-    \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
-      ->set('hide_grid_toggle', true)
-      ->save();
-
-    // Reset region and weight for alshaya main menu block.
-    $weight = \Drupal::entityTypeManager()->getStorage('block')
-      ->load('alshayaalgoliareactautocomplete')->getWeight();
-
-    $weight = $weight - 1;
-    $block = \Drupal::entityTypeManager()->getStorage('block')
-      ->load('alshayamainmenu');
-    $block->setRegion('header');
-    $block->setWeight($weight);
-    $block->save();
-
-    $block = \Drupal::entityTypeManager()->getStorage('block')->load('branding');
-    $block->setWeight($weight - 1);
-    $block->save();
+  if (!in_array('alshaya_algolia_react', $modules)) {
+    return;
   }
+
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+    ->set('hide_grid_toggle', true)
+    ->save();
+
+  // Reset region and weight for alshaya main menu block.
+  $weight = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('alshayaalgoliareactautocomplete')->getWeight();
+
+  $weight = $weight - 1;
+  $block = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('alshayamainmenu');
+  $block->setRegion('header');
+  $block->setWeight($weight);
+  $block->save();
+
+  $block = \Drupal::entityTypeManager()->getStorage('block')->load('branding');
+  $block->setWeight($weight - 1);
+  $block->save();
 }
 
 /**
