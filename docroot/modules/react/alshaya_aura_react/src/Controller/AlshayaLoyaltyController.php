@@ -9,6 +9,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_aura_react\Helper\AuraHelper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\alshaya_aura_react\Helper\AuraApiHelper;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 
 /**
  * AlshayaLoyaltyController for loyalty club page.
@@ -38,6 +41,20 @@ class AlshayaLoyaltyController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * The api helper object.
+   *
+   * @var Drupal\alshaya_aura_react\Helper\AuraApiHelper
+   */
+  protected $apiHelper;
+
+  /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaLoyaltyController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
@@ -46,15 +63,23 @@ class AlshayaLoyaltyController extends ControllerBase {
    *   The aura helper service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param Drupal\alshaya_aura_react\Helper\AuraApiHelper $api_helper
+   *   Api helper object.
+   * @param Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The form builder.
    */
   public function __construct(
     MobileNumberUtilInterface $mobile_util,
     AuraHelper $aura_helper,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    AuraApiHelper $api_helper,
+    LanguageManagerInterface $language_manager
   ) {
     $this->mobileUtil = $mobile_util;
     $this->auraHelper = $aura_helper;
     $this->moduleHandler = $module_handler;
+    $this->apiHelper = $api_helper;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -64,7 +89,9 @@ class AlshayaLoyaltyController extends ControllerBase {
     return new static(
       $container->get('mobile_number.util'),
       $container->get('alshaya_aura_react.aura_helper'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_aura_react.aura_api_helper'),
+      $container->get('language_manager')
     );
   }
 
@@ -82,6 +109,10 @@ class AlshayaLoyaltyController extends ControllerBase {
         'title2' => $loyalty_benefits_config->get('loyalty_benefits_title2') ?? '',
       ],
       'loyaltyBenefitsContent' => $loyalty_benefits_content ? $loyalty_benefits_content['value'] : '',
+      'allBrands' => $this->apiHelper->getAuraApiConfig(
+        [AuraDictionaryApiConstants::APC_BRANDS],
+        $this->languageManager->getCurrentLanguage()->getId(),
+      )[AuraDictionaryApiConstants::APC_BRANDS],
       'config' => $this->auraHelper->getAuraConfig(),
     ];
 

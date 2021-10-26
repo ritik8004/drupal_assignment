@@ -20,6 +20,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     super(props);
     this.typeSelectRef = React.createRef();
     this.dateSelectRef = React.createRef();
+    this.brandSelectRef = React.createRef();
     this.state = {
       activity: null,
       dateFilterOptions: getTransactionDateOptions(),
@@ -105,6 +106,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     Object.entries(activity).forEach(([, transaction]) => {
       statement.push(
         <div className="statement-row" key={transaction.auraPoints + transaction.orderNo}>
+          <span className="brand-name">{transaction.brandName}</span>
           <span className="order-id">{transaction.orderNo}</span>
           <span className="date">{formatDate(transaction.date, 'DD-Mon-YYYY')}</span>
           <span className="amount">{`${transaction.currencyCode} ${transaction.orderTotal}`}</span>
@@ -128,6 +130,10 @@ class LoyaltyClubRewardsActivity extends React.Component {
     if (filterName === 'type') {
       this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
     }
+
+    if (filterName === 'brand') {
+      this.brandSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
+    }
   };
 
   onMenuClose = (filterName) => {
@@ -136,6 +142,9 @@ class LoyaltyClubRewardsActivity extends React.Component {
     }
     if (filterName === 'type') {
       this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
+    }
+    if (filterName === 'brand') {
+      this.brandSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
     }
   };
 
@@ -153,6 +162,15 @@ class LoyaltyClubRewardsActivity extends React.Component {
     const fromDate = formatDate(date, 'YYYY-MM-DD');
     const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD');
     const { type } = this.state;
+
+    this.fetchRewardActivity(fromDate, toDate, 0, type);
+  };
+
+  handleBrandChange = (selectedOption) => {
+    const { fromDate, toDate } = this.state;
+    const type = selectedOption.value !== 'all'
+      ? selectedOption.value
+      : '';
 
     this.fetchRewardActivity(fromDate, toDate, 0, type);
   };
@@ -204,11 +222,25 @@ class LoyaltyClubRewardsActivity extends React.Component {
             isSearchable={false}
             key="transaction-filter"
           />
+          <Select
+            ref={this.brandSelectRef}
+            classNamePrefix="spcAuraSelect"
+            className="reward-activity-filter transaction-brand-filter"
+            name="transactionBrandFilter"
+            onMenuOpen={() => this.onMenuOpen('brand')}
+            onMenuClose={() => this.onMenuClose('brand')}
+            options={transactionTypeOptions}
+            defaultValue={transactionTypeOptions[0]}
+            onChange={this.handleTypeChange}
+            isSearchable={false}
+            key="transaction-filter"
+          />
         </div>
         <div className="reward-activity-statement">
           {noStatement === false
           && (
             <div className="header-row">
+              <span className="date">{Drupal.t('Brand')}</span>
               <span className="order-id">{Drupal.t('Order No.')}</span>
               <span className="date">{Drupal.t('Date')}</span>
               <span className="amount">{Drupal.t('Order Total')}</span>

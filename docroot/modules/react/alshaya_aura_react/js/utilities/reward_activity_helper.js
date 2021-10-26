@@ -63,9 +63,23 @@ function getTransactionDateOptionsDefaultValue(fromDate) {
   return { value: formatedDate, label: formatedDate };
 }
 
+/**
+ * Utility function to get brand options.
+ */
+ function getTransactionBrandOptions() {
+  let brandOptions = '';
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'allBrands')) {
+      brandOptions = drupalSettings.aura.allBrands;
+  }
+
+  return brandOptions;
+}
+
 export {
   getTransactionTypeOptions,
   getTransactionDateOptions,
   formatDate,
   getTransactionDateOptionsDefaultValue,
+  getTransactionBrandOptions,
 };

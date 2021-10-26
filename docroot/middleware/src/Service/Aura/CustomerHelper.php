@@ -256,6 +256,7 @@ class CustomerHelper {
             'currencyCode' => $transaction['currency_code'],
             'channel' => $transaction['channel'],
             'auraPoints' => $transaction['points'],
+            'brandName' => $transaction['location_name'],
           ];
 
           if (!empty($transaction['points_balances'][0])) {

@@ -93,10 +93,10 @@ class AuraApiHelper {
       : AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;
 
     foreach ($auraApiConfig as $value) {
-      // Adding language code in cache key for tier names only
+      // Adding language code in cache key for tier names and brand names only
       // because for rest of the dictionary APIs, response is not
       // expected to change based on language.
-      $cache_key = $value === AuraDictionaryApiConstants::APC_TIER_TYPES
+      $cache_key = ($value === AuraDictionaryApiConstants::APC_TIER_TYPES || $value === AuraDictionaryApiConstants::APC_BRANDS)
         ? 'alshaya_aura_react:aura_api_configs:' . $langcode . ':' . $value
         : 'alshaya_aura_react:aura_api_configs:' . $value;
 
@@ -105,10 +105,10 @@ class AuraApiHelper {
         continue;
       }
 
-      // For tier mapping API, if langcode in the argument is different from
+      // For tier mapping and brand API, if langcode in the argument is different from
       // the request language then update context langcode for the API call.
       $resetStoreContext = FALSE;
-      if ($value === AuraDictionaryApiConstants::APC_TIER_TYPES
+      if (($value === AuraDictionaryApiConstants::APC_TIER_TYPES || $value === AuraDictionaryApiConstants::APC_BRANDS)
         && $langcode !== $this->languageManager->getCurrentLanguage()->getId()) {
         $this->apiWrapper->updateStoreContext($langcode);
         $resetStoreContext = TRUE;
@@ -130,9 +130,9 @@ class AuraApiHelper {
         continue;
       }
 
-      // Getting `code` and `value` keys for tier types api
+      // Getting `code` and `value` keys for tier types and brand api
       // and just value for others.
-      $data = ($value === AuraDictionaryApiConstants::APC_TIER_TYPES)
+      $data = ($value === AuraDictionaryApiConstants::APC_TIER_TYPES || $value === AuraDictionaryApiConstants::APC_BRANDS)
         ? array_column($response['items'], 'value', 'code')
         : array_column($response['items'], 'value');
 
