@@ -66,16 +66,7 @@ export default class PaymentMethod extends React.Component {
     // set, then the redirect url is set to the V1 middleware route, which is
     // incorrect. So we update the payment method so that the proper V2 redirect
     // URL is set.
-    const analytics = {};
-    const trackingIdEle = document.getElementById('spc-ga-tracking-id');
-    if (trackingIdEle) {
-      analytics.trackingId = trackingIdEle.value;
-    }
-    const clientIdEle = document.getElementById('spc-ga-client-id');
-    if (clientIdEle) {
-      analytics.clientId = clientIdEle.value;
-    }
-
+    const analytics = Drupal.alshayaSpc.getGAData();
     const data = {
       payment: {
         method: method.code,
@@ -83,7 +74,6 @@ export default class PaymentMethod extends React.Component {
         analytics,
       },
     };
-
     await addPaymentMethodInCart('update payment', data);
 
     return true;
