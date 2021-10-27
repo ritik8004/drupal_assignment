@@ -36,7 +36,7 @@ alshaya_aura_react.aura_loyalty_benefits_config:
     _permission: 'administer site configuration'
 
 alshaya_aura_react.guest_loyalty_club:
-  path: '/user/loyalty-club'
+  path: '/user/guest-loyalty-club'
   defaults:
     _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::loyaltyClubGuest'
     _title_callback: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::getLoyaltyClubTitle'

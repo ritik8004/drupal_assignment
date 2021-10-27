@@ -32,3 +32,9 @@
     display: none;
   }
 }
+
+.l-one--w.c-loyalty-club-page {
+  @include breakpoint($desktop) {
+    margin-top: 2.5rem;
+  }
+}
