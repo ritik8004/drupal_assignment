@@ -105,8 +105,9 @@ class AuraApiHelper {
         continue;
       }
 
-      // For tier mapping and brand API, if langcode in the argument is different from
-      // the request language then update context langcode for the API call.
+      // For tier mapping and brand API, if langcode in the argument is
+      // different from the request language then update context
+      // langcode for the API call.
       $resetStoreContext = FALSE;
       if (($value === AuraDictionaryApiConstants::APC_TIER_TYPES || $value === AuraDictionaryApiConstants::APC_BRANDS)
         && $langcode !== $this->languageManager->getCurrentLanguage()->getId()) {
