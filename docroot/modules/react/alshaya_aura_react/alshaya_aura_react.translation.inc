@@ -328,5 +328,17 @@ function _alshaya_aura_react_translations() {
     'Aura points can not be redeemed with cash on delivery.' => [
       'ar' => 'لا يمكن استبدال نقاط أورا عند استخدام خيار الدفع عند الاسلام.',
     ],
+    'Aura account number' => [
+      'ar' => 'رقم حساب أورا',
+    ],
+    'My tier' => [
+      'ar' => 'باقتي',
+    ],
+    'Points balance' => [
+      'ar' => 'رصيد النقاط',
+    ],
+    'Pending points' => [
+      'ar' => 'النقاط المعلقة',
+    ],
   ];
 }
