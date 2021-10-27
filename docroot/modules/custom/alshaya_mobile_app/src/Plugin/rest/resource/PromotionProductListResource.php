@@ -210,9 +210,6 @@ class PromotionProductListResource extends ResourceBase {
         $this->mobileAppUtility->throwException();
       }
 
-      // Get the config value for not executing search query.
-      $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
-
       // Get language specific version of node.
       $node = $this->entityRepository->getTranslationFromContext($node, $this->languageManager->getCurrentLanguage()->getId());
 
@@ -232,9 +229,7 @@ class PromotionProductListResource extends ResourceBase {
       $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
 
       // Filter the empty products.
-      if ($respond_algolia_data && !empty($response_data['products'])) {
-        $response_data['products'] = array_filter($response_data['products']);
-      }
+      $response_data['products'] = array_filter($response_data['products']);
 
       return (new ModifiedResourceResponse($response_data));
     }

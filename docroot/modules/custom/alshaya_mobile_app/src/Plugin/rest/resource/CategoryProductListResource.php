@@ -224,8 +224,6 @@ class CategoryProductListResource extends ResourceBase {
     if (alshaya_advanced_page_is_department_page($term->id())) {
       $this->mobileAppUtility->throwException();
     }
-    // Get the config value for not executing search query.
-    $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
 
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($id);
@@ -251,9 +249,7 @@ class CategoryProductListResource extends ResourceBase {
     // Filter the empty products.
     // Array values being used to re-set the array index
     // if there any empty item in b/w.
-    if ($respond_algolia_data && !empty($response_data['products'])) {
-      $response_data['products'] = array_values(array_filter($response_data['products']));
-    }
+    $response_data['products'] = array_values(array_filter($response_data['products']));
 
     // Get sub categories for the current term.
     $response_data['sub_categories'] = $this->getSubCategoryData($id);
