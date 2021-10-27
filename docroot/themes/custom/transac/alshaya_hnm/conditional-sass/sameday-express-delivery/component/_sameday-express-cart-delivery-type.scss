@@ -29,10 +29,19 @@
       .cart-shipping-method {
         .information-icon {
           &::after {
-            top: initial;
+            top: 0.125rem;
+
+            html[lang=ar] & {
+              top: -0.0625rem;
+            }
           }
         }
       }
+    }
+
+    .carrier-title {
+      padding-top: 0.0625rem;
+      padding-bottom: 0.0625rem;
     }
   }
 }

@@ -239,11 +239,7 @@ export default class PaymentMethods extends React.Component {
 
     showFullScreenLoader();
 
-    const analytics = {};
-    if (typeof window.ga === 'function' && window.ga.loaded) {
-      analytics.clientId = window.ga.getAll()[0].get('clientId');
-      analytics.trackingId = window.ga.getAll()[0].get('trackingId');
-    }
+    const analytics = Drupal.alshayaSpc.getGAData();
 
     const data = {
       payment: {

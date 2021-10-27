@@ -31,14 +31,13 @@ separately._
 * The lando package will have the compatible docker as well inside it.
 * Post installation, follow the recommendations in the [Performance](#Performance) section below.
 
-Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
-as per the instructions above.
-
 All steps are executed on your host OS.
 
   * `lando start` - this will configure and set up your containers and services.
   * `lando composer install` - This will install all the composer packages.
-  * `lando blt blt:init` - this will initialize BLT aliases, git hooks and settings.
+  * `lando create-databases` - This will create all the required databases.
+  * `lando blt blt:init:git-hooks` - this will initialize git hooks.
+  * `lando blt blt:init:settings` - this will initialize settings.
   * `lando blt frontend:setup` - see notes on BLT & NPM below
   * `lando blt frontend:build` - see notes on BLT & NPM below
   * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build. If you don't specify the
@@ -48,6 +47,12 @@ You should now be able to access the site in your browser at `https://<sitename>
 example: `https://mckw.alshaya.lndo.site/`
 
 Drush commands can be executed from your host OS using `lando drush -l <site_url>`.
+
+### Post Destroy / Starting fresh
+
+After every-time `lando destroy` is done we need to do following post `lando start`
+
+* `lando create-databases` - This will create all the required databases.
 
 ## Services
 
@@ -60,8 +65,10 @@ Having mysql exposed on localhost is useful for connecting to mysql from clients
 
 ### MySQL
 
-If you're adding new sites, as things stand, you'll need to add restart lando
-after adding the line to blt/alshaya_local_sites.yml file.
+If you're adding new sites
+* Add the new site as described in [README file](./README.md#create-a-new-site)
+* No need to rebuild like in vagrant
+* After adding entry in blt/alshaya_local_sites.yml just run `lando create-databases`
 
 ### Varnish
 
@@ -178,3 +185,12 @@ For reference:
 - https://docs.lando.dev/config/performance.html
 - https://github.com/lando/lando/issues/763
 
+## Text Editors
+### VS Code
+1. In the XDebug configuration, make sure you have the following
+```
+"port": 9003,
+"pathMappings": {
+  "/app/": "${workspaceFolder}"
+},
+```

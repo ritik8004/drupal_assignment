@@ -33,9 +33,9 @@ import {
 import {
   getApiEndpoint,
   isUserAuthenticated,
-  logger,
   getIp,
 } from './utility';
+import logger from '../../utilities/logger';
 import cartActions from '../../utilities/cart_actions';
 import {
   getPaymentMethods,
@@ -225,7 +225,7 @@ const getLastOrder = async (customerId) => {
     const order = await callMagentoApi(getApiEndpoint('getLastOrder'), 'GET', {});
     if (!hasValue(order.data) || hasValue(order.data.error)) {
       logger.warning('Error while fetching last order of customer. CustomerId: @customerId, Response: @response.', {
-        '@response': JSON.stringify(order.data),
+        '@response': JSON.stringify(order),
         '@customerId': customerId,
       });
 
@@ -288,7 +288,7 @@ const getDefaultPaymentFromOrder = async (order) => {
  * @returns {object|null}
  *   Returns the store data object if found else null.
  */
-const getSavedStoreData = (key) => {
+const getSavedDrupalStoreData = (key) => {
   const savedStoreData = getStorageInfo(key);
 
   if (savedStoreData !== null) {
@@ -311,7 +311,7 @@ const getSavedStoreData = (key) => {
  * @param {object} data
  *   The store data object.
  */
-const setStoreData = (key, data) => {
+const setDrupalStoreData = (key, data) => {
   // eslint-disable-next-line no-param-reassign
   data.created = new Date().getTime();
 
@@ -336,23 +336,28 @@ const getStoreInfo = async (storeInformation) => {
   }
 
   const storageKey = `storeInfo:${drupalSettings.path.currentLanguage}:${store.code}`;
-  let storeData = getSavedStoreData(storageKey);
+  let storeData = getSavedDrupalStoreData(storageKey);
+  let storeInfo = null;
 
   if (hasValue(storeData)) {
-    return storeData.data;
-  }
+    storeInfo = storeData.data;
+  } else {
+    storeData = {};
 
-  storeData = { data: {} };
+    // Fetch store info from Drupal.
+    const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
+    if (_isEmpty(response.data)
+      || (!_isUndefined(response.data.error) && response.data.error)
+    ) {
+      setDrupalStoreData(storageKey, storeData);
+      return null;
+    }
+    storeInfo = response.data;
 
-  // Fetch store info from Drupal.
-  const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-  if (_isEmpty(response.data)
-    || (!_isUndefined(response.data.error) && response.data.error)
-  ) {
-    setStoreData(storageKey, storeData);
-    return null;
+    // Set the Drupal store data into storage.
+    storeData.data = storeInfo;
+    setDrupalStoreData(storageKey, storeData);
   }
-  const storeInfo = response.data;
 
   // Get the complete data about the store by combining the received data from
   // Magento with the processed store data stored in Drupal.
@@ -382,8 +387,6 @@ const getStoreInfo = async (storeInformation) => {
     delete store.rnc_config;
   }
 
-  storeData.data = store;
-  setStoreData(storageKey, storeData);
   return store;
 };
 
@@ -1467,10 +1470,10 @@ const paymentUpdate = async (data) => {
   // Process payment data by paymentMethod.
   const processedData = processPaymentData(paymentData, params.payment.additional_data);
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
-    logger.warning('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
+    logger.warning('Error while processing payment data. Error message: @message cart: @cart payment method: @paymentMethod', {
       '@message': processedData.data.message,
       '@cart': JSON.stringify(await window.commerceBackend.getCart()),
-      '@method': paymentData.method,
+      '@paymentMethod': paymentData.method,
     });
     return processedData;
   }
@@ -1494,9 +1497,9 @@ const paymentUpdate = async (data) => {
   }
 
   const cartId = window.commerceBackend.getCartId();
-  logger.notice('Calling update payment for payment_update. Cart id: @cartId Method: @method Data: @data.', {
+  logger.notice('Calling update payment for payment_update. Cart id: @cartId Method: @paymentMethod Data: @data.', {
     '@cartId': cartId,
-    '@method': paymentData.method,
+    '@paymentMethod': paymentData.method,
     '@data': JSON.stringify(paymentData),
   });
 
@@ -1742,9 +1745,9 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @code.', {
+      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @responseCode.', {
         '@message': error.message,
-        '@code': error.status,
+        '@responseCode': error.status,
       });
 
       return {
@@ -2134,6 +2137,20 @@ window.commerceBackend.placeOrder = async (data) => {
       }
 
       const orderId = parseInt(response.data, 10);
+      if (!orderId) {
+        logger.error('Place order returned an empty order id. Response: @response Cart: @cart .', {
+          '@response': JSON.stringify(response),
+          '@cart': JSON.stringify(cart),
+        });
+
+        result.error = true;
+        result.error_code = 604;
+        result.success = false;
+        result.error_message = getDefaultErrorMessage();
+        return { data: result };
+      }
+
+      // Proceed with checkout.
       const secureOrderId = btoa(JSON.stringify({
         order_id: orderId,
         email: cart.data.cart.billing_address.email,
@@ -2144,18 +2161,18 @@ window.commerceBackend.placeOrder = async (data) => {
 
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
-      logger.notice('Order placed successfully. Cart: @cart OrderId: @orderId, Payment Method: @method.', {
+      logger.notice('Order placed successfully. Cart: @cart OrderId: @orderId, Payment Method: @paymentMethod.', {
         '@cart': JSON.stringify(cart),
         '@orderId': orderId,
-        '@method': data.data.paymentMethod.method,
+        '@paymentMethod': data.data.paymentMethod.method,
       });
 
       return { data: result };
     })
     .catch((response) => {
-      logger.error('Error while placing order. Error message: @message, Code: @code.', {
+      logger.error('Error while placing order. Error message: @message, Code: @errorCode.', {
         '@message': !_isEmpty(response.error) ? response.error.message : response,
-        '@code': !_isEmpty(response.error) ? response.error.error_code : '',
+        '@errorCode': !_isEmpty(response.error) ? response.error.error_code : '',
       });
 
       // @todo all the error handling.

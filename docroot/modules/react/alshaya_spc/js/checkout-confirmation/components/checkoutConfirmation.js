@@ -12,6 +12,7 @@ import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import hasValue from '../../../../js/utilities/conditionsUtility';
+import logger from '../../utilities/logger';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -50,6 +51,21 @@ class CheckoutConfirmation extends React.Component {
     stickySidebar();
   }
 
+  onPrintError = (errorLocation, error) => {
+    logger.warning('Error launching checkout print. ErrorLocation: @errorLocation, error: @message', {
+      '@errorLocation': errorLocation,
+      '@message': error,
+    });
+  };
+
+  onAfterPrint = () => {
+    // We want to log a alert when the print window was opened and closed successfully.
+    // User has either printed or cancelled from print window.
+    logger.debug('Checkout order print finished and print window closed. react-to-print: @hook called', {
+      '@hook': 'onAfterPrint',
+    });
+  };
+
   render() {
     const {
       items,
@@ -69,6 +85,8 @@ class CheckoutConfirmation extends React.Component {
           <ReactToPrint
             trigger={() => <div className="spc-checkout-confirmation-print-button">{Drupal.t('print confirmation')}</div>}
             content={() => this.componentRef}
+            onPrintError={(errorLocation, error) => this.onPrintError(errorLocation, error)}
+            onAfterPrint={() => this.onAfterPrint()}
           />
         </div>
         <div className="spc-main">

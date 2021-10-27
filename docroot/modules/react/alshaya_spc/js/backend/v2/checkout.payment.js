@@ -1,6 +1,7 @@
 import _isEmpty from 'lodash/isEmpty';
 import { callMagentoApi, getCart } from './common';
-import { getApiEndpoint, logger } from './utility';
+import { getApiEndpoint } from './utility';
+import logger from '../../utilities/logger';
 import StaticStorage from './staticStorage';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
@@ -124,9 +125,9 @@ window.commerceBackend.saveApplePayPayment = (data) => {
 
     return response;
   }).catch((response) => {
-    logger.error('Error while finalizing payment. Error message: @message, Code: @code.', {
+    logger.error('Error while finalizing payment. Error message: @message, Code: @errorCode.', {
       '@message': !_isEmpty(response.error) ? response.error.message : response,
-      '@code': !_isEmpty(response.error) ? response.error.error_code : '',
+      '@errorCode': !_isEmpty(response.error) ? response.error.error_code : '',
     });
 
     return response;

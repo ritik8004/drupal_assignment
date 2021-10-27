@@ -66,9 +66,7 @@
               </div>
             {% endfor %}
           </div>
-        {% endif %}
-
-        {% if content.same_day_delivery_text %}
+        {% elseif content.same_day_delivery_text %}
           <div class="same-day-delivery">
             <div class="same-day-content">
               <p>{{ content.same_day_delivery_text }}</p>
