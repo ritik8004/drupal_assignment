@@ -578,7 +578,7 @@ class AlshayaSearchApiQueryExecute {
    * @return array
    *   Processed facets array.
    */
-  public function getProcessedFacets(array $facets) {
+  protected function getProcessedFacets(array $facets) {
     // Prepare an array of key/value where key will be the facet id and value
     // will be the facet object.
     // Example - ['skus_sku_reference_final_price' => facet_object_here].
