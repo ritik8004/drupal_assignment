@@ -531,7 +531,7 @@ class CustomCommand extends BltTasks {
    * @aliases js:setup
    */
   public function assetsSetup() {
-    $this->taskExec('npm ci')
+    $this->taskExec('npm install')
       ->dir($this->getConfigValue('repo.root') . '/docroot/modules/custom')
       ->run();
   }
