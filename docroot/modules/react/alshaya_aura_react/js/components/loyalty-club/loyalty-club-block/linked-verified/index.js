@@ -44,7 +44,7 @@ const AuraMyAccountVerifiedUser = (props) => {
         <div className="aura-card-linked-verified-description">
           <div className="aura-tier">
             <label>{Drupal.t('My tier')}</label>
-            <span className="aura-blend">{`${Drupal.t('Aura ')} ${getAllAuraTier()[tier]}`}</span>
+            <span className="aura-blend">{ getAllAuraTier()[tier] }</span>
           </div>
           <div className="aura-points">
             <label>{Drupal.t('Points balance')}</label>
