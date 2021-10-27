@@ -2,6 +2,14 @@
   #alshaya-algolia-search {
     .c-content__region {
       width: 100%;
+
+      @include breakpoint($tablet) {
+        .alias--cart & {
+          width: 75.5%;
+          float: none;
+          margin: 0 auto;
+        }
+      }
     }
   }
 }
