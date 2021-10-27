@@ -36,7 +36,7 @@
       line-height: 1;
       margin: 0.3125rem 0;
 
-      &:hover {
+      &:not([disabled]):hover {
         color: $sofa-sectional-config-item-bg;
         background: $sofa-sectional-btn-border;
       }
@@ -46,6 +46,8 @@
       cursor: pointer;
       background: none !important;
       pointer-events: none;
+      color: $sofa-sectional-disabled-clear-option-text;
+      border-color: $sofa-sectional-disabled-clear-option-border;
     }
   }
 }

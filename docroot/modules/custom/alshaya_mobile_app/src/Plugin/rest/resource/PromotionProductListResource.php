@@ -278,6 +278,20 @@ class PromotionProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get the config value for not executing search query.
+      $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+
+      $response['algolia_data'] = [
+        'filter_field' => 'promotion_nid',
+        'filter_value' => $rule_id,
+        'rule_contexts' => '',
+      ];
+
+      // Return only algolia data if the config value is set to false.
+      if (!$respond_algolia_data) {
+        return $response;
+      }
+
       $index = $storage->load('alshaya_algolia_index');
 
       /** @var \Drupal\search_api\Query\QueryInterface $query */
@@ -310,11 +324,6 @@ class PromotionProductListResource extends ResourceBase {
 
       // Prepare and execute query and pass result set.
       $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
-      $response['algolia_data'] = [
-        'filter_field' => 'promotion_nid',
-        'filter_value' => $rule_id,
-        'rule_contexts' => '',
-      ];
 
       return $response;
     }

@@ -88,6 +88,10 @@
         flex-wrap: wrap;
         justify-content: flex-end;
       }
+
+      .shipping-tags-second-row:not(:empty) {
+        padding-#{$left}: 0.625rem;
+      }
     }
 
     .carrier-title {
@@ -230,18 +234,30 @@
 
     .delivery-area-label {
       display: flex;
-      justify-content: center;
+      white-space: nowrap;
+
+      @include breakpoint($only-mobile) {
+        justify-content: center;
+      }
 
       > div {
         display: flex;
         align-items: center;
         cursor: pointer;
+        position: relative;
       }
     }
 
     .delivery-area-name {
       font-family: $alshaya-bold;
       padding-#{$left}: 0.3125rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 10.3125rem;
+      display: block;
+      vertical-align: bottom;
+      padding-#{$right}: 1.25rem;
     }
 
     .delivery-area-button {
@@ -250,6 +266,10 @@
       @include icon('chevrondown') {
         font-size: 1.25rem;
         padding-#{$left}: 0.3125rem;
+        position: absolute;
+        top: 60%;
+        #{$right}: 0;
+        transform: translateY(-50%);
       }
     }
   }
