@@ -2,15 +2,12 @@
 
 # This file runs during the install phase in travis.
 
-nodeVersion=$(node --version)
-if [ "$nodeVersion" != "v8.12.0" ]
-then
-  echo "Installing node using nvm to match the expected version."
-  nvm install 8.12.0
-  nvm use 8.12.0
-else
-  echo "Not installing node again as version matches what we need."
-fi
+echo "Installing node using nvm to match the expected version."
+nvm install 8.12.0
+
+# Switch the node version every-time to make sure we have it setup properly.
+nvm use node
+nvm use 8.12.0
 
 npmVersion=$(npm --version)
 if [ "$npmVersion" != "6.13.4" ]
