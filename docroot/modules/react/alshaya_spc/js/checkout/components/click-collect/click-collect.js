@@ -424,9 +424,8 @@ class ClickCollect extends React.Component {
       this.toggleFullScreen(false);
     }
     // Log a debug to know what is the store code being passed.
-    logger.debug('Store code @code selected by the user. Store Code JSON: @storeCodeJson', {
-      '@code': storeCode,
-      '@storeCodeJson': JSON.stringify(storeCode),
+    logger.debug('Store code @storeCode selected by the user.', {
+      '@storeCode': storeCode,
     });
     // Find the store object with the given store-code from the store list.
     const store = _find(storeList, { code: storeCode });
