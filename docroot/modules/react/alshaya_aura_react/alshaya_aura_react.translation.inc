@@ -322,5 +322,8 @@ function _alshaya_aura_react_translations() {
     'Order No.' => [
       'ar' => 'رقم الطلب',
     ],
+    'Brand' => [
+      'ar' => 'Brand AR',
+    ],
   ];
 }

@@ -11,6 +11,7 @@ import {
   getTransactionDateOptions,
   formatDate,
   getTransactionDateOptionsDefaultValue,
+  getTransactionBrandOptions,
 } from '../../../utilities/reward_activity_helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import EmptyRewardActivity from './empty-reward-activity';
@@ -27,6 +28,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       fromDate: '',
       toDate: '',
       type: '',
+      brand: '',
       wait: true,
       noStatement: false,
     };
@@ -39,11 +41,11 @@ class LoyaltyClubRewardsActivity extends React.Component {
     this.fetchRewardActivity('', '', 1, '');
   }
 
-  fetchRewardActivity = (fromDate = '', toDate = '', maxResults = 0, type = '') => {
+  fetchRewardActivity = (fromDate = '', toDate = '', maxResults = 0, type = '', brand = '') => {
     addInlineLoader('.reward-activity');
     // API call to get reward activity for logged in users.
     const { rewardActivityTimeLimit } = getAuraConfig();
-    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${type}&duration=${rewardActivityTimeLimit}`;
+    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${type}&duration=${rewardActivityTimeLimit}&partnerCode=${brand}`;
     const apiData = getAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -56,6 +58,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
             fromDate,
             toDate,
             type,
+            brand,
           });
           this.setFromAndToDate(result.data.data);
 
@@ -167,12 +170,8 @@ class LoyaltyClubRewardsActivity extends React.Component {
   };
 
   handleBrandChange = (selectedOption) => {
-    const { fromDate, toDate } = this.state;
-    const type = selectedOption.value !== 'all'
-      ? selectedOption.value
-      : '';
-
-    this.fetchRewardActivity(fromDate, toDate, 0, type);
+    const { fromDate, toDate, type } = this.state;
+    this.fetchRewardActivity(fromDate, toDate, 0, type, selectedOption.value);
   };
 
   render() {
@@ -183,6 +182,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       fromDate,
     } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
+    const transactionBrandOptions = getTransactionBrandOptions();
 
     if (wait) {
       return (
@@ -220,7 +220,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
             defaultValue={transactionTypeOptions[0]}
             onChange={this.handleTypeChange}
             isSearchable={false}
-            key="transaction-filter"
+            key="type-filter"
           />
           <Select
             ref={this.brandSelectRef}
@@ -229,11 +229,11 @@ class LoyaltyClubRewardsActivity extends React.Component {
             name="transactionBrandFilter"
             onMenuOpen={() => this.onMenuOpen('brand')}
             onMenuClose={() => this.onMenuClose('brand')}
-            options={transactionTypeOptions}
-            defaultValue={transactionTypeOptions[0]}
-            onChange={this.handleTypeChange}
+            options={transactionBrandOptions}
+            defaultValue={transactionBrandOptions[0]}
+            onChange={this.handleBrandChange}
             isSearchable={false}
-            key="transaction-filter"
+            key="brand-filter"
           />
         </div>
         <div className="reward-activity-statement">

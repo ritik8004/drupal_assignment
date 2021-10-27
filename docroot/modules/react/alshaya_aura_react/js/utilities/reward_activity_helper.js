@@ -67,10 +67,15 @@ function getTransactionDateOptionsDefaultValue(fromDate) {
  * Utility function to get brand options.
  */
  function getTransactionBrandOptions() {
-  let brandOptions = '';
+  let brandOptions = [];
   if (typeof drupalSettings.aura !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura, 'allBrands')) {
-      brandOptions = drupalSettings.aura.allBrands;
+      Object.entries(drupalSettings.aura.allBrands).forEach(([key, value]) => {
+        brandOptions.push({
+            value: key,
+            label: value,
+          });
+      });
   }
 
   return brandOptions;

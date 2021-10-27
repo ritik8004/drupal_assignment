@@ -445,7 +445,8 @@ class LoyaltyCustomerController {
         $request_content['fromDate'] ?? '',
         $request_content['toDate'] ?? '',
         $request_content['maxResults'] ?? 0,
-        $request_content['channel'] ?? ''
+        $request_content['channel'] ?? '',
+        $request_content['partnerCode'] ?? ''
       );
 
       // Check if request is to get last transaction and response is not empty.
@@ -471,8 +472,14 @@ class LoyaltyCustomerController {
           $fromDate,
           $toDate,
           0,
-          $request_content['channel'] ?? ''
+          $request_content['channel'] ?? '',
+          $request_content['partnerCode'] ?? ''
         );
+      }
+
+      // Return if we already have error from API response.
+      if (!empty($data['error'])) {
+        return new JsonResponse($data);
       }
 
       $responseData = [
