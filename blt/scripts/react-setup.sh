@@ -45,6 +45,7 @@ fi
 if ([ $setup == 1 ])
 then
   cd $docrootDir/modules/react
+  npm rebuild
   npm install
 
   ignoredDirs=( "node_modules" "alshaya_react" "js" "dist" )
