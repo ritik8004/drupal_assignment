@@ -14,7 +14,7 @@
     align-items: center;
     display: inline-grid;
     font-family: $aura-regular;
-    grid-template-columns: 11.8125rem 9rem 8.5625rem 10.0625rem 7.1875rem 10.125rem;
+    grid-template-columns: 8rem 7.8125rem 8rem 6.5625rem 8.0625rem 6.1875rem 11.125rem;
 
     > span.order-id {
       overflow: hidden;
@@ -23,7 +23,7 @@
 
     > span.order-id,
     > span.date {
-      padding-#{$left}: 1.875rem;
+      padding-#{$left}: 0.5rem;
     }
 
     > span.amount,
@@ -33,7 +33,12 @@
     }
 
     > span.type {
-      padding-#{$left}: 2.625rem;
+      padding-#{$left}: 0.75rem;
+      text-align: $right;
+    }
+
+    > span.brand-name {
+      padding-#{$left}: 0.5rem;
     }
 
     > span.status {
