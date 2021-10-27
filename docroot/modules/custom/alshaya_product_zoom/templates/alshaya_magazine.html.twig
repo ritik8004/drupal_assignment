@@ -46,8 +46,8 @@
           {% if delivery_options %}
             <div class="express-delivery mobile">
               {% for key,delivery_option in delivery_options %}
-                <div class="express-delivery-text {{ key }}">
-                  <span>{{ delivery_option }}</span>
+                <div class="express-delivery-text {{ key }} {{ delivery_option.active_class }}">
+                  <span>{{ delivery_option.attr_label }}</span>
                 </div>
               {% endfor %}
             </div>

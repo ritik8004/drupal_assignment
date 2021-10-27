@@ -303,6 +303,10 @@
     border: 1px solid $spc-cart-express-delivery-border;
     width: 14.6875rem;
 
+    &.in-active {
+      display: none;
+    }
+
     &:nth-child(2) {
       margin-top: 0.625rem;
     }

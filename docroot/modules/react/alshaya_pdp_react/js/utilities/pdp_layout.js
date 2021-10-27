@@ -273,6 +273,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = variantInfo.promotionsRaw;
+          deliveryOptions = variantInfo.deliveryOptions;
           // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];

@@ -655,7 +655,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $delivery_options_order = $express_delivery_config->get('delivery_options_order');
             foreach ($delivery_options_order as $option) {
               if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
-                $build['delivery_options'][$option]['#markup'] = $delivery_options[$option]['label'];
+                $build['delivery_options'][$option]['active_class']['#markup'] = $delivery_options[$option]['status'];
+                $build['delivery_options'][$option]['attr_label']['#markup'] = $delivery_options[$option]['label'];
               }
             }
           }
@@ -2164,13 +2165,15 @@ function alshaya_acm_product_get_delivery_options($sku) {
     return NULL;
   }
 
+  $attr_same_day = $sku_entity->get('attr_same_day_delivery')->getString();
+  $attr_express = $sku_entity->get('attr_express_delivery')->getString();
   return [
     'same_day_delivery' => [
-      'status' => $sku_entity->get('attr_same_day_delivery')->getString(),
-      'label' => t('Same Day Delivery Available'), [], ['context' => 'sameday_delivery_label'],
+      'status' => $attr_same_day === '1' ? 'active' : 'in-active',
+      'label' => t('Same Day Delivery Available', [], ['context' => 'sameday_delivery_label']),
     ],
     'express_delivery' => [
-      'status' => $sku_entity->get('attr_express_delivery')->getString(),
+      'status' => $attr_express === '1' ? 'active' : 'in-active',
       'label' => t('Express Delivery Available', [], ['context' => 'express_delivery_label']),
     ],
   ];

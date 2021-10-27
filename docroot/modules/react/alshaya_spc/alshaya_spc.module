@@ -296,7 +296,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   // Use proxy on local env as here we don't have Cloudflare.
   if (Settings::get('env') === 'local') {
-    $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
+    $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
   }
 
   // Add the prefix for rest and store code.
@@ -384,6 +384,7 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   ];
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
   $build['#attached']['drupalSettings']['alshaya_spc']['address_fields'] = _alshaya_spc_get_address_fields();
+ // $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['delivery_options'] = alshaya_acm_product_get_delivery_options($sku->getSku());
 
   $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
 
@@ -407,4 +408,45 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   }
 
   unset($build['home_delivery']);
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ *
+ * Prepare delivery options for each variants.
+ */
+function alshaya_spc_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+
+  // Return if express delivery feature is disabled.
+  // And product is not buyable.
+  // Otherwise show express delivery options.
+  if (!($express_delivery_config->get('status'))) {
+    return;
+  }
+
+  if ($parent !== NULL && $parent instanceof SKUInterface) {
+    $parent_sku = $variant['parent_sku'];
+  }
+  // Below condition is only for simple products.
+  elseif (empty($parent)) {
+    $parent_sku = $variant['sku'];
+  }
+  else {
+    return;
+  }
+
+  $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku);
+
+  $variant['delivery_options'] = [];
+  if ($delivery_options !== NULL) {
+    // Show delivery options as per order defined in config.
+    $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+    foreach ($delivery_options_order as $option) {
+      if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
+        $variant['delivery_options'][$option]['active_class'] = $delivery_options[$option]['status'];
+        $variant['delivery_options'][$option]['attr_label'] = $delivery_options[$option]['label'];
+      }
+    }
+  }
 }
