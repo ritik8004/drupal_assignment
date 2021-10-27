@@ -35,7 +35,7 @@ const TotalLineItem = (props) => {
         {title}
         <ToolTip enable={tooltip}>{tooltipContent}</ToolTip>
       </span>
-      <span className="value"><PriceElement amount={value} /></span>
+      <span className="value"><PriceElement amount={value} showZeroValue /></span>
     </div>
   );
 };

@@ -99,7 +99,7 @@
       height: calc(100vh - 3.5rem);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       background: $aura-form-otp-background !important;
     }
 
@@ -111,6 +111,27 @@
 
     .aura-form-messages-container:not(:empty) {
       padding: 0;
+    }
+  }
+}
+
+// iOS - Safari.
+@include breakpoint($only-mobile) {
+  body.aura-enabled.safari {
+    #block-alshayamainmenu.aura-header-modal-open {
+      ul.menu__list.menu--one__list {
+        width: 100vw;
+        top: 0;
+        overflow: auto;
+
+        #aura-mobile-header-shop {
+          .popup-overlay.aura-modal-form {
+            &.otp-modal-overlay {
+              top: 0 !important;
+            }
+          }
+        }
+      }
     }
   }
 }

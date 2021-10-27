@@ -16,8 +16,15 @@
     }
   }
 
+  .spc-promotions {
+    &.free-gift-container {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   .spc-cart-shipping-methods {
-    padding-top: 1.5rem;
+    padding-top: 1.75rem;
   }
 
   .sku-cart-delivery-methods {
@@ -78,9 +85,11 @@
     @include breakpoint($desktop) {
       .shipping-tags-first-row {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
       }
 
-      .shipping-tags-second-row {
+      .shipping-tags-second-row:not(:empty) {
         padding-#{$left}: 0.625rem;
       }
     }
@@ -112,6 +121,11 @@
       padding-#{$left}: 0.625rem;
       position: relative;
 
+      @include breakpoint($desktop) {
+        flex-shrink: 0;
+        margin-bottom: 0.9375rem;
+      }
+
       &:first-child {
         padding-#{$left}: 0;
       }
@@ -141,15 +155,17 @@
           .method-title {
             display: block;
             position: absolute;
-            bottom: 100%;
+            bottom: 0.75rem;
             border: 1px solid $spc-cart-delivery-info-border;
-            padding: 0.5rem;
+            padding: 0.125rem 0.5rem 0.125rem 0.5625rem;
             background: white;
-            min-width: 6.875rem;
+            max-width: 9rem;
+            width: 200%;
             z-index: 2;
             transform: translateY(-0.9375rem);
             #{$right}: -0.3125rem;
-            border-radius: 0.125rem;
+            border-radius: 0.25rem;
+            text-align: center;
 
             &::before {
               content: '';
@@ -218,18 +234,30 @@
 
     .delivery-area-label {
       display: flex;
-      justify-content: center;
+      white-space: nowrap;
+
+      @include breakpoint($only-mobile) {
+        justify-content: center;
+      }
 
       > div {
         display: flex;
         align-items: center;
         cursor: pointer;
+        position: relative;
       }
     }
 
     .delivery-area-name {
       font-family: $alshaya-bold;
       padding-#{$left}: 0.3125rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 10.3125rem;
+      display: block;
+      vertical-align: bottom;
+      padding-#{$right}: 1.25rem;
     }
 
     .delivery-area-button {
@@ -238,6 +266,10 @@
       @include icon('chevrondown') {
         font-size: 1.25rem;
         padding-#{$left}: 0.3125rem;
+        position: absolute;
+        top: 60%;
+        #{$right}: 0;
+        transform: translateY(-50%);
       }
     }
   }

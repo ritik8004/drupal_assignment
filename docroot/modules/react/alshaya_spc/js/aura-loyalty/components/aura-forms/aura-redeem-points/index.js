@@ -7,7 +7,7 @@ import {
   removeError,
 } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
-import { redeemAuraPoints } from '../../utilities/checkout_helper';
+import { redeemAuraPoints, isUnsupportedPaymentMethod } from '../../utilities/checkout_helper';
 import {
   getUserDetails,
   getPointToPriceRatio,
@@ -58,6 +58,7 @@ class AuraFormRedeemPoints extends React.Component {
 
   // Set points and money in state to prefill redemption input elements.
   updatePointsAndMoney = () => {
+    removeError('spc-aura-link-api-response-message');
     const { totals } = this.props;
 
     // If amount paid with aura is not present in cart totals, we calculate
@@ -250,11 +251,16 @@ class AuraFormRedeemPoints extends React.Component {
     } = this.state;
 
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
-
-    const { totals } = this.props;
+    const { totals, paymentMethodInCart } = this.props;
+    const disableRedemption = (isUnsupportedPaymentMethod(paymentMethodInCart) === true)
+      ? true
+      : !enableSubmit;
 
     return (
-      <div className="spc-aura-redeem-points-form-wrapper">
+      <div className={disableRedemption
+        ? 'spc-aura-redeem-points-form-wrapper in-active'
+        : 'spc-aura-redeem-points-form-wrapper'}
+      >
         <span className="label">{ getStringMessage('checkout_use_your_points') }</span>
         <div className="form-items">
           <div className="inputs">
@@ -264,6 +270,7 @@ class AuraFormRedeemPoints extends React.Component {
                 placeholder="0"
                 onChangeCallback={this.convertPointsToMoney}
                 value={points}
+                disabled={disableRedemption}
               />
               <span className="spc-aura-redeem-points-separator">=</span>
               <AuraRedeemPointsTextField
@@ -283,7 +290,7 @@ class AuraFormRedeemPoints extends React.Component {
               type="submit"
               className="spc-aura-redeem-form-submit spc-aura-button"
               onClick={() => this.redeemPoints()}
-              disabled={!enableSubmit}
+              disabled={disableRedemption}
             >
               { getStringMessage('checkout_use_points') }
             </button>
@@ -301,6 +308,8 @@ class AuraFormRedeemPoints extends React.Component {
         <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
         {totals.balancePayable <= 0
           && <span id="payment-method-aura_payment" />}
+        {disableRedemption && paymentMethodInCart === 'cashondelivery'
+          && <div className="spc-aura-cod-disabled-message">{Drupal.t('Aura points can not be redeemed with cash on delivery.')}</div>}
       </div>
     );
   }

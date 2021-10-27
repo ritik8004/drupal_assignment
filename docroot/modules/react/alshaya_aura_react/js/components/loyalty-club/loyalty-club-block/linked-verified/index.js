@@ -28,7 +28,7 @@ const AuraMyAccountVerifiedUser = (props) => {
           <div className="aura-user-name">
             { profileInfo.profileName }
             <div className="aura-card-number">
-              <span>{Drupal.t('Card number')}</span>
+              <span>{Drupal.t('Aura account number')}</span>
               <span>
                 <Cleave
                   name="aura-my-account-user-card"
@@ -43,16 +43,16 @@ const AuraMyAccountVerifiedUser = (props) => {
         </div>
         <div className="aura-card-linked-verified-description">
           <div className="aura-tier">
-            <label>{Drupal.t('Status')}</label>
+            <label>{Drupal.t('My tier')}</label>
             <span className="aura-blend">{ getAllAuraTier()[tier] }</span>
           </div>
           <div className="aura-points">
-            <label>{Drupal.t('Point balance')}</label>
+            <label>{Drupal.t('Points balance')}</label>
             <span className="aura-blend">{ `${points} ${Drupal.t('pts')}`}</span>
           </div>
           <div className="aura-points-on-hold">
             <label>
-              {Drupal.t('Points on hold')}
+              {Drupal.t('Pending points')}
               <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
             </label>
             <span className="aura-blend">{ `${pointsOnHold} ${Drupal.t('pts')}`}</span>

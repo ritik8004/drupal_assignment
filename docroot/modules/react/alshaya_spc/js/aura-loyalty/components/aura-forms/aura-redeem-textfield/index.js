@@ -9,6 +9,7 @@ const AuraRedeemPointsTextField = (props) => {
     currencyCode,
     type,
     value,
+    disabled,
   } = props;
 
   if (type === 'money') {
@@ -45,6 +46,7 @@ const AuraRedeemPointsTextField = (props) => {
         type="text"
         onChange={(e) => onChangeCallback(e)}
         value={value || ''}
+        disabled={disabled}
       />
     </div>
   );

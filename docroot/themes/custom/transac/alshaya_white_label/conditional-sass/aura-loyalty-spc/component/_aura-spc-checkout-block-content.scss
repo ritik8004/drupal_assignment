@@ -293,4 +293,23 @@
       margin-top: 5px;
     }
   }
+
+  .spc-aura-redeem-points-form-wrapper.in-active {
+    .label,
+    .spc-aura-redeem-points-separator {
+      color: $aura-spc-rewards-block-disabled-elements;
+    }
+
+    input:disabled {
+      color: $aura-spc-rewards-block-disabled-elements;
+      border-color: $aura-spc-rewards-block-disabled-elements;
+      background: none;
+    }
+
+    .spc-aura-cod-disabled-message {
+      color: $aura-spc-cod-disabled-text;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+    }
+  }
 }

@@ -222,9 +222,10 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     $customer = user_load_by_mail($order['email']);
 
     // Add success message in logs.
-    $this->logger->info('Placed order. Order id: @order_id. Payment method: @method', [
+    $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
       '@order_id' => $order['order_id'],
       '@method' => $payment_method,
+      '@cart_id' => $order['quote_id'],
     ]);
 
     if ($customer instanceof UserInterface) {

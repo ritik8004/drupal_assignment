@@ -149,6 +149,13 @@ class AuraCartRewards extends React.Component {
       );
     }
 
+    // Get price points from total without delivery charges.
+    let price = 0;
+    if (typeof totals.base_grand_total_without_surcharge !== 'undefined'
+      && typeof totals.shipping_incl_tax !== 'undefined') {
+      price = totals.base_grand_total_without_surcharge - totals.shipping_incl_tax;
+    }
+
     return (
       <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
@@ -158,7 +165,7 @@ class AuraCartRewards extends React.Component {
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
           <AuraNotLinkedNoData
-            price={totals.base_grand_total_without_surcharge}
+            price={price}
             loyaltyStatus={loyaltyStatus}
           />
         </ConditionalView>
@@ -166,7 +173,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Linked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
           <AuraLinkedVerified
-            price={totals.base_grand_total_without_surcharge}
+            price={price}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
             loyaltyStatus={loyaltyStatus}
@@ -176,7 +183,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Linked Loyalty Card - Pending Enrollment */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
           <AuraLinkedNotVerified
-            price={totals.base_grand_total_without_surcharge}
+            price={price}
             loyaltyStatus={loyaltyStatus}
           />
         </ConditionalView>
@@ -184,7 +191,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Unlinked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
           <AuraNotLinkedData
-            price={totals.base_grand_total_without_surcharge}
+            price={price}
             cardNumber={cardNumber}
             loyaltyStatus={loyaltyStatus}
           />
