@@ -63,7 +63,7 @@ class SignUpHeader extends React.Component {
             <div className="aura-popup-body desktop-only">
               <p>{Drupal.t('Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.')}</p>
               <a
-                href={headerLearnMoreLink}
+                href={Drupal.url(headerLearnMoreLink)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="learn-more"

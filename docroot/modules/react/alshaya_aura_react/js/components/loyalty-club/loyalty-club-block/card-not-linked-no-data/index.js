@@ -79,6 +79,8 @@ class AuraMyAccountNoLinkedCard extends React.Component {
       isLinkCardModalOpen,
     } = this.state;
 
+    const isUserAuthenticated = Boolean(drupalSettings.userDetails.customerId);
+
     return (
       <div className="aura-myaccount-no-linked-card-wrapper no-card-found fadeInUp">
         <div className="aura-logo">
@@ -90,18 +92,24 @@ class AuraMyAccountNoLinkedCard extends React.Component {
           </ConditionalView>
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
-          <div className="aura-myaccount-no-linked-card-title">
-            { Drupal.t('Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits.') }
+          <div className="banner-title">
+            <p>
+              <strong>
+                { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
+              </strong>
+            </p>
           </div>
-          <div className="link-your-card">
-            { Drupal.t('Already an Aura member?') }
-            <div
-              className="btn"
-              onClick={() => this.openLinkCardModal()}
-            >
-              { Drupal.t('Link your account') }
+          <ConditionalView condition={isUserAuthenticated}>
+            <div className="link-your-card">
+              { Drupal.t('Already AURA Member?') }
+              <div
+                className="btn"
+                onClick={() => this.openLinkCardModal()}
+              >
+                { Drupal.t('Link your card') }
+              </div>
             </div>
-          </div>
+          </ConditionalView>
           <div className="sign-up">
             { Drupal.t('Ready to be rewarded?') }
             <div
