@@ -185,7 +185,7 @@ const logApiStats = (response) => {
     const transferTime = Date.now() - response.config.headers.RequestTime;
     logger.debug('Finished API request @url in @transferTime, ResponseCode: @responseCode, Method: @method.', {
       '@url': response.config.url,
-      '@transferTime': `${transferTime}ms`,
+      '@transferTime': transferTime,
       '@responseCode': response.status,
       '@method': response.config.method,
     });
