@@ -746,7 +746,7 @@ class AlshayaSearchApiQueryExecute {
         'key' => $key,
         'label' => $facet_block->label(),
         'weight' => $facet_block->getWeight(),
-        'options' => ($respond_algolia_data) ? $facet_option_data : [],
+        'options' => $facet_option_data,
       ];
     }
 
