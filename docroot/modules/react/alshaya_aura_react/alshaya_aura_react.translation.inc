@@ -323,7 +323,13 @@ function _alshaya_aura_react_translations() {
       'ar' => 'رقم الطلب',
     ],
     'Brand' => [
-      'ar' => 'Brand AR',
+      'ar' => 'الماركة',
+    ],
+    'Points Earned' => [
+      'ar' => 'Points Earned AR',
+    ],
+    'Points Redeemed' => [
+      'ar' => 'Points Redeemed AR',
     ],
   ];
 }

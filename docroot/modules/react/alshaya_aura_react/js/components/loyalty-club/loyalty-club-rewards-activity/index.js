@@ -108,7 +108,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     Object.entries(activity).forEach(([, transaction]) => {
       statement.push(
-        <div className="statement-row" key={transaction.auraPoints + transaction.orderNo}>
+        <div className="statement-row" key={transaction.auraPoints + transaction.orderNo + transaction.channel + transaction.date}>
           <span className="brand-name">{transaction.brandName}</span>
           <span className="order-id">{transaction.orderNo}</span>
           <span className="date">{formatDate(transaction.date, 'DD-Mon-YYYY')}</span>
@@ -152,21 +152,21 @@ class LoyaltyClubRewardsActivity extends React.Component {
   };
 
   handleTypeChange = (selectedOption) => {
-    const { fromDate, toDate } = this.state;
+    const { fromDate, toDate, brand } = this.state;
     const type = selectedOption.value !== 'all'
       ? selectedOption.value
       : '';
 
-    this.fetchRewardActivity(fromDate, toDate, 0, type);
+    this.fetchRewardActivity(fromDate, toDate, 0, type, brand);
   };
 
   handleDateChange = (selectedOption) => {
     const date = new Date(selectedOption.value);
     const fromDate = formatDate(date, 'YYYY-MM-DD');
     const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD');
-    const { type } = this.state;
+    const { type, brand } = this.state;
 
-    this.fetchRewardActivity(fromDate, toDate, 0, type);
+    this.fetchRewardActivity(fromDate, toDate, 0, type, brand);
   };
 
   handleBrandChange = (selectedOption) => {
