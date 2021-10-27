@@ -72,6 +72,8 @@ cache:
     - "docroot/profiles/contrib"
     - "docroot/core"
     - "docroot/libraries"
+    - "docroot/modules/custom/node_modules"
+    - "docroot/modules/react/node_modules"
     - "docroot/themes/custom/amp/node_modules"
     - "docroot/themes/custom/non_transac/node_modules"
     - "docroot/themes/custom/transac/node_modules"
