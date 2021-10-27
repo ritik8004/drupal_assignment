@@ -16,7 +16,6 @@ then
   npm i -g npm@6.13.4
 else
   echo "Not installing NPM again as version matches what we need."
-  npm rebuild
 fi
 
 gulpExists=$(which gulp)
