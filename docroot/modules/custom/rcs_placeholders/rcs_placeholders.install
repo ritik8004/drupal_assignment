@@ -11,18 +11,29 @@ use Drupal\Core\Url;
  * Create the placeholder category term, product node and main menu links.
  */
 function rcs_placeholders_install() {
+  // This will be used for creating entity translations. Since default 'en' will
+  // be created first, we unset it from the array.
+  $languages = \Drupal::languageManager()->getLanguages();
+  unset($languages['en']);
+
   $config = \Drupal::service('config.factory')->getEditable('rcs_placeholders.settings');
 
   // Placeholder category term.
-  $term = Term::create(array(
+  $term = Drupal\taxonomy\Entity\Term::create(array(
     'parent' => array(),
-    'name' => '#rcs.category.name#',
+    'name' => '#rcs.category.name1235#',
     'vid' => 'rcs_category',
   ));
   $term->save();
 
-  $config->set('category.placeholder_tid', $term->id())->save();
+  foreach ($languages as $langcode => $language) {
+    $translated_term = $term->addTranslation($langcode, [
+      'name' => '#rcs.category.name#',
+    ]);
+    $translated_term->save();
+  }
 
+  $config->set('category.placeholder_tid', $term->id())->save();
 
   // Placeholder product node.
   $node = Node::create(array(
@@ -30,6 +41,13 @@ function rcs_placeholders_install() {
     'title' => '#rcs.product.name#',
   ));
   $node->save();
+
+  foreach ($languages as $langcode => $language) {
+    $translated_node = $node->addTranslation($langcode, [
+      'title' => '#rcs.product.name#',
+    ]);
+    $translated_node->save();
+  }
 
   $config->set('product.placeholder_nid', $node->id())->save();
 
@@ -39,6 +57,13 @@ function rcs_placeholders_install() {
     'title' => '#rcs.promotion.name#',
   ));
   $node->save();
+
+  foreach ($languages as $langcode => $language) {
+    $translated_node = $node->addTranslation($langcode, [
+      'title' => '#rcs.promotion.name#',
+    ]);
+    $translated_node->save();
+  }
 
   $config->set('promotion.placeholder_nid', $node->id())->save();
 
