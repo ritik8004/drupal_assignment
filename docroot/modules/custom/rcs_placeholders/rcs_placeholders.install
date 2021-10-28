@@ -20,7 +20,7 @@ function rcs_placeholders_install() {
   $config = \Drupal::service('config.factory')->getEditable('rcs_placeholders.settings');
 
   // Placeholder category term.
-  $term = Drupal\taxonomy\Entity\Term::create(array(
+  $term = Term::create(array(
     'parent' => array(),
     'name' => '#rcs.category.name#',
     'vid' => 'rcs_category',
