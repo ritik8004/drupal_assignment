@@ -80,7 +80,12 @@ class AlshayaSofaSectionalConfigForm extends ConfigFormBase {
 
     $options = [];
     foreach ($terms as $term) {
-      $options[$term->id()] = $term->getName();
+      $option_label = $term->getName();
+      // Check if commerce ID is available append it with label.
+      if ($term->get('field_commerce_id')->getString()) {
+        $option_label .= ' - (' . $term->get('field_commerce_id')->getString() . ')';
+      }
+      $options[$term->id()] = $option_label;
     }
 
     $form['sofa_sectional_status'] = [
@@ -93,6 +98,7 @@ class AlshayaSofaSectionalConfigForm extends ConfigFormBase {
       '#type' => 'select',
       '#multiple' => TRUE,
       '#title' => $this->t('Select Categories'),
+      '#description' => $this->t('Select categories for those products you want to show sofa and sectional form. Category Ids showing above are Magento category IDs.'),
       '#options' => $options,
       '#default_value' => $this->config('alshaya_sofa_sectional.settings')->get('category_ids'),
       '#size' => 10,
