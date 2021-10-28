@@ -47,10 +47,6 @@
           .information-icon {
             @include icon(infomation, after) {
               top: 0.1875rem;
-
-              html[lang=ar] & {
-                top: 0.125rem;
-              }
             }
 
             &:hover {
@@ -65,6 +61,11 @@
       .carrier-title {
         display: inline-block;
         white-space: nowrap;
+
+        html[lang=ar] & {
+          padding-top: 0.1875rem;
+          padding-bottom: 0.25rem;
+        }
       }
 
       .carrier-title,
