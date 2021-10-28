@@ -211,8 +211,8 @@ function _alshaya_aura_react_translations() {
     'Balance Payable' => [
       'ar' => 'الرصيد المستحق الدفع',
     ],
-    'To enable auto accrual and rewards redemption' => [
-      'ar' => 'لتفعيل النقاط المستحقة واسترداد المكافآت',
+    'To automatically collect and spend points on all your purchases, please ' => [
+      'ar' => 'لجمع النقاط وإنفاقها بشكل تلقائي في جميع عمليات الشراء، الرجاء',
     ],
     'link your account now' => [
       'ar' => 'قم بربط البطاقة الآن',
