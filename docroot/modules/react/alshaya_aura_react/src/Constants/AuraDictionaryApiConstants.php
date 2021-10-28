@@ -32,6 +32,11 @@ final class AuraDictionaryApiConstants {
   const APC_TIER_TYPES = 'APC_TIER_TYPES';
 
   /**
+   * Aura brands constant.
+   */
+  const APC_BRANDS = 'APC_BRANDS';
+
+  /**
    * Contains all the dictionary api keys constants in the class.
    */
   const ALL_DICTIONARY_API_CONSTANTS = [
@@ -40,6 +45,7 @@ final class AuraDictionaryApiConstants {
     'RECOGNITION_ACCRUAL_RATIO' => self::RECOGNITION_ACCRUAL_RATIO,
     'EXT_PHONE_PREFIX' => self::EXT_PHONE_PREFIX,
     'APC_TIER_TYPES' => self::APC_TIER_TYPES,
+    'APC_BRANDS' => self::APC_BRANDS,
   ];
 
 }

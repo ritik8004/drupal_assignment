@@ -11,6 +11,7 @@ import {
   getTransactionDateOptions,
   formatDate,
   getTransactionDateOptionsDefaultValue,
+  getTransactionBrandOptions,
 } from '../../../utilities/reward_activity_helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import EmptyRewardActivity from './empty-reward-activity';
@@ -20,12 +21,14 @@ class LoyaltyClubRewardsActivity extends React.Component {
     super(props);
     this.typeSelectRef = React.createRef();
     this.dateSelectRef = React.createRef();
+    this.brandSelectRef = React.createRef();
     this.state = {
       activity: null,
       dateFilterOptions: getTransactionDateOptions(),
       fromDate: '',
       toDate: '',
       type: '',
+      brand: '',
       wait: true,
       noStatement: false,
     };
@@ -38,11 +41,11 @@ class LoyaltyClubRewardsActivity extends React.Component {
     this.fetchRewardActivity('', '', 1, '');
   }
 
-  fetchRewardActivity = (fromDate = '', toDate = '', maxResults = 0, type = '') => {
+  fetchRewardActivity = (fromDate = '', toDate = '', maxResults = 0, type = '', brand = '') => {
     addInlineLoader('.reward-activity');
     // API call to get reward activity for logged in users.
     const { rewardActivityTimeLimit } = getAuraConfig();
-    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${type}&duration=${rewardActivityTimeLimit}`;
+    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${type}&duration=${rewardActivityTimeLimit}&partnerCode=${brand}`;
     const apiData = getAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
@@ -55,6 +58,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
             fromDate,
             toDate,
             type,
+            brand,
           });
           this.setFromAndToDate(result.data.data);
 
@@ -104,7 +108,8 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     Object.entries(activity).forEach(([, transaction]) => {
       statement.push(
-        <div className="statement-row" key={transaction.auraPoints + transaction.orderNo}>
+        <div className="statement-row" key={transaction.auraPoints + transaction.orderNo + transaction.channel + transaction.date}>
+          <span className="brand-name">{transaction.brandName}</span>
           <span className="order-id">{transaction.orderNo}</span>
           <span className="date">{formatDate(transaction.date, 'DD-Mon-YYYY')}</span>
           <span className="amount">{`${transaction.currencyCode} ${transaction.orderTotal}`}</span>
@@ -128,6 +133,10 @@ class LoyaltyClubRewardsActivity extends React.Component {
     if (filterName === 'type') {
       this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
     }
+
+    if (filterName === 'brand') {
+      this.brandSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
+    }
   };
 
   onMenuClose = (filterName) => {
@@ -137,24 +146,32 @@ class LoyaltyClubRewardsActivity extends React.Component {
     if (filterName === 'type') {
       this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
     }
+    if (filterName === 'brand') {
+      this.brandSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
+    }
   };
 
   handleTypeChange = (selectedOption) => {
-    const { fromDate, toDate } = this.state;
+    const { fromDate, toDate, brand } = this.state;
     const type = selectedOption.value !== 'all'
       ? selectedOption.value
       : '';
 
-    this.fetchRewardActivity(fromDate, toDate, 0, type);
+    this.fetchRewardActivity(fromDate, toDate, 0, type, brand);
   };
 
   handleDateChange = (selectedOption) => {
     const date = new Date(selectedOption.value);
     const fromDate = formatDate(date, 'YYYY-MM-DD');
     const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD');
-    const { type } = this.state;
+    const { type, brand } = this.state;
 
-    this.fetchRewardActivity(fromDate, toDate, 0, type);
+    this.fetchRewardActivity(fromDate, toDate, 0, type, brand);
+  };
+
+  handleBrandChange = (selectedOption) => {
+    const { fromDate, toDate, type } = this.state;
+    this.fetchRewardActivity(fromDate, toDate, 0, type, selectedOption.value);
   };
 
   render() {
@@ -165,6 +182,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       fromDate,
     } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
+    const transactionBrandOptions = getTransactionBrandOptions();
 
     if (wait) {
       return (
@@ -202,13 +220,27 @@ class LoyaltyClubRewardsActivity extends React.Component {
             defaultValue={transactionTypeOptions[0]}
             onChange={this.handleTypeChange}
             isSearchable={false}
-            key="transaction-filter"
+            key="type-filter"
+          />
+          <Select
+            ref={this.brandSelectRef}
+            classNamePrefix="spcAuraSelect"
+            className="reward-activity-filter transaction-brand-filter"
+            name="transactionBrandFilter"
+            onMenuOpen={() => this.onMenuOpen('brand')}
+            onMenuClose={() => this.onMenuClose('brand')}
+            options={transactionBrandOptions}
+            defaultValue={transactionBrandOptions[0]}
+            onChange={this.handleBrandChange}
+            isSearchable={false}
+            key="brand-filter"
           />
         </div>
         <div className="reward-activity-statement">
           {noStatement === false
           && (
             <div className="header-row">
+              <span className="date">{Drupal.t('Brand')}</span>
               <span className="order-id">{Drupal.t('Order No.')}</span>
               <span className="date">{Drupal.t('Date')}</span>
               <span className="amount">{Drupal.t('Order Total')}</span>

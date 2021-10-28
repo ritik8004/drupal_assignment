@@ -6,8 +6,8 @@ import { getAuraConfig } from './helper';
 function getTransactionTypeOptions() {
   return [
     { value: 'all', label: Drupal.t('All Transactions') },
-    { value: 'online', label: Drupal.t('Online') },
-    { value: 'offline', label: Drupal.t('Offline') },
+    { value: 'K', label: Drupal.t('Online') },
+    { value: 'V', label: Drupal.t('Offline') },
   ];
 }
 
@@ -63,9 +63,28 @@ function getTransactionDateOptionsDefaultValue(fromDate) {
   return { value: formatedDate, label: formatedDate };
 }
 
+/**
+ * Utility function to get brand options.
+ */
+function getTransactionBrandOptions() {
+  const brandOptions = [];
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'allBrands')) {
+    Object.entries(drupalSettings.aura.allBrands).forEach(([key, value]) => {
+      brandOptions.push({
+        value: key,
+        label: value,
+      });
+    });
+  }
+
+  return brandOptions;
+}
+
 export {
   getTransactionTypeOptions,
   getTransactionDateOptions,
   formatDate,
   getTransactionDateOptionsDefaultValue,
+  getTransactionBrandOptions,
 };

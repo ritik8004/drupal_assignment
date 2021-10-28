@@ -234,15 +234,16 @@ class CustomerHelper {
    * @return array
    *   Return customer's reward activity.
    */
-  public function getRewardActivity($customerId, $fromDate, $toDate, $maxResults, $channel) {
+  public function getRewardActivity($customerId, $fromDate, $toDate, $maxResults, $channel, $brand) {
     try {
       // We are always passing `orderField=date:DESC`.
-      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date:DESC&maxResults=%s&channel=%s',
+      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date:DESC&maxResults=%s&channel=%s&partnerCode=%s',
         $customerId,
         $fromDate,
         $toDate,
         $maxResults,
-        $channel
+        $channel,
+        $brand
       );
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $response_data = [];
@@ -256,6 +257,7 @@ class CustomerHelper {
             'currencyCode' => $transaction['currency_code'],
             'channel' => $transaction['channel'],
             'auraPoints' => $transaction['points'],
+            'brandName' => $transaction['location_name'],
           ];
 
           if (!empty($transaction['points_balances'][0])) {

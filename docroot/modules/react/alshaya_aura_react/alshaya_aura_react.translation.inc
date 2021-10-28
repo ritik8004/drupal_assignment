@@ -346,5 +346,14 @@ function _alshaya_aura_react_translations() {
     'Add your mobile number, Aura account number or email address below to link this purchase.' => [
       'ar' => 'أضف رقم الهاتف، أو رقم حساب أورا أو بريدك الإلكتروني في الأسفل لربط عملية الشراء الحالية.',
     ],
+    'Brand' => [
+      'ar' => 'الماركة',
+    ],
+    'Points Earned' => [
+      'ar' => 'Points Earned AR',
+    ],
+    'Points Redeemed' => [
+      'ar' => 'Points Redeemed AR',
+    ],
   ];
 }

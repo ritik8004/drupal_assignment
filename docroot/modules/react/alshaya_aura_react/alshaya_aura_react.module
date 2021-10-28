@@ -332,3 +332,19 @@ function alshaya_aura_react_alshaya_spc_cart_build_alter(array &$build) {
   // Add aura dictionary api data in drupalSettings.
   $build['#attached']['drupalSettings']['aura'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData();
 }
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_aura_react_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
+  foreach ($build['recent_order'] as $key => $order) {
+    $build['recent_order'][$key]['#order']['aura_enabled'] = TRUE;
+    $build['recent_order'][$key]['#order']['apc_accrued_points'] = $order['#order']['extension']['apc_accrued_points'];
+    $build['recent_order'][$key]['#order']['apc_redeemed_points'] = $order['#order']['extension']['apc_redeemed_points'];
+  }
+}
