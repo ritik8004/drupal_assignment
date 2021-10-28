@@ -209,7 +209,7 @@ export default class PaymentMethod extends React.Component {
 
             <label className="radio-sim radio-label">
               {method.name}
-              <ConditionalView condition={method.code === 'cashondelivery' && cart.cart.surcharge && cart.cart.surcharge.amount > 0}>
+              <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
                 <div className="spc-payment-method-desc">
                   <div className="desc-content">
                     <CodSurchargeInformation
@@ -224,7 +224,7 @@ export default class PaymentMethod extends React.Component {
             <PaymentMethodIcon methodName={method.code} />
           </div>
 
-          <ConditionalView condition={isSelected && method.code === 'cashondelivery' && cart.cart.surcharge && cart.cart.surcharge.amount > 0}>
+          <ConditionalView condition={isSelected && method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
             <div className={`payment-method-bottom-panel ${method.code}`}>
               <div className="cod-surcharge-desc">
                 <CodSurchargeInformation
