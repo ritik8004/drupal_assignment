@@ -24,8 +24,6 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
     }
   };
 
-  getToolTipContent = () => Drupal.t('Earn AURA points every time you shop! You can redeem your points to use on future purchases. Not applicable on purchases made using AURA points.');
-
   render() {
     const { price, cartId } = this.props;
     const { showLinkCardMessage } = this.state;
