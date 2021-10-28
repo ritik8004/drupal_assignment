@@ -132,7 +132,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_aura_block_title',
-      'value' => t('Aura rewards'),
+      'value' => t('Aura'),
     ],
     [
       'key' => 'checkout_optional',
@@ -140,7 +140,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_earn_and_redeem',
-      'value' => t('Earn and redeem as you shop'),
+      'value' => t('Earn and spend as you shop'),
     ],
     [
       'key' => 'checkout_members_will_earn',
@@ -164,7 +164,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_points_to_be_credited_message',
-      'value' => t('Your loyalty points will be credited to this account.'),
+      'value' => t('Your points for this purchase will be added to your account.'),
     ],
     [
       'key' => 'earn',
@@ -228,7 +228,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'link_your_card_now',
-      'value' => t('link your card now'),
+      'value' => t('link your account now'),
     ],
     [
       'key' => 'signup_empty_mobile',
@@ -269,6 +269,14 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'invalid_points',
       'value' => t('The number you’ve entered is invalid. Please re-enter the number of points you’d like to redeem.'),
+    ],
+    [
+      'key' => 'checkout_earn_and_redeem_tooltip',
+      'value' => t('Enjoy offers and rewards? Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits.'),
+    ],
+    [
+      'key' => 'checkout_already_member_question_tooltip',
+      'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.'),
     ],
   ];
 }
