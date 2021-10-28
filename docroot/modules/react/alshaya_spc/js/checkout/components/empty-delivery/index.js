@@ -1,6 +1,5 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import _isEmpty from 'lodash/isEmpty';
 import _findKey from 'lodash/findKey';
 import Loading from '../../../utilities/loading';
 import {
@@ -28,6 +27,7 @@ import {
 } from '../../../utilities/cnc_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import hasValue from '../../../../../js/utilities/conditionsUtility';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -120,7 +120,7 @@ export default class EmptyDeliveryText extends React.Component {
     // multiple requests are in progress.
     this.openStoreRequests.push({ coords, defaultCenter });
 
-    if (_isEmpty(coords)) {
+    if (!hasValue(coords)) {
       window.fetchStore = 'finished';
       return;
     }
