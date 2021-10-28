@@ -20,6 +20,7 @@ $green: #39b54a;
 $jungle-green: #26a69a;
 $blue-cola: #007fdb;
 $bright-blue: #2182d5;
+$teal: #26a69a;
 
 // Global elements.
 $primary_text: $eerie-black;
@@ -300,6 +301,9 @@ $minicart_notification_btn_bg: $outer-space;
 $minicart_notification_product_title: $eerie-black;
 $cart_notification_arrow_bg: $white;
 
+// Messages and Errors
+$default_msg_bg: $teal;
+
 // SPC
 $spc-cart-background: $gray-light;
 $spc-empty-text: $eerie-black;
@@ -330,6 +334,10 @@ $spc-tooltip-border: $outer-space;
 $spc_tooltip_icon: $outer-space;
 $spc_tooltip_icon_border: $outer-space;
 $spc-deliver-button: $outer-space;
+$spc-cnc-store-search-icon: $eerie-black;
+$spc-cnc-toggle-bg-active: $eerie-black;
+$spc-cnc-toggle-bg: $eerie-black;
+$spc-checkout-success-message-background: $teal;
 
 // Checkout Global.
 $checkout_section_titles: $eerie-black;
@@ -418,10 +426,10 @@ $pdp_sidebar_link: $outer-space;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $eerie-black;
+$colour-swatches-simple-effect-bg: $white;
 $size-tray-empty-btn-text: $outer-space;
 $size-tray-empty-btn-border: $bright-gray;
 $pdp_sizeguide_link: $eerie-black;
-$colour-swatches-simple-effect-bg: $gray-light;
 $sharethis-icon-bg: $white;
 $sharethis-label-color: $eerie-black;
 
