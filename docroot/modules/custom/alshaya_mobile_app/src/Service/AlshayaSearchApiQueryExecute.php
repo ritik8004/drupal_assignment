@@ -310,18 +310,8 @@ class AlshayaSearchApiQueryExecute {
   public function prepareExecuteQuery(QueryInterface $query, string $page_type, ?string $keyword = '') {
     // Get all facets for the given facet source.
     $facets = $this->facetManager->getFacetsByFacetSourceId($this->getFacetSourceId());
-
-    // Prepare an array of key/value where key will be the facet id and value
-    // will be the facet object.
-    // Example - ['skus_sku_reference_final_price' => facet_object_here].
-    foreach ($facets as $facet) {
-      $this->processedFacetsArray[$facet->id()] = $facet;
-      // Storing price facet temporary to use later for special handling.
-      if ($facet->getFieldIdentifier() == 'final_price') {
-        $this->priceFacet = $facet;
-      }
-    }
-
+    // Get the processed facets array along with final price.
+    $this->processedFacetsArray = $this->getProcessedFacets($facets);
     // Filter by published nodes as same is done in views.
     if ($query->getIndex()->id() !== 'alshaya_algolia_index') {
       $query->addCondition('status', NodeInterface::PUBLISHED);
@@ -580,6 +570,29 @@ class AlshayaSearchApiQueryExecute {
   }
 
   /**
+   * Get the Processed facets array.
+   *
+   * @param array $facets
+   *   Actual facets.
+   *
+   * @return array
+   *   Processed facets array.
+   */
+  protected function getProcessedFacets(array $facets) {
+    // Prepare an array of key/value where key will be the facet id and value
+    // will be the facet object.
+    // Example - ['skus_sku_reference_final_price' => facet_object_here].
+    foreach ($facets as $facet) {
+      $this->processedFacetsArray[$facet->id()] = $facet;
+      // Storing price facet temporary to use later for special handling.
+      if ($facet->getFieldIdentifier() == 'final_price') {
+        $this->priceFacet = $facet;
+      }
+    }
+    return $this->processedFacetsArray;
+  }
+
+  /**
    * Prepare response data array.
    *
    * @param array $result_set
@@ -589,11 +602,19 @@ class AlshayaSearchApiQueryExecute {
    *   Response array.
    */
   public function prepareResponseFromResult(array $result_set) {
+    $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+    if (!$respond_algolia_data) {
+      // Get all facets for the given facet source.
+      $facets = $this->facetManager->getEnabledFacets();
+      // Get the processed facets array along with final price.
+      $result_set['processed_facets'] = $this->getProcessedFacets($facets);
+    }
+
     // Prepare facet data.
     $facet_result = $this->prepareFacetData($result_set);
 
     // Prepare product data.
-    $product_data = $this->prepareProductData($result_set);
+    $product_data = isset($result_set['search_api_results']) ? $this->prepareProductData($result_set) : [];
 
     // Process the price facet for special handling.
     // Get price facet key.
@@ -657,7 +678,9 @@ class AlshayaSearchApiQueryExecute {
    *   Facet data.
    */
   public function prepareFacetData(array $result_set) {
+    $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
     $facets_data = $result_set['processed_facets'];
+
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
@@ -673,7 +696,9 @@ class AlshayaSearchApiQueryExecute {
       }
       // If no result available for a facet, skip that.
       $facet_results = $facet->getResults();
-      if (empty($facet_results)) {
+      // Respond all config labels when respond_algolia_data is false
+      // If not process the available filters.
+      if (empty($facet_results) && $respond_algolia_data) {
         continue;
       }
 

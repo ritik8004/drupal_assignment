@@ -31,12 +31,17 @@ separately._
 * The lando package will have the compatible docker as well inside it.
 * Post installation, follow the recommendations in the [Performance](#Performance) section below.
 
+Add the below line in ~/.bashrc.
+
+  * Linux user: add 'export LANDO_SSH_AUTH_SOCK="${SSH_AUTH_SOCK}"' at the end of your ~/.bashrc:
+  * Mac user: MacOS specific path is here as the variable default value, nothing to do.
+
 All steps are executed on your host OS.
 
   * `lando start` - this will configure and set up your containers and services.
   * `lando composer install` - This will install all the composer packages.
   * `lando create-databases` - This will create all the required databases.
-  * `lando blt blt:init:git` - this will initialize git hooks.
+  * `lando blt blt:init:git-hooks` - this will initialize git hooks.
   * `lando blt blt:init:settings` - this will initialize settings.
   * `lando blt frontend:setup` - see notes on BLT & NPM below
   * `lando blt frontend:build` - see notes on BLT & NPM below
@@ -50,7 +55,7 @@ Drush commands can be executed from your host OS using `lando drush -l <site_url
 
 ### Post Destroy / Starting fresh
 
-After every-time `lando destory` is done we need to do following post `lando start`
+After every-time `lando destroy` is done we need to do following post `lando start`
 
 * `lando create-databases` - This will create all the required databases.
 
