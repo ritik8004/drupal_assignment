@@ -602,8 +602,8 @@ class AlshayaSearchApiQueryExecute {
    *   Response array.
    */
   public function prepareResponseFromResult(array $result_set) {
-    $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
-    if (!$respond_algolia_data) {
+    $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
+    if ($respond_ignore_algolia_data) {
       // Get all facets for the given facet source.
       $facets = $this->facetManager->getEnabledFacets();
       // Get the processed facets array along with final price.
@@ -678,7 +678,7 @@ class AlshayaSearchApiQueryExecute {
    *   Facet data.
    */
   public function prepareFacetData(array $result_set) {
-    $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+    $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
     $facets_data = $result_set['processed_facets'];
 
     // Prepare facet data first.
@@ -698,7 +698,7 @@ class AlshayaSearchApiQueryExecute {
       $facet_results = $facet->getResults();
       // Respond all config labels when respond_algolia_data is false
       // If not process the available filters.
-      if (empty($facet_results) && $respond_algolia_data) {
+      if (empty($facet_results) && !$respond_ignore_algolia_data) {
         continue;
       }
 
