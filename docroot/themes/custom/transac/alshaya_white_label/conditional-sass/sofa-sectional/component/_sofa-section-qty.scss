@@ -52,7 +52,7 @@
     }
 
     .alshayaSelect__control {
-      border: 1px solid $sofa-sectional-title;
+      border: 1px solid $sofa-sectional-select-border;
       border-radius: 0;
       height: 2.1875rem;
       min-height: 2.1875rem;
@@ -61,7 +61,7 @@
       cursor: pointer;
 
       &:hover {
-        border-color: $sofa-sectional-title;
+        border-color: $sofa-sectional-select-border;
       }
 
       > div:nth-child(2) {
@@ -122,7 +122,7 @@
 
       .alshayaSelect__menu-list {
         padding: 0;
-        border: 1px solid $sofa-sectional-title;
+        border: 1px solid $sofa-sectional-select-border;
         border-top-width: 0;
 
         > div {
