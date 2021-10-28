@@ -437,7 +437,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   if (!_isUndefined(response.data.error) && response.data.error) {
     logger.warning('Error occurred while fetching stores for cart id @cartId, Cart Id Int: @cartIdInt. API Response: @response.', {
       '@cartId': cartId,
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       '@response': JSON.stringify(response.data),
     });
 
@@ -449,7 +449,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   if (!Array.isArray(response.data)) {
     logger.warning('Error occurred while fetching stores for cart id @cartId, Cart Id Int: @cartIdInt. API Response: @response.', {
       '@cartId': cartId,
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       '@response': JSON.stringify(response.data),
     });
 
@@ -488,7 +488,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   } catch (error) {
     logger.warning('Error occurred while fetching stores for cart id @cartId, Cart Id Int: @cartIdInt. API Response: @message.', {
       '@cartId': cartId,
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       '@message': error.message,
     });
   }
@@ -520,7 +520,7 @@ const getCncStores = async (lat, lon, cncStoresLimit = 0) => {
   if (!lat || !lon) {
     logger.warning('Error while fetching CnC store for cart @cartId. Cart Id Int: @cartIdInt. One of lat/lon is not provided. Lat: @lat, Lon: @lon.', {
       '@cartId': cartId,
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       '@lat': lat || '',
       '@lon': lon || '',
     });
@@ -805,7 +805,7 @@ const selectCnc = async (store, address, billing) => {
     '@address': JSON.stringify(address),
     '@store': JSON.stringify(store),
     '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
   });
 
   // If shipping address not contains proper data (extension info).
@@ -823,7 +823,7 @@ const selectCnc = async (store, address, billing) => {
     logger.warning('Billing address does not have extension attributes. Address: @address Cart: @cartId, Cart Id Int: @cartIdInt.', {
       '@address': JSON.stringify(billing),
       '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
     });
 
     return false;
@@ -835,7 +835,7 @@ const selectCnc = async (store, address, billing) => {
     logger.warning('Billing address does not have customer_address_id. Address: @address Cart: @cartId, Cart Id Int: @cartIdInt.', {
       '@address': JSON.stringify(billing),
       '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
     });
 
     return cart;
@@ -848,7 +848,7 @@ const selectCnc = async (store, address, billing) => {
     logger.warning('Billing address not available in customer address book now. Address: @address Cart: @cartId, Cart Id Int: @cartIdInt.', {
       '@address': JSON.stringify(billing),
       '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
     });
 
     return cart;
@@ -858,7 +858,7 @@ const selectCnc = async (store, address, billing) => {
   logger.debug('Billing update default for CNC. Address: @address Cart: @cartId, Cart Id Int: @cartIdInt.', {
     '@address': JSON.stringify(billing),
     '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
   });
 
   cart = await updateBilling(billing);
@@ -912,7 +912,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   // Add log for shipping data we pass to magento update cart.
   logger.debug('Shipping update default for HD. Cart: @cartId, Cart Id Int: @cartIdInt. Data: @data.', {
     '@cartId': cartId,
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
     '@data': JSON.stringify(shippingData),
   });
 
@@ -944,7 +944,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   logger.notice('Billing update default for HD. Address: @address Cart: @cartId, Cart Id Int: @cartIdInt.', {
     '@address': JSON.stringify(billing),
     '@cartId': cartId,
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
   });
 
   // If billing address not contains proper address, don't process further.
@@ -1030,7 +1030,7 @@ const applyDefaultShipping = async (order) => {
       ) {
         logger.debug('Setting shipping/billing address from user last HD order. Cart: @cartId, Cart Id Int: @cartIdInt. Address: @address, Billing: @billing.', {
           '@cartId': window.commerceBackend.getCartId(),
-          '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+          '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
           '@address': JSON.stringify(address),
           '@billing': JSON.stringify(order.billing_commerce_address),
         });
@@ -1070,7 +1070,7 @@ const applyDefaults = async (data, customerId) => {
     } else {
       logger.debug('Applying defaults from last order. Cart: @cartId. Cart Id Int: @cartIdInt.', {
         '@cartId': window.commerceBackend.getCartId(),
-        '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+        '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       });
 
       const response = await applyDefaultShipping(order);
@@ -1093,7 +1093,7 @@ const applyDefaults = async (data, customerId) => {
 
       logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Cart Id Int: @cartIdInt. Address: @address.', {
         '@cartId': window.commerceBackend.getCartId(),
-        '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+        '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
         '@address': JSON.stringify(address),
       });
 
@@ -1109,7 +1109,7 @@ const applyDefaults = async (data, customerId) => {
 
       logger.debug('Setting shipping/billing address from user address book. Cart: @cartId, Cart Id Int: @cartIdInt. Address: @address.', {
         '@cartId': window.commerceBackend.getCartId(),
-        '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+        '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
         '@address': JSON.stringify(data.shipping.address),
       });
 
@@ -1244,7 +1244,7 @@ window.commerceBackend.addBillingMethod = async (data) => {
   const cartId = window.commerceBackend.getCartId();
   logger.debug('Billing update manual. Cart: @cartId, Cart Id Int: @cartIdInt. Address: @address, Data: @data.', {
     '@cartId': cartId,
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
     '@data': JSON.stringify(billingInfo),
     '@address': JSON.stringify(billingData),
   });
@@ -1515,7 +1515,7 @@ const paymentUpdate = async (data) => {
   const cartId = window.commerceBackend.getCartId();
   logger.notice('Calling update payment for payment_update. Cart id: @cartId, Cart Id Int: @cartIdInt. Method: @paymentMethod Data: @data.', {
     '@cartId': cartId,
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
     '@paymentMethod': paymentData.method,
     '@data': JSON.stringify(paymentData),
   });
@@ -1605,7 +1605,7 @@ const isAddressExtensionAttributesValid = (data) => {
       logger.error('Field: @field not available in cart shipping address. Cart id: @cartId, Cart Id Int: @cartIdInt.', {
         '@field': field,
         '@cartId': window.commerceBackend.getCartId(),
-        '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+        '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       });
 
       isValid = false;
@@ -1740,7 +1740,7 @@ window.commerceBackend.getCartForCheckout = async () => {
       if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
         logger.error('Error while getting cart: @cartId, Cart Id Int: @cartIdInt. Error: @message.', {
           '@cartId': cartId,
-          '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+          '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
           '@message': cart.data.error_message,
         });
         return cart.data;
@@ -1749,7 +1749,7 @@ window.commerceBackend.getCartForCheckout = async () => {
       if (_isEmpty(cart.data.cart) || _isEmpty(cart.data.cart.items)) {
         logger.warning('Checkout accessed without items in cart for id: @cartId, Cart Id Int: @cartIdInt.', {
           '@cartId': cartId,
-          '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+          '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
         });
 
         return {
@@ -1897,7 +1897,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
       '@data': JSON.stringify(data),
       '@address': JSON.stringify(shippingInfo),
       '@cartId': cartId,
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
     });
 
     cart = await addCncShippingInfo(shippingInfo, data.action);
@@ -1917,7 +1917,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cartId, Cart Id Int: @cartIdInt. Error message: @message', {
       '@data': JSON.stringify(data),
       '@cartId': cartId,
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       '@message': response.error_message,
     });
 
@@ -1946,7 +1946,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
   logger.notice('Shipping update manual for HD. Data: @params. Cart: @cartId, Cart Id Int: @cartIdInt.', {
     '@params': JSON.stringify(params),
     '@cartId': window.commerceBackend.getCartId(),
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
   });
 
   cart = await addShippingInfo(params, data.action, updateBillingInfo);

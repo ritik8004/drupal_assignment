@@ -108,26 +108,6 @@ const matchStockQuantity = (sku, quantity = 0) => {
 window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
 
 /**
- * Gets properties from cart in local storage.
- *
- * @param {string} path
- *   The path to the data in the object. i.e. cart.customer.id
- *
- * @returns {Object|array|string|number|null}
- *   The value or null if not found.
- */
-window.commerceBackend.getCartDataItemFromStorage = (path) => {
-  // Splits the path using dot then tries to find the value inside the object.
-  const value = path.split('.')
-    .reduce((prev, curr) => prev && prev[curr], window.commerceBackend.getCartDataFromStorage());
-
-  if (typeof value !== 'undefined') {
-    return value;
-  }
-  return null;
-};
-
-/**
  * Sets the cart data to storage.
  *
  * @param data
@@ -137,6 +117,7 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   StaticStorage.set('cart', cartInfo);
+  sessionStorage.setItem('cart_data', JSON.stringify(cartInfo));
 
   // @todo find better way to get this using commerceBackend.
   // As of now it not possible to get it on page load before all
@@ -164,6 +145,30 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   if (resetAll) {
     removeCartIdFromStorage();
   }
+};
+
+/**
+ * Gets properties from data in the session.
+ *
+ * @param {string} key
+ *   The key of the variable stored in the session.
+ * @param {string} path
+ *   The path to the data in the object. i.e. cart.customer.id
+ *
+ * @returns {Object|array|string|number|null}
+ *   The value or null if not found.
+ */
+window.commerceBackend.getDataFromSessionStorage = (key, path) => {
+  const data = JSON.parse(sessionStorage.getItem(key));
+  if (data) {
+    // Splits the path using dot then tries to find the value inside the object.
+    const value = path.split('.').reduce((prev, curr) => prev && prev[curr], data);
+    if (typeof value !== 'undefined') {
+      return value;
+    }
+  }
+
+  return null;
 };
 
 /**
@@ -908,7 +913,7 @@ const associateCartToCustomer = async (guestCartId) => {
   if (response.status !== 200) {
     logger.warning('Error while associating cart: @cartId to customer: @customerId. Cart Id Int: @cartIdInt. Response: @response.', {
       '@cartId': guestCartId,
-      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       '@customerId': window.drupalSettings.userDetails.customerId,
       '@response': JSON.stringify(response),
     });
@@ -931,7 +936,7 @@ const associateCartToCustomer = async (guestCartId) => {
     '@customerId': window.drupalSettings.userDetails.customerId,
     '@guestCartId': guestCartId,
     '@cartId': window.commerceBackend.getCartId(),
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
   });
 };
 
@@ -1104,7 +1109,7 @@ const updateCart = async (postData) => {
 
   logger.debug('Updating Cart. CartId: @cartId, Cart Id Int: @cartIdInt. Action: @action, Request: @request.', {
     '@cartId': cartId,
-    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
+    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart.cart_id_int') || '',
     '@request': JSON.stringify(data),
     '@action': action,
   });
