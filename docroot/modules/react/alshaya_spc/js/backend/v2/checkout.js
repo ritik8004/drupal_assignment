@@ -1470,10 +1470,10 @@ const paymentUpdate = async (data) => {
   // Process payment data by paymentMethod.
   const processedData = processPaymentData(paymentData, params.payment.additional_data);
   if (typeof processedData.data !== 'undefined' && processedData.data.error) {
-    logger.warning('Error while processing payment data. Error message: @message cart: @cart payment method: @method', {
+    logger.warning('Error while processing payment data. Error message: @message cart: @cart payment method: @paymentMethod', {
       '@message': processedData.data.message,
       '@cart': JSON.stringify(await window.commerceBackend.getCart()),
-      '@method': paymentData.method,
+      '@paymentMethod': paymentData.method,
     });
     return processedData;
   }
@@ -1497,9 +1497,9 @@ const paymentUpdate = async (data) => {
   }
 
   const cartId = window.commerceBackend.getCartId();
-  logger.notice('Calling update payment for payment_update. Cart id: @cartId Method: @method Data: @data.', {
+  logger.notice('Calling update payment for payment_update. Cart id: @cartId Method: @paymentMethod Data: @data.', {
     '@cartId': cartId,
-    '@method': paymentData.method,
+    '@paymentMethod': paymentData.method,
     '@data': JSON.stringify(paymentData),
   });
 
@@ -1745,9 +1745,9 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @code.', {
+      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @responseCode.', {
         '@message': error.message,
-        '@code': error.status,
+        '@responseCode': error.status,
       });
 
       return {
@@ -2161,18 +2161,18 @@ window.commerceBackend.placeOrder = async (data) => {
 
       result.redirectUrl = `checkout/confirmation?oid=${secureOrderId}}`;
 
-      logger.notice('Order placed successfully. Cart: @cart OrderId: @orderId, Payment Method: @method.', {
+      logger.notice('Order placed successfully. Cart: @cart OrderId: @orderId, Payment Method: @paymentMethod.', {
         '@cart': JSON.stringify(cart),
         '@orderId': orderId,
-        '@method': data.data.paymentMethod.method,
+        '@paymentMethod': data.data.paymentMethod.method,
       });
 
       return { data: result };
     })
     .catch((response) => {
-      logger.error('Error while placing order. Error message: @message, Code: @code.', {
+      logger.error('Error while placing order. Error message: @message, Code: @errorCode.', {
         '@message': !_isEmpty(response.error) ? response.error.message : response,
-        '@code': !_isEmpty(response.error) ? response.error.error_code : '',
+        '@errorCode': !_isEmpty(response.error) ? response.error.error_code : '',
       });
 
       // @todo all the error handling.
