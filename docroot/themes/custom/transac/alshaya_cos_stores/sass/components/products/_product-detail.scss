@@ -179,3 +179,14 @@
     }
   }
 }
+
+// Layout of the detail page
+.nodetype--acq_product {
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      &::after {
+        margin-top: 0;
+      }
+    }
+  }
+}
