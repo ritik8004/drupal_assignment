@@ -29,10 +29,12 @@
       .cart-shipping-method {
         .information-icon {
           &::after {
-            top: 0.125rem;
-
             html[lang=ar] & {
               top: -0.0625rem;
+
+              @include breakpoint($upto-desktop) {
+                top: 0.1875rem;
+              }
             }
           }
         }

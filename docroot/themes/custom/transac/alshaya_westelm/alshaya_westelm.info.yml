@@ -146,3 +146,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
+
+  alshaya_white_label/sofa-sectional:
+    css:
+      theme:
+        css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css
