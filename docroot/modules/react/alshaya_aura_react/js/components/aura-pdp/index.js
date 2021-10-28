@@ -134,7 +134,7 @@ class AuraPDP extends React.Component {
     redeemAuraPoints(requestData);
   };
 
-  getToolTipContent = () => Drupal.t('Earn AURA points every time you shop! You can redeem your points to use on future purchases. Not applicable on purchases made using AURA points.');
+  getToolTipContent = () => Drupal.t('Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits. Points are not earned on purchases made with points.');
 
   getPointsText = () => {
     const { productPoints } = this.state;
