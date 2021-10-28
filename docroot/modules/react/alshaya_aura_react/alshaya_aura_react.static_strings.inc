@@ -224,7 +224,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'auto_accrual_message',
-      'value' => t('To enable auto accrual and rewards redemption'),
+      'value' => t('To automatically collect and spend points on all your purchases, please'),
     ],
     [
       'key' => 'link_your_card_now',

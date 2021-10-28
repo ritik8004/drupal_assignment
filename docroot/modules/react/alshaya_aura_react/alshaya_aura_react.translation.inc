@@ -211,7 +211,7 @@ function _alshaya_aura_react_translations() {
     'Balance Payable' => [
       'ar' => 'الرصيد المستحق الدفع',
     ],
-    'To automatically collect and spend points on all your purchases, please ' => [
+    'To automatically collect and spend points on all your purchases, please' => [
       'ar' => 'لجمع النقاط وإنفاقها بشكل تلقائي في جميع عمليات الشراء، الرجاء',
     ],
     'link your account now' => [
