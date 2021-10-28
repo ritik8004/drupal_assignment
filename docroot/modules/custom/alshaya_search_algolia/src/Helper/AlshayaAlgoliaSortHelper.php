@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_search_algolia\Service;
+namespace Drupal\alshaya_search_algolia\Helper;
 
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
@@ -10,7 +10,7 @@ use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
  *
  * Sort data helper.
  *
- * @package Drupal\alshaya_search_algolia\Service
+ * @package Drupal\alshaya_search_algolia\Helper
  */
 class AlshayaAlgoliaSortHelper {
 
@@ -49,7 +49,8 @@ class AlshayaAlgoliaSortHelper {
         ->getSortOptionsLabels();
       $labels = $sort_options->sortGivenOptions($labels);
     }
-
+    $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $algolia_product_list_index = AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index');
     $sort_items = [];
     foreach ($labels as $label_key => $label_value) {
       if (empty($label_value)) {
@@ -75,11 +76,11 @@ class AlshayaAlgoliaSortHelper {
       elseif (in_array($sort_key, $enabled_sorts)) {
         $sort_index_key = $index_name . '_' . $index_sort_key . '_' . strtolower($sort_order);
         // Get index name by page type.
-        if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+        if ($page_type === 'listing' && $algolia_product_list_index) {
           // Get sort index name for listing
           // eg: 01live_bbwae_product_list_en_title_asc.
           $sort_index_key = $index_name . '_'
-            . \Drupal::languageManager()->getCurrentLanguage()->getId() . '_'
+            . $lang . '_'
             . $index_sort_key . '_'
             . strtolower($sort_order);
         }

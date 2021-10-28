@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_algolia_react\Services;
 
 use Drupal\alshaya_acm_product\SkuImagesHelper;
-use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaSortHelper;
+use Drupal\alshaya_search_algolia\Helper\AlshayaAlgoliaSortHelper;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;

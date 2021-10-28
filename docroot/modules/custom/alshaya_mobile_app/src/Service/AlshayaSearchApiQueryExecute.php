@@ -22,7 +22,7 @@ use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\node\NodeInterface;
-use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaSortHelper;
+use Drupal\alshaya_search_algolia\Helper\AlshayaAlgoliaSortHelper;
 
 /**
  * Class Alshaya Search Api Query Execute.
@@ -816,7 +816,9 @@ class AlshayaSearchApiQueryExecute {
     // If PLP views.
     $sort_data = [];
     $lang = $this->languageManager->getCurrentLanguage()->getId();
-    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index') || AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+    $alshaya_algolia_index = AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index');
+    $algolia_product_list_index = AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index');
+    if ($alshaya_algolia_index || $algolia_product_list_index) {
       $index_name = AlshayaAlgoliaSortHelper::getAlgoliaIndexName($lang, $page_type);
       $sort_data = AlshayaAlgoliaSortHelper::getSortByOptions($index_name, $page_type);
       return $sort_data;
