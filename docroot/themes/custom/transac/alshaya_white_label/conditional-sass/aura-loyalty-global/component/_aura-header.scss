@@ -29,6 +29,13 @@
 
       &.user-points {
         width: 3.375rem;
+
+        @include breakpoint($desktop) {
+          min-width: 3.375rem;
+          margin-#{$right}: 0.875rem;
+          margin-#{$left}: 0.3125rem;
+          width: auto;
+        }
       }
 
       width: 6.375rem;

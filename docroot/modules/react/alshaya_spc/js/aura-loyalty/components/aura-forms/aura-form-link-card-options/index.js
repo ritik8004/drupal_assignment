@@ -52,7 +52,7 @@ class AuraFormLinkCardOptions extends React.Component {
             className="aura-radio-sim"
             htmlFor="card"
           >
-            {Drupal.t('Card number')}
+            {Drupal.t('Aura account number')}
           </label>
         </div>
         <div key="email" className="linking-option" onClick={(e) => this.selectOption(e)}>

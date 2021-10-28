@@ -4,6 +4,7 @@ import LinkYourCardMessage from '../link-your-card-message';
 import ConditionalView from '../../../../../common/components/conditional-view';
 import { getMembersToEarnMessage } from '../../../utilities/checkout_helper';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import ToolTip from '../../../../../utilities/tooltip';
 
 class AuraNotLinkedNoDataCheckout extends React.Component {
   constructor(props) {
@@ -31,10 +32,12 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
       <div className="block-content guest-user">
         <div className="title">
           <div className="subtitle-1">{ getStringMessage('checkout_earn_and_redeem') }</div>
+          <ToolTip enable info>{ getStringMessage('checkout_earn_and_redeem_tooltip') }</ToolTip>
           <div className="subtitle-2">{ getMembersToEarnMessage(price) }</div>
         </div>
         <div className="spc-aura-link-card-form">
           <div className="label">{ getStringMessage('checkout_already_member_question') }</div>
+          <ToolTip enable info>{ getStringMessage('checkout_already_member_question_tooltip') }</ToolTip>
           <div className="item-wrapper">
             <AuraFormLinkCard
               enableShowLinkCardMessage={this.enableShowLinkCardMessage}

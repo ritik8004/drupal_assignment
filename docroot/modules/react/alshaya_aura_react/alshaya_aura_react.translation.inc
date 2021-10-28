@@ -136,8 +136,8 @@ function _alshaya_aura_react_translations() {
     'Sign in or create an account to use your points.' => [
       'ar' => 'سجل الدخول أو أنشيء حساب جديد لاستخدام النقاط',
     ],
-    'Aura rewards' => [
-      'ar' => 'مكافآت أورا',
+    'Aura' => [
+      'ar' => 'أورا',
     ],
     '(Optional)' => [
       'ar' => 'اختياري',
@@ -193,8 +193,8 @@ function _alshaya_aura_react_translations() {
     'Incorrect Aura card number. Please re-enter a valid Aura card number.' => [
       'ar' => 'رقم AURA غير صحيح. يرجى إعادة إدخال رقم بطاقة AURA صحيح.',
     ],
-    'Your loyalty points will be credited to this account.' => [
-      'ar' => 'سيتم إضافة نقاط الولاء إلى هذا الحساب.',
+    'Your points for this purchase will be added to your account.' => [
+      'ar' => 'نقاط عملية الشراء الحالية سيتم إضافتها إلى حسابك',
     ],
     'Full name' => [
       'ar' => 'الاسم بالكامل',
@@ -211,10 +211,10 @@ function _alshaya_aura_react_translations() {
     'Balance Payable' => [
       'ar' => 'الرصيد المستحق الدفع',
     ],
-    'To enable auto accrual and rewards redemption' => [
-      'ar' => 'لتفعيل النقاط المستحقة واسترداد المكافآت',
+    'To automatically collect and spend points on all your purchases, please' => [
+      'ar' => 'لجمع النقاط وإنفاقها بشكل تلقائي في جميع عمليات الشراء، الرجاء',
     ],
-    'link your card now' => [
+    'link your account now' => [
       'ar' => 'قم بربط البطاقة الآن',
     ],
     'You Have' => [
@@ -226,8 +226,8 @@ function _alshaya_aura_react_translations() {
     'with this purchase' => [
       'ar' => 'مع عملية الشراء هذه',
     ],
-    'Earn and redeem as you shop' => [
-      'ar' => 'اربح واستبدل النقاط أثناء تسوقك',
+    'Earn and spend as you shop' => [
+      'ar' => 'اكسب النقاط وأنفقها خلال عملية الشراء',
     ],
     'Aura points earned' => [
       'ar' => 'نقاط أورا المكتسبة',
@@ -339,6 +339,12 @@ function _alshaya_aura_react_translations() {
     ],
     'Pending points' => [
       'ar' => 'النقاط المعلقة',
+    ],
+    'Enjoy offers and rewards? Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits.' => [
+      'ar' => 'هل تود الاستمتع بالنقاط والمكافآت؟ ا انضم إلى أورا، برنامج المكافآت الجديد لتجميع النقاط وإنفاقها أثناء الشراء واكتشف العديد من المميزات الحصرية.',
+    ],
+    'Add your mobile number, Aura account number or email address below to link this purchase.' => [
+      'ar' => 'أضف رقم الهاتف، أو رقم حساب أورا أو بريدك الإلكتروني في الأسفل لربط عملية الشراء الحالية.',
     ],
     'Brand' => [
       'ar' => 'الماركة',
