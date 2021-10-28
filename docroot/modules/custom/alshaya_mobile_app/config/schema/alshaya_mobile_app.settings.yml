@@ -11,3 +11,6 @@ alshaya_mobile_app.settings:
     max_product_limit:
       type: integer
       label: 'Upper limit for number of products per request.'
+    listing_ignore_algolia_data:
+      type: boolean
+      label: 'Dont respond product if config is true.'
