@@ -109,8 +109,8 @@ function _alshaya_aura_react_translations() {
     'This email address is already registered. Please sign-in or use a different email address.' => [
       'ar' => 'البريد الإلكتروني مسجل لدينا بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني مختلف',
     ],
-    'Earn AURA points every time you shop! You can redeem your points to use on future purchases. Not applicable on purchases made using AURA points.' => [
-      'ar' => 'اربح نقاط أورا في كل مرة تتسوق فيها! يمكنك استبدال نقاطك لاستخدامها في عمليات الشراء المستقبلية. لا ينطبق على عمليات الشراء التي تتم باستخدام نقاط أورا.',
+    'Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits. Points are not earned on purchases made with points.' => [
+      'ar' => 'اشترك في أورا، برنامج المكافآت الجديد، لاكتساب وصرف النقاط أثناء التسوق، واكتشف الكثير من المميزات الحصرية. لا يتم اكتساب النقاط عند الشراء باستخدام النقاط المجمعة مسبقاً.',
     ],
     'AURA points' => [
       'ar' => 'نقاط أورا',
