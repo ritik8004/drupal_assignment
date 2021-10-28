@@ -11,10 +11,11 @@ use Drupal\Core\Url;
  * Create the placeholder category term, product node and main menu links.
  */
 function rcs_placeholders_install() {
-  // This will be used for creating entity translations. Since default 'en' will
-  // be created first, we unset it from the array.
+  // This will be used for creating entity translations. Since we are creating
+  // the dafault language separately, we unset it from the array.
   $languages = \Drupal::languageManager()->getLanguages();
-  unset($languages['en']);
+  $default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+  unset($languages[$default_langcode]);
 
   $config = \Drupal::service('config.factory')->getEditable('rcs_placeholders.settings');
 
