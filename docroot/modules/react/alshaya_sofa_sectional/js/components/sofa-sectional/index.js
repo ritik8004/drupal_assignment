@@ -25,7 +25,6 @@ export default class SofaSectionalForm extends React.Component {
     super(props);
     const { productInfo, configurableCombinations } = drupalSettings;
     const { sku } = props;
-
     let selectedVariant = configurableCombinations[sku].firstChild;
 
     // Set the default attributes.

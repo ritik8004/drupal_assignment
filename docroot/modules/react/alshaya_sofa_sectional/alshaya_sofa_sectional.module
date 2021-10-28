@@ -52,12 +52,10 @@ function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SK
   // Get the current node from the sku entity.
   $node = $skuManager->getDisplayNode($sku_entity);
 
-  // Return if feature isn't applicable for this entity.
-  if (!\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($node)) {
-    return;
-  }
-
-  if (!isset($form['#attached']['drupalSettings']['configurableCombinations'])) {
+  // Return if configurable options are not available for the product
+  // and feature isn't applicable for this entity.
+  if (!isset($form['#attached']['drupalSettings']['configurableCombinations'])
+  || !\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($node)) {
     return;
   }
 
