@@ -12,4 +12,4 @@ static_page_mappings:
   store_finder: 'store-finder'
 dy_plp_banner_name: 'Generic PLP banners'
 max_product_limit: 24
-listing_respond_algolia_data: FALSE
+listing_ignore_algolia_data: FALSE
