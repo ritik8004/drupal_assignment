@@ -13,3 +13,10 @@ sofa_sectional_utilities:
   dependencies:
     - core/jquery
     - core/drupal
+
+# Library to attach with products detail view in modal.
+product_modal_view:
+  js:
+    assets/js/product_modal_view.js: { }
+  dependencies:
+    - core/drupal
