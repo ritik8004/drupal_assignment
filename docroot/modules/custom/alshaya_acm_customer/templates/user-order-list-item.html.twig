@@ -83,5 +83,19 @@
       </div>
     </a>
   </div>
+  {% if order.auraEnabled == true %}
+    <div class="fifth">
+      <a href="{{ order_detail_link }}" class="link-wrapper">
+        <div class="dark points-earned">
+          <span>{{ "Points Earned"|t }}</span>
+          <span>{{ order.apcAccruedPoints }}</span>
+        </div>
+        <div class="dark points-redeemed">
+          <span>{{ "Points Redeemed"|t }}</span>
+          <span>{{ order.apcRedeemedPoints }}</span>
+        </div>
+      </a>
+    </div>
+  {% endif %}
   <a href="{{ order_detail_link }}" class="order-detail-page"></a>
 </div>

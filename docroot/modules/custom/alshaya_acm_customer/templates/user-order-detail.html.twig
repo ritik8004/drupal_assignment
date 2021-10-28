@@ -94,7 +94,20 @@
             {{ order.total }}
           </div>
         </td>
-        <td class="above-mobile empty--cell">&nbsp;</td>
+        {% if order.auraEnabled == true %}
+          <td class="above-mobile">
+            <div class="dark points-earned">
+              <span>{{ "Points Earned"|t }}</span>
+              <span>{{ order.apcAccruedPoints }}</span>
+            </div>
+            <div class="dark points-redeemed">
+              <span>{{ "Points Redeemed"|t }}</span>
+              <span>{{ order.apcRedeemedPoints }}</span>
+            </div>
+          </td>
+        {% else %}
+          <td class="above-mobile empty--cell">&nbsp;</td>
+        {% endif %}
       </tr>
 
       {% if delivery_detail_notice %}

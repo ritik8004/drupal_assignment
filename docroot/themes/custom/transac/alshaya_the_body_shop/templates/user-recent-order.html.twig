@@ -60,11 +60,29 @@
 				<div class="button {{ order.status.class }}">{{ order.status.text }}</div>
 			</td>
 
-			<td class="above-mobile toggle--icon" colspan="{{ order.bazaarvoice ? '2' : '' }}">
-				<div class="light">{{ "Order Total"|t }}</div>
-				<div class="dark">{{ order.totals.grand }}</div>
-				<div class="icon-ic_dropdown-expand"></div>
-			</td>
+			<td class="above-mobile toggle--icon order-total-column" colspan="{{ order.bazaarvoice ? '2' : '' }}">
+        {% if order.aura_enabled != true %}
+          <div class="light">{{ "Order Total"|t }}</div>
+          <div class="dark">{{ order.totals.grand }}</div>
+          <div class="icon-ic_chevrondown"></div>
+        {% else %}
+          <div class="order-total-wrapper">
+            <div class="light">{{ "Order Total"|t }}</div>
+            <div class="dark">{{ order.totals.grand }}</div>
+          </div>
+          <div class="aura-points">
+            <div class="points-earned dark">
+              <span>{{ "Points Earned"|t }}</span>
+              <span>{{ order.apc_accrued_points }}</span>
+            </div>
+            <div class="points-redeemed dark">
+              <span>{{ "Points Redeemed"|t }}</span>
+              <span>{{ order.apc_redeemed_points }}</span>
+            </div>
+          </div>
+          <div class="icon-ic_chevrondown"></div>
+        {% endif %}
+      </td>
 		</tr>
 
 		{% for item in order.items %}
