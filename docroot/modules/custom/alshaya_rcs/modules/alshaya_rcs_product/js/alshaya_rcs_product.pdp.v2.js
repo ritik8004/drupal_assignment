@@ -8,7 +8,8 @@ window.commerceBackend = window.commerceBackend || {};
  * Local static data store.
  */
 let staticDataStore = {
-  cnc_status: {}
+  cnc_status: {},
+  configurableColorData: {},
 };
 
 /**
@@ -315,7 +316,7 @@ function getVariantsInfo(product) {
       promotionsRaw: [],
       // @todo Add free gift promotion value here.
       freeGiftPromotion: [],
-      url: getProductUrls(product.url_key),
+      url: getProductUrls(variantInfo.url_key),
     }
 
     // Set max sale quantity data.
@@ -750,3 +751,76 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     }, 1);
   }
 };
+
+/**
+ * Gets the configurable color details.
+ *
+ * @param {string} sku
+ *   The sku value.
+ *
+ * @returns {object}
+ *   The configurable color details.
+ *
+ * @see https://github.com/acquia-pso/alshaya/blob/6.7.0/docroot/modules/custom/alshaya_acm_product/alshaya_acm_product.module#L1513
+ */
+window.commerceBackend.getConfigurableColorDetails = function (sku) {
+  if (Drupal.hasValue(staticDataStore.configurableColorData[sku])) {
+    return staticDataStore.configurableColorData[sku];
+  }
+
+  const colorAttributeConfig = drupalSettings.alshayaRcs.colorAttributeConfig;
+  const isSupportsMultipleColor = Drupal.hasValue(colorAttributeConfig.configurable_color_attribute);
+  const configColorAttribute = colorAttributeConfig.configurable_color_attribute;
+
+  if (isSupportsMultipleColor) {
+    const colorLabelAttribute = colorAttributeConfig.configurable_color_label_attribute.replace('attr_', '');
+    const colorCodeAttribute = colorAttributeConfig.configurable_color_code_attribute.replace('attr_', '');
+    // Translate color attribute option values to the rgb color values &
+    // expose the same in Drupal settings to javascript.
+    const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+    const rawProductData = window.commerceBackend.getProductData(sku, false, false);
+    const configurableOptions = rawProductData.configurable_options;
+
+    const variants = {};
+    const skuConfigurableOptionsColor = {};
+
+    // Do this mapping for easy access.
+    rawProductData.variants.forEach(function (variant) {
+      variants[variant.product.sku] = variant;
+    })
+
+    configurableOptions.forEach(function (option) {
+      option.values.forEach(function (value) {
+        if (Drupal.hasValue(combinations.attribute_sku[configColorAttribute][value.value_index])) {
+          combinations.attribute_sku[configColorAttribute][value.value_index].forEach(function (variantSku) {
+            const colorOptionsList = {
+              display_label: window.commerceBackend.getAttributeValueLabel(option.attribute_code, variants[variantSku].product[colorLabelAttribute]),
+              swatch_type: 'RGB',
+              display_value: variants[variantSku].product[colorCodeAttribute],
+            };
+
+            // The behavior is same as
+            // hook_alshaya_acm_product_pdp_swath_type_alter().
+            RcsEventManager.fire('alshayaRcsAlterPdpSwatch', {
+              detail: {
+                sku,
+                colorOptionsList,
+                variantSku,
+              }
+            });
+
+            skuConfigurableOptionsColor[value.value_index] = colorOptionsList;
+          });
+        }
+      });
+    });
+
+    const data = {
+      sku_configurable_options_color: skuConfigurableOptionsColor,
+      sku_configurable_color_attribute: configColorAttribute,
+    }
+    staticDataStore.configurableColorData[sku] = data;
+
+    return data;
+  }
+}
