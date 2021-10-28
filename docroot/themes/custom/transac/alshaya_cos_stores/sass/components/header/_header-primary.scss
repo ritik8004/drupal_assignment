@@ -85,6 +85,10 @@ header {
     @include breakpoint($desktop) {
       display: inline-flex;
       width: 4.375rem;
+
+      .alias--cart-login & {
+        width: 6rem;
+      }
     }
 
     @include breakpoint($only-tablet) {
