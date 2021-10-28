@@ -270,7 +270,7 @@ class AuraFormRedeemPoints extends React.Component {
                 placeholder="0"
                 onChangeCallback={this.convertPointsToMoney}
                 value={points}
-                disabled={disableRedemption}
+                disabled={isUnsupportedPaymentMethod(paymentMethodInCart)}
               />
               <span className="spc-aura-redeem-points-separator">=</span>
               <AuraRedeemPointsTextField
