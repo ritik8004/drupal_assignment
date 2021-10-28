@@ -47,6 +47,11 @@ class CategoryProductListResource extends ResourceBase {
   const PARSE_MODE_CONJUNCTION = 'OR';
 
   /**
+   * Page Type.
+   */
+  const PAGE_TYPE = 'listing';
+
+  /**
    * Entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -244,7 +249,7 @@ class CategoryProductListResource extends ResourceBase {
     AlshayaRequestContextManager::updateDefaultContext('app');
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
+    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1', self::PAGE_TYPE);
 
     // Filter the empty products.
     // Array values being used to re-set the array index
@@ -364,7 +369,7 @@ class CategoryProductListResource extends ResourceBase {
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
       // Get the config value for not executing search query.
-      $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+      $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
       if ((AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) && (Settings::get('mobile_app_plp_index_new', FALSE))) {
         $langcode = 'en';
@@ -392,7 +397,7 @@ class CategoryProductListResource extends ResourceBase {
         'rule_contexts' => $term_details['ruleContext'],
       ];
       // Return only algolia data if the config value is set to false.
-      if (!$respond_algolia_data) {
+      if ($respond_ignore_algolia_data) {
         return $response;
       }
 
