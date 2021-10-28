@@ -19,7 +19,7 @@ class AlshayaLoyaltyClubBreadcrumb implements BreadcrumbBuilderInterface {
    * {@inheritdoc}
    */
   public function applies(RouteMatchInterface $route_match) {
-    return $route_match->getRouteName() == 'alshaya_aura_react.guest_loyalty_club';
+    return $route_match->getRouteName() == 'alshaya_aura_react.my_loyalty_club';
   }
 
   /**
@@ -28,7 +28,7 @@ class AlshayaLoyaltyClubBreadcrumb implements BreadcrumbBuilderInterface {
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
-    $breadcrumb->addLink(Link::createFromRoute($this->t('About Aura'), 'alshaya_aura_react.guest_loyalty_club'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('About Aura'), 'alshaya_aura_react.my_loyalty_club'));
     $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;
   }
