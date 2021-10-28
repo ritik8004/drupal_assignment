@@ -279,7 +279,7 @@ class PromotionProductListResource extends ResourceBase {
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
       // Get the config value for not executing search query.
-      $respond_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_respond_algolia_data');
+      $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
 
       $response['algolia_data'] = [
         'filter_field' => 'promotion_nid',
@@ -288,7 +288,7 @@ class PromotionProductListResource extends ResourceBase {
       ];
 
       // Return only algolia data if the config value is set to false.
-      if (!$respond_algolia_data) {
+      if ($respond_ignore_algolia_data) {
         return $response;
       }
 
