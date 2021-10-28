@@ -370,5 +370,11 @@ function _alshaya_aura_react_translations() {
     'points with Aura' => [
       'ar' => 'النقاط مع أورا',
     ],
+    'About Aura' => [
+      'ar' => 'حول أورا',
+    ],
+    'Join Aura to earn and spend points while you shop and enjoy exclusive benefits.' => [
+      'ar' => 'اشترك في أورا واستمتع بتجميع النقاط وإنفاقها أثناء التسوق واحصل على مميزات حصرية.',
+    ],
   ];
 }

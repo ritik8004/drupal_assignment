@@ -166,12 +166,12 @@ class AlshayaLoyaltyController extends ControllerBase {
   /**
    * Returns page title.
    */
-  public static function getLoyaltyClubTitle() {
-    if (\Drupal::currentUser()->isAuthenticated()) {
-      t('My AURA');
+  public function getLoyaltyClubTitle() {
+    if ($this->currentUser()->isAuthenticated()) {
+      return $this->t('My AURA');
     }
 
-    return t('About Aura');
+    return $this->t('About Aura');
   }
 
   /**
