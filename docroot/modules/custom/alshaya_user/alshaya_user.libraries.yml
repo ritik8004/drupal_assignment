@@ -15,5 +15,4 @@ user_action_logger:
   js:
     js/user_action_logger.js: {}
   dependencies:
-    - core/jquery
-    - core/drupal
+    - alshaya_master/common_functions
