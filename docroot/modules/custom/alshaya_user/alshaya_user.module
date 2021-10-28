@@ -590,3 +590,11 @@ function _alshaya_user_password_reset_submit(array $form, FormStateInterface $fo
   // Redirect to login page after form submit.
   $form_state->setRedirect('user.login');
 }
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_user_page_attachments_alter(array &$attachments) {
+  // Attach user logger library.
+  $attachments['#attached']['library'][] = 'alshaya_user/user_action_logger';
+}
