@@ -18,6 +18,10 @@
             if (destination) {
               window.location.href = destination;
             } else {
+              // Log the social login.
+              Drupal.alshayaLogger('warning', 'User performed social authentication on @authLink and failed.', {
+                '@authLink': authLink,
+              });
               window.location.reload();
             }
           }
