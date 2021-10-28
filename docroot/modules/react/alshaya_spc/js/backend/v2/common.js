@@ -108,6 +108,26 @@ const matchStockQuantity = (sku, quantity = 0) => {
 window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
 
 /**
+ * Gets properties from cart in local storage.
+ *
+ * @param {string} path
+ *   The path to the data in the object. i.e. cart.customer.id
+ *
+ * @returns {Object|array|string|number|null}
+ *   The value or null if not found.
+ */
+window.commerceBackend.getCartDataItemFromStorage = (path) => {
+  // Splits the path using dot then tries to find the value inside the object.
+  const value = path.split('.')
+    .reduce((prev, curr) => prev && prev[curr], window.commerceBackend.getCartDataFromStorage());
+
+  if (typeof value !== 'undefined') {
+    return value;
+  }
+  return null;
+};
+
+/**
  * Sets the cart data to storage.
  *
  * @param data
@@ -716,9 +736,10 @@ const getProcessedCartData = async (cartData) => {
         // Do not show the products which are not available in
         // system but only available in cart.
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
-          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, Cart Id Int: @cartIdInt, StockInfo: @stockInfo.', {
             '@sku': item.sku,
-            '@cartId': data.cart_id_int,
+            '@cartId': data.cart_id,
+            '@cartIdInt': data.cart_id_int,
             '@stockInfo': JSON.stringify(stockInfo || {}),
           });
 
@@ -885,8 +906,9 @@ const associateCartToCustomer = async (guestCartId) => {
   }
 
   if (response.status !== 200) {
-    logger.warning('Error while associating cart: @cartId to customer: @customerId. Response: @response.', {
+    logger.warning('Error while associating cart: @cartId to customer: @customerId. Cart Id Int: @cartIdInt. Response: @response.', {
       '@cartId': guestCartId,
+      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
       '@customerId': window.drupalSettings.userDetails.customerId,
       '@response': JSON.stringify(response),
     });
@@ -905,10 +927,11 @@ const associateCartToCustomer = async (guestCartId) => {
   // Reload cart.
   await getCart(true);
 
-  logger.notice('Guest Cart id @guestCartId associated to customer @customerId with Cart id @cartId.', {
+  logger.notice('Guest Cart id @guestCartId associated to customer @customerId with Cart id @cartId. Cart Id Int: @cartIdInt.', {
     '@customerId': window.drupalSettings.userDetails.customerId,
     '@guestCartId': guestCartId,
     '@cartId': window.commerceBackend.getCartId(),
+    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
   });
 };
 
@@ -1079,8 +1102,9 @@ const updateCart = async (postData) => {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
-  logger.debug('Updating Cart. CartId: @cartId, Action: @action, Request: @request.', {
+  logger.debug('Updating Cart. CartId: @cartId, Cart Id Int: @cartIdInt. Action: @action, Request: @request.', {
     '@cartId': cartId,
+    '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
     '@request': JSON.stringify(data),
     '@action': action,
   });

@@ -238,8 +238,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (hasValue(response.data) && hasValue(response.data.error)) {
-    logger.warning('Error updating cart. CartId: @cartId. Post: @post, Response: @response', {
+    logger.warning('Error updating cart. CartId: @cartId. Cart Id Int: @cartIdInt. Post: @post, Response: @response', {
       '@cartId': cartId,
+      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
       '@post': JSON.stringify(itemData),
       '@response': JSON.stringify(response.data),
     });

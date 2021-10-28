@@ -23,8 +23,9 @@ const getPaymentMethods = async () => {
   }
 
   if (_isEmpty(cart.data.shipping) || _isEmpty(cart.data.shipping.method)) {
-    logger.notice('Shipping method not available, not loading payment methods. CartID: @cartId.', {
+    logger.notice('Shipping method not available, not loading payment methods. CartID: @cartId. Cart Id Int: @cartIdInt.', {
       '@cartId': cart.data.id,
+      '@cartIdInt': window.commerceBackend.getCartDataItemFromStorage('cart.cart_id_int') || '',
     });
 
     return null;
