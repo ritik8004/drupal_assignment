@@ -1,0 +1,32 @@
+.user__order--detail.recent__orders--list {
+  .order-total-column {
+    padding-#{$left}: 0;
+
+    .order-total-wrapper {
+      float: $left;
+    }
+
+    .aura-points {
+      float: $left;
+      display: inline-block;
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 1rem;
+      }
+
+      .points-earned,
+      .points-redeemed {
+        font-size: 0.75rem;
+
+        span:first-child {
+          min-width: 6rem;
+          display: inline-block;
+        }
+      }
+    }
+
+    &.toggle--icon .icon-ic_chevrondown {
+      #{$right}: 0.25rem;
+    }
+  }
+}
