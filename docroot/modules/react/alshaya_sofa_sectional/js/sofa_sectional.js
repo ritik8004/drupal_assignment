@@ -14,9 +14,11 @@ const renderSofaSectionalForm = (elementSelector) => {
   if (selectedFormEelement) {
     // Get sku from forms data-sku attribute.
     const { sku } = selectedFormEelement.dataset;
+
+    // Render Sofa and Sectional form for selected form element.
     if (typeof sku !== 'undefined') {
       ReactDOM.render(
-        <SofaSectionalForm sku={sku} />,
+        <SofaSectionalForm sku={sku} elementSelector={elementSelector} />,
         selectedFormEelement,
       );
     }

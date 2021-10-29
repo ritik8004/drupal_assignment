@@ -282,6 +282,7 @@ export default class SofaSectionalForm extends React.Component {
    */
   handleClearOptions = () => {
     const { sku } = this.state;
+    const { elementSelector } = this.props;
 
     this.setState({
       selectedVariant: null,
@@ -289,7 +290,12 @@ export default class SofaSectionalForm extends React.Component {
 
     // Dispatch custom event with selected variant to trigger jquery event variant-selected,
     // which will update gallery, price block, limits etc.
-    const customEvent = new CustomEvent('react-variant-select', { detail: { sku } });
+    const customEvent = new CustomEvent('react-variant-select', {
+      detail: {
+        sku,
+        elementSelector,
+      },
+    });
     document.dispatchEvent(customEvent);
   };
 

@@ -26,8 +26,8 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
   }
 
   // Attach Sofa and Sectional libraries.
-  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
   $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
   $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
 
   // Attach additional library to dispatch modal load event.
