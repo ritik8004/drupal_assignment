@@ -31,13 +31,17 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
     return (
       <div className="block-content guest-user">
         <div className="title">
-          <div className="subtitle-1">{ getStringMessage('checkout_earn_and_redeem') }</div>
-          <ToolTip enable info>{ getStringMessage('checkout_earn_and_redeem_tooltip') }</ToolTip>
+          <div className="subtitle-1">
+            { getStringMessage('checkout_earn_and_redeem') }
+            <ToolTip enable question>{ getStringMessage('checkout_earn_and_redeem_tooltip') }</ToolTip>
+          </div>
           <div className="subtitle-2">{ getMembersToEarnMessage(price) }</div>
         </div>
         <div className="spc-aura-link-card-form">
-          <div className="label">{ getStringMessage('checkout_already_member_question') }</div>
-          <ToolTip enable info>{ getStringMessage('checkout_already_member_question_tooltip') }</ToolTip>
+          <div className="label">
+            { getStringMessage('checkout_already_member_question') }
+            <ToolTip enable question>{ getStringMessage('checkout_already_member_question_tooltip') }</ToolTip>
+          </div>
           <div className="item-wrapper">
             <AuraFormLinkCard
               enableShowLinkCardMessage={this.enableShowLinkCardMessage}
