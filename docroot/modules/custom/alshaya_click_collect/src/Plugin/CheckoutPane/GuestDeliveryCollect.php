@@ -12,7 +12,6 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\geolocation\GoogleMapsDisplayTrait;
 
 /**
  * Provides the delivery CnC pane for guests.
@@ -25,8 +24,6 @@ use Drupal\geolocation\GoogleMapsDisplayTrait;
  * )
  */
 class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface {
-  // Add trait to get map url from getGoogleMapsApiUrl().
-  use GoogleMapsDisplayTrait;
 
   // Add trait to get selected delivery method tab.
   use CheckoutDeliveryMethodTrait;
@@ -275,7 +272,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $pane_form['#attached'] = [
       'drupalSettings' => [
         'geolocation' => [
-          'google_map_url' => $this->getGoogleMapsApiUrl(),
+          'google_map_url' => \Drupal::service('plugin.manager.geolocation.mapprovider')->getMapProvider('google_maps')->getGoogleMapsApiUrl(),
           'google_map_settings' => [
             'type' => static::$ROADMAP,
             'zoom' => 11,

@@ -29,9 +29,9 @@ libraries-override:
   geolocation/geolocation.formatter.googlemap:
     js:
       js/geolocation-formatter-googlemap.js: components/dist/js/geolocation/alshaya_geolocation_formatter_googlemap.js
-  geolocation/geolocation.googlemapsapi:
+  geolocation/geolocation.api:
     js:
-      js/geolocation-google-maps-api.js: components/dist/js/geolocation/alshaya_geolocation_google_maps_api.js
+      js/geolocation-api.js: components/dist/js/geolocation/alshaya_geolocation_google_maps_api.js
   views_infinite_scroll/views-infinite-scroll:
     js:
       js/infinite-scroll.js : components/dist/js/infinite-scroll.js
