@@ -408,35 +408,3 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
 
   unset($build['home_delivery']);
 }
-
-/**
- * Implements hook_sku_variant_info_alter().
- *
- * Prepare delivery options for each variants.
- */
-function alshaya_spc_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
-  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-
-  // Return if express delivery feature is disabled.
-  // And product is not buyable.
-  // Otherwise show express delivery options.
-  if (!($express_delivery_config->get('status'))) {
-    return;
-  }
-
-  if ($parent !== NULL && $parent instanceof SKUInterface) {
-    $parent_sku = $variant['parent_sku'];
-  }
-  // Below condition is only for simple products.
-  elseif (empty($parent)) {
-    $parent_sku = $variant['sku'];
-  }
-  else {
-    return;
-  }
-
-  $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku);
-
-  $variant['delivery_options'] = !empty($delivery_options['values']) ? $delivery_options['values'] : [];
-  $variant['express_delivery_class'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
-}

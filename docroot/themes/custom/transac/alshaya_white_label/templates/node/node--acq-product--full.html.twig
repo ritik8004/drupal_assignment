@@ -82,7 +82,7 @@ set classes = [
 
           {# Delivery options will load if express delivery enabled. #}
           {% if content.delivery_options %}
-            <div class="express-delivery desktop {{ content.express_delivery_class }}">
+            <div class="express-delivery {{ content.express_delivery_class }}">
             {% for key,delivery_option in content.delivery_options %}
               <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
                 <span>{{ delivery_option.label }}</span>
