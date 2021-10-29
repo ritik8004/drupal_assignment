@@ -252,12 +252,10 @@ class AuraFormRedeemPoints extends React.Component {
 
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     const { totals, paymentMethodInCart } = this.props;
-    const disableRedemption = (isUnsupportedPaymentMethod(paymentMethodInCart) === true)
-      ? true
-      : !enableSubmit;
+    const paymentNotSupported = isUnsupportedPaymentMethod(paymentMethodInCart);
 
     return (
-      <div className={disableRedemption
+      <div className={paymentNotSupported
         ? 'spc-aura-redeem-points-form-wrapper in-active'
         : 'spc-aura-redeem-points-form-wrapper'}
       >
@@ -270,7 +268,7 @@ class AuraFormRedeemPoints extends React.Component {
                 placeholder="0"
                 onChangeCallback={this.convertPointsToMoney}
                 value={points}
-                disabled={disableRedemption}
+                disabled={paymentNotSupported}
               />
               <span className="spc-aura-redeem-points-separator">=</span>
               <AuraRedeemPointsTextField
@@ -290,7 +288,9 @@ class AuraFormRedeemPoints extends React.Component {
               type="submit"
               className="spc-aura-redeem-form-submit spc-aura-button"
               onClick={() => this.redeemPoints()}
-              disabled={disableRedemption}
+              disabled={(paymentNotSupported)
+                ? true
+                : !enableSubmit}
             >
               { getStringMessage('checkout_use_points') }
             </button>
@@ -308,7 +308,7 @@ class AuraFormRedeemPoints extends React.Component {
         <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
         {totals.balancePayable <= 0
           && <span id="payment-method-aura_payment" />}
-        {disableRedemption && paymentMethodInCart === 'cashondelivery'
+        {paymentNotSupported && paymentMethodInCart === 'cashondelivery'
           && <div className="spc-aura-cod-disabled-message">{Drupal.t('Aura points can not be redeemed with cash on delivery.')}</div>}
       </div>
     );
