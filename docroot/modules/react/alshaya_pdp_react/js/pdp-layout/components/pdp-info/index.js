@@ -1,7 +1,10 @@
 import React from 'react';
 import PostpayCart
   from '../../../../../alshaya_spc/js/cart/components/postpay/postpay';
+import TabbyCart
+  from '../../../../../alshaya_spc/js/cart/components/tabby';
 import Postpay from '../../../../../alshaya_spc/js/utilities/postpay';
+import Tabby from '../../../../../alshaya_spc/js/utilities/tabby';
 
 const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
@@ -23,6 +26,15 @@ const PdpInfo = ({
       <PostpayCart
         amount={finalPrice.replace(',', '')}
         classNames=""
+        pageType="pdp"
+      />
+    );
+  }
+
+  let tabby;
+  if (Tabby.isTabbyEnabled()) {
+    tabby = (
+      <TabbyCart
         pageType="pdp"
       />
     );
@@ -71,6 +83,7 @@ const PdpInfo = ({
         </div>
       </div>
       {postpay}
+      {tabby}
     </div>
   );
 };

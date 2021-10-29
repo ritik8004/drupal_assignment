@@ -8,6 +8,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -83,18 +84,21 @@ class AlshayaTabbyHelper {
    *   Config Factory.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend checkout_com.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Factory.
    */
   public function __construct(AlshayaApiWrapper $api_wrapper,
                               CurrentRouteMatch $current_route_match,
                               LanguageManager $language_manager,
                               ConfigFactoryInterface $config_factory,
-                              CacheBackendInterface $cache) {
+                              CacheBackendInterface $cache,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->currentRouteMatch = $current_route_match;
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
-    $this->logger = $this->getLogger('AlshayaTabbyHelper');
+    $this->logger = $logger_factory->get('AlshayaTabbyHelper');
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
   }
 

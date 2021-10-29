@@ -1,4 +1,4 @@
-name: 'Alshaya Tabby Payment Method'
+name: 'Alshaya Tabby'
 type: module
 description: 'Contains Tabby payment method related code.'
 package: 'Alshaya'

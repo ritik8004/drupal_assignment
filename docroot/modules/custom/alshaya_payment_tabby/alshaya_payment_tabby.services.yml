@@ -14,3 +14,4 @@ services:
       - '@language_manager'
       - '@config.factory'
       - '@cache.tabby'
+      - '@logger.factory'
