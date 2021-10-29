@@ -1893,7 +1893,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
   // Shipping methods.
   const response = await getHomeDeliveryShippingMethods(shippingAddress);
   if (response.error) {
-    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cartId, Error message: @message', {
+    logger.notice('Error while shipping update manual for HD. Data: @data Cart: @cartId Error message: @message', {
       '@data': JSON.stringify(data),
       '@cartId': cartId,
       '@message': response.error_message,
