@@ -80,7 +80,7 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
 
   // Add My Aura link.
   $links['alshaya_loyalty_club'] = [
-    'text' => t('My AURA'),
+    'text' => t('My Aura'),
     'route' => 'alshaya_aura_react.my_loyalty_club',
     'weight' => 11,
   ];

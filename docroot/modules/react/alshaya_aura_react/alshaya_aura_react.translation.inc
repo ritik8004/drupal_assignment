@@ -55,11 +55,11 @@ function _alshaya_aura_react_translations() {
     'Points on hold' => [
       'ar' => 'النقاط قيد الانتظار',
     ],
-    'Rewards activity' => [
+    'Aura activity' => [
       'ar' => 'تفاصيل المكافآت',
     ],
-    'Loyalty benefits' => [
-      'ar' => 'مكافآت الولاء',
+    'Aura benefits' => [
+      'ar' => 'مميزات أورا',
     ],
     'Your points will be credited to your account. You will be able to redeem them 14 days after delivery as per Aura Terms & Conditions and Alshaya exchange and refund policies.' => [
       'ar' => 'سيتم إيداع النقاط في حسابك. يمكنك استبدالها بعد 14 يوم من التوصيل طبقا للشروط والأحكام الخاصة ببرنامج أورا وسياسات الاستبدال والاسترجاع الخاصة بالشايع.',
@@ -112,7 +112,7 @@ function _alshaya_aura_react_translations() {
     'Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits. Points are not earned on purchases made with points.' => [
       'ar' => 'اشترك في أورا، برنامج المكافآت الجديد، لاكتساب وصرف النقاط أثناء التسوق، واكتشف الكثير من المميزات الحصرية. لا يتم اكتساب النقاط عند الشراء باستخدام النقاط المجمعة مسبقاً.',
     ],
-    'AURA points' => [
+    'Aura points' => [
       'ar' => 'نقاط أورا',
     ],
     'Earn' => [
@@ -130,7 +130,7 @@ function _alshaya_aura_react_translations() {
     'Learn more' => [
       'ar' => 'تعرف على المزيد',
     ],
-    'Your AURA card number' => [
+    'Your Aura card number' => [
       'ar' => 'رقم بطاقة أورا الخاصة بك',
     ],
     'Sign in or create an account to use your points.' => [
@@ -316,8 +316,8 @@ function _alshaya_aura_react_translations() {
     'All Transactions' => [
       'ar' => 'جميع المعاملات',
     ],
-    'Online / Offline' => [
-      'ar' => 'على الانترنت / خارج الشبكة',
+    'Online / Instore' => [
+      'ar' => 'على الانترنت / في المحلات',
     ],
     'Order No.' => [
       'ar' => 'رقم الطلب',

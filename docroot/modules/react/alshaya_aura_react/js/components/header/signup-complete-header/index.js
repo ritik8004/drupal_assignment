@@ -26,7 +26,7 @@ const SignUpCompleteHeader = (props) => {
               <AuraLogo stacked="horizontal" />
             </ConditionalView>
             <div className="title">
-              {Drupal.t('Your AURA card number')}
+              {Drupal.t('Your Aura card number')}
             </div>
             <Cleave
               name="aura-my-account-link-card"

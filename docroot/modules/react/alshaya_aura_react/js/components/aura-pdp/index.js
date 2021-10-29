@@ -143,7 +143,7 @@ class AuraPDP extends React.Component {
       return [
         <span>{`${Drupal.t('Earn')} `}</span>,
         <b>{productPoints}</b>,
-        <span>{` ${Drupal.t('AURA points')}`}</span>,
+        <span>{` ${Drupal.t('Aura points')}`}</span>,
       ];
     }
 
