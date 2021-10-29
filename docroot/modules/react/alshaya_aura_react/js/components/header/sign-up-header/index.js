@@ -49,27 +49,19 @@ class SignUpHeader extends React.Component {
         { isHeaderModalOpen && !isNotExpandable
           && (
           <div className="aura-header-popup-wrapper">
+            <div className="aura-popup-sub-header">
+              <h3>{Drupal.t('Say hello to Aura')}</h3>
+            </div>
             <div className="aura-popup-header">
               <div className="title title--one">
                 {Drupal.t('Bespoke rewards.')}
               </div>
               <div className="title title--two">
-                {Drupal.t('Bespoke lifestyles.')}
+                {Drupal.t('Personalised for you.')}
               </div>
             </div>
-            <div className="aura-popup-sub-header">
-              <h3>{Drupal.t('Say hello to Aura')}</h3>
-            </div>
-            <div className="aura-popup-body">
-              <p>{Drupal.t('Good things come to those with taste. Say hello to Aura, a lifestyle program catered to your taste for refined brands and experiences.')}</p>
-            </div>
-            <div className="aura-popup-footer">
-              <div
-                className="join-aura"
-                onClick={() => this.openOTPModal()}
-              >
-                {Drupal.t('Sign up now')}
-              </div>
+            <div className="aura-popup-body desktop-only">
+              <p>{Drupal.t('Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.')}</p>
               <a
                 href={headerLearnMoreLink}
                 target="_blank"
@@ -78,6 +70,17 @@ class SignUpHeader extends React.Component {
               >
                 {Drupal.t('Learn more')}
               </a>
+            </div>
+            <div className="aura-popup-footer">
+              <div
+                className="join-aura"
+                onClick={() => this.openOTPModal()}
+              >
+                {Drupal.t('Join now')}
+              </div>
+              <div className="aura-popup-footer-bottom">
+                <p>{Drupal.t('Already a member? Add your account details at checkout.')}</p>
+              </div>
             </div>
           </div>
           )}

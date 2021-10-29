@@ -121,11 +121,11 @@ function _alshaya_aura_react_translations() {
     'Bespoke rewards.' => [
       'ar' => 'مكافآت بلا حدود.',
     ],
-    'Bespoke lifestyles.' => [
-      'ar' => 'أسلوب حياة أفضل.',
+    'Personalised for you.' => [
+      'ar' => 'مخصص لك.',
     ],
-    'Good things come to those with taste. Say hello to Aura, a lifestyle program catered to your taste for refined brands and experiences.' => [
-      'ar' => 'لأن أصحاب الذوق الرفيع يستحقون كل ما هو أفضل. مرحباً بكم في أورا، برنامج المكافآت الذي يقدم لكم ماركاتكم المفضلة من خلال تجربة تسوق تُحسن أسلوب حياتكم.',
+    'Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.' => [
+      'ar' => 'أورا هو برنامج المكافآت الجديد يمنحك النقاط عند تسوقك في الأماكن المفضلة ويعطيك فرصة حصرية لتجارب لا مثيل لها.',
     ],
     'Learn more' => [
       'ar' => 'تعرف على المزيد',
@@ -354,6 +354,12 @@ function _alshaya_aura_react_translations() {
     ],
     'Points Redeemed' => [
       'ar' => 'Points Redeemed AR',
+    ],
+    'Join now' => [
+      'ar' => 'اشترك الآن',
+    ],
+    'Already a member? Add your account details at checkout.' => [
+      'ar' => 'هل أنت عضو بالفعل؟ أضف تفاصيل حسابك عند الدفع.',
     ],
   ];
 }
