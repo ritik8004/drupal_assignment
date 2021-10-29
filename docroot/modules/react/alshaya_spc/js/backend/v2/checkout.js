@@ -796,7 +796,7 @@ const selectCnc = async (store, address, billing) => {
     return false;
   }
 
-  logger.notice('Shipping update default for CNC. Data: @data Address: @address Store: @store Cart: @cartId,', {
+  logger.notice('Shipping update default for CNC. Data: @data Address: @address Store: @store Cart: @cartId', {
     '@data': JSON.stringify(data),
     '@address': JSON.stringify(address),
     '@store': JSON.stringify(store),
@@ -815,7 +815,7 @@ const selectCnc = async (store, address, billing) => {
 
   // If billing address not contains proper data (extension info).
   if (!hasValue(billing.extension_attributes)) {
-    logger.warning('Billing address does not have extension attributes. Address: @address Cart: @cartId,', {
+    logger.warning('Billing address does not have extension attributes. Address: @address Cart: @cartId', {
       '@address': JSON.stringify(billing),
       '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
     });
@@ -826,7 +826,7 @@ const selectCnc = async (store, address, billing) => {
   // Not use/assign default billing address if customer_address_id
   // is not available.
   if (!hasValue(billing.customer_address_id)) {
-    logger.warning('Billing address does not have customer_address_id. Address: @address Cart: @cartId,', {
+    logger.warning('Billing address does not have customer_address_id. Address: @address Cart: @cartId', {
       '@address': JSON.stringify(billing),
       '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
     });
@@ -838,7 +838,7 @@ const selectCnc = async (store, address, billing) => {
   // exist in customer's address id list.
   const customerAddressIds = await getCustomerAddressIds();
   if (!_includes(customerAddressIds, billing.customer_address_id)) {
-    logger.warning('Billing address not available in customer address book now. Address: @address Cart: @cartId,', {
+    logger.warning('Billing address not available in customer address book now. Address: @address Cart: @cartId', {
       '@address': JSON.stringify(billing),
       '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
     });
@@ -847,7 +847,7 @@ const selectCnc = async (store, address, billing) => {
   }
 
   // Add log for billing data we pass to magento update cart.
-  logger.debug('Billing update default for CNC. Address: @address Cart: @cartId,', {
+  logger.debug('Billing update default for CNC. Address: @address Cart: @cartId', {
     '@address': JSON.stringify(billing),
     '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
   });
@@ -931,7 +931,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Add log for billing data we pass to magento update cart.
-  logger.notice('Billing update default for HD. Address: @address Cart: @cartId,', {
+  logger.notice('Billing update default for HD. Address: @address Cart: @cartId', {
     '@address': JSON.stringify(billing),
     '@cartId': cartId,
   });
@@ -1497,7 +1497,7 @@ const paymentUpdate = async (data) => {
   }
 
   const cartId = window.commerceBackend.getCartId();
-  logger.notice('Calling update payment for payment_update. Cart id: @cartId, Method: @paymentMethod Data: @data.', {
+  logger.notice('Calling update payment for payment_update. Cart id: @cartId Method: @paymentMethod Data: @data.', {
     '@cartId': cartId,
     '@paymentMethod': paymentData.method,
     '@data': JSON.stringify(paymentData),
@@ -1585,7 +1585,7 @@ const isAddressExtensionAttributesValid = (data) => {
   addressFieldsToValidate.forEach((field) => {
     // If field not exists or empty.
     if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
-      logger.error('Field: @field not available in cart shipping address. Cart id: @cartId,', {
+      logger.error('Field: @field not available in cart shipping address. Cart id: @cartId', {
         '@field': field,
         '@cartId': window.commerceBackend.getCartId(),
       });
@@ -1728,7 +1728,7 @@ window.commerceBackend.getCartForCheckout = async () => {
       }
 
       if (_isEmpty(cart.data.cart) || _isEmpty(cart.data.cart.items)) {
-        logger.warning('Checkout accessed without items in cart for id: @cartId,', {
+        logger.warning('Checkout accessed without items in cart for id: @cartId', {
           '@cartId': cartId,
         });
 
@@ -1873,7 +1873,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     // Unset as not needed in further processing.
     delete (shippingInfo.shipping_type);
 
-    logger.notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cartId,', {
+    logger.notice('Shipping update manual for CNC. Data: @data Address: @address Cart: @cartId', {
       '@data': JSON.stringify(data),
       '@address': JSON.stringify(shippingInfo),
       '@cartId': cartId,
@@ -1921,7 +1921,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
     carrier_info: carrierInfo,
   };
 
-  logger.notice('Shipping update manual for HD. Data: @params. Cart: @cartId,', {
+  logger.notice('Shipping update manual for HD. Data: @params. Cart: @cartId', {
     '@params': JSON.stringify(params),
     '@cartId': window.commerceBackend.getCartId(),
   });

@@ -741,10 +741,9 @@ const getProcessedCartData = async (cartData) => {
         // Do not show the products which are not available in
         // system but only available in cart.
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
-          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, Cart Id Int: @cartIdInt, StockInfo: @stockInfo.', {
+          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
             '@sku': item.sku,
             '@cartId': data.cart_id,
-            '@cartIdInt': data.cart_id_int,
             '@stockInfo': JSON.stringify(stockInfo || {}),
           });
 
@@ -923,6 +922,10 @@ const associateCartToCustomer = async (guestCartId) => {
     return;
   }
 
+  logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
+    '@customerId': window.drupalSettings.userDetails.customerId,
+    '@guestCartId': guestCartId,
+  });
 
   // Clear local storage.
   removeCartIdFromStorage();
@@ -930,12 +933,6 @@ const associateCartToCustomer = async (guestCartId) => {
 
   // Reload cart.
   await getCart(true);
-
-  logger.notice('Guest Cart id @guestCartId associated to customer @customerId with Cart id @cartId.', {
-    '@customerId': window.drupalSettings.userDetails.customerId,
-    '@guestCartId': guestCartId,
-    '@cartId': window.commerceBackend.getCartId(),
-  });
 };
 
 /**
