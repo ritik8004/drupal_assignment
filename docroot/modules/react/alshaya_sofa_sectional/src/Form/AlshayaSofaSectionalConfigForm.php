@@ -90,7 +90,7 @@ class AlshayaSofaSectionalConfigForm extends ConfigFormBase {
 
     $form['sofa_sectional_status'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable sofa and sectional form'),
+      '#title' => $this->t('Enable sofa and sectional feature'),
       '#description' => $this->t('Enable this to apply category from the the list below.'),
       '#default_value' => $this->config('alshaya_sofa_sectional.settings')->get('enabled'),
     ];
