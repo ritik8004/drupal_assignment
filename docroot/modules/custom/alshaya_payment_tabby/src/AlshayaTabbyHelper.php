@@ -8,7 +8,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManager;
-use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -21,7 +20,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class AlshayaTabbyHelper {
 
   use StringTranslationTrait;
-  use LoggerChannelTrait;
 
   /**
    * Api wrapper.
@@ -169,7 +167,10 @@ class AlshayaTabbyHelper {
     $tabbyApiConfig = $this->getTabbyApiConfig();
 
     // No need to integrate the widget if the API does not have merchant code.
-    if (!isset($tabbyApiConfig['merchant_code']) || empty($tabbyApiConfig['merchant_code'])) {
+    if (empty($tabbyApiConfig['merchant_code'])) {
+      $this->logger->error('Merchant code is missing in Tabby config, @response', [
+        '@response' => Json::encode($tabbyApiConfig),
+      ]);
       return;
     }
     $tabbyApiConfig['locale'] = $this->langcode;
@@ -249,6 +250,7 @@ class AlshayaTabbyHelper {
       return $this->getTabbyApiConfig(TRUE);
     }
 
+    // @todo replace with $configs if mdc api works fine.
     return [
       'merchant_code' => 'uae_test',
       'public_key' => 'pk_test_99a77d42-a084-4fff-aee1-a8587483aa13',

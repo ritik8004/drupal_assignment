@@ -12,7 +12,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_payment_tabby_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  // Need processing only for products with Full view mode.
+  // Need processing only for products with Full, Modal, Matchback view mode.
   if ($entity->bundle() != 'acq_product') {
     return;
   }
