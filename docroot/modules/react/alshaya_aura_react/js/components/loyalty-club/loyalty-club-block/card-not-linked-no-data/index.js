@@ -90,22 +90,25 @@ class AuraMyAccountNoLinkedCard extends React.Component {
           </ConditionalView>
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
+          <div className="aura-myaccount-no-linked-card-title">
+            { Drupal.t('Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits.') }
+          </div>
           <div className="link-your-card">
-            { Drupal.t('Already AURA Member?') }
+            { Drupal.t('Already an Aura member?') }
             <div
               className="btn"
               onClick={() => this.openLinkCardModal()}
             >
-              { Drupal.t('Link your card') }
+              { Drupal.t('Link your account') }
             </div>
           </div>
           <div className="sign-up">
-            { Drupal.t('Ready to be Rewarded?') }
+            { Drupal.t('Ready to be rewarded?') }
             <div
               className="btn"
               onClick={() => this.openOTPModal()}
             >
-              { Drupal.t('Sign up') }
+              { Drupal.t('Join now') }
             </div>
             <Popup
               className="aura-modal-form otp-modal"
