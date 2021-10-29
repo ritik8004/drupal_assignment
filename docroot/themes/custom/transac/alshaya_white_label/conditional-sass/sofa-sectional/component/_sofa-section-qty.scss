@@ -171,6 +171,10 @@
     @include breakpoint($only-mobile) {
       display: block;
     }
+
+    button[type=submit][disabled]::after {
+      background-image: none;
+    }
   }
 
   .alshaya-select-wrapper {
