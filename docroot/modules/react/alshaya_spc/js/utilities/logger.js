@@ -10,17 +10,6 @@
  */
 const logger = {
   send: (level, message, context) => {
-    // Add customer Id.
-    if (typeof context !== 'undefined'
-      && typeof drupalSettings.userDetails !== 'undefined'
-      && typeof drupalSettings.userDetails.customerId !== 'undefined'
-      && typeof context['@customerId'] === 'undefined'
-    ) {
-      /* eslint no-param-reassign: "off" */
-      message = `${message} Customer Id: @customerId`;
-      context['@customerId'] = drupalSettings.userDetails.customerId;
-    }
-
     if (typeof Drupal.logViaDataDog !== 'undefined') {
       Drupal.logViaDataDog(level, message, context);
       return;
@@ -43,5 +32,15 @@ const logger = {
   info: (message, context) => logger.send('info', message, context),
   debug: (message, context) => logger.send('debug', message, context),
 };
+
+/**
+ * Provides extra DataDog contexts.
+ */
+document.addEventListener('dataDogContextAlter', (e) => {
+  const context = e.detail;
+  context.customerId = drupalSettings.userDetails.customerId || 0;
+  context.cartId = window.commerceBackend.getCartId() || '';
+  context.cartIdInt = window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '';
+});
 
 export default logger;

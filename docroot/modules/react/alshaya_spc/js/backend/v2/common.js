@@ -911,9 +911,8 @@ const associateCartToCustomer = async (guestCartId) => {
   }
 
   if (response.status !== 200) {
-    logger.warning('Error while associating cart: @cartId to customer: @customerId. Cart Id Int: @cartIdInt. Response: @response.', {
+    logger.warning('Error while associating cart: @cartId to customer: @customerId. Response: @response.', {
       '@cartId': guestCartId,
-      '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
       '@customerId': window.drupalSettings.userDetails.customerId,
       '@response': JSON.stringify(response),
     });
@@ -932,11 +931,10 @@ const associateCartToCustomer = async (guestCartId) => {
   // Reload cart.
   await getCart(true);
 
-  logger.notice('Guest Cart id @guestCartId associated to customer @customerId with Cart id @cartId. Cart Id Int: @cartIdInt.', {
+  logger.notice('Guest Cart id @guestCartId associated to customer @customerId with Cart id @cartId.', {
     '@customerId': window.drupalSettings.userDetails.customerId,
     '@guestCartId': guestCartId,
     '@cartId': window.commerceBackend.getCartId(),
-    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '',
   });
 };
 
@@ -1107,9 +1105,8 @@ const updateCart = async (postData) => {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
-  logger.debug('Updating Cart. CartId: @cartId, Cart Id Int: @cartIdInt. Action: @action, Request: @request.', {
+  logger.debug('Updating Cart. CartId: @cartId, Action: @action, Request: @request.', {
     '@cartId': cartId,
-    '@cartIdInt': window.commerceBackend.getDataFromSessionStorage('cart.cart_id_int') || '',
     '@request': JSON.stringify(data),
     '@action': action,
   });
