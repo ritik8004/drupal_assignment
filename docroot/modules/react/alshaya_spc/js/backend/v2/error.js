@@ -1,5 +1,5 @@
-import _isArray from 'lodash/isArray';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { isArray } from '../../../../js/utilities/typeCheckUtility';
 
 /**
  * Contains cart error codes.
@@ -58,7 +58,7 @@ const getProcessedErrorMessage = (response) => {
   const replacements = {};
 
   // If parameters is an array, we loop the array to create the replacements object.
-  if (_isArray(params)) {
+  if (isArray(params)) {
     for (let i = 0; i < params.length; i++) {
       replacements[`%${i + 1}`] = params[i];
     }
