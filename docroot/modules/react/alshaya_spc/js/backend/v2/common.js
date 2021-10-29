@@ -117,6 +117,9 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   StaticStorage.set('cart', cartInfo);
+
+  // Cart data is not available in local storage on checkout page.
+  // Storing the cart data on session to make data available for DataDog logs.
   sessionStorage.setItem('cart_data', JSON.stringify(cartInfo));
 
   // @todo find better way to get this using commerceBackend.
