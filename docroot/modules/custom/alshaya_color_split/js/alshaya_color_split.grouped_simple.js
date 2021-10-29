@@ -35,8 +35,10 @@
         // Update sameday and express delivery labels on variant change.
         for (var option in variantInfo.delivery_options) {
           $(node).find('.' + option).removeClass('active in-active');
-          $(node).find('.' + option).addClass(variantInfo.delivery_options[option].active_class);;
+          $(node).find('.' + option).addClass(variantInfo.delivery_options[option].status);;
         }
+        $(node).find('.express-delivery').removeClass('active in-active');
+        $(node).find('.express-delivery').addClass(variantInfo.express_delivery_class);
 
         if (viewMode === 'full' || viewMode === 'matchback' || viewMode === 'matchback_mobile') {
           $(node).find('.content--item-code .field__value').html($(this).val());

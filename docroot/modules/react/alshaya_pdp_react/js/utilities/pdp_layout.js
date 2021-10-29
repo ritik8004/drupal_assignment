@@ -219,6 +219,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let firstChild = '';
   let promotions = '';
   let deliveryOptions = null;
+  let expressDeliveryClass = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -258,6 +259,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     firstChild = skuItemCode;
     promotions = productInfo[skuItemCode].promotionsRaw;
     deliveryOptions = productInfo[skuItemCode].deliveryOptions;
+    expressDeliveryClass = productInfo[skuItemCode].expressDeliveryClass;
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
@@ -274,6 +276,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = variantInfo.promotionsRaw;
           deliveryOptions = variantInfo.deliveryOptions;
+          expressDeliveryClass = variantInfo.expressDeliveryClass;
           // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
@@ -335,6 +338,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     freeGiftMessage,
     freeGiftPromoType,
     deliveryOptions,
+    expressDeliveryClass,
   };
 };
 

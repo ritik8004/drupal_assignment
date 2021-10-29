@@ -650,16 +650,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             '#subtitle' => t('Explore the delivery options applicable to your area.'),
           ];
           $delivery_options = alshaya_acm_product_get_delivery_options($sku);
-          if ($delivery_options !== NULL) {
-            // Show delivery options as per order defined in config.
-            $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-            foreach ($delivery_options_order as $option) {
-              if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
-                $build['delivery_options'][$option]['active_class']['#markup'] = $delivery_options[$option]['status'];
-                $build['delivery_options'][$option]['attr_label']['#markup'] = $delivery_options[$option]['label'];
-              }
+          if (!empty($delivery_options['values'])) {
+            foreach ($delivery_options['values'] as $key => $option) {
+              $build['delivery_options'][$key]['status']['#markup'] = $option['status'];
+              $build['delivery_options'][$key]['label']['#markup'] = $option['label'];
             }
           }
+          $build['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
         }
 
         // Delivery in only city.
@@ -2165,16 +2162,24 @@ function alshaya_acm_product_get_delivery_options($sku) {
     return NULL;
   }
 
-  $attr_same_day = $sku_entity->get('attr_same_day_delivery')->getString();
-  $attr_express = $sku_entity->get('attr_express_delivery')->getString();
-  return [
-    'same_day_delivery' => [
-      'status' => $attr_same_day === '1' ? 'active' : 'in-active',
-      'label' => t('Same Day Delivery Available', [], ['context' => 'sameday_delivery_label']),
-    ],
-    'express_delivery' => [
-      'status' => $attr_express === '1' ? 'active' : 'in-active',
-      'label' => t('Express Delivery Available', [], ['context' => 'express_delivery_label']),
-    ],
-  ];
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  $delivery_options_order = $express_delivery_config->get('delivery_options_order');
+  $isExpressDeliveryApplicable = FALSE;
+
+  // Show delivery options as per order defined in config.
+  $delivery_options = [];
+  foreach ($delivery_options_order as $option) {
+    $status = $sku_entity->get('attr_' . $option)->getString();
+    $delivery_options['values'][$option] = [
+      'status' => $status === '1' ? 'active' : 'in-active',
+      'label' => t($express_delivery_config->get($option . '_label'), [], ['context' => $option . '_label']),
+    ];
+    if ($status === '1') {
+      $isExpressDeliveryApplicable = TRUE;
+    }
+  }
+
+  $delivery_options['express_delivery_applicable'] = $isExpressDeliveryApplicable;
+
+  return $delivery_options;
 }
