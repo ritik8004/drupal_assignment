@@ -16,11 +16,11 @@ function _alshaya_aura_react_translations() {
     'Already an Aura member?' => [
       'ar' => 'هل أنت عضو في أورا؟',
     ],
-    'Link your card' => [
-      'ar' => 'قم بربط بطاقتك',
+    'Link your account' => [
+      'ar' => 'قم بربط حسابك',
     ],
     'Ready to be rewarded?' => [
-      'ar' => 'هل أنت مستعد للمكافآت؟',
+      'ar' => 'هل أنت جاهز للمكافآت؟',
     ],
     'Sign up now' => [
       'ar' => 'تسجيل الاشتراك الآن',
@@ -31,7 +31,7 @@ function _alshaya_aura_react_translations() {
     'To use your points online, please download the AURA app and provide us with a few more details.' => [
       'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
     ],
-    'An AURA card is already associated with your email address. Link your card in just one click.' => [
+    'An Aura card is already associated with your email address. Link your card in just one click.' => [
       'ar' => 'يُمكنك ربط بطاقة أورا ببريدك الإلكتروني من خلال ضغطة زر واحدة.',
     ],
     'Do you want to link now?' => [
@@ -121,11 +121,11 @@ function _alshaya_aura_react_translations() {
     'Bespoke rewards.' => [
       'ar' => 'مكافآت بلا حدود.',
     ],
-    'Bespoke lifestyles.' => [
-      'ar' => 'أسلوب حياة أفضل.',
+    'Personalised for you.' => [
+      'ar' => 'مخصص لك.',
     ],
-    'Good things come to those with taste. Say hello to Aura, a lifestyle program catered to your taste for refined brands and experiences.' => [
-      'ar' => 'لأن أصحاب الذوق الرفيع يستحقون كل ما هو أفضل. مرحباً بكم في أورا، برنامج المكافآت الذي يقدم لكم ماركاتكم المفضلة من خلال تجربة تسوق تُحسن أسلوب حياتكم.',
+    'Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.' => [
+      'ar' => 'أورا هو برنامج المكافآت الجديد يمنحك النقاط عند تسوقك في الأماكن المفضلة ويعطيك فرصة حصرية لتجارب لا مثيل لها.',
     ],
     'Learn more' => [
       'ar' => 'تعرف على المزيد',
@@ -217,7 +217,7 @@ function _alshaya_aura_react_translations() {
     'link your account now' => [
       'ar' => 'قم بربط البطاقة الآن',
     ],
-    'You Have' => [
+    'You have' => [
       'ar' => 'لديك',
     ],
     'You will earn' => [
@@ -354,6 +354,15 @@ function _alshaya_aura_react_translations() {
     ],
     'Points Redeemed' => [
       'ar' => 'Points Redeemed AR',
+    ],
+    'Join now' => [
+      'ar' => 'اشترك الآن',
+    ],
+    'Already a member? Add your account details at checkout.' => [
+      'ar' => 'هل أنت عضو بالفعل؟ أضف تفاصيل حسابك عند الدفع.',
+    ],
+    'Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits.' => [
+      'ar' => ' انضم إلى أورا، برنامج المكافآت الجديد لتجميع النقاط وإنفاقها أثناء الشراء واكتشف العديد من المميزات الحصرية.',
     ],
   ];
 }

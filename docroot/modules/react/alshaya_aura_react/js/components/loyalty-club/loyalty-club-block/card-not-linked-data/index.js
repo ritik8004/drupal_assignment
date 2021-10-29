@@ -21,7 +21,7 @@ const AuraMyAccountOldCardFound = (props) => {
       </div>
       <div className="aura-myaccount-no-linked-card-description old-card-found">
         <div className="header">
-          { Drupal.t('An AURA card is already associated with your email address. Link your card in just one click.') }
+          { Drupal.t('An Aura card is already associated with your email address. Link your card in just one click.') }
           <span className="bold">{Drupal.t('Do you want to link now?')}</span>
         </div>
         <div className="card-number-wrapper">
@@ -38,7 +38,7 @@ const AuraMyAccountOldCardFound = (props) => {
               className="link-your-card"
               onClick={() => handleLinkYourCard(cardNumber)}
             >
-              { Drupal.t('Link your card') }
+              { Drupal.t('Link your account') }
             </div>
           </div>
           <div className="not-you-wrapper">

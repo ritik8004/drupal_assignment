@@ -112,7 +112,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_you_have',
-      'value' => t('You Have'),
+      'value' => t('You have'),
     ],
     [
       'key' => 'checkout_you_will_earn',

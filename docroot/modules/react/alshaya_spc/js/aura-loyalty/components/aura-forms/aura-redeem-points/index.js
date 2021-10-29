@@ -14,7 +14,6 @@ import {
   getAuraConfig,
 } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import PriceElement from '../../../../utilities/special-price/PriceElement';
 import dispatchCustomEvent from '../../../../utilities/events';
 
 class AuraFormRedeemPoints extends React.Component {
@@ -236,8 +235,6 @@ class AuraFormRedeemPoints extends React.Component {
 
     return [
       <span key="points" className="spc-aura-highlight">{`${points} ${getStringMessage('points')}`}</span>,
-      <span key="worth" className="spc-aura-redeem-text">{`${getStringMessage('worth')}`}</span>,
-      <span key="money" className="spc-aura-highlight"><PriceElement amount={money} /></span>,
       <span key="redeemed" className="spc-aura-redeem-text">{`${getStringMessage('have_been_redeemed')}`}</span>,
     ];
   }
