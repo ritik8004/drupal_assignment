@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import qs from 'qs';
-import _cloneDeep from 'lodash/cloneDeep';
 import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
@@ -481,7 +480,13 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
  *   Formatted / processed cart.
  */
 const formatCart = (cartData) => {
-  const data = _cloneDeep(cartData);
+  // As of now we don't need deep clone of the passed object.
+  // As Method calls are storing the result on the same object.
+  // For ex - response.data = formatCart(response.data);
+  // if in future, method call is storing result on any other object.
+  // Clone of the argument passed, will be needed which can be achieved using.
+  // const data = JSON.parse(JSON.stringify(cartData));
+  const data = cartData;
   // Check if there is no cart data.
   if (!hasValue(data.cart) || !isObject(data.cart)) {
     return data;
