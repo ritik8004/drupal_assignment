@@ -126,11 +126,11 @@ header {
               width: 21.875rem;
               height: 2.125rem;
             }
-  
+
             html[lang="ar"] & {
               width: 11rem;
               height: 2.4365rem;
-              
+
               @include breakpoint($tablet) {
                 width: 15.8125rem;
                 height: 3.5rem;

@@ -59,12 +59,12 @@
       img {
         width: 10.98rem;
         height: 2.71rem;
-      
+
         @include breakpoint($tablet) {
           width: 13rem;
           height: 3.22rem;
         }
-      }      
+      }
     }
   }
 }

@@ -71,30 +71,30 @@ header.c-header {
           img {
             width: 10.63rem;
             height: 1.57rem;
-          
+
             @include breakpoint($tablet) {
               width: 17.57rem;
               height: 2.6rem;
             }
-          
+
             @include breakpoint($desktop) {
               width: 18.19rem;
               height: 2.69rem;
             }
-          
+
             html[lang="ar"] & {
               height: 2.5rem;
-          
+
               @include breakpoint($tablet) {
                 width: 16rem;
                 height: 3.75rem;
               }
-          
+
               @include breakpoint($desktop) {
                 height: 4.27rem;
               }
             }
-          }          
+          }
         }
       }
     }

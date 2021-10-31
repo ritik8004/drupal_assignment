@@ -198,16 +198,16 @@ header {
             img {
               width: 9.5rem;
               height: 1.71rem;
-      
+
               @include breakpoint($tablet) {
                 width: 9.75rem;
                 height: 1.75rem;
               }
-      
+
               html[lang=ar] & {
                 width: 7.5rem;
                 height: 3.07rem;
-      
+
                 @include breakpoint($tablet) {
                   width: 8rem;
                   height: 3.75rem;
@@ -216,7 +216,7 @@ header {
                 @include breakpoint($desktop) {
                   width: 10rem;
                   height: 4.1rem;
-                }      
+                }
               }
             }
           }
