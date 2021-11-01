@@ -1,5 +1,4 @@
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import { isArray } from '../../../../js/utilities/typeCheckUtility';
+import { hasValue, isArray } from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Contains cart error codes.

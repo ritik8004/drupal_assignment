@@ -19,10 +19,13 @@ import {
 } from './error';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isObject,
+  isArray,
+} from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
-import { isObject, isArray } from '../../../../js/utilities/typeCheckUtility';
 
 window.authenticatedUserCartId = 'NA';
 

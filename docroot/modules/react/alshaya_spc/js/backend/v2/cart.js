@@ -19,8 +19,11 @@ import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
-import { isString, isNumber } from '../../../../js/utilities/typeCheckUtility';
+import {
+  hasValue,
+  isString,
+  isNumber,
+} from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 

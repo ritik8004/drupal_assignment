@@ -3,7 +3,7 @@ import { getApiEndpoint } from './utility';
 import logger from '../../utilities/logger';
 import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
-import { hasValue, isString } from '../../../../js/utilities/typeCheckUtility';
+import { hasValue, isString } from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Format the address array.

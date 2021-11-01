@@ -32,7 +32,7 @@ import { getStorageInfo } from '../../../utilities/storage';
 import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 window.fetchStore = 'idle';
 

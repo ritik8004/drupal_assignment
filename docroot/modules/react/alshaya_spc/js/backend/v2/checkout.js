@@ -36,9 +36,13 @@ import {
   getHomeDeliveryShippingMethods,
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isBoolean,
+  isObject,
+  isArray,
+} from '../../../../js/utilities/conditionsUtility';
 import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
-import { isBoolean, isObject, isArray } from '../../../../js/utilities/typeCheckUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
