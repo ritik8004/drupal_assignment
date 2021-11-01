@@ -279,7 +279,7 @@ const handleResponse = (apiResponse) => {
       response.data.error_code = 500;
     } else if (apiResponse.status === 404
       && !hasValue(apiResponse.data)
-      && !!hasValue(apiResponse.message)) {
+      && hasValue(apiResponse.message)) {
       response.data.code = 404;
       response.data.error_code = 404;
       response.data.error_message = response.message;
@@ -290,7 +290,7 @@ const handleResponse = (apiResponse) => {
         '@resultCode': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
         '@responseCode': response.status,
       });
-    } else if (hasValue(apiResponse.data.message) && hasValue(apiResponse.data.message)) {
+    } else if (hasValue(apiResponse.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(apiResponse);
 
