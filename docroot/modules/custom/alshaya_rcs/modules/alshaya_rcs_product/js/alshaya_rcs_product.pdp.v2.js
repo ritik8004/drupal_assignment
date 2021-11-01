@@ -682,6 +682,7 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
   let rawProduct = null;
   const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
   const productData = window.commerceBackend.getProductData(mainSku, null, false);
+  const viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
   if (typeof parentSku === 'undefined') {
     rawProduct = productData;
@@ -698,8 +699,8 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
 
   // Maps gallery value from backend to the appropriate filter.
   let galleryType = null;
-  switch (drupalSettings.alshayaRcs.pdpLayout) {
-    case 'pdp':
+  switch (drupalSettings.alshayaRcs.pdpGalleryType) {
+    case 'classic':
       galleryType = 'classic-gallery';
       break;
   }
@@ -708,8 +709,11 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     .render(
       drupalSettings,
       galleryType,
-      {},
-      { labels },
+      {
+        galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
+        labels,
+      },
+      { },
       // rawProduct,
       productData,
       drupalSettings.path.currentLanguage,

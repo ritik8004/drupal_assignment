@@ -256,9 +256,15 @@ exports.render = function render(
         case 'never':
           // Get the images from the variants.
           entity.variants.forEach(function (variant) {
-            mediaCollection.gallery = mediaCollection.gallery.concat(variant.product.media);
-            // mediaCollection.zoom = mediaCollection.zoom.concat(variant.product.media.zoom);
-            // mediaCollection.thumbnails = mediaCollection.thumbnails.concat(variant.product.media.thumbnails);
+            variant.product.media.forEach(function (variantMedia) {
+              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+                type: 'image',
+                thumburl: variantMedia.thumbnails,
+                mediumurl: variantMedia.medium,
+                zoomurl: variantMedia.zoom,
+                fullurl: variantMedia.url,
+              });
+            });
           });
           break;
 
@@ -268,151 +274,27 @@ exports.render = function render(
       }
 
       // If no media, return;
-      if (!mediaCollection.gallery.length) {
+      if (!mediaCollection.thumbnails.length) {
         html = '';
         break;
       }
 
-      const gallery = jQuery('.rcs-templates--rcs-product-zoom').clone();
-
-      // Get the template for the thumbnails.
-      const thumbnailTemplate = jQuery('.rcs-templates--product_thumbnails').clone();
-      // This is the list that will hold the thumbnails.
-      const thumbnails = jQuery('<ul id="lightSlider"></ul>');
-
-      // Get the template for the mobile.
-      const mobileGalleryTemplate = jQuery('.rcs-templates--product_gallery_mobile').clone();
-      const mobileGallery = jQuery('<div>');
-
-      mediaCollection.gallery.forEach((media) => {
-        const galleryElement = jQuery('<li></li>');
-
-        const galleryElementAnchor = jQuery('<a></a>');
-        galleryElementAnchor.attr({
-          href: media.gallery,
-          class: 'imagegallery__thumbnails__image a-gallery',
-        });
-
-        const galleryElementImg = jQuery('<img />');
-        galleryElementImg.attr({
-          loading: 'lazy',
-          src: media.gallery,
-          'data-src': media.gallery,
-          // alt: media.label,
-          // title: media.label,
-        });
-
-        galleryElementAnchor.append(galleryElementImg);
-        galleryElement.append(galleryElementAnchor);
-        jQuery('#product-full-screen-gallery', gallery).append(galleryElement);
-
-
-        // @todo: Fetch the type from the input.
-        const type = 'image';
-        switch (type) {
-          case 'youtube':
-            break;
-
-          case 'vimeo':
-            break;
-
-          case 'pdp-video':
-            break;
-
-          // Image.
-          default:
-            // const imageLabel = media.label;
-            // Get the image element from the template and start adding the
-            // required attributes.
-            let element = jQuery('.default', thumbnailTemplate).clone();
-            const anchor = jQuery('a', element);
-
-            anchor.attr({
-              // @todo: Replace this with the zoomed image.
-              'data-zoom-url': media.zoom,
-              // @todo: Replace this with the medium image.
-              href: media.gallery,
-            });
-
-            jQuery('img', anchor).attr({
-              src:  media.gallery,
-              'data-src': media.gallery,
-              // alt: imageLabel,
-              // title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            thumbnails.append(element);
-
-            // ### MOBILE GALLERY.
-            // Get the image element from the template and start adding the
-            // required attributes.
-            element = jQuery('.default', mobileGalleryTemplate).clone();
-
-            jQuery('img', element).attr({
-              src:  media.gallery,
-              'data-src': media.gallery,
-              // alt: imageLabel,
-              // title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            mobileGallery.append(element);
-        }
-      });
-
-      if (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) {
-        thumbnails.addClass('pager-yes');
-      }
-      else {
-        thumbnails.addClass('pager-no');
+      const data = {
+        mainImage: {
+          zoomurl: mediaCollection.thumbnails[0].zoomurl,
+          mediumurl: mediaCollection.thumbnails[0].mediumurl,
+          label: entity.name,
+        },
+        labels: params.labels,
+        pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdp_gallery_pager_limit[params.galleryLimit])
+          ? 'pager-yes'
+          : 'pager-no',
+        thumbnails: mediaCollection.thumbnails,
+        lazy_load_placeholder: drupalSettings.alshayaRcs.lazy_load_placeholder,
+        pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
       }
 
-      jQuery('.cloudzoom__thumbnails', gallery).html(thumbnails);
-      jQuery('#product-image-gallery-mobile', gallery).html(mobileGallery.html());
-
-      // Get the labels data.
-      const labels = inputs.labels;
-      if (labels.length) {
-        const labelsData = {};
-        labels.forEach(function (label) {
-          // Don't render labels with unknown positions.
-          if (!(['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(label.position))) {
-            return;
-          }
-
-          if (typeof labelsData[label.position] === 'undefined') {
-            labelsData[label.position] = [];
-          }
-          // Group the labels by position.
-          labelsData[label.position].push(label);
-        });
-
-        const productLabels = jQuery('<div class="product-labels"><div class="labels-wrapper" data-type="pdp" data-sku="#rcs.product._self|sku#" data-main-sku="#rcs.product._self|sku#"></div></div>');
-        const labelsWrapper = productLabels.find('.labels-wrapper');
-
-        Object.keys(labelsData).forEach(function (position) {
-          const positionLabels = jQuery('<div>').addClass(`labels-container ${position}`);
-          labelsData[position].forEach(function (labelData) {
-            const individualLabel = jQuery('<div>').addClass('label');
-            const img = jQuery('<img>').attr({
-              src: labelData.image,
-              alt: labelData.name,
-              title: labelData.name,
-            });
-            individualLabel.append(img);
-            positionLabels.append(individualLabel);
-          });
-          labelsWrapper.append(positionLabels);
-        });
-
-        // jQuery('.product-labels .labels-wrapper', gallery).html(productLabels.html());
-        const productLabelsMarkup = productLabels.html();
-        jQuery('.cloudzoom__herocontainer', gallery).append(productLabelsMarkup);
-        jQuery('.mobilegallery', gallery).append(productLabelsMarkup);
-      }
-
-      html += gallery.html();
+      html += handlebarsRenderer.render('field.product.product_zoom', data);
       break;
 
     default:
