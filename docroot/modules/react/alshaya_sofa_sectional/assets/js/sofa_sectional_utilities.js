@@ -17,11 +17,17 @@
           );
         }
         else if (typeof sku !== 'undefined') {
-          // Check if the parent SKU is passed in event details and
+          // Check if the target element selector is passed in event details,
+          // else use the default sku base form class.
+          var targetFormEle = typeof detail.elementSelector !== 'undefined'
+            ? $(detail.elementSelector)
+            : $('form.sku-base-form');
+
+          // If the parent SKU is passed in event details and
           // add initial price block for the case of parent SKU.
-          var viewMode = $('form.sku-base-form').parents('article.entity--type-node').attr('data-vmode');
+          var viewMode = targetFormEle.parents('article.entity--type-node').attr('data-vmode');
           var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-          var node = $('form.sku-base-form').parents('article.entity--type-node:first');
+          var node = targetFormEle.parents('article.entity--type-node:first');
           $('.price-block-' + drupalSettings[productKey][sku].identifier, node).html(drupalSettings[productKey][sku].price);
 
           // Update Gallery.

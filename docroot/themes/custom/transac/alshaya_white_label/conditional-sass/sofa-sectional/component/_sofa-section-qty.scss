@@ -190,3 +190,15 @@
     }
   }
 }
+
+@include breakpoint($only-tablet) {
+  .acq-content-product-modal {
+    .field--name-field-skus {
+      .sku-base-form {
+        button[type="submit"] {
+          margin-top: 1.5rem !important;
+        }
+      }
+    }
+  }
+}
