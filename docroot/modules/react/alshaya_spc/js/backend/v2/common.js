@@ -251,7 +251,7 @@ const handleResponse = (apiResponse) => {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
-    response.data.error_message = getDefaultErrorMessage();
+    response.data.error_message = 'Back-end system is down';
   } else if (apiResponse.status === 401) {
     if (isUserAuthenticated()) {
       // Customer Token expired.
