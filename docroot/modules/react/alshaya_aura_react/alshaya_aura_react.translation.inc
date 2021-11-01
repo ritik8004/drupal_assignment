@@ -365,7 +365,7 @@ function _alshaya_aura_react_translations() {
       'ar' => ' انضم إلى أورا، برنامج المكافآت الجديد لتجميع النقاط وإنفاقها أثناء الشراء واكتشف العديد من المميزات الحصرية.',
     ],
     'As an Aura member, collect points every time you shop to spend on future purchases, and to unlock exclusive rewards.' => [
-      'ar' => 'As an Aura member, collect points every time you shop to spend on future purchases, and to unlock exclusive rewards. AR',
+      'ar' => 'كعضو في أورا، يمكنك تجميع النقاط مع كل عملية شراء وإنفاقها في عمليات الشراء المستقبلية، إضافة إلى الحصول على الكثير من المكافآت الحصرية.',
     ],
   ];
 }
