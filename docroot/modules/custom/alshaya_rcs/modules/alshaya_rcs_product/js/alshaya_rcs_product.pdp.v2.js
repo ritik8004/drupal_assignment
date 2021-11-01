@@ -712,6 +712,8 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
       {
         galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
         labels,
+        // The simple SKU.
+        sku,
       },
       { },
       // rawProduct,

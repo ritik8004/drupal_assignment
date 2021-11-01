@@ -256,6 +256,10 @@ exports.render = function render(
         case 'never':
           // Get the images from the variants.
           entity.variants.forEach(function (variant) {
+            // Only fetch media for the selected variant.
+            if (variant.product.sku !== params.sku) {
+              return;
+            }
             variant.product.media.forEach(function (variantMedia) {
               mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
                 type: 'image',
@@ -265,6 +269,8 @@ exports.render = function render(
                 fullurl: variantMedia.url,
               });
             });
+            // Break from the loop.
+            return false;
           });
           break;
 
