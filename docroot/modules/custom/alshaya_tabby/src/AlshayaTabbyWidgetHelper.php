@@ -5,7 +5,6 @@ namespace Drupal\alshaya_tabby;
 use Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -42,13 +41,6 @@ class AlshayaTabbyWidgetHelper {
   protected $configFactory;
 
   /**
-   * Cache backend tabby.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
    * Logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -71,20 +63,16 @@ class AlshayaTabbyWidgetHelper {
    *   Language Manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache backend checkout_com.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
    */
   public function __construct(AlshayaBnplApiHelper $bnpl_api_helper,
                               LanguageManager $language_manager,
                               ConfigFactoryInterface $config_factory,
-                              CacheBackendInterface $cache,
                               LoggerChannelFactoryInterface $logger_factory) {
     $this->bnplApiHelper = $bnpl_api_helper;
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
-    $this->cache = $cache;
     $this->logger = $logger_factory->get('AlshayaTabbyHelper');
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
   }

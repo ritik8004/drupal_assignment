@@ -7,7 +7,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Helper class for BNPL.
@@ -15,8 +14,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * @package Drupal\alshaya_acm_checkout
  */
 class AlshayaBnplApiHelper {
-
-  use StringTranslationTrait;
 
   /**
    * Api wrapper.
@@ -100,7 +97,7 @@ class AlshayaBnplApiHelper {
       $configs = Json::decode($response);
 
       if (empty($configs)) {
-        $this->logger->error('Invalid response from BNPL api, Payment Method: @payment_method, @response', [
+        $this->logger->error('Invalid response from api, Payment Method: @payment_method, @response', [
           '@payment_method' => $payment_method,
           '@response' => Json::encode($configs),
         ]);

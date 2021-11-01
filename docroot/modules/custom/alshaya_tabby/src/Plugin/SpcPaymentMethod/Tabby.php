@@ -6,7 +6,6 @@ use Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,7 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
 
   use LoggerChannelTrait;
-  use StringTranslationTrait;
 
   /**
    * BNPL payment method Helper.
