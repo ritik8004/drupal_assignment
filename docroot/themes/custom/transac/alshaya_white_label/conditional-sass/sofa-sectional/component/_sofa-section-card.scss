@@ -1,20 +1,23 @@
-.c-pdp .sku-base-form {
-  .sofa-section-card {
-    display: block;
-
-    &:nth-of-type(1) {
-      border-top: 1px solid $accordion_border;
-    }
-
-    @include breakpoint($only-mobile) {
+.c-pdp,
+.acq-content-product-modal {
+  .sku-base-form {
+    .sofa-section-card {
       display: block;
-      width: calc(100% + 1rem);
-      margin-left: -0.5rem;
-      margin-right: -0.5rem;
-    }
 
-    @include breakpoint($only-tablet) {
-      width: 100%;
+      &:nth-of-type(1) {
+        border-top: 1px solid $accordion_border;
+      }
+
+      @include breakpoint($only-mobile) {
+        display: block;
+        width: calc(100% + 1rem);
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 100%;
+      }
     }
   }
 }
