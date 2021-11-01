@@ -1,6 +1,4 @@
 import _isBoolean from 'lodash/isBoolean';
-import _findIndex from 'lodash/findIndex';
-import _first from 'lodash/first';
 import _isArray from 'lodash/isArray';
 import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -118,13 +116,13 @@ const getDefaultAddress = (data) => {
   }
 
   // If address is set as default for shipping.
-  const key = _findIndex(data.customer.addresses, (address) => address.default_shipping === '1');
+  const key = _.findIndex(data.customer.addresses, (address) => address.default_shipping === '1');
   if (key >= 0) {
     return data.customer.addresses[key];
   }
 
   // Return first address.
-  return _first(data.customer.addresses);
+  return [].concat(data.customer.addresses).shift();
 };
 
 /**

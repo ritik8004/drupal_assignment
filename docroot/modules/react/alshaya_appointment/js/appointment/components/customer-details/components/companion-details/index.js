@@ -1,5 +1,4 @@
 import React from 'react';
-import _find from 'lodash/find';
 import { getStorageInfo } from '../../../../../utilities/storage';
 import TextField from '../../../../../utilities/textfield';
 import { fetchAPIData } from '../../../../../utilities/api/fetchApiData';
@@ -89,9 +88,9 @@ export default class CompanionDetails extends React.Component {
       const firstName = `${companionNamePrefix}name`;
       const lastName = `${companionNamePrefix}lastname`;
       const dob = `${companionNamePrefix}dob`;
-      const firstNameData = _find(questions, ['questionExternalId', firstName]);
-      const lastNameData = _find(questions, ['questionExternalId', lastName]);
-      const dobData = _find(questions, ['questionExternalId', dob]);
+      const firstNameData = _.find(questions, ['questionExternalId', firstName]);
+      const lastNameData = _.find(questions, ['questionExternalId', lastName]);
+      const dobData = _.find(questions, ['questionExternalId', dob]);
       let defaultfirstName; let defaultlastName; let
         defaultdob;
 

@@ -3,6 +3,7 @@ alshaya_appointment:
     dist/appointment.js: {}
   dependencies:
     - alshaya_react/react
+    - core/underscore
 
 alshaya_appointment_view:
   js:
