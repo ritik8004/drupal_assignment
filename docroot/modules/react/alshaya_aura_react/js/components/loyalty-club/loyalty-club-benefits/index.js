@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { getLoyaltyBenefitsTitle, getLoyaltyBenefitsContent } from '../../../utilities/helper';
+import ToolTip from '../../../../../alshaya_spc/js/utilities/tooltip';
 
 const LoyaltyClubBenefits = () => {
   const loyaltyBenefitsTitle = getLoyaltyBenefitsTitle();
@@ -10,6 +11,7 @@ const LoyaltyClubBenefits = () => {
       <div className="title">
         <span className="title-1">{loyaltyBenefitsTitle.title1}</span>
         <span className="title-2">{loyaltyBenefitsTitle.title2}</span>
+        <ToolTip enable question>{ Drupal.t('As an Aura member, collect points every time you shop to spend on future purchases, and to unlock exclusive rewards.') }</ToolTip>
       </div>
       <div className="details">
         {parse(getLoyaltyBenefitsContent())}
