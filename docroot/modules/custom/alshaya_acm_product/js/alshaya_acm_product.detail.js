@@ -529,7 +529,7 @@
           }
         }
       }
-      else if (variantInfo !== '') {
+      else if (typeof variantInfo !== 'undefined' && variantInfo !== '') {
         var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined"
           ? variantInfo.orderLimitMsg : '';
 
