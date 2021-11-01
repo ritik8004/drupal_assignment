@@ -118,10 +118,6 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   cartInfo.last_update = new Date().getTime();
   StaticStorage.set('cart', cartInfo);
 
-  // Cart data is not available in local storage on checkout page.
-  // Storing the cart data on session to make data available for DataDog logs.
-  sessionStorage.setItem('cart_data', JSON.stringify(cartInfo));
-
   // @todo find better way to get this using commerceBackend.
   // As of now it not possible to get it on page load before all
   // other JS is executed and for all other JS refactoring
@@ -148,30 +144,6 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   if (resetAll) {
     removeCartIdFromStorage();
   }
-};
-
-/**
- * Gets properties from data in the session.
- *
- * @param {string} key
- *   The key of the variable stored in the session.
- * @param {string} path
- *   The path to the data in the object. i.e. cart.customer.id
- *
- * @returns {Object|array|string|number|null}
- *   The value or null if not found.
- */
-window.commerceBackend.getDataFromSessionStorage = (key, path) => {
-  const data = JSON.parse(sessionStorage.getItem(key));
-  if (data) {
-    // Splits the path using dot then tries to find the value inside the object.
-    const value = path.split('.').reduce((prev, curr) => prev && prev[curr], data);
-    if (typeof value !== 'undefined') {
-      return value;
-    }
-  }
-
-  return null;
 };
 
 /**

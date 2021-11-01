@@ -1,3 +1,5 @@
+import { getStorageItem } from './storage';
+
 /**
  * Logs messages in the backend.
  *
@@ -40,7 +42,7 @@ document.addEventListener('dataDogContextAlter', (e) => {
   const context = e.detail;
   context.customerId = drupalSettings.userDetails.customerId || 0;
   context.cartId = window.commerceBackend.getCartId() || '';
-  context.cartIdInt = window.commerceBackend.getDataFromSessionStorage('cart_data', 'cart.cart_id_int') || '';
+  context.cartIdInt = getStorageItem('cart_data', 'cart.cart_id_int') || '';
 });
 
 export default logger;
