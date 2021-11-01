@@ -167,6 +167,7 @@ class AlshayaTabbyWidgetHelper {
 
       default:
         $build['#attached']['library'][] = 'alshaya_tabby/tabby_pdp';
+        $build['#attached']['library'][] = 'alshaya_white_label/tabby';
         $build['tabby'] = $this->getTabbyWidgetMarkup();
         $widget_info = $this->getTabbyWidgetInfo();
         $build['#attached']['drupalSettings']['tabby']['selector'] = $widget_info['id'];
