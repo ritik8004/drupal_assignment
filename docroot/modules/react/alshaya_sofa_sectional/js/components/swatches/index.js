@@ -55,7 +55,7 @@ const Swatch = (props) => {
       className={isColor ? `li-swatch-color ${classes}` : `li-swatch-image ${classes}`}
       onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
     >
-      <ConditionalView condition={isColor}>
+      <ConditionalView condition={(isColor) && (data !== null)}>
         <a
           id={`value${value}`}
           data-value={value}
@@ -63,7 +63,7 @@ const Swatch = (props) => {
           style={{ backgroundColor: data }}
         />
       </ConditionalView>
-      <ConditionalView condition={!isColor}>
+      <ConditionalView condition={(!isColor) && (data !== null)}>
         <a
           id={`value${value}`}
           data-value={value}
