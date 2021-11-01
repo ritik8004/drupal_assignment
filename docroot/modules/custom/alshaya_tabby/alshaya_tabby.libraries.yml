@@ -6,13 +6,13 @@ tabby_promos:
   js:
     https://checkout.tabby.ai/tabby-promo.js: { type: external }
   dependencies:
-    - alshaya_payment_tabby/tabby_sdk
+    - alshaya_tabby/tabby_sdk
 
 tabby_card:
   js:
     https://checkout.tabby.ai/tabby-card.js: { type: external }
   dependencies:
-    - alshaya_payment_tabby/tabby_sdk
+    - alshaya_tabby/tabby_sdk
 
 tabby_pdp:
   version: 1.x
@@ -23,11 +23,11 @@ tabby_pdp:
     - core/jquery.once
     - core/drupal
     - core/drupalSettings
-    - alshaya_payment_tabby/tabby_promos
+    - alshaya_tabby/tabby_promos
 
 tabby_cart:
   version: 1.x
   js:
     js/tabby_cart.js: { }
   dependencies:
-    - alshaya_payment_tabby/tabby_sdk
+    - alshaya_tabby/tabby_sdk

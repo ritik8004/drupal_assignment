@@ -1,33 +1,31 @@
 <?php
 
-namespace Drupal\alshaya_payment_tabby;
+namespace Drupal\alshaya_tabby;
 
-use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Helper class for Tabby.
  *
- * @package Drupal\alshaya_payment_tabby
+ * @package Drupal\alshaya_tabby
  */
-class AlshayaTabbyHelper {
+class AlshayaTabbyWidgetHelper {
 
   use StringTranslationTrait;
 
   /**
-   * Api wrapper.
+   * BNPL Api Helper.
    *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   * @var \Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper
    */
-  protected $apiWrapper;
+  protected $bnplApiHelper;
 
   /**
    * Language Manager service.
@@ -42,13 +40,6 @@ class AlshayaTabbyHelper {
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
-
-  /**
-   * The current route matcher service.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  protected $currentRouteMatch;
 
   /**
    * Cache backend tabby.
@@ -74,10 +65,8 @@ class AlshayaTabbyHelper {
   /**
    * AlshayaTabbyHelper Constructor.
    *
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   * @param \Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper $bnpl_api_helper
    *   Api wrapper.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
-   *   Current route matcher service.
    * @param \Drupal\Core\Language\LanguageManager $language_manager
    *   Language Manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -87,14 +76,12 @@ class AlshayaTabbyHelper {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper,
-                              CurrentRouteMatch $current_route_match,
+  public function __construct(AlshayaBnplApiHelper $bnpl_api_helper,
                               LanguageManager $language_manager,
                               ConfigFactoryInterface $config_factory,
                               CacheBackendInterface $cache,
                               LoggerChannelFactoryInterface $logger_factory) {
-    $this->apiWrapper = $api_wrapper;
-    $this->currentRouteMatch = $current_route_match;
+    $this->bnplApiHelper = $bnpl_api_helper;
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
@@ -159,16 +146,17 @@ class AlshayaTabbyHelper {
     // No need to integrate the widget if tabby payment method is excluded
     // from the Checkout page.
     $config = $this->configFactory->get('alshaya_acm_checkout.settings');
-    $excludedPaymemtMethods = $config->get('exclude_payment_methods');
+    $excludedPaymentMethods = $config->get('exclude_payment_methods');
+
+    if (in_array('tabby', array_filter($excludedPaymentMethods))) {
+      return;
+    }
 
     CacheableMetadata::createFromRenderArray($build)
       ->addCacheableDependency($config)
       ->applyTo($build);
-    if (in_array('tabby', array_filter($excludedPaymemtMethods))) {
-      return;
-    }
 
-    $tabbyApiConfig = $this->getTabbyApiConfig();
+    $tabbyApiConfig = $this->bnplApiHelper->getBnplApiConfig('tabby', 'tabby/config');
 
     // No need to integrate the widget if the API does not have merchant code.
     if (empty($tabbyApiConfig['merchant_code'])) {
@@ -190,7 +178,7 @@ class AlshayaTabbyHelper {
         break;
 
       default:
-        $build['#attached']['library'][] = 'alshaya_payment_tabby/tabby_pdp';
+        $build['#attached']['library'][] = 'alshaya_tabby/tabby_pdp';
         $build['tabby'] = $this->getTabbyWidgetMarkup();
         $widget_info = $this->getTabbyWidgetInfo();
         $build['#attached']['drupalSettings']['tabby']['selector'] = $widget_info['id'];
@@ -198,67 +186,6 @@ class AlshayaTabbyHelper {
         $build['#attached']['drupalSettings']['tabby']['tabby_installment_count'] = 4;
         break;
     }
-  }
-
-  /**
-   * Get Tabby payment method config.
-   *
-   * @param bool $reset
-   *   Reset cached data and fetch again.
-   *
-   * @return array|mixed
-   *   Return array of keys.
-   */
-  public function getTabbyApiConfig($reset = FALSE) {
-
-    static $configs;
-
-    if (!empty($configs)) {
-      return $configs;
-    }
-
-    $cache_key = 'alshaya_payment_tabby:api_configs';
-
-    // Cache time in minutes, set 0 to disable caching.
-    $cache_time = (int) Settings::get('alshaya_payment_tabby_cache_time', 60);
-
-    // Disable caching if cache time set to 0 or null in settings.
-    $reset = empty($cache_time) ? TRUE : $reset;
-
-    $cache = $reset ? NULL : $this->cache->get($cache_key);
-    if (is_object($cache) && !empty($cache->data)) {
-      $configs = $cache->data;
-    }
-    else {
-      $response = $this->apiWrapper->invokeApi(
-        'tabby/config',
-        [],
-        'GET'
-      );
-
-      $configs = Json::decode($response);
-
-      if (empty($configs)) {
-        $this->logger->error('Invalid response from Tabby api, @response', [
-          '@response' => Json::encode($configs),
-        ]);
-      }
-      elseif ($cache_time > 0) {
-        // Cache only if enabled (cache_time set).
-        $this->cache->set($cache_key, $configs, strtotime("+${cache_time} minutes"));
-      }
-    }
-
-    // Try resetting once.
-    if (empty($configs) && !($reset)) {
-      return $this->getTabbyApiConfig(TRUE);
-    }
-
-    // @todo replace with $configs if mdc api works fine.
-    return [
-      'merchant_code' => 'uae_test',
-      'public_key' => 'pk_test_99a77d42-a084-4fff-aee1-a8587483aa13',
-    ];
   }
 
 }

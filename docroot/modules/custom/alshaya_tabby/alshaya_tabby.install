@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Contains install, update, uninstall hooks for alshaya_payment_tabby module.
+ * Contains install, update, uninstall hooks for alshaya_tabby module.
  */
 
 /**
  * Implements hook_install().
  */
-function alshaya_payment_tabby_install() {
+function alshaya_tabby_install() {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $tabby = $checkout_options_manager->loadPaymentMethod('tabby', 'Instalments with tabby');

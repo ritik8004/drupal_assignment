@@ -6,11 +6,10 @@ services:
     factory: cache_factory:get
     arguments: [ tabby ]
 
-  alshaya_payment_tabby.helper:
-    class: Drupal\alshaya_payment_tabby\AlshayaTabbyHelper
+  alshaya_tabby.widget_helper:
+    class: Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper
     arguments:
-      - '@alshaya_api.api'
-      - '@current_route_match'
+      - '@alshaya_acm_checkout.bnpl_api_helper'
       - '@language_manager'
       - '@config.factory'
       - '@cache.tabby'

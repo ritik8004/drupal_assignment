@@ -56,3 +56,17 @@ services:
       - '@current_route_match'
     tags:
       - { name: event_subscriber }
+
+  cache.bnpl_helper:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [ bnpl_helper ]
+
+  alshaya_acm_checkout.bnpl_api_helper:
+    class: Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@cache.bnpl_helper'
+      - '@logger.factory'
