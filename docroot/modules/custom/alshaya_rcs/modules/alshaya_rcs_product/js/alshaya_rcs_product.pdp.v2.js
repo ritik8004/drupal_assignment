@@ -699,9 +699,9 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
 
   // Maps gallery value from backend to the appropriate filter.
   let galleryType = null;
-  switch (drupalSettings.alshayaRcs.pdpGalleryType) {
-    case 'classic':
-      galleryType = 'classic-gallery';
+  switch (drupalSettings.alshayaRcs.pdpLayout) {
+    case 'pdp-magazine':
+      galleryType = drupalSettings.alshayaRcs.pdpGalleryType === 'classic' ? 'classic-gallery' : 'magazine-gallery';
       break;
   }
 
