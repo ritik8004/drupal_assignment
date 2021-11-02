@@ -136,6 +136,12 @@
       }
     }
 
+    .react-autosuggest__suggestions-list {
+      .react-autosuggest__suggestion {
+        cursor: pointer;
+      }
+    }
+
     .react-autosuggest__suggestions-container {
       &--open {
         border-width: 0.0625rem;
@@ -263,7 +269,7 @@ body {
 
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($only-mobile) {
-      margin-top: 6.5rem;
+      margin-top: 7.1875rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -276,7 +282,7 @@ body {
 
     html[lang=ar] & {
       @include breakpoint($only-mobile) {
-        margin-top: 6.5rem;
+        margin-top: 6.8125rem;
       }
 
       @include breakpoint($only-tablet) {
@@ -349,6 +355,7 @@ body {
     .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
         top: 3.625rem;
+        z-index: 9;
       }
     }
   }
