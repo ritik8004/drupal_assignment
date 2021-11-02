@@ -849,7 +849,6 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
   $templates['field']['product'] = [
     'description' => "$path/templates/rcs-field-description.handlebars",
     'short_description' => "$path/templates/rcs-field-short-description.handlebars",
-    // 'product_zoom' => "$path/templates/rcs-classic-gallery.handlebars",
     'product_zoom' => "$path/templates/rcs-product-zoom.handlebars",
   ];
 
