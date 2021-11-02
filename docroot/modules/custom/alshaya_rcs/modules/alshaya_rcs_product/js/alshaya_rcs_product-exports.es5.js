@@ -379,12 +379,6 @@ exports.computePhFilters = function (input, filter) {
       value = window.commerceBackend.getTeaserImage(input);
       break;
 
-    case 'thumbnail_count':
-      // @todo: Fetch this from the correct key.
-      mediaCollection = input.media_gallery;
-      value = mediaCollection.length;
-      break;
-
     case 'add_to_cart':
       value = '';
 
