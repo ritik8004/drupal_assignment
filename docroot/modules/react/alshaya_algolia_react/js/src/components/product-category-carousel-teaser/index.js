@@ -54,7 +54,7 @@ const ProductCategoryTeaser = ({
           <div className="image-label-wrapper">
             <ConditionalView condition={hit.media.length > 0}>
               <Gallery
-                media={hit.media.splice(1)}
+                media={hit.media.splice(0, 1)}
                 title={attribute.title}
                 labels={attribute.product_labels}
                 sku={hit.sku}
@@ -62,13 +62,13 @@ const ProductCategoryTeaser = ({
             </ConditionalView>
           </div>
           <div className="c-products__item__label">
-            <span className="suggested-text" title={attribute.title && Parser(attribute.title)}>
-              {attribute.title && Parser(attribute.title)}
-            </span>
+            {attribute.title && Parser(attribute.title)}
           </div>
-          {attribute.rendered_price
-            ? Parser(attribute.rendered_price)
-            : <Price price={attribute.original_price} final_price={attribute.final_price} />}
+          <div className={`price-block price-block-${hit.sku}`}>
+            {attribute.rendered_price
+              ? Parser(attribute.rendered_price)
+              : <Price price={attribute.original_price} final_price={attribute.final_price} />}
+          </div>
         </a>
         <div className="product-plp-detail-wrapper">
           <ConditionalView condition={isPromotionFrameEnabled()}>
