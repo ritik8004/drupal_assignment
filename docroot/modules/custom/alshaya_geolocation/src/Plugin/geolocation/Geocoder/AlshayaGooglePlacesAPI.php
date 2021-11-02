@@ -5,7 +5,6 @@ namespace Drupal\alshaya_geolocation\Plugin\geolocation\Geocoder;
 use GuzzleHttp\Exception\RequestException;
 use Drupal\Component\Serialization\Json;
 use Drupal\geolocation\GeocoderBase;
-use Drupal\geolocation\GoogleMapsDisplayTrait;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -20,8 +19,6 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 class AlshayaGooglePlacesAPI extends GeocoderBase {
-
-  use GoogleMapsDisplayTrait;
 
   /**
    * {@inheritdoc}
@@ -85,7 +82,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
    * {@inheritdoc}
    */
   public function formAttachGeocoder(array &$render_array, $element_name) {
-    $render_array['#attached']['drupalSettings']['geolocation']['google_map_url'] = $this->getGoogleMapsApiUrl();
+    $render_array['#attached']['drupalSettings']['geolocation']['google_map_url'] = \Drupal::service('plugin.manager.geolocation.mapprovider')->getMapProvider('google_maps')->getGoogleMapsApiUrl();
 
     $render_array['geolocation_geocoder_google_places_api'] = [
       '#type' => 'textfield',
@@ -201,7 +198,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
     }
     $request_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' . $address;
 
-    $config = \Drupal::config('geolocation.settings');
+    $config = \Drupal::config('geolocation_google_maps.settings');
 
     if (!empty($config->get('google_map_api_key'))) {
       $request_url .= '&key=' . $config->get('google_map_api_key');

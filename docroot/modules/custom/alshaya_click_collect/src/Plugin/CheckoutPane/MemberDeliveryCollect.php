@@ -11,7 +11,6 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\geolocation\GoogleMapsDisplayTrait;
 use Drupal\user\Entity\User;
 
 /**
@@ -25,8 +24,6 @@ use Drupal\user\Entity\User;
  * )
  */
 class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInterface {
-  // Add trait to get map url from getGoogleMapsApiUrl().
-  use GoogleMapsDisplayTrait;
 
   // Add trait to get selected delivery method tab.
   use CheckoutDeliveryMethodTrait;
@@ -237,7 +234,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $pane_form['#attached'] = [
       'drupalSettings' => [
         'geolocation' => [
-          'google_map_url' => $this->getGoogleMapsApiUrl(),
+          'google_map_url' => \Drupal::service('plugin.manager.geolocation.mapprovider')->getMapProvider('google_maps')->getGoogleMapsApiUrl(),
           'google_map_settings' => [
             'type' => static::$ROADMAP,
             'zoom' => 11,

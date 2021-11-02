@@ -276,7 +276,8 @@
       Drupal.geolocation.maps_api_loading = true;
       // Google Maps isn't loaded so lazy load Google Maps.
       if (typeof drupalSettings.geolocation.google_map_url !== 'undefined') {
-        $.getScript(drupalSettings.geolocation.google_map_url)
+        var map_url = drupalSettings.geolocation.google_map_url.replace('Drupal.geolocation.google.load', 'Drupal.geolocation.googleCallback');
+        $.getScript(map_url)
           .done(function () {
             Drupal.geolocation.maps_api_loading = false;
           });
@@ -497,5 +498,469 @@
       }
     }
   };
+
+  /**
+   * @type {Object}
+   */
+  Drupal.geolocation.MapProviders = {};
+
+  Drupal.geolocation.addMapProvider = function (type, name) {
+    Drupal.geolocation.MapProviders[type] = name;
+  };
+
+  /**
+   * Geolocation map.
+   *
+   * @constructor
+   * @abstract
+   * @implements {GeolocationMapInterface}
+   *
+   * @param {GeolocationMapSettings} mapSettings Setting to create map.
+   */
+  function GeolocationMapBase(mapSettings) {
+    this.settings = mapSettings.settings || {};
+    this.wrapper = mapSettings.wrapper;
+    this.container = mapSettings.wrapper.find('.geolocation-map-container').first();
+
+    if (this.container.length !== 1) {
+      throw 'Geolocation - Map container not found';
+    }
+
+    this.initialized = false;
+    this.populated = false;
+    this.lat = mapSettings.lat;
+    this.lng = mapSettings.lng;
+
+    if (typeof mapSettings.id === 'undefined') {
+      this.id = 'map' + Math.floor(Math.random() * 10000);
+    }
+    else {
+      this.id = mapSettings.id;
+    }
+
+    this.mapCenter = mapSettings.map_center;
+    this.mapMarkers = this.mapMarkers || [];
+    this.mapShapes = this.mapShapes || [];
+
+    return this;
+  }
+
+  GeolocationMapBase.prototype = {
+    addControl: function (element) {
+      // Stub.
+    },
+    removeControls: function () {
+      // Stub.
+    },
+    getZoom: function () {
+      // Stub.
+    },
+    setZoom: function (zoom, defer) {
+      // Stub.
+    },
+    getCenter: function () {
+      // Stub.
+    },
+    setCenter: function () {
+      if (typeof this.wrapper.data('preserve-map-center') !== 'undefined') {
+        return;
+      }
+
+      this.setZoom();
+      this.setCenterByCoordinates({lat: this.lat, lng: this.lng});
+
+      if (typeof this.mapCenter !== 'undefined') {
+
+        var that = this;
+
+        var centerOptions = Object
+          // .values(this.mapCenter) // Reenable once IE11 is dead. Hopefully soon.
+          .keys(that.mapCenter).map(function (item) {
+            return that.mapCenter[item];
+          }) // IE11 fix from #3046802.
+          .sort(function (a, b) {
+            return a.weight - b.weight;
+          });
+
+        centerOptions.some(
+          function (centerOption) {
+            if (typeof Drupal.geolocation.mapCenter[centerOption.map_center_id] === 'function') {
+              return Drupal.geolocation.mapCenter[centerOption.map_center_id](that, centerOption);
+            }
+          }
+        );
+      }
+    },
+    setCenterByCoordinates: function (coordinates, accuracy, identifier) {
+      this.centerUpdatedCallback(coordinates, accuracy, identifier);
+    },
+    setMapMarker: function (marker) {
+      this.mapMarkers.push(marker);
+      this.markerAddedCallback(marker);
+    },
+    removeMapMarker: function (marker) {
+      var that = this;
+      $.each(
+        this.mapMarkers,
+
+        /**
+         * @param {integer} index - Current index.
+         * @param {GeolocationMapMarker} item - Current marker.
+         */
+        function (index, item) {
+          if (item === marker) {
+            that.markerRemoveCallback(marker);
+            that.mapMarkers.splice(Number(index), 1);
+          }
+        }
+      );
+    },
+    removeMapMarkers: function () {
+      var that = this;
+      var shallowCopy = $.extend({}, this.mapMarkers);
+      $.each(
+        shallowCopy,
+
+        /**
+         * @param {integer} index - Current index.
+         * @param {GeolocationMapMarker} item - Current marker.
+         */
+        function (index, item) {
+          if (typeof item === 'undefined') {
+            return;
+          }
+          that.removeMapMarker(item);
+        }
+      );
+    },
+    addShape: function (shape) {
+      this.mapShapes.push(shape);
+    },
+    removeShape: function (shape) {
+      var that = this;
+      $.each(
+          this.mapShapes,
+
+          /**
+           * @param {integer} index - Current index.
+           * @param {GeolocationShape} item - Current shape.
+           */
+          function (index, item) {
+            if (item === shape) {
+              that.mapShapes.splice(Number(index), 1);
+            }
+          }
+      );
+    },
+    removeShapes: function () {
+      var that = this;
+      var shallowCopy = $.extend({}, this.mapShapes);
+      $.each(
+          shallowCopy,
+
+          /**
+           * @param {integer} index - Current index.
+           * @param {GeolocationShape} item - Current shape.
+           */
+          function (index, item) {
+            if (typeof item === 'undefined') {
+              return;
+            }
+            that.removeShape(item);
+          }
+      );
+    },
+    fitMapToMarkers: function (markers, identifier) {
+      var boundaries = this.getMarkerBoundaries();
+      if (boundaries === false) {
+        return false;
+      }
+
+      this.fitBoundaries(boundaries, identifier);
+    },
+    getMarkerBoundaries: function (markers) {
+      // Stub.
+    },
+    fitBoundaries: function (boundaries, identifier) {
+      this.centerUpdatedCallback(this.getCenter(), null, identifier);
+    },
+    clickCallback: function (location) {
+      this.clickCallbacks = this.clickCallbacks || [];
+      $.each(this.clickCallbacks, function (index, callback) {
+        callback(location);
+      });
+    },
+    addClickCallback: function (callback) {
+      this.clickCallbacks = this.clickCallbacks || [];
+      this.clickCallbacks.push(callback);
+    },
+    doubleClickCallback: function (location) {
+      this.doubleClickCallbacks = this.doubleClickCallbacks || [];
+      $.each(this.doubleClickCallbacks, function (index, callback) {
+        callback(location);
+      });
+    },
+    addDoubleClickCallback: function (callback) {
+      this.doubleClickCallbacks = this.doubleClickCallbacks || [];
+      this.doubleClickCallbacks.push(callback);
+    },
+    contextClickCallback: function (location) {
+      this.contextClickCallbacks = this.contextClickCallbacks || [];
+      $.each(this.contextClickCallbacks, function (index, callback) {
+        callback(location);
+      });
+    },
+    addContextClickCallback: function (callback) {
+      this.contextClickCallbacks = this.contextClickCallbacks || [];
+      this.contextClickCallbacks.push(callback);
+    },
+    initializedCallback: function () {
+      this.initializedCallbacks = this.initializedCallbacks || [];
+      while (this.initializedCallbacks.length > 0) {
+        this.initializedCallbacks.shift()(this);
+      }
+      this.initialized = true;
+    },
+    addInitializedCallback: function (callback) {
+      if (this.initialized) {
+        callback(this);
+      }
+      else {
+        this.initializedCallbacks = this.initializedCallbacks || [];
+        this.initializedCallbacks.push(callback);
+      }
+    },
+    updatedCallback: function (mapSettings) {
+      var that = this;
+      this.updatedCallbacks = this.updatedCallbacks || [];
+      this.updatedCallbacks.forEach(function (callback) {
+        callback(that, mapSettings);
+      });
+    },
+    addUpdatedCallback: function (callback) {
+      this.updatedCallbacks = this.updatedCallbacks || [];
+      this.updatedCallbacks.push(callback);
+    },
+    boundsChangedCallback: function (bounds) {
+      this.boundsChangedCallbacks = this.boundsChangedCallbacks || [];
+      $.each(this.boundsChangedCallbacks, function (index, callback) {
+        callback(bounds);
+      });
+    },
+    addBoundsChangedCallback: function (callback) {
+      this.boundsChangedCallbacks = this.boundsChangedCallbacks || [];
+      this.boundsChangedCallbacks.push(callback);
+    },
+    centerUpdatedCallback: function (coordinates, accuracy, identifier) {
+      this.centerUpdatedCallbacks = this.centerUpdatedCallbacks || [];
+      $.each(this.centerUpdatedCallbacks, function (index, callback) {
+        callback(coordinates, accuracy, identifier);
+      });
+    },
+    addCenterUpdatedCallback: function (callback) {
+      this.centerUpdatedCallbacks = this.centerUpdatedCallbacks || [];
+      this.centerUpdatedCallbacks.push(callback);
+    },
+    markerAddedCallback: function (marker) {
+      this.markerAddedCallbacks = this.markerAddedCallbacks || [];
+      $.each(this.markerAddedCallbacks, function (index, callback) {
+        callback(marker);
+      });
+    },
+    addMarkerAddedCallback: function (callback, existing) {
+      existing = existing || true;
+      if (existing) {
+        $.each(this.mapMarkers, function (index, marker) {
+          callback(marker);
+        });
+      }
+      this.markerAddedCallbacks = this.markerAddedCallbacks || [];
+      this.markerAddedCallbacks.push(callback);
+    },
+    markerRemoveCallback: function (marker) {
+      this.markerRemoveCallbacks = this.markerRemoveCallbacks || [];
+      $.each(this.markerRemoveCallbacks, function (index, callback) {
+        callback(marker);
+      });
+    },
+    addMarkerRemoveCallback: function (callback) {
+      this.markerRemoveCallbacks = this.markerRemoveCallbacks || [];
+      this.markerRemoveCallbacks.push(callback);
+    },
+    populatedCallback: function () {
+      this.populatedCallbacks = this.populatedCallbacks || [];
+      while (this.populatedCallbacks.length > 0) {
+        this.populatedCallbacks.shift()(this);
+      }
+      this.populated = true;
+    },
+    addPopulatedCallback: function (callback) {
+      if (this.populated) {
+        callback(this);
+      }
+      else {
+        this.populatedCallbacks = this.populatedCallbacks || [];
+        this.populatedCallbacks.push(callback);
+      }
+    },
+    loadMarkersFromContainer: function () {
+      var locations = [];
+      this.wrapper.find('.geolocation-location').each(function (index, locationWrapperElement) {
+
+        var locationWrapper = $(locationWrapperElement);
+
+        var position = {
+          lat: Number(locationWrapper.data('lat')),
+          lng: Number(locationWrapper.data('lng'))
+        };
+
+        /** @type {GeolocationMapMarker} */
+        var location = {
+          position: position,
+          title: locationWrapper.find('.location-title').text().trim(),
+          setMarker: true,
+          locationWrapper: locationWrapper
+        };
+
+        if (typeof locationWrapper.data('icon') !== 'undefined') {
+          location.icon = locationWrapper.data('icon').toString();
+        }
+
+        if (typeof locationWrapper.data('label') !== 'undefined') {
+          location.label = locationWrapper.data('label').toString();
+        }
+
+        if (locationWrapper.data('set-marker') === 'false') {
+          location.setMarker = false;
+        }
+
+        locations.push(location);
+      });
+
+      return locations;
+    },
+    loadShapesFromContainer: function () {
+      var shapes = [];
+      this.wrapper.find('.geolocation-shape').each(function (index, shapeWrapperElement) {
+
+        var shapeWrapper = $(shapeWrapperElement);
+        var meta = shapeWrapper.find('span[typeof="GeoShape"] meta').first();
+        if (meta.length === 0) {
+          return;
+        }
+
+        var type = meta.attr('property').toString();
+
+        var coordinates = [];
+        $.each(meta.attr('content').toString().split(' '), function (index, rawCoordinate) {
+          var coordinate = rawCoordinate.split(',');
+          if (
+            coordinate[0].length === 0
+            || coordinate[1].length === 0
+          ) {
+            return;
+          }
+          coordinates.push({
+            lat: parseFloat(coordinate[0]),
+            lng: parseFloat(coordinate[1])
+          });
+        });
+
+        /** @type {GeolocationShape} */
+        var shape = {
+          coordinates: coordinates,
+          shape: type,
+          shapeWrapper: shapeWrapper
+        };
+
+        switch (type) {
+          case 'line':
+            shape.title = shapeWrapper.find('.polyline-title').text().trim();
+            break;
+
+          case 'polygon':
+            shape.title = shapeWrapper.find('.polygon-title').text().trim();
+
+            if (typeof shapeWrapper.data('fillColor') !== 'undefined') {
+              shape.fillColor = shapeWrapper.data('fillColor').toString();
+            }
+            if (typeof shapeWrapper.data('fillOpacity') !== 'undefined') {
+              shape.fillOpacity = parseFloat(shapeWrapper.data('fillOpacity').toString());
+            }
+            break;
+        }
+
+        if (typeof shapeWrapper.data('strokeColor') !== 'undefined') {
+          shape.strokeColor = shapeWrapper.data('strokeColor').toString();
+        }
+        if (typeof shapeWrapper.data('strokeWidth') !== 'undefined') {
+          shape.strokeWidth = parseInt(shapeWrapper.data('strokeWidth').toString());
+        }
+        if (typeof shapeWrapper.data('strokeOpacity') !== 'undefined') {
+          shape.strokeOpacity = parseFloat(shapeWrapper.data('strokeOpacity').toString());
+        }
+
+        shapes.push(shape);
+      });
+
+      return shapes;
+    },
+    boundariesNormalized: function (boundaries) {
+      if (typeof boundaries.north === 'number'
+          && typeof boundaries.east === 'number'
+          && typeof boundaries.south === 'number'
+          && typeof boundaries.west === 'number'
+      ) {
+        return true;
+      }
+
+      return false;
+    },
+    normalizeBoundaries: function (boundaries) {
+      var that = this;
+
+      if (that.boundariesNormalized(boundaries)) {
+        return boundaries;
+      }
+
+      if (
+          typeof boundaries.north !== 'undefined'
+          && typeof boundaries.south !== 'undefined'
+          && typeof boundaries.east !== 'undefined'
+          && typeof boundaries.west !== 'undefined'
+      ) {
+        var castBoundaries = {
+          north: Number(boundaries.north),
+          east: Number(boundaries.east),
+          south: Number(boundaries.south),
+          west: Number(boundaries.west)
+        };
+
+        if (that.boundariesNormalized(castBoundaries)) {
+          return castBoundaries;
+        }
+      }
+
+      $.each(Drupal.geolocation.MapProviders, function (type, name) {
+        var normalizedBoundaries = null;
+        if (typeof Drupal.geolocation[name].prototype.normalizeBoundaries !== 'undefined') {
+          normalizedBoundaries = Drupal.geolocation[name].prototype.normalizeBoundaries.call(null, boundaries);
+        }
+
+        if (that.boundariesNormalized(normalizedBoundaries)) {
+          boundaries = normalizedBoundaries;
+          return false;
+        }
+      });
+
+      if (that.boundariesNormalized(boundaries)) {
+        return boundaries;
+      }
+
+      return false;
+    }
+  };
+
+  Drupal.geolocation.GeolocationMapBase = GeolocationMapBase;
 
 })(jQuery, _, Drupal, drupalSettings);

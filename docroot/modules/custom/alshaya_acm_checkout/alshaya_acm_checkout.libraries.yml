@@ -14,7 +14,7 @@ click-and-collect:
   dependencies:
     - core/drupal.ajax
     - core/underscore
-    - geolocation/geolocation.geocoder.googlegeocodingapi
+    - geolocation_google_maps/geocoder.googlegeocodingapi
 
 analytics:
   version: 1.x

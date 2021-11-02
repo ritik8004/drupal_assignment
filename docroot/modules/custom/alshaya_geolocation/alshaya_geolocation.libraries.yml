@@ -4,12 +4,11 @@ places-api-autocomplete:
   dependencies:
     - core/drupal.ajax
     - core/underscore
-    - geolocation/geolocation.geocoder.googlegeocodingapi
+    - geolocation_google_maps/geocoder.googlegeocodingapi
 
 # Geolocation views filter geocoder function.
 places-api.googleplacesapi:
   js:
     js/alshaya-google-places-autocomplete-api-views.js: {}
   dependencies:
-    - geolocation/geolocation.geocoder
     - alshaya_geolocation/places-api-autocomplete
