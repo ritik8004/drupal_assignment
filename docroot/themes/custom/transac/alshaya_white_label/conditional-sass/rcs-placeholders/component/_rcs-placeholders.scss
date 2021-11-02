@@ -1,6 +1,6 @@
 .rcs-page:not(.rcs-loaded) {
-  & h1,
-  & .field {
+  [id^="rcs-ph"] .field,
+  h1:not(.site-brand-home) {
     color: $no-color;
 
     & > * {
@@ -8,9 +8,5 @@
     }
 
     @include plain-loader;
-  }
-
-  & .c-plp .c-page-title {
-    border: 0;
   }
 }
