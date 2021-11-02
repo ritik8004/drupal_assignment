@@ -547,14 +547,10 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'first_image':
-      // @todo: Use the correct image key.
-      value = ((input.media_gallery.length > 0)
-          && (typeof input.media_gallery[0].url !== 'undefined'
-            || input.media_gallery[0].url
-            || input.media_gallery[0].url !== '')
-        )
-        ? input.media_gallery[0].url
-        : drupalSettings.alshayaRcs.default_meta_image
+      const firstImage = window.commerceBackend.getFirstImage(input);
+      value = Drupal.hasValue(firstImage)
+        ? firstImage.url
+        : drupalSettings.alshayaRcs.default_meta_image;
       break;
 
     case 'schema_stock':

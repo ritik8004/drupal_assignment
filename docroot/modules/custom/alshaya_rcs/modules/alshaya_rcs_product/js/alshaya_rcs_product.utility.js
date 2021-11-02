@@ -180,7 +180,7 @@
    */
   window.commerceBackend.getFirstImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
-    return galleryProduct.media;
+    return Drupal.hasValue(galleryProduct.media[0]) ? galleryProduct.media[0] : null;
   }
 
   /**
