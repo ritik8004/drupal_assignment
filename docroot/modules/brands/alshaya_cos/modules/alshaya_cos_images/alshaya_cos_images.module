@@ -110,19 +110,3 @@ function alshaya_cos_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterfac
   }
 }
 
-/**
- * Implements hook_rcs_placeholders_graphql_query_alter().
- */
-function alshaya_cos_images_rcs_placeholders_graphql_query_alter(&$query_fields) {
-  array_push($query_fields['products']['items']['... on ConfigurableProduct']['variants']['product'], 'assets_pdp');
-  $query_fields['products']['items']['upsell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  $query_fields['products']['items']['related_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-  $query_fields['products']['items']['crosssell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
-}
-
-/**
- * Implements hook_ENTITY_view().
- */
-function alshaya_cos_images_page_attachments_alter(&$attachments) {
-  $attachments['#attached']['library'][] = 'alshaya_cos_images/alshaya_rcs_product_images';
-}

@@ -2,7 +2,3 @@ cos_images:
   css:
     theme:
       css/alshaya_assets_hover.css: {}
-
-alshaya_rcs_product_images:
-  js:
-    js/alshaya_rcs_product_images.js: {}

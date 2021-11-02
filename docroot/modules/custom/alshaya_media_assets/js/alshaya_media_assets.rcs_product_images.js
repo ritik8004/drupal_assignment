@@ -1,7 +1,7 @@
 /**
  * Listens to the 'alshayaRcsUpdateResults' event and update the result object.
  */
-(function () {
+ (function () {
   RcsEventManager.addListener('alshayaRcsUpdateResults', (e) => {
     // Return if result is empty.
     if ((typeof e.detail.pageType !== 'undefined' && e.detail.pageType !== 'product')
