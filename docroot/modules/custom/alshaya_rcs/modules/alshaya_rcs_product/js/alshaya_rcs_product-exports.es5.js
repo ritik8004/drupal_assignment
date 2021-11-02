@@ -300,7 +300,7 @@ exports.render = function render(
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
       }
 
-      html += handlebarsRenderer.render('field.product.product_zoom', data);
+      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
       break;
 
     default:

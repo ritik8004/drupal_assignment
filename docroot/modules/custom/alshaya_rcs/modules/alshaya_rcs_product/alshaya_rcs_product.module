@@ -849,11 +849,28 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
   $templates['field']['product'] = [
     'description' => "$path/templates/rcs-field-description.handlebars",
     'short_description' => "$path/templates/rcs-field-short-description.handlebars",
-    'product_zoom' => "$path/templates/rcs-product-zoom.handlebars",
   ];
 
   $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
   $templates['product']['promotions'] = "$path/templates/rcs-product-promotions.handlebars";
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates().
+ */
+function alshaya_rcs_product_rcs_handlebars_templates() {
+  $path = drupal_get_path('module', 'alshaya_rcs_product');
+  $templates = ['gallery' => []];
+  $templates['gallery']['product'] = [
+    'product_zoom' => "$path/templates/rcs-product-zoom.handlebars",
+    'block' => [
+      'product_zoom_default_gallery' => "$path/templates/rcs-product-zoom-default-gallery-block.handlebars",
+      'product_zoom_mobile_gallery' => "$path/templates/rcs-product-zoom-mobile-gallery.handlebars",
+      'product_zoom_modal_gallery' => "$path/templates/rcs-product-zoom-modal-gallery.handlebars",
+    ],
+  ];
+
+  return $templates;
 }
 
 /**
