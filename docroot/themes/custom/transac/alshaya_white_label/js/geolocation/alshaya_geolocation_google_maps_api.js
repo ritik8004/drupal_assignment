@@ -523,7 +523,7 @@
     this.container = mapSettings.wrapper.find('.geolocation-map-container').first();
 
     if (this.container.length !== 1) {
-      throw "Geolocation - Map container not found";
+      throw 'Geolocation - Map container not found';
     }
 
     this.initialized = false;
@@ -583,9 +583,6 @@
           });
 
         centerOptions.some(
-          /**
-           * @param {GeolocationCenterOption} centerOption
-           */
           function (centerOption) {
             if (typeof Drupal.geolocation.mapCenter[centerOption.map_center_id] === 'function') {
               return Drupal.geolocation.mapCenter[centerOption.map_center_id](that, centerOption);
@@ -945,8 +942,9 @@
       }
 
       $.each(Drupal.geolocation.MapProviders, function (type, name) {
+        var normalizedBoundaries = null;
         if (typeof Drupal.geolocation[name].prototype.normalizeBoundaries !== 'undefined') {
-          var normalizedBoundaries = Drupal.geolocation[name].prototype.normalizeBoundaries.call(null, boundaries);
+          normalizedBoundaries = Drupal.geolocation[name].prototype.normalizeBoundaries.call(null, boundaries);
         }
 
         if (that.boundariesNormalized(normalizedBoundaries)) {
