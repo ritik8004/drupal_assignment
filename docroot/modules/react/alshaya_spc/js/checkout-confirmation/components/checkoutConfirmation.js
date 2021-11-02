@@ -11,7 +11,7 @@ import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
 import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import logger from '../../utilities/logger';
 
 class CheckoutConfirmation extends React.Component {

@@ -26,7 +26,7 @@ import {
 } from '../../../utilities/cnc_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 

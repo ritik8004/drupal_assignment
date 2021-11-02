@@ -7,7 +7,7 @@ import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
 import Advantagecard from '../advantagecard';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
 class TotalLineItems extends React.Component {
