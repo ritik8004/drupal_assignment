@@ -1,4 +1,6 @@
 import React from 'react';
+import _find from 'lodash/find';
+import _findIndex from 'lodash/findIndex';
 import { fetchAPIData } from '../../../utilities/api/fetchApiData';
 import StoreList from './components/store-list';
 import { getLocationAccess } from '../../../utilities/helper';
@@ -380,7 +382,7 @@ export default class AppointmentStore extends React.Component {
   openMarkerOfStore = (storeCode, storeList = null, showInfoWindow = true) => {
     const { storeList: contextStoreList } = this.state;
     const storeListArg = (!storeList) ? contextStoreList : storeList;
-    const index = _.findIndex(storeListArg, {
+    const index = _findIndex(storeListArg, {
       locationExternalId: storeCode,
     });
     this.selectStoreButtonVisibility(index >= 0);
@@ -429,7 +431,7 @@ export default class AppointmentStore extends React.Component {
     }
 
     // Find the store object with the given store-code from the store list.
-    const store = _.find(storeList, { locationExternalId: storeCode });
+    const store = _find(storeList, { locationExternalId: storeCode });
     dispatchCustomEvent('storeSelected', { store });
     this.updateSelectedStore(store);
     this.setState({

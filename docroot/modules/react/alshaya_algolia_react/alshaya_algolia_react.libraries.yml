@@ -2,7 +2,6 @@ autocomplete:
   js:
     dist/autocomplete.js: {}
   dependencies:
-    - core/underscore
     - alshaya_algolia_react/vendor
     - alshaya_algolia_react/search_insights_listing
     - alshaya_algolia_react/algolia_common
@@ -48,7 +47,6 @@ plp:
     js/alshaya_algolia_subcategory_scroll.js: {}
   dependencies:
     - core/drupalSettings
-    - core/underscore
     - alshaya_algolia_react/algolia_common
     - core/jquery.once
 

@@ -1,6 +1,7 @@
 import _defineProperty from '@babel/runtime/helpers/esm/defineProperty';
 import _toConsumableArray from '@babel/runtime/helpers/esm/toConsumableArray';
 import _objectWithoutProperties from '@babel/runtime/helpers/esm/objectWithoutProperties';
+import _isEqual from 'lodash/isEqual';
 import _reduce from 'lodash/reduce';
 import _isPlainObject from 'lodash/isPlainObject';
 import { createConnector } from 'react-instantsearch-dom';
@@ -37,7 +38,7 @@ function diffObject(obj1, obj2) {
     const finalResult = result;
     if (_isPlainObject(value) && (typeof obj2 !== 'undefined' && typeof obj2[key] !== 'undefined')) {
       finalResult[key] = diffObject(value, obj2[key]);
-    } else if ((typeof obj2 !== 'undefined' && typeof obj2[key] !== 'undefined') && JSON.stringify(value) !== JSON.stringify(obj2[key])) {
+    } else if ((typeof obj2 !== 'undefined' && typeof obj2[key] !== 'undefined') && !_isEqual(value, obj2[key])) {
       finalResult[key] = value;
     }
     return finalResult;
@@ -102,8 +103,7 @@ export default createConnector({
 
       this.firstReceivedPage = 0;
       this.lastReceivedPage = props.defaultpageRender;
-    } else if (this.firstReceivedPage === undefined
-      || JSON.stringify(currentState) !== JSON.stringify(this.prevState)) {
+    } else if (this.firstReceivedPage === undefined || !_isEqual(currentState, this.prevState)) {
       const $diff = diffObject(currentState, this.prevState);
 
       this.allResults = (this.allResults.length > 0 && Object.prototype.hasOwnProperty.call($diff, 'hitsPerPage'))

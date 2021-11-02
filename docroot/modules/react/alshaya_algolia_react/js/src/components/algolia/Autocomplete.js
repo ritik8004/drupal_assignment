@@ -1,6 +1,7 @@
 import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
+import _isEqual from 'lodash/isEqual';
 import CustomHighlight from './CustomHighlight';
 import {
   getCurrentSearchQuery,
@@ -60,7 +61,7 @@ class Autocomplete extends React.Component {
     return (
       nextProps.currentRefinement !== currentRefinement
       || nextState.value !== value
-      || JSON.stringify(nextProps.hits) !== JSON.stringify(hits)
+      || !_isEqual(nextProps.hits, hits)
     );
   }
 
