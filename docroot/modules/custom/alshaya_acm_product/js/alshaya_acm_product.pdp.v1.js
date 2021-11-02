@@ -88,3 +88,19 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, sku, 
     }, 1);
   }
 };
+
+/**
+ * Gets the configurable color details.
+ *
+ * @param {string} sku
+ *   The sku value.
+ *
+ * @returns {object}
+ *   The configurable color details.
+ */
+window.commerceBackend.getConfigurableColorDetails = function (sku) {
+  return {
+    sku_configurable_color_attribute: drupalSettings.sku_configurable_color_attribute,
+    sku_configurable_options_color: drupalSettings.sku_configurable_options_color,
+  }
+}
