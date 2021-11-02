@@ -43,7 +43,7 @@
         variant.product.media_cart = null;
         if (Drupal.hasValue(variant.product.assets_cart)) {
           mediaData = JSON.parse(variant.product.assets_cart);
-          mediaData.every(function setGalleryMedia(media) {
+          mediaData.every(function setCartMedia(media) {
             variant.product.media_cart = media.styles.cart_thumbnail;
             // Break as there is only 1 teaser image exepected.
             return false;
