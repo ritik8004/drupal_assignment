@@ -262,8 +262,8 @@ function _alshaya_aura_react_translations() {
     'Aura' => [
       'ar' => 'أورا',
     ],
-    'reward points with this purchase' => [
-      'ar' => 'نقاط المكافآت مع عملية الشراء هذه',
+    'points with this purchase' => [
+      'ar' => 'النقاط في عملية الشراء الحالية',
     ],
     'On completion of this purchase you will earn:' => [
       'ar' => 'عند إتمام عملية الشراء هذه، سوف تربح:',
@@ -366,6 +366,9 @@ function _alshaya_aura_react_translations() {
     ],
     'As an Aura member, collect points every time you shop to spend on future purchases, and to unlock exclusive rewards.' => [
       'ar' => 'كعضو في أورا، يمكنك تجميع النقاط مع كل عملية شراء وإنفاقها في عمليات الشراء المستقبلية، إضافة إلى الحصول على الكثير من المكافآت الحصرية.',
+    ],
+    'points with Aura' => [
+      'ar' => 'النقاط مع أورا',
     ],
   ];
 }

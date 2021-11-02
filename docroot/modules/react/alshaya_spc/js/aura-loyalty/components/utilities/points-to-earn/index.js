@@ -12,7 +12,7 @@ const PointsToEarnMessage = (props) => {
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
     || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
     const toEarnMessageP1 = `${getStringMessage('earn')} `;
-    const pointsHighlight = `${points} ${getStringMessage('aura')}`;
+    const pointsHighlight = `${points}`;
     const toEarnMessageP2 = ` ${getStringMessage('reward_points_with_purchase')}`;
 
     return (
