@@ -1,6 +1,6 @@
 import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
-import hasValue from '../../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const DeliveryTypeFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, ...props

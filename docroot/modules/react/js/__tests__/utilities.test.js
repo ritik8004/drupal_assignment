@@ -83,8 +83,10 @@ describe('JS Utilities', () => {
 describe('isString', function() {
   it('should return `true` for strings', function() {
     assert.strictEqual(isString('foo'), true);
+    assert.strictEqual(isString(''), true);
     assert.strictEqual(isString(Object('foo')), true);
     assert.strictEqual(isString(new String('foo')), true);
+    assert.strictEqual(isString(new String('')), true);
   });
 
   it('should return `false` for non-strings', function() {
@@ -95,6 +97,8 @@ describe('isString', function() {
     assert.strictEqual(isString({ '0': 1, 'length': 1 }), false);
     assert.strictEqual(isString(1), false);
     assert.strictEqual(isString(/x/), false);
+    assert.strictEqual(isString(Object()), false);
+    assert.strictEqual(isString(), false);
   });
 });
 
@@ -113,6 +117,7 @@ describe('isNumber', function() {
     assert.strictEqual(isNumber({ 'a': 1 }), false);
     assert.strictEqual(isNumber(/x/), false);
     assert.strictEqual(isNumber('a'), false);
+    assert.strictEqual(isNumber(Object()), false);
   });
 });
 
@@ -132,12 +137,15 @@ describe('isBoolean', function() {
     assert.strictEqual(isBoolean(1), false);
     assert.strictEqual(isBoolean(/x/), false);
     assert.strictEqual(isBoolean('a'), false);
+    assert.strictEqual(isBoolean(), false);
+    assert.strictEqual(isBoolean(Object()), false);
   });
 });
 
 describe('isArray', function() {
   it('should return `true` for arrays', function() {
     assert.strictEqual(isArray([1, 2, 3]), true);
+    assert.strictEqual(isArray([]), true);
   });
 
   it('should return `false` for non-arrays', function() {
@@ -148,6 +156,7 @@ describe('isArray', function() {
     assert.strictEqual(isArray(1), false);
     assert.strictEqual(isArray(/x/), false);
     assert.strictEqual(isArray('a'), false);
+    assert.strictEqual(isArray(), false);
   });
 });
 
@@ -160,6 +169,7 @@ describe('isObject', function() {
     assert.strictEqual(isObject(Object(0)), true);
     assert.strictEqual(isObject(/x/), true);
     assert.strictEqual(isObject(Object('a')), true);
+    assert.strictEqual(isObject(Object()), true);
   });
 
   it('should return `false` for non-objects', function() {
@@ -168,5 +178,6 @@ describe('isObject', function() {
     assert.strictEqual(isObject(false), false);
     assert.strictEqual(isObject(1234), false);
     assert.strictEqual(isObject([1, 2, 3]), false);
+    assert.strictEqual(isObject(), false);
   });
 });
