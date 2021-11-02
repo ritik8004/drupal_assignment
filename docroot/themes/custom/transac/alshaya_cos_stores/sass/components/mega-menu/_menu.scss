@@ -72,6 +72,14 @@
         width: 50%;
       }
     }
+
+    .menu--active & {
+      #{$left}: -0.0625rem;
+
+      html[lang=ar] & {
+        right: 0;
+      }
+    }
   }
 
   .mobile--close {
