@@ -16,7 +16,7 @@ const cartErrorCodes = {
  * @return string
  *   Default error message.
  */
-const getDefaultErrorMessage = () => 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.';
+const getDefaultErrorMessage = () => Drupal.t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.');
 
 /**
  * Provides the type of the exception message for a message.
