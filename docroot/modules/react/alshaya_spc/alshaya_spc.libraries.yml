@@ -23,6 +23,7 @@ cart:
   dependencies:
     - core/drupal.ajax
     - core/drupal.dialog
+    - core/underscore
     - alshaya_react/react
     - alshaya_product_zoom/cloud_zoom_pdp_gallery
     - alshaya_spc/cart_utilities
@@ -34,6 +35,7 @@ checkout:
   js:
     dist/checkout.bundle.js: { }
   dependencies:
+    - core/underscore
     - alshaya_react/react
     - alshaya_spc/cart_utilities
 
@@ -105,6 +107,7 @@ commerce_backend.checkout.v2:
   js:
     dist/backend_checkout_v2.bundle.js: {}
   dependencies:
+    - core/underscore
     - alshaya_spc/security
 
 express_delivery:
