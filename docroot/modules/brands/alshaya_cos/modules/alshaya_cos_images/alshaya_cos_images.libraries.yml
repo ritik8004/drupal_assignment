@@ -3,6 +3,6 @@ cos_images:
     theme:
       css/alshaya_assets_hover.css: {}
 
-rcs_product_images:
+alshaya_rcs_product_images:
   js:
     js/alshaya_rcs_product_images.js: {}

@@ -124,5 +124,5 @@ function alshaya_cos_images_rcs_placeholders_graphql_query_alter(&$query_fields)
  * Implements hook_ENTITY_view().
  */
 function alshaya_cos_images_page_attachments_alter(&$attachments) {
-  $attachments['#attached']['library'][] = 'alshaya_cos_images/rcs_product_images';
+  $attachments['#attached']['library'][] = 'alshaya_cos_images/alshaya_rcs_product_images';
 }
