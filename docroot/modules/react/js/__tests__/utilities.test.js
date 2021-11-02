@@ -153,7 +153,6 @@ describe('isArray', function() {
 
 describe('isObject', function() {
   it('should return `true` for objects', function() {
-    assert.strictEqual(isObject([1, 2, 3]), true);
     assert.strictEqual(isObject(Object(false)), true);
     assert.strictEqual(isObject(new Date), true);
     assert.strictEqual(isObject(new Error), true);
@@ -168,5 +167,6 @@ describe('isObject', function() {
     assert.strictEqual(isObject(true), false);
     assert.strictEqual(isObject(false), false);
     assert.strictEqual(isObject(1234), false);
+    assert.strictEqual(isObject([1, 2, 3]), false);
   });
 });

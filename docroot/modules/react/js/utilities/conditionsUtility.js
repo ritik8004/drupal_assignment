@@ -64,7 +64,7 @@ const isArray = (value) => {
  */
 const isObject = (value) => {
   const type = typeof value;
-  return (type === 'object' || type === 'function');
+  return ((type === 'object' || type === 'function') && !Array.isArray(value));
 };
 
 export {
