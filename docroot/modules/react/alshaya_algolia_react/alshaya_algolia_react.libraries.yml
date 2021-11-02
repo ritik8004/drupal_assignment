@@ -50,6 +50,12 @@ plp:
     - alshaya_algolia_react/algolia_common
     - core/jquery.once
 
+product_category_carousel:
+  js:
+    dist/productCategoryCarousel.js: {}
+  dependencies:
+    - core/drupalSettings
+
 algolia_common:
   js:
     js/alshaya_algolia_global.js: {}
