@@ -9,6 +9,7 @@ var config = {
   entry: {
     autocomplete: './js/src/SearchIndex.js',
     plp: './js/src/PlpIndex.js',
+    productCategoryCarousel: './js/src/ProductCategoryCarousel.js',
   },
   mode: 'production',
   output: {
