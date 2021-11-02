@@ -2,6 +2,10 @@
   .express-delivery {
     margin: 0.5rem 0 1rem;
 
+    &.in-active {
+      display: none;
+    }
+
     @include breakpoint($only-mobile) {
       margin-top: 0.3125rem;
       margin-bottom: 1.5625rem;
@@ -298,6 +302,10 @@
     padding: 0.1875rem 1rem;
     border: 1px solid $spc-cart-express-delivery-border;
     width: 14.6875rem;
+
+    &.in-active {
+      display: none;
+    }
 
     &:nth-child(2) {
       margin-top: 0.625rem;
