@@ -39,10 +39,24 @@ const logger = {
  * Provides extra DataDog contexts.
  */
 document.addEventListener('dataDogContextAlter', (e) => {
+  // These contexts will only be available when we have access to the data.
+  // For example, on checkout page, we don't have access to cart_data in local
+  // storage, so we won't have a context for cartIdInt.
+  const customerId = drupalSettings.userDetails.customerId || 0;
+  const cartId = window.commerceBackend.getCartId() || null;
+  const cartIdInt = getStorageItem('cart_data', 'cart.cart_id_int') || null;
   const context = e.detail;
-  context.customerId = drupalSettings.userDetails.customerId || 0;
-  context.cartId = window.commerceBackend.getCartId() || '';
-  context.cartIdInt = getStorageItem('cart_data', 'cart.cart_id_int') || '';
+  // We are prepending the letter 'c' on custom contexts to differentiate them
+  // from existing contexts.
+  if (customerId) {
+    context.cCustomerId = customerId;
+  }
+  if (cartId) {
+    context.cCartId = cartId;
+  }
+  if (cartIdInt) {
+    context.cCartIdInt = cartIdInt;
+  }
 });
 
 export default logger;
