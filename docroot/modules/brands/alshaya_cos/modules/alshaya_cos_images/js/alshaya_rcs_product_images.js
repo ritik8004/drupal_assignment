@@ -1,5 +1,5 @@
 /**
- * Listens to the 'alshayaRcsUpdateResults' event and updated the result object.
+ * Listens to the 'alshayaRcsUpdateResults' event and update the result object.
  */
 (function () {
   RcsEventManager.addListener('alshayaRcsUpdateResults', (e) => {
