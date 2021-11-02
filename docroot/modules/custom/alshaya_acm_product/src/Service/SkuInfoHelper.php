@@ -606,6 +606,25 @@ class SkuInfoHelper {
       }
     }
 
+    // Check if express delivery feature is enabled.
+    if ($this->configFactory->get('alshaya_spc.express_delivery')->get('status')) {
+      $current_parent = $this->skuManager->getParentSkuBySku($child);
+      if ($current_parent instanceof SKUInterface) {
+        $parent_sku = $current_parent->getSku();
+      }
+      // Below condition is only for simple products.
+      elseif (empty($parent)) {
+        $parent_sku = (string) $child->getSku();
+      }
+
+      // Prepare delivery options for each variants.
+      if (isset($parent_sku)) {
+        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku);
+        $variant['delivery_options'] = !empty($delivery_options['values']) ? $delivery_options['values'] : [];
+        $variant['express_delivery_class'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
+      }
+    }
+
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 
     return $variant;
