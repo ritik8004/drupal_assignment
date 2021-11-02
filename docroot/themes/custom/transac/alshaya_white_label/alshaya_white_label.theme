@@ -1458,19 +1458,22 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
           ];
 
           $productCarousel = array_merge($productCarousel, [
-            'section_title' => $carousel_title,
+            'sectionTitle' => $carousel_title,
             'itemsPerPage' => $product_in_carousel,
-            'vat_text' => $settings->get('vat_text'),
+            'vatText' => $settings->get('vat_text'),
           ]);
 
           $variables['content']['product_category_carousel'] = [
             '#type' => 'container',
             '#attributes' => [
-              'id' => ['alshaya-product-category-carousel']
+              'class' => ['alshaya-product-category-carousel'],
+              'data-pcc-id' => $category_id,
             ],
             '#attached' => [
               'drupalSettings' => [
-                'alshayaProductCarousel' => $productCarousel,
+                'alshayaProductCarousel' => [
+                  $category_id => $productCarousel,
+                ],
                 'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
               ],
               'library' => [

@@ -10,15 +10,15 @@ import CategoryCarouselInfiniteHits from '../algolia/CategoryCarouselInfiniteHit
  * Render algolia results.
  */
 const ProductCategoryCarousel = ({
-  searchState, createURL, onSearchStateChange,
+  searchState, createURL, onSearchStateChange, categoryId,
 }) => {
   const {
     category_field: categoryField,
     hierarchy,
     itemsPerPage,
     ruleContext,
-    section_title: sectionTitle,
-  } = drupalSettings.alshayaProductCarousel;
+    sectionTitle,
+  } = drupalSettings.alshayaProductCarousel[categoryId];
 
   const {
     filterOos,
@@ -54,7 +54,7 @@ const ProductCategoryCarousel = ({
       <h3 className="subtitle crossell-title"><a href={sectionTitle.url}>{sectionTitle.title}</a></h3>
       <div className="views-element-container">
         <div className="view view-product-slider view-id-product_slider view-display-id-category_product_slider">
-          <CategoryCarouselInfiniteHits />
+          <CategoryCarouselInfiniteHits categoryId={categoryId} />
         </div>
       </div>
     </InstantSearch>

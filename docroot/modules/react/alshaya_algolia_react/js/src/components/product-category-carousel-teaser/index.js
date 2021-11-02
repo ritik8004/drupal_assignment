@@ -10,9 +10,9 @@ import {
 import Promotions from '../promotions';
 
 const ProductCategoryTeaser = ({
-  hit, gtmContainer = null,
+  hit, gtmContainer = null, categoryId,
 }) => {
-  const { vat_text: vatText } = drupalSettings.alshayaProductCarousel;
+  const { vatText } = drupalSettings.alshayaProductCarousel[categoryId];
   const { currentLanguage } = drupalSettings.path;
 
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
