@@ -109,4 +109,3 @@ function alshaya_cos_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterfac
     $color_options_list[key($color_options_list)]['swatch_type'] = $swatch['type'];
   }
 }
-
