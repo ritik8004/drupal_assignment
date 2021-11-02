@@ -1,6 +1,5 @@
 import _isArray from 'lodash/isArray';
-import _isEmpty from 'lodash/isEmpty';
-import _isUndefined from 'lodash/isUndefined';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Contains cart error codes.
@@ -52,7 +51,7 @@ const getExceptionMessageType = (msg) => {
 const getProcessedErrorMessage = (response) => {
   let msg = response.data.message;
 
-  if (_isUndefined(response.data.parameters) || _isEmpty(response.data.parameters)) {
+  if (!hasValue(response.data.parameters)) {
     return msg;
   }
   const params = response.data.parameters;
@@ -66,7 +65,7 @@ const getProcessedErrorMessage = (response) => {
   } else {
     // If parameters is an object, we loop the object to add % to each key.
     Object.keys(params).forEach((key) => {
-      replacements[`%${key}`] = !_isEmpty(params[key]) ? params[key] : '';
+      replacements[`%${key}`] = hasValue(params[key]) ? params[key] : '';
     });
   }
 

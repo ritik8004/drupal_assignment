@@ -1,11 +1,10 @@
-import _isEmpty from 'lodash/isEmpty';
-import _isUndefined from 'lodash/isUndefined';
 import _isString from 'lodash/isString';
 import md5 from 'md5';
 import { getApiEndpoint } from './utility';
 import logger from '../../utilities/logger';
 import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
+import hasValue from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Format the address array.
@@ -26,7 +25,7 @@ const formatAddressForShippingBilling = (address) => {
 
   const data = {};
 
-  if (!_isEmpty(address.static)) {
+  if (hasValue(address.static)) {
     Object.keys(address.static).forEach((key) => {
       data[key] = address.static[key];
     });
@@ -42,7 +41,7 @@ const formatAddressForShippingBilling = (address) => {
       return;
     }
 
-    if (_isEmpty(address[key])) {
+    if (!hasValue(address[key])) {
       return;
     }
 
@@ -128,7 +127,7 @@ const formatShippingEstimatesAddress = (address) => {
  *   HD Shipping methods or error.
  */
 const getHomeDeliveryShippingMethods = async (data) => {
-  if (_isEmpty(data.country_id)) {
+  if (!hasValue(data.country_id)) {
     logger.error('Error in getting shipping methods for HD as country id not available. Data: @data', {
       '@data': JSON.stringify(data),
     });
@@ -145,13 +144,13 @@ const getHomeDeliveryShippingMethods = async (data) => {
   // Get shipping methods from static.
   const staticShippingMethods = StaticStorage.get('shipping_methods') || {};
 
-  if (_isEmpty(staticShippingMethods[key])) {
+  if (!hasValue(staticShippingMethods[key])) {
     staticShippingMethods[key] = [];
     const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
     const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
 
     // Check for errors.
-    if (!_isUndefined(response.data.error) && response.data.error) {
+    if (hasValue(response.data.error) && response.data.error) {
       logger.warning('Error in getting shipping methods for HD. Error: @message', {
         '@message': response.data.error_message,
       });
@@ -159,7 +158,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
       return getFormattedError(response.data.error_code, response.data.error_message);
     }
 
-    if (_isEmpty(response.data)) {
+    if (!hasValue(response.data)) {
       const message = 'Got empty response while getting shipping methods for HD.';
       logger.notice(message);
 
@@ -169,7 +168,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
     // Delete methods for CNC.
     const methods = response.data.filter((i) => i.carrier_code !== 'click_and_collect');
 
-    if (_isEmpty(methods)) {
+    if (!hasValue(methods)) {
       const message = 'No shipping methods available for HD.';
       logger.notice(message);
 
