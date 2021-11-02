@@ -39,28 +39,43 @@
         console.log('Exception occured while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
       }
 
-        const productRecommendations = ['upsell_products', 'related_products', 'crosssell_products'];
-        productRecommendations.forEach(function eachRecommendationType(type) {
-          if (Drupal.hasValue(product[type])) {
-            product[type][0].variants.forEach(function setRecommendedProductImage(variant) {
-              variant.product.media_teaser = null;
-              try {
-                mediaData = JSON.parse(variant.product.assets_teaser);
-                mediaData.every(function setTeaserMedia(media) {
-                  variant.product.media_teaser = media.styles.product_teaser;
-                  // We do this so that we are able to detect in getSkuForGallery
-                  // that the variant has media.
-                  variant.product.media = variant.product.media_teaser;
-                  // Break as there is only 1 teaser image exepected.
-                  return false;
-                });
-              }
-              catch (e) {
-                console.log('Exception occured while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
-              }
+      try {
+        variant.product.media_cart = null;
+        if (Drupal.hasValue(variant.product.assets_cart)) {
+          mediaData = JSON.parse(variant.product.assets_cart);
+          mediaData.every(function setGalleryMedia(media) {
+            variant.product.media_cart = media.styles.cart_thumbnail;
+            // Break as there is only 1 teaser image exepected.
+            return false;
+          });
+        }
+      }
+      catch (e) {
+        console.log('Exception occured while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
+      }
+    });
+
+    const productRecommendations = ['upsell_products', 'related_products', 'crosssell_products'];
+    productRecommendations.forEach(function eachRecommendationType(type) {
+      if (Drupal.hasValue(product[type])) {
+        product[type][0].variants.forEach(function setRecommendedProductImage(variant) {
+          variant.product.media_teaser = null;
+          try {
+            mediaData = JSON.parse(variant.product.assets_teaser);
+            mediaData.every(function setTeaserMedia(media) {
+              variant.product.media_teaser = media.styles.product_teaser;
+              // We do this so that we are able to detect in getSkuForGallery
+              // that the variant has media.
+              variant.product.media = variant.product.media_teaser;
+              // Break as there is only 1 teaser image exepected.
+              return false;
             });
           }
+          catch (e) {
+            console.log('Exception occured while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
+          }
         });
+      }
     });
   }, 1);
 })();

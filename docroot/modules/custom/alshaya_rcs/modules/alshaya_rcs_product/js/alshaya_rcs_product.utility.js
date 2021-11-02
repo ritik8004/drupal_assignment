@@ -154,7 +154,7 @@
    * @see \Drupal\alshaya_acm_product\SkuImagesManager::getSkuForGallery()
    */
   const getSkuForGallery = function (product) {
-    let child = {};
+    let child = product.product;
 
     switch (drupalSettings.alshayaRcs.use_parent_images) {
       case 'never':
@@ -181,5 +181,21 @@
   window.commerceBackend.getFirstImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
     return galleryProduct.media;
+  }
+
+  /**
+   * Get first image from media to display as list.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstImage()
+   */
+   window.commerceBackend.getCartImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_cart;
   }
 })(Drupal);

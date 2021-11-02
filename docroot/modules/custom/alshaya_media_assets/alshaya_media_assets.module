@@ -13,6 +13,7 @@ function alshaya_media_assets_rcs_placeholders_graphql_query_alter(&$queries) {
     $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
     'assets_swatch',
     'assets_pdp',
+    'assets_cart',
   );
 
   // Query for teaser assets for product recommendations.
