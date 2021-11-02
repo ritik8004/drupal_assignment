@@ -786,6 +786,7 @@ function _alshaya_rcs_product_get_recommended_product_field_query() {
     'sku',
     'id',
     'name',
+    'type_id',
     'url_key',
     'is_buyable',
     'stock_status',

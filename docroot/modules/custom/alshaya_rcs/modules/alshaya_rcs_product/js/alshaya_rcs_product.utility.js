@@ -117,4 +117,69 @@
 
     return allOptionsForAttribute[attrValue];
   }
+
+  /**
+   * Get the first child with media.
+   *
+   * @param {object}
+   *   The raw product object.
+   *
+   * @return {object}
+   *   The first child raw product object.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstChildWithMedia()
+   */
+  const getFirstChildWithMedia = function (product) {
+    let firstChild = {};
+    product.variants.every(function (variant) {
+      if (Drupal.hasValue(variant.product.media)) {
+        firstChild = variant.product;
+        // Break.
+        return false;
+      }
+    });
+
+    return firstChild;
+  }
+
+  /**
+   * Get SKU to use for gallery when no specific child is selected.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {object}
+   *   The gallery sku object.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getSkuForGallery()
+   */
+  const getSkuForGallery = function (product) {
+    let child = {};
+
+    switch (drupalSettings.alshayaRcs.use_parent_images) {
+      case 'never':
+        if (product.type_id === 'configurable') {
+          child = getFirstChildWithMedia(product);
+        }
+        break;
+    }
+
+    return child;
+  }
+
+  /**
+   * Get first image from media to display as list.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstImage()
+   */
+  window.commerceBackend.getFirstImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media;
+  }
 })(Drupal);

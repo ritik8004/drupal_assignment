@@ -368,13 +368,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'image':
-      value = ((input.media_gallery.length > 0)
-          && (typeof input.media_gallery[0].url !== 'undefined'
-            || input.media_gallery[0].url
-            || input.media_gallery[0].url !== '')
-        )
-        ? input.media_gallery[0].url
-        : '';
+      value = window.commerceBackend.getFirstImage(input, filter);
       break;
 
     case 'thumbnail_count':

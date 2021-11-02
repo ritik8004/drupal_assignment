@@ -115,6 +115,9 @@ function alshaya_cos_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterfac
  */
 function alshaya_cos_images_rcs_placeholders_graphql_query_alter(&$query_fields) {
   array_push($query_fields['products']['items']['... on ConfigurableProduct']['variants']['product'], 'assets_pdp');
+  $query_fields['products']['items']['upsell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  $query_fields['products']['items']['related_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
+  $query_fields['products']['items']['crosssell_products']['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
 }
 
 /**
