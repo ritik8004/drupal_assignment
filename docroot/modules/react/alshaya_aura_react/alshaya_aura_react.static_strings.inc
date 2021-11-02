@@ -176,7 +176,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'reward_points_with_purchase',
-      'value' => t('reward points with this purchase'),
+      'value' => t('points with this purchase'),
     ],
     [
       'key' => 'pts',
