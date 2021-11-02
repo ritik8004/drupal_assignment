@@ -11,7 +11,7 @@
  */
 #}
 {% set count = order.quantity %}
-<div class="order-list-wrapper-container">
+<div class="order-list-wrapper-container {{ order.auraEnabled == true ? 'has-aura-points' : '' }}">
   <div class="first-second wrapper">
     <a href="{{ order_detail_link }}" class="link-wrapper">
       <div class="first">
@@ -35,6 +35,20 @@
           {% endtrans %}
         </div>
       </div>
+      {% if order.auraEnabled == true %}
+        <div class="aura-points-wrapper">
+          <a href="{{ order_detail_link }}" class="link-wrapper">
+            <div class="points-earned">
+              <span>{{ "Points Earned"|t }}</span>
+              <span>{{ order.apcAccruedPoints }}</span>
+            </div>
+            <div class="points-redeemed">
+              <span>{{ "Points Redeemed"|t }}</span>
+              <span>{{ order.apcRedeemedPoints }}</span>
+            </div>
+          </a>
+        </div>
+      {% endif %}
       {% if order.cancelled_items_count > 0 %}
         <div class="cancel-item">
           <a href="{{ order_detail_link }}#cancelled-items" class="cancel-link"> {{ '@count Cancelled'|t({ '@count': order.cancelled_items_count } ) }}</a>
@@ -77,10 +91,24 @@
   </div>
   <div class="fourth">
     <a href="{{ order_detail_link }}" class="link-wrapper">
-      <div class="light totale-label">{{ "Order Total"|t }}</div>
-      <div class="dark order-total">
-        {{ order.total }}
+      <div class="order-total-wrapper">
+        <div class="light totale-label">{{ "Order Total"|t }}</div>
+        <div class="dark order-total">
+          {{ order.total }}
+        </div>
       </div>
+      {% if order.auraEnabled == true %}
+      <div class="aura-points-wrapper">
+        <div class="points-earned">
+            <span>{{ "Points Earned"|t }}</span>
+            <span>{{ order.apcAccruedPoints }}</span>
+          </div>
+          <div class="points-redeemed">
+            <span>{{ "Points Redeemed"|t }}</span>
+            <span>{{ order.apcRedeemedPoints }}</span>
+          </div>
+        </div>
+      {% endif %}
     </a>
   </div>
   <a href="{{ order_detail_link }}" class="order-detail-page"></a>

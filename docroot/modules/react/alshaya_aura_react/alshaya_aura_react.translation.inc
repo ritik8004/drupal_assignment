@@ -350,10 +350,10 @@ function _alshaya_aura_react_translations() {
       'ar' => 'الماركة',
     ],
     'Points Earned' => [
-      'ar' => 'Points Earned AR',
+      'ar' => 'النقاط المكتسبة',
     ],
     'Points Redeemed' => [
-      'ar' => 'Points Redeemed AR',
+      'ar' => 'النقاط التي تم استبدالها',
     ],
     'Join now' => [
       'ar' => 'اشترك الآن',

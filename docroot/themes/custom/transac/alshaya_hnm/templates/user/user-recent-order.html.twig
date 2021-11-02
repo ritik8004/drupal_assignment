@@ -52,11 +52,16 @@
         <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
       </td>
 
-      <td class="above-mobile toggle--icon" colspan="{{ order.bazaarvoice ? '2' : '' }}">
-        <div class="light">{{ "Order Total"|t }}</div>
-        <div class="dark">{{ order.totals.grand }}</div>
-        <div class="icon-ic_dropdown-expand"></div>
-      </td>
+      <td class="above-mobile toggle--icon order-total-column {{ order.aura_enabled == true ? 'has-aura-points' : '' }}" colspan="{{ order.bazaarvoice ? '2' : '' }}">
+        <div class="order-total-wrapper">
+          <div class="light">{{ "Order Total"|t }}</div>
+          <div class="dark">{{ order.totals.grand }}</div>
+        </div>
+				{% if order.aura_enabled == true %}
+					{% include directory ~ '/../alshaya_white_label/templates/partial/aura-myaccount-earned-points.html.twig' %}
+				{% endif %}
+				<div class="icon-ic_chevrondown"></div>
+        </td>
     </tr>
 
     {% for item in order.items %}
