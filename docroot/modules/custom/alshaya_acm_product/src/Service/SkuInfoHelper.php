@@ -606,9 +606,8 @@ class SkuInfoHelper {
       }
     }
 
-    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
     // Check if express delivery feature is enabled.
-    if ($express_delivery_config->get('status')) {
+    if ($this->configFactory->get('alshaya_spc.express_delivery')->get('status')) {
       $current_parent = $this->skuManager->getParentSkuBySku($child);
       if ($current_parent instanceof SKUInterface) {
         $parent_sku = $current_parent->getSku();
