@@ -465,9 +465,16 @@ function alshaya_color_split_pathauto_alias_alter(&$alias, array $context) {
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_color_split_rcs_placeholders_graphql_query_alter(&$queries) {
+  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  // Get hex value of color.
+  $color_code_attribute = $display_settings->get('color_attribute_config')['configurable_color_code_attribute'];
+  // Remove the "attr_" prefix.
+  $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
+
   array_push(
     $queries['products']['items']['... on ConfigurableProduct']['variants']['product'],
     AlshayaColorSplitConfig::get('attribute_code_color_id'),
+    $color_code_attribute,
   );
 }
 

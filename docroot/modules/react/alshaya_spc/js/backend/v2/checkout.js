@@ -1,12 +1,9 @@
-import _isUndefined from 'lodash/isUndefined';
-import _isEmpty from 'lodash/isEmpty';
 import _isBoolean from 'lodash/isBoolean';
 import _findIndex from 'lodash/findIndex';
 import _first from 'lodash/first';
 import _isArray from 'lodash/isArray';
 import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
-import _isNull from 'lodash/isNull';
 import _isObject from 'lodash/isObject';
 import _each from 'lodash/each';
 import {
@@ -82,7 +79,7 @@ const getCncStatusForCart = async (data) => {
   }
 
   // Validate data.
-  if (_isEmpty(data) || _isEmpty(data.cart)) {
+  if (!hasValue(data) || !hasValue(data.cart)) {
     return true;
   }
 
@@ -94,7 +91,7 @@ const getCncStatusForCart = async (data) => {
     // Suppressing the lint error for now.
     // eslint-disable-next-line no-await-in-loop
     const productStatus = await getProductStatus(item.sku);
-    if (!_isEmpty(productStatus)
+    if (hasValue(productStatus)
       && _isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
       StaticStorage.set('cnc_status', false);
@@ -116,7 +113,7 @@ const getCncStatusForCart = async (data) => {
  *   Address if found.
  */
 const getDefaultAddress = (data) => {
-  if (_isEmpty(data.customer) || _isEmpty(data.customer.addresses)) {
+  if (!hasValue(data.customer) || !hasValue(data.customer.addresses)) {
     return null;
   }
 
@@ -141,9 +138,9 @@ const getDefaultAddress = (data) => {
  */
 const validateAddressAreaCity = async (address) => {
   const response = await callDrupalApi('/spc/validate-info', 'POST', { address });
-  if (!_isUndefined(response)
-    && !_isUndefined(response.data)
-    && !_isUndefined(response.data.address)
+  if (hasValue(response)
+    && hasValue(response.data)
+    && hasValue(response.data.address)
   ) {
     return response.data.address;
   }
@@ -161,7 +158,7 @@ const validateAddressAreaCity = async (address) => {
  */
 const processLastOrder = (orderData) => {
   const order = { ...orderData };
-  if (_isUndefined(order.entity_id)) {
+  if (!hasValue(order.entity_id)) {
     return order;
   }
 
@@ -177,7 +174,7 @@ const processLastOrder = (orderData) => {
   data.items = order.items;
 
   // Coupon code.
-  data.coupon = !_isEmpty(order.coupon_code) ? order.coupon_code : '';
+  data.coupon = hasValue(order.coupon_code) ? order.coupon_code : '';
 
   // Extension.
   data.extension = order.extension_attributes;
@@ -257,14 +254,14 @@ const getLastOrder = async (customerId) => {
  *   Payment method name or null.
  */
 const getDefaultPaymentFromOrder = async (order) => {
-  if (_isUndefined(order.payment) || _isUndefined(order.payment.method)) {
+  if (!hasValue(order.payment) || !hasValue(order.payment.method)) {
     return order;
   }
 
   const orderPaymentMethod = order.payment.method;
 
   const methods = await getPaymentMethods();
-  if (_isEmpty(methods)
+  if (!hasValue(methods)
     || (typeof methods.error !== 'undefined' && methods.error)
   ) {
     return null;
@@ -346,8 +343,8 @@ const getStoreInfo = async (storeInformation) => {
 
     // Fetch store info from Drupal.
     const response = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
-    if (_isEmpty(response.data)
-      || (!_isUndefined(response.data.error) && response.data.error)
+    if (!hasValue(response.data)
+      || (hasValue(response.data.error) && response.data.error)
     ) {
       setDrupalStoreData(storageKey, storeData);
       return null;
@@ -363,14 +360,14 @@ const getStoreInfo = async (storeInformation) => {
   // Magento with the processed store data stored in Drupal.
   store = Object.assign(store, storeInfo);
 
-  if (!_isUndefined(store.distance)) {
+  if (hasValue(store.distance)) {
     store.formatted_distance = store.distance
       .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       .replace(/,/g, '');
     store.formatted_distance = parseFloat(store.formatted_distance);
   }
 
-  if (!_isUndefined(store.sts_delivery_time_label)) {
+  if (hasValue(store.sts_delivery_time_label)) {
     store.delivery_time = store.sts_delivery_time_label;
   }
 
@@ -428,13 +425,13 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
   const response = await callMagentoApi(url, 'GET', {});
 
   // If no stores available, return empty.
-  if (_isEmpty(response.data)) {
+  if (!hasValue(response.data)) {
     StaticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
   // If API returned error, log the error and return empty.
-  if (!_isUndefined(response.data.error) && response.data.error) {
+  if (hasValue(response.data.error) && response.data.error) {
     logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @response.', {
       '@cartId': cartId,
       '@response': JSON.stringify(response.data),
@@ -541,12 +538,12 @@ const getCncStores = async (lat, lon, cncStoresLimit = 0) => {
 const formatAddressForFrontend = (address) => {
   // Do not consider addresses without custom attributes as they are required
   // for Delivery Matrix.
-  if (_isEmpty(address) || _isEmpty(address.country_id)) {
+  if (!hasValue(address) || !hasValue(address.country_id)) {
     return null;
   }
 
   const result = { ...address };
-  if (!_isEmpty(address.custom_attributes)) {
+  if (hasValue(address.custom_attributes)) {
     Object.keys(address.custom_attributes).forEach((item) => {
       const key = address.custom_attributes[item].attribute_code;
       const val = address.custom_attributes[item].value;
@@ -571,7 +568,7 @@ const formatAddressForFrontend = (address) => {
  *   Cleared customer data.
  */
 const getCustomerPublicData = (customer) => {
-  if (_isEmpty(customer)) {
+  if (!hasValue(customer)) {
     return {};
   }
 
@@ -583,23 +580,23 @@ const getCustomerPublicData = (customer) => {
     addresses: [],
   };
 
-  if (!_isUndefined(customer.id)) {
+  if (hasValue(customer.id)) {
     data.id = customer.id;
   }
 
-  if (!_isUndefined(customer.firstname) && customer.firstname !== invisibleCharacter) {
+  if (hasValue(customer.firstname) && customer.firstname !== invisibleCharacter) {
     data.firstname = customer.firstname;
   }
 
-  if (!_isUndefined(customer.lastname) && customer.lastname !== invisibleCharacter) {
+  if (hasValue(customer.lastname) && customer.lastname !== invisibleCharacter) {
     data.lastname = customer.lastname;
   }
 
-  if (!_isUndefined(customer.email)) {
+  if (hasValue(customer.email)) {
     data.email = customer.email;
   }
 
-  if (!_isEmpty(customer.addresses)) {
+  if (hasValue(customer.addresses)) {
     customer.addresses.forEach((item) => {
       data.addresses.push(formatAddressForFrontend(item));
     });
@@ -642,11 +639,10 @@ const getMethodCodeForFrontend = (code) => {
  */
 const getCustomerAddressIds = () => getCart()
   .then((response) => {
-    if (!_isNull(response)
-      && !_isUndefined(response.data)
-      && !_isUndefined(response.data.customer)
-      && !_isUndefined(response.data.customer.addresses)
-      && !_isEmpty(response.data.customer.addresses)
+    if (hasValue(response)
+      && hasValue(response.data)
+      && hasValue(response.data.customer)
+      && hasValue(response.data.customer.addresses)
     ) {
       const addresses = [];
       response.data.customer.addresses.forEach((item) => {
@@ -674,7 +670,7 @@ const updateBilling = async (data) => {
     billing: { ...data },
   };
 
-  if (!_isUndefined(params.billing.id)) {
+  if (hasValue(params.billing.id)) {
     delete params.billing.id;
   }
 
@@ -702,12 +698,12 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
     },
   };
 
-  if (_isEmpty(shippingData)) {
+  if (!hasValue(shippingData)) {
     return null;
   }
 
   // Add carrier info.
-  if (!_isEmpty(shippingData.carrier_info)) {
+  if (hasValue(shippingData.carrier_info)) {
     // @todo make the parameter consistent for all the cases.
     params.shipping.shipping_carrier_code = shippingData.carrier_info.code
       || shippingData.carrier_info.carrier;
@@ -715,7 +711,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
   }
 
   // Add customer address info.
-  if (!_isUndefined(shippingData.customer_address_id)) {
+  if (hasValue(shippingData.customer_address_id)) {
     params.shipping.shipping_address = shippingData.address;
   } else {
     params.shipping.shipping_address = formatAddressForShippingBilling(shippingData.address);
@@ -723,7 +719,7 @@ const addShippingInfo = async (shippingData, action, updateBillingDetails) => {
 
   let cart = await updateCart(params);
   // If cart update has error.
-  if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
+  if (!hasValue(cart.data) || (hasValue(cart.data.error) && cart.data.error)) {
     return cart;
   }
   const cartData = cart.data;
@@ -772,9 +768,8 @@ const selectCnc = async (store, address, billing) => {
     },
   };
 
-  if (_isUndefined(data.shipping.shipping_address.custom_attributes)
-    && !_isUndefined(data.shipping.shipping_address.extension_attributes)
-    && !_isEmpty(data.shipping.shipping_address.extension_attributes)
+  if (!hasValue(data.shipping.shipping_address.custom_attributes)
+    && hasValue(data.shipping.shipping_address.extension_attributes)
   ) {
     const extensionAttributes = data.shipping.shipping_address.extension_attributes;
     data.shipping.shipping_address.custom_attributes = [];
@@ -804,7 +799,7 @@ const selectCnc = async (store, address, billing) => {
   });
 
   // If shipping address not contains proper data (extension info).
-  if (_isEmpty(data.shipping.shipping_address.extension_attributes)) {
+  if (!hasValue(data.shipping.shipping_address.extension_attributes)) {
     return false;
   }
 
@@ -854,7 +849,7 @@ const selectCnc = async (store, address, billing) => {
 
   cart = await updateBilling(billing);
   // If billing update has error.
-  if (!_isUndefined(cart.data.error) && cart.data.error) {
+  if (hasValue(cart.data.error) && cart.data.error) {
     return false;
   }
 
@@ -888,9 +883,9 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   };
 
   // Set customer address id.
-  if (!_isUndefined(address.id)) {
+  if (hasValue(address.id)) {
     shippingData.customer_address_id = address.id;
-  } else if (!_isUndefined(address.customer_address_id)) {
+  } else if (hasValue(address.customer_address_id)) {
     shippingData.customer_address_id = address.customer_address_id;
   }
 
@@ -907,8 +902,8 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   });
 
   // If shipping address not contains proper address, don't process further.
-  if (_isEmpty(shippingData.address.extension_attributes)
-    && _isEmpty(shippingData.address.custom_attributes)
+  if (!hasValue(shippingData.address.extension_attributes)
+    && !hasValue(shippingData.address.custom_attributes)
   ) {
     return false;
   }
@@ -919,14 +914,14 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Set shipping methods.
-  if (!_isEmpty(updated.data) && !_isEmpty(updated.data.shipping)
-    && !_isEmpty(shippingMethods)) {
+  if (hasValue(updated.data) && hasValue(updated.data.shipping)
+    && hasValue(shippingMethods)) {
     updated.data.shipping.methods = shippingMethods;
   }
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
-  if (_isUndefined(billing.customer_address_id)) {
+  if (!hasValue(billing.customer_address_id)) {
     return updated;
   }
 
@@ -937,7 +932,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   });
 
   // If billing address not contains proper address, don't process further.
-  if (_isEmpty(billing.extension_attributes) && _isEmpty(billing.custom_attributes)) {
+  if (!hasValue(billing.extension_attributes) && !hasValue(billing.custom_attributes)) {
     return updated;
   }
 
@@ -947,8 +942,8 @@ const selectHd = async (address, method, billing, shippingMethods) => {
   }
 
   // Set shipping methods.
-  if (!_isEmpty(updated.data) && !_isEmpty(updated.data.shipping)
-    && !_isEmpty(shippingMethods)) {
+  if (hasValue(updated.data) && hasValue(updated.data.shipping)
+    && hasValue(shippingMethods)) {
     updated.data.shipping.methods = shippingMethods;
   }
 
@@ -965,7 +960,7 @@ const selectHd = async (address, method, billing, shippingMethods) => {
  *   FALSE if something went wrong, updated cart data otherwise.
  */
 const applyDefaultShipping = async (order) => {
-  if (_isUndefined(order.shipping) || _isUndefined(order.shipping.commerce_address)) {
+  if (!hasValue(order.shipping) || !hasValue(order.shipping.commerce_address)) {
     return false;
   }
 
@@ -997,7 +992,7 @@ const applyDefaultShipping = async (order) => {
     return false;
   }
 
-  if (_isUndefined(address.customer_address_id)) {
+  if (!hasValue(address.customer_address_id)) {
     return false;
   }
 
@@ -1041,7 +1036,7 @@ const applyDefaultShipping = async (order) => {
  *   The data.
  */
 const applyDefaults = async (data, customerId) => {
-  if (!_isEmpty(data.shipping.method)) {
+  if (hasValue(data.shipping.method)) {
     return data;
   }
 
@@ -1088,7 +1083,7 @@ const applyDefaults = async (data, customerId) => {
   }
 
   // If address already available in cart, use it.
-  if (!_isEmpty(data.shipping.address) && !_isEmpty(data.shipping.address.country_id)) {
+  if (hasValue(data.shipping.address) && hasValue(data.shipping.address.country_id)) {
     const response = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (!response.error) {
       const { methods } = response;
@@ -1131,13 +1126,13 @@ const getProcessedCheckoutData = async (cartData) => {
 
   // Here we will do the processing of cart to make it in required format.
   const updated = await applyDefaults(data, window.drupalSettings.userDetails.customerId);
-  if (updated !== false && !_isEmpty(updated.data)) {
+  if (updated !== false && hasValue(updated.data)) {
     data = updated.data;
   }
 
-  if (_isUndefined(data.shipping.methods)
-    && !_isUndefined(data.shipping.address)
-    && !_isUndefined(data.shipping.type) && data.shipping.type !== 'click_and_collect'
+  if (!hasValue(data.shipping.methods)
+    && hasValue(data.shipping.address)
+    && hasValue(data.shipping.type) && data.shipping.type !== 'click_and_collect'
   ) {
     const response = await getHomeDeliveryShippingMethods(data.shipping.address);
     if (response.error) {
@@ -1146,11 +1141,11 @@ const getProcessedCheckoutData = async (cartData) => {
     data.shipping.methods = response.methods;
   }
 
-  if (_isUndefined(data.payment.methods)
-    && !_isUndefined(data.shipping.method)
+  if (!hasValue(data.payment.methods)
+    && hasValue(data.shipping.method)
   ) {
     const paymentMethods = await getPaymentMethods();
-    if (!_isEmpty(paymentMethods)) {
+    if (hasValue(paymentMethods)) {
       data.payment.methods = paymentMethods;
     }
     data.payment.method = await getPaymentMethodSetOnCart();
@@ -1284,9 +1279,9 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleCheckDone) => {
   let orderId = '';
 
-  if (!_isEmpty(cart.cart)
-    && !_isEmpty(cart.cart.extension_attributes)
-    && !_isEmpty(cart.cart.extension_attributes.real_reserved_order_id)) {
+  if (hasValue(cart.cart)
+    && hasValue(cart.cart.extension_attributes)
+    && hasValue(cart.cart.extension_attributes.real_reserved_order_id)) {
     orderId = cart.cart.extension_attributes.real_reserved_order_id;
   }
 
@@ -1296,35 +1291,35 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
   message.push(`double_check_done:${doubleCheckDone}`);
   message.push(`order_id:${orderId}`);
 
-  if (!_isEmpty(cart.cart)) {
+  if (hasValue(cart.cart)) {
     message.push(`cart_id:${cart.cart.id}`);
     message.push(`amount_paid:${cart.totals.base_grand_total}`);
   }
 
   let paymentMethod = '';
-  if (!_isEmpty(data.method)) {
+  if (hasValue(data.method)) {
     paymentMethod = data.method;
-  } else if (!_isEmpty(data.paymentMethod.method)) {
+  } else if (hasValue(data.paymentMethod.method)) {
     paymentMethod = data.paymentMethod.method;
   }
   message.push(`payment_method:.${paymentMethod}`);
 
   let additionalInfo = '';
-  if (!_isEmpty(data.paymentMethod) && !_isEmpty(data.paymentMethod.additional_data)) {
+  if (hasValue(data.paymentMethod) && hasValue(data.paymentMethod.additional_data)) {
     additionalInfo = JSON.stringify(data.paymentMethod.additional_data);
-  } else if (!_isEmpty(data.additional_data)) {
+  } else if (hasValue(data.additional_data)) {
     additionalInfo = JSON.stringify(data.additional_data);
   }
   message.push(`additional_information:${additionalInfo}`);
 
-  if (!_isEmpty(cart.shipping) && !_isEmpty(cart.shipping.method)) {
+  if (hasValue(cart.shipping) && hasValue(cart.shipping.method)) {
     message.push(`shipping_method:${cart.shipping.method}`);
     _each(cart.shipping.custom_attributes, (value) => {
       message.push(`${value.attribute_code}:${value.value}`);
     });
   }
 
-  return !_isEmpty(message) ? message.join('||') : '';
+  return hasValue(message) ? message.join('||') : '';
 };
 
 /**
@@ -1364,7 +1359,7 @@ const processPaymentData = (paymentData, data) => {
           const { cvvCheck } = drupalSettings.checkoutComUpapi;
           const { cvv, id } = additionalInfo;
 
-          if (cvvCheck && _isEmpty(cvv)) {
+          if (cvvCheck && !hasValue(cvv)) {
             return {
               data: {
                 error: true,
@@ -1374,7 +1369,7 @@ const processPaymentData = (paymentData, data) => {
             };
           }
 
-          if (_isEmpty(id)) {
+          if (!hasValue(id)) {
             return {
               data: {
                 error: true,
@@ -1422,25 +1417,25 @@ const paymentUpdate = async (data) => {
     },
     payment: {
       method: paymentData.method,
-      additional_data: (!_isUndefined(paymentData.additional_data))
+      additional_data: (hasValue(paymentData.additional_data))
         ? paymentData.additional_data
         : [],
     },
   };
 
-  if (!_isUndefined(data.payment_info)
-    && !_isUndefined(data.payment_info.payment)
-    && !_isUndefined(data.payment_info.payment.analytics)
+  if (hasValue(data.payment_info)
+    && hasValue(data.payment_info.payment)
+    && hasValue(data.payment_info.payment.analytics)
   ) {
     const analyticsData = data.payment_info.payment.analytics;
 
     params.extension.ga_client_id = '';
-    if (!_isUndefined(analyticsData.clientID) && !_isNull(analyticsData.clientID)) {
+    if (hasValue(analyticsData.clientID) && hasValue(analyticsData.clientID)) {
       params.extension.ga_client_id = analyticsData.clientID;
     }
 
     params.extension.tracking_id = '';
-    if (!_isUndefined(analyticsData.trackingId) && !_isNull(analyticsData.trackingId)) {
+    if (hasValue(analyticsData.trackingId) && hasValue(analyticsData.trackingId)) {
       params.extension.tracking_id = analyticsData.trackingId;
     }
 
@@ -1482,13 +1477,13 @@ const paymentUpdate = async (data) => {
   // Additional changes for VAULT.
   switch (paymentData.method) {
     case 'checkout_com_upapi':
-      if (!_isEmpty(params.payment.additional_data.public_hash)) {
+      if (hasValue(params.payment.additional_data.public_hash)) {
         params.payment.method = checkoutComUpapiVaultMethod();
       }
       break;
 
     case 'checkout_com':
-      if (!_isEmpty(params.payment.additional_data.public_hash)) {
+      if (hasValue(params.payment.additional_data.public_hash)) {
         params.payment.method = checkoutComVaultMethod();
       }
       break;
@@ -1505,7 +1500,7 @@ const paymentUpdate = async (data) => {
 
   const oldCart = await getCart();
   const cart = await updateCart(params);
-  if (_isEmpty(cart.data) || (!_isUndefined(cart.data.error) && cart.data.error)) {
+  if (!hasValue(cart.data) || (hasValue(cart.data.error) && cart.data.error)) {
     const errorMessage = (cart.data.error_code > 600) ? 'Back-end system is down' : cart.data.error_message;
     cart.data.message = errorMessage;
     const message = prepareOrderFailedMessage(oldCart.data, paymentData, errorMessage, 'update cart', 'NA');
@@ -1535,15 +1530,15 @@ const cartAddressFieldsToValidate = () => {
   const addressFields = getCartSettings('addressFields');
 
   // Use default value first if available.
-  if (!_isUndefined(countryCode)) {
-    if (!_isUndefined(addressFields.default[countryCode])) {
+  if (hasValue(countryCode)) {
+    if (hasValue(addressFields.default[countryCode])) {
       addressFieldsToValidate = addressFields.default[countryCode];
     }
 
-    if (!_isUndefined(siteCode)) {
+    if (hasValue(siteCode)) {
       // If brand specific value available/override.
-      if (!_isUndefined(addressFields[siteCode])
-        && !_isUndefined(addressFields[siteCode][countryCode])
+      if (hasValue(addressFields[siteCode])
+        && hasValue(addressFields[siteCode][countryCode])
       ) {
         addressFieldsToValidate = addressFields[siteCode][countryCode];
       }
@@ -1569,7 +1564,7 @@ const isAddressExtensionAttributesValid = (data) => {
   // in drupal settings.
   const addressFieldsToValidate = cartAddressFieldsToValidate();
 
-  if (_isEmpty(addressFieldsToValidate)) {
+  if (!hasValue(addressFieldsToValidate)) {
     return isValid;
   }
 
@@ -1584,7 +1579,7 @@ const isAddressExtensionAttributesValid = (data) => {
   // shipping address or not.
   addressFieldsToValidate.forEach((field) => {
     // If field not exists or empty.
-    if (_isUndefined(cartAddressCustom[field]) || _isEmpty(cartAddressCustom[field])) {
+    if (!hasValue(cartAddressCustom[field])) {
       logger.error('Field: @field not available in cart shipping address. Cart id: @cartId', {
         '@field': field,
         '@cartId': window.commerceBackend.getCartId(),
@@ -1606,7 +1601,7 @@ const isAddressExtensionAttributesValid = (data) => {
 const validateBeforePaymentFinalise = async () => {
   // Fetch fresh cart from magento.
   const cart = await getCart(true);
-  if (_isNull(cart) || _isUndefined(cart.data)) {
+  if (!hasValue(cart) || !hasValue(cart.data)) {
     return false;
   }
   const cartData = cart.data;
@@ -1627,17 +1622,15 @@ const validateBeforePaymentFinalise = async () => {
 
     errorMessage = 'Cart contains some items which are not in stock.';
     errorCode = cartErrorCodes.cartHasOOSItem;
-  } else if (_isUndefined(cartData.shipping.method)
-    || _isEmpty(cartData.shipping.method)
+  } else if (!hasValue(cartData.shipping.method)
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
     logger.error('Error while finalizing payment. No shipping method available. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (_isUndefined(cartData.shipping.address)
-    || _isUndefined(cartData.shipping.address.custom_attributes)
-    || _isEmpty(cartData.shipping.address.custom_attributes)
+  } else if (!hasValue(cartData.shipping.address)
+    || !hasValue(cartData.shipping.address.custom_attributes)
   ) {
     // If shipping address not have custom attributes.
     isError = true;
@@ -1651,16 +1644,16 @@ const validateBeforePaymentFinalise = async () => {
     logger.error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (_isUndefined(cartData.shipping.address.firstname)
-    || _isUndefined(cartData.shipping.address.lastname)
+  } else if (!hasValue(cartData.shipping.address.firstname)
+    || !hasValue(cartData.shipping.address.lastname)
   ) {
     // If first/last name not available in shipping address.
     isError = true;
     logger.error('Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (_isUndefined(cartData.cart.billing_address.firstname)
-    || _isUndefined(cartData.cart.billing_address.lastname)
+  } else if (!hasValue(cartData.cart.billing_address.firstname)
+    || !hasValue(cartData.cart.billing_address.lastname)
   ) {
     // If first/last name not available in billing address.
     isError = true;
@@ -1695,8 +1688,8 @@ window.commerceBackend.addPaymentMethod = async (data) => {
   // Validate cart.
   if (data.action === cartActions.cartPaymentFinalise) {
     const response = await validateBeforePaymentFinalise();
-    if (!_isUndefined(response.data)
-      && !_isUndefined(response.data.error) && response.data.error
+    if (hasValue(response.data)
+      && hasValue(response.data.error) && response.data.error
     ) {
       return response;
     }
@@ -1719,7 +1712,7 @@ window.commerceBackend.getCartForCheckout = async () => {
       const cart = response;
       const cartId = window.commerceBackend.getCartId();
 
-      if (_isEmpty(cart.data) || !_isEmpty(cart.data.error_message)) {
+      if (!hasValue(cart.data) || hasValue(cart.data.error_message)) {
         logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,
           '@message': cart.data.error_message,
@@ -1727,7 +1720,7 @@ window.commerceBackend.getCartForCheckout = async () => {
         return cart.data;
       }
 
-      if (_isEmpty(cart.data.cart) || _isEmpty(cart.data.cart.items)) {
+      if (!hasValue(cart.data.cart) || !hasValue(cart.data.cart.items)) {
         logger.warning('Checkout accessed without items in cart for id: @cartId', {
           '@cartId': cartId,
         });
@@ -1783,13 +1776,13 @@ const addCncShippingInfo = async (shippingData, action) => {
   };
 
   // Move extension data to static fields.
-  if (!_isUndefined(address.static.extension)) {
+  if (hasValue(address.static.extension)) {
     address = { ...address, ...address.static.extension };
     delete address.static.extension;
   }
 
   // Move street to the root.
-  if (!_isUndefined(address.static.street)) {
+  if (hasValue(address.static.street)) {
     address.street = address.static.street;
     delete address.static.street;
   }
@@ -1811,9 +1804,9 @@ const addCncShippingInfo = async (shippingData, action) => {
 
   let cart = await updateCart(params);
   // If cart update has error.
-  if (_isEmpty(cart.data)
-    || (!_isUndefined(cart.data.error) && cart.data.error)
-    || (!_isUndefined(cart.data.response_message) && cart.data.response_message === 'json_error')
+  if (!hasValue(cart.data)
+    || (hasValue(cart.data.error) && cart.data.error)
+    || (hasValue(cart.data.response_message) && cart.data.response_message === 'json_error')
   ) {
     return cart;
   }
@@ -1821,8 +1814,8 @@ const addCncShippingInfo = async (shippingData, action) => {
   // Setting city value as 'NONE' so that, we can
   // identify if billing address added is default one and
   // not actually added by the customer on FE.
-  if (_isEmpty(cart.data.cart.billing_address)
-    || _isEmpty(cart.data.cart.billing_address.city)
+  if (!hasValue(cart.data.cart.billing_address)
+    || !hasValue(cart.data.cart.billing_address.city)
     || cart.data.cart.billing_address.city === 'NONE'
   ) {
     params.shipping.shipping_address.city = 'NONE';
@@ -1865,7 +1858,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
   const cartId = window.commerceBackend.getCartId();
 
-  const type = (!_isUndefined(shippingInfo.shipping_type))
+  const type = (hasValue(shippingInfo.shipping_type))
     ? shippingInfo.shipping_type
     : 'home_delivery';
 
@@ -1905,11 +1898,11 @@ window.commerceBackend.addShippingMethod = async (data) => {
   const shippingMethods = response.methods;
 
   let carrierInfo = {};
-  if (!_isEmpty(shippingInfo.carrier_info)) {
+  if (hasValue(shippingInfo.carrier_info)) {
     carrierInfo = shippingInfo.carrier_info;
   }
 
-  if (_isEmpty(carrierInfo)) {
+  if (!hasValue(carrierInfo)) {
     carrierInfo = {
       code: shippingMethods[0].carrier_code,
       method: shippingMethods[0].method_code,
@@ -1928,7 +1921,7 @@ window.commerceBackend.addShippingMethod = async (data) => {
 
   cart = await addShippingInfo(params, data.action, updateBillingInfo);
 
-  if (!_isEmpty(cart.data) && !_isEmpty(cart.data.shipping) && !_isEmpty(shippingMethods)) {
+  if (hasValue(cart.data) && hasValue(cart.data.shipping) && hasValue(shippingMethods)) {
     cart.data.shipping.methods = shippingMethods;
   }
 
@@ -1976,8 +1969,8 @@ const triggerCheckoutEvent = (event, data) => callDrupalApi(
  */
 const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
   let customerId = '';
-  if (!_isEmpty(cart.data.cart.customer)
-    && !_isEmpty(cart.data.cart.customer.id)) {
+  if (hasValue(cart.data.cart.customer)
+    && hasValue(cart.data.cart.customer.id)) {
     customerId = cart.data.cart.customer.id;
   }
 
@@ -2006,7 +1999,7 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
  */
 window.commerceBackend.placeOrder = async (data) => {
   const cart = await getCart(true);
-  if (_isNull(cart) || _isUndefined(cart.data)) {
+  if (!hasValue(cart) || !hasValue(cart.data)) {
     return false;
   }
 
@@ -2029,7 +2022,7 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // Check if shipping method is present else throw error.
-  if (_isEmpty(cart.data.shipping.method)) {
+  if (!hasValue(cart.data.shipping.method)) {
     logger.error('Error while placing order. No shipping method available. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
@@ -2043,7 +2036,7 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // Check if shipping address not have custom attributes.
-  if (_isEmpty(cart.data.shipping.address.custom_attributes)) {
+  if (!hasValue(cart.data.shipping.address.custom_attributes)) {
     logger.error('Error while placing order. Shipping address not contains all info. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
@@ -2072,8 +2065,8 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // If first/last name not available in shipping address.
-  if (_isEmpty(cart.data.shipping.address.firstname)
-    || _isEmpty(cart.data.shipping.address.lastname)) {
+  if (!hasValue(cart.data.shipping.address.firstname)
+    || !hasValue(cart.data.shipping.address.lastname)) {
     logger.error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });
@@ -2087,8 +2080,8 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // Check If first/last name not available in billing address.
-  if (_isEmpty(cart.data.cart.billing_address.firstname)
-    || _isEmpty(cart.data.cart.billing_address.lastname)) {
+  if (!hasValue(cart.data.cart.billing_address.firstname)
+    || !hasValue(cart.data.cart.billing_address.lastname)) {
     logger.error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });
@@ -2171,8 +2164,8 @@ window.commerceBackend.placeOrder = async (data) => {
     })
     .catch((response) => {
       logger.error('Error while placing order. Error message: @message, Code: @errorCode.', {
-        '@message': !_isEmpty(response.error) ? response.error.message : response,
-        '@errorCode': !_isEmpty(response.error) ? response.error.error_code : '',
+        '@message': hasValue(response.error) ? response.error.message : response,
+        '@errorCode': hasValue(response.error) ? response.error.error_code : '',
       });
 
       // @todo all the error handling.

@@ -7,7 +7,7 @@
       {% for brand in brands %}
         <div class='brand'>
           <a href={{ brand.link }}>
-            <img loading="lazy" src={{ brand.brand_logo }}>
+            <img loading="lazy" src="{{ brand.brand_logo }}">
             <span class='brand-name'>{{ brand.title }}</span>
           </a>
         </div>
