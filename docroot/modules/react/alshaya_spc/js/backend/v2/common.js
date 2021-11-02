@@ -1,8 +1,6 @@
 import Axios from 'axios';
 import qs from 'qs';
-import _isArray from 'lodash/isArray';
 import _cloneDeep from 'lodash/cloneDeep';
-import _isObject from 'lodash/isObject';
 import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
@@ -21,7 +19,11 @@ import {
 } from './error';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isObject,
+  isArray,
+} from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
@@ -230,7 +232,6 @@ const handleResponse = (apiResponse) => {
   detectCaptcha(apiResponse);
   // If the response contains a CF Challenge, the page will be reloaded once per session.
   detectCFChallenge(apiResponse);
-
   // Treat each status code.
   if (apiResponse.status === 202) {
     // Place order can return 202, this isn't error.
@@ -334,7 +335,7 @@ const handleResponse = (apiResponse) => {
     logger.info('Error while doing MDC api call. Error: @message', {
       '@message': error.message,
     });
-  } else if (_isArray(apiResponse.data.response_message)
+  } else if (isArray(apiResponse.data.response_message)
     && hasValue(apiResponse.data.response_message[1])
     && apiResponse.data.response_message[1] === 'error') {
     // When there is error in response_message from custom updateCart API.
@@ -481,9 +482,8 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
  */
 const formatCart = (cartData) => {
   const data = _cloneDeep(cartData);
-
   // Check if there is no cart data.
-  if (!hasValue(data.cart) || !_isObject(data.cart)) {
+  if (!hasValue(data.cart) || !isObject(data.cart)) {
     return data;
   }
 

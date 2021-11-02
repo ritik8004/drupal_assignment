@@ -1,6 +1,6 @@
 import { redirectToCart } from './get_cart';
 import dispatchCustomEvent from './events';
-import hasValue from '../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Clear local storage and reload/redirect to cart page.

@@ -1,7 +1,7 @@
 import isRTL from '../rtl';
 import dispatchCustomEvent from '../events';
 import { getDefaultMapCenter } from '../checkout_util';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export class Gmap {
   constructor() {
