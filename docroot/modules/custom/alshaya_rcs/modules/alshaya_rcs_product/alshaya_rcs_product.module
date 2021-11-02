@@ -865,8 +865,9 @@ function alshaya_rcs_product_rcs_handlebars_templates() {
     'product_zoom' => "$path/templates/rcs-product-zoom.handlebars",
     'block' => [
       'product_zoom_default_gallery' => "$path/templates/rcs-product-zoom-default-gallery-block.handlebars",
-      'product_zoom_mobile_gallery' => "$path/templates/rcs-product-zoom-mobile-gallery.handlebars",
-      'product_zoom_modal_gallery' => "$path/templates/rcs-product-zoom-modal-gallery.handlebars",
+      'product_zoom_mobile_gallery' => "$path/templates/rcs-product-zoom-mobile-gallery-block.handlebars",
+      'product_zoom_modal_gallery' => "$path/templates/rcs-product-zoom-modal-gallery-block.handlebars",
+      'product_zoom_magazine_gallery' => "$path/templates/rcs-product-zoom-magazine-gallery-block.handlebars",
     ],
   ];
 
