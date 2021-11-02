@@ -1,6 +1,5 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import _findKey from 'lodash/findKey';
 import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
@@ -157,7 +156,7 @@ export default class EmptyDeliveryText extends React.Component {
         // On two concurrent requests, update storelist only for user's location.
         if (openStoreRequests.length > 1 && response.config) {
           const currentCoords = response.config.url.split('/').slice(-2).map((point) => parseFloat(point));
-          const rquestIndex = _findKey(openStoreRequests, {
+          const rquestIndex = _.findKey(openStoreRequests, {
             coords: {
               lat: currentCoords[0],
               lng: currentCoords[1],

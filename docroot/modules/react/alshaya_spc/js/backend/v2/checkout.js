@@ -1,11 +1,7 @@
 import _isBoolean from 'lodash/isBoolean';
-import _findIndex from 'lodash/findIndex';
-import _first from 'lodash/first';
 import _isArray from 'lodash/isArray';
-import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isObject from 'lodash/isObject';
-import _each from 'lodash/each';
 import {
   isAnonymousUserWithoutCart,
   getCart,
@@ -118,13 +114,13 @@ const getDefaultAddress = (data) => {
   }
 
   // If address is set as default for shipping.
-  const key = _findIndex(data.customer.addresses, (address) => address.default_shipping === '1');
+  const key = _.findIndex(data.customer.addresses, (address) => address.default_shipping === '1');
   if (key >= 0) {
     return data.customer.addresses[key];
   }
 
   // Return first address.
-  return _first(data.customer.addresses);
+  return [].concat(data.customer.addresses).shift();
 };
 
 /**
@@ -269,7 +265,7 @@ const getDefaultPaymentFromOrder = async (order) => {
 
   const methodNames = methods.map((value) => value.code);
 
-  if (!_includes(methodNames, orderPaymentMethod)) {
+  if (!_.contains(methodNames, orderPaymentMethod)) {
     return null;
   }
 
@@ -832,7 +828,7 @@ const selectCnc = async (store, address, billing) => {
   // Return if address id from last order doesn't
   // exist in customer's address id list.
   const customerAddressIds = await getCustomerAddressIds();
-  if (!_includes(customerAddressIds, billing.customer_address_id)) {
+  if (!_.contains(customerAddressIds, billing.customer_address_id)) {
     logger.warning('Billing address not available in customer address book now. Address: @address Cart: @cartId', {
       '@address': JSON.stringify(billing),
       '@cartId': JSON.stringify(window.commerceBackend.getCartId()),
@@ -966,7 +962,7 @@ const applyDefaultShipping = async (order) => {
 
   const address = order.shipping.commerce_address;
 
-  if (_includes(order.shipping.method, 'click_and_collect')) {
+  if (_.contains(order.shipping.method, 'click_and_collect')) {
     const store = await getStoreInfo({ code: order.shipping.extension_attributes.store_code });
 
     // We get a string value if store node is not present in Drupal. So in
@@ -979,7 +975,7 @@ const applyDefaultShipping = async (order) => {
 
     const availableStoreCodes = availableStores.map((value) => value.code);
 
-    if (_includes(availableStoreCodes, store.code)) {
+    if (_.contains(availableStoreCodes, store.code)) {
       let storeKey = '';
       availableStores.forEach((value, key) => {
         if (value.code === store.code) {
@@ -999,7 +995,7 @@ const applyDefaultShipping = async (order) => {
   // Return false if address id from last order doesn't
   // exist in customer's address id list.
   const customerAddressIds = await getCustomerAddressIds();
-  if (!_includes(customerAddressIds, address.customer_address_id)) {
+  if (!_.contains(customerAddressIds, address.customer_address_id)) {
     return false;
   }
 
@@ -1048,7 +1044,7 @@ const applyDefaults = async (data, customerId) => {
   // Try to apply defaults from last order.
   if (hasValue(order)) {
     // If cnc order but cnc is disabled.
-    if (_includes(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
+    if (_.contains(order.shipping.method, 'click_and_collect') && await getCncStatusForCart(data) !== true) {
       // Do nothing, we will let the address from address book used for default flow.
     } else {
       logger.debug('Applying defaults from last order. Cart: @cartId.', {
@@ -1314,7 +1310,7 @@ const prepareOrderFailedMessage = (cart, data, exceptionMessage, api, doubleChec
 
   if (hasValue(cart.shipping) && hasValue(cart.shipping.method)) {
     message.push(`shipping_method:${cart.shipping.method}`);
-    _each(cart.shipping.custom_attributes, (value) => {
+    _.each(cart.shipping.custom_attributes, (value) => {
       message.push(`${value.attribute_code}:${value.value}`);
     });
   }
