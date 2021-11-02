@@ -361,7 +361,6 @@ function processProduct(product) {
     gtm_attributes: product.gtm_attributes,
     gallery: null,
     identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
-    // @todo Add proper implementation for cart image.
     cart_image: window.commerceBackend.getCartImage(product),
     // @todo Add brand specific cart title.
     cart_title: 'Temp title',
