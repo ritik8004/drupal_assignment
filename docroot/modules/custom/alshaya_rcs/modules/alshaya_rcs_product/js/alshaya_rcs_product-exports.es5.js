@@ -375,8 +375,8 @@ exports.computePhFilters = function (input, filter) {
       value = drupalSettings.vat_text;
       break;
 
-    case 'image':
-      value = window.commerceBackend.getFirstImage(input, filter);
+    case 'teaser_image':
+      value = window.commerceBackend.getTeaserImage(input);
       break;
 
     case 'thumbnail_count':

@@ -184,18 +184,30 @@
   }
 
   /**
-   * Get first image from media to display as list.
+   * Get the image from media to as the cart image.
    *
    * @param {object} product
    *   The raw product object.
    *
    * @return {string}
    *   The media item url.
-   *
-   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstImage()
    */
-   window.commerceBackend.getCartImage = function (product) {
+  window.commerceBackend.getCartImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
     return galleryProduct.media_cart;
+  }
+
+  /**
+   * Get the image from media to display as teaser image.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   */
+   window.commerceBackend.getTeaserImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_teaser;
   }
 })(Drupal);
