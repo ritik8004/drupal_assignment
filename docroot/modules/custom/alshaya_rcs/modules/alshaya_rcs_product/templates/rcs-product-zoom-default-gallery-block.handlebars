@@ -47,7 +47,7 @@
         {{else if (eq this.type "video")}}
           <li class="cloudzoom__thumbnails__video pdp-video">
             <button class="pdp-video-close"></button>
-            <video class="gallery-video b-lazy" muted="muted" loop>
+            <video class="gallery-video" loading="lazy" muted="muted" loop>
               <source src="{{data.root.lazy_load_placeholder}}" data-src="{{this.url}}" />
               {{t "Your browser does not support the video tag."}}
             </video>
