@@ -720,7 +720,7 @@ exports.computePhFilters = function (input, filter) {
       };
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`field.product.${filter}.block`, data);
+      value = handlebarsRenderer.render(`product.${filter}.block`, data);
       break;
 
     case 'short_description':

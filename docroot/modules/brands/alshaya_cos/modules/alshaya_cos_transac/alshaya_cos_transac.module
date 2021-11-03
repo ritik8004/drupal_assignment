@@ -50,8 +50,15 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
   }
 
   $path = drupal_get_path('module', 'alshaya_cos_transac');
-  // Override default template for description.
-  $templates['field']['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
+
+  // Override default template for description block.
+  $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
+
+  $pdp_layout = Drupal::configFactory()->get('alshaya_acm_product.settings')->get('pdp_layout');
+  if ($pdp_layout == 'magazine') {
+    // Override default template for short description block when using magazine layout.
+    $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-full-magazine-block.handlebars";
+  }
 }
 
 /**
