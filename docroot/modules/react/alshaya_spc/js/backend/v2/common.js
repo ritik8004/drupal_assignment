@@ -718,7 +718,7 @@ const getProcessedCartData = async (cartData) => {
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
           logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
             '@sku': item.sku,
-            '@cartId': data.cart_id,
+            '@cartId': data.cart_id_int,
             '@stockInfo': JSON.stringify(stockInfo || {}),
           });
 
