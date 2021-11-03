@@ -720,12 +720,13 @@ exports.computePhFilters = function (input, filter) {
       };
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`field.product.${filter}`, data);
+      value = handlebarsRenderer.render(`field.product.${filter}.block`, data);
       break;
 
     case 'short_description':
       // Prepare the object data for rendering.
       data = (input.short_description) ? input.short_description : input.description;
+      data.description = input.description;
       data.read_more = false;
 
       // Apply ellipsis.
@@ -734,7 +735,7 @@ exports.computePhFilters = function (input, filter) {
       data.read_more = tmp.read_more;
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`field.product.${filter}`, data);
+      value = handlebarsRenderer.render(`product.${filter}.block`, data);
       break;
 
     case 'promotions':

@@ -51,7 +51,7 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
 
   $path = drupal_get_path('module', 'alshaya_cos_transac');
   // Override default template for description.
-  $templates['field']['product']['description'] = "$path/templates/rcs-field-description.handlebars";
+  $templates['field']['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
 }
 
 /**
