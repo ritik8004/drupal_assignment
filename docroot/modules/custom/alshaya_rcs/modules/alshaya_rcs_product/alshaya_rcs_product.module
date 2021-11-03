@@ -860,7 +860,11 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
 /**
  * Implements hook_rcs_handlebars_templates().
  */
-function alshaya_rcs_product_rcs_handlebars_templates() {
+function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
+  if ($entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
   $path = drupal_get_path('module', 'alshaya_rcs_product');
   $templates = ['gallery' => []];
   $templates['gallery']['product'] = [
