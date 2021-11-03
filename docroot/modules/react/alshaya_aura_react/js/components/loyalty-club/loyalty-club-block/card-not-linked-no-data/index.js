@@ -9,6 +9,7 @@ import AuraFormNewAuraUserModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-new-aura-user-form';
 import AuraFormLinkCardOTPModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
+import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 
 class AuraMyAccountNoLinkedCard extends React.Component {
   constructor(props) {
@@ -78,8 +79,6 @@ class AuraMyAccountNoLinkedCard extends React.Component {
       chosenUserMobile,
       isLinkCardModalOpen,
     } = this.state;
-
-    const isUserAuthenticated = Boolean(drupalSettings.userDetails.customerId);
 
     return (
       <div className="aura-myaccount-no-linked-card-wrapper no-card-found fadeInUp">

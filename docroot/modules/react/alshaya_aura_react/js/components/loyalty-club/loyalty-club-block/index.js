@@ -7,8 +7,8 @@ import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import AuraProgressWrapper from '../../aura-progress';
 import { getStorageInfo } from '../../../../../js/utilities/storage';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { getAuraLocalStorageKey } from '../../../utilities/aura_utils';
-import { isUserAuthenticated } from '../../../../../alshaya_spc/js/backend/v2/utility';
 
 const LoyaltyClubBlock = (props) => {
   const allAuraStatus = getAllAuraStatus();

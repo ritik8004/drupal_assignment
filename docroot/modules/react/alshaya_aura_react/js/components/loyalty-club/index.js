@@ -4,7 +4,7 @@ import LoyaltyClubTabs from './loyalty-club-tabs';
 import { getAllAuraStatus } from '../../utilities/helper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { getAuraDetailsDefaultState } from '../../utilities/aura_utils';
-import { isUserAuthenticated } from '../../../../alshaya_spc/js/backend/v2/utility';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 class LoyaltyClub extends React.Component {
   constructor(props) {
