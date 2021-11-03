@@ -20,7 +20,7 @@ function alshaya_aura_react_token_info() {
 
   $info['tokens']['alshaya_aura']['currency'] = [
     'name' => t('Currency'),
-    'description' => t("Website currency"),
+    'description' => t('Website currency'),
   ];
 
   return $info;

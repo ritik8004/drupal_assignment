@@ -157,7 +157,7 @@ class AlshayaLoyaltyController extends ControllerBase {
   public function loyaltyClubGuest() {
     // Redirect to loyalty club user page for authenticated user.
     if ($this->currentUser()->isAuthenticated()) {
-      return $this->redirect('alshaya_aura_react.my_loyalty_club', ['user' => $this->currentUser->id()]);
+      return $this->redirect('alshaya_aura_react.my_loyalty_club');
     }
 
     return $this->loyaltyClub();
