@@ -6,6 +6,9 @@ import AuraMyAccountVerifiedUser from './linked-verified';
 import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import AuraProgressWrapper from '../../aura-progress';
+import { getStorageInfo } from '../../../../../js/utilities/storage';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import { getAuraLocalStorageKey } from '../../../utilities/aura_utils';
 
 const LoyaltyClubBlock = (props) => {
   const allAuraStatus = getAllAuraStatus();
@@ -34,8 +37,15 @@ const LoyaltyClubBlock = (props) => {
   }
 
   const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
+  const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
   if (loyaltyStatusInt !== '') {
+    // Guest user and pending enrollment.
+    if (localStorageValues !== null && !isUserAuthenticated()) {
+      return (
+        <AuraMyAccountPendingFullEnrollment />
+      );
+    }
     // When user has no card associated with him.
     if (loyaltyStatusInt === allAuraStatus.APC_NOT_LINKED_NO_DATA
       || loyaltyStatusInt === allAuraStatus.APC_NOT_LINKED_NOT_U) {

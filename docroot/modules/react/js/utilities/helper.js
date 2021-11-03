@@ -10,3 +10,11 @@ export default function isAuraEnabled() {
 
   return enabled;
 }
+
+/**
+ * Get user role authenticated or anonymous.
+ *
+ * @returns {boolean}
+ *   True if user is authenticated.
+ */
+export const isUserAuthenticated = () => Boolean(window.drupalSettings.userDetails.customerId);

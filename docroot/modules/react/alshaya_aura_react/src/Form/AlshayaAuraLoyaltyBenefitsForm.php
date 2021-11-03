@@ -50,6 +50,12 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_benefits_content.value'),
     ];
 
+    // Display token UI required for currency.
+    $form['token_help'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => ['alshaya_aura'],
+    ];
+
     $form['alshaya_aura_react']['help'] = [
       '#type' => 'details',
       '#title' => $this->t('Help - Content Visual Reference'),

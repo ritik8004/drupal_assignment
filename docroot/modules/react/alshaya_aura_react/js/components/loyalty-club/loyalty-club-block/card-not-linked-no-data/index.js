@@ -9,6 +9,7 @@ import AuraFormNewAuraUserModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-new-aura-user-form';
 import AuraFormLinkCardOTPModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
+import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 
 class AuraMyAccountNoLinkedCard extends React.Component {
   constructor(props) {
@@ -90,64 +91,68 @@ class AuraMyAccountNoLinkedCard extends React.Component {
           </ConditionalView>
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
-          <div className="aura-myaccount-no-linked-card-title">
-            { Drupal.t('Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits.') }
+          <div className="banner-title">
+            { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
           </div>
-          <div className="link-your-card">
-            { Drupal.t('Already an Aura member?') }
-            <div
-              className="btn"
-              onClick={() => this.openLinkCardModal()}
-            >
-              { Drupal.t('Link your account') }
+          <div className="action-wrapper">
+            <ConditionalView condition={isUserAuthenticated}>
+              <div className="link-your-card">
+                { Drupal.t('Already AURA Member?') }
+                <div
+                  className="btn"
+                  onClick={() => this.openLinkCardModal()}
+                >
+                  { Drupal.t('Link your card') }
+                </div>
+              </div>
+            </ConditionalView>
+            <div className="sign-up">
+              { Drupal.t('Ready to be Rewarded?') }
+              <div
+                className="btn"
+                onClick={() => this.openOTPModal()}
+              >
+                { Drupal.t('Join now') }
+              </div>
+              <Popup
+                className="aura-modal-form otp-modal"
+                open={isOTPModalOpen}
+                closeOnEscape={false}
+                closeOnDocumentClick={false}
+              >
+                <AuraFormSignUpOTPModal
+                  closeOTPModal={() => this.closeOTPModal()}
+                  openNewUserModal={() => this.openNewUserModal()}
+                  setChosenCountryCode={this.setChosenCountryCode}
+                  setChosenUserMobile={this.setChosenUserMobile}
+                  chosenCountryCode={chosenCountryCode}
+                />
+              </Popup>
+              <Popup
+                className="aura-modal-form new-aura-user"
+                open={isNewUserModalOpen}
+                closeOnEscape={false}
+                closeOnDocumentClick={false}
+              >
+                <AuraFormNewAuraUserModal
+                  chosenCountryCode={chosenCountryCode}
+                  chosenUserMobile={chosenUserMobile}
+                  closeNewUserModal={() => this.closeNewUserModal()}
+                />
+              </Popup>
+              <Popup
+                className="aura-modal-form link-card-otp-modal"
+                open={isLinkCardModalOpen}
+                closeOnEscape={false}
+                closeOnDocumentClick={false}
+              >
+                <AuraFormLinkCardOTPModal
+                  closeLinkCardOTPModal={() => this.closeLinkCardModal()}
+                  setChosenCountryCode={this.setChosenCountryCode}
+                  chosenCountryCode={chosenCountryCode}
+                />
+              </Popup>
             </div>
-          </div>
-          <div className="sign-up">
-            { Drupal.t('Ready to be rewarded?') }
-            <div
-              className="btn"
-              onClick={() => this.openOTPModal()}
-            >
-              { Drupal.t('Join now') }
-            </div>
-            <Popup
-              className="aura-modal-form otp-modal"
-              open={isOTPModalOpen}
-              closeOnEscape={false}
-              closeOnDocumentClick={false}
-            >
-              <AuraFormSignUpOTPModal
-                closeOTPModal={() => this.closeOTPModal()}
-                openNewUserModal={() => this.openNewUserModal()}
-                setChosenCountryCode={this.setChosenCountryCode}
-                setChosenUserMobile={this.setChosenUserMobile}
-                chosenCountryCode={chosenCountryCode}
-              />
-            </Popup>
-            <Popup
-              className="aura-modal-form new-aura-user"
-              open={isNewUserModalOpen}
-              closeOnEscape={false}
-              closeOnDocumentClick={false}
-            >
-              <AuraFormNewAuraUserModal
-                chosenCountryCode={chosenCountryCode}
-                chosenUserMobile={chosenUserMobile}
-                closeNewUserModal={() => this.closeNewUserModal()}
-              />
-            </Popup>
-            <Popup
-              className="aura-modal-form link-card-otp-modal"
-              open={isLinkCardModalOpen}
-              closeOnEscape={false}
-              closeOnDocumentClick={false}
-            >
-              <AuraFormLinkCardOTPModal
-                closeLinkCardOTPModal={() => this.closeLinkCardModal()}
-                setChosenCountryCode={this.setChosenCountryCode}
-                chosenCountryCode={chosenCountryCode}
-              />
-            </Popup>
           </div>
         </div>
       </div>

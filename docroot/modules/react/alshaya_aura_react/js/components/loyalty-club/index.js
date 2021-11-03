@@ -4,6 +4,7 @@ import LoyaltyClubTabs from './loyalty-club-tabs';
 import { getAllAuraStatus } from '../../utilities/helper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { getAuraDetailsDefaultState } from '../../utilities/aura_utils';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 class LoyaltyClub extends React.Component {
   constructor(props) {
@@ -25,6 +26,13 @@ class LoyaltyClub extends React.Component {
     document.addEventListener('loyaltyStatusUpdated', this.setCustomerDetails, false);
 
     if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+      this.setState({
+        wait: false,
+      });
+    }
+
+    // Set wait false for guest user.
+    if (!isUserAuthenticated() && loyaltyStatus === 0) {
       this.setState({
         wait: false,
       });

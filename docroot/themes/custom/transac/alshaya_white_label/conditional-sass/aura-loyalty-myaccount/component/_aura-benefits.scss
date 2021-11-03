@@ -36,7 +36,26 @@
     }
 
     @include breakpoint($only-mobile) {
-      grid-template-columns: 7rem 1fr 1fr 1fr;
+      grid-template-columns: 9rem 1fr 1fr 1fr;
+    }
+
+    .row-desktop {
+      @include breakpoint($upto-desktop) {
+        display: none !important;
+      }
+    }
+
+    .row-mobile {
+      justify-content: flex-start !important;
+      padding-#{$left}: 1rem;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: 1.875rem;
+      }
+
+      @include breakpoint($desktop) {
+        display: none !important;
+      }
     }
 
     &.header {
@@ -99,15 +118,15 @@
     }
 
     &:not(.normal) > div {
-      &:nth-child(2) {
+      &:nth-child(3) {
         color: $aura-loyalty-club-hello-text;
       }
 
-      &:nth-child(3) {
+      &:nth-child(4) {
         color: $aura-loyalty-club-stars-text;
       }
 
-      &:nth-child(4) {
+      &:nth-child(5) {
         color: $aura-loyalty-club-vip-text;
       }
     }
