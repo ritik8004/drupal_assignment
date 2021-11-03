@@ -38,6 +38,18 @@
       color: $aura-normal-text;
       padding-#{$right}: 1.25rem;
 
+      @include breakpoint($tablet) {
+        width: 45%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 49%;
+
+        html[lang=ar] & {
+          width: 40%;
+        }
+      }
+
       .spc-aura-highlight {
         color: $aura-highlight;
         font-family: $aura-bold;
@@ -69,7 +81,7 @@
       background-origin: border-box;
       background-clip: content-box, border-box;
       flex-grow: 1;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       border-color: transparent;
@@ -79,9 +91,20 @@
       font-size: 1rem;
       color: $aura-join-link-text;
 
+      @include breakpoint($only-tablet) {
+        min-width: 8rem;
+      }
+
       html[lang=ar] & {
+        min-width: 12rem;
         background-image: $aura-join-link-ar;
         text-align: center;
+      }
+
+      &-wrapper {
+        @include breakpoint($only-mobile) {
+          text-align: center;
+        }
       }
     }
   }

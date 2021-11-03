@@ -122,6 +122,10 @@ body.aura-enabled {
       text-align: #{$left};
       line-height: normal;
 
+      html[lang=ar] & {
+        line-height: 2.25rem;
+      }
+
       @include breakpoint($desktop) {
         font-size: 1.5rem;
       }

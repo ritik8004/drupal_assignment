@@ -95,19 +95,19 @@ class AuraMyAccountNoLinkedCard extends React.Component {
             { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
           </div>
           <div className="action-wrapper">
-            <ConditionalView condition={isUserAuthenticated}>
+            <ConditionalView condition={isUserAuthenticated()}>
               <div className="link-your-card">
-                { Drupal.t('Already AURA Member?') }
+                { Drupal.t('Already an Aura member?') }
                 <div
                   className="btn"
                   onClick={() => this.openLinkCardModal()}
                 >
-                  { Drupal.t('Link your card') }
+                  { Drupal.t('Link your account') }
                 </div>
               </div>
             </ConditionalView>
             <div className="sign-up">
-              { Drupal.t('Ready to be Rewarded?') }
+              { Drupal.t('Ready to be rewarded?') }
               <div
                 className="btn"
                 onClick={() => this.openOTPModal()}

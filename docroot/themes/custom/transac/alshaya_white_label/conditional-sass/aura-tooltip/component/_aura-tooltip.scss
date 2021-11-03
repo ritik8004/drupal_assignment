@@ -2,7 +2,8 @@
 .spc-aura-checkout-rewards-block .block-content,
 .aura-card-linked-verified-wrapper .aura-points-on-hold,
 .aura-pdp-points-section,
-.loyalty-club-details-wrapper {
+.loyalty-club-details-wrapper,
+.spc-aura-cart-rewards-block .spc-join-aura-link-wrapper {
   .tooltip-anchor {
     display: inline-block;
     margin-#{$left}: 0.5rem;
@@ -71,5 +72,11 @@
         }
       }
     }
+  }
+}
+
+.spc-aura-cart-rewards-block .spc-join-aura-link-wrapper {
+  .tooltip-anchor {
+    top: -0.1875rem;
   }
 }
