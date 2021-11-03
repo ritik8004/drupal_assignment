@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_dh_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
+    if ($sku_entity instanceof SKU) {
+      $return = _alshaya_dh_transac_get_product_description($sku_entity);
+      $build['description'] = $return['description'];
+      $build['short_desc'] = $return['short_desc'];
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_dh_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $return = _alshaya_dh_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $return['short_desc'];
+    $build['description'] = $return['description'];
+  }
+}

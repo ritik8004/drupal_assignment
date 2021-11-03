@@ -262,3 +262,27 @@ sites:
     module: alshaya_cos
     type: alshaya_transac
     country: qa
+  dhkw:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: kw
+  dhsa:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: sa
+  dhae:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: ae
+  dheg:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: eg
+  dhbh:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: bh
+  dhqa:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: qa
