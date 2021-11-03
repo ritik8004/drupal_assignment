@@ -1,7 +1,4 @@
-import _isBoolean from 'lodash/isBoolean';
-import _isArray from 'lodash/isArray';
 import _cloneDeep from 'lodash/cloneDeep';
-import _isObject from 'lodash/isObject';
 import {
   isAnonymousUserWithoutCart,
   getCart,
@@ -39,7 +36,12 @@ import {
   getHomeDeliveryShippingMethods,
 } from './checkout.shipping';
 import StaticStorage from './staticStorage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isBoolean,
+  isObject,
+  isArray,
+} from '../../../../js/utilities/conditionsUtility';
 import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
@@ -88,7 +90,7 @@ const getCncStatusForCart = async (data) => {
     // eslint-disable-next-line no-await-in-loop
     const productStatus = await getProductStatus(item.sku);
     if (hasValue(productStatus)
-      && _isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
+      && isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
       StaticStorage.set('cnc_status', false);
       return false;
@@ -547,7 +549,7 @@ const formatAddressForFrontend = (address) => {
     });
   }
 
-  if (_isArray(result.street)) {
+  if (isArray(result.street)) {
     [result.street] = result.street;
   }
 
@@ -1606,7 +1608,7 @@ const validateBeforePaymentFinalise = async () => {
   let errorMessage = 'Delivery Information is incomplete. Please update and try again.';
   let errorCode = cartErrorCodes.cartOrderPlacementError;
 
-  if (_isObject(cartData) && isCartHasOosItem(cartData)) {
+  if (isObject(cartData) && isCartHasOosItem(cartData)) {
     isError = true;
     logger.warning('Error while finalizing payment. Cart has an OOS item. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
@@ -1999,7 +2001,7 @@ window.commerceBackend.placeOrder = async (data) => {
     return false;
   }
 
-  if (_isObject(cart) && isCartHasOosItem(cart.data)) {
+  if (isObject(cart) && isCartHasOosItem(cart.data)) {
     logger.warning('Error while placing order. Cart has an OOS item. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });

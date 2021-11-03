@@ -2,7 +2,7 @@ import axios from 'axios';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-import hasValue from '../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.

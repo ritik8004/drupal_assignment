@@ -413,6 +413,12 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
           }
         }
         $object['collection_labels'] = $object['collection_labels'] ?? (object)$object['collection_labels'];
+        $concept_values = $sku->get('attr_concept')->getValue();
+        if (!empty($concept_values)) {
+          $object['attr_concept'] = array_map(function ($item) {
+            return $item['value'];
+          }, $concept_values);
+        }
       }
     }
   }

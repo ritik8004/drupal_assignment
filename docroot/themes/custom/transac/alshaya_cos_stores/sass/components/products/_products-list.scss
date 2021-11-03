@@ -338,6 +338,12 @@
   z-index: 1;
 }
 
+article[data-vmode="search_result"]:hover .alshaya_search_mainimage {
+  @include breakpoint($only-mobile) {
+    opacity: 1;
+  }
+}
+
 .block-views-blockproduct-category-level-3-block-2 {
   @include breakpoint($only-mobile) {
     .views-row {

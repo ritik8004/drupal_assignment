@@ -1,5 +1,3 @@
-import _isString from 'lodash/isString';
-import _isNumber from 'lodash/isNumber';
 import {
   callMagentoApi,
   getCartSettings,
@@ -20,7 +18,11 @@ import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isString,
+  isNumber,
+} from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -333,7 +335,7 @@ window.commerceBackend.createCart = async () => {
   // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
   if (response.status === 200 && hasValue(response.data)
-    && (_isString(response.data) || _isNumber(response.data))
+    && (isString(response.data) || isNumber(response.data))
   ) {
     logger.notice('New cart created: @cartId, for Customer: @customerId.', {
       '@cartId': response.data,
