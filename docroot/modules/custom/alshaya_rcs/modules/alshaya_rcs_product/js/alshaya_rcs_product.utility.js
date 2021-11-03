@@ -130,13 +130,8 @@
    * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstChildWithMedia()
    */
   const getFirstChildWithMedia = function (product) {
-    let firstChild = {};
-    product.variants.every(function (variant) {
-      if (Drupal.hasValue(variant.product.media)) {
-        firstChild = variant.product;
-        // Break.
-        return false;
-      }
+    const firstChild = product.variants.find(function (variant) {
+      return Drupal.hasValue(variant.product.media) ? variant.product : false;
     });
 
     return firstChild;
@@ -154,7 +149,7 @@
    * @see \Drupal\alshaya_acm_product\SkuImagesManager::getSkuForGallery()
    */
   const getSkuForGallery = function (product) {
-    let child = product.product;
+    let child = product;
 
     switch (drupalSettings.alshayaRcs.use_parent_images) {
       case 'never':
@@ -164,7 +159,7 @@
         break;
     }
 
-    return child;
+    return child.product;
   }
 
   /**
