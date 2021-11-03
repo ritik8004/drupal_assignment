@@ -60,8 +60,8 @@ class SignUpHeader extends React.Component {
                 {Drupal.t('Personalised for you.')}
               </div>
             </div>
-            <div className="aura-popup-body desktop-only">
-              <p>{Drupal.t('Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.')}</p>
+            <div className="aura-popup-body">
+              <p className="desktop-only">{Drupal.t('Good things come to those with taste. Aura is the new loyalty programme rewarding you for spending in the places you love while unlocking exclusive access to unrivalled experiences.')}</p>
               <a
                 href={headerLearnMoreLink}
                 target="_blank"

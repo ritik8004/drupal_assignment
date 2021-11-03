@@ -117,20 +117,27 @@
 body.aura-enabled {
   .aura-popup-header {
     .title {
-      font-size: 1.4375rem;
+      font-family: $alshaya-thin;
+      font-size: 1.125rem;
       text-align: #{$left};
-      line-height: 2.25rem;
+      line-height: normal;
 
       @include breakpoint($desktop) {
-        font-size: 1.875rem;
+        font-size: 1.5rem;
       }
 
       &--one {
         color: $title-blue;
+        margin-bottom: 0.375rem;
       }
 
       &--two {
         color: $title-pink;
+        margin-bottom: 0.625rem;
+
+        @include breakpoint($upto-desktop) {
+          margin-bottom: 1.75rem;
+        }
       }
     }
   }
@@ -138,36 +145,54 @@ body.aura-enabled {
   .aura-popup-sub-header {
     h3 {
       color: $aura-purple;
-      font-size: 1.125rem;
-      margin: 0.5rem 0 0.75rem;
+      font-size: 1.5rem;
+      line-height: 2rem;
+      margin: 0 0 0.375rem;
       text-align: #{$left};
 
       @include breakpoint($desktop) {
-        font-size: 1.4375rem;
-        margin: 0.75rem 0;
+        font-size: 1.75rem;
       }
     }
   }
 
   .aura-popup-body {
-    margin-bottom: 0.75rem;
-    text-align: #{$left};
+    margin-bottom: 1rem;
+    text-align: center;
 
     @include breakpoint($desktop) {
-      margin-bottom: 1.875rem;
+      margin-bottom: 1.5rem;
+      text-align: #{$left};
     }
 
     p {
-      color: $benefits-text;
+      font-family: $aura-regular;
       font-size: 0.8125rem;
       line-height: 1.1875rem;
-      font-family: $aura-regular;
+      color: $benefits-text;
       margin: 0;
       padding: 0;
 
       @include breakpoint($desktop) {
-        font-size: 0.9375rem;
+        display: block;
+        font-size: 0.875rem;
         line-height: 1.4375rem;
+      }
+    }
+
+    p.desktop-only {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
+
+    a.learn-more {
+      font-size: 0.875rem;
+      line-height: 1.4375rem;
+      color: $aura-header-popup-learn-more-link;
+
+      @include breakpoint($desktop) {
+        padding: 0.5rem 0 0;
       }
     }
   }
@@ -189,7 +214,6 @@ body.aura-enabled {
       padding: 0.3125rem 1.75rem;
       height: 2.875rem;
       color: $join-aura-link;
-      margin-bottom: 1.25rem;
       letter-spacing: 0.0443rem;
       font-family: $aura-bold;
       border-radius: 1.75rem;
@@ -200,6 +224,21 @@ body.aura-enabled {
       color: $learn-more-link;
       text-decoration: none;
       background: none;
+    }
+
+    &-bottom {
+      p {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        line-height: 1.4375rem;
+        margin-top: 0.875rem;
+        margin-bottom: 0;
+        color: $aura-header-popup-footer-text;
+
+        @include breakpoint($desktop) {
+          margin-top: 1.125rem;
+        }
+      }
     }
   }
 
