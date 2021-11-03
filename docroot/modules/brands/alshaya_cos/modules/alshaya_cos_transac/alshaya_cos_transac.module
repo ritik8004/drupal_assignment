@@ -53,6 +53,7 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
 
   // Override default template for description block.
   $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
+  $templates['product']['description-details']['block'] = "$path/templates/rcs-product-description-details-block.handlebars";
 
   $pdp_layout = Drupal::configFactory()->get('alshaya_acm_product.settings')->get('pdp_layout');
   if ($pdp_layout == 'magazine') {
