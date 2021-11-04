@@ -39,3 +39,7 @@ let html = handlebarsRenderer.render('field.page.title', data);
 ```
 
 The templates need to have the Handlebars syntax, see https://handlebarsjs.com/guide/
+
+# Troubleshooting
+- How do I know what variables are available to use in a Handlebars template?
+  - You can use `{{log this }}` to list all variables in the Console.
