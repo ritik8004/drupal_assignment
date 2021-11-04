@@ -17,3 +17,15 @@ installation.
 * Visit /admin/config/system/datadog-js/settings
 * Configure the token
 * Configure if you want to track for admin pages too or not
+
+# CONTEXTS
+It is possible to override contexts by implementing an event listener like the example below:
+
+```
+// Add a new context to allow us to add a new column and filter by foo.
+document.addEventListener('dataDogContextAlter', (e) => {
+  const context = e.detail;
+  // Add context for foo.
+  context.foo = 'bar';
+});
+```
