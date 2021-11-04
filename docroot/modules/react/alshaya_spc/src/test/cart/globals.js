@@ -1,4 +1,6 @@
 import Drupal from '../../../../../../core/misc/drupal.es6';
+// Bridge to make Drupal Underscore available while running tests.
+global._ = require('underscore');
 
 export const drupalSettings = {
   jest: 1,

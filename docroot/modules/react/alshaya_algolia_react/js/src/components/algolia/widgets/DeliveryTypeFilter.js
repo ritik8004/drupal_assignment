@@ -1,6 +1,6 @@
 import React from 'react';
-import _isEmpty from 'lodash/isEmpty';
 import connectRefinementList from '../connectors/connectRefinementList';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const DeliveryTypeFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, ...props
@@ -11,14 +11,14 @@ const DeliveryTypeFilter = ({
     }, 1);
   }
   const deliveryItems = [];
-  if (_isEmpty(items)) {
+  if (!hasValue(items)) {
     return null;
   }
   Object.entries(items).forEach(([key, item]) => {
     deliveryItems[key] = item;
   });
   const { facetValues } = props;
-  if (_isEmpty(deliveryItems)) {
+  if (!hasValue(deliveryItems)) {
     return null;
   }
   return (

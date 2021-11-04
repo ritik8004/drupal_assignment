@@ -13,6 +13,7 @@
 (function main($) {
 
   var pageEntity = null;
+  const classRcsLoaded = 'rcs-loaded';
 
   $(document).ready(function ready() {
     if (
@@ -80,11 +81,11 @@
               });
           }
 
-          // Remove loaders and show elements.
-          $('.rcs-page').addClass('rcs-loaded');
-
           // Re-attach all behaviors.
           rcsPhApplyDrupalJs(document);
+
+          // Add class to remove loader styles after RCS info is filled.
+          $('.rcs-page').addClass(classRcsLoaded);
         });
     }
   });
@@ -161,11 +162,8 @@
           )
         );
 
-        // Remove loader and show element.
-        const element = document.getElementById(blockPhId[0]);
-        if (element) {
-          element.classList.add('rcs-loaded');
-        }
+        // Add class to remove loader styles on RCS Placeholders.
+        $(this).addClass(classRcsLoaded);
 
         // Re-attach all behaviors.
         rcsPhApplyDrupalJs($(this).parent()[0]);

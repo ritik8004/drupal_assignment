@@ -67,6 +67,7 @@ function rcs_placeholders_preprocess_html(&$variables) {
   // Attach required JS. We must be cautious to only add new values or replace
   // on purpose as some previous hooks may have already set some values.
   $variables['#attached']['library'][] = 'rcs_placeholders/rcs_placeholders';
+  $variables['#attached']['library'][] = 'alshaya_white_label/rcs-placeholders';
   $variables['#attached']['drupalSettings']['rcsPhSettings']['categoryPathPrefix'] = $config->get('category.path_prefix');
   $variables['#attached']['drupalSettings']['rcsPhSettings']['productPathPrefix'] = $config->get('product.path_prefix');
 

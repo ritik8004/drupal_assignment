@@ -1,0 +1,16 @@
+.rcs-page:not(.rcs-loaded) {
+  & h1,
+  & .field {
+    color: $no-color;
+
+    & > * {
+      visibility: hidden;
+    }
+
+    @include plain-loader;
+  }
+
+  & .c-plp .c-page-title {
+    border: 0;
+  }
+}

@@ -1,33 +1,37 @@
-.c-pdp .sku-base-form {
-  .sofa-section-accordion {
-    label {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      padding-#{$left}: 0.625rem;
-      padding-#{$right}: 2.5rem;
-      padding-top: 0.625rem;
-      padding-bottom: 0.625rem;
-      text-transform: capitalize;
+.c-pdp,
+.acq-content-product-modal {
+  .sku-base-form {
+    .sofa-section-accordion {
+      label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding-#{$left}: 0.625rem;
+        padding-#{$right}: 2.5rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        text-transform: capitalize;
+        cursor: pointer;
 
-      &.active {
-        .config-number-wrapper {
-          .config-index-number {
-            color: $sofa-sectional-config-item-bg;
-            background: $sofa-sectional-active-accordion;
-            border: 1px solid $sofa-sectional-active-accordion;
+        &.active {
+          .config-number-wrapper {
+            .config-index-number {
+              color: $sofa-sectional-config-item-bg;
+              background: $sofa-sectional-active-accordion;
+              border: 1px solid $sofa-sectional-active-accordion;
+            }
+          }
+
+          .config-name {
+            margin-bottom: 0.3125rem;
           }
         }
 
-        .config-name {
-          margin-bottom: 0.3125rem;
-        }
-      }
-
-      &:not(.active) {
-        .config-name {
-          font-size: 0.875rem;
+        &:not(.active) {
+          .config-name {
+            font-size: 0.875rem;
+          }
         }
       }
     }
@@ -89,7 +93,7 @@
     }
 
     .config-value {
-      font-weight: 600;
+      font-family: $alshaya-bold;
       color: $sofa-sectional-title;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -198,12 +202,13 @@
           align-items: center;
 
           .fabric-color-icon {
+            content: "";
+            background: url('#{$base_theme_img_directory_path}/icons/fabric-color-icon.svg') no-repeat;
+            background-size: contain;
+            display: inline-block;
             height: 2.5rem;
             width: 3.125rem;
             margin: 0 0.625rem;
-            background: url('#{$base_theme_img_directory_path}/icons/fabric-color-icon.svg') no-repeat;
-            content: "";
-            display: inline-block;
           }
         }
       }

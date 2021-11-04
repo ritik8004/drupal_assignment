@@ -329,4 +329,20 @@
     setTimeout(Drupal.SpcPopulateDataFromGA, 500);
   };
 
+  Drupal.alshayaSpc.getGAData = function () {
+    const analytics = {};
+
+    const trackingIdEle = document.getElementById('spc-ga-tracking-id');
+    if (trackingIdEle) {
+      analytics.trackingId = trackingIdEle.value;
+    }
+
+    const clientIdEle = document.getElementById('spc-ga-client-id');
+    if (clientIdEle) {
+      analytics.clientId = clientIdEle.value;
+    }
+
+    return analytics;
+  };
+
 })(jQuery, Drupal);

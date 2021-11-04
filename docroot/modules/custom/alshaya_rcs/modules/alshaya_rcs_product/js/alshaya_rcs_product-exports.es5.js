@@ -131,6 +131,7 @@ function getChildSkuFromAttribute(sku, attribute, option_id) {
 
   if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
     console.log(`No combination available for attribute ${attribute} and option ${option_id} for SKU ${sku}`);
+    return null;
   }
 
   return combinations.attribute_sku[attribute][option_id][0];
@@ -145,10 +146,17 @@ function getChildSkuFromAttribute(sku, attribute, option_id) {
  * @returns {string}
  *   The swatch image url.
  */
-function getPdpSwatchImageUrl(sku) {
-  // @todo Add proper implementation for this once
-  // https://alshayagroup.atlassian.net/browse/CORE-35237 is resolved.
-  return jQuery('.logo img').attr('src');
+function getPdpSwatchImageUrl(product, childSku) {
+  let swatchImageUrl = null;
+  product.variants.forEach(function (variant) {
+    if (variant.product.sku == childSku) {
+      swatchImageUrl = variant.product.media.swatch;
+      // Break from the loop.
+      return false;
+    }
+  });
+
+  return swatchImageUrl;
 }
 
 exports.render = function render(
@@ -423,6 +431,9 @@ exports.render = function render(
       break;
   }
 
+  // Add class to remove loader styles after RCS info is filled.
+  jQuery('.page-type-product').addClass('rcs-loaded');
+
   return html;
 };
 
@@ -583,6 +594,15 @@ exports.computePhFilters = function (input, filter) {
           selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(rcsTranslatedText(`Select ${option.attribute_code}`));
           configurableOptionsList.append(selectOption);
 
+          const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
+
+          if (Drupal.hasValue(configurableColorDetails) && optionIsSwatch){
+            configurableOptionsList.attr({
+              'data-default-title': Drupal.t('Color'),
+              'title': Drupal.t('Color'),
+            });
+          }
+
           // Add the option values.
           option.values.forEach((value) => {
             selectOption = jQuery('<option></option>');
@@ -592,7 +612,12 @@ exports.computePhFilters = function (input, filter) {
 
             if (optionIsSwatch) {
               const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
-              selectOption.attr({'swatch-image': getPdpSwatchImageUrl(childSku)});
+              // If configurableColorDetails has value, then we process the
+              // swatch data in
+              // Drupal.alshaya_color_images_generate_swatch_markup().
+              if (childSku !== null && !Drupal.hasValue(configurableColorDetails)) {
+                selectOption.attr({'swatch-image': getPdpSwatchImageUrl(input, childSku)});
+              }
             }
           });
 

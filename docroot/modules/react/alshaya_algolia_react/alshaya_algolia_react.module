@@ -16,7 +16,7 @@ use Drupal\Core\Session\AccountInterface;
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_algolia_react_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if (($entity->bundle() !== 'acq_product')) {
+  if (!in_array($entity->bundle(), ['acq_product', 'rcs_product'])) {
     return;
   }
 

@@ -45,7 +45,7 @@ export default class CompletePurchase extends React.Component {
   /**
    * Place order.
    */
-  placeOrder = (e) => {
+  placeOrder = async (e) => {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
 
@@ -69,7 +69,7 @@ export default class CompletePurchase extends React.Component {
     checkoutButton.classList.add('in-active');
 
     try {
-      const validated = validateBeforePlaceOrder();
+      const validated = await validateBeforePlaceOrder();
       if (validated === false) {
         if (this.completePurchaseButtonActive()) {
           checkoutButton.classList.remove('in-active');

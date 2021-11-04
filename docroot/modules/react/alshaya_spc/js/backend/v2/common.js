@@ -1,11 +1,6 @@
 import Axios from 'axios';
 import qs from 'qs';
-import _isArray from 'lodash/isArray';
 import _cloneDeep from 'lodash/cloneDeep';
-import _isUndefined from 'lodash/isUndefined';
-import _isObject from 'lodash/isObject';
-import _isEmpty from 'lodash/isEmpty';
-import _isNull from 'lodash/isNull';
 import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
@@ -24,7 +19,11 @@ import {
 } from './error';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isObject,
+  isArray,
+} from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
@@ -50,12 +49,12 @@ window.commerceBackend.getCartId = () => {
   }
 
   let cartId = getCartIdFromStorage();
-  if (_isNull(cartId)) {
+  if (!hasValue(cartId)) {
     // For authenticated users we get the cart id from the cart.
     const data = window.commerceBackend.getRawCartDataFromStorage();
-    if (!_isNull(data)
-      && !_isUndefined(data.cart)
-      && !_isUndefined(data.cart.id)
+    if (hasValue(data)
+      && hasValue(data.cart)
+      && hasValue(data.cart.id)
     ) {
       cartId = data.cart.id;
     }
@@ -183,10 +182,10 @@ const logApiStats = (response) => {
     }
 
     const transferTime = Date.now() - response.config.headers.RequestTime;
-    logger.debug('Finished API request @url in @transferTime, ResponseCode: @code, Method: @method.', {
+    logger.debug('Finished API request @url in @transferTime, ResponseCode: @responseCode, Method: @method.', {
       '@url': response.config.url,
-      '@transferTime': `${transferTime}ms`,
-      '@code': response.status,
+      '@transferTime': transferTime,
+      '@responseCode': response.status,
       '@method': response.config.method,
     });
   } catch (error) {
@@ -215,8 +214,8 @@ const handleResponse = (apiResponse) => {
 
   // In case we don't receive any response data.
   if (typeof apiResponse.data === 'undefined') {
-    logger.warning('Error while doing MDC api. Response result is empty. Status code: @status', {
-      '@status': response.status,
+    logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
+      '@responseCode': response.status,
     });
 
     const error = {
@@ -233,7 +232,6 @@ const handleResponse = (apiResponse) => {
   detectCaptcha(apiResponse);
   // If the response contains a CF Challenge, the page will be reloaded once per session.
   detectCFChallenge(apiResponse);
-
   // Treat each status code.
   if (apiResponse.status === 202) {
     // Place order can return 202, this isn't error.
@@ -275,15 +273,14 @@ const handleResponse = (apiResponse) => {
     response.data.error_message = getDefaultErrorMessage();
 
     // Check for empty resonse data.
-    if (_isNull(apiResponse) || _isUndefined(apiResponse.data)) {
-      logger.warning('Error while doing MDC api. Response result is empty. Status code: @code', {
-        '@code': response.status,
+    if (!hasValue(apiResponse) || !hasValue(apiResponse.data)) {
+      logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
+        '@responseCode': response.status,
       });
       response.data.error_code = 500;
     } else if (apiResponse.status === 404
-      && _isUndefined(apiResponse.data)
-      && !_isUndefined(apiResponse.message)
-      && !_isEmpty(apiResponse.message)) {
+      && !hasValue(apiResponse.data)
+      && hasValue(apiResponse.message)) {
       response.data.code = 404;
       response.data.error_code = 404;
       response.data.error_message = response.message;
@@ -294,7 +291,7 @@ const handleResponse = (apiResponse) => {
         '@resultCode': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
         '@responseCode': response.status,
       });
-    } else if (!_isUndefined(apiResponse.data.message) && !_isEmpty(apiResponse.data.message)) {
+    } else if (hasValue(apiResponse.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(apiResponse);
 
@@ -317,10 +314,9 @@ const handleResponse = (apiResponse) => {
       } else {
         response.data.error_code = 500;
       }
-    } else if (!_isUndefined(apiResponse.data.messages)
-      && !_isEmpty(apiResponse.data.messages)
-      && !_isUndefined(apiResponse.data.messages.error)
-      && !_isEmpty(response.data.messages.error)
+    } else if (hasValue(apiResponse.data.messages)
+      && hasValue(apiResponse.data.messages.error)
+      && hasValue(response.data.messages.error)
     ) {
       // Other messages.
       const error = apiResponse.data.messages.error[0];
@@ -339,8 +335,8 @@ const handleResponse = (apiResponse) => {
     logger.info('Error while doing MDC api call. Error: @message', {
       '@message': error.message,
     });
-  } else if (_isArray(apiResponse.data.response_message)
-    && !_isUndefined(apiResponse.data.response_message[1])
+  } else if (isArray(apiResponse.data.response_message)
+    && hasValue(apiResponse.data.response_message[1])
     && apiResponse.data.response_message[1] === 'error') {
     // When there is error in response_message from custom updateCart API.
     response.data.error = true;
@@ -466,8 +462,8 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
         return null;
       }
 
-      logger.error('Something happened in setting up the request that triggered an error.', {
-        '@error': error.message,
+      logger.error('Something happened in setting up the request that triggered an error: @message.', {
+        '@message': error.message,
         ...params,
       });
 
@@ -486,20 +482,19 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
  */
 const formatCart = (cartData) => {
   const data = _cloneDeep(cartData);
-
   // Check if there is no cart data.
-  if (_isUndefined(data.cart) || !_isObject(data.cart)) {
+  if (!hasValue(data.cart) || !isObject(data.cart)) {
     return data;
   }
 
   // Move customer data to root level.
-  if (!_isEmpty(data.cart.customer)) {
+  if (hasValue(data.cart.customer)) {
     data.customer = data.cart.customer;
     delete data.cart.customer;
   }
 
   // Format addresses.
-  if (!_isEmpty(data.customer) && !_isEmpty(data.customer.addresses)) {
+  if (hasValue(data.customer) && hasValue(data.customer.addresses)) {
     data.customer.addresses = data.customer.addresses.map((address) => {
       const item = { ...address };
       delete item.id;
@@ -510,9 +505,9 @@ const formatCart = (cartData) => {
   }
 
   // Format shipping info.
-  if (!_isEmpty(data.cart.extension_attributes)) {
-    if (!_isEmpty(data.cart.extension_attributes.shipping_assignments)) {
-      if (!_isEmpty(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
+  if (hasValue(data.cart.extension_attributes)) {
+    if (hasValue(data.cart.extension_attributes.shipping_assignments)) {
+      if (hasValue(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
         data.shipping = data.cart.extension_attributes.shipping_assignments[0].shipping;
         delete data.cart.extension_attributes.shipping_assignments;
       }
@@ -522,11 +517,11 @@ const formatCart = (cartData) => {
   }
 
   let shippingMethod = '';
-  if (!_isEmpty(data.shipping)) {
-    if (!_isEmpty(data.shipping.method)) {
+  if (hasValue(data.shipping)) {
+    if (hasValue(data.shipping.method)) {
       shippingMethod = data.shipping.method;
     }
-    if (!_isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
+    if (hasValue(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
       data.shipping.type = 'click_and_collect';
     } else if (isUserAuthenticated()
       && (typeof data.shipping.address.customer_address_id === 'undefined' || !(data.shipping.address.customer_address_id))) {
@@ -537,12 +532,12 @@ const formatCart = (cartData) => {
     }
   }
 
-  if (!_isEmpty(data.shipping) && !_isEmpty(data.shipping.extension_attributes)) {
+  if (hasValue(data.shipping) && hasValue(data.shipping.extension_attributes)) {
     const extensionAttributes = data.shipping.extension_attributes;
-    if (!_isEmpty(extensionAttributes.click_and_collect_type)) {
+    if (hasValue(extensionAttributes.click_and_collect_type)) {
       data.shipping.clickCollectType = extensionAttributes.click_and_collect_type;
     }
-    if (!_isEmpty(extensionAttributes.store_code)) {
+    if (hasValue(extensionAttributes.store_code)) {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
 
@@ -823,8 +818,8 @@ const getCart = async (force = false) => {
         || (hasValue(response.data) && response.data.error_code === 404)
         || (hasValue(response.data.message) && response.data.error_message.indexOf('No such entity with cartId') > -1)
     ) {
-      logger.warning('getCart() returned error: @code.', {
-        '@code': response.data.error_code,
+      logger.warning('getCart() returned error: @errorCode.', {
+        '@errorCode': response.data.error_code,
       });
 
       clearInvalidCart();
@@ -932,10 +927,10 @@ const getCartWithProcessedData = async (force = false) => {
  */
 const isAuthenticatedUserWithoutCart = async () => {
   const response = await getCart();
-  if (_isNull(response)
-    || _isUndefined(response.data)
-    || _isUndefined(response.data.cart)
-    || _isUndefined(response.data.cart.id)
+  if (!hasValue(response)
+    || !hasValue(response.data)
+    || !hasValue(response.data.cart)
+    || !hasValue(response.data.cart.id)
   ) {
     return true;
   }
@@ -950,12 +945,12 @@ const isAuthenticatedUserWithoutCart = async () => {
  */
 const getCartCustomerId = async () => {
   const response = await getCart();
-  if (_isNull(response) || _isUndefined(response.data)) {
+  if (!hasValue(response) || !hasValue(response.data)) {
     return null;
   }
 
   const cart = response.data;
-  if (!_isEmpty(cart) && !_isEmpty(cart.customer) && !_isUndefined(cart.customer.id)) {
+  if (hasValue(cart) && hasValue(cart.customer) && hasValue(cart.customer.id)) {
     return parseInt(cart.customer.id, 10);
   }
   return null;
@@ -974,13 +969,13 @@ const validateRequestData = async (request) => {
   // Return error response if not valid data.
   // Setting custom error code for bad response so that
   // we could distinguish this error.
-  if (_isEmpty(request)) {
+  if (!hasValue(request)) {
     logger.error('Cart update operation not containing any data.');
     return 500;
   }
 
   // If action info or cart id not available.
-  if (_isEmpty(request.extension) || _isUndefined(request.extension.action)) {
+  if (!hasValue(request.extension) || !hasValue(request.extension.action)) {
     logger.error('Cart update operation not containing any action. Data: @data.', {
       '@data': JSON.stringify(request),
     });
@@ -998,7 +993,7 @@ const validateRequestData = async (request) => {
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
   if (drupalSettings.userDetails.customerId > 0) {
-    if (_isNull(cartCustomerId)) {
+    if (!hasValue(cartCustomerId)) {
       // @todo Check if we should associate cart and proceed.
       // Todo copied from middleware.
       return 400;
@@ -1006,8 +1001,8 @@ const validateRequestData = async (request) => {
 
     // This is serious.
     if (cartCustomerId !== drupalSettings.userDetails.customerId) {
-      logger.error('Mismatch session customer id: @sessionCustomerId and card customer id: @cartCustomerId.', {
-        '@sessionCustomerId': drupalSettings.userDetails.customerId,
+      logger.error('Mismatch session customer id: @customerId and cart customer id: @cartCustomerId.', {
+        '@customerId': drupalSettings.userDetails.customerId,
         '@cartCustomerId': cartCustomerId,
       });
       return 400;
@@ -1066,7 +1061,7 @@ const updateCart = async (postData) => {
 
   // Validate params before updating the cart.
   const validationResult = await preUpdateValidation(data);
-  if (!_isUndefined(validationResult.error) && validationResult.error) {
+  if (hasValue(validationResult.error) && validationResult.error) {
     return new Promise((resolve, reject) => reject(validationResult));
   }
 
@@ -1078,8 +1073,8 @@ const updateCart = async (postData) => {
 
   return callMagentoApi(getApiEndpoint('updateCart', { cartId }), 'POST', JSON.stringify(data))
     .then((response) => {
-      if (_isEmpty(response.data)
-        || (!_isUndefined(response.data.error) && response.data.error)) {
+      if (!hasValue(response.data)
+        || (hasValue(response.data.error) && response.data.error)) {
         return response;
       }
 
@@ -1092,10 +1087,10 @@ const updateCart = async (postData) => {
       return response;
     })
     .catch((response) => {
-      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @code', {
+      logger.warning('Error while updating cart on MDC for action: @action. Error message: @message, Code: @errorCode', {
         '@action': action,
         '@message': response.error.message,
-        '@code': response.error.error_code,
+        '@errorCode': response.error.error_code,
       });
       // @todo add error handling, see try/catch block in Cart:updateCart().
       return response;
@@ -1131,7 +1126,7 @@ const getCartCustomerEmail = async () => {
   }
 
   const response = await getCart();
-  if (_isNull(response) || _isUndefined(response.data)) {
+  if (!hasValue(response) || !hasValue(response.data)) {
     email = '';
   } else {
     const cart = response.data;
@@ -1157,15 +1152,15 @@ const getCartCustomerEmail = async () => {
  *   TRUE if cart has an OOS item.
  */
 const isCartHasOosItem = (cartData) => {
-  if (!_isEmpty(cartData.cart.items)) {
+  if (hasValue(cartData.cart.items)) {
     for (let i = 0; i < cartData.cart.items.length; i++) {
       const item = cartData.cart.items[i];
       // If error at item level.
-      if (!_isUndefined(item.extension_attributes)
-        && !_isUndefined(item.extension_attributes.error_message)
+      if (hasValue(item.extension_attributes)
+        && hasValue(item.extension_attributes.error_message)
       ) {
         const exceptionType = getExceptionMessageType(item.extension_attributes.error_message);
-        if (!_isEmpty(exceptionType) && exceptionType === 'OOS') {
+        if (hasValue(exceptionType) && exceptionType === 'OOS') {
           return true;
         }
       }
@@ -1268,15 +1263,15 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
     // Associate cart to customer.
     const response = await callMagentoApi(url, 'GET', {});
 
-    if (!_isUndefined(response.data.error) && response.data.error) {
-      logger.error('Error in getting shipping methods for cart. Error: @error', {
-        '@error': response.data.error_message,
+    if (hasValue(response.data.error) && response.data.error) {
+      logger.error('Error in getting shipping methods for cart. Error: @message', {
+        '@message': response.data.error_message,
       });
 
       return getFormattedError(response.data.error_code, response.data.error_message);
     }
 
-    if (_isEmpty(response.data)) {
+    if (!hasValue(response.data)) {
       const message = 'Got empty response while getting shipping methods.';
       logger.notice(message);
 
@@ -1415,7 +1410,7 @@ window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined)
     }
 
     // If no city available, return empty.
-    if (_isEmpty(response.data)) {
+    if (!hasValue(response.data)) {
       return null;
     }
     return response.data;
