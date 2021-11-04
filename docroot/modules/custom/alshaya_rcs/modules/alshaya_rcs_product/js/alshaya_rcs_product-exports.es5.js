@@ -54,6 +54,20 @@ function applyEllipsis(value) {
 }
 
 /**
+ * Gets legal notice value from config.
+ *
+ * @returns {object}
+ *   Object containing the legal notice details.
+ */
+function getLegalNotice() {
+  return {
+    enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
+    label: drupalSettings.alshayaRcs.legal_notice_label,
+    summary: drupalSettings.alshayaRcs.legal_notice_summary.value,
+  };
+}
+
+/**
  * Replace placeholders and get related products.
  *
  * @param {object} products
@@ -713,11 +727,7 @@ exports.computePhFilters = function (input, filter) {
       data = input.description;
 
       // Add legal notice.
-      data.legal_notice = {
-        enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
-        label: drupalSettings.alshayaRcs.legal_notice_label,
-        summary: drupalSettings.alshayaRcs.legal_notice_summary.value,
-      };
+      data.legal_notice = getLegalNotice();
 
       // Render handlebars plugin.
       value = handlebarsRenderer.render(`product.${filter}.block`, data);
@@ -726,8 +736,11 @@ exports.computePhFilters = function (input, filter) {
     case 'short_description':
       // Prepare the object data for rendering.
       data = (input.short_description) ? input.short_description : input.description;
+
+      // Add description (Used inside short description on Magazine layout).
       data.description = input.description;
-      data.read_more = false;
+      // Add legal notice.
+      data.description.legal_notice = getLegalNotice();
 
       // Apply ellipsis.
       let tmp = applyEllipsis(data.html);
