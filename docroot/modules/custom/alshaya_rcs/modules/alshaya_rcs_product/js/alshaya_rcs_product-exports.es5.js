@@ -260,7 +260,7 @@ exports.render = function render(
         thumbnails: [],
       };
 
-      switch (drupalSettings.alshayaRcs.use_parent_images) {
+      switch (drupalSettings.alshayaRcs.useParentImages) {
         case 'never':
           // Get the images from the variants.
           entity.variants.forEach(function (variant) {

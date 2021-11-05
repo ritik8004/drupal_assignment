@@ -67,6 +67,7 @@ function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
       '... on ConfigurableProduct' => [
         'variants' => [
           'product' => [
+            'type_id',
             'assets_teaser',
           ],
         ],

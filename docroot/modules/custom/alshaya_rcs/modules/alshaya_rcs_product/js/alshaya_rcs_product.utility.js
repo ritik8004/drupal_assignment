@@ -134,7 +134,7 @@
       return Drupal.hasValue(variant.product.media) ? variant.product : false;
     });
 
-    return firstChild;
+    return firstChild.product;
   }
 
   /**
@@ -151,7 +151,7 @@
   const getSkuForGallery = function (product) {
     let child = product;
 
-    switch (drupalSettings.alshayaRcs.use_parent_images) {
+    switch (drupalSettings.alshayaRcs.useParentImages) {
       case 'never':
         if (product.type_id === 'configurable') {
           child = getFirstChildWithMedia(product);
@@ -159,7 +159,7 @@
         break;
     }
 
-    return child.product;
+    return child;
   }
 
   /**
