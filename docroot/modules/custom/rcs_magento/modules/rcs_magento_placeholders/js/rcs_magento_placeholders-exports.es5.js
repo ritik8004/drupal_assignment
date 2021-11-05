@@ -240,6 +240,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
   return result;
 };
 
+// @todo This is not Async, rename to something else.
 exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
@@ -256,6 +257,7 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
   switch (placeholder) {
     case 'products-in-style':
       request.data = JSON.stringify({
+        // @todo Have custom query with only items that we need.
         query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
@@ -273,6 +275,7 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
       // error.
       const filterValue = operator === 'in' ? JSON.stringify(params.sku).replace(/"/g, '\\"') : `\\"${params.sku}\\"`;
       request.data = JSON.stringify({
+        // @todo Have custom query with only items that we need.
         query: `{ products(filter: { sku: { ${operator}: filterValue }}) ${rcsPhGraphqlQuery.products}}`
       });
       request.data = request.data.replace('filterValue', filterValue);
