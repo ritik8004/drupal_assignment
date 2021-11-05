@@ -11,3 +11,4 @@ helpers:
     js/alshaya_rcs_promotion_utility.js: { }
   dependencies:
     - core/jquery
+    - rcs_placeholders/helpers

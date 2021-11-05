@@ -300,11 +300,11 @@ exports.render = function render(
           label: entity.name,
         },
         labels: params.labels,
-        pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdp_gallery_pager_limit[params.galleryLimit])
+        pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryLimit[params.galleryLimit])
           ? 'pager-yes'
           : 'pager-no',
         thumbnails: mediaCollection.thumbnails,
-        lazy_load_placeholder: drupalSettings.alshayaRcs.lazy_load_placeholder,
+        lazy_load_placeholder: drupalSettings.alshayaRcs.lazyLoadPlaceholder,
         pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
       }
 

@@ -207,7 +207,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
   $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryType'] = $product_settings->get('pdp_gallery_type');
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdp_gallery_pager_limit'] = [
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryLimit'] = [
     'modal' => $product_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us'),
     'others' => $product_settings->get('pdp_gallery_pager_limits'),
   ];
@@ -235,7 +235,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
 
   $alshaya_master_settings = \Drupal::config('alshaya_master.settings');
-  $build['#attached']['drupalSettings']['alshayaRcs']['lazy_load_placeholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
+  $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $alshaya_master_settings->getCacheTags());
 }
 

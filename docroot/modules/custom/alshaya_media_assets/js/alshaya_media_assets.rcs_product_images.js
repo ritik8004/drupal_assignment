@@ -36,7 +36,7 @@
         }
       }
       catch (e) {
-        console.log('Exception occured while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
+        console.log('Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
       }
 
       try {
@@ -49,7 +49,7 @@
         }
       }
       catch (e) {
-        console.log('Exception occured while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
+        console.log('Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
       }
     });
 
@@ -65,12 +65,12 @@
               // We do this so that we are able to detect in getSkuForGallery
               // that the variant has media.
               variant.product.media = variant.product.media_teaser;
-              // Break as there is only 1 teaser image exepected.
+              // Break as there is only 1 teaser image expected.
               return false;
             });
           }
           catch (e) {
-            console.log('Exception occured while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
+            console.log('Exception occurred while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
           }
         });
       }
