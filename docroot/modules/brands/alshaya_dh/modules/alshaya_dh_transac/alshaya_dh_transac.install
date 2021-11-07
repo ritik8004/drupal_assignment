@@ -68,7 +68,7 @@ function alshaya_dh_transac_install() {
   $strings = [
     'seo_brand_name' => [
       'en' => 'Debenhams',
-      'ar' => 'Debenhams',
+      'ar' => 'دبنهامز',
     ],
     'get email offers and the latest news from @site_name' => [
       'en' => 'Enjoy 10% off your first order',
