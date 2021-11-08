@@ -34,7 +34,10 @@
         }
       }
       catch (e) {
-        Drupal.alshayaLogger('debug', 'Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing variant product assets for sku @sku : @message', {
+          '@sku': variant.product.sku,
+          '@message': e.message
+        });
       }
 
       try {
@@ -47,7 +50,10 @@
         }
       }
       catch (e) {
-        Drupal.alshayaLogger('debug', 'Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing cart product assets for sku @sku: @message', {
+          '@sku': variant.product.sku,
+          '@message': e.message,
+        });
       }
 
       try {
@@ -65,7 +71,10 @@
         }
       }
       catch (e) {
-        Drupal.alshayaLogger('debug', 'Exception occurred while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
+        Drupal.alshayaLogger('error', 'Exception occurred while parsing teaser product assets for sku @sku: @message', {
+          '@sku': variant.product.sku,
+          '@message': e.message,
+        });
       }
     });
 
@@ -87,7 +96,11 @@
               });
             }
             catch (e) {
-              Drupal.alshayaLogger('debug', 'Exception occurred while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
+              Drupal.alshayaLogger('error', 'Exception occurred while parsing @type product assets for sku @sku: @message', {
+                '@type': type,
+                '@sku': variant.product.sku,
+                '@message': e.message,
+              });
             }
           });
         });

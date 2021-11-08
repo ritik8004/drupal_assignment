@@ -119,6 +119,11 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
  * Implements hook_page_attachments().
  */
 function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
   // Add more attributes to the list provided by the rcs_placeholders module.
   $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = array_merge(
     $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'],
