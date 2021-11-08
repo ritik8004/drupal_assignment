@@ -547,7 +547,7 @@ exports.computePhFilters = function (input, filter) {
         const sizeGuide = jQuery('.rcs-templates--size-guide');
         let sizeGuideAttributes = [];
         if (sizeGuide.length) {
-          let sizeGuideAttributes = sizeGuide.attr('data-attributes');
+          sizeGuideAttributes = sizeGuide.attr('data-attributes');
           sizeGuideAttributes = sizeGuideAttributes ? sizeGuideAttributes.split(',') : sizeGuideAttributes;
         }
 
