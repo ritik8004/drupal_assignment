@@ -2,7 +2,7 @@
   @include breakpoint($desktop) {
     width: 6.5rem;
     display: inline-block;
-    margin-right: 0.25rem;
+    margin-#{$right}: 0.25rem;
   }
 
   @include plain-loader;

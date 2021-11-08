@@ -284,7 +284,11 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
 
       if (response && response.data.products.total_count) {
         response.data.products.items.forEach(function (product) {
-          RcsPhStaticStorage.set('product_' + product.sku, product);
+          RcsEventManager.fire('alshayaRcsUpdateResults', {
+            detail: {
+              result: product,
+            }
+          });
         });
       }
       break;
