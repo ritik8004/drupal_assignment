@@ -607,7 +607,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'promotions':
-      const promotions = input.promotions || {};
+      const promotions = input.promotions || [];
       if (typeof promotions === 'undefined' || promotions === null) {
         break;
       }
