@@ -307,7 +307,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
 
   $languages = $language_manager->getLanguages();
-  $page['#attached']['drupalSettings']['alshaya_spc']['languages'] = array_keys($languages);
+  $page['#attached']['drupalSettings']['alshayaSpc']['languages'] = array_keys($languages);
 
   // Add product settings.
   $product_config = \Drupal::config('alshaya_acm_product.settings');
