@@ -286,3 +286,7 @@ sites:
     module: alshaya_dh
     type: alshaya_transac
     country: qa
+  dhjo:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: jo
