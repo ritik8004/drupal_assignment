@@ -3,6 +3,7 @@ import PointsToEarnMessage from '../../../utilities/points-to-earn';
 import { handleSignUp } from '../../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
 import ToolTip from '../../../../../utilities/tooltip';
+import getStringMessage from '../../../../../utilities/strings';
 
 class AuraNotLinkedNoData extends React.Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class AuraNotLinkedNoData extends React.Component {
               >
                 {Drupal.t('Sign up now')}
               </a>
-              <ToolTip enable question>{ Drupal.t('Enjoy offers and rewards? Join Aura, our new loyalty programme, to earn and spend points while you shop, and discover exclusive benefits.') }</ToolTip>
+              <ToolTip enable question>{ getStringMessage('checkout_earn_and_redeem_tooltip') }</ToolTip>
             </div>
           </div>
         </div>
