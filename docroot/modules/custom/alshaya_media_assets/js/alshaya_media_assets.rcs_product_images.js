@@ -34,7 +34,7 @@
         }
       }
       catch (e) {
-        console.log('Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
+        Drupal.alshayaLogger('debug', 'Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
       }
 
       try {
@@ -47,7 +47,7 @@
         }
       }
       catch (e) {
-        console.log('Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
+        Drupal.alshayaLogger('debug', 'Exception occurred while parsing variant product assets for sku ' + variant.product.sku + ': ' + e.message);
       }
 
       try {
@@ -65,7 +65,7 @@
         }
       }
       catch (e) {
-        console.log('Exception occurred while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
+        Drupal.alshayaLogger('debug', 'Exception occurred while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
       }
     });
 
@@ -87,7 +87,7 @@
               });
             }
             catch (e) {
-              console.log('Exception occurred while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
+              Drupal.alshayaLogger('debug', 'Exception occurred while parsing ' + type + ' product assets for sku ' + variant.product.sku + ': ' + e.message);
             }
           });
         });
