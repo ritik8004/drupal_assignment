@@ -222,7 +222,7 @@ function getVariantConfigurableOptions(product, variant) {
  */
 function getProductUrls(urlKey, langcode = null) {
   const urls = {};
-  drupalSettings.alshaya_spc.languages.forEach(function (language) {
+  drupalSettings.alshayaSpc.languages.forEach(function (language) {
     urls[language] = `/${language}/${urlKey}.html`;
   });
 
