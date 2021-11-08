@@ -703,6 +703,7 @@ const getProcessedCartData = async (cartData) => {
 
         // Do not show the products which are not available in
         // system but only available in cart.
+        // @todo test this with smart agent
         if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
           logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
             '@sku': item.sku,

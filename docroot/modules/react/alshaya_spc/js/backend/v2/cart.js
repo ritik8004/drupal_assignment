@@ -257,10 +257,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       await window.commerceBackend.triggerStockRefresh({ [sku]: quantity });
     }
 
-    // @todo After we refreshed the stock from API call, we need to try the operation again.
-    // If there is stock, we should not display the error message.
-    // We need avoid infinite loop.
-
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
   }
 

@@ -43,7 +43,6 @@
     return $.param(data);
   };
 
-  // @Todo this function name is incorrect, it should be something like productInLocalStorage
   Drupal.alshayaSpc.getLocalStorageProductData = function(sku, callback, extraData) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
@@ -287,7 +286,6 @@
     attach: function(context) {
       // Ajax success to trigger callbacks once api request from
       // Drupal.alshayaSpc.getProductData finished.
-      // @todo this no longer works for graphql
       $(document).once('getProductData-success').ajaxSuccess(function( event, xhr, settings ) {
         if (!settings.hasOwnProperty('requestOrigin') || settings.requestOrigin !== 'getProductData') {
           return;
