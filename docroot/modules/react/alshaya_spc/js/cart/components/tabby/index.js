@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TabbyCart = (props) => {
+const TabbyWidget = (props) => {
   const {
     pageType,
   } = props;
@@ -8,11 +8,11 @@ const TabbyCart = (props) => {
   if (pageType === 'pdp') {
     return (
       <div className="tabby">
-        <div id={drupalSettings.tabby.selector} />
+        <div className="tabby-widget" id={drupalSettings.tabby.selector} />
       </div>
     );
   }
-  return (null);
+  return null;
 };
 
-export default TabbyCart;
+export default TabbyWidget;

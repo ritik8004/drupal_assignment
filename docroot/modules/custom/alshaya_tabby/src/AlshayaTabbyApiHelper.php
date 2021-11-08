@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_checkout;
+namespace Drupal\alshaya_tabby;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Serialization\Json;
@@ -9,11 +9,11 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 
 /**
- * Helper class for BNPL.
+ * Helper class for Tabby.
  *
- * @package Drupal\alshaya_acm_checkout
+ * @package Drupal\alshaya_tabby
  */
-class AlshayaBnplApiHelper {
+class AlshayaTabbyApiHelper {
 
   /**
    * Api wrapper.
@@ -42,7 +42,7 @@ class AlshayaBnplApiHelper {
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache backend checkout_com.
+   *   Cache backend object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
    */
@@ -51,23 +51,19 @@ class AlshayaBnplApiHelper {
                               LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->cache = $cache;
-    $this->logger = $logger_factory->get('AlshayaBnplHelper');
+    $this->logger = $logger_factory->get('AlshayaTabbyApiHelper');
   }
 
   /**
-   * Get BNPL payment method config.
+   * Get Tabby payment method config.
    *
-   * @param string $payment_method
-   *   Payment method to look for.
-   * @param string $endpoint
-   *   Endpoint to use.
    * @param bool $reset
    *   Reset cached data and fetch again.
    *
    * @return array|mixed
    *   Return array of keys.
    */
-  public function getBnplApiConfig($payment_method, $endpoint, $reset = FALSE) {
+  public function getTabbyApiConfig($reset = FALSE) {
 
     static $configs;
 
@@ -75,10 +71,10 @@ class AlshayaBnplApiHelper {
       return $configs;
     }
 
-    $cache_key = "{$payment_method}:api_configs";
+    $cache_key = "alshaya_tabby:api_configs";
 
     // Cache time in minutes, set 0 to disable caching.
-    $cache_time = (int) Settings::get("{$payment_method}_cache_time", 60);
+    $cache_time = (int) Settings::get("alshaya_tabby_cache_time", 60);
 
     // Disable caching if cache time set to 0 or null in settings.
     $reset = empty($cache_time) ? TRUE : $reset;
@@ -89,7 +85,7 @@ class AlshayaBnplApiHelper {
     }
     else {
       $response = $this->apiWrapper->invokeApi(
-        $endpoint,
+        'tabby/config',
         [],
         'GET'
       );
@@ -97,8 +93,7 @@ class AlshayaBnplApiHelper {
       $configs = Json::decode($response);
 
       if (empty($configs)) {
-        $this->logger->error('Invalid response from api, Payment Method: @payment_method, @response', [
-          '@payment_method' => $payment_method,
+        $this->logger->error('Invalid response from Tabby api, @response', [
           '@response' => Json::encode($configs),
         ]);
       }
@@ -110,14 +105,10 @@ class AlshayaBnplApiHelper {
 
     // Try resetting once.
     if (empty($configs) && !($reset)) {
-      return $this->getBnplApiConfig($payment_method, $endpoint, TRUE);
+      return $this->getTabbyApiConfig(TRUE);
     }
 
-    // @todo replace with $configs if mdc api works fine.
-    return [
-      'merchant_code' => 'uae_test',
-      'public_key' => 'pk_test_99a77d42-a084-4fff-aee1-a8587483aa13',
-    ];
+    return $configs;
   }
 
 }

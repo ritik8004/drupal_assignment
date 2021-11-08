@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_tabby;
 
-use Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -20,11 +19,11 @@ class AlshayaTabbyWidgetHelper {
   use StringTranslationTrait;
 
   /**
-   * BNPL Api Helper.
+   * Tabby Api Helper.
    *
-   * @var \Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper
+   * @var \Drupal\alshaya_tabby\AlshayaTabbyApiHelper
    */
-  protected $bnplApiHelper;
+  protected $tabbyApiHelper;
 
   /**
    * Language Manager service.
@@ -57,7 +56,7 @@ class AlshayaTabbyWidgetHelper {
   /**
    * AlshayaTabbyHelper Constructor.
    *
-   * @param \Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper $bnpl_api_helper
+   * @param \Drupal\alshaya_tabby\AlshayaTabbyApiHelper $tabby_api_helper
    *   Api wrapper.
    * @param \Drupal\Core\Language\LanguageManager $language_manager
    *   Language Manager service.
@@ -66,11 +65,11 @@ class AlshayaTabbyWidgetHelper {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
    */
-  public function __construct(AlshayaBnplApiHelper $bnpl_api_helper,
+  public function __construct(AlshayaTabbyApiHelper $tabby_api_helper,
                               LanguageManager $language_manager,
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_factory) {
-    $this->bnplApiHelper = $bnpl_api_helper;
+    $this->tabbyApiHelper = $tabby_api_helper;
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('AlshayaTabbyHelper');
@@ -136,16 +135,14 @@ class AlshayaTabbyWidgetHelper {
     $config = $this->configFactory->get('alshaya_acm_checkout.settings');
     $excludedPaymentMethods = $config->get('exclude_payment_methods');
 
-    if (in_array('tabby', array_filter($excludedPaymentMethods))) {
-      return;
-    }
-
     CacheableMetadata::createFromRenderArray($build)
       ->addCacheableDependency($config)
       ->applyTo($build);
 
-    $tabbyApiConfig = $this->bnplApiHelper->getBnplApiConfig('tabby', 'tabby/config');
-
+    if (in_array('tabby', array_filter($excludedPaymentMethods))) {
+      return;
+    }
+    $tabbyApiConfig = $this->tabbyApiHelper->getTabbyApiConfig();
     // No need to integrate the widget if the API does not have merchant code.
     if (empty($tabbyApiConfig['merchant_code'])) {
       $this->logger->error('Merchant code is missing in Tabby config, @response', [
@@ -155,6 +152,7 @@ class AlshayaTabbyWidgetHelper {
     }
     $tabbyApiConfig['locale'] = $this->langcode;
     $build['#attached']['drupalSettings']['tabby'] = $tabbyApiConfig;
+    $build['#attached']['drupalSettings']['tabby']['tabby_installment_count'] = 4;
 
     switch ($page_type) {
       case 'cart':
@@ -172,7 +170,6 @@ class AlshayaTabbyWidgetHelper {
         $widget_info = $this->getTabbyWidgetInfo();
         $build['#attached']['drupalSettings']['tabby']['selector'] = $widget_info['id'];
         $build['#attached']['drupalSettings']['tabby_widget_info'] = $widget_info;
-        $build['#attached']['drupalSettings']['tabby']['tabby_installment_count'] = 4;
         break;
     }
   }

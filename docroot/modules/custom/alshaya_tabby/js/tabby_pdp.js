@@ -40,14 +40,11 @@
       drupalSettings[productKey][sku]['gtm_attributes']['price'];
 
     // Tabby promo change event.
-    new TabbyPromo({
-      selector: '#' + drupalSettings.tabby.selector,
-      currency: drupalSettings.alshaya_spc.currency_config.currency_code,
-      price: variantPrice,
-      installmentsCount: drupalSettings.tabby.tabby_installment_count,
-      lang: drupalSettings.tabby.locale,
-      source: 'product',
-      api_key: drupalSettings.tabby.public_key
+    $('.tabby-widget').once('tabby-widget').each(function () {
+      const selector = $(this).attr('id');
+      if (selector) {
+        Drupal.tabbyPromoInit('#' + selector, variantPrice, 'product');
+      }
     });
   }
 })(jQuery, Drupal);

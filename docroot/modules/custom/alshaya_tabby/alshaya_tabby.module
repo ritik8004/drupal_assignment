@@ -18,8 +18,8 @@ function alshaya_tabby_node_view(array &$build, EntityInterface $entity, EntityV
 
   // Need processing only for products with Full, Modal, Matchback view mode.
   if (in_array($view_mode, ['full', 'modal', 'matchback'])) {
-    /** @var \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper $AlshayaTabbyHelper */
-    $AlshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
-    $AlshayaTabbyHelper->getTabbyPaymentBuild($build);
+    /** @var \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper $alshayaTabbyHelper */
+    $alshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
+    $alshayaTabbyHelper->getTabbyPaymentBuild($build);
   }
 }

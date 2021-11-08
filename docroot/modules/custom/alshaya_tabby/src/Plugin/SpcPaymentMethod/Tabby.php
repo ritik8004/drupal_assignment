@@ -2,8 +2,8 @@
 
 namespace Drupal\alshaya_tabby\Plugin\SpcPaymentMethod;
 
-use Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
+use Drupal\alshaya_tabby\AlshayaTabbyApiHelper;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,11 +21,11 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
   use LoggerChannelTrait;
 
   /**
-   * BNPL payment method Helper.
+   * Tabby payment method Helper.
    *
-   * @var \Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper
+   * @var \Drupal\alshaya_tabby\AlshayaTabbyApiHelper
    */
-  protected $alshayaBnplHelper;
+  protected $tabbyApiHelper;
 
   /**
    * {@inheritdoc}
@@ -38,7 +38,7 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_checkout.bnpl_api_helper'),
+      $container->get('alshaya_tabby.api_helper'),
     );
   }
 
@@ -51,22 +51,22 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\alshaya_acm_checkout\AlshayaBnplApiHelper $alshaya_bnpl_helper
-   *   Tabby Payment Helper.
+   * @param \Drupal\alshaya_tabby\AlshayaTabbyApiHelper $tabby_api_helper
+   *   Tabby api Helper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              AlshayaBnplApiHelper $alshaya_bnpl_helper) {
+                              AlshayaTabbyApiHelper $tabby_api_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->alshayaBnplHelper = $alshaya_bnpl_helper;
+    $this->tabbyApiHelper = $tabby_api_helper;
   }
 
   /**
    * {@inheritdoc}
    */
   public function isAvailable() {
-    $config = $this->alshayaBnplHelper->getBnplApiConfig('tabby', 'tabby/config');
+    $config = $this->tabbyApiHelper->getTabbyApiConfig();
     if (empty($config['merchant_code'])) {
       $this->getLogger('tabby')->warning('Tabby status enabled but no merchant code set, ignoring.');
       return FALSE;
