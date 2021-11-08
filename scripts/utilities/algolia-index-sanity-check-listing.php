@@ -111,7 +111,7 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
 
     $logger->warning('Removed entries from index @index for objectIds: @objectIds.', [
       '@index' => $actual->getIndexName(),
-      '@objectIds' => $skus_to_remove,
+      '@objectIds' => implode(',', $skus_to_remove),
     ]);
   }
 }
