@@ -70,24 +70,24 @@ foreach ($all_sites as $brand => $secret) {
 
     if (!in_array($replica_name, $settings['replicas'])) {
       $settings['replicas'][] = $replica_name;
-      $index->setSettings($settings, ['forwardToReplicas' => FALSE]);
+      $response = $index->setSettings($settings, ['forwardToReplicas' => FALSE]);
+      $response->wait();
     }
 
     $ranking = $settings['ranking'];
-    while (1) {
-      try {
-        $replica = $client->initIndex($replica_name);
-        sleep(3);
-        $replica_settings = $replica->getSettings();
-        $replica_settings['ranking'] = [
-            'asc(changed)',
-          ] + $ranking;
-        $replica->setSettings($replica_settings);
-        break;
-      }
-      catch(\Exception $e) {
-        print $replica_name . ' : ' . $e->getMessage() . PHP_EOL;
-      }
+    try {
+      $replica = $client->initIndex($replica_name);
+      sleep(3);
+      $replica_settings = $replica->getSettings();
+      $replica_settings['ranking'] = [
+          'asc(changed)',
+        ] + $ranking;
+      $response = $replica->setSettings($replica_settings);
+      $response->wait();
+      break;
+    }
+    catch(\Exception $e) {
+      print $replica_name . ' : ' . $e->getMessage() . PHP_EOL;
     }
   }
 }
