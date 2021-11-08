@@ -26,8 +26,7 @@
               url: media.url,
               medium: media.styles.product_zoom_medium_606x504,
               zoom: media.styles.product_zoom_large_800x800,
-              // @todo Find out actual thumbnail key.
-              thumbnails: media.styles.product_teaser,
+              thumbnails: media.styles.pdp_gallery_thumbnail,
               teaser: media.styles.product_teaser,
             });
           });
