@@ -1,7 +1,6 @@
 .rcs-page:not(.rcs-loaded) .c-page-title__description,
 .rcs-page:not(.rcs-loaded) .c-content__region .term-description-mobile-only.c-page-title__description {
-  width: 90%;
-  margin: auto;
+  width: auto;
 
   & > * {
     visibility: hidden;
