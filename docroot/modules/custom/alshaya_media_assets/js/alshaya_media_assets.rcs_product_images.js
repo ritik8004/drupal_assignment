@@ -96,7 +96,11 @@
   }
 
   RcsEventManager.addListener('alshayaRcsUpdateResults', (e) => {
-    // Return if result is empty.
+    // We do not want further processing:
+    // 1. If page is not a product page
+    // 2. If the result object in the event data is undefined
+    // 3. If product recommendation replacement or magazine carousel replacement
+    // has not called this handler.
     if ((typeof e.detail.pageType !== 'undefined' && e.detail.pageType !== 'product')
       || typeof e.detail.result === 'undefined'
       || (typeof e.detail.placeholder !=='undefined'
