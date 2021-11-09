@@ -11,12 +11,12 @@
  * php-script scripts/utilities/clean-brand-product-options.php`
  */
 
-// Get all nodes of product list which has english language.
 use Drupal\node\NodeInterface;
 
 $db = \Drupal::database();
 $logger = \Drupal::logger('clean-brand-product-options');
 
+// Get all nodes of product list type with attribute brand.
 $query = $db->select('node_field_data', 'nfd');
 $query->addField('nfd', 'nid', 'nid');
 $query->innerJoin('node', 'n', 'nfd.nid=n.nid');
@@ -34,10 +34,10 @@ $count = 0;
 foreach ($nids as $nid) {
   try {
     $node = $node_storage->load($nid);
-    if ($node instanceof NodeInterface && $node->language()->getId() === 'en' && preg_match("/\p{Arabic}/u", $node->getTitle())) {
+    if ($node instanceof NodeInterface && $node->language()->getId() === 'ar' && preg_match("/\p{English}/u", $node->getTitle())) {
       $node->delete();
       $count++;
-      $logger->notice('Deleting product option node: @nid', [
+      $logger->notice('Deleted product option node: @nid', [
         '@nid' => $node->getTitle(),
       ]);
     }
