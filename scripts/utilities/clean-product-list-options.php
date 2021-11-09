@@ -34,7 +34,7 @@ $count = 0;
 foreach ($nids as $nid) {
   try {
     $node = $node_storage->load($nid);
-    if ($node instanceof NodeInterface && $node->language()->getId() === 'ar' && preg_match("/\p{English}/u", $node->getTitle())) {
+    if ($node instanceof NodeInterface && $node->language()->getId() === 'en' && preg_match("/\p{Arabic}/u", $node->getTitle())) {
       $node->delete();
       $count++;
       $logger->notice('Deleted product option node: @nid', [
