@@ -3,3 +3,8 @@ services:
     class: Drupal\alshaya_rcs\Services\AlshayaRcsFeatureStatusHelper
     arguments:
       - '@config.factory'
+
+  alshaya_rcs.algolia_index_name_override:
+    class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexNameConfigOverrider
+    tags:
+      - { name: config.factory.override, priority: -1 }
