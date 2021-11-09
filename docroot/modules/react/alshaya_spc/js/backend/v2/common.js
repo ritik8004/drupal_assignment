@@ -351,8 +351,16 @@ const handleResponse = (apiResponse) => {
   // Assign response data as is if no error.
   if (typeof response.data.error === 'undefined') {
     response.data = JSON.parse(JSON.stringify(apiResponse.data));
-  } else if (apiResponse.status > 400 && apiResponse.status < 700) {
-    response.data.error_message = getDefaultErrorMessage();
+  } else {
+    // Log error again for all cases.
+    logger.warning('Encountered an error. Message: @message', {
+      '@message': hasValue(response.data.error_message) ? response.data.error_message : 'Empty.',
+    });
+    // Format error for specific cases so that in the front end we show user
+    // friendly error messages.
+    if (apiResponse.status > 400 && apiResponse.status < 700) {
+      response.data.error_message = getDefaultErrorMessage();
+    }
   }
 
   return new Promise((resolve) => resolve(response));
