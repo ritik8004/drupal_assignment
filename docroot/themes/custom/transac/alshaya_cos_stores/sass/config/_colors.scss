@@ -20,6 +20,7 @@ $green: #39b54a;
 $jungle-green: #26a69a;
 $blue-cola: #007fdb;
 $bright-blue: #2182d5;
+$teal: #26a69a;
 
 // Global elements.
 $primary_text: $eerie-black;
@@ -300,6 +301,9 @@ $minicart_notification_btn_bg: $outer-space;
 $minicart_notification_product_title: $eerie-black;
 $cart_notification_arrow_bg: $white;
 
+// Messages and Errors
+$default_msg_bg: $teal;
+
 // SPC
 $spc-cart-background: $gray-light;
 $spc-empty-text: $eerie-black;
@@ -314,6 +318,7 @@ $spc-totals-line-item-color: $outer-space;
 $spc-order-total-suffix-text: $brownish-grey;
 $spc-promo-code-placeholder-text: $silver-gray;
 $spc-promo-code-border: $warm-grey-two;
+$spc-promo-code-close-icon: $eerie-black;
 $spc-cart-promo-code-submit-enabled: $white;
 $spc-order-summary-product-area-bg: $bright-gray;
 $spc-checkout-delivery-method-txt: $brownish-grey;
@@ -330,6 +335,10 @@ $spc-tooltip-border: $outer-space;
 $spc_tooltip_icon: $outer-space;
 $spc_tooltip_icon_border: $outer-space;
 $spc-deliver-button: $outer-space;
+$spc-cnc-store-search-icon: $eerie-black;
+$spc-cnc-toggle-bg-active: $eerie-black;
+$spc-cnc-toggle-bg: $white;
+$spc-checkout-success-message-background: $teal;
 
 // Checkout Global.
 $checkout_section_titles: $eerie-black;
@@ -397,6 +406,8 @@ $magazine-article-read-more-bg-color: $white;
 $magazine-article-title: $black-two;
 $magazine-article-link-hover: $brownish-grey;
 $magazine-article-back-to-feed: $outer-space;
+$magazine-homepage-block-bg: $white;
+$magazine-article-primary-color: $outer-space;
 
 // Product detail page.
 $pdp_product_special_price_text: $blood;
@@ -418,10 +429,10 @@ $pdp_sidebar_link: $outer-space;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $eerie-black;
+$colour-swatches-simple-effect-bg: $white;
 $size-tray-empty-btn-text: $outer-space;
 $size-tray-empty-btn-border: $bright-gray;
 $pdp_sizeguide_link: $eerie-black;
-$colour-swatches-simple-effect-bg: $gray-light;
 $sharethis-icon-bg: $white;
 $sharethis-label-color: $eerie-black;
 
