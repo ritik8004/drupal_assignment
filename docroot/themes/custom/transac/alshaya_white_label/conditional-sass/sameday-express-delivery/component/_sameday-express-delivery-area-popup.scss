@@ -89,17 +89,18 @@ body.overlay-delivery-area {
 }
 
 .spc-delivery-area {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  overflow: scroll;
 
   .title-block {
     display: flex;
     align-items: center;
-    padding-top: 1.875rem;
-    padding-#{$left}: 1.125rem;
     justify-content: center;
-    padding-#{$left}: 0;
-    margin-bottom: 1.875rem;
+    box-shadow: 0 -0.0625rem 1.25rem 0.5625rem $sticky-btn;
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 0;
 
     @include breakpoint($only-mobile) {
       padding-top: 1.0625rem;
@@ -131,13 +132,15 @@ body.overlay-delivery-area {
   .close-modal {
     font-size: 0;
     cursor: pointer;
+    position: absolute;
+    #{$right}: 0;
+    color: transparent;
+    top: 50%;
+    transform: translateY(-50%);
 
     @include icon(close, before) {
       font-size: 3rem;
       color: $sameday-express-delivery-drawer-cross;
-      position: absolute;
-      top: 0;
-      #{$right}: 0;
 
       @include breakpoint($tablet) {
         padding-top: 0.9375rem;
@@ -146,9 +149,20 @@ body.overlay-delivery-area {
   }
 
   .area-list-block-content {
-    margin-top: 0.625rem;
     text-align: $left;
     color: $sameday-express-delivery-drawer-text;
+    overflow: scroll;
+    margin-top: 0;
+
+    &::before {
+      content: '';
+      display: block;
+      border-top: 0.625rem solid $delivery-modal-bg;
+    }
+
+    .area-list-block-wrapper {
+      margin-top: 1rem;
+    }
   }
 
   .governate-label,
@@ -448,10 +462,6 @@ body.overlay-delivery-area {
         color: $magv2-popup-header-label;
         font-size: 1.25rem;
         align-items: center;
-      }
-
-      .area-list-block-content {
-        margin-top: 2rem;
       }
     }
   }
