@@ -1068,56 +1068,58 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $query->condition('n.type', 'product_list');
     $nids = $query->execute()->fetchCol();
 
-    if (!empty($nids)) {
-      // Confirmation before delete.
-      if (!$this->io()->confirm(dt('Are you sure you want to clean up product option nodes?'), FALSE)) {
-        throw new UserAbortException();
-      }
-
-      $batch = [
-        'operations' => [],
-        'init_message' => dt('Deleting brand option nodes...'),
-        'error_message' => dt('Failed to delete old nodes for brand options.'),
-      ];
-
-      foreach (array_chunk($nids, $batch_size) as $chunk) {
-        $batch['operations'][] = [
-          [__CLASS__, 'deleteBrandProducListNodes'],
-          [$chunk],
-        ];
-      }
-
-      batch_set($batch);
-
-      // Re-save product options taxonomy terms after deleting nodes.
-      // This will create new nodes with correct urls.
-      $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
-      $query = $termStorage->getQuery();
-      $query->condition('vid', 'sku_product_option');
-      $result = $query->execute();
-
-      if (empty($result)) {
-        return [];
-      }
-
-      $batch = [
-        'operations' => [],
-        'init_message' => dt('Process all brand option taxonomy terms...'),
-        'error_message' => dt('Failed to create new nodes for brand options.'),
-      ];
-
-      foreach (array_chunk($result, $batch_size) as $chunk) {
-        $batch['operations'][] = [
-          [__CLASS__, 'recreateProductOptionNodes'],
-          [$chunk],
-        ];
-      }
-
-      batch_set($batch);
-
-      // Process the batch.
-      drush_backend_batch_process();
+    if (empty($nids)) {
+      return;
     }
+
+    // Confirmation before delete.
+    if (!$this->io()->confirm(dt('Are you sure you want to clean up product option nodes?'), FALSE)) {
+      throw new UserAbortException();
+    }
+
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Deleting brand option nodes...'),
+      'error_message' => dt('Failed to delete old nodes for brand options.'),
+    ];
+
+    foreach (array_chunk($nids, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'deleteBrandProducListNodes'],
+        [$chunk],
+      ];
+    }
+
+    batch_set($batch);
+
+    // Re-save product options taxonomy terms after deleting nodes.
+    // This will create new nodes with correct urls.
+    $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $query = $termStorage->getQuery();
+    $query->condition('vid', 'sku_product_option');
+    $result = $query->execute();
+
+    if (empty($result)) {
+      return [];
+    }
+
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Process all brand option taxonomy terms...'),
+      'error_message' => dt('Failed to create new nodes for brand options.'),
+    ];
+
+    foreach (array_chunk($result, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'recreateProductOptionNodes'],
+        [$chunk],
+      ];
+    }
+
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
 
     $this->drupalLogger->notice('Deletion and re-creating product option nodes completed.');
   }
@@ -1131,22 +1133,24 @@ class AlshayaAcmProductCommands extends DrushCommands {
   public static function deleteBrandProducListNodes(array $nids) {
     $logger = \Drupal::logger('delete-product-options-nodes');
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    if ($nids) {
-      foreach ($nids as $nid) {
-        try {
-          if (($node = $node_storage->load($nid)) && ($node instanceof NodeInterface)) {
-            $node->delete();
-            $logger->notice('Deleting product option node: @nid', [
-              '@nid' => $nid,
-            ]);
-          }
-        }
-        catch (\Exception $e) {
-          $logger->error('Error while deleting product options node: @nid Message: @message', [
+    if (empty($nids)) {
+      return;
+    }
+    foreach ($nids as $nid) {
+      try {
+        $node = $node_storage->load($nid);
+        if ($node && $node instanceof NodeInterface) {
+          $node->delete();
+          $logger->notice('Deleted product option node: @nid', [
             '@nid' => $nid,
-            '@message' => $e->getMessage(),
           ]);
         }
+      }
+      catch (\Exception $e) {
+        $logger->error('Error while deleting product options node: @nid Message: @message', [
+          '@nid' => $nid,
+          '@message' => $e->getMessage(),
+        ]);
       }
     }
   }
@@ -1160,14 +1164,15 @@ class AlshayaAcmProductCommands extends DrushCommands {
   public static function recreateProductOptionNodes(array $terms) {
     $logger = \Drupal::logger('create-product-options-nodes');
     $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    if ($terms) {
-      $product_options = $termStorage->loadMultiple($terms);
-      foreach ($product_options as $product_option) {
-        $logger->notice('Resaving product option term: @term and creating node.', [
-          '@term' => $product_option->label(),
-        ]);
-        $product_option->save();
-      }
+    if (empty($terms)) {
+      return;
+    }
+    $product_options = $termStorage->loadMultiple($terms);
+    foreach ($product_options as $product_option) {
+      $logger->notice('Resaving product option term: @term and creating node.', [
+        '@term' => $product_option->label(),
+      ]);
+      $product_option->save();
     }
   }
 
