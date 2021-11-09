@@ -1,6 +1,7 @@
 jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
+import _cloneDeep from 'lodash/cloneDeep';
 import utilsRewire from '../../../../js/backend/v2/common';
 import { drupalSettings, Drupal } from '../globals';
 import cartActions from '../../../../js/utilities/cart_actions';
@@ -24,7 +25,7 @@ describe('Common', () => {
       const formatCart = utilsRewire.__get__('formatCart');
 
       it('With Cart data', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         const result = formatCart(data);
         expect(result.cart.customer).toEqual(undefined);
         expect(result.customer.addresses[0].region).toEqual('0');
@@ -41,35 +42,35 @@ describe('Common', () => {
       });
 
       it('Without customer address', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         delete data.cart.customer.addresses;
         const result = formatCart(data);
         expect(result.customer.addresses).toEqual(undefined);
       });
 
       it('Without customer data', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         delete data.cart.customer;
         const result = formatCart(data);
         expect(result.customer).toEqual(undefined);
       });
 
       it('Without extension_attributes data', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         delete data.cart.extension_attributes;
         const result = formatCart(data);
         expect(result.shipping).toEqual({});
       });
 
       it('Without shipping data', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         delete data.cart.extension_attributes.shipping_assignments[0].shipping;
         const result = formatCart(data);
         expect(result.shipping).toEqual({});
       });
 
       it('Custom shipping method', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         data.cart.extension_attributes.shipping_assignments[0].shipping.method = 'foo';
         const result = formatCart(data);
         expect(result.shipping.method).toEqual('foo');
@@ -77,7 +78,7 @@ describe('Common', () => {
       });
 
       it('Click and collect', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         data.cart.extension_attributes.shipping_assignments[0].shipping.method = 'click_and_collect';
         const result = formatCart(data);
         expect(result.shipping.method).toEqual('click_and_collect');
@@ -85,7 +86,7 @@ describe('Common', () => {
       });
 
       it('No shipping method', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         data.cart.billing_address = { foo: 'bar' };
         delete data.cart.extension_attributes.shipping_assignments[0].shipping.method;
         const result = formatCart(data);
@@ -94,7 +95,7 @@ describe('Common', () => {
       });
 
       it('Store code', () => {
-        const data = JSON.parse(JSON.stringify(cartData));
+        const data = _cloneDeep(cartData);
         data.cart.extension_attributes.shipping_assignments[0].shipping.extension_attributes.store_code = '1234';
         const result = formatCart(data);
         expect(result.shipping.storeCode).toEqual('1234');

@@ -1,4 +1,5 @@
 jest.mock('axios');
+import _cloneDeep from 'lodash/cloneDeep';
 import axios from 'axios';
 import each from 'jest-each'
 import utilsRewire, { getCncStores } from "../../../../js/backend/v2/checkout";
@@ -637,7 +638,7 @@ describe('Checkout', () => {
 
       it('With shipping data', async () => {
         // Keep a copy of original.
-        const original = JSON.parse(JSON.stringify(shippingData));
+        const original = _cloneDeep(shippingData);
         await addCncShippingInfo(shippingData, 'update shipping');
 
         // Make sure the original object was not changed.
