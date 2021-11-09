@@ -38,7 +38,7 @@ foreach ($nids as $nid) {
       $node->delete();
       $count++;
       $logger->notice('Deleted product option node: @nid', [
-        '@nid' => $node->getTitle(),
+        '@nid' => $nid,
       ]);
     }
   }
