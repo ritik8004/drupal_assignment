@@ -17,4 +17,12 @@
       color: $spc-promo-code-placeholder-text;
     }
   }
+
+  .promo-remove {
+    &.active {
+      &::after {
+        color: $spc-promo-code-close-icon;
+      }
+    }
+  }
 }

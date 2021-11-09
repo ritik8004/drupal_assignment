@@ -66,6 +66,18 @@
   }
 }
 
+.special--price {
+  .price-wrapper {
+    .price {
+      margin-#{$left}: 0.25rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+}
+
 .store-finder-form-wrapper {
   .search-store {
     button {
