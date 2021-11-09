@@ -60,8 +60,8 @@ if (empty($result)) {
 }
 $logger->notice('Re-saving all taxonomy terms of product options');
 if ($result) {
-  $shipping_options = $termStorage->loadMultiple($result);
-  foreach ($shipping_options as $shipping_option) {
-    $shipping_option->save();
+  $product_options = $termStorage->loadMultiple($result);
+  foreach ($product_options as $product_option) {
+    $product_option->save();
   }
 }
