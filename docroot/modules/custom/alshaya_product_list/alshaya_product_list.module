@@ -223,7 +223,7 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
           'field_attribute_name' => [
             'value' => $attribute,
           ],
-        ]) ;
+        ]);
         $node->save();
 
         // Creating the node translation if term has translation.
