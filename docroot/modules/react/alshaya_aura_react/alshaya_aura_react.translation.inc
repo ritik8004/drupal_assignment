@@ -376,5 +376,11 @@ function _alshaya_aura_react_translations() {
     'Join Aura to earn and spend points while you shop and enjoy exclusive benefits.' => [
       'ar' => 'اشترك في أورا واستمتع بتجميع النقاط وإنفاقها أثناء التسوق واحصل على مميزات حصرية.',
     ],
+    'You currently have no Aura linked transactions.' => [
+      'ar' => 'ليس لديك عمليات مرتبطة بحساب أورا حالياً',
+    ],
+    'To see your offers and rewards, visit your AURA MENA app or' => [
+      'ar' => 'لمعرفة العروض والمكافآت الخاصة بك، قم بزيارة تطبيق أورا أو',
+    ],
   ];
 }
