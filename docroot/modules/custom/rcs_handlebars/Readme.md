@@ -13,7 +13,7 @@ to provide the contents of Handlebars templates, see rcs_handlebars.api.php. i.e
 /**
  * Implements hook_rcs_handlebars_templates().
  */
-function hook_rcs_handlebars_templates() {
+function hook_rcs_handlebars_templates(\Drupal\Core\Entity\EntityInterface $entity) {
   // List of handlebars templates to be embedded on the page.
   return [
     // List of field templates.
