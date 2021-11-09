@@ -38,7 +38,7 @@
       margin-#{$left}: 0.625rem;
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: 0.25rem;
+        margin-#{$left}: 0;
       }
     }
 
