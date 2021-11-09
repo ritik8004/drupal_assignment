@@ -380,7 +380,7 @@ export default class ConfigurableForm extends React.Component {
           })}
           <QuantitySelector
             type="dropdown"
-            options={getQuantityDropdownValues()}
+            options={getQuantityDropdownValues(selectedVariant, productData)}
             onChange={this.onQuantityChanged}
             quantity={quantity}
             label={getStringMessage('quantity')}
