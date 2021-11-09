@@ -246,12 +246,10 @@ const handleResponse = (apiResponse) => {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 500;
-    response.data.error_message = getDefaultErrorMessage();
   } else if (apiResponse.status > 500) {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
-    response.data.error_message = 'Back-end system is down';
   } else if (apiResponse.status === 401) {
     if (isUserAuthenticated()) {
       // Customer Token expired.
@@ -268,7 +266,6 @@ const handleResponse = (apiResponse) => {
 
     response.data.error = true;
     response.data.error_code = 401;
-    response.data.error_message = apiResponse.data.message;
   } else if (apiResponse.status !== 200) {
     // Set default values.
     response.data.error = true;
@@ -354,6 +351,8 @@ const handleResponse = (apiResponse) => {
   // Assign response data as is if no error.
   if (typeof response.data.error === 'undefined') {
     response.data = JSON.parse(JSON.stringify(apiResponse.data));
+  } else if (apiResponse.status > 400 && apiResponse.status < 700) {
+    response.data.error_message = getDefaultErrorMessage();
   }
 
   return new Promise((resolve) => resolve(response));
