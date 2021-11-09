@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enables the alshaya_media_assets module.
+ */
+function alshaya_cos_transac_update_8001() {
+  \Drupal::service('module_installer')->install(['alshaya_media_assets']);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_cos_transac_install() {

@@ -46,11 +46,7 @@
       };
 
       // Prepare Assets.
-      item['image'] = item.assets_teaser;
-      if (item.type_id === 'configurable') {
-        let assets = JSON.parse(item.variants[0].product.assets_teaser);
-        item['image'] = assets[0].styles;
-      }
+      item['image'] = window.commerceBackend.getTeaserImage(item);
     });
   });
 })(drupalSettings);

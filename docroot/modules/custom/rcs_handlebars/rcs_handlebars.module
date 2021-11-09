@@ -11,7 +11,7 @@ function rcs_handlebars_entity_view_alter(array &$build, EntityInterface $entity
   $templates = &drupal_static('rcs_handlebars_templates', []);
 
   // Invoke hook to get default values.
-  $templates = \Drupal::moduleHandler()->invokeAll('rcs_handlebars_templates');
+  $templates = \Drupal::moduleHandler()->invokeAll('rcs_handlebars_templates', [$entity]);
 
   // Allow other modules to alter the data based on entity.
   \Drupal::moduleHandler()->alter('rcs_handlebars_templates', $templates, $entity);
@@ -47,7 +47,7 @@ function rcs_handlebars_page_bottom(array &$page_bottom) {
 /**
  * Implements hook_rcs_handlebars_templates().
  */
-function rcs_handlebars_rcs_handlebars_templates() {
+function rcs_handlebars_rcs_handlebars_templates(EntityInterface $entity) {
   // List of handlebars templates to be embedded on the page.
   return [
     // List of block templates.

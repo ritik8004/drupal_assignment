@@ -67,6 +67,7 @@ function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
       '... on ConfigurableProduct' => [
         'variants' => [
           'product' => [
+            'type_id',
             'assets_teaser',
           ],
         ],
@@ -80,4 +81,16 @@ function alshaya_rcs_magazine_rcs_placeholders_graphql_query() {
   ];
 
   return $query_fields;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_rcs_magazine_preprocess_field__rcs_placeholder_block(&$variables) {
+  if ($variables['field_name'] === 'field_magazine_shop_the_story') {
+    $product_display_settings = \Drupal::configFactory()->get('alshaya_acm_product.display_settings');
+    $variables['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+    $variables['#cache']['tags'] = $variables['#cache']['tags'] ?? [];
+    $variables['#cache']['tags'] = array_merge($variables['#cache']['tags'], $product_display_settings->getCacheTags());
+  }
 }

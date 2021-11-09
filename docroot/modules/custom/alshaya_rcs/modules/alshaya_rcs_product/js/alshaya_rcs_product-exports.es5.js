@@ -254,176 +254,61 @@ exports.render = function render(
       break;
 
     case 'classic-gallery':
-      const gallery = jQuery('.rcs-templates--rcs-product-zoom');
-      const mediaCollection = entity.media_gallery;
+      let mediaCollection = {
+        gallery: [],
+        zoom: [],
+        thumbnails: [],
+      };
+
+      switch (drupalSettings.alshayaRcs.useParentImages) {
+        case 'never':
+          // Get the images from the variants.
+          entity.variants.forEach(function (variant) {
+            // Only fetch media for the selected variant.
+            if (variant.product.sku !== params.sku) {
+              return;
+            }
+            variant.product.media.forEach(function (variantMedia) {
+              mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
+                type: 'image',
+                thumburl: variantMedia.thumbnails,
+                mediumurl: variantMedia.medium,
+                zoomurl: variantMedia.zoom,
+                fullurl: variantMedia.url,
+              });
+            });
+            // Break from the loop.
+            return false;
+          });
+          break;
+
+        default:
+          // @todo Add default case when working on other brands.
+          break;
+      }
 
       // If no media, return;
-      if (!mediaCollection.length) {
+      if (!mediaCollection.thumbnails.length) {
         html = '';
         break;
       }
 
-      mediaCollection.forEach((media) => {
-        const galleryElement = jQuery('<li></li>');
-
-        const galleryElementAnchor = jQuery('<a></a>');
-        galleryElementAnchor.attr({
-          href: media.url,
-          class: 'imagegallery__thumbnails__image a-gallery',
-        });
-
-        const galleryElementImg = jQuery('<img />');
-        galleryElementImg.attr({
-          class: 'b-lazy',
-          // @todo: Replace with lazy loaded image.
-          src: media.url,
-          'data-src': media.url,
-          alt: media.label,
-          title: media.label,
-        });
-
-        galleryElementAnchor.append(galleryElementImg);
-        galleryElement.append(galleryElementAnchor);
-        jQuery('#product-full-screen-gallery', gallery).append(galleryElement);
-      });
-
-      // Get the template for the thumbnails.
-      const thumbnailTemplate = jQuery('.rcs-templates--product_thumbnails').clone();
-
-      // This is the list that will hold the thumbnails.
-      const thumbnails = jQuery('<ul id="lightSlider"></ul>');
-
-      mediaCollection.forEach((media) => {
-        // @todo: Fetch the type from the input.
-        const type = 'image';
-        switch (type) {
-          case 'youtube':
-            break;
-
-          case 'vimeo':
-            break;
-
-          case 'pdp-video':
-            break;
-
-          // Image.
-          default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
-            // Get the image element from the template and start adding the
-            // required attributes.
-            const element = jQuery('.default', thumbnailTemplate).clone();
-            const anchor = jQuery('a', element);
-
-            anchor.attr({
-              // @todo: Replace this with the zoomed image.
-              'data-zoom-url': imageUrl,
-              // @todo: Replace this with the medium image.
-              href: imageUrl,
-            });
-
-            jQuery('img', anchor).attr({
-              src:  imageUrl,
-              'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            thumbnails.append(element);
-        }
-      });
-
-      if (mediaCollection.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) {
-        thumbnails.addClass('pager-yes');
-      }
-      else {
-        thumbnails.addClass('pager-no');
+      const data = {
+        mainImage: {
+          zoomurl: mediaCollection.thumbnails[0].zoomurl,
+          mediumurl: mediaCollection.thumbnails[0].mediumurl,
+          label: entity.name,
+        },
+        labels: params.labels,
+        pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryLimit[params.galleryLimit])
+          ? 'pager-yes'
+          : 'pager-no',
+        thumbnails: mediaCollection.thumbnails,
+        lazy_load_placeholder: drupalSettings.alshayaRcs.lazyLoadPlaceholder,
+        pdp_gallery_type: drupalSettings.alshayaRcs.pdpGalleryType,
       }
 
-      jQuery('.cloudzoom__thumbnails', gallery).html(thumbnails);
-
-      // Get the template for the mobile.
-      const mobileGalleryTemplate = jQuery('.rcs-templates--product_gallery_mobile').clone();
-      const mobileGallery = jQuery('<div>');
-
-      mediaCollection.forEach((media) => {
-        // @todo: Fetch the type from the input.
-        const type = 'image';
-        switch (type) {
-          case 'youtube':
-            break;
-
-          case 'vimeo':
-            break;
-
-          case 'pdp-video':
-            break;
-
-          // Image.
-          default:
-            const imageUrl = media.url;
-            const imageLabel = media.label;
-            // Get the image element from the template and start adding the
-            // required attributes.
-            const element = jQuery('.default', mobileGalleryTemplate).clone();
-
-            jQuery('img', element).attr({
-              src:  imageUrl,
-              'data-src': imageUrl,
-              alt: imageLabel,
-              title: imageLabel,
-            });
-
-            // Append the li element to the list.
-            mobileGallery.append(element);
-        }
-      });
-
-      jQuery('#product-image-gallery-mobile', gallery).html(mobileGallery.html());
-
-      // Get the labels data.
-      const labels = inputs.labels;
-      if (labels.length) {
-        const labelsData = {};
-        labels.forEach(function (label) {
-          // Don't render labels with unknown positions.
-          if (!(['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(label.position))) {
-            return;
-          }
-
-          if (typeof labelsData[label.position] === 'undefined') {
-            labelsData[label.position] = [];
-          }
-          // Group the labels by position.
-          labelsData[label.position].push(label);
-        });
-
-        const productLabels = jQuery('<div class="product-labels"><div class="labels-wrapper" data-type="pdp" data-sku="#rcs.product._self|sku#" data-main-sku="#rcs.product._self|sku#"></div></div>');
-        const labelsWrapper = productLabels.find('.labels-wrapper');
-
-        Object.keys(labelsData).forEach(function (position) {
-          const positionLabels = jQuery('<div>').addClass(`labels-container ${position}`);
-          labelsData[position].forEach(function (labelData) {
-            const individualLabel = jQuery('<div>').addClass('label');
-            const img = jQuery('<img>').attr({
-              src: labelData.image,
-              alt: labelData.name,
-              title: labelData.name,
-            });
-            individualLabel.append(img);
-            positionLabels.append(individualLabel);
-          });
-          labelsWrapper.append(positionLabels);
-        });
-
-        // jQuery('.product-labels .labels-wrapper', gallery).html(productLabels.html());
-        const productLabelsMarkup = productLabels.html();
-        jQuery('.cloudzoom__herocontainer', gallery).append(productLabelsMarkup);
-        jQuery('.mobilegallery', gallery).append(productLabelsMarkup);
-      }
-
-      html += gallery.html();
+      html += handlebarsRenderer.render('gallery.product.product_zoom', data);
       break;
 
     default:
@@ -490,20 +375,8 @@ exports.computePhFilters = function (input, filter) {
       value = drupalSettings.vat_text;
       break;
 
-    case 'image':
-      value = ((input.media_gallery.length > 0)
-          && (typeof input.media_gallery[0].url !== 'undefined'
-            || input.media_gallery[0].url
-            || input.media_gallery[0].url !== '')
-        )
-        ? input.media_gallery[0].url
-        : '';
-      break;
-
-    case 'thumbnail_count':
-      // @todo: Fetch this from the correct key.
-      mediaCollection = input.media_gallery;
-      value = mediaCollection.length;
+    case 'teaser_image':
+      value = window.commerceBackend.getTeaserImage(input);
       break;
 
     case 'add_to_cart':
@@ -668,14 +541,10 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'first_image':
-      // @todo: Use the correct image key.
-      value = ((input.media_gallery.length > 0)
-          && (typeof input.media_gallery[0].url !== 'undefined'
-            || input.media_gallery[0].url
-            || input.media_gallery[0].url !== '')
-        )
-        ? input.media_gallery[0].url
-        : drupalSettings.alshayaRcs.default_meta_image
+      const firstImage = window.commerceBackend.getFirstImage(input);
+      value = Drupal.hasValue(firstImage)
+        ? firstImage.url
+        : drupalSettings.alshayaRcs.default_meta_image;
       break;
 
     case 'schema_stock':
@@ -738,7 +607,7 @@ exports.computePhFilters = function (input, filter) {
       break;
 
     case 'promotions':
-      const promotions = input.promotions || {};
+      const promotions = input.promotions || [];
       if (typeof promotions === 'undefined' || promotions === null) {
         break;
       }

@@ -117,4 +117,92 @@
 
     return allOptionsForAttribute[attrValue];
   }
+
+  /**
+   * Get the first child with media.
+   *
+   * @param {object}
+   *   The raw product object.
+   *
+   * @return {object}
+   *   The first child raw product object.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstChildWithMedia()
+   */
+  const getFirstChildWithMedia = function (product) {
+    const firstChild = product.variants.find(function (variant) {
+      return Drupal.hasValue(variant.product.media) ? variant.product : false;
+    });
+
+    return firstChild.product;
+  }
+
+  /**
+   * Get SKU to use for gallery when no specific child is selected.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {object}
+   *   The gallery sku object.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getSkuForGallery()
+   */
+  const getSkuForGallery = function (product) {
+    let child = product;
+
+    switch (drupalSettings.alshayaRcs.useParentImages) {
+      case 'never':
+        if (product.type_id === 'configurable') {
+          child = getFirstChildWithMedia(product);
+        }
+        break;
+    }
+
+    return child;
+  }
+
+  /**
+   * Get first image from media to display as list.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstImage()
+   */
+  window.commerceBackend.getFirstImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return Drupal.hasValue(galleryProduct.media[0]) ? galleryProduct.media[0] : null;
+  }
+
+  /**
+   * Get the image from media to as the cart image.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   */
+  window.commerceBackend.getCartImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_cart;
+  }
+
+  /**
+   * Get the image from media to display as teaser image.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   */
+   window.commerceBackend.getTeaserImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_teaser;
+  }
 })(Drupal);
