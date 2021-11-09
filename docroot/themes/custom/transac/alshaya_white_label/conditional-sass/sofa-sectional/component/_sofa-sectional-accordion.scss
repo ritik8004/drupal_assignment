@@ -164,6 +164,10 @@
           pointer-events: none;
         }
 
+        .swatch-color {
+          word-break: break-word;
+        }
+
         @include breakpoint($only-mobile) {
           display: flex;
           flex-direction: column;

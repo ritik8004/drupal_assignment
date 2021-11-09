@@ -203,9 +203,23 @@
       font-size: 0.875rem;
       padding-#{$left}: 0;
 
+      @include breakpoint($only-mobile) {
+        font-size: 0.8125rem;
+      }
+
       a {
         &:hover:active {
           text-decoration: none;
+        }
+      }
+    }
+
+    article {
+      &:hover {
+        .field--name-name a {
+          @include breakpoint($desktop) {
+            text-decoration: none;
+          }
         }
       }
     }

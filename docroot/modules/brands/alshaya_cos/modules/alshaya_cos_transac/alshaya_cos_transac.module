@@ -28,7 +28,6 @@ function alshaya_cos_transac_rcs_placeholders_graphql_query_alter(&$queries) {
   array_push(
     $queries['products']['items'],
     'style_code',
-    'asset_type',
     'composition',
     'washing_instructions',
     'article_warning'

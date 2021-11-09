@@ -56,7 +56,7 @@ $time = strtotime("-$days days");
 
 $algolia_options['numericFilters'] = 'changed<' . $time;
 
-$actual_indexes = [];
+$indexes = [];
 foreach (['en', 'ar'] as $lang) {
   $actual_index_name = implode('_', [
     $index_name,
@@ -80,7 +80,6 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
     '@days' => $days,
   ]);
 
-  $page = 0;
   $results = $replica->search('', $algolia_options);
 
   $nids = array_column($results['hits'], 'nid');
@@ -114,18 +113,19 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
     '@nids' => implode(',', $nids_to_remove),
   ]);
 
-  foreach ($nids_to_remove as $nid) {
-    $pos = array_search($nid, $nids);
-    $object_id = $results['hits'][$pos]['objectID'];
+  if ($operation === 'delete') {
+    $object_ids = [];
 
-    if ($operation === 'delete') {
-      $actual->deleteObject($object_id);
-
-      $logger->warning('Removed entry with objectId @object_id from index @index', [
-        '@index' => $actual->getIndexName(),
-        '@object_id' => $object_id,
-      ]);
+    foreach ($nids_to_remove as $nid) {
+      $pos = array_search($nid, $nids);
+      $object_ids[] = $results['hits'][$pos]['objectID'];
     }
+
+    $actual->deleteObjects($object_ids);
+    $logger->warning('Removed entries from index @index for objectIds: @objectIds.', [
+      '@index' => $actual->getIndexName(),
+      '@objectIds' => $object_ids,
+    ]);
   }
 }
 

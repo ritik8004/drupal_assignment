@@ -92,6 +92,7 @@ class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
       $common_config['otherRequiredValues']['libraries'],
       'alshaya_algolia_react/plpv2',
       'alshaya_rcs_listing/renderer',
+      'alshaya_white_label/rcs-algolia-plp',
     );
 
     // Remove the v1 PLP library.

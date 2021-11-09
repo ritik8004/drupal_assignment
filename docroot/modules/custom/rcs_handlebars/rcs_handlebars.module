@@ -48,7 +48,7 @@ function rcs_handlebars_page_bottom(array &$page_bottom) {
 /**
  * Implements hook_rcs_handlebars_templates().
  */
-function rcs_handlebars_rcs_handlebars_templates() {
+function rcs_handlebars_rcs_handlebars_templates(EntityInterface $entity) {
   // List of handlebars templates to be embedded on the page.
   return [
     // List of block templates.

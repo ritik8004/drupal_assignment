@@ -289,8 +289,7 @@ function getVariantsInfo(product) {
     const variantSku = variantInfo.sku;
     // @todo Add code for commented keys.
     info[variantSku] = {
-      // @todo Add proper implementation for cart image.
-      cart_image: jQuery('.logo img').attr('src'),
+      cart_image: window.commerceBackend.getCartImage(variant),
       // @todo Add brand specific cart title.
       cart_title: 'Temp title',
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
@@ -362,8 +361,7 @@ function processProduct(product) {
     gtm_attributes: product.gtm_attributes,
     gallery: null,
     identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
-    // @todo Add proper implementation for cart image.
-    cart_image: jQuery('.logo img').attr('src'),
+    cart_image: window.commerceBackend.getCartImage(product),
     // @todo Add brand specific cart title.
     cart_title: 'Temp title',
     url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
@@ -683,6 +681,7 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
   let rawProduct = null;
   const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
   const productData = window.commerceBackend.getProductData(mainSku, null, false);
+  const viewMode = product.parents('.entity--type-node').attr('data-vmode');
 
   if (typeof parentSku === 'undefined') {
     rawProduct = productData;
@@ -700,8 +699,8 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
   // Maps gallery value from backend to the appropriate filter.
   let galleryType = null;
   switch (drupalSettings.alshayaRcs.pdpLayout) {
-    case 'pdp':
-      galleryType = 'classic-gallery';
+    case 'pdp-magazine':
+      galleryType = drupalSettings.alshayaRcs.pdpGalleryType === 'classic' ? 'classic-gallery' : 'magazine-gallery';
       break;
   }
 
@@ -709,9 +708,15 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     .render(
       drupalSettings,
       galleryType,
-      {},
-      { labels },
-      rawProduct,
+      {
+        galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
+        labels,
+        // The simple SKU.
+        sku,
+      },
+      { },
+      // rawProduct,
+      productData,
       drupalSettings.path.currentLanguage,
       null,
     );
