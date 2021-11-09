@@ -7,7 +7,7 @@ const EmptyRewardActivity = () => (
     </div>
     <div>
       {`${Drupal.t('To see your offers and rewards, visit your AURA MENA app or')} `}
-      <a href="aura-mena.com">aura-mena.com</a>
+      <a href="http://aura-mena.com">aura-mena.com</a>
     </div>
   </>
 );
