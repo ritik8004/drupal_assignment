@@ -11,11 +11,12 @@ function rcs_handlebars_entity_view_alter(array &$build, EntityInterface $entity
   $rcs_handlebars_templates = &drupal_static('rcs_handlebars_templates', []);
 
   // Invoke hook to get default values.
-  $templates = \Drupal::moduleHandler()->invokeAll('rcs_handlebars_templates');
-  $rcs_handlebars_templates = array_merge_recursive($rcs_handlebars_templates, $templates);
+  $templates = \Drupal::moduleHandler()->invokeAll('rcs_handlebars_templates', [$entity]);
 
   // Allow other modules to alter the data based on entity.
-  \Drupal::moduleHandler()->alter('rcs_handlebars_templates', $rcs_handlebars_templates, $entity);
+  \Drupal::moduleHandler()->alter('rcs_handlebars_templates', $templates, $entity);
+
+  $rcs_handlebars_templates = array_merge_recursive($rcs_handlebars_templates, $templates);
 
   // If any module provided handlebars templates, we need to add the renderer.
   $build['#attached']['library'][] = 'rcs_handlebars/main';
@@ -25,17 +26,17 @@ function rcs_handlebars_entity_view_alter(array &$build, EntityInterface $entity
  * Implements hook_page_bottom().
  */
 function rcs_handlebars_page_bottom(array &$page_bottom) {
-  $rcs_handlebars_templates = &drupal_static('rcs_handlebars_templates', []);
+  $templates = &drupal_static('rcs_handlebars_templates', []);
 
   // Load templates.
-  array_walk_recursive ($rcs_handlebars_templates, function(&$value, $key){
+  array_walk_recursive ($templates, function(&$value, $key){
     if (strpos($value, '.handlebars') !== FALSE) {
       $value = file_get_contents($value);
     }
   });
 
   // Encode array.
-  $scripts = json_encode($rcs_handlebars_templates, JSON_UNESCAPED_UNICODE);
+  $scripts = json_encode($templates, JSON_UNESCAPED_UNICODE);
 
   // Embed handlebars templates.
   $page_bottom['rcs_handlebars_handlebars'] = [
