@@ -196,7 +196,7 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
 
   // Check if Term has same attribute code as the alshaya_options_list
   // settings, if yes then create a product list node for that attribute value.
-  if (in_array($term_attribute_code, $attributeCodes)) {
+  if (in_array($term_attribute_code, $attributeCodes) && $term->get('langcode')->value == 'en') {
     $attribute = 'attr_' . $term_attribute_code;
     $attribute_value = $term->getName();
     try {
@@ -223,17 +223,21 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
           'field_attribute_name' => [
             'value' => $attribute,
           ],
-        ]);
+        ]) ;
         $node->save();
 
-        // Creating the translation if langcode not passed.
-        /** @var \Drupal\node\NodeInterface $node_translation */
-        $node_translation = $node->addTranslation('ar');
-        $node_translation->setOwnerId(1);
-        $node_translation->setTitle($attribute_value);
-        $node_translation->set('field_attribute_name', $attribute);
-        $node_translation->set('field_attribute_value', $attribute_value);
-        $node_translation->save();
+        // Creating the node translation if term has translation.
+        if ($term->hasTranslation('ar')) {
+          $term_translation = $term->getTranslation('ar');
+          $attribute_value = $term_translation->getName();
+          /** @var \Drupal\node\NodeInterface $node_translation */
+          $node_translation = $node->addTranslation('ar');
+          $node_translation->setOwnerId(1);
+          $node_translation->setTitle($attribute_value);
+          $node_translation->set('field_attribute_name', $attribute);
+          $node_translation->set('field_attribute_value', $attribute_value);
+          $node_translation->save();
+        }
       }
     }
     catch (\Exception $e) {
