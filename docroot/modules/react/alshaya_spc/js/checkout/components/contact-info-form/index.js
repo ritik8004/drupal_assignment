@@ -15,8 +15,9 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
 
-  handleSubmit = (e, store) => {
+  handleSubmit = (e, store, handleScrollTo) => {
     e.preventDefault();
+    handleScrollTo();
 
     const contactInfoError = validateContactInfo(e, (drupalSettings.user.uid === 0));
     if (contactInfoError) {
@@ -173,13 +174,13 @@ class ContactInfoForm extends React.Component {
   };
 
   render() {
-    const { store, subTitle } = this.props;
+    const { store, subTitle, handleScrollTo } = this.props;
     const { contactInfo } = this.context;
 
     return (
       <form
         className="spc-contact-form"
-        onSubmit={(e) => this.handleSubmit(e, store)}
+        onSubmit={(e) => this.handleSubmit(e, store, handleScrollTo)}
       >
         <FixedFields
           showEmail={drupalSettings.user.uid === 0}
