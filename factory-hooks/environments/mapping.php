@@ -361,7 +361,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'coskw_qa2',
       ],
       'dev' => [
-        'magento' => 'cos_qa',
+        'magento' => 'cos_integration',
         'conductor' => 'coskw_dev',
       ],
       'uat' => [
@@ -375,7 +375,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'cossa_qa2',
       ],
       'dev' => [
-        'magento' => 'cos_qa',
+        'magento' => 'cos_integration',
         'conductor' => 'cossa_dev',
       ],
       'uat' => [
@@ -389,7 +389,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'cosae_qa2',
       ],
       'dev' => [
-        'magento' => 'cos_qa',
+        'magento' => 'cos_integration',
         'conductor' => 'cosae_dev',
       ],
       'uat' => [
@@ -403,7 +403,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'coseg_qa2',
       ],
       'dev' => [
-        'magento' => 'cos_qa',
+        'magento' => 'cos_integration',
         'conductor' => 'coseg_dev',
       ],
       'uat' => [
@@ -417,7 +417,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'cosbh_qa2',
       ],
       'dev' => [
-        'magento' => 'cos_qa',
+        'magento' => 'cos_integration',
         'conductor' => 'cosbh_dev',
       ],
       'uat' => [
@@ -431,7 +431,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'cosqa_qa2',
       ],
       'dev' => [
-        'magento' => 'cos_qa',
+        'magento' => 'cos_integration',
         'conductor' => 'cosqa_dev',
       ],
       'uat' => [
