@@ -272,10 +272,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       }
 
       // If cart is still available, it means something else is wrong.
-      if (hasValue(response.data.error_message)) {
-        response.data.error_message = getUserFriendlyErrorMessage(response);
-        return response;
-      }
+      return response;
     }
 
     const exceptionType = getExceptionMessageType(response.data.error_message);
