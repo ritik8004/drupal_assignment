@@ -242,15 +242,44 @@ export const getAllowedAttributeValues = (
 /**
  * Returns the allowed values for quantity for the quantity dropdown.
  *
+ * @param {string} selectedVariant
+ *   The selected variant string.
+ * @param {object} productData
+ *   Full product information object.
+ *
  * @returns array
  *   The list of allowed values for quantity.
  */
-export const getQuantityDropdownValues = () => (
-  drupalSettings.add_to_bag.show_quantity
-  && typeof drupalSettings.add_to_bag.cart_quantity_options === 'object'
+export const getQuantityDropdownValues = (selectedVariant, productData) => {
+  const qty = drupalSettings.add_to_bag.show_quantity
+    && typeof drupalSettings.add_to_bag.cart_quantity_options === 'object'
     ? Object.values(drupalSettings.add_to_bag.cart_quantity_options)
-    : []
-);
+    : [];
+
+  // Get the selected variant's information.
+  let variantInfo = null;
+  for (let index = 0; index < productData.variants.length; index++) {
+    if (productData.variants[index].sku === selectedVariant) {
+      variantInfo = productData.variants[index];
+      break;
+    }
+  }
+
+  // Return is variant information is not available.
+  if (variantInfo === null) {
+    return qty;
+  }
+
+  // Remove quantity option if option is greater than stock quantity.
+  const options = [];
+  qty.forEach((val) => {
+    if (variantInfo.stock.status
+      && val <= variantInfo.stock.qty) {
+      options.push(val);
+    }
+  });
+  return options;
+};
 
 /**
  *
