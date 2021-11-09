@@ -104,7 +104,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_page_aura_header',
-      'value' => t('Aura rewards'),
+      'value' => t('Aura'),
     ],
     [
       'key' => 'cart_page_aura_accrual_label',
