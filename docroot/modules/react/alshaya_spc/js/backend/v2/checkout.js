@@ -29,7 +29,6 @@ import {
 import {
   cartErrorCodes,
   getDefaultErrorMessage,
-  getUserFriendlyErrorMessage,
 } from './error';
 import {
   getApiEndpoint,
@@ -2134,10 +2133,6 @@ window.commerceBackend.placeOrder = async (data) => {
       }
 
       if (!hasValue(response.data) || hasValue(response.data.error)) {
-        if (hasValue(response.data.error_message)) {
-          response.data.error_message = getUserFriendlyErrorMessage(response);
-        }
-
         return response;
       }
 

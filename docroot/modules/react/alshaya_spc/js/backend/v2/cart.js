@@ -20,7 +20,7 @@ import {
   removeCartIdFromStorage,
 } from './utility';
 import logger from '../../utilities/logger';
-import { getExceptionMessageType, getUserFriendlyErrorMessage } from './error';
+import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
@@ -282,10 +282,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       await triggerStockRefresh({ [sku]: quantity });
     }
 
-    return returnExistingCartWithError(
-      response.data.error_code,
-      getUserFriendlyErrorMessage(response),
-    );
+    return returnExistingCartWithError(response.data.error_code, response.data.error_message);
   }
 
   // Reset counter.

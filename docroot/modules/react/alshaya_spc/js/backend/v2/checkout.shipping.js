@@ -6,7 +6,6 @@ import { getApiEndpoint } from './utility';
 import logger from '../../utilities/logger';
 import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
-import { getUserFriendlyErrorMessage } from './error';
 
 /**
  * Format the address array.
@@ -157,7 +156,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
         '@message': response.data.error_message,
       });
 
-      return getFormattedError(response.data.error_code, getUserFriendlyErrorMessage(response));
+      return getFormattedError(response.data.error_code, response.data.error_message);
     }
 
     if (_isEmpty(response.data)) {
