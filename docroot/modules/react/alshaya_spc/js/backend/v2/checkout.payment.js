@@ -5,6 +5,7 @@ import logger from '../../utilities/logger';
 import StaticStorage from './staticStorage';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
+import { getUserFriendlyErrorMessage } from './error';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -78,6 +79,8 @@ const getPaymentMethodSetOnCart = async () => {
     logger.error('Error while getting payment set on cart. Response: @response', {
       '@response': JSON.stringify(response.data),
     });
+
+    response.data.error_message = getUserFriendlyErrorMessage(response);
   }
 
   return null;

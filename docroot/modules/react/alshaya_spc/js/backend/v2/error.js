@@ -79,9 +79,27 @@ const getProcessedErrorMessage = (response) => {
   return msg;
 };
 
+/**
+ * Gets the user friendly error message for specific conditions.
+ *
+ * @param {object} response
+ *   The response object after calling Magento.
+ *
+ * @returns
+ *   The user friendly global error message.
+ */
+const getUserFriendlyErrorMessage = (response) => {
+  if (response.status > 400 && response.status < 700) {
+    return getDefaultErrorMessage();
+  }
+
+  return response.data.error_message;
+};
+
 export {
   cartErrorCodes,
   getDefaultErrorMessage,
   getExceptionMessageType,
   getProcessedErrorMessage,
+  getUserFriendlyErrorMessage,
 };
