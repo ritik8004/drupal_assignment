@@ -13,20 +13,23 @@
  * E.g.
  *
  * @code
- * To check for mismatch for multiple facet filters:
- * drush -l local.alshaya-hmae.com scr ../scripts/utilities/algolia-index-sanity-check.php -- "verify" "60"
- *
- * To delete mismatching skus from Algolia index for multiple facet filters:
- * drush -l local.alshaya-hmae.com scr ../scripts/utilities/algolia-index-sanity-check.php -- "delete" "60"
+ * drush -l local.alshaya-hmae.com scr ../scripts/utilities/algolia-index-sanity-check-listing.php -- "verify" "60"
+ * drush -l local.alshaya-hmae.com scr ../scripts/utilities/algolia-index-sanity-check-listing.php -- "delete" "60"
  * @endcode
  */
 
 use Algolia\AlgoliaSearch\SearchClient;
 
-$logger = \Drupal::logger('algolia-index-sanity-check');
+$logger = \Drupal::logger('algolia-index-sanity-check-listing');
+
+$algolia_index_config = \Drupal::config('search_api.index.alshaya_algolia_product_list_index');
+if (empty($algolia_index_config) || !($algolia_index_config->get('status'))) {
+  $logger->notice('Algolia listing page index not enabled, skipping.');
+  return;
+}
 
 $algolia_server_config = \Drupal::config('search_api.server.algolia')->get('backend_config');
-$algolia_index_config = \Drupal::config('search_api.index.alshaya_algolia_index')->get('options');
+$algolia_index_config = $algolia_index_config->get('options');
 
 $app_id = $algolia_server_config['application_id'];
 $app_secret = $algolia_server_config['api_key'];
@@ -44,7 +47,7 @@ $logger->notice('@process process has begun.', [
 
 $algolia_options = [
   'attributesToRetrieve' => [
-    'nid',
+    'sku',
   ],
   'hitsPerPage' => 1000,
   'page' => 0,
@@ -54,22 +57,12 @@ $days = $extra[1] ?? 60;
 $days = is_numeric($days) ? $days : 60;
 $time = strtotime("-$days days");
 
-$algolia_options['numericFilters'] = 'changed<' . $time;
+$algolia_options['numericFilters'] = 'changed.en<' . $time;
 
-$indexes = [];
-foreach (['en', 'ar'] as $lang) {
-  $actual_index_name = implode('_', [
-    $index_name,
-    $lang,
-  ]);
-
-  $replica_index_name = implode('_', [
-    $actual_index_name,
-    'changed_asc',
-  ]);
-
-  $indexes[$actual_index_name] = $replica_index_name;
-}
+$indexes[$index_name] = implode('_', [
+  $index_name,
+  'changed_asc',
+]);
 
 foreach ($indexes as $actual_index_name => $replica_index_name) {
   $replica = $client->initIndex($replica_index_name);
@@ -82,8 +75,8 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
 
   $results = $replica->search('', $algolia_options);
 
-  $nids = array_column($results['hits'], 'nid');
-  if (empty($nids)) {
+  $skus = array_column($results['hits'], 'sku');
+  if (empty($skus)) {
     $logger->notice('No items found in the index @index with changed before @days days.', [
       '@index' => $replica->getIndexName(),
       '@days' => $days,
@@ -93,13 +86,13 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
   }
 
   // Verify skus do not exist in Drupal.
-  $query = \Drupal::database()->select('node_field_data', 'nfd');
-  $query->condition('nid', $nids, 'IN');
-  $query->addField('nfd', 'nid');
-  $nids_available_in_system = $query->execute()->fetchCol();
+  $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
+  $query->condition('sku', $skus, 'IN');
+  $query->addField('asfd', 'sku');
+  $skus_available_in_system = $query->execute()->fetchCol();
 
-  $nids_to_remove = array_diff($nids, $nids_available_in_system);
-  if (empty($nids_to_remove)) {
+  $skus_to_remove = array_diff($skus, $skus_available_in_system);
+  if (empty($skus_to_remove)) {
     $logger->notice('All data is legitimate in the index @index with changed before @days days.', [
       '@index' => $replica->getIndexName(),
       '@days' => $days,
@@ -107,24 +100,18 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
     continue;
   }
 
-  $logger->notice('NIDs that are in Algolia index @index but not in database: count @count, nids: @nids', [
+  $logger->notice('SKUs that are in Algolia index @index but not in database: count @count, SKUs: @skus.', [
     '@index' => $replica->getIndexName(),
-    '@count' => count($nids_to_remove),
-    '@nids' => implode(',', $nids_to_remove),
+    '@count' => count($skus_to_remove),
+    '@skus' => implode(',', $skus_to_remove),
   ]);
 
   if ($operation === 'delete') {
-    $object_ids = [];
+    $actual->deleteObjects($skus_to_remove);
 
-    foreach ($nids_to_remove as $nid) {
-      $pos = array_search($nid, $nids);
-      $object_ids[] = $results['hits'][$pos]['objectID'];
-    }
-
-    $actual->deleteObjects($object_ids);
     $logger->warning('Removed entries from index @index for objectIds: @objectIds.', [
       '@index' => $actual->getIndexName(),
-      '@objectIds' => $object_ids,
+      '@objectIds' => implode(',', $skus_to_remove),
     ]);
   }
 }
