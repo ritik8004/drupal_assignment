@@ -92,13 +92,13 @@ describe('Cart', () => {
     });
 
     it('Test response for 404 error', async () => {
-      axios.mockResolvedValue({ data: { message: 'Not found' }, status: 404 });
+      axios.mockResolvedValue({ data: { message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' }, status: 404 });
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
           error: true,
           error_code: 404,
-          error_message: 'Not found',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 404,
       });
@@ -127,7 +127,7 @@ describe('Cart', () => {
         data: {
           error: true,
           error_code: 600,
-          error_message: 'Back-end system is down',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 501,
       });
@@ -163,13 +163,13 @@ describe('Cart', () => {
     });
 
     it('Test response for non 200 response', async () => {
-      axios.mockResolvedValue({ data: { message: 'Something is wrong' }, status: 405 });
+      axios.mockResolvedValue({ data: { message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' }, status: 405 });
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
           error: true,
           error_code: 500,
-          error_message: 'Something is wrong',
+          error_message: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         },
         status: 405,
       });
