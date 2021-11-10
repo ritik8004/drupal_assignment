@@ -299,7 +299,8 @@ exports.render = function render(
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
           label: entity.name,
         },
-        labels: params.labels,
+        // Labels will be populated separately.
+        labels: [],
         pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryLimit[params.galleryLimit])
           ? 'pager-yes'
           : 'pager-no',

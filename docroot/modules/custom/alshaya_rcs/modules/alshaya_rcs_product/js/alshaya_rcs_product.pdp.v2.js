@@ -629,7 +629,7 @@ function getSkuSiblingsAndParent(sku) {
  * @returns object
  *   The labels data for the given product ID.
  */
-window.commerceBackend.getLabelsData = async function (sku) {
+async function getProductLabelsData (sku) {
   if (typeof staticDataStore.labels === 'undefined') {
     staticDataStore.labels = {};
     staticDataStore.labels[sku] = null;
@@ -664,6 +664,59 @@ window.commerceBackend.getLabelsData = async function (sku) {
 }
 
 /**
+ * Get the labels data for the selected SKU.
+ *
+ * @param {object} product
+ *   The product wrapper jquery object.
+ * @param {string} sku
+ *   The sku for which labels is to be retreived.
+ * @param {string} mainSku
+ *   The main sku for the product being displayed.
+ */
+function renderProductLabelsData(product, sku, mainSku) {
+  getProductLabelsData(sku).then(function (labelsData) {
+    // Do nothing if lables data is empty.
+    if (!Drupal.hasValue(labelsData)) {
+      return;
+    }
+
+    const data = {
+      topRight: [],
+      topLeft: [],
+      bottomRight: [],
+      bottomLeft: [],
+      sku: sku,
+      mainSku: mainSku,
+      type: 'pdp',
+    };
+
+    labelsData.forEach(function (label) {
+      if (!Drupal.hasValue(label.image)) {
+        return;
+      }
+
+      switch (label.position) {
+        case 'top-right':
+          data.topRight.push(label.image);
+          break;
+        case 'top-left':
+          data.topLeft.push(label.image);
+          break;
+        case 'bottom-right':
+          data.bottomRight.push(label.image);
+          break;
+        case 'bottom-left':
+          data.bottomLeft.push(label.image);
+          break;
+      }
+    });
+
+    const labelsMarkup = handlebarsRenderer.render('gallery.product.product_labels', {labels: data});
+    jQuery('.product-labels-custom', product).html(labelsMarkup);
+  });
+}
+
+/**
  * Renders the gallery for the given SKU.
  *
  * @param {object} product
@@ -678,7 +731,6 @@ window.commerceBackend.getLabelsData = async function (sku) {
  *   The parent SKU value if exists.
  */
 window.commerceBackend.updateGallery = async function (product, layout, productGallery, sku, parentSku) {
-  let rawProduct = null;
   const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
   const productData = window.commerceBackend.getProductData(mainSku, null, false);
   const viewMode = product.parents('.entity--type-node').attr('data-vmode');
@@ -694,8 +746,6 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     });
   }
 
-  let labels = await window.commerceBackend.getLabelsData(sku);
-
   // Maps gallery value from backend to the appropriate filter.
   let galleryType = null;
   switch (drupalSettings.alshayaRcs.pdpLayout) {
@@ -710,7 +760,6 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
       galleryType,
       {
         galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
-        labels,
         // The simple SKU.
         sku,
       },
@@ -724,6 +773,8 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
   if (gallery === '' || gallery === null) {
     return;
   }
+
+  renderProductLabelsData(product, sku, mainSku);
 
   if (jQuery(product).find('.gallery-wrapper').length > 0) {
     // Since matchback products are also inside main PDP, when we change the variant
