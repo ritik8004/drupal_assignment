@@ -197,6 +197,26 @@ const logApiStats = (response) => {
 };
 
 /**
+ * Logs API response to the logging system.
+ *
+ * @param {string} type
+ *   The type of log message.
+ * @param {*} message
+ *   The message text.
+ * @param {*} statusCode
+ *   The API response status code.
+ * @param {*} code
+ *   The code value in the response.
+ */
+const logApiResponse = (type, message, statusCode, code) => {
+  logger[type]('Commerce backend call failed. Response Code: @responseCode, Error Code: @resultCode, Exception: @message.', {
+    '@responseCode': statusCode,
+    '@resultCode': hasValue(code) ? code : '-',
+    '@message': hasValue(message) ? message : '-',
+  });
+};
+
+/**
  * Handle errors and messages.
  *
  * @param {Promise} apiResponse
@@ -213,9 +233,7 @@ const handleResponse = (apiResponse) => {
 
   // In case we don't receive any response data.
   if (typeof apiResponse.data === 'undefined') {
-    logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
-      '@responseCode': response.status,
-    });
+    logApiResponse('warning', 'Error while doing MDC api. Response result is empty.', apiResponse.status);
 
     const error = {
       data: {
@@ -236,25 +254,20 @@ const handleResponse = (apiResponse) => {
     // Place order can return 202, this isn't error.
     // Do nothing here, we will let code below return the response.
   } else if (apiResponse.status === 500) {
-    logger.warning('500 error from backend. Message: @message.', {
-      '@message': getProcessedErrorMessage(apiResponse),
-    });
+    logApiResponse('warning', getProcessedErrorMessage(apiResponse), apiResponse.status);
 
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 500;
-    response.data.error_message = getDefaultErrorMessage();
   } else if (apiResponse.status > 500) {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
-    response.data.error_message = 'Back-end system is down';
+    logApiResponse('warning', apiResponse.data.error_message, apiResponse.status);
   } else if (apiResponse.status === 401) {
     if (isUserAuthenticated()) {
       // Customer Token expired.
-      logger.warning('Got 401 response, redirecting to user/logout. Message: @message.', {
-        '@message': apiResponse.data.message,
-      });
+      logApiResponse('warning', `Got 401 response, redirecting to user/logout. ${apiResponse.data.message}`, apiResponse.status);
 
       // Log the user out and redirect to the login page.
       window.location = Drupal.url('user/logout');
@@ -265,7 +278,7 @@ const handleResponse = (apiResponse) => {
 
     response.data.error = true;
     response.data.error_code = 401;
-    response.data.error_message = apiResponse.data.message;
+    logApiResponse('warning', apiResponse.data.message, apiResponse.status);
   } else if (apiResponse.status !== 200) {
     // Set default values.
     response.data.error = true;
@@ -273,9 +286,7 @@ const handleResponse = (apiResponse) => {
 
     // Check for empty resonse data.
     if (!hasValue(apiResponse) || !hasValue(apiResponse.data)) {
-      logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
-        '@responseCode': response.status,
-      });
+      logApiResponse('warning', 'Error while doing MDC api. Response result is empty', apiResponse.status);
       response.data.error_code = 500;
     } else if (apiResponse.status === 404
       && !hasValue(apiResponse.data)
@@ -285,21 +296,13 @@ const handleResponse = (apiResponse) => {
       response.data.error_message = response.message;
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
-        '@message': response.data.error_message,
-        '@resultCode': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
-        '@responseCode': response.status,
-      });
+      logApiResponse('warning', response.data.error_message, apiResponse.status, response.data.code);
     } else if (hasValue(apiResponse.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(apiResponse);
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
-        '@message': response.data.error_message,
-        '@resultCode': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
-        '@responseCode': apiResponse.status,
-      });
+      logApiResponse('warning', response.data.error_message, apiResponse.status, apiResponse.data.code);
 
       // The following case happens when there is a stock mismatch between
       // Magento and OMS.
@@ -319,9 +322,7 @@ const handleResponse = (apiResponse) => {
     ) {
       // Other messages.
       const error = apiResponse.data.messages.error[0];
-      logger.info('Error while doing MDC api call. Error message: @message', {
-        '@message': error.message,
-      });
+      logApiResponse('info', error.message, apiResponse.status, error.code);
       response.data.error_code = error.code;
       response.data.error_message = error.message;
     }
@@ -331,9 +332,7 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
-    logger.info('Error while doing MDC api call. Error: @message', {
-      '@message': error.message,
-    });
+    logApiResponse('info', error.message, apiResponse.status, error.code);
   } else if (isArray(apiResponse.data.response_message)
     && hasValue(apiResponse.data.response_message[1])
     && apiResponse.data.response_message[1] === 'error') {
@@ -341,14 +340,16 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = 400;
     [response.data.error_message] = apiResponse.data.response_message;
-    logger.info('Error while doing MDC api call. Error: @message', {
-      '@message': JSON.stringify(response.data.response_message),
-    });
+    logApiResponse('info', JSON.stringify(response.data.response_message), apiResponse.status, response.data.error_code);
   }
 
   // Assign response data as is if no error.
   if (typeof response.data.error === 'undefined') {
     response.data = JSON.parse(JSON.stringify(apiResponse.data));
+  } else if (apiResponse.status > 400 && apiResponse.status < 700) {
+    // Format error for specific cases so that in the front end we show user
+    // friendly error messages.
+    response.data.error_message = getDefaultErrorMessage();
   }
 
   return new Promise((resolve) => resolve(response));
