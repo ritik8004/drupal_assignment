@@ -13,6 +13,14 @@ use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_update_N().
+ */
+function alshaya_bp_transac_update_8017() {
+  // Metatag update.
+  _alshaya_bp_transac_save_metatag();
+}
+
+/**
+ * Implements hook_update_N().
  *
  * [6.3.0] Add attr_brand_category to facets in algolia.
  */
@@ -75,7 +83,7 @@ function alshaya_bp_transac_update_8014() {
     'optional',
     AlshayaConfigManager::MODE_MERGE
   );
-  
+
   // Re-indexing all the products.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 
@@ -182,28 +190,28 @@ function alshaya_bp_transac_update_8010() {
  * Update category term path aliases.
  */
 function alshaya_bp_transac_update_8009() {
- $manager = \Drupal::service('alshaya_config.manager');
- $configs = ['pathauto.pattern.product_category_pathauto'];
- $manager->updateConfigs($configs, 'alshaya_acm_product_category');
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = ['pathauto.pattern.product_category_pathauto'];
+  $manager->updateConfigs($configs, 'alshaya_acm_product_category');
 
- // Now run batch process to update the term aliases.
- // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
- $batch = [
-   'title' => t('Bulk updating URL aliases'),
-   'operations' => [
-     ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
-     ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
-       [
-         'canonical_entities:taxonomy_term',
-         'all',
-       ],
-     ],
-   ],
-   'finished' => '_alshaya_bp_transac_term_alias_update_batch_finished',
-   'progressive' => FALSE,
- ];
+  // Now run batch process to update the term aliases.
+  // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
+  $batch = [
+    'title' => t('Bulk updating URL aliases'),
+    'operations' => [
+      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
+      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
+        [
+          'canonical_entities:taxonomy_term',
+          'all',
+        ],
+      ],
+    ],
+    'finished' => '_alshaya_bp_transac_term_alias_update_batch_finished',
+    'progressive' => FALSE,
+  ];
 
- batch_set($batch);
+  batch_set($batch);
 }
 
 /**
@@ -495,6 +503,9 @@ function alshaya_bp_transac_install() {
 
   // Install metatag translations.
   _alshaya_bp_transac_save_metatag_translations();
+
+  // Install metatag
+  _alshaya_bp_transac_save_metatag();
 }
 
 /**
@@ -549,4 +560,30 @@ function _alshaya_bp_transac_save_metatag_translations() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_bp_transac_save_metatag() {
+  // Update global metatag defaults.
+  $config_factory = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product');
+  $tags = $config_factory->get('tags');
+  $tags['title'] = 'Buy [node:title] online | [site:name]';
+  $tags['og_title'] = 'Buy [node:title] online | [site:name]';
+  $tags['description'] = 'Buy now online [node:title] at best price on [site:name]. Exclusive deals and offers on [node:title] with availalbe delivery to [alshaya_seo:city1], [alshaya_seo:city2], and all areas around [alshaya_seo:country].';
+  $tags['og_description'] = 'Buy now online [node:title] at best price on [site:name]. Exclusive deals and offers on [node:title] with availalbe delivery to [alshaya_seo:city1], [alshaya_seo:city2], and all areas around [alshaya_seo:country].';
+  $config_factory->set('tags', $tags);
+  $config_factory->save();
+
+  // Add ar translation for metatag config.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.node__acq_product');
+  $tags = [
+    'title' => 'شراء [node:title] اون لاين | [site:name]',
+    'og_title' => 'شراء [node:title] اون لاين | [site:name]',
+    'description' => 'متاحة الآن بجودة عالية المستوى، تقدم بوتس [site:name] الاستثنائية بأفضل سعر. اشتر الآن [node:title] بتوصيل متاح إلى [alshaya_seo:city1],[alshaya_seo:city2] وكل أنحاء [alshaya_seo:country]',
+    'og_description' => 'متاحة الآن بجودة عالية المستوى، تقدم بوتس [site:name] الاستثنائية بأفضل سعر. اشتر الآن [node:title] بتوصيل متاح إلى [alshaya_seo:city1],[alshaya_seo:city2] وكل أنحاء [alshaya_seo:country]',
+  ];
+  $config->set('tags', $tags);
+  $config->save();
 }
