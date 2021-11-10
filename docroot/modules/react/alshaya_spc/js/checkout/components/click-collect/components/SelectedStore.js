@@ -88,7 +88,7 @@ const SelectedStore = ({ store, open, closePanel }) => {
             )}
           </div>
           <div className="spc-cnc-contact-form">
-            <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} handleScrollTo={handleScrollTo} />
+            <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} handleScrollTo={handleScrollTo} errorSuccessMessage={errorSuccessMessage} />
           </div>
         </div>
       </div>
