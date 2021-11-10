@@ -43,9 +43,7 @@
         variant.product.media_cart = null;
         if (Drupal.hasValue(variant.product.assets_cart)) {
           mediaData = JSON.parse(variant.product.assets_cart);
-          variant.product.media_cart = mediaData.find(function setCartMedia(media) {
-            return media.styles.cart_thumbnail;
-          });
+          variant.product.media_cart = mediaData[0].styles.cart_thumbnail;
         }
       }
       catch (e) {

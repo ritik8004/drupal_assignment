@@ -124,8 +124,8 @@
    * @param {object}
    *   The raw product object.
    *
-   * @return {object}
-   *   The first child raw product object.
+   * @return {object|null}
+   *   The first child raw product object or null if no child with media found.
    *
    * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstChildWithMedia()
    */
@@ -134,7 +134,11 @@
       return Drupal.hasValue(variant.product.media) ? variant.product : false;
     });
 
-    return firstChild.product;
+    if (Drupal.hasValue(firstChild)) {
+      return firstChild.product;
+    }
+
+    return null;
   };
 
   /**
@@ -149,7 +153,8 @@
    * @see \Drupal\alshaya_acm_product\SkuImagesManager::getSkuForGallery()
    */
   const getSkuForGallery = function (product) {
-    let child = product;
+    let skuForGallery = product;
+    let child = null;
 
     switch (drupalSettings.alshayaRcs.useParentImages) {
       case 'never':
@@ -159,7 +164,8 @@
         break;
     }
 
-    return child;
+    skuForGallery = Drupal.hasValue(child) ? child : skuForGallery;
+    return skuForGallery;
   };
 
   /**
