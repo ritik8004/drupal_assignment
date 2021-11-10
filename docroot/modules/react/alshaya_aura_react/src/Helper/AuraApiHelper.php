@@ -137,12 +137,12 @@ class AuraApiHelper {
         ? array_column($response['items'], 'value', 'code')
         : array_column($response['items'], 'value');
 
-      // Getting `code` and `short_value` keys for tier types.
+      // Getting `code` `value` and `short_value` keys for tier types.
       if ($value === AuraDictionaryApiConstants::APC_TIER_TYPES) {
         $data = [];
-        foreach ($response['items'] as $values) {
-          $data['value'][$values['code']] = $values['value'];
-          $data['shortValue'][$values['code']] = $values['short_value'];
+        foreach ($response['items'] as $items) {
+          $data['value'][$items['code']] = $items['value'];
+          $data['shortValue'][$items['code']] = $items['short_value'];
         }
       }
 
