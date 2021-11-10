@@ -270,7 +270,7 @@ const handleResponse = (apiResponse) => {
   } else if (apiResponse.status === 401) {
     if (isUserAuthenticated()) {
       // Customer Token expired.
-      logApiResponse('warning', apiResponse.data.message, apiResponse.status);
+      logApiResponse('warning', `Got 401 response, redirecting to user/logout. ${apiResponse.data.message}`, apiResponse.status);
 
       // Log the user out and redirect to the login page.
       window.location = Drupal.url('user/logout');
