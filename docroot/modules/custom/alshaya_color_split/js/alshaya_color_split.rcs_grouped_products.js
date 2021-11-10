@@ -89,9 +89,11 @@
         if (!processedColors.includes(variant.product.color)) {
           processedColors.push(variant.product.color);
           // Get the labels for the color attribute.
-          const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product.color);
-          // Update the array with the color values.
-          colorAttributeValues.push({value_index: variant.product.color, store_label: label});
+          if (Drupal.hasValue(variant.product.color)) {
+            const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product.color);
+            // Update the array with the color values.
+            colorAttributeValues.push({value_index: variant.product.color, store_label: label});
+          }
         }
 
         mainProduct.variants.push(variant);
