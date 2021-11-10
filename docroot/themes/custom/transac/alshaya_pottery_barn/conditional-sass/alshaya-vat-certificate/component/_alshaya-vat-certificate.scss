@@ -1,0 +1,16 @@
+.block-alshaya-vat-certificate-block {
+  @include breakpoint($only-mobile) {
+    margin-top: -1rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    html[lang=ar] & {
+      margin-top: -1.25rem;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    text-align: $right;
+    margin-#{$right}: 0;
+  }
+}

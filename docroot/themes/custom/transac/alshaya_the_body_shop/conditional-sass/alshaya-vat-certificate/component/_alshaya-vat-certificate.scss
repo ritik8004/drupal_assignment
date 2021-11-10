@@ -1,0 +1,11 @@
+.block-alshaya-vat-certificate-block {
+  float: $left;
+  clear: both;
+  margin-top: -1rem;
+  margin-bottom: 1rem;
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+    width: 100%;
+  }
+}

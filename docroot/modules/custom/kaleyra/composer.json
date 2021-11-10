@@ -1,0 +1,22 @@
+{
+  "name": "drupal/kaleyra",
+  "type": "drupal-module",
+  "description": "Allows Drupal websites to send SMS via Kaleyra service.",
+  "license": "GPL-2.0+",
+  "homepage": "http://drupal.org/project/kaleyra",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/kaleyra",
+    "source": "https://git.drupalcode.org/project/kaleyra"
+  },
+  "require": {
+    "ext-json": "*",
+    "drupal/core": "^8.8 || ^9"
+  },
+  "authors": [
+    {
+      "name": "Piyuesh Kumar",
+      "homepage": "https://www.drupal.org/u/piyuesh23",
+      "role": "Author"
+    }
+  ]
+}

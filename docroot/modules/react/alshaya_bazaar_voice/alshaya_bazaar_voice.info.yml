@@ -3,7 +3,9 @@ type: module
 description: 'Provides integration with BazaarVoice.'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - bazaar_voice:bazaar_voice
   - alshaya_react:alshaya_react
   - alshaya_spc:alshaya_spc
+  - alshaya_mobile_app:alshaya_mobile_app

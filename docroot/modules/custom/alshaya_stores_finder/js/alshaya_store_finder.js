@@ -139,7 +139,7 @@
 
             if (runscript) {
               if ($('.current-view').length) {
-                $('.current-view #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
+                $('.current-view .geolocation-geocoder-google-places-api').val(results[1].formatted_address);
                 $('.current-view input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
                 $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
               }
@@ -154,7 +154,7 @@
           if ($('.current-view').length !== 0) {
             setTimeout(function () {
               if (runscript) {
-                $('.current-view form #edit-submit-stores-finder').trigger('click');
+                $('.current-view form .block-store-finder-form__input__submit').trigger('click');
               }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');

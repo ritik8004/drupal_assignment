@@ -51,7 +51,7 @@ class SystemSettings {
     // Get host_site_code or acsf_site_name based on environment.
     if ($env === 'local') {
       // Require local_sites.php file for host site code.
-      require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
+      require_once DRUPAL_ROOT . '/../factory-hooks/pre-sites-php/local_sites.php';
     }
     else {
       // Require sites.inc and post-sites-php/includes.php for ACSF site_name.
@@ -73,12 +73,10 @@ class SystemSettings {
 
     // Require more files as and when required.
     // Files should not have any Drupal specific code.
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/knet.php';
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/cybersource.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/exception_message_type.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/mada_bins.php';
-    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/commerce_backend.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_checkout_settings.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_address_fields.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/alshaya_backend_calls_options.settings.php';

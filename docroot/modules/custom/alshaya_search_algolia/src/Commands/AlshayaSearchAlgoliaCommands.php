@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_search_algolia\Commands;
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_master\Service\AlshayaEntityHelper;
@@ -128,7 +128,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
     $alshaya_algolia_react_setting_values = \Drupal::config('alshaya_algolia_react.settings');
     $app_id = $alshaya_algolia_react_setting_values->get('application_id');
     $app_secret_admin = $alshaya_algolia_react_setting_values->get('search_api_key');
-    $client = new Client($app_id, $app_secret_admin);
+    $client = SearchClient::create($app_id, $app_secret_admin);
 
     $index_name = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
     $languages = \Drupal::languageManager()->getLanguages();
@@ -149,7 +149,15 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
       }, $nids);
 
       try {
-        $objects = $index->getObjects($objectIDs, 'final_price,original_price,sku,nid');
+        $objects = $index->getObjects($objectIDs, [
+          'attributesToRetrieve' => [
+            'nid',
+            'final_price',
+            'original_price',
+            'sku',
+          ],
+        ]);
+
       }
       catch (\Exception $e) {
         continue;

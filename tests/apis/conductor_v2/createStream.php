@@ -19,6 +19,7 @@ $countries = [
   'eg' => 'Egypt',
   'bh' => 'Bahrain',
   'qa' => 'Qatar',
+  'jo' => 'Jordan',
 ];
 
 $languages = [
@@ -87,7 +88,7 @@ foreach ($countries as $country_code => $country_name) {
       'Drupal system details for ' . ucfirst(strtolower($brand_name)) . ' ' . strtoupper($country_code) . ' ' . ucfirst(strtolower($lang_name)) . ' - ' . ucfirst(strtolower($env)),
       $site->id,
       'drupal',
-      $env != 'live' ? 'https://' . $brand_code . $country_code . '-' . $env . '.factory.alshaya.com/' . $lang_code : 'https://' . $brand_code . $country_code . '.factory.alshaya.com/' . $lang_code,
+      $env != 'live' ? 'https://' . $brand_code . $country_code . $stack_id . '-' . $env . '.factory.alshaya.com/' . $lang_code : 'https://' . $brand_code . $country_code . '.factory.alshaya.com/' . $lang_code,
       $magento_data['store_id'][$lang_code],
       $drupal_auth->id
     );

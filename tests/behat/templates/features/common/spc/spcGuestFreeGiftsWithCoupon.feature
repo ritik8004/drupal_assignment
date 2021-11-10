@@ -1,4 +1,4 @@
-@javascript @promotions @free-gifts @smoke @guest
+@javascript @promotions @free-gifts @smoke @guest @mckwuat @mcsauat @mcaeuat
 Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupon-code for Guest User for single and multiple products
 
   @desktop @single_product
@@ -11,7 +11,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     And the element "#block-content .free-gift-promotions .free-gift-coupon-code" should exist
-    Then I press "{add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -71,6 +71,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
@@ -88,7 +89,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     And the element "#block-content .free-gift-promotions .free-gift-coupon-code" should exist
-    Then I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -147,6 +148,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
@@ -172,7 +174,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And I wait 5 seconds
     And I click on ".ui-dialog-titlebar-close" element
     And I wait 5 seconds
-    Then I press "{add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -230,6 +232,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
@@ -245,7 +248,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     And the element "#block-content .free-gift-promotions .free-gift-coupon-code" should exist
-    Then I press "{add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -295,6 +298,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
@@ -312,7 +316,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     And the element "#block-content .free-gift-promotions .free-gift-coupon-code" should exist
-    When I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -361,6 +365,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
@@ -375,7 +380,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     And the element "#block-content .free-gift-promotions .free-gift-coupon-code" should exist
-    Then I press "{add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -422,6 +427,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page with coupo
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"

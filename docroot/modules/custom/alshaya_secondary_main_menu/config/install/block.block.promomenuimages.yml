@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_secondary_main_menu
+  theme:
+    - alshaya_white_label
+id: promomenuimages
+theme: alshaya_white_label
+region: pre_content
+weight: 0
+provider: null
+plugin: promo_menu_images
+settings:
+  id: promo_menu_images
+  label: 'Promo Menu Images'
+  provider: alshaya_secondary_main_menu
+  label_display: '0'
+visibility: {  }

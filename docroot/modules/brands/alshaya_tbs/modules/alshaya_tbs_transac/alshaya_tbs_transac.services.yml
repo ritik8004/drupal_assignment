@@ -1,0 +1,9 @@
+services:
+  alshaya_tbs_transac.product_info_requested_event:
+    class: Drupal\alshaya_tbs_transac\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@config.factory'
+      - '@alshaya_acm_product.helper'
+    tags:
+      - { name: 'event_subscriber' }

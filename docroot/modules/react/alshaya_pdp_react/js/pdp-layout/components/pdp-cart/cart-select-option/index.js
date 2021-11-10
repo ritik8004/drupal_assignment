@@ -2,7 +2,6 @@ import React from 'react';
 import GroupSelectOption from '../group-select-option';
 import NonGroupSelectOption from '../non-group-select-option';
 import SwatchSelectOption from '../swatch-select-option';
-import { closeModalHelper } from '../../../../utilities/pdp_layout';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
@@ -47,10 +46,6 @@ class CartSelectOption extends React.Component {
         selected: value,
       });
     }
-
-    const currentContext = this;
-
-    closeModalHelper(['overlay-select', 'overlay-related-select'], ['magv2-select-popup-container', 'magv2-crossell-popup-container'], currentContext.closeModal);
   }
 
   // To get the option values of the
@@ -198,7 +193,7 @@ class CartSelectOption extends React.Component {
     );
 
     const selectOption = (!swatchStatus) ? (
-      <div className="non-grouped-attr">
+      <div className="non-grouped-attr" onClick={(e) => (e.target.classList.contains('non-grouped-attr') ? this.closeModal(e) : null)}>
         <NonGroupSelectOption
           key={attributeKey}
           keyId={attributeKey}
@@ -217,7 +212,7 @@ class CartSelectOption extends React.Component {
     ) : swatchSelectOption;
 
     return (groupStatus) ? (
-      <div className="grouped-attr">
+      <div className="grouped-attr" onClick={(e) => (e.target.classList.contains('grouped-attr') ? this.closeModal(e) : null)}>
         <GroupSelectOption
           key={attributeKey}
           keyId={attributeKey}

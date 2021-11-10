@@ -1,0 +1,123 @@
+.labels-wrapper {
+  > .labels-container {
+    position: absolute;
+    z-index: 1;
+    // Add a small default space for blazy to realise there is a image here to be rendered.
+    min-width: 0.625rem;
+    min-height: 0.625rem;
+
+    > .label {
+      // Safety for super large images.
+      max-width: 5rem;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    &.top-left {
+      top: 0.5rem;
+      #{$left}: 0.5rem;
+      text-align: $left;
+
+      @include breakpoint($tablet) {
+        top: 0.9375rem;
+        #{$left}: 0.9375rem;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        top: 0;
+        #{$left}: 0;
+
+        @include breakpoint($tablet) {
+          top: 0;
+          #{$left}: 0;
+        }
+      }
+    }
+
+    &.top-right {
+      top: 0.5rem;
+      #{$right}: 0.5rem;
+      text-align: $right;
+
+      @include breakpoint($tablet) {
+        top: 0.9375rem;
+        #{$right}: 0.9375rem;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        top: 0;
+        #{$right}: 0;
+
+        @include breakpoint($tablet) {
+          top: 0;
+          #{$right}: 0;
+        }
+      }
+    }
+
+    &.bottom-left {
+      bottom: 0.5rem;
+      #{$left}: 0.5rem;
+      text-align: $left;
+
+      @include breakpoint($tablet) {
+        bottom: 0.9375rem;
+        #{$left}: 0.9375rem;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        bottom: 0;
+        #{$left}: 0;
+
+        @include breakpoint($tablet) {
+          bottom: 0;
+          #{$left}: 0;
+        }
+      }
+    }
+
+    &.bottom-right {
+      bottom: 0.5rem;
+      #{$right}: 0.5rem;
+      text-align: $right;
+
+      @include breakpoint($tablet) {
+        bottom: 0.9375rem;
+        #{$right}: 0.9375rem;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        bottom: 0;
+        #{$right}: 0;
+
+        @include breakpoint($tablet) {
+          bottom: 0;
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+
+  .labels-container > .label {
+    margin-bottom: 0.625rem;
+
+    .c-pdp & {
+      // PDP lozenges are 20px apart on desktop.
+      @include breakpoint($desktop) {
+        margin-bottom: 1.25rem;
+      }
+    }
+  }
+
+  .labels-container > .label:only-child,
+  .labels-container > .label:last-child {
+    margin-bottom: 0;
+  }
+}

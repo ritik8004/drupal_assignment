@@ -1,0 +1,15 @@
+%page-title {
+  color: $page_title;
+  font-family: $tbs-recoleta-semibold;
+  text-transform: capitalize;
+}
+
+.c-page-title {
+  @extend %page-title;
+
+  font-size: 1.875rem;
+
+  @include breakpoint($only-mobile) {
+    font-size: 1.5rem;
+  }
+}

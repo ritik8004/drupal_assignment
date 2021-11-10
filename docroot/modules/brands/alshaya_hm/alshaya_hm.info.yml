@@ -3,7 +3,7 @@ type: module
 description: 'The dedicated module for HnM brand.'
 package: Alshaya
 core: 8.x
-
+core_version_requirement: ^8 || ^9
 themes:
   - alshaya_hnm
 

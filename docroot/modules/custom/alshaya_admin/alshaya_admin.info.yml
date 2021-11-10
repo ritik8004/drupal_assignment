@@ -2,6 +2,7 @@ name: 'Alshaya Admin'
 description: 'Administration related customization for Alshaya.'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya
 dependencies:
   - alshaya_image_styles:alshaya_image_styles

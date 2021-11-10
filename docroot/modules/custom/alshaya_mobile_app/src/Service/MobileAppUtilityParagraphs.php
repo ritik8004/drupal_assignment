@@ -8,7 +8,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -28,6 +28,8 @@ use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Connection;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
+use Drupal\Core\Path\PathValidatorInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -107,7 +109,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The language manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
@@ -133,6 +135,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Block plugin manager.
    * @param \Drupal\Core\Database\Connection $database
    *   Database service.
+   * @param Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_manager
+   *   Super Category Manager.
+   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   *   Path Validator service object.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -154,9 +160,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     RedirectRepository $redirect_repository,
     SkuInfoHelper $sku_info_helper,
     BlockManagerInterface $block_plugin_manager,
-    Connection $database
+    Connection $database,
+    AlshayaSuperCategoryManager $super_category_manager,
+    PathValidatorInterface $path_validator
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database, $super_category_manager, $path_validator);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
@@ -810,12 +818,17 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
     if ($data['accordion']) {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
+      $term = $this->skuInfoHelper->getEntityTranslation($term, $this->currentLanguage);
       if (empty($data['title'])) {
-        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
-        $term = $this->skuInfoHelper->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
+      $items = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
+      // Adding deeplink if there is no items.
+      if (empty($items)) {
+        $data['deeplink'] = $this->getDeepLink($term);
+      }
+      $data['items'] = $items;
     }
     else {
       // Invoke views display in executeInRenderContext to avoid cached

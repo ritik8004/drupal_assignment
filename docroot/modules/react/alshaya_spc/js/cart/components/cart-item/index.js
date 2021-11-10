@@ -16,11 +16,13 @@ import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
 import { getStorageInfo } from '../../../utilities/storage';
-import { isQtyLimitReached } from '../../../utilities/checkout_util';
+import { isQtyLimitReached, customStockErrorMessage } from '../../../utilities/checkout_util';
 import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
+import AdvantageCardExcludedItem from '../advantage-card';
+import CartShippingMethods from '../cart-shipping-methods';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -98,9 +100,10 @@ export default class CartItem extends React.Component {
 
         let messageInfo = null;
         if (cartResult.error !== undefined) {
+          const errorMessage = customStockErrorMessage(cartResult);
           messageInfo = {
             type: 'error',
-            message: cartResult.error_message,
+            message: errorMessage,
           };
         } else {
           messageInfo = {
@@ -186,6 +189,8 @@ export default class CartItem extends React.Component {
       productPromotion,
       couponCode,
       selectFreeGift,
+      totalsItems,
+      cartShippingMethods,
     } = this.props;
 
     const {
@@ -199,6 +204,7 @@ export default class CartItem extends React.Component {
         url,
         price,
         maxSaleQty,
+        parentSKU,
       },
     } = this.state;
     const cartImage = {
@@ -285,21 +291,33 @@ export default class CartItem extends React.Component {
             </div>
           </div>
         </div>
-        <div className="spc-promotions free-gift-container">
-          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />)}
-
-          <ConditionalView condition={freeGiftPromotion !== null}>
-            <CartPromotionFreeGift
-              key={`${sku}-free-gift`}
-              promo={freeGiftPromotion}
-              sku={sku}
-              couponCode={couponCode}
-              selectFreeGift={selectFreeGift}
-            />
-          </ConditionalView>
+        <div className="spc-cart-item-bottom-wrapper">
+          <div className="spc-promotions free-gift-container">
+            {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />)}
+            <ConditionalView condition={freeGiftPromotion !== null}>
+              <CartPromotionFreeGift
+                key={`${sku}-free-gift`}
+                promo={freeGiftPromotion}
+                sku={sku}
+                couponCode={couponCode}
+                selectFreeGift={selectFreeGift}
+              />
+            </ConditionalView>
+          </div>
+          {/* Displaying cart shipping methods when express delivery enabled */}
+          <div className="spc-cart-shipping-methods shipping-methods">
+            <ConditionalView condition={cartShippingMethods !== null}>
+              <CartShippingMethods
+                sku={sku}
+                parentSKU={parentSKU}
+                cartShippingMethods={cartShippingMethods}
+              />
+            </ConditionalView>
+          </div>
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />
+          <AdvantageCardExcludedItem type="warning" totalsItems={totalsItems} id={id} />
           <ItemLowQuantity type="alert" stock={stock} qty={qty} in_stock={inStock} />
           {drupalSettings.quantity_limit_enabled
           && (

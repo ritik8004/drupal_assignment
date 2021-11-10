@@ -23,21 +23,3 @@
     }
   }
 }
-
-.c-address-book {
-  .region__content {
-    .profile-form {
-      @include breakpoint($desktop) {
-        margin-top: 3rem;
-      }
-    }
-  }
-
-  .address-book-address {
-    .mobile-number-field .mobile-input--wrapper {
-      #edit-field-address-0-address-mobile-number-mobile-error {
-        margin-top: -0.5rem;
-      }
-    }
-  }
-}

@@ -361,7 +361,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       $this->tempStore->delete($state_key);
     }
     catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger()->addMessage($e->getMessage(), 'error');
       $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
       return new RedirectResponse($url, 302);
     }
@@ -445,7 +445,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $data = $this->tempStore->get($state_key);
 
     // @todo Confirm message.
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
+    $this->messenger()->addMessage($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $quote_id,
       '@payment_id' => $data['payment_id'],
       '@result_code' => $data['result'],

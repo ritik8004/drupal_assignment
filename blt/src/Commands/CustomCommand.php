@@ -4,6 +4,7 @@ namespace Acquia\Blt\Custom\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Robo\Contract\VerbosityThresholdInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -238,9 +239,9 @@ class CustomCommand extends BltTasks {
    * @description Setup local dev environment.
    */
   public function refreshLocal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
-    $list = implode(array_keys($sites), ", ");
+    $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall ($list):");
     }
@@ -254,7 +255,8 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+
+    $uri = self::getSiteUri($site);
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -285,9 +287,9 @@ class CustomCommand extends BltTasks {
    * @description Reinstall local dev environment.
    */
   public function refreshLocalDrupal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
-    $list = implode(array_keys($sites), ", ");
+    $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall, ($list):");
     }
@@ -301,7 +303,8 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site:, ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+
+    $uri = self::getSiteUri($site);
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -350,19 +353,20 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('local:reset-local-settings');
 
-    $devel_env = getenv('DEVEL_ENV');
-    $is_lando = !empty($devel_env) && $devel_env == 'lando';
+    $app_root = $this->getConfigValue('repo.root');
     $sudo_prefix = '';
 
-    if ($is_lando) {
-      $app_root = '/app';
-
+    if (getenv('LANDO')) {
       // Flush memcache.
-      $this->_exec('echo "flush_all" | nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache2 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
+    }
+    elseif (getenv('AH_SITE_ENVIRONMENT')) {
+      $this->taskDrush()
+        ->drush('cr')
+        ->uri($uri)
+        ->run();
     }
     else {
-      $app_root = '/var/www/alshaya';
       $sudo_prefix = 'sudo ';
       // Restart memcache to avoid issues because of old configs.
       $this->_exec($sudo_prefix . 'service memcached restart');
@@ -451,6 +455,114 @@ class CustomCommand extends BltTasks {
       ->run();
 
     return $result;
+  }
+
+  /**
+   * Wrapper to get folders which require compiling.
+   *
+   * @return array
+   *   Folders containing webpack.config.js file.
+   */
+  private function getFoldersWithJs() {
+    $folders = [];
+
+    $finder = new Finder();
+
+    // Find all the folders containing the file used to specify entry points.
+    $finder->name('webpack.config.js');
+
+    // We need to find inside custom code only.
+    $files = $finder->in($this->getConfigValue('repo.root') . '/docroot/modules/custom');
+
+    foreach ($files as $file) {
+      $dir = str_replace('webpack.config.js', '', $file->getRealPath());
+
+      // Ignore webpack.config.js found inside node_modules.
+      if (strpos($dir, 'node_modules') > -1) {
+        continue;
+      }
+
+      $folders[] = $dir;
+    }
+
+    return $folders;
+  }
+
+  /**
+   * Compile all the JS for development use.
+   *
+   * @command source:build:js-assets-dev
+   * @aliases js:build:dev
+   */
+  public function assetsBuildDev() {
+    foreach ($this->getFoldersWithJs() as $dir) {
+      // Print the directory path to for user.
+      $this->say($dir);
+
+      // Build the files.
+      $this->taskExec('npm run build:dev')
+        ->dir($dir)
+        ->run();
+    }
+  }
+
+  /**
+   * Compile all the JS for production use.
+   *
+   * @command source:build:js-assets
+   * @aliases js:build
+   */
+  public function assetsBuild() {
+    foreach ($this->getFoldersWithJs() as $dir) {
+      // Print the directory path to for user.
+      $this->say($dir);
+
+      // Build the files.
+      $this->taskExec('npm run build')
+        ->dir($dir)
+        ->run();
+    }
+  }
+
+  /**
+   * Install the npm packages.
+   *
+   * @command source:setup:js-assets
+   * @aliases js:setup
+   */
+  public function assetsSetup() {
+    $this->taskExec('npm install')
+      ->dir($this->getConfigValue('repo.root') . '/docroot/modules/custom')
+      ->run();
+  }
+
+  /**
+   * Get the site url for local.
+   *
+   * @param string $site_code
+   *   Site Code.
+   *
+   * @return string
+   *   URL.
+   */
+  public static function getSiteUri($site_code) {
+    if (getenv('LANDO')) {
+      return $site_code . '.alshaya.lndo.site';
+    }
+
+    if (getenv('AH_SITE_ENVIRONMENT') === 'ide') {
+      // Store the site code in file.
+      file_put_contents('/home/ide/project/site.txt', $site_code);
+
+      if (getenv('SERVER_NAME')) {
+        return getenv('SERVER_NAME');
+      }
+
+      // Cloud IDE doesn't support multiple sites.
+      return getenv('ACQUIA_APPLICATION_UUID') . '.web.ahdev.cloud';
+    }
+
+    return 'local.alshaya-' . $site_code . '.com';
   }
 
 }

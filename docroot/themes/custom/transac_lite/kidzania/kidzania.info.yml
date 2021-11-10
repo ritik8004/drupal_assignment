@@ -1,7 +1,8 @@
 name: KidZania
-description: Theme for KidZania brands.
+description: Theme for KidZania brand - Transac Lite.
 type: theme
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: cog
 alshaya_theme_type: alshaya_transac_lite
 

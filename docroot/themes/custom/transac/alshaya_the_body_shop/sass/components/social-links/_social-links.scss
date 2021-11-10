@@ -1,0 +1,105 @@
+.c-social-links {
+  [class^="c-social-links--"] {
+    &::before {
+      font-size: 2.5rem;
+    }
+  }
+
+  ul {
+    margin-#{$left}: -0.75rem;
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        margin-right: -0.5rem;
+      }
+    }
+  }
+}
+
+.c-social-links {
+  .c-social-links {
+    &--facebook {
+      &::before {
+        @include ic-social;
+
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/facebook.svg);
+      }
+
+      &:hover {
+        &::before {
+          background-image: url(#{$tbs_theme_img_directory_path}/icons/facebook.svg);
+        }
+      }
+    }
+
+    &--instagram {
+      &::before {
+        @include ic-social;
+
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/instagram.png);
+      }
+
+      &:hover {
+        &::before {
+          background-image: url(#{$tbs_theme_img_directory_path}/icons/instagram.png);
+        }
+      }
+    }
+
+    &--twitter {
+      &::before {
+        @include ic-social;
+
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/twitter.svg);
+      }
+
+      &:hover {
+        &::before {
+          background-image: url(#{$tbs_theme_img_directory_path}/icons/twitter.svg);
+        }
+      }
+    }
+
+    &--youtube {
+      &::before {
+        @include ic-social;
+
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/youtube.svg);
+      }
+
+      &:hover {
+        &::before {
+          background-image: url(#{$tbs_theme_img_directory_path}/icons/youtube.svg);
+        }
+      }
+    }
+
+    &--pinterest {
+      &::before {
+        @include ic-social;
+
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/pinterest.svg);
+      }
+
+      &:hover {
+        &::before {
+          background-image: url(#{$tbs_theme_img_directory_path}/icons/pinterest.svg);
+        }
+      }
+    }
+
+    &--facebook,
+    &--instagram,
+    &--twitter,
+    &--youtube,
+    &--pinterest {
+      &:hover {
+        &::before {
+          background-size: contain;
+          width: 2.5rem;
+          height: 2.5rem;
+        }
+      }
+    }
+  }
+}

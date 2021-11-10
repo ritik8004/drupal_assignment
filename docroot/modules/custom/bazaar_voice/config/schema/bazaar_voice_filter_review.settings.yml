@@ -1,0 +1,7 @@
+bazaar_voice_filter_review.settings:
+  type: config_object
+  label: 'BazaarVoice filter reviews settings'
+  mapping:
+    pdp_filter_options:
+      type: text
+      label: 'Provide filter options to be shown in pdp review page.'

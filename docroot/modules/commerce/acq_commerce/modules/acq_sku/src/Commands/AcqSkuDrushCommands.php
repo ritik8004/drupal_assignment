@@ -12,12 +12,11 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Drupal\acq_sku\ConductorCategorySyncHelper;
@@ -93,20 +92,6 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $entityTypeManager;
 
   /**
-   * Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
-
-  /**
-   * Entity Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
-   */
-  private $entityManager;
-
-  /**
    * Language Manager service.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -167,10 +152,6 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Database connection object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Type Manager.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $queryFactory
-   *   Query Factory.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
-   *   Entity Manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $langaugeManager
    *   Language Manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -192,8 +173,6 @@ class AcqSkuDrushCommands extends DrushCommands {
                               LoggerChannelFactoryInterface $loggerChannelFactory,
                               Connection $connection,
                               EntityTypeManagerInterface $entityTypeManager,
-                              QueryFactory $queryFactory,
-                              EntityManagerInterface $entityManager,
                               LanguageManagerInterface $langaugeManager,
                               ModuleHandlerInterface $moduleHandler,
                               CacheBackendInterface $linkedSkuCache,
@@ -209,8 +188,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->drupalLogger = $loggerChannelFactory->get('acq_sku');
     $this->connection = $connection;
     $this->entityTypeManager = $entityTypeManager;
-    $this->queryFactory = $queryFactory;
-    $this->entityManager = $entityManager;
     $this->languageManager = $langaugeManager;
     $this->moduleHandler = $moduleHandler;
     $this->linkedSkuCache = $linkedSkuCache;
@@ -313,6 +290,18 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   public function syncCategories() {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
+
+    // Conditionally increase memory limit to double the current limit.
+    $new_limit = (((int) ini_get('memory_limit')) * 2) . 'M';
+
+    // We still let that be overridden via settings.
+    $new_limit = Settings::get('acq_sku_sync_commerce_cats_memory_limit', $new_limit);
+
+    ini_set('memory_limit', $new_limit);
+    $this->drupalLogger->notice('Memory limit increased for sync-commerce-cats to @limit', [
+      '@limit' => ini_get('memory_limit'),
+    ]);
+
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
 
     // We trigger delete only if there is any term update/create.
@@ -335,11 +324,12 @@ class AcqSkuDrushCommands extends DrushCommands {
 
         // Confirmation to delete old categories.
         if ($this->io()->confirm(dt('Are you sure you want to clean these old categories'), FALSE)) {
+          $orphan_categories = array_keys($orphan_categories);
 
           // Allow other modules to skipping the deleting of terms.
           $this->moduleHandler->alter('acq_sku_sync_categories_delete', $orphan_categories);
 
-          foreach ($orphan_categories as $tid => $rs) {
+          foreach ($orphan_categories as $tid) {
             $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
             if ($term instanceof TermInterface) {
               // Delete the term.
@@ -694,9 +684,9 @@ class AcqSkuDrushCommands extends DrushCommands {
         ];
       }
 
+      $context_results = &$context['sandbox']['results'];
       // Allow other modules to add data to be deleted when cleaning up.
-      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context);
-
+      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context_results);
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
       $context['sandbox']['max'] = count($context['sandbox']['results']);
@@ -983,6 +973,25 @@ class AcqSkuDrushCommands extends DrushCommands {
   public function processBlacklistedProduct() {
     $event = new ProcessBlackListedProductsEvent();
     $this->dispatcher->dispatch(ProcessBlackListedProductsEvent::EVENT_NAME, $event);
+  }
+
+  /**
+   * Drush command to get the item count we need to delete.
+   *
+   * Get the items count we need to delete during commerce data cleanup.
+   *
+   * @validate-module-enabled acq_sku
+   *
+   * @command acq_sku:get-item-delete-count
+   *
+   * @usage drush acq_sku:get-item-delete-count
+   *   Get the items count we need to delete during commerce data cleanup.
+   */
+  public function getItemCountTodelete() {
+    $result = $this->connection->query("select nid as entity_id, 'node' as type from node where type in ('acq_product', 'acq_promotion', 'store') union select id as entity_id, 'acq_sku' as type from acq_sku union select tid as entity_id, 'taxonomy_term' as type from taxonomy_term_data where vid='acq_product_category'");
+    $data = $result->fetchAll(\PDO::FETCH_ASSOC);
+    $this->moduleHandler->alter('acq_sku_clean_synced_data', $data);
+    print count($data);
   }
 
 }

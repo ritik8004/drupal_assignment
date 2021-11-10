@@ -2,4 +2,5 @@ name: 'Alshaya Search - Local search'
 description: 'Contains search config for Alshaya related to search in local.'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya

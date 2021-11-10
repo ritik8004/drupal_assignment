@@ -375,9 +375,275 @@ body {
   @include breakpoint($only-mobile) {
     #{$left}: -95%;
   }
+
+  @content;
 }
 
 @mixin tooltip-display () {
   visibility: visible;
   opacity: 1;
 }
+
+// RR thumbnail image container style
+@mixin bv-photo-upload-container () {
+  border: 0;
+  background: $rr-thumbnail-img-bg;
+  box-sizing: border-box;
+  vertical-align: top;
+  margin: 0;
+  margin-bottom: 1%;
+  margin-#{$right}: 1%;
+  height: 8.75rem;
+  width: 8.75rem;
+  overflow: hidden;
+  zoom: 1;
+  flex-shrink: 0;
+  padding: 0;
+
+  @content;
+}
+
+// RR thumbnail image style for my reviews, PDP and write a review form.
+@mixin bv-photo-upload-image () {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  object-position: center;
+  zoom: 1;
+
+  @content;
+}
+
+// Apply Select style mixin for tablet and mobile on select tag.
+// We dont use selec2 in devices, allowing native OS to handle inputs.
+@mixin select-style($select-width) {
+  appearance: none;
+  border: 1px solid $primary_dropdown_border;
+  border-radius: 0;
+  background-color: $primary_dropdown_bg;
+  padding: 0.5rem;
+  padding-#{$left}: 0.35rem;
+  padding-#{$right}: 1.5rem;
+  width: $select-width;
+  height: 2.1875rem;
+  font-size: 0.75rem;
+  outline: none;
+  direction: $dir;
+
+  @include breakpoint($tablet) {
+    background-color: $primary_dropdown_bg;
+    position: relative;
+    z-index: 3;
+  }
+
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
+  // Arabic font is longer so it gets clipped from bottom.
+  html[lang=ar] & {
+    line-height: 1.2;
+  }
+}
+
+// Apply Select Wrapper mixin for all resolutions.
+// Style it in two stages.
+// 1. Apply select-wrapper($wrapper-width) on form-item div.
+// 2. Then apply select2-style mixin on selec2-container div for desktop.
+// Above only true if using select2 on desktop.
+// 3. Apply select-style mixing for select tag on mobile and tablets.
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    font-size: 1.75rem;
+    line-height: 35px;
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    text-align: center;
+    background-color: $primary_dropdown_arrow_bg;
+    width: 2.1875rem;
+    height: 35px;
+    height: 2.1875rem;
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}
+
+@mixin select-bg($select-width) {
+  &::before {
+    width: $select-width;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 2.1875rem;
+    z-index: 1;
+  }
+}
+
+// Style select2 container.
+@mixin select2-style($select-width) {
+  width: $select-width !important;
+
+  .select2-selection {
+    font-size: 0.875rem;
+    height: 2.1875rem;
+    padding: 0.25rem 0.2rem;
+    text-align: $left;
+    width: $select-width;
+    border: 1px solid $primary_dropdown_border;
+    border-radius: 0;
+    outline: none;
+
+    .select2-selection__rendered {
+      color: $primary_dropdown_text;
+
+      @include breakpoint($only-mobile) {
+        line-height: 1.5rem;
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    .select2-selection--single .select2-selection__rendered {
+      width: 94%;
+    }
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: 2.1875rem;
+    height: 2.1875rem;
+    background: $primary_dropdown_arrow_bg;
+
+    &::after {
+      // IE10 needs this in px.
+      line-height: 35px;
+      font-size: 1.75rem;
+      top: 0;
+      #{$left}: auto;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+      background: $primary_dropdown_arrow_bg;
+    }
+  }
+}
+
+//Country Select style
+@mixin country-select {
+  border: none;
+  height: auto;
+
+  .mobile-number-flag {
+    display: none;
+  }
+
+  .arrow {
+    display: none;
+  }
+
+  select.country {
+    display: none;
+  }
+}
+
+//Mobile input style
+@mixin mobile-input-style {
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid $checkout_cc_store_address_mobile_border;
+  position: relative;
+  direction: ltr;
+
+  .form-item.verified {
+    #edit-billing-address & {
+      display: none;
+    }
+  }
+
+  .prefix {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: $greyish;
+
+    html[lang=ar] .safari & {
+      line-height: 1.2;
+    }
+
+    html[lang=ar] .ie & {
+      line-height: 1.3;
+    }
+  }
+
+  .form-item-field-address-0-address-mobile-number-mobile,
+  .form-item-field-mobile-number-0-mobile,
+  .form-item-billing-address-address-billing-mobile-number-mobile,
+  .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
+  .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
+  .form-item-cc-mobile-number-mobile,
+  .form-item-mobile-number-mobile {
+    position: static !important;
+    width: 9.375rem;
+
+    .c-input__bar {
+      position: static;
+
+      &::before,
+      &::after {
+        bottom: -1px;
+      }
+    }
+  }
+
+  .form-item-field-mobile-number-0-country-code {
+    .user-page.c-user-edit & {
+      margin-top: 0;
+    }
+  }
+
+  #edit-field-address-0-address-mobile-number-mobile-error,
+  #edit-mobile-number-mobile-error {
+    border-top: 2px solid $primary_input_inline_error;
+    position: absolute;
+    top: 2rem;
+    #{$left}: 0;
+  }
+
+  .form-item--error-message {
+    position: absolute;
+    #{$left}: 0;
+    line-height: 1;
+    border-top: 2px solid $primary_input_inline_error;
+    width: 100%;
+  }
+}
+
+//Mobile number input style
+@mixin mobile-number-input-style {
+  border: none !important;
+
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: $white-five !important;
+  }
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  html[lang=ar] & {
+    direction: ltr;
+  }
+}
+

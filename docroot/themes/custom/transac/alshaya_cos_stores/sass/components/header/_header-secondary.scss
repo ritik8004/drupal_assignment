@@ -1,0 +1,85 @@
+.c-menu-secondary {
+  text-transform: uppercase;
+  text-align: center;
+
+  @include breakpoint($upto-desktop) {
+    text-align: $left;
+  }
+
+  li {
+    height: 1.875rem;
+
+    @include breakpoint($upto-desktop) {
+      height: 2.875rem;
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 0.625rem;
+
+      &::after {
+        font-size: 1.625rem;
+        #{$right}: 0.3125rem;
+      }
+    }
+  }
+
+  a {
+    font-size: 0.75rem;
+    height: 1.875rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+
+    @include breakpoint($upto-desktop) {
+      height: 2.875rem;
+      line-height: 2.5;
+    }
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .menu--account,
+  .block-alshaya-stores-finder,
+  .block-language-blocklanguage-interface {
+    height: 1.875rem;
+  }
+}
+
+.c-my-account-nav {
+  li {
+    &::after {
+      font-size: 1.625rem;
+      #{$right}: 0.25rem;
+      margin-top: -1.25rem;
+    }
+  }
+
+  li,
+  h3 {
+    padding: 0.9375rem 0.625rem;
+    margin: 0;
+    text-transform: uppercase;
+  }
+}
+
+body {
+  @include breakpoint($upto-desktop) {
+    html[lang=ar] & {
+      margin-top: 3.75rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 4rem;
+  }
+}
+
+.menu__in {
+  &::after {
+    @include breakpoint($upto-desktop) {
+      font-size: 1.625rem;
+    }
+  }
+}

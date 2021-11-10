@@ -2,6 +2,7 @@ name: Acquia Commerce checkout payment
 type: module
 description: This module provides checkout.com payment method.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Commerce
 dependencies:
   - acq_commerce:acq_payment

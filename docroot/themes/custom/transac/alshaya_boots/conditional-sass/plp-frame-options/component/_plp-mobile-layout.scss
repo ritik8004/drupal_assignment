@@ -1,0 +1,80 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp,
+#top-results {
+  .c-products-list {
+    &.product-large,
+    &.product-small {
+      .c-products__item {
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0.625rem !important;
+        }
+      }
+    }
+
+    &.view-search,
+    &.view-algolia-plp {
+      @include breakpoint($only-mobile) {
+        padding-left: 0.625rem;
+        padding-right: 0.625rem;
+      }
+    }
+  }
+
+  .c-products__item {
+    @include breakpoint($only-mobile) {
+      font-size: 0.75rem;
+    }
+
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      @include breakpoint($only-mobile) {
+        display: inline-block;
+      }
+    }
+
+    &.promotion-frame {
+      .product-plp-detail-wrapper {
+        .promotions {
+          @include breakpoint($only-mobile) {
+            margin: 0.5rem 0.625rem;
+          }
+
+          .sku-promotion-item {
+            @include breakpoint($only-mobile) {
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      article {
+        @include breakpoint($only-mobile) {
+          padding-bottom: 0.5rem;
+        }
+
+        @include breakpoint($tablet) {
+          padding-bottom: 0.75rem;
+        }
+      }
+    }
+
+    .product-plp-detail-wrapper {
+      .field--name-name ~ .price,
+      .field--name-name ~ .special-price-block {
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0.5rem;
+          padding: 0 0.25rem;
+        }
+      }
+    }
+
+    .addtobag-button-container,
+    .addtobag-config-button-container,
+    .is-not-buyable {
+      @include breakpoint($only-mobile) {
+        margin: 0.5rem 0.625rem 0;
+      }
+    }
+  }
+}

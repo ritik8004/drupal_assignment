@@ -22,6 +22,9 @@
 <div>
   <a href="{{ print_link }}" target="_blank" class="button-wide print--button">{{ "print"|t }}</a>
 </div>
+{% if bazaarvoice_strings %}
+  {{ bazaarvoice_strings }}
+{% endif %}
 <div{{ attributes }}>
 
   <table class="user__order--detail">
@@ -138,6 +141,13 @@
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
 
+          {% if order_details.payment.referenceNumber %}
+            <div class="mobile-only payment--details">
+              <div class="label font-small">{{ "Reference No"|t }}</div>
+              <div class="dark">{{ order_details.payment.referenceNumber }}</div>
+            </div>
+          {% endif %}
+
           {% if order_details.payment.banktransfer_payment_details %}
             <div class="mobile-only banktransfer">
               {{ order_details.payment.banktransfer_payment_details }}
@@ -177,7 +187,7 @@
                     {% for item in order_details.store_open_hours %}
                       <div>
                         <span class="key-value-key dark">{{ item.key }}</span>
-                        <span class="key-value-value">{{ item.value }}</span>
+                        <span class="key-value-value">{{ item.value|default('Holiday'|t) }}</span>
                       </div>
                     {% endfor %}
                   </div>
@@ -204,6 +214,11 @@
         <td class="above-mobile blend">
           <div class="label payment-method font-small">{{ "Payment method"|t }}</div>
           <div class="dark">{{ order_details.payment_method }}</div>
+
+          {% if order_details.payment.referenceNumber %}
+            <div class="label delivery-method font-small">{{ "Reference No"|t }}</div>
+            <div class="dark reference-no">{{ order_details.payment.referenceNumber }}</div>
+          {% endif %}
 
           {% if order_details.payment.banktransfer_payment_details %}
             {{ order_details.payment.banktransfer_payment_details }}
@@ -269,7 +284,7 @@
       <tr class="delivery-charge-row">
         <td class="desktop-only">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
-        <td class="right--align">{{ "Delivery charge"|t }}</td>
+        <td class="right--align">{{ order_details.is_pudo_pickup ? "Collection Charge"|t : "Delivery charge"|t }}</td>
         <td class="blend">
           {{ order_details.delivery_charge }}
         </td>
@@ -385,6 +400,9 @@
             <div class="dark">{{ product.total }}</div>
           {% endif %}
         {% endif %}
+        {% if product.bazaarvoice_link %}
+          <div class="myaccount-write-review" data-sku={{ product.parent_sku }}></div>
+        {% endif %}
       </div>
     </td>
 
@@ -403,7 +421,10 @@
         {% endif %}
       {% endif %}
     </td>
-
-    <td class="above-mobile empty--cell">&nbsp;</td>
+    {% if product.bazaarvoice_link %}
+      <td class="above-mobile user-review bazaarvoice-enable">
+        <div class="myaccount-write-review" data-sku={{ product.parent_sku }}></div>
+      </td>
+    {% endif %}
   </tr>
 {% endmacro %}

@@ -4,12 +4,17 @@
       &-comment {
         button {
           font-family: $bp-thin;
+          border-radius: 0.1875rem;
         }
       }
     }
 
     &-title {
       font-family: $bp-bold;
+    }
+
+    &-date {
+      margin-top: 0.25rem;
     }
 
     &-date,
@@ -46,4 +51,15 @@
       border-radius: 0.1875rem;
     }
   }
+
+  .load-more-wrapper {
+    .load-more {
+      border-radius: 0.1875rem;
+    }
+  }
+}
+
+.translate-by-google,
+.back-to-original {
+  font-family: $bp-light;
 }

@@ -6,10 +6,11 @@
         max-width: 14rem;
         width: 100%;
       }
+    }
 
-      @include breakpoint($only-mobile) {
-        max-width: 8rem;
-        width: 100%;
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        height: 7rem;
       }
     }
   }

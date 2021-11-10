@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.secondary-main-menu
+  module:
+    - content_translation
+    - menu_link_content
+third_party_settings:
+  content_translation:
+    enabled: true
+id: secondary-main-menu
+target_entity_type_id: menu_link_content
+target_bundle: secondary-main-menu
+default_langcode: site_default
+language_alterable: true

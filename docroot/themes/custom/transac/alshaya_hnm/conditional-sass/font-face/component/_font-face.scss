@@ -1,0 +1,133 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
+
+@font-face {
+  font-family: 'alshaya-icons';
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?p1AKYu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// HM Sans
+@font-face {
+  font-family: 'HM Sans Regular';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Semi Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-SemiBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Bold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Italic';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Italic.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Light';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSans-Light.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSans-Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// HM Arabic
+@font-face {
+  font-family: 'HM Sans Arabic Regular';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff2?jAKPu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Regular.woff?jAKPu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Semi Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff2?jDKPu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-SemiBold.woff?jDKPu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff2?jDKZu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Bold.woff?jDKZu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Light';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff2?jNKZu') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSansArabic-Light.woff?jNKZu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// HM Serif
+@font-face {
+  font-family: 'HM Serif Regular';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Serif Italic';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Serif SemiBold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMSerif-SemiBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

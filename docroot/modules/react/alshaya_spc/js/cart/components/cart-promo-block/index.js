@@ -5,6 +5,7 @@ import SectionTitle from '../../../utilities/section-title';
 import dispatchCustomEvent from '../../../utilities/events';
 import DynamicPromotionCode from './DynamicPromotionCode';
 import { openCartFreeGiftModal, getCartFreeGiftModalId } from '../../../utilities/free_gift_util';
+import Advantagecard from '../../../utilities/advantagecard';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -118,11 +119,19 @@ export default class CartPromoBlock extends React.Component {
     if (inStock === false) {
       return;
     }
-    const promoValue = document.getElementById('promo-code').value.trim();
+    let promoValue = document.getElementById('promo-code').value.trim();
 
     // If empty promo text.
     if (promoApplied === false && promoValue.length === 0) {
       document.getElementById('promo-message').innerHTML = Drupal.t('please enter promo code.');
+      document.getElementById('promo-message').classList.add('error');
+      document.getElementById('promo-code').classList.add('error');
+      return;
+    }
+    // If Advantage card enabled and not valid.
+    if (Advantagecard.isAdvantagecardEnabled()
+      && Advantagecard.isValidAdvantagecard(promoValue) === false) {
+      document.getElementById('promo-message').innerHTML = Drupal.t('Please enter valid Advantage card code.');
       document.getElementById('promo-message').classList.add('error');
       document.getElementById('promo-code').classList.add('error');
       return;
@@ -156,8 +165,26 @@ export default class CartPromoBlock extends React.Component {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
           document.getElementById('promo-remove-button').classList.remove('loading');
+          if (Advantagecard.isAdvantagecardEnabled()
+            && (Advantagecard.isAdvantageCardApplied(result.totals.items)
+            || (promoValue.includes(drupalSettings.alshaya_spc.advantageCard.advantageCardPrefix)
+              && result.response_message.status === 'error_coupon'))) {
+            // For Advantage card set promoValue to Advantage_Card_uid.
+            promoValue = `Advantage_Card_${drupalSettings.userDetails.userID}`;
+          }
           // If coupon is not valid.
-          if (result.response_message.status === 'error_coupon') {
+          if (Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
+            let messageInfo = null;
+            messageInfo = {
+              type: 'error',
+              message: result.response_message.msg,
+            };
+            dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+            const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
+            document.dispatchEvent(event);
+          }
+          if (result.response_message.status === 'error_coupon'
+            && !Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
             const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
             document.getElementById('promo-message').innerHTML = result.response_message.msg;
             document.getElementById('promo-message').classList.add('error');
@@ -197,7 +224,9 @@ export default class CartPromoBlock extends React.Component {
           }
 
           // Trigger cart update to remove any message on cart.
-          dispatchCustomEvent('spcCartMessageUpdate', {});
+          if (!Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
+            dispatchCustomEvent('spcCartMessageUpdate', {});
+          }
         }
       });
     }

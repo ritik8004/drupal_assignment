@@ -14,12 +14,15 @@ use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoCustomer;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Utility;
+use App\Helper\CookieHelper;
+use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class Cart Controller.
@@ -129,6 +132,81 @@ class CartController {
     $this->checkoutDefaults = $checkout_defaults;
     $this->utility = $utility;
     $this->settings = $settings;
+  }
+
+  /**
+   * Resume smart agent cart.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirect to cart page.
+   */
+  public function smartAgentResumeCart(Request $request) {
+    $content = $request->query->get('data');
+    // Decrypt the data.
+    $data = json_decode(SecureText::decrypt(
+      $content,
+      $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
+    ), TRUE);
+    $cart_id = $data['cart_id'];
+    $smart_agent_details = $data['smart_agent'];
+
+    // Get customer id from drupal.
+    $customer_id = $this->cart->getDrupalInfo('customer_id');
+
+    // Redirect to cart page if cart id or smart agent details is empty.
+    if (empty($cart_id) || empty($smart_agent_details)) {
+      return new RedirectResponse('/' . $data['langcode'] . '/cart', 302);
+    }
+
+    // Update cart id in session.
+    $this->cart->setCartId($cart_id);
+
+    // Verify if cart exists else redirect to cart page.
+    $cart = $this->cart->getCart();
+
+    if (!empty($cart['error'])) {
+      $this->logger->info('Failed to get cart to resume order assisted by smart agent. Cart ID: @cart_id is invalid or no longer available.', [
+        '@cart_id' => $cart_id,
+      ]);
+      return new RedirectResponse('/' . $data['langcode'] . '/cart', 302);
+    }
+
+    // Associate cart to customer.
+    if (!empty($customer_id)) {
+      $this->cart->associateCartToCustomer($customer_id);
+    }
+
+    // Update cart call to set smart agent details.
+    $formatted_smart_agent_details = $this->cart->formatSmartAgentDetails($smart_agent_details);
+
+    $extension = array_merge(
+      ['action' => 'refresh'],
+      $formatted_smart_agent_details
+    );
+
+    $this->cart->updateCart(['extension' => $extension]);
+
+    // Logging data sent to updateCart API call.
+    $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Update cart request data: @data.', [
+      '@cart_id' => $cart_id,
+      '@data' => json_encode($formatted_smart_agent_details),
+    ]);
+
+    // Redirect to cart page and set cookie to convey
+    // that we need to reset cart in storage.
+    $response = new RedirectResponse('/' . $data['langcode'] . '/cart', 302);
+    $response->headers->setCookie(CookieHelper::create(
+      'reset_cart_storage',
+      TRUE,
+      strtotime('+1 year'), '/',
+      NULL,
+      TRUE
+    ));
+
+    return $response;
   }
 
   /**
@@ -334,8 +412,10 @@ class CartController {
 
     if (empty($data['payment']['methods']) && !empty($data['shipping']['method'])) {
       $methods = $this->cart->getPaymentMethods();
-      $data['payment']['methods'] = $methods ?? [];
-      $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      if (!empty($methods)) {
+        $data['payment']['methods'] = $methods;
+        $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      }
     }
 
     // Re-use the processing done for cart page.
@@ -763,9 +843,10 @@ class CartController {
           $extension['attempted_payment'] = 1;
         }
 
-        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method', [
+        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method Data: @data', [
           '@cart_id' => $this->cart->getCartId(),
           '@method' => $request_content['payment_info']['payment']['method'],
+          '@data' => json_encode($request_content['payment_info']['payment']),
         ]);
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
@@ -991,7 +1072,10 @@ class CartController {
     }
 
     try {
-      $result = $this->cart->getCartStores($lat, $lon);
+      $cncStoresLimit = $this->request->get('cncStoresLimit');
+      $result = !empty($cncStoresLimit)
+        ? $this->cart->getCartStores($lat, $lon, $cncStoresLimit)
+        : $this->cart->getCartStores($lat, $lon);
       return new JsonResponse($result);
     }
     catch (\Exception $e) {

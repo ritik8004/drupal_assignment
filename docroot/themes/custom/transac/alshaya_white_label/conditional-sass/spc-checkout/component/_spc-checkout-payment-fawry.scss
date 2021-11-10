@@ -1,0 +1,40 @@
+.payment-method.payment-method-checkout_com_upapi_fawry {
+  .payment-method-bottom-panel.checkout_com_upapi_fawry {
+    .payment-form-wrapper {
+      input[type=email],
+      input[type=tel] {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid $primary_input_border;
+        padding: 0;
+        color: $primary_form_input;
+        background: none;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      .spc-type-textfield {
+        margin-top: 2rem;
+      }
+    }
+
+    padding: 1.25rem;
+    padding-#{$left}: 3rem;
+
+    .fawry-prefix-description {
+      font-size: 0.875rem;
+      color: $fawry-desc-prefix;
+      line-height: 1.14;
+    }
+
+    .fawry-suffix-description {
+      font-size: 0.75rem;
+      color: $fawry-desc-suffix;
+      line-height: 1.67;
+
+      a {
+        text-decoration: underline;
+      }
+    }
+  }
+}

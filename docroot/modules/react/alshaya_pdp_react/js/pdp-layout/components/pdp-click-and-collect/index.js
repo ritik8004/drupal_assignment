@@ -146,12 +146,12 @@ export default class PdpClickCollect extends React.PureComponent {
     );
 
     if (cncEnabled) {
-      let label = Drupal.t('Check in-store availability:');
+      let label = Drupal.t('Check in-store availability');
       let storesContent = {};
       let storeCountLabel = '';
 
       if (hideInput) {
-        label = Drupal.t('In-store availability:');
+        label = Drupal.t('In-store availability');
         storesContent = stores
           .filter((store, key) => key < (showMore ? stores.length : 2))
           .map((store, key) => (
@@ -177,7 +177,7 @@ export default class PdpClickCollect extends React.PureComponent {
               <span className="magv2-card-icon-svg">
                 <ClickCollectSVG />
               </span>
-              {Drupal.t('click & collect')}
+              {Drupal.t('Click & Collect')}
             </PdpSectionTitle>
             <div className="magv2-accordion" />
           </div>
@@ -186,7 +186,7 @@ export default class PdpClickCollect extends React.PureComponent {
               <span>{cncSubtitleAvailable}</span>
             </PdpSectionText>
             <div className="instore-wrapper">
-              <div className="instore-title">{label}</div>
+              <div className="instore-title">{`${label}:`}</div>
 
               <ConditionalView condition={stores && stores.length > 0}>
                 <div className="store-count-label" onClick={this.showSearchInput}>{parse(storeCountLabel)}</div>
@@ -228,7 +228,7 @@ export default class PdpClickCollect extends React.PureComponent {
             <span className="magv2-card-icon-svg">
               <ClickCollectSVG />
             </span>
-            {Drupal.t('click & collect')}
+            {Drupal.t('Click & Collect')}
           </PdpSectionTitle>
           <div className="magv2-accordion" />
         </div>

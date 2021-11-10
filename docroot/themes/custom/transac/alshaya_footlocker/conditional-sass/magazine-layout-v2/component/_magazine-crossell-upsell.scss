@@ -1,0 +1,7 @@
+.magv2-pdp-crossell-upsell-wrapper {
+  .magv2-detail-wrapper + .promotions-full-view-mode {
+    @include breakpoint($only-mobile) {
+      margin-top: -0.9375rem;
+    }
+  }
+}

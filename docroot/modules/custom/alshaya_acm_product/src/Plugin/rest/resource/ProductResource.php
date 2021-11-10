@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Core\Url;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
@@ -276,6 +277,9 @@ class ProductResource extends ResourceBase {
       $cacheableMetadata->addCacheContexts($this->cache['contexts']);
     }
 
+    // Add query_args cache context.
+    $cacheableMetadata->addCacheContexts(['url.query_args']);
+
     if (!empty($this->cache['tags'])) {
       $cacheableMetadata->addCacheTags($this->cache['tags']);
     }
@@ -399,10 +403,15 @@ class ProductResource extends ResourceBase {
     if ($current_request->query->get('pdp') == 'magazinev2') {
       // Set cart image.
       $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-      $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
+      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
       // Prepare image style url.
-      if (!empty($image['#uri'])) {
-        $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+      if (!empty($image['#uri']) && !empty($image['#theme'])) {
+        // If image has image_style theme
+        // then get style url by loading image style,
+        // else get PIMS url directly from uri.
+        $image = ($image['#theme'] == 'image_style')
+          ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
+          : $image['#uri'];
       }
       $data['cart_image'] = is_string($image) ? $image : '';
     }
@@ -427,10 +436,15 @@ class ProductResource extends ResourceBase {
 
             // Set cart image.
             $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-            $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
+            $image = alshaya_acm_get_product_display_image($child, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
             // Prepare image style url.
             if (!empty($image['#uri'])) {
-              $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+              // If image has image_style theme
+              // then get style url by loading image style,
+              // else get PIMS url directly from uri.
+              $image = ($image['#theme'] == 'image_style')
+                ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
+                : $image['#uri'];
             }
             $data['variants'][$values['sku']]['cart_image'] = is_string($image) ? $image : '';
           }
@@ -530,7 +544,7 @@ class ProductResource extends ResourceBase {
       // Adding extra data to the product resource.
       $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
       $data['extra_data'] = [];
-      $image = alshaya_acm_get_product_display_image($sku, 'cart_thumbnail', 'cart');
+      $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_CART_THUMBNAIL, 'cart');
       if (!empty($image)) {
         if ($image['#theme'] == 'image_style') {
           $data['extra_data']['cart_image'] = [
@@ -714,13 +728,14 @@ class ProductResource extends ResourceBase {
       if (isset($promotion['type']) && $promotion['type'] === 'free_gift') {
         continue;
       }
-
+      // Load promotion object.
+      $promo_node = $this->nodeStorage->load($nid);
       $promotions[] = [
         'text' => $promotion['text'],
         'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
           '',
           Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl()),
-        'promo_node' => $nid,
+        'promo_node' => (int) $promo_node->get('field_acq_promotion_rule_id')->getString(),
       ];
     }
     return $promotions;

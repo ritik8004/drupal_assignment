@@ -1,0 +1,15 @@
+.c-category-list {
+  &__title {
+    a {
+      font-family: $tbs-recoleta-semibold;
+      font-size: 1.125rem;
+    }
+  }
+
+  &__item {
+    a {
+      font-size: 0.875rem;
+      color: $secondary_link;
+    }
+  }
+}

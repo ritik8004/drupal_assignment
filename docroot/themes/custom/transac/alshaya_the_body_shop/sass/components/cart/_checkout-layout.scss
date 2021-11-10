@@ -1,0 +1,34 @@
+.block-customer-service-block {
+  h3 {
+    color: $spc-customer-service-title;
+    font-size: 1rem;
+    font-family: $alshaya-super-bold;
+    text-transform: uppercase;
+  }
+
+  @include breakpoint($only-mobile) {
+    text-align: #{$left};
+    padding: 0.5rem 1.875rem 1.4375rem;
+    border-bottom: 0.0625rem solid $checkout_footer_border;
+  }
+
+  @include breakpoint($desktop) {
+    padding-top: 0.875rem;
+    padding-bottom: 1.875rem;
+  }
+
+  p {
+    font-family: $alshaya-thin;
+    text-transform: none;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+  }
+
+  p:last-child {
+    .light {
+      font-family: $alshaya-thin;
+    }
+  }
+}

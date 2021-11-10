@@ -1,0 +1,59 @@
+.spc-delivery-store-info {
+  .spc-delivery-store-name-wrapper {
+    position: relative;
+    padding-#{$left}: 2.125rem;
+    margin-bottom: 1.125rem;
+
+    .store-icon,
+    .collection-point-icon {
+      &::before {
+        #{$left}: 0;
+      }
+    }
+  }
+
+  .store-open-hours-list {
+    margin-top: 0.5rem;
+  }
+
+  .store-delivery-time {
+    font-family: $alshaya-bold;
+    color: $spc-cnc-store-item-text-impress;
+    margin-top: 0.75rem;
+
+    .delivery--time--value {
+      padding-#{$left}: 0.3125rem;
+    }
+  }
+}
+
+.spc-checkout-delivery-information {
+  .delivery-information-preview {
+    .spc-delivery-store-info {
+      .store-name {
+        font-family: $alshaya-thin;
+        color: $spc-delivery-info-text;
+      }
+    }
+  }
+}
+
+#click-and-collect-selected-store {
+  .store-details-wrapper {
+    .store-delivery-time {
+      font-family: $alshaya-bold;
+    }
+
+    .store-open-hours {
+      margin-top: 0.625rem;
+      margin-bottom: 0.625rem;
+    }
+  }
+}
+
+.map-store-list ul li.select-store,
+#google-map-cnc .gm-style .gm-style-iw-d {
+  .store-delivery-time {
+    font-family: $alshaya-bold !important;
+  }
+}

@@ -9,6 +9,24 @@
     font-size: 0.875rem;
   }
 
+  ul {
+    &.js-pager__items {
+      margin-top: 3rem;
+
+      a {
+        font-size: 0.875rem;
+        line-height: 1.29;
+        text-transform: uppercase;
+        padding: 0.62625rem 3.9375rem;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: 100%;
+        }
+      }
+    }
+  }
+
   .region__content {
     .block-page-title-block.mobile {
       h1 {
@@ -24,154 +42,7 @@
         margin-bottom: 0.5rem;
       }
     }
-  }
 
-  .c-products__item {
-    font-size: 0.875rem;
-
-    @include breakpoint ($desktop) {
-      margin-bottom: 2rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      min-height: 22.5rem;
-    }
-
-    // required for tablet landscape as well.
-    @include breakpoint($desktop - 1) {
-      min-height: 31rem;
-    }
-
-    article:hover {
-      .field--name-name a {
-        text-decoration: none;
-      }
-
-      &::after {
-        @include breakpoint($tablet) {
-          top: -1px;
-          left: -1px;
-          right: -1px;
-          bottom: -0.75rem;
-          -webkit-appearance: none;
-          box-shadow: 0.25rem 0.25rem 0.5rem 0 $plp_tile_product_hover_shadow;
-        }
-      }
-    }
-
-    .alshaya_search_gallery {
-      @include breakpoint($desktop) {
-        max-height: 24.5rem;
-      }
-
-      .alshaya_search_mainimage {
-        @include breakpoint($upto-desktop) {
-          height: auto;
-        }
-
-        @include breakpoint($desktop) {
-          height: 24.5rem;
-          align-items: flex-start;
-        }
-      }
-    }
-  }
-
-  .c-products-list.product-small {
-    .alshaya_search_gallery {
-      @include breakpoint($desktop) {
-        max-height: 20.5rem;
-      }
-
-      .alshaya_search_mainimage {
-        @include breakpoint($desktop) {
-          height: 20.5rem;
-        }
-
-        @include breakpoint($tablet) {
-          height: auto;
-        }
-
-        @include breakpoint($only-mobile) {
-          height: 15.125rem;
-        }
-      }
-    }
-  }
-
-  .c-products-list.product-large {
-    @include breakpoint($desktop) {
-      .alshaya_search_gallery {
-        max-height: 26.5rem;
-
-        .alshaya_search_mainimage {
-          height: 26.5rem;
-        }
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      .alshaya_search_gallery {
-        max-height: 29.125rem;
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      .alshaya_search_gallery {
-        max-height: 31.125rem;
-
-        .alshaya_search_mainimage {
-          height: 31.125rem;
-        }
-      }
-    }
-  }
-
-  &.lhn-without-sidebar {
-    .c-products-list.product-small {
-      @include breakpoint($desktop) {
-        .alshaya_search_gallery {
-          max-height: 24.5rem;
-
-          .alshaya_search_mainimage {
-            height: 24.5rem;
-
-            // in search page, the height is a bit big for most of the images.
-            img {
-              height: 100%;
-              object-fit: cover;
-            }
-          }
-        }
-
-        .c-products__item article:hover {
-          .alshaya_search_gallery {
-            max-height: none;
-          }
-        }
-      }
-    }
-
-    .c-products-list.product-large {
-      @include breakpoint($desktop) {
-        .alshaya_search_gallery {
-          max-height: 33rem;
-
-          .alshaya_search_mainimage {
-            height: 33rem;
-          }
-        }
-
-        .c-products__item article:hover {
-          .alshaya_search_gallery {
-            max-height: none;
-          }
-        }
-      }
-    }
-  }
-
-  .region__content {
     .bef-exposed-form {
       position: relative;
     }
@@ -228,6 +99,7 @@
           text-transform: uppercase;
           font-family: $vs-bold;
           border: none;
+          margin-bottom: 0;
 
           a {
             display: block;
@@ -239,6 +111,168 @@
             &.facet-item__value {
               text-transform: none;
             }
+          }
+        }
+      }
+    }
+  }
+
+  .c-products__item {
+    font-size: 0.875rem;
+
+    @include breakpoint ($desktop) {
+      margin-bottom: 2rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      min-height: 22.5rem;
+    }
+
+    // required for tablet landscape as well.
+    @include breakpoint($desktop - 1) {
+      min-height: auto;
+    }
+
+    article:hover {
+      .field--name-name a {
+        text-decoration: none;
+      }
+
+      &::after {
+        @include breakpoint($tablet) {
+          top: -1px;
+          left: -1px;
+          right: -1px;
+          bottom: -0.75rem;
+          -webkit-appearance: none;
+          box-shadow: 0.25rem 0.25rem 0.5rem 0 $plp_tile_product_hover_shadow;
+        }
+      }
+    }
+
+    .alshaya_search_gallery {
+      @include breakpoint($desktop) {
+        height: 24.5rem;
+      }
+
+      .alshaya_search_mainimage {
+        @include breakpoint($upto-desktop) {
+          height: auto;
+        }
+
+        @include breakpoint($desktop) {
+          height: 24.5rem;
+          align-items: flex-start;
+        }
+      }
+    }
+  }
+
+  .c-products-list.product-small {
+    .alshaya_search_gallery {
+      @include breakpoint($desktop) {
+        height: 24.5rem;
+      }
+
+      .alshaya_search_mainimage {
+        @include breakpoint($desktop) {
+          height: 20.5rem;
+        }
+
+        @include breakpoint($tablet) {
+          height: auto;
+        }
+
+        @include breakpoint($only-mobile) {
+          height: 15.125rem;
+        }
+      }
+    }
+  }
+
+  .c-products-list.product-large {
+    @include breakpoint($desktop) {
+      .alshaya_search_gallery {
+        height: 26.5rem;
+
+        .alshaya_search_mainimage {
+          height: 26.5rem;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .alshaya_search_gallery {
+        height: 29.125rem;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .alshaya_search_gallery {
+        height: 31.125rem;
+
+        .alshaya_search_mainimage {
+          height: 31.125rem;
+        }
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 19.5rem;
+          }
+        }
+      }
+
+      &.product-large {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 26.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  &.lhn-without-sidebar {
+    .c-products-list.product-small {
+      @include breakpoint($desktop) {
+        .alshaya_search_gallery {
+          height: 24.5rem;
+
+          .alshaya_search_mainimage {
+            height: 24.5rem;
+
+            // in search page, the height is a bit big for most of the images.
+            img {
+              height: auto;
+              object-fit: cover;
+              width: 100%;
+            }
+          }
+        }
+
+        .c-products__item article:hover {
+          .alshaya_search_gallery {
+            .img-wrapper {
+              max-height: 21.5rem;
+            }
+          }
+        }
+      }
+    }
+
+    .c-products-list.product-large {
+      @include breakpoint($desktop) {
+        .alshaya_search_gallery {
+          height: 33rem;
+
+          .alshaya_search_mainimage {
+            height: 33rem;
           }
         }
       }
@@ -290,26 +324,6 @@
       @include breakpoint($tablet) {
         font-size: 2rem;
         #{$right}: 0;
-      }
-    }
-  }
-}
-
-.c-plp {
-  ul {
-    &.js-pager__items {
-      margin-top: 3rem;
-
-      a {
-        font-size: 0.875rem;
-        line-height: 1.29;
-        text-transform: uppercase;
-        padding: 0.62625rem 3.9375rem;
-
-        @include breakpoint($only-mobile) {
-          display: block;
-          width: 100%;
-        }
       }
     }
   }

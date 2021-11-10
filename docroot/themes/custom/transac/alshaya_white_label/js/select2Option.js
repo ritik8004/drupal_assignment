@@ -29,7 +29,8 @@ jQuery.fn.select2Option = function (options) {
 
         if ($(this).attr('swatch-image')) {
           liHtml.addClass('li-swatch-image');
-          var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
+
+          var swatchImage = '<img loading="lazy" src="' + $(this).attr('swatch-image') + '" alt="' + textValue + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
           }
@@ -46,10 +47,10 @@ jQuery.fn.select2Option = function (options) {
             liHtml.hide();
             var defaultTitle = $(this).parent().attr('data-default-title');
             if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ': <span></h4>';
             }
             else {
-              labeltext = '<h4 class="list-title"><span>' + textValue + ' : <span></h4>';
+              labeltext = '<h4 class="list-title"><span>' + textValue + ': <span></h4>';
             }
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
@@ -102,7 +103,7 @@ jQuery.fn.select2Option = function (options) {
       labeltext = select.attr('data-default-title');
     }
 
-    labeltext = '<h4 class="list-title"><span>' + labeltext + ' : </span><span class="selected-text"></span></h4>';
+    labeltext = '<h4 class="list-title"><span>' + labeltext + ': </span><span class="selected-text"></span></h4>';
     buttonsHtml.prepend(labeltext);
     buttonsHtml.find('a').on('click', function (e) {
       e.preventDefault();
@@ -238,7 +239,16 @@ jQuery.fn.select2Option = function (options) {
 Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, select, option_id, status, selectIndex) {
   'use strict';
 
-  if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') ||
+  var configurable_color_attribute = 'article_castor_id';
+  if (drupalSettings.hasOwnProperty('sku_configurable_color_attribute')
+    && drupalSettings.sku_configurable_color_attribute.length !== 0) {
+    configurable_color_attribute = drupalSettings.sku_configurable_color_attribute;
+  }
+
+  // Replace '_' with '-'.
+  configurable_color_attribute = configurable_color_attribute.split('_').join('-').toLowerCase();
+  configurable_color_attribute = 'edit-configurables-' + configurable_color_attribute;
+  if ((select.attr('data-drupal-selector') === configurable_color_attribute) ||
     (select.attr('data-drupal-selector') === 'edit-variants-in-group') &&
     (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
     (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {

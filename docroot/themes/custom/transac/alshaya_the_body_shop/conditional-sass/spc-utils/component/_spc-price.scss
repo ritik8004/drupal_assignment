@@ -1,0 +1,34 @@
+.spc-product-price {
+  font-size: 0.8125rem;
+  font-family: $alshaya-bold;
+
+  .price--discount {
+    font-family: $alshaya-thin;
+    font-size: 0.8125rem;
+    text-transform: capitalize;
+  }
+}
+
+.spc-recommended-products {
+  .spc-product-price {
+    font-size: 1.5rem;
+    font-family: $alshaya-bold;
+    text-align: $left;
+  }
+}
+
+.path--cart {
+  header {
+    .region__header {
+      .price {
+        .price-currency {
+          padding-#{$right}: 0;
+        }
+
+        .price-amount {
+          margin: 0;
+        }
+      }
+    }
+  }
+}

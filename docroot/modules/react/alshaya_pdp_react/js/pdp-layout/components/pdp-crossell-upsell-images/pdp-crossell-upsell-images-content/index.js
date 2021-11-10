@@ -26,6 +26,7 @@ const PdpCrossellUpsellImageContent = ({
                 src={productLabels[key].image.url}
                 alt={productLabels[key].image.alt}
                 title={productLabels[key].image.title}
+                loading="lazy"
               />
             </div>
           ))}
@@ -37,6 +38,7 @@ const PdpCrossellUpsellImageContent = ({
       finalPrice={finalPrice}
       pdpProductPrice={pdpProductPrice}
       animateTitlePrice={false}
+      hidepostpay
     />
     {productPromotions ? (
       <div className="promotions promotions-full-view-mode">

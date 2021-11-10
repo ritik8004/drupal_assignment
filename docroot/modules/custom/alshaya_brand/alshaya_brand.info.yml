@@ -2,6 +2,7 @@ name: 'Alshaya Brand'
 description: 'Contains brand shared code.'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya
 dependencies:
   - s3fs:s3fs

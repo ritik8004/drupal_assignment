@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>09BDA960-CD22-466D-BD97-D315232AAF80</title>
+    <defs>
+        <path d="M24.9960051,0.34383117 C25.4544466,-0.11461039 26.1977273,-0.11461039 26.6561688,0.34383117 C27.1146104,0.80227273 27.1146104,1.54555336 26.6561688,2.00399492 L26.6561688,2.00399492 L15.16,13.5 L26.6561688,24.9960051 C27.0818646,25.4217008 27.1122714,26.0929976 26.7473893,26.5537792 L26.6561688,26.6561688 C26.1977273,27.1146104 25.4544466,27.1146104 24.9960051,26.6561688 L24.9960051,26.6561688 L13.5,15.16 L2.00399492,26.6561688 C1.57829918,27.0818646 0.907002416,27.1122714 0.44622082,26.7473893 L0.34383117,26.6561688 C-0.11461039,26.1977273 -0.11461039,25.4544466 0.34383117,24.9960051 L0.34383117,24.9960051 L11.84,13.5 L0.34383117,2.00399492 C-0.0818645643,1.57829918 -0.112271402,0.907002416 0.252610655,0.44622082 L0.34383117,0.34383117 C0.80227273,-0.11461039 1.54555336,-0.11461039 2.00399492,0.34383117 L2.00399492,0.34383117 L13.5,11.84 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="M-Guest-Home-Page-Menu-Copy-10" transform="translate(-331.000000, -320.000000)">
+            <g id="Components/Cards/Menu/Mobile-(L1)-375W-Copy-7" transform="translate(-0.000000, -471.000000)">
+                <g id="Style/Icons/UI/Close" transform="translate(318.000000, 778.000000)">
+                    <g id="ic_close" transform="translate(13.500000, 13.500000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Combined-Shape" fill="#0ABB76" fill-rule="nonzero" xlink:href="#path-1"></use>
+                        <g id="Style/Color/White" mask="url(#mask-2)" fill="#FFFFFF">
+                            <g transform="translate(-13.500000, -13.500000)" id="Rectangle-4-Copy-38">
+                                <rect transform="translate(27.000000, 27.000000) rotate(-180.000000) translate(-27.000000, -27.000000) " x="0" y="0" width="54" height="54"></rect>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

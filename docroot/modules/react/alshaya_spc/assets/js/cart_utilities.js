@@ -5,10 +5,11 @@
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
 
   Drupal.alshayaSpc.clearCartData = function () {
-    localStorage.removeItem('cart_data');
+    window.commerceBackend.removeCartDataFromStorage();
   };
 
   Drupal.alshayaSpc.getCartData = function () {
+    // @todo find better way to get this using commerceBackend.
     var cart_data = localStorage.getItem('cart_data');
     if (cart_data) {
       cart_data = JSON.parse(cart_data);
@@ -154,6 +155,18 @@
   Drupal.alshayaSpc.storeProductData = function (data) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, data.sku].join(':');
+
+    // This is to avoid the situation where a child product have more than one
+    // Parent products. In this case it will fetch the product name and id of
+    // the parent product from the local storage.
+    var localStorageData = JSON.parse(localStorage.getItem(key));
+    if (localStorageData != null && localStorageData.gtmAttributes !== undefined) {
+      data.gtmAttributes.id = localStorageData.gtmAttributes.id ? localStorageData.gtmAttributes.id : data.gtmAttributes.id;
+      data.gtmAttributes.name = localStorageData.gtmAttributes.name ? localStorageData.gtmAttributes.name : data.gtmAttributes.name;
+      data.parentSKU = localStorageData.parentSKU ? localStorageData.parentSKU : data.parentSKU;
+      data.title = localStorageData.title ? localStorageData.title : data.title;
+      data.url = localStorageData.url ? localStorageData.url : data.url;
+    }
     var productData = {
       'id': data.id,
       'sku': data.sku,
@@ -242,8 +255,41 @@
           }
         }
       });
+      // Set analytics data in hidden field.
+      Drupal.SpcPopulateDataFromGA();
     }
   }
 
-})(jQuery, Drupal);
+  Drupal.SpcPopulateDataFromGA = function () {
+    // Check if ga is loaded.
+    if (typeof window.ga === 'function' && window.ga.loaded && ga.getAll().length) {
+      // Use GA function queue.
+      ga(function () {
+        $('#spc-ga-client-id').val(ga.getAll()[0].get('clientId'));
+        $('#spc-ga-tracking-id').val(ga.getAll()[0].get('trackingId'));
+      });
 
+      return;
+    }
+
+    // Try to read again.
+    setTimeout(Drupal.SpcPopulateDataFromGA, 500);
+  };
+
+  Drupal.alshayaSpc.getGAData = function () {
+    const analytics = {};
+
+    const trackingIdEle = document.getElementById('spc-ga-tracking-id');
+    if (trackingIdEle) {
+      analytics.trackingId = trackingIdEle.value;
+    }
+
+    const clientIdEle = document.getElementById('spc-ga-client-id');
+    if (clientIdEle) {
+      analytics.clientId = clientIdEle.value;
+    }
+
+    return analytics;
+  };
+
+})(jQuery, Drupal);

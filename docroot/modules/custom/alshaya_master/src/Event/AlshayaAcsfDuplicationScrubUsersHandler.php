@@ -14,7 +14,7 @@ class AlshayaAcsfDuplicationScrubUsersHandler extends AcsfEventHandler {
    * Implements AcsfEventHandler::handle().
    */
   public function handle() {
-    drush_print(dt('Entered @class', ['@class' => get_class($this)]));
+    $this->consoleLog(dt('Entered @class', ['@class' => get_class($this)]));
 
     $ids = \Drupal::entityQuery('user')
       ->execute();
@@ -28,8 +28,8 @@ class AlshayaAcsfDuplicationScrubUsersHandler extends AcsfEventHandler {
       // Only if a user has just a single role of authenticated user,
       // we will delete them.
       if (($num_roles == 1) && ($roles[0] == 'authenticated')) {
-        drush_print(dt('Deleting non-administrative user from duplicated site: @id', ['@id' => $id]));
-        user_delete($id);
+        $this->consoleLog(dt('Deleting non-administrative user from duplicated site: @id', ['@id' => $id]));
+        \Drupal::entityTypeManager()->getStorage('user')->load($id)->delete();
       }
     }
   }

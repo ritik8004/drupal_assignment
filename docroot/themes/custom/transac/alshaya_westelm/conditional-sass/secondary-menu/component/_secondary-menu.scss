@@ -1,0 +1,67 @@
+.block-alshaya-secondary-main-menu {
+  @include breakpoint($desktop) {
+    .secondary--main--menu {
+      ul.menu--one__list {
+        li.menu--one__list-item {
+          &.has-child {
+            margin-right: 0.9375rem;
+
+            > .menu__link-wrapper {
+              position: relative;
+            }
+
+            a.menu--one__link {
+              position: initial;
+
+              &::after {
+                content: '';
+                width: 0;
+                height: 0;
+                border-left: 0.25rem solid transparent;
+                border-right: 0.25rem solid transparent;
+                border-top: 0.25rem solid $header_secondary_menu_link_arrow;
+                margin-left: 0.5rem;
+                position: absolute;
+                right: -0.8rem;
+                top: 0.5rem;
+              }
+            }
+          }
+
+          &:hover {
+            a.menu--one__link {
+              &::after {
+                border-top: 0;
+                border-bottom: 0.25rem solid $header_secondary_menu_link_arrow;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    .secondary--main--menu {
+      ul.menu--one__list {
+        .menu__in {
+          margin-top: -2.25rem;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .secondary-main-menu-wrapper {
+    .secondary--main--menu {
+      li.menu--one__list-item {
+        .menu--one__link {
+          font-family: $we-regular;
+        }
+      }
+    }
+  }
+}

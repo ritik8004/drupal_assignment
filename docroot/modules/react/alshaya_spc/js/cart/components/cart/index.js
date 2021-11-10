@@ -1,6 +1,5 @@
 import React from 'react';
 import Cookies from 'js-cookie';
-
 import '../../../utilities/interceptor/interceptor';
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
@@ -22,6 +21,18 @@ import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
 import Postpay from '../../../utilities/postpay';
+import PostpayEligiblityMessage from '../postpay/postpay-eligiblity-message';
+import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
+import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
+import ConditionalView
+  from '../../../../../js/utilities/components/conditional-view';
+import DeliveryAreaSelect from '../delivery-area-select';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
+import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -39,6 +50,8 @@ export default class Cart extends React.Component {
       inStock: true,
       messageType: null,
       message: null,
+      cartShippingMethods: null,
+      panelContent: null,
     };
   }
 
@@ -49,6 +62,7 @@ export default class Cart extends React.Component {
       checkCartCustomer(data);
 
       if (typeof data === 'undefined'
+        || data === null
         || data.cart_id === null
         || data.error !== undefined) {
         const prevState = this.state;
@@ -63,6 +77,7 @@ export default class Cart extends React.Component {
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
+          ...collectionPointsEnabled() && { collectionCharge: data.collection_charge || '' },
         }));
 
         // The cart is empty.
@@ -113,16 +128,19 @@ export default class Cart extends React.Component {
         });
       }
 
-      // Call dynamic-yield spa api for cart context.
       const { items } = this.state;
-      window.DY.API('spa', {
-        context: {
-          type: 'CART',
-          data: Object.keys(items),
-          lng: drupalSettings.alshaya_spc.lng,
-        },
-        countAsPageview: false,
-      });
+
+      // Call dynamic-yield spa api for cart context.
+      if (typeof window.DY !== 'undefined' && typeof window.DY.API !== 'undefined') {
+        window.DY.API('spa', {
+          context: {
+            type: 'CART',
+            data: Object.keys(items),
+            lng: drupalSettings.alshaya_spc.lng,
+          },
+          countAsPageview: false,
+        });
+      }
     }, false);
 
     // Event handles cart message update.
@@ -136,6 +154,11 @@ export default class Cart extends React.Component {
 
     // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
+
+    // Show labels for delivery methods if express delivery enabled.
+    if (isExpressDeliveryEnabled()) {
+      document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+    }
 
     // Display message from cookies.
     const qtyMismatchError = Cookies.get('middleware_payment_error');
@@ -187,6 +210,60 @@ export default class Cart extends React.Component {
     }
   };
 
+  preparePostpayMessage = (totals) => {
+    let postpay = null;
+    let postpayEligibilityMessage = null;
+    if (Postpay.isPostpayEnabled()) {
+      postpay = (
+        <PostpayCart
+          amount={totals.base_grand_total}
+          pageType="cart"
+          classNames="spc-postpay-mobile-preview"
+          mobileOnly
+        />
+      );
+      postpayEligibilityMessage = (
+        <PostpayEligiblityMessage
+          text={drupalSettings.alshaya_spc.postpay_eligibility_message}
+        />
+      );
+    }
+    return {
+      postpay,
+      postpayEligibilityMessage,
+    };
+  }
+
+  displayShippingMethods = (event) => {
+    const currentArea = event.detail;
+    showFullScreenLoader();
+    getCartShippingMethods(currentArea).then(
+      (response) => {
+        if (response !== null) {
+          this.setState({
+            cartShippingMethods: response,
+          });
+        }
+        removeFullScreenLoader();
+      },
+    );
+  }
+
+  // Adding panel for area list block.
+  getPanelData = (data) => {
+    // Adds loading class for showing loader on onclick of delivery panel.
+    document.querySelector('.delivery-loader').classList.add('loading');
+    this.setState({
+      panelContent: data,
+    });
+  };
+
+  // Removing panel for area list block.
+  removePanelData = () => {
+    this.setState({
+      panelContent: null,
+    });
+  };
 
   render() {
     const {
@@ -202,6 +279,9 @@ export default class Cart extends React.Component {
       actionMessage,
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
+      cartShippingMethods,
+      panelContent,
+      collectionCharge,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -228,20 +308,21 @@ export default class Cart extends React.Component {
         </>
       );
     }
-    let postpay;
-    let postpayEligibilityMessage;
-    if (Postpay.isPostpayEnabled()) {
-      postpay = (
-        <PostpayCart
-          amount={totals.base_grand_total}
-          isCartPage
-          classNames="spc-postpay-mobile-preview"
-          mobileOnly
-        />
-      );
-      postpayEligibilityMessage = <div className={`${drupalSettings.postpay_widget_info.postpay_mode_class}`}><div id="postpay-eligibility-message" style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: drupalSettings.alshaya_spc.postpay_eligibility_message }} /></div>;
+
+    const postPayData = this.preparePostpayMessage(totals);
+    if (postPayData.postpayEligibilityMessage !== null) {
       preContentActive = 'visible';
     }
+
+    // Get Smart Agent Info if available.
+    const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
+      ? Drupal.smartAgent.getInfo()
+      : false;
+
+    if (smartAgentInfo) {
+      preContentActive = 'visible';
+    }
+
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -255,24 +336,42 @@ export default class Cart extends React.Component {
           </CheckoutMessage>
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
-          {postpayEligibilityMessage}
+          {postPayData.postpayEligibilityMessage}
+
+          <ConditionalView condition={smartAgentInfo !== false}>
+            <>
+              <SASessionBanner agentName={smartAgentInfo.name} />
+              <SAShareStrip />
+            </>
+          </ConditionalView>
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
-          {postpay}
+          {postPayData.postpay}
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <SectionTitle animationDelayValue="0.4s">
-              <span>{`${Drupal.t('my shopping bag')} `}</span>
-              <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
-            </SectionTitle>
+            <div className="spc-title-wrapper">
+              <SectionTitle animationDelayValue="0.4s">
+                <span>{`${Drupal.t('my shopping bag')} `}</span>
+                <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
+              </SectionTitle>
+              <ConditionalView condition={isExpressDeliveryEnabled()}>
+                <DeliveryAreaSelect
+                  animationDelayValue="0.4s"
+                  getPanelData={this.getPanelData}
+                  removePanelData={this.removePanelData}
+                />
+              </ConditionalView>
+            </div>
             <DeliveryInOnlyCity />
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
               items={items}
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
+              totals={totals}
+              cartShippingMethods={cartShippingMethods}
             />
           </div>
           <div className="spc-sidebar">
@@ -288,6 +387,10 @@ export default class Cart extends React.Component {
               show_checkout_button
               animationDelay="0.5s"
               context="cart"
+              {...(collectionPointsEnabled()
+                && hasValue(collectionCharge)
+                && { collectionCharge }
+              )}
             />
           </div>
         </div>
@@ -298,6 +401,13 @@ export default class Cart extends React.Component {
         <div className="spc-footer">
           <VatFooterText />
         </div>
+        <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <div className="select-area-popup-wrapper">
+            <SelectAreaPanel
+              panelContent={panelContent}
+            />
+          </div>
+        </ConditionalView>
       </>
     );
   }

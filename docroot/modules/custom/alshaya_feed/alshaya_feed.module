@@ -7,6 +7,7 @@
 
 use Drupal\alshaya_acm_product\Plugin\QueueWorker\PostProcessProduct;
 use Drupal\node\NodeInterface;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Post process SKU when node is deleted.
@@ -23,5 +24,24 @@ function alshaya_feed_node_delete(NodeInterface $node) {
     $sku = $node->get('field_skus')->getString();
     // Add sku to post process product queue.
     \Drupal::service('queue')->get(PostProcessProduct::QUEUE_NAME)->createItem($sku);
+  }
+}
+
+/**
+ * Implements hook_sku_product_attribute_alter().
+ */
+function alshaya_feed_sku_product_attribute_alter(array &$attributes, SKUInterface $sku, string $field_name) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  // Add a valid barcode (EAN) attribute in the product feed.
+  $extra_row = [];
+  if ($field_name === 'attr_aims_barcode'
+    && $skuManager->validateEanBarcode($sku->get($field_name)->getString())) {
+    $extra_row['key'] = 'sanitized_aims_barcode';
+    $extra_row['value'] = $sku->get($field_name)->getString();
+  }
+
+  if (!empty($extra_row)) {
+    $attributes[] = $extra_row;
   }
 }

@@ -7,6 +7,7 @@ use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -19,7 +20,7 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\metatag\MetatagToken;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\image\Entity\ImageStyle;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 
 /**
  * Class SkuInfoHelper.
@@ -111,6 +112,20 @@ class AlshayaFeedSkuInfoHelper {
   protected $metaTagManager;
 
   /**
+   * The SKU Price Helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper
+   */
+  protected $skuPriceHelper;
+
+  /**
+   * SKU images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -135,6 +150,10 @@ class AlshayaFeedSkuInfoHelper {
    *   Matatag manager.
    * @param \Drupal\metatag\MetatagToken $token
    *   The MetatagToken object.
+   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
+   *   The SKU price helper service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   SKU images helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -147,7 +166,9 @@ class AlshayaFeedSkuInfoHelper {
     RendererInterface $renderer,
     ConfigFactoryInterface $config_factory,
     MetatagManager $metaTagManager,
-    MetatagToken $token
+    MetatagToken $token,
+    SkuPriceHelper $sku_price_helper,
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -163,6 +184,8 @@ class AlshayaFeedSkuInfoHelper {
     $this->currencyCode['en'] = $currency_config->get('currency_code');
     $this->metaTagManager = $metaTagManager;
     $this->tokenService = $token;
+    $this->skuPriceHelper = $sku_price_helper;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -222,7 +245,6 @@ class AlshayaFeedSkuInfoHelper {
       $promotions_array = array_column($this->skuManager->getPromotionsForSearchViewFromSkuId($sku), 'text');
       $promotion_label = implode(' | ', $promotions_array);
 
-      $priceRange = $this->getRange($prices['final_price']);
       $parentProduct = [
         'group_id' => $sku->getSku(),
         'name' => $node->label(),
@@ -233,7 +255,7 @@ class AlshayaFeedSkuInfoHelper {
         'description' => !empty($description) ? $this->renderer->renderPlain($description) : '',
         'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
         'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
-        'price_range' => $this->currencyCode[$lang] . ' ' . $this->skuInfoHelper->formatPriceDisplay((float) $priceRange['start']) . ' - ' . $this->currencyCode[$lang] . ' ' . $this->skuInfoHelper->formatPriceDisplay((float) $priceRange['stop']),
+        'price_range' => $this->getPlainTextPriceRange($sku),
         'currency' => $this->currencyCode[$lang],
         'keywords' => $keywords,
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
@@ -276,6 +298,7 @@ class AlshayaFeedSkuInfoHelper {
             continue;
           }
           $stockInfo = $this->skuInfoHelper->stockInfo($child);
+          $prices = $this->skuManager->getMinPrices($child, $color);
 
           $variant = [
             'sku' => $child->getSku(),
@@ -292,6 +315,9 @@ class AlshayaFeedSkuInfoHelper {
               'description',
               'short_description',
             ]),
+            'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
+            'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
+            'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
           $product[$lang][] = array_merge($parentProduct, $variant);
         }
@@ -372,14 +398,12 @@ class AlshayaFeedSkuInfoHelper {
       return [];
     }
 
-    $image_style_plp = ImageStyle::load('product_listing');
-
-    $images = array_map(function ($image) use ($image_style_plp) {
+    $images = array_map(function ($image) {
       if (!empty($image['drupal_uri'])) {
         return [
           'label' => $image['label'],
           'url' => file_create_url($image['drupal_uri']),
-          'url_product_listing' => $image_style_plp->buildUrl($image['drupal_uri']),
+          'url_product_listing' => $this->skuImagesHelper->getImageStyleUrl($image, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         ];
       }
     }, $media_items['media_items']['images']);
@@ -464,6 +488,36 @@ class AlshayaFeedSkuInfoHelper {
 
     $static[$cid] = $configurations;
     return $configurations;
+  }
+
+  /**
+   * Processes the price range and returns in plain text.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Product sku for which we want the price.
+   *
+   * @return string
+   *   The price range in plaintext format.
+   */
+  private function getPlainTextPriceRange(SKU $sku) {
+    $sku_price_range = $this->skuPriceHelper->getPriceBlockForSku($sku);
+
+    switch ($sku->bundle()) {
+      case 'configurable':
+        $sku_price_range = strip_tags($sku_price_range["#price"]["#markup"]);
+        break;
+
+      case 'simple':
+      default:
+        $sku_price_range = $sku_price_range['#final_price']
+          ? strip_tags($this->renderer->renderPlain($sku_price_range['#final_price']))
+          : strip_tags($this->renderer->renderPlain($sku_price_range['#price']));
+        break;
+    }
+
+    // Remove extra spaces from beginning/end/middle of string which
+    // appear due to removal of html tags.
+    return preg_replace(['/^\s+/', '/\s+$/', '/\s+/u'], ['', '', ' '], $sku_price_range);
   }
 
 }

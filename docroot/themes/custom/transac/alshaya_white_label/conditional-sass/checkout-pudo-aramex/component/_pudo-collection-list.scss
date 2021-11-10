@@ -1,0 +1,80 @@
+#click-and-collect-list-view {
+  .spc-cnc-store-name.pudo-collection-list {
+    padding-top: 0.625rem;
+    padding-#{$left}: 5.625rem;
+    padding-#{$right}: 1.25rem;
+    padding-bottom: 0.75rem;
+
+    .spc-store-name-wrapper {
+      height: auto;
+      padding-#{$left}: 0;
+      line-height: 1;
+
+      .store-name {
+        color: $spc-cnc-store-list-distance;
+      }
+
+      .store-distance {
+        @include breakpoint($only-mobile) {
+          #{$right}: 3rem;
+        }
+      }
+    }
+  }
+
+  ul {
+    li {
+      .store-address-content {
+        padding-#{$left}: 5.625rem;
+      }
+    }
+  }
+}
+
+.pudo-collection-list,
+.spc-delivery-store-name-wrapper {
+  .pickup-point-title {
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    color: $spc-checkout_section_title;
+  }
+}
+
+#google-map-cnc {
+  .spc-store-name-wrapper {
+    display: block;
+  }
+
+  .store-icon,
+  .collection-point-icon {
+    display: none;
+  }
+}
+
+#click-and-collect-list-view,
+#google-map-cnc,
+.map-store-list,
+#click-and-collect-selected-store {
+  .pudo-collection-list {
+    .store-distance {
+      position: absolute;
+      #{$right}: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+.map-store-list {
+  .pudo-collection-list {
+    padding-#{$left}: 2.125rem;
+
+    .store-distance {
+      @include breakpoint($only-mobile) {
+        #{$right}: 0;
+        top: calc(50% - 0.5rem);
+      }
+    }
+  }
+}

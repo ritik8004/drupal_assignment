@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 export default class ReviewSorting extends React.Component {
   handleSelect = (selectedOption) => {
@@ -8,10 +9,17 @@ export default class ReviewSorting extends React.Component {
       processingCallback,
     } = this.props;
 
-    if (selectedOption.value !== 'none'
-      && currentOption !== selectedOption.value) {
+    if (currentOption !== selectedOption.value) {
       // Callback to process sort option.
       processingCallback(selectedOption);
+      // Process sort click data as user clicks on sort option.
+      const analyticsData = {
+        type: 'Used',
+        name: 'sort',
+        detail1: selectedOption.label,
+        detail2: selectedOption.value,
+      };
+      trackFeaturedAnalytics(analyticsData);
     }
   }
 

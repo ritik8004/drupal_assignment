@@ -14,6 +14,9 @@
 // Utilities for building multilingual websites.
 @import "directional";
 
+// Common styles for @extend.
+@import "placeholder";
+
 // These are the default base styles applied to HTML elements.
 @import "base/**/*";
 

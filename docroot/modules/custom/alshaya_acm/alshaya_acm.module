@@ -8,6 +8,7 @@
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -570,7 +571,7 @@ function alshaya_acm_get_cart_items_by_sku() {
 function alshaya_acm_form_multistep_default_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Create the cart page link.
   $url = Url::fromRoute('acq_cart.cart');
-  $link = \Drupal::l('Back to Basket', $url)->getGeneratedLink();
+  $link = Link::fromTextAndUrl('Back to Basket', $url)->getGeneratedLink();
   $form['back_to_cart'] = [
     '#markup' => $link,
     '#weight' => -5,
@@ -767,7 +768,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   else {
     // Get SKU attributes.
     $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
-    $sku_image = alshaya_acm_get_product_display_image($sku_entity, 'cart_thumbnail', 'cart');
+    $sku_image = alshaya_acm_get_product_display_image($sku_entity, SkuImagesHelper::STYLE_CART_THUMBNAIL, 'cart');
     $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
 
     // Set the cache.

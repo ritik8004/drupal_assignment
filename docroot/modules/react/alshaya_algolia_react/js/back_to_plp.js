@@ -6,11 +6,6 @@
 (function ($) {
   'use strict';
 
-  Drupal.algoliaGetActualPageNumber = function () {
-    var resultsCount = $('.node--view-mode-search-result:visible').length;
-    return Math.ceil(resultsCount / drupalSettings.algoliaSearch.itemsPerPage);
-  }
-
   Drupal.processBackToPLP = function () {
     // On page load, apply filter/sort if any.
     $('html').once('back-to-list').each(function () {
@@ -20,11 +15,11 @@
           var context = $('#alshaya-algolia-plp');
           // To adjust the grid view mode.
           if (typeof storage_value.grid_type !== 'undefined') {
-            Drupal.algolia.adjustAlgoliaGridView(context, '.view-algolia-plp', storageKey, storage_value);
+            Drupal.algolia.adjustAlgoliaGridView(context, 'back-to-plp', storageKey, storage_value);
           }
 
           if (typeof storage_value.sku !== 'undefined') {
-            Drupal.algolia.scrollToAlgoliaProduct(context, 'back-to-plp', storageKey, storage_value);
+            Drupal.algolia.scrollToAlgoliaProduct(context, '.view-algolia-plp', storageKey, storage_value);
           }
         }
     });

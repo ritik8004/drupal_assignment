@@ -53,26 +53,6 @@ payment.checkout_com_apple_pay_save:
     controller: App\Controller\CheckoutComPaymentController::saveApplePayPayment
     methods: POST
 
-payment.knet_payment_response:
-    path: /payment/knet-response
-    controller: App\Controller\KnetPaymentController::handleKnetResponse
-    methods: POST
-
-payment.knet_payment_error:
-    path: /payment/knet-error/{state_key}
-    controller: App\Controller\KnetPaymentController::handleKnetError
-    methods: GET
-
-payment.cybersource_payment_token:
-    path: /payment/cybersource/get-token
-    controller: App\Controller\CyberSourcePaymentController::getCybersourceToken
-    methods: POST
-
-payment.cybersource_payment_finalise:
-    path: /payment/cybersource/finalise
-    controller: App\Controller\CyberSourcePaymentController::finaliseCybersource
-    methods: POST
-
 payment.payment_success:
   path: /payment/success/{langcode}
   controller: App\Controller\PaymentController::handlePaymentSuccess
@@ -87,3 +67,8 @@ freegift.select_free_gift:
     path: /select-free-gift
     controller: App\Controller\FreeGiftController::selectFreeGift
     methods: POST
+
+cart.smart_agent_resume_cart:
+  path: /cart/smart-agent-cart-resume
+  controller: App\Controller\CartController::smartAgentResumeCart
+  methods: GET

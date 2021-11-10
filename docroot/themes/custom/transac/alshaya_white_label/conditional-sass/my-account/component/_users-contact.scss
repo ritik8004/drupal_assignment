@@ -1,0 +1,84 @@
+.c-user-edit {
+  .user-form {
+    @include breakpoint($desktop) {
+      margin-top: -0.125rem;
+      margin-bottom: 6.25rem;
+    }
+
+    input:disabled {
+      color: $primary_input_disabled;
+    }
+
+    input:not(:focus):valid ~ label,
+    input:not(:active):valid ~ label {
+      font-size: 0.75rem;
+      top: -0.125rem;
+    }
+
+    input:focus:valid ~ label,
+    input:active:valid ~ label,
+    .form-item input ~ label.active-label {
+      @include placeholder-active;
+    }
+
+    #edit-account {
+      padding-top: 0;
+    }
+
+    input.form-text {
+      display: inline-block;
+    }
+
+    .field--type-mobile-number {
+      .form-item {
+        &.form-type-tel {
+          margin-top: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .c-content .messages--error {
+    margin-top: 1.25rem;
+  }
+
+  .field--name-field-first-name {
+    margin-#{$right}: 1.5rem;
+  }
+
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    display: inline-block;
+    max-width: 10.7rem;
+    width: calc(50% - 0.75rem);
+
+    @include breakpoint($only-mobile) {
+      width: calc(50% - 0.875rem);
+    }
+
+    input {
+      margin-top: 0.5rem;
+    }
+  }
+
+  #user-form {
+    @include breakpoint($tablet) {
+      #edit-submit {
+        width: 5.688rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      max-width: 25rem;
+
+      #edit-account {
+        margin-top: 3.375rem;
+      }
+
+      .field--name-field-privilege-card-number {
+        margin-top: 3rem;
+      }
+    }
+  }
+}

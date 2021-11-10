@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { placeOrder, removeFullScreenLoader } from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
-import i18nMiddleWareUrl from './i18n_url';
+import logger from './logger';
 
 let applePaySessionObject;
 
@@ -55,9 +55,12 @@ const ApplePay = {
   },
 
   onValidateMerchant: (event) => {
+    logger.debug('Inside onValidateMerchant for Apple Pay.');
+
     const controllerUrl = Drupal.url('checkoutcom/applepay/validate');
     const validationUrl = `${controllerUrl}?u=${event.validationURL}`;
     Axios.get(validationUrl).then((merchantSession) => {
+      logger.debug('Merchant validation successful for Apple Pay.');
       applePaySessionObject.completeMerchantValidation(merchantSession.data);
     }).catch((error) => {
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
@@ -70,8 +73,9 @@ const ApplePay = {
   },
 
   onPaymentAuthorized: (event) => {
-    const url = i18nMiddleWareUrl('payment/checkout-com-apple-pay/save');
-    Axios.post(url, event.payment.token).then((response) => {
+    logger.debug('Inside onPaymentAuthorized for Apple Pay.');
+
+    window.commerceBackend.saveApplePayPayment(event.payment.token).then((response) => {
       if (response.data.success !== undefined && response.data.success === true) {
         // Update apple pay popup.
         applePaySessionObject.completePayment(window.ApplePaySession.STATUS_SUCCESS);

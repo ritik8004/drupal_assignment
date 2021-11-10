@@ -1,0 +1,17 @@
+smart_agent:
+  js:
+    js/smart_agent.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+    - core/jquery.cookie
+
+restrict_agent_login:
+  js:
+    js/restrict_agent_login.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+    - core/jquery.cookie
+    - alshaya_checkout_by_agent/smart_agent

@@ -1,0 +1,7 @@
+services:
+  alshaya_acm_product_category.commands:
+    class: \Drupal\alshaya_acm_product_category\Commands\AlshayaAcmProductCategoryDrushCommands
+    arguments:
+      - '@alshaya_acm_product_category.category_sync_manager'
+    tags:
+      - { name: drush.command }

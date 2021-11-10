@@ -52,6 +52,10 @@
 
       &:nth-of-type(3) {
         text-align: center;
+
+        &::before {
+          #{$left}: 42.3%;
+        }
       }
 
       &:nth-of-type(4),
@@ -80,12 +84,6 @@
       &:nth-of-type(2) {
         &::before {
           #{$left}: 45%;
-        }
-      }
-
-      &:nth-of-type(3) {
-        &::before {
-          #{$left}: 42.3%;
         }
       }
 
@@ -127,6 +125,41 @@
       &:nth-of-type(2) span,
       &:nth-of-type(4) span {
         visibility: hidden;
+      }
+    }
+
+    &.range-3 {
+      label {
+        &:nth-of-type(1),
+        &:nth-of-type(3) {
+          width: 25%;
+        }
+
+        &:nth-of-type(2) {
+          text-align: center;
+          width: 50%;
+
+          span {
+            visibility: visible;
+            #{$left}: -0.75rem;
+
+            @include breakpoint($upto-desktop) {
+              #{$left}: -0.25rem;
+            }
+          }
+
+          &::before {
+            #{$left}: 45%;
+          }
+        }
+
+        &:nth-of-type(3) {
+          text-align: $right;
+
+          &::before {
+            #{$left}: 94%;
+          }
+        }
       }
     }
 
@@ -175,6 +208,7 @@
   .select-slider__wrap {
     display: flex;
     align-items: center;
+    margin-top: 1.375rem;
 
     @include breakpoint($only-mobile) {
       flex-flow: row wrap;
@@ -194,6 +228,11 @@
       .selectedLabel {
         color: $rr-selected-slider-value;
         font-style: italic;
+        padding-#{$left}: 0.1875rem;
+
+        html[lang=ar] & {
+          padding-right: 0.3125rem;
+        }
       }
     }
   }

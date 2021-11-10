@@ -1,0 +1,28 @@
+.swatch-list {
+  .li-swatch-image {
+    height: auto;
+    width: auto;
+
+    a {
+      height: auto;
+      width: 2.9375rem;
+      line-height: 0;
+
+      &.active {
+        &::after {
+          height: auto;
+          width: auto;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}

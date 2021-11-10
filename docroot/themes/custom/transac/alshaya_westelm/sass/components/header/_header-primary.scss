@@ -1,4 +1,8 @@
 header {
+  @include breakpoint($desktop) {
+    border-bottom: 0.0625rem solid $mm_l1_border;
+  }
+
   &.c-header {
     .block-views-exposed-filter-blocksearch-page {
       .form-text {
@@ -85,6 +89,10 @@ header {
 
       @include breakpoint($desktop) {
         top: -0.25rem;
+
+        #mini-cart-wrapper {
+          min-width: 14.813rem;
+        }
       }
 
       @include breakpoint($only-tablet) {
@@ -108,6 +116,17 @@ header {
       }
     }
 
+    .block-alshaya-react-mini-cart {
+      .cart-link {
+        @include breakpoint($only-mobile) {
+          html[lang=ar] & {
+            top: -0.125rem;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
     .site-brand-home {
       text-align: center;
 
@@ -126,6 +145,7 @@ header {
 
         @include breakpoint($desktop) {
           max-width: 12.5rem;
+          display: inline;
         }
 
         @include breakpoint($only-tablet) {
@@ -149,7 +169,6 @@ header {
           @include breakpoint($desktop) {
             width: 10rem;
             margin-top: -1.25rem;
-            margin-right: 0.25rem;
           }
 
           @include breakpoint($only-tablet) {
@@ -206,6 +225,12 @@ header {
         > div {
           @include breakpoint($desktop) {
             width: 33.33%;
+          }
+        }
+
+        > .block-system-branding-block {
+          @include breakpoint($desktop) {
+            width: 100%;
           }
         }
       }

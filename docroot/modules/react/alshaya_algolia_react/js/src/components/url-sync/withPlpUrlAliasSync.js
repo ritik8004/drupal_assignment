@@ -248,7 +248,7 @@ const withPlpUrlAliasSync = (
 
     const apiRequests = [];
     filters.forEach((element) => {
-      const facetAlias = facetFieldAlias(element.key, 'alias');
+      const facetAlias = facetFieldAlias(element.key, 'alias', pageType);
 
       // Range filters (e.g "price") requires values separated by colon(:)
       // [e.g 0:5, 5:10 etc..], filter value in url contains only min. value
@@ -387,7 +387,7 @@ const withPlpUrlAliasSync = (
       const freshApiRequests = [];
       Object.entries(newSearchState.refinementList).forEach(([facetKey, value]) => {
         if (!value) return;
-        const facetKeyAlias = facetFieldAlias(facetKey, 'alias');
+        const facetKeyAlias = facetFieldAlias(facetKey, 'alias', pageType);
         // Convert facet values to aliases to send it to url.
         const facetValues = getFacetStorage(facetKeyAlias);
         const aliasValues = [];

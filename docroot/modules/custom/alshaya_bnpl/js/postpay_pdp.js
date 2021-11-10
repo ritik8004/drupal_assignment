@@ -1,12 +1,14 @@
 (function ($, Drupal) {
   Drupal.behaviors.postpayPDP = {
     attach: function (context, settings) {
-      $('.sku-base-form').each(function () {
-        setPostpayWidgetAmount(this);
-      });
+      document.addEventListener('alshayaPostpayInit', () => {
+        $('.sku-base-form').each(function () {
+          setPostpayWidgetAmount(this);
+        });
 
-      $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
-        setPostpayWidgetAmount(this, variant, event);
+        $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+          setPostpayWidgetAmount(this, variant, event);
+        });
       });
     }
   };
@@ -26,13 +28,22 @@
     }
     else {
       variant = $('.selected-variant-sku', element).val();
+      // Check if we are in mag-v2 layout
+      // due to different markup the initial variant fetch will fail.
+      if (typeof variant === 'undefined') {
+        if ($('body').hasClass('magazine-layout-v2')) {
+          // variantselected is an attribute in magv2 form.
+          variant = $(element).attr('variantselected');
+        }
+      }
     }
-
-    var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+    var variantPrice = (drupalSettings[productKey][sku]['type'] != 'simple') ?
+      drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
+      drupalSettings[productKey][sku]['gtm_attributes']['price'];
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.
-    $('.postpay-widget', product).attr('data-amount', (variantInfo['gtm_price'].replace(',', '') * drupalSettings.postpay.currency_multiplier).toFixed(0));
+    $('.postpay-widget', product).attr('data-amount', (variantPrice.replace(',', '') * drupalSettings.postpay.currency_multiplier).toFixed(0));
     postpay.ui.refresh();
   }
 })(jQuery, Drupal);

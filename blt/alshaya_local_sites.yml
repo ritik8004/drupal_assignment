@@ -13,6 +13,10 @@ sites:
     module: alshaya_mc
     type: alshaya_transac
     country: ae
+  mcqa:
+    module: alshaya_mc
+    type: alshaya_transac
+    country: qa
   hmkw:
     module: alshaya_hm
     type: alshaya_transac
@@ -29,6 +33,10 @@ sites:
     module: alshaya_hm
     type: alshaya_transac
     country: eg
+  hmqa:
+    module: alshaya_hm
+    type: alshaya_transac
+    country: qa
   bbwkw:
     module: alshaya_bbw
     type: alshaya_transac
@@ -53,6 +61,10 @@ sites:
     module: alshaya_bbw
     type: alshaya_transac
     country: qa
+  bbwjo:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: jo
   vskw:
     module: alshaya_vs
     type: alshaya_transac
@@ -61,6 +73,10 @@ sites:
     module: alshaya_vs
     type: alshaya_transac
     country: ae
+  vsqa:
+    module: alshaya_vs
+    type: alshaya_transac
+    country: qa
   vssa:
     module: alshaya_vs
     type: alshaya_transac
@@ -206,3 +222,71 @@ sites:
     module: alshaya_mu
     type: alshaya_transac
     country: eg
+  tbskw:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: kw
+  tbssa:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: sa
+  tbsae:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: ae
+  tbseg:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: eg
+  coskw:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: kw
+  cossa:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: sa
+  cosae:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: ae
+  coseg:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: eg
+  cosbh:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: bh
+  cosqa:
+    module: alshaya_cos
+    type: alshaya_transac
+    country: qa
+  dhkw:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: kw
+  dhsa:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: sa
+  dhae:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: ae
+  dheg:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: eg
+  dhbh:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: bh
+  dhqa:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: qa
+  dhjo:
+    module: alshaya_dh
+    type: alshaya_transac
+    country: jo

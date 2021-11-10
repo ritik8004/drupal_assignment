@@ -9,7 +9,7 @@
 
   .slick-slide {
     @include breakpoint($desktop) {
-      width: 6.5rem !important;
+      width: 6.1875rem !important;
       height: 8rem !important;
       padding: 0;
     }
@@ -17,14 +17,6 @@
     @include breakpoint($only-tablet) {
       height: 7.75rem !important;
       padding: 0;
-    }
-
-    img {
-      height: 7.625rem;
-
-      @include breakpoint($only-tablet) {
-        height: 7.25rem;
-      }
     }
   }
 
@@ -54,18 +46,19 @@
 }
 
 .cloudzoom {
-  &.thumbnail-count-1 {
-    .cloudzoom__herocontainer {
-      @include breakpoint($tablet) {
-        margin-#{$right}: 3.125rem;
-      }
+  @include breakpoint($desktop) {
+    &.thumbnail-count-1 {
+      margin-#{$right}: 3.125rem;
+    }
+
+    &:not(.thumbnail-count-1) {
+      margin-#{$right}: 6.125rem;
     }
   }
 
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
       width: calc(100% - (6.5rem + 8rem));
-      margin-#{$right}: 6.125rem;
     }
   }
 
@@ -85,6 +78,10 @@
         height: 31.875rem;
       }
     }
+  }
+
+  #cloud-zoom-wrap img {
+    object-fit: scale-down;
   }
 }
 
@@ -109,6 +106,18 @@
     &.pager-no {
       @include breakpoint($only-tablet) {
         margin-top: 2.5rem;
+      }
+    }
+  }
+}
+
+.mobilegallery {
+  #product-image-gallery-mobile {
+    li.slick-slide {
+      @include breakpoint($only-mobile) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

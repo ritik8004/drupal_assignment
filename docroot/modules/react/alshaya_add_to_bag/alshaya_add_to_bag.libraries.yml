@@ -1,0 +1,7 @@
+add_to_bag:
+  version: 1.x
+  footer: true
+  js:
+    dist/addtobag.bundle.js: { }
+  dependencies:
+    - alshaya_react/react

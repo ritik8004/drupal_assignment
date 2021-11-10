@@ -26,17 +26,17 @@
           {% if mobile_site_logo %}
             <picture>
               <source media="(max-width: 767px)" srcset="{{ mobile_site_logo }}">
-              <img src="{{ site_logo }}" alt="{{ site_name }}"/>
+              <img loading="lazy" src="{{ site_logo }}" alt="{{ site_name }}"/>
             </picture>
           {% else %}
-            <img src="{{ site_logo }}" alt="{{ site_name }}"/>
+            <img loading="lazy" src="{{ site_logo }}" alt="{{ site_name }}"/>
           {% endif %}
         </a>
 
         {# If sub brand logo available #}
         {% if sub_brand_logo_img %}
           <a href="{{ sub_brand_logo_link }}" title="{{ sub_brand_logo_title }}" rel="home" class="sub-brand-logo logo">
-            <img src="{{ sub_brand_logo_img }}?ytDfk6" alt="{{ sub_brand_logo_alt }}"/>
+            <img loading="lazy" src="{{ sub_brand_logo_img }}?ytDfk6" alt="{{ sub_brand_logo_alt }}"/>
           </a>
           {% endif %}
       </div>

@@ -35,7 +35,7 @@ then
 fi
 
 stack=`whoami`
-repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
+repo="$stack@svn-5975.enterprise-g1.hosting.acquia.com:$stack.git"
 
 server_root="/var/www/html/$AH_SITE_NAME"
 docroot="${server_root}/docroot"
@@ -67,7 +67,7 @@ log_message "Repo: $repo"
 log_message "Docroot: $docroot"
 log_message "Log file: $log_file"
 log_message "Base URI: $base_uri"
-log_message "Script Directory: $current_dir"
+log_message "Script Directory: $script_dir"
 
 echo
 read -p "Please confirm details above and say proceed to start the release: " proceed

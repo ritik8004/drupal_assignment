@@ -1,0 +1,7 @@
+.checkout-link {
+  &:not(.checkout_com_applepay) {
+    a {
+      font-family: $tbs-medium;
+    }
+  }
+}

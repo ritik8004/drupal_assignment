@@ -1,0 +1,93 @@
+.addtobag-button {
+  position: relative;
+  font-family: $alshaya-bold;
+  font-size: 0.875rem;
+  background: $primary_btn_bg;
+  color: $primary_btn_text;
+  display: inline-block;
+  height: 2.5rem;
+  width: 100%;
+  padding: 0.625rem 1.25rem;
+  border: 0;
+  border-radius: 0.125rem;
+
+  @include breakpoint($only-mobile) {
+    height: 2.1875rem;
+    padding-#{$left}: 0.5rem;
+    padding-#{$right}: 0.5rem;
+  }
+}
+
+.addtobag-button-container {
+  margin: 1.5rem 0.5rem 0;
+
+  @include breakpoint($tablet) {
+    margin-#{$left}: 1.25rem;
+    margin-#{$right}: 1.25rem;
+  }
+}
+
+.add-to-basket-loader {
+  position: relative;
+
+  button {
+    font-size: 0 !important;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &.qty-sel-container {
+    .qty-text-wrapper {
+      font-size: 0;
+    }
+
+    .qty-sel-btn {
+      opacity: 0.7;
+    }
+  }
+}
+
+.is-not-buyable,
+.addtobag-config-button {
+  font-family: $alshaya-bold;
+  font-size: 0.875rem;
+  color: $primary_btn_bg;
+  width: calc(100% - 2.5rem);
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $spc-checkout-delivery-method-bg;
+  cursor: pointer;
+  border: 1px solid $primary_btn_bg;
+  z-index: 1;
+  text-align: center;
+  padding: 0.5rem 1.25rem;
+  margin: 1.5rem 1.25rem 0;
+
+  @include breakpoint($only-mobile) {
+    width: calc(100% - 1rem);
+    height: 2.1875rem;
+    margin-#{$left}: 0.5rem;
+    margin-#{$right}: 0.5rem;
+  }
+}
+
+.is-not-buyable:hover {
+  color: $primary_btn_bg;
+}
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  &:hover {
+    background: $plp-primary-cta-hover-bg;
+  }
+}
+
+.is-not-buyable,
+.addtobag-config-button,
+.product-drawer-content-wrapper .pdp-link {
+  &:hover {
+    background: $plp-secondary-cta-hover-bg;
+  }
+}

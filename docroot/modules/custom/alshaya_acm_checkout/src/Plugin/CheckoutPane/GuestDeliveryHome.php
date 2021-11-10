@@ -356,7 +356,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       }
       catch (\Exception $e) {
         if (acq_commerce_is_exception_api_down_exception($e)) {
-          drupal_set_message($e->getMessage(), 'error');
+          $this->messenger()->addMessage($e->getMessage(), 'error');
           $form_state->setErrorByName('custom', $e->getMessage());
           return;
         }

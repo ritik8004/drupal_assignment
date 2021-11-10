@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableJsonResponse;
@@ -23,10 +24,10 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\image\ImageStyleInterface;
 use Drupal\Core\Extension\ModuleHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Class Product Controller.
@@ -72,6 +73,20 @@ class ProductController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -80,7 +95,9 @@ class ProductController extends ControllerBase {
       $container->get('request_stack'),
       $container->get('config.factory'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity.repository'),
+      $container->get('alshaya_acm_product.sku_images_helper')
     );
   }
 
@@ -97,19 +114,27 @@ class ProductController extends ControllerBase {
    *   The SKU Image Manager.
    * @param \Drupal\Core\Extension\ModuleHandler $module_handler
    *   The Module Handler service.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
+   *   Sku imagese helper.
    */
   public function __construct(
       SkuManager $sku_manager,
       RequestStack $request_stack,
       ConfigFactoryInterface $config_factory,
       SkuImagesManager $sku_image_manager,
-      ModuleHandler $module_handler
+      ModuleHandler $module_handler,
+      EntityRepositoryInterface $entity_repository,
+      SkuImagesHelper $images_helper
     ) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
     $this->acmConfig = $config_factory->get('alshaya_acm.settings');
     $this->skuImageManager = $sku_image_manager;
     $this->moduleHandler = $module_handler;
+    $this->entityRepository = $entity_repository;
+    $this->skuImagesHelper = $images_helper;
   }
 
   /**
@@ -225,7 +250,7 @@ class ProductController extends ControllerBase {
 
       if ($node instanceof NodeInterface) {
         // Get translated node object.
-        $node = $this->entityManager()->getTranslationFromContext($node);
+        $node = $this->entityRepository->getTranslationFromContext($node);
 
         // Set the title to empty string. We don't want to display title.
         $node->setTitle('');
@@ -306,7 +331,7 @@ class ProductController extends ControllerBase {
         if ($this->acmConfig->get('display_crosssell')) {
           $data = [
             'section_title' => $this->t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
-            'views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
+            'views_display_id' => $this->acmConfig->get('show_crosssell_as_matchback') ? ($device == 'desktop' ? 'block_matchback' : 'block_matchback_mobile') : 'block_product_slider',
           ];
         }
       }
@@ -370,11 +395,8 @@ class ProductController extends ControllerBase {
       if ($related_sku_entity instanceof SKU) {
         $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
-        if (!empty($sku_media['drupal_uri'])) {
-          $image_style = $this->entityTypeManager()->getStorage('image_style')->load('product_zoom_medium_606x504');
-          if ($image_style instanceof ImageStyleInterface) {
-            $image = $image_style->buildUrl($sku_media['drupal_uri']);
-          }
+        if (!empty($sku_media)) {
+          $image = $this->skuImagesHelper->getImageStyleUrl($sku_media, SkuImagesHelper::STYLE_PRODUCT_SLIDE);
         }
         $priceHelper = _alshaya_acm_product_get_price_helper();
         $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);

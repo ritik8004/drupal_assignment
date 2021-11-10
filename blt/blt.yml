@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: (MMCPA|ACR2|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP)
+  prefix: (MMCPA|ACR2|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP|VMA)
   human_name: Alshaya
   profile:
     name: alshaya_transac
@@ -10,11 +10,13 @@ project:
 git:
   default_branch: develop
   remotes:
-    - 'alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git'
-    - 'alshaya2@svn-25.enterprise-g1.hosting.acquia.com:alshaya2.git'
-    - 'alshaya3bis@svn-25.enterprise-g1.hosting.acquia.com:alshaya3bis.git'
-    - 'alshaya4@svn-25.enterprise-g1.hosting.acquia.com:alshaya4.git'
-    - 'alshaya5@svn-25.enterprise-g1.hosting.acquia.com:alshaya5.git'
+    - 'alshaya@svn-5975.enterprise-g1.hosting.acquia.com:alshaya.git'
+    - 'alshaya2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya2.git'
+    - 'alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git'
+    - 'alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git'
+    - 'alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git'
+    - 'alshaya6tmp2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya6tmp2.git'
+    - 'alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git'
 deploy:
   tag_source: true
   gitignore_file: '${repo.root}/blt/config/.gitignore'
@@ -26,7 +28,7 @@ drush:
   default_alias: '${drush.aliases.local}'
 modules:
   local:
-    enable: [dblog, devel, seckit, views_ui]
+    enable: [views_ui]
     uninstall: [acsf, acquia_connector, shield]
   ci:
     enable: {  }
@@ -50,15 +52,12 @@ modules:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [views_ui]
 command-hooks:
-  frontend-test:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-validate.sh ${docroot}'
   frontend-reqs:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-setup.sh ${docroot}; bash react-setup.sh ${docroot}'
+    command: 'bash react-setup.sh ${docroot} && bash frontend-setup.sh ${docroot} && cd ${docroot} && ../vendor/bin/blt js:setup'
   frontend-assets:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-build.sh ${docroot}; bash react-build.sh ${docroot}'
+    command: 'bash frontend-build.sh ${docroot} && bash react-build.sh ${docroot} && cd ${docroot} && ../vendor/bin/blt js:build'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
@@ -83,7 +82,7 @@ cm:
   strategy: none
 validate:
   twig:
-    functions: [alshaya_main_menu]
+    functions: [alshaya_main_menu, alshaya_secondary_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
 # We must disable security checks for module updates until

@@ -184,6 +184,11 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       : file_create_url($assets[0]['drupal_uri']);
 
     $event->setValue($swatch);
+
+    // For HM brand we have custom requirements around swatch fields
+    // so we do not want generic eventSubscriber to be executed further
+    // so we stop the propogation.
+    $event->stopPropagation();
   }
 
 }

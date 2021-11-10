@@ -3,14 +3,16 @@
 {% else %}
 <div class="alshaya_search_gallery">
 {% endif %}
-	{% if mainImage %}
-		<div class="alshaya_search_mainimage">
-			{{ mainImage }}
-		</div>
-	{% endif %}
-	{% if hoverImage %}
-		<div class="alshaya_search_hoverimage">
-			{{ hoverImage }}
-		</div>
-	{% endif %}
+  {% if mainImage %}
+    <div class="alshaya_search_mainimage">
+      {{ mainImage }}
+    </div>
+  {% endif %}
+  {% if hoverImage %}
+    <div class="alshaya_search_hoverimage">
+      {{ hoverImage }}
+    </div>
+  {% endif %}
+  {# Product lozenges #}
+  {{ losanges }}
 </div>

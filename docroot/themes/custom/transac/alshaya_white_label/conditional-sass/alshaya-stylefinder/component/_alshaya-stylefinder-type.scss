@@ -11,6 +11,8 @@
     text-transform: uppercase;
     position: relative;
 
+    @include arabic-letter-spacing;
+
     &:first-child {
       margin-#{$left}: 0;
     }

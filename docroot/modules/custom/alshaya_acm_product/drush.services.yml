@@ -9,5 +9,7 @@ services:
       - '@database'
       - '@entity_type.manager'
       - '@module_handler'
+      - '@acq_commerce.i18n_helper'
+      - '@acq_commerce.ingest_api'
     tags:
       - { name: drush.command }

@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * alshaya_vat module for hook implementations.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_vat_theme() {
+  return [
+    'alshaya_vat_certificate_block' => [
+      'variables' => [
+        'link_text' => NULL,
+        'vat_text' => NULL,
+        'vat_url' => NULL,
+      ],
+    ],
+    'alshaya_vat_certificate_page' => [
+      'variables' => [
+        'url' => NULL,
+      ],
+    ],
+  ];
+}

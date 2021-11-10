@@ -1,12 +1,8 @@
-@javascript @account @smoke @auth @mcsaprod @mcsapprod @mcaeprod @mcaepprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @mcaepprod @hmkwpprod @vssaprod @vssapprod @vsaeprod @vsaepprod @vsaepprod @pbaeprod @pbaepprod @pbaepprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcaeprod @mcaepprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmaeprod @hmaepprod @hmaepprod @flaeprod @flaepprod @flaepprod @hmsaprod @hmsapprod @flsaprod @flsapprod
+@javascript @account @smoke @auth @pbkaepprod @pbksapprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmkwpprod @westelmaepprod @westelmsapprod @pbkkwprod @pbksaprod @pbkaeprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmkwprod @westelmaeprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @vskwpprod @vssapprod @bbwkwpprod @mcaepprod @hmkwpprod @vssaprod @vssapprod @vsaeprod @vsaepprod @vsaepprod @pbaeprod @pbaepprod @pbaepprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcaeprod @mcaepprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmaeprod @hmaepprod @hmaepprod @flaeprod @flaepprod @flaepprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: Test the adding address to existing user account
 
   Background:
-    Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait 10 seconds
     Then I should be on "/user" page
 
@@ -21,19 +17,20 @@ Feature: Test the adding address to existing user account
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
     Then I scroll to the "#address-book-form-open" element
-    Then I select "{city_option}" from "field_address[0][address][area_parent]" address
+    And I select "City" option from "field_address[0][address][area_parent]"
     And I wait 2 seconds
-    Then I select "{governorate}" from "field_address[0][address][area_parent]" address
+    And I select "Area" option from "field_address[0][address][administrative_area]"
     And I wait 2 seconds
-    Then I select "{address_area_field}" from "field_address[0][address][administrative_area]" address
     When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
       | field_address[0][address][address_line1]             | {street}      |
       | field_address[0][address][dependent_locality]        | {building}    |
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
+      | field_address[0][address][sorting_code]              | {landmark}    |
+      | field_address[0][address][postal_code]               | {postal_code} |
     And I press "op"
     When I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 5 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 

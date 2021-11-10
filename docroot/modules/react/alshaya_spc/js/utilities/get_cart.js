@@ -1,23 +1,6 @@
-import i18nMiddleWareUrl from './i18n_url';
-import { getInfoFromStorage } from './storage';
-
-/**
- * Get the middleware get cart endpoint.
- *
- * @returns {string}
- */
-export const getCartApiUrl = () => i18nMiddleWareUrl('cart/get');
-
-/**
- * Get the middleware get cart for checkout endpoint.
- *
- * @returns {string}
- */
-export const getCartForCheckoutApiUrl = () => i18nMiddleWareUrl('cart/checkout');
-
 export const cartAvailableInStorage = () => {
   // Get data from local storage.
-  const cartData = getInfoFromStorage();
+  const cartData = window.commerceBackend.getCartDataFromStorage();
   // If data is not available in storage, we flag it to check/fetch from api.
   if (!cartData || !cartData.cart) {
     return null;
@@ -38,7 +21,7 @@ export const cartAvailableInStorage = () => {
       return 'empty';
     }
 
-    return cartData.cart.cart_id;
+    return null;
   }
 
   return cartData.cart;

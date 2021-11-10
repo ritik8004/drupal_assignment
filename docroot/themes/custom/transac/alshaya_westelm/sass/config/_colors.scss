@@ -35,6 +35,7 @@ $WE_deep_blue: #4285f4;
 $WE_light_blue: #e0eaf2;
 $roman_coffee: #81644b;
 $_we_gray_one: #666;
+$_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 
 // Overrides for variables.
 // Global elements.
@@ -130,6 +131,7 @@ $header_secondary_bg_upto_desk: $WE_white;
 $header_secondary_menu_link_mobile: $WE_grey_three;
 $header_secondary_menu_link: $WE_grey_three;
 $header_secondary_menu_link_hover_bg: $WE_white_two;
+$header_secondary_menu_link_arrow: $WE_grey_three;
 
 // Header tablet and mobile.
 $header_c_menu_text: $WE_grey_three;
@@ -437,9 +439,6 @@ $breadcrumb_link: $WE_grey_three;
 $breadcrumb_link_hover: $WE_grey_two;
 $breadcrumb_link_active: $WE_grey_three;
 
-// Pace progress color
-$progress_loader: $WE_grey_three;
-
 // Department page
 $department_category_list_hover: $WE_grey_three;
 $department_category_accordion_title: $WE_grey_three;
@@ -647,3 +646,11 @@ $algolia-auto-complete-border: $WE_gray_five;
 $algolia-auto-complete-border-bottom: $WE_grey_four;
 $algolia-search-icon: $WE_grey_three;
 $algolia-search-clear-text-icon: $WE_grey_three;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $WE_black_one;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
+// Sofa and sectional.
+$sofa-sectional-title: $WE_grey_three;
+$sofa-sectional-select-border: $WE_gray_five;

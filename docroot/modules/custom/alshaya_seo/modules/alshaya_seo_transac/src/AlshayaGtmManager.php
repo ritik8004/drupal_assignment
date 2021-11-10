@@ -28,6 +28,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Detection\MobileDetect;
 
 /**
  * Class Alshaya Gtm Manager.
@@ -449,7 +450,7 @@ class AlshayaGtmManager {
 
     if (!in_array('brand', $gtm_disabled_vars)) {
       // Site name.
-      $gtm_brand = $this->configFactory->get('system.site')->get('name');
+      $gtm_brand = $this->configFactory->get('system.site')->getOriginal('name', FALSE);
       $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
       if ($sku->hasField('attr_brand')) {
         $attributes['gtm-brand'] = $sku->get('attr_brand')->getString() ?: $gtm_brand;
@@ -477,6 +478,8 @@ class AlshayaGtmManager {
 
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
+      // Overriding the products name as per CORE-26973.
+      $attributes['gtm-name'] = trim($parent_sku->label());
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
       if (!in_array('brand', $gtm_disabled_vars)) {
         $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: $attributes['gtm-brand'];
@@ -931,18 +934,34 @@ class AlshayaGtmManager {
     }
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-    $orders_count = $this->ordersManager->getOrdersCount((int) $order['customer_id']);
-
+    $current_user_id = $this->currentUser->id();
+    // For guest fetching the phone number from shipping details.
+    $phone_number = $order['shipping']['address']['telephone'];
+    $is_customer = alshaya_acm_customer_is_customer($this->currentUser);
+    $orders_count = $customer_id = 0;
+    if ($is_customer) {
+      $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
+      $customer_id = $current_user->get('acq_customer_id')->getString();
+      $orders_count = $this->ordersManager->getOrdersCount($customer_id);
+      if (!empty($current_user->get('field_mobile_number')->getValue())) {
+        $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
+      }
+    }
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
-      'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
+      'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
+      'userId' => $customer_id,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
+      'userPhone' => $phone_number ?? '',
+      'userType' => $is_customer ? 'Logged in User' : 'Guest User',
+      'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
+      'platformType' => $this->getUserDeviceType(),
     ];
 
     return [
@@ -1318,6 +1337,25 @@ class AlshayaGtmManager {
     return !empty($currency_code->get('iso_currency_code'))
       ? $currency_code->get('iso_currency_code')
       : $currency_code->get('currency_code');
+  }
+
+  /**
+   * Helper function to get device type.
+   *
+   * @return string
+   *   User device type.
+   */
+  protected function getUserDeviceType() {
+    $detect = new MobileDetect();
+    $device_type = 'Desktop';
+    if ($detect->isTablet()) {
+      $device_type = 'Tablet';
+    }
+    elseif ($detect->isMobile()) {
+      $device_type = 'Mobile';
+    }
+
+    return $device_type;
   }
 
 }

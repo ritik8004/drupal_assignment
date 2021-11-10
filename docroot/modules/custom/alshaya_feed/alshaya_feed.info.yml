@@ -3,5 +3,7 @@ type: module
 description: 'Alshaya feed.'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_acm_product:alshaya_acm_product
+  - dynamic_yield:dynamic_yield

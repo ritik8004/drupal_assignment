@@ -131,7 +131,7 @@ class AlshayaAddressBookController extends ProfileController {
     $profile->save();
 
     if ($address_book_manager->pushUserAddressToApi($profile)) {
-      drupal_set_message($this->t('Primary address is updated successfully.'));
+      $this->messenger()->addMessage($this->t('Primary address is updated successfully.'));
     }
 
     $url = $profile->urlInfo('collection');

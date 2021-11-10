@@ -76,6 +76,8 @@ $_tooltip_blue: #007aff;
 $black: $hnm-black-three;
 $tropical_green: #007b5f;
 $mariner: #283d5a;
+$sky_blue: #93cdff;
+$_plp_secondary_cta_hover: rgba(34, 34, 34, 0.1);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -132,6 +134,7 @@ $secondary_link: $hnm-black-three;
 $secondary_border: $hnm-black-three;
 $seconday_menu_link: $hnm-black-three;
 $seconday_menu_link_hover: $gray44;
+$header_secondary_menu_link: $hnm-black-three;
 
 /* ------- 4. Tertiary Colors ------- */
 $tertiary_link: $black-three;
@@ -277,6 +280,7 @@ $promo_bordered_border: $grey-ash;
 $copyright_footer_bg: #e4e4e4;
 $copyright_footer_text: $hnm-black-three;
 $copyright_footer_link: $hnm-black-three;
+$copyright_footer_paragraph: $hnm-black-three;
 
 //3. Footer
 $footer_bg: #e4e4e4;
@@ -646,9 +650,6 @@ $department_category_accordion_title: $hnm-black-three;
 $department_category_content_link: $hnm-black-three;
 $department_category_content_link_active: $venetian_red;
 
-// Pace progress color
-$progress_loader: $hnm-black-three;
-
 // PLP campaign-plp-style-1.
 $plp-machino-modal-content: $hnm-black-three;
 
@@ -717,10 +718,18 @@ $spc_checkout_as_guest_text_hover: $gray44;
 $spc_checkout_as_guest_border_hover: $gray44;
 $spc_checkout_button_background: $gray44;
 $spc-cart-free-gifts-link: $gray44;
+$spc-cart-delivery-info-border: $hnm-black-three;
+$spc-cart-delivery-popup-title: $hnm-black-four;
+$spc-cart-delivery-popup-bg: $seashell_grey;
+$spc-cart-delivery-popup-border: $grey7;
+$spc-cart-delivery-popup-search-border: $hnm-black-three;
+$spc-cart-delivery-popup-search-placeholder: $light_grey;
 
 // SPC Checkout
 $spc-checkout-page-title-border: $hnm-black;
 $spc-deliver-button: $hnm-black-three;
+$spc-delivery-area-popup-border: $hnm-black-two;
+$spc-delivery-area-popup-text: $hnm-black-two;
 
 // SPC CnC.
 $spc-cnc-toggle-bg-active: $hnm-black-three;
@@ -763,3 +772,30 @@ $rr-form-body-txt: $hnm-black-three;
 $rr-review-pagination: $hnm-black-three;
 $rr-filter-selected-item-bg: $hnm-black-three;
 $rr-write-review-link-txt: $hnm-black-three;
+$rr-stars-color: $hnm-black-three;
+$rr-form-head-row-border: $hnm-black-three;
+
+// same day delivery
+$pdp_product_same_day: $hnm-black-three;
+$pdp_product_same_day_btn_border: $sky_blue;
+$pdp_product_same_day_btn_bg: $white-five;
+
+// PLP Quick view drawer.
+$plp-quick-view-product-size-text: $primary_text;
+$plp-quick-view-product-size-text-active: $white-five;
+$plp-quick-view-product-size-border: $pdp_swatch_selected_border;
+$plp-quick-view-product-size-border-hover: $gray44;
+$plp-quick-view-product-size-hover-bg: $gray44;
+$plp-quick-view-product-size-active-bg: $primary_btn_bg;
+$plp-quick-view-product-size-text-disabled: $pdp_swatch_disabled;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $gray44;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
+// Express delivery
+$pdp-delivery-section-subtitle: $gray44;
+$sameday-express-delivery-drawer-search: $hnm-black-three;
+$sameday-express-delivery-drawer-cross: $hnm-black-three;
+$sameday-express-delivery-drawer-text: $hnm-black-three;
+$spc-cart-delivery-tags: $hnm-black-three;

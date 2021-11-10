@@ -1,0 +1,158 @@
+.account--dashboard {
+  margin-bottom: 57px;
+  font-family: $arial;
+  line-height: 1;
+
+  .subtitle {
+    border-bottom: 1px solid $primary_border;
+    font-weight: 700;
+    margin-bottom: 1.313rem;
+    font-family: $alshaya-bold;
+    font-size: 1rem;
+    color: $sub_title;
+
+    @include breakpoint($tablet) {
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-bottom: 1.125rem;
+      font-size: 1rem;
+    }
+  }
+
+  ul {
+    font-size: 0;
+    list-style: none;
+    margin: 0;
+    padding-#{$left}: 0;
+  }
+
+  li {
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+      margin-bottom: 0;
+      width: 33%;
+    }
+
+    div {
+      @include breakpoint($tablet) {
+        font-size: 0.75rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 0.875rem !important;
+      }
+    }
+  }
+
+  .contact--number {
+    @include breakpoint($desktop) {
+      padding-left: 50px;
+    }
+  }
+
+  .card--number {
+    @include breakpoint($desktop) {
+      padding-left: 35px;
+    }
+  }
+
+  .label {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .account-content-wrapper {
+    float: $left;
+    width: 50%;
+
+    li {
+      line-height: 1.36;
+    }
+
+    .light {
+      color: $user_account_wrapper_light;
+    }
+  }
+
+  .joinclub {
+    float: $right;
+    width: 42.5%;
+
+    @include breakpoint($desktop) {
+      width: 48%;
+    }
+
+    #block-jointheclub {
+      h3 {
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        color: $joinclubblock_title;
+        margin-top: 0;
+      }
+
+      p {
+        font-family: $arial;
+        font-size: 0.75rem;
+        color: $joinclubblock_text;
+        margin: 0.4rem 0;
+        text-transform: none;
+        padding-#{$left}: 0.5rem;
+
+        @include breakpoint($tablet) {
+          margin: 0.5rem 0;
+          line-height: 1.2;
+          padding-#{$left}: 0;
+
+          span {
+            vertical-align: middle;
+          }
+
+          .icon-reward {
+            top: -0.125rem;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          text-transform: lowercase;
+        }
+      }
+
+      a {
+        font-family: $arial;
+        font-weight: bold;
+        display: inline-block;
+
+        @include breakpoint($only-tablet) {
+          margin-top: 0.4rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin-top: 0.2rem;
+        }
+      }
+
+      img {
+        width: 80%;
+        max-width: 15.5rem;
+
+        @include breakpoint($tablet) {
+          margin-#{$left}: -2rem;
+          width: 100%;
+          min-width: 14.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          float: $right;
+          width: 58%;
+          margin-#{$left}: 0;
+          min-width: 0;
+        }
+      }
+    }
+  }
+}

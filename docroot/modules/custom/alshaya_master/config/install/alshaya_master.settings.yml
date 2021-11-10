@@ -4,6 +4,5 @@ mobile_logo:
   path: ''
 ajax_spinner_message_interval: 3000
 js_disable_message: '<strong>JavaScript seems to be disabled in your browser</strong>. For the best experience on our site, be sure to turn on javascript in your browser.'
-lazy_load_placeholder: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 sub_brand_logo_img: ''
 sub_brand_logo_link: ''

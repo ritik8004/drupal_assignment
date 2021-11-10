@@ -35,30 +35,72 @@ bazaar_voice.settings:
     environment:
       type: string
       label: 'The deployment environment of BazaarVoice where we implement BV Pixel.'
+    notify_comment_published:
+      type: boolean
+      label: 'Enable/Disable email notifications whenever comment is published.'
     pdp_rating_reviews:
       type: boolean
       label: 'Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'
+    show_location_filter:
+      type: boolean
+      label: 'Display location on the left panel in pdp reviews.'
+    myaccount_rating_reviews:
+      type: boolean
+      label: 'Enable/Disable My Account BazaarVoice Ratings and Review Feature.'
+    myaccount_reviews_limit:
+      type: integer
+      label: 'Enter limit for number of reviews to be shown under my account section.'
     write_review_submission:
       type: boolean
       label: 'Enable Closed submission for unauthorized user.'
-    reviews_limit_per_page:
-      type: integer
-      label: 'Number of reviews to be shown per page of PDP.'
     write_review_tnc:
       type: string
       label: 'URL of BazaarVoice Write Review Terms and Conditon.'
     write_review_guidlines:
       type: string
       label: 'URL of BazaarVoice Write review Guidelines.'
+    comment_submission:
+      type: boolean
+      label: 'Check to disable the comment feature on PDP.'
     comment_form_tnc:
       type: string
       label: 'URL of BazaarVoice Comment Form Terms and Condition.'
-    comment_form_box_length:
+    screen_name_min_length:
+      type: integer
+      label: 'Minimum character length for screen name text in comment form.'
+    comment_box_min_length:
       type: integer
       label: 'Minimum character length for comment box text in comment form.'
+    comment_box_max_length:
+      type: integer
+      label: 'Maximum character length for comment box text in comment form.'
     bv_content_types:
       type: string
       label: 'Content types of BazaarVoice used with reviews API like comments, products,etc.'
     bv_routes_list:
       type: string
       label: 'List of routes which will be tracked for BazaarVoice analytics.'
+    reviews_pagination_type:
+      type: string
+      label: 'Review listing settings has either load more or pagination to list reviews.'
+    reviews_initial_load:
+      type: integer
+      label: 'Number of reviews on first page load.'
+    reviews_on_loadmore:
+      type: integer
+      label: 'Number of reviews per click of load more.'
+    reviews_per_page:
+      type: integer
+      label: 'Number of reviews per page.'
+    pdp_reviews_seo_limit:
+      type: integer
+      label: 'Enter total number of reviews to be captured for SEO on PDP.'
+    featured_reviews_limit:
+      type: integer
+      label: 'Set the limit for featured reviews to be pushed in DY.'
+    translate_chars_limit:
+      type: integer
+      label: 'Set the characters limit for google translations.'
+    enable_google_translation:
+      type: boolean
+      label: 'Check to enable google translation feature.'

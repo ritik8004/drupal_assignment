@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
 
@@ -212,7 +213,19 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $shipping_info = explode(' - ', $order['shipping_description']);
   $orderDetails['delivery_method'] = $shipping_info[0];
 
-  $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
+  $orderDetails['is_pudo_pickup'] = $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup';
+
+  if ($orderDetails['is_pudo_pickup']) {
+    // We get `price_amount` i.e collection charge values like "5" or "Free"
+    // so the below check to display accordingly.
+    $orderDetails['delivery_charge'] = ($order['shipping']['extension_attributes']['price_amount'] > 0)
+      ? alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount'])
+      : $order['shipping']['extension_attributes']['price_amount'];
+  }
+  else {
+    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
+  }
+
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
@@ -360,6 +373,11 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       }
       break;
 
+    case 'checkout_com_upapi_fawry':
+      $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
+      $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+
+      break;
   }
 
   return $orderDetails;
@@ -475,7 +493,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       }
 
       // Load the first image.
-      $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
+      $product['image'] = alshaya_acm_get_product_display_image($item['sku'], SkuImagesHelper::STYLE_PRODUCT_TEASER, 'cart');
       if ($product['image']) {
         $product['image']['#skip_lazy_loading'] = TRUE;
       }
@@ -511,6 +529,12 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   if ($order['shipping']['method'] == $checkoutOptionsManager->getClickandColectShippingMethod()) {
     $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following store');
+
+    // If collection point feature is enabled, update order message.
+    if (\Drupal::config('alshaya_spc.collection_points')->get('click_collect_collection_points_enabled')
+    && $order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup') {
+      $build['#delivery_detail_notice'] = t('Your order will be available for pickup at the following collection point');
+    }
   }
   else {
     $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');

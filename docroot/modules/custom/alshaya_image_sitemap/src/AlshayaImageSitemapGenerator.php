@@ -17,6 +17,8 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\simple_sitemap\Simplesitemap;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Class Alshaya Image Sitemap Generator.
@@ -98,6 +100,13 @@ class AlshayaImageSitemapGenerator {
   protected $simpleSitemap;
 
   /**
+   * Current time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $currentTime;
+
+  /**
    * AlshayaImageSitemapGenerator constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
@@ -122,6 +131,8 @@ class AlshayaImageSitemapGenerator {
    *   Config Factory service.
    * @param \Drupal\simple_sitemap\Simplesitemap $simple_sitemap
    *   Simple sitemap.
+   * @param \Drupal\Component\Datetime\TimeInterface $current_time
+   *   Current time service.
    */
   public function __construct(Connection $database,
                               StateInterface $state,
@@ -133,7 +144,8 @@ class AlshayaImageSitemapGenerator {
                               SkuImagesManager $skuImagesManager,
                               SkuManager $sku_manager,
                               ConfigFactory $configFactory,
-                              Simplesitemap $simple_sitemap) {
+                              Simplesitemap $simple_sitemap,
+                              TimeInterface $current_time) {
     $this->database = $database;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -145,6 +157,7 @@ class AlshayaImageSitemapGenerator {
     $this->skuManager = $sku_manager;
     $this->configFactory = $configFactory;
     $this->simpleSitemap = $simple_sitemap;
+    $this->currentTime = $current_time;
   }
 
   /**
@@ -153,7 +166,8 @@ class AlshayaImageSitemapGenerator {
   public function getSitemapReady() {
     $output = '<?xml version="1.0" encoding="UTF-8"?>';
     $output .= '<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="https://www.w3.org/1999/xhtml" xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">';
-    $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_image_sitemap"));
+    $schema = $this->configFactory->get('system.file')->get('default_scheme');
+    $path = file_create_url($this->fileSystem->realpath($schema . "://alshaya_image_sitemap"));
     if (!is_dir($path)) {
       $this->fileSystem->mkdir($path);
     }
@@ -170,7 +184,7 @@ class AlshayaImageSitemapGenerator {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
 
     return $query->condition('type', 'acq_product')
-      ->condition('status', NODE_PUBLISHED)
+      ->condition('status', NodeInterface::PUBLISHED)
       // Add tag to ensure this can be altered easily in custom modules.
       ->addTag('get_display_node_for_sku')
       ->execute();
@@ -262,7 +276,8 @@ class AlshayaImageSitemapGenerator {
     }
     $this->state->set('alshaya_image_sitemap.url_count', $total_urls);
     $output = $this->formatXmlString($output);
-    $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_image_sitemap"));
+    $schema = $this->configFactory->get('system.file')->get('default_scheme');
+    $path = file_create_url($this->fileSystem->realpath($schema . "://alshaya_image_sitemap"));
     $filename = 'image_sitemap.xml';
     file_put_contents($path . '/' . $filename, $output, FILE_APPEND);
   }
@@ -272,11 +287,13 @@ class AlshayaImageSitemapGenerator {
    */
   public function sitemapGenerateFinished() {
     $output = '</urlset>';
-    $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_image_sitemap"));
+    $schema = $this->configFactory->get('system.file')->get('default_scheme');
+    $path = file_create_url($this->fileSystem->realpath($schema . "://alshaya_image_sitemap"));
     $filename = 'image_sitemap.xml';
     $output = $this->formatXmlString($output);
     file_put_contents($path . '/' . $filename, $output, FILE_APPEND);
-    $this->state->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
+    $request_time = $this->currentTime->getRequestTime();
+    $this->state->set('alshaya_image_sitemap.last_generated', $request_time);
   }
 
   /**

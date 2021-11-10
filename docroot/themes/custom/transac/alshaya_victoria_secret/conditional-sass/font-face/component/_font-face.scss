@@ -1,0 +1,251 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secret/fonts';
+
+@font-face {
+  font-family: "GESSTwoLight-Light";
+  src:
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi";
+  src:
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Book";
+  src:
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Medium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Regular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Light";
+  src:
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HarrietDisplay";
+  src:
+    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'alshaya-icons';
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?myjxot') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PinkSans";
+  src:
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PinkSans-130";
+  src:
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PinkSlab";
+  src:
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSansCompMedium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// new fonts neeeded for DY template for VS
+@font-face {
+  font-family: "Pink Slab 190";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 190";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 130";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Victoria INTL";
+  src:
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Sans 160";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 100";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 070";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 100";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 160";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 130";
+  src:
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gotcha Crush Regular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

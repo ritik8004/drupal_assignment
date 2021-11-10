@@ -5,8 +5,13 @@ var config = {
   entry: {
     cart: './js/cart',
     minicart: './js/minicart',
+    expressdelivery: './js/expressdelivery',
     checkout: './js/checkout',
     checkout_confirmation: './js/checkout-confirmation',
+    backend_cart_v1: './js/backend/v1/cart.js',
+    backend_cart_v2: './js/backend/v2/cart.js',
+    backend_checkout_v1: './js/backend/v1/checkout.js',
+    backend_checkout_v2: './js/backend/v2/checkout.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -20,14 +25,18 @@ var config = {
   },
   externals: {
     react: 'React',
-    'react-dom': 'ReactDOM'
+    'react-dom': 'ReactDOM',
+    axios: 'axios',
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        use: ['babel-loader']
+        loader: "babel-loader",
+        options: {
+          rootMode: "upward",
+        }
       }
     ]
   }

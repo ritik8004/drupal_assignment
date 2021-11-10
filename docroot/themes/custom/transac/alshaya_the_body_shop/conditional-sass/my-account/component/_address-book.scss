@@ -1,0 +1,87 @@
+.address {
+  .address--edit,
+  .address--delete {
+    a {
+      color: $address-edit-delete-btn-text;
+      text-align: center;
+
+      @include breakpoint($desktop) {
+        border: 0.0625rem solid $address-edit-delete-btn-border;
+      }
+    }
+  }
+
+  .address--primary {
+    letter-spacing: 0;
+  }
+
+  .address--content {
+    color: $primary_text;
+  }
+
+  .address--label {
+    font-family: $alshaya-bold;
+    color: $address-label;
+  }
+}
+
+.address-book-address {
+  .form-type-select {
+    &::after {
+      @include breakpoint($upto-desktop) {
+        border: 1px solid $primary_dropdown_arrow_border;
+        border-#{$left}: 0;
+      }
+
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+
+    .select2-selection {
+      border-color: $primary_dropdown_border;
+    }
+
+    .select2-selection__arrow {
+      &::after {
+        font-size: 2rem;
+        top: 0;
+        left: 0;
+        height: 2.1875rem;
+        width: 2.1875rem;
+      }
+    }
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-type-select {
+    &::after {
+      @include breakpoint($upto-desktop) {
+        border: 1px solid $primary_dropdown_arrow_border;
+        border-#{$left}: 0;
+      }
+
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+  }
+}
+
+.c-address-book {
+  .profile-form {
+    label {
+      color: $primary_text !important;
+    }
+  }
+}
+
+#address_wrapper .address-book-address,
+#address-book-form-open .address-book-address,
+.address_wrapper .address-book-address {
+  .country-label,
+  .country-name {
+    color: $primary_input_label !important;
+  }
+}

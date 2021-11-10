@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\StockManager;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
@@ -13,6 +14,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
@@ -273,7 +275,8 @@ class SkuInfoHelper {
       // Remove un-wanted description key.
       unset($row['description']);
       $attributes[] = $row;
-    };
+      $this->moduleHandler->alter('sku_product_attribute', $attributes, $sku, $field_name);
+    }
 
     return $attributes;
   }
@@ -519,6 +522,11 @@ class SkuInfoHelper {
     $productInfo['type'] = $sku->bundle();
     $productInfo['priceRaw'] = _alshaya_acm_format_price_with_decimal((float) $sku->get('price')->getString());
     $productInfo['cart_title'] = $this->productInfoHelper->getTitle($sku, 'basket');
+
+    // Add price block for parent SKU too.
+    $price = $this->priceHelper->getPriceBlockForSku($sku);
+    $productInfo['price'] = $this->renderer->renderPlain($price);
+
     $this->moduleHandler->alter('sku_product_info', $productInfo, $sku);
     return $productInfo;
   }
@@ -595,6 +603,25 @@ class SkuInfoHelper {
           'absolute' => FALSE,
           'language' => $language,
         ])->toString();
+      }
+    }
+
+    // Check if express delivery feature is enabled.
+    if ($this->configFactory->get('alshaya_spc.express_delivery')->get('status')) {
+      $current_parent = $this->skuManager->getParentSkuBySku($child);
+      if ($current_parent instanceof SKUInterface) {
+        $parent_sku = $current_parent->getSku();
+      }
+      // Below condition is only for simple products.
+      elseif (empty($parent)) {
+        $parent_sku = (string) $child->getSku();
+      }
+
+      // Prepare delivery options for each variants.
+      if (isset($parent_sku)) {
+        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku);
+        $variant['delivery_options'] = !empty($delivery_options['values']) ? $delivery_options['values'] : [];
+        $variant['express_delivery_class'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
       }
     }
 
@@ -691,6 +718,42 @@ class SkuInfoHelper {
     $type = 'light';
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
     return $data;
+  }
+
+  /**
+   * Gets the cart image for the SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The SKU entity.
+   *
+   * @return string
+   *   The image url or empty in case the image is not found.
+   */
+  public function getCartImage(SKUInterface $sku) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $image = alshaya_acm_get_product_display_image($sku, SkuImagesHelper::STYLE_PRODUCT_THUMBNAIL, 'cart');
+    // Prepare image style url.
+    if (!empty($image['#theme'])) {
+      $image = ($image['#theme'] == 'image_style')
+        ? file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']))
+        : $image['#uri'];
+    }
+
+    return is_string($image) ? $image : '';
+  }
+
+  /**
+   * Gets the cart title for the SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The SKU entity.
+   *
+   * @return string
+   *   The product title for cart.
+   */
+  public function getCartTitle(SKUInterface $sku) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    return $this->productInfoHelper->getTitle($sku, 'basket');
   }
 
 }

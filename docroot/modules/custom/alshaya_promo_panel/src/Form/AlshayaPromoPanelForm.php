@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_promo_panel\Form;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
@@ -181,7 +180,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       $block_load = $this->blockStorage->loadByProperties(['id' => $machine_name]);
       if ($block = reset($block_load)) {
         $promo_panel_blocks[$machine_name] = [
-          'mobile_path' => Unicode::substr($link, 0, 1) !== '/' ? '/' . $link : $link,
+          'mobile_path' => substr($link, 0, 1) !== '/' ? '/' . $link : $link,
           'plugin_id' => $block->getPluginId(),
         ];
       }

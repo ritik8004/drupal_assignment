@@ -1,0 +1,30 @@
+alshaya_checkout_by_agent.settings:
+  type: config_object
+  label: 'Alshaya Smart Agent Settings'
+  mapping:
+    smart_user_agents:
+      type: sequence
+      label: 'Browser User agents of the smart agents of in-store devices.'
+      sequence:
+        type: string
+        label: 'Browser User Agent'
+    smart_agent_ips:
+      type: string
+      label: 'IP addresses of the smart agents of in-store devices.'
+    whatsapp_template:
+      type: label
+      label: 'WhatsApp Template'
+    email_template:
+      type: text
+      label: Email template to share cart
+      translatable: true
+    sms_template:
+      type: text
+      label: SMS template to share cart
+      translatable: true
+    restrict_agent_login:
+      type: boolean
+      label: 'Config to enable/disable retricting agent login when location is not shared.'
+    api_request_limit:
+      type: integer
+      label: 'Config to set limit on number of request per min for the API.'

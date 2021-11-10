@@ -10,6 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Checkout.com UPAPI payment method for SPC.
@@ -38,6 +39,13 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
   protected $currentUser;
 
   /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container,
@@ -49,7 +57,8 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_checkoutcom.api_helper'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('config.factory')
     );
   }
 
@@ -66,16 +75,20 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
    *   API Wrapper.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               AlshayaAcmCheckoutComAPIHelper $api_wrapper,
-                              AccountInterface $current_user) {
+                              AccountInterface $current_user,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->apiWrapper = $api_wrapper;
     $this->currentUser = $current_user;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -126,6 +139,31 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       'cvvCheck' => $config['cvv_check'],
       'processMada' => in_array('mada', $allowed_cards),
     ];
+
+    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+
+    // Add bin validation config in drupalSettings if it is enabled.
+    $bin_validation_enabled = $checkout_settings->get('card_bin_validation_enabled') ?? FALSE;
+    $bin_validation_supported_payment_methods = $checkout_settings->get('bin_validation_supported_payment_methods') ?? '';
+    $card_bin_numbers = $checkout_settings->get('card_bin_numbers') ?? [];
+
+    if ($bin_validation_enabled == TRUE
+      && !empty($bin_validation_supported_payment_methods)
+      && !empty($card_bin_numbers)) {
+      $build['#attached']['drupalSettings']['checkoutComUpapi']['binValidation'] = [
+        'cardBinValidationEnabled' => $bin_validation_enabled,
+        'binValidationSupportedPaymentMethods' => $bin_validation_supported_payment_methods,
+        'cardBinNumbers' => $card_bin_numbers,
+      ];
+
+      // Add payment method specific error message in strings.
+      foreach (explode(',', $bin_validation_supported_payment_methods) ?? [] as $payment_method) {
+        $build['#strings']['card_bin_validation_error_message_' . $payment_method] = [
+          'key' => 'card_bin_validation_error_message_' . $payment_method,
+          'value' => $this->t('Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.', [], ['context' => $payment_method]),
+        ];
+      }
+    }
 
     $build['#strings']['invalid_card'] = [
       'key' => 'invalid_card',

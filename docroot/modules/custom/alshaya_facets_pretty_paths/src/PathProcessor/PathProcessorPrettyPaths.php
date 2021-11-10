@@ -7,7 +7,7 @@ use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 
 /**
  * Path processor for alshaya_facets_pretty_paths.
@@ -24,7 +24,7 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
   /**
    * The path alias manager.
    *
-   * @var \Drupal\Core\Path\AliasManagerInterface
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -33,7 +33,7 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
    *
    * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $route_match
    *   Route match service.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    */
   public function __construct(ResettableStackedRouteMatchInterface $route_match, AliasManagerInterface $alias_manager) {

@@ -171,11 +171,6 @@
   border-top: none;
   padding: 0;
 
-  .c-footer-is-accordion {
-    margin-top: 0;
-    border-bottom: none;
-  }
-
   &__region {
     @include clearfix;
 
@@ -211,6 +206,8 @@
 
   .c-footer {
     &-is-accordion {
+      margin-top: 0;
+      border-bottom: none;
       display: inline-block;
       vertical-align: top;
 
@@ -623,7 +620,7 @@
 
 .cols-6 {
   .c-footer-menu {
-    &:last-child {
+    &:last-child:not(:only-child) {
       @include breakpoint($desktop) {
         padding-#{$left}: 0;
       }

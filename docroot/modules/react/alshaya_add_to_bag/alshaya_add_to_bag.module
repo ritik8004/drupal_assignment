@@ -1,0 +1,165 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Cache\Cache;
+use Drupal\search_api\IndexInterface;
+use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
+use Drupal\alshaya_add_to_bag\Services\AddToBagIndexHelper;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_add_to_bag_theme() {
+  return [
+    'add_to_bag_strings' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_add_to_bag_page_attachments_alter(array &$page) {
+  $add_to_bag_feature_status = \Drupal::service('alshaya_add_to_bag.helper')->isAddToBagFeatureEnabled();
+  $add_to_bag_settings = \Drupal::config('alshaya_add_to_bag.settings');
+
+  $page['#attached']['drupalSettings']['add_to_bag']['display_addtobag'] = $add_to_bag_feature_status;
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $add_to_bag_settings->getCacheTags());
+
+  if (!$add_to_bag_feature_status) {
+    return;
+  }
+
+  // Get the product's info expiration time in local storage.
+  // Default to zero i.e. disable the local storage.
+  $productinfo_local_storage_expiration = \Drupal::service('alshaya_add_to_bag.helper')->getProductInfoLocalStorageExpiration();
+  $page['#attached']['drupalSettings']['add_to_bag']['productinfo_local_storage_expiration'] = $productinfo_local_storage_expiration ? $productinfo_local_storage_expiration : 0;
+
+  // Attach the theming library.
+  $page['#attached']['library'][] = 'alshaya_white_label/plp-add-to-cart';
+
+  // Attach notification library if feature is enabled.
+  $page['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
+
+  // Attach cart utilities library if feature is enabled.
+  $page['#attached']['library'][] = 'alshaya_spc/cart_utilities';
+
+  // Check if the acm cart notification settings exist and assign notification time in drupal settings.
+  $acm_cart_notification_settings = \Drupal::config('alshaya_acm_cart_notification.settings');
+  if ($acm_cart_notification_settings) {
+    $page['#attached']['drupalSettings']['addToCartNotificationTime'] = $acm_cart_notification_settings->get('notification_time');
+  }
+
+  // Send the cart quantity options to be used while displaying quantity
+  // dropdown. Adding the setting to global namespace.
+  $page['#attached']['drupalSettings']['add_to_bag']['cart_quantity_options'] = _alshaya_acm_get_cart_quantity_options();
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:alshaya_acm.cart_config']);
+
+  // Get the screen width from where we want to show configurable boxes. Adding
+  // the setting to the global namespace.
+  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $page['#attached']['drupalSettings']['show_configurable_boxes_after'] = (int) $display_settings->get('show_configurable_boxes_after');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $display_settings->getCacheTags());
+
+  // Add vat text.
+  $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $page['#attached']['drupalSettings']['vat_text'] = $product_settings->get('vat_text');
+  $page['#attached']['drupalSettings']['is_all_products_buyable'] = (bool) $product_settings->get('all_products_buyable');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $product_settings->getCacheTags());
+
+  // Pass max sale quantity status and whether message show be shown.
+  $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
+  $page['#attached']['drupalSettings']['add_to_bag']['max_sale_quantity_enabled'] = $alshaya_acm_settings->get('quantity_limit_enabled');
+  $page['#attached']['drupalSettings']['add_to_bag']['max_sale_hide_message'] = $alshaya_acm_settings->get('hide_max_qty_limit_message');
+  // Make global error message available in drupal settings..
+  $page['#attached']['drupalSettings']['add_to_bag']['global_error_message'] = _alshaya_spc_global_error_message();
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $alshaya_acm_settings->getCacheTags());
+
+  // Pass config for showing/hiding quantity selector in configurable product
+  // form.
+  $page['#attached']['drupalSettings']['add_to_bag']['show_quantity'] = \Drupal::service('acq_sku.cart_form_helper')->showQuantity();
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:acq_sku.configurable_form_settings']);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_add_to_bag_preprocess_page(&$variables) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_add_to_bag', 'inc', 'alshaya_add_to_bag.static_strings');
+  $add_to_bag_strings = [
+    '#strings' => _alshaya_add_to_bag_strings(),
+    '#theme' => 'add_to_bag_strings',
+  ];
+
+  $status = \Drupal::requestStack()->getCurrentRequest()->attributes->get('exception');
+  // For 404 page, page.content is not rendered so we add it to pre_content.
+  if ($status && $status->getStatusCode() == 404){
+    $variables['page']['pre_content']['add_to_bag_strings'] = $add_to_bag_strings;
+  }
+  else {
+    $variables['page']['content']['add_to_bag_strings'] = $add_to_bag_strings;
+  }
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_add_to_bag_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  foreach ($objects as $id => &$object) {
+    if (empty($object['sku'])) {
+      continue;
+    }
+    $node = $items[$id]->getOriginalObject()->getValue();
+    $atbAttributeName = AddToBagIndexHelper::ADD_TO_BAG_ATTRIBUTE;
+    // Process index object for product list index.
+    if ($index->id() == AlshayaAlgoliaIndexHelper::PRODUCT_LIST_INDEX) {
+      $nodeLanguages = $node->getTranslationLanguages();
+      foreach ($nodeLanguages as $lan_key => $lan_value) {
+        $node_object = $node->getTranslation($lan_key);
+        $atb_attribute = _alshaya_add_to_bag_get_language_specific_data($lan_key, $object['sku'], $node_object);
+        if ($atb_attribute){
+          $object[$atbAttributeName][$lan_key] = $atb_attribute;
+        }
+      }
+    }
+    else {
+      $atb_attribute = _alshaya_add_to_bag_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
+      if($atb_attribute){
+        $object[$atbAttributeName] = $atb_attribute;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_product_list_exclude_attribute_alter().
+ */
+function alshaya_add_to_bag_alshaya_product_list_exclude_attribute_alter(array &$excludedAttributes) {
+  $atbAttributeName = AddToBagIndexHelper::ADD_TO_BAG_ATTRIBUTE;
+  $excludedAttributes[] = $atbAttributeName;
+}
+
+/**
+ * Get Language specific SKU and Node.
+ */
+function _alshaya_add_to_bag_get_language_specific_data($lang, $sku_data, $node){
+  $sku = SKU::loadFromSku($sku_data, $lang);
+  if (!($sku instanceof SKUInterface)) {
+    return FALSE;
+  }
+  if ($sku->language()->getId() != $node->language()->getId()) {
+    return FALSE;
+  }
+  $value = \Drupal::service('alshaya_add_to_bag.index_helper')->getItemsToIndex($node, $sku, $lang);
+  return $value;
+}

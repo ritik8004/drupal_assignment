@@ -1,0 +1,45 @@
+.addtobag-button-container,
+.is-not-buyable,
+.addtobag-config-button {
+  margin-#{$left}: 0;
+  margin-#{$right}: 0;
+}
+
+.addtobag-config-button,
+.is-not-buyable {
+  width: 100%;
+}
+
+.addtobag-button,
+.is-not-buyable,
+.addtobag-config-button,
+.product-drawer-content-wrapper .config-form-addtobag-button,
+.pdp-link {
+  font-family: $tbs-semibold;
+}
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button,
+.is-not-buyable,
+.addtobag-config-button,
+.product-drawer-content-wrapper .pdp-link {
+  &:hover {
+    color: $plp-primary-cta-hover-text;
+  }
+}
+
+.qty-sel-btn--down,
+.qty-sel-btn--up {
+  &:hover {
+    &::before {
+      color: $plp-primary-cta-hover-text;
+    }
+  }
+}
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button,
+.qty-sel-btn--down,
+.qty-sel-btn--up {
+  border-radius: 0;
+}

@@ -310,6 +310,7 @@
     color: $myaccountneedhelp_text;
     overflow: hidden;
     font-size: 0;
+    background: $info;
 
     p,
     ul {
@@ -319,8 +320,15 @@
     }
 
     p {
+      font-family: $hnm-bold;
+      font-weight: normal;
+
       @include breakpoint($only-tablet) {
         float: $left;
+      }
+
+      @include breakpoint($desktop) {
+        width: 33.5%;
       }
     }
 
@@ -338,19 +346,6 @@
         text-decoration: underline;
       }
     }
-
-    p {
-      font-family: $hnm-bold;
-      font-weight: normal;
-
-      @include breakpoint($desktop) {
-        width: 33.5%;
-      }
-    }
-  }
-
-  .c-order-help .field--name-body {
-    background: $info;
   }
 }
 

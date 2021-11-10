@@ -1,0 +1,80 @@
+.c-plp {
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar-productlist,
+  .block-facets-summary-blockfilter-bar {
+    .filter-list-label {
+      font-size: 0.8125rem;
+      text-transform: capitalize;
+    }
+
+    ul {
+      li.clear-all {
+        a {
+          font-size: 0.6875rem !important;
+          text-transform: capitalize;
+          letter-spacing: 1px;
+        }
+      }
+    }
+  }
+}
+
+.c-facet.c-accordion,
+.c-facet.c-collapse-item {
+  &:not(.block-facet-blockcategory-facet-search) {
+    &:not(.algolia-plp-category-facet) ul,
+    ul {
+      z-index: 3;
+      text-transform: uppercase;
+    }
+  }
+
+  .c-accordion__title,
+  .c-collapse__title {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+
+    &::after {
+      #{$right}: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .c-plp & {
+      @include breakpoint($only-mobile) {
+        @include icon(chevrondown, after) {
+          font-size: 0.875rem;
+          #{$right}: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+.show-all-filters,
+.show-all-filters-algolia {
+  .desktop {
+    @include breakpoint($desktop) {
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+      color: $plp_facet_filter_link;
+    }
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      a {
+        html[lang=ar] & {
+          width: 4rem;
+        }
+      }
+    }
+  }
+}

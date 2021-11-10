@@ -43,7 +43,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    background: white;
+    background: $social-icons-bg;
   }
 
   @include breakpoint($desktop) {
@@ -151,6 +151,22 @@
   background-repeat: no-repeat;
 }
 
+.c-footer__logo--fawry {
+  background-image: url(#{$base_theme_img_directory_path}/cards/fawry.png);
+  width: 4.25rem;
+  height: 1.25rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.c-footer__logo--mada {
+  background-image: url(#{$base_theme_img_directory_path}/cards/card-mada-logo.svg);
+  width: 4.5625rem;
+  height: 1.5rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
 .c-footer__logo--customer-rights {
   background-image: url(#{$base_theme_img_directory_path}/cards/customer-right.svg);
   width: 18.1875rem;
@@ -177,7 +193,7 @@
     width: 55%;
 
     .c-footer-secondary & {
-      width: auto;
+      width: 55%;
     }
 
     .field--name-body {
@@ -252,6 +268,29 @@
         width: 30%;
         margin: 0 auto;
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .region__footer-secondary {
+    display: flex;
+    flex-direction: column;
+
+    #block-css {
+      order: 1;
+    }
+
+    #block-copyright {
+      order: 2;
+    }
+
+    #block-alshayavatcertificateblock {
+      order: 3;
+    }
+
+    #block-footerlogos {
+      order: 4;
     }
   }
 }

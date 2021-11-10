@@ -113,12 +113,18 @@
   .list-view-link,
   .map-view-link {
     text-transform: uppercase;
+    line-height: 1.4;
+    color: $content_link_color;
 
     &:hover,
     &.active {
       border: 1px solid $store_finder_border_hover;
       color: $store_finder_btn_act_hover_state;
       background-color: $store_finder_backbtn;
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 0.0625rem;
     }
   }
 
@@ -294,16 +300,6 @@
     }
   }
 
-  .list-view-link,
-  .map-view-link {
-    line-height: 1.4;
-    color: $content_link_color;
-
-    @include breakpoint($tablet) {
-      margin-#{$left}: 0.0625rem;
-    }
-  }
-
   .icon-list {
     @include breakpoint($only-tablet) {
       margin-#{$left}: -1.625rem;
@@ -346,32 +342,7 @@
       }
     }
   }
-}
 
-.node--type-store {
-  .content > .store--wrapper {
-    font-size: 0.875rem;
-
-    .hours--label {
-      &::after {
-        width: 1.0625rem;
-        height: 0.4375rem;
-        top: 0.3125rem;
-        #{$right}: 3.4375rem;
-      }
-    }
-  }
-}
-
-//Individual store theming
-.individual--store {
-  .list-view-locator {
-    background-color: $store_finder_individual_list_view;
-  }
-}
-
-.path--store-finder,
-.nodetype--store {
   .hours--wrapper {
     .hours--label.open {
       &::after {
@@ -428,6 +399,28 @@
   }
 }
 
+.node--type-store {
+  .content > .store--wrapper {
+    font-size: 0.875rem;
+
+    .hours--label {
+      &::after {
+        width: 1.0625rem;
+        height: 0.4375rem;
+        top: 0.3125rem;
+        #{$right}: 3.4375rem;
+      }
+    }
+  }
+}
+
+//Individual store theming
+.individual--store {
+  .list-view-locator {
+    background-color: $store_finder_individual_list_view;
+  }
+}
+
 .geolocation-common-map-container {
   .views-field-title {
     span {
@@ -467,15 +460,7 @@
   .get--directions div::after {
     top: 0.25rem;
   }
-}
 
-.scroll-fix {
-  .location-content {
-    margin-#{$left}: 1.875rem;
-  }
-}
-
-.geolocation-common-map-container {
   .hours--wrapper {
     .hours--label {
       border-top: 1px solid $store_finder_individual_hour_border;
@@ -511,5 +496,11 @@
   .get--directions a {
     padding-bottom: 0.875rem;
     padding-top: 0.875rem;
+  }
+}
+
+.scroll-fix {
+  .location-content {
+    margin-#{$left}: 1.875rem;
   }
 }

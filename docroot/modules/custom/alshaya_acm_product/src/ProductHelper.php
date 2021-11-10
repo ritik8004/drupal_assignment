@@ -130,8 +130,8 @@ class ProductHelper {
       return $short_desc;
     }
     // Remove the ellipses appended at last if there any.
-    if (Unicode::substr($short_desc, -3) == '...') {
-      $short_desc = Unicode::substr($short_desc, 0, -3);
+    if (mb_substr($short_desc, -3) == '...') {
+      $short_desc = mb_substr($short_desc, 0, -3);
     }
     // To suppress errors by the DomDocument.
     libxml_use_internal_errors(TRUE);

@@ -1,0 +1,28 @@
+.spc-promo-code-block {
+  .promo-submit {
+    text-transform: uppercase;
+    line-height: 2px;
+  }
+
+  #promo-code {
+    font-size: 0.875rem;
+    border: 1px solid $spc-promo-code-border;
+
+    .error {
+      border-width: 1px !important;
+      border-#{$right}: 0 !important;
+    }
+
+    &::placeholder {
+      color: $spc-promo-code-placeholder-text;
+    }
+  }
+
+  .promo-remove {
+    &.active {
+      &::after {
+        color: $spc-promo-code-close-icon;
+      }
+    }
+  }
+}

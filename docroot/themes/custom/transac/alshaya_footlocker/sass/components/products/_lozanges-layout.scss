@@ -1,0 +1,97 @@
+.labels-wrapper {
+  > .labels-container {
+    .label {
+      // Safety for super large images in PLP.
+      // Also default for only one lozenge in PLP and slider.
+      &:only-child {
+        .c-plp &,
+        .view-product-slider & {
+          max-width: 2.375rem;
+        }
+      }
+
+      // Safety for super large images.
+      // Also default for more than one lozenge.
+      &:not(:only-child) {
+        max-width: 2.375rem;
+
+        // PLP Lozenges (Desktop + Mobile)- Size: 38px each (Added as global max-width for FL).
+        // PDP Lozenges (Desktop) - Size 50px each.
+        // PDP Lozenges (Mobile) - Size 38px each.
+        .c-pdp & {
+          @include breakpoint($tablet) {
+            max-width: 3.125rem;
+          }
+        }
+      }
+    }
+
+    &.top-left {
+      top: 0.625rem;
+      #{$left}: 0.625rem;
+
+      @include breakpoint($tablet) {
+        top: 1.25rem;
+        #{$left}: 1.25rem;
+      }
+
+      .c-plp & {
+        @include breakpoint($tablet) {
+          top: 0.625rem;
+          #{$left}: 0.625rem;
+        }
+      }
+    }
+
+    &.top-right {
+      top: 0.625rem;
+      #{$right}: 0.625rem;
+
+      @include breakpoint($tablet) {
+        top: 1.25rem;
+        #{$right}: 1.25rem;
+      }
+
+      .c-plp & {
+        @include breakpoint($tablet) {
+          top: 0.625rem;
+          #{$right}: 0.625rem;
+        }
+      }
+    }
+
+    &.bottom-left {
+      bottom: 0.625rem;
+      #{$left}: 0.625rem;
+
+      @include breakpoint($tablet) {
+        bottom: 1.25rem;
+        #{$left}: 1.25rem;
+      }
+
+      .c-plp & {
+        @include breakpoint($tablet) {
+          bottom: 0.625rem;
+          #{$left}: 0.625rem;
+        }
+      }
+    }
+
+    &.bottom-right {
+      bottom: 0.625rem;
+      #{$right}: 0.625rem;
+
+      @include breakpoint($tablet) {
+        bottom: 1.25rem;
+        #{$right}: 1.25rem;
+      }
+
+      .c-plp & {
+        @include breakpoint($tablet) {
+          bottom: 0.625rem;
+          #{$right}: 0.625rem;
+        }
+      }
+    }
+  }
+}

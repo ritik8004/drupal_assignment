@@ -1,6 +1,11 @@
 import React from 'react';
+import moment from 'moment';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
+import OrderSummaryFawryBanner from './order-summary-fawry-banner';
+import PriceElement from '../../../utilities/special-price/PriceElement';
+import getStringMessage from '../../../utilities/strings';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -25,6 +30,9 @@ const OrderSummary = () => {
     }
     if (addressInfo.dependent_locality !== undefined) {
       customerAddress.push(addressInfo.dependent_locality);
+    }
+    if (addressInfo.postal_code !== undefined) {
+      customerAddress.push(addressInfo.postal_code);
     }
   }
 
@@ -62,11 +70,13 @@ const OrderSummary = () => {
       && storeInfo.store_phone !== null) {
       storePhone = storeInfo.store_phone;
     }
-    etaLabel = Drupal.t('available instore within');
+    etaLabel = (collectionPointsEnabled() && storeInfo.pudo_available === true)
+      ? Drupal.t('available in collection point within')
+      : Drupal.t('available instore within');
   }
 
   const {
-    method, transactionId, paymentId, resultCode, bankDetails, orderDate,
+    method, transactionId, paymentId, resultCode, bankDetails, orderDate, methodCode,
   } = drupalSettings.order_details.payment;
 
   // Get Billing info.
@@ -97,9 +107,37 @@ const OrderSummary = () => {
   // Customer name on shipping.
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
 
+  // Fawry details.
+  const {
+    payment: {
+      referenceNumber,
+      paymentExpiryTime,
+    },
+    totals: {
+      base_grand_total: baseGrandTotal,
+    },
+    delivery_type_info: {
+      collection_date: collectionDate,
+      collection_charge: collectionCharge,
+    },
+  } = drupalSettings.order_details;
+  const priceTotal = <PriceElement amount={baseGrandTotal} />;
+
+  // Set language for datetime translation.
+  const { currentLanguage } = drupalSettings.path;
+  if (currentLanguage !== undefined) {
+    moment.locale(currentLanguage);
+  }
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
+        <ConditionalView condition={methodCode !== undefined && methodCode === 'checkout_com_upapi_fawry'}>
+          <OrderSummaryFawryBanner animationDelay="0.5s" />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_amount_due')} value={priceTotal} />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_reference_number')} value={referenceNumber} />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_complete_payment_by')} value={moment(paymentExpiryTime).format('DD MMMM YYYY, HH:mm a')} />
+        </ConditionalView>
         <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('confirmation email sent to')} value={customEmail} />
         <OrderSummaryItem animationDelay="0.6s" label={Drupal.t('order number')} value={orderNumber} />
 
@@ -142,6 +180,14 @@ const OrderSummary = () => {
                   address={storeAddress.join(', ')}
                   openingHours={storeInfo.store_open_hours}
                   mapLink={storeInfo.view_on_map_link}
+                  {...(collectionPointsEnabled() && storeInfo.pudo_available !== undefined
+                    && { pickUpPointIcon: storeInfo.pudo_available ? 'collection-point' : 'store' })}
+                  {...(collectionPointsEnabled() && storeInfo.collection_point !== undefined
+                    && { pickUpPointTitle: storeInfo.collection_point })}
+                  {...(collectionPointsEnabled() && collectionDate !== undefined
+                    && { collectionDate })}
+                  {...(collectionPointsEnabled() && collectionCharge !== undefined
+                    && { collectionCharge })}
                 />
                 <OrderSummaryItem label={Drupal.t('Collection by')} value={customerShippingName} />
               </>

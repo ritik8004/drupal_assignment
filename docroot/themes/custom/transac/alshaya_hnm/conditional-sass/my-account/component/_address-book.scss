@@ -1,0 +1,377 @@
+.user__address--column {
+  border: 0.0625rem solid $address_tile_border;
+  font-family: $hnm-regular;
+}
+
+.view-address-book {
+  padding-top: 0.5rem;
+
+  @include breakpoint($tablet) {
+    padding-top: 2.1875rem;
+  }
+
+  @include breakpoint($desktop) {
+    padding-top: 3rem;
+  }
+}
+
+.address {
+  .address--content {
+    color: $address_content_text;
+    font-family: $alshaya-thin;
+    font-weight: normal;
+    font-size: 0.8125rem;
+    line-height: 1rem;
+  }
+
+  .address--label {
+    font-family: $hnm-regular;
+    color: $address_tile_label;
+    font-size: 0.8125rem;
+    line-height: 1rem;
+  }
+
+  .address--primary {
+    @include arabic-letter-spacing;
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: 2rem;
+      padding-#{$left}: 1.625rem;
+      font-size: 0.875rem;
+    }
+
+    span::before,
+    a::before,
+    a:hover::before {
+      transform: translateY(0);
+      border: none;
+    }
+
+    span {
+      @include icon(radio-filled, before) {
+        color: $primary_radiobtn_filled;
+        font-size: 2.625rem;
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        #{$left}: -0.9375rem;
+        background: none;
+
+        .firefox & {
+          top: -2px;
+        }
+
+        @include breakpoint($only-mobile) {
+          top: 5%;
+          #{$left}: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 22%;
+          #{$left}: -3px;
+        }
+      }
+    }
+
+    a {
+      @include icon(radio-empty, before) {
+        color: $primary_radiobtn_empty;
+        font-size: 2.625rem;
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        #{$left}: -0.9375rem;
+        background: none;
+
+        .firefox & {
+          top: -2px;
+        }
+
+        @include breakpoint($only-mobile) {
+          top: 5%;
+          #{$left}: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 22%;
+          #{$left}: -3px;
+        }
+      }
+
+      &:hover {
+        @include icon(radio-filled, before);
+      }
+    }
+  }
+
+  &:hover,
+  &.default {
+    .address--data {
+      background: $address_tile_selected_bg;
+    }
+
+    .address--primary {
+      @include arabic-letter-spacing;
+
+      font-family: $hnm-bold;
+      font-weight: normal;
+      color: $address_content_text;
+      letter-spacing: 0;
+
+      @include breakpoint($desktop) {
+        font-size: 0.8125rem;
+      }
+    }
+  }
+
+  .address--options {
+    border-top: none;
+  }
+}
+
+#edit-member-delivery-home-addresses {
+  .address {
+    &--edit {
+      a {
+        font-family: $hnm-demibold;
+        font-weight: normal;
+        text-decoration: underline;
+        color: $address_content_text;
+      }
+    }
+
+    &--deliver-to-this-address {
+      a {
+        color: $address_content_text;
+        border: 0.0625rem solid $address_content_link_border;
+        font-family: $hnm-bold;
+        font-weight: normal;
+        text-transform: uppercase;
+      }
+    }
+
+    &:hover,
+    &.default {
+      .address--data {
+        background: $grey3;
+      }
+
+      .address--deliver-to-this-address {
+        a {
+          border: 1px solid $address_content_link_border;
+          background-color: $address_content_link_bg;
+          font-family: $hnm-bold;
+          font-weight: normal;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
+
+.c-address-book {
+  .block-system > a {
+    @extend %button-wide;
+
+    text-transform: uppercase;
+    font-size: 0.875rem;
+
+    @include breakpoint($desktop) {
+      top: -0.625rem;
+      margin-bottom: 0.625rem;
+    }
+  }
+
+  .profile-form {
+    input {
+      background-color: $default_background_color;
+      color: $primary_input !important;
+    }
+
+    label {
+      color: $primary_input_label !important;
+      font-size: 0.8125rem !important;
+
+      &.error {
+        color: $primary_input_inline_error !important;
+        font-size: 0.6875rem;
+        background: $default_background_color !important;
+        bottom: -1.5rem;
+      }
+    }
+
+    .form-item {
+      &.mobile-number-field {
+        .prefix {
+          color: $primary_input;
+        }
+      }
+    }
+
+    .form-item-field-address-0-address-address-line2 {
+      input[type=text] ~ label:not(.active-label) {
+        color: $primary_input !important;
+        font-size: 0.8125rem !important;
+      }
+    }
+  }
+
+  .region__content {
+    .profile-form {
+      @include breakpoint($desktop) {
+        margin-top: 3rem;
+      }
+    }
+  }
+
+  .address-book-address {
+    .mobile-number-field .mobile-input--wrapper {
+      #edit-field-address-0-address-mobile-number-mobile-error {
+        margin-top: -0.5rem;
+      }
+    }
+  }
+}
+
+.user-form,
+.address-book-address,
+.webform-submission-alshaya-contact-form,
+#selected-store-wrapper {
+  .mobile-number-field {
+    .mobile-input--wrapper {
+      .prefix {
+        font-size: 1rem;
+        color: $address_book_mobile_prefix;
+      }
+
+      .form-item-field-address-0-address-mobile-number-mobile,
+      .form-item-field-mobile-number-0-mobile,
+      .form-item-billing-address-address-billing-mobile-number-mobile,
+      .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
+      .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
+      .form-item-mobile-number-mobile,
+      .form-item-cc-mobile-number-mobile {
+        position: static !important;
+        width: auto;
+
+        .ie & {
+          width: 9.37rem;
+        }
+      }
+
+      #edit-field-address-0-address-mobile-number-mobile-error,
+      #edit-mobile-number-mobile-error,
+      label.error {
+        top: 2rem !important;
+        // Show red border for mobile number error.
+        border-top: 2px solid $primary_input_inline_error;
+        padding-top: 0.4375rem;
+        margin-top: -0.1875rem;
+        z-index: 1;
+        width: 100%;
+
+        .checkout & {
+          top: 3.25rem !important;
+        }
+      }
+
+      .form-item--error-message {
+        padding-top: 0.4375rem;
+        margin-top: 0;
+        z-index: 1;
+        width: 100%;
+      }
+    }
+
+    input {
+      html[lang=ar] & {
+        font-family: $hnm-regular-nodir;
+      }
+    }
+  }
+}
+
+.address-book-address .form-type-select {
+  .select2-selection {
+    @include arabic-letter-spacing;
+
+    font-family: $hnm-regular;
+    font-size: 0.8125rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-color: $primary_dropdown_border;
+  }
+
+  .select2-selection__arrow {
+    top: 1px;
+    #{$right}: 1px;
+    width: 2.063rem;
+    height: 2.063rem;
+    background: $primary_dropdown_bg;
+
+    &::after {
+      font-size: 2.438rem;
+      top: 0;
+      #{$left}: 0;
+      width: 2.063rem;
+      height: 2.063rem;
+      text-indent: -0.375rem;
+    }
+  }
+
+  .select2-selection__rendered {
+    font-family: $hnm-regular;
+    color: $primary_dropdown_text !important;
+    font-size: 1rem;
+  }
+
+  .select2-selection__placeholder {
+    color: $primary_dropdown_text !important;
+  }
+
+  .select2-selection--single {
+    background: $white-five;
+  }
+
+  select {
+    &.select2-select {
+      &.form-select {
+        @include breakpoint($only-mobile) {
+          font-size: 1rem;
+          height: 2.5rem;
+        }
+      }
+    }
+  }
+}
+
+.profile-address-book-edit-form,
+#address-book-form-open {
+  .form-actions {
+    margin-bottom: 1.5rem;
+  }
+}
+
+#address_wrapper .address-book-address,
+#address-book-form-open .address-book-address,
+.address_wrapper .address-book-address {
+  .country-label {
+    color: $primary_input_label !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .country-name {
+    background-color: $default_background_color;
+    color: $primary_input !important;
+  }
+}
+
+.address-book-address,
+.contact-form,
+.user-communication-preference {
+  .country-field-wrapper {
+    .country-label {
+      font-size: 0.8125rem;
+    }
+  }
+}

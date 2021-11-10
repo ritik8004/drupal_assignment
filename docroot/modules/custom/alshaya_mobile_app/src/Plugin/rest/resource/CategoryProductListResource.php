@@ -20,7 +20,8 @@ use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\Views;
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
+use Drupal\Core\Site\Settings;
 
 /**
  * Class Category Product List Resource.
@@ -44,6 +45,11 @@ class CategoryProductListResource extends ResourceBase {
    * Parse mode conjunction.
    */
   const PARSE_MODE_CONJUNCTION = 'OR';
+
+  /**
+   * Page Type.
+   */
+  const PAGE_TYPE = 'listing';
 
   /**
    * Entity type manager.
@@ -226,6 +232,7 @@ class CategoryProductListResource extends ResourceBase {
 
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($id);
+
     // Prepare response from result set.
     $response_data = $this->addExtraTermData($term);
 
@@ -239,10 +246,10 @@ class CategoryProductListResource extends ResourceBase {
       $result_set = $result_set['plp_data'];
     }
 
-    AlshayaPromoContextManager::updateDefaultContext('app');
+    AlshayaRequestContextManager::updateDefaultContext('app');
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
+    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1', self::PAGE_TYPE);
 
     // Filter the empty products.
     // Array values being used to re-set the array index
@@ -276,10 +283,12 @@ class CategoryProductListResource extends ResourceBase {
     foreach ($subcategory_list_view->result as $subcategory_list_view_value) {
       $sub_category_entity_list = $subcategory_list_view_value->_entity;
       $sub_category_entity = $this->entityRepository->getTranslationFromContext($sub_category_entity_list);
+      $deeplink = $this->mobileAppUtility->getDeepLink($sub_category_entity);
+      $redirect_term_deeplink = $this->mobileAppUtility->getRedirectedTermDeeplink($sub_category_entity->id());
       $data[] = [
         'id' => $sub_category_entity->get('tid')->getValue()[0]['value'],
         'label' => $sub_category_entity->get('name')->getValue()[0]['value'],
-        'deeplink' => $this->mobileAppUtility->getDeepLink($sub_category_entity),
+        'deeplink' => !empty($redirect_term_deeplink) ? $redirect_term_deeplink : $deeplink,
       ];
     }
     return $data;
@@ -359,11 +368,38 @@ class CategoryProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get the config value for not executing search query.
+      $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      if ((AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) && (Settings::get('mobile_app_plp_index_new', FALSE))) {
+        $langcode = 'en';
+      }
+
       // Get term details in current language for filters.
       $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
-        $this->languageManager->getCurrentLanguage()->getId(),
+        $langcode,
         $tid
       );
+
+      $filter_field = $term_details['category_field'];
+      if (Settings::get('mobile_app_plp_index_new', FALSE)) {
+        // Append 'en' in 'filter_field' of 'algolia_data'.
+        // for ex:
+        // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
+        $category_field = explode('.', $term_details['category_field']);
+        $category_field_temp[] = $category_field[0] . '.' . $langcode . '.';
+        array_shift($category_field);
+        $filter_field = implode(array_merge($category_field_temp, $category_field));
+      }
+      $response['algolia_data'] = [
+        'filter_field' => $filter_field,
+        'filter_value' => $term_details['hierarchy'],
+        'rule_contexts' => $term_details['ruleContext'],
+      ];
+      // Return only algolia data if the config value is set to false.
+      if ($respond_ignore_algolia_data) {
+        return $response;
+      }
 
       $index = $storage->load('alshaya_algolia_index');
 
@@ -398,11 +434,6 @@ class CategoryProductListResource extends ResourceBase {
 
       // Prepare and execute query and pass result set.
       $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
-      $response['algolia_data'] = [
-        'filter_field' => $term_details['category_field'],
-        'filter_value' => $term_details['hierarchy'],
-        'rule_contexts' => $term_details['ruleContext'],
-      ];
 
       return $response;
     }

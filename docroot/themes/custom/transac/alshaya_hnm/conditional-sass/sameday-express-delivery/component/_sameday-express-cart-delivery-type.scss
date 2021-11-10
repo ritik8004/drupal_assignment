@@ -1,0 +1,53 @@
+.alias--cart {
+  #delivery-area-select {
+    .delivery-area-name {
+      font-family: $hnm-demibold;
+    }
+
+    .delivery-area-label {
+      > div {
+        display: block;
+      }
+    }
+
+    .delivery-area-button {
+      &::before {
+        font-size: 0.5rem;
+      }
+    }
+  }
+
+  .sku-cart-delivery-methods {
+    .information-icon {
+      &::after {
+        top: 0;
+      }
+    }
+
+    .shipping-tags-first-row,
+    .shipping-tags-second-row {
+      .cart-shipping-method {
+        .information-icon {
+          &::after {
+            html[lang=ar] & {
+              top: -0.0625rem;
+
+              @include breakpoint($upto-desktop) {
+                top: 0.1875rem;
+              }
+            }
+
+            @include breakpoint($desktop) {
+              top: 0.125rem;
+            }
+          }
+        }
+      }
+    }
+
+    .carrier-title {
+      padding-top: 0.0625rem;
+      padding-bottom: 0.0625rem;
+    }
+  }
+}

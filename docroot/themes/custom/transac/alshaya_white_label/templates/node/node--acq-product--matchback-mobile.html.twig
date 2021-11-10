@@ -1,0 +1,34 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+
+<article{{ attributes }} {{ gtm_attributes }}>
+  <div class="cross-sell-product-components acq-content-product acq-content-product-matchback">
+
+    <div class="matchback-image-wrapper">
+      {% if content.image is not null %}
+        {{ content.image }}
+      {% endif %}
+    </div>
+
+    <div class="cross-sell-product-component-center">
+      <h1 class="c-products__item__label"><a class="full-prod-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ label }}</a></h1>
+      <div class="price-block {{ content.price_block_identifier }}">
+        {{ content.price_block }}
+      </div>
+    </div>
+
+    <div class="cross-sell-product-component-right">
+      <div class="mobile-content-wrapper">
+        <div class="basic-details-wrapper">
+          {{ content.field_skus }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</article>

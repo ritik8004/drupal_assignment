@@ -6,3 +6,8 @@ swatches:
     - article_castor_id
   plp:
     - color_family
+color_attribute_config:
+  support_multiple_attributes: true
+  configurable_color_attribute: 'article_castor_id'
+  configurable_color_label_attribute: 'attr_color_label'
+  configurable_color_code_attribute: 'attr_rgb_color'

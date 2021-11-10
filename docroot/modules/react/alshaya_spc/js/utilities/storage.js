@@ -20,23 +20,26 @@ export const getStorageInfo = (storageKey = 'cart_data') => {
   }
 };
 
-export const addInfoInStorage = (cart) => {
-  const cartInfo = { ...cart };
-  // Adding current time to storage to know the last time cart updated.
-  cartInfo.last_update = new Date().getTime();
-  setStorageInfo(cartInfo);
-};
+/**
+ * Gets properties from data in local storage.
+ *
+ * @param {string} key
+ *   The key of the stored data.
+ * @param {string} path
+ *   The path to the data in the object. i.e. cart.customer.id
+ *
+ * @returns {Object|array|string|number|null}
+ *   The value or null if not found.
+ */
+export const getStorageItem = (key = 'cart_data', path = null) => {
+  const data = getStorageInfo(key);
+  if (data) {
+    // Splits the path using dot then tries to find the value inside the object.
+    const value = path.split('.').reduce((prev, curr) => prev && prev[curr], data);
+    if (typeof value !== 'undefined') {
+      return value;
+    }
+  }
 
-export const removeCartFromStorage = () => {
-  removeStorageInfo('cart_data');
-
-  // Remove last selected payment on page load.
-  // We use this to ensure we trigger events for payment method
-  // selection at-least once and not more than once.
-  removeStorageInfo('last_selected_payment');
-};
-
-export const getInfoFromStorage = () => {
-  const cartData = getStorageInfo('cart_data');
-  return cartData;
+  return null;
 };

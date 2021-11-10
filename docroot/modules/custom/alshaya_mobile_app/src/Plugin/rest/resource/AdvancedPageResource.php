@@ -5,6 +5,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
+use Drupal\views\Views;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
@@ -17,6 +18,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Provides a resource to node data of advanced page.
@@ -67,6 +69,13 @@ class AdvancedPageResource extends ResourceBase {
   protected $configFactory;
 
   /**
+   * Entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -87,6 +96,8 @@ class AdvancedPageResource extends ResourceBase {
    *   The entity type manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity repository.
    */
   public function __construct(
     array $configuration,
@@ -97,13 +108,15 @@ class AdvancedPageResource extends ResourceBase {
     MobileAppUtility $mobile_app_utility,
     RequestStack $request_stack,
     EntityTypeManagerInterface $entity_type_manager,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    EntityRepositoryInterface $entityRepository
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -119,7 +132,8 @@ class AdvancedPageResource extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('request_stack'),
       $container->get('entity_type.manager'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('entity.repository')
     );
   }
 
@@ -132,13 +146,15 @@ class AdvancedPageResource extends ResourceBase {
   public function get() {
     // Path alias of advanced page.
     $alias = $this->requestStack->query->get('url');
-    if (!$alias) {
-      $page = $this->requestStack->query->get('page');
+    $page = $this->requestStack->query->get('page');
+    if (!$alias && $page !== 'front') {
       $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
     }
 
     try {
-      $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+      $node = ($page === 'front')
+        ? $this->entityTypeManager->getStorage('node')->load($this->configFactory->get('alshaya_master.home')->get('entity')['id'])
+        : $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
     }
     catch (\Exception $e) {
       // Redirect to 404.
@@ -200,6 +216,11 @@ class AdvancedPageResource extends ResourceBase {
       $advanced_page_fields = $start + $elem + $advanced_page_fields;
     }
 
+    // LHN Data for Departmental page for mobile app.
+    if ($node->get('field_use_as_department_page')->getValue()[0]['value'] == 1 && $node->get('field_show_left_menu')->getValue()[0]['value'] == 1) {
+      $response_data['lhn_tree'] = $this->getCategoryData($term->id());
+    }
+
     foreach ($advanced_page_fields as $field => $field_info) {
       $current_blocks = $this->mobileAppUtility->getFieldData(
         $node,
@@ -210,16 +231,14 @@ class AdvancedPageResource extends ResourceBase {
       );
 
       $current_blocks = array_filter($current_blocks);
-      if (!empty($current_blocks['type'])) {
+      if (isset($current_blocks['type']) && !empty($current_blocks['type'])) {
         $blocks[] = $current_blocks;
       }
       else {
         $blocks = array_merge($blocks, $current_blocks);
       }
     }
-
     $response_data['blocks'] = $blocks;
-
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
     foreach ($this->mobileAppUtility->getCacheableEntities() as $cacheable_entity) {
@@ -241,6 +260,67 @@ class AdvancedPageResource extends ResourceBase {
     ]));
 
     return $response;
+  }
+
+  /**
+   * Get all terms of a given parent term.
+   *
+   * @param int $parent_tid
+   *   Parent term id.
+   *
+   * @return array
+   *   Data array.
+   */
+  private function getCategoryData(int $parent_tid) {
+    $subcategory_list_view = Views::getView('product_category_level_2_3');
+    $subcategory_list_view->setDisplay('block_2');
+    $subcategory_list_view->setArguments([$parent_tid]);
+    $subcategory_list_view->execute();
+    $data = [];
+    foreach ($subcategory_list_view->result as $subcategory_list_view_value) {
+      $sub_category_entity_list = $subcategory_list_view_value->_entity;
+      $sub_category_entity = $this->entityRepository->getTranslationFromContext($sub_category_entity_list);
+      $sub_category_entity_url_obj = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $sub_category_entity->id()]);
+      $sub_category_entity_url = $sub_category_entity_url_obj->toString(TRUE)->getGeneratedUrl();
+      $data[] = [
+        'id' => $sub_category_entity->get('tid')->getValue()[0]['value'],
+        'label' => $sub_category_entity->get('name')->getValue()[0]['value'],
+        'deeplink' => $this->mobileAppUtility->getDeepLink($sub_category_entity),
+        'path' => $sub_category_entity_url,
+        'child' => $this->getChildCategoryData($sub_category_entity->get('tid')->getValue()[0]['value']),
+      ];
+    }
+    return $data;
+  }
+
+  /**
+   * Get all child terms of a given parent term.
+   *
+   * @param int $child_tid
+   *   Child term id.
+   *
+   * @return array
+   *   Data array.
+   */
+  private function getChildCategoryData(int $child_tid) {
+    $childCategory_list_view = Views::getView('product_category_level_3');
+    $childCategory_list_view->setDisplay('block_1');
+    $childCategory_list_view->setArguments([$child_tid]);
+    $childCategory_list_view->execute();
+    $data = [];
+    foreach ($childCategory_list_view->result as $childCategory_list_view_value) {
+      $child_category_entity_list = $childCategory_list_view_value->_entity;
+      $child_category_entity = $this->entityRepository->getTranslationFromContext($child_category_entity_list);
+      $child_category_entity_url_obj = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $child_category_entity->id()]);
+      $child_category_entity_url = $child_category_entity_url_obj->toString(TRUE)->getGeneratedUrl();
+      $data[] = [
+        'id' => $child_category_entity->get('tid')->getValue()[0]['value'],
+        'label' => $child_category_entity->get('name')->getValue()[0]['value'],
+        'deeplink' => $this->mobileAppUtility->getDeepLink($child_category_entity),
+        'path' => $child_category_entity_url,
+      ];
+    }
+    return $data;
   }
 
 }

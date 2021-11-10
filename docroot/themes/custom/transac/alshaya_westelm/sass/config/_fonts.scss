@@ -1,87 +1,3 @@
-// Define Fonts
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts';
-
-@font-face {
-  font-family: "GTEestiDisplay-Light";
-  src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GTEestiDisplay-Medium";
-  src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GEDinarTwoMedium";
-  src:
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GEDinarOneMedium";
-  src:
-    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-//DY fonts.
-@font-face {
-  font-family: "GTEestiDisplay-Bold";
-  src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Bold.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GTEestiDisplay-Regular";
-  src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Sanomat-Light";
-  src:
-    url("#{$base_theme_fonts_directory_path}/Sanomat-Light.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Sanomat-Light.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Sanomat-Medium";
-  src:
-    url("#{$base_theme_fonts_directory_path}/Sanomat-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Sanomat-Medium.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 // Font Family
 $we-bold: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
 $we-bold-nodir: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
@@ -89,8 +5,8 @@ $we-bold-nodir: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
 $we-thin: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
 $we-thin-nodir: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
 
-$we-arabic-bold: 'GEDinarTwoMedium', 'GTEestiDisplay-Medium', 'Arial';
-$we-arabic-bold-nodir: 'GEDinarTwoMedium', 'GTEestiDisplay-Medium', 'Arial';
+$we-arabic-bold: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
+$we-arabic-bold-nodir: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
 
 $we-arabic-thin: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
 $we-arabic-thin-nodir: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';

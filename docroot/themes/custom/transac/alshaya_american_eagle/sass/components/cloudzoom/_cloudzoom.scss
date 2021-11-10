@@ -9,8 +9,8 @@
 
   .slick-slide {
     @include breakpoint($desktop) {
-      width: 4.875rem !important;
-      height: 6.5rem !important;
+      width: 5rem !important;
+      height: 6.25rem !important;
       padding: 0;
     }
 
@@ -19,18 +19,25 @@
       padding: 0;
     }
 
-    img {
-      height: 6.25rem;
-
-      @include breakpoint($only-tablet) {
-        height: 7.25rem;
-      }
+    @include breakpoint($tablet) {
+      overflow: hidden;
+      border: none;
     }
   }
 
   .slick-current {
     border: 0;
-    border-bottom: 0.1875rem solid $gallery_arrows_border;
+
+    &::after {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      height: 0.1875rem;
+      background: $gallery_arrows_border;
+      #{$left}: 0;
+      bottom: 0;
+    }
 
     @include breakpoint($only-tablet) {
       border: 0 !important;
@@ -80,7 +87,7 @@
 
   .cloudzoom__thumbnails {
     @include breakpoint($desktop) {
-      width: 4.875rem;
+      width: 5rem;
     }
   }
 
@@ -141,6 +148,14 @@
   #product-image-gallery-mobile {
     button.slick-arrow {
       display: none !important;
+    }
+
+    li.slick-slide {
+      @include breakpoint($only-mobile) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 }

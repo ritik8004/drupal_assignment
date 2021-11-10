@@ -1,0 +1,6 @@
+logger:
+  version: 1
+  js:
+    js/datadog_js.logger.js: {}
+  dependencies:
+    - core/drupal

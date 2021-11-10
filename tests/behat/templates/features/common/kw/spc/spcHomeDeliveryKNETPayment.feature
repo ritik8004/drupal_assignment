@@ -1,5 +1,5 @@
-@javascript @KNetPayment @guest @homeDelivery @bbwkwuat @flkwuat
-Feature: SPC Checkout Home Delivery CC
+@javascript @KNetPayment @guest @homeDelivery
+Feature: SPC Checkout Home Delivery Knet Payment for Guest User
 
   Background:
     Given I am on "{spc_basket_page}"
@@ -7,11 +7,11 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
 
   @cc @hd @Knet
-  Scenario: As a Guest, I should be able to checkout using CC
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+  Scenario: As a Guest, I should be able to checkout using KNET payment method
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -26,42 +26,24 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {governorate} |
-      | spc-area-select-selected      | {city_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
-    And I wait 10 seconds
+    And I wait 30 seconds
+    And I wait for AJAX to finish
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
     And I wait 10 seconds
-    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect.bank"
+    And I select "{spc_knet_option}" from dropdown ".paymentselect.bank"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "Submit"
-    And I wait 2 seconds
+    And I wait 5 seconds
     And I press "Confirm"
     And I wait 5 seconds
     And I wait for the page to load
@@ -69,6 +51,7 @@ Feature: SPC Checkout Home Delivery CC
     Then I should be on "/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
@@ -100,14 +83,14 @@ Feature: SPC Checkout Home Delivery CC
     And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @Knet
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  Scenario: As a Guest, I should be able to checkout using KNET payment in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -122,25 +105,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I select the Knet payment method
     And I wait 10 seconds
@@ -152,8 +117,7 @@ Feature: SPC Checkout Home Delivery CC
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds
@@ -162,16 +126,17 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I wait 5 seconds
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @hd @language @mobile @Knet
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  Scenario: As a Guest, I should be able to checkout using KNET payment in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -186,25 +151,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I select the Knet payment method
     And I wait 10 seconds
@@ -216,8 +163,7 @@ Feature: SPC Checkout Home Delivery CC
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
-    And I select "{spc_Knet_month}" from "debitMonthSelect"
-    And I select "{spc_Knet_year}" from "debitYearSelect"
+    And I select date and month in the form for arabic
     And I fill in "cardPin" with "{spc_Knet_pin}"
     And I press "إرسال"
     And I wait 2 seconds
@@ -226,3 +172,4 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I wait 5 seconds
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file

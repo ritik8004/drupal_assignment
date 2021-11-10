@@ -2,88 +2,103 @@
 
 It is possible to work with Lando for local development.
 
-However, at the time of writing, it does require some manual steps, and there are some caveats - see below.
+Using Lando should be considered in BETA phase.
 
-Using Lando should be considered EXPERIMENTAL. If you hit issues you could be mostly on your own, so don't depend on
-this for your work if you're not already fairly comfortable with docker and lando.
+#### Pending items:
+* XHPROF
+* Make SOLR work (we still use for non-transac)
 
-Having said that, it'd be great to get people using it and fixing issues.
-
-N.B The current configuration uses mutagen for mounting files. This requires a suitable version of docker and lando with
-support for this functionality.
-
-## Manual Setup
-
-### Host resolution
-
-Because we're not using .lndo URLs which get resolved by public DNS, we need to edit our own /etc/hosts files to add
-entries for the Alshaya sites - in the same way that the Vagrant VM plugin does this for us when using DrupalVM.
-
-### SSH
-
-When I tried to run certain BLT commands requiring SSH access (such as local:sync) I found that Lando had not forwarded
-my ssh keys as expected.
-
-I found that the quickest workaround to this is to copy your ssh keys into `lando.config.userConfRoot/keys` - in probably
-all cases, this will mean `$HOME/.lando/keys` - and then rebuild using `lando rebuild`.
-
-Unfortunately, I couldn't find a way to get ssh agent forwarding going, so password protected keys will require the
-password on each use, which is a minor irritation.
+### Switching from DrupalVM to Lando
+* Reset your local.settings.php (docroot/sites/g/settings/local.settings.php) file
+  from docroot/sites/default/settings/default.local.settings.php
+* Shut down (no need to destroy) vagrant (vagrant halt or vagrant suspend)
 
 ### Build steps
 
-Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
-as per the instructions above.
+If you are switching from DrupalVM to Lando, please check the steps below.
+
+### Requirements
+
+* Docker
+* Lando
+* MacOS or Ubuntu/Linux (_*Not tested on Windows_)
+
+### Installation
+* Follow https://docs.lando.dev/basics/installation.html
+_**NOTE**: Lando recommends you download their installer which has docker desktop bundled with it instead of installing
+separately._
+* Download the dmg file from `https://github.com/lando/lando/releases`
+* The lando package will have the compatible docker as well inside it.
+* Post installation, follow the recommendations in the [Performance](#Performance) section below.
+
+Add the below line in ~/.bashrc.
+
+  * Linux user: add 'export LANDO_SSH_AUTH_SOCK="${SSH_AUTH_SOCK}"' at the end of your ~/.bashrc:
+  * Mac user: MacOS specific path is here as the variable default value, nothing to do.
 
 All steps are executed on your host OS.
 
-  * `composer clear-cache`
-  * `composer install`
-  * `composer blt-alias`
   * `lando start` - this will configure and set up your containers and services.
+  * `lando composer install` - This will install all the composer packages.
+  * `lando create-databases` - This will create all the required databases.
+  * `lando blt blt:init:git-hooks` - this will initialize git hooks.
+  * `lando blt blt:init:settings` - this will initialize settings.
+  * `lando blt frontend:setup` - see notes on BLT & NPM below
+  * `lando blt frontend:build` - see notes on BLT & NPM below
+  * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build. If you don't specify the
+     site name, you will be able to pick the name from a list.
 
-  * `lando blt blt:init:git-hooks`
-  * `lando blt blt:init:settings`
-  * `lando frontend-setup` - see notes on BLT below
-  * `lando frontend-build` - see notes on BLT below
-  * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build
-
-You should now be able to access the site in your browser at https://local.alshaya-<sitename>.com/
+You should now be able to access the site in your browser at `https://<sitename>.alshaya.lndo.site/`
+example: `https://mckw.alshaya.lndo.site/`
 
 Drush commands can be executed from your host OS using `lando drush -l <site_url>`.
+
+### Post Destroy / Starting fresh
+
+After every-time `lando destroy` is done we need to do following post `lando start`
+
+* `lando create-databases` - This will create all the required databases.
 
 ## Services
 
 The following ports are exposed on localhost
 
- - 80/443 : varnish
  - 33061 : mysql
- - 11211 : memcache1
- - 11212 : memcache2
 
 Having mysql exposed on localhost is useful for connecting to mysql from clients running on the host OS, such as
 "Sequel Pro".
 
-Exposing the ports of the memcache services is useful for being able to debug memcache from your terminal, by issuing
-commands via netcat or telnet.
-
 ### MySQL
 
-When the mysql service is started, commands are run to create databases for the sites if they don't already exist. These
-commands can be found in the service config in the lando file. If you're adding new sites, as things stand, you'll
-need to add another similar line here to create your database.
+If you're adding new sites
+* Add the new site as described in [README file](./README.md#create-a-new-site)
+* No need to rebuild like in vagrant
+* After adding entry in blt/alshaya_local_sites.yml just run `lando create-databases`
 
 ### Varnish
 
 There is a separate varnish file for Lando in `architecture/varnish/varnish-4-lando.vcl`. The existing file did not
 compile when using Lando, hence the need for a Lando specific version.
 
+THIS IS NOT TESTED YET
+
 ### Memcache
 
-We are using two memcache services in a similar setup to other environments. The idea here is that we may flush out
-some of the memcache issues we've seen by replicating other environments more closely.
+We are using one memcache service the same way as what we had in DrupalVM / Vagrant setup.
+
+### Mailhog
+
+To read the mails sent by system please access http://mail-alshaya.lndo.site
+
+## PHPMyAdmin
+
+To access database via PHPMyAdmin, please access http://pma-alshaya.lndo.site
 
 ## Tooling
+
+### Logs
+
+To access Drupal Logs we can use `lando logs-drupal`
 
 ### BLT
 
@@ -94,6 +109,17 @@ actually executing the BLT commands in this case - we're doing what the BLT comm
 running some scripts from our `blt/scripts` folder.
 
 This is not ideal since it means we could get out of date if the blt code in that area changes.
+
+### NPM and NODE components setup.
+
+To execute any NPM commands with lando, use `lando npm run build` or `lando npm run build:dev`.
+Theme and React compilation works same way, execute the commands from inside the module/theme folder.
+
+For example to compile the JS for `alshaya_spc`.
+```
+$ cd docroot/modules/react/alshaya_spc
+$ lando npm run build:dev
+```
 
 ### Xdebug
 
@@ -132,11 +158,10 @@ For example, `lando behat-run --profile=hm-kw-uat-en-desktop`.
 
 ### Observing Behat
 
-You will need a vnc viewer in order to do this.  Recommended is "RealVNC Viewer". On mac, install either using
-`homebrew cask install vnc-viewer` or from the DMG file on the RealVNC site.
-
-To observe, before running tests, point your VNC viewer at `localhost` on port `4444`.  If asked for a password, you
-should use `secret`.
+On the latest MacOS you can use **Screen Sharing** app to connect using `localhost:4444`. If you are using an older
+version of MacOS, you can install "RealVNC Viewer" either using -`homebrew cask install vnc-viewer` or from the DMG file
+on the RealVNC site.
+If asked for a password, you should use `secret`.
 
 Now run the tests, and you should be able to observe the browser activity.
 
@@ -144,16 +169,33 @@ Now run the tests, and you should be able to observe the browser activity.
 
 Performance is not as good as a dedicated VM, for a number of reasons, but mostly docker related rather than Lando.
 
-We have made some attempt to improve this by using `excludes` within `.lando.yml` to exclude vendor folder from shares.
-Instead, it's contents are copied into the container at build time. However, this does mean that containers **must be
-rebuilt after each composer operation that changes the contents of your vendor folder**, for example `composer install`
-or `composer update`.  Luckily this doesn't take long.  To do this, use `lando rebuild -y`.
+We have made some attempt to improve this by using `excludes` within `.lando.yml` to exclude folders that are mostly
+written by server and we do not need them.
 
-On local, it has been found that updating docker preferences on mac to only mount project folder and $HOME/.lando
+On local, it has been found that updating docker preferences on Mac to only mount project folder and $HOME/.lando
 folder into containers.
 
-For reference:
+1. Change `~/.lando/config.yml` and set home to empty, so home directory wont be loaded. The content of this file should be,
+```
+home: ''
+```
 
+2. `(Already applied)` Once #1 is done, the ssh keys are not accessible to lando as home directory is unmounted. This fix https://github.com/lando/lando/issues/478#issuecomment-654634511 has been added for now as part of `.lando.yml` until lando has a better way to allow projects to manage ssh keys without sacrificing performance by mounting entire `home` directory.
+
+NOTE: Be careful about the Experimental features in Docker dashboard. The assumption is we have them turned off.
+
+For reference:
+- https://github.com/lando/lando/issues/478#issuecomment-654634511
+- https://github.com/lando/lando/issues/2635#issuecomment-877473886
 - https://docs.lando.dev/config/performance.html
 - https://github.com/lando/lando/issues/763
 
+## Text Editors
+### VS Code
+1. In the XDebug configuration, make sure you have the following
+```
+"port": 9003,
+"pathMappings": {
+  "/app/": "${workspaceFolder}"
+},
+```

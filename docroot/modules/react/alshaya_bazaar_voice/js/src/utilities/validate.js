@@ -5,7 +5,8 @@ import { getbazaarVoiceSettings } from './api/request';
 /**
  * Validates the form details.
  */
-export const processFormDetails = (e) => {
+export const processFormDetails = (e, ReviewId) => {
+  const bazaarVoiceSettings = getbazaarVoiceSettings();
   // Flag to determine if there is any error.
   let isError = false;
 
@@ -15,18 +16,19 @@ export const processFormDetails = (e) => {
       return;
     }
     if (!element.value.length) {
-      document.getElementById(`${element.id}-error`).innerHTML = getStringMessage('empty_field_default_error');
+      const label = element.id.replace(`-${ReviewId}`, '');
+      const title = getStringMessage(label) !== '' ? getStringMessage(label) : getStringMessage('screen_name');
+      document.getElementById(`${element.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': title });
       document.getElementById(`${element.id}-error`).classList.add('error');
       document.getElementById(`${element.id}`).classList.add('error');
       isError = true;
     } else {
       document.getElementById(`${element.id}-error`).innerHTML = '';
-      document.getElementById(`${element.id}-error`).classList.remove('error');
     }
   });
 
   const targetElementEmail = e.target.elements.email;
-  if (targetElementEmail !== undefined && targetElementEmail.value.toString().length > 0) {
+  if (targetElementEmail.value.length > 0) {
     const isValidEmail = validEmailRegex.test(targetElementEmail.value);
     if (!isValidEmail) {
       document.getElementById(`${targetElementEmail.id}`).classList.add('error');
@@ -37,18 +39,40 @@ export const processFormDetails = (e) => {
   }
 
   const targetElementCommentbox = e.target.elements.commentbox;
-  const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length;
-  if (targetElementCommentbox !== undefined
-    && targetElementCommentbox.value.toString().length < commentMinLength) {
+  const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_box_min_length;
+  if (targetElementCommentbox.value.length > 0
+    && targetElementCommentbox.value.length < commentMinLength) {
+    const commentlabel = getStringMessage('comment');
     document.getElementById(`${targetElementCommentbox.id}`).classList.add('error');
-    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': commentMinLength });
+    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': targetElementCommentbox.minLength, '%fieldTitle': commentlabel });
     document.getElementById(`${targetElementCommentbox.id}-error`).classList.add('error');
     isError = true;
   }
+
+  const targetElementNickname = e.target.elements.nickname;
+  const nicknameMinLength = bazaarVoiceSettings.reviews.bazaar_voice.screen_name_min_length;
+  if (targetElementNickname.value.length > 0
+    && targetElementNickname.value.length < nicknameMinLength) {
+    const label = getStringMessage('screen_name');
+    document.getElementById(`${targetElementNickname.id}`).classList.add('error');
+    document.getElementById(`${targetElementNickname.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': targetElementNickname.minLength, '%fieldTitle': label });
+    document.getElementById(`${targetElementNickname.id}-error`).classList.add('error');
+    isError = true;
+  }
+
   return isError;
+};
+
+/**
+ * To Get average percentage value.
+ */
+export const getPercentVal = (count, totalCount) => {
+  const average = count / totalCount;
+
+  return average * 100;
 };
 
 export default {
   processFormDetails,
+  getPercentVal,
 };

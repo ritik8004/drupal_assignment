@@ -28,19 +28,6 @@
     open: productMatchbackDialogOpen
   };
 
-  /**
-   * Call blazyRevalidate() on afterChange of slick sliders.
-   *
-   * @param {object} carousel
-   * The carousel element.
-   */
-  function applyMatchbackHorizontalLazyLoad(carousel) {
-    // Lazy Load on carousels.
-    carousel.on('afterChange', function () {
-      Drupal.blazyRevalidate();
-    });
-  }
-
   // Call applyMatchbackRtl() to initialise slick.
   function applyMatchbackRtl(ocObject, options) {
 
@@ -74,7 +61,6 @@
   // Call matchbackSlider() to apply slick and instagram dots.
   function matchbackSlider(ocObject) {
     applyMatchbackRtl(ocObject, optionMatchback);
-    applyMatchbackHorizontalLazyLoad(ocObject);
   }
 
   // Call matchbackZoomModal() to open matchback zoom image in modal.
@@ -118,6 +104,20 @@
       $('.sku-base-form').once('matchback-variant').on('variant-selected', function () {
         var variantMatchbackSlider = $(this).closest('.cross-sell-product-component-right').siblings('.cross-sell-product-component-left').find('.machbackSlider');
         var zoom_wrap = $(this).closest('.cross-sell-product-component-right').siblings('.cross-sell-product-component-left').find('.imagezoom-wrap')
+        zoom_wrap.each(function () {
+          $(this).bind( "click", function () {
+            matchbackZoomModal($(this));
+          });
+        });
+        if (variantMatchbackSlider.length > 0) {
+          matchbackSlider(variantMatchbackSlider);
+        }
+      });
+
+      // On matchback product change using attributes like fragnance for grouped products, attach slick on matchback gallery and bind click event to open zoom image in modal.
+      $('article.entity--type-node').once('matchback-variant-group').on('group-item-selected', function () {
+        var variantMatchbackSlider = $(this).find('.cross-sell-product-component-left .machbackSlider');
+        var zoom_wrap = $(this).find('.cross-sell-product-component-left .imagezoom-wrap');
         zoom_wrap.each(function () {
           $(this).bind( "click", function () {
             matchbackZoomModal($(this));

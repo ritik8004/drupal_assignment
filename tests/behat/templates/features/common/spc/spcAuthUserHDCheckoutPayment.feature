@@ -1,45 +1,32 @@
-@javascript @auth @checkoutPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @bbwaeuat @vssauat @vsaeuat @bbwkwuat @auth @hmkwuat @hmsauat @flkwuat @flaeuat
+@javascript @auth @checkoutPayment @homeDelivery @mujikwuat @mujisauat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @pbkwuat @westelmaeuat @westelmsauat @westelmkwuat @flsauat @mcaeuat @bbwsauat @mcsauat @tbskwuat @pbaeuat @pbsauat @hmaeuat @mckwuat @bbwaeuat @vssauat @vsaeuat @bbwkwuat @auth @hmkwuat @hmsauat @flkwuat @flaeuat
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Authenticated user
 
   Background:
-    Given I am on "user/login"
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for the page to load
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
+    And I wait 10 seconds
     Then I should be on "/user" page
     When I am on "{spc_basket_page}"
     And I wait for the page to load
 
   @cc @hd @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com)
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
+    And I wait 30 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -48,12 +35,13 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
@@ -85,37 +73,26 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 50 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -133,10 +110,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     Then I should be on "/{language_short}/checkout/" page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{language_order_detail}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
@@ -168,37 +142,26 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I should see "{language_continue_shopping_text}"
 
   @cc @hd @language @mobile @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -214,3 +177,6 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait for AJAX to finish
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/" page
+    And I wait 10 seconds
+    And I wait for the page to load
+    And I should save the order details in the file

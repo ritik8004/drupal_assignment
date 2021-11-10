@@ -68,6 +68,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'download_link' => NULL,
       'vat_text' => NULL,
       'cancelled_products' => NULL,
+      'bazaarvoice_strings' => NULL,
     ],
   ];
 
@@ -190,6 +191,8 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == 'user_register_form') {
+    array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name');
+
     // We allow Drupal admins to create only admin users and customers can be
     // created in Magento directly.
     if (\Drupal::currentUser()->isAnonymous()) {
@@ -202,7 +205,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
         unset($form['#validate'][$key]);
       }
 
-      array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name', 'alshaya_acm_customer_register_validate');
+      array_unshift($form['#validate'], 'alshaya_acm_customer_register_validate');
 
       // Final step in validate itself, register the user.
       $form['#validate'][] = 'alshaya_acm_customer_register_validate_final';
@@ -234,8 +237,12 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
       array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name');
       // Always hide customer_id field for none-admin users.
-      $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
+      $has_administer_user_permissions = \Drupal::currentUser()->hasPermission('administer users');
+      $form['acq_customer_id']['#access'] = $has_administer_user_permissions;
       $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+
+      // Hide store field for non-admin users.
+      $form['field_agent_store']['#access'] = $has_administer_user_permissions;
     }
     else {
       // Add markup for terms and conditions.
@@ -352,7 +359,7 @@ function alshaya_acm_customer_login_post_validate(array &$form, FormStateInterfa
     // Set error without name ref for name error.
     if (isset($all_errors['name'])) {
 
-      drupal_set_message($all_errors['name'], 'error');
+      \Drupal::messenger()->addMessage($all_errors['name'], 'error');
       $form_state->setErrorByName('custom', $all_errors['name']);
       unset($all_errors['name']);
     }
@@ -536,7 +543,7 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
     // after try/catch.
     if (acq_commerce_is_exception_api_down_exception($e)) {
       $form_state->setErrorByName('custom', $e->getMessage());
-      drupal_set_message($e->getMessage(), 'error');
+      \Drupal::messenger()->addMessage($e->getMessage(), 'error');
     }
   }
 
@@ -583,7 +590,7 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
     // after try/catch.
     if (acq_commerce_is_exception_api_down_exception($e)) {
       $form_state->setErrorByName('custom', $e->getMessage());
-      drupal_set_message($e->getMessage(), 'error');
+      \Drupal::messenger()->addMessage($e->getMessage(), 'error');
     }
     else {
       \Drupal::logger('alshaya_acm_customer')->error('Error occurred during customer registration @message', [

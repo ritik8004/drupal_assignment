@@ -68,7 +68,10 @@ class AlshayaBazaarVoiceController extends ControllerBase {
   }
 
   /**
-   * Returns write a review form configs synced from BazaarVoice config hub.
+   * Convert base64 content into image and upload temporarily.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
    *
    * @return array
    *   Build array.
@@ -105,6 +108,21 @@ class AlshayaBazaarVoiceController extends ControllerBase {
     $response->setData($uasToken);
 
     return $response;
+  }
+
+  /**
+   * Returns review stats of a product.
+   *
+   * @param string $productId
+   *   Product id or sanitized sku id.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function getProductReviewStatistics(string $productId) {
+    // Add user review of current product in user settings.
+    $reviewStatsData = $this->alshayaBazaarVoice->getProductReviewStatistics($productId);
+    return new JsonResponse(!empty($reviewStatsData) ? reset($reviewStatsData) : []);
   }
 
 }

@@ -1,0 +1,16 @@
+.c-user-edit {
+  .mobile-number-field .mobile-input--wrapper .country-select .prefix {
+    line-height: 1.6;
+  }
+
+  .user-form {
+    .field--type-mobile-number {
+      .form-item {
+        &.form-type-tel {
+          margin-top: 0.5rem;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

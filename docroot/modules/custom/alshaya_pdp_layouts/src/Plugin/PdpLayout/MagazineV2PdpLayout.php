@@ -12,6 +12,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides the default laypout for PDP.
@@ -123,35 +125,53 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $sku_entity = SKU::loadFromSku($sku);
     $vars['sku'] = $sku_entity;
 
-    // Get gallery data for the main product.
-    if ($sku_entity instanceof SKUInterface) {
-      $gallery = $this->getGalleryVariables($sku_entity);
-      if (!empty($gallery)) {
-        $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $gallery;
-      }
-      $max_sale_qty = 0;
-      if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
-        // We will take lower value for quantity options from
-        // available quantity and order limit.
-        $plugin = $sku_entity->getPluginInstance();
-        $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
-      }
-      $quantity = $this->skuManager->getStockQuantity($sku_entity);
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
-
-      // Set delivery options only if product is buyable.
-      if (alshaya_acm_product_is_buyable($sku_entity)) {
-        // Check if home delivery is available for this product.
-        if (alshaya_acm_product_available_home_delivery($sku)) {
-          $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
-          $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
-        }
-      }
-
-      // Check if product is in stock.
-      $stock_status = $this->skuManager->isProductInStock($sku_entity);
-      $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $stock_status;
+    if (!($sku_entity instanceof SKUInterface)) {
+      throw new NotFoundHttpException();
     }
+
+    // Get gallery data for the main product.
+    $gallery = $this->getGalleryVariables($sku_entity);
+    if (!empty($gallery)) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $gallery;
+    }
+    $max_sale_qty = 0;
+    if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+      // We will take lower value for quantity options from
+      // available quantity and order limit.
+      $plugin = $sku_entity->getPluginInstance();
+      $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
+    }
+    $quantity = $this->skuManager->getStockQuantity($sku_entity);
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockQty'] = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
+
+    // Get the product's buyable status.
+    $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['is_product_buyable'] = $is_product_buyable;
+
+    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+    $vars['#cache']['tags'] = Cache::mergeTags($vars['#cache']['tags'] ?? [], $express_delivery_config->getCacheTags());
+    // Checking if express delivery enabled.
+    if ($express_delivery_config->get('status')) {
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
+      // Show delivery options as per order in express delivery config.
+      $delivery_options = alshaya_acm_product_get_delivery_options($sku);
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'] = $delivery_options['values'];
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
+    }
+
+    // Set delivery options only if product is buyable.
+    // Hide home delivery default options if express delivery enabled.
+    if ($is_product_buyable && !($express_delivery_config->get('status'))) {
+      // Check if home delivery is available for this product.
+      if (alshaya_acm_product_available_home_delivery($sku)) {
+        $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
+        $vars['#attached']['drupalSettings']['homeDelivery'] = $home_delivery_config;
+      }
+    }
+
+    // Check if product is in stock.
+    $stock_status = $this->skuManager->isProductInStock($sku_entity);
+    $vars['#attached']['drupalSettings']['productInfo'][$sku]['stockStatus'] = $stock_status;
 
     // Get share this settings.
     if (isset($vars['elements']['sharethis'])) {
@@ -276,6 +296,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['firstChild'] = reset($sorted_variants);
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $variant_gallery;
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
+
+        $parent_sku = $this->skuManager->getParentSkuBySku($child);
+        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku->getSku());
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['deliveryOptions'] = $delivery_options['values'];
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
         if ($child_sku == reset($sorted_variants)) {
           $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $variant_gallery;
         }
@@ -323,7 +348,6 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           'sku' => $sku,
           'thumbnails' => $thumbnails,
           'pager_flag' => $pager_flag,
-          'lazy_load_placeholder' => $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder'),
         ];
 
       }

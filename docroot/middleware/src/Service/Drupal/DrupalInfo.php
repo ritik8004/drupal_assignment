@@ -48,21 +48,6 @@ class DrupalInfo {
    *   Drupal url.
    */
   public function getDrupalHostUrl() {
-    // For factory domains we have an issue around DNS resolution, in many
-    // systems (mainly linux as per observations) *.factory.alshaya.com domain
-    // doesn't resolve properly. As a workaround we use the domain with CDN
-    // suffix here. Issue is very old and has been informed to Alshaya as well
-    // as TAM of the project, configuration changes are expected in how the
-    // domain is configured by Alshaya.
-    // To observe the issue try to do curl https://mckw-uat.factory.alshaya.com
-    // from inside the UAT server.
-    // alshaya@staging-1509:/var/www/html/alshaya.01uat/docroot$ curl -I \
-    // > mckw-uat.factory.alshaya.com
-    // curl: (6) Could not resolve host: mckw-uat.factory.alshaya.com.
-    if (strpos($this->getDrupalBaseUrl(), 'factory.alshaya') !== FALSE) {
-      return 'https://' . $this->getDrupalBaseUrl() . '.cdn.cloudflare.net';
-    }
-
     return 'https://' . $this->getDrupalBaseUrl();
   }
 
@@ -93,12 +78,37 @@ class DrupalInfo {
    *   Api client.
    */
   public function getDrupalApiClient() {
-    return (new Client([
+    $host = $this->getDrupalBaseUrl();
+
+    $options = [
       // Base URI is used with relative requests.
       'base_uri' => $this->getDrupalHostUrl(),
-      'headers' => ['Host' => $this->getDrupalBaseUrl()],
+      'headers' => ['Host' => $host],
       'verify' => FALSE,
-    ]));
+    ];
+
+    // For factory domains we have an issue around DNS resolution, in many
+    // systems (mainly linux as per observations) *.factory.alshaya.com domain
+    // doesn't resolve properly. As a workaround we hardcode the IP here.
+    // Issue is very old and has been informed to Alshaya as well as TAM of
+    // the project, configuration changes are expected in how the
+    // domain is configured by Alshaya.
+    // To observe the issue try to do curl https://mckw-uat.factory.alshaya.com
+    // from inside the UAT server.
+    // alshaya@staging-1509:/var/www/html/alshaya.01uat/docroot$ curl -I \
+    // > mckw-uat.factory.alshaya.com
+    // curl: (6) Could not resolve host: mckw-uat.factory.alshaya.com.
+    if (strpos($host, 'factory.alshaya.com') !== FALSE) {
+      $options['curl'] = [
+        CURLOPT_RESOLVE => [
+          // @todo Make this IP a setting.
+          $host . ':80:104.18.6.59',
+          $host . ':443:104.18.6.59',
+        ],
+      ];
+    }
+
+    return (new Client($options));
   }
 
   /**

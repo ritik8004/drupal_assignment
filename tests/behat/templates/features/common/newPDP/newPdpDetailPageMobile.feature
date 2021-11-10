@@ -1,32 +1,50 @@
-@javascript @smoke @newPdp @mobile @mcaeuat @flsauat @aeoaeuat
+@javascript @smoke @newPdp @mobile @flkwprod @flaeprod @flsaprod @mcaeuat
 Feature: Testing new PDP page for Mobile
 
   Background:
     Given I am on "{np_plp_page}"
     And I wait 10 seconds
     And I wait for the page to load
+    When I select a product in stock on ".c-products__item"
+    And I wait 10 seconds
+    And I wait for the page to load
 
   Scenario: To verify, add to cart button is visible
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see a "#add-to-cart-main" element on page
 
+  Scenario: To verify user is able to see the Product info with size drawer
+    Then I should see a ".magv2-main .magv2-pdp-title-wrapper" element on page
+    Then I should see a ".magv2-sidebar .magv2-pdp-price .magv2-pdp-price-container" element on page
+    Then I should see a ".magv2-size-btn-wrapper" element on page
+    And I click the element ".magv2-size-btn-wrapper" on page
+    And I wait for AJAX to finish
+    Then I should see a ".overlay-select" element on page
+    And I should see a ".overlay-select .size-guide" element on page
+    And I click jQuery ".magv2-select-popup-content-wrapper .size-guide a" element on page
+    And I wait for AJAX to finish
+    And I wait 2 seconds
+    Then I should see a ".ui-dialog-content .modal-content" element on page
+    And I click jQuery ".ui-dialog-titlebar-close" element on page
+    And I wait for AJAX to finish
+    And I wait 2 seconds
+    And I should see a ".overlay-select .magv2-confirm-size-btn" element on page
+    And I click jQuery ".magv2-select-popup-content-wrapper .magv2-confirm-size-btn" element on page
+    And I wait for AJAX to finish
+    Then I should see a ".magv2-qty-container" element on page
+
   Scenario: To verify user is able to see product details
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     Then I should see a ".magv2-pdp-description-wrapper .magv2-pdp-section-title" element on page
     And I should see "product details"
     And the element ".magv2-pdp-description-wrapper .magv2-pdp-section-text.short-desc" should exist
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
-    And I should see "read more"
+    And I click jQuery ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element on page
+    And I wait for AJAX to finish
+    Then I should see a ".overlay-desc" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-container div.magv2-pdp-title" element on page
+    Then I should see a ".overlay-desc .magv2-desc-popup-pdp-item-code-attribute" element on page
 
   Scenario: To verify user is able to see product details when clicking on read more link
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
-    And I wait for the page to load
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     When I click on ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element
@@ -58,9 +76,6 @@ Feature: Testing new PDP page for Mobile
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
-    And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
@@ -78,9 +93,6 @@ Feature: Testing new PDP page for Mobile
     Then I should be on "/{language_short}/cart" page
 
   Scenario: As a Guest, I should be able add content in minicart
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
-    And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification col-1 img" element

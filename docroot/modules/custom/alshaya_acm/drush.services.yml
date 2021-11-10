@@ -5,7 +5,6 @@ services:
       - '@config.factory'
       - '@language_manager'
       - '@entity_type.manager'
-      - '@entity.manager'
       - '@alshaya_acm_product_category.product_category_tree'
       - '@alshaya_acm.config_check'
       - '@database'

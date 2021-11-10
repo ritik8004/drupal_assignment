@@ -15,6 +15,8 @@ import {
   smoothScrollTo,
 } from './smoothScroll';
 import { setStorageInfo } from './storage';
+import { isExpressDeliveryEnabled } from '../../../js/utilities/expressDeliveryHelper';
+import { setDeliveryAreaStorage } from './delivery_area_util';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -100,6 +102,7 @@ export const prepareAddressDataForShipping = (address) => {
     firstname: address.firstname,
     lastname: address.lastname,
     email: address.email,
+    postcode: address.postal_code,
     city: address.city,
     telephone: address.mobile,
     country_id: drupalSettings.country_code,
@@ -188,6 +191,16 @@ export const prepareAddressDataFromForm = (elements) => {
   Object.entries(drupalSettings.address_fields).forEach(([key]) => {
     address[key] = elements[key].value;
   });
+
+  // Save area for customer if express delivery feature enabled.
+  if (isExpressDeliveryEnabled()) {
+    const areaSelected = {
+      label: gerAreaLabelById(false, elements.administrative_area.value),
+      area: parseInt(elements.administrative_area.value, 10),
+      governate: parseInt(elements.area_parent.value, 10),
+    };
+    setDeliveryAreaStorage(areaSelected);
+  }
 
   return prepareAddressDataForShipping(address);
 };
@@ -281,10 +294,33 @@ export const addEditAddressToCustomer = (e) => {
   const target = e.target.elements;
   // Validate mobile number.
   const mobile = e.target.elements.mobile.value.trim();
-  const validationRequest = validateInfo({ mobile });
+
+  const validationData = {
+    mobile: target.mobile.value.trim(),
+    fullname: extractFirstAndLastName(target.fullname.value.trim()),
+  };
+
+  const validationRequest = validateInfo(validationData);
   if (validationRequest instanceof Promise) {
     validationRequest.then((result) => {
       if (result.status === 200 && result.data.status) {
+        let validName = true;
+        // If invalid full name.
+        if (result.data.fullname === false) {
+          validName = false;
+          removeFullScreenLoader();
+          document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+          document.getElementById('fullname-error').classList.add('error');
+          return;
+        }
+
+        // If name is valid.
+        if (validName === true) {
+          // Remove error class and any error message.
+          document.getElementById('fullname-error').innerHTML = '';
+          document.getElementById('fullname-error').classList.remove('error');
+        }
+
         // If not valid mobile number.
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
@@ -465,6 +501,7 @@ export const checkoutAddressProcess = (e) => {
 
   const validationData = {
     mobile: e.target.elements.mobile.value,
+    fullname: extractFirstAndLastName(e.target.elements.fullname.value.trim()),
   };
   const targetElementEmail = e.target.elements.email;
   if (targetElementEmail !== undefined && targetElementEmail.value.toString().length > 0) {
@@ -493,6 +530,17 @@ export const checkoutAddressProcess = (e) => {
       document.getElementById('mobile-error').classList.remove('error');
     }
 
+    // If invalid full name.
+    if (response.data.fullname === false) {
+      document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+      document.getElementById('fullname-error').classList.add('error');
+      isError = true;
+    } else {
+      // Remove error class and any error message.
+      document.getElementById('fullname-error').innerHTML = '';
+      document.getElementById('fullname-error').classList.remove('error');
+    }
+
     // Do the processing only if we did email validation.
     if (response.data.email !== undefined) {
       if (response.data.email === 'invalid') {
@@ -512,6 +560,7 @@ export const checkoutAddressProcess = (e) => {
 
     if (isError) {
       removeFullScreenLoader();
+      addressFormInlineErrorScroll();
       // Remove loading class.
       document.getElementById('save-address').classList.remove('loading');
       return false;
@@ -521,11 +570,11 @@ export const checkoutAddressProcess = (e) => {
     const cartInfo = addShippingInCart('update shipping', formData);
     if (cartInfo instanceof Promise) {
       cartInfo.then((cartResult) => {
+        // Remove the loader.
+        removeFullScreenLoader();
         if (!cartResult) {
           return;
         }
-        // Remove the loader.
-        removeFullScreenLoader();
 
         // If any error, don't process further.
         if (cartResult.error !== undefined) {
@@ -630,10 +679,32 @@ export const processBillingUpdateFromForm = (e, shipping) => {
 
   const target = e.target.elements;
 
-  const validationRequest = validateInfo({ mobile: target.mobile.value.trim() });
+  const validationData = {
+    mobile: target.mobile.value.trim(),
+    fullname: extractFirstAndLastName(target.fullname.value.trim()),
+  };
+
+  const validationRequest = validateInfo(validationData);
   if (validationRequest instanceof Promise) {
     validationRequest.then((result) => {
       if (result.status === 200 && result.data.status) {
+        let validName = true;
+        // If invalid full name.
+        if (result.data.fullname === false) {
+          removeFullScreenLoader();
+          validName = false;
+          document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+          document.getElementById('fullname-error').classList.add('error');
+          return;
+        }
+
+        // If name is valid, remove error.
+        if (validName === true) {
+          // Remove error class and any error message.
+          document.getElementById('fullname-error').innerHTML = '';
+          document.getElementById('fullname-error').classList.remove('error');
+        }
+
         // If not valid mobile number.
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
@@ -797,4 +868,82 @@ export const errorOnDropDownFieldsNotFilled = () => {
       smoothScrollTo('.spc-address-form-sidebar .spc-type-select:first-child', 'center');
     });
   }
+};
+
+/**
+ * Prepare address data to update shipping address.
+ */
+export const prepareAddressToUpdate = (address) => {
+  const addressUpdate = address;
+  addressUpdate.city = gerAreaLabelById(false, address.administrative_area);
+  addressUpdate.mobile = `+${drupalSettings.country_mobile_code}${cleanMobileNumber(address.mobile)}`;
+  const data = prepareAddressDataForShipping(addressUpdate);
+  data.static.customer_address_id = address.address_mdc_id;
+  data.static.customer_id = address.customer_id;
+  return data;
+};
+
+/**
+ * When user changes address, update the cart.
+ */
+export const updateSelectedAddress = (address, type) => {
+  // Prepare address data for address info update.
+  const data = prepareAddressToUpdate(address);
+
+  // Update address on cart.
+  const cartInfo = type === 'billing'
+    ? addBillingInCart('update billing', data)
+    : addShippingInCart('update shipping', data);
+
+  if (cartInfo instanceof Promise) {
+    cartInfo.then((cartResult) => {
+      if (!cartResult) {
+        return;
+      }
+      // Remove loader.
+      removeFullScreenLoader();
+      // Prepare cart data.
+      let cartData = {};
+      // If there is any error.
+      if (cartResult.error !== undefined) {
+        cartData = {
+          error_message: cartResult.error_message,
+        };
+      } else if (typeof cartResult.response_message !== 'undefined'
+          && cartResult.response_message.status !== 'success') {
+        cartData = {
+          error_message: cartResult.response_message.msg,
+        };
+      } else {
+        cartData.cart = cartResult;
+      }
+      // Trigger event to close shipping popups.
+      dispatchCustomEvent('refreshCartOnAddress', cartData);
+
+      if (type === 'billing') {
+        // Trigger event to close billing popups.
+        dispatchCustomEvent('onBillingAddressUpdate', cartData);
+      }
+    });
+  }
+};
+
+/**
+ * Pre populate default area with storage value.
+ * Blank out other address fields.
+ */
+export const editDefaultAddressFromStorage = (address, areaSelected) => {
+  const addressData = { ...address };
+  Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
+    if (addressData[val.key] !== undefined && val.visible === true) {
+      if (key === 'administrative_area') {
+        addressData[val.key] = areaSelected.value.area;
+      } else if (key === 'area_parent') {
+        addressData[val.key] = areaSelected.value.governate;
+      } else {
+        addressData[val.key] = '';
+      }
+    }
+  });
+  return addressData;
 };

@@ -9,6 +9,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Returns responses for Alshaya acm dashboard routes.
@@ -44,6 +45,13 @@ class AlshayaAcmDashboardController extends ControllerBase {
   protected $i18nHelper;
 
   /**
+   * Current time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $currentTime;
+
+  /**
    * AlshayaAcmDashboardController constructor.
    *
    * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
@@ -54,15 +62,19 @@ class AlshayaAcmDashboardController extends ControllerBase {
    *   Conductor API  wrapper service.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18n helper service.
+   * @param \Drupal\Component\Datetime\TimeInterface $current_time
+   *   Current time service.
    */
   public function __construct(AlshayaMdcQueueManager $mdcQueueManager,
                               DateFormatter $dateFormatter,
                               APIWrapper $api_wrapper,
-                              I18nHelper $i18n_helper) {
+                              I18nHelper $i18n_helper,
+                              TimeInterface $current_time) {
     $this->mdcQueueManager = $mdcQueueManager;
     $this->dateFormatter = $dateFormatter;
     $this->apiWrapper = $api_wrapper;
     $this->i18nHelper = $i18n_helper;
+    $this->currentTime = $current_time;
   }
 
   /**
@@ -73,7 +85,8 @@ class AlshayaAcmDashboardController extends ControllerBase {
       $container->get('alshaya_acm.mdc_queue_manager'),
       $container->get('date.formatter'),
       $container->get('acq_commerce.agent_api'),
-      $container->get('acq_commerce.i18n_helper')
+      $container->get('acq_commerce.i18n_helper'),
+      $container->get('datetime.time')
     );
   }
 
@@ -84,7 +97,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
     $acm_dashboard_settings = $this->config('alshaya_acm_dashboard.settings');
     $mdc_queues = $acm_dashboard_settings->get('queues');
     $mdc_queue_stats = [];
-
+    $request_time = $this->currentTime->getRequestTime();
     foreach ($mdc_queues as $queue_machine_name => $label) {
       $mdc_queue_result = $this->mdcQueueManager->getMdcQueueStats($queue_machine_name);
       if (!$mdc_queue_result) {
@@ -111,7 +124,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
       $build['mdc_stats']['#rows'][] = [
         $queue_stat['label'],
         $queue_stat['stats']->messages,
-        $this->dateFormatter->format(REQUEST_TIME + (($queue_stat['stats']->messages * $queue_processing_rate) / 1000), 'custom', 'D M j G:i:s T Y'),
+        $this->dateFormatter->format($request_time + (($queue_stat['stats']->messages * $queue_processing_rate) / 1000), 'custom', 'D M j G:i:s T Y'),
       ];
     }
 
@@ -127,7 +140,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
       '#rows' => [
         [
           $acm_queue_stats,
-          $this->dateFormatter->format(REQUEST_TIME + (($acm_queue_stats * $acm_dashboard_settings->get('processing_rate_acm_queue')) / 1000), 'custom', 'D M j G:i:s T Y'),
+          $this->dateFormatter->format($request_time + (($acm_queue_stats * $acm_dashboard_settings->get('processing_rate_acm_queue')) / 1000), 'custom', 'D M j G:i:s T Y'),
         ],
       ],
     ];

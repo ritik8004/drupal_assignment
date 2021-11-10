@@ -43,7 +43,8 @@ class AlshayaFeatureProcess {
     // Adding test templates for functionalities likes new checkout, new pdp, spc, boots etc. based on sites/region/environment
     $environment = explode('-', $parameters['site']);
     $this->suiteLocators = array();
-    if ($parameters['variables']['new_pdp_enabled']) {
+    $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPLPAddtocart';
+    if (isset($parameters['variables']['new_pdp_enabled'])) {
       $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPDP';
     }
     else {
@@ -57,7 +58,7 @@ class AlshayaFeatureProcess {
         $this->suiteLocators[] =
           $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc';
       }
-      if ($environment[1] == 'qa' && $parameters['variables']['new_checkout_enabled']) {
+      if ($environment[1] == 'qa' && isset($parameters['variables']['new_checkout_enabled'])) {
         $this->suiteLocators[] =
           $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc' . DIRECTORY_SEPARATOR . 'newCheckout';
       }
@@ -71,7 +72,7 @@ class AlshayaFeatureProcess {
         $this->suiteLocators[] =
           $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . $environment[1];
       }
-      if ($environment[1] == 'qa' && $parameters['variables']['new_checkout_enabled']) {
+      if ($environment[1] == 'qa' && isset($parameters['variables']['new_checkout_enabled'])) {
         $this->suiteLocators[] =
           $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'newCheckout';
       }

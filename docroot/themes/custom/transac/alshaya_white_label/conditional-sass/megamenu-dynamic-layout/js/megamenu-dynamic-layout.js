@@ -13,7 +13,7 @@
       var winWidth = $(window).width();
 
       $('.menu--one__list-item').once().on('mouseover', function () {
-        if(winWidth >= 1024){
+        if(winWidth > 1024){
           MegaMenuDynamicLayout($(this));
         }
       });
@@ -25,7 +25,7 @@
       var eleL2Wrapper = $(this).children('.menu--two__list');
       var eleL2LinksWrapper = eleL2Wrapper.find('.menu__links__wrapper');
       var eleL2HighlightWrapper = eleL2Wrapper.find('.term-image__wrapper .highlights');
-      var eleMainMenu = $('.megamenu-dynamic-layout');
+      var eleMainMenu = $(this).closest('.megamenu-dynamic-layout');
 
       if (eleL2Wrapper.length > 0) {
         $(this).css('position', 'relative');
@@ -37,31 +37,56 @@
         eleL2Wrapper.css('width', l2WrapperWidth);
 
         // Get the Left position of Main Menu.
-        var posEleMainMenu = eleMainMenu.offset().left;
+        var posLeftEleMainMenu = eleMainMenu.offset().left;
         // Get the Left postion of L2 wrapper
-        var posEleL2Wrapper = eleL2Wrapper.offset().left
+        var posLeftEleL2Wrapper = eleL2Wrapper.offset().left;
         // Get the Left position of the L2 links list wrapper.
-        var posL2LinksWrapper = eleL2LinksWrapper.offset().left;
+        var posLeftL2LinksWrapper = eleL2LinksWrapper.offset().left;
 
         // Get the Right position of Main Menu.
-        var posRightEleMainMenu = eleMainMenu.width() + posEleMainMenu;
+        var posRightEleMainMenu = eleMainMenu.width() + posLeftEleMainMenu;
         // Get the Right position of the L2 wrapper.
-        var posRightL2Wrapper = eleL2HighlightWrapper.outerWidth() ? posL2LinksWrapper + eleL2LinksWrapper.outerWidth() + eleL2HighlightWrapper.outerWidth() : posL2LinksWrapper + eleL2LinksWrapper.outerWidth();
+        var posRightL2Wrapper = eleL2Wrapper.outerWidth() + posLeftEleL2Wrapper;
+
+        var croppedSectionWidth;
 
         // Set the position for Arabic layout.
         if (isRTL()) {
-          if (posEleL2Wrapper < posEleMainMenu) {
-            var getRightPos = posEleL2Wrapper - posEleMainMenu;
-            eleL2Wrapper.css('right', getRightPos);
+          if (posLeftEleL2Wrapper < posLeftEleMainMenu) {
+            var l2BoundaryOverflowValue = posLeftEleMainMenu - posLeftEleL2Wrapper;
+            var positionAdjustment = -(l2BoundaryOverflowValue);
+            eleL2Wrapper.css('right', positionAdjustment);
           }
         } else {
           if (posRightEleMainMenu < posRightL2Wrapper) {
-            var getLeftPos = -(posRightL2Wrapper - posRightEleMainMenu);
-            eleL2Wrapper.css('left', getLeftPos);
+            var l2BoundaryOverflowValue = posRightL2Wrapper - posRightEleMainMenu;
+            var positionAdjustment = -(l2BoundaryOverflowValue);
+            eleL2Wrapper.css('left', positionAdjustment);
           }
+        }
+
+        if (isRTL()) {
+          // Cropped section width calculated based on the right offset of the
+          // L2 and right position by which the menu is moved. RTL has right
+          // direction so need to get the window width to compare the cropped value.
+          // Subtracting the calculation (offset and position) from window width
+          // gives cropped section width.
+          croppedSectionWidth = $(window).width() - (l2BoundaryOverflowValue + posRightL2Wrapper);
+        } else {
+          // Cropped section width calculated based on the left offset of the
+          // L2 and left position by which the menu is moved.
+          croppedSectionWidth = positionAdjustment + posLeftEleL2Wrapper;
+        }
+
+        if (croppedSectionWidth < 0) {
+          eleL2Wrapper.css('overflow-x', 'auto');
+          eleL2Wrapper.css(isRTL() ? 'right' : 'left', positionAdjustment + Math.abs(croppedSectionWidth));
+        }
+
+        if (eleL2Wrapper.width() > $(window).width()) {
+          eleL2Wrapper.css('width', $(window).width());
         }
       }
     });
   }
-
 })(jQuery, Drupal);

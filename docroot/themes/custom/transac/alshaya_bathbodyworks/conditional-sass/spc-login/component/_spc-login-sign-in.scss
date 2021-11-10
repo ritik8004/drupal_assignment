@@ -2,13 +2,13 @@
   .multistep-login {
     fieldset {
       .fieldset-legend {
-        font-family: $bbw-thin;
+        font-family: $alshaya-thin;
         text-transform: capitalize;
       }
     }
 
     .edit-checkout-as-guest {
-      font-family: $bbw-bold;
+      font-family: $alshaya-bold;
       padding-top: 0.375rem;
     }
 
@@ -20,20 +20,20 @@
     .ashaya-spc-login-form {
       .form-actions {
         button {
-          font-family: $bbw-thin;
+          font-family: $alshaya-thin;
           padding-top: 0.875rem;
         }
       }
 
       .request-password-link {
-        font-family: $bbw-thin;
+        font-family: $alshaya-thin;
         font-weight: 700;
       }
     }
 
     .checkout-login-actions-wrapper {
       a {
-        font-family: $bbw-thin;
+        font-family: $alshaya-thin;
         display: inline-block;
         font-weight: 700;
       }

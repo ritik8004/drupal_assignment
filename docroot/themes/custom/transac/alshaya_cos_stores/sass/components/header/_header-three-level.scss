@@ -1,0 +1,27 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .highlights {
+      margin-top: 1.5rem;
+    }
+
+    .menu--two__list {
+      .menu--two__list-item {
+        > .menu-two__link-wrapper {
+          max-width: 12rem;
+
+          a {
+            &:hover {
+              opacity: 0.6;
+            }
+          }
+        }
+      }
+    }
+
+    .menu--three__list-item > .menu-two__link-wrapper a {
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}

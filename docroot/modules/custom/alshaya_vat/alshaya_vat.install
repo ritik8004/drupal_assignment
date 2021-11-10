@@ -1,0 +1,32 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the alshaya_vat module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Moving block to current theme.
+ */
+function alshaya_vat_install() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+      'block.block.alshayavatcertificateblock',
+    ],
+    'alshaya_vat',
+    'install',
+    $manager::MODE_REPLACE
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Reset config. We need to ensure all the configuration added in the module
+ * is deleted to allow the ON/OFF code to work.
+ */
+function alshaya_vat_uninstall() {
+  \Drupal::configFactory()->getEditable('block.block.alshayavatcertificateblock')->delete();
+}

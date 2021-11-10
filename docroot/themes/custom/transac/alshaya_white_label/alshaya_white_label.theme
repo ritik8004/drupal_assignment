@@ -20,28 +20,6 @@ use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\file\Entity\File;
 
 /**
- * Implements hook_css_alter().
- */
-function alshaya_white_label_css_alter(&$css, $assets) {
-  $language_manager = \Drupal::service('language_manager');
-  $language = $language_manager->getCurrentLanguage();
-  $direction = $language->getDirection();
-
-  // We don't do anything for ltr languages.
-  if ($direction == 'ltr') {
-    return;
-  }
-
-  foreach ($css as $name => $data) {
-    if (strpos($name, '.ltr.') && isset($data['data'])) {
-      $data['data'] = str_replace('.ltr.', '.rtl.', $data['data']);
-      $css[str_replace('.ltr.', '.rtl.', $name)] = $data;
-      unset($css[$name]);
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_html().
  */
 function alshaya_white_label_preprocess_html(&$variables) {
@@ -156,12 +134,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
 
   $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
-
-  // If loader is enabled for the site, attach PACE library.
-  $progressConfig = \Drupal::config('alshaya_master.loader_settings');
-  if ($progressConfig->get('alshaya_page_progress_loader') == 1) {
-    $variables['#attached']['library'][] = 'alshaya_white_label/pace';
-  }
 
   // Add class for sites with super menu.
   if (isset($variables['page']['menu_secondary']['supermenu'])) {
@@ -334,6 +306,17 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['sub_brand_logo_alt'] = $sub_brand_logo['sub_brand_logo_alt'];
     $variables['#attached']['library'][] = 'alshaya_white_label/sub-brand-logo';
   }
+
+  // Product List LHN Block
+  if($node_bundle === 'product_list') {
+    $lhn_block = \Drupal::entityTypeManager()->getStorage('block')->load('productlistlhnblock');
+    if (empty($lhn_block->getPlugin()->build())) {
+      $variables['enable_lhn_tree'] = 0;
+    }
+    else {
+      $variables['enable_lhn_tree'] = 1;
+    }
+  }
 }
 
 /**
@@ -413,6 +396,9 @@ function alshaya_white_label_preprocess_block(&$variables) {
 
   if ($variables['plugin_id'] == 'search_api_algolia_autocomplete_block') {
     $variables['#attached']['library'][] = 'alshaya_white_label/algolia_search';
+    if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/style-review-stars';
+    }
   }
 
   if ($variables['plugin_id'] == 'alshaya_main_menu') {
@@ -643,6 +629,11 @@ function alshaya_white_label_preprocess_node(&$variables) {
         /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+        // Classic gallery for cos PDP magazine layout.
+        $pdp_gallery_type = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_type');
+        if ($pdp_gallery_type == 'classic' && $pdp_layout == 'pdp-magazine') {
+          $variables['#attached']['drupalSettings']['pdp_gallery_type'] = $pdp_gallery_type;
+        }
         $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
         $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
         $pdp_plugin->getRenderArray($variables);
@@ -692,7 +683,7 @@ function alshaya_white_label_form_node_form_alter(&$form, FormStateInterface $fo
   $node = $form_state->getFormObject()->getEntity();
   $form['#theme'] = ['node_edit_form'];
   $form['advanced']['#type'] = 'container';
-  $is_new = !$node->isNew() ? format_date($node->getChangedTime(), 'short') : t('Not saved yet');
+  $is_new = !$node->isNew() ? \Drupal::service('date.formatter')->format($node->getChangedTime(), 'short') : t('Not saved yet');
   $form['meta'] = [
     '#attributes' => ['class' => ['entity-meta__header']],
     '#type'       => 'container',
@@ -808,7 +799,6 @@ function alshaya_white_label_theme() {
         'desktop_image' => NULL,
         'mobile_image' => NULL,
         'default_image' => NULL,
-        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
       ],
     ],
   ];
@@ -886,6 +876,19 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
     if (in_array('back_to_top/back_to_top_js', $attachments['#attached']['library'])) {
       $index = array_search('back_to_top/back_to_top_js', $attachments['#attached']['library']);
       unset($attachments['#attached']['library'][$index]);
+    }
+  }
+
+  // For performance testing & debugging purposes adding a quick bypass for
+  // escaping GTM JS on a page.
+  // Usage: ?GTM=BLOCK.
+  $param = \Drupal::request()->get('GTM');
+  if ($param === 'BLOCK') {
+    foreach ($attachments['#attached']['html_head'] ?? [] as $index => $script) {
+      if ($script[1] === 'google_tag_script_tag__primary' || $script[1] === 'google_tag_data_layer_tag__primary') {
+        unset($attachments['#attached']['html_head'][$index]);
+        return;
+      }
     }
   }
 }
@@ -1097,9 +1100,9 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
 }
 
 /**
- * Implements hook_preprocess_mimemail_messages().
+ * Implements hook_preprocess_mimemail_message().
  */
-function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
+function alshaya_white_label_preprocess_mimemail_message(&$variables) {
   // Currently we have alshaya_white_label theme enabled for non-transac sites
   // too. We don't need to modify anything around mails for non-transac sites
   // so we simply skip execution if installed profile is not transac.
@@ -1126,7 +1129,7 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   // with different env.
   $uuid = '340b823b-e16c-457a-bc03-4a096f8ae171';
   // Get copyright block based on language.
-  $copyright_block = \Drupal::entityManager()->loadEntityByUuid('block_content', $uuid);
+  $copyright_block = \Drupal::service('entity.repository')->loadEntityByUuid('block_content', $uuid);
   if ($copyright_block) {
     $block_view = \Drupal::entityTypeManager()
       ->getViewBuilder('block_content')
@@ -1192,7 +1195,7 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
     dynamic_yield_page_attachments($variables);
   }
   if (!empty($image)) {
-    if ($file = file_load($image)) {
+    if ($file = File::load($image)) {
       $variables['maintenance_image'] = file_create_url($file->getFileUri());
     }
   }
@@ -1230,7 +1233,7 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
   ];
   $variables['image_404'] = '';
   if (!empty($image)) {
-    if ($file = file_load($image)) {
+    if ($file = File::load($image)) {
       $variables['image_404'] = file_create_url($file->getFileUri());
     }
   }
@@ -1423,40 +1426,53 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         }
         else {
           $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
-          $nodes = _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $product_in_carousel);
+          $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+          $productCarousel = \Drupal::service('alshaya_acm_product_category.page')->getCurrentSelectedCategory($langcode, $category_id);
+          $settings = \Drupal::config('alshaya_acm_product.settings');
 
-          if (!empty($nodes)) {
-            $data = array_map(function ($node) {
-              return $node->id();
-            }, $nodes);
+          // Make carousel title link.
+          $carousel_title = [
+            'title' => $section_title,
+            'url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id])->toString(),
+          ];
 
-            // Make carousel title link.
-            $carousel_title = [
-              '#title' => $section_title,
+          $productCarousel = array_merge($productCarousel, [
+            'sectionTitle' => $carousel_title,
+            'itemsPerPage' => $product_in_carousel,
+            'vatText' => $settings->get('vat_text'),
+          ]);
+
+          $variables['content']['product_category_carousel'] = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['alshaya-product-category-carousel'],
+              'data-pcc-id' => $category_id,
+            ],
+            '#attached' => [
+              'drupalSettings' => [
+                'alshayaProductCarousel' => [
+                  $category_id => $productCarousel,
+                ],
+                'hp_product_carousel_items' => $settings->get('product_carousel_items_settings.hp_product_carousel_items_number'),
+              ],
+              'library' => [
+                'alshaya_algolia_react/product_category_carousel',
+                'alshaya_white_label/product_carousel',
+              ]
+            ],
+          ];
+
+          if ($view_all_text) {
+            $variables['attributes']['class'][] = 'has-view-all-link';
+
+            $variables['content']['view_all'] = [
+              '#title' => $view_all_text,
               '#type' => 'link',
+              '#attributes' => [
+                'class' => ['category-carousel-view-all'],
+              ],
               '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
             ];
-
-            $variables['content']['product_category_carousel'] = [
-              '#theme' => 'products_horizontal_slider',
-              '#data' => $data,
-              '#views_display_id' => 'category_product_slider',
-              '#views_name' => 'product_slider',
-              '#section_title' => $carousel_title ?: NULL,
-            ];
-
-            if ($view_all_text) {
-              $variables['attributes']['class'][] = 'has-view-all-link';
-
-              $variables['content']['view_all'] = [
-                '#title' => $view_all_text,
-                '#type' => 'link',
-                '#attributes' => [
-                  'class' => ['category-carousel-view-all'],
-                ],
-                '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-              ];
-            }
           }
         }
       }
@@ -1474,6 +1490,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
     /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $advanced_page_slug_banner = $variables['paragraph'];
+    if (!empty($advanced_page_slug_banner)) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/slug-banner';
+    }
 
     // Get the desktop and mobile slug background color if available.
     $desktop_slug_bkg_color = $advanced_page_slug_banner->get('field_default_slug_bkg_color')->value ?? NULL;
@@ -1748,24 +1767,7 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
  * Implements template_preprocess_image().
  */
 function alshaya_white_label_preprocess_image(&$variables) {
-  if (isset($variables['skip_lazy_loading']) && $variables['skip_lazy_loading']) {
-    return;
-  }
-
-  $scheme = \Drupal::service('file_system')->uriScheme($variables['uri']);
-
-  // Use lazy load only for public schema and for already relative urls.
-  if ($scheme == 'public') {
-    $variables['attributes']['class'][] = 'b-lazy';
-    // For public scheme, create the url and make it relative.
-    $variables['attributes']['data-src'] = file_url_transform_relative(file_create_url($variables['uri']));
-    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
-  }
-  elseif ($scheme === FALSE) {
-    $variables['attributes']['class'][] = 'b-lazy';
-    $variables['attributes']['data-src'] = $variables['uri'];
-    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
-  }
+  $variables['attributes']['loading'] = 'lazy';
 }
 
 /**

@@ -3,6 +3,7 @@ type: module
 description: 'The dedicated module for transac Westelm brand.'
 package: Alshaya
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_we:alshaya_we
   - alshaya_furnitures:alshaya_furnitures

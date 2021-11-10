@@ -1,0 +1,13 @@
+.spc-order-summary-order-preview {
+  .spc-order-summary-item {
+    .spc-value {
+      font-family: $alshaya-bold;
+    }
+  }
+}
+
+.spc-order-summary-order-detail {
+  label {
+    @include icon('dropdown-expand', after);
+  }
+}

@@ -1,0 +1,80 @@
+.myaccount-write-review {
+  .button-wrapper {
+    .write-review-button {
+      min-width: 7.25rem;
+      height: 2.5rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-border;
+      padding: 0.75rem 0;
+      font-size: 0.875rem;
+      line-height: 1;
+      font-family: $alshaya-bold;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+
+  .view-review-button {
+    cursor: pointer;
+    text-decoration: underline;
+    text-align: center;
+
+    @include breakpoint($only-mobile) {
+      text-align: $left;
+    }
+  }
+
+  .bv-select {
+    .bvSelect__control {
+      > div:nth-child(2) {
+        .bvSelect__indicator {
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+.open-form-modal {
+  .bv-select {
+    .bvSelect__control {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.user__order--detail {
+  .above-mobile {
+    &.user-review {
+      &.bazaarvoice-enable {
+        padding: 1.375rem 0.75rem;
+      }
+    }
+  }
+
+  .order-item-row {
+    .product-image-block {
+      img {
+        width: auto;
+      }
+    }
+  }
+}
+
+.order-detail {
+  .c-content {
+    .user__order--detail {
+      .total-row.vat-row {
+        .warm--white {
+          padding-#{$left}: 1.375rem;
+          padding-#{$right}: 0;
+
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}

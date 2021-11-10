@@ -10,12 +10,16 @@ import { validateContactInfo, addressFormInlineErrorScroll } from '../../../util
 import { extractFirstAndLastName } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
 
-  handleSubmit = (e, store) => {
+  handleSubmit = (e, store, handleScrollTo, errorSuccessMessage) => {
     e.preventDefault();
+    if (errorSuccessMessage !== undefined && errorSuccessMessage !== null) {
+      handleScrollTo();
+    }
 
     const contactInfoError = validateContactInfo(e, (drupalSettings.user.uid === 0));
     if (contactInfoError) {
@@ -27,6 +31,7 @@ class ContactInfoForm extends React.Component {
     const { contactInfo: { email } } = this.context;
     const name = e.target.elements.fullname.value.trim();
     const { firstname, lastname } = extractFirstAndLastName(name);
+
     const formData = {
       static: {
         firstname,
@@ -54,6 +59,10 @@ class ContactInfoForm extends React.Component {
   processShippingUpdate = (formData) => {
     const validationData = {
       mobile: formData.static.telephone,
+      fullname: {
+        firstname: formData.static.firstname,
+        lastname: formData.static.lastname,
+      },
     };
     const { contactInfo } = this.context;
 
@@ -71,6 +80,17 @@ class ContactInfoForm extends React.Component {
         // Show errors if any, else call update cart api to update shipping address.
         // Flag to determine if there any error.
         let isError = false;
+
+        // If invalid full name.
+        if (result.data.fullname === false) {
+          document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+          document.getElementById('fullname-error').classList.add('error');
+          isError = true;
+        } else {
+          // Remove error class and any error message.
+          document.getElementById('fullname-error').innerHTML = '';
+          document.getElementById('fullname-error').classList.remove('error');
+        }
 
         // If invalid mobile number.
         if (result.data.mobile === false) {
@@ -145,7 +165,6 @@ class ContactInfoForm extends React.Component {
             Drupal.logJavascriptError('update-shipping', cartResult.response_message.msg, GTM_CONSTANTS.CHECKOUT_ERRORS);
             return null;
           }
-
           updateContactInfo(formData.static);
           dispatchCustomEvent('refreshCartOnCnCSelect', { cart: cartResult });
           return null;
@@ -157,13 +176,15 @@ class ContactInfoForm extends React.Component {
   };
 
   render() {
-    const { store, subTitle } = this.props;
+    const {
+      store, subTitle, handleScrollTo, errorSuccessMessage,
+    } = this.props;
     const { contactInfo } = this.context;
 
     return (
       <form
         className="spc-contact-form"
-        onSubmit={(e) => this.handleSubmit(e, store)}
+        onSubmit={(e) => this.handleSubmit(e, store, handleScrollTo, errorSuccessMessage)}
       >
         <FixedFields
           showEmail={drupalSettings.user.uid === 0}
@@ -172,6 +193,12 @@ class ContactInfoForm extends React.Component {
           type="cnc"
         />
         <div className="spc-address-form-actions">
+          {collectionPointsEnabled() === true
+          && (
+            <div className="spc-cnc-store-actions-pudo-msg">
+              {getStringMessage('cnc_valid_govtid_message')}
+            </div>
+          )}
           <button
             id="save-address"
             className="spc-address-form-submit"

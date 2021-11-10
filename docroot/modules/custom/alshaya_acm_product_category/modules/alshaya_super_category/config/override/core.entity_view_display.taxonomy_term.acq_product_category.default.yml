@@ -1,0 +1,9 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.acq_product_category.field_logo_active_image
+    - field.field.taxonomy_term.acq_product_category.field_logo_header_image
+    - field.field.taxonomy_term.acq_product_category.field_logo_inactive_image
+hidden:
+  field_logo_active_image: true
+  field_logo_header_image: true
+  field_logo_inactive_image: true

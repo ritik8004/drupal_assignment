@@ -1,0 +1,24 @@
+.write_review {
+  &-overlay {
+    @include breakpoint($tablet) {
+      padding-top: 2rem;
+    }
+  }
+
+  &-content {
+    margin-bottom: 2rem !important;
+
+    @include breakpoint($only-mobile) {
+      min-height: 100vh;
+      margin-bottom: 0 !important;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 90% !important;
+    }
+
+    @include breakpoint($desktop) {
+      width: 75% !important;
+    }
+  }
+}

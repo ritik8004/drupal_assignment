@@ -1,7 +1,7 @@
-import _isEmpty from 'lodash/isEmpty';
 import isRTL from '../rtl';
 import dispatchCustomEvent from '../events';
 import { getDefaultMapCenter } from '../checkout_util';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export class Gmap {
   constructor() {
@@ -85,14 +85,14 @@ export class Gmap {
    * Set center of the map.
    */
   setCenter = (coords, callBackFunc = null) => {
-    if (!_isEmpty(coords)) {
+    if (hasValue(coords)) {
       this.map.googleMap.setCenter(coords);
       this.map.googleMap.setZoom(this.map.settings.zoom);
       return;
     }
 
     const defaultLocation = getDefaultMapCenter();
-    if (!_isEmpty(defaultLocation)) {
+    if (hasValue(defaultLocation)) {
       const { lat, lng } = defaultLocation;
       const position = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
       this.map.googleMap.setCenter(position);
@@ -130,16 +130,17 @@ export class Gmap {
    * Pass second parameter true to not show infowindo and
    * false to add infowindow and it's close event.
    */
-  setMapMarker = (markerSettings, showInfoWindow = false) => {
+  setMapMarker = (markerSettings, showInfoWindow = false, mapIcon = '') => {
     this.map.mapMarkers = this.map.mapMarkers || [];
     const currentMarkerSettings = { ...markerSettings };
 
     const { active: markerActiveIcon, inActive: markerInActiveIcon } = this.map.settings.map_marker;
+    const mapMarkerIcon = mapIcon || markerInActiveIcon;
 
-    if (typeof markerInActiveIcon === 'string') {
+    if (typeof mapMarkerIcon === 'string') {
       // Add the marker icon.
       currentMarkerSettings.icon = {
-        url: markerInActiveIcon,
+        url: mapMarkerIcon,
       };
     }
 
@@ -164,8 +165,12 @@ export class Gmap {
     const { map } = this;
     let clickedMarker = '';
     currentMarker.addListener('click', () => {
-      map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon(currentMarkerSettings.icon));
-      currentMarker.setIcon(markerActiveIcon);
+      map.mapMarkers.forEach((tempMarker) => tempMarker.setIcon({
+        url: mapIcon ? tempMarker.icon.url : currentMarkerSettings.icon.url,
+      }));
+      currentMarker.setIcon(
+        { url: mapIcon || markerActiveIcon, scaledSize: new google.maps.Size(47, 66) },
+      );
       clickedMarker = currentMarker;
 
       if (currentMarkerSettings.infoWindowSolitary && showInfoWindow === true) {
@@ -191,7 +196,7 @@ export class Gmap {
       if (clickedMarker === currentMarker) {
         return;
       }
-      currentMarker.setIcon(markerActiveIcon);
+      currentMarker.setIcon(mapIcon || markerActiveIcon);
     });
 
     google.maps.event.addListener(currentMarker, 'mouseout', () => {
@@ -223,13 +228,13 @@ export class Gmap {
     return currentMarker;
   };
 
-  resetIcon = (currentMarker) => {
-    const { inActive } = this.map.settings.map_marker;
+  resetIcon = (currentMarker, options = {}) => {
+    const { inActive } = options.map_marker || this.map.settings.map_marker;
     currentMarker.setIcon(inActive);
   }
 
-  highlightIcon = (currentMarker) => {
-    const { active } = this.map.settings.map_marker;
+  highlightIcon = (currentMarker, options = {}) => {
+    const { active } = options.map_marker || this.map.settings.map_marker;
     currentMarker.setIcon(active);
   }
 

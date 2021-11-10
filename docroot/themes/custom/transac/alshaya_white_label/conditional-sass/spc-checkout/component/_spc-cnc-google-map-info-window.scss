@@ -2,9 +2,10 @@
   .gm-style {
     .gm-style-iw-c {
       width: 17.6875rem;
-      padding: 1.125rem 1.375rem !important;
+      padding: 1rem !important;
       border: solid 1px $spc-cnc-info-window-border;
       border-radius: 0;
+      max-width: none !important;
     }
 
     .gm-style-iw-d {
@@ -12,6 +13,10 @@
       font-family: $alshaya-thin;
       color: $spc-cnc-map-info-window-text;
       overflow: auto !important;
+
+      .spc-store-name-wrapper {
+        display: flex;
+      }
 
       .spc-cnc-store-name {
         .store-name {
@@ -21,7 +26,8 @@
         }
 
         .store-distance {
-          float: $right;
+          text-align: $right;
+          flex-basis: 5rem;
         }
 
         margin-bottom: 1rem;
@@ -83,6 +89,7 @@
         padding-bottom: 1rem;
         color: $spc-cnc-store-item-text-impress;
         position: relative;
+        width: 92%;
 
         .spc-store-name-wrapper {
           display: inline-block;
@@ -91,7 +98,6 @@
           .store-distance {
             float: $right;
             color: $spc-cnc-store-list-distance;
-            padding-#{$right}: 2rem;
           }
         }
       }
@@ -111,8 +117,8 @@
 
     .spc-map-list-close {
       position: absolute;
-      top: -0.5rem;
-      #{$right}: -0.75rem;
+      top: 0.625rem;
+      #{$right}: 0.6875rem;
 
       @include icon('close') {
         font-size: 2rem;

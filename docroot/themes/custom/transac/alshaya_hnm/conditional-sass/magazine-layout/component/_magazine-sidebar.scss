@@ -1,0 +1,16 @@
+.c-accordion-delivery-options {
+  .ui-accordion-header {
+    &::after {
+      transition: transform 0.3s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.ui-state-active {
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+.block-alshaya-category-lhn-block {
+  > ul {
+    > li {
+      > .lhn-2 {
+        font-size: 1.125rem;
+        font-family: $tbs-recoleta-semibold;
+      }
+    }
+  }
+
+  ul {
+    li {
+      font-size: 0.875rem;
+
+      a.lhn-3 {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-category-lhn-block,
+.block-alshaya-product-list-lhn-block {
+  ul {
+    li {
+      a,
+      span {
+        text-transform: none;
+      }
+    }
+  }
+}

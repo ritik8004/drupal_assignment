@@ -1,0 +1,96 @@
+{
+  "name": "H&M Avenues Phase 1",
+  "code": "RA1-Q314-HEN-003",
+  "address": "\n<div class=\"address--line2\">\n  The Avenues Mall,  Opposite Zara, Beside River Island  Farwaniyah Al-Rai\n</div>\n",
+  "phone_number": "22283901",
+  "open_hours": [
+    {
+      "value": "10 am - 11 pm ",
+      "key": "Sunday",
+      "description": null
+    },
+    {
+      "value": "10 am - 11 pm ",
+      "key": "Monday",
+      "description": null
+    },
+    {
+      "value": "10 am - 11 pm ",
+      "key": "Tuesday",
+      "description": null
+    },
+    {
+      "value": "10 am - 11 pm ",
+      "key": "Wednesday",
+      "description": null
+    },
+    {
+      "value": "10 am - 11 pm ",
+      "key": "Thursday",
+      "description": null
+    },
+    {
+      "value": "10 am - 11 pm ",
+      "key": "Friday",
+      "description": null
+    },
+    {
+      "value": "10 am - 11 pm ",
+      "key": "Saturday",
+      "description": null
+    }
+  ],
+  "open_hours_group": {
+    "Sunday - Saturday": "10 am - 11 pm "
+  },
+  "delivery_time": "1-2 days",
+  "nid": "1874971",
+  "view_on_map_link": "/en/click-and-collect/store-map-view/1874971",
+  "lat": 29.302761,
+  "lng": 47.940268000000003,
+  "gtm_cart_address": {
+    "country_code": "KW",
+    "given_name": null,
+    "family_name": null,
+    "mobile_number": {
+      "value": ""
+    },
+    "address_line1": "The Avenues Mall,  Opposite Zara, Beside River Island ",
+    "address_line2": "",
+    "locality": "",
+    "dependent_locality": "",
+    "administrative_area": "120986",
+    "area_parent": "120916",
+    "administrative_area_display": "Al-Rai",
+    "area_parent_display": "Farwaniyah"
+  },
+  "cart_address_raw": {
+    "country_code": "KW",
+    "given_name": null,
+    "family_name": null,
+    "mobile_number": {
+      "value": ""
+    },
+    "address_line1": "The Avenues Mall,  Opposite Zara, Beside River Island ",
+    "address_line2": "",
+    "locality": "",
+    "dependent_locality": "",
+    "administrative_area": "120986",
+    "area_parent": "120916",
+    "administrative_area_display": "Al-Rai",
+    "area_parent_display": "Farwaniyah"
+  },
+  "cart_address": {
+    "city": "Al-Rai",
+    "country_id": "KW",
+    "telephone": "",
+    "street": "The Avenues Mall,  Opposite Zara, Beside River Island ",
+    "extension": {
+      "address_apartment_segment": "",
+      "address_block_segment": "",
+      "address_building_segment": "",
+      "area": "22",
+      "governate": "1"
+    }
+  }
+}

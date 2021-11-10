@@ -1,6 +1,7 @@
 variables:
-  url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  product_listing_page_url: "/shop-divided/new-arrivals/clothes/"
-  spc_product_listing_page: '/shop-divided/new-arrivals/clothes/'
-  spc_basket_page: '/shop-divided/new-arrivals/clothes/'
-  governorate: ''
+  url_product_page: 'buy-long-sleeved-blouse-black.html'
+  product_listing_page_url: '/shop-lingerie/'
+  spc_product_listing_page: '/shop-lingerie/'
+  spc_basket_page: '/shop-lingerie/'
+  spc_pdp_page: 'buy-long-sleeved-blouse-black.html'
+  spc_bank_product: '/shop-lingerie/'

@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_acm_promotion\Plugin\rest\resource;
 
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -73,11 +73,11 @@ class PromotionsResource extends ResourceBase {
   protected $moduleHandler;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
-   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
-  protected $promoContextManager;
+  protected $requestContextManager;
 
   /**
    * PromotionsResource constructor.
@@ -102,8 +102,8 @@ class PromotionsResource extends ResourceBase {
    *   The database connection.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
-   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
-   *   Alshaya Promo Context Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
+   *   Alshaya Request Context Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -115,14 +115,14 @@ class PromotionsResource extends ResourceBase {
                               EntityRepositoryInterface $entity_repository,
                               Connection $connection,
                               ModuleHandlerInterface $module_handler,
-                              AlshayaPromoContextManager $alshayaPromoContextManager) {
+                              AlshayaRequestContextManager $alshayaRequestContextManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
     $this->connection = $connection;
     $this->moduleHandler = $module_handler;
-    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->requestContextManager = $alshayaRequestContextManager;
   }
 
   /**
@@ -177,7 +177,7 @@ class PromotionsResource extends ResourceBase {
    */
   public function get() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $context = $this->promoContextManager->getPromotionContext();
+    $context = $this->requestContextManager->getContext();
     $nids = $this->getAllPromotions($langcode, $context);
     $response_data = [];
 
@@ -195,12 +195,12 @@ class PromotionsResource extends ResourceBase {
         $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
 
         $data = [
-          'id' => (int) $node->id(),
+          'id' => (int) $node->get('field_acq_promotion_rule_id')->getString(),
           'name' => $node->label(),
           'path' => $node_url->getGeneratedUrl(),
           'commerce_id' => (int) $node->get('field_acq_promotion_rule_id')->first()->getString(),
           'promo_sub_tpe' => $node->get('field_alshaya_promotion_subtype')->first()->getString(),
-          'promo_desc' => $node->get('field_acq_promotion_description')->first() ? $node->get('field_acq_promotion_description')->first()->getValue()['value'] : '',
+          'promo_desc' => $node->get('field_acq_promotion_description')->first() ? trim(strip_tags($node->get('field_acq_promotion_description')->first()->getValue()['value'])) : '',
           'promo_label' => $node->get('field_acq_promotion_label')->getString(),
         ];
 

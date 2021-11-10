@@ -22,7 +22,7 @@
           <div class="c-content__region">
             <div class="maintenance__logo--wrapper">
               <div class="maintenance__logo">
-                <img src="{{ '/' ~ active_theme_path() ~ '/site-logo-ar.png' }}" />
+                <img loading="lazy" src="{{ '/' ~ active_theme_path() ~ '/site-logo-ar.png' }}" />
               </div>
             </div>
             <div class="l-container not-found">
@@ -35,7 +35,7 @@
               {% endif %}
               {% if maintenance_image is not empty %}
                 <div class="not-found__image">
-                  <img src="{{ maintenance_image }}" />
+                  <img loading="lazy" src="{{ maintenance_image }}" />
                 </div>
               {% endif %}
             </div>

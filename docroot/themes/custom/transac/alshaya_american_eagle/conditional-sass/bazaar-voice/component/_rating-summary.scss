@@ -1,0 +1,9 @@
+.aggregate-rating {
+  .empty-stars {
+    .histogram-data {
+      @include tooltip(19.735rem) {
+        #{$left}: -97%;
+      }
+    }
+  }
+}

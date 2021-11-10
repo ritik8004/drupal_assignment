@@ -6,3 +6,12 @@ services:
       - '@alshaya_feed.generate'
     tags:
       - { name: drush.command }
+
+  alshaya_feed.product_delta_feed_commands:
+    class: Drupal\alshaya_feed\Commands\AlshayaProductDeltaFeedCommands
+    arguments:
+     - '@alshaya_feed.product_delta_feed'
+     - '@config.factory'
+     - '@logger.factory'
+    tags:
+      - { name: drush.command }

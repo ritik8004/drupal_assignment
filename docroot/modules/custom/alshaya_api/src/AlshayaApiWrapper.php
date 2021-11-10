@@ -1009,6 +1009,42 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Authenticate customer through magento api using email.
+   *
+   * @param string $mail
+   *   The mail address.
+   *
+   * @return array
+   *   The array customer data OR empty array.
+   */
+  public function getCustomerTokenBySocialDetail(string $mail) {
+    $endpoint = 'integration/customer/token/bySocialDetail';
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('customer_authenticate'),
+    ];
+
+    try {
+      return $this->invokeApi(
+        $endpoint,
+        [
+          'customerEmail' => $mail,
+        ],
+        'JSON',
+        FALSE,
+        $request_options
+      );
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Exception while authenticating customer. Error: @response. E-mail: @email', [
+        '@response' => $e->getMessage(),
+        '@email' => $mail,
+      ]);
+      return [];
+    }
+  }
+
+  /**
    * Get customer by email, helpful for logged in user.
    *
    * @param string $email
@@ -1210,6 +1246,103 @@ class AlshayaApiWrapper {
     }
 
     return $response;
+  }
+
+  /**
+   * Function to get all the categories from Commerce system.
+   *
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return mixed
+   *   Stores array.
+   */
+  public function getCategories($langcode) {
+    $this->updateStoreContext($langcode);
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('get_categories'),
+    ];
+    $response = $this->invokeApi(
+      'categories/extended',
+      [],
+      'GET',
+      FALSE,
+      $request_options
+    );
+
+    $categories = NULL;
+    if ($response && is_string($response)) {
+      $categories = json_decode($response, TRUE);
+    }
+
+    return $categories;
+  }
+
+  /**
+   * Wrapper function to decrypt smart agent data.
+   *
+   * @param string $data
+   *   Encrypted data.
+   *
+   * @return array
+   *   Decrypted processed data.
+   */
+  public function getDecryptedSmartAgentData(string $data) {
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('smart_agent_resume'),
+    ];
+
+    $response = $this->invokeApi(
+      'smart-agent',
+      ['data' => $data],
+      'JSON',
+      FALSE,
+      $request_options
+    );
+
+    if ($response && is_string($response)) {
+      return json_decode($response, TRUE);
+    }
+
+    return $response;
+  }
+
+  /**
+   * Wrapper function to associate cart to customer.
+   *
+   * @param string|int $cart_id
+   *   Cart ID.
+   * @param string|int $customer_id
+   *   Customer ID.
+   *
+   * @return mixed
+   *   API response or false if API called.
+   */
+  public function associateCartToCustomer($cart_id, $customer_id) {
+    $url = sprintf('carts/%d/associate-cart', $cart_id);
+
+    try {
+      $data = [
+        'customerId' => $customer_id,
+        'cartId' => $cart_id,
+      ];
+
+      $request_options = [
+        'timeout' => $this->mdcHelper->getPhpTimeout('cart_associate'),
+      ];
+
+      return $this->invokeApi($url, $data, 'JSON', TRUE, $request_options);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while associating cart to customer. CartID: @cart_id, CustomerID: @customer_id, Error: @message.', [
+        '@cart_id' => $cart_id,
+        '@customer_id' => $customer_id,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return FALSE;
   }
 
   /**

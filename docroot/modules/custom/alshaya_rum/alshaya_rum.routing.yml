@@ -1,7 +1,0 @@
-alshaya_rum.alshaya_rum_config:
-  path: '/admin/config/alshaya/alshaya-rum-config'
-  defaults:
-    _title: 'Alshaya RUM config'
-    _form: 'Drupal\alshaya_rum\Form\AlshayaRumConfigForm'
-  requirements:
-    _permission: 'configure real usage monitoring config'

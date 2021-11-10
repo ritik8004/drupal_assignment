@@ -81,7 +81,8 @@ class AlshayaFeedController extends ControllerBase {
    */
   public function getFeed(Request $request) {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $uri = file_default_scheme() . '://feed_' . $langcode . '.xml';
+    $schema = $this->configFactory->get('system.file')->get('default_scheme');
+    $uri = $schema . '://feed_' . $langcode . '.xml';
     $file = file_url_transform_relative(file_create_url($uri));
     if (!file_exists(ltrim($file, '/'))) {
       $this->logger->notice('Feed accessed but not available in system: @file', ['@file' => $file]);

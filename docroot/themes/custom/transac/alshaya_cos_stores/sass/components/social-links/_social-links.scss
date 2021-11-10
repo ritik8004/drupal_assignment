@@ -1,0 +1,79 @@
+.ic-social {
+  &-facebook {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$cos_theme_img_directory_path}/icons/facebook.svg);
+    }
+  }
+
+  &-instagram {
+    &::before {
+      @include ic-social;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 1.25rem;
+      }
+
+      background-image: url(#{$cos_theme_img_directory_path}/icons/instagram.svg);
+    }
+  }
+
+  &-twitter {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$cos_theme_img_directory_path}/icons/twitter.svg);
+    }
+  }
+
+  &-spotify {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$cos_theme_img_directory_path}/icons/spotify.svg);
+    }
+  }
+
+  &-pinterest {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$cos_theme_img_directory_path}/icons/pinterest.svg);
+    }
+  }
+
+  &-tumbler {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$cos_theme_img_directory_path}/icons/tumbler.svg);
+    }
+  }
+}
+
+.footer--social {
+  @include breakpoint($only-tablet) {
+    max-width: 14.75rem;
+  }
+
+  .c-social-links {
+    li {
+      &:not(:last-child) {
+        margin-#{$right}: 0.75rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 0.625rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$right}: 0.75rem;
+        }
+      }
+
+      a:hover {
+        opacity: 0.5;
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ const DescriptionContent = (props) => {
   const {
     skuCode, title, pdpProductPrice, finalPrice, pdpDescription, closeModal,
   } = props;
+  const itemCode = Drupal.t('Item Code');
 
   return (
     <div className="magv2-desc-popup-container">
@@ -27,7 +28,7 @@ const DescriptionContent = (props) => {
             pdpDescription={pdpDescription}
           />
           <div className="magv2-desc-popup-pdp-item-code-attribute">
-            <span className="magv2-pdp-section-text dark magv2-desc-popup-pdp-item-code-label">Item Code:</span>
+            <span className="magv2-pdp-section-text dark magv2-desc-popup-pdp-item-code-label">{`${itemCode}:`}</span>
             <span className="magv2-pdp-section-text magv2-desc-popup-pdp-item-code-value">{skuCode}</span>
           </div>
         </div>

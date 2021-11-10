@@ -46,6 +46,9 @@ if (empty($_acsf_site_name) && $settings['env'] == 'local') {
     echo "Setting up vsae for travis environment.";
     $_acsf_site_name = 'vsae';
   }
+
+  // Ensure hash salt is unique for each site.
+  $settings['hash_salt'] = hash('sha256', $_acsf_site_name . $settings['env']);
 }
 
 require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';

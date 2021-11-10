@@ -1,4 +1,6 @@
 .c-menu-secondary {
+  text-transform: none;
+
   a {
     font-size: 0.75rem;
     padding-#{$left}: 1.125rem;
@@ -8,6 +10,61 @@
     &.is-active {
       color: $header_secondary_menu_link_hover;
     }
+
+    @include breakpoint($desktop) {
+      padding-top: 0.25rem;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    a {
+      font-size: 0.875rem;
+      font-family: $tbs-medium;
+      padding: 1rem 1.25rem;
+      text-transform: capitalize;
+      margin-#{$right}: 1rem;
+      background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
+      background-position: 96.25%;
+      line-height: 1.1;
+
+      &:hover,
+      &.is-active {
+        color: $header_secondary_menu_link_mobile;
+        background: $header_secondary_menu_link url("../imgs/icons/ic-arrow-right.svg") no-repeat 96.25%;
+      }
+
+      html[lang=ar] & {
+        background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
+        background-position: 0 center;
+        margin-left: 1.5rem;
+
+        &:hover,
+        &.is-active {
+          background-image: url("../imgs/icons/ic-arrow-left.svg?1234");
+          background-position: 0 center;
+        }
+      }
+    }
+
+    li {
+      border-color: $menu-secondary-border;
+      margin: 0;
+
+      &::after {
+        content: '';
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    a {
+      background-position: 98.25%;
+
+      &:hover,
+      &.is-active {
+        background-position: 98.25%;
+      }
+    }
   }
 
   @include breakpoint($desktop) {
@@ -16,8 +73,17 @@
       li:nth-child(2) a,
       li:last-child a {
         &::before {
-          content: '';
-          padding: 0;
+          font-size: 0;
+        }
+      }
+
+      li:last-child a {
+        @at-root {
+          .logged-in & {
+            &::before {
+              font-size: 0;
+            }
+          }
         }
       }
     }
@@ -52,5 +118,25 @@
 .branding__menu {
   @include breakpoint($only-tablet) {
     height: 4.535rem;
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .c-my-account-nav {
+    h3 {
+      color: $cyprus;
+      font-size: 0.875rem;
+      font-family: $tbs-medium;
+    }
+  }
+}
+
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.6875rem !important;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 4.5rem !important;
   }
 }

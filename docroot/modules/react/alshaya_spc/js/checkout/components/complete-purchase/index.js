@@ -9,29 +9,67 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
 
 export default class CompletePurchase extends React.Component {
+  componentDidMount() {
+    document.addEventListener('updatePlaceOrderCTA', this.updatePlaceOrderCTA, false);
+    document.addEventListener('orderPlaced', this.orderPlaced);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('updatePlaceOrderCTA', this.updatePlaceOrderCTA, false);
+  }
+
+  /**
+   * Callback for any action after an order is placed.
+   */
+  orderPlaced = () => {
+    // 'benefit_pay_modal_auto_opened' is used to ensure that we auto open the
+    // benefit pay modal only once for a user. Removing this key just after
+    // placing order to remove old value.
+    localStorage.removeItem('benefit_pay_modal_auto_opened');
+  }
+
+  /**
+   * Update the 'complete purchase' CTA button to active/inactive.
+   *
+   * @param event
+   */
+  updatePlaceOrderCTA = (event) => {
+    const { status } = event.detail;
+    if (status === true) {
+      // Mark the CTA active.
+      const completePurchaseCTA = document.querySelector('.complete-purchase-cta');
+      completePurchaseCTA.classList.remove('in-active');
+    }
+  }
+
   /**
    * Place order.
    */
-  placeOrder = (e) => {
+  placeOrder = async (e) => {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
 
     if (!this.completePurchaseButtonActive()) {
       return;
     }
-
-    dispatchCustomEvent('orderPaymentMethod', {
-      payment_method: Object
-        .values(drupalSettings.payment_methods)
-        .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
-        .shift().gtm_name,
-    });
+    // Dispatch the event for all payment method
+    // except checkout_com_upapi method.
+    // For checkout_com_upapi method this
+    // handle in its own component.
+    if (cart.cart.payment.method !== 'checkout_com_upapi') {
+      dispatchCustomEvent('orderPaymentMethod', {
+        payment_method: Object
+          .values(drupalSettings.payment_methods)
+          .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+          .shift().gtm_name,
+      });
+    }
 
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
 
     try {
-      const validated = validateBeforePlaceOrder();
+      const validated = await validateBeforePlaceOrder();
       if (validated === false) {
         if (this.completePurchaseButtonActive()) {
           checkoutButton.classList.remove('in-active');
@@ -142,10 +180,12 @@ export default class CompletePurchase extends React.Component {
 
     if (paymentMethod === 'postpay') {
       buttonText = Drupal.t('Continue with postpay');
+    } else if (paymentMethod === 'checkout_com_upapi_benefitpay') {
+      buttonText = Drupal.t('Continue with Benefit pay');
     }
 
     return (
-      <div className={`checkout-link complete-purchase fadeInUp notInMobile submit active ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
+      <div className={`checkout-link complete-purchase complete-purchase-cta fadeInUp notInMobile submit active ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
         <ConditionalView condition={paymentMethod === 'checkout_com_applepay' || paymentMethod === 'checkout_com_upapi_applepay'}>
           <ApplePayButton isaActive="active" text={Drupal.t('Buy with')} lang={drupalSettings.path.currentLanguage} placeOrder={(e) => this.placeOrder(e)} />
         </ConditionalView>

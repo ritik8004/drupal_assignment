@@ -1,14 +1,16 @@
 import React from 'react';
+import TextareaAutosize from 'react-autosize-textarea';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
-} from '../../../utilities/user_util';
-import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getLanguageCode, getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+
+const bazaarVoiceSettings = getbazaarVoiceSettings();
+const userDetails = getUserDetails();
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -25,23 +27,25 @@ class ReviewCommentForm extends React.Component {
   }
 
   showCommentForm = () => {
+    const { ReviewId } = this.props;
     const { commentbox, nickname, email } = this.state;
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
+    const commentTncUri = `/${getLanguageCode()}/${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
         <form id="comment-form" onSubmit={this.handleSubmit} noValidate>
           <div className="comment-form-title">
             {getStringMessage('post_a_comment')}
           </div>
+          <BazaarVoiceMessages />
           <div className="comment-form-fields">
             <input type="hidden" name="blackBox" id="ioBlackBox" />
             <div className="form-item">
-              <input
+              <TextareaAutosize
                 type="text"
-                id="commentbox"
+                id={`comment-${ReviewId}`}
                 name="commentbox"
-                minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length}
+                minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_min_length}
+                maxLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_max_length}
                 onChange={this.handleCommentboxChange}
                 className="form-input"
                 defaultValue={commentbox}
@@ -51,15 +55,17 @@ class ReviewCommentForm extends React.Component {
                 {getStringMessage('comment')}
                 {'*'}
               </label>
-              <div id="commentbox-error" className="error" />
+              <div id={`comment-${ReviewId}-error`} className="error" />
             </div>
 
             <div className="form-item-two-column">
               <div className="form-item">
                 <input
                   type="text"
-                  id="nickname"
+                  id={`nickname-${ReviewId}`}
                   name="nickname"
+                  minLength={bazaarVoiceSettings.reviews.bazaar_voice.screen_name_min_length}
+                  maxLength="25"
                   onChange={this.handleNicknameChange}
                   className="form-input"
                   defaultValue={nickname}
@@ -69,25 +75,25 @@ class ReviewCommentForm extends React.Component {
                   {getStringMessage('screen_name')}
                   {'*'}
                 </label>
-                <div id="nickname-error" className="error" />
+                <div id={`nickname-${ReviewId}-error`} className="error" />
               </div>
 
               <div className="form-item">
                 <input
                   type="email"
-                  id="email"
+                  id={`email-${ReviewId}`}
                   name="email"
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
-                  readOnly={(getCurrentUserEmail() !== null) ? 1 : 0}
+                  readOnly={userDetails.user.emailId !== null ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
                   {getStringMessage('email_address_label')}
                   {'*'}
                 </label>
-                <div id="email-error" className="error" />
+                <div id={`email-${ReviewId}-error`} className="error" />
               </div>
             </div>
 
@@ -118,40 +124,48 @@ class ReviewCommentForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const isError = processFormDetails(e);
+    const { ReviewId } = this.props;
+    const isError = processFormDetails(e, ReviewId);
     if (!isError) {
-      const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
-      const bazaarVoiceSettings = getbazaarVoiceSettings();
-      if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== email) {
-        const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
-        deleteSessionCookie(cookieValues);
-      }
+      const notifications = bazaarVoiceSettings.reviews.bazaar_voice.notify_comment_published;
+      const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
+      let storageUpdated = false;
       let authParams = '';
-      if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
-        authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+      // Set auth paramters for anonymous users.
+      if (userDetails.user.userId === 0 && userStorage !== null) {
+        if (userStorage.bvUserId === undefined
+          || (userStorage.email !== undefined && userStorage.email !== email)) {
+          authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+        }
       }
       // Set user authenticated string (UAS).
-      if (getCurrentUserEmail() !== null && getSessionCookie('uas_token') !== undefined) {
-        authParams += `&user=${getSessionCookie('uas_token')}`;
-        setSessionCookie('BvUserNickname', nickname);
-      }
-
-      if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
-        && getSessionCookie('BvUserNickname') !== null) {
-        if (getSessionCookie('BvUserNickname') !== nickname) {
-          authParams += `&UserNickname=${nickname}`;
-          setSessionCookie('BvUserNickname', nickname);
+      if (userStorage !== null) {
+        if (userDetails.user.userId !== 0 && userStorage.uasToken !== undefined) {
+          authParams += `&user=${userStorage.uasToken}&UserNickname=${nickname}`;
+          // Update current user in storage.
+          userStorage.nickname = nickname;
+          storageUpdated = true;
+        } else if (userDetails.user.userId === 0 && userStorage.email !== undefined
+          && userStorage.bvUserId !== undefined
+          && userStorage.nickname !== undefined) {
+          if (userStorage.nickname !== nickname) {
+            authParams += `&UserNickname=${nickname}`;
+            userStorage.nickname = nickname;
+            storageUpdated = true;
+          }
+          authParams += `&User=${userStorage.bvUserId}`;
+        } else {
+          authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
         }
-        authParams += `&User=${getSessionCookie('BvUserId')}`;
       } else {
         authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
       }
       // Add device finger printing string.
       if (e.target.elements.blackBox.value !== '') {
-        authParams += `&fp=${e.target.elements.blackBox.value}`;
+        authParams += `&fp=${encodeURIComponent(e.target.elements.blackBox.value)}`;
       }
-      const params = `&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
+      const params = `&sendemailalertwhenpublished=${notifications}&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -172,7 +186,11 @@ class ReviewCommentForm extends React.Component {
                 submissionTime: response.Comment.SubmissionTime,
                 showCommentSubmission: true,
                 showCommentForm: false,
+                commentbox: response.Comment.CommentText,
               });
+              if (storageUpdated) {
+                setStorageInfo(userStorage, `bvuser_${userDetails.user.userId}`);
+              }
             }
           } else {
             Drupal.logJavascriptError('review-comment-submit', result.error);
@@ -183,44 +201,61 @@ class ReviewCommentForm extends React.Component {
   }
 
   handleEmailChange = (e) => {
-    if (e.target.value.length > 0) {
-      document.getElementById(`${e.target.id}-error`).innerHTML = validEmailRegex.test(e.target.value)
-        ? '' : getStringMessage('valid_email_error', { '%mail': e.target.value });
+    const label = getStringMessage('email_address_label');
+    if (e.target.value.length > 0 && !validEmailRegex.test(e.target.value)) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('valid_email_error', { '%mail': e.target.value });
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length === 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
+      document.getElementById(`${e.target.id}`).classList.remove('error');
     }
-    this.setState({ email: e.target.value });
+    this.setState({ email: encodeURIComponent(e.target.value) });
   }
 
   handleNicknameChange = (e) => {
-    this.setState({ nickname: e.target.value });
+    const label = getStringMessage('screen_name');
+    if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length === 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else {
+      document.getElementById(`${e.target.id}-error`).innerHTML = '';
+      document.getElementById(`${e.target.id}`).classList.remove('error');
+    }
+    this.setState({ nickname: encodeURIComponent(e.target.value) });
   }
 
   handleCommentboxChange = (e) => {
-    if (e.target.value.length > 0) {
-      document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength })
-        : '';
+    const label = getStringMessage('comment');
+    if (e.target.value.length > 0 && e.target.value.length < e.target.minLength) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
+    } else if (e.target.value.length === 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': label });
+      document.getElementById(`${e.target.id}`).classList.add('error');
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
+      document.getElementById(`${e.target.id}`).classList.remove('error');
     }
-    this.setState({ commentbox: e.target.value });
+    this.setState({ commentbox: encodeURIComponent(e.target.value) });
   }
 
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
-    let emailValue = '';
+    const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
+    let emailValue = userDetails.user.emailId;
     let nicknameValue = '';
-    if (getCurrentUserEmail() !== null) {
-      emailValue = getCurrentUserEmail();
-    } else if (getSessionCookie('BvUserEmail') !== null) {
-      emailValue = getSessionCookie('BvUserEmail');
+    // Set default value for user email and nickname.
+    if (userStorage !== null) {
+      emailValue = userStorage.email !== undefined && emailValue !== '' ? userStorage.email : '';
+      nicknameValue = userStorage.nickname !== undefined ? userStorage.nickname : '';
     }
-    if (getCurrentUserEmail() !== null || getSessionCookie('BvUserEmail') !== null) {
-      nicknameValue = getSessionCookie('BvUserNickname') !== null ? getSessionCookie('BvUserNickname') : '';
-    }
-
     if (ReviewId !== undefined) {
       return (
         <>
@@ -240,8 +275,6 @@ class ReviewCommentForm extends React.Component {
           </div>
           {showCommentForm ? this.showCommentForm() : null}
           {showCommentSubmission ? this.showCommentSubmission() : null}
-          {showCommentForm
-           && (<BazaarVoiceMessages />)}
         </>
       );
     }

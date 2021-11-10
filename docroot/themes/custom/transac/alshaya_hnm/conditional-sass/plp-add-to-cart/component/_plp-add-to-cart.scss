@@ -1,0 +1,43 @@
+.addtobag-button {
+  padding: 0.5rem 0.25rem;
+}
+
+.addtobag-button-container,
+.is-not-buyable,
+.addtobag-config-button {
+  margin-#{$left}: 0;
+  font-size: 0.8125rem;
+}
+
+.addtobag-simple-button-container,
+.is-not-buyable,
+.addtobag-config-button {
+  text-transform: uppercase;
+}
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  font-family: $hnm-demibold;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  @include icon(shopping-bag) {
+    font-size: 1.25rem;
+    top: 0.4375rem;
+    position: absolute;
+    #{$left}: 1.188rem;
+    position: static;
+    padding-#{$right}: 0.35rem;
+    margin: 0 0 0.125rem;
+  }
+}
+
+.addtobag-simple-button-container.add-to-basket-loader button,
+.config-form-addtobag-button.add-to-bag-loader {
+  &::before {
+    content: unset;
+  }
+}

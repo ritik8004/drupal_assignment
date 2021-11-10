@@ -1,0 +1,134 @@
+.address-book-address {
+  .form-type-select {
+    .select2-selection {
+      height: 2.5rem !important;
+    }
+
+    .select2-selection__arrow {
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+.address {
+  &:hover {
+    .address--primary {
+      font-weight: normal;
+    }
+  }
+
+  .address--label {
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  .address--controls {
+    display: flex;
+
+    @include breakpoint($desktop) {
+      min-height: 2.25rem;
+      padding-#{$right}: 0;
+    }
+
+    @include breakpoint($upto-desktop) {
+      min-height: 2.5rem;
+      padding: 0.75rem;
+      padding-#{$left}: 2.25rem;
+    }
+  }
+
+  .address--content {
+    font-weight: normal;
+  }
+
+  .address--primary {
+    font-size: 0.875rem;
+    letter-spacing: normal;
+
+    @include breakpoint($desktop) {
+      padding: 0.6875rem 1.25rem;
+      padding-#{$right}: 0;
+      width: 75%;
+    }
+
+    @include breakpoint($upto-desktop) {
+      width: 49%;
+    }
+  }
+
+  &.default {
+    .address--primary {
+      font-family: $bp-light;
+
+      @include breakpoint($upto-desktop) {
+        width: 76%;
+        padding: 0.75rem 2.5rem;
+      }
+    }
+
+    .address--edit {
+      @include breakpoint($upto-desktop) {
+        padding: 0.75rem 1.875rem;
+      }
+    }
+  }
+
+  .address--options {
+    padding: 0 0.5rem;
+    padding-#{$right}: 0;
+    display: flex;
+    flex-flow: row nowrap;
+
+    @include breakpoint($upto-desktop) {
+      padding: 0;
+      height: 2.5rem;
+    }
+  }
+
+  .address--edit,
+  .address--delete {
+    a {
+      @include breakpoint($desktop) {
+        padding: 0.6875rem 1rem;
+        border: 0;
+        border-#{$left}: 1px solid $address_book_border;
+        font-weight: normal;
+        font-size: 0.875rem;
+        min-width: 5rem;
+      }
+    }
+  }
+
+  .address--edit {
+    @include breakpoint($upto-desktop) {
+      padding: 0.75rem 1.875rem;
+    }
+  }
+
+  .address--delete {
+    @include breakpoint($upto-desktop) {
+      padding: 0.75rem 1.5rem;
+    }
+  }
+}
+
+.user__address--column {
+  &:nth-child(2n+1) {
+    clear: both;
+  }
+
+  @include breakpoint($desktop) {
+    width: calc(34.5% - 0.75rem);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 1.5rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    width: calc(66% - 0.75rem);
+  }
+}

@@ -16,7 +16,28 @@ if (!class_exists(Dotenv::class)) {
 // Load all the .env files.
 (new Dotenv(FALSE))->loadEnv(dirname(__DIR__) . '/.env');
 
-$home = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_SERVER['HOME'] : '/home/vagrant';
+$home = '/home/vagrant';
+if (getenv('AH_SITE_ENVIRONMENT')) {
+  $home = $_SERVER['HOME'];
+}
+elseif (getenv('LANDO')) {
+  $home = '/app/local_home';
+}
+
+$env = 'local';
+
+if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+  $env = $_ENV['AH_SITE_ENVIRONMENT'];
+}
+elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
+  $env = 'travis';
+}
+
+// Ensure we use development mode in local.
+if ($env === 'local') {
+  $_SERVER['APP_ENV'] = 'dev';
+}
+
 if (file_exists($home . '/settings/.appointment-env')) {
   // Load the .env files from Server Home.
   (new Dotenv(FALSE))->loadEnv($home . '/settings/.appointment-env');

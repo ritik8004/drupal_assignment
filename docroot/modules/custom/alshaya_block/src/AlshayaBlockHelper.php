@@ -4,7 +4,7 @@ namespace Drupal\alshaya_block;
 
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Menu\MenuLinkTree;
-use Drupal\Core\Path\AliasStorage;
+use Drupal\path_alias\AliasRepositoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
 
 /**
@@ -36,7 +36,7 @@ class AlshayaBlockHelper {
   /**
    * The alias storage.
    *
-   * @var \Drupal\Core\Path\AliasStorage
+   * @var \Drupal\path_alias\AliasRepositoryInterface
    */
   protected $aliasStorage;
 
@@ -49,10 +49,10 @@ class AlshayaBlockHelper {
    *   The menu link tree service.
    * @param \Drupal\Core\Path\CurrentPathStack $current_path
    *   The current path stack.
-   * @param \Drupal\Core\Path\AliasStorage $alias_storage
+   * @param \Drupal\path_alias\AliasRepositoryInterface $alias_storage
    *   The alias storage service.
    */
-  public function __construct(LanguageManager $language_manager, MenuLinkTree $menu_tree, CurrentPathStack $current_path, AliasStorage $alias_storage) {
+  public function __construct(LanguageManager $language_manager, MenuLinkTree $menu_tree, CurrentPathStack $current_path, AliasRepositoryInterface $alias_storage) {
     $this->languageManager = $language_manager;
     $this->menuTree = $menu_tree;
     $this->currentPath = $current_path;

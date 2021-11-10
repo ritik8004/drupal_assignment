@@ -1,0 +1,121 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.menu_link_content.field_secondary_menu_highlight
+    - paragraphs.paragraphs_type.main_menu_highlight
+    - system.menu.secondary-main-menu
+  module:
+    - entity_reference_revisions
+id: menu_link_content.secondary-main-menu.field_secondary_menu_highlight
+field_name: field_secondary_menu_highlight
+entity_type: menu_link_content
+bundle: secondary-main-menu
+label: 'secondary menu highlight'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      main_menu_highlight: main_menu_highlight
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        weight: 32
+        enabled: false
+      1_row_1_col:
+        weight: 33
+        enabled: false
+      1_row_1_col_dept:
+        weight: 34
+        enabled: false
+      1_row_2_col:
+        weight: 35
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 36
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 37
+        enabled: false
+      1_row_2_col_dept:
+        weight: 38
+        enabled: false
+      1_row_3_col:
+        weight: 39
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 40
+        enabled: false
+      1_row_3_col_dept:
+        weight: 41
+        enabled: false
+      1_row_3_col_flex:
+        weight: 42
+        enabled: false
+      1_row_3_col_text:
+        weight: 43
+        enabled: false
+      1_row_4_col:
+        weight: 44
+        enabled: false
+      banner:
+        weight: 45
+        enabled: false
+      banner_full_width:
+        weight: 46
+        enabled: false
+      block_reference:
+        weight: 47
+        enabled: false
+      delivery_usp_block:
+        weight: 48
+        enabled: false
+      image_title_subtitle:
+        weight: 49
+        enabled: false
+      main_menu_highlight:
+        enabled: true
+        weight: 50
+      offers_bordered:
+        weight: 51
+        enabled: false
+      product_carousel_category:
+        weight: 52
+        enabled: false
+      promo_block:
+        weight: 53
+        enabled: false
+      promo_block_button:
+        weight: 54
+        enabled: false
+      promo_block_text:
+        weight: 55
+        enabled: false
+      related_info_one_column:
+        weight: 56
+        enabled: false
+      section_divider:
+        weight: 57
+        enabled: false
+      slug_banner:
+        weight: 58
+        enabled: false
+      text_links:
+        weight: 59
+        enabled: false
+      title_textarea:
+        weight: 60
+        enabled: false
+      video:
+        weight: 61
+        enabled: false
+      views_reference:
+        weight: 62
+        enabled: false
+field_type: entity_reference_revisions

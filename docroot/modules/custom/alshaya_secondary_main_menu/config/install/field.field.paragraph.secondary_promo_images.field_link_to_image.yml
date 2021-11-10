@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_link_to_image
+    - paragraphs.paragraphs_type.secondary_promo_images
+  module:
+    - link
+id: paragraph.secondary_promo_images.field_link_to_image
+field_name: field_link_to_image
+entity_type: paragraph
+bundle: secondary_promo_images
+label: 'Link To Image'
+description: ''
+required: true
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link

@@ -241,7 +241,7 @@ class CustomerCartForm extends FormBase {
     else {
       // If we have success message available.
       $msg = !empty($this->successMessage) ? $this->successMessage : $this->t('Your cart has been updated.');
-      drupal_set_message($msg);
+      $this->messenger()->addMessage($msg);
     }
   }
 
@@ -298,7 +298,7 @@ class CustomerCartForm extends FormBase {
     }
     catch (\Exception $e) {
       if (acq_commerce_is_exception_api_down_exception($e)) {
-        drupal_set_message($e->getMessage(), 'error');
+        $this->messenger()->addMessage($e->getMessage(), 'error');
         $form_state->setErrorByName('custom', $e->getMessage());
         $form_state->setRebuild(TRUE);
       }

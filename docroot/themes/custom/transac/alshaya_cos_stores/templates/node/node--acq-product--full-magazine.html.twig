@@ -1,0 +1,43 @@
+{% extends "@alshaya_white_label/node/node--acq-product--full-magazine.html.twig" %}
+
+{% block shortDescBlock %}
+  <div class="short-description-wrapper">
+    <div class="content--short-description">
+      <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+      <div class="field__content-wrapper">
+        <div class="field__content">
+          <div class="desc-wrapper">
+            {% if content.short_desc.label|render %}
+              <div class="desc-label">
+                {{ content.short_desc.label }}
+              </div>
+            {% endif %}
+            {% if content.short_desc.value|render %}
+              <div class="desc-value">
+                {{ content.short_desc.value }}
+              </div>
+            {% endif %}
+          </div>
+          {% for desc in content.description %}
+            {% if desc.value|render %}
+              <div class="desc-wrapper">
+                {% if desc.label|render %}
+                  <div class="desc-label">
+                    {{ desc.label }}
+                  </div>
+                {% endif %}
+
+                <div class="desc-value">
+                  {{ desc.value }}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if content.description %}
+          <span class="read-more-description-link-mobile">{{ 'read more'|t }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

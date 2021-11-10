@@ -30,6 +30,11 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         {{ content.price_block }}
       </div>
 
+      {% if content.postpay %}
+        {{ attach_library('alshaya_white_label/postpay-pdp') }}
+        <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
+      {% endif %}
+
         {% if content.promotions %}
           <div class="promotions">
             {{ content.promotions }}

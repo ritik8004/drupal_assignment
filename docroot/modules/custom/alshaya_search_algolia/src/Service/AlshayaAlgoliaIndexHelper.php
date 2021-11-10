@@ -2,11 +2,12 @@
 
 namespace Drupal\alshaya_search_algolia\Service;
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases;
@@ -19,7 +20,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
@@ -29,6 +29,8 @@ use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Alshaya Algolia Index Helper.
@@ -40,6 +42,11 @@ class AlshayaAlgoliaIndexHelper {
   use StringTranslationTrait;
 
   const FACET_SOURCE = 'search_api:views_page__search__page';
+
+  /**
+   * Index name for product list on PLP, promo, brand listing.
+   */
+  const PRODUCT_LIST_INDEX = 'alshaya_algolia_product_list_index';
 
   /**
    * SKU Manager service object.
@@ -175,6 +182,20 @@ class AlshayaAlgoliaIndexHelper {
   protected $productInfoHelper;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  protected $skuImagesHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -215,6 +236,10 @@ class AlshayaAlgoliaIndexHelper {
    *   Pretty Aliases.
    * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
    *   Product Info Helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $sku_images_helper
+   *   Sku images helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -238,7 +263,9 @@ class AlshayaAlgoliaIndexHelper {
     AlshayaFacetsPrettyPathsHelper $pretty_path_helper,
     DefaultFacetManager $facets_manager,
     AlshayaFacetsPrettyAliases $pretty_aliases,
-    ProductInfoHelper $product_info_helper
+    ProductInfoHelper $product_info_helper,
+    ModuleHandlerInterface $module_handler,
+    SkuImagesHelper $sku_images_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -260,6 +287,8 @@ class AlshayaAlgoliaIndexHelper {
     $this->facetsManager = $facets_manager;
     $this->prettyAliases = $pretty_aliases;
     $this->productInfoHelper = $product_info_helper;
+    $this->moduleHandler = $module_handler;
+    $this->skuImagesHelper = $sku_images_helper;
   }
 
   /**
@@ -309,17 +338,25 @@ class AlshayaAlgoliaIndexHelper {
 
     // Restore the language manager to it's original language.
     $this->languageManager->setConfigOverrideLanguage($original_language);
-
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
-
+    // Used for highest discount.
+    $object['discount'] = $this->skuManager->getDiscountedPercent($object['price'], $object['final_price']);
     // Use max of selling prices for price in configurable products.
     if (!empty($prices['children'])) {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $object['price'] = max($selling_prices);
-
+      // Use Dicount in configurable products.
+      $discount = array_filter(array_column($prices['children'], 'discount'));
+      if (empty($discount)) {
+        // If Discount is NULL in configurable products set 0.
+        $object['discount'] = 0;
+      }
+      else {
+        $object['discount'] = max($discount);
+      }
       $selling_prices = array_unique([
         min($selling_prices),
         max($selling_prices),
@@ -337,7 +374,17 @@ class AlshayaAlgoliaIndexHelper {
         return $item['value'];
       }, $configured_skus);
     }
-
+    // Add value to dummy dummy field attr_delivery_ways.
+    // It is depend on status of attr_express_delivery,attr_same_day_delivery.
+    $object['attr_delivery_ways'] = [];
+    $same_value = 'same_day_delivery_available';
+    $express_value = 'express_day_delivery_available';
+    if ($sku->get('attr_same_day_delivery')->getString() == '1') {
+      array_push($object['attr_delivery_ways'], $same_value);
+    }
+    if ($sku->get('attr_express_delivery')->getString() == '1') {
+      array_push($object['attr_delivery_ways'], $express_value);
+    }
     $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
 
     // Set color / size and other configurable attributes data.
@@ -359,7 +406,7 @@ class AlshayaAlgoliaIndexHelper {
       foreach ($available_translation_langcode as $langcode => $value) {
         $promotion['url_' . $langcode] = Url::fromRoute('entity.node.canonical', ['node' => $nid], ['language' => $this->languageManager->getLanguage($langcode)])->toString();
       }
-      $promotion['id'] = $nid;
+      $promotion['id'] = $node->get('field_acq_promotion_rule_id')->getString();
     });
 
     $object['promotions'] = array_values($promotions);
@@ -444,8 +491,14 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     $object['is_new'] = $sku->get('attr_is_new')->getString();
+    $object['is_buyable'] = (bool) $sku->get('attr_is_buyable')->getString();
+    // Used for new arrivals.
+    $object['new_arrivals'] = $sku->get('created')->getString();
     $this->updatePrettyPathAlias($object);
     unset($object['field_category_aliases']);
+
+    // Allow other modules to add/alter object data.
+    $this->moduleHandler->alter('alshaya_search_algolia_object', $object);
   }
 
   /**
@@ -556,10 +609,9 @@ class AlshayaAlgoliaIndexHelper {
     // @see \Drupal\alshaya_acm_product\SkuImagesManager::getGallery.
     $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search', FALSE);
     $images = [];
-
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $images[] = [
-        'url' => ImageStyle::load('product_listing')->buildUrl($media_item['drupal_uri']),
+        'url' => $this->skuImagesHelper->getImageStyleUrl($media_item, SkuImagesHelper::STYLE_PRODUCT_LISTING),
         'image_type' => $media_item['sortAssetType'] ?? 'image',
       ];
     }
@@ -589,6 +641,7 @@ class AlshayaAlgoliaIndexHelper {
    * Create term hierarchy to index for Algolia.
    *
    * Prepares the array structure as shown below.
+   * @codingStandardsIgnoreStart
    * @code
    * [
    *   [
@@ -625,6 +678,7 @@ class AlshayaAlgoliaIndexHelper {
    *   ]
    * }
    * @endcode
+   * @codingStandardsIgnoreEnd
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node object for which we need to prepare hierarchy.
@@ -806,7 +860,8 @@ class AlshayaAlgoliaIndexHelper {
    */
   public function getAlgoliaSwatchData(SKUInterface $sku): array {
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
-    $swatches = $this->skuImagesManager->getSwatchData($sku);
+    // Add context value for PLP to use in PLP related index data like swatches.
+    $swatches = $this->skuImagesManager->getSwatchData($sku, 'plp');
 
     if (empty($swatches) || empty($swatches['swatches'])) {
       return [];
@@ -817,8 +872,10 @@ class AlshayaAlgoliaIndexHelper {
       $index_product_image_url = FALSE;
     }
 
+    $swatch_data = [];
     foreach ($swatches['swatches'] as $key => $swatch) {
-      if ($index_product_image_url) {
+      // Check if color swatch is enabled and image url exist.
+      if ($index_product_image_url && !empty($swatch['image_url'])) {
         $child = SKU::loadFromSku($swatch['child_sku_code']);
         $swatch_product_image = $child->getThumbnail();
         // If we have image for the product.
@@ -826,12 +883,12 @@ class AlshayaAlgoliaIndexHelper {
           $url = file_create_url($swatch_product_image['file']->getFileUri());
           $swatch['product_image_url'] = $url;
         }
-      }
 
-      $swatches['swatches'][$key] = $swatch;
+        $swatch_data['swatches'][$key] = $swatch;
+      }
     }
 
-    return $swatches;
+    return $swatch_data;
   }
 
   /**
@@ -892,45 +949,82 @@ class AlshayaAlgoliaIndexHelper {
    */
   public function addCustomFacetToIndex($attributes) {
     $attributes = is_array($attributes) ? $attributes : [$attributes];
+    /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
+    $indexNames = $this->getAlgoliaIndexNames();
+    foreach ($indexNames as $indexName) {
+      $search_api_index = 'search_api.index.' . $indexName;
+      // @todo If an entity field is to be added, the function should be modified
+      // such that $attr_name should have prefix "attr_" as that is the
+      // general syntax that can be seen.
+      $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
+      $client_config = $this->configFactory->get($search_api_index)->get('options');
+      $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
+      $index_name = $client_config['algolia_index_name'];
 
-    // @todo If an entity field is to be added, the function should be modified
-    // such that $attr_name should have prefix "attr_" as that is the
-    // general syntax that can be seen.
-    $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
-    $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
-    $client = new Client($backend_config['application_id'], $backend_config['api_key']);
-    $index_name = $client_config['algolia_index_name'];
+      if ($client_config['algolia_index_apply_suffix'] == 1) {
+        foreach ($this->languageManager->getLanguages() as $language) {
+          $updated = FALSE;
+          $index = $client->initIndex($index_name . '_' . $language->getId());
+          $settings = $index->getSettings();
 
-    foreach ($this->languageManager->getLanguages() as $language) {
-      $updated = FALSE;
-      $index = $client->initIndex($index_name . '_' . $language->getId());
-      $settings = $index->getSettings();
+          foreach ($attributes as $attribute_name) {
+            if (in_array($attribute_name, $settings['attributesForFaceting'])) {
+              $this->logger->error("The attribute $attribute_name is already added to the index.");
+              continue;
+            }
 
-      foreach ($attributes as $attribute_name) {
-        if (in_array($attribute_name, $settings['attributesForFaceting'])) {
-          $this->logger->error("The attribute $attribute_name is already added to the index.");
-          continue;
+            $settings['attributesForFaceting'][] = $attribute_name;
+            $updated = TRUE;
+          }
+
+          if ($updated) {
+            $index->setSettings($settings);
+
+            foreach ($settings['replicas'] as $replica) {
+              $replica_index = $client->initIndex($replica);
+              $replica_settings = $replica_index->getSettings();
+              $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
+              $replica_index->setSettings($replica_settings, [
+                'forwardToReplicas' => TRUE,
+              ]);
+            }
+          }
+        }
+      }
+      else {
+        $updated = FALSE;
+        $index = $client->initIndex($index_name);
+        $settings = $index->getSettings();
+        foreach ($attributes as $attribute_name) {
+          if (in_array($attribute_name, $settings['attributesForFaceting'])) {
+            $this->logger->error("The attribute $attribute_name is already added to the index.");
+            continue;
+          }
+          // Update Custom Facet attribute
+          // for Product list index and its replicas.
+          $settings['attributesForFaceting'][] = $attribute_name;
+          $updated = TRUE;
         }
 
-        $settings['attributesForFaceting'][] = $attribute_name;
-        $updated = TRUE;
-      }
+        if ($updated) {
+          $index->setSettings($settings);
 
-      if ($updated) {
-        $index->setSettings($settings);
-
-        foreach ($settings['replicas'] as $replica) {
-          $replica_index = $client->initIndex($replica);
-          $replica_settings = $replica_index->getSettings();
-          $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
-          $replica_index->setSettings($replica_settings);
+          foreach ($settings['replicas'] as $replica) {
+            $replica_index = $client->initIndex($replica);
+            $replica_settings = $replica_index->getSettings();
+            $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
+            $replica_index->setSettings($replica_settings, [
+              'forwardToReplicas' => TRUE,
+            ]);
+          }
         }
+
       }
+
+      $this->logger->notice('Added attribute(s) for faceting: @attributes', [
+        '@attributes' => implode(',', $attributes),
+      ]);
     }
-
-    $this->logger->notice('Added attribute(s) for faceting: @attributes', [
-      '@attributes' => implode(',', $attributes),
-    ]);
   }
 
   /**
@@ -944,33 +1038,79 @@ class AlshayaAlgoliaIndexHelper {
   public function updateReplicaIndex(array $sorts, int $req_attempts = 0) {
     try {
       $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
-      $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
-      $client = new Client($backend_config['application_id'], $backend_config['api_key']);
-      $index_name = $client_config['algolia_index_name'];
+      $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
+      $index_names = $this->getAlgoliaIndexNames();
 
-      foreach ($this->languageManager->getLanguages() as $language) {
-        $index = $client->initIndex($index_name . '_' . $language->getId());
-        $name = $index_name . '_' . $language->getId();
-        $settings = $index->getSettings();
-        unset($settings['replicas']);
-        $ranking = $settings['ranking'];
+      foreach ($index_names as $index) {
+        $search_api_index = 'search_api.index.' . $index;
+        $index_name = $this->configFactory->get($search_api_index)->get('options.algolia_index_name');
+        // Get value for algolia_index_apply_suffix in search Api backend.
+        $algolia_index_apply_suffix = $this->configFactory->get($search_api_index)->get('options.algolia_index_apply_suffix');
+        if ($algolia_index_apply_suffix == 1) {
+          foreach ($this->languageManager->getLanguages() as $language) {
+            $name = $index_name . '_' . $language->getId();
+            $index = $client->initIndex($name);
+            $settings = $index->getSettings();
+            unset($settings['replicas']);
+            $ranking = $settings['ranking'];
 
-        foreach ($sorts as $sort) {
-          $replica = $name . '_' . implode('_', $sort);
-          $settings['replicas'][] = $replica;
+            foreach ($sorts as $sort) {
+              $replica = $name . '_' . implode('_', $sort);
+              $settings['replicas'][] = $replica;
+            }
+            $index->setSettings($settings, [
+              'forwardToReplicas' => TRUE,
+            ]);
+            foreach ($sorts as $sort) {
+              $replica = $name . '_' . implode('_', $sort);
+              $replica_index = $client->initIndex($replica);
+              $replica_settings = $replica_index->getSettings();
+              $replica_settings['ranking'] = [
+                'desc(stock)',
+                $sort['direction'] . '(' . $sort['field'] . ')',
+              ];
+              // Allow other modules to add/alter ranking & sorting options.
+              $this->moduleHandler->alter('alshaya_search_algolia_ranking_sorting', $replica_settings, $sort, $ranking);
+              $replica_settings['ranking'] = $replica_settings['ranking'] + $ranking;
+
+              $replica_index->setSettings($replica_settings, [
+                'forwardToReplicas' => TRUE,
+              ]);
+            }
+          }
         }
+        else {
+          $index = $client->initIndex($index_name);
+          $settings = $index->getSettings();
+          $ranking = $settings['ranking'];
+          unset($settings['replicas']);
+          foreach ($sorts as $sort) {
+            foreach ($this->languageManager->getLanguages() as $language) {
+              $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
+              $settings['replicas'][] = $replica;
+            }
+          }
+          $index->setSettings($settings, [
+            'forwardToReplicas' => TRUE,
+          ]);
+          foreach ($sorts as $sort) {
+            foreach ($this->languageManager->getLanguages() as $language) {
+              $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
+              $replica_index = $client->initIndex($replica);
+              $replica_settings = $replica_index->getSettings();
+              $replica_settings['ranking'] = [
+                'desc(stock)',
+                $sort['direction'] . '(' . $sort['field'] . '.' . $language->getId() . ')',
+              ];
+              // Allow other modules to add/alter ranking & sorting options.
+              $this->moduleHandler->alter('alshaya_search_algolia_ranking_sorting', $replica_settings, $sort, $ranking);
+              $replica_settings['ranking'] = $replica_settings['ranking'] + $ranking;
 
-        $index->setSettings($settings, TRUE);
-
-        foreach ($sorts as $sort) {
-          $replica = $name . '_' . implode('_', $sort);
-          $replica_index = $client->initIndex($replica);
-          $replica_settings = $replica_index->getSettings();
-          $replica_settings['ranking'] = [
-            'desc(stock)',
-            $sort['direction'] . '(' . $sort['field'] . ')',
-          ] + $ranking;
-          $replica_index->setSettings($replica_settings);
+              $replica_index->setSettings($replica_settings, [
+                'forwardToReplicas' => TRUE,
+              ]);
+            }
+          }
         }
       }
       sleep(3);
@@ -989,21 +1129,60 @@ class AlshayaAlgoliaIndexHelper {
   /**
    * Helps to prepare fields to create replicas.
    *
+   * @param array $sort_label_options
+   *   The list of options label.
    * @param array $sort_options
    *   The list of options.
+   *
+   * @return array
+   *   Formated array of sorting options.
    */
-  public function prepareFieldsToSort(array $sort_options) {
+  public function prepareFieldsToSort(array $sort_label_options, array $sort_options) {
     $sorts = [];
-    foreach ($sort_options as $value) {
-      if ($value !== 0) {
-        if ($value != 'created') {
-          $sorts[] = ['field' => $value, 'direction' => 'asc'];
-        }
-        $sorts[] = ['field' => $value, 'direction' => 'desc'];
+    foreach ($sort_label_options as $sort_label_option) {
+      $value = explode(' ', $sort_label_option['value']);
+      if (!empty($sort_label_option['label']) && array_search(trim($value[0]), $sort_options, TRUE)) {
+        $sorts[] = ['field' => $value[0], 'direction' => strtolower($value[1])];
       }
     }
 
     return $sorts;
+  }
+
+  /**
+   * Helps to return list of Index names.
+   */
+  public function getAlgoliaIndexNames() {
+    $index_name[] = 'alshaya_algolia_index';
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $index_name[] = 'alshaya_algolia_product_list_index';
+    }
+    return $index_name;
+  }
+
+  /**
+   * Helps to return list of attributes to exclude Language prefix.
+   */
+  public function getExcludedAttributeList() {
+    $excludedAttributes = [
+      'objectID',
+      'sku',
+      'stock',
+      'search_api_language',
+      'promotion_nid',
+      'gtm',
+      'nid',
+      'search_api_datasource',
+      'search_api_id',
+      'stock_quantity',
+      'attr_aims_barcode',
+      'field_configured_skus',
+      'media',
+    ];
+
+    $this->moduleHandler->alter('alshaya_product_list_exclude_attribute', $excludedAttributes);
+
+    return $excludedAttributes;
   }
 
 }

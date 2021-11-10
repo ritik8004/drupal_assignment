@@ -3,7 +3,7 @@ type: module
 description: Provides a Purge plugin in order to be able to target a specific Load Balancer.
 package: alshaya
 core: 8.x
-
+core_version_requirement: ^8 || ^9
 dependencies:
   - purge
   - purge_ui

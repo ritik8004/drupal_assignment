@@ -64,6 +64,9 @@ $settings['alshaya_backend_calls_options'] = [
     'cnc_check' => [
       'timeout' => 10,
     ],
+    'cart_remove' => [
+      'timeout' => 15,
+    ],
   ],
   'drupal' => [
     'default' => [
@@ -110,6 +113,9 @@ $settings['alshaya_backend_calls_options'] = [
     ],
     'cart_get' => [
       'timeout' => 10,
+    ],
+    'get_categories' => [
+      'timeout' => 300,
     ],
   ],
   'appointment_booking' => [

@@ -32,6 +32,7 @@ import {
   getSuperCategoryOptionalFilter,
 } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
+import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -45,7 +46,7 @@ const SearchResultsComponent = ({
   const parentRef = React.createRef();
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : '';
-  const { indexName } = drupalSettings.algoliaSearch;
+  const { indexName } = drupalSettings.algoliaSearch.search;
 
   // Get default page to display for back to search,
   // and delete the stored info from local storage.
@@ -65,6 +66,9 @@ const SearchResultsComponent = ({
   const showCategoryFacets = () => {
     parentRef.current.classList.toggle('category-facet-open');
   };
+
+  // Add the drawer markup for add to bag feature.
+  createConfigurableDrawer();
 
   return (
     <InstantSearch

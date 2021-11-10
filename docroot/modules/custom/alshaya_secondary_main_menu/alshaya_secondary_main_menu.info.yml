@@ -1,0 +1,22 @@
+name: 'Alshaya secondary main menu'
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:block
+  - drupal:content_translation
+  - entity_browser:entity_browser
+  - entity_reference_revisions:entity_reference_revisions
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - drupal:language
+  - drupal:link
+  - paragraphs:paragraphs
+  - drupal:path
+  - drupal:system
+  - drupal:text
+  - drupal:user
+  - drupal:menu_item_extras
+  - drupal:conditional_fields
+package: Alshaya

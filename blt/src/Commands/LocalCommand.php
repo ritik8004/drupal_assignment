@@ -22,6 +22,8 @@ class LocalCommand extends BltTasks {
     3 => 'alshaya3bis.01',
     4 => 'alshaya4.04',
     5 => 'alshaya5.05',
+    6 => 'alshaya6tmp2.06',
+    7 => 'alshaya7tmp.07',
   ];
 
   /**
@@ -94,14 +96,11 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $devel_env = getenv('DEVEL_ENV');
-
-    if (!empty($devel_env) && $devel_env === 'lando') {
+    if (getenv('LANDO')) {
       // If we're running Lando, our best option is to flush our memcache
       // services.
       $this->say('Flushing memcache servers.');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache2 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
     else {
       $this->say('Restarting memcache service');
@@ -113,14 +112,21 @@ class LocalCommand extends BltTasks {
         ->run();
     }
 
+    $this->taskDrush()
+      ->drush('status')
+      ->alias($info['local']['alias'])
+      ->uri($info['local']['url'])
+      ->printOutput(FALSE)
+      ->run();
+
     $this->say('Disable cloud modules');
     $this->taskDrush()
-      ->drush('pmu purge acquia_search acquia_connector shield')
+      ->drush('pmu purge acquia_search acquia_connector shield dblog advagg datadog_js')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
 
-    $modules_to_enable = 'dblog field_ui views_ui restui stage_file_proxy';
+    $modules_to_enable = 'syslog field_ui views_ui restui stage_file_proxy';
 
     $this->say('Enable local only modules');
     $this->taskDrush()
@@ -149,9 +155,9 @@ class LocalCommand extends BltTasks {
       ->run();
 
     // Now the last thing, dev script, I love it :).
-    $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
+    $dev_script_path = $this->getConfigValue('repo.root') . '/scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
-      $this->_exec('sh ' . $dev_script_path . ' ' . preg_replace('/\d/', '', $site));
+      $this->_exec('sh ' . $dev_script_path . ' ' . $info['local']['url']);
     }
 
   }
@@ -234,11 +240,7 @@ class LocalCommand extends BltTasks {
     static $path;
 
     if (!isset($path)) {
-      $path = '/var/www/alshaya/files-private';
-
-      if (getenv('DEVEL_ENV') == 'lando') {
-        $path = '/app/files-private';
-      }
+      $path = $this->getConfigValue('repo.root') . '/files-private';
 
       if (!file_exists($path)) {
         $this->say('Creating temp directory at: ' . $path);
@@ -276,7 +278,7 @@ class LocalCommand extends BltTasks {
       return $static[$env][$site];
     }
 
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
     $sites = $data['sites'];
 
     if (empty($site) || empty($sites[$site])) {
@@ -290,7 +292,7 @@ class LocalCommand extends BltTasks {
 
     $info['profile'] = $site_data['type'];
 
-    $info['local']['url'] = 'local.alshaya-' . $site . '.com';
+    $info['local']['url'] = CustomCommand::getSiteUri($site);
     $info['local']['alias'] = 'self';
 
     foreach ($this->stacks as $alias_prefix) {
@@ -423,16 +425,21 @@ class LocalCommand extends BltTasks {
   }
 
   /**
-   * CRF for all sites on all stacks of given ENV.
+   * Execute drush command on all sites on all stacks of given ENV.
    *
    * @param string $env
    *   Environment code.
+   * @param string $drush_command
+   *   Drush Command.
    *
-   * @command local:crf
+   * @command cloud:drush
    *
-   * @description Do drush crf on all sites on all stacks of given ENV.
+   * @usage drush cloud:drush uat crf
+   *   Execute drush crf on all the sites of UAT environment.
+   *
+   * @description Execute drush command on all sites on all stacks of given ENV.
    */
-  public function crf(string $env) {
+  public function cloudDrush(string $env, string $drush_command) {
     if (!in_array($env, $this->envs)) {
       $this->yell('Invalid environment name.');
       return;
@@ -441,38 +448,45 @@ class LocalCommand extends BltTasks {
     foreach ($this->stacks as $stack) {
       $task = $this->taskDrush();
       $task->interactive(FALSE);
-      $task->drush('sfml crf')
+      $task->drush('sfl --fields')
         ->alias($stack . $env)
-        ->printOutput(TRUE);
-      $result = $task->run();
-      $this->io()->writeln($result->getMessage());
+        ->printOutput(FALSE);
+      $sites = $task->run();
+      foreach (explode(PHP_EOL, $sites->getMessage()) as $site) {
+        $task = $this->taskDrush();
+        $task->interactive(FALSE);
+        $task->drush($drush_command)
+          ->uri("${site}-${env}.factory.alshaya.com")
+          ->alias($stack . $env)
+          ->printOutput(FALSE);
+        $result = $task->run();
+        $this->io()->writeln($result->getMessage());
+      }
     }
   }
 
   /**
-   * UPDB for all sites on all stacks of given ENV.
+   * Add new QA account.
    *
-   * @param string $env
-   *   Environment code.
+   * @param string $mail
+   *   Mail address of QA.
    *
-   * @command local:updb
+   * @command local:add-qa-account
    *
-   * @description Do drush updb on all sites on all stacks of given ENV.
+   * @description Add QA account for creation on restaging on all non-prod envs.
    */
-  public function updb(string $env) {
-    if (!in_array($env, $this->envs)) {
-      $this->yell('Invalid environment name.');
-      return;
-    }
-
-    foreach ($this->stacks as $stack) {
-      $task = $this->taskDrush();
-      $task->interactive(FALSE);
-      $task->drush('sfml updb')
-        ->alias($stack . $env)
-        ->printOutput(TRUE);
-      $result = $task->run();
-      $this->io()->writeln($result->getMessage());
+  public function addQaAccount(string $mail) {
+    foreach ($this->envs as $env) {
+      foreach ($this->stacks as $stack) {
+        $this->io()->writeln("$env - $stack");
+        $task = $this->taskDrush();
+        $task->interactive(FALSE);
+        $task->drush('ssh "echo ' . $mail . ' >> ~/qa_accounts.txt"')
+          ->alias($stack . $env)
+          ->printOutput(TRUE);
+        $result = $task->run();
+        $this->io()->writeln($result->getMessage());
+      }
     }
   }
 

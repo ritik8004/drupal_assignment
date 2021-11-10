@@ -92,8 +92,10 @@ class AlshayaSearchApiFacetsManager {
    *   Prefix to use blank, plp, promo.
    * @param array $overrides
    *   Overrides if any.
+   * @param bool $index_status
+   *   Index status to use for block status.
    */
-  public function createFacet($field_key, $facet_source_id, $filter_bar_id, $prefix = '', array $overrides = []) {
+  public function createFacet($field_key, $facet_source_id, $filter_bar_id, $prefix = '', array $overrides = [], $index_status = TRUE) {
     $template_id = 'facets.facet.' . $field_key;
     // For example this will convert
     // search_api:views_block__alshaya_product_list__block_1 to
@@ -182,11 +184,14 @@ class AlshayaSearchApiFacetsManager {
     }
 
     $block_data['id'] = $formatted_id;
+    $block_data['status'] = $index_status;
     $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
     $block_data['settings']['label'] = $data['name'];
 
+    // Invoke alter hook to alter block_data from other modules.
+    \Drupal::moduleHandler()->alter('alshaya_search_api_facet_block_data', $block_data);
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
 
     // Translate facet block titles.

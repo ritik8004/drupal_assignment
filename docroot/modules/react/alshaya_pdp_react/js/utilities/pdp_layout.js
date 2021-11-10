@@ -7,14 +7,7 @@ import ReactDOM from 'react-dom';
  *
  * @param {*} selector
  */
-export const updateCart = (url, postData) => axios({
-  url,
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  data: JSON.stringify(postData),
-});
+export const updateCart = (postData) => window.commerceBackend.addUpdateRemoveCartItem(postData);
 
 /**
  * Get post data on add to cart.
@@ -225,6 +218,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let stockQty = '';
   let firstChild = '';
   let promotions = '';
+  let deliveryOptions = null;
+  let expressDeliveryClass = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -263,6 +258,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
     promotions = productInfo[skuItemCode].promotionsRaw;
+    deliveryOptions = productInfo[skuItemCode].deliveryOptions;
+    expressDeliveryClass = productInfo[skuItemCode].expressDeliveryClass;
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
@@ -278,6 +275,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = variantInfo.promotionsRaw;
+          deliveryOptions = variantInfo.deliveryOptions;
+          expressDeliveryClass = variantInfo.expressDeliveryClass;
           // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
@@ -338,6 +337,8 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
+    deliveryOptions,
+    expressDeliveryClass,
   };
 };
 
@@ -401,9 +402,8 @@ export const addToCartConfigurable = (
     ? productInfo[skuCode].variants[variantSelected].cart_title
     : productInfo[skuCode].variants[variantSelected].title;
   productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
-  const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
 
-  updateCart(cartEndpoint, postData).then(
+  updateCart(postData).then(
     (response) => {
       triggerAddToCart(
         response,
@@ -452,9 +452,7 @@ export const addToCartSimple = (
   productData.product_name = (context === 'main') ? productInfo[skuCode].cart_title : productInfo[skuCode].title;
   productData.image = productInfo[skuCode].cart_image;
 
-  const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
-
-  updateCart(cartEndpoint, postData).then(
+  updateCart(postData).then(
     (response) => {
       triggerAddToCart(
         response,
@@ -472,61 +470,4 @@ export const addToCartSimple = (
     .catch((error) => {
       Drupal.logJavascriptError('addToCartSimple', error, GTM_CONSTANTS.CART_ERRORS);
     });
-};
-
-/**
- * Close side modals when clicked anywhere on screen.
- */
-export const closeModalHelper = (overlayClass, containerClass, closeModalfn) => {
-  document.querySelector('body').addEventListener('click', (e) => {
-    let checkIfModalIsNotOpen;
-
-    // Skip if modal is not open.
-    if (Array.isArray(overlayClass)) {
-      checkIfModalIsNotOpen = [...overlayClass]
-        .reduce((cond, ent) => cond && !document.querySelector('body').classList.contains(ent), true);
-    } else {
-      checkIfModalIsNotOpen = !document.querySelector('body').classList.contains(overlayClass);
-    }
-
-    // Return if not open as logic should only affect open modal state.
-    if (checkIfModalIsNotOpen) {
-      return;
-    }
-
-    // Skip if clicked inside modal container.
-    let currEl = e.target;
-
-    const containerClassReducer = (cond, ent) => cond || currEl.classList.contains(ent);
-
-    // Check if the clicked element is inside container class/es.
-    while (!currEl.nodeName === 'BODY') {
-      let ifClickedInsideContainerClasses;
-
-      if (Array.isArray(containerClass)) {
-        ifClickedInsideContainerClasses = [...containerClass]
-          .reduce(containerClassReducer, false);
-      } else {
-        ifClickedInsideContainerClasses = currEl.classList.contains(containerClass);
-      }
-
-      // If user clicks inside container class then return w/o doing anything.
-      if (ifClickedInsideContainerClasses) {
-        return;
-      }
-
-      currEl = currEl.parentNode;
-    }
-
-    // If bubbling reaches top of DOM tree (body), trigger logic for closing modal/s.
-    if (currEl.nodeName === 'BODY') {
-      if (Array.isArray(overlayClass)) {
-        overlayClass.forEach((el) => {
-          document.querySelector('body').classList.remove(el);
-        });
-      } else {
-        closeModalfn(e);
-      }
-    }
-  });
 };

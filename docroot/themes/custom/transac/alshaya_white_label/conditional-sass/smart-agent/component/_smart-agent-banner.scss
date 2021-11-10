@@ -1,0 +1,41 @@
+.spc-messages-container.smart-agent-session-banner {
+  border: 2px dashed $smart-agent-banner-bg;
+  color: $smart-agent-banner-bg;
+
+  @include breakpoint($only-mobile) {
+    align-items: flex-start;
+  }
+
+  @include icon('infomation') {
+    font-size: 1.75rem;
+    margin-#{$left}: 1rem;
+  }
+
+  .spc-checkout-smart-agent-session-message {
+    width: 100%;
+    justify-content: space-between;
+
+    .action {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .action {
+        padding-top: 0.5rem;
+      }
+    }
+  }
+}
+
+.spc-messages-container {
+  &.smart-agent-session-banner,
+  &.smart-agent-share {
+    .spc-message {
+      padding-#{$left}: 0;
+    }
+  }
+}

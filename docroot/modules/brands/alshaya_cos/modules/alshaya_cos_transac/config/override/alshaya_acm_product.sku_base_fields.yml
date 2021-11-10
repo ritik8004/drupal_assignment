@@ -1,0 +1,46 @@
+fields:
+  color_family:
+    label: 'Colour'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  materials:
+    label: 'Materials'
+    type: 'string'
+    index: 1
+    facet: 1
+
+  gender:
+    label: 'Gender'
+    index: 1
+    facet: 1
+
+  article_style:
+    label: 'Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  composition:
+    label: 'Composition'
+    description: 'Product Composition.'
+    type: 'text_long'
+
+  washing_instructions:
+    label: 'Washing Instructions'
+    type: 'text_long'
+
+  article_warning:
+    label: 'Article Warning'
+    type: 'text_long'
+
+  rgb_color:
+    label: 'RGB color'
+    type: 'string'
+
+  assets:
+    label: 'Assets'
+    type: 'text_long'
+    translatable: 0

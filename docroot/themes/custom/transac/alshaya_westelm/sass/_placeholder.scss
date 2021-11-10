@@ -1,0 +1,17 @@
+%btn {
+  text-transform: uppercase !important;
+  font-size: 0.875rem;
+}
+
+%page-title {
+  text-transform: uppercase;
+  font-size: 1.125rem;
+
+  @include breakpoint($tablet) {
+    font-size: 1.375rem;
+  }
+
+  @include breakpoint($desktop) {
+    font-size: 1.25rem;
+  }
+}

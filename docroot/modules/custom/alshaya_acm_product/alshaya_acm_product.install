@@ -9,6 +9,216 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
+use Drupal\user\Entity\Role;
+use Drupal\block\BlockInterface;
+use Drupal\block\Entity\Block;
+use Drupal\search_api\Item\Field;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Creating Delivery Ways facet field under
+ * product Search API Index if does not exist.
+ */
+function alshaya_acm_product_update_8076() {
+  // Search API Index storage object.
+  $index_storage = \Drupal::entityTypeManager()
+    ->getStorage('search_api_index');
+  // Product Search API Index.
+  $index = $index_storage->load('product');
+
+  // Check if attr_delivery_ways facet field not added to index.
+  if (!array_key_exists('attr_delivery_ways', $index->getFields())) {
+    // Index the attr_delivery_ways field.
+    $field_delivery_ways = new Field($index, 'attr_delivery_ways');
+    $field_delivery_ways->setLabel('SKUs » SKU Reference » Different Delivery Types');
+    $field_delivery_ways->setDatasourceId('entity:node');
+    $field_delivery_ways->setPropertyPath('field_skus:entity:attr_delivery_ways');
+    $field_delivery_ways->setType('string');
+
+    $index->addField($field_delivery_ways);
+
+    $index->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new settings for swatch attribute images roles and
+ * for excluding swatch attributes from PLP pages.
+ */
+function alshaya_acm_product_update_8075() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Re-saving the stock resource to moved outside mobile app.
+ * Add new settings for local storage cache time for product data.
+ */
+function alshaya_acm_product_update_8074() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add attr_delivery_ways to facets in algolia.
+ */
+function alshaya_acm_product_update_8073() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+  // Adding fields in search_api index
+  $manager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+  $manager->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+
+  $blocks = [
+    'deliveryways' => 'alshaya_search_facets_block_all',
+    'promodeliveryways' => 'alshaya_promo_facets_block_all',
+    'plpdeliveryways' => 'alshaya_plp_facets_block_all',
+    'productlistdeliveryways' => 'alshaya_productlist_facets_block_all',
+  ];
+  foreach ($blocks as $facet_block_id => $all_filter_block_id) {
+    // Add string translation for the block label.
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.' . $facet_block_id)
+      ->set('settings.label', 'نوع التوصيل')
+      ->save();
+  }
+  $facet_ids = [
+    'plp_delivery_ways',
+    'promo_delivery_ways',
+    'delivery_ways',
+  ];
+  foreach ($facet_ids as $facet_id) {
+    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+      ->set('widget.type', 'delivery_ways')
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new Product Linked SKU resource v2.
+ */
+function alshaya_acm_product_update_8072() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+      'rest.resource.product_linked_skus_v2'
+    ],
+    'alshaya_acm_product',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.2.0] Add the config value for the color attribute display.
+ */
+function alshaya_acm_product_update_8071() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+    $manager->updateConfigs([
+      'alshaya_acm_product.display_settings',
+    ],
+      'alshaya_acm_product',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING,
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.2.0] Delete the configs for /skus/list API.
+ */
+function alshaya_acm_product_update_8070() {
+  // Deleting the memory limit policy for /skus/list API.
+  \Drupal::configFactory()->getEditable('memory_limit_policy.memory_limit_policy.path_based_memory')->delete();
+  // Deleting the sku_images rest config.
+  \Drupal::configFactory()->getEditable('rest.resource.sku_images')->delete();
+  // Disable the resource related permissions.
+  $role = Role::load('alshaya_magento_consumer');
+  if ($role->hasPermission('restful post sku_images')) {
+    $role->revokePermission('restful post sku_images');
+  }
+  $role->save();
+}
+/**
+ * Implements hook_update_N().
+ *
+ * Add new Product Status resource.
+ */
+function alshaya_acm_product_update_8069() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'rest.resource.product_status',
+  ],
+    'alshaya_acm_product',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+
+  // Rebuild router.
+  \Drupal::service('router.builder')->rebuild();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change in a local storage cache time.
+ */
+function alshaya_acm_product_update_8068() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    $manager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['local_storage_cache_time']]
+  );
+}
 
 /**
  * Implements hook_update_N().
@@ -292,7 +502,7 @@ function alshaya_acm_product_update_8053() {
     while ($row = $result->fetchAssoc()) {
       $fid = $row['fid'];
       // Delete the file now that its references are deleted.
-      file_delete_multiple([$fid]);
+      \Drupal::entityTypeManager()->getStorage('file')->load($fid)->delete();
     }
   }
 }
@@ -1278,7 +1488,7 @@ function alshaya_acm_product_update_8002() {
   $weight = 0;
   foreach ($option_sets as $options) {
     foreach ($options['options'] as $key => $value) {
-      db_query(
+      \Drupal::database()->query(
         'UPDATE {taxonomy_term_field_data} AS ttfd
 INNER JOIN {taxonomy_term__field_sku_attribute_code} ttfsac ON ttfsac.entity_id = ttfd.tid
 INNER JOIN {taxonomy_term__field_sku_option_id} ttfsoi ON ttfsoi.entity_id = ttfd.tid
