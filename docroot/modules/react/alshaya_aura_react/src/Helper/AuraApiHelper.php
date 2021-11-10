@@ -139,13 +139,16 @@ class AuraApiHelper {
 
       // Getting `code` and `short_value` keys for tier types.
       if ($value === AuraDictionaryApiConstants::APC_TIER_TYPES) {
-        $data = array_column($response['items'], 'short_value', 'code');
+        $data = [];
+        foreach ($response['items'] as $values) {
+          $data['value'][$values['code']] = $values['value'];
+          $data['shortValue'][$values['code']] = $values['short_value'];
+        }
       }
 
       $auraConfigs[$value] = $data;
       $this->cache->set($cache_key, $auraConfigs[$value], Cache::PERMANENT);
     }
-
     return $auraConfigs;
   }
 

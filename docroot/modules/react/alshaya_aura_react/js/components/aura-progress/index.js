@@ -125,7 +125,7 @@ class AuraProgressWrapper extends React.Component {
           userPoints={userPoints}
           nextTierThreshold={nextTierThreshold}
           showDotClass={showDotClass}
-          nextTierLabel={getAllAuraTier()[nextTierLevel]}
+          nextTierLabel={getAllAuraTier('shortValue')[nextTierLevel]}
           progressRatio={progressRatio}
         />
         <PointsExpiryMessage

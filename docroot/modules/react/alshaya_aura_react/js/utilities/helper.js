@@ -44,11 +44,11 @@ function getAllAuraStatus() {
 /**
  * Helper function to get all AURA Tiers.
  */
-function getAllAuraTier() {
+function getAllAuraTier(value) {
   let allAuraTier = {};
   if (typeof drupalSettings.aura !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura, 'allAuraTier')) {
-    allAuraTier = drupalSettings.aura.allAuraTier || {};
+    allAuraTier = drupalSettings.aura.allAuraTier[value] || {};
   }
 
   return allAuraTier;
