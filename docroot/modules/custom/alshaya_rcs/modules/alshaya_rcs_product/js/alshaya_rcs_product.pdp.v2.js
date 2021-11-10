@@ -646,8 +646,13 @@ async function getProductLabelsData (sku) {
     productIds[products[sku].id] = sku;
   });
 
-  const labels = await globalThis.rcsPhCommerceBackend
-                                              .getData('labels', { productIds: Object.keys(productIds) }, null, drupalSettings.path.currentLanguage, '')
+  const labels = await globalThis.rcsPhCommerceBackend.getData(
+    'labels',
+    { productIds: Object.keys(productIds) },
+    null,
+    drupalSettings.path.currentLanguage,
+    ''
+  );
 
   if (Array.isArray(labels) && labels.length) {
     labels.forEach(function (productLabels) {
@@ -673,46 +678,19 @@ async function getProductLabelsData (sku) {
  * @param {string} mainSku
  *   The main sku for the product being displayed.
  */
-function renderProductLabelsData(product, sku, mainSku) {
+function renderProductLabels(product, sku, mainSku) {
   getProductLabelsData(sku).then(function (labelsData) {
-    // Do nothing if lables data is empty.
-    if (!Drupal.hasValue(labelsData)) {
-      return;
-    }
-
-    const data = {
-      topRight: [],
-      topLeft: [],
-      bottomRight: [],
-      bottomLeft: [],
-      sku: sku,
-      mainSku: mainSku,
-      type: 'pdp',
-    };
-
-    labelsData.forEach(function (label) {
-      if (!Drupal.hasValue(label.image)) {
-        return;
-      }
-
-      switch (label.position) {
-        case 'top-right':
-          data.topRight.push(label.image);
-          break;
-        case 'top-left':
-          data.topLeft.push(label.image);
-          break;
-        case 'bottom-right':
-          data.bottomRight.push(label.image);
-          break;
-        case 'bottom-left':
-          data.bottomLeft.push(label.image);
-          break;
-      }
-    });
-
-    const labelsMarkup = handlebarsRenderer.render('gallery.product.product_labels', {labels: data});
-    jQuery('.product-labels-custom', product).html(labelsMarkup);
+    globalThis.rcsPhRenderingEngine.render(
+      drupalSettings,
+      'product-labels',
+      {
+        sku,
+        mainSku,
+        type: 'pdp',
+        labelsData,
+        product,
+      },
+    );
   });
 }
 
@@ -774,7 +752,12 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     return;
   }
 
-  renderProductLabelsData(product, sku, mainSku);
+  // Here we render the product labels asynchrously.
+  // If we try to do it synchronously, then javascript moves on to other tasks
+  // while the labels are fetched from the API.
+  // This causes discrepancy in the flow, since in V1 the updateGallery()
+  // executes completely in one flow.
+  renderProductLabels(product, sku, mainSku);
 
   if (jQuery(product).find('.gallery-wrapper').length > 0) {
     // Since matchback products are also inside main PDP, when we change the variant

@@ -1,8 +1,9 @@
 {{#*inline "getLabels"}}
   <div class="labels-container {{ positionClass }}">
     {{#each position as |item|}}
-    {{!-- @todo add title and alt --}}
-      <div class="label"><img src="{{item}}"/></div>
+      <div class="label">
+        <img src="{{item.url}}" loading="lazy" alt="{{item.name}}" title="{{item.name}}"/>
+      </div>
     {{/each}}
   </div>
 {{/inline}}
