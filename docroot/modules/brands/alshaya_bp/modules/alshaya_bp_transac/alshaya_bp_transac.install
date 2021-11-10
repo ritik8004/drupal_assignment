@@ -190,28 +190,28 @@ function alshaya_bp_transac_update_8010() {
  * Update category term path aliases.
  */
 function alshaya_bp_transac_update_8009() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $configs = ['pathauto.pattern.product_category_pathauto'];
-  $manager->updateConfigs($configs, 'alshaya_acm_product_category');
+ $manager = \Drupal::service('alshaya_config.manager');
+ $configs = ['pathauto.pattern.product_category_pathauto'];
+ $manager->updateConfigs($configs, 'alshaya_acm_product_category');
 
-  // Now run batch process to update the term aliases.
-  // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
-  $batch = [
-    'title' => t('Bulk updating URL aliases'),
-    'operations' => [
-      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
-      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
-        [
-          'canonical_entities:taxonomy_term',
-          'all',
-        ],
-      ],
-    ],
-    'finished' => '_alshaya_bp_transac_term_alias_update_batch_finished',
-    'progressive' => FALSE,
-  ];
+ // Now run batch process to update the term aliases.
+ // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
+ $batch = [
+   'title' => t('Bulk updating URL aliases'),
+   'operations' => [
+     ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
+     ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
+       [
+         'canonical_entities:taxonomy_term',
+         'all',
+       ],
+     ],
+   ],
+   'finished' => '_alshaya_bp_transac_term_alias_update_batch_finished',
+   'progressive' => FALSE,
+ ];
 
-  batch_set($batch);
+ batch_set($batch);
 }
 
 /**
