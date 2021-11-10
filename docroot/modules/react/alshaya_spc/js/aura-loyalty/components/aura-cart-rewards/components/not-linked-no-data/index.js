@@ -45,7 +45,7 @@ class AuraNotLinkedNoData extends React.Component {
                 className="spc-join-aura-link"
                 onClick={() => this.openOTPModal()}
               >
-                {Drupal.t('Sign up now')}
+                {Drupal.t('Join now')}
               </a>
               <ToolTip enable question>{ getStringMessage('checkout_earn_and_redeem_tooltip') }</ToolTip>
             </div>
