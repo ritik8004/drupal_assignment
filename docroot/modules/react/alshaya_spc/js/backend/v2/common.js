@@ -345,7 +345,7 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = 400;
     [response.data.error_message] = apiResponse.data.response_message;
-    logApiResponse('info', response.data.error_message, apiResponse.status, response.data.error_code);
+    logApiResponse('info', JSON.stringify(response.data.response_message), apiResponse.status, response.data.error_code);
   }
 
   // Assign response data as is if no error.
