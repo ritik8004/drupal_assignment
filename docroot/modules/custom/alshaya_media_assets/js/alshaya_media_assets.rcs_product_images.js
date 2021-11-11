@@ -1,5 +1,5 @@
 /**
- * Listens to the 'alshayaRcsUpdateResults' event and updates the result object
+ * Listens to the 'rcsUpdateResults' event and updates the result object
  * with assets data.
  */
  (function () {
@@ -105,7 +105,7 @@
     });
   }
 
-  RcsEventManager.addListener('alshayaRcsUpdateResults', (e) => {
+  RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // We do not want further processing:
     // 1. If page is not a product page
     // 2. If the result object in the event data is undefined
