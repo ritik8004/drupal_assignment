@@ -187,7 +187,7 @@
           }}`
       });
 
-      response = rcsCommerceBackend.invokeApiAsync(request);
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
       // Update the response variable based on response.
       response = response.data.promoDynamicLabelProduct;
     }
