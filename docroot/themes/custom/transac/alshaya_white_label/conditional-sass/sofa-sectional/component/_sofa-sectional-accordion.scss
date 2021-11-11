@@ -1,34 +1,37 @@
-.c-pdp .sku-base-form {
-  .sofa-section-accordion {
-    label {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      padding-#{$left}: 0.625rem;
-      padding-#{$right}: 2.5rem;
-      padding-top: 0.625rem;
-      padding-bottom: 0.625rem;
-      text-transform: capitalize;
-      cursor: pointer;
+.c-pdp,
+.acq-content-product-modal {
+  .sku-base-form {
+    .sofa-section-accordion {
+      label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding-#{$left}: 0.625rem;
+        padding-#{$right}: 2.5rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        text-transform: capitalize;
+        cursor: pointer;
 
-      &.active {
-        .config-number-wrapper {
-          .config-index-number {
-            color: $sofa-sectional-config-item-bg;
-            background: $sofa-sectional-active-accordion;
-            border: 1px solid $sofa-sectional-active-accordion;
+        &.active {
+          .config-number-wrapper {
+            .config-index-number {
+              color: $sofa-sectional-config-item-bg;
+              background: $sofa-sectional-active-accordion;
+              border: 1px solid $sofa-sectional-active-accordion;
+            }
+          }
+
+          .config-name {
+            margin-bottom: 0.3125rem;
           }
         }
 
-        .config-name {
-          margin-bottom: 0.3125rem;
-        }
-      }
-
-      &:not(.active) {
-        .config-name {
-          font-size: 0.875rem;
+        &:not(.active) {
+          .config-name {
+            font-size: 0.875rem;
+          }
         }
       }
     }
@@ -90,7 +93,7 @@
     }
 
     .config-value {
-      font-weight: 600;
+      font-family: $alshaya-bold;
       color: $sofa-sectional-title;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -159,6 +162,10 @@
           background: linear-gradient(to bottom right, $sofa-sectional-config-item-bg 49%, $accordion_border 49%, $accordion_border 51%, $sofa-sectional-config-item-bg 51%);
           background-color: $sofa-sectional-config-item-bg;
           pointer-events: none;
+        }
+
+        .swatch-color {
+          word-break: break-word;
         }
 
         @include breakpoint($only-mobile) {

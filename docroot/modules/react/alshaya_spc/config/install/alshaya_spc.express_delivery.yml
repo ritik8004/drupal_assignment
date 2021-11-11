@@ -5,3 +5,5 @@ status: false
 delivery_options_order:
   - same_day_delivery
   - express_delivery
+same_day_delivery_label: 'Same Day Delivery Available'
+express_delivery_label: 'Express Delivery Available'

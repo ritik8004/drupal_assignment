@@ -45,7 +45,7 @@ export default class CompletePurchase extends React.Component {
   /**
    * Place order.
    */
-  placeOrder = (e) => {
+  placeOrder = async (e) => {
     e.preventDefault();
     const { cart, validateBeforePlaceOrder } = this.props;
 
@@ -89,7 +89,7 @@ export default class CompletePurchase extends React.Component {
 
     try {
       const validated = (isPseudoPaymentMedthod === false)
-        ? validateBeforePlaceOrder()
+        ? await validateBeforePlaceOrder()
         : true;
 
       if (validated === false) {

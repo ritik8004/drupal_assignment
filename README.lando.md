@@ -31,6 +31,11 @@ separately._
 * The lando package will have the compatible docker as well inside it.
 * Post installation, follow the recommendations in the [Performance](#Performance) section below.
 
+Add the below line in ~/.bashrc.
+
+  * Linux user: add 'export LANDO_SSH_AUTH_SOCK="${SSH_AUTH_SOCK}"' at the end of your ~/.bashrc:
+  * Mac user: MacOS specific path is here as the variable default value, nothing to do.
+
 All steps are executed on your host OS.
 
   * `lando start` - this will configure and set up your containers and services.

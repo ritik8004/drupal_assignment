@@ -78,6 +78,7 @@ const PdpLayout = () => {
     freeGiftMessage,
     freeGiftPromoType,
     deliveryOptions,
+    expressDeliveryClass,
   } = productValues;
 
   const emptyRes = (
@@ -238,11 +239,11 @@ const PdpLayout = () => {
           <ConditionalView condition={isExpressDeliveryEnabled()
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >
-            <div className="express-delivery">
+            <div className={`express-delivery ${expressDeliveryClass}`}>
               {deliveryOptions && deliveryOptions !== null
                 && Object.keys(deliveryOptions).length > 0
                 && Object.keys(deliveryOptions).map((option) => (
-                  <div key={option} className={`express-delivery-text ${option}`}>
+                  <div key={option} className={`express-delivery-text ${deliveryOptions[option].status}`}>
                     <span>{deliveryOptions[option].label}</span>
                   </div>
                 ))}

@@ -3,5 +3,9 @@
     .spc-checkout-confirmation-title {
       font-weight: 600;
     }
+
+    .spc-print-header--logo {
+      padding-#{$right}: 2.5rem;
+    }
   }
 }

@@ -1,7 +1,5 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import _isEmpty from 'lodash/isEmpty';
-import _findKey from 'lodash/findKey';
 import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
@@ -28,6 +26,7 @@ import {
 } from '../../../utilities/cnc_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -120,7 +119,7 @@ export default class EmptyDeliveryText extends React.Component {
     // multiple requests are in progress.
     this.openStoreRequests.push({ coords, defaultCenter });
 
-    if (_isEmpty(coords)) {
+    if (!hasValue(coords)) {
       window.fetchStore = 'finished';
       return;
     }
@@ -157,7 +156,7 @@ export default class EmptyDeliveryText extends React.Component {
         // On two concurrent requests, update storelist only for user's location.
         if (openStoreRequests.length > 1 && response.config) {
           const currentCoords = response.config.url.split('/').slice(-2).map((point) => parseFloat(point));
-          const rquestIndex = _findKey(openStoreRequests, {
+          const rquestIndex = _.findKey(openStoreRequests, {
             coords: {
               lat: currentCoords[0],
               lng: currentCoords[1],

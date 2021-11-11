@@ -36,6 +36,16 @@
           return;
         }
 
+        // Update sameday and express delivery labels on variant change.
+        if (drupalSettings.expressDelivery !== 'undefined' && drupalSettings.expressDelivery.enabled) {
+          for (var option in variantInfo.delivery_options) {
+            $(node).find('.' + option).removeClass('active in-active');
+            $(node).find('.' + option).addClass(variantInfo.delivery_options[option].status);;
+          }
+          $(node).find('.express-delivery').removeClass('active in-active');
+          $(node).find('.express-delivery').addClass(variantInfo.express_delivery_class);
+        }
+
         var productChanged = false;
         if ($(node).attr('data-vmode') === 'full') {
           if (window.location.pathname !== variantInfo.url[$('html').attr('lang')]) {

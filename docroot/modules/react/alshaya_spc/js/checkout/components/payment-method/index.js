@@ -42,8 +42,9 @@ export default class PaymentMethod extends React.Component {
     setUpapiApplePayCofig();
   }
 
-  validateBeforePlaceOrder = () => {
+  validateBeforePlaceOrder = async () => {
     const { method } = this.props;
+
     // Do additional process for some payment methods.
     if (method.code === 'checkout_com') {
       return this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
@@ -60,6 +61,22 @@ export default class PaymentMethod extends React.Component {
     if (method.code === 'checkout_com_upapi_applepay') {
       return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
     }
+
+    // Now update the payment method data in the cart.
+    // This is done so that if the site has switched from V1 to V2 for the
+    // commer backend and if a cart has payment method like checkoutcom KNET
+    // set, then the redirect url is set to the V1 middleware route, which is
+    // incorrect. So we update the payment method so that the proper V2 redirect
+    // URL is set.
+    const analytics = Drupal.alshayaSpc.getGAData();
+    const data = {
+      payment: {
+        method: method.code,
+        additional_data: {},
+        analytics,
+      },
+    };
+    await addPaymentMethodInCart('update payment', data);
 
     return true;
   };
@@ -202,7 +219,7 @@ export default class PaymentMethod extends React.Component {
 
             <label className="radio-sim radio-label">
               {method.name}
-              <ConditionalView condition={method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
+              <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
                 <div className="spc-payment-method-desc">
                   <div className="desc-content">
                     <CodSurchargeInformation
@@ -225,7 +242,7 @@ export default class PaymentMethod extends React.Component {
             </div>
           </ConditionalView>
 
-          <ConditionalView condition={isSelected && method.code === 'cashondelivery' && cart.cart.surcharge.amount > 0}>
+          <ConditionalView condition={isSelected && method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
             <div className={`payment-method-bottom-panel ${method.code}`}>
               <div className="cod-surcharge-desc">
                 <CodSurchargeInformation
