@@ -26,6 +26,7 @@ $query->condition('n.type', 'product_list');
 $nids = $query->execute()->fetchCol();
 
 if (empty($nids)) {
+  $logger->notice('No nodes found for brand product options.');
   return;
 }
 
@@ -34,11 +35,14 @@ $count = 0;
 foreach ($nids as $nid) {
   try {
     $node = $node_storage->load($nid);
+    // Checking for english language nodes which has title in arabic.
+    // Delete all those nodes as they are duplicate and not required.
     if ($node instanceof NodeInterface && $node->language()->getId() === 'en' && preg_match("/\p{Arabic}/u", $node->getTitle())) {
       $node->delete();
       $count++;
-      $logger->notice('Deleted product option node: @nid', [
+      $logger->notice('Deleted product option node: @nid with arabic title: @title', [
         '@nid' => $nid,
+        '@title' => $node->getTitle(),
       ]);
     }
   }
