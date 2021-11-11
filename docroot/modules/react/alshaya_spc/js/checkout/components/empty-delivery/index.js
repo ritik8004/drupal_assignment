@@ -1,7 +1,5 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import _isEmpty from 'lodash/isEmpty';
-import _findKey from 'lodash/findKey';
 import Loading from '../../../utilities/loading';
 import {
   checkoutAddressProcess,
@@ -13,6 +11,7 @@ import {
   getLocationAccess,
   removeFullScreenLoader,
   showFullScreenLoader,
+  getCnCStoresLimit,
 } from '../../../utilities/checkout_util';
 import ClickCollectContainer from '../click-collect';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
@@ -22,6 +21,12 @@ import { getUserLocation } from '../../../utilities/map/map_utils';
 import dispatchCustomEvent from '../../../utilities/events';
 import WithModal from '../with-modal';
 import { makeFullName } from '../../../utilities/cart_customer_util';
+import {
+  getCncSectionDescription,
+} from '../../../utilities/cnc_util';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -69,7 +74,7 @@ export default class EmptyDeliveryText extends React.Component {
     const { fetchStoresHelper } = this;
     setTimeout(() => {
       if (window.fetchStore === 'idle') {
-        fetchStoresHelper(getDefaultMapCenter(), true);
+        fetchStoresHelper(getDefaultMapCenter(), true, getCnCStoresLimit());
       }
     }, 200);
 
@@ -107,14 +112,14 @@ export default class EmptyDeliveryText extends React.Component {
   /**
    * Fetch click n collect stores and update store list.
    */
-  fetchStoresHelper = (coords, defaultCenter = false) => {
+  fetchStoresHelper = (coords, defaultCenter = false, cncStoresLimit = 0) => {
     // State from context, whether the modal is open or not.
     const { clickCollectModal, showOutsideCountryError, cartId } = this.context;
     // Add all requests in array to update storeLists only once when
     // multiple requests are in progress.
     this.openStoreRequests.push({ coords, defaultCenter });
 
-    if (_isEmpty(coords)) {
+    if (!hasValue(coords)) {
       window.fetchStore = 'finished';
       return;
     }
@@ -128,6 +133,7 @@ export default class EmptyDeliveryText extends React.Component {
     const args = {
       coords,
       cartId,
+      cncStoresLimit,
     };
     const list = createFetcher(fetchClicknCollectStores).read(args);
 
@@ -148,9 +154,9 @@ export default class EmptyDeliveryText extends React.Component {
         }
 
         // On two concurrent requests, update storelist only for user's location.
-        if (openStoreRequests.length > 1) {
+        if (openStoreRequests.length > 1 && response.config) {
           const currentCoords = response.config.url.split('/').slice(-2).map((point) => parseFloat(point));
-          const rquestIndex = _findKey(openStoreRequests, {
+          const rquestIndex = _.findKey(openStoreRequests, {
             coords: {
               lat: currentCoords[0],
               lng: currentCoords[1],
@@ -252,6 +258,20 @@ export default class EmptyDeliveryText extends React.Component {
       };
     }
 
+    const areaSelected = getDeliveryAreaStorage();
+    if (isExpressDeliveryEnabled() && areaSelected !== null) {
+      const defaultArea = {};
+      Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
+        if (key === 'administrative_area') {
+          defaultArea[val.key] = areaSelected.value.area;
+        } else if (key === 'area_parent') {
+          // Handling for parent area.
+          defaultArea[val.key] = areaSelected.value.governate;
+        }
+      });
+      defaultVal = defaultArea;
+    }
+
     const popupClassName = customerHasAddress(mainCart)
       ? getAddressPopupClassName()
       : 'spc-address-form-guest';
@@ -263,7 +283,7 @@ export default class EmptyDeliveryText extends React.Component {
             <div onClick={() => this.openModal(triggerOpenModal)} className="spc-checkout-empty-delivery-text">
               <span>
                 {deliveryType === 'click_and_collect'
-                  ? Drupal.t('select your preferred collection store')
+                  ? getCncSectionDescription()
                   : Drupal.t('please add your contact details and address.')}
               </span>
             </div>

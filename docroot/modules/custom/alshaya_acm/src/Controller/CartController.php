@@ -116,7 +116,7 @@ class CartController extends ControllerBase {
       }
     }
     else {
-      drupal_set_message($this->t('Oops, something went wrong.'), 'error');
+      $this->messenger()->addMessage($this->t('Oops, something went wrong.'), 'error');
 
       if ($js === 'ajax') {
         $response = new AjaxResponse();

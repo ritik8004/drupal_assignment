@@ -2,6 +2,7 @@ name: Alshaya The Body Shop
 type: theme
 description: 'Theme for The Body Shop.'
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: alshaya_white_label
 alshaya_theme_type: transac
 
@@ -35,7 +36,97 @@ libraries-override:
       theme:
         css/ltr-print.css: css/rtl-print.css
 
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
+
   alshaya_white_label/algolia_search:
     css:
       theme:
         css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
+
+  alshaya_white_label/spc-utils:
+    css:
+      theme:
+        css/conditional-sass/spc-utils/spc-utils.ltr.css: css/conditional-sass/spc-utils/spc-utils.ltr.css
+
+  alshaya_white_label/spc-cart:
+    css:
+      theme:
+        css/conditional-sass/spc-cart/spc-cart.ltr.css: css/conditional-sass/spc-cart/spc-cart.ltr.css
+
+  alshaya_white_label/spc-login:
+    css:
+      theme:
+        css/conditional-sass/spc-login/spc-login.ltr.css: css/conditional-sass/spc-login/spc-login.ltr.css
+
+  alshaya_white_label/spc-checkout:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout/spc-checkout.ltr.css: css/conditional-sass/spc-checkout/spc-checkout.ltr.css
+
+  alshaya_white_label/spc-checkout-confirmation:
+    css:
+      theme:
+        css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css
+
+  alshaya_white_label/store_finder:
+    css:
+      theme:
+        css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/tooltip:
+    css:
+      theme:
+        css/conditional-sass/tooltip/tooltip.ltr.css: css/conditional-sass/tooltip/tooltip.ltr.css
+
+  alshaya_white_label/promo-blocks:
+    css:
+      theme:
+        css/conditional-sass/promo-blocks/promo-blocks.ltr.css: css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+
+  alshaya_white_label/plp-add-to-cart:
+    css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css
+
+  alshaya_white_label/advanced-page:
+    css:
+      theme:
+        css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css
+
+  alshaya_white_label/smart-agent:
+    css:
+      theme:
+        css/conditional-sass/smart-agent/smart-agent.ltr.css: css/conditional-sass/smart-agent/smart-agent.ltr.css
+
+  alshaya_white_label/my-account:
+    css:
+      theme:
+        css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
+  alshaya_white_label/alshaya-vat-certificate:
+    css:
+      theme:
+        css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css
+
+  alshaya_white_label/sameday-express-delivery:
+    css:
+      theme:
+        css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
+
+  alshaya_white_label/checkout-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css
+
+  alshaya_white_label/checkout-confirmation-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css

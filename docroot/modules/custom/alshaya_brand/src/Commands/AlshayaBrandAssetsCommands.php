@@ -266,33 +266,55 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
     // Get list of unused assets common in all the markets of a brand.
     $unused_brand_assets_common = call_user_func_array('array_intersect', $unused_brand_assets);
+
+    // First delete the files which are marked as unused for all the domains.
+    foreach (array_chunk($unused_brand_assets_common, $batch_size, TRUE) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'deleteUnusedBrandAssetsAllMarketsChunk'],
+        [$chunk, $dry_run],
+      ];
+    }
+
     // Get list of unused assets not common to all markets.
     $unused_brand_assets_diff = array_diff($unused_brand_assets_merged, $unused_brand_assets_common);
 
-    if (!empty($unused_brand_assets_diff)) {
-      foreach ($unused_brand_assets as $domain => $assets) {
-        $uri = [];
-        foreach ($unused_brand_assets_diff as $asset) {
-          if (in_array($asset, $assets)) {
-            continue;
-          }
-          else {
-            $uri[] = $asset;
-          }
+    // Below we try to check if brand asset which was not returned in unused
+    // list is actually used or not there at all. It is possible a product was
+    // never published on a particular market and hence there is no trace of
+    // it to even return in unused list.
+    foreach ($unused_brand_assets ?? [] as $domain => $assets) {
+      $uris_to_check = [];
+      foreach ($unused_brand_assets_diff as $asset) {
+        // Do not check for an asset if it is already marked unused for
+        // this domain.
+        if (in_array($asset, $assets)) {
+          continue;
         }
-        if (!empty($uri)) {
-          $uris = implode(',', $uri);
 
-          // Batch operation to check if brand asset entity exists.
-          $batch['operations'][] = [
-            [__CLASS__, 'checkBrandAssetFileForDomain'],
-            [$domain, $uris],
-          ];
-        }
+        $uris_to_check[] = $asset;
+      }
+
+      if (empty($uris_to_check)) {
+        // Found no URI to check for this domain.
+        continue;
+      }
+
+      // Check for URIs in batches.
+      foreach (array_chunk($uris_to_check, $batch_size, TRUE) as $chunk) {
+        $uris = implode(',', $chunk);
+
+        // Batch operation to check if brand asset entity exists.
+        $batch['operations'][] = [
+          [__CLASS__, 'checkBrandAssetFileForDomain'],
+          [$domain, $uris],
+        ];
       }
     }
 
-    foreach (array_chunk($unused_brand_assets_merged, $batch_size, TRUE) as $chunk) {
+    // Process the assets which were not marked unused for all the domains.
+    // We have additional check based on checkBrandAssetFileForDomain inside
+    // deleteUnusedBrandAssetsAllMarketsChunk to not remove if file is in use.
+    foreach (array_chunk($unused_brand_assets_diff, $batch_size, TRUE) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'deleteUnusedBrandAssetsAllMarketsChunk'],
         [$chunk, $dry_run],
@@ -321,6 +343,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    */
   public static function deleteUnusedBrandAssetsAllMarketsChunk(array $files, $dry_run, &$context) {
     $logger = \Drupal::logger('AlshayaBrandAssetsCommands');
+
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');
 
@@ -328,12 +351,29 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
       if (in_array($uri, $context['results'])) {
         continue;
       }
+
       $logger->notice('Delete file with uri @uri', [
         '@uri' => $uri,
       ]);
 
       if (!$dry_run) {
-        $file_system->delete($uri);
+        try {
+          if (strpos($uri, 's3://') !== FALSE) {
+            // @todo use stream_wrapper.s3fs service and unlink.
+            $logger->notice('Not deleting S3 file as of now as pending dev. URI: @uri.', [
+              '@uri' => $uri,
+            ]);
+
+            continue;
+          }
+
+          $file_system->delete($uri);
+        }
+        catch (\Exception $e) {
+          $logger->warning('Failed to delete the file with uri: @uri, exception: @message.', [
+            '@uri' => $uri,
+          ]);
+        }
       }
     }
   }
@@ -443,6 +483,11 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *   Batch context.
    */
   public static function checkBrandAssetFileForDomain(string $domain, string $uris, &$context) {
+    \Drupal::logger('AlshayaBrandAssetsCommands')->notice('Checking Brand Asset File for Domain: @domain, uris: @uris', [
+      '@domain' => $domain,
+      '@uris' => $uris,
+    ]);
+
     $processManager = ProcessManager::createDefault();
     $command = sprintf('drush -l %s check-brand-asset-file-entity --uris="%s"', $domain, $uris);
     $get_file_usage = $processManager->process($command);

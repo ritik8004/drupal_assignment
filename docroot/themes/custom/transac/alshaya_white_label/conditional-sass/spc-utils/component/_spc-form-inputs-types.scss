@@ -22,6 +22,7 @@
   margin-bottom: 1.5rem;
 }
 
+// Type = Select.
 .spc-type-select {
   margin-bottom: 2rem;
 
@@ -51,6 +52,11 @@
       margin-top: 0.375rem;
     }
   }
+
+  label {
+    font-size: 0.75rem;
+    color: $spc-input-label;
+  }
 }
 
 // Type = Text.
@@ -71,14 +77,6 @@
   input:focus ~ label,
   input.focus ~ label {
     @include spc-placeholder-active;
-  }
-}
-
-// Type = Select.
-.spc-type-select {
-  label {
-    font-size: 0.75rem;
-    color: $spc-input-label;
   }
 }
 

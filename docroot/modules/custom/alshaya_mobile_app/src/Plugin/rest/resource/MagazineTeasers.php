@@ -12,6 +12,7 @@ use Drupal\rest\ResourceResponse;
 use Drupal\views\Views;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Provides a resource to get magazine teasers.
@@ -55,6 +56,13 @@ class MagazineTeasers extends ResourceBase {
   protected $entityRepository;
 
   /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -75,6 +83,8 @@ class MagazineTeasers extends ResourceBase {
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   Current time service.
    */
 
   /**
@@ -89,7 +99,8 @@ class MagazineTeasers extends ResourceBase {
     MobileAppUtility $mobile_app_utility,
     RequestStack $request_stack,
     LanguageManagerInterface $language_manager,
-    EntityRepositoryInterface $entity_repository
+    EntityRepositoryInterface $entity_repository,
+    DateFormatterInterface $date_formatter
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
@@ -97,6 +108,7 @@ class MagazineTeasers extends ResourceBase {
     $this->languageManager = $language_manager;
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
     $this->entityRepository = $entity_repository;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -112,7 +124,8 @@ class MagazineTeasers extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('request_stack'),
       $container->get('language_manager'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('date.formatter')
     );
   }
 
@@ -158,7 +171,7 @@ class MagazineTeasers extends ResourceBase {
         $response_data['title'] = $entity->getTitle();
         if (!empty($entity->field_magazine_date->getValue())) {
           $magazine_date = $entity->field_magazine_date->getValue()[0]['value'];
-          $response_data['date'] = format_date(strtotime($magazine_date), 'magazine_date', '', NULL, $this->currentLanguage);
+          $response_data['date'] = $this->dateFormatter->format(strtotime($magazine_date), 'magazine_date', '', NULL, $this->currentLanguage);
         }
         if ($entity->get('field_magazine_homepage_image')->getValue()) {
           $response_data['image'] = $this->mobileAppUtility->getImages($entity, 'field_magazine_homepage_image', 'magazine_article_listing');

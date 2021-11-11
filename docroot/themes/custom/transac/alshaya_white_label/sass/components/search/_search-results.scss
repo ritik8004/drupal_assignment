@@ -93,6 +93,12 @@ header,
       }
     }
   }
+
+  .block-views-exposed-filter-blocksearch-page {
+    .form-item-keywords {
+      float: $left;
+    }
+  }
 }
 
 .search-api-autocomplete-suggestion {
@@ -112,14 +118,6 @@ header,
   background-size: 2rem;
 }
 
-.c-header__region {
-  .block-views-exposed-filter-blocksearch-page {
-    .form-item-keywords {
-      float: $left;
-    }
-  }
-}
-
 .ajax-progress.ajax-progress-fullscreen {
   background-image: url(#{$base_theme_loader_img_directory_path}) !important;
   background-repeat: no-repeat !important;
@@ -137,6 +135,10 @@ header,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.alshaya_search_hoverimage,
+.alshaya_search_mainimage {
   min-height: 10.5rem;
 }
 

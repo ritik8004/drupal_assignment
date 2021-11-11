@@ -1,0 +1,12 @@
+.slick-prev,
+.slick-next {
+  @include icon(ic-arrow-left) {
+    font-size: 1rem;
+  }
+}
+
+.slick-next {
+  &::before {
+    transform: rotate(180deg);
+  }
+}

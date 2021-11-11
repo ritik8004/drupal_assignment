@@ -97,12 +97,14 @@
           ticketUI: function (index, icon, minage, maxage, description, price, ticket) {
             var isTicket = '';
             var isCount = 'disable';
+            var unitPrice = parseFloat(price).toFixed(3);
             if (ticket) {
               isCount = ticket.count ? '' : 'disable';
-              isTicket = "<div class='ticket-subtotal unit'><span class='value'><span>" + ticket.count + "</span><span class='icon icon-ticket'></span></span></div><div class='ticket-subtotal cost'><span class='value'>KWD <span>" + ticket.total + '</span></span></div>';
+              var ticketTotal = parseFloat(ticket.total).toFixed(3);
+              isTicket = "<div class='ticket-subtotal unit'><span class='value'><span>" + ticket.count + "</span><span class='icon icon-ticket'></span></span></div><div class='ticket-subtotal cost'><span class='value'>KWD <span>" + ticketTotal + '</span></span></div>';
             }
             return (
-              "<div class='ticket_information clearfix'><input type='hidden' name='ticktIndex' value='" + index + "'><div class='age-group'><div class='age-group-icon'><span class='icon icon_" + icon + "'></span></div><div class='age-range'>" + description + "<br><span class='ticket-age'>(" + minage + '-' + maxage + ")</span></div></div><div class='ticket-unit-price'>KWD <span>" + price + "</span><div class='ticket-qty clearfix'><a class='plusBtn'><span class='icon icon-plus'></span></a><a class='minusBtn " + isCount + "'><span class='icon icon-minus'></span></a></div></div><div class='ticket-count'>" + isTicket + '</div></div>'
+              "<div class='ticket_information clearfix'><input type='hidden' name='ticktIndex' value='" + index + "'><div class='age-group'><div class='age-group-icon'><span class='icon icon_" + icon + "'></span></div><div class='age-range'>" + description + "<br><span class='ticket-age'>(" + minage + '-' + maxage + ")</span></div></div><div class='ticket-unit-price'>KWD <span>" + unitPrice + "</span><div class='ticket-qty clearfix'><a class='plusBtn'><span class='icon icon-plus'></span></a><a class='minusBtn " + isCount + "'><span class='icon icon-minus'></span></a></div></div><div class='ticket-count'>" + isTicket + '</div></div>'
             );
           },
           generateUI: function () {
@@ -158,6 +160,7 @@
               isFormValid = true;
               totalEle.addClass('active');
               eleCartIcon.addClass('full');
+              tPrice = parseFloat(tPrice).toFixed(3);
               var html = "<span class='amount'><span id='#'>" + tCount + "</span><span class='icon icon-ticket'></span>KWD <span id='#'>" + tPrice + '</span></span>';
               totalEle.find('.total_price').html(html);
               eleCartPrice.html(tPrice);

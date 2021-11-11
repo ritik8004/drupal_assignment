@@ -1,0 +1,38 @@
+.alshaya-select {
+  .alshayaSelect__control {
+    border: 0.0625rem solid $pdp_qty_select_border;
+    height: 3.125rem;
+    font-size: 1.125rem;
+
+    @include breakpoint($tablet) {
+      width: 5.5625rem;
+    }
+
+    &:hover {
+      border-color: $pdp_qty_select_border;
+    }
+
+    .alshayaSelect__dropdown-indicator {
+      @include icon('dropdown-expand', before) {
+        font-size: 2.25rem;
+        color: $plp-quick-view-product-qty-arrow;
+      }
+    }
+
+    .alshayaSelect__indicator {
+      background: none !important;
+    }
+  }
+
+  .alshayaSelect__menu {
+    @include breakpoint($tablet) {
+      width: 5.5625rem;
+    }
+
+    .alshayaSelect__menu-list {
+      border-color: $pdp_qty_select_border;
+      border-bottom: none;
+      border-top: 1px solid $pdp_qty_select_border;
+    }
+  }
+}

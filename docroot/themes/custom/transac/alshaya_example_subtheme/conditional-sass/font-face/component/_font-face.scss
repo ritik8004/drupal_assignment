@@ -1,0 +1,23 @@
+// Define Font-faces.
+// Use woff & woff2 only.
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_example_subtheme/fonts';
+
+// Example: Google Font
+@import url('https://fonts.googleapis.com/css?family=Cairo:300,400,600,700|Open+Sans:400,600,700&subset=arabic');
+
+// Example: Icon Font
+@font-face {
+  font-family: 'alshaya-icons';
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?2pxs5l') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Example: Custom Font
+//@font-face {
+//  font-family: "Ginger-light-webfont";
+//  src: url("#{$base_theme_fonts_directory_path}/Ginger-light-webfont.woff");
+//  font-weight: normal;
+//  font-style: normal;
+//  font-display: swap;
+//}

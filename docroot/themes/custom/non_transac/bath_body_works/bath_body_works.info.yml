@@ -1,7 +1,8 @@
 name: Bath and Body Works
-description: Theme for Bath and Body Works.
+description: Theme for Bath and Body Works - Non Transac site.
 type: theme
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: whitelabel
 alshaya_theme_type: non_transac
 

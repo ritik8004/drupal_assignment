@@ -1,0 +1,15 @@
+.c-department {
+  .c-category-list__title {
+    color: $primary_link;
+    text-transform: none;
+  }
+
+  .c-category-list__item a,
+  .c-category-list__title a {
+    color: $primary_link;
+
+    &:hover {
+      color: $secondary_link;
+    }
+  }
+}

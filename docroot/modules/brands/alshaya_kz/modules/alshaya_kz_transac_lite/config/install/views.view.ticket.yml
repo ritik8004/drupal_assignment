@@ -26,7 +26,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: alshaya_tag
         options: {  }
       query:
         type: views_query

@@ -89,32 +89,21 @@
         @include breakpoint($upto-desktop) {
           background: $header_top_bg;
           height: 2.875rem;
+          display: block;
+          margin-#{$left}: -1px;
+          flex-grow: 1;
+          width: auto;
         }
+      }
+
+      @include breakpoint($upto-desktop) {
+        display: flex !important;
       }
     }
 
     .active--menu--links li.menu--one__list-item:hover {
       a.menu--one__link {
         border: 0;
-      }
-    }
-  }
-}
-
-.c-menu-primary {
-  .block-alshaya-super-category-menu {
-    .menu--one__list {
-      @include breakpoint($upto-desktop) {
-        display: flex !important;
-      }
-
-      li {
-        @include breakpoint($upto-desktop) {
-          display: block;
-          margin-#{$left}: -1px;
-          flex-grow: 1;
-          width: auto;
-        }
       }
     }
   }

@@ -1,0 +1,293 @@
+#myaccount-reviews {
+  .review-summary {
+    padding-bottom: 2.25rem;
+    border-bottom: 0.0625rem solid $rr-reviews-summary-border;
+  }
+
+  .no-review {
+    margin-top: 1.4375rem;
+  }
+
+  .product-block {
+    display: flex;
+    padding: 1.25rem 0;
+
+    .product-image-block {
+      width: 5rem;
+      height: 6.25rem;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .product-desc-block {
+      padding-#{$left}: 1.25rem;
+
+      .product-title {
+        font-size: 1.25rem;
+      }
+
+      .product-item-code {
+        font-size: 0.75rem;
+        color: $pdp_product_itemcode;
+        padding-top: 0.625rem;
+      }
+    }
+  }
+
+  .star-ratings-wrapper {
+    margin-bottom: 0.75rem;
+
+    .icon-ic_ratingfull,
+    .icon-ic_rating {
+      &::before {
+        font-size: 1.375rem;
+      }
+    }
+  }
+
+  .review {
+    &-title {
+      font-size: 1.125rem;
+      line-height: 1.2;
+      color: $rr-review-summary-txt;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.25rem;
+      }
+    }
+
+    &-date {
+      font-size: 0.75rem;
+      margin-bottom: 0.9375rem;
+      color: $rr-review-summary-grey-text;
+    }
+
+    &-text {
+      font-size: 0.875rem;
+      color: $rr-review-summary-grey-text;
+      margin-bottom: 0.9375rem;
+      word-break: break-word;
+      white-space: pre-line;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
+  .user-reviews {
+    display: flex;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
+    .user-desc {
+      width: 66%;
+
+      @include breakpoint($only-tablet) {
+        width: 60%;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+
+    .user-secondary-rating {
+      width: 34%;
+      padding-#{$left}: 3.75rem;
+
+      @include breakpoint($only-tablet) {
+        width: 40%;
+        padding-#{$left}: 2rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 66%;
+        padding-#{$left}: 0;
+      }
+
+      .attribute-list {
+        margin-bottom: 1.25rem;
+
+        .display-slider {
+          margin-top: 0;
+
+          .slide-dot-container {
+            @include breakpoint($only-tablet) {
+              width: 38%;
+            }
+
+            .dynamic-dot {
+              width: 0.4375rem;
+              height: 0.4375rem;
+              top: -0.125rem;
+            }
+          }
+
+          .slider-label {
+            width: 28%;
+          }
+        }
+
+        .slider-header {
+          font-size: 0.875rem;
+          font-family: $alshaya-bold;
+          margin-bottom: 0.25rem;
+
+          .slider-header-label {
+            font-size: 0.75rem;
+            font-family: $alshaya-thin;
+            color: $rr-review-summary-grey-text;
+          }
+        }
+      }
+    }
+  }
+
+  .load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 4.5rem;
+
+    .load-more {
+      width: 10.625rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-border;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1;
+      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin: 0 0.5rem;
+      }
+    }
+  }
+}
+
+.review-summary,
+.reviews-block {
+  position: relative;
+
+  .thumbnail-img-block {
+    display: flex;
+    overflow-y: auto;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+    }
+
+    .thumbnail-img {
+      @include bv-photo-upload-container ();
+
+      img {
+        @include bv-photo-upload-image ();
+      }
+    }
+
+    .popup-overlay {
+      background: transparent !important;
+      position: absolute !important;
+      z-index: 2;
+    }
+
+    .popup-content {
+      width: 18.75rem !important;
+      padding: 0 !important;
+      border: 0 !important;
+      z-index: 3 !important;
+      top: 1.875rem !important;
+
+      @include breakpoint($only-mobile) {
+        #{$left}: 0 !important;
+        width: 100% !important;
+        top: 6.25rem !important;
+      }
+
+      .popup-arrow {
+        display: none;
+      }
+
+      .large-image {
+        @include breakpoint($tablet) {
+          width: 18.75rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 23.75rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          height: 21rem;
+        }
+
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          object-position: center;
+          zoom: 1;
+        }
+      }
+
+      .close {
+        position: absolute;
+        #{$right}: 0;
+        border: 0;
+        padding: 0;
+        background: $modal_close_bg;
+        color: $modal_close_icon;
+
+        @include icon(close, after) {
+          font-size: 1.25rem;
+          vertical-align: middle;
+          position: relative;
+        }
+      }
+    }
+  }
+}
+
+.reviews-block {
+  .thumbnail-img-block {
+    .popup-content {
+      @include breakpoint($tablet) {
+        margin-#{$left}: 4.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        top: -4.625rem !important;
+      }
+
+      @include breakpoint($only-tablet) {
+        top: -3rem !important;
+      }
+    }
+  }
+}
+
+body[class*="reviews"] {
+  @include breakpoint($only-mobile) {
+    .c-user--node {
+      &.l-two--sf {
+        aside.c-sidebar-first {
+          display: none;
+        }
+      }
+
+      main {
+        #block-page-title {
+          display: block;
+        }
+      }
+    }
+  }
+}

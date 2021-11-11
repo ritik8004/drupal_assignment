@@ -2,6 +2,7 @@ name: Acquia Commerce Promotion
 type: module
 description: This module provides Promotions functionality to the Acquia Commerce Connector.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Commerce
 dependencies:
   - acq_commerce:acq_sku

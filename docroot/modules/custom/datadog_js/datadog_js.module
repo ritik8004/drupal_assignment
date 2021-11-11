@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Module file for DataDogJS.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function datadog_js_page_attachments(array &$attachments) {
+  $settings = \Drupal::config('datadog_js.settings');
+  $token = $settings->get('token');
+
+  $cache_tags = $attachments['#cache']['tags'] ?? [];
+  $attachments['#cache']['tags'] = Cache::mergeTags(
+    $settings->getCacheTags(),
+    $cache_tags
+  );
+
+  // Do nothing if token not set.
+  if (empty($token)) {
+    return;
+  }
+
+  // Do nothing if not configured to show on admin pages and current page
+  // is admin page.
+  $admin_pages = $settings->get('admin_pages');
+  if ($admin_pages === 'hidden' && \Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  $attachments['#attached']['library'][] = 'datadog_js/logger';
+
+  global $_acsf_site_name;
+
+  $config = [];
+  $config['clientToken'] = $token;
+  $config['service'] = $_acsf_site_name;
+  $config['env'] = Settings::get('env_name');
+
+  $application = $settings->get('application');
+  if (!empty($application)) {
+    $config['site'] = $application;
+  }
+
+  $init_script = [
+    [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => Markup::create('window.DD_LOGS && DD_LOGS.init(' . json_encode($config) . ');'),
+    ],
+    'datadog_js_init',
+  ];
+
+  $library_script = [
+    [
+      '#tag' => 'script',
+      '#attributes' => [
+        'src' => $settings->get('library'),
+        'crossorigin' => TRUE,
+      ],
+    ],
+    'datadog_js_library',
+  ];
+
+  array_unshift($attachments['#attached']['html_head'], $init_script);
+  array_unshift($attachments['#attached']['html_head'], $library_script);
+}

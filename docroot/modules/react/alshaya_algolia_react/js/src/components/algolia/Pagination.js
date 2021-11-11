@@ -2,12 +2,15 @@ import React from 'react';
 import { connectStats } from 'react-instantsearch-dom';
 
 import ProgressBar from './widgets/ProgressBar';
-import { showLoader, toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
+import {
+  showLoader, toggleSearchResultsContainer, toggleSortByFilter, toggleBlockCategoryFilter,
+} from '../../utils';
 
 // Stats with pagination.
 const PaginationStats = connectStats(({ nbHits, currentResults }) => {
   toggleSearchResultsContainer();
   toggleSortByFilter('show');
+  toggleBlockCategoryFilter('show');
 
   return (
     <>

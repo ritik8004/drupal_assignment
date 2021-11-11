@@ -8,7 +8,6 @@ use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\alshaya_admin\QueueHelper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_stores_finder_transac\StoresFinderManager;
@@ -256,7 +255,7 @@ class SyncForm extends FormBase {
           }
         }
 
-        drupal_set_message($this->t('Product categories synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Product categories synchronization complete.'), 'status');
 
         // If any term deleted.
         if (!empty($deleted_orphans)) {
@@ -275,7 +274,7 @@ class SyncForm extends FormBase {
 
       case $this->t('Synchronize product options'):
         $this->productOptionshelper->synchronizeProductOptions();
-        drupal_set_message($this->t('Product options synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Product options synchronization complete.'), 'status');
         break;
 
       case $this->t('Synchronize listed SKUs'):
@@ -289,7 +288,7 @@ class SyncForm extends FormBase {
           }
         }
 
-        drupal_set_message($this->t('Selected products synchronization launched.'), 'status');
+        $this->messenger()->addMessage($this->t('Selected products synchronization launched.'), 'status');
         break;
 
       case $this->t('Synchronize ALL products'):
@@ -310,7 +309,7 @@ class SyncForm extends FormBase {
           implode(' and ', $message_addition) . ' languages'
         );
 
-        drupal_set_message($this->t('Full product synchronization launched on @addition.', [
+        $this->messenger()->addMessage($this->t('Full product synchronization launched on @addition.', [
           '@addition' => $message_addition,
         ]), 'status');
         break;
@@ -318,17 +317,17 @@ class SyncForm extends FormBase {
       case $this->t('Synchronize promotions'):
         $this->promotionsManager->syncPromotions();
         $this->queueHelper->processQueues(['acq_promotion_attach_queue']);
-        drupal_set_message($this->t('Promotions synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Promotions synchronization complete.'), 'status');
         break;
 
       case $this->t('Synchronize stores'):
         $this->storesManager->syncStores();
-        drupal_set_message($this->t('Stores synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Stores synchronization complete.'), 'status');
         break;
 
       case $this->t('Synchronize areas'):
         $this->addressBookManager->syncAreas();
-        drupal_set_message($this->t('Areas synchronization complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Areas synchronization complete.'), 'status');
         break;
     }
   }
@@ -337,7 +336,7 @@ class SyncForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    drupal_set_message($this->t('Syncing data can have a performance impact. Please use with caution.'), 'warning');
+    $this->messenger()->addMessage($this->t('Syncing data can have a performance impact. Please use with caution.'), 'warning');
 
     foreach ($this->languageManager->getLanguages() as $language) {
       $options[$language->getId()] = $language->getName();
@@ -456,20 +455,18 @@ class SyncForm extends FormBase {
       ],
     ];
 
-    if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      // Areas.
-      $form['areas_fieldset'] = [
-        '#type' => 'fieldset',
-        '#title' => $this->t('Areas'),
-        'areas' => [
-          '#type' => 'actions',
-          'stores_action' => [
-            '#type' => 'submit',
-            '#value' => $this->t('Synchronize areas'),
-          ],
+    // Areas.
+    $form['areas_fieldset'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Areas'),
+      'areas' => [
+        '#type' => 'actions',
+        'stores_action' => [
+          '#type' => 'submit',
+          '#value' => $this->t('Synchronize areas'),
         ],
-      ];
-    }
+      ],
+    ];
 
     $form['#attached']['library'][] = 'alshaya_acm/alshaya_acm.sync_form';
 

@@ -1,0 +1,15 @@
+.swatch-list {
+  .li-swatch-image,
+  .li-swatch-color {
+    a {
+      border-radius: 100%;
+
+      &.active {
+        &::after {
+          border-color: $plp-quick-view-product-color-swatch-border;
+          border-radius: 100%;
+        }
+      }
+    }
+  }
+}

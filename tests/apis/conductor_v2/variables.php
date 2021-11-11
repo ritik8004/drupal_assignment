@@ -7,21 +7,22 @@
  */
 
 // Brand information.
-$brand_name = 'Victoria\'s Secret';
-$brand_code = 'vs';
+$brand_name = 'HM';
+$brand_code = 'hm';
+$stack_id = 5;
 
 // Environment information.
 // dev, test, uat, pprod, live, dev2, dev3, qa2.
-$env = 'test';
+$env = 'qa2';
 
 // Magento information.
 // Must match a magento key defined in factory-hooks/environment/magento.php.
-$mdc_key = 'vs_qa';
+$mdc_key = 'hm_qa';
 
-$mdc_token = 'x87mjqygripmcwhnby2d2gceiy6w47vj';
-$mdc_token_secret = 'xoydwilwrqdh9dptvlvecp5j4qyqwy8h';
-$mdc_client_id = 'xvy9bq7lcnyul4ovlgn84gxkggnsvq0x';
-$mdc_client_secret = 'xi3jwa6h7mruv7g6c27fhmilwilx7chf';
+$mdc_token = '12hbl5i7yg6683nsb1o94ude9p5eg35d';
+$mdc_token_secret = '3h20t43laa6yff4yssjajgxuj692ru96';
+$mdc_client_id = 'acnbwifl9olohrh30g1t4liqnwqwi6p2';
+$mdc_client_secret = 'ctuivmr0bnqbq357xqalotnocntidcay';
 
 // Drupal information.
 $drupal_client_id = '35b9a28a-939f-4e2b-be55-9445c5b6549e';

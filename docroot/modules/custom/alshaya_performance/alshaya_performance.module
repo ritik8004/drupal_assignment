@@ -164,15 +164,30 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
   \Drupal::theme()->alter('alshaya_performance_preload', $preload);
 
   foreach ($preload ?? [] as $index => $item) {
-    $attachments['#attached']['html_head'][$item] = [
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'link',
-        '#attributes' => [
-          'rel' => 'preload',
-          'href' => $item,
-        ],
+    // Ensure preload happens as soon as possible.
+    $preload_render = [
+      '#type' => 'html_tag',
+      '#tag' => 'link',
+      '#weight' => -2,
+      '#attributes' => [
+        'rel' => 'preload',
+        'href' => $item['href'],
+        'as' => $item['as'],
       ],
+    ];
+
+    // Only add `crossorigin` attribute when needed.
+    if(isset($item['crossorigin'])) {
+      $preload_render['#attributes']['crossorigin'] = $item['crossorigin'];
+    }
+
+    // Only add `type` attribute when needed.
+    if(isset($item['type'])) {
+      $preload_render['#attributes']['type'] = $item['type'];
+    }
+
+    $attachments['#attached']['html_head'][$item['href']] = [
+      $preload_render,
       'alshaya_performance_preload_' . $index,
     ];
   }

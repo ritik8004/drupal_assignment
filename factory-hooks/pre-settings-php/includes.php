@@ -49,7 +49,7 @@ if ($settings['env'] === 'local') {
 
   // Set private files directory for local, it is not set in
   // '/../vendor/acquia/blt/settings/filesystem.settings.php' file.
-  $settings['file_private_path'] = '/var/www/alshaya/files-private/' . $host_site_code;
+  $settings['file_private_path'] = DRUPAL_ROOT . '/../files-private/' . $host_site_code;
 
   // Set config of stage file proxy to ignore invalid ssl errors.
   $config['stage_file_proxy.settings']['verify'] = FALSE;
@@ -219,7 +219,6 @@ switch ($env_name) {
     $settings['linked_skus_timeout'] = 5;
 
     // Specific/development modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
 
     // Increase autologout timeout on local so we are not always logged out.
@@ -237,7 +236,6 @@ switch ($env_name) {
   case 'dev3':
   case 'test':
     // Specific/development modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
 
@@ -254,3 +252,6 @@ switch ($env_name) {
     break;
 
 }
+
+// Disable importing translations from remote.
+$config['locale.settings']['translation']['use_source'] = 'local';

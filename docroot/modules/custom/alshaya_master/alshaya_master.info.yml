@@ -1,6 +1,7 @@
 name: 'Alshaya master'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Alshaya
 description: 'Master module for updating the core settings.'
 dependencies:
@@ -27,5 +28,4 @@ dependencies:
   - drupal:views
   - alshaya_contact:alshaya_contact
   - seckit:seckit
-  - alshaya_rum:alshaya_rum
   - pcb:pcb_memcache

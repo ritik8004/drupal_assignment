@@ -22,6 +22,16 @@
     }
   }
 
+  .c-facet {
+    .listing-inline-star {
+      .star-ratings-wrapper {
+        .inline-star {
+          top: 0.375rem;
+        }
+      }
+    }
+  }
+
   .block-facet-blockcategory-facet-search,
   .algolia-plp-category-facet {
     a {
@@ -248,6 +258,22 @@
 
           &::after {
             color: $default-anchor-link-hover;
+          }
+        }
+      }
+
+      ul {
+        .facet-item {
+          .listing-inline-star {
+            .rating-label {
+              width: 21%;
+            }
+
+            .star-ratings-wrapper {
+              .inline-star {
+                top: 0.125rem;
+              }
+            }
           }
         }
       }

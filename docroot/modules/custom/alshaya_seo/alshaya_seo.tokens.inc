@@ -139,7 +139,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
       // Get the original token.
       $original = $arg_tokens[$size];
       // Get the translation for the current node.
-      $translation = \Drupal::entityManager()->getTranslationFromContext($node, $langcode, ['operation' => 'node_tokens']);
+      $translation = \Drupal::service('entity.repository')->getTranslationFromContext($node, $langcode, ['operation' => 'node_tokens']);
       if ($translation->hasField('body') && ($items = $translation->get('body')) && !$items->isEmpty()) {
         $item = $items[0];
         // If the summary was requested and is not empty, use it.

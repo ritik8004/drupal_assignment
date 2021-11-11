@@ -1,0 +1,376 @@
+{
+  "cart": {
+    "applied_rule_ids": "",
+    "id": "13964",
+    "created_at": "2021-06-07 13:45:01",
+    "updated_at": "2021-06-07 14:05:16",
+    "is_active": "1",
+    "is_virtual": "",
+    "items": [
+      {
+        "item_id": "7335",
+        "sku": "WZBOWZ107",
+        "qty": "2",
+        "name": "Banana Boat Deep Tanning Oil",
+        "price": "1.91",
+        "product_type": "simple",
+        "quote_id": "13964"
+      }
+    ],
+    "items_count": "1",
+    "items_qty": "2",
+    "customer": {
+      "id": "478",
+      "group_id": "1",
+      "default_billing": "69",
+      "default_shipping": "69",
+      "created_at": "2021-06-03 08:14:10",
+      "updated_at": "2021-06-07 13:58:47",
+      "created_in": "AE English",
+      "email": "osmarwado@gmail.com",
+      "firstname": "Osmar",
+      "lastname": "Wado",
+      "store_id": "4",
+      "website_id": "3",
+      "addresses": [
+        {
+          "id": "69",
+          "customer_id": "478",
+          "region": {
+            "region_code": "",
+            "region": "",
+            "region_id": "0"
+          },
+          "region_id": "0",
+          "country_id": "AE",
+          "street": [
+            "1 London Rd"
+          ],
+          "telephone": "+971555666777",
+          "city": "Al Awir",
+          "firstname": "Osmar",
+          "lastname": "Wado",
+          "default_shipping": "1",
+          "default_billing": "1",
+          "custom_attributes": [
+            {
+              "attribute_code": "address_city_segment",
+              "value": "1",
+              "name": "address_city_segment"
+            },
+            {
+              "attribute_code": "area",
+              "value": "13",
+              "name": "area"
+            },
+            {
+              "attribute_code": "address_apartment_segment"
+            }
+          ]
+        },
+        {
+          "id": "70",
+          "customer_id": "478",
+          "region": {
+            "region_code": "",
+            "region": "",
+            "region_id": "0"
+          },
+          "region_id": "0",
+          "country_id": "AE",
+          "street": [
+            "17 crewdosn rd"
+          ],
+          "telephone": "+971555666777",
+          "city": "Abu Dhabi Mall",
+          "firstname": "Osmar",
+          "lastname": "Wado",
+          "custom_attributes": [
+            {
+              "attribute_code": "address_city_segment",
+              "value": "2",
+              "name": "address_city_segment"
+            },
+            {
+              "attribute_code": "area",
+              "value": "207",
+              "name": "area"
+            },
+            {
+              "attribute_code": "address_apartment_segment",
+              "value": "1",
+              "name": "address_apartment_segment"
+            },
+            {
+              "attribute_code": "address_building_segment",
+              "value": "foo",
+              "name": "address_building_segment"
+            }
+          ]
+        }
+      ],
+      "disable_auto_group_change": "0",
+      "extension_attributes": {
+        "is_subscribed": ""
+      },
+      "custom_attributes": [
+        {
+          "attribute_code": "channel",
+          "value": "web",
+          "name": "channel"
+        }
+      ]
+    },
+    "billing_address": {
+      "id": "28834",
+      "region": "",
+      "region_id": "",
+      "region_code": "",
+      "country_id": "AE",
+      "street": [
+        "1 London Rd"
+      ],
+      "telephone": "+971555666777",
+      "postcode": "",
+      "city": "Al Awir",
+      "firstname": "Osmar",
+      "lastname": "Wado",
+      "customer_id": "478",
+      "email": "osmarwado@gmail.com",
+      "same_as_billing": "0",
+      "customer_address_id": "69",
+      "save_in_address_book": "0",
+      "custom_attributes": [
+        {
+          "attribute_code": "address_city_segment",
+          "value": "1",
+          "name": "address_city_segment"
+        },
+        {
+          "attribute_code": "area",
+          "value": "13",
+          "name": "area"
+        },
+        {
+          "attribute_code": "address_apartment_segment",
+          "value": "1",
+          "name": "address_apartment_segment"
+        },
+        {
+          "attribute_code": "address_building_segment",
+          "value": "foo",
+          "name": "address_building_segment"
+        }
+      ]
+    },
+    "reserved_order_id": "BTAEHDE0000469",
+    "orig_order_id": "0",
+    "currency": {
+      "global_currency_code": "KWD",
+      "base_currency_code": "AED",
+      "store_currency_code": "AED",
+      "quote_currency_code": "AED",
+      "store_to_base_rate": "0",
+      "store_to_quote_rate": "0",
+      "base_to_global_rate": "1",
+      "base_to_quote_rate": "1"
+    },
+    "customer_is_guest": "",
+    "customer_note_notify": "1",
+    "customer_tax_class_id": "10",
+    "store_id": "4",
+    "extension_attributes": {
+      "shipping_assignments": [
+        {
+          "shipping": {
+            "address": {
+              "id": "28832",
+              "region": "",
+              "region_id": "",
+              "region_code": "",
+              "country_id": "AE",
+              "street": [
+                "1 London Rd"
+              ],
+              "telephone": "+971555666777",
+              "postcode": "",
+              "city": "Al Awir",
+              "firstname": "Osmar",
+              "lastname": "Wado",
+              "customer_id": "478",
+              "email": "osmarwado@gmail.com",
+              "same_as_billing": "0",
+              "customer_address_id": "69",
+              "save_in_address_book": "0",
+              "custom_attributes": [
+                {
+                  "attribute_code": "address_city_segment",
+                  "value": "1",
+                  "name": "address_city_segment"
+                },
+                {
+                  "attribute_code": "area",
+                  "value": "13",
+                  "name": "area"
+                },
+                {
+                  "attribute_code": "address_apartment_segment"
+                }
+              ]
+            },
+            "method": "home_delivery",
+            "extension_attributes": {
+              "click_and_collect_type": "home_delivery"
+            }
+          },
+          "items": [
+            {
+              "item_id": "7335",
+              "sku": "WZBOWZ107",
+              "qty": "2",
+              "name": "Banana Boat Deep Tanning Oil",
+              "price": "1.91",
+              "product_type": "simple",
+              "quote_id": "13964"
+            }
+          ]
+        }
+      ],
+      "real_reserved_order_id": "BTAEHDE0000469",
+      "user_id": "478",
+      "user_type": "Logged in User",
+      "client_ip": "192.168.25.1",
+      "user_agent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/90.0.4430.212 Safari\/537.36",
+      "ga_client_id": "1410775694.1622725417",
+      "attempted_payment": "1",
+      "applied_rule_ids": "",
+      "surcharge": {
+        "amount": "0",
+        "is_applied": "0"
+      }
+    }
+  },
+  "totals": {
+    "grand_total": "3.81",
+    "base_grand_total": "4",
+    "subtotal": "3.81",
+    "base_subtotal": "3.81",
+    "discount_amount": "0",
+    "base_discount_amount": "0",
+    "subtotal_with_discount": "3.81",
+    "base_subtotal_with_discount": "3.81",
+    "shipping_amount": "0",
+    "base_shipping_amount": "0",
+    "shipping_discount_amount": "0",
+    "base_shipping_discount_amount": "0",
+    "tax_amount": "0.19",
+    "base_tax_amount": "0.19",
+    "weee_tax_applied_amount": "",
+    "shipping_tax_amount": "0",
+    "base_shipping_tax_amount": "0",
+    "subtotal_incl_tax": "4",
+    "shipping_incl_tax": "0",
+    "base_shipping_incl_tax": "0",
+    "base_currency_code": "AED",
+    "quote_currency_code": "AED",
+    "items_qty": "2",
+    "items": [
+      {
+        "item_id": "7335",
+        "price": "1.91",
+        "base_price": "1.91",
+        "qty": "2",
+        "row_total": "3.81",
+        "base_row_total": "3.81",
+        "row_total_with_discount": "0",
+        "tax_amount": "0.19",
+        "base_tax_amount": "0.19",
+        "tax_percent": "5",
+        "discount_amount": "0",
+        "base_discount_amount": "0",
+        "discount_percent": "0",
+        "price_incl_tax": "2",
+        "base_price_incl_tax": "2",
+        "row_total_incl_tax": "4",
+        "base_row_total_incl_tax": "4",
+        "options": "[]",
+        "weee_tax_applied_amount": "",
+        "weee_tax_applied": "",
+        "name": "Banana Boat Deep Tanning Oil"
+      }
+    ],
+    "total_segments": [
+      {
+        "code": "subtotal",
+        "title": "Subtotal",
+        "value": "4"
+      },
+      {
+        "code": "giftwrapping",
+        "title": "Gift Wrapping",
+        "value": "",
+        "extension_attributes": {
+          "gw_item_ids": [],
+          "gw_price": "0.0000",
+          "gw_base_price": "0.0000",
+          "gw_items_price": "0.0000",
+          "gw_items_base_price": "0.0000",
+          "gw_card_price": "0.0000",
+          "gw_card_base_price": "0.0000"
+        }
+      },
+      {
+        "code": "shipping",
+        "title": "Shipping & Handling (Standard Delivery - Standard delivery 2-3 days)",
+        "value": "0"
+      },
+      {
+        "code": "tax",
+        "title": "Tax",
+        "value": "0.19",
+        "area": "taxes",
+        "extension_attributes": {
+          "tax_grandtotal_details": [
+            {
+              "amount": "0.19",
+              "rates": [
+                {
+                  "percent": "5",
+                  "title": "2"
+                }
+              ],
+              "group_id": "1"
+            }
+          ]
+        }
+      },
+      {
+        "code": "grand_total",
+        "title": "Grand Total",
+        "value": "4",
+        "area": "footer"
+      },
+      {
+        "code": "surcharge",
+        "title": "",
+        "value": "0"
+      },
+      {
+        "code": "customerbalance",
+        "title": "Store Credit",
+        "value": "0"
+      },
+      {
+        "code": "reward",
+        "title": "0 Reward points",
+        "value": "0"
+      }
+    ],
+    "extension_attributes": {
+      "reward_points_balance": "0",
+      "reward_currency_amount": "0",
+      "base_reward_currency_amount": "0"
+    }
+  },
+  "response_message": []
+}

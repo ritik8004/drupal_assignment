@@ -31,7 +31,9 @@
             var viewMode = $(form).closest('article[gtm-type="gtm-product-link"]').attr('data-vmode');
             // Decide the key from which we load product data.
             // It will be in productInfo for all cases except matchback.
-            var productInfoKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
+            var productInfoKey = (viewMode === 'matchback' || viewMode === 'matchback_mobile')
+              ? viewMode
+              : 'productInfo';
 
             var quantity = 1;
             // If quantity drop down available, use that value.
@@ -85,8 +87,11 @@
 
             // Configurable - normal as well as re-structured.
             if (is_configurable) {
-              productData['product_name'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_title;
-              productData['image'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_image;
+              var productVariantSku = settings[productInfoKey][page_main_sku].variants[variant_sku];
+              if (productVariantSku !== undefined) {
+                productData['product_name'] = productVariantSku.cart_title;
+                productData['image'] = productVariantSku.cart_image;
+              }
             }
             // Simple grouped (re-structured).
             else if (settings[productInfoKey][page_main_sku]['group'] !== undefined) {
@@ -95,23 +100,9 @@
             }
 
             // Post to ajax for cart update/create.
-            jQuery.ajax({
-              url: settings.alshaya_spc.cart_update_endpoint + '?lang=' + drupalSettings.path.currentLanguage,
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              data: JSON.stringify(post_data),
-              error: function (error) {
-                var cartNotification = new CustomEvent('product-add-to-cart-error', {
-                  bubbles: true,
-                  detail: {
-                    postData: post_data,
-                  },
-                });
-                form[0].dispatchEvent(cartNotification);
-              },
-              success: function (response) {
+            window.commerceBackend.addUpdateRemoveCartItem(post_data)
+              .then (function (responseData) {
+                const response = responseData.data;
                 // If there any error we throw from middleware.
                 if (response.error === true) {
                   if (response.error_code === '400') {
@@ -120,9 +111,13 @@
                     return;
                   }
                   var closestForm = $(that).closest('form.sku-base-form');
+                  let errorMessage = response.error_message;
+                  if (response.error_code === '604') {
+                    errorMessage = Drupal.t('The product that you are trying to add is not available.');
+                  }
 
                   // Showing the error message.
-                  $(closestForm).find('.errors-container').html('<div class="error">' + response.error_message + '</div>');
+                  $(closestForm).find('.errors-container').html('<div class="error">' + errorMessage + '</div>');
 
                   // Process required data and trigger add to cart failure event.
                   productData.options = [];
@@ -262,8 +257,16 @@
                     );
                   }
                 }
-              }
-            });
+              })
+              .catch (function() {
+                var cartNotification = new CustomEvent('product-add-to-cart-error', {
+                  bubbles: true,
+                  detail: {
+                    postData: post_data,
+                  },
+                });
+                form[0].dispatchEvent(cartNotification);
+              });
           }
         }, 20);
       });

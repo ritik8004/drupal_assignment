@@ -13,13 +13,13 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Unicode;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
@@ -140,7 +140,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       // For the logo file name - we always want the english value.
       // @TODO: Move this to a separate field and remove name dependency.
       $parent_en = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
-      $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent_en->label()));
+      $term_clean_name = Html::cleanCssIdentifier(mb_strtolower($parent_en->label()));
       // Set the language suffix for logo based on current language.
       $langcode = \Drupal::service('language_manager')
         ->getCurrentLanguage()
@@ -154,13 +154,20 @@ function alshaya_super_category_preprocess_block(&$variables) {
       // Current active theme object.
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
       // Set the logo path based on term name and current language.
+      if ($super_category->hasField('field_logo_header_image') && !empty($super_category->field_logo_header_image->getValue())) {
+        $file = File::load($super_category->field_logo_header_image->getValue()[0]['target_id']);
+        $header_logo = file_create_url($file->getFileUri());
+      }
       $logo_path = '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo';
-      $logo_relative_path = DRUPAL_ROOT . $logo_path;
+      $logo_absolute_path = DRUPAL_ROOT . $logo_path;
       // Check logo fallback.
-      if (file_exists($logo_relative_path . $langcode . '.svg')) {
+      if (!empty($header_logo)) {
+        $variables['content']['site_logo']['#uri'] = $header_logo;
+      }
+      elseif (file_exists($logo_absolute_path . $langcode . '.svg')) {
         $variables['content']['site_logo']['#uri'] = $logo_path . $langcode . '.svg';
       }
-      elseif (file_exists($logo_relative_path . '.svg')) {
+      elseif (file_exists($logo_absolute_path . '.svg')) {
         $variables['content']['site_logo']['#uri'] = $logo_path . '.svg';
       }
       // Set image Alt based on current brand.
@@ -622,7 +629,18 @@ function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alt
   // Only for the term edit page.
   if (isset($form['tid']) && !empty($form['tid']['#value'])) {
     if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      // Hide the super category logo fields if the feature is not enabled.
+      $form['field_logo_active_image']['#access'] = FALSE;
+      $form['field_logo_inactive_image']['#access'] = FALSE;
+      $form['field_logo_header_image']['#access'] = FALSE;
       return;
+    }
+    $termDepth = taxonomy_term_depth_get_by_tid($form['tid']['#value']);
+    if ($termDepth != 1) {
+      // Hide the super category logo fields since it is not required for children categories.
+      $form['field_logo_active_image']['#access'] = FALSE;
+      $form['field_logo_inactive_image']['#access'] = FALSE;
+      $form['field_logo_header_image']['#access'] = FALSE;
     }
 
     if ($term = Term::load($form['tid']['#value'])) {
@@ -770,7 +788,7 @@ function alshaya_super_category_alshaya_config_save_alter(array &$data, $config_
   $meta_configs = [
     'metatag.metatag_defaults.node__advanced_page'                 => '[node:title] | ' . $token,
     'metatag.metatag_defaults.node__acq_promotion'                 => '[node:field_acq_promotion_label] | ' . $token,
-    'metatag.metatag_defaults.taxonomy_term__acq_product_category' => '[alshaya_seo:page_title]',
+    'metatag.metatag_defaults.taxonomy_term__acq_product_category' => '[alshaya_seo:term_name] | ' . $token . ' [alshaya_seo:country]',
   ];
 
   // Only for the meta tag configs.
@@ -815,7 +833,7 @@ function alshaya_super_category_gtm_product_attributes_alter($product, array &$a
 
   // If super category feature is enabled and brand attribute is enabled.
   if ($super_category_feature_enabled && !empty($attributes['gtm-brand'])) {
-    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired(NULL, 'en');
     if (!empty($super_category)) {
       $attributes['gtm-brand'] = $super_category['label'];
     }

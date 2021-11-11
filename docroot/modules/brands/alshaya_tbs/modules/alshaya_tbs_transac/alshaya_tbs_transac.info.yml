@@ -1,0 +1,11 @@
+name: 'Alshaya Thebodyshop (Transac)'
+type: module
+description: 'The dedicated module for transac The Body Shop brand.'
+package: Alshaya
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_tbs:alshaya_tbs
+  - dynamic_yield:dynamic_yield
+themes:
+  - alshaya_the_body_shop

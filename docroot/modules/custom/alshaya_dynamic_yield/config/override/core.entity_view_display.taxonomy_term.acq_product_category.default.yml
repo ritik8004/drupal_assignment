@@ -1,0 +1,5 @@
+dependencies:
+  config:
+  - field.field.taxonomy_term.acq_product_category.field_dy_category
+hidden:
+  field_dy_category: true

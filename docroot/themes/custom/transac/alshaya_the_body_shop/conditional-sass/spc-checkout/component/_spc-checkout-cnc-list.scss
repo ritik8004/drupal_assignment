@@ -1,0 +1,26 @@
+.spc-cnc-store-actions {
+  .select-store {
+    font-family: $tbs-medium;
+  }
+
+  &.show {
+    .select-store {
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
+    }
+  }
+}
+
+#click-and-collect-list-view {
+  ul {
+    li {
+      .spc-cnc-store-name {
+        .spc-store-name-wrapper {
+          .store-name {
+            color: $spc-cnc-store-name;
+          }
+        }
+      }
+    }
+  }
+}

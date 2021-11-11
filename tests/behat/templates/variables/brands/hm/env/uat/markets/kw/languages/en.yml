@@ -19,6 +19,10 @@ variables:
   add_to_cart_link: 'add to basket'
   language_add_to_cart_link: 'أضف إلى حقيبة التسوق'
   ar_collection_filter: ''
+  spc_search_byname: 'Suit trousers'
+  np_plp_store: 'Abu Dhabi - United Arab Emirates'
+  np_plp_language_store: 'أبو ظبي'
+  spc_search_byID: 'HMKWHDA'
   ar_sort_filter: 'رتب حسب'
   ar_price_filter: 'السعر'
   ar_brand_filter: ''
@@ -48,8 +52,8 @@ variables:
   vat: ''
   language_vat: ''
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهب للتسوق"
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
   mobile_language_class: 'ar'
   language_short: 'ar'
   street: 'Street A'
@@ -98,4 +102,6 @@ variables:
   filter_1: 'attr_size'
   filter_2: 'final_price'
   filter_3: 'field_acq_promotion_label.web'
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
 

@@ -6,4 +6,17 @@
       }
     }
   }
+
+  // Minimalistic header fix:
+  // Avoid notification from getting cut from top on scroll
+  // when header gets hidden.
+  .hide-minimalistic-header.matchback-notification-overlay {
+    #cart_notification {
+      &.matchback-cart-notification {
+        &.has--notification {
+          top: 0;
+        }
+      }
+    }
+  }
 }

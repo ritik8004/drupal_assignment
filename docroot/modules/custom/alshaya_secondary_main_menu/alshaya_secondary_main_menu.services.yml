@@ -1,0 +1,6 @@
+services:
+    alshaya_secondary_main_menu.twig.alshaya_secondary_main_menu_extensions:
+        class: Drupal\alshaya_secondary_main_menu\Twig\AlshayaSecondaryMainMenuTwigExtension
+        arguments: ['@renderer']
+        tags:
+          - { name: twig.extension }

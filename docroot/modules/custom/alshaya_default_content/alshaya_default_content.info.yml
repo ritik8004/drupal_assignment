@@ -3,7 +3,10 @@ type: module
 description: 'Default content to be created during install.'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
+  - alshaya_advanced_page:alshaya_advanced_page
+  - alshaya_config:alshaya_config
   - alshaya_master:alshaya_master
   - alshaya_menus:alshaya_menus
   - alshaya_permissions:alshaya_permissions

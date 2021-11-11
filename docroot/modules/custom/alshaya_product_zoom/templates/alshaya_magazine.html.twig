@@ -4,11 +4,11 @@
       {% for thumbs in thumbnails %}
         {% if thumbs.type == 'youtube' %}
           <div data-iframe="{{ thumbs.url }}" class="pdp-asset pdp-video pdp-asset-{{ loop.index0 }} youtube">
-            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
+            <img loading="lazy" width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </div>
         {% elseif thumbs.type == 'vimeo' %}
           <div data-iframe="{{ thumbs.url }}" class="pdp-asset pdp-video pdp-asset-{{ loop.index0 }} vimeo">
-            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
+            <img loading="lazy" width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </div>
         {% elseif thumbs.type == 'video' %}
           <figure class="pdp-asset pdp-video pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}">
@@ -24,7 +24,7 @@
         {% elseif loop.first %}
           <figure class="pdp-asset pdp-image pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}  data-scale="2">
             <div class="pdp-image-zoom-wrapper">
-              <img class="b-lazy" data-zoom-url="{{ thumbs.zoomurl }}"  data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+              <img loading="lazy" data-zoom-url="{{ thumbs.zoomurl }}" src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             </div>
             {%  if labels|length > 0 %}
               <div class="product-labels">
@@ -35,13 +35,23 @@
         {% else %}
           <figure class="pdp-asset pdp-image pdp-asset-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }} data-scale="2">
             <div class="pdp-image-zoom-wrapper">
-              <img class="b-lazy" data-zoom-url="{{ thumbs.zoomurl }}" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+              <img loading="lazy" data-zoom-url="{{ thumbs.zoomurl }}" src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             </div>
           </figure>
         {% endif %}
       {% endfor %}
       <div class="magazine-product-description">
         <div class="magazine-swatch-placeholder"></div>
+          {# Delivery options will load if express delivery enabled. #}
+          {% if delivery_options %}
+            <div class="express-delivery mobile {{ express_delivery_class }}">
+              {% for key,delivery_option in delivery_options %}
+                <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
+                  <span>{{ delivery_option.label }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
         <div class="magazine-desc-wrapper">
           {% if product_attribute_labels %}
             <ul class="collection-labels">
@@ -66,7 +76,7 @@
             {% if thumbs.type != 'youtube' and thumbs.type != 'vimeo' and thumbs.type != 'video'%}
               <li>
                 <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
-                  <img class="b-lazy" src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                  <img loading="lazy" src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
                 </a>
               </li>
             {% endif %}
@@ -83,7 +93,7 @@
               {# As per new desgn we dont show videos in full screen modal galleries. #}
               {% if thumbs.type != 'youtube' and thumbs.type != 'vimeo' and thumbs.type != 'video'%}
                 <li class="mob-imagegallery__thumbnails__image zoom">
-                  <img class="b-lazy" data-src="{{ thumbs.fullurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                  <img loading="lazy" src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
                 </li>
               {% endif %}
             {% endfor %}

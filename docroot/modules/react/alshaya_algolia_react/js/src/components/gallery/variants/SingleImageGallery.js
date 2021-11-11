@@ -1,6 +1,7 @@
 import React from 'react';
-import Labels from '../../labels';
 import ImageElement from '../imageHelper/ImageElement';
+import Lozenges
+  from '../../../../common/components/lozenges';
 
 const SingleImageGallery = (props) => {
   const {
@@ -18,12 +19,11 @@ const SingleImageGallery = (props) => {
     <div className="alshaya_search_gallery">
       <div className="alshaya_search_mainimage" data-sku-image={`${mainImageUrl}`}>
         <ImageElement
-          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={mainImageUrl}
+          src={mainImageUrl}
           title={title}
-          className="b-lazy"
+          loading="lazy"
         />
-        <Labels labels={labels} sku={sku} />
+        <Lozenges labels={labels} sku={sku} />
       </div>
     </div>
   );

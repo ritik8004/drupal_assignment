@@ -1,0 +1,31 @@
+{% if data.highlight_paragraph.ishighlight.value == '1' %}
+  {% if data.highlight_paragraph is not empty %}
+    <div class="highlights">
+    {#For other paragraphs.#}
+    {#Render highlight image and other data.#}
+    {#Even if title is empty, we need to render the empty div to set the min height.#}
+    <div class="highlighted {{ data.highlight_paragraph.paragraph_type }}" gtm-type="gtm-highlights">
+      <div class="title {{ title_class }}">
+        {#If its highlight, then only we render the title.#}
+      </div>
+      {% if data.highlight_paragraph.imageUrl is not empty %}
+        <a href="{{ data.highlight_paragraph.image_link }}">
+        <div class="field field--name-field-highlight-image field--type-image field--label-hidden field__item">
+          <img loading="lazy" src="{{ file_url(data.highlight_paragraph.imageUrl) }}">
+        </div>
+        </a>
+      {% endif %}
+      {% if data.highlight_paragraph.subtitle is not empty %}
+        <div class="highlights_subtitle">
+          {{ data.highlight_paragraph.subtitle }}
+        </div>
+      {% endif %}
+      {% if data.highlight_paragraph.title is not empty %}
+        <div class="highlights_title">
+          {{ data.highlight_paragraph.title }}
+        </div>
+      {% endif %}
+    </div>
+   </div>
+  {% endif %}
+{% endif %}

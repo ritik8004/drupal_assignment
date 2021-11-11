@@ -40,11 +40,6 @@ function alshaya_stores_finder_transac_node_view(array &$build,
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
-  // Do nothing if we are not on DMV2.
-  if ($address_book_manager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    return;
-  }
-
   $build['field_store_address'] = [];
 
   $address_values = $entity->get('field_address')->getValue();
@@ -69,11 +64,6 @@ function alshaya_stores_finder_transac_preprocess_views_view_field__field_store_
   /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_finder_utility */
   $store_finder_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
 
-  // Do nothing if we are not on DMV2.
-  if ($address_book_manager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    return;
-  }
-
   /* @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
   /* @var \Drupal\Core\Entity\EntityRepository $entity_repository */
@@ -90,12 +80,6 @@ function alshaya_stores_finder_transac_preprocess_views_view_field__field_store_
 function alshaya_stores_finder_transac_form_node_store_form_alter(array &$form, FormStateInterface $form_state) {
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
-  // Do nothing if we are not on DMV2.
-  if ($address_book_manager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    $form['field_address']['#access'] = FALSE;
-    return;
-  }
 
   // Set the default country.
   $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = _alshaya_custom_get_site_level_country_code();

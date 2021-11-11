@@ -1,7 +1,7 @@
 <?php
 // @codingStandardsIgnoreFile
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
@@ -30,7 +30,7 @@ $envs = [
 
 global $languages;
 
-$client = new Client($app_id, $app_secret_admin);
+$client = SearchClient::create($app_id, $app_secret_admin);
 
 foreach ($envs as $env) {
   foreach ($brands as $brand) {

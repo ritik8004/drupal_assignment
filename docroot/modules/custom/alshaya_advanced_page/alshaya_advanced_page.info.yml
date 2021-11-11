@@ -1,8 +1,10 @@
 name: 'Alshaya Advanced Page'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 description: 'Advanced Page CT and related settings.'
 dependencies:
+  - alshaya_config:alshaya_config
   - alshaya_paragraphs:alshaya_paragraphs
   - drupal:block
   - block_field:block_field

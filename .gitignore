@@ -3,6 +3,7 @@ local.settings.php
 local.drush.yml
 local.site.yml
 local.services.yml
+site.txt
 tests/apis/conductor_v2/settings.php
 tests/behat/local.yml
 box/local.config.yml
@@ -15,7 +16,6 @@ docroot/core
 
 # Ignore paths that contain user-generated content.
 docroot/sites/*/files
-/files-private
 docroot/sites/*/private
 
 # Ignore contrib modules. These should be created during build process.
@@ -26,6 +26,7 @@ docroot/libraries
 drush/Commands
 
 # Ignore custom module build artifacts
+docroot/modules/custom/node_modules
 docroot/modules/react/node_modules
 docroot/modules/react/*/node_modules
 docroot/modules/react/*/dist
@@ -172,3 +173,4 @@ docroot/modules/.gitignore
 docroot/profiles/.gitignore
 /.editorconfig
 /.gitattributes
+.lando.local.yml

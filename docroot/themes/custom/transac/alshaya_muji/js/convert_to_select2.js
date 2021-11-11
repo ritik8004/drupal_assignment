@@ -39,11 +39,11 @@
         });
 
         // See https://github.com/select2/select2/pull/5035.
-        $('.cybersource-credit-card-exp-month-select, .checkoutcom-credit-card-exp-month-select').once('manage-disable').on('change', function () {
+        $('.checkoutcom-credit-card-exp-month-select').once('manage-disable').on('change', function () {
           setTimeout(function () {
-            $('.cybersource-credit-card-exp-month-select, .checkoutcom-credit-card-exp-month-select').select2('destroy');
+            $('.checkoutcom-credit-card-exp-month-select').select2('destroy');
 
-            $('.cybersource-credit-card-exp-month-select, .checkoutcom-credit-card-exp-month-select').select2({
+            $('.checkoutcom-credit-card-exp-month-select').select2({
               minimumResultsForSearch: -1
             });
           }, 50);

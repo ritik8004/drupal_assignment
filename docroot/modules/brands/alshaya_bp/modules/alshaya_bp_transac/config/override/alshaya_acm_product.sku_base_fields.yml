@@ -250,3 +250,10 @@ fields:
     cardinality: -1
     facet: 1
     index: 1
+  brand_category:
+    label: 'Category'
+    description: 'brand_category attribute.'
+    type: 'attribute'
+    cardinality: -1
+    index: 1
+    facet: 1

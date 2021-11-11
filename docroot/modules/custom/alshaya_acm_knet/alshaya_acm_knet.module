@@ -45,7 +45,7 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
     \Drupal::service('alshaya_acm.cart_helper')->cancelCartReservation($e->getMessage());
 
     // Show generic message to user.
-    drupal_set_message(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'), 'error');
+    \Drupal::messenger()->addMessage(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'), 'error');
 
     $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString());
     $response->send();

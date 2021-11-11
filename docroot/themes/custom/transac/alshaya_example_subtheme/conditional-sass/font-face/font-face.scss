@@ -1,0 +1,6 @@
+// We dont need any variable overrides in font-face.
+/// If brand has its own icons below import is not needed ///
+// We need whitelabel icons as this brand doesnt have its own.
+@import '../../../alshaya_white_label/conditional-sass/font-face/component/**/*';
+///////////////////////////////// Ends //////////////////////
+@import "component/**/*";

@@ -1,0 +1,5 @@
+name: Kaleyra
+type: module
+description: 'SMS gateway integration with Kaleyra API.'
+package: 'Other'
+core_version_requirement: ^8 || ^9

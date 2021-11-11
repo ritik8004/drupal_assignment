@@ -1,0 +1,5 @@
+alshaya_checkout_by_agent.smart_agent_settings:
+  title: Alshaya Smart Agent Settings
+  description: Configure smart agents in-store devices.
+  parent: alshaya_master.alshaya_admin
+  route_name: alshaya_checkout_by_agent.smart_agent_settings

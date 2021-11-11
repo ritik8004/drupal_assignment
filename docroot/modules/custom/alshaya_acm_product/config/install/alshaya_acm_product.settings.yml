@@ -4,7 +4,7 @@ list_view_items_per_page: 12
 list_view_auto_page_load_count: 3
 back_to_list: '1'
 auto_load_trigger_offset: 800
-local_storage_cache_time: 60
+local_storage_cache_time: 15
 pdp_gallery_pager_limit: 5
 brand_logo_base_path: 'media/attribute/swatch'
 brand_logo_extension: 'jpg'
@@ -45,3 +45,4 @@ max_discount_to_log: 80
 enable_size_grouping_filter: 0
 pause_videos_download: FALSE
 delivery_in_only_city_key: 0
+pdp_gallery_type: 'default'

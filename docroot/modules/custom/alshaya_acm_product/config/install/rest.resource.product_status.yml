@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product
+id: product_status
+plugin_id: product_status
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

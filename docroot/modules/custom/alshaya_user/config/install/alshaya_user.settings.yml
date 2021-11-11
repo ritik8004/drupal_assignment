@@ -10,5 +10,5 @@ password_tooltip:
 password_tooltip_change_pwd:
   value: '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords are not allowed.</li></ul>'
   format: rich_text
-my_account_enabled_links: ''
+my_account_enabled_links: 'a:8:{s:10:"my_account";s:10:"my_account";s:6:"orders";s:6:"orders";s:15:"contact_details";s:15:"contact_details";s:12:"address_book";s:12:"address_book";s:13:"payment_cards";s:13:"payment_cards";s:24:"communication_preference";s:24:"communication_preference";s:15:"change_password";s:15:"change_password";s:8:"sign_out";s:8:"sign_out";}'
 langcode: en

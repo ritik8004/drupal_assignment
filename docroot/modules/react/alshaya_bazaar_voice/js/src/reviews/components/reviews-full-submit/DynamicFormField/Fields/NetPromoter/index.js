@@ -30,9 +30,9 @@ class NetPromoter extends React.Component {
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="netpromotr-wrapper">
+        <div id={id} className="netpromotr-wrapper">
           <div className="netpromoter-label">
             <label htmlFor={label}>
               {label}

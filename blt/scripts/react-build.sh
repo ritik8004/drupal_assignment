@@ -75,11 +75,15 @@ then
     echo -e "travis_fold:start:REACT-$module_dir-Build\r"
 
     # We build the module if:
+    # - There is a change in common JS directory.
     # - We are outside Travis context.
     # - The module has changed.
     # - We are merging but the module (dist) does not exist on deploy directory.
     build=0
-    if ([[ $(echo "$diff" | grep modules/react/$module_dir) ]]); then
+    if ([[ $(echo "$diff" | grep modules/react/js) ]]); then
+      echo -e "Building $module_dir because there is some change in common (modules/react/js) folder."
+      build=1
+    elif ([[ $(echo "$diff" | grep modules/react/$module_dir) ]]); then
       echo -e "Building $module_dir because there is some change in this folder."
       build=1
     elif [ $isTravis == 0 ]; then
@@ -91,6 +95,24 @@ then
         echo -e "Building $module_dir because there is no dist folder in $docrootDir/../deploy/docroot/modules/react/$module_dir"
         build=1
       fi
+    fi
+
+    # We build the module if:
+    # - The react_dependencies.txt exist in the current module,
+    # - and there are changes in one of the listed modules.
+    # Ignore checking if build is already true.
+    dependecyFile="$docrootDir/modules/react/$module_dir/react_dependencies.txt"
+    if ([ -f "$dependecyFile" -a $build == 0 ])
+    then
+      IFS=$'\r\n' GLOBIGNORE='*' command eval "dependentModules=($(cat $dependecyFile))"
+      for dependentModule in ${dependentModules[@]}
+      do
+        if ([[ $(echo "$diff" | grep modules/react/$dependentModule) ]]); then
+          echo -e "Building $module_dir because there is some change in dependent module $dependentModule."
+          build=1
+          break
+        fi
+      done
     fi
 
     if ([ $build == 1 ])

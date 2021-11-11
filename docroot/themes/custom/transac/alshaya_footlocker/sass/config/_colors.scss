@@ -17,6 +17,7 @@ $info-blue: #4285f4;
 $cerulean-two: #0084cc;
 $new-pdp-blue: #007aff;
 $new-pdp-nero: #1a1a1a;
+$_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
 
 // Header color.
 $dark-brown: #504a4a;
@@ -203,9 +204,6 @@ $joinclubblock_text: $black;
 $content_error_msg_bg: $red;
 $default_msg_bg: $medium-green;
 
-// Pace progress color
-$progress_loader: $purplish-brown;
-
 /* ------- 5. Components --------------- */
 // Titles.
 $page_title: $black;
@@ -261,6 +259,7 @@ $category_facet_active_text: $black;
 $plp_tile_product_text: $black;
 $plp_tile_product_title: $black;
 $plp_tile_product_title_hover: $black;
+$plp-add-to-cart-btn-bg: $dark-red;
 
 // Product Add to cart form.
 $pdp_sidebar_label: $purplish-brown;
@@ -595,3 +594,21 @@ $magv2-free-gift-modal-item-code: $warm-grey;
 
 // Cloudzoom
 $product-image-zoom-placeholder-bg: $white-two;
+
+// PLP Quick view drawer.
+$plp-quick-view-product-size-text: $pdp_size_option_text;
+$plp-quick-view-product-size-text-active: $pdp_size_option_selected_text;
+$plp-quick-view-product-size-border: $pdp_size_option_border;
+$plp-quick-view-product-size-border-hover: $pdp_size_option_border;
+$plp-quick-view-product-size-hover-bg: $pdp_thumbimage_hover_bg;
+$plp-quick-view-product-size-active-bg: $pdp_size_option_selected_bg;
+$plp-quick-view-product-size-text-disabled: $pdp_size_option_text;
+$plp-quick-view-product-group-size-active: $primary_link-active;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: rgba(0, 0, 0, 0.8);
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
+// Express delivery
+$pdp-delivery-section-subtitle: $warm-grey;
+$sameday-express-delivery-radio-button: $new-pdp-blue;

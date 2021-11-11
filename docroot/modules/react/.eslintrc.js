@@ -30,6 +30,9 @@ module.exports = {
     google: true,
     GTM_CONSTANTS: true,
     debounce: true,
+    BV: true,
+    axios: true,
+    _: true,
   },
   parser: "babel-eslint",
   parserOptions: {
@@ -63,5 +66,6 @@ module.exports = {
       ]
     }],
     "react/jsx-props-no-spreading": "off",
-  }
+  },
+  ignorePatterns: ["**/__tests__/*.js"],
 };

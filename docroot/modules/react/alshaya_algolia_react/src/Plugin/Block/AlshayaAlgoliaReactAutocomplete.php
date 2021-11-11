@@ -83,7 +83,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
    */
   public function build() {
     // Get common configuration for Algolia pages.
-    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
+    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, self::PAGE_TYPE);
 
     // Get algola settings for lhn menu.
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
@@ -102,6 +102,11 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       'alshaya_white_label/algolia_search',
       'alshaya_white_label/slick_css',
     ];
+
+    if ($common_config['commonAlgoliaSearch']['productFrameEnabled'] || $common_config['commonAlgoliaSearch']['promotionFrameEnabled'] || $common_config['commonAlgoliaSearch']['productTitleTrimEnabled']) {
+      $libraries[] = 'alshaya_white_label/plp-frame-options';
+    }
+
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
     if ($display_settings->get('color_swatches_show_product_image')) {
       $libraries[] = 'alshaya_white_label/plp-swatch-hover';
@@ -118,6 +123,19 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
 
+    // Check express day option avialble or not and add drupal settings.
+    $express_status = [
+      'enabled' => FALSE,
+    ];
+    $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+    if ($express_delivery_config->get('status')) {
+      $express_status = [
+        'enabled' => TRUE,
+      ];
+
+      $libraries[] = 'alshaya_white_label/sameday-express-delivery';
+    }
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-autocomplete"></div>',
@@ -127,6 +145,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
           'algoliaSearch' => $algoliaSearch,
           'autocomplete' => $autocomplete,
           'reactTeaserView' => $reactTeaserView,
+          'expressDelivery' => $express_status,
         ],
       ],
     ];
@@ -136,9 +155,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), [
-      'languages',
-    ]);
+    return ['languages'];
   }
 
   /**
@@ -147,6 +164,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   public function getCacheTags() {
     return Cache::mergeTags(parent::getCacheTags(), [
       'config:alshaya_search.settings',
+      'config:alshaya_spc.express_delivery',
     ]);
   }
 

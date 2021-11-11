@@ -1,5 +1,6 @@
 import React from 'react';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 export default class BazaarVoiceMessages extends React.Component {
   isComponentMounted = true;
@@ -80,6 +81,8 @@ export default class BazaarVoiceMessages extends React.Component {
 
   render() {
     const { message, errorList } = this.state;
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+
     return (
       <>
         { message
@@ -93,7 +96,7 @@ export default class BazaarVoiceMessages extends React.Component {
         <div className="exception-error">
           <ul className="exception-field-error-list">
             {errorList.map((error) => (
-              <li key={`error-${error.Field}`}>{error.Message}</li>
+              <li key={`error-${error.Field}`}>{bazaarVoiceSettings.reviews.bazaar_voice.error_messages[error.Code]}</li>
             ))}
           </ul>
         </div>

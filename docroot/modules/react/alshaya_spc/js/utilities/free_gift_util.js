@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
@@ -61,12 +59,7 @@ export const addFreeGift = (freeGiftLink) => {
       promoRuleId,
     };
   }
-  axios.post('/middleware/public/select-free-gift', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: JSON.stringify(postData),
-  }).then((cartresponse) => {
+  window.commerceBackend.addFreeGift(postData).then((cartresponse) => {
     if (Object.keys(cartresponse.data).length !== 0) {
       // Refreshing mini-cart.
       const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartresponse.data } });

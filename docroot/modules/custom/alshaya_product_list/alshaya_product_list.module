@@ -15,6 +15,9 @@ use Drupal\search_api\Query\QueryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\alshaya_product_list\Plugin\Block\AlshayaAlgoliaReactProductList;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_search_api_db_query_alter().
@@ -80,6 +83,9 @@ function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = '
 
   switch ($op) {
     case 'add':
+      /** @var \Drupal\search_api\Entity\Index $index */
+      $index = Index::load('product');
+
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
           // We use add even when resetting. Remove facet if available.
@@ -87,7 +93,7 @@ function alshaya_product_list_acq_sku_base_fields_updated(array $fields, $op = '
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']], $index->status());
       }
       break;
 
@@ -250,4 +256,70 @@ function alshaya_product_list_node_presave(NodeInterface $node) {
   }
   // Invalidate option page cache.
   Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
+}
+
+/**
+ * Implements hook_query_TAG_NAME_alter().
+ */
+function alshaya_product_list_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Add show_in_product_list_lhn field.
+  $query->leftJoin('taxonomy_term__field_show_in_product_list_lhn', 'tplhn', 'tplhn.entity_id=tfd.tid');
+  $query->addField('tplhn', 'field_show_in_product_list_lhn_value', 'field_show_in_product_list_lhn_value');
+}
+
+/**
+ * Implements hook_alshaya_search_api_listing_page_types_alter().
+ */
+function alshaya_product_list_alshaya_search_api_listing_page_types_alter(&$page_types) {
+  $page_types['product_option_list'] = t('Product Option Listing');
+}
+
+/**
+ * Implememts hook_options_list_resource_response_alter().
+ */
+function alshaya_product_list_options_list_resource_response_alter(&$data) {
+  try {
+    $options = array_keys($data['options_list']);
+    $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
+    $lancode = '';
+    foreach ($options as $option_name) {
+      foreach ($data['options_list'][$option_name] ?? [] as $option_name_key => $brands_list) {
+        foreach ($brands_list['options_markup']['#option']['terms'] ?? [] as $term_list_key => $term_list) {
+          if ($brands_list['group'] ?? NULL) {
+            foreach ($term_list ?? [] as $term_key => $term) {
+              $lancode = explode('/', $term['url'])[1];
+              $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['lhn_status'] = $mobile_app_utility->getProductListLhnStatus($term['url'], $lancode);
+            }
+          } else {
+            // Here $term_list is actually a single term since there is no grouping.
+            $lancode = explode('/', $term_list['url'])[1];
+            $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key]['lhn_status'] = $mobile_app_utility->getProductListLhnStatus($term_list['url'], $lancode);
+          }
+        }
+      }
+    }
+    $alshaya_product_list_helper = \Drupal::service('alshaya_product_list.page_helper');
+    $vocab_list = $alshaya_product_list_helper->getVocabListLhnBlock();
+    $terms = reset($vocab_list);
+    if($terms && $lancode){
+      $productCategoryHelper = \Drupal::service('alshaya_acm_product_category.helper');
+      $category_tree = $productCategoryHelper->productCategoryBuild('alshaya_product_list_lhn_block', $terms, $lancode, 'product_list');
+      $data['lhn_tree'] = $mobile_app_utility->excludeUnusedKeysMobile($category_tree['#lhn_cat_tree']);
+    }
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_product_list')->error('Error occured while alter product list options list resource response alter : @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_algolia_react_option_list_information().
+ */
+function alshaya_product_list_algolia_react_option_list_information_alter( $query_type, &$page_type, &$page_sub_type) {
+  if ($query_type === 'optionlist') {
+    $page_type = AlshayaAlgoliaReactProductList::PAGE_TYPE;
+    $page_sub_type = AlshayaAlgoliaReactProductList::PAGE_SUB_TYPE;
+  }
 }

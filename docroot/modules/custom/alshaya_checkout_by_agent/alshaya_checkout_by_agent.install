@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set api_request_limit for smartagent API.
+ */
+function alshaya_checkout_by_agent_update_8001() {
+  \Drupal::configFactory()->getEditable('alshaya_checkout_by_agent.settings')
+    ->set('api_request_limit', 10)
+    ->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_checkout_by_agent_uninstall() {
+  // Delete all the configs added by this module.
+  \Drupal::configFactory()
+    ->getEditable('alshaya_checkout_by_agent.settings')
+    ->delete();
+  \Drupal::configFactory()->getEditable('rest.resource.share_cart')->delete();
+  Role::load('smartagent')->delete();
+
+  $field = FieldConfig::loadByName('user', 'user', 'field_agent_store');
+  if (!empty($field)) {
+    $field->delete();
+  }
+  $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store');
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_checkout_by_agent_install() {
+  // Update translations.
+  $strings = [
+    'Order assisted by ALX InStorE' => [
+      'ar' => 'طلب بمساعدة وكيل',
+    ],
+    'End Transaction' => [
+      'ar' => 'إنهاء المعاملة',
+    ],
+    'ALX InStorE: @name' => [
+      'ar' => '@name :الوكيل',
+    ],
+    'Share basket with customer via' => [
+      'ar' => 'شارك السلة مع العميل عبر',
+    ],
+    'Share basket with customer' => [
+      'ar' => 'مشاركة السلة مع العميل',
+    ],
+    'SMS' => [
+      'ar' => 'رسالة قصيرة',
+    ],
+    'Complete your order at @site_name' => [
+      'ar' => 'عزيزي العميل @site_name',
+    ],
+    'Share' => [
+      'ar' => 'إرسال',
+    ],
+    'Smart agent, we have not been able to confirm your location. Please enable location services and allow location tracking then try to log in again.' => [
+      'ar' => 'أيها الوكيل ، لم نتمكن من تأكيد موقعك. يرجى تمكين خدمات الموقع والسماح بتتبع الموقع ثم حاول تسجيل الدخول مرة أخرى.'
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

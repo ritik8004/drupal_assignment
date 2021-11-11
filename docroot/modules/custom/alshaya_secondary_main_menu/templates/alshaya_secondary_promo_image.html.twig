@@ -1,0 +1,14 @@
+<div class="promo-wrapper" style="display: none">
+  {% for promo_button in promo %}
+    <a class="promo--button-wrapper" href="{{ promo_button.link }}">
+      <div class="promo--button">
+        <div class="promo--button-image">
+          <img loading="lazy" src="{{ file_url(promo_button.imgurl) }}">
+        </div>
+        <div class="promo--button-body">
+          <span class="promo--button-title">{{ promo_button.img_title }}</span>
+          <span class="promo--button-link">{{ promo_button.link_title }}</span></div>
+      </div>
+    </a>
+  {% endfor %}
+</div>

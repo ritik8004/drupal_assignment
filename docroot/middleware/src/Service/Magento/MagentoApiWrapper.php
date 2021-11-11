@@ -109,7 +109,7 @@ class MagentoApiWrapper {
         throw new \Exception('Back-end system is down', 600);
       }
       elseif ($action === 'native' && $response->getStatusCode() == 404) {
-        throw new \Exception('', 404);
+        throw new \Exception($result['message'] ?? '', 404);
       }
       elseif ($response->getStatusCode() !== 200) {
         if (empty($result)) {

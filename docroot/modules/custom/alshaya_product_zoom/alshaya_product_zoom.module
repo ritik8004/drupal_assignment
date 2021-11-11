@@ -18,6 +18,7 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
         'properties' => '',
         'labels' => '',
         'image_slider_position_pdp' => '',
+        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
       ],
       'template' => 'product_zoom',
     ],

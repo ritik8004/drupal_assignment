@@ -423,6 +423,8 @@
       letter-spacing: 0.5px;
       padding: 0 1.25rem;
     }
+
+    @include arabic-letter-spacing;
   }
 }
 

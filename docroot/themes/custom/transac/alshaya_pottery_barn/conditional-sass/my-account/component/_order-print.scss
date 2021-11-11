@@ -1,0 +1,117 @@
+@media print {
+  .alias--confirmation-print {
+    .block-customer-service-block {
+      text-align: $left;
+    }
+
+    .above-mobile.empty--cell {
+      display: none;
+    }
+  }
+}
+
+body {
+  &.alias--confirmation-print {
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.alias--confirmation-print {
+  .dark--text {
+    font-weight: normal;
+  }
+
+  .delivery-details {
+    border: 1px solid $order_print_delivery_details_row_border;
+    font-size: 0.9375rem;
+
+    strong {
+      color: $order_print_dark_txt;
+      font-weight: normal;
+    }
+  }
+
+  .c-order-print {
+    .subtitle {
+      color: $order_print_dark_txt;
+      border-bottom: 1px solid $order_print_dark_txt;
+      font-weight: normal;
+    }
+  }
+
+  .user__order--detail {
+    .order-item-row {
+      .price-currency,
+      .price-amount {
+        font-weight: normal;
+      }
+
+      .blend {
+        background-color: $order_print_order_details_row_bg_blend;
+      }
+
+      .dark {
+        color: $order_print_order_details_row_label;
+      }
+
+      td {
+        &:nth-child(2) {
+          div {
+            color: $order_print_order_details_item_row_details;
+
+            &.dark {
+              color: $order_print_order_details_row_label;
+            }
+          }
+        }
+      }
+    }
+
+    background-color: $order_print_order_details_row_bg;
+
+    .dark {
+      font-weight: normal;
+      color: $order_print_order_details_row_dark_label;
+    }
+
+    .product--count {
+      background-color: $order_print_product_count_row_bg;
+      color: $order_print_order_details_row_label;
+    }
+
+    .price-type__wrapper {
+      color: $order_print_order_details_price_wrapper;
+    }
+
+    .light {
+      color: $order_print_order_details_row_light;
+    }
+
+    .total-row {
+      .right--align {
+        .dark {
+          color: $order_print_order_details_total_label;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .sub-total-row,
+    .delivery-charge-row,
+    .total-row {
+      .price-type__wrapper {
+        .price {
+          color: $order_print_delivery_details_price_label;
+        }
+      }
+    }
+
+    .right--align {
+      color: $order_print_order_details_total_label;
+    }
+  }
+}

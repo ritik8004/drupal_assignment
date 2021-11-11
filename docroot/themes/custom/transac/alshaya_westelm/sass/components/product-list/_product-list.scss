@@ -55,6 +55,10 @@
   .c-products-list {
     &.product-small {
       .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 14.6125rem;
+        }
+
         .alshaya_search_mainimage {
           @include breakpoint($only-tablet) {
             height: 13.5rem;
@@ -103,7 +107,7 @@
   .c-products-list.product-large {
     @include breakpoint($only-tablet) {
       .alshaya_search_gallery {
-        max-height: 20rem;
+        height: 20rem;
 
         .alshaya_search_mainimage {
           height: auto;
@@ -113,7 +117,7 @@
 
     @include breakpoint($only-mobile) {
       .alshaya_search_gallery {
-        max-height: 21rem;
+        height: 21rem;
 
         .alshaya_search_mainimage {
           height: 21rem;
@@ -123,10 +127,20 @@
 
     @include breakpoint($desktop) {
       .alshaya_search_gallery {
-        max-height: none;
+        height: 20.5rem;
 
         .alshaya_search_mainimage {
           height: auto;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-promotion {
+    .c-products-list.product-large {
+      @include breakpoint($desktop) {
+        .alshaya_search_gallery {
+          height: 25.5rem;
         }
       }
     }

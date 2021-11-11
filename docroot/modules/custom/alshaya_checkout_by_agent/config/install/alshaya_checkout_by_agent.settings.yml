@@ -1,0 +1,9 @@
+smart_user_agents: []
+smart_agent_ips: ''
+whatsapp_template: ''
+whatsapp_mode: 'text'
+langcode: en
+email_template: '<h1>Dear Customer,</h1><p>Thank you for visiting our store.</p><p>Please complete the purchase by clicking on the button below for the order initiated by you with the assistance of one our ALX InStorE.</p><p><a href="@cart_url" target="_blank" class="button">Complete Purchase</a><br/></p><p>Best Wishes,<br/>The [site:name] Team<br/><a href="[site:url]">[site:url-brief]</a></p>'
+sms_template: "Dear Customer,\r\n\r\nComplete you order by visiting the link: @link. \r\n\r\nBest Wishes, \r\nThe [site:name] Team"
+restrict_agent_login: true
+api_request_limit: 10

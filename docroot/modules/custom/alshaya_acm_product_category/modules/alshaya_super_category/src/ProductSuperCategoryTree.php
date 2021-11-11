@@ -9,7 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
@@ -19,6 +19,8 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Theme\ThemeManagerInterface;
 
 /**
  * Class Product Super Category Tree.
@@ -42,7 +44,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   /**
    * The path alias manager.
    *
-   * @var \Drupal\Core\Path\AliasManagerInterface
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -52,6 +54,13 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
    */
   protected $productCategoryHelper;
+
+  /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * ProductCategoryTree constructor.
@@ -76,10 +85,14 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Database connection.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
+   *   The Theme Manager service.
    */
   public function __construct(ProductCategoryTreeInterface $product_category_tree,
                               RequestStack $request_stack,
@@ -92,11 +105,14 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
                               Connection $connection,
                               ConfigFactoryInterface $config_factory,
                               AliasManagerInterface $alias_manager,
-                              ProductCategoryHelper $product_category_helper) {
+                              ProductCategoryHelper $product_category_helper,
+                              ModuleHandlerInterface $module_handler,
+                              ThemeManagerInterface $theme_manager) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper);
+    $this->themeManager = $theme_manager;
+    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper, $module_handler);
   }
 
   /**
@@ -343,6 +359,55 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     }
 
     return $l1Terms ? array_column($l1Terms, 'name', 'tid') : [];
+  }
+
+  /**
+   * Gets the brand logos.
+   *
+   * @param int $tid
+   *   Taxonomy term id.
+   *
+   * @return object
+   *   Object containing fields data.
+   */
+  public function getBrandIcons($tid) {
+    // Check for super category status.
+    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      return [];
+    }
+    // Supercategory image fields.
+    $fields = [
+      'active_image' => 'field_logo_active_image',
+      'inactive_image' => 'field_logo_inactive_image',
+      'header_image' => 'field_logo_header_image',
+    ];
+    $brand_logos = $brand_logo_data = [];
+    $term_data = $this->getCategoryRootTerms();
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+    // Get all the terms data in English for preparing label.
+    $term_data_en = ($current_language !== 'en') ? $this->getCategoryRootTerms('en') : $term_data;
+    $term_info_en = isset($term_data_en[$tid]) ? $term_data_en[$tid] : "";
+    if (!empty($term_info_en)) {
+      $theme = $this->themeManager->getActiveTheme();
+      $base_uri = $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
+      $term_clean_name = Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
+      $brand_logos['active_image'] = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '-active.svg';
+      $brand_logos['inactive_image'] = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '.svg';
+    }
+    // Get supercategory logo data.
+    foreach ($fields as $field_key => $field) {
+      $brand_logo_data[$field_key] = $this->getImageField($tid, $field);
+    }
+    // Prepare image url for supercategory logo.
+    foreach ($brand_logo_data as $key => $logo_data) {
+      $id = "field_logo_{$key}_target_id";
+      if (!empty($logo_data)) {
+        $image = $this->fileStorage->load($logo_data->$id);
+        $brand_logos[$key] = file_create_url($image->getFileUri());
+      }
+    }
+
+    return $brand_logos;
   }
 
 }

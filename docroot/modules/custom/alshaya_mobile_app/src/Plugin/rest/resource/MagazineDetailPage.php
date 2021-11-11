@@ -17,6 +17,7 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Provides a resource to get deeplink.
@@ -80,6 +81,12 @@ class MagazineDetailPage extends ResourceBase {
    */
   protected $entityRepository;
 
+  /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
 
   /**
    * AdvancedPageResource constructor.
@@ -108,6 +115,8 @@ class MagazineDetailPage extends ResourceBase {
    *   Renderer interface.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   Current time service.
    */
 
   /**
@@ -125,7 +134,8 @@ class MagazineDetailPage extends ResourceBase {
     SkuInfoHelper $skuInfo,
     SkuPriceHelper $skuPrice,
     RendererInterface $renderer,
-    EntityRepositoryInterface $entity_repository
+    EntityRepositoryInterface $entity_repository,
+    DateFormatterInterface $date_formatter
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
@@ -135,6 +145,7 @@ class MagazineDetailPage extends ResourceBase {
     $this->sku_price = $skuPrice;
     $this->renderer = $renderer;
     $this->entityRepository = $entity_repository;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -153,7 +164,8 @@ class MagazineDetailPage extends ResourceBase {
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('alshaya_acm_product.price_helper'),
       $container->get('renderer'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('date.formatter')
     );
   }
 
@@ -167,6 +179,7 @@ class MagazineDetailPage extends ResourceBase {
     // Path alias of magazine article.
     $alias = $this->requestStack->query->get('url');
     $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+    $res = NULL;
 
     if (!$node instanceof NodeInterface) {
       $this->mobileAppUtility->throwException();
@@ -202,7 +215,7 @@ class MagazineDetailPage extends ResourceBase {
     }
     if (!empty($node->field_magazine_date->getValue())) {
       $magazine_date = $node->field_magazine_date->getValue()[0]['value'];
-      $response_data['date'] = format_date(strtotime($magazine_date), 'magazine_date');
+      $response_data['date'] = $this->dateFormatter->format(strtotime($magazine_date), 'magazine_date');
     }
     if ($node->hasField('field_magazine_paragraphs') && !empty($node->field_magazine_paragraphs)) {
       $magazine_paragraphs = $node->field_magazine_paragraphs->referencedEntities();
@@ -239,11 +252,11 @@ class MagazineDetailPage extends ResourceBase {
             $res['type'] = $item->bundle();
             foreach ($video as $items) {
               $res1['media_id'] = (int) $items->id();
-              if (!empty($items->field_media_video_embed_field->getValue())) {
-                $res1['embed_video_url'] = $items->field_media_video_embed_field->getValue()[0]['value'];
+              if (!empty($items->field_media_oembed_video->getValue())) {
+                $res1['embed_video_url'] = $items->field_media_oembed_video->getValue()[0]['value'];
               }
-              if (!empty($items->field_document->entity)) {
-                $res1['video_url'] = file_create_url($items->field_document->entity->getFileUri());
+              if (!empty($items->field_media_document->entity)) {
+                $res1['video_url'] = file_create_url($items->field_media_document->entity->getFileUri());
               }
               if (!empty($items->field_media_in_library->getValue())) {
                 $res1['media_library_flag'] = (int) $items->field_media_in_library->getValue()[0]['value'];

@@ -1,0 +1,94 @@
+error_messages:
+  -
+    value: 'ERROR_ACCESS_DENIED'
+    label: 'لا يمكن معالجة طلبك. يرجى المحاولة مرة أخرى بعد قليل.'
+  -
+    value: 'ERROR_FORM_DUPLICATE'
+    label: 'الاسم المستعار مستخدم بالفعل. الرجاء اختيار اسم مستعار آخر.'
+  -
+    value: 'ERROR_FORM_DUPLICATE_NICKNAME'
+    label: 'الاسم المستعار مستخدم بالفعل. الرجاء اختيار اسم مستعار آخر.'
+  -
+    value: 'ERROR_FORM_EMOJI'
+    label: 'الرموز التعبيرية غير مدعومة. يمكنك استخدام النصوص والأرقام للمتابعة.'
+  -
+    value: 'ERROR_FORM_INVALID_EMAILADDRESS'
+    label: 'صيغة البريد الإلكتروني غير صحيحة. يرجى إدخال بريد الكتروني صحيح.'
+  -
+    value: 'ERROR_FORM_INVALID_IPADDRESS'
+    label: 'عنوان بروتوكول الانترنت غير صالح.'
+  -
+    value: 'ERROR_FORM_INVALID_OPTION'
+    label: 'تمت إزالة الخيار المحدد.'
+  -
+    value: 'ERROR_FORM_PATTERN_MISMATCH'
+    label: 'هذا الحقل ليس بالتنسيق الصحيح. يرجى التعديل للمتابعة.'
+  -
+    value: 'ERROR_FORM_PROFANITY'
+    label: 'تحتوي الرسالة على لغة غير لائقة. يرجى التأكد من أن مراجعتك متوافقة مع إرشاداتنا.'
+  -
+    value: 'ERROR_FORM_REJECTED'
+    label: 'تم رفض الطلب.'
+  -
+    value: 'ERROR_FORM_REQUIRED'
+    label: 'لم يتم ملء الحقل المطلوب. يرجى ملء جميع التفاصيل المطلوبة.'
+  -
+    value: 'ERROR_FORM_REQUIRED_EITHER'
+    label: 'معايير المصادقة المستضافة المطلوبة مفقودة.'
+  -
+    value: 'ERROR_FORM_REQUIRED_NICKNAME'
+    label: 'الاسم المستعار مطلوب. الرجاء إدخال اسم مستعار صالح.'
+  -
+    value: 'ERROR_FORM_REQUIRES_TRUE'
+    label: 'لقد قرأت ووافقت على الشروط والأحكام لتقديم التقييم.'
+  -
+    value: 'ERROR_FORM_RESTRICTED'
+    label: 'يجب أن يكون عمرك 18 عاماً أو أكثر لإرسال تقييمك. يرجى قراءة الشروط والأحكام الخاصة بنا لمزيد من التفاصيل.'
+  -
+    value: 'ERROR_FORM_SUBMITTED_NICKNAME'
+    label: 'الاسم المستعار مستخدم بالفعل. الرجاء اختيار اسم مستعار مختلف.'
+  -
+    value: 'ERROR_FORM_TOO_FEW'
+    label: 'يجب تحديد خيار واحد أو أكثر للمتابعة.'
+  -
+    value: 'ERROR_FORM_TOO_HIGH'
+    label: 'تم تحديد عدد كبير جداً من الخيارات. يرجى إزالة خيار واحد أو أكثر للمتابعة.'
+  -
+    value: 'ERROR_FORM_TOO_LONG'
+    label: 'هذه الرسالة تتجاوز عدد الأحرف المسموح به. الرجاء إرسال رسالة أقصر للمتابعة.'
+  -
+    value: 'ERROR_FORM_TOO_LOW'
+    label: 'هذه الرسالة أقل من عدد الأحرف المسموح بها. يرجى إرسال رسالة أطول للمتابعة.'
+  -
+    value: 'ERROR_FORM_TOO_SHORT'
+    label: 'هذه الرسالة أقل من عدد الأحرف المسموح بها. يرجى إرسال رسالة أطول للمتابعة.'
+  -
+    value: 'ERROR_FORM_UPLOAD_IO'
+    label: 'لا يمكن تحميل الملف. يرجى التأكد من أن نوع الملف صالح.'
+  -
+    value: 'ERROR_DUPLICATE_SUBMISSION'
+    label: 'لقد قدمت بالفعل تقييم لهذا المنتج.'
+  -
+    value: 'ERROR_PARAM_INVALID_API_KEY'
+    label: 'قيمة مفتاح API غير صالحة.'
+  -
+    value: 'ERROR_PARAM_INVALID_LOCALE'
+    label: 'رمز المنطقة غير صالح.'
+  -
+    value: 'ERROR_PARAM_INVALID_PARAMETERS'
+    label: 'معيار غير صالح في تقديم المحتوى.'
+  -
+    value: 'ERROR_PARAM_MISSING_SUBJECT_ID'
+    label: 'الإرسال لا يحتوي على المنتج. معرف المنتج مطلوب لتقديم المراجعة.'
+  -
+    value: 'ERROR_PARAM_MISSING_USER_ID'
+    label: 'لا يسمح هذا العميل بعمليات الإرسال غير الموثقة. مطلوب توفير مستخدم صالح.'
+  -
+    value: 'ERROR_REQUEST_LIMIT_REACHED'
+    label: 'خطأ في تحديد المعدل - عدد كبير جداً من الطلبات لكل فترة زمنية.'
+  -
+    value: 'ERROR_UNKNOWN'
+    label: 'لا يمكن معالجة طلبك. يرجى المحاولة مرة أخرى بعد قليل.'
+  -
+    value: 'ERROR_UNSUPPORTED'
+    label: 'هذه الميزة غير مدعومة حالياً.'

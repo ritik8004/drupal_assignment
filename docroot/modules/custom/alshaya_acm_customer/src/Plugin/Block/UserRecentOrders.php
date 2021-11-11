@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_customer\Plugin\Block;
 
 use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -238,7 +239,11 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               $order['item_names'][] = $item['name'];
 
               // Load the first image.
-              $order['items'][$key]['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'order_detail');
+              $order['items'][$key]['image'] = alshaya_acm_get_product_display_image(
+                $item['sku'],
+                SkuImagesHelper::STYLE_PRODUCT_TEASER,
+                'order_detail'
+              );
 
               // Total price.
               $order['items'][$key]['total_price'] = [
@@ -287,6 +292,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             '#order' => $order,
           ];
         }
+        // Allow other modules to update recent order build.
+        $this->moduleHandler->alter('alshaya_acm_customer_recent_order_build', $build);
       }
     }
     catch (\Exception $e) {

@@ -12,6 +12,72 @@ use Drupal\Core\Site\Settings;
 use Drupal\block\BlockInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\facets\Entity\Facet;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_update_n().
+ *
+ * [6.4.0] Uninstall redundant drupal core themes.
+ */
+function alshaya_transac_update_8136() {
+  // Remove redundant drupal core themes.
+  $theme_handler = \Drupal::service('theme_handler');
+  // We set a admin theme as part of alshaya_admin module.
+  if ($theme_handler->themeExists('claro')) {
+    \Drupal::service('theme_installer')->uninstall(['claro']);
+  }
+  // We set a site theme as part of brand module.
+  if ($theme_handler->themeExists('bartik')) {
+    \Drupal::service('theme_installer')->uninstall(['bartik']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.3.0] Uninstall acq_cybersource module from
+ * docroot/modules/commerce/acq_commerce/modules.
+ */
+function alshaya_transac_update_8135() {
+  \Drupal::service('module_installer')->uninstall(['acq_cybersource']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.1.0] Uninstall the unused KNET module and disable the knet plugins.
+ */
+function alshaya_transac_update_8134()
+{
+  // Disabling these modules for transac profile only, as these modules are
+  // still in use by some non-transac sites.
+  \Drupal::service('module_installer')->uninstall(['alshaya_acm_knet']);
+  \Drupal::service('module_installer')->uninstall(['alshaya_knet']);
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $configManager */
+  $configManager = \Drupal::service('alshaya_config.manager');
+
+  // Disable the config so that plugin not found error is not thrown.
+  $configManager->updateConfigs(
+    [
+      'rest.resource.knet_finalize_request',
+      'rest.resource.knet_init_request'
+    ],
+    'alshaya_mobile_app',
+    'optional'
+  );
+
+  // Disable the resource related permissions.
+  foreach (Role::loadMultiple(['anonymous', 'authenticated']) as $role) {
+    if ($role->hasPermission('restful get knet_init_request')) {
+      $role->revokePermission('restful get knet_init_request');
+    }
+    if ($role->hasPermission('restful get knet_finalize_request')) {
+      $role->revokePermission('restful get knet_finalize_request');
+    }
+    $role->save();
+  }
+}
 
 /**
  * Implements hook_update_N().
@@ -859,7 +925,6 @@ function alshaya_transac_install() {
     'alshaya_stores_finder_transac',
     'alshaya_super_category',
     'alshaya_user',
-    'alshaya_acm_knet',
     'alshaya_acm_checkoutcom',
     'alshaya_static_html',
     'alshaya_product_options',
@@ -905,6 +970,17 @@ function alshaya_transac_install() {
 
   // Set alshaya_white_label as the default theme.
   \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+
+  // Remove redundant drupal core themes.
+  $theme_handler = \Drupal::service('theme_handler');
+  // We set a admin theme as part of alshaya_admin module.
+  if ($theme_handler->themeExists('claro')) {
+    \Drupal::service('theme_installer')->uninstall(['claro']);
+  }
+  // We set a site theme as part of brand module.
+  if ($theme_handler->themeExists('bartik')) {
+    \Drupal::service('theme_installer')->uninstall(['bartik']);
+  }
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac');

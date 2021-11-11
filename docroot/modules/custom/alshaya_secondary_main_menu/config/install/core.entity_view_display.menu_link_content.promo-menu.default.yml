@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.menu_link_content.promo-menu.field_promo_images
+    - system.menu.promo-menu
+  module:
+    - entity_reference_revisions
+id: menu_link_content.promo-menu.default
+targetEntityType: menu_link_content
+bundle: promo-menu
+mode: default
+content:
+  children:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_promo_images:
+    type: entity_reference_revisions_entity_view
+    weight: 2
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

@@ -134,6 +134,30 @@
         }
       }
     }
+
+    .listing-inline-star {
+      justify-content: $left;
+      margin-bottom: 0;
+
+      .rating-label {
+        margin-#{$right}: 0.5rem;
+        width: 10%;
+
+        @include breakpoint($only-mobile) {
+          width: 14%;
+        }
+      }
+
+      .facet-item__count {
+        padding-#{$left}: 0.125rem;
+      }
+
+      .star-ratings-wrapper {
+        .inline-star {
+          top: 0.0625rem;
+        }
+      }
+    }
   }
 
   .filter__inner {
@@ -214,6 +238,16 @@
           }
         }
       }
+
+      ul {
+        .facet-item {
+          .listing-inline-star {
+            .rating-label {
+              width: 17%;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -247,6 +281,16 @@
       height: 3rem;
       display: flex;
       align-items: center;
+    }
+  }
+
+  .c-products-list {
+    &.view-algolia-plp,
+    &.view-search {
+      .view-content {
+        display: flex;
+        flex-wrap: wrap;
+      }
     }
   }
 }

@@ -1,4 +1,0 @@
-env: 'test'
-test_url: 'https://testsecureacceptance.cybersource.com'
-prod_url: 'https://secureacceptance.cybersource.com'
-allowed_cc_types: 'VI,MC'

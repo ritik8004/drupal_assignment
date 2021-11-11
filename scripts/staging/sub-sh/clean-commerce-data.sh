@@ -8,7 +8,7 @@ drush --uri=$uri sqlq "SHOW TABLES LIKE 'acq_sku%'" | xargs -I acq_sku_tables dr
 while :
 do
   drush --uri=$uri clean-synced-data -y
-  to_clean=$(drush --uri=$uri sqlq "select count(*) from (select nid from node where type in ('acq_product', 'acq_promotion', 'store') union select id from acq_sku union select tid from taxonomy_term_data where vid='acq_product_category') as tmp")
+  to_clean=$(drush --uri=$uri acq_sku:get-item-delete-count)
   echo "$to_clean items to clean"
 
   if [ $to_clean == "0" ]

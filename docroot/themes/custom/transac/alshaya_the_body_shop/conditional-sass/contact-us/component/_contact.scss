@@ -1,0 +1,65 @@
+.webform-submission-alshaya-contact-form {
+  .form-submit {
+    font-size: 1rem;
+    font-family: $tbs-medium;
+  }
+}
+
+.alias--contact {
+  .webform-submission-alshaya-contact-form {
+    .contact-us-feedback {
+      width: 100%;
+
+      @include breakpoint($desktop) {
+        &::after {
+          display: none;
+        }
+      }
+
+      .select2-container {
+        .select2-selection__arrow {
+          &::after {
+            border: 0.0625rem solid $contact-form-select-dropdown-border;
+            border-#{$left}: none;
+          }
+        }
+      }
+    }
+
+    .contact-us-feedback,
+    .contact-us-type,
+    .contact-us-reason {
+      &::after {
+        @include breakpoint($upto-desktop) {
+          position: absolute;
+          top: 0;
+          #{$right}: 0;
+          z-index: 3;
+          line-height: 2.1875rem;
+          font-size: 1.75rem;
+          width: 2.1875rem;
+          height: 2.1875rem;
+          border: 0.0625rem solid $contact-form-select-dropdown-border;
+          border-#{$left}: none;
+        }
+
+        @include breakpoint($desktop) {
+          content: '';
+        }
+      }
+    }
+
+    .select2-container {
+      .select2-selection__arrow {
+        z-index: 1;
+      }
+    }
+  }
+
+  .l-column--two-1050 {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.5rem;
+      padding-#{$right}: 1.5rem;
+    }
+  }
+}

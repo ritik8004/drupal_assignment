@@ -127,8 +127,6 @@
       $(this).addClass('active');
       $('body').removeClass('large-grid')
       $('.c-products-list', algolia_wrapper).removeClass('product-large').addClass('product-small');
-      // Adjust height of PLP tiles.
-      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
     $('#alshaya-algolia-search .large-col-grid').once('algolia-search').on('click', function () {
@@ -137,8 +135,6 @@
       $(this).addClass('active');
       $('body').addClass('large-grid');
       $('.c-products-list', algolia_wrapper).removeClass('product-small').addClass('product-large');
-      // Adjust height of PLP tiles.
-      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
     // Add dropdown effect for facets filters.

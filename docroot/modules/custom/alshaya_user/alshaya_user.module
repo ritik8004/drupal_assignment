@@ -117,6 +117,9 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     // First name and last name will not accept some special characters.
     $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
     $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+
+    // Hide store field for anonymous users.
+    $form['field_agent_store']['#access'] = FALSE;
   }
 
   $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
@@ -215,6 +218,8 @@ function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_stat
 
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
   $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
+  // Custom submit handler.
+  $form['actions']['submit']['#submit'][] = '_alshaya_user_password_reset_submit';
 }
 
 /**
@@ -502,8 +507,8 @@ function alshaya_valid_email_address(&$element, FormStateInterface $form_state, 
 
   // Check MX records. This is done by Magento and good to have this check.
   $domain = explode('@', $value)[1];
-  $dns_records = dns_get_record($domain);
-  if (empty($dns_records)) {
+  $host = gethostbyname($domain);
+  if (empty($host) || $host === $domain) {
     $form_state->setError($element, t('The email address %mail is not valid.', ['%mail' => $value]));
   }
 }
@@ -575,4 +580,21 @@ function alshaya_user_first_name_last_name(string $name): array {
       explode(' ', $name, 2)
     )
   );
+}
+
+/**
+ * Custom method for user redirect.
+ */
+function _alshaya_user_password_reset_submit(array $form, FormStateInterface $form_state) {
+  call_user_func_array($form_state->prepareCallback('::submitForm'), [&$form, &$form_state]);
+  // Redirect to login page after form submit.
+  $form_state->setRedirect('user.login');
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_user_page_attachments_alter(array &$attachments) {
+  // Attach user logger library.
+  $attachments['#attached']['library'][] = 'alshaya_user/user_action_logger';
 }

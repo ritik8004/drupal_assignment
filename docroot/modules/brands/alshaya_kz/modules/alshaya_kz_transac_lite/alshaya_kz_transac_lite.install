@@ -6,6 +6,56 @@
  */
 
 use Drupal\block_content\Entity\BlockContent;
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove order_total field was created as integer.
+ * Recreate order_total as type string.
+ * Migrate existing date into new field.
+ */
+function alshaya_kz_transac_lite_update_8004() {
+  // Fetch and store existing order total data in temporary variable.
+  $source_column = 'order_total';
+  $connection = \Drupal::database();
+  $query = $connection->select('ticket', 'tkt');
+  $query->fields('tkt', [
+    'id', 'langcode', $source_column]);
+  $query->isNotNull('tkt.' . $source_column);
+  $result = $query->execute()->fetchAll();
+
+  // Remove order total field created as integer type.
+  $update_manager = Drupal::service('entity.definition_update_manager');
+  $definition = $update_manager->getFieldStorageDefinition('order_total', 'ticket');
+  $update_manager->uninstallFieldStorageDefinition($definition);
+
+  // Added order total field as varchar type.
+  $storage_definition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Order Total'))
+    ->setDescription(t('The order total of the ticket entity.'))
+    ->setRequired(FALSE);
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('order_total', 'ticket', 'ticket', $storage_definition);
+
+  // If data is available in temporary variable,
+  // then re-store it in new column.
+  if (!empty($result)) {
+    $destination_table = 'ticket';
+    $destination_column = 'order_total';
+
+    // Update data for new field.
+    foreach ($result as $rs) {
+      // Update data in new destination attribute.
+      $query = $connection->update($destination_table)->fields([
+        $destination_column => $rs->{$source_column},
+      ])
+        ->condition('id', $rs->id, '=')
+        ->condition('langcode', $rs->langcode, '=');
+      $query->execute();
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().

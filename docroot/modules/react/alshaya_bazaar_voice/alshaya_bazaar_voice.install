@@ -7,6 +7,106 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\block\BlockInterface;
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add configs for Google translations.
+ * Add new field for sorting optons.
+ * Add translations.
+ */
+function alshaya_bazaar_voice_update_8004() {
+  // Add configs for Google translations feature.
+  $config = \Drupal::configFactory()->getEditable('bazaar_voice.settings');
+  $config->set('translate_chars_limit', 6000);
+  $config->set('enable_google_translation', false);
+  $config->save();
+
+  // Add new field for sorting optons.
+  $config = \Drupal::configFactory()->getEditable('bazaar_voice_sort_review.settings');
+  // Update available option.
+  $available_sort_options = $config->get('sort_options');
+  $new_options['IsFeatured'] = 'IsFeatured';
+  $available_sort_options = array_merge(array_slice($available_sort_options, 0, 0), $new_options, array_slice($available_sort_options, 0));
+  $config->set('sort_options', $available_sort_options);
+  // Update sorting options label.
+  $new_label = [
+    [
+      'value' => 'IsFeatured:Desc',
+      'label' => 'Featured',
+    ],
+  ];
+  $labels = $config->get('sort_options_labels');
+  $labels = array_merge(array_slice($labels, 0, 1), $new_label, array_slice($labels, 1));
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Moving bazaarvoice block from white label to active theme.
+ */
+function alshaya_bazaar_voice_update_8003() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'block.block.bazaarvoiceuserdatablock',
+    ],
+    'alshaya_bazaar_voice',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translations.
+ */
+function alshaya_bazaar_voice_update_8002() {
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable bv blocks if algolia plp is enabled.
+ */
+function alshaya_bazaar_voice_update_8001() {
+  // Disable bv blocks if algolia plp is enabled.
+  _disable_bv_rating_blocks_in_algolia_plp();
+
+  // Add block to store user settings.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.bazaarvoiceuserdatablock'],
+    'alshaya_bazaar_voice'
+  );
+  // Update config for my account reviews limit.
+  $manager->updateConfigs(
+    ['bazaar_voice.settings'],
+    'bazaar_voice'
+  );
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
 
 /**
  * Implements hook_install().
@@ -19,7 +119,7 @@ function alshaya_bazaar_voice_install() {
   $manager->updateConfigs(
     [
       'core.entity_form_display.taxonomy_term.acq_product_category.default',
-      'core.entity_view_display.taxonomy_term.acq_product_category.default'
+      'core.entity_view_display.taxonomy_term.acq_product_category.default',
     ],
     'alshaya_acm_product_category',
     'install',
@@ -31,6 +131,36 @@ function alshaya_bazaar_voice_install() {
   if ($translations = _alshaya_bazaar_voice_translations()) {
     alshaya_i18n_save_translations($translations);
   }
+  // Add field for Rating filter to be used as facet.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+  // Update widget type as star rating.
+  $facet_ids = [
+    'plp_bv_rating',
+    'promo_bv_rating',
+    'bv_rating',
+  ];
+  foreach ($facet_ids as $facet_id) {
+    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+      ->set('widget.type', 'star_rating')
+      ->save();
+  }
+  // Disable bv blocks if algolia plp is enabled.
+  _disable_bv_rating_blocks_in_algolia_plp();
+  // Provide sorting option Top rated in srp/plp.
+  _add_sort_option_in_plp_srp_config_form();
+  // Move bazaarvoice block from white label to active theme.
+  $manager->updateConfigs(
+    [
+      'block.block.bazaarvoiceuserdatablock',
+    ],
+    'alshaya_bazaar_voice',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
 }
 
 /**
@@ -51,5 +181,67 @@ function alshaya_bazaar_voice_uninstall() {
   $webform = \Drupal::entityTypeManager()->getStorage('webform')->load('alshaya_bv_write_review');
   if (!is_null($webform)) {
     $webform->delete();
+  }
+  // Remove bazaar_voice_configs, write_review_config rest resource.
+  \Drupal::configFactory()->getEditable('rest.resource.bazaar_voice_configs')->delete();
+  \Drupal::configFactory()->getEditable('rest.resource.write_review_config')->delete();
+}
+
+/**
+ * Add sorting option (Top rated) in srp/plp configuration form.
+ */
+function _add_sort_option_in_plp_srp_config_form() {
+  // Update srp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
+  $labels = $config->get('sort_options_labels');
+  $new_labels = [
+    [
+      'value' => 'attr_bv_average_overall_rating ASC',
+      'label' => '',
+    ],
+    [
+      'value' => 'attr_bv_average_overall_rating DESC',
+      'label' => 'Top Rated',
+    ],
+  ];
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+
+  // Update plp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  // Update available option.
+  $available_sort_options = $config->get('available_sort_options');
+  $available_sort_options['attr_bv_average_overall_rating'] = 'Top Rated';
+  $config->set('available_sort_options', $available_sort_options);
+  // Update sorting options labels.
+  $labels = $config->get('sort_options_labels');
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+}
+
+/**
+ * Disable bv blocks if algolia plp is enabled.
+ */
+function _disable_bv_rating_blocks_in_algolia_plp() {
+  if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+    $block_storage = \Drupal::entityTypeManager()->getStorage('block');
+    $algolia_plp = $block_storage->load('alshaya_algolia_react_plp');
+    if ($algolia_plp instanceof BlockInterface && $algolia_plp->status()) {
+      $bv_blocks = [
+        'plpbvrating',
+        'promobvrating',
+        'productlistbvrating',
+      ];
+
+      foreach ($bv_blocks as $bv_block) {
+        $block = $block_storage->load($bv_block);
+        if ($block instanceof BlockInterface) {
+          $block->setStatus(0);
+          $block->save();
+        }
+      }
+    }
   }
 }

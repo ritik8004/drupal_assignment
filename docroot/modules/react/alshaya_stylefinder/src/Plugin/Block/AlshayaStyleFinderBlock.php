@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_stylefinder\Plugin\Block;
 
+use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -159,6 +160,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
           'styleFinder' => [
             'quizDetails' => $quizDetails,
             'dyStrategyId' => $config['dy_strategy_id'],
+            'locale' => AlshayaI18nLanguages::getLocale($current_langcode),
           ],
         ],
       ],

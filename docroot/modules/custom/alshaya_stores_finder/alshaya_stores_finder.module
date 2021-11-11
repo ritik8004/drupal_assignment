@@ -16,13 +16,13 @@ use Drupal\Core\Session\AccountInterface;
 /**
  * Implements hook_acq_sku_clean_synced_data_alter().
  */
-function alshaya_stores_finder_acq_sku_clean_synced_data_alter(&$context) {
+function alshaya_stores_finder_acq_sku_clean_synced_data_alter(&$context_results) {
   $query = \Drupal::entityQuery('node');
   $query->addTag('node');
   $query->condition('type', 'store');
   $entities = $query->execute();
   foreach ($entities as $entity_id) {
-    $context['sandbox']['results'][] = [
+    $context_results[] = [
       'type' => 'node',
       'entity_id' => $entity_id,
     ];
@@ -72,7 +72,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       $store_finder_config = \Drupal::config('alshaya_stores_finder.settings');
       $store_finder_search_config = $store_finder_config->get('enable_disable_store_finder_search');
 
-      $form['#attributes']['class'][] = 'stores-finder-exposed-form';
+      $form['#attributes']['class'][] = 'stores-finder-exposed-form current-view';
 
       $hidden_class_map_list = '';
       $hidden_class_glossary_back = 'hidden';

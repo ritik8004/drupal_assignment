@@ -1,0 +1,20 @@
+#google-map-cnc {
+  .gm-style {
+    .gm-style-iw-d {
+      .spc-store-name-wrapper {
+        .store-name {
+          font-family: $alshaya-thin;
+          color: $spc-delivery-info-text;
+        }
+      }
+
+      .spc-cnc-store-name.pudo-collection-list {
+        position: relative;
+
+        .store-distance {
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}

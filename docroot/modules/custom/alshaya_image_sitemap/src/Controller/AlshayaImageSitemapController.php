@@ -149,12 +149,13 @@ class AlshayaImageSitemapController extends ControllerBase {
     if ($success) {
       \Drupal::service('alshaya_image_sitemap.generator')
         ->sitemapGenerateFinished();
-      \Drupal::state()->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
+      $request_time = \Drupal::time()->getRequestTime();
+      \Drupal::state()->set('alshaya_image_sitemap.last_generated', $request_time);
       // @codingStandardsIgnoreEnd
-      drupal_set_message(t('Image Sitemap Generated Successfully.'), 'success');
+      \Drupal::messenger()->addMessage(t('Image Sitemap Generated Successfully.'), 'success');
     }
     else {
-      drupal_set_message(t('There was some error while generating image sitemap.'), 'error');
+      \Drupal::messenger()->addMessage(t('There was some error while generating image sitemap.'), 'error');
     }
   }
 

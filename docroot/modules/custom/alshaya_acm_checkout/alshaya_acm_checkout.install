@@ -13,6 +13,78 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * [6.7.0] Update checkout config to include cache time for cnc store info.
+ */
+function alshaya_acm_checkout_update_8013() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update checkout config to include card bin numbers for bin validation.
+ */
+function alshaya_acm_checkout_update_8012() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update checkout config to include bin validation config and add translations.
+ */
+function alshaya_acm_checkout_update_8011() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+
+  // Add string for tranlsation of bin validation error.
+  $strings['Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.'] = [
+    'ar' => 'بيانات بطاقتك صالحة للدفع باستخدام بطاقات السحب الآلي NAPS. يُرجى اختيار بطاقات السحب الآلي NAPS كطريقة دفع أو إدخال تفاصيل بطاقة ائتمان / سحب آلي مختلفة للمتابعة.',
+    'context' => 'qpay',
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.2.4] Add new configuration for AB Testing.
+ */
+function alshaya_acm_checkout_update_8010() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.ab_testing'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update checkout config to include refund details and added translations.
  */
 function alshaya_acm_checkout_update_8009() {

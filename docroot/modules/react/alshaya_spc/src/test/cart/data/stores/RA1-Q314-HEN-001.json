@@ -1,0 +1,96 @@
+{
+  "name": "Plaza Hawally",
+  "code": "RA1-Q314-HEN-001",
+  "address": "\n<div class=\"address--line2\">\n  Al Othman street Farwaniyah Rabiya\n</div>\n",
+  "phone_number": "(+965) 22214856/(+965)22214857",
+  "open_hours": [
+    {
+      "value": "10:00 AM - 10:00 PM",
+      "key": "Sunday",
+      "description": null
+    },
+    {
+      "value": "10:00 AM - 10:00 PM",
+      "key": "Monday",
+      "description": null
+    },
+    {
+      "value": "10:00 AM - 10:00 PM",
+      "key": "Tuesday",
+      "description": null
+    },
+    {
+      "value": "10:00 AM - 10:00 PM",
+      "key": "Wednesday",
+      "description": null
+    },
+    {
+      "value": "10:00 AM - 10:00 PM",
+      "key": "Thursday",
+      "description": null
+    },
+    {
+      "value": "10:00 AM - 10:00 PM",
+      "key": "Friday",
+      "description": null
+    },
+    {
+      "value": "10:00 AM - 10:00 PM",
+      "key": "Saturday",
+      "description": null
+    }
+  ],
+  "open_hours_group": {
+    "Sunday - Saturday": "10:00 AM - 10:00 PM"
+  },
+  "delivery_time": "1-2 days",
+  "nid": "1874961",
+  "view_on_map_link": "/en/click-and-collect/store-map-view/1874961",
+  "lat": 29.332799999999999,
+  "lng": 48.028599999999997,
+  "gtm_cart_address": {
+    "country_code": "KW",
+    "given_name": null,
+    "family_name": null,
+    "mobile_number": {
+      "value": ""
+    },
+    "address_line1": "Al Othman street",
+    "address_line2": "",
+    "locality": "",
+    "dependent_locality": "",
+    "administrative_area": "120936",
+    "area_parent": "120916",
+    "administrative_area_display": "Rabiya",
+    "area_parent_display": "Farwaniyah"
+  },
+  "cart_address_raw": {
+    "country_code": "KW",
+    "given_name": null,
+    "family_name": null,
+    "mobile_number": {
+      "value": ""
+    },
+    "address_line1": "Al Othman street",
+    "address_line2": "",
+    "locality": "",
+    "dependent_locality": "",
+    "administrative_area": "120936",
+    "area_parent": "120916",
+    "administrative_area_display": "Rabiya",
+    "area_parent_display": "Farwaniyah"
+  },
+  "cart_address": {
+    "city": "Rabiya",
+    "country_id": "KW",
+    "telephone": "",
+    "street": "Al Othman street",
+    "extension": {
+      "address_apartment_segment": "",
+      "address_block_segment": "",
+      "address_building_segment": "",
+      "area": "7",
+      "governate": "1"
+    }
+  }
+}

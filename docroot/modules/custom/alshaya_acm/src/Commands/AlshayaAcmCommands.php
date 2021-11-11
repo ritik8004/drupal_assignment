@@ -9,10 +9,8 @@ use Drupal\alshaya_acm\AlshayaMdcQueueManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -52,13 +50,6 @@ class AlshayaAcmCommands extends DrushCommands {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private $entityTypeManager;
-
-  /**
-   * Entity manager.
-   *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
-   */
-  private $entityManager;
 
   /**
    * Product category tree manager.
@@ -125,8 +116,6 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Language Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
-   *   Entity manager.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $productCategoryTree
    *   Product category tree manager.
    * @param \Drupal\alshaya_acm\AlshayaAcmConfigCheck $alshayaAcmConfigCheck
@@ -147,7 +136,6 @@ class AlshayaAcmCommands extends DrushCommands {
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
                               EntityTypeManagerInterface $entityTypeManager,
-                              EntityManagerInterface $entityManager,
                               ProductCategoryTree $productCategoryTree,
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
                               Connection $connection,
@@ -159,7 +147,6 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
-    $this->entityManager = $entityManager;
     $this->productCategoryTree = $productCategoryTree;
     $this->alshayaAcmConfigCheck = $alshayaAcmConfigCheck;
     $this->connection = $connection;
@@ -245,7 +232,7 @@ class AlshayaAcmCommands extends DrushCommands {
           $this->output->writeln(dt('Unknown "@country_code" country code for "@mdc" MDC. Using the current site\'s country code "@current_country_code".', [
             '@country_code' => $country_code,
             '@mdc' => $mdc,
-            '@current_country_code' => $country_code = Unicode::strtolower(Settings::get('country_code')),
+            '@current_country_code' => $country_code = strtolower(Settings::get('country_code')),
           ]));
         }
 
@@ -323,7 +310,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $brand_module = $this->configFactory->get('alshaya.installed_brand')->get('module');
 
     // Get country code.
-    $country_code = Unicode::strtolower(Settings::get('country_code'));
+    $country_code = strtolower(Settings::get('country_code'));
 
     // Check if the site is configured for a specific brand.
     if (empty($brand_module)) {
@@ -355,7 +342,7 @@ class AlshayaAcmCommands extends DrushCommands {
         continue;
       }
 
-      module_load_include('data', $brand_module, 'data/products_' . $country_code . '_' . $langcode);
+      $this->moduleHandler->loadInclude($brand_module, 'data', 'data/products_' . $country_code . '_' . $langcode);
 
       // Check if we need to import only specific SKUs.
       if ($query) {
@@ -397,8 +384,8 @@ class AlshayaAcmCommands extends DrushCommands {
         drupal_static_reset();
 
         // Entity storage can blow up with caches so clear them out.
-        foreach ($this->entityManager->getDefinitions() as $id => $definition) {
-          $this->entityManager->getStorage($id)->resetCache();
+        foreach ($this->entityTypeManager->getDefinitions() as $id => $definition) {
+          $this->entityTypeManager->getStorage($id)->resetCache();
         }
 
         // Process chunk.
@@ -467,9 +454,7 @@ class AlshayaAcmCommands extends DrushCommands {
   /**
    * Check config state as a part of pre-command to reset.
    *
-   * Added (*) to execute before each drush command.
-   *
-   * @hook pre-command *
+   * @hook pre-command status
    */
   public function resetConfigPostCommand(CommandData $commandData) {
     try {
@@ -652,7 +637,7 @@ class AlshayaAcmCommands extends DrushCommands {
         $command_options['skus'] = implode(',', $csv_skus_chunk);
 
         if (!empty($command_options['skus'])) {
-          drush_invoke_process('@self', 'acsp', [
+          Drush::drush('@self', 'acsp', [
             'langcode' => $langcode,
             'page_size' => $page_size,
           ], $command_options);
@@ -660,7 +645,7 @@ class AlshayaAcmCommands extends DrushCommands {
       }
     }
     elseif (!empty($command_options['skus']) || !empty($command_options['category_id'])) {
-      drush_invoke_process('@self', 'acsp', [
+      Drush::drush('@self', 'acsp', [
         'langcode' => $langcode,
         'page_size' => $page_size,
       ], $command_options);

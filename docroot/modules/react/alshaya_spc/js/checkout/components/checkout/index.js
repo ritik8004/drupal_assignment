@@ -29,6 +29,10 @@ import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
 import validateCartResponse from '../../../utilities/validation_util';
 import { getStorageInfo } from '../../../utilities/storage';
+import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
+import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 window.fetchStore = 'idle';
 
@@ -96,6 +100,12 @@ export default class Checkout extends React.Component {
 
   processCheckout = (result) => {
     const cart = result;
+
+    // No further processing required if shipping is not set yet in cart.
+    if (typeof result.shipping === 'undefined') {
+      return;
+    }
+
     // Set default as user selection for handling conditions.
     cart.delivery_type = result.shipping.type;
 
@@ -105,7 +115,7 @@ export default class Checkout extends React.Component {
     }
     // Process Removal of "same as billing" flag before we update the
     // cart state. before the billing address component mounted. as
-    // setState will immidiately mount the components before localStorage
+    // setState will immediately mount the components before localStorage
     // update happens.
     removeBillingFlagFromStorage({ cart });
     dispatchCustomEvent('checkoutCartUpdate', { cart });
@@ -129,6 +139,11 @@ export default class Checkout extends React.Component {
   }
 
   processAddressFromLocalStorage = (result) => {
+    // Do this only for guests.
+    if (!(drupalSettings.userDetails.customerId)) {
+      return;
+    }
+
     if (result.shipping && result.shipping.method === null) {
       const shippingAddress = getStorageInfo('shippingaddress-formdata');
       if (shippingAddress) {
@@ -153,10 +168,22 @@ export default class Checkout extends React.Component {
     this.updateCheckoutMessage(type, message);
   };
 
+  /**
+   * Set the type and message in state to be shown to the user.
+   *
+   * @param {string} type
+   *   The type of the message, will be added as class on selector.
+   *
+   * @param {string} message
+   *   The message to be displayed to the user.
+   */
   updateCheckoutMessage = (type, message) => {
-    this.setState({ messageType: type, errorSuccessMessage: message });
+    const statusType = type || '';
+    const statusContent = message || '';
+
+    this.setState({ messageType: statusType, errorSuccessMessage: statusContent });
     // Checking length as if no type, means no error.
-    if ((type.length > 0) && (document.getElementsByClassName('.spc-content').length > 0)) {
+    if ((statusType.length > 0) && (document.getElementsByClassName('spc-content').length > 0)) {
       smoothScrollTo('.spc-content');
     }
   };
@@ -243,9 +270,21 @@ export default class Checkout extends React.Component {
     const termConditions = <TermsConditions />;
     const billingComponent = this.getBillingComponent();
 
+    // Get Smart Agent Info if available.
+    const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
+      ? Drupal.smartAgent.getInfo()
+      : false;
+
     return (
       <>
-        <div className="spc-pre-content" />
+        <div className="spc-pre-content">
+          <ConditionalView condition={smartAgentInfo !== false}>
+            <>
+              <SASessionBanner agentName={smartAgentInfo.name} />
+              <SAShareStrip />
+            </>
+          </ConditionalView>
+        </div>
         <div className="spc-main">
           <div className="spc-content">
             {errorSuccessMessage !== null
@@ -292,6 +331,10 @@ export default class Checkout extends React.Component {
               show_checkout_button={false}
               animationDelay="0.4s"
               context="checkout"
+              {...(collectionPointsEnabled()
+                && hasValue(cart.cart.shipping.price_amount)
+                && { collectionCharge: cart.cart.shipping.price_amount }
+              )}
             />
           </div>
         </div>

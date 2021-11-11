@@ -5,7 +5,6 @@ namespace Drupal\acq_sku;
 use Differ\ArrayDiff;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -56,13 +55,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   protected $apiWrapper;
 
   /**
-   * Drupal Entity Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
-
-  /**
    * I18n Helper.
    *
    * @var \Drupal\acq_commerce\I18nHelper
@@ -99,8 +91,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   ClientFactory object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   API Wrapper object.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
-   *   Query factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
@@ -112,12 +102,11 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * @param \Drupal\acq_sku\ApiHelper $api_helper
    *   The api helper object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection, ApiHelper $api_helper) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection, ApiHelper $api_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
     $this->apiWrapper = $api_wrapper;
-    $this->queryFactory = $query_factory;
     $this->logger = $logger_factory->get('acq_sku');
     $this->i18nHelper = $i18n_helper;
     $this->modulehandler = $moduleHandler;
@@ -137,6 +126,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $debug_dir = $config->get('debug_dir');
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
+      $this->logger->notice('Loading category data from commerce backend for @language.', [
+        '@language' => $langcode,
+      ]);
+
       if ($store_id) {
         // Load Conductor Category data.
         $categories = [$this->loadCategoryData($langcode)];
@@ -188,7 +181,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
     // If parent is 0, means term will be created at root level.
     $parent = 0;
-    $query = $this->queryFactory->get('taxonomy_term');
+    $query = $this->termStorage->getQuery();
     $group = $query->andConditionGroup()
       ->condition('field_commerce_id', $categories['category_id'])
       ->condition('vid', $this->vocabulary->id());
@@ -207,7 +200,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       // case, we need to find the existing parent or new term will be created
       // at root level.
       if (isset($categories['parent_id'])) {
-        $query = $this->queryFactory->get('taxonomy_term');
+        $query = $this->termStorage->getQuery();
         $group = $query->andConditionGroup()
           ->condition('field_commerce_id', $categories['parent_id'])
           ->condition('vid', $this->vocabulary->id());
@@ -323,6 +316,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
         // Sleep for half a second before trying again.
         if (!$lock_acquired) {
+          $this->logger->notice('Failed to acquire lock for @lock_key, waiting.', [
+            '@lock_key' => $lock_key,
+          ]);
+
           usleep(500000);
         }
       } while (!$lock_acquired);

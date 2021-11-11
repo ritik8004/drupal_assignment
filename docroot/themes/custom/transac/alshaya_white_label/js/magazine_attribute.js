@@ -281,8 +281,16 @@
 
           // Moving sharethis before description field in mobile.
           var sharethisSection = $('.basic-details-wrapper .modal-share-this', product).clone();
+          // Check if express delivery feature is enabled.
           if ($('.magazine-product-description .modal-share-this', product).length < 1) {
-            sharethisSection.once('bind-events').insertAfter(product.find('.magazine-swatch-placeholder'));
+            var magzine_swatch_placeholder = product.find('.magazine-swatch-placeholder');
+            if (typeof settings.expressDelivery !== 'undefined'
+              && typeof settings.expressDelivery.enabled !== 'undefined'
+              && document.querySelector('.express-delivery.mobile') !== null) {
+              // Moving sharethis below Express delivery tag placement in mobile magazine layout.
+              magzine_swatch_placeholder = product.find('.express-delivery.mobile');
+            }
+            sharethisSection.once('bind-events').insertAfter(magzine_swatch_placeholder);
           }
           $('.basic-details-wrapper .modal-share-this', product).addClass('visually-hidden');
           if ($('.magazine-product-description .modal-share-this', product).hasClass('visually-hidden')) {
@@ -351,7 +359,7 @@
         });
       });
 
-      if ($(window).width() > 767) {
+      if ($(window).width() > 767 && drupalSettings.pdp_gallery_type !== 'classic') {
         // JS to make sidebar sticky beyond Mobile.
         // PDP Sidebar.
         var sidebarWrapper = $('.content-sidebar-wrapper');
@@ -363,6 +371,8 @@
         $(window).once('mobileMagazine').on('scroll', function (event) {
           // Magazine Gallery.
           var galleryWrapper = $('.gallery-wrapper');
+          var topPosition;
+          var mainBottom;
 
           // Figure out scroll direction.
           var currentScrollTop = $(this).scrollTop();
@@ -374,10 +384,13 @@
           }
           lastScrollTop = currentScrollTop;
 
-          // Gallery top.
-          var topPosition = galleryWrapper.offset().top - 20;
-          // Gallery Bottom.
-          var mainBottom = calculateBottom(galleryWrapper);
+          if (galleryWrapper.length > 0) {
+            // Gallery top.
+            topPosition = galleryWrapper.offset().top - 20;
+
+            // Gallery Bottom.
+            mainBottom = calculateBottom(galleryWrapper);
+          }
 
           // Fixing sidebar when the top part of sidebar touches viewport top.
           if (($(this).scrollTop() > topPosition)) {

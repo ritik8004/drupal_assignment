@@ -1,0 +1,53 @@
+.field--name-field-skus .sku-base-form {
+  .sofa-section-select-option-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.625rem;
+    padding-bottom: 0.9375rem;
+    border-bottom: 1px solid $accordion_border;
+    text-transform: capitalize;
+
+    @include breakpoint($only-mobile) {
+      width: calc(100% + 1rem);
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      padding: 0 1.25rem 0.9375rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 100%;
+    }
+
+    .sofa-section-select-option {
+      font-family: $alshaya-bold;
+      font-size: 0.9375rem;
+      line-height: 1.0625rem;
+      color: $sofa-sectional-title;
+    }
+
+    .sofa-section-clear-option-btn {
+      padding: 0.625rem 0.4375rem;
+      font-size: 0.875rem;
+      color: $sofa-sectional-btn-border;
+      border: 1px solid $sofa-sectional-btn-border;
+      border-radius: 0.3125rem;
+      background: none;
+      line-height: 1;
+      margin: 0.3125rem 0;
+
+      &:not([disabled]):hover {
+        color: $sofa-sectional-config-item-bg;
+        background: $sofa-sectional-btn-border;
+      }
+    }
+
+    button[disabled] {
+      cursor: pointer;
+      background: none !important;
+      pointer-events: none;
+      color: $sofa-sectional-disabled-clear-option-text;
+      border-color: $sofa-sectional-disabled-clear-option-border;
+    }
+  }
+}

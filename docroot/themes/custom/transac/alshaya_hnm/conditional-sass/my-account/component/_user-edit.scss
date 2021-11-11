@@ -1,0 +1,71 @@
+.c-user-edit {
+  .user-form {
+    @include breakpoint($desktop) {
+      margin-top: -0.125rem;
+    }
+
+    input {
+      background-color: $default_background_color;
+      color: $primary_input !important;
+    }
+
+    label {
+      color: $primary_input_label !important;
+      font-size: 0.8125rem !important;
+
+      &.error {
+        color: $primary_input_inline_error !important;
+        font-size: 0.6875rem;
+        background: $default_background_color !important;
+        bottom: -1.5rem;
+      }
+    }
+
+    .form-item {
+      &.mobile-number-field {
+        .prefix {
+          color: $hnm-black-three;
+        }
+      }
+    }
+  }
+
+  .field--name-field-first-name {
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 1rem;
+    }
+  }
+
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    width: calc(50% - 12px);
+
+    input {
+      margin-top: 0.5rem;
+    }
+  }
+
+  #user-form {
+    @include breakpoint($only-tablet) {
+      #edit-account {
+        margin-top: 2.875rem;
+      }
+    }
+
+    .field--type-mobile-number {
+      margin-top: 0.875rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 2rem;
+      }
+
+      .mobile-number-field {
+        margin-bottom: 0.4375rem;
+
+        .form-type-select .form-item--error-message {
+          display: none;
+        }
+      }
+    }
+  }
+}

@@ -11,11 +11,5 @@ services:
       - '@alshaya_api.mdc_helper'
       - '@module_handler'
 
-  alshaya_api.i18n_helper:
-    class: Drupal\alshaya_api\AlshayaI18nHelper
-    arguments:
-      - '@config.factory'
-      - '@language_manager'
-
   alshaya_api.mdc_helper:
     class: Drupal\alshaya_api\Helper\MagentoApiHelper

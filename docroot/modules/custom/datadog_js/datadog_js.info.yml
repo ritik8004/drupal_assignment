@@ -1,0 +1,6 @@
+name: DataDog JS
+type: module
+description: 'Adds DataDog JS integration to Drupal.'
+package: 'Performance and scalability'
+core_version_requirement: ^8.7.7 || ^9
+configure: datadog_js.settings

@@ -1,19 +1,21 @@
 import React from 'react';
 import ConditionalView from '../../../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 class RadioButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       activeId: '',
+      swithcClass: '',
     };
   }
 
-  setActiveId = (radioLabel) => {
-    if (radioLabel.length > 0) {
-      this.setState({
-        activeId: radioLabel,
-      });
+  setActiveId = (radioValue, radioLabel) => {
+    if (radioValue === 1) {
+      this.setState({ activeId: 'no', swithcClass: radioLabel });
+    } else {
+      this.setState({ activeId: 'yes', swithcClass: radioLabel });
     }
   };
 
@@ -24,18 +26,18 @@ class RadioButton extends React.Component {
       label,
       text,
     } = this.props;
-    const { activeId } = this.state;
+    const { activeId, swithcClass } = this.state;
     const recommend = {
-      0: Drupal.t('no'),
-      1: Drupal.t('yes'),
+      0: getStringMessage('no'),
+      1: getStringMessage('yes'),
     };
 
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="switch-button">
+        <div id={id} className="switch-button">
           <div className="switch-text query">
             <label htmlFor={label}>
               {label}
@@ -49,8 +51,8 @@ class RadioButton extends React.Component {
               return (
                 <React.Fragment key={radioValue}>
                   <span
-                    className={activeId === radioLabel ? 'switchOn' : 'switchOff'}
-                    onClick={() => this.setActiveId(radioLabel)}
+                    className={swithcClass === radioLabel ? 'switchOn' : 'switchOff'}
+                    onClick={() => this.setActiveId(radioValue, radioLabel)}
                     htmlFor={radioLabel}
                   >
                     {radioLabel}
@@ -60,8 +62,6 @@ class RadioButton extends React.Component {
             })}
           </div>
           <input type="hidden" id={id} name={id} required={required} value={activeId || ''} />
-          <div className="c-input__bar" />
-          <div id="bv-error" className="error" />
         </div>
       </>
     );

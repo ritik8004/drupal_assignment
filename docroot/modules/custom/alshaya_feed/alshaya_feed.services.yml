@@ -13,6 +13,7 @@ services:
       - '@alshaya_feed.sku_info'
       - '@twig'
       - '@logger.channel.alshaya_feed'
+      - '@config.factory'
 
   alshaya_feed.sku_info:
     class: Drupal\alshaya_feed\AlshayaFeedSkuInfoHelper
@@ -28,6 +29,8 @@ services:
       - '@config.factory'
       - '@metatag.manager'
       - '@metatag.token'
+      - '@alshaya_acm_product.price_helper'
+      - '@alshaya_acm_product.sku_images_helper'
 
   alshaya_feed.product_delta_feed:
     class: Drupal\alshaya_feed\AlshayaProductDeltaFeedHelper
@@ -41,6 +44,9 @@ services:
       - '@config.factory'
       - '@metatag.manager'
       - '@metatag.token'
+      - '@database'
+      - '@logger.channel.alshaya_feed'
+      - '@dynamic_yield.product_feed_api_wrapper'
 
   alshaya_feed.product_processed_event:
     class: Drupal\alshaya_feed\EventSubscriber\ProductProcessedEventSubscriber

@@ -1,0 +1,5 @@
+services:
+  alshaya_security.commands:
+    class: \Drupal\alshaya_security\Commands\AlshayaSecurityCommands
+    tags:
+      - { name: drush.command }

@@ -13,78 +13,15 @@
         font-size: 0;
       }
     }
+  }
+}
 
+.block-alshaya-super-category {
+  .menu--one__list {
     .menu--one__link {
-      &::after {
-        content: "";
-        width: 3.4375rem;
-        height: 1.625rem;
-        display: block;
-        margin: auto;
-      }
-
-      &.brand-victoria-secret,
-      &.brand-victorias-secret {
-        &::after {
-          background: url("../imgs/logos/super-category/vsecret.svg") no-repeat center;
-          background-size: contain;
-        }
-
-        &:hover::after {
-          background: url("../imgs/logos/super-category/vsecret-active.svg") no-repeat center;
-          background-size: contain;
-        }
-      }
-
-      &.brand-pink {
-        &::after {
-          background: url("../imgs/logos/super-category/pink.svg") no-repeat center;
-          background-size: contain;
-        }
-      }
-
-      &.brand-beauty {
-        &::after {
-          background: url("../imgs/logos/super-category/beauty.svg?hzyOhx") no-repeat center;
-          background-size: contain;
-        }
-
-        &:hover::after {
-          background: url("../imgs/logos/super-category/beauty-active.svg?4nGDK4") no-repeat center;
-          background-size: contain;
-        }
-      }
-
-      &.brand-swimwear,
-      &.brand-swim {
-        &::after {
-          background: url("../imgs/logos/super-category/vs-swim-logo.svg?h1yOhx") no-repeat center;
-          background-size: 1.8125rem;
-        }
-
-        &:hover::after {
-          background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
-          background-size: 1.8125rem;
-        }
-      }
-    }
-
-    .active {
-      .brand-victoria-secret::after,
-      .brand-victorias-secret::after {
-        background: url("../imgs/logos/super-category/vsecret-active.svg") no-repeat center;
-        background-size: contain;
-      }
-
-      .brand-beauty::after {
-        background: url("../imgs/logos/super-category/beauty-active.svg?4nGDK4") no-repeat center;
-        background-size: contain;
-      }
-
-      &.brand-swimwear::after,
-      &.brand-swim::after {
-        background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
-        background-size: 1.8125rem;
+      @include breakpoint($only-tablet) {
+        display: flex;
+        justify-content: center;
       }
     }
   }

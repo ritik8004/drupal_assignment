@@ -80,24 +80,7 @@ header {
         display: block;
       }
     }
-  }
 
-  .block-views-exposed-filter-blocksearch-page {
-    #edit-submit-search,
-    #edit-submit-search--2 {
-      background: $primary_search_btn_icon url('../imgs/assets/search.svg') center no-repeat;
-      background-size: contain;
-      width: 1rem;
-      height: 1rem;
-      margin: 0.65rem 0.5rem;
-
-      @include breakpoint($desktop) {
-        background-size: 0.75rem;
-      }
-    }
-  }
-
-  .region__header {
     .block-views-exposed-filter-blocksearch-page {
       .form-item-keywords {
         display: block;
@@ -133,6 +116,21 @@ header {
           font-size: 0.875rem;
           text-transform: capitalize;
         }
+      }
+    }
+  }
+
+  .block-views-exposed-filter-blocksearch-page {
+    #edit-submit-search,
+    #edit-submit-search--2 {
+      background: $primary_search_btn_icon url('../imgs/assets/search.svg') center no-repeat;
+      background-size: contain;
+      width: 1rem;
+      height: 1rem;
+      margin: 0.65rem 0.5rem;
+
+      @include breakpoint($desktop) {
+        background-size: 0.75rem;
       }
     }
   }

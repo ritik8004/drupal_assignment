@@ -19,6 +19,7 @@ global_styles:
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element
+    - alshaya_white_label/font-face
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
     - alshaya_white_label/alshaya_image_lazy_load
@@ -42,6 +43,11 @@ rtl_print_styles:
   css:
     theme:
       css/rtl-print.css: {media: print}
+
+font-face:
+  css:
+    theme:
+      css/conditional-sass/font-face/font-face.ltr.css: { }
 
 unmask_password:
   js:
@@ -92,6 +98,7 @@ convert_to_select2:
   js:
     js/convert_to_select2.js: {}
   dependencies:
+    - core/jquery.once
     - alshaya_white_label/select2
 
 slick:
@@ -138,6 +145,8 @@ ucfix:
 stickybutton:
   js:
     js/pdp-stickybutton.js: {}
+  dependencies:
+    - core/jquery.once
 
 utils:
   js:
@@ -167,10 +176,6 @@ plp_search_js:
 jquery_mobile_touch_swipe:
   js:
     vendor/js/jquery.touchSwipe.min.js: {}
-
-pace:
-  js:
-    /libraries/pace/pace.min.js: {}
 
 magazine_attribute:
   js:
@@ -204,6 +209,8 @@ magazine_socialSharepopup:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
+  dependencies:
+    - core/jquery.once
 
 magazine_article:
   css:
@@ -218,7 +225,6 @@ magazine_article:
 alshaya_image_lazy_load:
   js:
     vendor/js/blazy.min.js: { minified: true }
-    js/alshaya_image_lazyload.js: {}
   dependencies:
     - core/drupal
     - core/jquery.once
@@ -324,10 +330,10 @@ matchback_layout:
     theme:
       css/conditional-sass/matchback-layout/matchback-layout.ltr.css: {}
   dependencies:
-  - core/jquery
-  - core/drupal
-  - alshaya_white_label/slick
-  - alshaya_white_label/alshaya_image_lazy_load
+    - core/jquery
+    - core/drupal
+    - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 matchback_cart_notification:
   css:
@@ -336,13 +342,13 @@ matchback_cart_notification:
 
 tooltip:
   js:
-      js/order-detail.js: {}
+    js/order-detail.js: {}
   css:
     theme:
       css/conditional-sass/tooltip/tooltip.ltr.css: {}
   dependencies:
-  - core/jquery
-  - core/drupal
+    - core/jquery
+    - core/drupal
 
 alshaya-react-animate:
   css:
@@ -443,6 +449,8 @@ bazaar-voice:
   css:
     theme:
       css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/style-review-stars
 
 store_finder:
   css:
@@ -463,6 +471,83 @@ advanced-page:
   css:
     theme:
       css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
+
+plp-add-to-cart:
+  css:
+    theme:
+      css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate
+
+style-review-stars:
+  css:
+    theme:
+      css/conditional-sass/style-review-stars/style-review-stars.ltr.css: {}
+
+myaccount-reviews:
+  css:
+    theme:
+      css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css: {}
+
+smart-agent:
+  css:
+    theme:
+      css/conditional-sass/smart-agent/smart-agent.ltr.css: {}
+
+secondary-menu:
+  css:
+    theme:
+      css/conditional-sass/secondary-menu/secondary-menu.ltr.css: {}
+
+checkout-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: {}
+
+my-account:
+  css:
+    theme:
+      css/conditional-sass/my-account/my-account.ltr.css: {}
+
+contact:
+  css:
+    theme:
+      css/conditional-sass/contact-us/contact-us.ltr.css: {}
+
+sitemap:
+  css:
+    theme:
+      css/conditional-sass/sitemap/sitemap.ltr.css: {}
+
+checkout-confirmation-pudo-aramex:
+  css:
+    theme:
+      css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: {}
+
+alshaya-vat-certificate:
+  css:
+    theme:
+      css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: {}
+
+slug-banner:
+  css:
+    theme:
+      css/conditional-sass/slug-banner/slug-banner.ltr.css: {}
+
+sameday-express-delivery:
+  css:
+    theme:
+      css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: {}
+
+plp-frame-options:
+  css:
+    theme:
+      css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: {}
+
+sofa-sectional:
+  css:
+    theme:
+      css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
 
 my-wishlist-page:
   css:

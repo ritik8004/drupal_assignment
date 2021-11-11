@@ -258,7 +258,7 @@ function alshaya_color_split_node_view(array &$build, EntityInterface $entity, E
     return;
   }
 
-  if (in_array($view_mode, ['modal', 'full'])) {
+  if (in_array($view_mode, ['modal', 'full', 'matchback', 'matchback_mobile'])) {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
@@ -289,13 +289,20 @@ function alshaya_color_split_node_view(array &$build, EntityInterface $entity, E
       $skuInfo = \Drupal::service('alshaya_acm_product.sku_info');
 
       $context = ($view_mode === 'full') ? 'pdp' : 'modal';
+      $settingsKey = 'productInfo';
+
+      if (($view_mode === 'matchback' || $view_mode === 'matchback_mobile')) {
+        $settingsKey = $view_mode;
+        $context = 'matchback';
+      }
+
       $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
       foreach ($product_in_style as $variant) {
         $group[$variant->getSku()] = $skuInfo->getVariantInfo($variant, $pdp_layout);
       }
 
       $build['#attached']['library'][] = 'alshaya_color_split/grouped_simple';
-      $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['group'] = $group ?? [];
+      $build['#attached']['drupalSettings'][$settingsKey][$sku->getSku()]['group'] = $group ?? [];
     }
     elseif ($sku->bundle() === 'configurable') {
       $build['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
@@ -357,9 +364,9 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
     }
   }
 
-  /** @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager $promoContextManager */
-  $promoContextManager = \Drupal::service('alshaya_acm_product.context_manager');
-  $context = $promoContextManager->getPromotionContext();
+  /** @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager $requestContextManager */
+  $requestContextManager = \Drupal::service('alshaya_acm_product.context_manager');
+  $context = $requestContextManager->getContext();
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
 

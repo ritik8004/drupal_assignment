@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.menu_link_content.secondary-main-menu.field_add_highlights
+    - field.field.menu_link_content.secondary-main-menu.field_secondary_menu_highlight
+    - system.menu.secondary-main-menu
+id: menu_link_content.secondary-main-menu.default
+targetEntityType: menu_link_content
+bundle: secondary-main-menu
+mode: default
+content:
+  children:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_add_highlights: true
+  field_secondary_menu_highlight: true
+  langcode: true
+  search_api_excerpt: true

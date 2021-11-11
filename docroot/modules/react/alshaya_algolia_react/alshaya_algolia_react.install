@@ -10,6 +10,73 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Added product elements alignment config to frames.
+ */
+function alshaya_algolia_react_update_8006() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.product_frames'],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Added product teaser frames settings.
+ */
+function alshaya_algolia_react_update_8005() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.product_frames'],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  $strings = [
+    'Shop all products in this offer' => [
+      'ar' => 'تسوق جميع المنتجات المشمولة بهذا العرض'
+    ],
+    'Offers available' => [
+      'ar' => 'العروض متوفرة'
+    ],
+    'You can combine promotions but only one offer code can be used per transaction' => [
+      'ar' => 'يمكنك الجمع بين العروض الترويجية ولكن لا يمكن استخدام إلا رمز عرض واحد لكل معاملة تجارية'
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translations - CORE 23468.
+ */
+function alshaya_algolia_react_update_8004() {
+  $strings = [
+    'clear filters' => [
+      'ar' => 'مسح الاختيارات',
+    ],
+    'Promotions' => [
+      'ar' => 'العروض',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.promotions')
+    ->set('settings.label', 'العروض')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Prepare for using Algolia on listing pages.
  */
 function alshaya_algolia_react_update_8003() {
@@ -126,6 +193,21 @@ function alshaya_algolia_react_install() {
     ],
     'Load more products' => [
       'ar' => 'تحميل المزيد من المنتجات',
+    ],
+    'clear filters' => [
+      'ar' => 'مسح الاختيارات',
+    ],
+    'Promotions' => [
+      'ar' => 'العروض',
+    ],
+    'Shop all products in this offer' => [
+      'ar' => 'تسوق جميع المنتجات المشمولة بهذا العرض'
+    ],
+    'Offers available' => [
+      'ar' => 'العروض متوفرة'
+    ],
+    'You can combine promotions but only one offer code can be used per transaction' => [
+      'ar' => 'يمكنك الجمع بين العروض الترويجية ولكن لا يمكن استخدام إلا رمز عرض واحد لكل معاملة تجارية'
     ],
   ];
 

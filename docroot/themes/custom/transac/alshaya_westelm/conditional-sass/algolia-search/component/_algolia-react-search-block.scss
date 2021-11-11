@@ -10,8 +10,21 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    bottom: -3.5rem;
+
+    html[lang=ar] & {
+      bottom: -2.5rem;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    width: 14.812rem !important;
+    padding: 0;
+  }
+
   .algolia-search-cleartext-icon {
-    #{$right}: 2.5rem;
+    #{$right}: 0;
 
     @include breakpoint($only-mobile) {
       top: 0.875rem;
@@ -30,9 +43,9 @@
   .react-autosuggest__input {
     border-width: 0.0625rem;
     border-radius: 0;
-    height: 3.125rem;
-    padding-#{$left}: 3.5rem;
-    padding-#{$right}: 1.5rem;
+    height: 2.8125rem;
+    padding-#{$left}: 3.125rem;
+    padding-#{$right}: 0.4375rem;
     font-size: 0.9375rem;
     line-height: 2.5;
 
@@ -42,6 +55,12 @@
 
     @include breakpoint($tablet) {
       border-bottom-color: $algolia-auto-complete-border-bottom;
+      width: 14.813rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      border-bottom-color: $algolia-auto-complete-border-bottom;
+      width: 100%;
     }
 
     &::placeholder {
@@ -59,7 +78,9 @@
 
   #alshaya-algolia-autocomplete {
     @include breakpoint($tablet) {
-      width: 20.25rem;
+      width: 14.813rem;
+      height: 2.8125rem;
+      padding: 0;
     }
 
     .react-autosuggest__container {
@@ -70,20 +91,25 @@
       }
 
       &::after {
-        height: 3.125rem;
+        display: block;
+        background: transparent url(../../../imgs/icons/search.svg) no-repeat;
+        background-position: center;
+        border: none;
+        text-indent: -9999px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%) !important;
+        width: 2.125rem;
+        height: 2.125rem;
         #{$left}: 0;
-        #{$right}: inherit;
+        margin-#{$left}: 0.5rem;
 
         @include breakpoint($only-mobile) {
-          top: 0.5rem;
+          top: 50%;
           #{$right}: inherit;
-          #{$left}: 0.75rem;
+          #{$left}: 0;
           opacity: 1;
           transition: opacity 0.2s;
-
-          html[lang=ar] & {
-            top: 0.25rem;
-          }
         }
       }
 

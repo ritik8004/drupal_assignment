@@ -333,3 +333,61 @@ export function addQueryID(hits, queryID) {
     __queryID: queryID,
   }));
 }
+
+// Helper function to return the status of productListIndexStatus
+// if alshaya_algolia_product_list_index is enabled in Drupal
+// this will return true else false
+export function productListIndexStatus() {
+  if (drupalSettings.algoliaSearch.productListIndexStatus === true) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Get product frame enabled / disabled.
+ *
+ * @returns {boolean}
+ */
+export function isProductFrameEnabled() {
+  if (drupalSettings.algoliaSearch.productFrameEnabled === true) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Get promotion frame enabled / disabled.
+ *
+ * @returns {boolean}
+ */
+export function isPromotionFrameEnabled() {
+  if (drupalSettings.algoliaSearch.promotionFrameEnabled === true) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Get product title trim status.
+ *
+ * @returns {boolean}
+ */
+export function isProductTitleTrimEnabled() {
+  if (drupalSettings.algoliaSearch.productTitleTrimEnabled === true) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Get product elements alignment status.
+ *
+ * @returns {boolean}
+ */
+export function isProductElementAlignmentEnabled() {
+  if (drupalSettings.algoliaSearch.productElementAlignmentEnabled === true) {
+    return true;
+  }
+  return false;
+}

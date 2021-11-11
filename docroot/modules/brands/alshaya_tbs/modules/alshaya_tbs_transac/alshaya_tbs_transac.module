@@ -1,0 +1,407 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific to TBS brand.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU && $view_mode == 'full') {
+      $product_description = _alshaya_tbs_transac_get_product_description($sku_entity);
+
+      // If short description not available, check other consecutive fields.
+      if (empty($product_description['short_desc']['value']['#markup'])) {
+        foreach ($product_description['description'] as $short_description) {
+          // If value is available in next field, then
+          // use it and no need to process further.
+          if (!empty($short_description['value']['#markup'])) {
+            $product_description['short_desc'] = $short_description;
+            break;
+          }
+        }
+      }
+
+      // Trim the short description.
+      /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+      $product_helper = \Drupal::service('alshaya_acm_product.helper');
+      $short_desc = $product_helper->createShortDescription($product_description['short_desc']['value']['#markup']);
+      // If there is 'readmore' available only then process.
+      if (!empty($short_desc['read_more'])) {
+        $short_desc['html'] = $product_helper->processShortDescEllipsis($short_desc['html']);
+      }
+      $product_description['short_desc']['value']['#markup'] = $short_desc['html'];
+      $build['short_desc'] = $product_description['short_desc'];
+      $build['description'] = $product_description['description'];
+      _alshaya_tbs_transac_get_product_ingredients($sku_entity, $build);
+
+      // Prepare how to use block content for the product.
+      _alshaya_tbs_transac_get_product_howtouse($sku_entity, $build);
+
+      // If it is a simple product check for size.
+      if ($sku_entity->getType() === 'simple') {
+        if ($size_volume = $sku_entity->get('attr_size')->getValue()) {
+          $build['size_volume']['#markup'] = $size_volume[0]['value'];
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_tbs_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $product_description = _alshaya_tbs_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $product_description['short_desc'];
+    $build['description'] = $product_description['description'];
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_tbs_transac_get_product_description($sku_entity) {
+  $product_description = [];
+  // Prepare $at_glance variable.
+  $at_glance['label'] = [
+    '#markup' => t('At a glance'),
+  ];
+  $at_glance['value'] = [
+    '#markup' => $sku_entity->get('attr_at_glance')->getString(),
+  ];
+
+  // Prepare $description variable.
+  $description['label'] = [
+    '#markup' => t('Features and benefits'),
+  ];
+  $description_value = '';
+
+  if ($body = $sku_entity->get('attr_description')->getValue()) {
+    $description_value = $body[0]['value'];
+  }
+
+  if ($bullet_points = $sku_entity->get('attr_bullet_points')
+    ->getString()) {
+    $description_value .= '<div class="bullet-points-wrapper">';
+    $description_value .= $bullet_points;
+    $description_value .= '</div>';
+  }
+
+  $description['value'] = [
+    '#markup' => $description_value,
+  ];
+
+  // If specifications are enabled, prepare the specification variable.
+  if (\Drupal::config('alshaya_acm.settings')
+    ->get('pdp_show_specifications')) {
+    $specifications['label'] = [
+      '#markup' => t('Specifications'),
+    ];
+
+    $specifications['value'] = [
+      "#theme" => 'item_list',
+      '#items' => [],
+    ];
+
+    if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
+      $specifications['value']['#items'][] = t('Style Code: @value', [
+        '@value' => $attr_style_code,
+      ]);
+    }
+
+    if ($attr_color = $sku_entity->get('attr_color')->getString()) {
+      $specifications['value']['#items'][] = t('Color: @value', [
+        '@value' => $attr_color,
+      ]);
+    }
+
+    if ($attr_season = $sku_entity->get('attr_season')->getString()) {
+      $specifications['value']['#items'][] = t('Season: @value', [
+        '@value' => $attr_season,
+      ]);
+    }
+
+    if ($attr_brand = $sku_entity->get('attr_product_brand')
+      ->getString()) {
+      $specifications['value']['#items'][] = t('Product brand: @value', [
+        '@value' => $attr_brand,
+      ]);
+    }
+  }
+
+  // Prepare $whats_in_box variable.
+  $whats_in_box['label'] = [
+    '#markup' => t("What's In The Box"),
+  ];
+
+  $whats_in_box['value'] = [
+    '#markup' => $sku_entity->get('attr_whats_in_the_box')->getString(),
+  ];
+
+  // Add all variables to $build in the sequence in
+  // which they should be displayed.
+  // Check comments in MMCPA-218 for sequence requirements.
+  // $build['short_desc'] contains the description that should be
+  // displayed before 'Read More'.
+  $product_description['short_desc'] = $at_glance;
+  $product_description['description'][] = $at_glance;
+  $product_description['description'][] = $description;
+  if (!empty($specifications)) {
+    $product_description['description'][] = $specifications;
+  }
+  $product_description['description'][] = $whats_in_box;
+
+  return $product_description;
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_tbs_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  // Early return if context is not a PDP page.
+  if ($context != 'pdp') {
+    return;
+  }
+
+  // Get the updated title.
+  $title = _alshaya_tbs_transac_get_product_title($sku, $context);
+  $build['title'] = [
+    '#markup' => $title,
+  ];
+}
+
+/**
+ * A helper function to get the product title.
+ *
+ * @param Drupal\acq_sku\Entity\SKU $sku
+ *   A object contains values for attributes.
+ *
+ * @return string
+ *   Title value.
+ */
+function _alshaya_tbs_transac_get_product_title(SKU $sku, $context) {
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+  $currentTitle = $productInfoHelper->getTitle($sku, $context);
+
+  // Prepare Top three attributes variable.
+  $top_three_attribute_fields = [];
+  if ($top_attribute1 = $sku->get('attr_top_three_attributes_1')->getString()) {
+    $top_three_attribute_fields[] = $top_attribute1;
+  }
+  if ($top_attribute2 = $sku->get('attr_top_three_attributes_2')->getString()) {
+    $top_three_attribute_fields[] = $top_attribute2;
+  }
+  if ($top_attribute3 = $sku->get('attr_top_three_attributes_3')->getString()) {
+    $top_three_attribute_fields[] = $top_attribute3;
+  }
+
+  $top_three_attributes = '';
+  if (!empty($top_three_attribute_fields)) {
+    // We need to show them comma-separated on FE.
+    $top_three_attribute_fields = implode(', ', $top_three_attribute_fields);
+    $top_three_attributes = '<span class="content--top-three-attributes">' . $top_three_attribute_fields . '</span>';
+  }
+
+  return $currentTitle . $top_three_attributes;
+}
+
+/**
+ * A helper function to get the product ingredients.
+ *
+ * @param Drupal\acq_sku\Entity\SKU $sku
+ *   A object contains values for attributes.
+ * @param array $build
+ *   A build array.
+ *
+ * @return string
+ *   Ingredients content.
+ */
+function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
+
+  $ingredients_fields = [
+    'attr_mainkeyingredients_name',
+    'attr_mainkeyingredients_description',
+    'attr_keyingredients_name2',
+    'attr_keyingredients_description2',
+    'attr_keyingredients_name3',
+    'attr_keyingredients_description3',
+    'attr_technical_ingredients_description'
+  ];
+  $ingredients_content = '';
+  $label = '<h4 class="ingredients_label">';
+  $description_div = '<div class="ingredients_description">';
+  foreach ($ingredients_fields as $ingredients_field) {
+    $value = $sku->get($ingredients_field)->getValue();
+    if (!empty($value[0]['value'])) {
+      if ($ingredients_field == 'attr_technical_ingredients_description') {
+        $ingredients_content .= '<span class="read-more-ingredients-link">Read More</span>
+          <div class="technical_ingredients_description">
+          <div class="content--description"><span class="ingredient-modal-close"></span>
+          <h2 class="field__label">Ingredients</h2><div class="field__content"><div class="desc-wrapper">' .
+          $value[0]['value'] . '</div></div></div></div>';
+        continue;
+      }
+      if (strpos($ingredients_field, '_name') !== false) {
+        $ingredients_content .= $label . $value[0]['value'] . '</h4>';
+      }
+      if (strpos($ingredients_field, '_description') !== false) {
+        $ingredients_content .= $description_div . $value[0]['value'] . '</div>';
+      }
+    }
+  }
+
+  if (!empty($ingredients_content)) {
+    $build['ingredients'] = [
+      '#theme' => 'pdp_description_accordion',
+      '#title' => t('Ingredients'),
+      '#class' => 'ingredients',
+      '#text' => [
+        '#markup' => $ingredients_content,
+      ],
+    ];
+  }
+}
+
+/**
+ * A helper function to get the product's howtouse fields content.
+ *
+ * @param Drupal\acq_sku\Entity\SKU $sku
+ *   A object contains values for attributes.
+ * @param array $build
+ *   A build array.
+ *
+ * @return string
+ *   howtouse_name content.
+ *   howtouse_description content.
+ */
+function _alshaya_tbs_transac_get_product_howtouse(SKU $sku, array &$build) {
+  if ($howtouse_name = $sku->get('attr_howtouse_name')->getString()) {
+    $build['howtouse_name'] = [
+      '#markup' => $howtouse_name,
+    ];
+  }
+
+  if ($howtouse_description = $sku->get('attr_howtouse_description')->getString()) {
+    $build['howtouse_description'] = [
+      '#markup' => $howtouse_description,
+    ];
+  }
+}
+
+/**
+ * Implements hook_alshaya_performance_preload_alter().
+ */
+function alshaya_tbs_transac_alshaya_performance_preload_alter(array &$preload) {
+  $themeHandler = \Drupal::service('theme_handler');
+  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
+  $fonts_directory_path = '/' . $themePath . '/fonts';
+
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/alshaya-icons.woff?D7b5ir',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/WorkSans-Regular.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/WorkSans-Light.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/WorkSans-Medium.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/WorkSans-SemiBold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/WorkSans-Bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Mada-Regular.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Mada-Medium.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Mada-SemiBold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Mada-Bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/MizanAR-Medium.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Recoleta-Medium.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Recoleta-SemiBold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/29LT-Bukra-Wide-Bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/DrukWide-Bold-Cy-Web.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+}

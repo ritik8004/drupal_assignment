@@ -118,14 +118,14 @@ class ProductSyncForm extends FormBase {
     switch ($action) {
       case 'Synchronize Categories':
         $this->catManager->synchronizeTree('acq_product_category');
-        drupal_set_message($this->t('Category Synchronization Complete.'), 'status');
+        $this->messenger()->addMessage($this->t('Category Synchronization Complete.'), 'status');
         break;
 
       case 'Synchronize Products':
         foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
           $this->ingestApi->productFullSync($store_id, $langcode);
         }
-        drupal_set_message($this->t('Product Synchronization Processing...'), 'status');
+        $this->messenger()->addMessage($this->t('Product Synchronization Processing...'), 'status');
         break;
     }
   }

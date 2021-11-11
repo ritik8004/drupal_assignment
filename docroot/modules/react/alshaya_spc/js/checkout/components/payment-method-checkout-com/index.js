@@ -162,6 +162,11 @@ class PaymentMethodCheckoutCom extends React.Component {
       removeFullScreenLoader();
       return;
     }
+
+    if (data.card.paymentMethod !== undefined) {
+      drupalSettings.payment_methods.checkout_com.gtm_name = data.card.paymentMethod;
+    }
+
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 

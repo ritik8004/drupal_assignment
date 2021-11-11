@@ -28,7 +28,6 @@ services:
       - '@entity_type.manager'
       - '@database'
       - '@language_manager'
-      - '@config.factory'
 
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
@@ -56,6 +55,8 @@ services:
       - '@alshaya.alshaya_array_utils'
       - '@alshaya_acm_product.product_processed_manager'
       - '@alshaya_acm_product.context_manager'
+      - '@file_system'
+      - '@datetime.time'
   alshaya_acm_product.add_to_cart_form_helper:
     class: Drupal\alshaya_acm_product\Service\AddToCartFormHelper
     arguments:
@@ -88,6 +89,7 @@ services:
       - '@acq_sku.product_info_helper'
       - '@cache.data'
       - '@alshaya_acm_product.cache_manager'
+      - '@alshaya_acm_product.sku_images_helper'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:
@@ -175,6 +177,7 @@ services:
       - '@current_route_match'
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
+      - '@alshaya_acm_product.sku_images_helper'
     tags:
       - { name: event_subscriber }
   alshaya_acm_product.product_order_limit:
@@ -189,6 +192,8 @@ services:
     tags:
       - { name: normalizer, priority: 20 }
   alshaya_acm_product.context_manager:
-    class: Drupal\alshaya_acm_product\AlshayaPromoContextManager
+    class: Drupal\alshaya_acm_product\AlshayaRequestContextManager
     arguments:
       - '@request_stack'
+  alshaya_acm_product.sku_images_helper:
+    class: Drupal\alshaya_acm_product\SkuImagesHelper

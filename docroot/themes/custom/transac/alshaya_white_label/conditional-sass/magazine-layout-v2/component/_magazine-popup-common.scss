@@ -1,7 +1,8 @@
 .magv2 {
   &-desc,
   &-select,
-  &-crossell {
+  &-crossell,
+  &-ratings-reviews {
     &-popup {
       &-container {
         background-color: $magv2-desc-popup-bg;

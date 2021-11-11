@@ -39,9 +39,9 @@ variables:
   language_excluding_delivery: 'Excluding delivery'
   language_vat: ''
   language_checkout_link: 'continue to checkout'
-  language_continue_shopping: 'go shopping'
+  continue_shopping: 'إليك منتجاتنا المفضلة'
+  language_continue_shopping: 'Here are some of our favorites'
   second_language_link: 'العربية'
-  continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
   language_short: 'ar'
   language_street: 'Street S'
@@ -84,3 +84,5 @@ variables:
   delivery_type: 'نوع التوصيل:'
   payment_type: 'نقداً عند التوصيل'
   language_store_area: 'Salmiya'
+  empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
+  language_empty_bag: 'Your shopping bag is empty'

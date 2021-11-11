@@ -1,6 +1,6 @@
 <?php
 // @codingStandardsIgnoreFile
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 
 /**
  * @file
@@ -96,8 +96,8 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   global $searchable_attributes, $ranking;
   global $migrate_index;
 
-  $clientSource = new Client($source_app_id, $source_app_secret_admin);
-  $client = new Client($app_id, $app_secret_admin);
+  $clientSource = SearchClient::create($source_app_id, $source_app_secret_admin);
+  $client = SearchClient::create($app_id, $app_secret_admin);
 
   $indexSource = $clientSource->initIndex($source_index . '_' . $language);
   $settingsSource = $indexSource->getSettings();
@@ -111,6 +111,7 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $client->copyIndex('dummy', $name);
   $index = $client->initIndex($name);
 
+  $settings = $settingsSource;
   if ($migrate_index) {
     $settings['attributesForFaceting'] = $settingsSource['attributesForFaceting'];
   }
@@ -118,12 +119,11 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
     $settings['attributesForFaceting'] = $facets;
   }
 
-  $settings = $settingsSource;
   $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
   unset($settings['replicas']);
 
-  $index->setSettings($settings, TRUE);
+  $index->setSettings($settings, ['forwardToReplicas' => TRUE,]);
 
   foreach ($sorts as $sort) {
     $replica = $name . '_' . implode('_', $sort);
@@ -132,16 +132,16 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   }
   sleep(3);
 
-  $index->setSettings($settings, TRUE);
+  $index->setSettings($settings, ['forwardToReplicas' => TRUE,]);
 
   foreach ($sorts as $sort) {
     $replica = $name . '_' . implode('_', $sort);
     $replica_index = $client->initIndex($replica);
     $replica_settings = $replica_index->getSettings();
     $replica_settings['ranking'] = [
-      'desc(stock)',
-      $sort['direction'] . '(' . $sort['field'] . ')',
-    ] + $ranking;
+        'desc(stock)',
+        $sort['direction'] . '(' . $sort['field'] . ')',
+      ] + $ranking;
     $replica_index->setSettings($replica_settings);
   }
 
@@ -176,7 +176,7 @@ function algolia_update_synonyms($app_id, $app_secret_admin, $language, $env, $b
     return;
   }
 
-  $client = new Client($app_id, $app_secret_admin);
+  $client = SearchClient::create($app_id, $app_secret_admin);
   $client->setConnectTimeout(3000, 3000);
   $name = $env . '_' . $brand . '_' . $language;
   $index = $client->initIndex($name);
@@ -197,7 +197,7 @@ function algolia_update_synonyms($app_id, $app_secret_admin, $language, $env, $b
   print 'Synonyms saved for: ' . $name . PHP_EOL;
 }
 
-function algolia_get_synonyms(\AlgoliaSearch\Index $index) {
+function algolia_get_synonyms(\Algolia\AlgoliaSearch\SearchIndex $index) {
   $page = 0;
   $synonyms = [];
 

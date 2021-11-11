@@ -21,7 +21,7 @@
  * @endcode
  */
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 
 $logger = \Drupal::logger('algolia-index-sanity-check');
 
@@ -32,7 +32,7 @@ $app_id = $algolia_server_config['application_id'];
 $app_secret = $algolia_server_config['api_key'];
 $index_name = $algolia_index_config['algolia_index_name'];
 
-$client = new Client($app_id, $app_secret);
+$client = SearchClient::create($app_id, $app_secret);
 
 // $extra contains the command line args.
 $operation = $extra[0] ?? 'verify';
@@ -56,7 +56,7 @@ $time = strtotime("-$days days");
 
 $algolia_options['numericFilters'] = 'changed<' . $time;
 
-$actual_indexes = [];
+$indexes = [];
 foreach (['en', 'ar'] as $lang) {
   $actual_index_name = implode('_', [
     $index_name,
@@ -76,17 +76,16 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
   $actual = $client->initIndex($actual_index_name);
 
   $logger->notice('Finding entries with changed older then @days in index @index', [
-    '@index' => $replica->indexName,
+    '@index' => $replica->getIndexName(),
     '@days' => $days,
   ]);
 
-  $page = 0;
   $results = $replica->search('', $algolia_options);
 
   $nids = array_column($results['hits'], 'nid');
   if (empty($nids)) {
     $logger->notice('No items found in the index @index with changed before @days days.', [
-      '@index' => $replica->indexName,
+      '@index' => $replica->getIndexName(),
       '@days' => $days,
     ]);
 
@@ -102,30 +101,31 @@ foreach ($indexes as $actual_index_name => $replica_index_name) {
   $nids_to_remove = array_diff($nids, $nids_available_in_system);
   if (empty($nids_to_remove)) {
     $logger->notice('All data is legitimate in the index @index with changed before @days days.', [
-      '@index' => $replica->indexName,
+      '@index' => $replica->getIndexName(),
       '@days' => $days,
     ]);
     continue;
   }
 
   $logger->notice('NIDs that are in Algolia index @index but not in database: count @count, nids: @nids', [
-    '@index' => $replica->indexName,
+    '@index' => $replica->getIndexName(),
     '@count' => count($nids_to_remove),
     '@nids' => implode(',', $nids_to_remove),
   ]);
 
-  foreach ($nids_to_remove as $nid) {
-    $pos = array_search($nid, $nids);
-    $object_id = $results['hits'][$pos]['objectID'];
+  if ($operation === 'delete') {
+    $object_ids = [];
 
-    if ($operation === 'delete') {
-      $actual->deleteObject($object_id);
-
-      $logger->warning('Removed entry with objectId @object_id from index @index', [
-        '@index' => $actual->indexName,
-        '@object_id' => $object_id,
-      ]);
+    foreach ($nids_to_remove as $nid) {
+      $pos = array_search($nid, $nids);
+      $object_ids[] = $results['hits'][$pos]['objectID'];
     }
+
+    $actual->deleteObjects($object_ids);
+    $logger->warning('Removed entries from index @index for objectIds: @objectIds.', [
+      '@index' => $actual->getIndexName(),
+      '@objectIds' => $object_ids,
+    ]);
   }
 }
 

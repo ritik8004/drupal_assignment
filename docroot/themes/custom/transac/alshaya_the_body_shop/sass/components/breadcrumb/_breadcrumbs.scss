@@ -1,0 +1,13 @@
+.c-breadcrumb {
+  li {
+    text-transform: capitalize;
+
+    &:last-of-type a {
+      font-weight: normal;
+    }
+
+    &::after {
+      content: '/';
+    }
+  }
+}

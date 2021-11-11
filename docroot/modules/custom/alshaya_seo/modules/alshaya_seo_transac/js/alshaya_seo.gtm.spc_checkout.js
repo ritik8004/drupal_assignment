@@ -152,6 +152,12 @@
   });
 
   document.addEventListener('storeSelected', function (e) {
+    if (e.detail.store === undefined || e.detail.store.name === undefined) {
+      // Return if data not proper.
+      // We have added logs in the place from which event is dispatched.
+      return;
+    }
+
     dataLayer.push({
       event: 'VirtualPageview',
       virtualPageURL: ' /virtualpv/click-and-collect/step2/select-store',

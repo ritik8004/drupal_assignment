@@ -6,7 +6,6 @@ use Drupal\alshaya_seo\Event\MetaImageRenderEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Theme\ThemeManagerInterface;
@@ -105,7 +104,7 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
 
     // Create a name without spaces and any special character.
     $parent_lang = \Drupal::service('entity.repository')->getTranslationFromContext($parent, $langcode);
-    $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent_lang->label()));
+    $term_clean_name = Html::cleanCssIdentifier(mb_strtolower($parent_lang->label()));
 
     $langcode = ($langcode != 'en') ? '-' . $langcode : '';
     // Current active theme object.

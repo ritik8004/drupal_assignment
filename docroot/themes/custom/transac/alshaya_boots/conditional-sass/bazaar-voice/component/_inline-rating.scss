@@ -1,4 +1,9 @@
 .aggregate-rating {
+  @include breakpoint($only-mobile) {
+    justify-content: center;
+    padding: 0 0.5rem 0.75rem;
+  }
+
   .no-of-stars {
     font-family: $alshaya-bold;
   }

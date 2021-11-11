@@ -1,25 +1,19 @@
 #lightSlider {
   .slick-slide {
-    height: auto !important;
-    min-height: 8.125rem;
+    height: 8.125rem !important;
+    width: 6.125rem !important;
     padding: 0;
     border: 0;
     position: relative;
 
     @include breakpoint($desktop) {
       margin: 0.625rem 0;
-      width: 6.125rem !important;
       #{$left}: 2px;
     }
 
     @include breakpoint($only-tablet) {
-      width: 6.125rem !important;
       border: 0 !important;
       margin: 2px 0.4375rem;
-    }
-
-    img {
-      height: 8.125rem;
     }
   }
 
@@ -34,12 +28,18 @@
       border: 1px solid $gallery_arrows_border;
     }
   }
+
+  .slick-next {
+    @include breakpoint($desktop) {
+      bottom: auto;
+    }
+  }
 }
 
 .cloudzoom {
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
-      width: calc(100% - (6.375rem + 0.25rem));
+      width: calc(100% - 6.625rem);
     }
 
     .cloudzoom__image {
@@ -48,6 +48,8 @@
           height: auto;
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 37.5rem;
+          // Adding some height for loader icon
+          min-height: 20rem;
 
           .acq-content-product-modal & {
             img {
@@ -62,6 +64,7 @@
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 25rem;
           margin: auto;
+          min-height: 10rem;
 
           img {
             height: auto !important;
@@ -139,6 +142,16 @@
       }
     }
   }
+
+  .cloudzoom {
+    .cloudzoom__herocontainer {
+      .cloudzoom__image {
+        .hover-text {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 @include breakpoint($only-tablet) {
@@ -174,26 +187,6 @@
       .slick-next,
       .slick-prev {
         top: 0 !important;
-      }
-    }
-  }
-}
-
-#lightSlider {
-  .slick-next {
-    @include breakpoint($desktop) {
-      bottom: auto;
-    }
-  }
-}
-
-.pdp-modal-overlay {
-  .cloudzoom {
-    .cloudzoom__herocontainer {
-      .cloudzoom__image {
-        .hover-text {
-          display: none;
-        }
       }
     }
   }

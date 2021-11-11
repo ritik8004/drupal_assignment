@@ -15,6 +15,13 @@ use Drupal\Component\Serialization\Json;
  * Implements hook_page_attachments().
  */
 function dynamic_yield_page_attachments(array &$page) {
+  // For performance testing & debugging purposes adding a quick bypass for
+  // escaping DY JS on a page.
+  // Usage: ?DY=BLOCK
+  $param = \Drupal::request()->get('DY');
+  if ($param === 'BLOCK') {
+    return;
+  }
 
   /** @var \Drupal\dynamic_yield\DynamicYieldService $dynamic_yield */
   $dynamic_yield = \Drupal::service('dynamic_yield.dynamic_yield');
@@ -29,7 +36,7 @@ function dynamic_yield_page_attachments(array &$page) {
     ],
       'spath',
     ];
-
+    array_unshift($page['#attached']['html_head'], $static_script);
     $dynamic_script = [[
       '#tag' => 'script',
       '#attributes' => [
@@ -38,6 +45,7 @@ function dynamic_yield_page_attachments(array &$page) {
     ],
       'dpath',
     ];
+    array_unshift($page['#attached']['html_head'], $dynamic_script);
 
     // Dispatch the DyPageType event to set the context.
     $event = new DyPageType();
@@ -69,9 +77,6 @@ function dynamic_yield_page_attachments(array &$page) {
       'dycontext',
     ];
     array_unshift($page['#attached']['html_head'], $context_script);
-    // Adding Dy script below the DY context script.
-    array_unshift($page['#attached']['html_head'], $static_script);
-    array_unshift($page['#attached']['html_head'], $dynamic_script);
 
     // Add DY preconnect and dns-prefetch link tags to header.
     $prefetch_urls = [

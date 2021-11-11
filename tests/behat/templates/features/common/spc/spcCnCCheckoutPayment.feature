@@ -1,17 +1,19 @@
-@javascript @guest @checkoutPayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
+@javascript @guest @checkoutPayment @clickCollect @mujikwuat @mujisauat @mujiaeuat @pbkaeuat @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmsauat @westelmkwuat @vsaeqa @hmsaqa @flsauat @tbskwuat @hmaeuat @mcsauat @mcaeuat @bbwsauat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method for Guest User
 
   Background:
     Given I am on "{spc_basket_page}"
     And I wait 5 seconds
     And I wait for the page to load
+    And I scroll to the ".plp-facet-product-filter" element
+    And I wait 5 seconds
 
   @cc @cnc @desktop @checkout_com
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -25,25 +27,11 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
-    And I wait for AJAX to finish
-    Then the "delivery-method-click_and_collect" checkbox should be checked
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 5 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 30 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 10 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I wait 20 seconds
+    And I select the collection store
+    And I wait 30 seconds
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -74,6 +62,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I should be on "/checkout/confirmation" page
     And I wait 10 seconds
     And I wait for the page to load
+    And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
@@ -88,7 +77,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I should see "{cc_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -107,10 +95,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
 
   @cc @cnc @mobile @checkout_com
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -124,25 +112,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then the "delivery-method-click_and_collect" checkbox should be checked
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 5 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
     And I wait 10 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 20 seconds
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -171,16 +144,17 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @cnc @language @desktop @checkout_com
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -193,26 +167,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
-    And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then the "delivery-method-click_and_collect" checkbox should be checked
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 5 seconds
-    When I select the first autocomplete option for "{language_store_area}" on the "edit-store-location" field
-    When I wait 30 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
     And I wait 10 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 20 seconds
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -241,16 +199,17 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file
 
   @cc @cnc @language @mobile @checkout_com
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -264,25 +223,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then the "delivery-method-click_and_collect" checkbox should be checked
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 5 seconds
-    When I select the first autocomplete option for "{language_store_area}" on the "edit-store-location" field
-    When I wait 30 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
     And I wait 10 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 20 seconds
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -311,3 +255,4 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
+    And I should save the order details in the file

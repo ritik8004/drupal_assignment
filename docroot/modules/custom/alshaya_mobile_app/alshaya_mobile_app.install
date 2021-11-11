@@ -10,7 +10,46 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
+use Drupal\user\Entity\Role;
 
+/**
+ * Implements hook_update_N().
+ *
+ * [6.5.0] Add new Product Exclude Linked,
+ * Skus Product List resource and
+ * Deeplink Resource v2.
+ */
+function alshaya_mobile_app_update_8080() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+      'rest.resource.product_exclude_linked_v2',
+      'rest.resource.skus_product_list_v2',
+      'rest.resource.deeplink_v2'
+    ],
+    'alshaya_mobile_app',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.2.0] Delete the cart_promotions resource config.
+ */
+function alshaya_mobile_app_update_8079() {
+  // Deleting the cart_promotions rest config.
+  \Drupal::configFactory()->getEditable('rest.resource.cart_promotions')->delete();
+  // Disable the resource related permissions.
+  $role = Role::load('anonymous');
+  if ($role->hasPermission('restful get cart_promotions')) {
+    $role->revokePermission('restful get cart_promotions');
+  }
+  $role->save();
+}
 /**
  * Implements hook_update_N().
  *

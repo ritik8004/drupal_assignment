@@ -23,6 +23,7 @@ $white-smoke: #f3f3f3;
 $scarlet: #d0011b;
 $tomato: #e6591a;
 $medium-green: #3ab549;
+$_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 
 // Colors for which variables are not present in Zeplin but colors are used.
 $_black_two: #333;
@@ -556,9 +557,6 @@ $order_print_order_details_total_label: $_gray_ten;
 $order_print_order_details_item_row_details: $PB_grey_two;
 $order_print_delivery_details_price_label: $_black_two;
 
-// Pace progress color
-$progress_loader: $_black_two;
-
 // Department page
 $department_category_list_hover: $_black_two;
 $department_category_accordion_title: $_black_two;
@@ -620,3 +618,11 @@ $spc-deliver-button: $_black_two;
 $spc-cnc-toggle-bg-active: $_black_two;
 $spc-checkout-cnc-map-expand: $_black_two;
 $spc-cart-free-gifts-link: $PB_grey_one;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $PB_black_one;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
+// Sofa and sectional.
+$sofa-sectional-title: $_black_two;
+$sofa-sectional-select-border: $_black_two;

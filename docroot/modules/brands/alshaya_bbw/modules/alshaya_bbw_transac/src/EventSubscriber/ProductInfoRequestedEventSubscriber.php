@@ -89,6 +89,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'short_description':
         $this->processShortDescription($event);
         break;
+
       case 'title':
         // Only for algolia.
         if ($event->getContext() == 'plp') {

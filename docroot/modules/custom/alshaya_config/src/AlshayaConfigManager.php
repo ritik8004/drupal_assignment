@@ -15,6 +15,7 @@ use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\search_api\Entity\Index;
+use http\Exception\InvalidArgumentException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -158,9 +159,14 @@ class AlshayaConfigManager {
    * @param array $options
    *   Array of keys to replace when using MODE_REPLACE_KEY.
    */
-  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_REPLACE, array $options = []) {
+  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_ADD_MISSING, array $options = []) {
     if (empty($configs)) {
       return;
+    }
+
+    if (!in_array($path, ['install', 'optional'])) {
+      $this->logger->error('If you are trying to apply the overrides, please resave (MODE_RESAVE) original config.');
+      throw new InvalidArgumentException('Only original config should be updated.');
     }
 
     // Skip updating configs for modules currently not installed.
@@ -248,7 +254,8 @@ class AlshayaConfigManager {
         // Using flush() method of ImageStyle entity takes a lot of time as it
         // iterates recursively and deletes each file one by one, deleting
         // the directory using shell cmd is quicker with hook_update.
-        $directory = file_url_transform_relative(file_create_url(file_default_scheme() . '://styles/' . $style->id()));
+        $schema = $this->configFactory->get('system.file')->get('default_scheme');
+        $directory = file_url_transform_relative(file_create_url($schema . '://styles/' . $style->id()));
         if (file_exists($directory)) {
           $this->logger->info('Removing style directory: @directory.', [
             '@directory' => $directory,

@@ -1,0 +1,8 @@
+.account--dashboard {
+  .subtitle {
+    @include breakpoint($desktop) {
+      font-size: 1.125rem;
+      text-transform: capitalize;
+    }
+  }
+}

@@ -62,6 +62,8 @@
         font-size: 0.875rem;
         font-family: $alshaya-bold;
         letter-spacing: 1px;
+
+        @include arabic-letter-spacing;
       }
 
       @include breakpoint($desktop) {

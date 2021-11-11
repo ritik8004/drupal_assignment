@@ -4,15 +4,15 @@
           {% if fields.field_promotion_banner.content and fields.field_promotion_banner_mobile.content %}
               <source media="(min-width: 768px)" srcset="{{ fields.field_promotion_banner.content }}">
               <source media="(max-width: 767px)" srcset="{{ fields.field_promotion_banner_mobile.content }}">
-              <img src="{{ fields.field_promotion_banner.content }}"/>
+              <img loading="lazy" src="{{ fields.field_promotion_banner.content }}"/>
           {% elseif fields.field_promotion_banner.content is empty and fields.field_promotion_banner_mobile.content %}
               <source media="(min-width: 768px)" srcset="{{ fields.field_promotion_banner_mobile.content }}">
               <source media="(max-width: 767px)" srcset="{{ fields.field_promotion_banner_mobile.content }}">
-              <img src="{{ fields.field_promotion_banner_mobile.content }}"/>
+              <img loading="lazy" src="{{ fields.field_promotion_banner_mobile.content }}"/>
           {% elseif fields.field_promotion_banner_mobile.content is empty and fields.field_promotion_banner.content %}
               <source media="(min-width: 768px)" srcset="{{ fields.field_promotion_banner.content }}">
               <source media="(max-width: 767px)" srcset="{{ fields.field_promotion_banner.content }}">
-              <img src="{{ fields.field_promotion_banner.content }}"/>
+              <img loading="lazy" src="{{ fields.field_promotion_banner.content }}"/>
           {% endif %}
         </picture>
     </div>

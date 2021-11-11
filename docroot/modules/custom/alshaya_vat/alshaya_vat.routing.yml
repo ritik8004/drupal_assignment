@@ -1,0 +1,6 @@
+alshaya_vat.vat_certificate:
+  path: '/vat-certificate'
+  defaults:
+    _controller: '\Drupal\alshaya_vat\Controller\VatCertificateController::vatCertificatePage'
+  requirements: 
+    _permission: 'access content'

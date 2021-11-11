@@ -1,0 +1,23 @@
+.spc-delivery-area {
+  .delivery-type-wrapper {
+    font-family: $hnm-demibold;
+  }
+
+  .actions {
+    div.select-area-link {
+      font-family: $hnm-demibold;
+    }
+  }
+
+  .close-modal {
+    &::before {
+      font-size: 1rem;
+      padding-top: 1.875rem;
+      padding-#{$right}: 0.9375rem;
+
+      @include breakpoint($only-mobile) {
+        padding-top: 1.0625rem;
+      }
+    }
+  }
+}

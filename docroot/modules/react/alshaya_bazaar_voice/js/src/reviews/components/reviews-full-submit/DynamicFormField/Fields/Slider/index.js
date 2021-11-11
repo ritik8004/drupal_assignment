@@ -28,25 +28,25 @@ class Slider extends React.Component {
       text,
     } = this.props;
     const { sliderVal, activeId } = this.state;
+    const rangeLength = Object.keys(options).length;
 
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
-        <div className="write-review-type-slider">
+        <div id={id} className="write-review-type-slider">
           <div className="select-slider__wrap">
             <div className="selectedValue">
               <span>
                 {label}
-                {' '}
                 {(required) ? '*' : '' }
                 {':'}
               </span>
               <span className="selectedLabel">{activeId}</span>
             </div>
             <div className="range-slider-block" id={`${id}-error`}>
-              <div className="range-slider">
+              <div className={`range-slider range-${rangeLength}`}>
                 {Object.values(options).map((sliderLabel, i) => {
                   const sliderValue = i + 1;
                   return (

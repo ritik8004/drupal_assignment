@@ -90,20 +90,20 @@ function hook_acq_sku_commerce_category_alter(TermInterface $term, array $catego
 /**
  * Alter (add) data that needs to be deleted while removing all synced data.
  *
- * @param mixed $context
+ * @param mixed $context_results
  *   Whole batch context array.
  */
-function hook_acq_sku_clean_synced_data_alter(&$context) {
+function hook_acq_sku_clean_synced_data_alter(&$context_results) {
 
 }
 
 /**
  * Alter old categories data that needs to be deleted after category sync.
  *
- * @param array $result
- *   Result array to alter.
+ * @param array $orphan_categories
+ *   Array containing orphan category term ids.
  */
-function hook_acq_sku_sync_categories_delete_alter(array &$result) {
+function hook_acq_sku_sync_categories_delete_alter(array &$orphan_categories) {
 
 }
 

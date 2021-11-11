@@ -10,7 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Routing\RequestContext;
 
@@ -37,7 +37,7 @@ class DeeplinkResource extends ResourceBase {
   /**
    * The path alias manager.
    *
-   * @var \Drupal\Core\Path\AliasManagerInterface
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -77,7 +77,7 @@ class DeeplinkResource extends ResourceBase {
    *   Logger channel.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
    *   The path alias manager.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
@@ -117,7 +117,7 @@ class DeeplinkResource extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('language_manager'),
-      $container->get('path.alias_manager'),
+      $container->get('path_alias.manager'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('request_stack'),
       $container->get('router.request_context')
@@ -132,6 +132,14 @@ class DeeplinkResource extends ResourceBase {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
+    $url = $this->getDeeplink($alias);
+    return new ModifiedResourceResponse(['deeplink' => $url]);
+  }
+
+  /**
+   * Helper function to get deeplink.
+   */
+  protected function getDeeplink($alias) {
     $alias = str_replace($this->baseUrl, '', $alias);
 
     if (empty($alias) || UrlHelper::isExternal($alias)) {
@@ -188,7 +196,7 @@ class DeeplinkResource extends ResourceBase {
       $url = $this->mobileAppUtility->getDeepLinkFromUrl($url_obj);
     }
 
-    return new ModifiedResourceResponse(['deeplink' => $url]);
+    return $url;
   }
 
 }

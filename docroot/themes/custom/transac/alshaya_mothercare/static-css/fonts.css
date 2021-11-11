@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "Mothercare";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-bold.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MothercareThin";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-thin.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-thin.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo-300";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-arabic-thin.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-arabic-thin.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo-bold";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-arabic-bold.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/alshaya-arabic-bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ThrowMyHandsUpintheAir";
+  src: url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/ThrowMyHandsUpintheAir.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ThrowMyHandsUpintheAirBold";
+  src: url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_white_label/fonts/ThrowMyHandsUpintheAirBold.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Demi";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Demi.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Demi.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Junior";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Junior.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Junior.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Regular";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Regular.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mothercare-Thin";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Thin.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Mothercare-Thin.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo-Regular";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-Regular.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo-SemiBold";
+  src:
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-SemiBold.woff2") format("woff2"),
+    url("https://www.mothercare.com.kw/themes/custom/transac/alshaya_mothercare/fonts/Cairo-SemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

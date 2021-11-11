@@ -8,6 +8,7 @@ import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   isDeliveryTypeSameAsInCart,
   showFullScreenLoader,
+  removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
@@ -43,7 +44,6 @@ export default class PaymentMethods extends React.Component {
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
 
-
       if (paymentErrorInfo.status === 'declined' && paymentErrorInfo.payment_method === 'postpay') {
         message = parse(getStringMessage('postpay_error'));
         // Adding Postpay identifier to the error message for the GA event.
@@ -58,14 +58,6 @@ export default class PaymentMethods extends React.Component {
         const transactionData = getStringMessage(`${paymentErrorInfo.payment_method}_error_info`, errorData);
         message = parse(getStringMessage('place_order_failed_error', {
           '@transaction_data': transactionData,
-        }));
-      } else if (paymentErrorInfo.payment_method !== undefined
-        && paymentErrorInfo.payment_method === 'knet'
-        && paymentErrorInfo.data !== undefined) {
-        message = parse(getStringMessage('knet_error', {
-          '@transaction_id': paymentErrorInfo.data.transaction_id,
-          '@payment_id': paymentErrorInfo.data.payment_id,
-          '@result_code': paymentErrorInfo.data.result_code,
         }));
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
@@ -163,14 +155,15 @@ export default class PaymentMethods extends React.Component {
       }
 
       // Select first payment method by default.
-      this.changePaymentMethod(Object.keys(paymentMethods)[0]);
+      const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
+      this.changePaymentMethod(sortedMethods[0].code);
     }
   };
 
   getPaymentMethods = (active) => {
     const { cart } = this.props;
 
-    let paymentMethods = [];
+    const paymentMethods = [];
 
     if (active) {
       Object.entries(cart.cart.payment.methods).forEach(([, method]) => {
@@ -191,8 +184,6 @@ export default class PaymentMethods extends React.Component {
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });
-
-      paymentMethods = paymentMethods.sort((a, b) => a.weight - b.weight);
     } else {
       Object.entries(drupalSettings.payment_methods).forEach(([, method]) => {
         if (!(cart.delivery_type !== undefined && cart.delivery_type === 'click_and_collect' && method.code === 'cashondelivery')) {
@@ -248,11 +239,7 @@ export default class PaymentMethods extends React.Component {
 
     showFullScreenLoader();
 
-    const analytics = {};
-    if (typeof window.ga === 'function' && window.ga.loaded) {
-      analytics.clientId = window.ga.getAll()[0].get('clientId');
-      analytics.trackingId = window.ga.getAll()[0].get('trackingId');
-    }
+    const analytics = Drupal.alshayaSpc.getGAData();
 
     const data = {
       payment: {
@@ -266,6 +253,8 @@ export default class PaymentMethods extends React.Component {
     if (cartUpdate instanceof Promise) {
       cartUpdate.then((result) => {
         if (!result) {
+          // Close popup in case of error.
+          removeFullScreenLoader();
           return;
         }
         const paymentDiv = document.getElementById(`payment-method-${method}`);
@@ -297,10 +286,11 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
-    const activePaymentMethods = this.getPaymentMethods(active);
+    const activePaymentMethods = Object.values(this.getPaymentMethods(active))
+      .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
-    Object.entries(activePaymentMethods).forEach(([key, method], index) => {
+    Object.entries(activePaymentMethods).forEach(([, method], index) => {
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
       methods.push(<PaymentMethod
@@ -309,7 +299,7 @@ export default class PaymentMethods extends React.Component {
         refreshCart={refreshCart}
         changePaymentMethod={this.changePaymentMethod}
         isSelected={cart.cart.payment.method === method.code}
-        key={key}
+        key={method.code}
         method={method}
         animationOffset={animationOffset}
       />);

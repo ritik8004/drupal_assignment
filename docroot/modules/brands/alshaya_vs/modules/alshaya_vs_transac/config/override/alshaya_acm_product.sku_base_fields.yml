@@ -1,11 +1,33 @@
 fields:
   product_brand:
     source: 'brand'
+    index: 1
   color:
     facet: 0
     configurable: 1
+    index: 1
   padding:
     label: 'Padding'
+    index: 1
   bra_coverage:
     label: 'Bra Coverage'
     description: 'Bra Coverage.'
+    index: 1
+  labels:
+    index: 1
+  band_size:
+    index: 1
+  cup_size:
+    index: 1
+  fragrance:
+    index: 1
+  at_glance:
+    index: 1
+  style:
+    index: 1
+  season:
+    index: 1
+  collection:
+    index: 1
+  whats_in_the_box:
+    index: 1

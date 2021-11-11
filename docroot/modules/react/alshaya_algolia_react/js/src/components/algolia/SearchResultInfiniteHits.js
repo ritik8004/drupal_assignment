@@ -13,9 +13,7 @@ export default connectInfiniteHits(({
     () => {
       if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
         if (hits.length > 0) {
-          Drupal.blazyRevalidate();
           Drupal.algoliaReact.stickyfacetfilter();
-          Drupal.refreshGrids();
         }
         removeLoader();
         // Trigger back to search page.

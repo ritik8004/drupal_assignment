@@ -1,0 +1,114 @@
+.nodetype--magazine_article {
+  .c-breadcrumb {
+    display: block;
+  }
+
+  .field__items {
+    .field--name-field-magazine-hero-image {
+      margin-bottom: 1.5rem;
+
+      img {
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .field--name-field-magazine-paragraphs {
+    &.field__items {
+      @include container(60.0625rem);
+    }
+
+    .paragraph--type--title-textarea {
+      font-size: 0.75rem;
+    }
+
+    .field--name-field-banner,
+    .paragraph--type--video {
+      text-align: center;
+      margin-top: 5rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .field--name-field-magazine-slogan {
+    max-width: 39rem;
+    text-align: center;
+  }
+
+  .magazine-article-title {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  .magazine-page-title {
+    border-color: transparent;
+    margin-bottom: 3rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 2rem;
+    }
+
+    .magazine-detail-page-title {
+      text-transform: unset;
+      font-size: 1.5rem;
+    }
+  }
+
+  .field--name-field-button-link {
+    margin-bottom: 1rem;
+  }
+
+  .magazine-backfeed {
+    + article {
+      @include container(60.0625rem);
+    }
+  }
+}
+
+.nodetype--magazine_article,
+.path--magazine {
+  .magazine-article-title,
+  h2 a {
+    text-transform: unset;
+    font-weight: normal;
+    margin-bottom: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.25rem;
+    }
+
+    &:hover {
+      color: $magazine-article-link-hover;
+    }
+  }
+
+  .field--name-field-magazine-slogan {
+    font-style: normal;
+    font-size: 0.875rem;
+    line-height: 1.14;
+    margin-bottom: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .field--name-field-magazine-category {
+    font-size: 0.75rem;
+    margin: 0 0 0.875rem;
+    text-align: $left;
+  }
+}
+
+.path--magazine {
+  .field--name-field-magazine-slogan {
+    max-width: 60.0625rem;
+    text-align: $left;
+  }
+
+  .magazine-article-title,
+  h2 a {
+    text-align: $left;
+    font-size: 1.25rem;
+  }
+}

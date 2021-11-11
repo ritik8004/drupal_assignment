@@ -1,0 +1,201 @@
+.user__address--column {
+  font-size: 0.875rem;
+
+  @include breakpoint($tablet) {
+    max-width: 20rem;
+  }
+
+  width: 100%;
+
+  @include breakpoint($only-mobile) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @include breakpoint($desktop) {
+    &:nth-of-type(odd) {
+      margin-#{$right}: 1.5rem;
+    }
+  }
+}
+
+.view-address-book {
+  @include breakpoint($desktop) {
+    padding-top: 1.5rem;
+  }
+}
+
+.c-address-book {
+  .block-system > a {
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+
+    @include breakpoint($only-tablet) {
+      top: -1.625rem;
+    }
+  }
+}
+
+.address {
+  .address--label {
+    font-family: $alshaya-bold;
+    color: $primary_text;
+    font-size: 0.75rem;
+  }
+
+  .address--content {
+    color: $primary_text;
+    font-weight: normal;
+    font-size: 0.875rem;
+  }
+
+  .address--options {
+    @include breakpoint($desktop) {
+      padding: 0;
+    }
+
+    a {
+      font-size: 0.875rem;
+    }
+  }
+
+  .address--controls {
+    padding: 0.725rem 0;
+  }
+
+  .address--edit,
+  .address--delete {
+    width: 4rem;
+    padding: 0;
+    text-align: center;
+
+    a {
+      border: 0;
+      border-#{$left}: 1px solid $address_book_border;
+      height: 2.5rem;
+      padding: 0.925rem 0;
+      min-width: 4.9375rem;
+
+      @include breakpoint($desktop) {
+        padding: 0.925rem 0;
+        font-weight: normal;
+      }
+    }
+  }
+
+  .address--primary {
+    text-align: unset;
+    padding-#{$left}: 2.125rem;
+    padding-bottom: 0;
+    padding-top: 0.425rem;
+    font-weight: normal;
+    letter-spacing: normal;
+
+    @include breakpoint($tablet) {
+      width: auto;
+      padding-#{$left}: 2.125rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: 0;
+      padding-#{$left}: 2.125rem;
+    }
+
+    span::before,
+    a::before {
+      margin: 0 0.625rem;
+      #{$left}: 0;
+    }
+  }
+
+  &:hover,
+  &.default {
+    .address--data {
+      background-color: $address_list_background;
+    }
+
+    .address--primary {
+      font-weight: normal;
+      color: $address_button_text;
+    }
+  }
+}
+
+.address-book-address .form-type-select {
+  select.select2-select.form-select {
+    border-color: $primary_input_border;
+  }
+}
+
+#edit-member-delivery-home .user__address--column {
+  @include breakpoint($tablet) {
+    width: 77%;
+  }
+
+  @include breakpoint($desktop) {
+    width: 36%;
+    width: calc(37.5% - 1.5rem);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 1.5rem;
+    }
+  }
+}
+
+#edit-member-delivery-home-addresses {
+  .address {
+    &:hover,
+    &.default {
+      .address--deliver-to-this-address {
+        a {
+          color: $address_default_color;
+          border-width: 2px;
+          background-color: transparent;
+          text-transform: uppercase;
+
+          @include breakpoint($desktop) {
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+
+    &--edit {
+      text-align: center;
+
+      @include breakpoint($desktop) {
+        width: 23%;
+      }
+
+      a {
+        text-transform: uppercase;
+        height: 0;
+        display: inline-block;
+
+        @include breakpoint($tablet) {
+          height: 1rem;
+        }
+      }
+    }
+
+    &--deliver-to-this-address {
+      @include breakpoint($desktop) {
+        width: 74%;
+      }
+
+      a {
+        border: 0;
+        border-#{$right}: 0.0625rem solid $address_button_border;
+        text-transform: uppercase;
+
+        @include breakpoint($tablet) {
+          margin: 0;
+          border: 0.125rem solid transparent;
+          border-right: 0.0625rem solid $address_button_border;
+        }
+      }
+    }
+  }
+}

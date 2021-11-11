@@ -13,7 +13,13 @@ set classes = [
         {% if content.gallery is not empty %}
           {{ content.gallery }}
         {% else %}
-          <div id="product-zoom-container"></div>
+          <div class="gallery-wrapper empty-gallery">
+            <div id="product-zoom-container">
+              <div class="cloudzoom"></div>
+              <div class="mobilegallery"></div>
+              <div id="product-full-screen-gallery-container" style="display: none;"></div>
+            </div>
+          </div>
         {% endif %}
         {% if wishlist_enabled is defined and wishlist_enabled == true %}
           <div id="wishlist-pdp"></div>
@@ -21,6 +27,7 @@ set classes = [
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
+
         {% if show_crosssell_as_matchback == false %}
           {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
         {% endif %}
@@ -76,7 +83,16 @@ set classes = [
 
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
-          {% if content.same_day_delivery_text %}
+          {# Delivery options will load if express delivery enabled. #}
+          {% if content.delivery_options %}
+            <div class="express-delivery {{ content.express_delivery_class }}">
+            {% for key,delivery_option in content.delivery_options %}
+              <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
+                <span>{{ delivery_option.label }}</span>
+              </div>
+            {% endfor %}
+            </div>
+          {% elseif content.same_day_delivery_text and content.delivery_options is not defined and content.delivery_options is not empty %}
             <div class="same-day-delivery">
               <div class="same-day-content">
                 <p>{{ content.same_day_delivery_text }}</p>
@@ -189,10 +205,16 @@ set classes = [
             {% block afterDescription %}
             {% endblock %}
 
+            {% if content.express_delivery %}
+              {{content.express_delivery}}
+            {% endif %}
+
             {% if content.home_delivery or content.click_and_collect %}
               <div class="delivery-options-wrapper">
                 <div class="product-out-of-stock-layer"></div>
-                <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% if not content.express_delivery %}
+                  <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                {% endif %}
                 <div class="field__content">
                   {{ content.home_delivery }}
 
@@ -206,6 +228,9 @@ set classes = [
             {{ content.sharethis }}
 
           </div>
+
+          {% block productPostContentMobile %}
+          {% endblock %}
 
           {% include directory ~ '/../alshaya_white_label/templates/partial/mobile-product-related.html.twig' %}
 
@@ -221,10 +246,16 @@ set classes = [
     {% endif %}
 
   </div>
+
+  {% block productPostContent %}
+  {% endblock %}
+
 </article>
 <div id="dy-recommendation"></div>
 
 {% if content.reviews_section %}
-  {{ content.bazaar_voice_strings }}
-  {{content.reviews_section}}
+  {% if bazaarvoice_strings %}
+    {{ bazaarvoice_strings }}
+  {% endif %}
+  {{ content.reviews_section }}
 {% endif %}

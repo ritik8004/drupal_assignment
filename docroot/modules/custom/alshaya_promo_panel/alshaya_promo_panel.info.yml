@@ -3,5 +3,6 @@ type: module
 description: 'Alshaya Promo panel to show in the footer.'
 package: 'Alshaya'
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - block_content_machine_name:block_content_machine_name

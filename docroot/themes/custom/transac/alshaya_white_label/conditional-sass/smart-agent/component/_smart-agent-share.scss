@@ -1,0 +1,122 @@
+.spc-messages-container.smart-agent-share {
+  background: $smart-agent-banner-bg;
+  color: $smart-agent-banner-color;
+
+  .spc-checkout-smart-agent-share-message {
+    margin-#{$left}: 0;
+
+    > svg {
+      width: 2.5rem;
+      margin-#{$right}: 1rem;
+      margin-#{$left}: 1rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .spc-checkout-smart-agent-share-message {
+      flex-wrap: wrap;
+
+      .message {
+        + .share-options {
+          margin: 1rem auto 0;
+        }
+      }
+    }
+  }
+}
+
+.popup-content.smart-agent-share-modal-content {
+  max-width: 32.5rem !important;
+  background: $spc-checkout-sidebar-bg !important;
+  padding: 0 !important;
+  border: none !important;
+
+  @include breakpoint($only-mobile) {
+    width: 100% !important;
+    height: 100vh;
+  }
+
+  .smart-agent-share-modal-header-region,
+  .smart-agent-share-modal-content-region {
+    background: $spc-change-address-header;
+  }
+
+  .smart-agent-share-modal-header-region {
+    position: relative;
+
+    .spc-checkout-section-title {
+      height: 3.5rem;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+      margin-bottom: 0.625rem;
+    }
+
+    .close {
+      cursor: pointer;
+      position: absolute;
+      #{$right}: 0.75rem;
+      color: transparent;
+      top: 50%;
+      transform: translateY(-50%);
+
+      @include icon('close') {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: $spc-checkout-close-icon;
+      }
+    }
+  }
+
+  .smart-agent-share-modal-content-region {
+    padding: 2rem 1.25rem;
+
+    input[type=email],
+    input[type=tel] {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid $primary_input_border;
+      padding: 0;
+      color: $primary_input;
+    }
+
+    .smart-agent-share-submit {
+      background: $primary_btn_bg;
+      height: 3.25rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      justify-content: center;
+      color: $primary_btn_text;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      font-size: 1rem;
+      width: 100%;
+      border: none;
+
+      @include componentLoader($primary_btn_bg, 'after');
+    }
+  }
+}
+
+span.share-option {
+  cursor: pointer;
+  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-#{$right}: 1px solid $smart-agent-banner-color;
+
+  &:last-child {
+    padding-#{$right}: 0;
+    border-#{$right}: none;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-#{$right}: 0.5rem;
+  }
+}

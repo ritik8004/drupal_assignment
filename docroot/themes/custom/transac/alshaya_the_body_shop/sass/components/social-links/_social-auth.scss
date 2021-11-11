@@ -1,0 +1,20 @@
+.block-alshaya-signup-signin-buttons {
+  .link-button {
+    &::before {
+      mask-image: url(#{$base_theme_img_directory_path}/icons/profile-icon.svg);
+      mask-position: center;
+      mask-repeat: no-repeat;
+      mask-size: 2.9375rem;
+      background-image: none;
+      background-color: $user_signup_logo;
+    }
+  }
+}
+
+.c-user-login,
+.c-user-register {
+  .section-title {
+    font-family: $tbs-recoleta-semibold;
+    text-transform: capitalize;
+  }
+}

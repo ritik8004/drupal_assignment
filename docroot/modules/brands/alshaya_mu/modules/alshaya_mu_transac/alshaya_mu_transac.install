@@ -5,6 +5,57 @@
  * Install, uninstall, update function for alshaya_aeo_transac.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update type string => text_long for spec_en.
+ * Migrate existing attribute data to the new ones.
+ */
+function alshaya_mu_transac_update_8006() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldType(['attr_spec_en']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.4.0] Add field for new attribute `season_code` and enable `alshaya_product_lpn`.
+ */
+function alshaya_mu_transac_update_8005() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Enable alshaya_product_lpn module.
+  \Drupal::service('module_installer')->install(['alshaya_product_lpn']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set image_thumb_gallery => false to use single image gallery on listing pages.
+ */
+function alshaya_mu_transac_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

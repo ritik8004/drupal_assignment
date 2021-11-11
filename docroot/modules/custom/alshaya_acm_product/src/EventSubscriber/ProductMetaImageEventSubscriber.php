@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -39,6 +40,13 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
   private $skuImagesManager;
 
   /**
+   * Sku images helper.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
+   */
+  private $skuImagesHelper;
+
+  /**
    * ProductDyPageTypeEventSubscriber constructor.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -47,11 +55,17 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
    *   Sku Manager.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
    *   SKU Images Manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
+   *   Sku images helper.
    */
-  public function __construct(RouteMatchInterface $route_match, SkuManager $skuManager, SkuImagesManager $sku_images_manager) {
+  public function __construct(RouteMatchInterface $route_match,
+                              SkuManager $skuManager,
+                              SkuImagesManager $sku_images_manager,
+                              SkuImagesHelper $images_helper) {
     $this->routeMatch = $route_match;
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $sku_images_manager;
+    $this->skuImagesHelper = $images_helper;
   }
 
   /**
@@ -77,8 +91,8 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
       }
 
       $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
-      if (!empty($sku_media['drupal_uri'])) {
-        $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+      if (!empty($sku_media)) {
+        $teaser_image = $this->skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
         if (!empty($teaser_image['#uri'])) {
           $event->setMetaImage(file_create_url($teaser_image['#uri']));
           // We have three event subscriber to handle meta images.

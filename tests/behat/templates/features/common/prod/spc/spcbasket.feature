@@ -1,23 +1,21 @@
-@javascript @smoke @mcsaprod @mcsapprod @mcaeprod @mcaepprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
+@javascript @smoke @pbkaepprod @pbksapprod @pbkkwpprod @aeoaepprod @aeokwpprod @aeosapprod @pbkkwprod @pbksaprod @bpaepprod @bpsapprod @bpkwpprod @westelmaepprod @westelmsapprod @westelmkwpprod @vskwpprod @pbkaeprod @westelmkwprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @mcsaprod @mcsapprod @mcaeprod @vskwprod @mcaepprod @tbskwprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @flaeprod @flkwprod @flsaprod @flaepprod @flkwpprod @flsapprod @hmaeprod @hmkwprod @hmsaprod @hmaepprod @hmkwpprod @hmsapprod @vsaeprod @vssaprod @vsaepprod @vssapprod @pbaeprod @pbkwprod @pbsaprod @pbaepprod @pbkwpprod @pbsapprod
 Feature: Test basket page
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait 2 seconds
     Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
+    And I wait 2 seconds
 
+  @desktop
   Scenario: As a Guest, I should be able to add more quantity
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I press "{add_to_cart_link}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
+    And I click on Add-to-cart button
+    And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait 30 seconds
     And I wait for AJAX to finish
-    And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -27,23 +25,18 @@ Feature: Test basket page
     Then the price for product should be doubled
 
   @desktop
-  Scenario: As a Guest, I should be able to see the header and the footer
+  Scenario: As a Guest, I should be able to see the header
     When I scroll to top
     Then I should see "{create_account}"
     Then I should see "{sign_in}"
     Then I should see "{find_store}"
     Then I should see "{language_link}"
-    Then I should see "{sort_filter}"
-    Then I should see "{price_filter}"
-    Then I should see "{color_filter}"
-    Then I should see "{size_filter}"
-    Then I should see "{filters}"
-    Then I should see "{brand_filter}"
-    Then I should see "{collection_filter}"
-    Then I should see "{promotional_filter}"
+    Then I should see an ".acq-mini-cart" element
+    Then I should see an "#alshaya-algolia-autocomplete" element
+    Then I should see an ".plp-facet-product-filter" element
 
   @mobile
-  Scenario: As a Guest, I should be able to see the header and the footer (mobile)
+  Scenario: As a Guest, I should be able to see the header (mobile)
     When I scroll to top
     Then I should see a "#block-mobilenavigation a.store" element on page
     Then I should see a "#block-mobilenavigation a.mobile--search" element on page
@@ -56,20 +49,18 @@ Feature: Test basket page
     Then I should see a "#block-account-menu .sign-in-mobile" element on page
     Then I should see a "#block-account-menu .register-link" element on page
     Then I click on "#block-alshayamainmenu .mobile--close" element
-    And I wait 5 seconds
-    Then I should see a "#block-alshaya-plp-facets-block-all" element on page
 
   @desktop
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
+  Scenario: As a Guest, I should be able to see the products added to basket and the header
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
-    And I wait 10 seconds
+    And I click on Add-to-cart button
+    And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     Then the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-image img" should exist
@@ -81,71 +72,66 @@ Feature: Test basket page
     And the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile-actions .qty" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
-    And I should see "{subtotal}"
-    Then I should see "{order_total}"
+    And I should see an ".totals" element
+    And I should see an ".grand-total" element
+    And I should see an ".value .price .price-currency" element
+    And I should see an ".value .price .price-amount" element
     Then I should see "{order_summary}"
-    Then I should see "{promo_code}"
-    And I should see "{excluding_delivery}"
-    And I should see "{vat}"
+    Then I should see an ".delivery-vat" element
 
   @mobile
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
+  Scenario: As a Guest, I should be able to see the products added to basket and the header (mobile)
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
-    And I wait 10 seconds
+    And I click on Add-to-cart button
+    And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     Then I should see "{promo_code}"
     And I wait 5 seconds
-    And I should see "{subtotal}"
-    Then I should see "{order_total}"
-    Then I should see "{order_summary}"
-    And I should see "{excluding_delivery}"
-    And I should see "{vat}"
+    And I should see an ".totals" element
+    And I should see an ".grand-total" element
+    And I should see an ".value .price .price-currency" element
+    And I should see an ".value .price .price-amount" element
+    Then I should see an ".delivery-vat" element
 
   Scenario: As a Guest, I should be able to remove products from the basket
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
-    And I wait 10 seconds
+    And I click on Add-to-cart button
+    And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I should not see "{subtotal}" on page
-    Then I should not see "{order_total}" on page
-    Then I should not see "{order_summary}" on page
-    Then I should not see "{promo_code}" on page
-    And I should not see "{excluding_delivery}" on page
-    And I should not see "{vat}" on page
-    Then I should see "{empty_bag}"
-    And I should see the link "{continue_shopping}"
+    And I should not see an ".totals" element
+    And I should not see an ".grand-total" element
+    And I should not see an ".value .price .price-currency" element
+    And I should not see an ".value .price .price-amount" element
+    Then I should not see an ".delivery-vat" element
 
   @language @desktop
   Scenario: As a Guest, I should be able to add more quantity in second language
     When I follow "{language_link}"
-    And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
+    And I wait for the page to load
+    And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -156,17 +142,17 @@ Feature: Test basket page
   @language @mobile
   Scenario: As a Guest, I should be able to add more quantity in second language (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
@@ -175,7 +161,7 @@ Feature: Test basket page
     Then the price for product should be doubled
 
   @desktop @language
-  Scenario: As a Guest, I should be able to see the header and the footer in second language
+  Scenario: As a Guest, I should be able to see the header in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -184,19 +170,14 @@ Feature: Test basket page
     Then I should see "{language_sign_in}"
     Then I should see "{language_find_store}"
     Then I should see "{second_language_link}"
-    Then I should see "{language_sort_filter}"
-    Then I should see "{language_price_filter}"
-    Then I should see "{language_color_filter}"
-    Then I should see "{language_size_filter}"
-    Then I should see "{language_filters}"
-    Then I should see "{language_brand_filter}"
-    Then I should see "{language_collection_filter}"
-    Then I should see "{language_promotional_filter}"
+    Then I should see an ".acq-mini-cart" element
+    Then I should see an "#alshaya-algolia-autocomplete" element
+    Then I should see an ".plp-facet-product-filter" element
 
   @mobile @language
-  Scenario: As a Guest, I should be able to see the header and the footer in second language (mobile)
+  Scenario: As a Guest, I should be able to see the header and in second language (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
     When I scroll to top
     Then I should see a "#block-mobilenavigation a.store" element on page
@@ -210,106 +191,90 @@ Feature: Test basket page
     Then I should see a "#block-account-menu .sign-in-mobile" element on page
     Then I should see a "#block-account-menu .register-link" element on page
     Then I click on "#block-alshayamainmenu .mobile--close" element
-    And I wait 5 seconds
-    Then I should see a "#block-alshaya-plp-facets-block-all" element on page
 
   @language @desktop
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer in second language
+  Scenario: As a Guest, I should be able to see the products added to basket and the header in second language
     When I follow "{language_link}"
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
-    And I should see "{language_subtotal}"
-    Then I should see "{language_order_total}"
-    Then I should see "{language_order_summary}"
-    Then I should see "{language_promo_code}"
-    And I should see "{language_excluding_delivery}"
-    And I should see "{language_vat}"
+    And I wait 30 seconds
+    And I should see an ".totals" element
+    And I should see an ".grand-total" element
+    And I should see an ".value .price .price-currency" element
+    And I should see an ".value .price .price-amount" element
+    Then I should see an ".delivery-vat" element
 
   @mobile @language
-  Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
+  Scenario: As a Guest, I should be able to see the products added to basket and the header (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait 10 seconds
+    When I select a product in stock on ".c-products__item"
+    And I wait 5 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     And I wait 5 seconds
-    Then I should see "{language_promo_code}"
-    And I should see "{language_subtotal}"
-    Then I should see "{language_order_total}"
-    Then I should see "{language_order_summary}"
-    And I should see "{language_excluding_delivery}"
-    And I should see "{language_vat}"
+    And I should see an ".totals" element
+    And I should see an ".grand-total" element
+    And I should see an ".value .price .price-currency" element
+    And I should see an ".value .price .price-amount" element
+    Then I should see an ".delivery-vat" element
 
   @language @desktop
   Scenario: As a Guest, I should be able to remove products from the basket in second language
     When I follow "{language_link}"
+    And I wait 5 seconds
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I should not see "{language_subtotal}" on page
-    Then I should not see "{language_order_total}" on page
-    Then I should not see "{language_order_summary}" on page
-    Then I should not see "{language_promo_code}" on page
-    And I should not see "{language_excluding_delivery}" on page
-    And I should not see "{language_vat}" on page
-    Then I should see "{language_empty_bag}"
-    And I should see the link "{language_continue_shopping}"
+    And I should not see an ".totals" element
+    And I should not see an ".grand-total" element
+    And I should not see an ".value .price .price-currency" element
+    And I should not see an ".value .price .price-amount" element
+    Then I should not see an ".delivery-vat" element
 
   @language @mobile
   Scenario: As a Guest, I should be able to remove products from the basket in second language (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
-    And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 30 seconds
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I should not see "{language_subtotal}" on page
-    Then I should not see "{language_order_total}" on page
-    Then I should not see "{language_order_summary}" on page
-    Then I should not see "{language_promo_code}" on page
-    And I should not see "{language_excluding_delivery}" on page
-    And I should not see "{language_vat}" on page
-    Then I should see "{language_empty_bag}"
-    And I should see the link "{language_continue_shopping}"
+    And I should not see an ".totals" element
+    And I should not see an ".grand-total" element
+    And I should not see an ".value .price .price-currency" element
+    And I should not see an ".value .price .price-amount" element
+    Then I should not see an ".delivery-vat" element

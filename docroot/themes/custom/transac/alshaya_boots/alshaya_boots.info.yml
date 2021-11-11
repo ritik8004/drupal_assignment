@@ -2,6 +2,7 @@ name: Alshaya Boots
 type: theme
 description: 'Theme for Boots (Transactional).'
 core: 8.x
+core_version_requirement: ^8 || ^9
 base theme: alshaya_white_label
 alshaya_theme_type: transac
 
@@ -35,6 +36,11 @@ libraries-override:
     css:
       theme:
         css/ltr-print.css: css/rtl-print.css
+
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
 
   alshaya_white_label/optionlist_filter:
     css:
@@ -115,3 +121,43 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css
+
+  alshaya_white_label/plp-add-to-cart:
+    css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css
+
+  alshaya_white_label/myaccount-reviews:
+    css:
+      theme:
+        css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css: css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css
+
+  alshaya_white_label/smart-agent:
+    css:
+      theme:
+        css/conditional-sass/smart-agent/smart-agent.ltr.css: css/conditional-sass/smart-agent/smart-agent.ltr.css
+
+  alshaya_white_label/my-account:
+      css:
+        theme:
+          css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
+
+  alshaya_white_label/alshaya-vat-certificate:
+    css:
+      theme:
+        css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css
+
+  alshaya_white_label/checkout-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css: css/conditional-sass/checkout-pudo-aramex/checkout-pudo-aramex.ltr.css
+
+  alshaya_white_label/checkout-confirmation-pudo-aramex:
+    css:
+      theme:
+        css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
+
+  alshaya_white_label/plp-frame-options:
+      css:
+        theme:
+          css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css: css/conditional-sass/plp-frame-options/plp-frame-options.ltr.css

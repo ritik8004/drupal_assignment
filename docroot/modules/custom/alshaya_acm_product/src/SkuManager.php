@@ -41,6 +41,8 @@ use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Plugin\rest\resource\StockResource;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Class Sku Manager.
@@ -251,11 +253,25 @@ class SkuManager {
   protected $productProcessedManager;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
-   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
-  protected $promoContextManager;
+  protected $requestContextManager;
+
+  /**
+   * File system object.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
+   * Current time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $currentTime;
 
   /**
    * SkuManager constructor.
@@ -304,8 +320,12 @@ class SkuManager {
    *   Alshaya array utility service.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
-   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
-   *   Alshaya Promo Context Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
+   *   Alshaya Request Context Manager.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The filesystem service.
+   * @param \Drupal\Component\Datetime\TimeInterface $current_time
+   *   Current time service.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -329,7 +349,9 @@ class SkuManager {
                               ProductCacheManager $product_cache_manager,
                               AlshayaArrayUtils $alshayaArrayUtils,
                               ProductProcessedManager $product_processed_manager,
-                              AlshayaPromoContextManager $alshayaPromoContextManager) {
+                              AlshayaRequestContextManager $alshayaRequestContextManager,
+                              FileSystemInterface $fileSystem,
+                              TimeInterface $current_time) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -355,7 +377,9 @@ class SkuManager {
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
     $this->productProcessedManager = $product_processed_manager;
-    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->requestContextManager = $alshayaRequestContextManager;
+    $this->fileSystem = $fileSystem;
+    $this->currentTime = $current_time;
   }
 
   /**
@@ -494,11 +518,9 @@ class SkuManager {
       'price' => 0,
       'final_price' => 0,
     ];
-
     if ($sku_entity->bundle() == 'simple') {
       $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
       $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
-
       if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
         $price = $final_price;
       }
@@ -510,7 +532,6 @@ class SkuManager {
         'price' => $price,
         'final_price' => $final_price,
       ];
-
       $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
     }
@@ -527,7 +548,6 @@ class SkuManager {
     else {
       $children = $this->getValidChildSkusAsString($sku_entity);
     }
-
     $sku_price = 0;
 
     foreach ($children ?? [] as $child_sku_code) {
@@ -538,7 +558,6 @@ class SkuManager {
           $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity);
           $price = $prices['children'][$child_sku_code]['price'];
           $final_price = $prices['children'][$child_sku_code]['final_price'];
-
           if ($prices['children'][$child_sku_code]['final_price'] == $price) {
             $prices['children'][$child_sku_code]['final_price'] = 0;
           }
@@ -1113,7 +1132,7 @@ class SkuManager {
                                          $context = '') {
     $promos = [];
     if (empty($context)) {
-      $context = $this->promoContextManager->getPromotionContext();
+      $context = $this->requestContextManager->getContext();
     }
     $promotion_nodes = $this->getSkuPromotions($sku, $types, $context);
     if (!empty($promotion_nodes)) {
@@ -1171,7 +1190,7 @@ class SkuManager {
 
         // First check if we have date filter.
         if ($from > 0 && $to > 0) {
-          $now = REQUEST_TIME;
+          $now = $this->currentTime->getRequestTime();
 
           // Now, check if current date lies between from and to dates.
           if ($from > $now || $to < $now) {
@@ -1265,7 +1284,7 @@ class SkuManager {
 
       // First check if we have date filter.
       if ($from > 0 && $to > 0) {
-        $now = REQUEST_TIME;
+        $now = $this->currentTime->getRequestTime();
 
         // Now, check if current date lies between from and to dates.
         if ($from > $now || $to < $now) {
@@ -1398,13 +1417,13 @@ class SkuManager {
     $directory = 'public://labels/' . str_replace('/' . $file_name, '', $path);
 
     // Prepare the directory.
-    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
 
     // Save the file as file entity.
     // @todo Check for a way to remove old files and file objects.
     // To be done here and in SKU.php both.
     /** @var \Drupal\file\Entity\File $file */
-    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FileSystemInterface::EXISTS_REPLACE)) {
       return $file->id();
     }
     else {
@@ -2192,6 +2211,18 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get swatch attributes to exclude from PLP.
+   *
+   * @return array
+   *   Array containing attributes to exclude.
+   */
+  public function getSwatchAttributesToExcludeOnPlp() {
+    static $value = NULL;
+    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('exclude_swatches_on_plp') ?? [];
+    return $value;
+  }
+
+  /**
    * Wrapper function to get value of swatch attribute for given SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -2356,8 +2387,8 @@ class SkuManager {
 
       if ($sku->hasField($fieldKey)) {
         $value = $sku->get($fieldKey)->getString();
-
-        if ($remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
+        $context = $this->requestContextManager->getContext();
+        if ($context != 'app' && $remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
           continue;
         }
 
@@ -2432,7 +2463,21 @@ class SkuManager {
    *   TRUE if value matches options value to exclude.
    */
   public function isAttributeOptionToExclude($value) {
-    return in_array($value, $this->getConfig('alshaya_acm_product.settings')->get('excluded_attribute_options'));
+    return in_array($value, $this->attributeOptionToExclude());
+  }
+
+  /**
+   * Wrapper function to get options value to exclude.
+   *
+   * @return array
+   *   Array of values to exclude.
+   */
+  public function attributeOptionToExclude() {
+    $static = &drupal_static(__METHOD__, []);
+    if (!isset($static['excluded_attribute_options'])) {
+      $static['excluded_attribute_options'] = $this->getConfig('alshaya_acm_product.settings')->get('excluded_attribute_options');
+    }
+    return $static['excluded_attribute_options'];
   }
 
   /**
@@ -3421,7 +3466,11 @@ class SkuManager {
       foreach ($this->getAttributesToIndex() as $key => $field) {
         $field_key = 'attr_' . $key;
         $field_data = $child->get($field_key)->getValue();
-
+        // We don't need values from child sku.
+        // Express delivery attribute will be considered at parent level.
+        if ($field_key == 'attr_express_delivery') {
+          continue;
+        }
         if (!empty($field_data)) {
           $size_group = '';
           if ($field_key == 'attr_size' && $sizeGroupingEnabled) {
@@ -3812,6 +3861,24 @@ class SkuManager {
 
         urldecode($skuId)
       );
+  }
+
+  /**
+   * To validate EAN 13 digit barcode.
+   *
+   * @param bool $barcode
+   *   Barcode number.
+   *
+   * @return bool
+   *   Return a boolean value.
+   */
+  public function validateEanBarcode($barcode) {
+    // Check to see if barcode is 13 digits long.
+    if (!preg_match("/^[0-9]{13}$/", $barcode)) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }

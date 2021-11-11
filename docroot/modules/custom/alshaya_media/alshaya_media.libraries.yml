@@ -1,0 +1,4 @@
+responsive-video:
+  css:
+    component:
+      css/alshaya_oembed.responsive-video.css: {}

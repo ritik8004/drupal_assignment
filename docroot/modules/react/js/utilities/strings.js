@@ -5,8 +5,13 @@ const getStringMessage = (key, replacement) => {
       const str = element.value.toString();
       return replacement ? Drupal.formatString(str, replacement) : str;
     }
-  } catch (e) {
-    Drupal.logJavascriptError('Error occurred in getStringMessage', e.message);
+  } catch (error) {
+    if (Drupal.logViaDataDog !== undefined) {
+      Drupal.logViaDataDog('error', 'Error occurred in getStringMessage.', {
+        string: key,
+        error,
+      });
+    }
   }
 
   return '';

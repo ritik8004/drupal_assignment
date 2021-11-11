@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_store_type
+    - node.type.store
+  module:
+    - options
+id: node.store.field_store_type
+field_name: field_store_type
+entity_type: node
+bundle: store
+label: 'Store Type'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,5 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
+import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import PriceElement from '../../../utilities/special-price/PriceElement';
 
 const OrderSummaryItem = (props) => {
   const {
@@ -28,15 +30,33 @@ const OrderSummaryItem = (props) => {
 
   if (type === 'click_and_collect') {
     const {
-      name, address, phone, openingHours, mapLink,
+      name,
+      address,
+      phone,
+      openingHours,
+      mapLink,
+      pickUpPointIcon,
+      pickUpPointTitle,
+      collectionDate,
+      collectionCharge,
     } = props;
     return (
-      <div className="spc-order-summary-item spc-order-summary-address-item fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-order-summary-item spc-order-summary-address-item spc-order-summary-cnc fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-label">{`${label}:`}</span>
         <span className="spc-value">
-          <span className="spc-address-name">
-            {name}
-          </span>
+          <div className="spc-store-name-wrapper">
+            {(collectionPointsEnabled() && pickUpPointIcon !== undefined)
+              && (
+              <span className={`${pickUpPointIcon}-icon`} />
+              )}
+            {(collectionPointsEnabled() && pickUpPointTitle !== undefined)
+              && (
+                <span className="pickup-point-title">{pickUpPointTitle}</span>
+              )}
+            <span className="spc-address-name">
+              {name}
+            </span>
+          </div>
           <span className="spc-address">
             {address}
             <span className="spc-cnc-address-phone">{phone}</span>
@@ -51,6 +71,20 @@ const OrderSummaryItem = (props) => {
               ))
             }
           </div>
+          {(collectionPointsEnabled() && pickUpPointTitle !== undefined)
+            && (
+              <>
+                <div className="store-delivery-time">
+                  <span className="label--delivery-time">{Drupal.t('Collect in')}</span>
+                  <span className="delivery--time--value">{` ${collectionDate}`}</span>
+                  <PriceElement amount={collectionCharge} />
+                </div>
+                <div className="spc-cnc-confirmation-govtid-msg">
+                  <span className="spc-cnc-confirmation-govtid-msg-label">{`${Drupal.t('Important Note:')} `}</span>
+                  <span>{Drupal.t('Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.')}</span>
+                </div>
+              </>
+            )}
           <span className="spc-store-map-link">
             <a href={mapLink} rel="noopener noreferrer" target="_blank">
               {Drupal.t('Get directions')}

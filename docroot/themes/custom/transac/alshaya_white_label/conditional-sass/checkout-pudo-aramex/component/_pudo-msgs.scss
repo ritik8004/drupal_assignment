@@ -1,0 +1,18 @@
+.spc-cnc-store-actions-pudo-msg {
+  font-size: 0.75rem;
+  padding: 0 1.25rem 1.25rem;
+  line-height: normal;
+  text-align: center;
+  color: $spc-checkout_section_title;
+}
+
+#click-and-collect-selected-store {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 9.625rem;
+  }
+}
+
+.spc-cnc-selected-store-pudo-info {
+  font-size: 0.875rem;
+  color: $spc-checkout-billing-help-text;
+}

@@ -11,16 +11,21 @@ import PdpStandardDelivery from '../pdp-standard-delivery';
 import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
 import PdpRelatedProducts from '../pdp-related-products';
-import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
-import magv2Sticky from '../../../../../js/utilities/magv2StickySidebar';
-import magv2StickyHeader from '../../../../../js/utilities/magv2StickyHeader';
+import magv2Sticky from '../../../utilities/magv2StickySidebar';
+import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
+import Lozenges
+  from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
+import PpdRatingsReviews from '../pdp-ratings-reviews';
+import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import PdpExpressDelivery from '../pdp-express-delivery';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
-  const [panelContent, setPanelContent] = useState([]);
+  const [panelContent, setPanelContent] = useState(null);
   const { productInfo } = drupalSettings;
   let skuItemCode = '';
 
@@ -70,6 +75,8 @@ const PdpLayout = () => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
+    deliveryOptions,
+    expressDeliveryClass,
   } = productValues;
 
   const emptyRes = (
@@ -125,7 +132,9 @@ const PdpLayout = () => {
       if ((buttonRef !== null) && (buttonRef !== undefined)) {
         const buttonWidth = buttonRef.current.offsetWidth;
         const stickyHederButton = document.querySelector('#sticky-header-btn button');
-        stickyHederButton.style.width = `${buttonWidth}px`;
+        if (stickyHederButton) {
+          stickyHederButton.style.width = `${buttonWidth}px`;
+        }
       }
     };
 
@@ -138,7 +147,6 @@ const PdpLayout = () => {
     });
   };
 
-
   useEffect(() => {
     sidebarSticky();
     showStickyHeader();
@@ -147,15 +155,11 @@ const PdpLayout = () => {
   []);
 
   const getPanelData = useCallback((data) => {
-    setPanelContent([...panelContent, data]);
+    setPanelContent(data);
   }, [panelContent]);
 
   const removePanelData = useCallback(() => {
-    if (panelContent !== undefined) {
-      const panelData = [...panelContent];
-      panelData.splice(-1, 1);
-      setPanelContent(panelData);
-    }
+    setPanelContent(null);
   }, [panelContent]);
 
   return (skuItemCode) ? (
@@ -187,7 +191,7 @@ const PdpLayout = () => {
             miniFullScreenGallery={isTouchDevice}
             animateMobileGallery
           >
-            <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} context="main" />
+            <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
         </div>
         <div className="magv2-sidebar" ref={sidebarContainer}>
@@ -219,6 +223,23 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
+          <ConditionalView condition={isExpressDeliveryEnabled()
+            && checkProductExpressDeliveryStatus(skuItemCode)}
+          >
+            <div className={`express-delivery ${expressDeliveryClass}`}>
+              {deliveryOptions && deliveryOptions !== null
+                && Object.keys(deliveryOptions).length > 0
+                && Object.keys(deliveryOptions).map((option) => (
+                  <div key={option} className={`express-delivery-text ${deliveryOptions[option].status}`}>
+                    <span>{deliveryOptions[option].label}</span>
+                  </div>
+                ))}
+            </div>
+          </ConditionalView>
+          <PpdRatingsReviews
+            getPanelData={getPanelData}
+            removePanelData={removePanelData}
+          />
           <div className="addtobag-button-wrapper" ref={addToBagContainer}>
             {stockStatus ? (
               <PdpCart
@@ -248,7 +269,12 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
-          <PdpStandardDelivery />
+          <ConditionalView condition={isExpressDeliveryEnabled()}>
+            <PdpExpressDelivery />
+          </ConditionalView>
+          <ConditionalView condition={!isExpressDeliveryEnabled()}>
+            <PdpStandardDelivery />
+          </ConditionalView>
           {stockStatus ? (
             <PdpClickCollect />
           ) : null}
@@ -269,7 +295,7 @@ const PdpLayout = () => {
           ))}
         </div>
       ) : null}
-      <PpdPanel panelContent={panelContent} skuItemCode={skuItemCode} />
+      <PpdPanel panelContent={panelContent} />
     </>
   ) : emptyRes;
 };

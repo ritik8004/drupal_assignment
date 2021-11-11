@@ -1,4 +1,8 @@
 variables:
-  spc_product_listing_page: '/shop-baby-clothing/new-arrivals/'
-  spc_basket_page: '/shop-baby-clothing/new-arrivals/'
-  product_listing_page_url: "/shop-baby-clothing/new-arrivals/"
+  spc_product_listing_page: '/shop-newborn-clothing/newborn-boys/bottoms/'
+  spc_basket_page: '/shop-newborn-clothing/newborn-boys/bottoms/'
+  product_listing_page_url: '/shop-newborn-clothing/newborn-boys/bottoms/'
+  spc_pdp_page: 'buy-mothercare-all-we-know-baby-nappy-sacks-100-pack.html'
+  np_plp_product_page: '/buy-mothercare-all-we-know-baby-nappy-sacks-100-pack.html/'
+  np_plp_page: '/shop-newborn-clothing/newborn-boys/bottoms/'
+  new_pdp_enabled: TRUE

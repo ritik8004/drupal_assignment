@@ -1,72 +1,73 @@
 import Axios from 'axios';
-import { getbazaarVoiceSettings } from './request';
+import { getbazaarVoiceSettings, getUserBazaarVoiceSettings } from './request';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
-const bazaarVoiceSettings = getbazaarVoiceSettings();
-
-function getBvUrl() {
+function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
 }
 
-function getApiVersion() {
+function getApiVersion(bazaarVoiceSettings) {
   return `apiversion=${bazaarVoiceSettings.reviews.bazaar_voice.api_version}`;
 }
 
-function getPassKey() {
+function getPassKey(bazaarVoiceSettings) {
   return `&passkey=${bazaarVoiceSettings.reviews.bazaar_voice.passkey}`;
 }
 
-function getLocale() {
+function getLocale(bazaarVoiceSettings) {
   return `&locale=${bazaarVoiceSettings.reviews.bazaar_voice.locale}`;
 }
 
-export function fetchAPIData(apiUri, params) {
-  const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${params}`;
+export function fetchAPIData(apiUri, params, context = '') {
+  let bazaarVoiceSettings = null;
+  if (context === 'user') {
+    bazaarVoiceSettings = getUserBazaarVoiceSettings();
+  } else {
+    bazaarVoiceSettings = getbazaarVoiceSettings();
+  }
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
   return Axios.get(url)
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }
 
-export function postAPIData(apiUri, params) {
-  const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${params}`;
+export function postAPIData(apiUri, params, productId = undefined) {
+  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}`;
 
-  return Axios.post(url)
+  return Axios.post(url, params, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
+      return error;
+    });
+}
+
+export function postAPIPhoto(apiUri, params) {
+  const bazaarVoiceSettings = getbazaarVoiceSettings();
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
+
+  return Axios.post(url)
+    .then((response) => {
+      dispatchCustomEvent('showMessage', { data: response });
+      return response;
+    })
+    .catch((error) => {
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }
@@ -74,4 +75,5 @@ export function postAPIData(apiUri, params) {
 export default {
   fetchAPIData,
   postAPIData,
+  postAPIPhoto,
 };

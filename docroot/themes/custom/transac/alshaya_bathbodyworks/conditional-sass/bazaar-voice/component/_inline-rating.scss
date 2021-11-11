@@ -1,0 +1,5 @@
+.aggregate-rating {
+  @include breakpoint($only-mobile) {
+    padding: 0 0.5rem 1.25rem;
+  }
+}

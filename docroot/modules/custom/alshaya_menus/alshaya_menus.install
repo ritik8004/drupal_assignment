@@ -10,6 +10,19 @@ use Drupal\Core\Field\BaseFieldDefinition;
 /**
  * Implements hook_update_N().
  *
+ * Plugin of type string changed to string_textfield.
+ */
+function alshaya_menus_update_8003() {
+  $base_definition = \Drupal::entityDefinitionUpdateManager()->getFieldStorageDefinition('social_id', 'menu_link_content');
+  $base_definition->setDisplayOptions('form', ['type' => 'string_textfield', 'weight' => 21]);
+  \Drupal::entityDefinitionUpdateManager()->updateFieldStorageDefinition($base_definition);
+  $entity_type = \Drupal::entityTypeManager()->getDefinition('menu_link_content');
+  \Drupal::entityDefinitionUpdateManager()->installEntityType($entity_type);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Defines fields for the social id for the menu.
  */
 function alshaya_menus_update_8002() {
@@ -17,7 +30,7 @@ function alshaya_menus_update_8002() {
     ->setLabel(t('Social ID'))
     ->setDescription(t('Enter the value for Social ID.'))
     ->setDisplayOptions('form', [
-      'type' => 'string',
+      'type' => 'string_textfield',
       'weight' => 21,
     ]);
   \Drupal::entityDefinitionUpdateManager()

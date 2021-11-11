@@ -1,0 +1,11 @@
+.spc-checkout-delivery-information {
+  .spc-checkout-empty-delivery-text {
+    span {
+      @include breakpoint($only-mobile) {
+        html[lang=en] & {
+          width: 85%;
+        }
+      }
+    }
+  }
+}

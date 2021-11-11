@@ -6,7 +6,6 @@ use Drupal\Core\Config\CachedStorage;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
@@ -22,12 +21,15 @@ use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Input\InputInterface;
 use Consolidation\AnnotatedCommand\AnnotationData;
-use Drush\Drush;
+use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
+use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 
 /**
  * Alshaya Master Commands class.
  */
-class AlshayaMasterCommands extends DrushCommands {
+class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwareInterface {
+
+  use SiteAliasManagerAwareTrait;
 
   /**
    * State Manager.
@@ -72,13 +74,6 @@ class AlshayaMasterCommands extends DrushCommands {
   private $languageManager;
 
   /**
-   * Query Factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  private $queryFactory;
-
-  /**
    * Entity Type Manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -100,6 +95,13 @@ class AlshayaMasterCommands extends DrushCommands {
   private $dateFormatter;
 
   /**
+   * The install profile.
+   *
+   * @var string
+   */
+  protected $installProfile;
+
+  /**
    * AlshayaMasterCommands constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -114,14 +116,14 @@ class AlshayaMasterCommands extends DrushCommands {
    *   Cache Storage service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $queryFactory
-   *   Entity query factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
    *   Module Extension List Manager.
    * @param \Drupal\Core\Datetime\DateFormatter $date_formatter
    *   Date Formatter.
+   * @param string $install_profile
+   *   The install profile.
    */
   public function __construct(StateInterface $state,
                               ConfigFactoryInterface $configFactory,
@@ -129,20 +131,20 @@ class AlshayaMasterCommands extends DrushCommands {
                               ModuleHandlerInterface $moduleHandler,
                               CachedStorage $configStorage,
                               LanguageManagerInterface $languageManager,
-                              QueryFactory $queryFactory,
                               EntityTypeManagerInterface $entityTypeManager,
                               ModuleExtensionList $module_extension_list,
-                              DateFormatter $date_formatter) {
+                              DateFormatter $date_formatter,
+                              $install_profile) {
     $this->state = $state;
     $this->configFactory = $configFactory;
     $this->moduleInstaller = $moduleInstaller;
     $this->moduleHandler = $moduleHandler;
     $this->cachedStorage = $configStorage;
     $this->languageManager = $languageManager;
-    $this->queryFactory = $queryFactory;
     $this->entityTypeManager = $entityTypeManager;
     $this->moduleExtensionList = $module_extension_list;
     $this->dateFormatter = $date_formatter;
+    $this->installProfile = $install_profile;
   }
 
   /**
@@ -162,7 +164,7 @@ class AlshayaMasterCommands extends DrushCommands {
     'country_code' => self::REQ,
   ]) {
     $post_install_status = $this->state->get('alshaya_master_post_drupal_install', 'not done');
-    $modules = system_rebuild_module_data();
+    $modules = $this->moduleExtensionList->getList();
 
     // Determine which country module to install.
     $country_code = $options['country_code'];
@@ -228,7 +230,7 @@ class AlshayaMasterCommands extends DrushCommands {
           Locale::config()->updateConfigTranslations($names, $langcodes);
 
           // Get all config names available in current profile.
-          $names = ConfigHelper::forModule(drupal_get_profile())->optional()->listAll();
+          $names = ConfigHelper::forModule($this->installProfile)->optional()->listAll();
 
           // Update config translations from string translations.
           Locale::config()->updateConfigTranslations($names, $langcodes);
@@ -272,7 +274,8 @@ class AlshayaMasterCommands extends DrushCommands {
    * @aliases alshaya-scrub-users
    */
   public function scrubUsers() {
-    $ids = $this->queryFactory->get('user')->execute();
+    $user_entity = $this->entityTypeManager->getStorage('user');
+    $ids = $user_entity->getQuery()->execute();
 
     $ids_to_delete = [];
 
@@ -297,7 +300,7 @@ class AlshayaMasterCommands extends DrushCommands {
       if ($this->io()->confirm(dt('Are you sure you want to delete @num non-privileged users?', ['@num' => count($ids_to_delete)]))) {
         foreach ($ids_to_delete as $id_to_delete) {
           $this->output()->writeln(dt('Deleting user: @id', ['@id' => $id_to_delete]));
-          user_delete($id_to_delete);
+          $this->entityTypeManager->getStorage('user')->load($id_to_delete)->delete();
         }
 
         $this->output()->writeln(dt('Done.'));
@@ -317,9 +320,7 @@ class AlshayaMasterCommands extends DrushCommands {
    * @hook pre-init *
    */
   public function alter(InputInterface $input, AnnotationData $annotationData) {
-    // We could also use DI once this is released
-    // https://github.com/drush-ops/drush/commit/fc6205aeb93099e91ca5f395cea958c3f0290b3e#diff-45719e337c3fa71a41f373a69e9a0c92.
-    $self = Drush::aliasManager()->getSelf();
+    $self = $this->siteAliasManager()->getSelf();
     $uri = $self->get('uri');
     $url = parse_url($uri);
 
@@ -381,7 +382,7 @@ class AlshayaMasterCommands extends DrushCommands {
       time(),
       'custom',
       DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
-      DATETIME_STORAGE_TIMEZONE
+      DateTimeItemInterface::STORAGE_TIMEZONE
     );
 
     $qa_users = @file_get_contents(Settings::get('server_home_dir') . '/qa_accounts.txt');

@@ -3,14 +3,6 @@
 // Markup: form.twig
 //
 // Style guide: base.form
-%btn {
-  color: $primary_btn_text;
-  padding: 0.625rem 1.6rem;
-  border: 0;
-  font-size: 0.813rem;
-  font-family: $alshaya-bold;
-}
-
 @mixin form-selector-wrap {
   @include icon(chevrondown, after);
 

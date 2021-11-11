@@ -8,6 +8,7 @@
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_page_attachments().
@@ -21,6 +22,9 @@ function alshaya_product_lpn_page_attachments(array &$page) {
   $page['#attached']['drupalSettings']['lpn'] = [
     'lpn_attribute' => $lpn_attribute,
   ];
+
+  $page['#attached']['drupalSettings']['add_to_bag']['hidden_form_attributes'][] = $config->get('lpn_attribute');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $config->getCacheTags());
 }
 
 /**

@@ -20,8 +20,13 @@
   text-align: center;
 }
 
+.spc-messages-container.spc-postpay-banner {
+  padding: 0;
+}
+
 #postpay-eligibility-message {
   font-size: 0.9375rem;
+  width: 100%;
   line-height: 1.25rem;
 
   @include breakpoint($only-mobile) {

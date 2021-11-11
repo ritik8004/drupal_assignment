@@ -17,8 +17,14 @@
  *   Items to preload.
  */
 function hook_alshaya_performance_preload_alter(array &$preload) {
-  $preload[] = '/themes/custom/transac/alshaya_white_label/imgs/cards/card-visa.svg';
-  $preload[] = '/themes/custom/transac/alshaya_white_label/imgs/cards/card-mastercard.svg';
+  $preload[] = [
+    'as' => 'image',
+    'href' => '/themes/custom/transac/alshaya_white_label/imgs/cards/card-visa.svg',
+  ];
+  $preload[] = [
+    'as' => 'image',
+    'href' => '/themes/custom/transac/alshaya_white_label/imgs/cards/card-mastercard.svg',
+  ];
 }
 
 /**

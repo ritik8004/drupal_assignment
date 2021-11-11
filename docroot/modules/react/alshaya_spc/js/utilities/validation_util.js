@@ -1,6 +1,6 @@
 import { redirectToCart } from './get_cart';
-import { removeCartFromStorage } from './storage';
 import dispatchCustomEvent from './events';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Clear local storage and reload/redirect to cart page.
@@ -9,24 +9,33 @@ import dispatchCustomEvent from './events';
  *   API Response.
  */
 const validateCartResponse = (response) => {
-  if ((typeof response.response_message !== 'undefined'
-    && response.response_message !== null
+  if (!hasValue(response)) {
+    redirectToCart();
+    return false;
+  }
+
+  // For some OOS cases we get error in response_message.
+  // For most of the OOS cases we expect error code 506,
+  // which is checked later.
+  if (hasValue(response.response_message)
     && response.response_message.status === 'json_error'
-    && ((response.response_message.msg === 'OOS') || response.response_message.msg === 'not_enough'))
+    && (response.response_message.msg === 'OOS' || response.response_message.msg === 'not_enough')
   ) {
     redirectToCart();
     return false;
   }
 
-  if (typeof response.error_code === 'undefined') {
+  // Return if no error.
+  if (!hasValue(response.error_code)) {
     return true;
   }
 
+  // Get error code as integer for faster testing.
   const errorCode = parseInt(response.error_code, 10);
 
   // If there was validation issue or cart no longer available.
   if (errorCode === 400 || errorCode === 404) {
-    removeCartFromStorage();
+    window.commerceBackend.removeCartDataFromStorage();
     window.location.href = Drupal.url('cart');
     return false;
   }

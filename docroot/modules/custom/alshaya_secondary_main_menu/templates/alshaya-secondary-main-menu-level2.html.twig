@@ -1,0 +1,30 @@
+<ul class="menu__list menu--two__list">
+  <div class="menu__links__wrapper">
+    {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
+      <span class="back--link"><span class="menu__back"></span> <span>{{ data.l1_object.title }}</span></span>
+      {% for key, columns in data.l1_object.below %}
+        <div class="column {{ key }}">
+          <li class="menu__list-item menu--two__list-item {{ columns.class|join(' ') }} {{ columns.move_to_right ? 'move-to-right' : '' }}">
+            <div class="menu__link-wrapper menu-two__link-wrapper">
+              {% if columns.url.toString is not empty %}
+                <a href="{{columns.url}}" class="menu__link menu-two__link {{ columns.class|join(' ') }} {{columns.sub_nav_class}}" title="{{columns.title}}">{{ columns.title }}</a>
+              {% else %}
+                <div class="menu__link menu-two__link {{ columns.class|join(' ') }} {{columns.sub_nav_class}}">{{ columns.title }}</div>
+              {% endif %}
+            </div>
+              {% if columns.below is not empty %}
+                {{ alshaya_secondary_main_menu('alshaya_secondary_main_menu_level3', columns) }}
+              {% endif %}
+          </li>
+         </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+    {% if (menu_type == 'default') %}
+    <div class="term-image__wrapper">
+      {#Highlight image starts#}
+      {{ alshaya_secondary_main_menu('alshaya_secondary_main_menu_highlights', data.l1_object) }}
+      {#Highlight image end#}
+    {% endif %}
+    </div>
+</ul>

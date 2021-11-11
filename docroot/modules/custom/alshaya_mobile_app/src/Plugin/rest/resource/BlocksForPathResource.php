@@ -14,7 +14,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Path\AliasStorage;
+use Drupal\path_alias\AliasRepositoryInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
@@ -76,7 +76,7 @@ class BlocksForPathResource extends ResourceBase {
   /**
    * The alias storage.
    *
-   * @var \Drupal\Core\Path\AliasStorage
+   * @var \Drupal\path_alias\AliasRepositoryInterface
    */
   protected $aliasStorage;
 
@@ -117,7 +117,7 @@ class BlocksForPathResource extends ResourceBase {
    *   Block repository.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
-   * @param \Drupal\Core\Path\AliasStorage $alias_storage
+   * @param \Drupal\path_alias\AliasRepositoryInterface $alias_storage
    *   The alias storage service.
    * @param \Drupal\Core\Path\PathValidatorInterface $pathValidator
    *   The path validator service.
@@ -135,7 +135,7 @@ class BlocksForPathResource extends ResourceBase {
     EntityRepositoryInterface $entity_repository,
     BlockRepository $block_respository,
     MobileAppUtility $mobile_app_utility,
-    AliasStorage $alias_storage,
+    AliasRepositoryInterface $alias_storage,
     PathValidatorInterface $pathValidator,
     LanguageManagerInterface $language_manager
   ) {
@@ -165,7 +165,7 @@ class BlocksForPathResource extends ResourceBase {
       $container->get('entity.repository'),
       $container->get('block.repository'),
       $container->get('alshaya_mobile_app.utility'),
-      $container->get('path.alias_storage'),
+      $container->get('path_alias.repository'),
       $container->get('path.validator'),
       $container->get('language_manager')
     );
@@ -188,7 +188,7 @@ class BlocksForPathResource extends ResourceBase {
 
     if (empty($alias)
       || (!($this->pathValidator->isValid($alias))
-      && !($this->aliasStorage->aliasExists('/' . $alias, $this->languageManager->getCurrentLanguage()->getId())))
+      && !($this->aliasStorage->lookupByAlias('/' . $alias, $this->languageManager->getCurrentLanguage()->getId())))
       ) {
       $this->mobileAppUtility->throwException();
     }

@@ -49,6 +49,11 @@ jquery_is_in_viewport:
   dependencies:
     - core/jquery
 
+common_fixes:
+  version: 1.x
+  js:
+    js/common_fixes.js: {}
+
 common_functions:
   version: 1.x
   js:

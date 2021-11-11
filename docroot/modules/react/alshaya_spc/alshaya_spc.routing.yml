@@ -69,15 +69,6 @@ alshaya_spc.checkout.cnc_store_info:
   options:
     _maintenance_access: TRUE
 
-alshaya_spc.cart_cnc_status:
-  path: '/spc/cart/cnc-status'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::cartCncStatus'
-  requirements:
-    _permission: 'access content'
-  options:
-    _maintenance_access: TRUE
-
 alshaya_spc.checkout.customer:
   path: '/spc/customer'
   defaults:
@@ -92,4 +83,22 @@ alshaya_spc.checkout.checkout_event:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::checkoutEvent'
   methods: [POST]
   requirements:
-    _middleware_request_check: 'TRUE'
+    _permission: 'access content'
+
+alshaya_spc.callback_payment_success:
+  path: '/spc/payment-callback/success'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcPaymentCallbackController::success'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+
+alshaya_spc.callback_payment_error:
+  path: '/spc/payment-callback/{method}/error'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcPaymentCallbackController::error'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

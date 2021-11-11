@@ -28,9 +28,9 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'parse_args.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 
-$client = new Client($app_id, $app_secret_admin);
+$client = SearchClient::create($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $prefix . '_' . $language;

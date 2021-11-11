@@ -90,20 +90,46 @@
 
   // Push Filter event to GTM.
   $('body').once('bind-facet-item-click').on('click','.facet-item', function (event) {
+    // To get page type for listing pages.
+    // Search page does not have the pageSubType key in drupalSettings.
+    var listName = drupalSettings.algoliaSearch.pageSubType ? drupalSettings.algoliaSearch.pageSubType : drupalSettings.path.currentPath;
+    var section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase().trim();
     if (!$(this).hasClass('is-active')) {
-      var selectedVal = document.createElement('div');
+      var selectedText = '';
+      var eventName = '';
       var facetTitle = $(this).attr('datadrupalfacetlabel');
-      selectedVal.innerHTML = $(this).find('span.facet-item__value, a.facet-item__value').html();
-      selectedVal.querySelectorAll('span.facet-item__count').forEach(function (item, index) {
-        item.parentNode.removeChild(item);
-      });
-      var data = {
-        event: 'filter',
-        siteSection: 'search results',
-        filterType: facetTitle,
-        filterValue: selectedVal.innerHTML,
-      };
+      if ($(this).find('span.facet-item__value').length > 0) {
+        selectedText = $(this).find('span.facet-item__value span.facet-item__label').html();
+        // For rating filter.
+        if (facetTitle === 'Rating') {
+          selectedText = $(this).find('span.facet-item__value div.listing-inline-star div.rating-label').html();
+        }
+        eventName = 'filter';
+      }
+      else {
+        selectedText = $(this).find('a.facet-item__value').html();
+        eventName = 'sort';
+      }
+      switch (listName) {
+        case 'search':
+          var data = {
+            event: eventName,
+            siteSection: 'search results',
+            filterType: facetTitle,
+            filterValue: selectedText,
+          };
+          break;
 
+        case 'promotion':
+        case 'product_option_list':
+          var data = {
+            event: eventName,
+            siteSection: section,
+            filterType: facetTitle,
+            filterValue: selectedText,
+          };
+          break;
+      }
       dataLayer.push(data);
     }
   });

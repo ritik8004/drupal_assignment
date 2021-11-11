@@ -1,0 +1,5 @@
+.error-message {
+  @include breakpoint($desktop) {
+    margin-top: 1rem;
+  }
+}

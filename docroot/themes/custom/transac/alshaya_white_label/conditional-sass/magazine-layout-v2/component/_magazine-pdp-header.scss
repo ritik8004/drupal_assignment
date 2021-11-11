@@ -15,18 +15,23 @@
   width: 100%;
   top: 0;
   #{$left}: 0;
-  z-index: 4;
   background: $magv2-sticky-header-bg;
   opacity: 0;
   box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+  z-index: 4;
 
   @include breakpoint($only-mobile) {
     opacity: initial;
     box-shadow: none;
   }
 
+  .postpay {
+    display: none !important;
+  }
+
   &.magv2-pdp-sticky-header {
     opacity: 1;
+    pointer-events: unset;
 
     @include breakpoint($only-mobile) {
       background: $magv2-sticky-header-bg;
@@ -39,6 +44,7 @@
 
   &.magv2-pdp-non-sticky-header {
     opacity: 0;
+    pointer-events: none;
 
     @include breakpoint($only-mobile) {
       transform: translateY(-100%);
@@ -125,17 +131,15 @@
       @include breakpoint($only-mobile) {
         transition: opacity 0.4s ease-out;
       }
-
-      > div {
-        &:last-child {
-          margin-#{$right}: 0;
-        }
-      }
     }
 
     .magv2-compact-detail-wrapper {
+      display: none;
+
       @include breakpoint($only-mobile) {
         width: 100%;
+        display: block;
+        opacity: 0;
 
         .magv2-pdp-title {
           margin-bottom: 0;
@@ -186,8 +190,6 @@
 
     .magv2-pdp-price {
       @include breakpoint($tablet) {
-        margin-#{$right}: 3.75rem;
-        max-width: 13.125rem;
         padding: 0.25rem 0;
 
         .has-special-price {
@@ -217,10 +219,6 @@
         }
       }
 
-      @include breakpoint($only-tablet) {
-        max-width: 12.125rem;
-      }
-
       @include breakpoint($only-mobile) {
         .has-special-price {
           flex-direction: row;
@@ -230,15 +228,6 @@
             padding-#{$left}: 0;
           }
         }
-      }
-    }
-
-    .magv2-compact-detail-wrapper {
-      display: none;
-
-      @include breakpoint($only-mobile) {
-        display: block;
-        opacity: 0;
       }
     }
 
@@ -261,6 +250,13 @@
         #{$right}: 0;
         top: 0.625rem;
         transform: translateY(-50%);
+        height: 2.875rem;
+        width: 2.875rem;
+        margin-top: 0;
+
+        html[lang=ar] & {
+          margin-top: 0;
+        }
       }
     }
 

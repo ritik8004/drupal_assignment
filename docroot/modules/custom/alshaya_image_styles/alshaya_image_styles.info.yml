@@ -1,6 +1,7 @@
 name: 'Alshaya Image Styles'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 description: 'All the image styles.'
 dependencies:
   - alshaya_config:alshaya_config

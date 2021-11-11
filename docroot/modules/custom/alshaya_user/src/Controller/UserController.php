@@ -71,7 +71,7 @@ class UserController extends ControllerBase {
     }
 
     // Clear the status messages set by other modules.
-    drupal_get_messages('status');
+    $this->messenger()->messagesByType('status');
 
     $build = [];
 
@@ -105,7 +105,7 @@ class UserController extends ControllerBase {
    */
   public function passwordChangedLogout() {
     // Set the message now.
-    drupal_set_message($this->t('Your password has been changed.'));
+    $this->messenger()->addMessage($this->t('Your password has been changed.'));
     return $this->redirect('user.login');
   }
 

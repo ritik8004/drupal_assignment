@@ -430,7 +430,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           $this->getCheckoutHelper()->placeOrder($cart);
         }
         catch (\Exception $e) {
-          drupal_set_message($e->getMessage(), 'error');
+          $this->messenger()->addMessage($e->getMessage(), 'error');
           $this->redirectToStep('payment');
         }
       }

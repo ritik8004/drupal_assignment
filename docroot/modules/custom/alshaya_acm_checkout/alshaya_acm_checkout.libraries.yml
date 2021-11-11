@@ -24,3 +24,9 @@ analytics:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+ab_testing:
+  version: 1.x
+  css:
+    theme:
+      css/ab_testing.css: {}

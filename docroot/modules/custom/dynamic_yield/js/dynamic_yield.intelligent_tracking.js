@@ -11,9 +11,6 @@
     }
 
     // Simply call the controller to set the cookie.
-    Drupal.ajax({
-      type: 'POST',
-      url: Drupal.url('dyid'),
-    }).execute();
+    $.post(Drupal.url('dyid'));
   });
 })(jQuery, Drupal);

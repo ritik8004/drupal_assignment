@@ -13,9 +13,7 @@ rtl_styles:
     theme:
       css/rtl.css: {}
 
-super_menu_clone:
-  js:
-    js/super_menu_clone.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
+font-face:
+  css:
+    theme:
+      css/conditional-sass/font-face/font-face.ltr.css: { }

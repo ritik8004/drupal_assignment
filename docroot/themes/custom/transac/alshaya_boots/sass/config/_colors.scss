@@ -26,6 +26,8 @@ $warm-grey-three: #c2c2c2;
 $white-smoke-light: #f2f2f2;
 $white: #fff;
 $dark-sand: #ac8e54;
+$_plp_cta_hover: #0b3d6f;
+$_plp_secondary_cta_hover: rgba(0, 73, 144, 0.1);
 
 // Global elements.
 $primary_text: $black-two;
@@ -469,9 +471,6 @@ $block_acm_customer_txt: $drakish-blue;
 // Free Gifts
 $spc-cart-free-gift-coupon-code: $drakish-blue;
 
-// Pace progress color
-$progress_loader: $drakish-blue;
-
 // Social Auth
 $social-network-text: $black-two;
 $social-auth-bg-hover: rgba(218, 218, 218, 0.19);
@@ -481,7 +480,7 @@ $user_login_link_btn_text: $black-two;
 $user_login_section_title: $drakish-blue;
 
 // PLP LHN block.
-$lhn_l2: $drakish-blue;
+$lhn_l2: $black-two;
 $lhn_l3: $black-two;
 
 //Algolia search bar.
@@ -571,3 +570,9 @@ $rr-static-links-txt: $drakish-blue;
 $rr-review-form-title: $drakish-blue;
 $rr-review-terms-condition: $drakish-blue;
 $rr-write-review-link-txt: $black-two;
+$rr-stars-color: $drakish-blue;
+$rr-form-head-row-border: $drakish-blue;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $_plp_cta_hover;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;

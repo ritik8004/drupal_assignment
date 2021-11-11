@@ -19,13 +19,6 @@ export const getStorageInfo = (storageKey = 'reviews_data') => {
   }
 };
 
-export const addInfoInStorage = (review) => {
-  const reviewInfo = { ...review };
-  // Adding current time to storage to know the last time reviews updated.
-  reviewInfo.last_update = new Date().getTime();
-  setStorageInfo(reviewInfo);
-};
-
 export const removeReviewsFromStorage = () => {
   removeStorageInfo('reviews_data');
 };
@@ -33,4 +26,28 @@ export const removeReviewsFromStorage = () => {
 export const getInfoFromStorage = () => {
   const reviewData = getStorageInfo('reviews_data');
   return reviewData;
+};
+
+export const updateStorageInfo = (contentType, contentObj, contentId) => {
+  const storageList = getStorageInfo(contentType) !== null
+    ? getStorageInfo(contentType) : [];
+  let contentExists = false;
+  if (storageList !== null) {
+    const updatedStorage = storageList.map((contentStorage) => {
+      // Check if current content already exists in storage.
+      if (contentStorage.id === contentId) {
+        const storageObj = { ...contentStorage };
+        const mergedStorage = Object.assign(storageObj, contentObj);
+        contentExists = true;
+        return mergedStorage;
+      }
+      return contentStorage;
+    });
+    if (contentExists) {
+      setStorageInfo(JSON.stringify(updatedStorage), contentType);
+    } else {
+      storageList.push(contentObj);
+      setStorageInfo(JSON.stringify(storageList), contentType);
+    }
+  }
 };

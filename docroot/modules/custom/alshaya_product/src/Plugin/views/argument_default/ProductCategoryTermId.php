@@ -103,28 +103,30 @@ class ProductCategoryTermId extends ArgumentDefaultPluginBase implements Cacheab
     // facets on PLP/Promotion detail page post AJAX request.
     $url = $this->requestStack->getCurrentRequest()->getPathInfo();
     $url = explode('--', $url)[0];
+    $url_object = $this->pathValidator->getUrlIfValid($url);
+    if ($url_object && ($url_object->getRouteName() == 'entity.taxonomy_term.canonical')) {
+      $taxonomy_tid = $url_object->getRouteParameters()['taxonomy_term'];
+      if ($taxonomy_tid) {
+        $taxonomy_term = Term::load($taxonomy_tid);
+        if ($taxonomy_term instanceof TermInterface && ($taxonomy_term->bundle() === 'acq_product_category')) {
+          // Support group by sub-categories.
+          if ($taxonomy_term->get('field_group_by_sub_categories')->getString()) {
+            $terms = array_column($taxonomy_term->get('field_select_sub_categories_plp')->getValue() ?? [], 'value');
+          }
+          else {
+            $storage = $this->entityManager->getStorage('taxonomy_term');
+            $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id());
 
-    if (($url_object = $this->pathValidator->getUrlIfValid($url))
-      && ($url_object->getRouteName() == 'entity.taxonomy_term.canonical')
-      && ($taxonomy_tid = $url_object->getRouteParameters()['taxonomy_term'])
-      && (($taxonomy_term = Term::load($taxonomy_tid)) instanceof TermInterface)) {
+            // Get the array of term ids from tree.
+            $terms = $term_items ? array_column($term_items, 'tid') : [];
 
-      // Support group by sub-categories.
-      if ($taxonomy_term->get('field_group_by_sub_categories')->getString()) {
-        $terms = array_column($taxonomy_term->get('field_select_sub_categories_plp')->getValue() ?? [], 'value');
+            // Add the main term on top.
+            array_unshift($terms, $taxonomy_term->id());
+          }
+
+          $argument = implode('+', $terms);
+        }
       }
-      else {
-        $storage = $this->entityManager->getStorage('taxonomy_term');
-        $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id());
-
-        // Get the array of term ids from tree.
-        $terms = $term_items ? array_column($term_items, 'tid') : [];
-
-        // Add the main term on top.
-        array_unshift($terms, $taxonomy_term->id());
-      }
-
-      $argument = implode('+', $terms);
     }
 
     return $argument;

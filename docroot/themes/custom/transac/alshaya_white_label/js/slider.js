@@ -10,19 +10,6 @@
 (function ($, Drupal) {
   'use strict';
 
-  /**
-   * Call blazyRevalidate() on afterChange of slick sliders.
-   *
-   * @param {object} carousel
-   * The carousel element.
-   */
-  function applyBannerLazyLoad(carousel) {
-    // Lazy Load on carousels.
-    carousel.on('afterChange', function () {
-      Drupal.blazyRevalidate();
-    });
-  }
-
   // Call centerDots() to apply slick dots vertically center aligned.
   function centerDots() {
     var parent = $('.slick-list');
@@ -66,8 +53,6 @@
       var bannerSliderContainer = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content');
 
       applyBannerRtl(paragraphBanner, options);
-      applyBannerLazyLoad(paragraphBanner);
-
       var promoPanelOptions = {
         slidesToShow: 3,
         slidesToScroll: 3,

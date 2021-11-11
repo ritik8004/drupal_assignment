@@ -1,0 +1,10 @@
+.select2-dropdown {
+  border-color: $contact-form-select-dropdown-border;
+}
+
+.select2-selection__arrow {
+  &::after {
+    border: 1px solid $primary_dropdown_arrow_border;
+    border-#{$left}: 0;
+  }
+}

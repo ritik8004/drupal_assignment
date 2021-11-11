@@ -95,3 +95,23 @@
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "DroidArabicKufi_Bold";
+  src:
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/DroidArabicKufi-Bold.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/DroidArabicKufi-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidKufi_Regular";
+  src:
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/DroidKufi-Regular.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/DroidKufi-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

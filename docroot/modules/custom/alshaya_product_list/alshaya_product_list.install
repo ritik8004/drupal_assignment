@@ -5,6 +5,63 @@
  * Install file.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ * 
+ * Install alshaya_product_list.settings file.
+ */
+function alshaya_product_list_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_product_list.settings'],
+    'alshaya_product_list',
+  );
+}
+
+ /**
+ * Implements hook_update_N().
+ * 
+ * [6.2.0] Install field_show_in_lhn_options_list.
+ */
+function alshaya_product_list_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(
+    [
+      'field.storage.node.field_show_in_lhn_options_list',
+      'field.storage.taxonomy_term.field_show_in_product_list_lhn.yml',
+      'field.field.node.product_list.field_show_in_lhn_options_list',
+      'field.field.taxonomy_term.acq_product_category.field_show_in_product_list_lhn.yml',
+      'core.entity_form_display.node.product_list.default',
+      'core.entity_view_display.node.product_list.default',
+    ],
+    'alshaya_product_list',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  $alshayaConfigManager->updateConfigs(
+    [
+      'core.entity_form_display.taxonomy_term.acq_product_category.default',
+      'core.entity_view_display.taxonomy_term.acq_product_category.default',
+    ],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+
+  // Create and enable the new product list lhn block.
+  $alshayaConfigManager->updateConfigs(
+    ['block.block.productlistlhnblock'],
+    'alshaya_product_list',
+    'install',
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

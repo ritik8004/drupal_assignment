@@ -1,0 +1,4 @@
+enabled: false
+# Config for defining category IDs for which
+# this feature will work.
+category_ids: {}

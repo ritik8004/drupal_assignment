@@ -95,7 +95,8 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
       $privilege_customer = 'Regular Customer';
       $email = '';
       $customer_type = 'New Customer';
-
+      // Initialize the custom_id value as 0.
+      $customer_id = 0;
       if ($this->currentUser->isAuthenticated()) {
         $current_user = $this->userStorage->load($current_user_id);
         $email = $current_user->get('mail')->getString();
@@ -109,7 +110,7 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
       }
 
       $user_details = [
-        'userID' => $current_user_id ? $current_user->get('uid')->getString() : 0,
+        'userID' => $customer_id,
         'userEmailID' => $email,
         'userPhone' => $current_user_id ? ($current_user->get('field_mobile_number')->value ?? '') : '',
         'customerType' => $customer_type,
@@ -118,6 +119,7 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
         'privilegeCustomer' => $privilege_customer,
       ];
       $build['#attached']['drupalSettings']['userDetails'] = $user_details;
+
       return $build;
     }
   }

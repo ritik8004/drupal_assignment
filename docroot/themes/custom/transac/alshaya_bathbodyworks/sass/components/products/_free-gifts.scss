@@ -40,10 +40,8 @@ body {
       }
     }
   }
-}
 
-// for all browsers, for promo list.
-body {
+  // for all browsers, for promo list.
   &.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
     .ui-dialog #drupal-modal {
       height: auto !important;

@@ -1,10 +1,13 @@
 name: 'Alshaya Media'
 type: module
 core: 8.x
+core_version_requirement: ^8 || ^9
 description: 'custom media bundles for alshaya and related settings.'
 dependencies:
   - drupal:field
   - drupal:language
   - drupal:media (>= 8.4)
   - lightning_media_video:lightning_media_video
+  - lightning_media_document:lightning_media_document
+  - lightning_media_image:lightning_media_image
 package: Alshaya

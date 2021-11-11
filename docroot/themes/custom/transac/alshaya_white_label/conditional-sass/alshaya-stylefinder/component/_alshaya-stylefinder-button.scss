@@ -23,5 +23,7 @@
     &:hover {
       color: $stylefinder-button-text;
     }
+
+    @include arabic-letter-spacing;
   }
 }

@@ -1,9 +1,16 @@
 import React from 'react';
 import { getAmountWithCurrency } from '../checkout_util';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 const PriceElement = ({ amount: priceAmount, format }) => {
-  if (typeof priceAmount === 'undefined') {
+  if (!hasValue(priceAmount)
+    || parseFloat(priceAmount).toFixed(2) === '0.00') {
     return (null);
+  }
+
+  if (Number.isNaN(parseFloat(priceAmount))
+    && priceAmount.toUpperCase() === 'FREE') {
+    return (Drupal.t('Free'));
   }
 
   const priceParts = { ...getAmountWithCurrency(priceAmount, false) };
@@ -13,7 +20,7 @@ const PriceElement = ({ amount: priceAmount, format }) => {
     return (`${priceParts.currency} ${priceParts.amount}`);
   }
 
-  priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{ parseFloat(priceParts.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: currencyConfig.decimal_points }) }</span>);
+  priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{ parseFloat(priceParts.amount).toLocaleString(undefined, { minimumFractionDigits: currencyConfig.decimal_points, maximumFractionDigits: currencyConfig.decimal_points }) }</span>);
   priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
   return (

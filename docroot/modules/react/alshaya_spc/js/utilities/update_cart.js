@@ -1,24 +1,6 @@
-import axios from 'axios';
-
 import { cartAvailableInStorage } from './get_cart';
-import i18nMiddleWareUrl from './i18n_url';
-import { getInfoFromStorage } from './storage';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-
-/**
- * Get the middleware update cart endpoint.
- *
- * @returns {string}
- */
-export const updateCartApiUrl = () => i18nMiddleWareUrl('cart/update');
-
-/**
- * Get the middleware update cart endpoint.
- *
- * @returns {string}
- */
-export const restoreCartApiUrl = () => i18nMiddleWareUrl('cart/restore');
 
 /**
  * Apply/Remove the promo code.
@@ -47,9 +29,7 @@ export const applyRemovePromo = (action, promoCode) => {
     cart = cart.cart_id;
   }
 
-  const apiUrl = updateCartApiUrl();
-
-  return axios.post(apiUrl, {
+  return window.commerceBackend.applyRemovePromo({
     action,
     promo: promoCode,
     cart_id: cart,
@@ -77,9 +57,7 @@ export const updateCartItemData = (action, sku, quantity) => {
     cart = cart.cart_id;
   }
 
-  const apiUrl = updateCartApiUrl();
-
-  return axios.post(apiUrl, {
+  return window.commerceBackend.addUpdateRemoveCartItem({
     action,
     sku,
     cart_id: cart,
@@ -92,7 +70,7 @@ export const updateCartItemData = (action, sku, quantity) => {
         // We are doing this because on delete operation,
         // sku is removed from storage and thus we need
         // data before storage update.
-        const localCart = getInfoFromStorage();
+        const localCart = window.commerceBackend.getCartDataFromStorage();
         if (localCart.cart !== undefined
           && localCart.cart.items !== undefined
           && Object.prototype.hasOwnProperty.call(localCart.cart.items, sku)) {
@@ -113,21 +91,18 @@ export const updateCartItemData = (action, sku, quantity) => {
     });
 };
 
-export const addPaymentMethodInCart = (action, data) => {
-  const apiUrl = updateCartApiUrl();
-  return axios.post(apiUrl, {
-    action,
-    payment_info: data,
-  }).then((response) => {
-    if (!validateCartResponse(response.data)) {
-      if (typeof response.data.message !== 'undefined') {
-        Drupal.logJavascriptError(action, response.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
-      }
-      return null;
+export const addPaymentMethodInCart = (action, data) => window.commerceBackend.addPaymentMethod({
+  action,
+  payment_info: data,
+}).then((response) => {
+  if (!validateCartResponse(response.data)) {
+    if (typeof response.data.message !== 'undefined') {
+      Drupal.logJavascriptError(action, response.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
-    return response.data;
-  }, (error) => {
-    // Processing of error here.
-    Drupal.logJavascriptError('add-payment-method-in-cart', error, GTM_CONSTANTS.PAYMENT_ERRORS);
-  });
-};
+    return null;
+  }
+  return response.data;
+}, (error) => {
+  // Processing of error here.
+  Drupal.logJavascriptError('add-payment-method-in-cart', error, GTM_CONSTANTS.PAYMENT_ERRORS);
+});

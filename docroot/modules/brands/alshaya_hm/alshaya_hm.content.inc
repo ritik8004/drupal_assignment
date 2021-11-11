@@ -60,7 +60,7 @@ function alshaya_hm_create_footer_logo_block() {
     'body' => [
       'value' => "<div class='footer-brand-home'>
                    <a href='/en' title='footer-brand-logo' rel='home' class='logo'>
-                     <img src='" . $logo_path . "' alt='HnM Logo'>
+                     <img loading='lazy' src='" . $logo_path . "' alt='HnM Logo'>
                    </a>
                  </div>",
       'format' => 'rich_text',
@@ -75,7 +75,7 @@ function alshaya_hm_create_footer_logo_block() {
     'body' => [
       'value' => "<div class='footer-brand-home'>
                    <a href='/ar' title='footer-brand-logo' rel='home' class='logo'>
-                     <img src='" . $logo_path . "' alt='HnM Logo'>
+                     <img loading='lazy' src='" . $logo_path . "' alt='HnM Logo'>
                    </a>
                  </div>",
       'format' => 'rich_text',

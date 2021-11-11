@@ -7,10 +7,6 @@
 
   Drupal.behaviors.alshayaAlgoliaReactGlobal = {
     attach: function (context, settings) {
-      $(window).on('blazySuccess', function(event, element) {
-        Drupal.plpListingProductTileHeight('row', element);
-      });
-
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
         var facet_block = $('.container-without-product .c-collapse-item');
@@ -20,10 +16,6 @@
         }
       });
     }
-  };
-
-  Drupal.refreshGrids = function() {
-    Drupal.plpListingProductTileHeight('full_page', null);
   };
 
   Drupal.algolia = {};
@@ -103,6 +95,11 @@
     // so that on next page load, default behavior is used.
     delete storage_value.grid_type;
     localStorage.setItem(storageKey, JSON.stringify(storage_value));
+  }
+ // Adding to use global.
+  Drupal.algoliaGetActualPageNumber = function () {
+    var resultsCount = $('.node--view-mode-search-result:visible').length;
+    return Math.ceil(resultsCount / drupalSettings.algoliaSearch.itemsPerPage);
   }
 
 })(jQuery, Drupal);

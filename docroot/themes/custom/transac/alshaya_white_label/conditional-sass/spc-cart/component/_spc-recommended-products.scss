@@ -15,7 +15,8 @@
       display: inline-block;
       margin-#{$right}: 0.625rem;
       scroll-snap-align: center;
-      width: 8.75rem;
+      min-width: 8.75rem;
+      max-width: 8.75rem;
       position: relative;
 
       html[lang=ar] & {
@@ -28,6 +29,10 @@
 
       .spc-product-recommended-image {
         margin-bottom: 1.25rem;
+        min-height: 10.625rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .product-title {
@@ -47,6 +52,8 @@
 
         .promotion-label {
           color: $spc-recommended-product-promotion;
+          margin: 0;
+          display: block;
         }
 
         &:not(:empty) {

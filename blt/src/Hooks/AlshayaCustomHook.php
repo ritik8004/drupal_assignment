@@ -26,9 +26,11 @@ class AlshayaCustomHook extends BltTasks {
 
     $patterns = [];
 
-    $ignoredDirs = ['alshaya_react', 'js', 'dist', 'node_modules'];
+    $ignoredDirs = ['alshaya_react', 'js', 'dist', 'node_modules', '__tests__'];
 
-    foreach (new \DirectoryIterator($this->getConfigValue('docroot') . '/modules/react') as $subDir) {
+    $reactDir = $this->getConfigValue('docroot') . '/modules/react';
+
+    foreach (new \DirectoryIterator($reactDir) as $subDir) {
       if ($subDir->isDir()
         && strpos($subDir->getBasename(), '.') === FALSE
         && !in_array($subDir->getBasename(), $ignoredDirs)) {
@@ -46,7 +48,13 @@ class AlshayaCustomHook extends BltTasks {
     // Validate utility files.
     $patterns[] = '/react/js';
 
+    $do_test = FALSE;
+
     foreach ($files as $file) {
+      if (!$do_test && strpos($file, '/alshaya_spc/js/') !== FALSE) {
+        $do_test = TRUE;
+      }
+
       foreach ($patterns as $pattern) {
         if (strpos($file, $pattern) !== FALSE) {
           $paths = explode('react/', $file, 2);
@@ -60,6 +68,18 @@ class AlshayaCustomHook extends BltTasks {
 
     if ($failed) {
       throw new \Exception('Please fix eslint errors described above.');
+    }
+
+    // JS Tests.
+    if ($do_test) {
+      $output = $this->_exec('cd ' . $reactDir . '; npm test');
+      if ($output->getExitCode() !== 0) {
+        $failed = TRUE;
+      }
+    }
+
+    if ($failed) {
+      throw new \Exception('Please fix failing tests.');
     }
   }
 

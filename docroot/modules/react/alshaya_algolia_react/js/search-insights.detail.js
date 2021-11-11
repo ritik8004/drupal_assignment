@@ -30,19 +30,7 @@
         }
 
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
-
-        try {
-          window.aa('convertedObjectIDsAfterSearch', {
-            userToken: Drupal.getAlgoliaUserToken(),
-            eventName: 'Add to cart',
-            index: "...",
-            queryID: queryId,
-            objectIDs: [addedProduct.attr('data-insights-object-id')]
-          });
-        }
-        catch (e) {
-          console.error(e);
-        }
+        Drupal.pushAlshayaAlgoliaInsightsAddToCart(queryId, addedProduct);
       });
     }
   };

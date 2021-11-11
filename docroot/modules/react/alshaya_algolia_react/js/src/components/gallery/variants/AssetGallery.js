@@ -1,6 +1,6 @@
 import React from 'react';
-import Labels from '../../labels';
 import ImageElement from '../imageHelper/ImageElement';
+import Lozenges from '../../../../common/components/lozenges';
 
 const AssetGallery = ({
   media, title, labels, sku,
@@ -19,22 +19,25 @@ const AssetGallery = ({
     <div className="alshaya_search_gallery">
       <div className="alshaya_search_mainimage" data-sku-image={`${mainImageUrl}`}>
         <ImageElement
-          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={mainImageUrl}
+          src={mainImageUrl}
           title={title}
-          className="b-lazy"
+          loading="lazy"
         />
-        <Labels labels={labels} sku={sku} />
       </div>
-      <div className="alshaya_search_hoverimage">
-        <ImageElement
-          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
-          title={title}
-          className="b-lazy"
-        />
-        <Labels labels={labels} sku={sku} />
-      </div>
+      {
+        typeof hoverImage.url !== 'undefined'
+          ? (
+            <div className="alshaya_search_hoverimage">
+              <ImageElement
+                src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
+                title={title}
+                className="lazy"
+              />
+            </div>
+          )
+          : ''
+      }
+      <Lozenges labels={labels} sku={sku} />
     </div>
   );
 };

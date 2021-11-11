@@ -57,3 +57,14 @@ alshaya_acm_checkout.settings:
       type: sequence
       sequence:
         type: string
+    cnc_store_info_cache_time:
+      type: integer
+      label: 'Set the cache time for cnc store info'
+
+alshaya_acm_checkout.ab_testing:
+  type: config_object
+  label: 'Checkout AB Testing Settings'
+  mapping:
+    cashondelivery:
+      type: boolean
+      label: 'AB Testing Status for Cash on Delivery'

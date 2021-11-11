@@ -3,8 +3,10 @@ type: module
 description: 'The dedicated module for transac Foot Locker brand.'
 package: Alshaya
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_fl:alshaya_fl
   - alshaya_color_split:alshaya_color_split
+  - alshaya_mobile_app:alshaya_mobile_app
 themes:
   - alshaya_footlocker

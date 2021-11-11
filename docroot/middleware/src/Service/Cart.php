@@ -6,7 +6,6 @@ use App\EventListener\StockEventListener;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
-use App\Service\Knet\KnetHelper;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
@@ -70,13 +69,6 @@ class Cart {
    * @var \App\Service\CheckoutCom\APIWrapper
    */
   protected $checkoutComApi;
-
-  /**
-   * K-Net Helper.
-   *
-   * @var \App\Service\Knet\KnetHelper
-   */
-  protected $knetHelper;
 
   /**
    * Payment Data provider.
@@ -173,8 +165,6 @@ class Cart {
    *   Utility Service.
    * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
    *   Checkout.com API Wrapper.
-   * @param \App\Service\Knet\KnetHelper $knet_helper
-   *   K-Net Helper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
    * @param \App\Service\Config\SystemSettings $settings
@@ -205,7 +195,6 @@ class Cart {
     MagentoApiWrapper $magento_api_wrapper,
     Utility $utility,
     APIWrapper $checkout_com_api,
-    KnetHelper $knet_helper,
     PaymentData $payment_data,
     SystemSettings $settings,
     SessionStorage $session,
@@ -223,7 +212,6 @@ class Cart {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->utility = $utility;
     $this->checkoutComApi = $checkout_com_api;
-    $this->knetHelper = $knet_helper;
     $this->paymentData = $payment_data;
     $this->settings = $settings;
     $this->session = $session;
@@ -246,6 +234,22 @@ class Cart {
    */
   public function getCartId() {
     return $this->session->getDataFromSession(self::SESSION_STORAGE_KEY);
+  }
+
+  /**
+   * Wrapper function to get cart amount.
+   *
+   * @return int|string
+   *   Cart amount (base_grand_total from totals).
+   */
+  public function getCartAmount() {
+    $cart = $this->getCart();
+
+    if (empty($cart) || empty($cart['totals'])) {
+      return '';
+    }
+
+    return $cart['totals']['base_grand_total'] ?? 0;
   }
 
   /**
@@ -989,9 +993,14 @@ class Cart {
       'extension' => (object) $extension,
     ];
 
+    // Adding a log to confirm/get what data we send to middleware from browser.
+    $this->logger->notice('Cart updatePayment data: @data. CartId: @cart_id', [
+      '@data' => json_encode($data),
+      '@cart_id' => $this->getCartId(),
+    ]);
     $update['payment'] = [
       'method' => $data['method'],
-      'additional_data' => $data['additional_data'],
+      'additional_data' => $data['additional_data'] ?? [],
     ];
 
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
@@ -1069,24 +1078,6 @@ class Cart {
 
     // Method specific code.
     switch ($method) {
-      case 'knet':
-        $cart = $this->getCart();
-
-        $response = $this->knetHelper->initKnetRequest(
-          $cart['totals']['grand_total'],
-          $this->getCartId(),
-          $cart['cart']['extension_attributes']['real_reserved_order_id'],
-          $this->getCartCustomerId()
-        );
-
-        if (isset($response['redirectUrl']) && !empty($response['redirectUrl'])) {
-          $response['payment_type'] = 'knet';
-          $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response['data']);
-          throw new \Exception($response['redirectUrl'], 302);
-        }
-
-        throw new \Exception('Failed to initiate K-Net request.', 500);
-
       case 'checkout_com_upapi':
         switch ($additional_info['card_type']) {
           case 'new':
@@ -1246,6 +1237,13 @@ class Cart {
     foreach ($data['items'] ?? [] as $key => $item) {
       $skus[] = $item['variant_sku'] ?? $item['sku'];
       unset($data['items'][$key]['variant_sku']);
+    }
+
+    // JIRA Ticket No.: CORE-29691
+    // Add smart agent details in extension attribute to track
+    // orders by in-store devices.
+    if (!empty($cart_id)) {
+      $data['extension'] = $this->addSmartAgentDetails((array) $data['extension'] ?? [], $cart_id);
     }
 
     $request_options = [
@@ -1627,7 +1625,7 @@ class Cart {
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
     }
 
-    // Check if shiping method is present else throw error.
+    // Check if shipping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
         '@cart' => json_encode($cart),
@@ -1741,7 +1739,7 @@ class Cart {
       $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
       $doubleCheckEnabled = $checkout_settings['place_order_double_check_after_exception'];
-      if ($doubleCheckEnabled) {
+      if ($doubleCheckEnabled && !$this->isUpapiPaymentMethod($data['paymentMethod']['method']) && !$this->isPostpayPaymentMethod($data['paymentMethod']['method'])) {
         $double_check_done = 'yes';
         try {
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
@@ -1893,6 +1891,7 @@ class Cart {
   public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
     $email = $this->getCartCustomerEmail();
+    $customer_id = $this->getCartCustomerId();
 
     // Remove cart id and other caches from session.
     $this->removeCartFromSession();
@@ -1908,6 +1907,7 @@ class Cart {
       'order_id' => (int) $order_id,
       'cart' => $cart['cart'],
       'payment_method' => $payment_method,
+      'customer_id' => $customer_id,
     ];
 
     $this->drupal->triggerCheckoutEvent('place order success', $data);
@@ -2038,7 +2038,20 @@ class Cart {
 
     $cart['shipping']['clickCollectType'] = $cart['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
     $cart['shipping']['storeCode'] = $cart['shipping']['extension_attributes']['store_code'] ?? '';
+    $cart['shipping']['collection_point'] = $cart['shipping']['extension_attributes']['collection_point'] ?? '';
+    $cart['shipping']['pickup_date'] = $cart['shipping']['extension_attributes']['pickup_date'] ?? '';
+    $cart['shipping']['price_amount'] = $cart['shipping']['extension_attributes']['price_amount'] ?? '';
+    $cart['shipping']['pudo_available'] = $cart['shipping']['extension_attributes']['pudo_available'] ?? '';
     unset($cart['shipping']['extension_attributes']);
+
+    // Remove shipping info if address in cart is available but not available
+    // in address book for authenticated users.
+    if (isset($cart['shipping'], $cart['shipping']['type'])
+      && $cart['shipping']['type'] === 'home_delivery'
+      && $this->getDrupalInfo('customer_id')
+      && empty($cart['shipping']['address']['customer_address_id'])) {
+      $cart['shipping'] = [];
+    }
 
     // Initialise payment data holder.
     $cart['payment'] = [];
@@ -2080,13 +2093,15 @@ class Cart {
    *   The latitude.
    * @param float $lon
    *   The longitude.
+   * @param int $cncStoresLimit
+   *   The number of stores to display.
    *
    * @return array|mixed
    *   Return array of stores.
    *
    * @throws \Exception
    */
-  public function getCartStores($lat, $lon) {
+  public function getCartStores($lat, $lon, $cncStoresLimit = NULL) {
     $cart_id = $this->getCartId();
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $request_options = [
@@ -2096,6 +2111,11 @@ class Cart {
     try {
       if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options))) {
         return $stores;
+      }
+
+      // If cncStoresLimit is set, only load that many stores.
+      if (!empty($cncStoresLimit)) {
+        $stores = array_slice($stores, 0, $cncStoresLimit, TRUE);
       }
 
       foreach ($stores as $key => &$store) {
@@ -2410,6 +2430,8 @@ class Cart {
       'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
       'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
       'surcharge' => 0,
+      'items' => $cart_data['totals']['items'] ?? 0,
+      'allExcludedForAdcard' => $cart_data['totals']['extension_attributes']['is_all_items_excluded_for_adv_card'] ?? 0,
     ];
 
     if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
@@ -2444,6 +2466,13 @@ class Cart {
     $data['in_stock'] = TRUE;
     // If there are any error at cart item level.
     $data['is_error'] = FALSE;
+
+    // For CnC, add collection charge for collection points.
+    if (!empty($cart_data['shipping'])
+      && $cart_data['shipping']['type'] === 'click_and_collect'
+      && $cart_data['shipping']['pudo_available'] === TRUE) {
+      $data['collection_charge'] = $cart_data['shipping']['price_amount'] ?? '';
+    }
 
     try {
       $data['items'] = [];
@@ -2528,6 +2557,90 @@ class Cart {
     }
 
     return $info[$key] ?? NULL;
+  }
+
+  /**
+   * Add smart agent details in extension.
+   *
+   * @param array $data_extension
+   *   Data extension.
+   * @param string $cart_id
+   *   Cart ID.
+   *
+   * @return array
+   *   Data extension with smart agent details.
+   */
+  public function addSmartAgentDetails(array $data_extension, string $cart_id) {
+    $smart_agent_cookie = $this->request->cookies->get('smart_agent_cookie');
+
+    if (empty($smart_agent_cookie)) {
+      return $data_extension;
+    }
+
+    $decoded_cookies = base64_decode($smart_agent_cookie);
+    $decoded_cookies_array = json_decode($decoded_cookies, TRUE);
+    $data_extension = array_merge($data_extension, $this->formatSmartAgentDetails($decoded_cookies_array));
+
+    // Logging data sent to updateCart API call.
+    $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Action: @action, Smart Agent Email: @smart_agent_email, Smart Agent User: @smart_agent_user_agent, Smart Agent Client IP: @smart_agent_client_ip.', [
+      '@cart_id' => $cart_id,
+      '@action' => $data_extension['action'],
+      '@smart_agent_email' => $data_extension['smart_agent_email'],
+      '@smart_agent_user_agent' => $data_extension['smart_agent_user_agent'],
+      '@smart_agent_client_ip' => $data_extension['smart_agent_client_ip'],
+    ]);
+
+    return $data_extension;
+  }
+
+  /**
+   * Format smart agent details.
+   *
+   * @param array $data
+   *   Smart agent details array.
+   *
+   * @return array
+   *   Formatted smart agent details array.
+   */
+  public function formatSmartAgentDetails(array $data) {
+    $name = $data['name'] ?? '';
+    $email = $data['email'] ?? '';
+    $storeCode = $data['storeCode'] ?? '';
+    $clientIP = $data['clientIP'] ?? '';
+    $lat = $data['lat'] ?? '';
+    $lng = $data['lng'] ?? '';
+
+    // @todo remove all the concatenated one's after individual fields are
+    // created in Magento.
+    $formatted_details = [
+      'smart_agent_email' => $name . ';' . $email . ';' . $storeCode,
+      'smart_agent_mail' => $email,
+      'smart_agent_name' => $name,
+      'smart_agent_store' => $storeCode,
+      'smart_agent_user_agent' => $data['userAgent'] ?? '',
+      'smart_agent_client_ip' => $clientIP . ';' . $lat . ';' . $lng,
+      'smart_agent_ip' => $clientIP,
+      'smart_agent_location' => $lat . ';' . $lng,
+    ];
+
+    if (!empty($data['shared_via'])) {
+      $formatted_details['smart_agent_shared_channel'] = $data['shared_via'];
+      $formatted_details['smart_agent_url_shared_via'] = $data['shared_via'];
+
+      $formatted_details['smart_agent_shared_amount'] = $this->getCartAmount();
+      $formatted_details['smart_agent_url_shared_via'] .= ';' . $formatted_details['smart_agent_shared_amount'];
+
+      if (!empty($data['shared_to'])) {
+        $formatted_details['smart_agent_shared_to'] = $data['shared_to'];
+        $formatted_details['smart_agent_url_shared_via'] .= ';' . $data['shared_to'];
+      }
+    }
+
+    if (!empty($data['shared_on'])) {
+      $formatted_details['smart_agent_url_shared_on'] = $data['shared_on'];
+    }
+
+    return $formatted_details;
   }
 
 }

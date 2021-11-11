@@ -60,9 +60,15 @@
     padding: 0;
     margin: 0;
 
+    .slick-track,
+    li.slick-slide {
+      min-height: 50vh;
+    }
+
     li.slick-slide {
       width: 100%;
       height: auto;
+      position: relative;
 
       img {
         height: auto;

@@ -14,6 +14,8 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Link;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -232,8 +234,8 @@ function alshaya_bp_transac_form_alshaya_srp_sort_settings_form_alter(&$form, Fo
 /**
  * Implements hook_acq_sku_clean_synced_data_alter().
  */
-function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context) {
-  foreach ($context['sandbox']['results'] as $key => $data) {
+function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context_results) {
+  foreach ($context_results as $key => $data) {
     if ($data['type'] == 'taxonomy_term') {
       // Query for categories mapped in I&A pages.
       $value = \Drupal::database()->select('taxonomy_term__field_remove_shop_prefix', 'frsp')
@@ -243,8 +245,88 @@ function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context) {
       ->execute()
       ->fetchCol();
       if (reset($value)) {
-        unset($context['sandbox']['results'][$key]);
+        unset($context_results[$key]);
       }
     }
   }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function alshaya_bp_transac_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if (($view->id() == 'product_category_level_3' && $view->current_display === 'entity_reference_1') ||
+  ($view->id() == 'product_category_level_2_3' && $view->current_display === 'block_2')) {
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // Boolean field value is made 5 so that terms appear irrespective of TRUE or FALSE.
+        if (($condition['field'] == 'taxonomy_term__field_category_include_menu.field_category_include_menu_value') ||
+        ($condition['field'] == 'taxonomy_term_field_data_taxonomy_term__parent__taxonomy_term__field_category_include_menu.field_category_include_menu_value')) {
+          $condition['value'] = 5;
+          $condition['operator']='!=';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_search_api_facet_block_data_alter().
+ */
+function alshaya_bp_transac_alshaya_search_api_facet_block_data_alter(&$block_data) {
+  if ($block_data['id'] === 'brandcategory') {
+    $block_data['visibility']['alshaya_listing_page_types']['id'] = 'alshaya_listing_page_types';
+    $block_data['visibility']['alshaya_listing_page_types']['page_types']['product_option_list'] = 1;
+    $block_data['visibility']['alshaya_listing_page_types']['show_on_selected_pages'] = '1';
+  }
+}
+
+/**
+ * Implements hook_alshaya_performance_preload_alter().
+ */
+function alshaya_bp_transac_alshaya_performance_preload_alter(array &$preload) {
+  // Footlocker's icon font comes from whitelabel.
+  $icon_directory_path = '/' . drupal_get_path('theme', 'alshaya_white_label') . '/fonts';
+
+  $preload[] = [
+    'as' => 'font',
+    'href' => $icon_directory_path . '/alshaya-icons.woff?D7b5iT',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff',
+  ];
+
+  $themeHandler = \Drupal::service('theme_handler');
+  $themePath = $themeHandler->getTheme($themeHandler->getDefault())->getPath();
+  $fonts_directory_path = '/' . $themePath . '/fonts';
+
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/BootsSharp-Regular.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/BootsSharp-Bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/BootsSharp-Light.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Tahoma.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
+  $preload[] = [
+    'as' => 'font',
+    'href' => $fonts_directory_path . '/Tahoma-Bold.woff2',
+    'crossorigin' => 'crossorigin',
+    'type' => 'font/woff2',
+  ];
 }

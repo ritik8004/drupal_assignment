@@ -214,7 +214,7 @@ class ProductOptionsHelper {
     $swatches = [];
     foreach ($attribute['swatches'] as $swatch) {
       $swatches[$swatch['option_id']] = $swatch;
-    };
+    }
 
     $weight = 0;
     foreach ($attribute['options'] as $option) {

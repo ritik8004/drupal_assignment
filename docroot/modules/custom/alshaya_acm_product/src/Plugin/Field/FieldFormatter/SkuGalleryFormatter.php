@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
@@ -305,7 +306,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       if (empty($element['#all_galleries']) && empty($element['#gallery']['#mainImage'])) {
         $default_image = $this->skuImagesManager->getProductDefaultImage();
         if ($default_image) {
-          $main_image = $this->skuManager->getSkuImage($default_image->getFileUri(), '', 'product_listing');
+          $main_image = $this->skuManager->getSkuImage($default_image->getFileUri(), '', SkuImagesHelper::STYLE_PRODUCT_LISTING);
           $elements[$delta]['#gallery']['#mainImage'] = $main_image;
           $elements[$delta]['#gallery']['#class'] = 'product-default-image';
         }

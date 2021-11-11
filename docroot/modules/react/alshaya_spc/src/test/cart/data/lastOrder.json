@@ -1,0 +1,472 @@
+{
+  "base_currency_code": "AED",
+  "base_discount_amount": 0,
+  "base_discount_invoiced": 0,
+  "base_grand_total": 80,
+  "base_discount_tax_compensation_amount": 0,
+  "base_discount_tax_compensation_invoiced": 0,
+  "base_shipping_amount": 9.52,
+  "base_shipping_discount_amount": 0,
+  "base_shipping_discount_tax_compensation_amnt": 0,
+  "base_shipping_incl_tax": 10,
+  "base_shipping_invoiced": 9.52,
+  "base_shipping_tax_amount": 0.48,
+  "base_subtotal": 66.67,
+  "base_subtotal_incl_tax": 70,
+  "base_subtotal_invoiced": 66.67,
+  "base_tax_amount": 3.81,
+  "base_tax_invoiced": 3.81,
+  "base_total_due": 0,
+  "base_total_invoiced": 80,
+  "base_total_invoiced_cost": 0,
+  "base_total_paid": 80,
+  "base_to_global_rate": 1,
+  "base_to_order_rate": 1,
+  "billing_address_id": 3304,
+  "created_at": "2021-07-19 13:33:22",
+  "customer_email": "tester01@example.com",
+  "customer_firstname": "Tester",
+  "customer_group_id": 1,
+  "customer_id": 845,
+  "customer_is_guest": 0,
+  "customer_lastname": "test",
+  "customer_note_notify": 1,
+  "discount_amount": 0,
+  "discount_invoiced": 0,
+  "entity_id": 1654,
+  "global_currency_code": "KWD",
+  "grand_total": 80,
+  "discount_tax_compensation_amount": 0,
+  "discount_tax_compensation_invoiced": 0,
+  "increment_id": "BWAEHDE0000913",
+  "is_virtual": 0,
+  "order_currency_code": "AED",
+  "protect_code": "f14e0c9a40e2298f2a1847f639e4374a",
+  "quote_id": 7184,
+  "remote_ip": "82.11.31.207",
+  "shipping_amount": 9.52,
+  "shipping_description": "Standard Delivery - Standard delivery 2-3 days",
+  "shipping_discount_amount": 0,
+  "shipping_discount_tax_compensation_amount": 0,
+  "shipping_incl_tax": 10,
+  "shipping_invoiced": 9.52,
+  "shipping_tax_amount": 0.48,
+  "state": "processing",
+  "status": "accepted",
+  "store_currency_code": "AED",
+  "store_id": 5,
+  "store_name": "United Arab Emirates\nUnited Arab Emirates Store\nAE English",
+  "store_to_base_rate": 0,
+  "store_to_order_rate": 0,
+  "subtotal": 66.67,
+  "subtotal_incl_tax": 70,
+  "subtotal_invoiced": 66.67,
+  "tax_amount": 3.81,
+  "tax_invoiced": 3.81,
+  "total_due": 0,
+  "total_invoiced": 80,
+  "total_item_count": 1,
+  "total_paid": 80,
+  "total_qty_ordered": 1,
+  "updated_at": "2021-07-19 13:33:25",
+  "weight": 0.331,
+  "x_forwarded_for": "82.11.31.207",
+  "items": [
+    {
+      "amount_refunded": 0,
+      "base_amount_refunded": 0,
+      "base_discount_amount": 0,
+      "base_discount_invoiced": 0,
+      "base_discount_tax_compensation_amount": 0,
+      "base_discount_tax_compensation_invoiced": 0,
+      "base_original_price": 70,
+      "base_price": 66.67,
+      "base_price_incl_tax": 70,
+      "base_row_invoiced": 66.67,
+      "base_row_total": 66.67,
+      "base_row_total_incl_tax": 70,
+      "base_tax_amount": 3.33,
+      "base_tax_invoiced": 3.33,
+      "created_at": "2021-07-19 13:33:22",
+      "discount_amount": 0,
+      "discount_invoiced": 0,
+      "discount_percent": 0,
+      "free_shipping": 0,
+      "discount_tax_compensation_amount": 0,
+      "discount_tax_compensation_invoiced": 0,
+      "is_qty_decimal": 0,
+      "is_virtual": 0,
+      "item_id": 2213,
+      "name": "Warm Vanilla Sugar Shower Gel",
+      "no_discount": 0,
+      "order_id": 1654,
+      "original_price": 70,
+      "price": 66.67,
+      "price_incl_tax": 70,
+      "product_id": 1569,
+      "product_type": "simple",
+      "qty_canceled": 0,
+      "qty_invoiced": 1,
+      "qty_ordered": 1,
+      "qty_refunded": 0,
+      "qty_returned": 0,
+      "qty_shipped": 0,
+      "quote_item_id": 5555,
+      "row_invoiced": 66.67,
+      "row_total": 66.67,
+      "row_total_incl_tax": 70,
+      "row_weight": 0.331,
+      "sku": "Q022901839",
+      "store_id": 5,
+      "tax_amount": 3.33,
+      "tax_invoiced": 3.33,
+      "tax_percent": 5,
+      "updated_at": "2021-07-19 13:33:25",
+      "weee_tax_applied": "[]",
+      "weight": 0.331,
+      "extension_attributes": {
+        "apportioned_line_discount": "0.0000",
+        "apportioned_line_price": "0.0000",
+        "oms_amount_canceled": "0.0000",
+        "oms_amount_refunded": "0.0000",
+        "product_options": [
+          "{\"info_buyRequest\":{\"qty\":1},\"giftcard_lifetime\":null,\"giftcard_is_redeemable\":0,\"giftcard_email_template\":null,\"giftcard_type\":null}"
+        ]
+      }
+    }
+  ],
+  "billing_address": {
+    "address_type": "billing",
+    "city": "Al Badia",
+    "country_id": "AE",
+    "customer_address_id": 187,
+    "email": "tester01@example.com",
+    "entity_id": 3304,
+    "firstname": "Tester",
+    "lastname": "test",
+    "parent_id": 1654,
+    "postcode": null,
+    "street": [
+      "1 foo st"
+    ],
+    "telephone": "+971555666777",
+    "extension_attributes": {
+      "address_building_segment": "1",
+      "area": 15,
+      "address_city_segment": 1
+    }
+  },
+  "payment": {
+    "account_status": null,
+    "additional_information": [
+      "https://local.alshaya-bbwae.com/en/spc/payment-callback/success",
+      "https://local.alshaya-bbwae.com/en/spc/payment-callback/checkout_com_upapi/error",
+      "tok_jfxcmdkiohmutblnacmkiqwsui",
+      "424242",
+      "Visa",
+      "US",
+      "Credit Card (Checkout.com UPAPI)",
+      "src_hfkoi3qpxsfu7ak64fjyxlbhhm",
+      "Credit",
+      "4242",
+      "Y",
+      "10",
+      "2022",
+      "014266",
+      "Authorized",
+      "pay_ihlneo6g6pak5ag7enu6rdlxta"
+    ],
+    "amount_authorized": 80,
+    "amount_ordered": 80,
+    "base_amount_authorized": 80,
+    "base_amount_ordered": 80,
+    "base_shipping_amount": 9.52,
+    "cc_exp_year": "0",
+    "cc_last4": null,
+    "cc_ss_start_month": "0",
+    "cc_ss_start_year": "0",
+    "entity_id": 1652,
+    "last_trans_id": "act_5e67loi2wkbkjh7dasgg7pckwu",
+    "method": "checkout_com_upapi",
+    "parent_id": 1654,
+    "shipping_amount": 9.52
+  },
+  "status_histories": [
+    {
+      "comment": "Customer notified via email. Email template - 1",
+      "created_at": "2021-07-19 13:33:33",
+      "entity_id": 5963,
+      "entity_name": "order",
+      "is_customer_notified": 1,
+      "is_visible_on_front": 0,
+      "parent_id": 1654,
+      "status": "accepted"
+    },
+    {
+      "comment": "order publish to OMS queue",
+      "created_at": "2021-07-19 13:33:28",
+      "entity_id": 5962,
+      "entity_name": "order",
+      "is_customer_notified": null,
+      "is_visible_on_front": 0,
+      "parent_id": 1654,
+      "status": "accepted"
+    },
+    {
+      "comment": "Captured amount of : AED80.00 via Webhook callback. pay_id : pay_ihlneo6g6pak5ag7enu6rdlxta action_id : act_5e67loi2wkbkjh7dasgg7pckwu  order : BWAEHDE0000913",
+      "created_at": "2021-07-19 13:33:25",
+      "entity_id": 5961,
+      "entity_name": "invoice",
+      "is_customer_notified": null,
+      "is_visible_on_front": 0,
+      "parent_id": 1654,
+      "status": "accepted"
+    },
+    {
+      "comment": "Authorized amount of AED80.00. Transaction ID: \"pay_ihlneo6g6pak5ag7enu6rdlxta\"",
+      "created_at": "2021-07-19 13:33:22",
+      "entity_id": 5960,
+      "entity_name": "order",
+      "is_customer_notified": null,
+      "is_visible_on_front": 0,
+      "parent_id": 1654,
+      "status": "pending_payment"
+    }
+  ],
+  "extension_attributes": {
+    "shipping_assignments": [
+      {
+        "shipping": {
+          "address": {
+            "address_type": "shipping",
+            "city": "Al Badia",
+            "country_id": "AE",
+            "customer_address_id": 187,
+            "email": "tester01@example.com",
+            "entity_id": 3303,
+            "firstname": "Tester",
+            "lastname": "test",
+            "parent_id": 1654,
+            "postcode": null,
+            "street": [
+              "1 foo st"
+            ],
+            "telephone": "+971555666777",
+            "extension_attributes": {
+              "address_building_segment": "1",
+              "area": 15,
+              "address_city_segment": 1
+            }
+          },
+          "method": "alshayadelivery_armx_s01",
+          "total": {
+            "base_shipping_amount": 9.52,
+            "base_shipping_discount_amount": 0,
+            "base_shipping_discount_tax_compensation_amnt": 0,
+            "base_shipping_incl_tax": 10,
+            "base_shipping_invoiced": 9.52,
+            "base_shipping_tax_amount": 0.48,
+            "shipping_amount": 9.52,
+            "shipping_discount_amount": 0,
+            "shipping_discount_tax_compensation_amount": 0,
+            "shipping_incl_tax": 10,
+            "shipping_invoiced": 9.52,
+            "shipping_tax_amount": 0.48
+          },
+          "extension_attributes": {
+            "click_and_collect_type": "home_delivery"
+          }
+        },
+        "items": [
+          {
+            "amount_refunded": 0,
+            "base_amount_refunded": 0,
+            "base_discount_amount": 0,
+            "base_discount_invoiced": 0,
+            "base_discount_tax_compensation_amount": 0,
+            "base_discount_tax_compensation_invoiced": 0,
+            "base_original_price": 70,
+            "base_price": 66.67,
+            "base_price_incl_tax": 70,
+            "base_row_invoiced": 66.67,
+            "base_row_total": 66.67,
+            "base_row_total_incl_tax": 70,
+            "base_tax_amount": 3.33,
+            "base_tax_invoiced": 3.33,
+            "created_at": "2021-07-19 13:33:22",
+            "discount_amount": 0,
+            "discount_invoiced": 0,
+            "discount_percent": 0,
+            "free_shipping": 0,
+            "discount_tax_compensation_amount": 0,
+            "discount_tax_compensation_invoiced": 0,
+            "is_qty_decimal": 0,
+            "is_virtual": 0,
+            "item_id": 2213,
+            "name": "Warm Vanilla Sugar Shower Gel",
+            "no_discount": 0,
+            "order_id": 1654,
+            "original_price": 70,
+            "price": 66.67,
+            "price_incl_tax": 70,
+            "product_id": 1569,
+            "product_type": "simple",
+            "qty_canceled": 0,
+            "qty_invoiced": 1,
+            "qty_ordered": 1,
+            "qty_refunded": 0,
+            "qty_returned": 0,
+            "qty_shipped": 0,
+            "quote_item_id": 5555,
+            "row_invoiced": 66.67,
+            "row_total": 66.67,
+            "row_total_incl_tax": 70,
+            "row_weight": 0.331,
+            "sku": "Q022901839",
+            "store_id": 5,
+            "tax_amount": 3.33,
+            "tax_invoiced": 3.33,
+            "tax_percent": 5,
+            "updated_at": "2021-07-19 13:33:25",
+            "weee_tax_applied": "[]",
+            "weight": 0.331
+          }
+        ]
+      }
+    ],
+    "payment_additional_info": [
+      {
+        "key": "successUrl",
+        "value": "https://local.alshaya-bbwae.com/en/spc/payment-callback/success"
+      },
+      {
+        "key": "failUrl",
+        "value": "https://local.alshaya-bbwae.com/en/spc/payment-callback/checkout_com_upapi/error"
+      },
+      {
+        "key": "token",
+        "value": "tok_jfxcmdkiohmutblnacmkiqwsui"
+      },
+      {
+        "key": "bin",
+        "value": "424242"
+      },
+      {
+        "key": "scheme",
+        "value": "Visa"
+      },
+      {
+        "key": "issuer_country",
+        "value": "US"
+      },
+      {
+        "key": "method_title",
+        "value": "Credit Card (Checkout.com UPAPI)"
+      },
+      {
+        "key": "id",
+        "value": "src_hfkoi3qpxsfu7ak64fjyxlbhhm"
+      },
+      {
+        "key": "card_type",
+        "value": "Credit"
+      },
+      {
+        "key": "last4",
+        "value": "4242"
+      },
+      {
+        "key": "cvv_check",
+        "value": "Y"
+      },
+      {
+        "key": "expiry_month",
+        "value": "10"
+      },
+      {
+        "key": "expiry_year",
+        "value": "2022"
+      },
+      {
+        "key": "auth_code",
+        "value": "014266"
+      },
+      {
+        "key": "status",
+        "value": "Authorized"
+      },
+      {
+        "key": "pay_id",
+        "value": "pay_ihlneo6g6pak5ag7enu6rdlxta"
+      }
+    ],
+    "applied_taxes": [
+      {
+        "code": "AE-5%",
+        "title": "2",
+        "percent": 5,
+        "amount": 3.81,
+        "base_amount": 3.81
+      }
+    ],
+    "item_applied_taxes": [
+      {
+        "type": "shipping",
+        "applied_taxes": [
+          {
+            "code": "AE-5%",
+            "title": "2",
+            "percent": 5,
+            "amount": 0.48,
+            "base_amount": 0.48
+          }
+        ]
+      },
+      {
+        "type": "product",
+        "item_id": 2213,
+        "applied_taxes": [
+          {
+            "code": "AE-5%",
+            "title": "2",
+            "percent": 5,
+            "amount": 3.33,
+            "base_amount": 3.33
+          }
+        ]
+      }
+    ],
+    "converting_from_quote": true,
+    "gift_cards": [],
+    "base_gift_cards_amount": 0,
+    "gift_cards_amount": 0,
+    "gw_base_price": "0.0000",
+    "gw_price": "0.0000",
+    "gw_items_base_price": "0.0000",
+    "gw_items_price": "0.0000",
+    "gw_card_base_price": "0.0000",
+    "gw_card_price": "0.0000",
+    "mom_status_reason": "",
+    "barcode": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"198\" height=\"62\">\n  <title>Barcode CODE128 BWAEHDE0000913</title>\n  <rect x=\"0\" y=\"0\" width=\"197\" height=\"61\" fill=\"rgb(255,255,255)\"/>\n  <polygon points=\"0 0 0 61 198 61 198 0\" fill=\"rgb(255,255,255)\"/>\n  <polygon points=\"10 0 10 50 11 50 11 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"11 0 11 50 12 50 12 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"13 0 13 50 14 50 14 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"16 0 16 50 17 50 17 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"21 0 21 50 22 50 22 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"25 0 25 50 26 50 26 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"27 0 27 50 28 50 28 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"28 0 28 50 29 50 29 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"32 0 32 50 33 50 33 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"33 0 33 50 34 50 34 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"34 0 34 50 35 50 35 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"36 0 36 50 37 50 37 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"40 0 40 50 41 50 41 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"41 0 41 50 42 50 42 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"43 0 43 50 44 50 44 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"45 0 45 50 46 50 46 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"49 0 49 50 50 50 50 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"50 0 50 50 51 50 51 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"54 0 54 50 55 50 55 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"58 0 58 50 59 50 59 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"59 0 59 50 60 50 60 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"61 0 61 50 62 50 62 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"65 0 65 50 66 50 66 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"66 0 66 50 67 50 67 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"70 0 70 50 71 50 71 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"72 0 72 50 73 50 73 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"76 0 76 50 77 50 77 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"78 0 78 50 79 50 79 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"79 0 79 50 80 50 80 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"83 0 83 50 84 50 84 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"87 0 87 50 88 50 88 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"91 0 91 50 92 50 92 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"92 0 92 50 93 50 93 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"94 0 94 50 95 50 95 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"98 0 98 50 99 50 99 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"100 0 100 50 101 50 101 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"101 0 101 50 102 50 102 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"102 0 102 50 103 50 103 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"104 0 104 50 105 50 105 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"105 0 105 50 106 50 106 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"106 0 106 50 107 50 107 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"107 0 107 50 108 50 108 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"109 0 109 50 110 50 110 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"110 0 110 50 111 50 111 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"112 0 112 50 113 50 113 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"113 0 113 50 114 50 114 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"116 0 116 50 117 50 117 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"117 0 117 50 118 50 118 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"120 0 120 50 121 50 121 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"121 0 121 50 122 50 122 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"123 0 123 50 124 50 124 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"124 0 124 50 125 50 125 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"127 0 127 50 128 50 128 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"128 0 128 50 129 50 129 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"131 0 131 50 132 50 132 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"132 0 132 50 133 50 133 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"133 0 133 50 134 50 134 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"134 0 134 50 135 50 135 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"136 0 136 50 137 50 137 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"137 0 137 50 138 50 138 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"139 0 139 50 140 50 140 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"140 0 140 50 141 50 141 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"142 0 142 50 143 50 143 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"144 0 144 50 145 50 145 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"145 0 145 50 146 50 146 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"146 0 146 50 147 50 147 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"147 0 147 50 148 50 148 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"149 0 149 50 150 50 150 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"150 0 150 50 151 50 151 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"151 0 151 50 152 50 152 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"153 0 153 50 154 50 154 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"154 0 154 50 155 50 155 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"157 0 157 50 158 50 158 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"159 0 159 50 160 50 160 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"160 0 160 50 161 50 161 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"161 0 161 50 162 50 162 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"164 0 164 50 165 50 165 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"167 0 167 50 168 50 168 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"168 0 168 50 169 50 169 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"169 0 169 50 170 50 170 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"170 0 170 50 171 50 171 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"172 0 172 50 173 50 173 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"175 0 175 50 176 50 176 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"176 0 176 50 177 50 177 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"180 0 180 50 181 50 181 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"181 0 181 50 182 50 182 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"182 0 182 50 183 50 183 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"184 0 184 50 185 50 185 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"186 0 186 50 187 50 187 0\" fill=\"rgb(0,0,0)\"/>\n  <polygon points=\"187 0 187 50 188 50 188 0\" fill=\"rgb(0,0,0)\"/>\n  <text x=\"99\" y=\"61\" color=\"rgb(0,0,0)\" font-size=\"12\" style=\"text-anchor: middle\" transform=\"rotate(0, 99, 61)\">BWAEHDE0000913</text>\n</svg>\n",
+    "shipping_tax_class": "2",
+    "is_partial_fulfilled": 0,
+    "user_id": "845",
+    "user_type": "Logged in User",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36",
+    "alshaya_order_type": {
+      "order_type": null,
+      "additional_data": null
+    },
+    "customer_status": "Processing",
+    "invoice_path": "",
+    "channel": "web",
+    "surcharge": 0,
+    "base_surcharge": 0,
+    "surcharge_incl_tax": 0,
+    "base_surcharge_incl_tax": 0,
+    "surcharge_excl_tax": 0,
+    "base_surcharge_excl_tax": 0,
+    "surcharge_tax_amount": 0,
+    "base_surcharge_tax_amount": 0
+  }
+}

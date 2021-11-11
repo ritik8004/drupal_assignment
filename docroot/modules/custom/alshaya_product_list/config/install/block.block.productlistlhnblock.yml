@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_product_list
+  theme:
+    - alshaya_white_label
+id: productlistlhnblock
+theme: alshaya_white_label
+region: sidebar_first
+weight: 0
+provider: alshaya_product_list
+plugin: alshaya_product_list_lhn_block
+settings:
+  id: alshaya_product_list_lhn_block
+  label: 'Product List LHN Block'
+  provider: alshaya_product_list
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      product_list: product_list
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

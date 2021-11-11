@@ -1,0 +1,31 @@
+.address-book-address {
+  .form-type-select {
+    .select2-selection {
+      border-color: $primary_dropdown_border;
+    }
+  }
+
+  .form-item-field-address-0-address-locality,
+  .form-item-guest-delivery-home-address-shipping-locality,
+  .form-item-member-delivery-home-address-shipping-locality,
+  .form-item-billing-address-address-billing-locality {
+    &.form-item.form-type-textfield {
+      input[type=text] ~ label:not(.active-label) {
+        top: -0.125rem !important;
+        font-size: 1rem !important;
+      }
+
+      input[type=text]:focus ~ label {
+        top: -1.25em !important;
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+
+  .mobile-number-field .mobile-input--wrapper {
+    label.error {
+      padding-top: 0.4375rem;
+      border-top: 2px solid $primary_input_inline_error;
+    }
+  }
+}

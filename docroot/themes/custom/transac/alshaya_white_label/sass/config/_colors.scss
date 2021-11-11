@@ -34,6 +34,7 @@ $grey-shade: #c1c1c1;
 $grey-light: #777;
 $grey-light-two: #f3f3f3;
 $error-red: #c00;
+$torea-bay: #0b4bb9;
 // Mothercare
 $warm-grey-two: #dadada;
 $black: #333;
@@ -46,6 +47,7 @@ $scarlet-two: #d0011b;
 $pale-grey: #e8eff5;
 $tomato: #e6591a;
 $medium-green: #3ab549;
+$badge-green: #2d9921;
 // Mother care custom colors
 $white-smoke: #f4f4f4;
 $white-smoke-light: #f2f2f2;
@@ -152,6 +154,22 @@ $_corn_silk: #fffade;
 $_cancelled: #f77;
 $_gray_222: #222;
 $_postpay_blue: #8abbd5;
+$blueberri_boy: #0078ff;
+$_plp-add-to-cart-disabled-qty: #aeaeb2;
+$_smart_agent_banner: rgb(12, 161, 77);
+$_plp_cta_hover: #e85d17;
+$_plp_secondary_cta_hover: rgba(255, 109, 34, 0.1);
+$bleach_white: #efe4ce;
+$_spc-sameday-delivery-green: #8dd5b9;
+$sky_blue: #93cdff;
+$aubergine: #353132;
+$_spc-cart-delivery-gray-border: #f1f1f1;
+$_spc-cart-delivery-gray-text: #d2d2d2;
+$_spc-cart-delivery-popup-bg: #faf9f8;
+$_frame_promo_red: #c03;
+$_sofa-section-grey: #d9d9d9;
+$_sofa-section-grey2: #1a1a1a;
+$_sofa-section-brown: #866347;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -177,6 +195,7 @@ $primary_input_disabled: $greyish;
 $primary_input_focus_border: $windows-blue;
 $primary_input_inline_error: $red-error;
 $online_exclusive_link: $cerulean-two;
+$primary_form_input: $black;
 
 // Form Items
 $formitem_label: $greyish;
@@ -399,7 +418,7 @@ $header_mobile_menu_arrow: $marine-blue-two;
 $header_mobile_menu_active: $white-five;
 $header_mobile_menu_close_bg: $white-five;
 $header_mobile_menu_close: $black;
-$header_mobile_menu_overlay: rgba(0, 0, 0, 0.48);
+$header_mobile_menu_overlay: rgba(0, 0, 0, 0.6);
 
 // Branding menu mobile.
 $header_branding_shadow: $greyish;
@@ -490,6 +509,7 @@ $footer_link_hover: $cerulean-two;
 $our_brands_footer_separator: $peacock-blue;
 $our_brand_section_title: $marine-blue;
 $our_brand_link: $grey-ash;
+$social-icons-bg: $white-five;
 
 // Social links.
 $social_links: $marine-blue-two;
@@ -547,6 +567,7 @@ $plp_all_filter_filter_arrow: $grey-ash;
 $plp_filter_icon: $grey-ash;
 $plp_filter_active_tick: $marine-blue-two;
 $search_facet_active_title_bg: $grey-light-two;
+$plp_express_delivery_tag: $sky_blue;
 
 // PLP All filter colors
 $plp_all_filter_bg: $white-five;
@@ -840,6 +861,7 @@ $checkout_tab_mob_active_border: $marine-blue-two;
 // Checkout delivery options.
 $checkout_delivery_optn_odd_row: $white-four;
 $checkout_delivery_optn_shipping_method_title: $brownish-grey;
+$checkout_delivery_optn_shipping_method_error: $new-pdp-blue;
 
 // Checkout Payment.
 $checkout_payment_form_border: $greyish;
@@ -1080,9 +1102,6 @@ $cart-free-gifts-label: $white-five;
 $cart-free-gifts-label-background: $marine-blue;
 $cart-free-gifts-button-color: $white-five;
 
-// Pace progress color
-$progress_loader: $marine-blue;
-
 // Social Auth
 $social-network-text: $grey-ash;
 $social-auth-bg: $white-five;
@@ -1270,6 +1289,25 @@ $spc-country-availability: $_spc-discount-text;
 $spc-non-refundable-product: $grey-light;
 $spc-cart-free-gift-coupon-code: $mothercare-black;
 $spc-cart-free-gifts-link: $grey-ash;
+$spc-cart-standard-delivery-border: $bleach_white;
+$spc-cart-express-delivery-border: $sky_blue;
+$spc-cart-sameday-delivery-border: $_spc-sameday-delivery-green;
+$spc-cart-delivery-info-border: $_gray_222;
+$spc-cart-delivery-info: $aubergine;
+$spc-cart-delivery-info-bg: $white-five;
+$spc-cart-delivery-info-inactive-border: $_spc-cart-delivery-gray-border;
+$spc-cart-delivery-info-inactive: $_spc-cart-delivery-gray-text;
+$spc-cart-delivery-popup-bg: $_spc-cart-delivery-popup-bg;
+$spc-cart-delivery-popup-title: $mothercare-black;
+$spc-cart-delivery-popup-border: $grey-light;
+$spc-cart-delivery-popup-search-border: $_gray_222;
+$spc-cart-delivery-popup-search-placeholder: $_ancestral-water;
+$spc-cart-delivery-popup-list-bg: $white-five;
+$spc-cart-delivery-popup-button-shadow: rgba(0, 0, 0, 0.1);
+$spc-cart-delivery-area-select: $mothercare-black;
+$sameday-express-delivery-drawer-text: $mothercare-black;
+$spc-cart-delivery-tags: $mothercare-black;
+$spc-cart-express-delivery-radio-button: $mothercare-black;
 
 // SPC Checkout.
 $spc-checkout_section_title: $mothercare-black;
@@ -1343,6 +1381,9 @@ $spc-checkout-print-header: $white-five;
 $spc-checkout-print-header-title: $mothercare-black;
 $spc-checkout-order-detail-map-link: $mothercare-black;
 $spc-checkout-link-btn-box-shadow-mobile: rgba(0, 0, 0, 0.24);
+$spc-delivery-area-popup-border: $mothercare-black;
+$spc-delivery-area-popup-text: $mothercare-black;
+$spc-delivery-area-popup-bg: $white-five;
 
 // Order QTY Limit.
 $order_qty_limit_bg: $_dynamic_promo_text_bg;
@@ -1540,6 +1581,7 @@ $magv2-free-gift-modal-item-code: $brownish-grey;
 $magv2-breadcrumb-bg: $white-five;
 $magv2-panel-close-icon: $mothercare-black;
 $magv2-pinterest-share-icon-hover: $pinterest-red;
+$magv2-rr-histogram-block-bg: $white-five;
 
 // Sub brand logo.
 $sub_brand_logo_separator: $_ancestral-water;
@@ -1613,14 +1655,8 @@ $rr-review-count: $brownish-grey;
 $rr-review-summary-txt: $black-two;
 $rr-recommendation-icon: $white-five;
 $rr-recommendation-icon-bg: $marine-blue;
-$rr-select-text: $grey-light;
 $rr-select-arrow-bg: $white-five;
 $rr-select-border: $warm-grey-two;
-$rr-select-area-bg: $white-smoke-light;
-$rr-select-bg: $white-five;
-$rr-select-bg-hover: $white-four;
-$rr-select-option-bg: $white-five;
-$rr-select-hover-border: $warm-grey-two;
 $rr-switchOn-active-bg: $marine-blue;
 $rr-switchOn-active-txt: $white-five;
 $rr-switch-bg: $white;
@@ -1670,7 +1706,7 @@ $rr-review-success-msg-txt: $black-two;
 $rr-range-slider-bg: $white-smoke-light;
 $rr-form-label-txt: $greyish;
 $rr-selected-slider-value: $grey-light;
-$rr-stars-color: $mothercare-black;
+$rr-stars-color: $marine-blue-two;
 $rr-select-border-separator: $warm-grey-two;
 $rr-star-rating-error: $error-red;
 $rr-form-error-border: $error-red;
@@ -1682,3 +1718,91 @@ $rr-form-body-txt: $black-two;
 $rr-review-pagination: $black-two;
 $rr-sort-filter-txt: $brownish-grey;
 $rr-write-review-link-txt: $brownish-grey;
+$rr-form-head-row-border: $marine-blue-two;
+$rr-thumbnail-img-bg: $white-smoke-light;
+$rr-write-review-disabled-btn: $light-greyish;
+$rr-write-review-disabled-border: $light-greyish;
+$rr-badges-text: $black-two;
+$rr-verified-purchaser-text: $badge-green;
+$rr-verified-purchaser-icon-bg: $badge-green;
+$rr-verified-purchaser-icon: $white-five;
+$rr-translate-link: $torea-bay;
+
+// Fawry colors.
+$fawry-desc-prefix: $_gray_222;
+$fawry-desc-suffix: $grey-light;
+$fawry-banner: $blueberri_boy;
+
+// PLP add to cart.
+$plp-disabled-qty-bg: $_plp-add-to-cart-disabled-qty;
+$plp-hover-slider-dot-color: $_gray;
+$plp-hover-slider-dot-container-bg-color: $white-five;
+$plp-primary-cta-hover-bg: $_plp_cta_hover;
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+
+// PLP Quick view drawer.
+$plp-quick-view-background: $white-five;
+$plp-quick-view-product-size-text: $marine-blue;
+$plp-quick-view-product-size-text-active: $white-five;
+$plp-quick-view-product-size-border: $marine-blue;
+$plp-quick-view-product-size-border-hover: $marine-blue;
+$plp-quick-view-product-size-active-bg: $marine-blue;
+$plp-quick-view-product-size-text-disabled: $marine-blue;
+$plp-quick-view-product-success: $_spc-radio-filled;
+$plp-quick-view-product-group-size-active: $primary_link-active;
+
+// Smart Agent colors.
+$smart-agent-banner-bg: $_smart_agent_banner;
+$smart-agent-banner-color: $white-five;
+
+// HFD secondary menu.
+$hfd-menu-link-color: $grey-light;
+$hfd-menu-link-color-hover: $black;
+$hfd-menu-background: #f8f8f8;
+$hfd-promo-button-background: #e6e3de;
+$hfd-menu-heighlight-title: #010101;
+
+// Benefit pay
+$bp-section-title: $peacock-blue;
+$bp-QR-code-title: $mothercare-black;
+$bp-merchant-value: $mothercare-black;
+$bp-mobile-pay-button: $error-red;
+$bp-mobile-pay-button-txt: $white-five;
+$bp-mobile-scan-bg: $cerulean-two;
+$bp-box-border: $mothercare-black;
+$bp-footer-link: $mothercare-black;
+$bp-mobile-title-border: $_screeching_white;
+$bp-header-gradient: radial-gradient(circle at 59% 168%, #f44242 0%, #83255d 97%, #e62708 191%);
+
+// PLP promotion V2
+$plp-popup-title: $black-two;
+$plp-popup_header_border: $warm-grey-two;
+
+// Express delivery
+$delivery-modal-overlay: rgba(0, 0, 0, 0.48);
+$delivery-modal-box-shadow: rgba(0, 0, 0, 0.5);
+$delivery-modal-bg: $grey-light-three;
+$pdp-delivery-section-border: $white;
+$pdp-delivery-section-subtitle: $grey-ash;
+$pdp-delivery-section-bg: $white-five;
+$sameday-express-delivery-drawer-search: $mothercare-black;
+$sameday-express-delivery-drawer-cross: $mothercare-black;
+$sameday-express-delivery-radio-button: $mothercare-black;
+$express-delivery-menu-list-border: $mothercare-black;
+
+// Boots frame.
+$frame_promo: $_frame_promo_red;
+$plp-frame-promo-subtitle: $black-two;
+
+// Sofa and sectional.
+$sofa-sectional-bg: $grey-light-three;
+$sofa-sectional-title: $new-pdp-blue;
+$sofa-sectional-text: $brownish-grey;
+$sofa-sectional-border: $_sofa-section-grey;
+$sofa-sectional-config-item-bg: $white-five;
+$sofa-sectional-active-accordion: $brownish-grey;
+$sofa-sectional-btn-border: $_sofa-section-brown;
+$sofa-sectional-active-border: $_sofa-section-grey2;
+$sofa-sectional-disabled-clear-option-text: $primary_text;
+$sofa-sectional-disabled-clear-option-border: $light-greyish;
+$sofa-sectional-select-border: $new-pdp-blue;

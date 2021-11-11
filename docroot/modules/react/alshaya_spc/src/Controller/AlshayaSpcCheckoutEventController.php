@@ -125,6 +125,9 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         $order_id = $request->request->get('order_id');
         $cart = $request->request->get('cart');
         $payment_method = $request->get('payment_method');
+        $customer_id = $request->get('customer_id');
+        $account_id = 0;
+
         if (empty($order_id)) {
           throw new BadRequestHttpException('Missing required parameters');
         }
@@ -149,7 +152,12 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           }
 
           $customer_id = (int) $account->get('acq_customer_id')->getString();
-          $this->ordersManager->clearOrderCache($customer_id, $account->id());
+          $account_id = $account->id();
+        }
+
+        // Clear the customer order cache.
+        if (!empty($customer_id)) {
+          $this->ordersManager->clearOrderCache($customer_id, $account_id);
         }
 
         // While debugging we log the whole cart object.

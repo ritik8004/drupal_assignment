@@ -275,6 +275,184 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to Fawry payment method.
+  $strings['v3'] = [
+    'Once the product is successfully requested, we will send you Fawry Ref. No. to the below contact details' => [
+      'ar' => 'سوف يصلك الرقم المرجعي لخدمة فوري على تفاصيل الاتصال أدناه، بمجرد إتمام الطلبية.',
+    ],
+    "Pay for your order through any of <a href='@fawry_link' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt." => [
+      'ar' => "قم بدفع مبلغ الطلبية عن طريق خدمة فوري من أي <a href='@fawry_link'target='_blank'>نقطة دفع نقدي،</a> وفي أي وقت ومكان في جميع أرجاء مصر.",
+    ],
+    "Please complete your payment at the nearest <a href='@fawry_link' target='_blank'>Fawry Cash Point</a> using your reference number." => [
+      'ar' => "يرجى استكمال الدفع عن طريق أقرب <a href='@fawry_link'target='_blank'>نقطة دفع لفوري</a> عن طريق استخدام رقم المرجع",
+    ],
+    'Complete payment by' => [
+      'ar' => 'إتمام الدفع من خلال',
+    ],
+    'Amount Due' => [
+      'ar' => 'المبلغ المستحق',
+    ],
+    'Reference number' => [
+      'ar' => 'رقم المرجع',
+    ],
+    'Reference No' => [
+      'ar' => 'رقم المرجع',
+    ],
+  ];
+
+  // Strings related to V2.
+  $strings['v4'] = [
+    'We have upgraded your experience, please refresh the page and try again.' => [
+      'ar' => '.لقد قمنا بترقية تجربتك ، يرجى تحديث الصفحة والمحاولة مرة أخرى',
+    ],
+  ];
+
+  // Strings related to collection point feature.
+  $strings['v5'] = [
+    'Collection Point' => [
+      'ar' => 'نقطة الاستلام',
+    ],
+    'select your preferred collection point' => [
+      'ar' => 'اختر نقطة الاستلام المفضلة',
+    ],
+    'find your collection point' => [
+      'ar' => 'اكتشف أقرب نقطة استلام',
+    ],
+    'Please ensure that the person collecting this order has a valid government ID and printed copy of the invoice.' => [
+      'ar' => 'يرجى التأكد من إحضار هوية شخصية صالحة ونسخة مطبوعة من الفاتورة عند الاستلام.',
+    ],
+    'Selected collection point' => [
+      'ar' => 'نقطة الاستلام المختارة.',
+    ],
+    'Important Note:' => [
+      'ar' => 'ملاحظة مهمة:',
+    ],
+    'Collect in' => [
+      'ar' => 'الاستلام في',
+    ],
+    'Your order will be available for pickup at the following collection point' => [
+      'ar' => 'سوف يكون طلبك جاهزاً في نقطة الاستلام هذه',
+    ],
+  ];
+
+  $strings['v6'] = [
+    'Transaction Failed: Invalid CVV' => [
+      'ar' => 'فشلت المعاملة: رقم CVV غير صالح',
+    ],
+  ];
+
+  // Strings related to Advantage card.
+  $strings['v7'] = [
+    'Please enter valid Advantage card code.' => [
+      'ar' => 'يرجى إدخال رقم بطاقة خصم الشايع صالح.',
+    ],
+    'Advantage Card Discount' => [
+      'ar' => 'خصم بطاقة الشايع',
+    ],
+    'This product is not eligible for the Advantage card discount.' => [
+      'ar' => 'هذا المنتج غير مؤهل للحصول على خصم بطاقة الشايع',
+    ],
+  ];
+
+  // Strings related to Benefit Pay payment method.
+  $strings['v8'] = [
+    'Continue with Benefit pay' => [
+      'ar' => 'أكمل مع بينفت باي',
+    ],
+    'Please complete your payment by scanning the QR code.' => [
+      'ar' => 'أكمل عملية الدفع عبر مسح رمز QR.',
+    ],
+    'Scan to Pay' => [
+      'ar' => 'امسح وادفع',
+    ],
+    'Pay using BenefitPay App' => [
+      'ar' => 'ادفع باستخدام تطبيق بينفت باي',
+    ],
+    'BenefitPay' => [
+      'ar' => 'بينفت باي',
+    ],
+    'Merchant' => [
+      'ar' => 'التاجر',
+    ],
+    'Amount' => [
+      'ar' => 'المبلغ',
+    ],
+    'Reference number' => [
+      'ar' => 'الرقم المرجعي',
+    ],
+    'How to pay using BenefitPay?' => [
+      'ar' => 'كيفية الدفع باستخدام بينفت باي؟',
+    ],
+  ];
+
+  // Strings related to collection point feature.
+  $strings['v9'] = [
+    'Collection Charge' => [
+      'ar' => 'رسوم الاستلام',
+    ],
+    'available in collection point within' => [
+      'ar' => 'متوفر في نقطة الاستلام خلال',
+    ],
+    'Holiday' => [
+      'ar' => 'عطلة',
+    ],
+  ];
+
+  // Strings related to express delivery feature.
+  $strings['v10'] = [
+    'Express Delivery Available' => [
+      'ar' => 'خدمة التوصيل السريع متوفرة',
+    ],
+    'Explore the delivery options applicable to your area.' => [
+      'ar' => 'اكتشف خيارات التوصيل المتاحة في منطقتك',
+    ],
+    'Check availability in your area' => [
+      'ar' => 'تحقق من التوفر في منطقتك',
+    ],
+    'Select' => [
+      'ar' => 'اختر',
+    ],
+    'Search area' => [
+      'ar' => 'ابحث عن منطقة',
+    ],
+    'Select an area' => [
+      'ar' => 'اختر المنطقة',
+    ],
+    'Same Day Delivery Available' => [
+      'ar' => 'التوصيل في نفس اليوم متاح',
+    ],
+    'Selected Area' => [
+      'ar' => 'مناطق معينة',
+    ],
+    'Deliver to' => [
+      'ar' => 'التوصيل إلى',
+    ],
+    'Select area' => [
+      'ar' => 'اختيار المنطقة',
+    ],
+    'Select this area' => [
+      'ar' => 'اختر هذه المنطقة',
+    ],
+    'Do you want to change your current Delivery Area from @currentAreaLabel to @storageAreaLabel?' => [
+      'ar' => 'هل تريد تغيير منطقة التسليم الحالية من @currentAreaLabel إلى @storageAreaLabel؟',
+    ],
+    'Delivery Type' => [
+      'ar' => 'نوع التوصيل',
+    ],
+    'Standard' => [
+      'ar' => 'العادي',
+    ],
+    'Same Day' => [
+      'ar' => 'نفس اليوم',
+    ],
+    'Express' => [
+      'ar' => 'دمة التوصيل السريع',
+    ],
+    'Express Delivery' => [
+      'ar' => 'دمة التوصيل السريع',
+    ],
+  ];
+
   return $strings;
 }
 

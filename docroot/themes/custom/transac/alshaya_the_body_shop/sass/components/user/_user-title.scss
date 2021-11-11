@@ -1,0 +1,29 @@
+.c-user-password,
+.c-user-register,
+.c-user-login {
+  h1 {
+    font-family: $tbs-recoleta-semibold;
+    text-transform: capitalize;
+  }
+}
+
+.order-detail .block-page-title-block,
+.c-change-password .block-page-title-block,
+.c-communication-preferences .block-page-title-block,
+.c-user-edit .block-page-title-block,
+.c-order-list .block-page-title-block,
+.c-user--node .block-page-title-block,
+.c-address-book .block-page-title-block,
+.c-payment-cards .block-page-title-block {
+  .back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(arrowup, before) {
+        top: 0.5rem;
+
+        html[lang=ar] & {
+          top: 0.3125rem;
+        }
+      }
+    }
+  }
+}

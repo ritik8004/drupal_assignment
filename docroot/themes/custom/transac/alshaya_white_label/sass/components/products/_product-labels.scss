@@ -1,6 +1,5 @@
 .labels-container {
   .label {
-    position: absolute;
     max-width: 5rem;
     z-index: 0;
     line-height: 0;
@@ -11,78 +10,6 @@
 
     .c-plp & {
       z-index: 1;
-    }
-
-    &.top {
-      &-left {
-        top: 0.5rem;
-        #{$left}: 0.5rem;
-        #{$right}: inherit;
-
-        @include breakpoint($only-tablet) {
-          top: 0.9375rem;
-          #{$left}: 0.9375rem;
-          #{$right}: inherit;
-        }
-
-        @include breakpoint($desktop) {
-          top: 1rem;
-          #{$left}: 2rem;
-          #{$right}: inherit;
-        }
-      }
-
-      &-right {
-        top: 0.5rem;
-        #{$right}: 0.5rem;
-        #{$left}: inherit;
-
-        @include breakpoint($only-tablet) {
-          top: 0.9375rem;
-          #{$right}: 0.9375rem;
-          #{$left}: inherit;
-        }
-
-        @include breakpoint($desktop) {
-          top: 1rem;
-          #{$right}: 2rem;
-          #{$left}: inherit;
-        }
-      }
-    }
-
-    &.bottom {
-      &-left {
-        bottom: 0;
-        #{$left}: 0.5rem;
-        #{$right}: inherit;
-
-        @include breakpoint($only-tablet) {
-          #{$left}: 0.9375rem;
-          #{$right}: inherit;
-        }
-
-        @include breakpoint($desktop) {
-          #{$left}: 2rem;
-          #{$right}: inherit;
-        }
-      }
-
-      &-right {
-        bottom: 0;
-        #{$right}: 0.5rem;
-        #{$left}: inherit;
-
-        @include breakpoint($only-tablet) {
-          #{$right}: 0.9375rem;
-          #{$left}: inherit;
-        }
-
-        @include breakpoint($desktop) {
-          #{$right}: 2rem;
-          #{$left}: inherit;
-        }
-      }
     }
   }
 }

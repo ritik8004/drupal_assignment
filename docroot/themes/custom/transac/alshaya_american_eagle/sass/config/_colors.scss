@@ -18,6 +18,7 @@ $royal-blue: #385adc;
 $windows-blue: $black;
 $thunderbird: #b91824;
 $boulder-grey: #7c7c7c;
+$_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
 
 /* ------- 2. Primary Colors ------- */
 
@@ -583,9 +584,6 @@ $maintenance_info_title-text: $black;
 $pdp_modal_full_prodlink: $black;
 $modal_close_bg: $black;
 
-// Pace progress color
-$progress_loader: $black;
-
 // PLP LHN block.
 $lhn_l1_border: $gallery;
 $lhn_l2: $black;
@@ -672,3 +670,9 @@ $rr-review-summary-grey-text: $boulder-grey;
 $rr-review-summary-txt: $black;
 $rr-sort-filter-txt: $black;
 $rr-write-review-link-txt: $black;
+$rr-stars-color: $black;
+$rr-form-head-row-border: $black;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: rgba(0, 0, 0, 0.8);
+$plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;

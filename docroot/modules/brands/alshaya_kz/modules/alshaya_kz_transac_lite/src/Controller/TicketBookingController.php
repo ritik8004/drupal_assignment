@@ -204,7 +204,7 @@ class TicketBookingController extends ControllerBase {
         }
       }
       $order_total = $this->ticketBooking->getOrderTotal($sales_number);
-      if ($flag && ($order_total == $final_visitor_list['total']['price'])) {
+      if ($flag && ($order_total > 0)) {
         $final_visitor_list['sales_number'] = $sales_number;
         $final_visitor_list['status'] = TRUE;
         $response->setData($final_visitor_list);

@@ -66,6 +66,10 @@ class AlshayaCountryManager {
     $currency['qa']['en'] = 'QAR';
     $currency['qa']['ar'] = 'ر.ق';
 
+    // Jordan.
+    $currency['jo']['en'] = 'JOD';
+    $currency['jo']['ar'] = 'د.أ';
+
     // Invoke the alter hook to allow all modules to update the currency code.
     $this->moduleHandler->alter('alshaya_get_currency_code', $currency);
 

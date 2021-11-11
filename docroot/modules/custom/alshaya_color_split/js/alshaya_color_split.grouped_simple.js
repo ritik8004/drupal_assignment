@@ -14,7 +14,8 @@
       $('[data-drupal-selector="edit-variants-in-group"]').once('alshaya-color-split').on('change', function () {
         var node = $(this).parents('article.entity--type-node:first');
         var sku = $(node).attr('data-sku');
-        var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var viewMode = $(node).attr('data-vmode');
+        var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
         if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
@@ -31,13 +32,28 @@
         // Trigger event for other modules to hook into.
         $(node).trigger('group-item-selected', [$(this).val()]);
 
-        if ($(node).attr('data-vmode') === 'full') {
+        // Update sameday and express delivery labels on variant change.
+        if (drupalSettings.expressDelivery !== 'undefined' && drupalSettings.expressDelivery.enabled) {
+          for (var option in variantInfo.delivery_options) {
+            $(node).find('.' + option).removeClass('active in-active');
+            $(node).find('.' + option).addClass(variantInfo.delivery_options[option].status);;
+          }
+          $(node).find('.express-delivery').removeClass('active in-active');
+          $(node).find('.express-delivery').addClass(variantInfo.express_delivery_class);
+        }
+
+        if (viewMode === 'full' || viewMode === 'matchback' || viewMode === 'matchback_mobile') {
           $(node).find('.content--item-code .field__value').html($(this).val());
 
           if (window.location.pathname !== variantInfo.url[$('html').attr('lang')]) {
             var url = variantInfo.url[$('html').attr('lang')] + location.search;
             url = Drupal.removeURLParameter(url, 'selected');
             window.history.replaceState(variantInfo, variantInfo.title, url);
+
+            // Trigger an event on variant select.
+            // Only considers variant when url is changed.
+            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: $(this).val() }});
+            document.dispatchEvent(currentSelectedVariantEvent);
           }
 
           $('.language-switcher-language-url .language-link').each(function () {

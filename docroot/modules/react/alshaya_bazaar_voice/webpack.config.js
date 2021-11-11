@@ -5,6 +5,8 @@ var config = {
   entry: {
     rating: './js/src/rating',
     reviews: './js/src/reviews',
+    myaccount: './js/src/myaccount',
+    myorders: './js/src/myorders',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -18,7 +20,8 @@ var config = {
   },
   externals: {
     react: 'React',
-    'react-dom': 'ReactDOM'
+    'react-dom': 'ReactDOM',
+    axios: 'axios',
   },
   module: {
     rules: [

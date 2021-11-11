@@ -1,0 +1,249 @@
+.myaccount-write-review {
+  .star-ratings-wrapper {
+    justify-content: center;
+
+    @include breakpoint($only-mobile) {
+      justify-content: $left;
+      margin-#{$left}: -0.25rem;
+    }
+
+    .inline-star {
+      #{$left}: 0.25rem;
+
+      .icon-ic_ratingfull,
+      .icon-ic_rating {
+        &::before {
+          font-size: 1.5rem;
+          margin-#{$left}: -0.25rem;
+        }
+      }
+    }
+  }
+
+  .review {
+    &-title {
+      margin-bottom: 0.5rem;
+      font-size: 1.125rem;
+      font-family: $alshaya-thin;
+      line-height: 1.2;
+      color: $rr-review-summary-txt;
+    }
+
+    &-text {
+      font-size: 0.875rem;
+      color: $rr-review-summary-grey-text;
+      margin-bottom: 0.9375rem;
+      font-family: $alshaya-thin;
+      word-break: break-word;
+      white-space: pre-line;
+      line-height: normal;
+    }
+
+    &-date {
+      font-size: 0.75rem;
+      margin-bottom: 0.9375rem;
+      color: $rr-review-summary-grey-text;
+      font-family: $alshaya-thin;
+    }
+  }
+
+  .post-review-moderation {
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+
+    .star-ratings-wrapper {
+      margin-bottom: 0.5rem;
+      margin-#{$left}: -0.25rem;
+
+      .inline-star {
+        .icon-ic_ratingfull,
+        .icon-ic_rating {
+          &::before {
+            font-size: 2rem;
+          }
+        }
+      }
+    }
+
+    .review {
+      &-recommendation {
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        font-family: $alshaya-bold;
+        display: flex;
+        align-items: center;
+        color: $rr-review-summary-txt;
+
+        @include breakpoint($tablet) {
+          margin-bottom: 0.625rem;
+        }
+
+        &-text {
+          font-family: $alshaya-thin;
+          padding-#{$left}: 0.125rem;
+        }
+
+        &-icon {
+          @include icon(check) {
+            background: $rr-recommendation-icon-bg;
+            color: $rr-recommendation-icon;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            margin-#{$right}: 0.1875rem;
+            position: relative;
+            top: 0.0625rem;
+          }
+        }
+      }
+    }
+
+    .comment-moderation-block {
+      margin-top: 0.813rem;
+      background-color: $rr-review-comment-confirmation-bg;
+      padding: 0.75rem 0.875rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 1.375rem;
+        padding: 0.688rem 1.375rem;
+      }
+
+      .comment-moderation-text {
+        font-size: 0.9375rem;
+        color: $rr-review-summary-txt;
+      }
+    }
+  }
+
+  .myaccount_review-content {
+    .write-review-form {
+      @include breakpoint($only-mobile) {
+        padding: 1rem 0.75rem 0;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      height: 100vh;
+    }
+
+    .star-ratings-wrapper {
+      justify-content: $left;
+    }
+  }
+
+  .view_review-content {
+    width: 76% !important;
+
+    @include breakpoint($only-mobile) {
+      height: 100vh;
+    }
+
+    @include breakpoint($upto-desktop) {
+      width: 100% !important;
+      overflow-y: auto;
+    }
+
+    .write-review-form {
+      padding: 3.625rem;
+
+      @include breakpoint($upto-desktop) {
+        padding: 0.75rem;
+      }
+
+      .attribute-list {
+        margin-bottom: 1rem;
+
+        .slider-header {
+          &-label {
+            color: $rr-review-summary-grey-text;
+            font-family: $alshaya-thin;
+          }
+        }
+
+        .display-slider {
+          .slider-label {
+            width: 25%;
+            font-size: 0.625rem;
+          }
+
+          .slide-dot-container {
+            @include breakpoint($only-mobile) {
+              width: 75%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .user-reviews {
+    display: flex;
+    width: 100%;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
+    .user-secondary-rating {
+      width: 31%;
+      padding-#{$left}: 6.1875rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        padding-#{$left}: 0;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 45%;
+        padding-#{$left}: 3.75rem;
+        margin-top: 1.25rem;
+      }
+    }
+
+    .user-desc {
+      width: 73%;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 50%;
+        margin-top: 0.6875rem;
+      }
+
+      .star-ratings-wrapper {
+        justify-content: $left;
+
+        .inline-star {
+          #{$left}: 0;
+        }
+      }
+    }
+  }
+
+  .view_review-overlay,
+  .myaccount_review-overlay {
+    @include breakpoint($tablet) {
+      overflow-y: auto;
+      padding: 2.5rem 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.user__order--detail {
+  .write-review-form {
+    padding: 0.875rem 1.5625rem 0;
+
+    .title-block {
+      margin-bottom: 0;
+
+      .close-modal {
+        &::before {
+          top: 0.5rem;
+        }
+      }
+    }
+  }
+}

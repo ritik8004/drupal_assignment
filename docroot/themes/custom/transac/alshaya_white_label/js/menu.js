@@ -3,7 +3,7 @@
  * Main Menu.
  */
 
-/* global debounce */
+/* global debounce, dataLayer */
 
 (function ($, Drupal) {
   'use strict';
@@ -110,6 +110,7 @@
         $('.block-alshaya-super-category .main--menu ').removeClass('menu--active');
         $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
+        $('body').addClass('menu--open');
       });
 
       $('.c-menu-primary .mobile--search').once('mainMenu').on('click', function (e) {
@@ -144,6 +145,7 @@
         $('.account').removeClass('active');
         $('html').removeClass('html--overlay');
         $('body').removeClass('mobile--overlay');
+        $('body').removeClass('menu--open');
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
         $('.remove--toggle').removeClass('remove--toggle');
@@ -153,9 +155,6 @@
       $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay overlay-main-menu');
         $('.menu--two__list li:first', this).addClass('first--child_open');
-        if (typeof Drupal.blazy !== 'undefined') {
-          Drupal.blazy.revalidate();
-        }
       }, function () {
         $('body').removeClass('overlay overlay-main-menu');
         $('.menu--two__list li:first', this).removeClass('first--child_open');
@@ -257,22 +256,22 @@
           var calcMaxHeight;
           if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
             calcMaxHeight = $('.block-alshaya-main-menu').height() + $('.block-alshaya-main-menu').offset().top;
-          }
-          var maxHeight = menuLevel2.map(function () {
-            return $(this).height();
-          })
-              .toArray()
-              .reduce(function (first, second) {
-                return Math.max(first, second);
-              });
+            var maxHeight = menuLevel2.map(function () {
+              return $(this).height();
+            })
+                .toArray()
+                .reduce(function (first, second) {
+                  return Math.max(first, second);
+                });
 
-          menuBackdrop.height(maxHeight);
-          menuLevel2.each(function () {
-            $(this).height(maxHeight + 20);
-            if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
-              $(this).css('max-height', 'calc(100vh - ' + calcMaxHeight + 'px)');
-            }
-          });
+            menuBackdrop.height(maxHeight);
+            menuLevel2.each(function () {
+              $(this).height(maxHeight + 20);
+              if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
+                $(this).css('max-height', 'calc(100vh - ' + calcMaxHeight + 'px)');
+              }
+            });
+          }
         }
       }
       setMenuHeight();
@@ -315,7 +314,121 @@
           stickyHeader();
         }
       });
+
+      // Push navigation data to dataLayer.
+      pushNavigationDataToDataLayer();
     }
   };
+
+  /**
+   * Bind events with menu items to prepare the data
+   * for pushing the data to the dataLayer.
+   */
+  function pushNavigationDataToDataLayer() {
+    // Push navigation events in dataLayer for super category block.
+    // Top navigation for VS brand.
+    $('.block-alshaya-super-category').find('.menu--one__link').once().on('click', function () {
+      var label = $(this).data('super-category-label');
+      var navigationData = {
+        event: 'Top Navigation',
+        eventLabel: label
+      };
+      pushNavigationData(navigationData, true);
+    });
+
+    // Push navigation events in dataLayer for super category block.
+    // Top navigation for WE, PB, PBK brand.
+    $('#block-supermenu').find('ul.menu li a').once().on('click', function () {
+      var label = $(this).text();
+      var navigationData = {
+        event: 'Top Navigation',
+        eventLabel: label
+      };
+      pushNavigationData(navigationData, true);
+    });
+
+    // Push navigation events in dataLayer for 1st Level in main menu.
+    $('.block-alshaya-main-menu').find('.menu--one__link').once().on('click', function () {
+      var label = $(this).text();
+      var navigationData = {
+        event: 'Category Navigation',
+        eventLabel: label
+      };
+      pushNavigationData(navigationData);
+    });
+
+    // Push navigation events in dataLayer for 2nd Level.
+    $('.menu--two__list-item .menu-two__link').once().on('click', function () {
+      // Create the event label with parent menu item and current target link text.
+      var label = $(this).closest('.menu--one__list-item').find('.menu--one__link').text();
+      label += ' > ' + $(this).text();
+      var navigationData = {
+        event: 'Sub Category',
+        eventLabel: label
+      };
+      pushNavigationData(navigationData);
+    });
+
+    // Push navigation events in dataLayer for 3rd Level.
+    $('.menu--three__link').once().on('click', function () {
+      // Create the event label with parent menu item and current target link text.
+      var label = $(this).closest('.menu--one__list-item').find('.menu--one__link').text();
+      label += ' > ' + $(this).closest('.menu--two__list-item').find('.menu-two__link').text();
+
+      // If the menu item is 4th level.
+      if ($(this).closest('.menu__list-item').hasClass('menu--four__list-item')) {
+        label += ' > ' + $(this).closest('.menu--three__list-item').find('.menu--three__link').first().text();
+      }
+
+      label += ' > ' + $(this).text();
+      var navigationData = {
+        event: 'Sub Category',
+        eventLabel: label
+      };
+      pushNavigationData(navigationData);
+    });
+
+    // Push navigation events in dataLayer for 1st Level in secondary menu.
+    $('.block-alshaya-secondary-main-menu').find('.menu--one__link').once().on('click', function () {
+      var label = $(this).text();
+      var navigationData = {
+        event: 'Secondary Navigation',
+        eventLabel: label
+      };
+      pushNavigationData(navigationData);
+    });
+  }
+
+  /**
+   * Push the data to the data layer.
+   *
+   * @param {object} navigationData
+   *  Object with the dataLayer variables.
+   * @param {boolean} topNavigation
+   *  Check for the top or super category navigation.
+   *
+   * @return {boolean}
+   *  Return true/false if data push is successfull.
+   */
+  function pushNavigationData(navigationData, topNavigation) {
+    // Early return if the dataLayer isn't defined.
+    if (typeof dataLayer === 'undefined') {
+      return false;
+    }
+
+    // We will push navigation data as is if it's a top/super category
+    // navigation item or super category isn't active on the brand site.
+    if (topNavigation || $('.block-alshaya-super-category').length <= 0) {
+      dataLayer.push(navigationData);
+      return true;
+    }
+
+    // If super category block exist on the page, we need to prepend
+    // super category label before pushing data to dataLayer.
+    var superCategoryLabel = $('.block-alshaya-super-category').find('.menu--one__link.active').data('super-category-label');
+    navigationData.eventLabel = superCategoryLabel + ' > ' + navigationData.eventLabel;
+    dataLayer.push(navigationData);
+    return true;
+  }
 
 })(jQuery, Drupal);

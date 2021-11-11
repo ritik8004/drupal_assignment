@@ -1,76 +1,4 @@
-// Define Fonts
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fonts';
-
-@font-face {
-  font-family: 'Mothercare';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'MothercareThin';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Cairo-300';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Cairo-bold';
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff2') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?D7b5iT');
-  src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?D7b5iT#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?D7b5iT') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5iT') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?D7b5iT#alshaya-icons') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-// DY Fonts.
-@font-face {
-  font-family: "ThrowMyHandsUpintheAir";
-  src: url("#{$base_theme_fonts_directory_path}/ThrowMyHandsUpintheAir.ttf");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "ThrowMyHandsUpintheAirBold";
-  src: url("#{$base_theme_fonts_directory_path}/ThrowMyHandsUpintheAirBold.ttf");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
+// Check alshaya_white_label/font-face for font-face declarations.
 // Font Family
 $alshaya-bold: 'Mothercare', 'Arial';
 $alshaya-bold-nodir: 'Mothercare', 'Arial';
@@ -87,6 +15,7 @@ $alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin', 'Arial';
 $alshaya-icons: 'alshaya-icons';
 $arial: 'arialmt', 'arial', 'sans-serif';
 $arial-nodir: 'arialmt', 'arial', 'sans-serif';
+$open-sans: "Open Sans", 'Cairo', 'Arial';
 $body_font: $arial;
 
 // campaign-plp-style-1 font family.
