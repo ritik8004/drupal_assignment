@@ -378,12 +378,6 @@ function processProduct(product) {
     },
   };
 
-  // Image.
-  const assets = JSON.parse(product.assets_teaser);
-  if (Drupal.hasValue(assets)) {
-    productData.cart_image = assets[0].styles.product_teaser;
-  }
-
   let maxSaleQty = 0;
 
   if (productData.type === 'simple') {
