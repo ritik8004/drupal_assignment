@@ -43,3 +43,9 @@ alshaya_spc.express_delivery:
       sequence:
         type: string
         label: 'Delivery option type'
+    same_day_delivery_label:
+      type: string
+      label: 'Same Day Delivery Label'
+    express_delivery_label:
+      type: string
+      label: 'Express Delivery Label'

@@ -1,6 +1,4 @@
 import React from 'react';
-import _find from 'lodash/find';
-import _findIndex from 'lodash/findIndex';
 import parse from 'html-react-parser';
 import { ClicknCollectContext } from '../../../context/ClicknCollect';
 import createFetcher from '../../../utilities/api/fetcher';
@@ -375,7 +373,7 @@ class ClickCollect extends React.Component {
   openMarkerOfStore = (storeCode, storeList = null, showInfoWindow = true) => {
     const { storeList: contextStoreList } = this.context;
     const storeListArg = (!storeList) ? contextStoreList : storeList;
-    const index = _findIndex(storeListArg, {
+    const index = _.findIndex(storeListArg, {
       code: storeCode,
     });
     this.selectStoreButtonVisibility(index >= 0);
@@ -424,12 +422,11 @@ class ClickCollect extends React.Component {
       this.toggleFullScreen(false);
     }
     // Log a debug to know what is the store code being passed.
-    logger.debug('Store code @code selected by the user. Store Code JSON: @storeCodeJson', {
-      '@code': storeCode,
-      '@storeCodeJson': JSON.stringify(storeCode),
+    logger.debug('Store code @storeCode selected by the user.', {
+      '@storeCode': storeCode,
     });
     // Find the store object with the given store-code from the store list.
-    const store = _find(storeList, { code: storeCode });
+    const store = _.find(storeList, { code: storeCode });
     if (store === undefined) {
       logger.error('Unable to find store from list.', {
         storeCode,

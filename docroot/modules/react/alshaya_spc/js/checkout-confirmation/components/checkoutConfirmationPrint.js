@@ -8,7 +8,7 @@ import ConditionalView from '../../common/components/conditional-view';
 import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
   const {

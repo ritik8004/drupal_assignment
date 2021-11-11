@@ -134,6 +134,69 @@
           text-align: $left;
         }
       }
+
+      &--open {
+        #top-results {
+          @include breakpoint($only-mobile) {
+            padding: 0 0.5rem;
+          }
+
+          .promotions {
+            .sku-promotion-item {
+              @include breakpoint($only-mobile) {
+                font-size: 0.75rem;
+                display: block;
+                margin: 0.25rem 0 0;
+              }
+
+              .sku-promotion-link {
+                @include breakpoint($only-mobile) {
+                  color: $plp_tite_product_promo_text;
+                }
+              }
+            }
+          }
+
+          .c-products__item {
+            .field--name-name {
+              @include breakpoint($only-mobile) {
+                padding: 0;
+                font-size: 0.8125rem;
+              }
+
+              a {
+                @include breakpoint($only-mobile) {
+                  font-size: 0.8125rem;
+                  color: $algolia_react-facet-item-color;
+                }
+              }
+            }
+          }
+
+          ul {
+            li {
+              &.ais-Hits-item {
+                .c-products__item {
+                  text-align: $left;
+                  font-size: 0.8125rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .react-autosuggest__suggestions-list {
+      .react-autosuggest__suggestion {
+        cursor: pointer;
+      }
+    }
+
+    .react-autosuggest__suggestions-list {
+      .react-autosuggest__suggestion {
+        cursor: pointer;
+      }
     }
 
     .react-autosuggest__suggestions-container {
@@ -263,7 +326,7 @@ body {
 
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($only-mobile) {
-      margin-top: 6.5rem;
+      margin-top: 7.1875rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -276,7 +339,7 @@ body {
 
     html[lang=ar] & {
       @include breakpoint($only-mobile) {
-        margin-top: 6.5rem;
+        margin-top: 6.8125rem;
       }
 
       @include breakpoint($only-tablet) {
@@ -348,7 +411,8 @@ body {
     .show-all-filters-algolia,
     .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
-        top: 3.625rem;
+        top: 3.5rem;
+        z-index: 9;
       }
     }
   }

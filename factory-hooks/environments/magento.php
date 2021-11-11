@@ -9,7 +9,7 @@ global $magentos;
 
 $magentos = [
   // COS.
-  'cos_qa' => [
+  'cos_integration' => [
     'url' => 'https://integration-5ojmyuq-vlvasu2xupli4.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => '6ih9p46w6xvqzo0ldex9xdhwuxgoyhyp',
@@ -34,6 +34,36 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 11, 'ar' => 12],
+    ],
+  ],
+  'cos_qa' => [
+    'url' => 'https://cos-qa.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'glln7apd2n5vuor8be0v0yjfztz5mtt6',
+      'consumer_secret' => 'a27mtkmxptaswxu3yjrzjuvsm877wwd6',
+      'access_token' => 'o1xcap908mxgqsyb4lil0pw12eiqlczl',
+      'access_token_secret' => 'hj4s8hu6vyztxv52rebyc2heumruqaee',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 40, 'ar' => 37],
     ],
   ],
   'cos_uat' => [

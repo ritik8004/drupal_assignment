@@ -328,6 +328,10 @@ class ProductInfoResource extends ResourceBase {
           $stock_info = $this->skuInfoHelper->stockInfo($child);
           $child_data['max_sale_qty'] = $stock_info['max_sale_qty'];
 
+          // Pass stock information to restrict the quantity options.
+          $child_data['stock']['qty'] = $stock_info['stock'];
+          $child_data['stock']['status'] = $stock_info['in_stock'];
+
           $data['variants'][] = $child_data;
 
           // Update the mapping array.

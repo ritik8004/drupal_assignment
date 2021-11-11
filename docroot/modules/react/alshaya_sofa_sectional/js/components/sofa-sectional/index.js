@@ -24,7 +24,7 @@ export default class SofaSectionalForm extends React.Component {
   constructor(props) {
     super(props);
     const { productInfo, configurableCombinations } = drupalSettings;
-    const sku = Object.keys(productInfo)[0];
+    const { sku } = props;
     let selectedVariant = configurableCombinations[sku].firstChild;
 
     // Set the default attributes.
@@ -282,6 +282,7 @@ export default class SofaSectionalForm extends React.Component {
    */
   handleClearOptions = () => {
     const { sku } = this.state;
+    const { elementSelector } = this.props;
 
     this.setState({
       selectedVariant: null,
@@ -289,7 +290,12 @@ export default class SofaSectionalForm extends React.Component {
 
     // Dispatch custom event with selected variant to trigger jquery event variant-selected,
     // which will update gallery, price block, limits etc.
-    const customEvent = new CustomEvent('react-variant-select', { detail: { sku } });
+    const customEvent = new CustomEvent('react-variant-select', {
+      detail: {
+        sku,
+        elementSelector,
+      },
+    });
     document.dispatchEvent(customEvent);
   };
 

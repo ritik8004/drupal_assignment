@@ -48,6 +48,11 @@ class PromotionProductListResource extends ResourceBase {
   const NODE_BUNDLE = 'acq_promotion';
 
   /**
+   * Page Type.
+   */
+  const PAGE_TYPE = 'listing';
+
+  /**
    * Facet source ID.
    */
   const FACET_SOURCE_ID = 'search_api:views_block__alshaya_product_list__block_2';
@@ -226,7 +231,7 @@ class PromotionProductListResource extends ResourceBase {
 
       // Prepare response from result set.
       $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-      $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
+      $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2', self::PAGE_TYPE);
 
       // Filter the empty products.
       $response_data['products'] = array_filter($response_data['products']);
@@ -278,6 +283,20 @@ class PromotionProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get the config value for not executing search query.
+      $respond_ignore_algolia_data = $this->configFactory->get('alshaya_mobile_app.settings')->get('listing_ignore_algolia_data');
+
+      $response['algolia_data'] = [
+        'filter_field' => 'promotion_nid',
+        'filter_value' => $rule_id,
+        'rule_contexts' => '',
+      ];
+
+      // Return only algolia data if the config value is set to false.
+      if ($respond_ignore_algolia_data) {
+        return $response;
+      }
+
       $index = $storage->load('alshaya_algolia_index');
 
       /** @var \Drupal\search_api\Query\QueryInterface $query */
@@ -310,11 +329,6 @@ class PromotionProductListResource extends ResourceBase {
 
       // Prepare and execute query and pass result set.
       $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
-      $response['algolia_data'] = [
-        'filter_field' => 'promotion_nid',
-        'filter_value' => $rule_id,
-        'rule_contexts' => '',
-      ];
 
       return $response;
     }

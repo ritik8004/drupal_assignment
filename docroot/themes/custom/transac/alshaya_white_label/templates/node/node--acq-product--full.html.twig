@@ -82,14 +82,14 @@ set classes = [
 
           {# Delivery options will load if express delivery enabled. #}
           {% if content.delivery_options %}
-            <div class="express-delivery">
-              {% for key,delivery_option in content.delivery_options %}
-                <div class="express-delivery-text {{ key }}">
-                  <span>{{ delivery_option }}</span>
-                </div>
-              {% endfor %}
+            <div class="express-delivery {{ content.express_delivery_class }}">
+            {% for key,delivery_option in content.delivery_options %}
+              <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
+                <span>{{ delivery_option.label }}</span>
+              </div>
+            {% endfor %}
             </div>
-          {% elseif content.same_day_delivery_text %}
+          {% elseif content.same_day_delivery_text and content.delivery_options is not defined and content.delivery_options is not empty %}
             <div class="same-day-delivery">
               <div class="same-day-content">
                 <p>{{ content.same_day_delivery_text }}</p>

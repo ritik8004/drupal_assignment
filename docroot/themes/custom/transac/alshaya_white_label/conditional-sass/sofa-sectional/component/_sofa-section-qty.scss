@@ -52,7 +52,7 @@
     }
 
     .alshayaSelect__control {
-      border: 1px solid $sofa-sectional-title;
+      border: 1px solid $sofa-sectional-select-border;
       border-radius: 0;
       height: 2.1875rem;
       min-height: 2.1875rem;
@@ -61,7 +61,7 @@
       cursor: pointer;
 
       &:hover {
-        border-color: $sofa-sectional-title;
+        border-color: $sofa-sectional-select-border;
       }
 
       > div:nth-child(2) {
@@ -122,7 +122,7 @@
 
       .alshayaSelect__menu-list {
         padding: 0;
-        border: 1px solid $sofa-sectional-title;
+        border: 1px solid $sofa-sectional-select-border;
         border-top-width: 0;
 
         > div {
@@ -171,6 +171,10 @@
     @include breakpoint($only-mobile) {
       display: block;
     }
+
+    button[type=submit][disabled]::after {
+      background-image: none;
+    }
   }
 
   .alshaya-select-wrapper {
@@ -183,6 +187,18 @@
       display: block;
       width: 100%;
       margin: 2.75rem 0 1.5rem;
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .acq-content-product-modal {
+    .field--name-field-skus {
+      .sku-base-form {
+        button[type="submit"] {
+          margin-top: 1.5rem !important;
+        }
+      }
     }
   }
 }
