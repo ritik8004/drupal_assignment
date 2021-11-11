@@ -15,16 +15,22 @@ async function handleNoItemsInResponse(request, urlKey) {
   });
 
   let response = await rcsCommerceBackend.invokeApi(request);
+
   if (response.data.urlResolver === null) {
-    rcsRedirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
+    return rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`);
   }
-  else if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
-    rcsRedirectToPage(response.data.urlResolver.relative_url);
+
+  if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
+    return rcsRedirectToPage(response.data.urlResolver.relative_url);
   }
-  else {
-    // @todo use DataDog https://alshayagroup.atlassian.net/browse/CORE-34720
-    console.log(`No route/redirect found for ${urlKey}.`);
-  }
+
+  RcsEventManager.fire('error', {
+    'level': 'warning',
+    'message': `No route/redirect found for ${urlKey}.`,
+    'context': {
+      'method': 'handleNoItemsInResponse',
+    },
+  });
 }
 
 exports.getEntity = async function getEntity(langcode) {
@@ -48,7 +54,7 @@ exports.getEntity = async function getEntity(langcode) {
   switch (pageType) {
     case 'product':
       // Add extra headers.
-      request.headers.push(["Store", drupalSettings.alshayaRcs.commerceBackend.store]);
+      request.headers.push(["Store", drupalSettings.rcs.commerceBackend.store]);
 
       // Remove .html suffix from the full path.
       let prodUrlKey = urlKey.replace('.html', '');
@@ -97,7 +103,7 @@ exports.getEntity = async function getEntity(langcode) {
         result = response.data.promotionUrlResolver;
       }
       if (!result || (typeof result.title !== 'string')) {
-        rcsRedirectToPage(`${drupalSettings.alshayaRcs['404_page']}?referer=${rcsWindowLocation().pathname}`);
+        rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`);
       }
       break;
 
@@ -111,7 +117,7 @@ exports.getEntity = async function getEntity(langcode) {
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = RcsEventManager.fire('alshayaRcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
         result: result,
         pageType: pageType,
@@ -130,7 +136,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
     method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],
-      ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
+      ['Store', drupalSettings.rcs.commerceBackend.store],
     ],
     language: langcode,
   };
@@ -228,7 +234,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
   if (result !== null) {
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = RcsEventManager.fire('alshayaRcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
         result: result,
         placeholder: placeholder,
@@ -247,7 +253,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
     method: 'POST',
     headers: [
       ['Content-Type', 'application/json'],
-      ['Store', drupalSettings.alshayaRcs.commerceBackend.store],
+      ['Store', drupalSettings.rcs.commerceBackend.store],
     ],
   };
 
@@ -282,7 +288,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
       if (response && response.data.products.total_count) {
         response.data.products.items.forEach(function (product) {
-          RcsEventManager.fire('alshayaRcsUpdateResults', {
+          RcsEventManager.fire('rcsUpdateResults', {
             detail: {
               result: product,
             }
