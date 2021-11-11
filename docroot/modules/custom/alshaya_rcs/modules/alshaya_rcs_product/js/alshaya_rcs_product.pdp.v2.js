@@ -629,7 +629,7 @@ function getSkuSiblingsAndParent(sku) {
  * @returns object
  *   The labels data for the given product ID.
  */
-window.commerceBackend.getLabelsData = async function (sku) {
+async function getProductLabelsData (sku) {
   if (typeof staticDataStore.labels === 'undefined') {
     staticDataStore.labels = {};
     staticDataStore.labels[sku] = null;
@@ -646,8 +646,13 @@ window.commerceBackend.getLabelsData = async function (sku) {
     productIds[products[sku].id] = sku;
   });
 
-  const labels = await globalThis.rcsPhCommerceBackend
-                                              .getData('labels', { productIds: Object.keys(productIds) }, null, drupalSettings.path.currentLanguage, '')
+  const labels = await globalThis.rcsPhCommerceBackend.getData(
+    'labels',
+    { productIds: Object.keys(productIds) },
+    null,
+    drupalSettings.path.currentLanguage,
+    ''
+  );
 
   if (Array.isArray(labels) && labels.length) {
     labels.forEach(function (productLabels) {
@@ -661,6 +666,32 @@ window.commerceBackend.getLabelsData = async function (sku) {
   }
 
   return staticDataStore.labels[sku];
+}
+
+/**
+ * Get the labels data for the selected SKU.
+ *
+ * @param {object} product
+ *   The product wrapper jquery object.
+ * @param {string} sku
+ *   The sku for which labels is to be retreived.
+ * @param {string} mainSku
+ *   The main sku for the product being displayed.
+ */
+function renderProductLabels(product, sku, mainSku) {
+  getProductLabelsData(sku).then(function (labelsData) {
+    globalThis.rcsPhRenderingEngine.render(
+      drupalSettings,
+      'product-labels',
+      {
+        sku,
+        mainSku,
+        type: 'pdp',
+        labelsData,
+        product,
+      },
+    );
+  });
 }
 
 /**
@@ -678,7 +709,6 @@ window.commerceBackend.getLabelsData = async function (sku) {
  *   The parent SKU value if exists.
  */
 window.commerceBackend.updateGallery = async function (product, layout, productGallery, sku, parentSku) {
-  let rawProduct = null;
   const mainSku = typeof parentSku !== 'undefined' ? parentSku : sku;
   const productData = window.commerceBackend.getProductData(mainSku, null, false);
   const viewMode = product.parents('.entity--type-node').attr('data-vmode');
@@ -694,8 +724,6 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     });
   }
 
-  let labels = await window.commerceBackend.getLabelsData(sku);
-
   // Maps gallery value from backend to the appropriate filter.
   let galleryType = null;
   switch (drupalSettings.alshayaRcs.pdpLayout) {
@@ -710,7 +738,6 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
       galleryType,
       {
         galleryLimit: viewMode === 'modal' ? 'modal' : 'others',
-        labels,
         // The simple SKU.
         sku,
       },
@@ -724,6 +751,13 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
   if (gallery === '' || gallery === null) {
     return;
   }
+
+  // Here we render the product labels asynchrously.
+  // If we try to do it synchronously, then javascript moves on to other tasks
+  // while the labels are fetched from the API.
+  // This causes discrepancy in the flow, since in V1 the updateGallery()
+  // executes completely in one flow.
+  renderProductLabels(product, sku, mainSku);
 
   if (jQuery(product).find('.gallery-wrapper').length > 0) {
     // Since matchback products are also inside main PDP, when we change the variant

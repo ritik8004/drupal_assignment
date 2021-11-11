@@ -299,7 +299,6 @@ exports.render = function render(
           mediumurl: mediaCollection.thumbnails[0].mediumurl,
           label: entity.name,
         },
-        labels: params.labels,
         pager_flag: (mediaCollection.thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryLimit[params.galleryLimit])
           ? 'pager-yes'
           : 'pager-no',
@@ -309,6 +308,48 @@ exports.render = function render(
       }
 
       html += handlebarsRenderer.render('gallery.product.product_zoom', data);
+      break;
+
+    case 'product-labels':
+      // Remove the wrapper div if no labels are to be rendered.
+      if (!Drupal.hasValue(params.labelsData)) {
+        jQuery('.product-labels', params.product).remove();
+        return;
+      }
+
+      const productLabelsData = {
+        topRight: [],
+        topLeft: [],
+        bottomRight: [],
+        bottomLeft: [],
+        sku: params.sku,
+        mainSku: params.mainSku,
+        type: params.type,
+      };
+
+      params.labelsData.forEach(function (label) {
+        if (!Drupal.hasValue(label.image)) {
+          return;
+        }
+
+        switch (label.position) {
+          case 'top-right':
+            productLabelsData.topRight.push({url: label.image, name: label.name});
+            break;
+          case 'top-left':
+            productLabelsData.topLeft.push({url: label.image, name: label.name});
+            break;
+          case 'bottom-right':
+            productLabelsData.bottomRight.push({url: label.image, name: label.name});
+            break;
+          case 'bottom-left':
+            productLabelsData.bottomLeft.push({url: label.image, name: label.name});
+            break;
+        }
+      });
+
+      const labelsMarkup = handlebarsRenderer.render('gallery.product.product_labels', {labels: productLabelsData});
+      jQuery('.product-labels', params.product).html(labelsMarkup);
       break;
 
     default:
