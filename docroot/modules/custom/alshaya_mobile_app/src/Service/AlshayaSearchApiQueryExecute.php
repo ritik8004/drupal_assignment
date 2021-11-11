@@ -629,7 +629,7 @@ class AlshayaSearchApiQueryExecute {
     foreach ($facet_result as &$facet) {
       // If price facet.
       if ($facet['key'] == $price_facet_key
-        && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key])
+        && !empty($result_set['search_api_results']) && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key])
       ) {
         $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key]);
       }
