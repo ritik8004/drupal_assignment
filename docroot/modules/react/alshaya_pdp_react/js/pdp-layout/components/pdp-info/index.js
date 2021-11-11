@@ -4,6 +4,7 @@ import PostpayCart
 import Postpay from '../../../../../alshaya_spc/js/utilities/postpay';
 import TabbyWidget from '../../../../../js/tabby/components';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
@@ -24,18 +25,6 @@ const PdpInfo = ({
     postpay = (
       <PostpayCart
         amount={finalPrice.replace(',', '')}
-        classNames=""
-        pageType="pdp"
-      />
-    );
-  }
-
-  // @todo: Use React component.
-  let tabby;
-  if (Tabby.isTabbyEnabled()) {
-    tabby = (
-      <TabbyWidget
-        amount={finalPrice}
         classNames=""
         pageType="pdp"
       />
@@ -85,7 +74,13 @@ const PdpInfo = ({
         </div>
       </div>
       {postpay}
-      {tabby}
+      <ConditionalView condition={Tabby.isTabbyEnabled()}>
+        <TabbyWidget
+          amount={finalPrice}
+          classNames=""
+          pageType="pdp"
+        />
+      </ConditionalView>
     </div>
   );
 };
