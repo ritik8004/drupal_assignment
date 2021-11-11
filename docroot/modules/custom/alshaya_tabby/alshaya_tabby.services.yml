@@ -17,6 +17,5 @@ services:
     class: Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper
     arguments:
       - '@alshaya_tabby.api_helper'
-      - '@language_manager'
       - '@config.factory'
       - '@logger.factory'

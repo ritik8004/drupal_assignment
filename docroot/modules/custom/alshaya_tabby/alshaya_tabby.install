@@ -11,11 +11,11 @@
 function alshaya_tabby_install() {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $tabby = $checkout_options_manager->loadPaymentMethod('tabby', 'Instalments with tabby');
+  $tabby = $checkout_options_manager->loadPaymentMethod('tabby', '4 interest-free payments with tabby');
   $tabby = $tabby->hasTranslation('ar')
     ? $tabby->getTranslation('ar')
     : $tabby->addTranslation('ar', []);
-  $tabby->setName('Instalments with tabby AR');
+  $tabby->setName('4 interest-free payments with tabby AR');
   $tabby->save();
   // @todo: Add translation strings for tabby.
 

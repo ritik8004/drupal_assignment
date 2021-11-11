@@ -6,7 +6,7 @@
       currency: drupalSettings.alshaya_spc.currency_config.currency_code,
       price: amount,
       installmentsCount: drupalSettings.tabby.tabby_installment_count,
-      lang: drupalSettings.tabby.locale,
+      lang: drupalSettings.path.currentLanguage,
       source: source,
       api_key: drupalSettings.tabby.public_key
     });

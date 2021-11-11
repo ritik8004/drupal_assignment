@@ -64,7 +64,6 @@ class AlshayaTabbyApiHelper {
    *   Return array of keys.
    */
   public function getTabbyApiConfig($reset = FALSE) {
-
     static $configs;
 
     if (!empty($configs)) {

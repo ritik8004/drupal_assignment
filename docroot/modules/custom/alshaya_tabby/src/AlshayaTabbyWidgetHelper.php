@@ -3,9 +3,9 @@
 namespace Drupal\alshaya_tabby;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
@@ -24,13 +24,6 @@ class AlshayaTabbyWidgetHelper {
    * @var \Drupal\alshaya_tabby\AlshayaTabbyApiHelper
    */
   protected $tabbyApiHelper;
-
-  /**
-   * Language Manager service.
-   *
-   * @var \Drupal\Core\Language\LanguageManager
-   */
-  protected $languageManager;
 
   /**
    * Config Factory.
@@ -58,22 +51,17 @@ class AlshayaTabbyWidgetHelper {
    *
    * @param \Drupal\alshaya_tabby\AlshayaTabbyApiHelper $tabby_api_helper
    *   Api wrapper.
-   * @param \Drupal\Core\Language\LanguageManager $language_manager
-   *   Language Manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
    */
   public function __construct(AlshayaTabbyApiHelper $tabby_api_helper,
-                              LanguageManager $language_manager,
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_factory) {
     $this->tabbyApiHelper = $tabby_api_helper;
-    $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('AlshayaTabbyHelper');
-    $this->langcode = $language_manager->getCurrentLanguage()->getId();
   }
 
   /**
@@ -97,7 +85,7 @@ class AlshayaTabbyWidgetHelper {
         break;
 
       default:
-        $info['id'] = 'tabby-promo-pdp';
+        $info['id'] = Html::getUniqueId('tabby-promo-pdp');
         break;
     }
     return $info;

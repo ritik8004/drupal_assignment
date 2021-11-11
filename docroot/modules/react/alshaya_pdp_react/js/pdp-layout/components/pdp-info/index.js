@@ -1,10 +1,9 @@
 import React from 'react';
 import PostpayCart
   from '../../../../../alshaya_spc/js/cart/components/postpay/postpay';
-import TabbyWidget
-  from '../../../../../alshaya_spc/js/cart/components/tabby';
 import Postpay from '../../../../../alshaya_spc/js/utilities/postpay';
-import Tabby from '../../../../../alshaya_spc/js/utilities/tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
 
 const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
@@ -35,6 +34,8 @@ const PdpInfo = ({
   if (Tabby.isTabbyEnabled()) {
     tabby = (
       <TabbyWidget
+        amount={finalPrice}
+        classNames=""
         pageType="pdp"
       />
     );

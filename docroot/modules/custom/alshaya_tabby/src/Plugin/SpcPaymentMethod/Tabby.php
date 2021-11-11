@@ -43,7 +43,7 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
   }
 
   /**
-   * CheckoutComApplePay constructor.
+   * Tabby constructor.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

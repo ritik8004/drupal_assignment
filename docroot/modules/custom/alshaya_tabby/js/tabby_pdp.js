@@ -40,9 +40,10 @@
       drupalSettings[productKey][sku]['gtm_attributes']['price'];
 
     // Tabby promo change event.
-    $('.tabby-widget').once('tabby-widget').each(function () {
+    const tabbyWidget = $(element).closest('.entity--type-node').find('.tabby-widget');
+    tabbyWidget.each(function () {
       const selector = $(this).attr('id');
-      if (selector) {
+      if (selector !== undefined) {
         Drupal.tabbyPromoInit('#' + selector, variantPrice, 'product');
       }
     });
