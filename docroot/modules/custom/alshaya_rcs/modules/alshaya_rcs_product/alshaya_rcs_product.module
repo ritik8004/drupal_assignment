@@ -609,7 +609,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
       'stock_status',
       'ship_to_store',
       'reserve_and_collect',
-      'assets_teaser',
       'price_range' => [
         'maximum_price' => [
           'regular_price' => [
@@ -684,7 +683,6 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
             'id',
             'sku',
             'meta_title',
-            'assets_teaser',
             'stock_status',
             'ship_to_store',
             'reserve_and_collect',
