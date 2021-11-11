@@ -1,6 +1,6 @@
 .path--cart,
-.nodetype--acq_product.pdp-modal-overlay {
-  .ui-dialog {
+.nodetype--acq_product {
+  .ui-dialog.ui-widget {
     @include breakpoint($desktop) {
       padding: calc((100vh - 32rem) / 2) calc((100vw - 64.13rem) / 2);
     }
@@ -9,7 +9,7 @@
       padding: calc((100vh - 43rem) / 2) calc((100vw - 64.13rem) / 2);
     }
 
-    #drupal-modal {
+    #drupal-modal.ui-dialog-content {
       @include breakpoint($desktop) {
         height: 32rem !important;
       }
