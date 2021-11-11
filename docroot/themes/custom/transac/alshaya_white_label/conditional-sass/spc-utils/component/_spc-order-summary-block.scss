@@ -82,11 +82,25 @@
   }
 
   .hero-total {
-    padding-bottom: 0.625rem;
+    border-top: 1px solid $spc-order-summary-hero-total-border;
+    padding: 1.25rem 0;
 
-    .total-line-item {
+    & > .total-line-item {
       font-family: $alshaya-bold;
-      margin-bottom: 0;
+    }
+
+    .aura-hero-total {
+      .total-line-item {
+        font-family: $alshaya-bold;
+        margin-bottom: 0;
+      }
+    }
+
+    .aura-order-summary {
+      .hero-total {
+        padding: 0;
+        border-top: 0;
+      }
     }
   }
 
