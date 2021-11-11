@@ -11,7 +11,7 @@ import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
 import CompleteBenefitPayPayment
   from './CompleteBenefitPayPayment';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import logger from '../../utilities/logger';
 
 class CheckoutConfirmation extends React.Component {
@@ -52,9 +52,9 @@ class CheckoutConfirmation extends React.Component {
   }
 
   onPrintError = (errorLocation, error) => {
-    logger.warning('Error launching checkout print. ErrorLocation: @errorLocation, error: @error', {
+    logger.warning('Error launching checkout print. ErrorLocation: @errorLocation, error: @message', {
       '@errorLocation': errorLocation,
-      '@error': error,
+      '@message': error,
     });
   };
 

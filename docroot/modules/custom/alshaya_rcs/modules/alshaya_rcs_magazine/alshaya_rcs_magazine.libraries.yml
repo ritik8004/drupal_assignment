@@ -4,3 +4,4 @@ main:
     js/alshaya_rcs_magazine.js: {}
   dependencies:
     - core/jquery
+    - rcs_placeholders/helpers

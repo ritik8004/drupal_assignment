@@ -1,0 +1,7 @@
+rcs_product_images:
+  version: 1.x
+  js:
+    js/alshaya_media_assets.rcs_product_images.js: {}
+  dependencies:
+    - core/jquery
+    - rcs_placeholders/helpers

@@ -598,3 +598,8 @@ rcs-shop-by-block:
   css:
     theme:
       css/conditional-sass/rcs-shop-by-block/rcs-shop-by-block.ltr.css: {}
+
+rcs-algolia-plp:
+  css:
+    theme:
+      css/conditional-sass/rcs-algolia-plp/rcs-algolia-plp.ltr.css: {}

@@ -6,7 +6,7 @@
       <a class="above-mobile-block product-link" href="{{ url }}">
         <div class="image-label-wrapper">
           {{#if image }}
-            <img src="{{ image.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+            <img src="{{ image }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
           {{/if}}
           <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
           </div>
@@ -35,7 +35,7 @@
           <td class="sell--image">
             {{#if image }}
               <a href="{{ url }}" rel="bookmark">
-                <img src="{{ image.product_teaser }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
+                <img src="{{ image }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy">
               </a>
             {{/if}}
             <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">

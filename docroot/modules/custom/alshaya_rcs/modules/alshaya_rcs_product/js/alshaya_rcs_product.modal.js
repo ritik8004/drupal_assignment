@@ -22,8 +22,8 @@
           .addClass('acq-content-product-modal');
 
         // Reset cloud zoom image attributes.
-        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', '"#rcs.product_modal._self|image#"');
-        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', '"#rcs.product_modal._self|image#"');
+        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', '"#rcs.product_modal._self|teaser_image#"');
+        content.find('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', '"#rcs.product_modal._self|teaser_image#"');
 
         // Try to get sku from the element clicked. Works with DY block.
         var sku = $(this).data('sku');

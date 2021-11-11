@@ -31,7 +31,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities
 import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class Cart extends React.Component {
   constructor(props) {

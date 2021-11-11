@@ -173,7 +173,7 @@
         ],
       };
       request.data = JSON.stringify({
-        query: `{dynamicPromotionLabel(
+        query: `{promoDynamicLabelProduct(
             sku: "${sku}"
             context: "web"
             view_mode: "${viewMode}"
@@ -187,9 +187,9 @@
           }}`
       });
 
-      response = rcsCommerceBackend.invokeApiAsync(request);
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
       // Update the response variable based on response.
-      response = response.data.dynamicPromotionLabel;
+      response = response.data.promoDynamicLabelProduct;
     }
 
     return response;

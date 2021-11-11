@@ -109,6 +109,7 @@ exports.render = function render(
     case 'mobile-crosssell-products':
     case 'crosssell-products':
     case 'classic-gallery':
+    case 'product-labels':
       // Render super category block.
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         html += globalThis.renderRcsProduct.render(
@@ -190,6 +191,7 @@ exports.computePhFilters = function (input, filter) {
     case 'description':
     case 'short_description':
     case 'promotions':
+    case 'teaser_image':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }

@@ -1,0 +1,26 @@
+.product-drawer {
+  &-content-wrapper {
+    .content--item-code {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.9375rem;
+      }
+    }
+  }
+}
+
+#configurable-drawer {
+  .attribute-wrapper_size {
+    @include breakpoint($only-mobile) {
+      float: none;
+    }
+  }
+
+  .attribute-wrapper + .alshaya-select-wrapper {
+    @include breakpoint($only-mobile) {
+      float: none;
+      margin-#{$left}: 0;
+      margin-top: 1.25rem;
+      width: 5rem;
+    }
+  }
+}

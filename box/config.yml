@@ -392,6 +392,34 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-dhkw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-dhae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-dhsa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-dheg.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-dhbh.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-dhqa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-dhjo.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal
     encoding: utf8mb4
@@ -654,6 +682,34 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_cosqa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dhkw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dhae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dhsa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dheg
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dhbh
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dhqa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dhjo
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

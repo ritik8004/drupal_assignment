@@ -32,6 +32,7 @@ module.exports = {
     debounce: true,
     BV: true,
     axios: true,
+    _: true,
   },
   parser: "babel-eslint",
   parserOptions: {

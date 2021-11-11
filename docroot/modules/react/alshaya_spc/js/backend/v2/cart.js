@@ -1,8 +1,3 @@
-import _isNull from 'lodash/isNull';
-import _isEmpty from 'lodash/isEmpty';
-import _isUndefined from 'lodash/isUndefined';
-import _isString from 'lodash/isString';
-import _isNumber from 'lodash/isNumber';
 import {
   callMagentoApi,
   getCartSettings,
@@ -23,7 +18,11 @@ import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isString,
+  isNumber,
+} from '../../../../js/utilities/conditionsUtility';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -135,7 +134,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   if (isAnonymousUserWithoutCart() || await isAuthenticatedUserWithoutCart()) {
     cartId = await window.commerceBackend.createCart();
     // If we still don't have a cart, we cannot continue.
-    if (_isNull(cartId)) {
+    if (!hasValue(cartId)) {
       throw new Error('Error creating cart when adding/removing item.');
     }
   }
@@ -238,7 +237,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
           // Create a new cart.
           cartId = await window.commerceBackend.createCart();
-          if (_isNull(cartId)) {
+          if (!hasValue(cartId)) {
             // Cart creation is also failing, simply return.
             return null;
           }
@@ -335,8 +334,8 @@ window.commerceBackend.createCart = async () => {
 
   // Create new cart and return the data.
   const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
-  if (response.status === 200 && !_isUndefined(response.data)
-    && (_isString(response.data) || _isNumber(response.data))
+  if (response.status === 200 && hasValue(response.data)
+    && (isString(response.data) || isNumber(response.data))
   ) {
     logger.notice('New cart created: @cartId, for Customer: @customerId.', {
       '@cartId': response.data,
@@ -354,7 +353,7 @@ window.commerceBackend.createCart = async () => {
     return response.data;
   }
 
-  const errorMessage = (!_isUndefined(response.data.error_message))
+  const errorMessage = (hasValue(response.data.error_message))
     ? response.data.error_message
     : '';
   logger.warning('Error while creating cart on MDC. Error: @message', {
@@ -372,7 +371,7 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
   const guestCartId = getCartIdFromStorage();
 
   // No further checks required if card id not available in storage.
-  if (_isEmpty(guestCartId)) {
+  if (!hasValue(guestCartId)) {
     return;
   }
 
@@ -381,7 +380,7 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
   // Try to load customer's cart if not doing this on checkout page.
   if (pageType !== 'checkout') {
     const cart = await getCart();
-    if (!_isEmpty(cart) && !_isEmpty(cart.data) && !_isEmpty(cart.data.cart.items)) {
+    if (hasValue(cart) && hasValue(cart.data) && hasValue(cart.data.cart.items)) {
       // If the current cart has items, we carry on with this cart and remove
       // the guest cart id from local storage.
       removeCartIdFromStorage();
@@ -413,7 +412,7 @@ window.commerceBackend.addFreeGift = async (data) => {
   const promoCode = data.promo;
   let cart = null;
 
-  if (_isEmpty(sku) || _isEmpty(promoCode) || _isEmpty(langCode)) {
+  if (!hasValue(sku) || !hasValue(promoCode) || !hasValue(langCode)) {
     logger.error('Missing request header parameters. SKU: @sku, Promo: @promoCode, Langcode: @langCode', {
       '@sku': sku || '',
       '@promoCode': promoCode || '',
@@ -428,15 +427,13 @@ window.commerceBackend.addFreeGift = async (data) => {
     });
 
     // Validations.
-    if (_isEmpty(cart.data)
-      || (!_isUndefined(cart.data.error) && cart.data.error)
+    if (!hasValue(cart.data)
+      || (hasValue(cart.data.error) && cart.data.error)
     ) {
       logger.warning('Cart is empty. Cart: @cart', {
         '@cart': JSON.stringify(cart),
       });
-    } else if (_isUndefined(cart.data.appliedRules)
-      || _isEmpty(cart.data.appliedRules)
-    ) {
+    } else if (!hasValue(cart.data.appliedRules)) {
       logger.warning('Invalid promo code. Cart: @cart, Promo: @promoCode', {
         '@cart': JSON.stringify(cart.data),
         '@promoCode': promoCode,
@@ -459,19 +456,19 @@ window.commerceBackend.addFreeGift = async (data) => {
           },
         });
       } else {
-        const options = (!_isEmpty(data.configurable_values)) ? data.configurable_values : [];
+        const options = (hasValue(data.configurable_values)) ? data.configurable_values : [];
         params.items.push({
           sku,
           qty: 1,
           product_type: skuType,
-          product_option: (_isEmpty(options))
+          product_option: (!hasValue(options))
             ? []
             : {
               extension_attributes: {
                 configurable_item_options: options,
               },
             },
-          variant_sku: (!_isEmpty(data.variant)) ? data.variant : null,
+          variant_sku: (hasValue(data.variant)) ? data.variant : null,
           extension_attributes: {
             promo_rule_id: promoRuleId,
           },
@@ -481,7 +478,7 @@ window.commerceBackend.addFreeGift = async (data) => {
       // Update cart.
       const updated = await updateCart(params);
       // If cart update has error.
-      if (_isEmpty(updated.data) || (!_isUndefined(updated.data.error) && updated.data.error)) {
+      if (!hasValue(updated.data) || (hasValue(updated.data.error) && updated.data.error)) {
         logger.warning('Update cart failed. Cart: @cart', {
           '@cart': JSON.stringify(cart),
         });

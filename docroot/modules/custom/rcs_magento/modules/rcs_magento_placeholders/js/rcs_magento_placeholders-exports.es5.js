@@ -198,6 +198,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
                 image
                 name
                 position
+                product_id
               }
             }
           }`
@@ -240,7 +241,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
   return result;
 };
 
-exports.getDataAsync = function getDataAsync(placeholder, params, entity, langcode) {
+exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
     method: 'POST',
@@ -259,7 +260,7 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
         query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
       });
 
-      response = rcsCommerceBackend.invokeApiAsync(request);
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
       result = response.data.products.items;
       break;
 
@@ -277,11 +278,15 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
       });
       request.data = request.data.replace('filterValue', filterValue);
 
-      response = rcsCommerceBackend.invokeApiAsync(request);
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
 
       if (response && response.data.products.total_count) {
         response.data.products.items.forEach(function (product) {
-          RcsPhStaticStorage.set('product_' + product.sku, product);
+          RcsEventManager.fire('alshayaRcsUpdateResults', {
+            detail: {
+              result: product,
+            }
+          });
         });
       }
       break;
@@ -298,7 +303,7 @@ exports.getDataAsync = function getDataAsync(placeholder, params, entity, langco
         query: `{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`
       });
 
-      result = rcsCommerceBackend.invokeApiAsync(request);
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
 
       RcsPhStaticStorage.set(staticKey, result);
       break;

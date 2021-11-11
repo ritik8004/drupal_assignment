@@ -70,6 +70,10 @@
   .price-wrapper {
     .price {
       margin-#{$left}: 0.25rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
     }
   }
 }
@@ -184,6 +188,17 @@
   .read-more-description-link-mobile:not(.matchback-readmore) {
     @include breakpoint($tablet) {
       display: block !important;
+    }
+  }
+}
+
+// Layout of the detail page
+.nodetype--acq_product {
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      &::after {
+        margin-top: 0;
+      }
     }
   }
 }
