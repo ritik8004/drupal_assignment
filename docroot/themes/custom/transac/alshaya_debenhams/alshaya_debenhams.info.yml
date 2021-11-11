@@ -34,3 +34,8 @@ libraries-override:
     css:
       theme:
         css/rtl-print.css: css/rtl-print.css
+
+  alshaya_white_label/font-face:
+    css:
+      theme:
+        css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
