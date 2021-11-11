@@ -131,16 +131,24 @@ class AuraApiHelper {
         continue;
       }
 
-      // Getting `code` and `value` keys for tier types and brand api
-      // and just value for others.
-      $data = ($value === AuraDictionaryApiConstants::APC_TIER_TYPES || $value === AuraDictionaryApiConstants::APC_BRANDS)
+      // Getting `code` and `value` keys for brand api
+      // and just value for others excluding tier types.
+      $data = $value === AuraDictionaryApiConstants::APC_BRANDS
         ? array_column($response['items'], 'value', 'code')
         : array_column($response['items'], 'value');
+
+      // Getting `code` `value` and `short_value` keys for tier types.
+      if ($value === AuraDictionaryApiConstants::APC_TIER_TYPES) {
+        $data = [];
+        foreach ($response['items'] as $items) {
+          $data['value'][$items['code']] = $items['value'];
+          $data['shortValue'][$items['code']] = $items['short_value'];
+        }
+      }
 
       $auraConfigs[$value] = $data;
       $this->cache->set($cache_key, $auraConfigs[$value], Cache::PERMANENT);
     }
-
     return $auraConfigs;
   }
 

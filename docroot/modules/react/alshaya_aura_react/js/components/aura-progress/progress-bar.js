@@ -58,10 +58,10 @@ class AuraProgressBar extends React.Component {
 
     return (
       <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
-        <span className="under">{getAllAuraTier()[currentTierLevel]}</span>
+        <span className="under">{getAllAuraTier('value')[currentTierLevel]}</span>
         <div className="start">
           <div id="aura-fill" className="fill" style={{ width: widthFinalFill }}>
-            <span className="over">{getAllAuraTier()[currentTierLevel]}</span>
+            <span className="over">{getAllAuraTier('value')[currentTierLevel]}</span>
           </div>
           <ConditionalView condition={showDotClass === 'pointer'}>
             <span
@@ -72,7 +72,7 @@ class AuraProgressBar extends React.Component {
           </ConditionalView>
         </div>
         <div className={`end next-tier-${nextTierLevel}`}>
-          <span>{getAllAuraTier()[nextTierLevel]}</span>
+          <span>{getAllAuraTier('value')[nextTierLevel]}</span>
         </div>
       </div>
     );
