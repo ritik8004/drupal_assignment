@@ -45,7 +45,7 @@ exports.invokeApi = async function (request) {
  * @param {string} callback
  *   The function to call on successful response.
  */
- exports.invokeApiAsync = function (request) {
+ exports.invokeApiSynchronous = function (request) {
   const headers = {};
   let result = null;
 

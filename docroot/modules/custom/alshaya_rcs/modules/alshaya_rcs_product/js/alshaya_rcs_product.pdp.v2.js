@@ -752,7 +752,7 @@ window.commerceBackend.updateGallery = async function (product, layout, productG
     return;
   }
 
-  // Here we render the product labels asynchrously.
+  // Here we render the product labels asynchronously.
   // If we try to do it synchronously, then javascript moves on to other tasks
   // while the labels are fetched from the API.
   // This causes discrepancy in the flow, since in V1 the updateGallery()

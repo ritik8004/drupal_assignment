@@ -29,7 +29,7 @@
     const mainProduct = e.detail.result;
 
     // Get the products with the same style.
-    var styleProducts = globalThis.rcsPhCommerceBackend.getDataAsync('products-in-style', { styleCode: mainProduct.style_code });
+    var styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: mainProduct.style_code });
 
     // If there are no products with the same style, then no further processing
     // required.

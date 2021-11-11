@@ -17,7 +17,7 @@
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    await globalThis.rcsPhCommerceBackend.getDataAsync('product', {sku: mainSKU});
+    await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   }
@@ -80,7 +80,7 @@
 
     // Fetch the product data for the given skus which also saves them to the
     // static storage.
-    globalThis.rcsPhCommerceBackend.getDataAsync('product', {sku: skuValues, op: 'in'});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: skuValues, op: 'in'});
 
     // Now store the product data to local storage.
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {
@@ -104,7 +104,7 @@
       return staticStorage['attrLabels'][attrName][attrValue];
     }
 
-    const response = globalThis.rcsPhCommerceBackend.getDataAsync('product-option', { attributeCode: attrName });
+    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option', { attributeCode: attrName });
     allOptionsForAttribute = {};
 
     // Process the data to extract what we require and format it into an object.
