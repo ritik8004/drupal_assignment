@@ -1,10 +1,10 @@
 /**
- * Listens to the 'alshayaRcsUpdateResults' event and updated the result object.
+ * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
 (function main(drupalSettings) {
   // Event listener to update the data layer object with the proper category
   // data.
-  RcsEventManager.addListener('alshayaRcsUpdateResults', (e) => {
+  RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined' || e.detail.placeholder !== 'field_magazine_shop_the_story') {
       return;
