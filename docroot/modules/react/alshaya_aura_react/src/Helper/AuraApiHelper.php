@@ -146,6 +146,16 @@ class AuraApiHelper {
         }
       }
 
+      // Getting only active country list code.
+      if ($value === AuraDictionaryApiConstants::EXT_PHONE_PREFIX) {
+        foreach ($response['items'] as $item) {
+          if ($item['status']) {
+            $countryList[] = $item['value'];
+          }
+        }
+        $data = $countryList;
+      }
+
       $auraConfigs[$value] = $data;
       $this->cache->set($cache_key, $auraConfigs[$value], Cache::PERMANENT);
     }
