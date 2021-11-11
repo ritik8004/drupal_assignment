@@ -20,7 +20,7 @@
     await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
-  }
+  };
 
   /**
    * Get the stock status of the given sku.
@@ -43,7 +43,7 @@
     });
 
     return stock;
-  }
+  };
 
   /**
    * Triggers stock refresh of the provided skus.
@@ -86,7 +86,7 @@
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {
       window.commerceBackend.processAndStoreProductData(parentSku, sku, 'productInfo');
     });
-  }
+  };
 
   /**
    * Gets the attribute label.
@@ -116,7 +116,7 @@
     staticStorage['attrLabels'][attrName] = allOptionsForAttribute;
 
     return allOptionsForAttribute[attrValue];
-  }
+  };
 
   /**
    * Get the first child with media.
@@ -139,7 +139,7 @@
     }
 
     return null;
-  }
+  };
 
   /**
    * Get SKU to use for gallery when no specific child is selected.
@@ -166,7 +166,7 @@
 
     skuForGallery = Drupal.hasValue(child) ? child : skuForGallery;
     return skuForGallery;
-  }
+  };
 
   /**
    * Get first image from media to display as list.
@@ -182,7 +182,7 @@
   window.commerceBackend.getFirstImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
     return Drupal.hasValue(galleryProduct.media[0]) ? galleryProduct.media[0] : null;
-  }
+  };
 
   /**
    * Get the image from media to as the cart image.
@@ -196,7 +196,7 @@
   window.commerceBackend.getCartImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
     return galleryProduct.media_cart;
-  }
+  };
 
   /**
    * Get the image from media to display as teaser image.
@@ -210,5 +210,5 @@
    window.commerceBackend.getTeaserImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
     return galleryProduct.media_teaser;
-  }
+  };
 })(Drupal);

@@ -308,6 +308,10 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $languages = $language_manager->getLanguages();
   $page['#attached']['drupalSettings']['alshayaSpc']['languages'] = array_keys($languages);
+
+  // Add product settings.
+  $product_config = \Drupal::config('alshaya_acm_product.settings');
+  $page['#attached']['drupalSettings']['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
 }
 
 /**
