@@ -70,10 +70,10 @@ class AlshayaTabbyApiHelper {
       return $configs;
     }
 
-    $cache_key = "alshaya_tabby:api_configs";
+    $cache_key = 'alshaya_tabby:api_configs';
 
     // Cache time in minutes, set 0 to disable caching.
-    $cache_time = (int) Settings::get("alshaya_tabby_cache_time", 60);
+    $cache_time = (int) Settings::get('alshaya_tabby_cache_time', 60);
 
     // Disable caching if cache time set to 0 or null in settings.
     $reset = empty($cache_time) ? TRUE : $reset;

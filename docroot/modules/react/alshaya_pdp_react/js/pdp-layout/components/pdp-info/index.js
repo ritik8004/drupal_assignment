@@ -30,6 +30,7 @@ const PdpInfo = ({
     );
   }
 
+  // @todo: Use React component.
   let tabby;
   if (Tabby.isTabbyEnabled()) {
     tabby = (
