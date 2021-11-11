@@ -14,6 +14,18 @@ const SelectedStore = ({ store, open, closePanel }) => {
   let didUnmount = false;
 
   /**
+   * Show to error on popup.
+   */
+  const handleScrollTo = () => {
+    const container = document.querySelector('.spc-cnc-selected-store-content');
+    container.scrollBy({
+      top: -300,
+      left: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  /**
    * Show error on popup.
    */
   const handleAddressPopUpError = (e) => {
@@ -23,6 +35,10 @@ const SelectedStore = ({ store, open, closePanel }) => {
     }
     setMsgType(type);
     setErrorMessage(message);
+
+    setTimeout(() => {
+      handleScrollTo();
+    }, 200);
     // Scroll to error.
     smoothScrollTo('.spc-cnc-selected-store-header .spc-checkout-section-title');
   };
@@ -54,13 +70,13 @@ const SelectedStore = ({ store, open, closePanel }) => {
           <span className="spc-cnc-selected-store-back" onClick={() => closePanel()} />
           <SectionTitle>{getStringMessage('cnc_collection_details')}</SectionTitle>
         </div>
-        {errorSuccessMessage !== null
-          && (
-          <CheckoutMessage type={messageType} context="selected-store-form-modal modal">
-            {errorSuccessMessage}
-          </CheckoutMessage>
-          )}
         <div className="spc-cnc-selected-store-content">
+          {errorSuccessMessage !== null
+            && (
+            <CheckoutMessage type={messageType} context="selected-store-form-modal modal">
+              {errorSuccessMessage}
+            </CheckoutMessage>
+            )}
           <SectionTitle>{getStringMessage(getCnCModalContactSubtitle())}</SectionTitle>
           <div className="store-details-wrapper">
             <StoreItem display="default" store={store} />
@@ -72,7 +88,7 @@ const SelectedStore = ({ store, open, closePanel }) => {
             )}
           </div>
           <div className="spc-cnc-contact-form">
-            <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} />
+            <ContactInfoForm subTitle={getStringMessage('cnc_contact_info_subtitle')} store={store} handleScrollTo={handleScrollTo} errorSuccessMessage={errorSuccessMessage} />
           </div>
         </div>
       </div>
