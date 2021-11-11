@@ -32,7 +32,7 @@ $dir: rtl;
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
 @import "../../alshaya_white_label/sass/components/**/*";
-// @import "components/**/*";
+@import "components/**/*";
 
 // Importing browser specific hot fixes.
 @import "../../alshaya_white_label/sass/hotfix";
