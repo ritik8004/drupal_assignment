@@ -5,6 +5,8 @@
  * Contains alshaya_wishlist.module.
  */
 
+use Drupal\Core\Cache\Cache;
+
 /**
  * Implements hook_theme().
  */
