@@ -41,8 +41,6 @@ const productRecommendationsSuffix = 'pr-';
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
-
-        Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange(product);
       });
 
       // For simple grouped products.
@@ -56,11 +54,49 @@ const productRecommendationsSuffix = 'pr-';
 
         var variantInfo = drupalSettings[productKey][sku]['group'][variant];
 
-        Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange($(this));
-
+        // Datalayer push for product detail view
+        // when url is changed wrt variant.
+        let lastUrl = location.href;
+        const observer = new MutationObserver(() => {
+          const url = location.href;
+          if (url !== lastUrl) {
+            lastUrl = url;
+            var amount = $(this).attr('gtm-price').replace(/\,/g,'');
+            // Prepare data.
+            var data = {
+              event: 'productDetailView',
+              ecommerce: {
+                currencyCode: drupalSettings.gtm.currency,
+                detail: {
+                  products: {
+                    name: $(this).attr('gtm-name'),
+                    id: $(this).attr('gtm-main-sku'),
+                    price: parseFloat(amount),
+                    category: $(this).attr('gtm-category'),
+                    variant: $(this).attr('gtm-product-sku'),
+                    dimension2: $(this).attr('gtm-sku-type'),
+                    dimension3: $(this).attr('gtm-dimension3'),
+                    dimension4: $(this).attr('gtm-dimension4')
+                  }
+                }
+              }
+            };
+            if ($(this).attr('gtm-brand')) {
+              data.ecommerce.detail.products.brand = $(this).attr('gtm-brand');
+            }
+            // Push into datalayer.
+            dataLayer.push(data);
+          }
+        });
+        observer.observe(document, {subtree: true, childList: true});
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
         $(this).attr('gtm-price', variantInfo['gtm_price']);
+
+        // Detach the observer to avoid multiple occurence.
+        setTimeout(function () {
+          observer.disconnect();
+        }, 500);
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function (event) {
@@ -705,61 +741,6 @@ const productRecommendationsSuffix = 'pr-';
       gtm_execute_onetime_events = false;
     }
   };
-
-  /**
-   * Gtm event for grouped simple and configurable product
-   *
-   * @param product
-   *   jQuery object which contains all gtm attributes.
-   */
-  Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange = function (product) {
-    // Convert the product to a jQuery object, if not already.
-    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
-      product = $(product);
-    }
-
-    // Datalayer push for product detail view
-    // when url is changed wrt variant.
-    let lastUrl = location.href;
-    const observer = new MutationObserver(() => {
-      const url = location.href;
-      if (url !== lastUrl) {
-        lastUrl = url;
-        var amount = product.attr('gtm-price').replace(/\,/g,'');
-        // Prepare data.
-        var data = {
-          event: 'productDetailView',
-          ecommerce: {
-            currencyCode: drupalSettings.gtm.currency,
-            detail: {
-              products: {
-                name: product.attr('gtm-name'),
-                id: product.attr('gtm-main-sku'),
-                price: parseFloat(amount),
-                category: product.attr('gtm-category'),
-                variant: product.attr('gtm-product-sku'),
-                dimension2: product.attr('gtm-sku-type'),
-                dimension3: product.attr('gtm-dimension3'),
-                dimension4: product.attr('gtm-dimension4')
-              }
-            }
-          }
-        };
-        if (product.attr('gtm-brand')) {
-          data.ecommerce.detail.products.brand = product.attr('gtm-brand');
-        }
-        // Push into datalayer.
-        dataLayer.push(data);
-      }
-    });
-    observer.observe(document, {subtree: true, childList: true});
-
-    // Detach the observer to avoid multiple occurence.
-    setTimeout(function () {
-      observer.disconnect();
-    }, 500);
-
-  }
 
   /**
    * Function to provide product data object.
