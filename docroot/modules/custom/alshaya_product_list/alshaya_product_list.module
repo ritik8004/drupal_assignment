@@ -200,20 +200,29 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
     $attribute = 'attr_' . $term_attribute_code;
     $attribute_value = $term->getName();
     try {
-      $properties = [
-        'field_attribute_name' => $attribute,
-        'field_attribute_value' => $attribute_value,
-        'type' => 'product_list',
-      ];
-      $entities = \Drupal::entityTypeManager()->getStorage('node')
-        ->loadByProperties($properties);
-      $node = array_shift($entities);
-      // If node exists, we create or we skip.
+      // Check if node exists with attribute value or its translation.
+      foreach ($term->getTranslationLanguages() as $language) {
+        $term_translation = $term->getTranslation($language->getId());
+        $properties = [
+          'field_attribute_name' => $attribute,
+          'field_attribute_value' => $term_translation->getName(),
+          'type' => 'product_list',
+        ];
+        $entities = \Drupal::entityTypeManager()->getStorage('node')
+          ->loadByProperties($properties);
+        $node = !empty($entities) ? array_shift($entities) : NULL;
+        if ($node instanceof Node) {
+          break;
+        }
+      }
+      // If node does not exists, we create a node.
+      // If node exists, we create the translation node.
+      // If node translation exists, we skip.
       if (!($node instanceof Node)) {
         $node = Node::create([
           // The node entity bundle.
           'type' => 'product_list',
-          'langcode' => 'en',
+          'langcode' => $term->language()->getId(),
           // The user ID.
           'uid' => 1,
           'title' => $attribute_value,
@@ -225,10 +234,10 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
           ],
         ]);
         $node->save();
-
-        // Creating the translation if langcode not passed.
+      } elseif (!($node->hasTranslation($term->language()->getId()))) {
         /** @var \Drupal\node\NodeInterface $node_translation */
-        $node_translation = $node->addTranslation('ar');
+        $node_translation = $node->addTranslation($term->language()->getId());
+        $attribute_value = $term->getName();
         $node_translation->setOwnerId(1);
         $node_translation->setTitle($attribute_value);
         $node_translation->set('field_attribute_name', $attribute);
