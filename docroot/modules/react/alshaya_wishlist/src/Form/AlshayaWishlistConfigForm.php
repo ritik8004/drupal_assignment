@@ -35,14 +35,6 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#default_value' => $this->config('alshaya_wishlist.settings')->get('wishlist_enabled'),
     ];
 
-    $form['alshaya_wishlist']['empty_wishlist_message'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Empty Wishlist Message'),
-      '#description' => $this->t('Provides a static message that will be shown when the Wishlist is empty.'),
-      '#maxlength' => 255,
-      '#default_value' => $this->config('alshaya_wishlist.settings')->get('empty_wishlist_message'),
-    ];
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -52,7 +44,6 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_wishlist.settings')
       ->set('wishlist_enabled', $form_state->getValue('wishlist_enabled'))
-      ->set('empty_wishlist_message', $form_state->getValue('empty_wishlist_message'))
       ->save();
 
     parent::submitForm($form, $form_state);

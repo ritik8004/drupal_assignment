@@ -1,11 +1,11 @@
 my-wishlist:
   js:
-    dist/wishlist.bundle.js: {}
+    dist/mywishlist.bundle.js: {}
   dependencies:
     - alshaya_react/react
 
-wishlist_pdp:
+wishlist:
   js:
-    dist/pdp.bundle.js: {}
+    dist/wishlist.bundle.js: {}
   dependencies:
     - alshaya_react/react

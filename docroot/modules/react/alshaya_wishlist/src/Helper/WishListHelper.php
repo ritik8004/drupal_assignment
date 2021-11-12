@@ -55,7 +55,7 @@ class WishListHelper {
     $alshaya_wishlist_config = $this->configFactory->get('alshaya_wishlist.settings');
 
     $config = [
-      'emptyWishListMessage' => $alshaya_wishlist_config->get('empty_wishlist_message') ?? '',
+      'wishlistinfoLocalStorageExpiration' => $alshaya_wishlist_config->get('wishlistinfo_local_storage_expiration'),
     ];
 
     return $config;
