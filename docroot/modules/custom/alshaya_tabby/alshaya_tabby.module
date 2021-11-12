@@ -23,3 +23,14 @@ function alshaya_tabby_node_view(array &$build, EntityInterface $entity, EntityV
     $alshayaTabbyHelper->getTabbyPaymentBuild($build);
   }
 }
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ *
+ * @param array $build
+ */
+function alshaya_tabby_alshaya_spc_cart_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper $alshayaTabbyHelper */
+  $alshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
+  $alshayaTabbyHelper->getTabbyPaymentBuild($build, 'cart');
+}

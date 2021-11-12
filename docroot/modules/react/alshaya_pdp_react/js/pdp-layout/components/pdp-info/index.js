@@ -79,9 +79,9 @@ const PdpInfo = ({
       {postpay}
       <ConditionalView condition={Tabby.isTabbyEnabled()}>
         <TabbyWidget
-          amount={finalPrice}
           classNames=""
           pageType="pdp"
+          id="tabby-promo-pdp"
         />
       </ConditionalView>
     </div>
