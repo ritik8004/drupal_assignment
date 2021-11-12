@@ -25,14 +25,14 @@ const getErrorResponse = (message, code) => ({
  * @param {Array} data
  *   User's aura info.
  *
- * @return {Boolean}
+ * @return {Promise}
  *   true if update is successful else false.
  */
-const updateUserAuraInfo = (data) => callDrupalApi('/update/user-aura-info', 'POST', data)
+const updateUserAuraInfo = async (data) => callDrupalApi('/update/user-aura-info', 'POST', data)
   .then((response) => response.data)
   .catch((e) => {
     logger.error('Error occurred while updating user aura info. Data: @data. Message: @message', {
-      '@data': data,
+      '@data': JSON.stringify(data),
       '@message': e.message,
     });
   });

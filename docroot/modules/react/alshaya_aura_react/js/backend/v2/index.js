@@ -1,6 +1,6 @@
 import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
 import logger from '../../../../alshaya_spc/js/utilities/logger';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from './error';
 import search from './search_helper';
 import { getErrorResponse, updateUserAuraInfo } from './utility';
@@ -24,7 +24,7 @@ window.auraBackend = window.auraBackend || {};
 window.auraBackend.loyaltyClubSignUp = async (data) => {
   if (!hasValue(data.firstname) || !hasValue(data.lastname)) {
     logger.warning('Error while trying to do loyalty club sign up. First name and last name is required. Data: @data', {
-      '@data': data,
+      '@data': JSON.stringify(data),
     });
 
     return getErrorResponse('INVALID_NAME_ERROR', 500);
@@ -77,41 +77,42 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
     requestData.customer.customerId = customerId;
   }
 
-  return callMagentoApi('/V1/customers/quick-enrollment', 'POST', requestData)
-    .then((response) => {
-      const responseData = {
-        status: true,
-        data: response,
-      };
-
-      // On API success, update user AURA Status in Drupal for logged in user.
-      if (!hasValue(uid) && Array.isArray(response) && hasValue(response.apc_link)) {
-        const auraData = {
-          uid,
-          apcLinkStatus: response.apc_link,
-        };
-
-        const isUserAuraInfoUpdated = updateUserAuraInfo(auraData);
-
-        // Check if user aura status was updated successfully in Drupal.
-        if (!isUserAuraInfoUpdated) {
-          const message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
-          logger.error(`${message} .  User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.`, {
-            '@uid': uid,
-            '@customer_id': customerId,
-            '@aura_status': response.apc_link,
-          });
-          return getErrorResponse(message, 500);
-        }
-      }
-
-      return responseData;
-    })
-    .catch((e) => {
-      logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
-        '@data': data,
-        '@message': e.message,
-      });
-      return getErrorResponse(e.message, e.code);
+  let response = null;
+  try {
+    response = await callMagentoApi('/V1/customers/quick-enrollment', 'POST', requestData);
+  } catch (e) {
+    logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
+      '@data': JSON.stringify(data),
+      '@message': e.message,
     });
+    return getErrorResponse(e.message, e.code);
+  }
+
+  const responseData = {
+    status: true,
+    data: response,
+  };
+
+  // On API success, update user AURA Status in Drupal for logged in user.
+  if (hasValue(uid) && isObject(response) && hasValue(response.data.apc_link)) {
+    const auraData = {
+      uid,
+      apcLinkStatus: response.data.apc_link,
+    };
+
+    const isUserAuraInfoUpdated = await updateUserAuraInfo(auraData);
+
+    // Check if user aura status was updated successfully in Drupal.
+    if (!isUserAuraInfoUpdated) {
+      const message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
+      logger.error(`${message} .  User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.`, {
+        '@uid': uid,
+        '@customer_id': customerId,
+        '@aura_status': response.data.apc_link,
+      });
+      return getErrorResponse(message, 500);
+    }
+  }
+
+  return responseData;
 };
