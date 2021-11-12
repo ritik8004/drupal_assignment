@@ -4,7 +4,7 @@ var buildPath = '/modules/react/alshaya_wishlist/dist/';
 var config = {
   entry: {
     wishlist: './js/wishlist',
-    pdp: './js/pdp',
+    mywishlist: './js/mywishlist',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

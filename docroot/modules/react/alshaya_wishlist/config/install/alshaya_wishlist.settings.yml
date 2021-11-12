@@ -1,3 +1,4 @@
 wishlist_enabled: true
 empty_wishlist_message: ''
-langcode: en
+# Config for local storage expiration time, default 300 sec (5 min).
+wishlistinfo_local_storage_expiration: 300

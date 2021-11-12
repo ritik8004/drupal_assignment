@@ -1,4 +1,4 @@
-alshaya_wishlist.settings: 
+alshaya_wishlist.settings:
   type: config_object
   label: 'Alshaya Wishlist Configuration'
   mapping:
@@ -8,3 +8,6 @@ alshaya_wishlist.settings:
     empty_wishlist_message:
       type: text
       label: 'Empty Wishlist Message.'
+    wishlistinfo_local_storage_expiration:
+      type: integer
+      label: 'Expire time for wishlist info in localStorage'

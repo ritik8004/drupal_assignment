@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WishlistProductList from './components/wishlist-product-list';
+import WishListPDP from './components/wishlist-pdp';
 
-ReactDOM.render(
-  <WishlistProductList />,
-  document.getElementById('my-wishlist'),
-);
+if (document.querySelector('#wishlist-pdp')) {
+  ReactDOM.render(
+    <WishListPDP />,
+    document.querySelector('#wishlist-pdp'),
+  );
+}
