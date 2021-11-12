@@ -5,6 +5,9 @@ alshaya_wishlist.settings:
     wishlist_enabled:
       type: boolean
       label: 'Switch to enable and disable Wishlist.'
+    empty_wishlist_message:
+      type: text
+      label: 'Empty Wishlist Message.'
     wishlistinfo_local_storage_expiration:
       type: integer
       label: 'Expire time for wishlist info in localStorage'

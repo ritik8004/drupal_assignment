@@ -1,0 +1,5 @@
+alshaya_wishlist.alshaya_wishlist_config:
+  title: 'Alshaya Wishlist Configuration'
+  base_route_name: alshaya_wishlist.alshaya_wishlist_config
+  names:
+    - alshaya_wishlist.settings
