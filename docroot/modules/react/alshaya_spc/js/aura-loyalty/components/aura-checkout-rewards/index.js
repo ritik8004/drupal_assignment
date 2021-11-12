@@ -18,7 +18,7 @@ import { processCheckoutCart } from '../utilities/checkout_helper';
 import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
