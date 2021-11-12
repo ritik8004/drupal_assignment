@@ -10,18 +10,21 @@ const PdpInfo = ({
   hidepostpay,
 }) => {
   let discountPercantage = null;
+  const productPriceNumber = pdpProductPrice.replace(',', '');
+  const finalPriceNumber = finalPrice.replace(',', '');
 
-  if (!(pdpProductPrice === finalPrice)) {
-    discountPercantage = Math.round(((pdpProductPrice - finalPrice) / pdpProductPrice) * 100);
+  if (!(productPriceNumber === finalPriceNumber)) {
+    // eslint-disable-next-line max-len
+    discountPercantage = Math.round(((productPriceNumber - finalPriceNumber) / productPriceNumber) * 100);
   }
 
-  const specialPriceClass = (parseInt(finalPrice, 10) < parseInt(pdpProductPrice, 10)) ? 'has-special-price' : '';
+  const specialPriceClass = (parseInt(finalPriceNumber, 10) < parseInt(productPriceNumber, 10)) ? 'has-special-price' : '';
 
   let postpay;
   if (Postpay.isPostpayEnabled() && !hidepostpay) {
     postpay = (
       <PostpayCart
-        amount={finalPrice.replace(',', '')}
+        amount={finalPriceNumber}
         classNames=""
         pageType="pdp"
       />
@@ -44,7 +47,7 @@ const PdpInfo = ({
         style={(animateTitlePrice ? { animationDelay: '0.4s' } : null)}
       >
         <div className={`magv2-pdp-price-container ${specialPriceClass}`}>
-          {(parseInt(finalPrice, 10) < parseInt(pdpProductPrice, 10))
+          {(parseInt(finalPriceNumber, 10) < parseInt(productPriceNumber, 10))
             ? (
               <div className="magv2-pdp-final-price-wrapper">
                 <span className="magv2-pdp-final-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
