@@ -52,5 +52,6 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $page['#attached']['drupalSettings']['wishlist'] = $settings;
 
   // Attach wishlist library if feature is enabled.
+  // @todo we need this library only for PDP, Listing pages and basket page.
   $page['#attached']['library'][] = 'alshaya_wishlist/wishlist';
 }
