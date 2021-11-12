@@ -119,20 +119,38 @@ export const getDeliveryAreaStorage = () => {
   return null;
 };
 
+export const getAreaFieldKey = () => {
+  if (drupalSettings.address_fields) {
+    return drupalSettings.address_fields.administrative_area.key;
+  }
+  return null;
+};
+
+export const getAreaParentFieldKey = () => {
+  if (drupalSettings.address_fields) {
+    return drupalSettings.address_fields.area_parent.key;
+  }
+  return null;
+};
+
 /**
  * Storing delivery area values choosen by user.
  */
 export const setDeliveryAreaStorage = (areaSelected) => {
-  removeStorageInfo('deliveryinfo-areadata');
-  const { currentLanguage } = drupalSettings.path;
-  const deliveryArea = {
-    label: {
-      [currentLanguage]: areaSelected.label,
-    },
-    value: {
-      area: areaSelected.area,
-      governate: areaSelected.governate,
-    },
-  };
-  setStorageInfo(deliveryArea, 'deliveryinfo-areadata');
+  const areaFieldKey = getAreaFieldKey();
+  const areaParentFieldKey = getAreaParentFieldKey();
+  if (areaFieldKey !== null && areaParentFieldKey !== null) {
+    removeStorageInfo('deliveryinfo-areadata');
+    const { currentLanguage } = drupalSettings.path;
+    const deliveryArea = {
+      label: {
+        [currentLanguage]: areaSelected.label,
+      },
+      value: {
+        [areaFieldKey]: areaSelected.area,
+        [areaParentFieldKey]: areaSelected.governate,
+      },
+    };
+    setStorageInfo(deliveryArea, 'deliveryinfo-areadata');
+  }
 };
