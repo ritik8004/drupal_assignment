@@ -2,6 +2,9 @@ import React from 'react';
 import PostpayCart
   from '../../../../../alshaya_spc/js/cart/components/postpay/postpay';
 import Postpay from '../../../../../alshaya_spc/js/utilities/postpay';
+import TabbyWidget from '../../../../../js/tabby/components';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
@@ -74,6 +77,13 @@ const PdpInfo = ({
         </div>
       </div>
       {postpay}
+      <ConditionalView condition={Tabby.isTabbyEnabled()}>
+        <TabbyWidget
+          amount={finalPrice}
+          classNames=""
+          pageType="pdp"
+        />
+      </ConditionalView>
     </div>
   );
 };

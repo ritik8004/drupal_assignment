@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_tabby module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_tabby_install() {
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $tabby = $checkout_options_manager->loadPaymentMethod('tabby', '4 interest-free payments with tabby');
+  $tabby = $tabby->hasTranslation('ar')
+    ? $tabby->getTranslation('ar')
+    : $tabby->addTranslation('ar', []);
+  $tabby->setName('4 interest-free payments with tabby AR');
+  $tabby->save();
+  // @todo: Add translation strings for tabby.
+
+  // Disable new tabby payment method by default
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $exclude_payment_methods = $config->get('exclude_payment_methods');
+  $refund_exclude_payment_methods = $config->get('refund_exclude_payment_methods');
+  $exclude_payment_methods['tabby'] = 'tabby';
+  $refund_exclude_payment_methods['tabby'] = 'tabby';
+  $config->set('exclude_payment_methods', $exclude_payment_methods);
+  $config->set('refund_exclude_payment_methods', $refund_exclude_payment_methods);
+  $config->save();
+}
