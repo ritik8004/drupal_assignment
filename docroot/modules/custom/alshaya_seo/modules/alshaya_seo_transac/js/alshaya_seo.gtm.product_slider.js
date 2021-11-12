@@ -13,12 +13,12 @@
       /**
        * Product click handler for product sliders on homepage and PDP.
        */
-      $('.view-product-slider article > a', context).once('product-clicked').on('click', function () {
+      $('.view-product-slider article > a', context).once('product-clicked').on('click', function (event) {
         var that = $(this).closest('article');
         var subListName = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
         // Get the position of the item in the carousel.
         var position = parseInt($(this).closest('.views-row').data('list-item-position'));
-        Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, subListName, position);
+        Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, subListName, position, event);
       });
     }
   }
