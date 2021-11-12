@@ -2853,4 +2853,33 @@ JS;
     file_put_contents($filename, json_encode($orders, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
   }
 
+  /**
+   * @Given /^I apply the "([^"]*)" delivery filter$/
+   */
+  public function iApplyTheDeliveryFilter($delivery_type) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.plp-facet-product-filter .show-all-filters-algolia')->click();
+    $this->iWaitSeconds('2');
+    $delivery_type_wrapper = $page->find('css', '.block-alshaya-algolia-plp-facets-block-all .filter__inner #attr_delivery_ways');
+    if (!empty($delivery_type_wrapper)) {
+      $delivery_type_wrapper->click();
+      if ($delivery_type == 'Express') {
+        $delivery_type_wrapper->find('css', 'ul li.express_delivery')->click();
+      }
+      else {
+        $delivery_type_wrapper->find('css', 'ul li.same_day_delivery')->click();
+      }
+    }
+    else {
+      $page->find('css', '.block-alshaya-algolia-plp-facets-block-all .all-filters-close')->click();
+      $page->find('css', '#block-alshaya-algolia-react-plp .plp-facet-product-filter #attr_delivery_ways h3')->click();
+      if ($delivery_type == 'Express') {
+        $page->find('css', '#block-alshaya-algolia-react-plp .plp-facet-product-filter #attr_delivery_ways ul li.express_delivery')->click();
+      } else {
+        $page->find('css', '#block-alshaya-algolia-react-plp .plp-facet-product-filter #attr_delivery_ways ul li.same_day_delivery')->click();
+      }
+      $page->find('css', '#block-alshaya-algolia-react-plp .plp-facet-product-filter #attr_delivery_ways h3')->click();
+    }
+  }
+
 }
