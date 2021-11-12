@@ -1191,7 +1191,12 @@ const getProcessedCheckoutData = async (cartData) => {
 
     // If payment method is not available in the list, we set the first
     // available payment method in React, here we remove it from response.
-    if (typeof response.payment.method !== 'undefined' && !codes.includes(response.payment.method)) {
+    // `aura_payment` is pseudo payment method, it won't be in
+    // the list of payment methods so do not remove payment method
+    // if it's `aura_payment`.
+    if (typeof response.payment.method !== 'undefined'
+      && !codes.includes(response.payment.method)
+      && response.payment.method !== 'aura_payment') {
       delete (response.payment.method);
     }
 

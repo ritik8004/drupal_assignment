@@ -27,6 +27,7 @@ import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import hasValue from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import isAuraEnabled from '../../../../js/utilities/helper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -663,6 +664,19 @@ const getProcessedCartData = async (cartData) => {
   if (typeof cartData.totals.base_grand_total !== 'undefined') {
     data.cart_total = cartData.totals.base_grand_total;
     data.minicart_total = cartData.totals.base_grand_total;
+  }
+
+  // If Aura enabled, add aura related details.
+  if (isAuraEnabled()) {
+    cartData.totals.total_segments.forEach((element) => {
+      if (element.code === 'balance_payable') {
+        data.totals.balancePayable = element.value;
+      }
+      if (element.code === 'aura_payment') {
+        data.totals.auraPayment = element.value;
+      }
+    });
+    data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
 
   if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
