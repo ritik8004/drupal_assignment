@@ -10,6 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 
 /**
  * Helper class for Aura.
@@ -63,6 +64,13 @@ class AuraHelper {
   protected $languageManager;
 
   /**
+   * Alshaya SPC Version Helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * AuraHelper constructor.
    *
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -77,6 +85,8 @@ class AuraHelper {
    *   Api helper object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Alshaya SPC Version Helper.
    */
   public function __construct(
     AccountProxyInterface $current_user,
@@ -84,7 +94,8 @@ class AuraHelper {
     MobileNumberUtilInterface $mobile_util,
     ConfigFactoryInterface $config_factory,
     AuraApiHelper $api_helper,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    AlshayaSpcHelper $spc_helper
   ) {
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
@@ -92,6 +103,7 @@ class AuraHelper {
     $this->configFactory = $config_factory;
     $this->apiHelper = $api_helper;
     $this->languageManager = $language_manager;
+    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -146,7 +158,9 @@ class AuraHelper {
       'rewardActivityTimeLimit' => $alshaya_aura_config->get('aura_reward_activity_time_limit_in_months'),
       'signUpTermsAndConditionsLink' => $alshaya_aura_config->get('aura_signup_terms_and_conditions_link'),
       'isoCurrencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
-      'auraUnsupportedPaymentMethods' => Settings::get('aura_unsupported_payment_methods'),
+      'auraUnsupportedPaymentMethods' => ($this->spcHelper->getCommerceBackendVersion() == 2)
+      ? $alshaya_aura_config->get('aura_unsupported_payment_methods')
+      : Settings::get('aura_unsupported_payment_methods'),
     ];
 
     return $config;

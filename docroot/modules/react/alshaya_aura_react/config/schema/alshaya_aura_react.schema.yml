@@ -20,6 +20,12 @@ alshaya_aura_react.settings:
     aura_signup_terms_and_conditions_link:
       type: text
       label: 'AURA Sign up terms and conditions Link'
+    aura_unsupported_payment_methods:
+      type: sequence
+      label: 'Aura Unsupported Payment Methods'
+      sequence:
+        type: string
+        label: 'Unsupported Payment Method'
 
 alshaya_aura_react.loyalty_benefits:
   type: config_object
