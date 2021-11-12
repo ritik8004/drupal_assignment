@@ -8,7 +8,6 @@ services:
       - '@config.factory'
       - '@alshaya_aura_react.aura_api_helper'
       - '@language_manager'
-      - '@alshaya_spc.helper'
   alshaya_aura_react.aura_api_helper:
     class: Drupal\alshaya_aura_react\Helper\AuraApiHelper
     arguments:
