@@ -11,12 +11,9 @@
     tabbyWidget.each(function () {
       const selector = $(this).attr('id');
       if (selector !== undefined) {
-        if ($(this).hasClass('spc-tabby-info')) {
-          Drupal.tabbyInfoInit('#' + selector, amount);
-        }
-        else {
-          Drupal.tabbyPromoInit('#' + selector, amount, 'cart');
-        }
+        $(this).hasClass('spc-tabby-info')
+          ? Drupal.tabbyInfoInit('#' + selector, amount)
+          : Drupal.tabbyPromoInit('#' + selector, amount, 'cart');
       }
     });
   });

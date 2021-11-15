@@ -342,6 +342,7 @@ export default class Cart extends React.Component {
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
           {postPayData.postpayEligibilityMessage}
+          {tabbyEnabled && <TabbyWidget pageType="cart" classNames="spc-tabby-info" mobileOnly={false} id="tabby-cart-info" />}
 
           <ConditionalView condition={smartAgentInfo !== false}>
             <>
@@ -351,7 +352,6 @@ export default class Cart extends React.Component {
           </ConditionalView>
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
-          {tabbyEnabled && <TabbyWidget pageType="cart" classNames="spc-tabby-info" mobileOnly={false} id="tabby-cart-info" />}
           <MobileCartPreview total_items={totalItems} totals={totals} />
           {postPayData.postpay}
           {tabbyEnabled && <TabbyWidget pageType="cart" classNames="spc-tabby-mobile-preview" mobileOnly id="tabby-promo-cart-mobile" />}
