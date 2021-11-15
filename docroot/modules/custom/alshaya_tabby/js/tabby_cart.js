@@ -7,7 +7,7 @@
     catch (e) {
       amount = 0;
     }
-    const tabbyWidget = $('#spc-cart').find('.' + drupalSettings.tabby_widget_info.class);
+    const tabbyWidget = $('#spc-cart').find('.' + drupalSettings.tabby.widgetInfo.class);
     tabbyWidget.each(function () {
       const selector = $(this).attr('id');
       if (selector !== undefined) {

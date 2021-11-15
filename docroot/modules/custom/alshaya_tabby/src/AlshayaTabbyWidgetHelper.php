@@ -141,7 +141,7 @@ class AlshayaTabbyWidgetHelper {
     }
     $tabbyApiConfig['locale'] = $this->langcode;
     $build['#attached']['drupalSettings']['tabby'] = $tabbyApiConfig;
-    $build['#attached']['drupalSettings']['tabby']['tabby_installment_count'] = 4;
+    $build['#attached']['drupalSettings']['tabby']['installmentCount'] = 4;
 
     switch ($page_type) {
       case 'cart':
@@ -161,8 +161,7 @@ class AlshayaTabbyWidgetHelper {
         $widget_info = $this->getTabbyWidgetInfo();
         break;
     }
-    $build['#attached']['drupalSettings']['tabby']['selector'] = $widget_info['id'];
-    $build['#attached']['drupalSettings']['tabby_widget_info'] = $widget_info;
+    $build['#attached']['drupalSettings']['tabby']['widgetInfo'] = $widget_info;
   }
 
 }

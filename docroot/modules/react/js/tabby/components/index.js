@@ -10,7 +10,7 @@ const TabbyWidget = (props) => {
     return (
       <div className="tabby">
         <div
-          className={`${classNames} ${drupalSettings.tabby_widget_info.class}`}
+          className={`${classNames} ${drupalSettings.tabby.widgetInfo.class}`}
           id={id}
         />
       </div>
