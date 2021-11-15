@@ -209,6 +209,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_enabled'] = $product_settings->get('legal_notice_enabled');
   $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_label'] = $product_settings->get('legal_notice_label');
   $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_summary'] = $product_settings->get('legal_notice_summary');
+  $build['#attached']['drupalSettings']['alshayaRcs']['additional_pdp_description_enabled'] = $product_settings->get('additional_pdp_description_enabled');
+  $build['#attached']['drupalSettings']['alshayaRcs']['additional_pdp_description_label'] = $product_settings->get('additional_pdp_description_label');
+  $build['#attached']['drupalSettings']['alshayaRcs']['additional_pdp_description_summary'] = $product_settings->get('additional_pdp_description_summary');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
   $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryType'] = $product_settings->get('pdp_gallery_type');

@@ -68,6 +68,26 @@ function getLegalNotice() {
 }
 
 /**
+ * Gets additional PDP description value from config.
+ *
+ * @returns {object}
+ *   Object containing the additional description.
+ */
+function getAdditionalPdpDescription() {
+  return {
+    enabled: Drupal.hasValue(drupalSettings.alshayaRcs.additional_pdp_description_enabled)
+      ? drupalSettings.alshayaRcs.additional_pdp_description_enabled
+      : false,
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.additional_pdp_description_label)
+      ? drupalSettings.alshayaRcs.additional_pdp_description_label
+      : '',
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.additional_pdp_description_summary)
+      ? drupalSettings.alshayaRcs.additional_pdp_description_summary.value
+      : false,
+  };
+}
+
+/**
  * Replace placeholders and get related products.
  *
  * @param {object} products
@@ -639,6 +659,9 @@ exports.computePhFilters = function (input, filter) {
       // Add legal notice.
       data.legal_notice = getLegalNotice();
 
+      // Add Additional description.
+      data.additional_description = getAdditionalPdpDescription();
+
       // Render handlebars plugin.
       value = handlebarsRenderer.render(`product.${filter}.block`, data);
       break;
@@ -651,6 +674,9 @@ exports.computePhFilters = function (input, filter) {
       data.description = input.description;
       // Add legal notice.
       data.description.legal_notice = getLegalNotice();
+
+      // Add Additional description.
+      data.description.additional_description = getAdditionalPdpDescription();
 
       // Apply ellipsis.
       let tmp = applyEllipsis(data.html);

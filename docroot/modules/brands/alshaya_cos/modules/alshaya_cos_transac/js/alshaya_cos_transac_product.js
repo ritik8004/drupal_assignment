@@ -4,7 +4,7 @@
 (function main() {
   // Event listener to update the data layer object with the proper category
   // data.
-  RcsEventManager.addListener('alshayaRcsUpdateResults', (e) => {
+  RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
       return;
@@ -19,10 +19,6 @@
       composition: data.composition,
       washing_instructions: data.washing_instructions,
       article_warning: data.article_warning,
-      // @TODO product_guide will be generated dynamically from config (to be done in V1)
-      // The content will be a text similar to the text below, with a link to a page.
-      // See https://alshayagroup.atlassian.net/browse/CORE-34431?focusedCommentId=595906.
-      product_guide: 'Make sure that your favorite items remain long-loved pieces for years to come. <a href="/product/guides">Read our product care guide.</a>',
       sku: data.sku,
       show_product_detail_title: (data.composition || data.washing_instructions || data.article_warning),
     };

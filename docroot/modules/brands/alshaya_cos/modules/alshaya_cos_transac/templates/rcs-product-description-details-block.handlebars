@@ -25,9 +25,19 @@
       <p>{{ article_warning }}</p>
     {{/if}}
 
-    {{#if product_guide }}
-      <p>{{{ product_guide }}}</p>
+    {{#if additional_description.enabled }}
+    <div class="additional-description desc-wrapper">
+      <div class="desc-label">
+        {{ additional_description.label }}
+      </div>
+      <div class="desc-value">
+        <p>{{{ additional_description.summary }}}</p>
+      </div>
+    </div>
     {{/if}}
+
+    <h3>{{t 'Product No:' }}</h3>
+    <p>{{ sku }}</p>
 
     {{#if legal_notice.enabled }}
     <div class="legal-notice desc-wrapper">
@@ -39,8 +49,5 @@
       </div>
     </div>
     {{/if}}
-
-    <h3>{{t 'Product No:' }}</h3>
-    <p>{{ sku }}</p>
   </div>
 </div>
