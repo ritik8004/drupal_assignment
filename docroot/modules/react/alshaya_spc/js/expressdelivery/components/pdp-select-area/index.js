@@ -1,7 +1,7 @@
 import React from 'react';
 import AreaListBlock from '../../../cart/components/area-list-block';
 import ConditionalView from '../../../common/components/conditional-view';
-import { getDeliveryAreaStorage, getDeliveryAreaValue } from '../../../utilities/delivery_area_util';
+import { getAreaFieldKey, getDeliveryAreaStorage, getDeliveryAreaValue } from '../../../utilities/delivery_area_util';
 import { setStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../utilities/strings';
 
@@ -25,15 +25,16 @@ export default class PdpSelectArea extends React.Component {
 
   setAreaLabel() {
     const currentArea = getDeliveryAreaStorage();
-    if (currentArea !== null) {
+    const areaFieldKey = getAreaFieldKey();
+    if (currentArea !== null && areaFieldKey !== null) {
       const { currentLanguage } = drupalSettings.path;
       // Fetching label from api if user switches language.
       if (!(currentLanguage in currentArea.label)) {
-        getDeliveryAreaValue(currentArea.value.area).then(
+        getDeliveryAreaValue(currentArea.value[areaFieldKey]).then(
           (result) => {
             if (result !== null && result.items.length > 0) {
               const areaObj = result.items.find(
-                (element) => element.location_id === currentArea.value.area,
+                (element) => element.location_id === currentArea.value[areaFieldKey],
               );
               if (areaObj && Object.keys(areaObj).length !== 0) {
                 currentArea.label[currentLanguage] = areaObj.label;

@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import ConditionalView from '../../../common/components/conditional-view';
 import {
+  getAreaParentFieldKey,
   getDeliveryAreaList, getDeliveryAreaStorage, getGovernatesList, setDeliveryAreaStorage,
 } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
@@ -12,7 +13,7 @@ import AvailableAreaItems from '../available-area-items';
 export default class AreaListBlock extends React.Component {
   constructor(props) {
     super(props);
-    this.parentVisibility = drupalSettings.alshaya_spc.address_fields.area_parent.visible;
+    this.parentVisibility = drupalSettings.address_fields.area_parent.visible;
     this.state = {
       governateOptions: '',
       governateDefault: '',
@@ -27,13 +28,14 @@ export default class AreaListBlock extends React.Component {
    */
   componentDidMount() {
     let governateDefaultLabel = '';
+    const governateKey = getAreaParentFieldKey();
     const areaSelected = getDeliveryAreaStorage();
     let defaultOptions = {
       value: 'none',
       label: getStringMessage('governate_label', { '@label': governateDefaultLabel }),
     };
-    if (drupalSettings.alshaya_spc.address_fields) {
-      governateDefaultLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
+    if (drupalSettings.address_fields) {
+      governateDefaultLabel = drupalSettings.address_fields.area_parent.label;
     }
     getGovernatesList().then(
       (response) => {
@@ -45,9 +47,9 @@ export default class AreaListBlock extends React.Component {
               label: item.label,
             });
           });
-          if (areaSelected !== null) {
+          if (areaSelected !== null && governateKey !== null) {
             defaultOptions = options.find(
-              (element) => element.value === areaSelected.value.governate,
+              (element) => element.value === areaSelected.value[governateKey],
             );
           } else if (options.length > 0) {
             [defaultOptions] = options;
@@ -166,8 +168,8 @@ export default class AreaListBlock extends React.Component {
     } = this.state;
     const { closeModal } = this.props;
     let governateDefaultLabel = '';
-    if (drupalSettings.alshaya_spc.address_fields) {
-      governateDefaultLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
+    if (drupalSettings.address_fields) {
+      governateDefaultLabel = drupalSettings.address_fields.area_parent.label;
     }
     return (
       <div className="spc-delivery-wrapper">
