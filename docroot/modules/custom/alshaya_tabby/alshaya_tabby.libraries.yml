@@ -2,6 +2,12 @@ tabby_sdk:
   js:
     https://checkout.tabby.ai/integration.js: { type: external }
 
+tabby_info:
+  js:
+    https://checkout.tabby.ai/tabby-info.js: { type: external }
+  dependencies:
+    - alshaya_tabby/tabby_sdk
+
 tabby_promos:
   js:
     js/tabby.js: { }
@@ -32,3 +38,4 @@ tabby_cart:
     js/tabby_cart.js: { }
   dependencies:
     - alshaya_tabby/tabby_promos
+    - alshaya_tabby/tabby_info
