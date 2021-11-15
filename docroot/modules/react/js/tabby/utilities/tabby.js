@@ -1,7 +1,7 @@
 const Tabby = {
   isTabbyEnabled: () => {
-    if (typeof drupalSettings.tabby_widget_info !== 'undefined'
-      && typeof drupalSettings.tabby !== 'undefined') {
+    if (typeof drupalSettings.tabby !== 'undefined'
+      && typeof drupalSettings.tabby.widgetInfo !== 'undefined') {
       return true;
     }
     return false;

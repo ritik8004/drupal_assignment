@@ -2,16 +2,16 @@ import React from 'react';
 
 const TabbyWidget = (props) => {
   const {
-    amount, classNames, pageType,
+    classNames, mobileOnly, pageType, id,
   } = props;
 
-  if (pageType === 'pdp') {
+  if ((pageType === 'cart' && !(mobileOnly && window.innerWidth >= 768))
+    || pageType === 'pdp') {
     return (
       <div className="tabby">
         <div
-          className={`${classNames} ${drupalSettings.tabby_widget_info.class}`}
-          data-amount={amount}
-          id={drupalSettings.tabby.selector} // @todo: Change this to unique for new pdp.
+          className={`${classNames} ${drupalSettings.tabby.widgetInfo.class}`}
+          id={id}
         />
       </div>
     );

@@ -77,7 +77,7 @@ class AlshayaTabbyWidgetHelper {
     $info['class'] = 'tabby-widget';
     switch ($page_type) {
       case 'cart':
-        // Cart code.
+        $id = 'tabby-promo-cart';
         break;
 
       case 'checkout':
@@ -85,9 +85,10 @@ class AlshayaTabbyWidgetHelper {
         break;
 
       default:
-        $info['id'] = Html::getUniqueId('tabby-promo-pdp');
+        $id = 'tabby-promo-pdp';
         break;
     }
+    $info['id'] = Html::getUniqueId($id);
     return $info;
   }
 
@@ -140,11 +141,13 @@ class AlshayaTabbyWidgetHelper {
     }
     $tabbyApiConfig['locale'] = $this->langcode;
     $build['#attached']['drupalSettings']['tabby'] = $tabbyApiConfig;
-    $build['#attached']['drupalSettings']['tabby']['tabby_installment_count'] = 4;
+    $build['#attached']['drupalSettings']['tabby']['installmentCount'] = 4;
 
     switch ($page_type) {
       case 'cart':
-        // Cart code.
+        $widget_info = $this->getTabbyWidgetInfo('cart');
+        $build['tabby'] = $this->getTabbyWidgetMarkup('cart');
+        $build['#attached']['library'][] = 'alshaya_tabby/tabby_cart';
         break;
 
       case 'checkout':
@@ -156,10 +159,9 @@ class AlshayaTabbyWidgetHelper {
         $build['#attached']['library'][] = 'alshaya_white_label/tabby';
         $build['tabby'] = $this->getTabbyWidgetMarkup();
         $widget_info = $this->getTabbyWidgetInfo();
-        $build['#attached']['drupalSettings']['tabby']['selector'] = $widget_info['id'];
-        $build['#attached']['drupalSettings']['tabby_widget_info'] = $widget_info;
         break;
     }
+    $build['#attached']['drupalSettings']['tabby']['widgetInfo'] = $widget_info;
   }
 
 }
