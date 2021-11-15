@@ -17,10 +17,10 @@
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    await globalThis.rcsPhCommerceBackend.getDataAsync('product', {sku: mainSKU});
+    await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
-  }
+  };
 
   /**
    * Get the stock status of the given sku.
@@ -43,7 +43,7 @@
     });
 
     return stock;
-  }
+  };
 
   /**
    * Triggers stock refresh of the provided skus.
@@ -80,13 +80,13 @@
 
     // Fetch the product data for the given skus which also saves them to the
     // static storage.
-    globalThis.rcsPhCommerceBackend.getDataAsync('product', {sku: skuValues, op: 'in'});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: skuValues, op: 'in'});
 
     // Now store the product data to local storage.
     Object.entries(skus).forEach(function ([ parentSku, sku ]) {
       window.commerceBackend.processAndStoreProductData(parentSku, sku, 'productInfo');
     });
-  }
+  };
 
   /**
    * Gets the attribute label.
@@ -104,7 +104,7 @@
       return staticStorage['attrLabels'][attrName][attrValue];
     }
 
-    const response = globalThis.rcsPhCommerceBackend.getDataAsync('product-option', { attributeCode: attrName });
+    const response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option', { attributeCode: attrName });
     allOptionsForAttribute = {};
 
     // Process the data to extract what we require and format it into an object.
@@ -116,5 +116,99 @@
     staticStorage['attrLabels'][attrName] = allOptionsForAttribute;
 
     return allOptionsForAttribute[attrValue];
-  }
+  };
+
+  /**
+   * Get the first child with media.
+   *
+   * @param {object}
+   *   The raw product object.
+   *
+   * @return {object|null}
+   *   The first child raw product object or null if no child with media found.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstChildWithMedia()
+   */
+  const getFirstChildWithMedia = function (product) {
+    const firstChild = product.variants.find(function (variant) {
+      return Drupal.hasValue(variant.product.media) ? variant.product : false;
+    });
+
+    if (Drupal.hasValue(firstChild)) {
+      return firstChild.product;
+    }
+
+    return null;
+  };
+
+  /**
+   * Get SKU to use for gallery when no specific child is selected.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {object}
+   *   The gallery sku object.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getSkuForGallery()
+   */
+  const getSkuForGallery = function (product) {
+    let skuForGallery = product;
+    let child = null;
+
+    switch (drupalSettings.alshayaRcs.useParentImages) {
+      case 'never':
+        if (product.type_id === 'configurable') {
+          child = getFirstChildWithMedia(product);
+        }
+        break;
+    }
+
+    skuForGallery = Drupal.hasValue(child) ? child : skuForGallery;
+    return skuForGallery;
+  };
+
+  /**
+   * Get first image from media to display as list.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   *
+   * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstImage()
+   */
+  window.commerceBackend.getFirstImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return Drupal.hasValue(galleryProduct.media[0]) ? galleryProduct.media[0] : null;
+  };
+
+  /**
+   * Get the image from media to as the cart image.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   */
+  window.commerceBackend.getCartImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_cart;
+  };
+
+  /**
+   * Get the image from media to display as teaser image.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return {string}
+   *   The media item url.
+   */
+   window.commerceBackend.getTeaserImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_teaser;
+  };
 })(Drupal);

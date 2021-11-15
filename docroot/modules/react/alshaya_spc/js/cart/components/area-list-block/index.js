@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import ConditionalView from '../../../common/components/conditional-view';
 import {
+  getAreaParentFieldKey,
   getDeliveryAreaList, getDeliveryAreaStorage, getGovernatesList, setDeliveryAreaStorage,
 } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
@@ -12,7 +13,7 @@ import AvailableAreaItems from '../available-area-items';
 export default class AreaListBlock extends React.Component {
   constructor(props) {
     super(props);
-    this.parentVisibility = drupalSettings.alshaya_spc.address_fields.area_parent.visible;
+    this.parentVisibility = drupalSettings.address_fields.area_parent.visible;
     this.state = {
       governateOptions: '',
       governateDefault: '',
@@ -27,13 +28,14 @@ export default class AreaListBlock extends React.Component {
    */
   componentDidMount() {
     let governateDefaultLabel = '';
+    const governateKey = getAreaParentFieldKey();
     const areaSelected = getDeliveryAreaStorage();
     let defaultOptions = {
       value: 'none',
       label: getStringMessage('governate_label', { '@label': governateDefaultLabel }),
     };
-    if (drupalSettings.alshaya_spc.address_fields) {
-      governateDefaultLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
+    if (drupalSettings.address_fields) {
+      governateDefaultLabel = drupalSettings.address_fields.area_parent.label;
     }
     getGovernatesList().then(
       (response) => {
@@ -45,9 +47,9 @@ export default class AreaListBlock extends React.Component {
               label: item.label,
             });
           });
-          if (areaSelected !== null) {
+          if (areaSelected !== null && governateKey !== null) {
             defaultOptions = options.find(
-              (element) => element.value === areaSelected.value.governate,
+              (element) => element.value === areaSelected.value[governateKey],
             );
           } else if (options.length > 0) {
             [defaultOptions] = options;
@@ -166,8 +168,8 @@ export default class AreaListBlock extends React.Component {
     } = this.state;
     const { closeModal } = this.props;
     let governateDefaultLabel = '';
-    if (drupalSettings.alshaya_spc.address_fields) {
-      governateDefaultLabel = drupalSettings.alshaya_spc.address_fields.area_parent.label;
+    if (drupalSettings.address_fields) {
+      governateDefaultLabel = drupalSettings.address_fields.area_parent.label;
     }
     return (
       <div className="spc-delivery-wrapper">
@@ -177,55 +179,57 @@ export default class AreaListBlock extends React.Component {
             <a className="close-modal" onClick={closeModal} />
           </div>
           <div className="area-list-block-content">
-            <ConditionalView condition={this.parentVisibility}>
-              <div className="governate-label">{getStringMessage('governate_label', { '@label': governateDefaultLabel })}</div>
-              <div className="governate-drop-down">
-                <Select
-                  classNamePrefix="spcSelect"
-                  className="spc-select"
-                  onChange={this.handleSelect}
-                  options={governateOptions}
-                  defaultValue={governateDefault}
-                  value={governateDefault}
-                  isSearchable
-                />
-              </div>
-            </ConditionalView>
-            <div className="area-label">{`${Drupal.t('Search area')}`}</div>
-            <div className="spc-filter-panel-search-form-item">
-              <input className="spc-filter-panel-search-field" type="text" placeholder={Drupal.t('e.g. Dubai')} onChange={this.filterList} />
-            </div>
-            <div className="delivery-type-wrapper">
-              <span className="standard-delivery">{Drupal.t('Standard')}</span>
-              <span className="sameday-delivery">{Drupal.t('Same Day')}</span>
-              <span className="express-delivery">{Drupal.t('Express')}</span>
-            </div>
-            <div className="area-list-label">{`${Drupal.t('Select an area')}`}</div>
-            <ConditionalView condition={items.length !== 0}>
-              <ul id="delivery-area-list-items" className="area-list-wrapper">
-                {items.map((item) => (
-                  <AvailableAreaItems
-                    key={item.location_id}
-                    attr={item.location_id}
-                    value={item.label}
-                    handleLiClick={this.handleLiClick}
-                    parentId={item.parent_id}
-                    isStandardDelivery={item.is_standard_delivery}
-                    isSameDayDelivery={item.is_sameday_delivery}
-                    isExpressDelivery={item.is_express_delivery}
+            <div className="area-list-block-wrapper">
+              <ConditionalView condition={this.parentVisibility}>
+                <div className="governate-label">{getStringMessage('governate_label', { '@label': governateDefaultLabel })}</div>
+                <div className="governate-drop-down">
+                  <Select
+                    classNamePrefix="spcSelect"
+                    className="spc-select"
+                    onChange={this.handleSelect}
+                    options={governateOptions}
+                    defaultValue={governateDefault}
+                    value={governateDefault}
+                    isSearchable
                   />
-                ))}
-              </ul>
-            </ConditionalView>
-            <div className="actions">
-              <div className="select-area-link submit">
-                <a
-                  onClick={(e) => this.handleSubmit(e, activeItem)}
-                  href="#"
-                  className="select-area-link"
-                >
-                  {Drupal.t('Select this area')}
-                </a>
+                </div>
+              </ConditionalView>
+              <div className="area-label">{`${Drupal.t('Search area')}`}</div>
+              <div className="spc-filter-panel-search-form-item">
+                <input className="spc-filter-panel-search-field" type="text" placeholder={Drupal.t('e.g. Dubai')} onChange={this.filterList} />
+              </div>
+              <div className="delivery-type-wrapper">
+                <span className="standard-delivery">{Drupal.t('Standard')}</span>
+                <span className="sameday-delivery">{Drupal.t('Same Day')}</span>
+                <span className="express-delivery">{Drupal.t('Express')}</span>
+              </div>
+              <div className="area-list-label">{`${Drupal.t('Select an area')}`}</div>
+              <ConditionalView condition={items.length !== 0}>
+                <ul id="delivery-area-list-items" className="area-list-wrapper">
+                  {items.map((item) => (
+                    <AvailableAreaItems
+                      key={item.location_id}
+                      attr={item.location_id}
+                      value={item.label}
+                      handleLiClick={this.handleLiClick}
+                      parentId={item.parent_id}
+                      isStandardDelivery={item.is_standard_delivery}
+                      isSameDayDelivery={item.is_sameday_delivery}
+                      isExpressDelivery={item.is_express_delivery}
+                    />
+                  ))}
+                </ul>
+              </ConditionalView>
+              <div className="actions">
+                <div className="select-area-link submit">
+                  <a
+                    onClick={(e) => this.handleSubmit(e, activeItem)}
+                    href="#"
+                    className="select-area-link"
+                  >
+                    {Drupal.t('Select this area')}
+                  </a>
+                </div>
               </div>
             </div>
           </div>

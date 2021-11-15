@@ -1,10 +1,9 @@
-import _isString from 'lodash/isString';
 import md5 from 'md5';
 import { getApiEndpoint } from './utility';
 import logger from '../../utilities/logger';
 import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue, isString } from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Format the address array.
@@ -31,7 +30,7 @@ const formatAddressForShippingBilling = (address) => {
     });
   }
 
-  data.street = _isString(address.street)
+  data.street = isString(address.street)
     ? [address.street]
     : address.street;
 
@@ -72,7 +71,7 @@ const formatShippingEstimatesAddress = (address) => {
   data.city = (typeof address.city !== 'undefined') ? address.city : '';
   data.telephone = (typeof address.telephone !== 'undefined') ? address.telephone : '';
 
-  data.street = _isString(address.street)
+  data.street = isString(address.street)
     ? [address.street]
     : address.street;
 

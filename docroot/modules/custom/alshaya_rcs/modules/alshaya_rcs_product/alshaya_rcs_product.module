@@ -119,6 +119,11 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
  * Implements hook_page_attachments().
  */
 function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
   // Add more attributes to the list provided by the rcs_placeholders module.
   $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'] = array_merge(
     $attachments['#attached']['drupalSettings']['rcsPhSettings']['placeholderAttributes'],
@@ -206,12 +211,18 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['legal_notice_summary'] = $product_settings->get('legal_notice_summary');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
   $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryType'] = $product_settings->get('pdp_gallery_type');
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryLimit'] = [
+    'modal' => $product_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us'),
+    'others' => $product_settings->get('pdp_gallery_pager_limits'),
+  ];
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
 
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
   $build['#attached']['drupalSettings']['alshayaRcs']['shortDescLimit'] = $product_display_settings->get('short_desc_characters');
   $build['#attached']['drupalSettings']['show_configurable_boxes_after'] = $product_display_settings->get('show_configurable_boxes_after');
+  $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
   $build['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
 
@@ -221,13 +232,16 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
   $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $sku_manager->showImagesFromChildrenAfterAllOptionsSelected();
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpLayout'] = $sku_manager->getPdpLayout($entity);
-
   $build['#attached']['drupalSettings']['alshayaRcs']['quantityLimitEnabled'] = $isQuantityLimitEnabled;
   $build['#attached']['drupalSettings']['alshayaRcs']['hide_max_qty_limit_message'] = $acm_settings->get('hide_max_qty_limit_message');
 
   $configurable_form_settings = \Drupal::config('acq_sku.configurable_form_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
+
+  $alshaya_master_settings = \Drupal::config('alshaya_master.settings');
+  $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $alshaya_master_settings->getCacheTags());
 }
 
 /**
@@ -283,30 +297,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#value' => render($price_block_template),
     '#attributes' => [
       'class' => 'rcs-templates--price_block',
-    ],
-  ];
-
-  $product_thumbnails_template = [
-    '#theme' => 'product_thumbnails',
-  ];
-  $variables['rcs_templates']['product_thumbnails'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'ul',
-    '#value' => render($product_thumbnails_template),
-    '#attributes' => [
-      'class' => 'rcs-templates--product_thumbnails',
-    ],
-  ];
-
-  $product_gallery_mobile_template = [
-    '#theme' => 'product_gallery_mobile',
-  ];
-  $variables['rcs_templates']['product_gallery_mobile'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'ul',
-    '#value' => render($product_gallery_mobile_template),
-    '#attributes' => [
-      'class' => 'rcs-templates--product_gallery_mobile',
     ],
   ];
 
@@ -463,18 +453,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#value' => render($related_product_wrapper),
     '#attributes' => [
       'class' => 'rcs-templates--related-product-wrapper',
-    ],
-  ];
-
-  $product_zoom = [
-    '#theme' => 'rcs_product_zoom',
-  ];
-  $variables['rcs_templates']['rcs_product_zoom'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($product_zoom),
-    '#attributes' => [
-      'class' => 'rcs-templates--rcs-product-zoom',
     ],
   ];
 
@@ -814,6 +792,7 @@ function _alshaya_rcs_product_get_recommended_product_field_query() {
     'sku',
     'id',
     'name',
+    'type_id',
     'url_key',
     'is_buyable',
     'stock_status',
@@ -888,6 +867,30 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
   $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
   $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
   $templates['product']['promotions'] = "$path/templates/rcs-product-promotions.handlebars";
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates().
+ */
+function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
+  if ($entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  $path = drupal_get_path('module', 'alshaya_rcs_product');
+  $templates = ['gallery' => []];
+  $templates['gallery']['product'] = [
+    'product_zoom' => "$path/templates/rcs-product-zoom.handlebars",
+    'product_labels' => "$path/templates/rcs-product-labels.handlebars",
+    'block' => [
+      'product_zoom_default_gallery' => "$path/templates/rcs-product-zoom-default-gallery-block.handlebars",
+      'product_zoom_mobile_gallery' => "$path/templates/rcs-product-zoom-mobile-gallery-block.handlebars",
+      'product_zoom_modal_gallery' => "$path/templates/rcs-product-zoom-modal-gallery-block.handlebars",
+      'product_zoom_magazine_gallery' => "$path/templates/rcs-product-zoom-magazine-gallery-block.handlebars",
+    ],
+  ];
+
+  return $templates;
 }
 
 /**

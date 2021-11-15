@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAmountWithCurrency } from '../checkout_util';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 const PriceElement = ({ amount: priceAmount, format }) => {
   if (!hasValue(priceAmount)
@@ -8,9 +8,10 @@ const PriceElement = ({ amount: priceAmount, format }) => {
     return (null);
   }
 
+  // If price amount contains any alphabet or Arabic character, render as is.
   if (Number.isNaN(parseFloat(priceAmount))
-    && priceAmount.toUpperCase() === 'FREE') {
-    return (Drupal.t('Free'));
+    && !/\d/.test(priceAmount)) {
+    return priceAmount;
   }
 
   const priceParts = { ...getAmountWithCurrency(priceAmount, false) };

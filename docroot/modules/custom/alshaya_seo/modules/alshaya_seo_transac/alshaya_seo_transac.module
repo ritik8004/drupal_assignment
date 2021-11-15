@@ -39,6 +39,11 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_seo_transac_page_attachments_alter(&$page) {
+  // Settings to enable error tracking on GA.
+  // Add this for all users to ensure they are available even for admins.
+  $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
+  $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
+
   if (_alshaya_seo_process_gtm()) {
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
@@ -67,9 +72,6 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       );
     }
 
-    // Settings to enable error tracking on GA.
-    $page['#attached']['drupalSettings']['gtm']['log_errors_to_console'] = Settings::get('log_errors_to_console', 1);
-    $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
     // Settings from the setting form for the module.
     $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');

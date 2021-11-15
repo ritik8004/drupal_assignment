@@ -26,7 +26,7 @@ import {
 } from '../../../utilities/cnc_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -263,10 +263,10 @@ export default class EmptyDeliveryText extends React.Component {
       const defaultArea = {};
       Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
         if (key === 'administrative_area') {
-          defaultArea[val.key] = areaSelected.value.area;
+          defaultArea[val.key] = areaSelected.value[val.key];
         } else if (key === 'area_parent') {
           // Handling for parent area.
-          defaultArea[val.key] = areaSelected.value.governate;
+          defaultArea[val.key] = areaSelected.value[val.key];
         }
       });
       defaultVal = defaultArea;

@@ -6,9 +6,12 @@
  */
 
 /**
- * Implements hook_rcs_handlebars_templates().
+ * Allows modules to define their own handlebars templates.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity being processed.
  */
-function hook_rcs_handlebars_templates() {
+function hook_rcs_handlebars_templates(\Drupal\Core\Entity\EntityInterface $entity) {
   // List of handlebars templates to be embedded on the page.
   return [
     // List of block templates.
@@ -25,9 +28,14 @@ function hook_rcs_handlebars_templates() {
 }
 
 /**
- * Implements hook_rcs_handlebars_templates_alter().
+ * Allows module to alter the handlebars templates added by other modules.
+ *
+ * @param array $templates
+ *   The array of templates to alter.
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity being processed.
  */
-function hook_rcs_handlebars_templates_alter(&$templates, $entity) {
+function hook_rcs_handlebars_templates_alter(array &$templates, \Drupal\Core\Entity\EntityInterface $entity) {
   if (!$entity || $entity->bundle() !== 'page') {
     return;
   }

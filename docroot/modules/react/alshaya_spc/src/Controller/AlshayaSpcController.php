@@ -216,12 +216,12 @@ class AlshayaSpcController extends ControllerBase {
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
           'global_error_message' => _alshaya_spc_global_error_message(),
+          'address_fields' => _alshaya_spc_get_address_fields(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
-            'address_fields' => _alshaya_spc_get_address_fields(),
           ],
         ],
       ],
@@ -1003,7 +1003,6 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['delivery_in_only_city_key'] = (int) $product_config->get('delivery_in_only_city_key');
 
     // Time we get from configuration is in minutes.
-    $settings['alshaya_spc']['productExpirationTime'] = $product_config->get('local_storage_cache_time') ?? 60;
     $settings['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
     $settings['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
 

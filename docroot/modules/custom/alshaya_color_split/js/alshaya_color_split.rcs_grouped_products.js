@@ -17,7 +17,7 @@
   }
 
   // Add the styled products.
-  RcsEventManager.addListener('alshayaRcsUpdateResults', function getProductsInStyle(e) {
+  RcsEventManager.addListener('rcsUpdateResults', function getProductsInStyle(e) {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined'
       || typeof e.detail.result.style_code === 'undefined'
@@ -29,7 +29,7 @@
     const mainProduct = e.detail.result;
 
     // Get the products with the same style.
-    var styleProducts = globalThis.rcsPhCommerceBackend.getDataAsync('products-in-style', { styleCode: mainProduct.style_code });
+    var styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: mainProduct.style_code });
 
     // If there are no products with the same style, then no further processing
     // required.
@@ -89,9 +89,11 @@
         if (!processedColors.includes(variant.product.color)) {
           processedColors.push(variant.product.color);
           // Get the labels for the color attribute.
-          const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product.color);
-          // Update the array with the color values.
-          colorAttributeValues.push({value_index: variant.product.color, store_label: label});
+          if (Drupal.hasValue(variant.product.color)) {
+            const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product.color);
+            // Update the array with the color values.
+            colorAttributeValues.push({value_index: variant.product.color, store_label: label});
+          }
         }
 
         mainProduct.variants.push(variant);

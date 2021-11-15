@@ -1,8 +1,5 @@
 import Axios from 'axios';
 import qs from 'qs';
-import _isArray from 'lodash/isArray';
-import _cloneDeep from 'lodash/cloneDeep';
-import _isObject from 'lodash/isObject';
 import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
@@ -21,7 +18,11 @@ import {
 } from './error';
 import StaticStorage from './staticStorage';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
-import hasValue from '../../../../js/utilities/conditionsUtility';
+import {
+  hasValue,
+  isObject,
+  isArray,
+} from '../../../../js/utilities/conditionsUtility';
 import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 
@@ -196,6 +197,26 @@ const logApiStats = (response) => {
 };
 
 /**
+ * Logs API response to the logging system.
+ *
+ * @param {string} type
+ *   The type of log message.
+ * @param {*} message
+ *   The message text.
+ * @param {*} statusCode
+ *   The API response status code.
+ * @param {*} code
+ *   The code value in the response.
+ */
+const logApiResponse = (type, message, statusCode, code) => {
+  logger[type]('Commerce backend call failed. Response Code: @responseCode, Error Code: @resultCode, Exception: @message.', {
+    '@responseCode': statusCode,
+    '@resultCode': hasValue(code) ? code : '-',
+    '@message': hasValue(message) ? message : '-',
+  });
+};
+
+/**
  * Handle errors and messages.
  *
  * @param {Promise} apiResponse
@@ -212,9 +233,7 @@ const handleResponse = (apiResponse) => {
 
   // In case we don't receive any response data.
   if (typeof apiResponse.data === 'undefined') {
-    logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
-      '@responseCode': response.status,
-    });
+    logApiResponse('warning', 'Error while doing MDC api. Response result is empty.', apiResponse.status);
 
     const error = {
       data: {
@@ -230,31 +249,25 @@ const handleResponse = (apiResponse) => {
   detectCaptcha(apiResponse);
   // If the response contains a CF Challenge, the page will be reloaded once per session.
   detectCFChallenge(apiResponse);
-
   // Treat each status code.
   if (apiResponse.status === 202) {
     // Place order can return 202, this isn't error.
     // Do nothing here, we will let code below return the response.
   } else if (apiResponse.status === 500) {
-    logger.warning('500 error from backend. Message: @message.', {
-      '@message': getProcessedErrorMessage(apiResponse),
-    });
+    logApiResponse('warning', getProcessedErrorMessage(apiResponse), apiResponse.status);
 
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 500;
-    response.data.error_message = getDefaultErrorMessage();
   } else if (apiResponse.status > 500) {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
-    response.data.error_message = 'Back-end system is down';
+    logApiResponse('warning', apiResponse.data.error_message, apiResponse.status);
   } else if (apiResponse.status === 401) {
     if (isUserAuthenticated()) {
       // Customer Token expired.
-      logger.warning('Got 401 response, redirecting to user/logout. Message: @message.', {
-        '@message': apiResponse.data.message,
-      });
+      logApiResponse('warning', `Got 401 response, redirecting to user/logout. ${apiResponse.data.message}`, apiResponse.status);
 
       // Log the user out and redirect to the login page.
       window.location = Drupal.url('user/logout');
@@ -265,7 +278,7 @@ const handleResponse = (apiResponse) => {
 
     response.data.error = true;
     response.data.error_code = 401;
-    response.data.error_message = apiResponse.data.message;
+    logApiResponse('warning', apiResponse.data.message, apiResponse.status);
   } else if (apiResponse.status !== 200) {
     // Set default values.
     response.data.error = true;
@@ -273,9 +286,7 @@ const handleResponse = (apiResponse) => {
 
     // Check for empty resonse data.
     if (!hasValue(apiResponse) || !hasValue(apiResponse.data)) {
-      logger.warning('Error while doing MDC api. Response result is empty. Status code: @responseCode', {
-        '@responseCode': response.status,
-      });
+      logApiResponse('warning', 'Error while doing MDC api. Response result is empty', apiResponse.status);
       response.data.error_code = 500;
     } else if (apiResponse.status === 404
       && !hasValue(apiResponse.data)
@@ -285,21 +296,13 @@ const handleResponse = (apiResponse) => {
       response.data.error_message = response.message;
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
-        '@message': response.data.error_message,
-        '@resultCode': (typeof response.data.code !== 'undefined') ? response.data.code : '-',
-        '@responseCode': response.status,
-      });
+      logApiResponse('warning', response.data.error_message, apiResponse.status, response.data.code);
     } else if (hasValue(apiResponse.data.message)) {
       // Process message.
       response.data.error_message = getProcessedErrorMessage(apiResponse);
 
       // Log the error message.
-      logger.warning('Error while doing MDC api call. Error message: @message, Code: @resultCode, Response code: @responseCode.', {
-        '@message': response.data.error_message,
-        '@resultCode': (typeof apiResponse.data.code !== 'undefined') ? apiResponse.data.code : '-',
-        '@responseCode': apiResponse.status,
-      });
+      logApiResponse('warning', response.data.error_message, apiResponse.status, apiResponse.data.code);
 
       // The following case happens when there is a stock mismatch between
       // Magento and OMS.
@@ -319,9 +322,7 @@ const handleResponse = (apiResponse) => {
     ) {
       // Other messages.
       const error = apiResponse.data.messages.error[0];
-      logger.info('Error while doing MDC api call. Error message: @message', {
-        '@message': error.message,
-      });
+      logApiResponse('info', error.message, apiResponse.status, error.code);
       response.data.error_code = error.code;
       response.data.error_message = error.message;
     }
@@ -331,24 +332,24 @@ const handleResponse = (apiResponse) => {
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
-    logger.info('Error while doing MDC api call. Error: @message', {
-      '@message': error.message,
-    });
-  } else if (_isArray(apiResponse.data.response_message)
+    logApiResponse('info', error.message, apiResponse.status, error.code);
+  } else if (isArray(apiResponse.data.response_message)
     && hasValue(apiResponse.data.response_message[1])
     && apiResponse.data.response_message[1] === 'error') {
     // When there is error in response_message from custom updateCart API.
     response.data.error = true;
     response.data.error_code = 400;
     [response.data.error_message] = apiResponse.data.response_message;
-    logger.info('Error while doing MDC api call. Error: @message', {
-      '@message': JSON.stringify(response.data.response_message),
-    });
+    logApiResponse('info', JSON.stringify(response.data.response_message), apiResponse.status, response.data.error_code);
   }
 
   // Assign response data as is if no error.
   if (typeof response.data.error === 'undefined') {
     response.data = JSON.parse(JSON.stringify(apiResponse.data));
+  } else if (apiResponse.status > 400 && apiResponse.status < 700) {
+    // Format error for specific cases so that in the front end we show user
+    // friendly error messages.
+    response.data.error_message = getDefaultErrorMessage();
   }
 
   return new Promise((resolve) => resolve(response));
@@ -480,10 +481,15 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
  *   Formatted / processed cart.
  */
 const formatCart = (cartData) => {
-  const data = _cloneDeep(cartData);
-
+  // As of now we don't need deep clone of the passed object.
+  // As Method calls are storing the result on the same object.
+  // For ex - response.data = formatCart(response.data);
+  // if in future, method call is storing result on any other object.
+  // Clone of the argument passed, will be needed which can be achieved using.
+  // const data = JSON.parse(JSON.stringify(cartData));
+  const data = cartData;
   // Check if there is no cart data.
-  if (!hasValue(data.cart) || !_isObject(data.cart)) {
+  if (!hasValue(data.cart) || !isObject(data.cart)) {
     return data;
   }
 
@@ -1295,16 +1301,16 @@ const getLocations = async (filterField = 'attribute_id', filterValue = 'governa
  *  returns list of governates.
  */
 window.commerceBackend.getGovernatesList = async () => {
-  if (!drupalSettings.alshaya_spc.address_fields) {
+  if (!drupalSettings.address_fields) {
     logger.error('Error in getting address fields mappings');
 
     return {};
   }
-  if (drupalSettings.alshaya_spc.address_fields
-    && !(drupalSettings.alshaya_spc.address_fields.area_parent.visible)) {
+  if (drupalSettings.address_fields
+    && !(drupalSettings.address_fields.area_parent.visible)) {
     return {};
   }
-  const mapping = drupalSettings.alshaya_spc.address_fields;
+  const mapping = drupalSettings.address_fields;
   // Use the magento field name from mapping.
   const responseData = await getLocations('attribute_id', mapping.area_parent.key);
 

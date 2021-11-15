@@ -1,0 +1,9 @@
+<div id="product-zoom-container">
+  {{{ render 'gallery.product.block.product_zoom_default_gallery' }}}
+  {{{ render 'gallery.product.block.product_zoom_mobile_gallery' }}}
+  {{!-- Add swatch images as magazine --}}
+  {{#if (eq pdp_gallery_type 'classic')}}
+    {{{ render 'gallery.product.block.product_zoom_magazine_gallery' }}}
+  {{/if}}
+  {{{ render 'gallery.product.block.product_zoom_modal_gallery' }}}
+</div>
