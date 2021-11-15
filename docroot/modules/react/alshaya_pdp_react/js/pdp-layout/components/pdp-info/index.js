@@ -10,7 +10,7 @@ const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
   shortDetail = false, brandLogo,
   brandLogoAlt, brandLogoTitle, animateTitlePrice,
-  hidepostpay,
+  hidepostpay, displayRegion,
 }) => {
   let discountPercantage = null;
   const productPriceNumber = pdpProductPrice.replace(',', '');
@@ -77,11 +77,11 @@ const PdpInfo = ({
         </div>
       </div>
       {postpay}
-      <ConditionalView condition={Tabby.isTabbyEnabled()}>
+      <ConditionalView condition={displayRegion === 'magv2-main' && Tabby.isTabbyEnabled()}>
         <TabbyWidget
           classNames=""
           pageType="pdp"
-          id="tabby-promo-pdp"
+          id={`${displayRegion}-tabby-promo-pdp`}
         />
       </ConditionalView>
     </div>
