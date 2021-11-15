@@ -43,6 +43,7 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
   // Call search API to check if given mobile number is already registered or
   // not.
   let searchResponse = await search('phone', data.mobile);
+  // Check if the mobile number is already registered.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to do loyalty club sign up. Mobile number @mobile is already registered.', {
       '@mobile': data.mobile,
@@ -58,6 +59,7 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
 
   // Call search API to check if given email is already registered or not.
   searchResponse = await search('email', data.email);
+  // Check if email address is already register.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to do loyalty club sign up. Email address @email is already registered.', {
       '@email': data.email,

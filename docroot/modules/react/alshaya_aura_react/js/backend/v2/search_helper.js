@@ -1,11 +1,14 @@
 import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
-import logger from '../../../../alshaya_spc/js/utilities/logger';
-import { getErrorResponse } from './utility';
 
 /**
- * Search.
+ * Call the search API for the provided params.
  *
- * @return array
+ * @param {string} type
+ *   The field for searching.
+ * @param {string} value
+ *   The field value.
+ *
+ * @return {Object}
  *   Return API response/error.
  */
 const search = async (type, value) => {
@@ -18,14 +21,6 @@ const search = async (type, value) => {
         data: response.data,
       };
       return responseData;
-    })
-  // @todo Check if this ever gets executed.
-    .catch((e) => {
-      logger.notice('Error while trying to search APC user. Endpoint: @endpoint. Message: @message', {
-        '@endpoint': endpoint,
-        '@message': e.message,
-      });
-      return getErrorResponse(e.message, e.code);
     });
 };
 

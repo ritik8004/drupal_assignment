@@ -9,12 +9,11 @@ import logger from '../../../../alshaya_spc/js/utilities/logger';
  * @param {string} code
  *   The error code.
  *
- * @returns {object}
+ * @returns {Object}
  *   The object containing the error data.
  */
-const getErrorResponse = (message, code) => ({
+const getErrorResponse = (message, code = '-') => ({
   error: true,
-  // @todo: Process error message like in getErrorResponse().
   error_message: message,
   error_code: code,
 });

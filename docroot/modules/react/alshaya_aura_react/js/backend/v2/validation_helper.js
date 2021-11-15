@@ -3,15 +3,13 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from './error';
 import { getErrorResponse } from './utility';
 
-/**
- * Stores the regex for valid email address.
- */
-const emailRegex = new RegExp('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+// eslint-disable-next-line
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 /**
  * Validate input data based on type.
  *
- * @returns {Array}
+ * @returns {object}
  *   Error/empty array.
  */
 const validateInput = (type, value) => {
