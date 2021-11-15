@@ -15,7 +15,7 @@ const search = async (type, value) => {
     .then((response) => {
       const responseData = {
         status: true,
-        data: response,
+        data: response.data,
       };
       return responseData;
     })

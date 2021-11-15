@@ -27,17 +27,17 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
       '@data': JSON.stringify(data),
     });
 
-    return getErrorResponse('INVALID_NAME_ERROR', 500);
+    return { data: getErrorResponse('INVALID_NAME_ERROR', 500) };
   }
 
   let validationResult = validateInput('email', data.email);
   if (hasValue(validationResult.error)) {
-    return validationResult;
+    return { data: validationResult };
   }
 
   validationResult = validateInput('mobile', data.mobile);
   if (hasValue(validationResult.error)) {
-    return validationResult;
+    return { data: validationResult };
   }
 
   // Call search API to check if given mobile number is already registered or
@@ -48,10 +48,12 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
       '@mobile': data.mobile,
     });
 
-    return getErrorResponse(
-      auraErrorCodes.MOBILE_ALREADY_REGISTERED_MSG,
-      auraErrorCodes.MOBILE_ALREADY_REGISTERED_CODE,
-    );
+    return {
+      data: getErrorResponse(
+        auraErrorCodes.MOBILE_ALREADY_REGISTERED_MSG,
+        auraErrorCodes.MOBILE_ALREADY_REGISTERED_CODE,
+      ),
+    };
   }
 
   // Call search API to check if given email is already registered or not.
@@ -61,10 +63,12 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
       '@email': data.email,
     });
 
-    return getErrorResponse(
-      auraErrorCodes.EMAIL_ALREADY_REGISTERED_MSG,
-      auraErrorCodes.EMAIL_ALREADY_REGISTERED_CODE,
-    );
+    return {
+      data: getErrorResponse(
+        auraErrorCodes.EMAIL_ALREADY_REGISTERED_MSG,
+        auraErrorCodes.EMAIL_ALREADY_REGISTERED_CODE,
+      ),
+    };
   }
 
   // Get user details from session.
@@ -77,15 +81,13 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
     requestData.customer.customerId = customerId;
   }
 
-  let response = null;
-  try {
-    response = await callMagentoApi('/V1/customers/quick-enrollment', 'POST', requestData);
-  } catch (e) {
+  const response = await callMagentoApi('/V1/customers/quick-enrollment', 'POST', requestData);
+  if (hasValue(response.data.error)) {
     logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
       '@data': JSON.stringify(data),
-      '@message': e.message,
+      '@message': response.data.error_message,
     });
-    return getErrorResponse(e.message, e.code);
+    return { data: getErrorResponse(response.data.error_message, response.data.error_code) };
   }
 
   const responseData = {
@@ -99,18 +101,17 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
       uid,
       apcLinkStatus: response.data.apc_link,
     };
-
     const isUserAuraInfoUpdated = await updateUserAuraInfo(auraData);
 
     // Check if user aura status was updated successfully in Drupal.
     if (!isUserAuraInfoUpdated) {
       const message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
-      logger.error(`${message} .  User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.`, {
+      logger.error(`${message}. User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.`, {
         '@uid': uid,
         '@customer_id': customerId,
         '@aura_status': response.data.apc_link,
       });
-      return getErrorResponse(message, 500);
+      return { data: getErrorResponse(message, 500) };
     }
   }
 
