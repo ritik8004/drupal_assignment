@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33c8a08b4557bd3e8ba070630cea1ca9",
+    "content-hash": "9b899068eab73c736ccaa4840c859023",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -367,7 +367,7 @@
             ],
             "description": "The best of Drupal, curated by Acquia",
             "abandoned": true,
-            "time": "2021-01-21T14:30:32+00:00"
+            "time": "2021-08-12T18:48:45+00:00"
         },
         {
             "name": "algolia/algoliasearch-client-php",
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -23332,6 +23332,7 @@
                 }
             ],
             "description": "A robust cross-platform utility for normalizing, comparing and modifying file paths.",
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         },
         {
@@ -26999,7 +27000,6 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
