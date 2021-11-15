@@ -4,7 +4,7 @@
   .filter-fixed-top {
     .show-all-filters-algolia,
     .block-facet-blockcategory-facet-search,
-    .block-facet-blockcategory-facet-plps {
+    .block-facet-blockcategory-facet-plp {
       @include breakpoint($only-mobile) {
         top: 3.125rem;
       }
