@@ -153,7 +153,7 @@ class TotalLineItems extends React.Component {
             <VatText />
           </div>
           {postpay}
-          <ConditionalView condition={Tabby.isTabbyEnabled() && isCartPage}>
+          <ConditionalView condition={isCartPage && Tabby.isTabbyEnabled()}>
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby"
