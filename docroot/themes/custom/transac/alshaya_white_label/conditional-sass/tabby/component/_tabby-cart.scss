@@ -14,4 +14,12 @@
       padding: 0.1875rem 1.3125rem 1.625rem;
     }
   }
+
+  .spc-pre-content {
+    .tabby {
+      @include breakpoint($only-mobile) {
+        margin: 1.875rem 1.25rem;
+      }
+    }
+  }
 }
