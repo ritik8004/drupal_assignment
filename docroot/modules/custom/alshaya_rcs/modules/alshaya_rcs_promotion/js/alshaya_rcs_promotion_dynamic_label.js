@@ -19,24 +19,20 @@ const PromotionsDynamicLabelsUtil = {
     }
 
     const productLabels = {};
-    Object.keys(cartData.items).forEach((key) => {
-      const response = Drupal.alshayaPromotions.getRcsDynamicLabel(cartData.items[key].sku, cartData, 'api');
-      if (response && response.label) {
-        productLabels[key] = {
-          sku: cartData.items[key].sku,
-          labels: JSON.parse(response.label),
-        };
-      }
-    });
-    dispatchRcsCustomEvent('applyDynamicPromotions', {
-      products_labels: productLabels,
-      // @todo Change the cart_labels logic once the changes are done in
-      // Magento.
-      cart_labels: {
-        qualified: [],
-        next_eligible: [],
-      },
-    });
+    const response = Drupal.alshayaPromotions.getRcsDynamicLabel('', cartData, '', 'cart');
+    if (response && response.products_labels) {
+      response.products_labels.forEach((item) => {
+        // @todo To remove this once we get the proper empty array response
+        // from Magento.
+        if (!item.labels) {
+          item.labels = [];
+        }
+        productLabels[item.sku] = item;
+      });
+      // Update the response array with the modified one.
+      response.products_labels = productLabels;
+      dispatchRcsCustomEvent('applyDynamicPromotions', response);
+    }
   },
 };
 

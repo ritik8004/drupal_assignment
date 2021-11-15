@@ -149,11 +149,13 @@
    *   The object containing the current cart data.
    * @param {string} viewMode
    *   The type of response we expect from magento.
+   * @param {string} type
+   *   The type of dynamic label ( Product or cart ).
    *
    * @returns {object}
    *   An oject containing the dynamic promotion label.
    */
-  Drupal.alshayaPromotions.getRcsDynamicLabel = function (sku, cartData, viewMode = 'links') {
+  Drupal.alshayaPromotions.getRcsDynamicLabel = function (sku, cartData, viewMode = 'links', type = 'product') {
     let response = null;
     if (typeof drupalSettings.alshayaRcs !== 'undefined') {
       // Prepare cart object.
@@ -162,6 +164,7 @@
         cartInfo.push(`{
             sku: "${cartData.items[key].sku}",
             qty: ${parseInt(cartData.items[key].qty)}
+            ${type === 'cart' ? 'price: ' + cartData.items[key].price : ''}
           }`);
       }
       // Prepare graphql query here.
@@ -172,24 +175,61 @@
           ["Content-Type", "application/json"],
         ],
       };
+      // Change the query type and body based on the type of the request.
+      let queryType = 'promoDynamicLabelProduct';
+      let queryBody = 'label';
+      if (type === 'cart') {
+        queryType = 'promoDynamicLabelCart';
+        queryBody = `cart_labels {
+            shipping_free
+            applied_rules {
+                label
+                description
+            }
+            qualified {
+                rule_id
+                label
+                type
+            }
+            next_eligible {
+                rule_id
+                label
+                type
+                coupon
+                coupon_discount
+                threshold_reached
+            }
+        }
+        products_labels {
+            sku
+            labels {
+                promotion_nid
+                link
+                label
+            }
+        }`;
+      }
       request.data = JSON.stringify({
-        query: `{promoDynamicLabelProduct(
-            sku: "${sku}"
+        query: `{${queryType}(
+            ${type === 'product' ? `sku: "${sku}"` : ''}
             context: "web"
-            view_mode: "${viewMode}"
+            ${type === 'product' ? `view_mode: "${viewMode}"` : ''}
             cart: {
+              ${type === 'cart' ? `
+              subtotal: ${cartData.totals.subtotal_incl_tax}
+              applied_rules: "${cartData.appliedRules}"` : ''}
               items: [
                 ${cartInfo}
               ]
             }
           ) {
-            label
+            ${queryBody}
           }}`
       });
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
       // Update the response variable based on response.
-      response = response.data.promoDynamicLabelProduct;
+      response = response.data[queryType];
     }
 
     return response;
