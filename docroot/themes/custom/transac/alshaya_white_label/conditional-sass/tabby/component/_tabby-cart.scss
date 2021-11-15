@@ -1,0 +1,17 @@
+#spc-cart {
+  .spc-sidebar {
+    .tabby {
+      margin-top: 2.4375rem;
+
+      @include breakpoint($tablet) {
+        margin: 1.375rem 0 0.5rem;
+      }
+    }
+  }
+
+  .spc-pre-content-sticky {
+    .tabby {
+      padding: 0.1875rem 1.3125rem 1.625rem;
+    }
+  }
+}
