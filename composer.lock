@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33c8a08b4557bd3e8ba070630cea1ca9",
+    "content-hash": "44c4cce524e07e286053c1d30031f14a",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6700,6 +6700,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Trigger and event before data push": "https://www.drupal.org/files/issues/2021-11-15/trigger-an-event-before-data-push-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
