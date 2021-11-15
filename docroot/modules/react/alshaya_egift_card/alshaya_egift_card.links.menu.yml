@@ -1,0 +1,5 @@
+alshaya_egift_card.egift_card_config:
+  route_name: alshaya_egift_card.egift_card_config
+  title: 'Alshaya Egift Card settings'
+  description: 'Configure Alshaya Egift Card settings.'
+  parent: alshaya_master.alshaya_admin

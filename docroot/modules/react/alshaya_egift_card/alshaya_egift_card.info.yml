@@ -1,0 +1,7 @@
+name: Alshaya egift card React
+type: module
+description: 'Implements egift card feature.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_react:alshaya_react

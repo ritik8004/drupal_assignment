@@ -1,0 +1,7 @@
+alshaya_egift_card.egift_card_config:
+  path: '/admin/config/alshaya/egift-card'
+  defaults:
+    _form: '\Drupal\alshaya_egift_card\Form\AlshayaEgiftCardSettingsForm'
+    _title: 'Alshaya Egift Card Configurations'
+  requirements:
+    _permission: 'administer site configuration'
