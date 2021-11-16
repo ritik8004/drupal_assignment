@@ -1,5 +1,5 @@
 /**
- * Listens to the 'alshayaRcsUpdateResults' event and updated the result object.
+ * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
 (function main() {
   // Event listener to update the data layer object with the proper category
