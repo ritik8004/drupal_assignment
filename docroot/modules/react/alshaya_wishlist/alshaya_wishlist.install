@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains install, update, uninstall hooks for alshaya_bazaar_voice.
+ * Contains install hook for alshaya_wishlist.
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
