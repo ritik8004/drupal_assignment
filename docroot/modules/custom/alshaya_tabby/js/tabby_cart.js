@@ -11,8 +11,9 @@
     tabbyWidget.each(function () {
       const selector = $(this).attr('id');
       if (selector !== undefined) {
-        // Remove the content so that tabby can refresh its content.
-        Drupal.tabbyPromoInit('#' + selector, amount, 'cart');
+        $(this).hasClass('spc-tabby-info')
+          ? Drupal.tabbyInfoInit('#' + selector, amount)
+          : Drupal.tabbyPromoInit('#' + selector, amount, 'cart');
       }
     });
   });

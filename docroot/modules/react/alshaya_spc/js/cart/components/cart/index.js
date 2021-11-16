@@ -339,7 +339,14 @@ export default class Cart extends React.Component {
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
           {postPayData.postpayEligibilityMessage}
-
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby-info"
+              mobileOnly={false}
+              id="tabby-cart-info"
+            />
+          </ConditionalView>
           <ConditionalView condition={smartAgentInfo !== false}>
             <>
               <SASessionBanner agentName={smartAgentInfo.name} />
