@@ -141,13 +141,13 @@ const Teaser = ({
               initSlider={initSlider}
               setSlider={setSlider}
             />
-            {/* @todo: we need to move this to proper place. */}
-            <WishlistContainer
-              context="plp"
-              position="topright"
-              sku={hit.sku}
-            />
           </a>
+          {/* @todo: we need to move this to proper place. */}
+          <WishlistContainer
+            context="plp"
+            position="topright"
+            sku={hit.sku}
+          />
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
