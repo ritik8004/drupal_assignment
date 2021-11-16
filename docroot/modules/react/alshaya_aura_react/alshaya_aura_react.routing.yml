@@ -18,6 +18,7 @@ alshaya_aura_react.update_user_aura_info:
   path: '/update/user-aura-info'
   defaults:
     _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::updateUserAuraInfo'
+  methods: [POST]
   requirements:
     _custom_access: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::checkAccess'
 
