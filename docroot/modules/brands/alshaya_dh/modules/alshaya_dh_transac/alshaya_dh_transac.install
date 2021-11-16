@@ -92,6 +92,14 @@ function alshaya_dh_transac_install() {
     'size guide' => [
       'ar' => 'دليل المقاسات'
     ],
+    'sign up' => [
+      'en' => 'Subscribe',
+      'ar' => 'تسجيل'
+    ],
+    'Social links' => [
+      'en' => 'Follow us',
+      'ar' => 'تابعنا'
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
