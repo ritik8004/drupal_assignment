@@ -11,18 +11,18 @@
 @import "../../alshaya_white_label/sass/config/**/*";
 @import "config/**/*";
 @import "../../alshaya_white_label/sass/utils";
-// @import "utils";
+@import "utils";
 
 // Utilities for building multilingual websites.
 @import "../../alshaya_white_label/sass/directional";
-// @import "directional";
+@import "directional";
 
 // Common styles for @extend.
 @import "../../alshaya_white_label/sass/placeholder";
 
 // These are the default base styles applied to HTML elements.
 @import "../../alshaya_white_label/sass/base/**/*";
-// @import "base/**/*";
+@import "base/**/*";
 @import "../../alshaya_white_label/sass/layout/**/*";
 @import "../../alshaya_white_label/sass/state/**/*";
 
