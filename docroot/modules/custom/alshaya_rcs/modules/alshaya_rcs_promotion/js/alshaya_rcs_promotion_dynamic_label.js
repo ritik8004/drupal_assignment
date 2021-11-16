@@ -9,9 +9,11 @@ const PromotionsDynamicLabelsUtil = {
   apply: (cartData) => {
     if (Object.values(cartData.items).length === 0) {
       // Remove existing labels.
-      dispatchRcsCustomEvent('applyDynamicPromotions', {
-        cart_labels: null,
-        products_labels: null,
+      RcsEventManager.fire('applyDynamicPromotions', {
+        detail: {
+          cart_labels: null,
+          products_labels: null,
+        }
       });
 
       // No API call required.
@@ -31,7 +33,11 @@ const PromotionsDynamicLabelsUtil = {
       });
       // Update the response array with the modified one.
       response.products_labels = productLabels;
-      dispatchRcsCustomEvent('applyDynamicPromotions', response);
+      RcsEventManager.fire('applyDynamicPromotions', {
+        detail: {
+          response
+        }
+      });
     }
   },
 };

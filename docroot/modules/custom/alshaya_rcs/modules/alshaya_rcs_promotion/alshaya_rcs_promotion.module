@@ -39,6 +39,36 @@ function alshaya_rcs_promotion_rcs_placeholders_graphql_query() {
     'title',
     'description',
   ];
+  // Dynamic promotion query for product (PDP).
+  $query_fields['product_dynamic_promotions'] = [
+    'label',
+  ];
+  // Dynamic promotion query for Cart.
+  $query_fields['cart_dynamic_promotions'] = [
+    'cart_labels' => [
+      'shipping_free',
+      'applied_rules' => [
+        'label',
+        'description',
+      ],
+      'next_eligible' => [
+        'rule_id',
+        'label',
+        'type',
+        'coupon',
+        'coupon_discount',
+        'threshold_reached',
+      ],
+    ],
+    'products_labels' => [
+      'sku',
+      'labels' => [
+        'promotion_nid',
+        'link',
+        'label',
+      ],
+    ],
+  ];
 
   return $query_fields;
 }
@@ -73,7 +103,6 @@ function alshaya_rcs_promotion_library_info_alter(&$libraries, $extension) {
         'rcs_magento_placeholders/rcs_magento_placeholders',
         'alshaya_rcs_promotion/alshaya_rcs_promotion',
         'alshaya_acm_promotion/label_manager',
-        'alshaya_rcs/utility',
       ]
     );
   }

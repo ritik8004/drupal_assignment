@@ -177,37 +177,10 @@
       };
       // Change the query type and body based on the type of the request.
       let queryType = 'promoDynamicLabelProduct';
-      let queryBody = 'label';
+      let queryBody = rcsPhGraphqlQuery.product_dynamic_promotions;
       if (type === 'cart') {
         queryType = 'promoDynamicLabelCart';
-        queryBody = `cart_labels {
-            shipping_free
-            applied_rules {
-                label
-                description
-            }
-            qualified {
-                rule_id
-                label
-                type
-            }
-            next_eligible {
-                rule_id
-                label
-                type
-                coupon
-                coupon_discount
-                threshold_reached
-            }
-        }
-        products_labels {
-            sku
-            labels {
-                promotion_nid
-                link
-                label
-            }
-        }`;
+        queryBody = rcsPhGraphqlQuery.cart_dynamic_promotions;
       }
       request.data = JSON.stringify({
         query: `{${queryType}(
@@ -222,9 +195,9 @@
                 ${cartInfo}
               ]
             }
-          ) {
+          )
             ${queryBody}
-          }}`
+          }`
       });
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
