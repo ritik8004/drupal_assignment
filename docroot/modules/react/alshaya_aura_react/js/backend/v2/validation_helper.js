@@ -3,6 +3,8 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from './error';
 import { getErrorResponse } from './utility';
 
+// @todo Use a simpler regex to identify the email and make backend call to
+// Drupal to check for valid email and possibly phone number.
 // eslint-disable-next-line
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 

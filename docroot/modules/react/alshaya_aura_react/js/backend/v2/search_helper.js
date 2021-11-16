@@ -16,6 +16,12 @@ const search = async (type, value) => {
 
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
+      // @todo We need to check for backend error here. Currently it is not
+      // possible because in case of backend error and also if user is not found
+      // on calling the Magento Search API, we get the error object here in
+      // both the cases.
+      // We are not able to distinguish between the 2 cases because of that.
+      // So we need to find a way of handling the errors.
       const responseData = {
         status: true,
         data: response.data,
