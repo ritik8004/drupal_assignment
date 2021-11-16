@@ -164,7 +164,12 @@
         cartInfo.push(`{
             sku: "${cartData.items[key].sku}",
             qty: ${parseInt(cartData.items[key].qty)}
-            ${type === 'cart' ? 'price: ' + cartData.items[key].price : ''}
+            ${
+              // Conditionaly adding the price attribute in query because it's
+              // required for cart Graphql query only and this cannot be passed
+              // as an extra attribute for product dynamic promotion query.
+              type === 'cart' ? 'price: ' + cartData.items[key].price : ''
+            }
           }`);
       }
       // Prepare graphql query here.
