@@ -6,6 +6,11 @@ import auraErrorCodes from '../utility/error';
 /**
  * Validate input data based on type.
  *
+ * @param {string} type
+ *   Input field type.
+ * @param {string} value
+ *   Input field value.
+ *
  * @returns {object}
  *   Error/empty array.
  */
