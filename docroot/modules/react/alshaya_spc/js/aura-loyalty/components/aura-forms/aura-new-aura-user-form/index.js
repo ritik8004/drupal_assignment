@@ -5,7 +5,6 @@ import AuraMobileNumberField from '../aura-mobile-number-field';
 import { showError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
 import { getAuraConfig, getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
-import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
@@ -85,8 +84,6 @@ class AuraFormNewAuraUserModal extends React.Component {
       return;
     }
 
-    // API call to do quick enrollment.
-    const apiUrl = 'post/loyalty-club/sign-up';
     const splitName = getElementValueByType('fullName').split(' ');
     const data = {
       firstname: splitName[0],
@@ -94,7 +91,8 @@ class AuraFormNewAuraUserModal extends React.Component {
       email: getElementValueByType('signUpEmail'),
       mobile: `+${this.getCountryMobileCode()}${getElementValueByType('signUpMobile')}`,
     };
-    const apiData = postAPIData(apiUrl, data);
+
+    const apiData = window.auraBackend.loyaltyClubSignUp(data);
     showFullScreenLoader();
 
     if (apiData instanceof Promise) {
