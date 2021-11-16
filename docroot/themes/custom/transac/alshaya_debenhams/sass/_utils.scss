@@ -1,1 +1,23 @@
 // Stylesheet mixins.
+$dh_theme_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs';
+$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs/icons/ic-loader.svg';
+
+@mixin ic-social {
+  content: '';
+  background-repeat: no-repeat;
+  width: 1.375rem;
+  height: 1.375rem;
+  display: inline-block;
+  background-size: contain;
+  margin-#{$left}: 0.125rem;
+
+  @include breakpoint($only-mobile) {
+    width: 1rem;
+  }
+
+  html[lang=ar] & {
+    background-position: right;
+  }
+
+  @content;
+}
