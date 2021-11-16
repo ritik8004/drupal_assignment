@@ -1,7 +1,7 @@
 import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
 import logger from '../../../../alshaya_spc/js/utilities/logger';
 import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
-import auraErrorCodes from './error';
+import auraErrorCodes from '../utility/error';
 import search from './search_helper';
 import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
