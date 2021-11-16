@@ -864,7 +864,7 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
       break;
 
     default:
-    $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-block.handlebars";
+      $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-block.handlebars";
   }
 
   $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
