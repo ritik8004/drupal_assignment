@@ -1,7 +1,7 @@
 import logger from '../../../../alshaya_spc/js/utilities/logger';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import getErrorResponse from '../../../../js/utilities/error';
 import auraErrorCodes from './error';
-import { getErrorResponse } from './utility';
 
 // @todo Use a simpler regex to identify the email.
 // eslint-disable-next-line

@@ -3,8 +3,9 @@ import logger from '../../../../alshaya_spc/js/utilities/logger';
 import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from './error';
 import search from './search_helper';
-import { getErrorResponse, updateUserAuraInfo } from './utility';
+import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
+import getErrorResponse from '../../../../js/utilities/error';
 
 /**
  * Global object to help perform Aura activities for V2.
