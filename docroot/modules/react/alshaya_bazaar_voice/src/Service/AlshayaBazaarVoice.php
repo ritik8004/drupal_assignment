@@ -621,7 +621,7 @@ class AlshayaBazaarVoice {
     $config = $this->configFactory->get('bazaar_voice.settings');
     $sharedKey = $config->get('shared_secret_key');
     $maxAge = $config->get('max_age');
-    $userId = $this->currentUser->id();
+    $userId = $this->currentUser->getAccount()->acq_customer_id;
     $mail = $this->currentUser->getEmail();
     $productId = $this->currentRequest->get('product');
 
