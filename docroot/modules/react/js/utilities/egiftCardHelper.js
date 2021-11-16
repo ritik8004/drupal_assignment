@@ -1,7 +1,7 @@
 /**
- * Helper function to get egift card enabled.
+ * Helper function to check if egift card is enabled.
  */
-function isEgiftCardEnabled() {
+export default function isEgiftCardEnabled() {
   let egiftCardStatus = false;
   if (typeof drupalSettings.egiftCard !== 'undefined'
     && typeof drupalSettings.egiftCard.enabled !== 'undefined') {
@@ -10,5 +10,3 @@ function isEgiftCardEnabled() {
 
   return egiftCardStatus;
 }
-
-export default isEgiftCardEnabled;

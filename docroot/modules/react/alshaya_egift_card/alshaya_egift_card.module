@@ -6,24 +6,6 @@
  */
 
 /**
- * Implements hook_page_attachments_alter().
- */
-function alshaya_egift_card_page_attachments_alter(array &$page) {
-  $egift_card_helper = \Drupal::service('alshaya_egift_card.egift_card_helper');
-  $settings['enabled'] = $egift_card_helper->isEgiftCardEnabled();
-
-  // Do not proceed if egift card is not enabled.
-  if ($settings['enabled'] !== TRUE) {
-    return;
-  }
-  $current_route = \Drupal::routeMatch();
-  if ($current_route->getRouteName() === 'entity.user.canonical') {
-    $page['#attached']['library'][] = 'alshaya_egift_card/alshaya_egift_card_my_account';
-  }
-  $page['#attached']['drupalSettings']['egiftCard'] = $settings;
-}
-
-/**
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
