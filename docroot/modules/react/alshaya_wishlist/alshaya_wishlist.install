@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_bazaar_voice.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_install().
+ *
+ * Update default configurations for the wishlist feature.
+ */
+function alshaya_wishlist_install() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Enable wishlist header block.
+  $manager->updateConfigs(
+    [
+      'block.block.alshayawishlistheaderblock',
+    ],
+    'alshaya_wishlist',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+}
