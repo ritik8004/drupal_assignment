@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../../alshaya_spc/js/utilities/storage';
+import logger from '../../../alshaya_spc/js/utilities/logger';
 
 /**
  * Ajax call for updating the cart.
@@ -297,6 +298,13 @@ export const pushSeoGtmData = (productData) => {
       productData.error_message,
     );
 
+    return;
+  }
+
+  if (productData.element === null) {
+    logger.warning('Error in pushing data to GTM. productData: @productData.', {
+      '@productData': JSON.stringify(productData),
+    });
     return;
   }
 
