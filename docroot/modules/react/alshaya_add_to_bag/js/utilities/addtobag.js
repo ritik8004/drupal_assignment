@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../../alshaya_spc/js/utilities/storage';
-import logger from '../../../alshaya_spc/js/utilities/logger';
+import logger from '../../../js/utilities/logger';
 
 /**
  * Ajax call for updating the cart.
