@@ -11,11 +11,11 @@
 function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
   // Do not proceed if egift card is not enabled.
   $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+  $page['#attached']['drupalSettings']['egiftCard'] = $egiftCard_settings->isEgiftCardEnabled();
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $egiftCard_settings->getCacheTags());
   if ($egiftCard_settings->isEgiftCardEnabled() !== TRUE) {
     return;
   }
-  $page['#attached']['drupalSettings']['egiftCard'] = $egiftCard_settings->isEgiftCardEnabled();
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $egiftCard_settings->getCacheTags());
 }
 
 /**
@@ -24,11 +24,10 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
 function alshaya_egift_card_alshaya_spc_cart_build_alter(array &$build) {
   // Do not proceed if egift card is not enabled.
   $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
-  if ($egiftCard_settings->isEgiftCardEnabled() !== TRUE) {
-    return;
-  }
-
   // Add aura dictionary api data in drupalSettings.
   $page['#attached']['drupalSettings']['egiftCard'] = $egiftCard_settings->isEgiftCardEnabled();
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $egiftCard_settings->getCacheTags());
+  if ($egiftCard_settings->isEgiftCardEnabled() !== TRUE) {
+    return;
+  }
 }
