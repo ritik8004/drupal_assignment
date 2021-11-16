@@ -3,10 +3,6 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import getErrorResponse from '../../../../js/utilities/error';
 import auraErrorCodes from '../utility/error';
 
-// @todo Use a simpler regex to identify the email.
-// eslint-disable-next-line
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 /**
  * Validate input data based on type.
  *
@@ -15,7 +11,7 @@ const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")
  */
 const validateInput = (type, value) => {
   if (type === 'email') {
-    if (!hasValue(value) || !emailRegex.test(value.toLowerCase())) {
+    if (!hasValue(value) || !(/^\S+@\S+\.\S+$/).test(value.toLowerCase())) {
       logger.error('Email is missing/invalid. Data: @data', {
         '@data': value,
       });
