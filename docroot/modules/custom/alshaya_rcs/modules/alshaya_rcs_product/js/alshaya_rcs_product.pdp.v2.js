@@ -289,7 +289,7 @@ function getVariantsInfo(product) {
     const variantSku = variantInfo.sku;
     // @todo Add code for commented keys.
     info[variantSku] = {
-      cart_image: window.commerceBackend.getCartImage(variant),
+      cart_image: window.commerceBackend.getCartImage(variant.product),
       cart_title: product.name,
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
       color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
