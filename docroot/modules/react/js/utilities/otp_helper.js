@@ -1,6 +1,6 @@
-import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
-import logger from '../../../../alshaya_spc/js/utilities/logger';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { callMagentoApi } from '../../alshaya_spc/js/backend/v2/common';
+import logger from '../../alshaya_spc/js/utilities/logger';
+import { hasValue } from './conditionsUtility';
 
 /**
  * Calls the API to send OTP.
