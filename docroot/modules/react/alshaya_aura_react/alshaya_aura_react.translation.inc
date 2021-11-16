@@ -46,6 +46,9 @@ function _alshaya_aura_react_translations() {
     'Status' => [
       'ar' => 'مستوى العضوية',
     ],
+    'status' => [
+      'ar' => 'مستوى العضوية',
+    ],
     'Point balance' => [
       'ar' => 'رصيد النقاط',
     ],
@@ -117,6 +120,9 @@ function _alshaya_aura_react_translations() {
     ],
     'Earn' => [
       'ar' => 'اربح',
+    ],
+    'points to reach' => [
+      'ar' => 'نقاط التواصل',
     ],
     'Bespoke rewards.' => [
       'ar' => 'مكافآت بلا حدود.',
