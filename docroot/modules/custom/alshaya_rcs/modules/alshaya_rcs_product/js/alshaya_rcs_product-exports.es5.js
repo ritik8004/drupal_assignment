@@ -61,9 +61,9 @@ function applyEllipsis(value) {
  */
 function getLegalNotice() {
   return {
-    enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
-    label: drupalSettings.alshayaRcs.legal_notice_label,
-    summary: drupalSettings.alshayaRcs.legal_notice_summary.value,
+    enabled: drupalSettings.alshayaRcs.legalNoticeEnabled,
+    label: drupalSettings.alshayaRcs.legalNoticeLabel,
+    summary: drupalSettings.alshayaRcs.legalNoticeSummary.value,
   };
 }
 
@@ -75,14 +75,14 @@ function getLegalNotice() {
  */
 function getAdditionalPdpDescription() {
   return {
-    enabled: Drupal.hasValue(drupalSettings.alshayaRcs.additional_pdp_description_enabled)
-      ? drupalSettings.alshayaRcs.additional_pdp_description_enabled
+    enabled: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescriptionEnabled)
+      ? drupalSettings.alshayaRcs.additionalPdpDescriptionEnabled
       : false,
-    label: Drupal.hasValue(drupalSettings.alshayaRcs.additional_pdp_description_label)
-      ? drupalSettings.alshayaRcs.additional_pdp_description_label
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescriptionLabel)
+      ? drupalSettings.alshayaRcs.additionalPdpDescriptionLabel
       : '',
-    summary: Drupal.hasValue(drupalSettings.alshayaRcs.additional_pdp_description_summary)
-      ? drupalSettings.alshayaRcs.additional_pdp_description_summary.value
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescriptionSummary)
+      ? drupalSettings.alshayaRcs.additionalPdpDescriptionSummary.value
       : false,
   };
 }
