@@ -481,6 +481,13 @@ const PaymentMethodIcon = (props) => {
       </svg>
     );
   }
+
+  if (methodName === 'tabby') {
+    return (
+      <div className="tabby-promo-snippet__logo-img" alt="Tabby Logo" width="70" height="27" />
+    );
+  }
+
   if (methodName === 'checkout_com_upapi_fawry') {
     return (
       <svg version="1.1" id="fLayer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="170px" height="83px" viewBox="0 0 170 83" enableBackground="new 0 0 170 83" space="preserve">

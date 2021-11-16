@@ -18,6 +18,7 @@ import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -179,6 +180,10 @@ export default class PaymentMethods extends React.Component {
           }
 
           if (method.code === 'postpay' && !Postpay.isAvailable(this)) {
+            return;
+          }
+
+          if (method.code === 'tabby' && !Tabby.isAvailable()) {
             return;
           }
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
