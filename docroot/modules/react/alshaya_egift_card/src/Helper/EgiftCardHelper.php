@@ -11,6 +11,11 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  */
 class EgiftCardHelper {
 
+  /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $configFactory;
 
   /**
