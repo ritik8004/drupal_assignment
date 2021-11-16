@@ -22,6 +22,8 @@ const sendOtp = (mobile, type) => callMagentoApi(`/V1/sendotp/phonenumber/${mobi
         '@mobile': mobile,
         '@message': response.data.error_message,
       });
+
+      return response.data;
     }
 
     return responseData;
