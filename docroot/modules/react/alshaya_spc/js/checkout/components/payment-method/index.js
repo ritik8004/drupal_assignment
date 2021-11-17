@@ -25,6 +25,7 @@ import PaymentMethodCheckoutComUpapiFawry
   from '../payment-method-checkout-com-upapi-fawry';
 import cartActions from '../../../utilities/cart_actions';
 import PaymentMethodTabby from '../payment-method-tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -223,7 +224,10 @@ export default class PaymentMethod extends React.Component {
               </ConditionalView>
             </label>
             <ConditionalView condition={method.code === 'tabby'}>
-              <button type="button" className="installments-popup" data-tabby-info="installments">ⓘ</button>
+              <TabbyWidget
+                pageType="checkout"
+                classNames="installment-popup"
+              />
             </ConditionalView>
             <PaymentMethodIcon methodName={method.code} />
           </div>
