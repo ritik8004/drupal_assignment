@@ -1,0 +1,163 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_promo_blocks
+    - node.type.advanced_page
+    - paragraphs.paragraphs_type.1_row_1_col
+    - paragraphs.paragraphs_type.1_row_1_col_dept
+    - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
+    - paragraphs.paragraphs_type.1_row_2_col
+    - paragraphs.paragraphs_type.1_row_2_col_1_2_dept
+    - paragraphs.paragraphs_type.1_row_2_col_2_1_dept
+    - paragraphs.paragraphs_type.1_row_2_col_dept
+    - paragraphs.paragraphs_type.1_row_3_col
+    - paragraphs.paragraphs_type.1_row_3_col_dept
+    - paragraphs.paragraphs_type.1_row_3_col_flex
+    - paragraphs.paragraphs_type.1_row_3_col_text
+    - paragraphs.paragraphs_type.1_row_4_col
+    - paragraphs.paragraphs_type.accordion_paragraph
+    - paragraphs.paragraphs_type.block_reference
+    - paragraphs.paragraphs_type.delivery_usp_block
+    - paragraphs.paragraphs_type.image_title_subtitle
+    - paragraphs.paragraphs_type.multiple_row_multiple_col
+    - paragraphs.paragraphs_type.section_divider
+    - paragraphs.paragraphs_type.views_reference
+  module:
+    - entity_reference_revisions
+id: node.advanced_page.field_promo_blocks
+field_name: field_promo_blocks
+entity_type: node
+bundle: advanced_page
+label: 'Promo Blocks'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 1
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      1_row_1st_col_2_row_2nd_col: 1_row_1st_col_2_row_2nd_col
+      1_row_1_col: 1_row_1_col
+      1_row_3_col: 1_row_3_col
+      1_row_2_col: 1_row_2_col
+      1_row_3_col_text: 1_row_3_col_text
+      1_row_1_col_dept: 1_row_1_col_dept
+      1_row_2_col_1_2_dept: 1_row_2_col_1_2_dept
+      1_row_2_col_2_1_dept: 1_row_2_col_2_1_dept
+      1_row_2_col_dept: 1_row_2_col_dept
+      1_row_3_col_dept: 1_row_3_col_dept
+      block_reference: block_reference
+      1_row_3_col_flex: 1_row_3_col_flex
+      1_row_4_col: 1_row_4_col
+      views_reference: views_reference
+      image_title_subtitle: image_title_subtitle
+      delivery_usp_block: delivery_usp_block
+      accordion_paragraph: accordion_paragraph
+      section_divider: section_divider
+      multiple_row_multiple_col: multiple_row_multiple_col
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        enabled: true
+        weight: 8
+      1_row_1_col:
+        enabled: true
+        weight: 9
+      1_row_3_col:
+        enabled: true
+        weight: 10
+      banner:
+        weight: 11
+        enabled: false
+      banner_full_width:
+        weight: 12
+        enabled: false
+      promo_block:
+        weight: 13
+        enabled: false
+      related_info_one_column:
+        weight: 14
+        enabled: false
+      1_row_2_col:
+        enabled: true
+        weight: 15
+      1_row_3_col_text:
+        enabled: true
+        weight: 16
+      1_row_1_col_dept:
+        enabled: true
+        weight: 18
+      1_row_2_col_1_2_dept:
+        enabled: true
+        weight: 20
+      1_row_2_col_2_1_dept:
+        enabled: true
+        weight: 21
+      1_row_2_col_dept:
+        enabled: true
+        weight: 22
+      1_row_3_col_dept:
+        enabled: true
+        weight: 24
+      1_row_3_col_delivery_banner:
+        weight: 25
+        enabled: false
+      main_menu_highlight:
+        weight: 27
+        enabled: false
+      promo_block_text:
+        weight: 29
+        enabled: false
+      block_reference:
+        enabled: true
+        weight: 30
+      1_row_3_col_flex:
+        enabled: true
+        weight: 31
+      1_row_4_col:
+        enabled: true
+        weight: 33
+      views_reference:
+        enabled: true
+        weight: 34
+      image_title_subtitle:
+        enabled: true
+        weight: 39
+      offers_bordered:
+        weight: 41
+        enabled: false
+      delivery_usp_block:
+        enabled: true
+        weight: 42
+      promo_block_button:
+        weight: 43
+        enabled: false
+      title_textarea:
+        weight: 46
+        enabled: false
+      accordion_paragraph:
+        enabled: true
+        weight: 47
+      video:
+        weight: 47
+        enabled: false
+      section_divider:
+        enabled: true
+        weight: 49
+      product_carousel_category:
+        weight: 50
+        enabled: false
+      multiple_row_multiple_col:
+        enabled: true
+        weight: 54
+      slug_banner:
+        weight: 56
+        enabled: false
+      text_links:
+        weight: 57
+        enabled: false
+field_type: entity_reference_revisions
