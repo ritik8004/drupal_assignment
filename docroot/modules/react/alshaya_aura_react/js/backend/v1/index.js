@@ -32,3 +32,25 @@ window.auraBackend.sendSignUpOtp = (mobile, chosenCountryCode) => postAPIData('p
   mobile,
   chosenCountryCode,
 });
+
+/**
+ * Verifies the OTP entered by the user.
+ *
+ * @param {string} mobile
+ *   Mobile number.
+ * @param {string} otp
+ *   Otp value.
+ * @param {string} type
+ *   Type of action for which otp is generated, eg. registration.
+ * @param {string} chosenCountryCode
+ *   The country code value.
+ *
+ * @returns {Promise}
+ *   Returns an object with status value or the error object in case of failure.
+ */
+window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => postAPIData('post/loyalty-club/verify-otp', {
+  mobile,
+  otp,
+  type,
+  chosenCountryCode,
+});

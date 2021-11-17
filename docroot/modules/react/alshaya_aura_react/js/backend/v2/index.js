@@ -2,7 +2,7 @@ import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
 import logger from '../../../../alshaya_spc/js/utilities/logger';
 import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
-import sendOtp from '../../../../js/utilities/otp_helper';
+import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
 import search from './search_helper';
 import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
@@ -153,3 +153,25 @@ window.auraBackend.sendSignUpOtp = async (mobile, chosenCountryCode) => {
 
   return { data: responseData };
 };
+
+/**
+ * Verifies the OTP entered by the user.
+ *
+ * @param {string} mobile
+ *   Mobile number.
+ * @param {string} otp
+ *   Otp value.
+ * @param {string} type
+ *   Type of action for which otp is generated, eg. registration.
+ * @param {string} chosenCountryCode
+ *   The country code value.
+ *
+ * @returns {Promise}
+ *   Returns an object with status value or the error object in case of failure.
+ */
+window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyOtp(
+  mobile,
+  otp,
+  type,
+  chosenCountryCode,
+);

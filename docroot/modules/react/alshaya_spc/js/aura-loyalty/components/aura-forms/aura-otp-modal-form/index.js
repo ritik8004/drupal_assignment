@@ -2,7 +2,6 @@ import React from 'react';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
-import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
 import AuraMobileNumberField from '../aura-mobile-number-field';
@@ -120,11 +119,13 @@ class AuraFormSignUpOTPModal extends React.Component {
 
     removeError(getInlineErrorSelector('otp').otp);
     // API call to verify otp.
-    const apiUrl = 'post/loyalty-club/verify-otp';
     // Passing type `reg` to denote this otp verification is for user registration.
-    const apiData = postAPIData(apiUrl, {
-      mobile, otp, type: 'reg', chosenCountryCode,
-    });
+    const apiData = window.auraBackend.verifyOtp(
+      mobile,
+      otp,
+      'reg',
+      chosenCountryCode,
+    );
     showFullScreenLoader();
 
     if (apiData instanceof Promise) {
