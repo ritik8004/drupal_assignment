@@ -61,9 +61,15 @@ function applyEllipsis(value) {
  */
 function getLegalNotice() {
   return {
-    enabled: drupalSettings.alshayaRcs.legalNoticeEnabled,
-    label: drupalSettings.alshayaRcs.legalNoticeLabel,
-    summary: drupalSettings.alshayaRcs.legalNoticeSummary.value,
+    enabled: Drupal.hasValue(drupalSettings.alshayaRcs.legalNoticeEnabled)
+      ? drupalSettings.alshayaRcs.legalNoticeEnabled
+      : false,
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.legalNoticeLabel)
+      ? drupalSettings.alshayaRcs.legalNoticeLabel
+      : '',
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.legalNoticeSummary)
+      ? drupalSettings.alshayaRcs.legalNoticeSummary.value
+      : false,
   };
 }
 

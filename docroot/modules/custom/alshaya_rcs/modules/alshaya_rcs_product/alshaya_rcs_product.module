@@ -209,9 +209,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['legalNoticeEnabled'] = $product_settings->get('legal_notice_enabled');
   $build['#attached']['drupalSettings']['alshayaRcs']['legalNoticeLabel'] = $product_settings->get('legal_notice_label');
   $build['#attached']['drupalSettings']['alshayaRcs']['legalNoticeSummary'] = $product_settings->get('legal_notice_summary');
-  $build['#attached']['drupalSettings']['alshayaRcs']['additionalPdpDescriptionEnabled'] = $product_settings->get('additionalPdpDescriptionEnabled');
-  $build['#attached']['drupalSettings']['alshayaRcs']['additionalPdpDescriptionLabel'] = $product_settings->get('additionalPdpDescriptionLabel');
-  $build['#attached']['drupalSettings']['alshayaRcs']['additionalPdpDescriptionSummary'] = $product_settings->get('additionalPdpDescriptionSummary');
+  $build['#attached']['drupalSettings']['alshayaRcs']['additionalPdpDescriptionEnabled'] = $product_settings->get('additional_pdp_description_enabled');
+  $build['#attached']['drupalSettings']['alshayaRcs']['additionalPdpDescriptionLabel'] = $product_settings->get('additional_pdp_description_label');
+  $build['#attached']['drupalSettings']['alshayaRcs']['additionalPdpDescriptionSummary'] = $product_settings->get('additional_pdp_description_summary');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
   $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryType'] = $product_settings->get('pdp_gallery_type');
@@ -857,9 +857,10 @@ function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity
 
   $path = drupal_get_path('module', 'alshaya_rcs_product');
 
-  $pdp_layout = Drupal::configFactory()->get('alshaya_acm_product.settings')->get('pdp_layout');
-  switch ($pdp_layout) {
-    case 'magazine':
+  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  switch ($sku_manager->getPdpLayout($entity)) {
+    case 'pdp-magazine':
       $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-full-magazine-block.handlebars";
       break;
 

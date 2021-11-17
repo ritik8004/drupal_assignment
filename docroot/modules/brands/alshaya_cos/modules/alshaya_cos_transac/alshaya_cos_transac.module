@@ -54,8 +54,9 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
   $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
   $templates['product']['description-details']['block'] = "$path/templates/rcs-product-description-details-block.handlebars";
 
-  $pdp_layout = \Drupal::configFactory()->get('alshaya_acm_product.settings')->get('pdp_layout');
-  if ($pdp_layout == 'magazine') {
+  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  if ($sku_manager->getPdpLayout($entity) == 'pdp-magazine') {
     // Override default template for short description block when using magazine layout.
     $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-full-magazine-block.handlebars";
   }
