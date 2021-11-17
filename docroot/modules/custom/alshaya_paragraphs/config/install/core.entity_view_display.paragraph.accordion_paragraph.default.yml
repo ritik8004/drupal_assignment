@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.accordion_paragraph.field_group_title
+    - field.field.paragraph.accordion_paragraph.field_title_and_content
+    - paragraphs.paragraphs_type.accordion_paragraph
+  module:
+    - entity_reference_revisions
+id: paragraph.accordion_paragraph.default
+targetEntityType: paragraph
+bundle: accordion_paragraph
+mode: default
+content:
+  field_group_title:
+    weight: 0
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_title_and_content:
+    weight: 1
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    type: entity_reference_revisions_entity_view
+    region: content
+hidden:
+  search_api_excerpt: true
