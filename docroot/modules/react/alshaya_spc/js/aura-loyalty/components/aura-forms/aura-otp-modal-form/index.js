@@ -66,8 +66,7 @@ class AuraFormSignUpOTPModal extends React.Component {
       validationRequest.then((valid) => {
         if (valid === true) {
           // API call to send otp.
-          const apiUrl = 'post/loyalty-club/send-otp';
-          const apiData = postAPIData(apiUrl, { mobile: userMobile, chosenCountryCode });
+          const apiData = window.auraBackend.sendSignUpOtp(userMobile, chosenCountryCode);
           showFullScreenLoader();
 
           if (apiData instanceof Promise) {

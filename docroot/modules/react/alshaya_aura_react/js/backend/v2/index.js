@@ -2,6 +2,7 @@ import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
 import logger from '../../../../alshaya_spc/js/utilities/logger';
 import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
+import sendOtp from '../../../../js/utilities/otp_helper';
 import search from './search_helper';
 import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
@@ -119,4 +120,36 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
   }
 
   return responseData;
+};
+
+/**
+ * Sends OTP.
+ *
+ * @param {object} data
+ *   The data to send to the API.
+ *
+ * @returns {Object}
+ *   Return API response status.
+ */
+window.auraBackend.sendSignUpOtp = async (mobile, chosenCountryCode) => {
+  // Call search API to check if given mobile number is already registered or
+  // not.
+  const searchResponse = await search('phone', `${chosenCountryCode}${mobile}`);
+
+  if (hasValue(searchResponse.data.apc_identifier_number)) {
+    logger.error('Error while trying to send otp. Mobile number @mobile is already registered.', {
+      '@mobile': mobile,
+    });
+    return {
+      data: getErrorResponse(
+        auraErrorCodes.MOBILE_ALREADY_REGISTERED_MSG,
+        auraErrorCodes.MOBILE_ALREADY_REGISTERED_CODE,
+      ),
+    };
+  }
+
+  // Send otp for the given mobile number.
+  const responseData = await sendOtp(`${chosenCountryCode}${mobile}`, 'reg');
+
+  return { data: responseData };
 };

@@ -16,3 +16,19 @@ window.auraBackend = window.auraBackend || {};
  * of success and the error object in case of error.
  */
 window.auraBackend.loyaltyClubSignUp = (data) => postAPIData('post/loyalty-club/sign-up', data);
+
+/**
+ * Sends OTP.
+ *
+ * @param {string} mobile
+ *   The mobile number.
+ * @param {string} chosenCountryCode
+ *   The country code value.
+ *
+ * @returns {Object}
+ *   Return API response status.
+ */
+window.auraBackend.sendSignUpOtp = (mobile, chosenCountryCode) => postAPIData('post/loyalty-club/send-otp', {
+  mobile,
+  chosenCountryCode,
+});
