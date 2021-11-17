@@ -13,6 +13,24 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Enhance existing paragraph and added accordian paragraph type.
+ */
+function alshaya_paragraphs_update_8130() {
+  $configs = [
+    'paragraphs.paragraphs_type.accordion_paragraph.yml',
+    'field.storage.paragraph.field_group_title.yml',
+    'field.storage.paragraph.field_title_and_content.yml',
+    'field.field.paragraph.accordion_paragraph.field_title_and_content.yml',
+    'field.field.paragraph.accordion_paragraph.field_group_title.yml',
+    'core.entity_view_display.paragraph.accordion_paragraph.default.yml',
+    'core.entity_form_display.paragraph.accordion_paragraph.default.yml',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enhance existing paragraph and new paragraph 1row3col flex added.
  */
 function alshaya_paragraphs_update_8129() {
