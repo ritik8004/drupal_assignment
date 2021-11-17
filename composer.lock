@@ -11109,11 +11109,17 @@
         },
         {
             "name": "drupal/mobile_app_links",
-            "version": "dev-1.x",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/mobile_app_links.git",
-                "reference": "df44beadda2fd43c96b36b05e3118b7e200027f6"
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/mobile_app_links-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "9821562b079f1223eee3e70289b9f462ab4c5a6a"
             },
             "require": {
                 "drupal/core": "^8.7||^9.0",
@@ -11121,15 +11127,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.0+1-dev",
-                    "datestamp": "1587003582",
+                    "version": "8.x-1.1",
+                    "datestamp": "1637137244",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -11154,8 +11157,7 @@
             "support": {
                 "source": "https://cgit.drupalcode.org/mobile_app_links",
                 "issues": "https://drupal.org/project/issues/mobile_app_links"
-            },
-            "time": "2020-04-16T02:19:18+00:00"
+            }
         },
         {
             "name": "drupal/mobile_number",
@@ -24157,6 +24159,7 @@
                 }
             ],
             "description": "A robust cross-platform utility for normalizing, comparing and modifying file paths.",
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         },
         {
