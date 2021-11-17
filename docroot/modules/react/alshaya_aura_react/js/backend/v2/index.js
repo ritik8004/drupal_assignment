@@ -7,6 +7,7 @@ import search from './search_helper';
 import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
 import getErrorResponse from '../../../../js/utilities/error';
+import { getCustomerInfo, getCustomerPoints, getCustomerTier } from './customer_helper';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -175,3 +176,97 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyO
   type,
   chosenCountryCode,
 );
+
+/**
+ * Get the loyalty customer details.
+ *
+ * @param {object} data
+ *   Object containing items like tier, status, etc.
+ *
+ * @returns {Promise}
+ *   The promise object which resolves to the response data and status in case
+ *   of success and the error object in case of error.
+ */
+window.auraBackend.getCustomerDetails = async (data) => {
+  // Get user details from session.
+  const { customerId } = drupalSettings.userDetails;
+  const { uid } = drupalSettings.user;
+  const fetchStatus = data.fetchStatus || true;
+  const fetchPoints = data.fetchPoints || true;
+  const fetchTier = data.fetchTier || true;
+  const updateDrupal = data.update || true;
+  const tier = data.tier || '';
+  const status = data.status || '';
+  let responseData = {};
+
+  if (!hasValue(customerId) || !hasValue(uid)) {
+    logger.warning('Error while trying to fetch loyalty points for customer. No customer available in session. Customer Id: @customerId, User Id: @uid', {
+      '@customerId': customerId,
+      '@uid': uid,
+    });
+
+    return getErrorResponse('No user in session', 404);
+  }
+
+  // Call helper to get customer information only if fetch status
+  // is not false.
+  if (fetchStatus === true) {
+    const customerInfo = await getCustomerInfo(customerId);
+
+    if (!hasValue(customerInfo.error)) {
+      responseData = { ...responseData, ...customerInfo };
+    }
+  }
+
+  // Call helper to get customer point details only if fetch points
+  // is not false.
+  if (fetchPoints === true) {
+    const customerPoints = await getCustomerPoints(customerId);
+
+    if (!hasValue(customerPoints.error)) {
+      responseData = { ...responseData, ...customerPoints };
+    }
+  }
+
+  // Call helper to get customer tier details only if fetch tier
+  // is not false.
+  if (fetchTier === true) {
+    const customerTier = await getCustomerTier(customerId);
+
+    if (!hasValue(customerTier.error)) {
+      responseData = { ...responseData, ...customerTier };
+    }
+  }
+
+  // Compare aura status and tier from drupal and API response and if
+  // they are different then call Drupal API to update the values.
+  if (updateDrupal === true && hasValue(responseData)) {
+    const updatedData = {};
+
+    if (responseData.auraStatus && status !== responseData.auraStatus) {
+      updatedData.apcLinkStatus = responseData.auraStatus;
+    }
+
+    if (responseData.tier && tier !== responseData.tier) {
+      updatedData.tier = responseData.tier;
+    }
+
+    if (hasValue(updatedData)) {
+      updatedData.uid = uid;
+      const isUserAuraInfoUpdated = await updateUserAuraInfo(updatedData);
+
+      // Check if user aura status and tier was updated successfully in Drupal.
+      if (!isUserAuraInfoUpdated) {
+        const message = 'Error while trying to update user AURA Status field in Drupal.';
+        logger.error(`${message}. User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status, Aura Tier: @aura_tier.`, {
+          '@uid': uid,
+          '@customer_id': customerId,
+          '@aura_status': responseData.auraStatus,
+          '@aura_tier': responseData.tier,
+        });
+        return { data: getErrorResponse(message, 500) };
+      }
+    }
+  }
+  return { data: responseData };
+};

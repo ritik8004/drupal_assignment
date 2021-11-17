@@ -10,8 +10,11 @@ import dispatchCustomEvent from '../../../js/utilities/events';
  */
 function getCustomerDetails(tier, loyaltyStatus) {
   // API call to get customer points for logged in users.
-  const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
-  const apiData = getAPIData(apiUrl);
+  const data = {
+    status: loyaltyStatus,
+    tier: tier,
+  }
+  const apiData = window.auraBackend.getCustomerDetails(data);
   let stateValues = {};
 
   if (apiData instanceof Promise) {
