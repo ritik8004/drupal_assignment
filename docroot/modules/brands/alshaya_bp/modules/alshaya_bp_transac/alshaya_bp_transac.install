@@ -566,7 +566,7 @@ function _alshaya_bp_transac_save_metatag_translations() {
  * Get translations of metatag.
  */
 function _alshaya_bp_transac_save_metatag() {
-  // Update node__acq_product metatag defaults.
+  // Update metatag defaults for product type.
   $config_factory_node_acq_product = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product');
   $tags_node_acq_product_en = [
     'title' => 'Buy [node:title] online | [site:name]',
@@ -588,7 +588,7 @@ function _alshaya_bp_transac_save_metatag() {
   $config_node_acq_product_ar->set('tags', $tags_node_acq_product_ar);
   $config_node_acq_product_ar->save();
 
-  // Update metatag.metatag_defaults.node__advanced_page metatag defaults.
+  // Update metatag defaults for advance page type.
   $config_factory_node_advanced_page = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page');
   $tags_node_advanced_page_en = [
     'title' => '[node:title] | health info & tips | [site:name]',
