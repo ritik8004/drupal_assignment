@@ -11,7 +11,7 @@ class PaymentMethodTabby extends React.Component {
 
   tabbyCardInit = () => {
     const { widgetInfo, cart } = this.props;
-    Drupal.tabbyCardInit(widgetInfo.id, cart.cart.totals.base_grand_total);
+    Drupal.tabbyCardInit(`#${widgetInfo.id}`, cart.cart.totals.base_grand_total);
   }
 
   render() {

@@ -222,7 +222,9 @@ export default class PaymentMethod extends React.Component {
                 </div>
               </ConditionalView>
             </label>
-
+            <ConditionalView condition={method.code === 'tabby'}>
+              <button type="button" className="installments-popup" data-tabby-info="installments">ⓘ</button>
+            </ConditionalView>
             <PaymentMethodIcon methodName={method.code} />
           </div>
 

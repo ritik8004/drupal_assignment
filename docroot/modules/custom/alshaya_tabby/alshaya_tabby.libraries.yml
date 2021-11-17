@@ -1,6 +1,12 @@
 tabby_sdk:
   js:
     https://checkout.tabby.ai/integration.js: { type: external }
+    js/tabby.js: { }
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
 
 tabby_info:
   js:
@@ -10,13 +16,8 @@ tabby_info:
 
 tabby_promos:
   js:
-    js/tabby.js: { }
     https://checkout.tabby.ai/tabby-promo.js: { type: external }
   dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal
-    - core/drupalSettings
     - alshaya_tabby/tabby_sdk
 
 tabby_card:
