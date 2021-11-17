@@ -21,4 +21,16 @@
       price: amount
     });
   }
+  // Function to initialize the info widget.
+  Drupal.tabbyCardInit = function (selector, amount) {
+    new TabbyCard({
+      selector: selector,
+      currency: drupalSettings.alshaya_spc.currency_config.currency_code,
+      lang: drupalSettings.path.currentLanguage,
+      price: amount,
+      size: 'wide',
+      theme: 'default',
+      header: false
+    });
+  }
 })(jQuery, Drupal, drupalSettings);

@@ -24,6 +24,8 @@ import CheckoutComUpapiApplePay
 import PaymentMethodCheckoutComUpapiFawry
   from '../payment-method-checkout-com-upapi-fawry';
 import cartActions from '../../../utilities/cart_actions';
+import PaymentMethodTabby from '../payment-method-tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -33,6 +35,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodPostpay = React.createRef();
+    this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
   }
 
@@ -220,7 +223,12 @@ export default class PaymentMethod extends React.Component {
                 </div>
               </ConditionalView>
             </label>
-
+            <ConditionalView condition={method.code === 'tabby'}>
+              <TabbyWidget
+                pageType="checkout"
+                classNames="installment-popup"
+              />
+            </ConditionalView>
             <PaymentMethodIcon methodName={method.code} />
           </div>
 
@@ -265,6 +273,16 @@ export default class PaymentMethod extends React.Component {
                 ref={this.PaymentMethodPostpay}
                 postpay={drupalSettings.postpay}
                 postpayWidgetInfo={drupalSettings.postpay_widget_info}
+                cart={cart}
+              />
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={(isSelected && method.code === 'tabby')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodTabby
+                ref={this.paymentMethodTabby}
+                widgetInfo={drupalSettings.tabby.widgetInfo}
                 cart={cart}
               />
             </div>

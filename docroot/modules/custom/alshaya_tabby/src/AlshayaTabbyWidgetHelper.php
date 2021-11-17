@@ -81,7 +81,7 @@ class AlshayaTabbyWidgetHelper {
         break;
 
       case 'checkout':
-        // Checkout code.
+        $id = 'tabby-card-checkout';
         break;
 
       default:
@@ -152,7 +152,8 @@ class AlshayaTabbyWidgetHelper {
         break;
 
       case 'checkout':
-        // Checkout code.
+        $build['#attached']['library'][] = 'alshaya_tabby/tabby_card';
+        $widget_info = $this->getTabbyWidgetInfo('checkout');
         break;
 
       default:

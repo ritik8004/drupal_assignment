@@ -4,8 +4,10 @@ namespace Drupal\alshaya_tabby\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 use Drupal\alshaya_tabby\AlshayaTabbyApiHelper;
+use Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,6 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
 
   use LoggerChannelTrait;
+  use StringTranslationTrait;
 
   /**
    * Tabby payment method Helper.
@@ -26,6 +29,13 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
    * @var \Drupal\alshaya_tabby\AlshayaTabbyApiHelper
    */
   protected $tabbyApiHelper;
+
+  /**
+   * Tabby widget Helper.
+   *
+   * @var \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper
+   */
+  protected $tabbyWidgetHelper;
 
   /**
    * {@inheritdoc}
@@ -39,6 +49,7 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_tabby.api_helper'),
+      $container->get('alshaya_tabby.widget_helper'),
     );
   }
 
@@ -53,13 +64,17 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
    *   The plugin implementation definition.
    * @param \Drupal\alshaya_tabby\AlshayaTabbyApiHelper $tabby_api_helper
    *   Tabby api Helper.
+   * @param \Drupal\alshaya_tabby\AlshayaTabbyWidgetHelper $tabby_widget_helper
+   *   Tabby api Helper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              AlshayaTabbyApiHelper $tabby_api_helper) {
+                              AlshayaTabbyApiHelper $tabby_api_helper,
+                              AlshayaTabbyWidgetHelper $tabby_widget_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->tabbyApiHelper = $tabby_api_helper;
+    $this->tabbyWidgetHelper = $tabby_widget_helper;
   }
 
   /**
@@ -72,6 +87,18 @@ class Tabby extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactor
       return FALSE;
     }
     return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function processBuild(array &$build) {
+    $this->tabbyWidgetHelper->getTabbyPaymentBuild($build, 'checkout');
+
+    $build['#strings']['tabby_error'] = [
+      'key' => 'tabby_error',
+      'value' => $this->t('Your tabby order has been cancelled'),
+    ];
   }
 
 }
