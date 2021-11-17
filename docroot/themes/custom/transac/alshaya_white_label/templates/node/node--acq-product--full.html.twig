@@ -21,8 +21,8 @@ set classes = [
             </div>
           </div>
         {% endif %}
-        {% if wishlist_enabled is defined and wishlist_enabled == true %}
-          <div id="wishlist-pdp"></div>
+        {% if content.wishlist_enabled %}
+          {{ content.wishlist_enabled }}
         {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>

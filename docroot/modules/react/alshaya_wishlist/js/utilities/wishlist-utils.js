@@ -159,6 +159,19 @@ export const removeProductFromWishList = (productSku, setWishListStatus) => {
 };
 
 /**
+ * Helper function to get current product sku on PDP.
+ */
+export const getProductSkuOnPDP = () => {
+  // Return null if productInfo is missing.
+  if (typeof drupalSettings.productInfo === 'undefined') {
+    return null;
+  }
+
+  // Return the sku of current PDP page.
+  return Object.keys(drupalSettings.productInfo)[0];
+};
+
+/**
  * Utility function to prepare product details for wishlist.
  */
 export const prepareProductDetailsForWishList = (productSku) => {
