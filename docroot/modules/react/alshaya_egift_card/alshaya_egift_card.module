@@ -5,14 +5,21 @@
  * Contains alshaya_egift_card.module.
  */
 
+ use Drupal\Core\Cache\Cache;
+
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
   // Do not proceed if egift card is not enabled.
   $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
-  $page['#attached']['drupalSettings']['egiftCard'] = $egiftCard_settings->isEgiftCardEnabled();
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $egiftCard_settings->getCacheTags());
+  $build['#attached']['drupalSettings']['egiftCard'] = [
+    'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
+    'notSupportedPaymentMethods' => array_filter($egiftCard_settings->getNotSupportedPaymentMethods(), function($method) {
+      return $method !== '0';
+    }),
+  ];
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
 }
 
 /**
@@ -22,6 +29,6 @@ function alshaya_egift_card_alshaya_spc_cart_build_alter(array &$build) {
   // Do not proceed if egift card is not enabled.
   $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
   // Add aura dictionary api data in drupalSettings.
-  $page['#attached']['drupalSettings']['egiftCard'] = $egiftCard_settings->isEgiftCardEnabled();
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $egiftCard_settings->getCacheTags());
+  $build['#attached']['drupalSettings']['egiftCard'] = $egiftCard_settings->isEgiftCardEnabled();
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
 }

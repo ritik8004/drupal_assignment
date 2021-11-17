@@ -45,4 +45,15 @@ class EgiftCardHelper {
   public function isEgiftCardEnabled() {
     return $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_enabled');
   }
+
+  /**
+   * Helper to get list of not supported payment methods for eGift card.
+   *
+   * @return array
+   *   An array containting all the payment methods with enable/disable value.
+   */
+  public function getNotSupportedPaymentMethods() {
+    return $this->configFactory->get('alshaya_egift_card.settings')->get('payment_methods_not_supported');
+  }
+
 }

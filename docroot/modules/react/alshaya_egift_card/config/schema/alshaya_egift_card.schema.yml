@@ -5,3 +5,8 @@ alshaya_egift_card.settings:
     egift_card_enabled:
       type: boolean
       label: 'Config to enable/disable egift card'
+    payment_methods_not_supported:
+      label: 'Not supported payment methods for eGift cards.'
+      type: sequence
+      sequence:
+        type: string
