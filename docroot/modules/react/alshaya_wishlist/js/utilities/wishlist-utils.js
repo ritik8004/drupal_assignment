@@ -120,6 +120,7 @@ export const addProductToWishList = (productSku, setWishListStatus) => {
     addProductToWishListForGuestUsers(productSku);
   }
 
+  // @todo: we need to work on for logged in users.
   setWishListStatus(true);
   dispatchCustomEvent('productAddedToWishlist', { sku: productSku, addedInWishList: true });
 };
@@ -152,6 +153,7 @@ export const removeProductFromWishList = (productSku, setWishListStatus) => {
     removeProductFromWishListForGuestUsers(productSku);
   }
 
+  // @todo: we need to work on for logged in users.
   setWishListStatus(false);
   dispatchCustomEvent('productRemovedFromWishlist', { sku: productSku, addedInWishList: false });
 };

@@ -59,7 +59,7 @@ class WishlistButton extends React.Component {
     const { context, position } = this.props;
 
     const classPrefix = `wishlist-icon ${context} ${position}`;
-    const wishListButtonClass = addedInWishList ? `${classPrefix}  added` : classPrefix;
+    const wishListButtonClass = addedInWishList ? `${classPrefix} in-wishlist` : classPrefix;
 
     return (
       <div
