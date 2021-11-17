@@ -1,0 +1,41 @@
+header {
+  .c-header__region {
+    max-width: 74rem;
+    padding: 1.5625rem 0 0.8125rem;
+  }
+
+  .region__header {
+    .block-system-branding-block {
+      .site-brand-home {
+        min-width: 12.5rem;
+      }
+    }
+  }
+}
+
+.site-brand-home {
+  a {
+    min-width: 12.5rem;
+  }
+
+  img {
+    .block-system-branding-block & {
+      html[lang=ar] & {
+        width: auto;
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .cart-link {
+    background-position: center $right;
+
+    html[lang=ar] & {
+      background-position: center left;
+    }
+  }
+}
