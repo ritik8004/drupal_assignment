@@ -8,6 +8,9 @@ alshaya_wishlist.settings:
     empty_wishlist_message:
       type: text
       label: 'Empty Wishlist Message.'
-    wishlistinfo_local_storage_expiration:
+    wishlistinfo_local_storage_expiration_guest:
       type: integer
-      label: 'Expire time for wishlist info in localStorage'
+      label: 'Expire time for wishlist info in localStorage for guest users.'
+    wishlistinfo_local_storage_expiration_logged_in:
+      type: integer
+      label: 'Expire time for wishlist info in localStorage for logged in users.'

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import isWishlistEnabled from '../../wishlistHelper';
+import { isWishlistEnabled } from '../../wishlistHelper';
 import EmptyErrorBoundary from '../empty-error-boundary/EmptyErrorBoundary';
 
 function WishlistContainer(props) {

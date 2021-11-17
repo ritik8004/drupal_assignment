@@ -1,5 +1,6 @@
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { getStorageInfo, setStorageInfo } from '../../../js/utilities/storage';
+import { getWishlistInfoStorageExpirationForGuest } from '../../../js/utilities/wishlistHelper';
 
 /**
  * Check if user is anonymous.
@@ -7,17 +8,6 @@ import { getStorageInfo, setStorageInfo } from '../../../js/utilities/storage';
  * @returns {bool}
  */
 export const isAnonymousUser = () => (drupalSettings.user.uid === 0);
-
-/**
- * Returns the wishlist info local storage expiration time.
- *
- * @returns integer
- *  Time in seconds format.
- */
-export const getWishlistInfoLocalStorageExpiration = () => ((typeof drupalSettings.wishlist.config !== 'undefined'
-  && typeof drupalSettings.wishlist.config.wishlistinfoLocalStorageExpiration !== 'undefined')
-  ? parseInt(drupalSettings.wishlist.config.wishlistinfoLocalStorageExpiration, 10)
-  : 0);
 
 /**
  * Utility function to get wishlist storage key.
@@ -31,20 +21,20 @@ export const getWishListStorageKey = () => 'wishlistInfo';
  * @returns {object}
  *  An object of wishlist information.
  */
-export const getWishListInfoAvailableInStorage = () => {
+export const getWishListInfoForGuestUsers = () => {
   // Get local storage key for the wishlist.
   const storageKey = getWishListStorageKey();
 
   // Get data from local storage.
   const wishListInfo = getStorageInfo(storageKey);
-
+  console.log(wishListInfo)
   // If data is not available in storage, we flag it to check/fetch from api.
   if (!wishListInfo || !wishListInfo.infoData) {
     return null;
   }
 
   // Configurable expiration time, by default it is 300s.
-  const storageExpireTime = getWishlistInfoLocalStorageExpiration();
+  const storageExpireTime = getWishlistInfoStorageExpirationForGuest();
   const expireTime = storageExpireTime * 1000;
   const currentTime = new Date().getTime();
 
@@ -54,6 +44,36 @@ export const getWishListInfoAvailableInStorage = () => {
   }
 
   return wishListInfo.infoData;
+};
+
+/**
+ * Return the current wishlist info if available.
+ *
+ * @returns {object}
+ *  An object of wishlist information.
+ */
+export const getWishListData = () => {
+  // For Guest users.
+  if (isAnonymousUser()) {
+    return getWishListInfoForGuestUsers();
+  }
+
+  // @todo: we need to work on for logged in users.
+};
+
+/**
+ * Utility function to check if product sku is already exist in wishlist.
+ */
+export const isProductExistInWishList = (productSku) => {
+  // Get existing wishlist data from storage.
+  const wishListItems = getWishListData();
+
+  // Check if product sku is in existing data.
+  if (wishListItems && Object.prototype.hasOwnProperty.call(wishListItems, productSku)) {
+    return true;
+  }
+
+  return false;
 };
 
 /**
@@ -74,35 +94,20 @@ export const addWishListInfoInStorage = (wishListData) => {
 };
 
 /**
- * Utility function to check if product sku is already exist in wishlist.
- */
-export const isProductExistInWishList = (productSku) => {
-  // Get existing wishlist data from storage.
-  const existing = getWishListInfoAvailableInStorage();
-
-  // Check if product sku is in existing data.
-  if (existing && Object.prototype.hasOwnProperty.call(existing, productSku)) {
-    return true;
-  }
-
-  return false;
-};
-
-/**
  * Utility function to add a product to wishlist for guest users.
  */
 export const addProductToWishListForGuestUsers = (productSku) => {
   // Get existing wishlist data from storage.
-  let existing = getWishListInfoAvailableInStorage();
+  let wishListItems = getWishListData();
 
   // If no existing data, create an array.
-  existing = existing || {};
+  wishListItems = wishListItems || {};
 
   // Add new data to storage.
-  existing[productSku] = productSku;
+  wishListItems[productSku] = productSku;
 
   // Save back to storage.
-  addWishListInfoInStorage(existing);
+  addWishListInfoInStorage(wishListItems);
 };
 
 /**
@@ -123,18 +128,18 @@ export const addProductToWishList = (productSku, setWishListStatus) => {
  */
 export const removeProductFromWishListForGuestUsers = (productSku) => {
   // Get existing wishlist data from storage.
-  const existing = getWishListInfoAvailableInStorage();
-
+  const wishListItems = getWishListData();
+  console.log(wishListItems)
   // Return is no existing data found.
-  if (!existing) {
+  if (!wishListItems) {
     return;
   }
 
   // Remove the entry for given productSku from existing storage data.
-  delete existing[productSku];
+  delete wishListItems[productSku];
 
   // Save back to storage.
-  addWishListInfoInStorage(existing);
+  addWishListInfoInStorage(wishListItems);
 };
 
 /**
