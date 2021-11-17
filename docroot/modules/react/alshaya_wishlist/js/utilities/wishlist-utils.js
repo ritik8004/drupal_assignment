@@ -27,7 +27,7 @@ export const getWishListInfoForGuestUsers = () => {
 
   // Get data from local storage.
   const wishListInfo = getStorageInfo(storageKey);
-  console.log(wishListInfo)
+
   // If data is not available in storage, we flag it to check/fetch from api.
   if (!wishListInfo || !wishListInfo.infoData) {
     return null;
@@ -59,6 +59,7 @@ export const getWishListData = () => {
   }
 
   // @todo: we need to work on for logged in users.
+  return null;
 };
 
 /**
@@ -129,7 +130,7 @@ export const addProductToWishList = (productSku, setWishListStatus) => {
 export const removeProductFromWishListForGuestUsers = (productSku) => {
   // Get existing wishlist data from storage.
   const wishListItems = getWishListData();
-  console.log(wishListItems)
+
   // Return is no existing data found.
   if (!wishListItems) {
     return;
