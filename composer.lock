@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33c8a08b4557bd3e8ba070630cea1ca9",
+    "content-hash": "f330c11e618979cd855642093804358d",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -26555,7 +26555,6 @@
         "drupal/menu_admin_per_menu": 5,
         "drupal/menu_link_attributes": 10,
         "drupal/mimemail": 20,
-        "drupal/mobile_app_links": 20,
         "drupal/mobile_number": 15,
         "drupal/path_redirect_import": 10,
         "drupal/profile": 15,
@@ -26563,7 +26562,7 @@
         "drupal/redirect": 15,
         "drupal/role_delegation": 15,
         "drupal/s3fs": 15,
-        "drupal/search_api_algolia": 20,
+        "drupal/search_api_algolia": 10,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
         "drupal/sessions_expire": 20,
