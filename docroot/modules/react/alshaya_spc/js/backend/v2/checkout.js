@@ -6,19 +6,12 @@ import {
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
-  callDrupalApi,
-  callMagentoApi,
   getCartCustomerEmail,
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
   getProductStatus,
-  getCartSettings,
 } from './common';
-import {
-  cartErrorCodes,
-  getDefaultErrorMessage,
-} from './error';
 import {
   getApiEndpoint,
   isUserAuthenticated,
@@ -42,6 +35,8 @@ import {
   isArray,
 } from '../../../../js/utilities/conditionsUtility';
 import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
+import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities/error';
+import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 

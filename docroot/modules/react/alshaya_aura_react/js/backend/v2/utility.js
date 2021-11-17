@@ -1,5 +1,5 @@
-import { callDrupalApi } from '../../../../alshaya_spc/js/backend/v2/common';
 import logger from '../../../../js/utilities/logger';
+import { callDrupalApi } from '../../../../js/utilities/requestHelper';
 
 /**
  * Update user's aura info.

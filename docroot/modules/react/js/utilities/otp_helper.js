@@ -1,7 +1,7 @@
-import { callMagentoApi } from '../../alshaya_spc/js/backend/v2/common';
+import { callMagentoApi } from './requestHelper';
 import logger from './logger';
 import { hasValue } from './conditionsUtility';
-import getErrorResponse from './error';
+import { getErrorResponse } from './error';
 
 /**
  * Calls the API to send OTP.
