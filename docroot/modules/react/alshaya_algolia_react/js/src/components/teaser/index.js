@@ -6,6 +6,7 @@ import PromotionsFrame from '../promotion-frame';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
 import {
@@ -141,6 +142,12 @@ const Teaser = ({
               setSlider={setSlider}
             />
           </a>
+          {/* @todo: we need to move this to proper place. */}
+          <WishlistContainer
+            context="plp"
+            position="top-right"
+            sku={hit.sku}
+          />
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (

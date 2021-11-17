@@ -1,4 +1,6 @@
 wishlist_enabled: true
 empty_wishlist_message: ''
-# Config for local storage expiration time, default 300 sec (5 min).
-wishlistinfo_local_storage_expiration: 300
+# Config for local storage expiration time for guest
+# and logged in users, default 300 sec (5 min).
+wishlistinfo_local_storage_expiration_guest: 300
+wishlistinfo_local_storage_expiration_logged_in: 300
