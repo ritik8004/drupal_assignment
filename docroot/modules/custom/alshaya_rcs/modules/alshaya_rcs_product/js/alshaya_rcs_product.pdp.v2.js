@@ -289,9 +289,8 @@ function getVariantsInfo(product) {
     const variantSku = variantInfo.sku;
     // @todo Add code for commented keys.
     info[variantSku] = {
-      cart_image: window.commerceBackend.getCartImage(variant),
-      // @todo Add brand specific cart title.
-      cart_title: 'Temp title',
+      cart_image: window.commerceBackend.getCartImage(variant.product),
+      cart_title: product.name,
       click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
       color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
       color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
@@ -362,8 +361,7 @@ function processProduct(product) {
     gallery: null,
     identifier: window.commerceBackend.cleanCssIdentifier(product.sku),
     cart_image: window.commerceBackend.getCartImage(product),
-    // @todo Add brand specific cart title.
-    cart_title: 'Temp title',
+    cart_title: product.name,
     url: getProductUrls(product.url_key, drupalSettings.path.currentLanguage),
     priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
     // @todo Add promotions value here.
