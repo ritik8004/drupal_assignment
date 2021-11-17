@@ -348,3 +348,15 @@ function alshaya_aura_react_alshaya_acm_customer_recent_order_build_alter(array 
     $build['recent_order'][$key]['#order']['apc_redeemed_points'] = $order['#order']['extension']['apc_redeemed_points'];
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'alshaya_aura_react' && isset($libraries['aura_header_library'])) {
+    $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+
+    // Add code to integrate V1/V2 js with aura header library.
+    $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
+  }
+}
