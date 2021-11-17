@@ -2,7 +2,7 @@
   border-width: 1px;
 
   .footer--menu {
-    width: 68%;
+    width: 70%;
 
     @include breakpoint($only-mobile) {
       margin: 0;
@@ -15,16 +15,17 @@
   }
 
   @include breakpoint($desktop) {
+    padding: 0;
     padding-top: 2.5rem;
   }
 
   .primary--footer--right {
     @include breakpoint($desktop) {
-      width: 32%;
+      width: 30%;
     }
 
     @include breakpoint($only-tablet) {
-      width: 32%;
+      width: 30%;
     }
   }
 
@@ -36,7 +37,7 @@
   }
 
   .l-container {
-    max-width: 77rem;
+    max-width: 74rem;
   }
 
   .footer--abouthelp {
@@ -140,10 +141,10 @@
 
 .alshaya-newsletter-subscribe {
   max-width: 22rem;
-  width: 88%;
+  width: 100%;
 
   html[lang=ar] & {
-    width: 85%;
+    width: 95%;
   }
 
   @include breakpoint($only-mobile) {
