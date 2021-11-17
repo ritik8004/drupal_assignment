@@ -8,7 +8,7 @@
  *  Key to identify data in local storage.
  */
 export const setStorageInfo = (data, storageKey) => {
-  // Return null if storage key isn't defined.
+  // Return void if storage key isn't defined.
   if (typeof storageKey === 'undefined') {
     return;
   }
@@ -24,7 +24,7 @@ export const setStorageInfo = (data, storageKey) => {
  *  Key to identify data in local storage.
  */
 export const removeStorageInfo = (storageKey) => {
-  // Return null if storage key isn't defined.
+  // Return void if storage key isn't defined.
   if (typeof storageKey === 'undefined') {
     return;
   }

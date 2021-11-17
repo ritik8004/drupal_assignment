@@ -145,7 +145,7 @@ const Teaser = ({
           {/* @todo: we need to move this to proper place. */}
           <WishlistContainer
             context="plp"
-            position="topright"
+            position="top-right"
             sku={hit.sku}
           />
           <div className="product-plp-detail-wrapper">
