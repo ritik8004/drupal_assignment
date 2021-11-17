@@ -1,5 +1,5 @@
 import { callMagentoApi } from '../../alshaya_spc/js/backend/v2/common';
-import logger from '../../alshaya_spc/js/utilities/logger';
+import logger from './logger';
 import { hasValue } from './conditionsUtility';
 import getErrorResponse from './error';
 

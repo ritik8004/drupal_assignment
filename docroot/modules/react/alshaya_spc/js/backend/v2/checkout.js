@@ -24,7 +24,7 @@ import {
   isUserAuthenticated,
   getIp,
 } from './utility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
 import {
   getPaymentMethods,
