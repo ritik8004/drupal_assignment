@@ -9,3 +9,15 @@
     margin-bottom: 1.5rem;
   }
 }
+
+.magazine-layout {
+  .acq-content-product {
+    .tabby {
+      margin: 0.5rem 0 1.25rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 0.875rem;
+      }
+    }
+  }
+}
