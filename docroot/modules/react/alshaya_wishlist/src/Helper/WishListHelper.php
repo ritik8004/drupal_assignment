@@ -56,8 +56,8 @@ class WishListHelper {
 
     $config = [
       'emptyWishListMessage' => $alshaya_wishlist_config->get('empty_wishlist_message') ?? '',
-      'wishlistinfoStorageExpirationForGuest' => $alshaya_wishlist_config->get('wishlistinfo_local_storage_expiration_guest'),
-      'wishlistinfoStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('wishlistinfo_local_storage_expiration_logged_in'),
+      'localStorageExpirationForGuest' => $alshaya_wishlist_config->get('local_storage_expiration_guest'),
+      'localStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('local_storage_expiration_logged_in'),
     ];
 
     return $config;
@@ -70,7 +70,7 @@ class WishListHelper {
    *   TRUE/FALSE
    */
   public function isWishListEnabled() {
-    return $this->configFactory->get('alshaya_wishlist.settings')->get('wishlist_enabled');
+    return $this->configFactory->get('alshaya_wishlist.settings')->get('enabled');
   }
 
   /**

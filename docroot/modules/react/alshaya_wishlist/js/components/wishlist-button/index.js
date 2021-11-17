@@ -8,21 +8,28 @@ import {
 class WishlistButton extends React.Component {
   constructor(props) {
     super(props);
-    let addedInWishList = false;
-    const { sku } = props;
-
-    // Check if product already exist in wishlist.
-    if (isProductExistInWishList(sku)) {
-      addedInWishList = true;
-    }
 
     // Set the products status in state.
     // true: if sku exist in wishlist,
-    // false: if sku doesn't exist in wishlist.
+    // false: default, if sku doesn't exist in wishlist.
     this.state = {
-      addedInWishList,
+      addedInWishList: false,
     };
   }
+
+  componentDidMount = () => {
+    const { sku } = this.props;
+
+    // @todo: we need to listen wishlist load event that
+    // will trigger from header wishlist component after
+    // wishlist data are fetched from MDC on page load
+    // for logged in user.
+    // Check if product already exist in wishlist, and
+    // set the status for the sku.
+    if (isProductExistInWishList(sku)) {
+      this.updateWishListStatus(true);
+    }
+  };
 
   /**
    * This will update the addedInWishList state of product.
@@ -66,6 +73,7 @@ class WishlistButton extends React.Component {
         className={wishListButtonClass}
         onClick={() => this.toggleWishlist()}
       >
+        {/* @todo: Display wishlist icon here. */}
         {Drupal.t('Add to wishlist')}
       </div>
     );
