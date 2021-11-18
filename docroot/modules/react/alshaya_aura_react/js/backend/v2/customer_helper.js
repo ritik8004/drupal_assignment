@@ -24,7 +24,7 @@ const getCustomerInfo = async (customerId) => {
       return responseData;
     })
     .catch((e) => {
-      logger.notice('Error while trying to fetch customer information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+      logger.error('Error while trying to fetch customer information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
         '@customerId': customerId,
         '@endpoint': endpoint,
         '@message': e.message,
@@ -55,7 +55,7 @@ const getCustomerPoints = async (customerId) => {
       return responseData;
     })
     .catch((e) => {
-      logger.notice('Error while trying to fetch loyalty points for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+      logger.error('Error while trying to fetch loyalty points for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
         '@customerId': customerId,
         '@endpoint': endpoint,
         '@message': e.message,
@@ -81,7 +81,7 @@ const getCustomerTier = async (customerId) => {
       return responseData;
     })
     .catch((e) => {
-      logger.notice('Error while trying to fetch tier information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+      logger.error('Error while trying to fetch tier information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
         '@customerId': customerId,
         '@endpoint': endpoint,
         '@message': e.message,

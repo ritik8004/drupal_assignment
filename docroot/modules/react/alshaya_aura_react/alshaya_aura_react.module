@@ -33,8 +33,6 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
       'id' => $uid,
       'email' => \Drupal::currentUser()->getEmail(),
       'userName' => AlshayaUserInfo::getFullName($user, ' ') ?? '',
-      'loyaltyStatus' => $aura_helper->getUserAuraStatus(),
-      'tier' => $aura_helper->getUserAuraTier(),
     ];
   }
 

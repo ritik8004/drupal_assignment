@@ -188,7 +188,7 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyO
  *   of success and the error object in case of error.
  */
 window.auraBackend.getCustomerDetails = async (data) => {
-  // Get user details from session.
+  // Get user details from drupalSettings.
   const { customerId } = drupalSettings.userDetails;
   const { uid } = drupalSettings.user;
   const fetchStatus = data.fetchStatus || true;
