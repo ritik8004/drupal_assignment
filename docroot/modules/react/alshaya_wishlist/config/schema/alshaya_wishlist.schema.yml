@@ -15,6 +15,5 @@ alshaya_wishlist.settings:
       type: integer
       label: 'Expire time for wishlist info in localStorage for logged in users.'
     wishlist_label:
-      type: string
+      type: text
       label: 'Label used for wishlist feature as per brand requirement.'
-      translatable: true

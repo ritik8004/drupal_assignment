@@ -28,11 +28,21 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $wishlist_config = $this->config('alshaya_wishlist.settings');
+
     $form['alshaya_wishlist']['wishlist_enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Wishlist'),
       '#description' => $this->t('Switch to enable or disable Wishlist feature.'),
-      '#default_value' => $this->config('alshaya_wishlist.settings')->get('wishlist_enabled'),
+      '#default_value' => $wishlist_config->get('wishlist_enabled'),
+    ];
+
+    $form['alshaya_wishlist']['wishlist_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Wishlist Label'),
+      '#description' => $this->t('Label used for wishlist feature as per brand requirement.'),
+      '#maxlength' => 255,
+      '#default_value' => $wishlist_config->get('wishlist_label'),
     ];
 
     $form['alshaya_wishlist']['empty_wishlist_message'] = [
@@ -40,7 +50,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#title' => $this->t('Empty Wishlist Message'),
       '#description' => $this->t('Provides a static message that will be shown when the Wishlist is empty.'),
       '#maxlength' => 255,
-      '#default_value' => $this->config('alshaya_wishlist.settings')->get('empty_wishlist_message'),
+      '#default_value' => $wishlist_config->get('empty_wishlist_message'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -53,6 +63,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
     $this->config('alshaya_wishlist.settings')
       ->set('wishlist_enabled', $form_state->getValue('wishlist_enabled'))
       ->set('empty_wishlist_message', $form_state->getValue('empty_wishlist_message'))
+      ->set('wishlist_label', $form_state->getValue('wishlist_label'))
       ->save();
 
     parent::submitForm($form, $form_state);

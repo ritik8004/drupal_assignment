@@ -175,3 +175,15 @@ export const prepareProductDetailsForWishList = (productSku) => {
 
   return productDetails;
 };
+
+/**
+ * Utility function to prepare product details for wishlist.
+ */
+export const getWishlistLabel = () => {
+  let wishlistLabel = '';
+  if (drupalSettings.wishlist.enabled && drupalSettings.wishlist.wishlist_label) {
+    wishlistLabel = drupalSettings.wishlist.wishlist_label;
+  }
+
+  return wishlistLabel;
+};

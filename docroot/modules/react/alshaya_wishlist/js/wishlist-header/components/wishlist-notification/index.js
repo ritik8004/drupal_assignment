@@ -1,5 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { getWishlistLabel } from '../../../utilities/wishlist-utils';
 
 const WishlistNotification = ({
   wishListItemData,
@@ -11,10 +12,10 @@ const WishlistNotification = ({
     <div className="wishlist-notification notification">
       <div className="product-name">
         <a href={`${wishListItemData.link}`} className="product-title">
-          {Drupal.t('@productName saved to your @label on this visit', { '@productName': wishListItemData.name, '@label': drupalSettings.wishlist.label }, { context: 'wishlist' })}
+          {Drupal.t('@productName saved to your @wishlist_label on this visit', { '@productName': wishListItemData.name, '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
         </a>
       </div>
-      <ConditionalView condition={drupalSettings.userDetails.id === 0}>
+      <ConditionalView condition={drupalSettings.user.uid === 0}>
         <div className="wishlist-query">
           {Drupal.t('Keep it for next time?', {}, { context: 'wishlist' })}
         </div>
@@ -23,8 +24,8 @@ const WishlistNotification = ({
             {Drupal.t('Sign in to your account or register a new one.', {}, { context: 'wishlist' })}
           </div>
           <div className="actions">
-            <a href="/user/login">{Drupal.t('Sign in', {}, { context: 'wishlist' })}</a>
-            <a href="/user/register">{Drupal.t('Register', {}, { context: 'wishlist' })}</a>
+            <a href="/user/login">{Drupal.t('sign in', {}, { context: 'wishlist' })}</a>
+            <a href="/user/register">{Drupal.t('register', {}, { context: 'wishlist' })}</a>
           </div>
         </div>
       </ConditionalView>

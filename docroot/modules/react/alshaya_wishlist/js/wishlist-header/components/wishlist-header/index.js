@@ -1,5 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { getWishlistLabel } from '../../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
 
 export default class WishlistHeader extends React.Component {
@@ -32,7 +33,7 @@ export default class WishlistHeader extends React.Component {
     return (
       <div className="wishlist-header">
         <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('my-wishlist')}>
-          <span className="wishlist-icon">{Drupal.t('my @label', { '@label': drupalSettings.wishlist.label }, { context: 'wishlist' })}</span>
+          <span className="wishlist-icon">{Drupal.t('my @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
         </a>
         <ConditionalView condition={wishListItemData !== null}>
           <WishlistNotification
