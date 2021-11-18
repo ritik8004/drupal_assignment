@@ -1,8 +1,6 @@
 /*eslint-disable */
 import {
   getAllAuraStatus,
-  getUserAuraStatus,
-  getUserAuraTier,
 } from './helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
 
@@ -17,9 +15,10 @@ function getCustomerDetails() {
   if (apiData instanceof Promise) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
+        const userLoyaltyStatus = result.data.auraStatus || '';
         stateValues = {
-          loyaltyStatus: result.data.auraStatus || getUserAuraStatus(),
-          tier: result.data.tier || getUserAuraTier(),
+          loyaltyStatus: userLoyaltyStatus,
+          tier: result.data.tier || '',
           points: result.data.auraPoints || 0,
           cardNumber: result.data.cardNumber || '',
           expiringPoints: result.data.auraPointsToExpire || 0,

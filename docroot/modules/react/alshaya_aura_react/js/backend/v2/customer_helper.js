@@ -1,6 +1,7 @@
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import logger from '../../../../js/utilities/logger';
 import { getErrorResponse } from '../../../../js/utilities/error';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Get Customer Information.
@@ -13,6 +14,15 @@ const getCustomerInfo = async (customerId) => {
 
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
+      if (hasValue(response.data.error)) {
+        logger.error('Error while trying to fetch customer information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+          '@customerId': customerId,
+          '@endpoint': endpoint,
+          '@message': response.data.error_message || '',
+        });
+        return getErrorResponse(response.data.error_message, response.data.error_code);
+      }
+
       const responseData = {
         cardNumber: response.data.apc_identifier_number || '',
         auraStatus: response.data.apc_link || '',
@@ -22,14 +32,6 @@ const getCustomerInfo = async (customerId) => {
         lastName: response.data.apc_last_name || '',
       };
       return responseData;
-    })
-    .catch((e) => {
-      logger.error('Error while trying to fetch customer information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
-        '@customerId': customerId,
-        '@endpoint': endpoint,
-        '@message': e.message,
-      });
-      return getErrorResponse(e.message, e.code);
     });
 };
 
@@ -44,6 +46,15 @@ const getCustomerPoints = async (customerId) => {
 
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
+      if (hasValue(response.data.error)) {
+        logger.error('Error while trying to fetch loyalty points for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+          '@customerId': customerId,
+          '@endpoint': endpoint,
+          '@message': response.data.error_message,
+        });
+        return getErrorResponse(response.data.error_message, response.data.error_code);
+      }
+
       const responseData = {
         customerId: response.data.customer_id || '',
         cardNumber: response.data.apc_identifier_number || '',
@@ -53,14 +64,6 @@ const getCustomerPoints = async (customerId) => {
         auraOnHoldPoints: response.data.apc_on_hold_points || 0,
       };
       return responseData;
-    })
-    .catch((e) => {
-      logger.error('Error while trying to fetch loyalty points for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
-        '@customerId': customerId,
-        '@endpoint': endpoint,
-        '@message': e.message,
-      });
-      return getErrorResponse(e.message, e.code);
     });
 };
 
@@ -75,18 +78,19 @@ const getCustomerTier = async (customerId) => {
 
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
+      if (hasValue(response.data.error)) {
+        logger.error('Error while trying to fetch tier information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+          '@customerId': customerId,
+          '@endpoint': endpoint,
+          '@message': response.data.error_message,
+        });
+        return getErrorResponse(response.data.error_message, response.data.error_code);
+      }
+
       const responseData = {
         tier: response.data.tier_code || '',
       };
       return responseData;
-    })
-    .catch((e) => {
-      logger.error('Error while trying to fetch tier information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
-        '@customerId': customerId,
-        '@endpoint': endpoint,
-        '@message': e.message,
-      });
-      return getErrorResponse(e.message, e.code);
     });
 };
 
