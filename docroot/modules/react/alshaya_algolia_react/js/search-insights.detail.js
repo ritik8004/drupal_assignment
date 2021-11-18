@@ -15,7 +15,10 @@
         try {
           if (localStorage.getItem('algolia_search_clicks') !== null) {
             var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
-            if (algolia_clicks && algolia_clicks[sku] !== undefined && algolia_clicks[sku] !== null) {
+            if (algolia_clicks
+              && algolia_clicks[sku] !== undefined
+              && algolia_clicks[sku] !== null
+              && typeof algolia_clicks[sku] !== 'string') {
               queryId = algolia_clicks[sku]['query-id'];
               objectId = algolia_clicks[sku]['object-id'];
             }
