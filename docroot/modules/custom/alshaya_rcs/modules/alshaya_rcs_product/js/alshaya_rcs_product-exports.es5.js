@@ -61,15 +61,15 @@ function applyEllipsis(value) {
  */
 function getLegalNotice() {
   return {
-    enabled: Drupal.hasValue(drupalSettings.alshayaRcs.legalNoticeEnabled)
-      ? drupalSettings.alshayaRcs.legalNoticeEnabled
+    status: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.status)
+      ? drupalSettings.alshayaRcs.legalNotice.status
       : false,
-    label: Drupal.hasValue(drupalSettings.alshayaRcs.legalNoticeLabel)
-      ? drupalSettings.alshayaRcs.legalNoticeLabel
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.label)
+      ? drupalSettings.alshayaRcs.legalNotice.label
       : '',
-    summary: Drupal.hasValue(drupalSettings.alshayaRcs.legalNoticeSummary)
-      ? drupalSettings.alshayaRcs.legalNoticeSummary.value
-      : false,
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.summary)
+      ? drupalSettings.alshayaRcs.legalNotice.summary.value
+      : '',
   };
 }
 
@@ -81,15 +81,15 @@ function getLegalNotice() {
  */
 function getAdditionalPdpDescription() {
   return {
-    enabled: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescriptionEnabled)
-      ? drupalSettings.alshayaRcs.additionalPdpDescriptionEnabled
+    status: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.status)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.status
       : false,
-    label: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescriptionLabel)
-      ? drupalSettings.alshayaRcs.additionalPdpDescriptionLabel
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.label)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.label
       : '',
-    summary: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescriptionSummary)
-      ? drupalSettings.alshayaRcs.additionalPdpDescriptionSummary.value
-      : false,
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.summary)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.summary.value
+      : '',
   };
 }
 

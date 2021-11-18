@@ -23,7 +23,7 @@
       <p>{{ article_warning }}</p>
     {{/if}}
 
-    {{#if additional_description.enabled }}
+    {{#if additional_description.status }}
     <div class="additional-description desc-wrapper">
       <div class="desc-label">
         {{ additional_description.label }}
@@ -37,7 +37,7 @@
     <h3>{{t 'Product No:' }}</h3>
     <p>{{ sku }}</p>
 
-    {{#if legal_notice.enabled }}
+    {{#if legal_notice.status }}
     <div class="legal-notice desc-wrapper">
       <div class="desc-label">
         {{ legal_notice.label }}
