@@ -1,7 +1,4 @@
 import {
-  callDrupalApi,
-  callMagentoApi,
-  getCartSettings,
   isAnonymousUserWithoutCart,
   isAuthenticatedUserWithoutCart,
   updateCart,
@@ -14,8 +11,7 @@ import {
   isUserAuthenticated,
   removeCartIdFromStorage,
 } from './utility';
-import logger from '../../utilities/logger';
-import { getExceptionMessageType } from './error';
+import logger from '../../../../js/utilities/logger';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
@@ -24,6 +20,8 @@ import {
   isString,
   isNumber,
 } from '../../../../js/utilities/conditionsUtility';
+import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import { getExceptionMessageType } from '../../../../js/utilities/error';
 
 window.commerceBackend = window.commerceBackend || {};
 
