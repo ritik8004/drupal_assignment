@@ -6,11 +6,8 @@ export default class WishlistHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      productCount: null,
-      productData: {
-        link: 'abc',
-        name: 'abc abc',
-      },
+      wishListItemCount: 0,
+      wishListItemData: null,
     };
   }
 
@@ -24,22 +21,22 @@ export default class WishlistHeader extends React.Component {
   addWishlistNotification = (e) => {
     if (e.detail) {
       this.setState({
-        productData: e.detail,
+        wishListItemData: e.detail,
       });
     }
   };
 
   render() {
-    const { productCount, productData } = this.state;
-    const wishlistActiveClass = productCount !== null ? 'wishlist-active' : 'wishlist-blank';
+    const { wishListItemCount, wishListItemData } = this.state;
+    const wishlistActiveClass = wishListItemCount !== 0 ? 'wishlist-active' : 'wishlist-inactive';
     return (
       <div className="wishlist-header">
         <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('my-wishlist')}>
-          <span className="wishlist-icon">{Drupal.t('my @label', { '@label': drupalSettings.wishlist.label })}</span>
+          <span className="wishlist-icon">{Drupal.t('my @label', { '@label': drupalSettings.wishlist.label }, { context: 'wishlist' })}</span>
         </a>
-        <ConditionalView condition={productData !== null}>
+        <ConditionalView condition={wishListItemData !== null}>
           <WishlistNotification
-            productData={productData}
+            wishListItemData={wishListItemData}
           />
         </ConditionalView>
       </div>

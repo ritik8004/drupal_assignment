@@ -17,7 +17,7 @@ function alshaya_wishlist_token_info() {
     'description' => t('List of tokens for wishlist feature as per current brand.'),
   ];
 
-  $info['tokens']['alshaya_wishlist']['label'] = [
+  $info['tokens']['alshaya_wishlist']['wishlist_label'] = [
     'name' => t('Wishlist Label'),
     'description' => t('Token for wishlist label.'),
   ];
@@ -36,10 +36,10 @@ function alshaya_wishlist_tokens($type, $tokens, array $data, array $options, Bu
 
   foreach ($tokens as $name => $original) {
     switch ($name) {
-      case 'label':
+      case 'wishlist_label':
         $config = \Drupal::config('alshaya_wishlist.settings');
         $bubbleable_metadata->addCacheableDependency($config);
-        $replacements[$original] = $config->get('label');
+        $replacements[$original] = $config->get('wishlist_label');
         break;
     }
   }

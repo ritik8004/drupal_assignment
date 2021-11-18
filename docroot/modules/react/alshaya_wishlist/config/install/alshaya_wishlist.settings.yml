@@ -4,4 +4,4 @@ empty_wishlist_message: ''
 # and logged in users, default 300 sec (5 min).
 local_storage_expiration_guest: 300
 local_storage_expiration_logged_in: 300
-label: 'favourites'
+wishlist_label: 'wishlist'

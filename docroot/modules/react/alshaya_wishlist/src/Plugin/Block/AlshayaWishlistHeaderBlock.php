@@ -101,7 +101,7 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
 
     $settings = [
       'config' => $this->wishListHelper->getWishListConfig(),
-      'label' => $this->tokenManager->replace('[alshaya_wishlist:label]'),
+      'label' => $this->tokenManager->replace('[alshaya_wishlist:wishlist_label]'),
     ];
 
     $build = [
