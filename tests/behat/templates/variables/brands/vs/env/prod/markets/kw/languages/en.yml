@@ -17,6 +17,7 @@ variables:
   size_filter: 'Size'
   promotional_filter: ''
   language_collection_filter: 'المجموعة'
+  language_spc_knet_option: 'عيديتي [KNET]'
   language_sort_filter: 'رتب حسب'
   language_price_filter: 'السعر'
   language_brand_filter: ''
