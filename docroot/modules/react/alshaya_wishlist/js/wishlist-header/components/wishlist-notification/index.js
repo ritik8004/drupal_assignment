@@ -11,7 +11,7 @@ const WishlistNotification = ({
     <div className="wishlist-notification notification">
       <div className="product-name">
         <a href={`${productData.link}`} className="product-title">
-          {Drupal.t('@productName saved to your favourites on this visit', { '@productName': productData.name })}
+          {Drupal.t('@productName saved to your @label on this visit', { '@productName': productData.name, '@label': drupalSettings.wishlist.label })}
         </a>
       </div>
       <ConditionalView condition={drupalSettings.wishlist.userDetails.id === 0}>

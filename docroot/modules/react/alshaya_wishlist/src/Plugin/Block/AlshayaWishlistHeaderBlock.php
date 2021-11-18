@@ -9,6 +9,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_wishlist\Helper\WishListHelper;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Utility\Token;
 
 /**
  * Provides a 'AlshayaWishlistHeaderBlock' block.
@@ -35,6 +36,13 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
   protected $wishListHelper;
 
   /**
+   * Token manager.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $tokenManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container,
@@ -46,6 +54,7 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('alshaya_wishlist.wishlist_helper'),
+      $container->get('token'),
     );
   }
 
@@ -62,15 +71,19 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
    *   Config Factory.
    * @param \Drupal\alshaya_wishlist\Helper\WishListHelper $wishlist_helper
    *   Wishlist Helper.
+   * @param \Drupal\Core\Utility\Token $token_manager
+   *   Token manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               ConfigFactoryInterface $config_factory,
-                              WishListHelper $wishlist_helper) {
+                              WishListHelper $wishlist_helper,
+                              Token $token_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->wishListHelper = $wishlist_helper;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -79,16 +92,17 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
   public function build() {
     $cache_tags = [];
     $build = [];
+
+    $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
     // Return empty block if wishlist not enabled.
     if (!($this->wishListHelper->isWishListEnabled())) {
       return $build;
     }
+
     $settings = [
       'config' => $this->wishListHelper->getWishListConfig(),
-      'userDetails' => $this->wishListHelper->getWishListUserDetails(),
+      'label' => $this->tokenManager->replace('[alshaya_wishlist:label]'),
     ];
-
-    $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
 
     $build = [
       '#type' => 'markup',
