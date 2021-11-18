@@ -165,12 +165,13 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
         // magento version, so as suggested we are using this for now but
         // need to change this when this got deprecated in coming magento
         // version and replace it with 'categoryList' magento API.
-        query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
-            ${drupalSettings.alshayaRcs.navigationMenu.query}
-          }
-        }`
+        // @todo Check why this is being called 3 times.
+        query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) ${rcsPhGraphqlQuery[placeholder]}}`
+        // @todo try to use data attributes
+        // query: `{category(id: ${params.category_id}) ${rcsPhGraphqlQuery[placeholder]}}`
       });
 
+      // @todo check why this is happening 3 times.
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
       if (response !== null) {

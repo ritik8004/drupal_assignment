@@ -217,3 +217,36 @@ function alshaya_rcs_main_menu_preprocess_block(&$variables) {
     $variables['attributes']['class'][] = 'block-alshaya-dp-navigation-link';
   }
 }
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
+  $config = \Drupal::config('alshaya_rcs_main_menu.settings');
+  $menu_max_depth = $config->get('menu_max_depth');
+  $query_fields = [];
+
+  for ($i = 0; $i < $menu_max_depth; $i++) {
+    $items = [
+      'children_count',
+      'children' => [
+        'id',
+        'level',
+        'name',
+        'meta_title',
+        'include_in_menu',
+        'url_path',
+        'url_key',
+        'show_on_dpt',
+        'show_in_lhn',
+        'show_in_app_navigation',
+        'position',
+        'is_anchor',
+        'display_view_all',
+      ],
+    ];
+    $query_fields = array_merge_recursive($items, ['children' => $query_fields]);
+  }
+
+  return ['navigation_menu' => $query_fields];
+}
