@@ -142,8 +142,8 @@ function _alshaya_aura_react_translations() {
     'Sign in or create an account to use your points.' => [
       'ar' => 'سجل الدخول أو أنشيء حساب جديد لاستخدام النقاط',
     ],
-    'Aura' => [
-      'ar' => 'أورا',
+    'Experience Aura' => [
+      'ar' => 'جرّب أورا',
     ],
     '(Optional)' => [
       'ar' => 'اختياري',
@@ -265,8 +265,8 @@ function _alshaya_aura_react_translations() {
     'will expire by' => [
       'ar' => 'ستنتهي بحلول',
     ],
-    'Aura' => [
-      'ar' => 'أورا',
+    'Experience Aura' => [
+      'ar' => 'جرّب أورا',
     ],
     'points with this purchase' => [
       'ar' => 'النقاط في عملية الشراء الحالية',
