@@ -1,6 +1,6 @@
-import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
-import logger from '../../../../alshaya_spc/js/utilities/logger';
-import getErrorResponse from '../../../../js/utilities/error';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import logger from '../../../../js/utilities/logger';
+import { getErrorResponse } from '../../../../js/utilities/error';
 
 /**
  * Get Customer Information.
