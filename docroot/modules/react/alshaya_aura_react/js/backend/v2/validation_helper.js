@@ -1,6 +1,6 @@
-import logger from '../../../../alshaya_spc/js/utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import getErrorResponse from '../../../../js/utilities/error';
+import { getErrorResponse } from '../../../../js/utilities/error';
 import auraErrorCodes from '../utility/error';
 
 /**

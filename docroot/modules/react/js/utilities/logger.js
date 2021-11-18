@@ -1,4 +1,4 @@
-import { getStorageItem } from './storage';
+import { getStorageItem } from '../../alshaya_spc/js/utilities/storage';
 
 /**
  * Logs messages in the backend.

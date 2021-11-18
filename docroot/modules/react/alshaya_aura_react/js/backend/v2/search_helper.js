@@ -1,4 +1,4 @@
-import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 /**
  * Call the search API for the provided params.

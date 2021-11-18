@@ -1,12 +1,12 @@
-import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
-import logger from '../../../../alshaya_spc/js/utilities/logger';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import logger from '../../../../js/utilities/logger';
 import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
 import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
 import search from './search_helper';
 import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
-import getErrorResponse from '../../../../js/utilities/error';
+import { getErrorResponse } from '../../../../js/utilities/error';
 
 /**
  * Global object to help perform Aura activities for V2.

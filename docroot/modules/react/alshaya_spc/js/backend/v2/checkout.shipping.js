@@ -1,9 +1,10 @@
 import md5 from 'md5';
 import { getApiEndpoint } from './utility';
-import logger from '../../utilities/logger';
-import { getFormattedError, callMagentoApi } from './common';
+import logger from '../../../../js/utilities/logger';
+import { getFormattedError } from './common';
 import StaticStorage from './staticStorage';
 import { hasValue, isString } from '../../../../js/utilities/conditionsUtility';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 /**
  * Format the address array.
