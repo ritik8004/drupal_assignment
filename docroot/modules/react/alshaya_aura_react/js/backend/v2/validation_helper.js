@@ -20,7 +20,7 @@ const validateInput = (type, value) => {
       logger.error('Email is missing/invalid. Data: @data', {
         '@data': value,
       });
-      return getErrorResponse(auraErrorCodes.EMPTY_EMAIL, auraErrorCodes.INVALID_EMAIL);
+      return getErrorResponse(auraErrorCodes.EMPTY_EMAIL, auraErrorCodes.INVALID_EMAIL, true);
     }
     return [];
   }
@@ -30,7 +30,7 @@ const validateInput = (type, value) => {
       logger.error('Card number is missing/invalid. Data: @data', {
         '@data': value,
       });
-      return getErrorResponse(auraErrorCodes.EMPTY_CARD, auraErrorCodes.INVALID_CARDNUMBER);
+      return getErrorResponse(auraErrorCodes.EMPTY_CARD, auraErrorCodes.INVALID_CARDNUMBER, true);
     }
     return [];
   }
@@ -41,7 +41,7 @@ const validateInput = (type, value) => {
       logger.error('Mobile number is missing/invalid. Data: @data', {
         '@data': value,
       });
-      return getErrorResponse(auraErrorCodes.EMPTY_MOBILE, auraErrorCodes.INVALID_MOBILE);
+      return getErrorResponse(auraErrorCodes.EMPTY_MOBILE, auraErrorCodes.INVALID_MOBILE, true);
     }
     return [];
   }
