@@ -14,7 +14,10 @@
         if (algolia_clicks === null) {
           algolia_clicks = {};
         }
-        algolia_clicks[hit.attr('gtm-main-sku')] = hit.attr('data-insights-query-id');
+        algolia_clicks[hit.attr('gtm-main-sku')] = {
+          'query-id': hit.attr('data-insights-query-id'),
+          'object-id': hit.attr('data-insights-object-id'),
+        };
         localStorage.setItem('algolia_search_clicks', JSON.stringify(algolia_clicks));
 
         window.aa('clickedObjectIDsAfterSearch', {
