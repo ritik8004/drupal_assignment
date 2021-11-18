@@ -168,6 +168,9 @@ exports.render = function render(
 exports.computePhFilters = function (input, filter) {
   let value = '';
 
+  // @todo Review if we really need this switch or we can call
+  // globalThis.renderRcsProduct.computePhFilters directly as there is already
+  // a switch there.
   switch(filter) {
     case 'price':
     case 'sku':
