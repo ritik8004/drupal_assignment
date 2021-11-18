@@ -4,11 +4,39 @@ namespace Drupal\alshaya_egift_card\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configure Alshaya Egift Card settings.
  */
 class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
+
+  /**
+   * Checkout options manager.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager
+   */
+  protected $checkoutOptionManager;
+
+  /**
+   * AlshayaEgiftCardSettingsForm constructor.
+   *
+   * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_option_manager
+   *   Checkout option manager.
+   */
+  public function __construct(CheckoutOptionsManager $checkout_option_manager) {
+    $this->checkoutOptionManager = $checkout_option_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('alshaya_acm_checkout.options_manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -39,6 +67,24 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('egift_card_enabled'),
       '#title' => $this->t('Enable Egift card on site.'),
     ];
+    // Payment methods.
+    $payment_terms = $this->checkoutOptionManager->getDefaultPayment(FALSE);
+    $options = [];
+    if ($payment_terms) {
+      foreach ($payment_terms as $term) {
+        $code = $term->get('field_payment_code')->getString();
+        $options[$code] = $term->getName() . " (${code})";
+      }
+
+      $form['egift_card_configuration']['payment_methods_not_supported'] = [
+        '#type' => 'checkboxes',
+        '#options' => $options,
+        '#title' => $this->t('Not supported payment methods'),
+        '#description' => $this->t('Select the payment methods which are not supported for eGift cart payment.'),
+        '#default_value' => $config->get('payment_methods_not_supported') ?? NULL,
+      ];
+    }
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -48,6 +94,7 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_egift_card.settings')
       ->set('egift_card_enabled', $form_state->getValue('enable_disable_egift_card'))
+      ->set('payment_methods_not_supported', $form_state->getValue('payment_methods_not_supported'))
       ->save();
 
     parent::submitForm($form, $form_state);
