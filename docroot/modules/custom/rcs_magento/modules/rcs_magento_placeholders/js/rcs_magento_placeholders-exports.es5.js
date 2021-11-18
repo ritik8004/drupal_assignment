@@ -18,9 +18,7 @@ async function handleNoItemsInResponse(request, urlKey) {
 
   if (response.data.urlResolver === null) {
     return rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`);
-  }
-
-  if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
+  } else if (typeof response.data.urlResolver.relative_url !== 'undefined') {
     return rcsRedirectToPage(response.data.urlResolver.relative_url);
   }
 
