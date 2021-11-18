@@ -1,31 +1,25 @@
 /*eslint-disable */
-import { getAPIData } from './api/fetchApiData';
 import {
   getAllAuraStatus,
+  getUserAuraStatus,
+  getUserAuraTier,
 } from './helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
 
 /**
  * Helper function to get customer details.
  */
-function getCustomerDetails(tier, loyaltyStatus) {
+function getCustomerDetails() {
   // API call to get customer points for logged in users.
-  const data = {
-    status: loyaltyStatus,
-    tier: tier,
-  }
-  const apiData = window.auraBackend.getCustomerDetails(data);
+  const apiData = window.auraBackend.getCustomerDetails();
   let stateValues = {};
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
-        const userLoyaltyStatus = result.data.auraStatus !== undefined
-          ? result.data.auraStatus : loyaltyStatus;
-
         stateValues = {
-          loyaltyStatus: userLoyaltyStatus,
-          tier: result.data.tier || tier,
+          loyaltyStatus: result.data.auraStatus || getUserAuraStatus(),
+          tier: result.data.tier || getUserAuraTier(),
           points: result.data.auraPoints || 0,
           cardNumber: result.data.cardNumber || '',
           expiringPoints: result.data.auraPointsToExpire || 0,

@@ -1,10 +1,9 @@
 import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
 import logger from '../../../../alshaya_spc/js/utilities/logger';
-import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
 import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
 import search from './search_helper';
-import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
 import getErrorResponse from '../../../../js/utilities/error';
 import { getCustomerInfo, getCustomerPoints, getCustomerTier } from './customer_helper';
@@ -78,7 +77,6 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
 
   // Get user details from session.
   const { customerId } = drupalSettings.userDetails;
-  const { uid } = drupalSettings.user;
   const requestData = {};
   requestData.customer = Object.assign(data, { isVerified: 'Y' });
 
@@ -99,26 +97,6 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
     status: true,
     data: response,
   };
-
-  // On API success, update user AURA Status in Drupal for logged in user.
-  if (hasValue(uid) && isObject(response) && hasValue(response.data.apc_link)) {
-    const auraData = {
-      uid,
-      apcLinkStatus: response.data.apc_link,
-    };
-    const isUserAuraInfoUpdated = await updateUserAuraInfo(auraData);
-
-    // Check if user aura status was updated successfully in Drupal.
-    if (!isUserAuraInfoUpdated) {
-      const message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
-      logger.error(`${message}. User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.`, {
-        '@uid': uid,
-        '@customer_id': customerId,
-        '@aura_status': response.data.apc_link,
-      });
-      return { data: getErrorResponse(message, 500) };
-    }
-  }
 
   return responseData;
 };
@@ -180,23 +158,17 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyO
 /**
  * Get the loyalty customer details.
  *
- * @param {object} data
- *   Object containing items like tier, status, etc.
- *
  * @returns {Promise}
  *   The promise object which resolves to the response data and status in case
  *   of success and the error object in case of error.
  */
-window.auraBackend.getCustomerDetails = async (data) => {
+window.auraBackend.getCustomerDetails = async (data = {}) => {
   // Get user details from drupalSettings.
   const { customerId } = drupalSettings.userDetails;
   const { uid } = drupalSettings.user;
   const fetchStatus = data.fetchStatus || true;
   const fetchPoints = data.fetchPoints || true;
   const fetchTier = data.fetchTier || true;
-  const updateDrupal = data.update || true;
-  const tier = data.tier || '';
-  const status = data.status || '';
   let responseData = {};
 
   if (!hasValue(customerId) || !hasValue(uid)) {
@@ -238,35 +210,5 @@ window.auraBackend.getCustomerDetails = async (data) => {
     }
   }
 
-  // Compare aura status and tier from drupal and API response and if
-  // they are different then call Drupal API to update the values.
-  if (updateDrupal === true && hasValue(responseData)) {
-    const updatedData = {};
-
-    if (responseData.auraStatus && status !== responseData.auraStatus) {
-      updatedData.apcLinkStatus = responseData.auraStatus;
-    }
-
-    if (responseData.tier && tier !== responseData.tier) {
-      updatedData.tier = responseData.tier;
-    }
-
-    if (hasValue(updatedData)) {
-      updatedData.uid = uid;
-      const isUserAuraInfoUpdated = await updateUserAuraInfo(updatedData);
-
-      // Check if user aura status and tier was updated successfully in Drupal.
-      if (!isUserAuraInfoUpdated) {
-        const message = 'Error while trying to update user AURA Status field in Drupal.';
-        logger.error(`${message}. User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status, Aura Tier: @aura_tier.`, {
-          '@uid': uid,
-          '@customer_id': customerId,
-          '@aura_status': responseData.auraStatus,
-          '@aura_tier': responseData.tier,
-        });
-        return { data: getErrorResponse(message, 500) };
-      }
-    }
-  }
   return { data: responseData };
 };

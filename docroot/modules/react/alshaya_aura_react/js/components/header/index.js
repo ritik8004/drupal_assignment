@@ -47,7 +47,6 @@ class Header extends React.Component {
   componentDidMount() {
     const {
       loyaltyStatus,
-      tier,
     } = this.state;
 
     // Event listener to listen to customer data API call event.
@@ -66,7 +65,7 @@ class Header extends React.Component {
     }
 
     // Get customer details.
-    getCustomerDetails(tier, loyaltyStatus);
+    getCustomerDetails();
   }
 
   // Event listener callback to update header states.
