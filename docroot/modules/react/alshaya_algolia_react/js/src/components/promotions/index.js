@@ -2,6 +2,14 @@ import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import { isPromotionFrameEnabled } from '../../utils/indexUtils';
 
+const getHref = (promotion) => {
+  let href = promotion[`url_${drupalSettings.path.currentLanguage}`];
+  if (!href.startsWith('/')) {
+    href = `/${href}`;
+  }
+  return href;
+};
+
 const Promotion = ({ promotion }) => (
   <span className="sku-promotion-item">
     {(drupalSettings.algoliaSearch.pageSubType !== 'undefined'
@@ -12,12 +20,12 @@ const Promotion = ({ promotion }) => (
         <>
           <ConditionalView condition={isPromotionFrameEnabled()}>
             <div className="sku-promotion-text">{promotion.text}</div>
-            <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
+            <a className="sku-promotion-link" href={getHref(promotion)}>
               {Drupal.t('Shop all products in this offer')}
             </a>
           </ConditionalView>
           <ConditionalView condition={!isPromotionFrameEnabled()}>
-            <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
+            <a className="sku-promotion-link" href={getHref(promotion)}>
               {promotion.text}
             </a>
           </ConditionalView>
