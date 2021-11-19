@@ -6,9 +6,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 use Drupal\Core\Session\AccountInterface;
 
