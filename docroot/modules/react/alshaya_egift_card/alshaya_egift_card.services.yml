@@ -8,3 +8,10 @@ services:
     class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaEgiftCardBreadcrumb
     tags:
       - { name: breadcrumb_builder, priority: 100 }
+
+  alshaya_egift_card.my_egift_card_breadcrumb:
+    class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaMyEgiftCardBreadcrumb
+    arguments:
+      - '@current_user'
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
