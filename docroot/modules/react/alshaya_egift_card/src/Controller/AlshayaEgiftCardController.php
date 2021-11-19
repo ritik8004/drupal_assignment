@@ -24,20 +24,6 @@ class AlshayaEgiftCardController extends ControllerBase {
   protected $egiftCardHelper;
 
   /**
-   * Module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * Language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * The current user.
    *
    * @var \Drupal\Core\Session\AccountInterface
@@ -49,22 +35,14 @@ class AlshayaEgiftCardController extends ControllerBase {
    *
    * @param Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
    *   The egift card helper service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module handler.
-   * @param Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The form builder.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    */
   public function __construct(
     EgiftCardHelper $egiftCardHelper,
-    ModuleHandlerInterface $module_handler,
-    LanguageManagerInterface $language_manager,
     AccountInterface $current_user
   ) {
     $this->egiftCardHelper = $egiftCardHelper;
-    $this->moduleHandler = $module_handler;
-    $this->languageManager = $language_manager;
     $this->currentUser = $current_user;
   }
 
@@ -74,8 +52,6 @@ class AlshayaEgiftCardController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_egift_card.egift_card_helper'),
-      $container->get('module_handler'),
-      $container->get('language_manager'),
       $container->get('current_user'),
     );
   }
