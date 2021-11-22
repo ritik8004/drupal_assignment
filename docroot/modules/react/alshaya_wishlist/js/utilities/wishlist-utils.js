@@ -114,15 +114,17 @@ export const addProductToWishListForGuestUsers = (productSku) => {
 /**
  * Utility function to add a product to wishlist.
  */
-export const addProductToWishList = (productSku, setWishListStatus) => {
+export const addProductToWishList = (productInfo, setWishListStatus) => {
   // For Guest users.
   if (isAnonymousUser()) {
-    addProductToWishListForGuestUsers(productSku);
+    addProductToWishListForGuestUsers(productInfo.sku);
   }
 
   // @todo: we need to work on for logged in users.
-  setWishListStatus(true);
-  dispatchCustomEvent('productAddedToWishlist', { sku: productSku, addedInWishList: true });
+  if (setWishListStatus) {
+    setWishListStatus(true);
+  }
+  dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
 };
 
 /**

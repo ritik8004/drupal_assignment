@@ -57,7 +57,7 @@ class WishlistButton extends React.Component {
     if (addedInWishList) {
       removeProductFromWishList(sku, this.updateWishListStatus);
     } else {
-      addProductToWishList(sku, this.updateWishListStatus);
+      addProductToWishList({ sku }, this.updateWishListStatus);
     }
   }
 

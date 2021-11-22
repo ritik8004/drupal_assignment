@@ -11,8 +11,8 @@ const WishlistNotification = ({
   return (
     <div className="wishlist-notification notification">
       <div className="product-name">
-        <a href={`${wishListItemData.link}`} className="product-title">
-          {Drupal.t('@productName saved to your @wishlist_label on this visit', { '@productName': wishListItemData.name, '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+        <a href={`${wishListItemData.url}`} className="product-title">
+          {Drupal.t('@productName saved to your @wishlist_label on this visit', { '@productName': wishListItemData.title, '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
         </a>
       </div>
       <ConditionalView condition={isAnonymousUser()}>

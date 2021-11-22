@@ -56,7 +56,7 @@ class WishListPDP extends React.Component {
     if (addedInWishList) {
       removeProductFromWishList(parentProductSku);
     } else {
-      addProductToWishList(parentProductSku);
+      addProductToWishList({ parentProductSku });
     }
   }
 
