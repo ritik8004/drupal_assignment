@@ -84,9 +84,6 @@ export default class CartItem extends React.Component {
    */
   closeWishlistModal = () => {
     const { item: { sku, id } } = this.props;
-    this.setState({
-      showWishlistPopup: false,
-    });
     this.setState({ showWishlistPopup: false, wishlistResponse: true }, () => {
       this.removeCartItem(sku, 'remove item', id);
     });
