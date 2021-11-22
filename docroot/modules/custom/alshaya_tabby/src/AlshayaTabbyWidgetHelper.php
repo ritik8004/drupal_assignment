@@ -153,6 +153,7 @@ class AlshayaTabbyWidgetHelper {
 
       case 'checkout':
         $build['#attached']['library'][] = 'alshaya_tabby/tabby_card';
+        $build['#attached']['library'][] = 'alshaya_white_label/tabby';
         $widget_info = $this->getTabbyWidgetInfo('checkout');
         break;
 
