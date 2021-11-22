@@ -2,7 +2,7 @@ import React from 'react';
 import BenefitPaySVG from './components/benefit-pay-svg';
 
 const PaymentMethodIcon = (props) => {
-  const { methodName } = props;
+  const { methodName, methodLabel } = props;
   if (methodName === 'banktransfer') {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
@@ -484,7 +484,7 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'tabby') {
     return (
-      <div className="tabby-promo-snippet__logo-img" alt={Drupal.t('Tabby Logo')} width="70" height="27" />
+      <div className="tabby-promo-snippet__logo-img" alt={Drupal.t(methodLabel)} width="70" height="27" />
     );
   }
 

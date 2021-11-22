@@ -10,8 +10,8 @@ const Tabby = {
   isAvailable: () => window.Tabby,
 
   productAvailable: (that) => {
-    const { TabbyProductStatus } = that.state;
-    if (!hasValue(TabbyProductStatus)) {
+    const { tabbyProductStatus } = that.state;
+    if (!hasValue(tabbyProductStatus)) {
       // Get available methods from MDC.
       const params = {
         cartId: window.commerceBackend.getCartId(),
@@ -20,9 +20,9 @@ const Tabby = {
       callMagentoApi(getApiEndpoint('getTabbyAvailableProducts', params), 'GET', {})
         .then((response) => {
           if (hasValue(response.data) && hasValue(response.data.available_products)) {
-            const status = hasValue(response.data.available_products.installment.is_available) ? 'disabled' : 'disabled';
+            const status = hasValue(response.data.available_products.installment.is_available) ? 'enabled' : 'disabled';
             that.setState({
-              TabbyProductStatus: status,
+              tabbyProductStatus: status,
             });
           }
         })

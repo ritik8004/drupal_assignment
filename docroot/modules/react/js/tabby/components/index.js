@@ -4,6 +4,7 @@ const TabbyWidget = (props) => {
   const {
     classNames, mobileOnly, pageType, id,
   } = props;
+  const { tabby: tabbyConfig } = window.drupalSettings;
 
   switch (pageType) {
     case 'pdp':
@@ -14,7 +15,7 @@ const TabbyWidget = (props) => {
       return (
         <div className="tabby">
           <div
-            className={`${classNames} ${drupalSettings.tabby.widgetInfo.class}`}
+            className={`${classNames} ${tabbyConfig.widgetInfo.class}`}
             id={id}
           />
         </div>
