@@ -9,7 +9,7 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
  */
 const onSwatchSelect = (e, attributeName, onClick) => {
   e.preventDefault();
-  const swatchValue = e.currentTarget.firstChild.dataset.value;
+  const swatchValue = e.currentTarget.dataset.value;
   onClick(attributeName, swatchValue);
 };
 
