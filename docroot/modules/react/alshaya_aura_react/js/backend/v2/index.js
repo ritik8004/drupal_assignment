@@ -11,7 +11,11 @@ import {
   getCustomerPoints,
   getCustomerTier,
   getCustomerProgressTracker,
+<<<<<<< HEAD
   setLoyaltyCard,
+=======
+  prepareAuraUserStatusUpdateData,
+>>>>>>> CORE-35510: Added interfacing function to update APC status of users for V1 and V2.
 } from './customer_helper';
 
 /**
@@ -437,4 +441,92 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
   };
 
   return { data: responseData };
+};
+
+/*
+ * Update User's AURA Status.
+ *
+ * @param {Object} inputData
+ *   Input data object.
+ *
+ * @returns {Promise}
+ *   Return success/failure response.
+ */
+window.auraBackend.apcStatusUpdate = async (inputData) => {
+  const data = prepareAuraUserStatusUpdateData(inputData);
+
+  if (hasValue(data.error)) {
+    logger.error('Error while trying to update user AURA Status. Data: @data.', {
+      '@data': JSON.stringify(data),
+    });
+    return { data };
+  }
+
+  const { customerId } = drupalSettings.userDetails;
+  // Get user details from session.
+  const { uid } = drupalSettings.user;
+
+  // Check if we have user in session.
+  if (!hasValue(customerId) || uid === 0) {
+    logger.error('Error while trying to update user AURA Status. No user available in session. User id from request: @uid.', {
+      '@uid': inputData.uid,
+    });
+    return getErrorResponse('No user available in session', 404);
+  }
+
+  // Check if uid in the request matches the one in session.
+  if (uid !== inputData.uid) {
+    logger.error('Error while trying to update user AURA Status. User id in request doesn\'t match the one in session. User id from request: @req_uid. User id in session: @session_uid.', {
+      '@req_uid': inputData.uid,
+      '@session_uid': uid,
+    });
+    return getErrorResponse("User id in request doesn't match the one in session.", 404);
+  }
+
+  data.statusUpdate.customerId = customerId;
+
+  try {
+    const response = await callMagentoApi('/V1/customers/apc-status-update', 'POST', data);
+    let customerData = {};
+    const responseData = {};
+
+    const searchResponse = await search('apcNumber', data.statusUpdate.apcIdentifierId);
+
+    if (hasValue(searchResponse.data.is_fully_enrolled)) {
+      const customerInfo = await getCustomerInfo(customerId);
+      if (hasValue(customerInfo.error)) {
+        throw new Error(JSON.stringify(customerInfo));
+      }
+      customerData = Object.assign(customerData, customerInfo);
+
+      const customerPoints = await getCustomerPoints(customerId);
+      if (hasValue(customerPoints.error)) {
+        throw new Error(JSON.stringify(customerPoints));
+      }
+      customerData = Object.assign(customerData, customerPoints);
+
+      const customerTier = await getCustomerTier(customerId);
+      if (hasValue(customerTier.error)) {
+        throw new Error(JSON.stringify(customerTier));
+      }
+      customerData = Object.assign(customerData, customerTier);
+    }
+
+    responseData.data = hasValue(customerData)
+      ? customerData
+      : { auraStatus: searchResponse.data.apc_link };
+
+    responseData.status = response.data;
+
+    return { data: responseData };
+  } catch (e) {
+    const error = JSON.parse(e.message);
+    logger.notice('Error while trying to update AURA Status for user with customer id @customer_id. Request Data: @request_data. Message: @message', {
+      '@customer_id': customerId,
+      '@request_data': JSON.stringify(data),
+      '@message': error.error_message,
+    });
+
+    return getErrorResponse(error.error_message, error.error_code);
+  }
 };

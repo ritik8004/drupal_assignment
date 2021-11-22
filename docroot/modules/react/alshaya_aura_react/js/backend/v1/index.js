@@ -110,3 +110,14 @@ window.auraBackend.updateLoyaltyCard = (action, type, value) => postAPIData('pos
   type,
   value,
 });
+
+/*
+ * Update User's AURA Status.
+ *
+ * @param {Object} inputData
+ *   Input data object.
+ *
+ * @returns {Promise}
+ *   Return success/failure response.
+ */
+window.auraBackend.apcStatusUpdate = (inputData) => postAPIData('post/loyalty-club/apc-status-update', inputData);
