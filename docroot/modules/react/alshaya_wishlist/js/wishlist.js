@@ -19,6 +19,7 @@ const renderWishListButton = (elementSelector) => {
           sku={sku}
           context="pdp"
           position="top-right"
+          format="icon"
         />,
         selectedEelement,
       );
