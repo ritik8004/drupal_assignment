@@ -125,10 +125,6 @@ class LoyaltyCustomerController {
     $fetchStatus = $request->get('fetchStatus') ?? TRUE;
     $fetchPoints = $request->get('fetchPoints') ?? TRUE;
     $fetchTier = $request->get('fetchTier') ?? TRUE;
-    $updateDrupal = $request->get('update') ?? TRUE;
-    $tier = $request->get('tier') ?? '';
-    $status = $request->get('status') ?? '';
-
     $customer_id = $this->cart->getDrupalInfo('customer_id');
     $uid = $this->cart->getDrupalInfo('uid');
     $response_data = [];
@@ -165,25 +161,6 @@ class LoyaltyCustomerController {
 
       if (empty($customer_tier['error'])) {
         $response_data = array_merge($response_data, $customer_tier);
-      }
-    }
-
-    // Compare aura status and tier from drupal and API response and if
-    // they are different then call Drupal API to update the values.
-    if ($updateDrupal && !empty($response_data)) {
-      $updatedData = [];
-
-      if ($response_data['auraStatus'] && (int) $status !== $response_data['auraStatus']) {
-        $updatedData['apcLinkStatus'] = $response_data['auraStatus'];
-      }
-
-      if ($response_data['tier'] && $tier !== $response_data['tier']) {
-        $updatedData['tier'] = $response_data['tier'];
-      }
-
-      if (!empty($updatedData)) {
-        $updatedData['uid'] = $uid;
-        $this->drupal->updateUserAuraInfo($updatedData);
       }
     }
 

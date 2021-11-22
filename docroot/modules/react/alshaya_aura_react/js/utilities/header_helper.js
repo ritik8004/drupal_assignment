@@ -1,35 +1,32 @@
 /*eslint-disable */
-import { getAPIData } from './api/fetchApiData';
 import {
   getAllAuraStatus,
 } from './helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Helper function to get customer details.
  */
-function getCustomerDetails(tier, loyaltyStatus) {
+function getCustomerDetails() {
   // API call to get customer points for logged in users.
-  const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
-  const apiData = getAPIData(apiUrl);
+  const apiData = window.auraBackend.getCustomerDetails();
   let stateValues = {};
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
-        const userLoyaltyStatus = result.data.auraStatus !== undefined
-          ? result.data.auraStatus : loyaltyStatus;
-
+        const userLoyaltyStatus = hasValue(result.data.auraStatus) ? result.data.auraStatus : '';
         stateValues = {
           loyaltyStatus: userLoyaltyStatus,
-          tier: result.data.tier || tier,
-          points: result.data.auraPoints || 0,
-          cardNumber: result.data.cardNumber || '',
-          expiringPoints: result.data.auraPointsToExpire || 0,
-          expiryDate: result.data.auraPointsExpiryDate || '',
-          pointsOnHold: result.data.auraOnHoldPoints || 0,
-          firstName: result.data.firstName || '',
-          lastName: result.data.lastName || '',
+          tier: hasValue(result.data.tier) ? result.data.tier : '',
+          points: hasValue(result.data.auraPoints) ? result.data.auraPoints : 0,
+          cardNumber: hasValue(result.data.cardNumber) ? result.data.cardNumber : '',
+          expiringPoints: hasValue(result.data.auraPointsToExpire) ? result.data.auraPointsToExpire : 0,
+          expiryDate: hasValue(result.data.auraPointsExpiryDate) ? result.data.auraPointsExpiryDate : '',
+          pointsOnHold: hasValue(result.data.auraOnHoldPoints) ? result.data.auraOnHoldPoints : 0,
+          firstName: hasValue(result.data.firstName) ? result.data.firstName : '',
+          lastName: hasValue(result.data.lastName) ? result.data.lastName : '',
         };
 
         // If user's loyalty status is APC_LINKED_VERIFIED or

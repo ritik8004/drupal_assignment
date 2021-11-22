@@ -1,12 +1,12 @@
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import logger from '../../../../js/utilities/logger';
-import { hasValue, isObject } from '../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
 import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
 import search from './search_helper';
-import updateUserAuraInfo from './utility';
 import validateInput from './validation_helper';
 import { getErrorResponse } from '../../../../js/utilities/error';
+import { getCustomerInfo, getCustomerPoints, getCustomerTier } from './customer_helper';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -77,7 +77,6 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
 
   // Get user details from session.
   const { customerId } = drupalSettings.userDetails;
-  const { uid } = drupalSettings.user;
   const requestData = {};
   requestData.customer = Object.assign(data, { isVerified: 'Y' });
 
@@ -98,26 +97,6 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
     status: true,
     data: response,
   };
-
-  // On API success, update user AURA Status in Drupal for logged in user.
-  if (hasValue(uid) && isObject(response) && hasValue(response.data.apc_link)) {
-    const auraData = {
-      uid,
-      apcLinkStatus: response.data.apc_link,
-    };
-    const isUserAuraInfoUpdated = await updateUserAuraInfo(auraData);
-
-    // Check if user aura status was updated successfully in Drupal.
-    if (!isUserAuraInfoUpdated) {
-      const message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
-      logger.error(`${message}. User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.`, {
-        '@uid': uid,
-        '@customer_id': customerId,
-        '@aura_status': response.data.apc_link,
-      });
-      return { data: getErrorResponse(message, 500) };
-    }
-  }
 
   return responseData;
 };
@@ -175,3 +154,62 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyO
   type,
   chosenCountryCode,
 );
+
+/**
+ * Get the loyalty customer details.
+ *
+ * @returns {Object}
+ *   Return customer data from API response.
+ */
+window.auraBackend.getCustomerDetails = async (data = {}) => {
+  // Get user details from drupalSettings.
+  const { customerId } = drupalSettings.userDetails;
+  const { uid } = drupalSettings.user;
+  const fetchStatus = data.fetchStatus || true;
+  const fetchPoints = data.fetchPoints || true;
+  const fetchTier = data.fetchTier || true;
+  let responseData = {};
+
+  if (!hasValue(customerId) || !hasValue(uid)) {
+    logger.warning('Error while trying to fetch loyalty points for customer. No customer available in session. Customer Id: @customerId, User Id: @uid', {
+      '@customerId': customerId,
+      '@uid': uid,
+    });
+
+    return getErrorResponse('No user in session', 404);
+  }
+
+  // Call helper to get customer information only if fetch status
+  // is not false.
+  if (fetchStatus === true) {
+    const customerInfo = await getCustomerInfo(customerId);
+
+    // @todo Add a check here to handle scenarios where customer doesn't
+    // exist in Aura. We will check this once MDC API is updated.
+    if (!hasValue(customerInfo.error)) {
+      responseData = { ...responseData, ...customerInfo };
+    }
+  }
+
+  // Call helper to get customer point details only if fetch points
+  // is not false.
+  if (fetchPoints === true) {
+    const customerPoints = await getCustomerPoints(customerId);
+
+    if (!hasValue(customerPoints.error)) {
+      responseData = { ...responseData, ...customerPoints };
+    }
+  }
+
+  // Call helper to get customer tier details only if fetch tier
+  // is not false.
+  if (fetchTier === true) {
+    const customerTier = await getCustomerTier(customerId);
+
+    if (!hasValue(customerTier.error)) {
+      responseData = { ...responseData, ...customerTier };
+    }
+  }
+
+  return { data: responseData };
+};

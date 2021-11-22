@@ -41,7 +41,7 @@ class AuraCheckoutRewards extends React.Component {
       }
 
       document.addEventListener('customerDetailsFetched', this.updateStates, false);
-      const { loyaltyStatus, tier } = this.state;
+      const { loyaltyStatus } = this.state;
 
       if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
         this.setState({
@@ -51,7 +51,7 @@ class AuraCheckoutRewards extends React.Component {
       }
 
       // Get customer details.
-      getCustomerDetails(tier, loyaltyStatus);
+      getCustomerDetails();
       return;
     }
 
