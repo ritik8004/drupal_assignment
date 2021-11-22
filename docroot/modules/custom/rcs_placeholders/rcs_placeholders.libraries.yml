@@ -5,6 +5,7 @@ helpers:
     js/rcs_placeholders-exports.js: { }
     js/eventManager.js: {}
   dependencies:
+    - core/drupal
     - core/jquery
 
 rcs_placeholders:
