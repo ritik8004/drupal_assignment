@@ -160,16 +160,26 @@
     if (typeof drupalSettings.alshayaRcs !== 'undefined') {
       // Prepare cart object.
       let cartInfo = [];
+      // Define sku and view_mode based on the request type.
+      let queryProductSku, queryProductViewMode, queryCartAttr, queryCartPrice = '';
+      if (type === 'product') {
+        queryProductSku = `sku: "${sku}"`;
+        queryProductViewMode = `view_mode: "${viewMode}"`;
+      }
+      else if (type === 'cart') {
+        queryCartAttr = `
+          subtotal: ${cartData.totals.subtotal_incl_tax}
+          applied_rules: "${cartData.appliedRules}"`;
+        // Conditionaly adding the price attribute in query because it's
+        // required for cart Graphql query only and this cannot be passed
+        // as an extra attribute for product dynamic promotion query.
+        queryCartPrice = `price: ${cartData.items[key].price}`
+      }
       for (const key in cartData.items) {
         cartInfo.push(`{
             sku: "${cartData.items[key].sku}",
             qty: ${parseInt(cartData.items[key].qty)}
-            ${
-              // Conditionaly adding the price attribute in query because it's
-              // required for cart Graphql query only and this cannot be passed
-              // as an extra attribute for product dynamic promotion query.
-              type === 'cart' ? 'price: ' + cartData.items[key].price : ''
-            }
+            ${queryCartPrice}
           }`);
       }
       // Prepare graphql query here.
@@ -189,13 +199,11 @@
       }
       request.data = JSON.stringify({
         query: `{${queryType}(
-            ${type === 'product' ? `sku: "${sku}"` : ''}
+            ${queryProductSku}
             context: "web"
-            ${type === 'product' ? `view_mode: "${viewMode}"` : ''}
+            ${queryProductViewMode}
             cart: {
-              ${type === 'cart' ? `
-              subtotal: ${cartData.totals.subtotal_incl_tax}
-              applied_rules: "${cartData.appliedRules}"` : ''}
+              ${queryCartAttr}
               items: [
                 ${cartInfo}
               ]
