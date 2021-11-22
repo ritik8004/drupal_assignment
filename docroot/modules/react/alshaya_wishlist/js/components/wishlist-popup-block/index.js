@@ -1,15 +1,15 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { addProductToWishList } from '../../utilities/wishlist-utils';
+import { addProductToWishList, getWishlistLabel } from '../../utilities/wishlist-utils';
 
 export default class WishlistPopupBlock extends React.Component {
-  addToWishlist = (response) => {
+  addToWishlist = (addToWishlist) => {
     const {
       sku, title, url, closeWishlistModal,
     } = this.props;
     // If user responds as yes, move item to wishlist and remove cart item.
     // Else close the popup and continue to remove cart item.
-    if (response) {
+    if (addToWishlist) {
       addProductToWishList({ sku, title, url });
     }
     closeWishlistModal();
@@ -20,13 +20,13 @@ export default class WishlistPopupBlock extends React.Component {
       <div className="wishlist-popup-container">
         <Popup
           open
-          className="wishlist_confirmation"
+          className="wishlist-confirmation"
           closeOnDocumentClick={false}
           closeOnEscape={false}
         >
           <div className="wishlist-popup-block">
             <div className="wishlist-question">
-              {Drupal.t('Do you want to move the product to wishlist?')}
+              {Drupal.t('Do you want to move the product to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
             </div>
             <div className="wishlist-options">
               <button

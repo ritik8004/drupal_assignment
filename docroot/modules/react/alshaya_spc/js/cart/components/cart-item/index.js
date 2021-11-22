@@ -35,7 +35,8 @@ export default class CartItem extends React.Component {
       wait: true,
       productInfo: null,
       showWishlistPopup: false,
-      wishlistResponse: true,
+      // wishlistResponse tracks if user has responded in wishlist popup.
+      wishlistResponse: false,
     };
   }
 
@@ -86,7 +87,7 @@ export default class CartItem extends React.Component {
     this.setState({
       showWishlistPopup: false,
     });
-    this.setState({ showWishlistPopup: false, wishlistResponse: false }, () => {
+    this.setState({ showWishlistPopup: false, wishlistResponse: true }, () => {
       this.removeCartItem(sku, 'remove item', id);
     });
   };
@@ -95,12 +96,13 @@ export default class CartItem extends React.Component {
    * Remove item from the cart.
    */
   removeCartItem = (sku, action, id) => {
-    const { wishlistResponse } = this.state;
     // Open wishlist confirmation popup if feature is enabled.
-    if (isWishlistEnabled() && wishlistResponse
-      && !(isProductExistInWishList(sku))) {
-      this.openWishlistModal();
-      return;
+    if (isWishlistEnabled()) {
+      const { wishlistResponse } = this.state;
+      if (!wishlistResponse && !(isProductExistInWishList(sku))) {
+        this.openWishlistModal();
+        return;
+      }
     }
     // Adding class on remove button for showing progress when click.
     document.getElementById(`remove-item-${id}`).classList.add('loading');
@@ -307,6 +309,7 @@ export default class CartItem extends React.Component {
                   context="cart"
                   position="cart-item"
                   sku={sku}
+                  format="text"
                 />
               </div>
             </ConditionalView>

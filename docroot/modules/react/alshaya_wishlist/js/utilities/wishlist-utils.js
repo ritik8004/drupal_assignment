@@ -184,3 +184,8 @@ export const prepareProductDetailsForWishList = (productSku) => {
  * Utility function to prepare product details for wishlist.
  */
 export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? drupalSettings.wishlist.wishlist_label : '');
+
+/**
+ * Utility function to get wishlist notification time.
+ */
+export const getWishlistNotificationTime = () => (3000);

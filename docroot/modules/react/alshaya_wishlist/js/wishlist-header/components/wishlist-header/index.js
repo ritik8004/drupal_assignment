@@ -1,7 +1,7 @@
 import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
-import { getWishlistLabel } from '../../../utilities/wishlist-utils';
+import { getWishlistLabel, getWishlistNotificationTime } from '../../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
 
 export default class WishlistHeader extends React.Component {
@@ -38,7 +38,7 @@ export default class WishlistHeader extends React.Component {
         wishListItemData: null,
       });
       this.timer = null;
-    }, 3000);
+    }, getWishlistNotificationTime());
   }
 
   /**
