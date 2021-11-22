@@ -71,6 +71,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   $search_direction = 'self';
   $description_value = '';
   $desc = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
+
   // Get data from article level.
   if (!empty($desc)) {
     $description_value .= $desc;
