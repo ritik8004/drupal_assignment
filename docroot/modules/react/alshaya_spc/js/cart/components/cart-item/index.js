@@ -35,6 +35,7 @@ export default class CartItem extends React.Component {
       wait: true,
       productInfo: null,
       showWishlistPopup: false,
+      wishlistResponse: true,
     };
   }
 
@@ -70,7 +71,7 @@ export default class CartItem extends React.Component {
    * To open the wishlist confirmation popup.
    * Popup will show up while deleting item from cart.
    */
-  openModal = () => {
+  openWishlistModal = () => {
     this.setState({
       showWishlistPopup: true,
     });
@@ -80,12 +81,12 @@ export default class CartItem extends React.Component {
    * To close the wishlist confirmation popup.
    * Once popup closes, we move on to deleting the item from cart.
    */
-  closeModal = () => {
+  closeWishlistModal = () => {
     const { item: { sku, id } } = this.props;
     this.setState({
       showWishlistPopup: false,
     });
-    this.setState({ showWishlistPopup: false }, () => {
+    this.setState({ showWishlistPopup: false, wishlistResponse: false }, () => {
       this.removeCartItem(sku, 'remove item', id);
     });
   };
@@ -94,9 +95,11 @@ export default class CartItem extends React.Component {
    * Remove item from the cart.
    */
   removeCartItem = (sku, action, id) => {
+    const { wishlistResponse } = this.state;
     // Open wishlist confirmation popup if feature is enabled.
-    if (isWishlistEnabled() && !(isProductExistInWishList(sku))) {
-      this.openModal();
+    if (isWishlistEnabled() && wishlistResponse
+      && !(isProductExistInWishList(sku))) {
+      this.openWishlistModal();
       return;
     }
     // Adding class on remove button for showing progress when click.
@@ -297,14 +300,16 @@ export default class CartItem extends React.Component {
               { itemCodeLabel }
               {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
-            <div className="spc-product-wishlist-link">
-              {/* @todo: we need to move this to proper place. */}
-              <WishlistContainer
-                context="cart"
-                position="cart-item"
-                sku={sku}
-              />
-            </div>
+            <ConditionalView condition={isWishlistEnabled()}>
+              <div className="spc-product-wishlist-link">
+                {/* @todo: we need to move this to proper place. */}
+                <WishlistContainer
+                  context="cart"
+                  position="cart-item"
+                  sku={sku}
+                />
+              </div>
+            </ConditionalView>
           </div>
           <div className="spc-product-tile-actions">
             <button
@@ -322,7 +327,7 @@ export default class CartItem extends React.Component {
                 sku={sku}
                 title={title}
                 url={url}
-                closeModal={() => this.closeModal()}
+                closeWishlistModal={() => this.closeWishlistModal()}
               />
             </ConditionalView>
             <div className="qty">
