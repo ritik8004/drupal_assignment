@@ -185,6 +185,8 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
   if (fetchStatus === true) {
     const customerInfo = await getCustomerInfo(customerId);
 
+    // @todo Add a check here to handle scenarios where customer doesn't
+    // exist in Aura. We will check this once MDC API is updated.
     if (!hasValue(customerInfo.error)) {
       responseData = { ...responseData, ...customerInfo };
     }
