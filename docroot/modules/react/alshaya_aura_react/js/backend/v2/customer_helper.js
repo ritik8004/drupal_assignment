@@ -6,8 +6,9 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 /**
  * Get Customer Information.
  *
- * @return array
- *   Return API response/error.
+ * @returns {Promise}
+ *   Promise that resolves to an object containing customer data in case of
+ *   success or an error object in case of failure.
  */
 const getCustomerInfo = (customerId) => {
   const endpoint = `/V1/customers/apcCustomerData/${customerId}`;
@@ -38,8 +39,9 @@ const getCustomerInfo = (customerId) => {
 /**
  * Get Customer Points.
  *
- * @return array
- *   Return API response/error.
+ * @returns {Promise}
+ *   Promise that resolves to an object containing customer data in case of
+ *   success or an error object in case of failure.
  */
 const getCustomerPoints = (customerId) => {
   const endpoint = `/V1/customers/apc-points-balance/${customerId}`;
@@ -70,8 +72,9 @@ const getCustomerPoints = (customerId) => {
 /**
  * Get Customer Tier.
  *
- * @return array
- *   Return API response/error.
+ * @returns {Promise}
+ *   Promise that resolves to an object containing customer data in case of
+ *   success or an error object in case of failure.
  */
 const getCustomerTier = (customerId) => {
   const endpoint = `/V1/customers/apc-tiers/${customerId}`;

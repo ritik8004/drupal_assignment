@@ -158,9 +158,8 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyO
 /**
  * Get the loyalty customer details.
  *
- * @returns {Promise}
- *   The promise object which resolves to the response data and status in case
- *   of success and the error object in case of error.
+ * @returns {Object}
+ *   Return customer data from API response.
  */
 window.auraBackend.getCustomerDetails = async (data = {}) => {
   // Get user details from drupalSettings.
