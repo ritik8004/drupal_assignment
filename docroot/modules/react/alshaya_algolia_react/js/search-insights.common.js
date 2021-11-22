@@ -33,7 +33,7 @@
         eventName: 'Add to cart',
         index: "...",
         queryID: queryId,
-        objectIDs: objectId,
+        objectIDs: [objectId],
       });
     }
     catch (e) {
