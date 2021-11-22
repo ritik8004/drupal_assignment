@@ -484,7 +484,7 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'tabby') {
     return (
-      <div className="tabby-promo-snippet__logo-img" alt="Tabby Logo" width="70" height="27" />
+      <div className="tabby-promo-snippet__logo-img" alt={Drupal.t('Tabby Logo')} width="70" height="27" />
     );
   }
 

@@ -133,6 +133,11 @@ const getApiEndpoint = (action, params = {}) => {
         : '';
       break;
 
+    case 'getTabbyAvailableProducts':
+      endpoint = isUserAuthenticated()
+        ? '/V1/carts/mine/tabby-available-products'
+        : `/V1/guest-carts/${params.cartId}/tabby-available-products`;
+      break;
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,

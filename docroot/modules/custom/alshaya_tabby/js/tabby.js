@@ -1,4 +1,4 @@
-(function ($, Drupal, drupalSettings) {
+(function (Drupal, drupalSettings) {
   // Function to initialize the promo widget.
   Drupal.tabbyPromoInit = function (selector, amount, source) {
     // Tabby promo change event.
@@ -33,4 +33,4 @@
       header: false
     });
   }
-})(jQuery, Drupal, drupalSettings);
+})(Drupal, drupalSettings);

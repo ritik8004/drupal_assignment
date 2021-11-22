@@ -1,8 +1,39 @@
+import { hasValue } from '../../utilities/conditionsUtility';
+import { callMagentoApi } from '../../../alshaya_spc/js/backend/v2/common';
+import { getApiEndpoint } from '../../../alshaya_spc/js/backend/v2/utility';
+import logger from '../../../alshaya_spc/js/utilities/logger';
+
 const Tabby = {
-  isTabbyEnabled: () => typeof drupalSettings.tabby !== 'undefined'
-      && typeof drupalSettings.tabby.widgetInfo !== 'undefined',
+  isTabbyEnabled: () => hasValue(drupalSettings.tabby)
+    && hasValue(drupalSettings.tabby.widgetInfo),
 
   isAvailable: () => window.Tabby,
+
+  productAvailable: (that) => {
+    const { TabbyProductStatus } = that.state;
+    if (!hasValue(TabbyProductStatus)) {
+      // Get available methods from MDC.
+      const params = {
+        cartId: window.commerceBackend.getCartId(),
+        paymentMethod: 'tabby',
+      };
+      callMagentoApi(getApiEndpoint('getTabbyAvailableProducts', params), 'GET', {})
+        .then((response) => {
+          if (hasValue(response.data) && hasValue(response.data.available_products)) {
+            const status = hasValue(response.data.available_products.installment.is_available) ? 'disabled' : 'disabled';
+            that.setState({
+              TabbyProductStatus: status,
+            });
+          }
+        })
+        .catch((response) => {
+          logger.error('Error while fetching tabby available products. Error message: @message, Code: @errorCode.', {
+            '@message': hasValue(response.error) ? response.error.message : response,
+            '@errorCode': hasValue(response.error) ? response.error.error_code : '',
+          });
+        });
+    }
+  },
 };
 
 export default Tabby;
