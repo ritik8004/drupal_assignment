@@ -97,8 +97,59 @@ const getCustomerTier = (customerId) => {
     });
 };
 
+/**
+ * Get Customer Progress Tracker.
+ *
+ * @returns {Object}
+ *   Progress tracker data.
+ */
+const prepareProgressTrackerResponse = (progressTracker) => ({
+  nextTierLevel: hasValue(progressTracker.tier_code) ? progressTracker.tier_code : '',
+  userPoints: hasValue(progressTracker.current_value) ? progressTracker.current_value : '',
+  nextTierThreshold: hasValue(progressTracker.max_value) ? progressTracker.max_value : '',
+});
+
+/**
+ * Get Customer Progress Tracker.
+ *
+ * @param {string} customerId
+ *   The customer Id.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object containing customer data in case of
+ *   success or an error object in case of failure.
+ */
+const getCustomerProgressTracker = (customerId) => {
+  const endpoint = `/V1/customers/apcTierProgressData/customerId/${customerId}`;
+
+  return callMagentoApi(endpoint, 'GET')
+    .then((response) => {
+      if (hasValue(response.data.error)) {
+        logger.error('Error while trying to get progress tracker of the user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+          '@customerId': customerId,
+          '@endpoint': endpoint,
+          '@message': response.data.error_message || '',
+        });
+        return getErrorResponse(response.data.error_message, response.data.error_code);
+      }
+
+      let trackerData = {};
+      if (response.data.tier_progress_tracker.length > 0) {
+        response.data.tier_progress_tracker.forEach((progressTracker) => {
+          if (progressTracker.code.includes('UPG')) {
+            trackerData = prepareProgressTrackerResponse(progressTracker);
+            return;
+          }
+          trackerData = prepareProgressTrackerResponse(progressTracker);
+        });
+      }
+      return trackerData;
+    });
+};
+
 export {
   getCustomerInfo,
   getCustomerPoints,
   getCustomerTier,
+  getCustomerProgressTracker,
 };

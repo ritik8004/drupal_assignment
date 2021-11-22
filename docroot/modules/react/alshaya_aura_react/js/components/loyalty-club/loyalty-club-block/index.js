@@ -79,6 +79,7 @@ const LoyaltyClubBlock = (props) => {
             upgradeMsg={upgradeMsg}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
+            tier={tier}
           />
         </>
       );

@@ -63,3 +63,12 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => postAPI
  *   of success and the error object in case of error.
  */
 window.auraBackend.getCustomerDetails = () => getAPIData('get/loyalty-club/get-customer-details');
+
+/**
+ * Fetches progress tracker for the current user.
+ *
+ * @returns {Promise}
+ *   The promise object which resolves to the response data and status in case
+ *   of success and the error object in case of error.
+ */
+window.auraBackend.getProgressTracker = () => getAPIData('get/loyalty-club/get-progress-tracker');
