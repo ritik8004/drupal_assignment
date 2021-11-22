@@ -5,6 +5,7 @@ var config = {
   entry: {
     wishlist: './js/wishlist',
     mywishlist: './js/mywishlist',
+    wishlistheader: './js/wishlistheader',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

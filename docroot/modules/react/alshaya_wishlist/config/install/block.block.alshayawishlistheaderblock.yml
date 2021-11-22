@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_wishlist
+  theme:
+    - alshaya_white_label
+id: alshayawishlistheaderblock
+theme: alshaya_white_label
+region: header
+weight: -30
+provider: null
+plugin: alshaya_react_wishlist_header
+settings:
+  id: alshaya_react_wishlist_header
+  label: 'Alshaya Wishlist Header Block'
+  provider: alshaya_wishlist
+  label_display: '0'
+visibility: { }

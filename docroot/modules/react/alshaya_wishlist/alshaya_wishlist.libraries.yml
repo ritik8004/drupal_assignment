@@ -9,3 +9,9 @@ wishlist:
     dist/wishlist.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+wishlistheader:
+  js:
+    dist/wishlistheader.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
