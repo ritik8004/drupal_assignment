@@ -44,3 +44,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
+
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
+  alshaya_white_label/store_finder:
+    css:
+      theme:
+        css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
