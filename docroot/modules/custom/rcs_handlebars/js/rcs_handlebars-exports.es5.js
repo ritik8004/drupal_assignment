@@ -76,7 +76,7 @@ Handlebars.registerHelper('t', (str, args, options) => {
     args[`@${key}`] = args[key];
   });
 
-  return rcsTranslatedText(str, args, options);
+  return Drupal.t(str, args, options);
 });
 
 /**
