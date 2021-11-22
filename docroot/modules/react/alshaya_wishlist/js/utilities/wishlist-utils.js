@@ -40,6 +40,8 @@ export const getWishListInfoForGuestUsers = () => {
 
   // If data is expired, we flag it to check/fetch from api.
   if ((currentTime - wishListInfo.last_update) > expireTime) {
+    // Empty wishlist info from local storage.
+    setStorageInfo({}, getWishListStorageKey());
     return null;
   }
 

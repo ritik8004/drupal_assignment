@@ -40,7 +40,11 @@ function alshaya_wishlist_node_view(array &$build, Node $entity, EntityViewDispl
   $build['wishlist_enabled'] = [
     '#type' => 'html_tag',
     '#tag' => 'div',
-    '#attributes' => ['id' => 'wishlist-pdp'],
+    '#attributes' => [
+      'class' => [
+        'wishlist-pdp-'.$view_mode,
+      ]
+    ],
   ];
 }
 
