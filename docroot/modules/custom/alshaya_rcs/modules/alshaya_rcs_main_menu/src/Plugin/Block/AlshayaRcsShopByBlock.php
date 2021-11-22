@@ -39,6 +39,7 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
           '#attributes' => [
             'id' => 'rcs-ph-shop_by_block',
             'data-param-entity-to-get' => 'navigation_menu',
+            'data-param-category_id' => $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category'),
           ],
         ],
       ],

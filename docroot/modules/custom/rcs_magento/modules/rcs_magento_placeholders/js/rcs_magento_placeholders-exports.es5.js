@@ -152,12 +152,6 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'navigation_menu':
-      // @todo To optimize the multiple category API call.
-      // Early return if the root category is undefined.
-      if (typeof drupalSettings.alshayaRcs.navigationMenu.rootCategory === 'undefined') {
-        return null;
-      }
-
       // Prepare request parameters.
       request.data = JSON.stringify({
         // @todo: we are using 'category' API for now which is going to be
@@ -165,10 +159,10 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
         // magento version, so as suggested we are using this for now but
         // need to change this when this got deprecated in coming magento
         // version and replace it with 'categoryList' magento API.
-        // @todo use ${params.category_id} instead of drupalSettings.
-        // Also, this query is being called 3 times from multiple RCS placeholders.
+        // @todo To optimize the multiple category API call.
+        // This query is being called 3 times from multiple RCS placeholders.
         // We need to statically cache it, bearing in mind the calls are Async.
-        query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) ${rcsPhGraphqlQuery[placeholder]}}`
+        query: `{category(id: ${params.category_id}) ${rcsPhGraphqlQuery[placeholder]}}`
       });
 
       response = await rcsCommerceBackend.invokeApi(request);

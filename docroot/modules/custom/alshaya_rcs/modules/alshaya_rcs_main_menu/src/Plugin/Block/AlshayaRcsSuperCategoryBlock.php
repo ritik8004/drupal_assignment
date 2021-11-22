@@ -115,6 +115,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
           '#attributes' => [
             'id' => 'rcs-ph-super_category',
             'data-param-entity-to-get' => 'navigation_menu',
+            'data-param-category_id' => $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category'),
           ],
         ],
       ],
