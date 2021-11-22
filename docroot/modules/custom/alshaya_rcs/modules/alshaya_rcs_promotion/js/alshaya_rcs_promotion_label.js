@@ -149,19 +149,37 @@
    *   The object containing the current cart data.
    * @param {string} viewMode
    *   The type of response we expect from magento.
+   * @param {string} type
+   *   The type of dynamic label ( Product or cart ).
    *
    * @returns {object}
    *   An oject containing the dynamic promotion label.
    */
-  Drupal.alshayaPromotions.getRcsDynamicLabel = function (sku, cartData, viewMode = 'links') {
+  Drupal.alshayaPromotions.getRcsDynamicLabel = function (sku, cartData, viewMode = 'links', type = 'product') {
     let response = null;
     if (typeof drupalSettings.alshayaRcs !== 'undefined') {
       // Prepare cart object.
       let cartInfo = [];
+      // Define sku and view_mode based on the request type.
+      let queryProductSku, queryProductViewMode, queryCartAttr, queryCartPrice = '';
+      if (type === 'product') {
+        queryProductSku = `sku: "${sku}"`;
+        queryProductViewMode = `view_mode: "${viewMode}"`;
+      }
+      else if (type === 'cart') {
+        queryCartAttr = `
+          subtotal: ${cartData.totals.subtotal_incl_tax}
+          applied_rules: "${cartData.appliedRules}"`;
+        // Conditionaly adding the price attribute in query because it's
+        // required for cart Graphql query only and this cannot be passed
+        // as an extra attribute for product dynamic promotion query.
+        queryCartPrice = `price: ${cartData.items[key].price}`
+      }
       for (const key in cartData.items) {
         cartInfo.push(`{
             sku: "${cartData.items[key].sku}",
             qty: ${parseInt(cartData.items[key].qty)}
+            ${queryCartPrice}
           }`);
       }
       // Prepare graphql query here.
@@ -172,24 +190,32 @@
           ["Content-Type", "application/json"],
         ],
       };
+      // Change the query type and body based on the type of the request.
+      let queryType = 'promoDynamicLabelProduct';
+      let queryBody = rcsPhGraphqlQuery.product_dynamic_promotions;
+      if (type === 'cart') {
+        queryType = 'promoDynamicLabelCart';
+        queryBody = rcsPhGraphqlQuery.cart_dynamic_promotions;
+      }
       request.data = JSON.stringify({
-        query: `{promoDynamicLabelProduct(
-            sku: "${sku}"
+        query: `{${queryType}(
+            ${queryProductSku}
             context: "web"
-            view_mode: "${viewMode}"
+            ${queryProductViewMode}
             cart: {
+              ${queryCartAttr}
               items: [
                 ${cartInfo}
               ]
             }
-          ) {
-            label
-          }}`
+          )
+            ${queryBody}
+          }`
       });
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
       // Update the response variable based on response.
-      response = response.data.promoDynamicLabelProduct;
+      response = response.data[queryType];
     }
 
     return response;
