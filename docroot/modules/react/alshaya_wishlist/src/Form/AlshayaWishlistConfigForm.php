@@ -30,11 +30,11 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $wishlist_config = $this->config('alshaya_wishlist.settings');
 
-    $form['alshaya_wishlist']['wishlist_enabled'] = [
+    $form['alshaya_wishlist']['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Wishlist'),
       '#description' => $this->t('Switch to enable or disable Wishlist feature.'),
-      '#default_value' => $wishlist_config->get('wishlist_enabled'),
+      '#default_value' => $wishlist_config->get('enabled'),
     ];
 
     $form['alshaya_wishlist']['wishlist_label'] = [
@@ -61,7 +61,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_wishlist.settings')
-      ->set('wishlist_enabled', $form_state->getValue('wishlist_enabled'))
+      ->set('enabled', $form_state->getValue('enabled'))
       ->set('empty_wishlist_message', $form_state->getValue('empty_wishlist_message'))
       ->set('wishlist_label', $form_state->getValue('wishlist_label'))
       ->save();

@@ -147,6 +147,7 @@ const Teaser = ({
             context="plp"
             position="top-right"
             sku={hit.sku}
+            format="icon"
           />
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
