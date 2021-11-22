@@ -74,13 +74,13 @@ const replaceOrderPlaceHolders = function (variant, product, itemHtml, settings)
   const innerHtmlObj = jQuery('<div>').html(itemHtml);
   // Prepare the data object with image placeholder variable.
   // @todo Change the code here once the assets data is available.
-  assests = JSON.parse(variant['assets_teaser']);
+  let assets = JSON.parse(variant['assets_teaser']);
   let imagePlaceHolder = innerHtmlObj.find('img.rcs-image');
   if (imagePlaceHolder.length > 0) {
     htmlElms = replaceIndividualPlaceHolder(
       imagePlaceHolder[0].outerHTML,
       'orderDetails',
-      { 'image': assests[0].styles.product_teaser, 'name': product.name },
+      { 'image': assets[0].styles.product_teaser, 'name': product.name },
       settings,
     );
     imagePlaceHolder.replaceWith(htmlElms);
