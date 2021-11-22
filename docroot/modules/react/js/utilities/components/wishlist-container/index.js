@@ -8,7 +8,12 @@ function WishlistContainer(props) {
     return null;
   }
 
-  const { context, position, sku } = props;
+  const {
+    context,
+    position,
+    sku,
+    format,
+  } = props;
 
   // Lazy load wishlist button component.
   const WishlistLazy = React.lazy(() => import('../../../../alshaya_wishlist/js/components/wishlist-button'));
@@ -20,6 +25,7 @@ function WishlistContainer(props) {
           context={context}
           position={position}
           sku={sku}
+          format={format}
         />
       </Suspense>
     </EmptyErrorBoundary>

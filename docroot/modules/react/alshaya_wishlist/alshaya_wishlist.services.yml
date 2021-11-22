@@ -1,5 +1,5 @@
 services:
-  alshaya_wishlist.wishlist_helper:
+  alshaya_wishlist.helper:
     class: Drupal\alshaya_wishlist\Helper\WishListHelper
     arguments:
       - '@config.factory'

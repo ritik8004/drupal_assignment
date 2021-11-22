@@ -62,7 +62,7 @@ class AlshayaMyWishlistController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_wishlist.wishlist_helper'),
+      $container->get('alshaya_wishlist.helper'),
       $container->get('config.factory'),
       $container->get('module_handler')
     );
