@@ -57,6 +57,22 @@ $primary_radiobtn_label: $charcoal;
 $primary_radiobtn_empty: $grey;
 $primary_radiobtn_filled: $black;
 
+// Dropdown.
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_border: $grey;
+$primary_dropdown_option_hover: $pale-grey;
+$primary_dropdown_option_border: $grey;
+$primary_dropdown_option_disbled: $pale-grey;
+$primary_dropdown_arrow_icon: $charcoal;
+$primary_dropdown_text: $charcoal;
+
+// Titles.
+$page_title: $charcoal;
+$block_title: $charcoal;
+$title: $charcoal;
+$sub_title: $charcoal;
+$user_sidebar_block_title: $charcoal;
+
 // Footer
 $footer_border_top: $primary_border;
 $footer_title_h3: $black;
@@ -117,3 +133,10 @@ $plp_tile_product_title: $charcoal;
 $plp_tile_product_title_hover: $charcoal;
 $plp_tile_product_special_price: $sale-red;
 $plp_tite_product_promo_text: $sale-red;
+
+// Contact Page
+$webform_contact_legend: $charcoal;
+$webform_contact_dropdown_disable_text: $charcoal;
+
+// Checkout Click & collect.
+$checkout_cc_store_address_mobile_border: $grey;
