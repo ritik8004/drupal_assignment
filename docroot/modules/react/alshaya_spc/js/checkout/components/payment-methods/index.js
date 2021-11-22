@@ -18,6 +18,7 @@ import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import RedeemEgiftCard from '../redeem-egift-card';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -286,6 +287,7 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
+    const { egiftCard } = drupalSettings;
     const activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
@@ -312,6 +314,9 @@ export default class PaymentMethods extends React.Component {
         <ConditionalView condition={Object.keys(methods).length > 0}>
           <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>
+        </ConditionalView>
+        <ConditionalView condition={typeof egiftCard !== 'undefined' && egiftCard.enabled}>
+          <RedeemEgiftCard />
         </ConditionalView>
       </div>
     );
