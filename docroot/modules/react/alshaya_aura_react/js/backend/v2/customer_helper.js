@@ -9,7 +9,7 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
  * @return array
  *   Return API response/error.
  */
-const getCustomerInfo = async (customerId) => {
+const getCustomerInfo = (customerId) => {
   const endpoint = `/V1/customers/apcCustomerData/${customerId}`;
 
   return callMagentoApi(endpoint, 'GET')
@@ -24,12 +24,12 @@ const getCustomerInfo = async (customerId) => {
       }
 
       const responseData = {
-        cardNumber: response.data.apc_identifier_number || '',
-        auraStatus: response.data.apc_link || '',
-        auraPoints: response.data.apc_points || 0,
-        phoneNumber: response.data.apc_phone_number || '',
-        firstName: response.data.apc_first_name || '',
-        lastName: response.data.apc_last_name || '',
+        cardNumber: hasValue(response.data.apc_identifier_number) ? response.data.apc_identifier_number : '',
+        auraStatus: hasValue(response.data.apc_link) ? response.data.apc_link : '',
+        auraPoints: hasValue(response.data.apc_points) ? response.data.apc_points : 0,
+        phoneNumber: hasValue(response.data.apc_phone_number) ? response.data.apc_phone_number : '',
+        firstName: hasValue(response.data.apc_first_name) ? response.data.apc_first_name : '',
+        lastName: hasValue(response.data.apc_last_name) ? response.data.apc_last_name : '',
       };
       return responseData;
     });
@@ -41,7 +41,7 @@ const getCustomerInfo = async (customerId) => {
  * @return array
  *   Return API response/error.
  */
-const getCustomerPoints = async (customerId) => {
+const getCustomerPoints = (customerId) => {
   const endpoint = `/V1/customers/apc-points-balance/${customerId}`;
 
   return callMagentoApi(endpoint, 'GET')
@@ -56,12 +56,12 @@ const getCustomerPoints = async (customerId) => {
       }
 
       const responseData = {
-        customerId: response.data.customer_id || '',
-        cardNumber: response.data.apc_identifier_number || '',
-        auraPoints: response.data.apc_points || 0,
-        auraPointsToExpire: response.data.apc_points_to_expire || 0,
-        auraPointsExpiryDate: response.data.apc_points_expiry_date || '',
-        auraOnHoldPoints: response.data.apc_on_hold_points || 0,
+        customerId: hasValue(response.data.customer_id) ? response.data.customer_id : '',
+        cardNumber: hasValue(response.data.apc_identifier_number) ? response.data.apc_identifier_number : '',
+        auraPoints: hasValue(response.data.apc_points) ? response.data.apc_points : '',
+        auraPointsToExpire: hasValue(response.data.apc_points_to_expire) ? response.data.apc_points_to_expire : '',
+        auraOnHoldPoints: hasValue(response.data.apc_on_hold_points) ? response.data.apc_on_hold_points : '',
+        auraPointsExpiryDate: hasValue(response.data.apc_points_expiry_date) ? response.data.apc_points_expiry_date : '',
       };
       return responseData;
     });
@@ -73,7 +73,7 @@ const getCustomerPoints = async (customerId) => {
  * @return array
  *   Return API response/error.
  */
-const getCustomerTier = async (customerId) => {
+const getCustomerTier = (customerId) => {
   const endpoint = `/V1/customers/apc-tiers/${customerId}`;
 
   return callMagentoApi(endpoint, 'GET')
@@ -88,7 +88,7 @@ const getCustomerTier = async (customerId) => {
       }
 
       const responseData = {
-        tier: response.data.tier_code || '',
+        tier: hasValue(response.data.tier_code) ? response.data.tier_code : '',
       };
       return responseData;
     });

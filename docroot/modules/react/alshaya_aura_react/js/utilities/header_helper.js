@@ -3,6 +3,7 @@ import {
   getAllAuraStatus,
 } from './helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Helper function to get customer details.
@@ -15,17 +16,17 @@ function getCustomerDetails() {
   if (apiData instanceof Promise) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
-        const userLoyaltyStatus = result.data.auraStatus || '';
+        const userLoyaltyStatus = hasValue(result.data.auraStatus) ? result.data.auraStatus : '';
         stateValues = {
           loyaltyStatus: userLoyaltyStatus,
-          tier: result.data.tier || '',
-          points: result.data.auraPoints || 0,
-          cardNumber: result.data.cardNumber || '',
-          expiringPoints: result.data.auraPointsToExpire || 0,
-          expiryDate: result.data.auraPointsExpiryDate || '',
-          pointsOnHold: result.data.auraOnHoldPoints || 0,
-          firstName: result.data.firstName || '',
-          lastName: result.data.lastName || '',
+          tier: hasValue(result.data.tier) ? result.data.tier : '',
+          points: hasValue(result.data.auraPoints) ? result.data.auraPoints : 0,
+          cardNumber: hasValue(result.data.cardNumber) ? result.data.cardNumber : '',
+          expiringPoints: hasValue(result.data.auraPointsToExpire) ? result.data.auraPointsToExpire : 0,
+          expiryDate: hasValue(result.data.auraPointsExpiryDate) ? result.data.auraPointsExpiryDate : '',
+          pointsOnHold: hasValue(result.data.auraOnHoldPoints) ? result.data.auraOnHoldPoints : 0,
+          firstName: hasValue(result.data.firstName) ? result.data.firstName : '',
+          lastName: hasValue(result.data.lastName) ? result.data.lastName : '',
         };
 
         // If user's loyalty status is APC_LINKED_VERIFIED or
