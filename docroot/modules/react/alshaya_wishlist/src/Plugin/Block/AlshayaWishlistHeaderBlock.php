@@ -53,7 +53,7 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('alshaya_wishlist.wishlist_helper'),
+      $container->get('alshaya_wishlist.helper'),
       $container->get('token'),
     );
   }
