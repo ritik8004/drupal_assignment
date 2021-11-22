@@ -268,7 +268,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(upsell_products, rcsTranslatedText('You may also like', {}, 'alshaya_static_text|pdp_upsell_title'));
+      html = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
       break;
 
     case 'mobile-related-products':
@@ -279,7 +279,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(related_products, rcsTranslatedText('Related', {}, 'alshaya_static_text|pdp_related_title'));
+      html = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
       break;
 
     case 'mobile-crosssell-products':
@@ -290,7 +290,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(crosssell_products, rcsTranslatedText('Customers also bought', {}, 'alshaya_static_text|pdp_crosssell_title'));
+      html = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
       break;
 
     case 'classic-gallery':
@@ -545,7 +545,8 @@ exports.computePhFilters = function (input, filter) {
 
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(rcsTranslatedText(`Select ${option.attribute_code}`));
+          let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
+          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
