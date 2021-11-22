@@ -313,7 +313,7 @@ export default class CartItem extends React.Component {
               id={`remove-item-${id}`}
               className={`spc-remove-btn ${OOSClass}`}
               disabled={(couponCode.length === 0 && freeItem)}
-              onClick={() => this.removeCartItem(sku, 'remove item', id)}
+              onClick={() => { this.removeCartItem(sku, 'remove item', id); }}
             >
               <TrashIconSVG />
             </button>
