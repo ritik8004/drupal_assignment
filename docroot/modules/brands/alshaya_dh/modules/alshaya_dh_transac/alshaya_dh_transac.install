@@ -100,6 +100,9 @@ function alshaya_dh_transac_install() {
       'en' => 'Follow us',
       'ar' => 'تابعنا'
     ],
+    'Select your prefered communication channel' => [
+      'ar' => 'حدد قناة الاتصال المفضلة لديك'
+    ]
   ];
 
   alshaya_i18n_save_translations($strings);
