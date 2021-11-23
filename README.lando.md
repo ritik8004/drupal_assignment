@@ -185,3 +185,12 @@ For reference:
 - https://docs.lando.dev/config/performance.html
 - https://github.com/lando/lando/issues/763
 
+## Text Editors
+### VS Code
+1. In the XDebug configuration, make sure you have the following
+```
+"port": 9003,
+"pathMappings": {
+  "/app/": "${workspaceFolder}"
+},
+```

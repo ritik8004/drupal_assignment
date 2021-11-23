@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\block\Entity\Block;
@@ -21,6 +22,7 @@ use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_search_algolia\Helper\AlshayaAlgoliaSortHelper;
 
 /**
  * Class Alshaya Search Api Query Execute.
@@ -804,13 +806,24 @@ class AlshayaSearchApiQueryExecute {
    *   Views machine id.
    * @param string $display_id
    *   Views display id.
+   * @param string $page_type
+   *   Page Type.
    *
    * @return array
    *   Sort array.
    */
-  public function prepareSortData(string $views_id, string $display_id) {
+  public function prepareSortData(string $views_id, string $display_id, string $page_type) {
     // If PLP views.
     $sort_data = [];
+    $lang = $this->languageManager->getCurrentLanguage()->getId();
+    $alshaya_algolia_index = AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index');
+    $algolia_product_list_index = AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index');
+    if ($alshaya_algolia_index || $algolia_product_list_index) {
+      $index_name = AlshayaAlgoliaSortHelper::getAlgoliaIndexName($lang, $page_type);
+      $sort_data = AlshayaAlgoliaSortHelper::getSortByOptions($index_name, $page_type);
+      return $sort_data;
+    }
+
     // If plp/promo list page.
     if ($views_id == 'alshaya_product_list') {
       // If promo list page.

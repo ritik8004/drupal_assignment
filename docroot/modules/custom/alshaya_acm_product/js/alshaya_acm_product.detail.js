@@ -344,6 +344,17 @@
     if (combinations[selectedCode][selectedValue] === 1) {
       return;
     }
+
+    if (typeof combinations[selectedCode][selectedValue] !== 'object' || combinations[selectedCode][selectedValue] === null) {
+      Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, combinations: @combinations, selectedCode: @selectedCode, selectedValue: @selectedValue', {
+        '@sku': sku,
+        '@combinations': combinations,
+        '@selectedCode': selectedCode,
+        '@selectedValue': selectedValue,
+      });
+      return;
+    }
+
     var nextCode = Object.keys(combinations[selectedCode][selectedValue])[0];
     var nextValues = Object.keys(combinations[selectedCode][selectedValue][nextCode]);
     Drupal.alshayaAcmProductSelectConfiguration(form, nextCode, nextValues);
