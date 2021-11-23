@@ -119,7 +119,11 @@ window.auraBackend.sendSignUpOtp = async (mobile, chosenCountryCode) => {
   // Call search API to check if given mobile number is already registered or
   // not.
   const searchResponse = await search('phone', `${chosenCountryCode}${mobile}`);
-
+  // Check for backend error.
+  if (hasValue(searchResponse.error)) {
+    return searchResponse;
+  }
+  // Check if mobile number is already registered.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to send otp. Mobile number @mobile is already registered.', {
       '@mobile': mobile,
@@ -134,6 +138,10 @@ window.auraBackend.sendSignUpOtp = async (mobile, chosenCountryCode) => {
 
   // Send otp for the given mobile number.
   const responseData = await sendOtp(`${chosenCountryCode}${mobile}`, 'reg');
+  // Check for backend error.
+  if (hasValue(responseData.error)) {
+    return responseData;
+  }
 
   return { data: responseData };
 };
