@@ -1,6 +1,6 @@
 import md5 from 'md5';
 import { getApiEndpoint } from './utility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import { getFormattedError, callMagentoApi } from './common';
 import StaticStorage from './staticStorage';
 import { hasValue, isString } from '../../../../js/utilities/conditionsUtility';
