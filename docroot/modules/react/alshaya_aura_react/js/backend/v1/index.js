@@ -56,6 +56,24 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => postAPI
 });
 
 /**
+ * Send Link card OTP.
+ *
+ * @param {string} type
+ *   The field for searching.
+ * @param {string} value
+ *   The field value.
+ *
+ * @returns {Promise}
+ *   Returns a promise which resolves to an object.
+ * On error, the error object is returned.
+ * On success, the success object is returned containing specific data.
+ */
+window.auraBackend.sendLinkCardOtp = (type, value) => postAPIData('post/loyalty-club/send-link-card-otp', {
+  type,
+  value,
+});
+
+/**
  * Fetches loyalty customer details for the current user.
  *
  * @returns {Promise}

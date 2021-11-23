@@ -3,7 +3,7 @@ import logger from '../../../../js/utilities/logger';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
 import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
-import search from './search_helper';
+import { search, searchUserDetails } from './search_helper';
 import validateInput from './validation_helper';
 import { getErrorResponse } from '../../../../js/utilities/error';
 import {
@@ -159,6 +159,55 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyO
   type,
   chosenCountryCode,
 );
+
+/**
+ * Send Link card OTP.
+ *
+ * @param {string} type
+ *   The field for searching.
+ * @param {string} value
+ *   The field value.
+ *
+ * @returns {Promise}
+ *   Returns a promise which resolves to an object.
+ * On error, the error object is returned.
+ * On success, the success object is returned containing specific data.
+ */
+window.auraBackend.sendLinkCardOtp = async (type, value) => {
+  let responseData = {};
+
+  const searchResponse = await searchUserDetails(type, value);
+
+  if (hasValue(searchResponse.error)) {
+    logger.error('Error while trying to search mobile number to send link card OTP. Request Data: @data', {
+      '@data': JSON.stringify({ type, value }),
+    });
+    return searchResponse.custom === true ? { data: searchResponse } : searchResponse;
+  }
+
+  if (!hasValue(searchResponse.data.mobile)) {
+    logger.error('Error while trying to send link card OTP. Mobile number not found. Request Data: @data', {
+      '@data': JSON.stringify({ type, value }),
+    });
+    return { data: getErrorResponse(auraErrorCodes.NO_MOBILE_FOUND_MSG, 404) };
+  }
+
+  responseData = await sendOtp(searchResponse.data.mobile, 'link');
+
+  if (hasValue(responseData.error)) {
+    logger.error('Error while trying to send link card OTP. Backend error. Request Data: @data.', {
+      '@data': JSON.stringify({ type, value }),
+    });
+    return responseData;
+  }
+
+  if (hasValue(responseData.status)) {
+    responseData.mobile = searchResponse.data.mobile;
+    responseData.cardNumber = searchResponse.data.apc_identifier_number;
+  }
+
+  return { data: responseData };
+};
 
 /**
  * Get the loyalty customer details.
