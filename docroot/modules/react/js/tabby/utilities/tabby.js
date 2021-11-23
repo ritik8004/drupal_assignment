@@ -2,7 +2,7 @@ import { hasValue } from '../../utilities/conditionsUtility';
 import { getApiEndpoint } from '../../../alshaya_spc/js/backend/v2/utility';
 import logger from '../../../alshaya_spc/js/utilities/logger';
 import StaticStorage from '../../../alshaya_spc/js/backend/v2/staticStorage';
-import { callSyncMagentoApi } from '../../../alshaya_spc/js/backend/v2/common';
+import { callMagentoApiSynchronous } from '../../../alshaya_spc/js/backend/v2/common';
 
 const Tabby = {
   isTabbyEnabled: () => hasValue(drupalSettings.tabby)
@@ -21,16 +21,12 @@ const Tabby = {
     }
     tabbyStatus[cart.cart.cart_total] = [];
     // Get available methods from MDC.
-    const urlParams = {
-      cartId: window.commerceBackend.getCartId(),
-      paymentMethod: 'tabby',
-    };
-    const response = callSyncMagentoApi(getApiEndpoint('getTabbyAvailableProducts', urlParams));
+    const response = callMagentoApiSynchronous(getApiEndpoint('getTabbyAvailableProducts', { cartId: window.commerceBackend.getCartId() }));
     tabbyStatus[cart.cart.cart_total].status = 'disabled';
     if (hasValue(response.available_products)) {
       const { installment } = response.available_products;
       if (installment.is_available) {
-        tabbyStatus[cart.cart.cart_total].status = 'enabled';
+        tabbyStatus[cart.cart.cart_total].status = 'disabled';
       } else {
         tabbyStatus[cart.cart.cart_total].rejection_reason = hasValue(installment.rejection_reason) ? installment.rejection_reason : '';
       }

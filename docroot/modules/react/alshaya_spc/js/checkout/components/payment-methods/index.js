@@ -137,10 +137,11 @@ export default class PaymentMethods extends React.Component {
         && paymentMethods[cart.cart.payment.method] !== undefined) {
         // For PostPay there is additional check required on frontend, it is
         // available for order amount within specific limit only.
-        if ((postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay')
-          && ((cart.cart.payment.method !== 'tabby') || (cart.cart.payment.method === 'tabby' && paymentMethods[cart.cart.payment.method].status !== 'disabled'))) {
-          this.changePaymentMethod(cart.cart.payment.method);
-          return;
+        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
+          if (paymentMethods[cart.cart.payment.method].status !== 'disabled') {
+            this.changePaymentMethod(cart.cart.payment.method);
+            return;
+          }
         }
       }
 
@@ -150,17 +151,18 @@ export default class PaymentMethods extends React.Component {
         && paymentMethods[cart.cart.payment.default] !== undefined) {
         // For PostPay there is additional check required on frontend, it is
         // available for order amount within specific limit only.
-        if ((postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay')
-          && ((cart.cart.payment.default !== 'tabby') || (cart.cart.payment.default === 'tabby' && paymentMethods[cart.cart.payment.default].status !== 'disabled'))) {
-          this.changePaymentMethod(cart.cart.payment.default);
-          return;
+        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
+          if (paymentMethods[cart.cart.payment.default].status !== 'disabled') {
+            this.changePaymentMethod(cart.cart.payment.default);
+            return;
+          }
         }
       }
 
       // Select first payment method by default.
       const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
       let firstMethod = sortedMethods[0].code;
-      if (firstMethod === 'tabby' && paymentMethods[firstMethod].status === 'disabled') {
+      if (paymentMethods[firstMethod].status === 'disabled') {
         firstMethod = hasValue(sortedMethods[1]) ? sortedMethods[1].code : null;
       }
       if (firstMethod) {

@@ -424,7 +424,7 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
  * @returns {object}
  *   Returns a ajax response.
  */
-const callSyncMagentoApi = (url, method = 'GET', dataObject = {}) => {
+const callMagentoApiSynchronous = (url, method = 'GET', dataObject = {}) => {
   const requestHeaders = {
     'Content-Type': 'application/json',
     'Alshaya-Channel': 'web',
@@ -438,6 +438,7 @@ const callSyncMagentoApi = (url, method = 'GET', dataObject = {}) => {
     url: i18nMagentoUrl(url),
     type: method,
     async: false,
+    cache: false,
     data: dataObject,
     headers: requestHeaders,
     success(response) {
@@ -1484,7 +1485,7 @@ export {
   associateCartToCustomer,
   callDrupalApi,
   callMagentoApi,
-  callSyncMagentoApi,
+  callMagentoApiSynchronous,
   preUpdateValidation,
   getCart,
   getCartWithProcessedData,

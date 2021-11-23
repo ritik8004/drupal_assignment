@@ -203,7 +203,7 @@ export default class PaymentMethod extends React.Component {
     if (method.code === 'tabby' && hasValue(method.status)) {
       additionalClasses = method.status;
       if (method.status === 'disabled') {
-        methodNameSuffix = hasValue(method.rejection_reason) ? `(${method.rejection_reason})` : '';
+        methodNameSuffix = method.rejection_reason;
       }
     }
 
