@@ -176,12 +176,20 @@ export default class CompletePurchase extends React.Component {
       ? cart.cart.payment.method
       : '';
 
-    let buttonText = Drupal.t('complete purchase');
+    let buttonText = '';
 
-    if (paymentMethod === 'postpay') {
-      buttonText = Drupal.t('Continue with postpay');
-    } else if (paymentMethod === 'checkout_com_upapi_benefitpay') {
-      buttonText = Drupal.t('Continue with Benefit pay');
+    switch (paymentMethod) {
+      case 'postpay':
+        buttonText = Drupal.t('Continue with postpay');
+        break;
+      case 'checkout_com_upapi_benefitpay':
+        buttonText = Drupal.t('Continue with Benefit pay');
+        break;
+      case 'tabby':
+        buttonText = Drupal.t('Continue with tabby');
+        break;
+      default:
+        buttonText = Drupal.t('complete purchase');
     }
 
     return (

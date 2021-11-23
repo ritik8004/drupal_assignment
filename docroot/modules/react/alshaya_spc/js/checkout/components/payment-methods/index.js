@@ -19,6 +19,7 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -117,14 +118,29 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
-    const paymentMethods = this.getPaymentMethods(true);
+    const allPaymentMethods = this.getPaymentMethods(true);
+    const { cart } = this.props;
+    const { postpayAvailable } = this.state;
+
+    // Prepare object containing only the methods available for use.
+    const paymentMethods = {};
+    Object.keys(allPaymentMethods).forEach((key) => {
+      // If status is set and disabled, do not use the method.
+      if (hasValue(allPaymentMethods[key].status) && allPaymentMethods[key].status === 'disabled') {
+        return;
+      }
+
+      // If postpay is not available remove from available methods list.
+      if (key === 'postpay' && !postpayAvailable[cart.cart.cart_total]) {
+        return;
+      }
+
+      paymentMethods[key] = allPaymentMethods[key];
+    });
 
     if (Object.keys(paymentMethods).length === 0) {
       return;
     }
-
-    const { postpayAvailable } = this.state;
-    const { cart } = this.props;
 
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
     if (cart.cart.payment.method === undefined
@@ -135,24 +151,16 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
         && paymentMethods[cart.cart.payment.method] !== undefined) {
-        // For PostPay there is additional check required on frontend, it is
-        // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
-          this.changePaymentMethod(cart.cart.payment.method);
-          return;
-        }
+        this.changePaymentMethod(cart.cart.payment.method);
+        return;
       }
 
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
         && paymentMethods[cart.cart.payment.default] !== undefined) {
-        // For PostPay there is additional check required on frontend, it is
-        // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
-          this.changePaymentMethod(cart.cart.payment.default);
-          return;
-        }
+        this.changePaymentMethod(cart.cart.payment.default);
+        return;
       }
 
       // Select first payment method by default.
@@ -186,7 +194,16 @@ export default class PaymentMethods extends React.Component {
           if (method.code === 'tabby' && !Tabby.isAvailable()) {
             return;
           }
+
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
+          // Get the product available for tabby.
+          if (method.code === 'tabby') {
+            const available = Tabby.productAvailable(this);
+            paymentMethods[method.code].status = available.status;
+            if (hasValue(available.rejection_reason)) {
+              paymentMethods[method.code].rejection_reason = available.rejection_reason;
+            }
+          }
         }
       });
     } else {

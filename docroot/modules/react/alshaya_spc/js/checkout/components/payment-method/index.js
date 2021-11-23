@@ -26,6 +26,7 @@ import PaymentMethodCheckoutComUpapiFawry
 import cartActions from '../../../utilities/cart_actions';
 import PaymentMethodTabby from '../payment-method-tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -186,6 +187,7 @@ export default class PaymentMethod extends React.Component {
       return (null);
     }
     let additionalClasses = '';
+    let methodNameSuffix = '';
 
     // Hide by default if AB Testing is enabled and method not selected already.
     if (method.ab_testing && !(isSelected)) {
@@ -195,6 +197,14 @@ export default class PaymentMethod extends React.Component {
     // @todo make this work with generic way added now above.
     if (method.code === 'postpay') {
       additionalClasses = drupalSettings.postpay_widget_info.postpay_mode_class;
+    }
+
+    // Set addition class for tabby.
+    if (method.code === 'tabby' && hasValue(method.status)) {
+      additionalClasses = method.status;
+      if (method.status === 'disabled') {
+        methodNameSuffix = method.rejection_reason;
+      }
     }
 
     return (
@@ -213,6 +223,9 @@ export default class PaymentMethod extends React.Component {
             <div className="payment-method-label-wrapper">
               <label className="radio-sim radio-label">
                 {method.name}
+                <ConditionalView condition={methodNameSuffix !== ''}>
+                  <span className="payment-method-name-suffix">{methodNameSuffix}</span>
+                </ConditionalView>
                 <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">
@@ -232,8 +245,7 @@ export default class PaymentMethod extends React.Component {
                 />
               </ConditionalView>
             </div>
-
-            <PaymentMethodIcon methodName={method.code} />
+            <PaymentMethodIcon methodName={method.code} methodLabel={method.name} />
           </div>
 
           <ConditionalView condition={isSelected && method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
@@ -282,7 +294,7 @@ export default class PaymentMethod extends React.Component {
             </div>
           </ConditionalView>
 
-          <ConditionalView condition={(isSelected && method.code === 'tabby')}>
+          <ConditionalView condition={(isSelected && method.code === 'tabby' && method.status === 'enabled')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <PaymentMethodTabby
                 ref={this.paymentMethodTabby}
