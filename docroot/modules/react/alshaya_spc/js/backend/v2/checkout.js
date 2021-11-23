@@ -1910,10 +1910,16 @@ window.commerceBackend.addShippingMethod = async (data) => {
   }
 
   if (_isEmpty(carrierInfo)) {
-    carrierInfo = {
-      code: shippingMethods[0].carrier_code,
-      method: shippingMethods[0].method_code,
-    };
+    // Find the first available method.
+    const selectedMethod = shippingMethods.find(
+      (method) => method.available === true,
+    );
+    if (selectedMethod && selectedMethod !== null) {
+      carrierInfo = {
+        code: selectedMethod.carrier_code,
+        method: selectedMethod.method_code,
+      };
+    }
   }
 
   const params = {
