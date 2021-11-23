@@ -23,6 +23,10 @@ import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
 import AdvantageCardExcludedItem from '../advantage-card';
 import CartShippingMethods from '../cart-shipping-methods';
+import { isWishlistEnabled } from '../../../../../js/utilities/wishlistHelper';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
+import WishlistPopupBlock from '../../../../../alshaya_wishlist/js/components/wishlist-popup-block';
+import { isProductExistInWishList } from '../../../../../alshaya_wishlist/js/utilities/wishlist-utils';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -30,6 +34,9 @@ export default class CartItem extends React.Component {
     this.state = {
       wait: true,
       productInfo: null,
+      showWishlistPopup: false,
+      // wishlistResponse tracks if user has responded in wishlist popup.
+      wishlistResponse: false,
     };
   }
 
@@ -62,9 +69,38 @@ export default class CartItem extends React.Component {
   };
 
   /**
+   * To open the wishlist confirmation popup.
+   * Popup will show up while deleting item from cart.
+   */
+  openWishlistModal = () => {
+    this.setState({
+      showWishlistPopup: true,
+    });
+  }
+
+  /**
+   * To close the wishlist confirmation popup.
+   * Once popup closes, we move on to deleting the item from cart.
+   */
+  closeWishlistModal = () => {
+    const { item: { sku, id } } = this.props;
+    this.setState({ showWishlistPopup: false, wishlistResponse: true }, () => {
+      this.removeCartItem(sku, 'remove item', id);
+    });
+  };
+
+  /**
    * Remove item from the cart.
    */
   removeCartItem = (sku, action, id) => {
+    // Open wishlist confirmation popup if feature is enabled.
+    if (isWishlistEnabled()) {
+      const { wishlistResponse } = this.state;
+      if (!wishlistResponse && !(isProductExistInWishList(sku))) {
+        this.openWishlistModal();
+        return;
+      }
+    }
     // Adding class on remove button for showing progress when click.
     document.getElementById(`remove-item-${id}`).classList.add('loading');
     const afterCartUpdate = () => {
@@ -168,7 +204,7 @@ export default class CartItem extends React.Component {
   }
 
   render() {
-    const { wait } = this.state;
+    const { wait, showWishlistPopup } = this.state;
     if (wait === true) {
       return (null);
     }
@@ -263,6 +299,17 @@ export default class CartItem extends React.Component {
               { itemCodeLabel }
               {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
+            <ConditionalView condition={isWishlistEnabled()}>
+              <div className="spc-product-wishlist-link">
+                {/* @todo: we need to move this to proper place. */}
+                <WishlistContainer
+                  context="cart"
+                  position="cart-item"
+                  sku={sku}
+                  format="text"
+                />
+              </div>
+            </ConditionalView>
           </div>
           <div className="spc-product-tile-actions">
             <button
@@ -275,7 +322,14 @@ export default class CartItem extends React.Component {
             >
               <TrashIconSVG />
             </button>
-
+            <ConditionalView condition={isWishlistEnabled() && showWishlistPopup}>
+              <WishlistPopupBlock
+                sku={sku}
+                title={title}
+                url={url}
+                closeWishlistModal={() => this.closeWishlistModal()}
+              />
+            </ConditionalView>
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect

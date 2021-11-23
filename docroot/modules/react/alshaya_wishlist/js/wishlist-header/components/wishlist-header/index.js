@@ -1,6 +1,7 @@
 import React from 'react';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
-import { getWishlistLabel } from '../../../utilities/wishlist-utils';
+import { smoothScrollTo } from '../../../../../js/utilities/smoothScroll';
+import { getWishlistLabel, getWishlistNotificationTime } from '../../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
 
 export default class WishlistHeader extends React.Component {
@@ -16,15 +17,41 @@ export default class WishlistHeader extends React.Component {
     // @todo Add logic to get wishlist content for current user.
 
     // Add event listener for add to wishlist action.
-    document.addEventListener('addWishlistNotification', this.addWishlistNotification);
+    document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
   }
 
-  addWishlistNotification = (e) => {
-    if (e.detail) {
-      this.setState({
-        wishListItemData: e.detail,
-      });
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  /**
+   * Set timer for wishlist notifcation.
+   */
+  setTimer() {
+    if (this.timer != null) {
+      clearTimeout(this.timer);
     }
+
+    // Hide notification after certain milliseconds.
+    this.timer = setTimeout(() => {
+      this.setState({
+        wishListItemData: null,
+      });
+      this.timer = null;
+    }, getWishlistNotificationTime());
+  }
+
+  /**
+   * Once item is added to wishlist, product details
+   * are shown in notification panel.
+   */
+  handleAddToWishList = (data) => {
+    const { productInfo } = data.detail;
+    this.setTimer();
+    this.setState({
+      wishListItemData: productInfo,
+    });
+    smoothScrollTo('#wishlist-header-wrapper');
   };
 
   render() {

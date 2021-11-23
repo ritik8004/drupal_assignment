@@ -42,5 +42,9 @@ function _alshaya_wishlist_translations() {
       'ar' => 'سجل الآن',
       'context' => 'wishlist',
     ],
+    'Do you want to move the product to @wishlist_label?' => [
+      'ar' => 'هل تريد نقل المنتج إلىwishlist_label؟',
+      'context' => 'wishlist',
+    ],
   ];
 }

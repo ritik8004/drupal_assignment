@@ -116,15 +116,17 @@ export const addProductToWishListForGuestUsers = (productSku) => {
 /**
  * Utility function to add a product to wishlist.
  */
-export const addProductToWishList = (productSku, setWishListStatus) => {
+export const addProductToWishList = (productInfo, setWishListStatus) => {
   // For Guest users.
   if (isAnonymousUser()) {
-    addProductToWishListForGuestUsers(productSku);
+    addProductToWishListForGuestUsers(productInfo.sku);
   }
 
   // @todo: we need to work on for logged in users.
-  setWishListStatus(true);
-  dispatchCustomEvent('productAddedToWishlist', { sku: productSku, addedInWishList: true });
+  if (setWishListStatus) {
+    setWishListStatus(true);
+  }
+  dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
 };
 
 /**
@@ -182,3 +184,8 @@ export const prepareProductDetailsForWishList = (productSku) => {
  * Utility function to prepare product details for wishlist.
  */
 export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? drupalSettings.wishlist.wishlist_label : '');
+
+/**
+ * Utility function to get wishlist notification time.
+ */
+export const getWishlistNotificationTime = () => (3000);
