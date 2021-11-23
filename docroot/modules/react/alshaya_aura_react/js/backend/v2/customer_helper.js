@@ -159,9 +159,35 @@ const getCustomerProgressTracker = (customerId) => {
     });
 };
 
+/**
+ * Set loyalty card in cart.
+ *
+ * @return array
+ *   API response status.
+ */
+const setLoyaltyCard = (data) => {
+  return callMagentoApi('/V1/apc/set-loyalty-card', 'POST', data).then((response) => {
+    if (response.status !== 200 && hasValue(response.data.error)) {
+      logger.notice('Error while trying to set loyalty card in cart. Request Data: @data. Message: @message.', {
+        '@data': data,
+        '@message': response.data.error_message,
+      });
+      return getErrorResponse(response.data.error_message, response.data.error_code);
+    }
+
+    responseData = {
+      'status': response,
+    };
+
+    return responseData;
+  });
+}
+
+
 export {
   getCustomerInfo,
   getCustomerPoints,
   getCustomerTier,
   getCustomerProgressTracker,
+  setLoyaltyCard,
 };
