@@ -1,5 +1,9 @@
 header .block-cart-mini-block,
 header .block-alshaya-react-mini-cart {
+  @include breakpoint($only-mobile) {
+    width: 40%;
+  }
+
   .quantity {
     bottom: 1rem;
     #{$left}: 1.25rem;
