@@ -7,6 +7,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ConditionalView from '../../../common/components/conditional-view';
 import ApplePayButton from '../payment-method-apple-pay/applePayButton';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -190,6 +191,14 @@ export default class CompletePurchase extends React.Component {
         break;
       default:
         buttonText = Drupal.t('complete purchase');
+    }
+
+    // Check if tabby is disabled.
+    if (paymentMethod === 'tabby') {
+      const available = Tabby.productAvailable(this);
+      if (available.status === 'disabled') {
+        buttonText = Drupal.t('complete purchase');
+      }
     }
 
     return (

@@ -27,7 +27,6 @@ import cartActions from '../../../utilities/cart_actions';
 import PaymentMethodTabby from '../payment-method-tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import Tabby from '../../../../../js/tabby/utilities/tabby';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -39,17 +38,10 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodPostpay = React.createRef();
     this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
-    this.state = {
-      tabbyProductStatus: null,
-    };
   }
 
   componentDidMount() {
     setUpapiApplePayCofig();
-    const { method } = this.props;
-    if (Tabby.isAvailable() && method.code === 'tabby') {
-      Tabby.productAvailable(this);
-    }
   }
 
   validateBeforePlaceOrder = async () => {
@@ -179,7 +171,6 @@ export default class PaymentMethod extends React.Component {
 
   render() {
     const { method } = this.props;
-    const { tabbyProductStatus } = this.state;
     const {
       isSelected,
       changePaymentMethod,
@@ -209,11 +200,10 @@ export default class PaymentMethod extends React.Component {
     }
 
     // Set addition class for tabby.
-    // @todo: make this dynamic.
-    if (method.code === 'tabby' && hasValue(tabbyProductStatus)) {
-      additionalClasses = tabbyProductStatus;
-      if (tabbyProductStatus === 'disabled') {
-        methodNameSuffix = '(Not Available)';
+    if (method.code === 'tabby' && hasValue(method.status)) {
+      additionalClasses = method.status;
+      if (method.status === 'disabled') {
+        methodNameSuffix = hasValue(method.rejection_reason) ? `(${method.rejection_reason})` : '';
       }
     }
 
@@ -304,7 +294,7 @@ export default class PaymentMethod extends React.Component {
             </div>
           </ConditionalView>
 
-          <ConditionalView condition={(isSelected && method.code === 'tabby' && tabbyProductStatus === 'enabled')}>
+          <ConditionalView condition={(isSelected && method.code === 'tabby' && method.status === 'enabled')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <PaymentMethodTabby
                 ref={this.paymentMethodTabby}

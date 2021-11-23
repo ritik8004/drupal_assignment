@@ -1,4 +1,4 @@
-(function (Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings) {
   // Function to initialize the promo widget.
   Drupal.tabbyPromoInit = function (selector, amount, source) {
     // Tabby promo change event.
@@ -33,4 +33,20 @@
       header: false
     });
   }
-})(Drupal, drupalSettings);
+  // Function to get the product available.
+  Drupal.tabbyProductAvailable = function (url, headers) {
+    let result;
+    $.ajax({
+      url: url,
+      async: false,
+      headers: headers,
+      success: function (response) {
+        result = response;
+      },
+      error: function (exception) {
+        result = exception;
+      }
+    });
+    return result;
+  }
+})(jQuery, Drupal, drupalSettings);

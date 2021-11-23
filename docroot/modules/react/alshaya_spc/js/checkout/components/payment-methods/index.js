@@ -19,6 +19,7 @@ import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -125,7 +126,6 @@ export default class PaymentMethods extends React.Component {
 
     const { postpayAvailable } = this.state;
     const { cart } = this.props;
-
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
@@ -137,7 +137,8 @@ export default class PaymentMethods extends React.Component {
         && paymentMethods[cart.cart.payment.method] !== undefined) {
         // For PostPay there is additional check required on frontend, it is
         // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
+        if ((postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay')
+          && ((cart.cart.payment.method !== 'tabby') || (cart.cart.payment.method === 'tabby' && paymentMethods[cart.cart.payment.method].status !== 'disabled'))) {
           this.changePaymentMethod(cart.cart.payment.method);
           return;
         }
@@ -149,7 +150,8 @@ export default class PaymentMethods extends React.Component {
         && paymentMethods[cart.cart.payment.default] !== undefined) {
         // For PostPay there is additional check required on frontend, it is
         // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
+        if ((postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay')
+          && ((cart.cart.payment.default !== 'tabby') || (cart.cart.payment.default === 'tabby' && paymentMethods[cart.cart.payment.default].status !== 'disabled'))) {
           this.changePaymentMethod(cart.cart.payment.default);
           return;
         }
@@ -157,7 +159,13 @@ export default class PaymentMethods extends React.Component {
 
       // Select first payment method by default.
       const sortedMethods = Object.values(paymentMethods).sort((a, b) => a.weight - b.weight);
-      this.changePaymentMethod(sortedMethods[0].code);
+      let firstMethod = sortedMethods[0].code;
+      if (firstMethod === 'tabby' && paymentMethods[firstMethod].status === 'disabled') {
+        firstMethod = hasValue(sortedMethods[1]) ? sortedMethods[1].code : null;
+      }
+      if (firstMethod) {
+        this.changePaymentMethod(firstMethod);
+      }
     }
   };
 
@@ -182,11 +190,17 @@ export default class PaymentMethods extends React.Component {
           if (method.code === 'postpay' && !Postpay.isAvailable(this)) {
             return;
           }
-
-          if (method.code === 'tabby' && !Tabby.isAvailable()) {
-            return;
-          }
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
+          if (method.code === 'tabby') {
+            if (!Tabby.isAvailable()) {
+              return;
+            }
+            const available = Tabby.productAvailable(this);
+            paymentMethods[method.code].status = available.status;
+            if (hasValue(available.rejection_reason)) {
+              paymentMethods[method.code].rejection_reason = available.rejection_reason;
+            }
+          }
         }
       });
     } else {
@@ -298,12 +312,16 @@ export default class PaymentMethods extends React.Component {
     Object.entries(activePaymentMethods).forEach(([, method], index) => {
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
+      let isSelected = (cart.cart.payment.method === method.code);
+      if (method.code === 'tabby' && method.status === 'disabled') {
+        isSelected = false;
+      }
       methods.push(<PaymentMethod
         cart={cart}
         ref={this.paymentMethodRefs[method.code]}
         refreshCart={refreshCart}
         changePaymentMethod={this.changePaymentMethod}
-        isSelected={cart.cart.payment.method === method.code}
+        isSelected={isSelected}
         key={method.code}
         method={method}
         animationOffset={animationOffset}

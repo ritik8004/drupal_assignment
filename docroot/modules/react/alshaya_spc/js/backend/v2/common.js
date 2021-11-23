@@ -411,6 +411,49 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
 };
 
 /**
+ * Make an synchronous AJAX call to Magento API.
+ * @todo: Update CallMagentoApi with sync request.
+ *
+ * @param {string} url
+ *   The url to send the request to.
+ * @param {string} method
+ *   The request method.
+ * @param {object} dataObject
+ *   The object to send for POST request.
+ *
+ * @returns {object}
+ *   Returns a ajax response.
+ */
+const callSyncMagentoApi = (url, method = 'GET', dataObject = {}) => {
+  const requestHeaders = {
+    'Content-Type': 'application/json',
+    'Alshaya-Channel': 'web',
+    RequestTime: Date.now(),
+  };
+  if (isUserAuthenticated()) {
+    requestHeaders.Authorization = `Bearer ${window.drupalSettings.userDetails.customerToken}`;
+  }
+  let result;
+  jQuery.ajax({
+    url: i18nMagentoUrl(url),
+    type: method,
+    async: false,
+    data: dataObject,
+    headers: requestHeaders,
+    success(response) {
+      result = response;
+    },
+    error(exception) {
+      logger.error('Something happened in setting up the request that triggered an error: @message.', {
+        '@message': exception.statusText,
+      });
+      result = exception;
+    },
+  });
+  return result;
+};
+
+/**
  * Make an AJAX call to Drupal API.
  *
  * @param {string} url
@@ -1441,6 +1484,7 @@ export {
   associateCartToCustomer,
   callDrupalApi,
   callMagentoApi,
+  callSyncMagentoApi,
   preUpdateValidation,
   getCart,
   getCartWithProcessedData,
