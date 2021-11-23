@@ -8,6 +8,67 @@
 global $magentos;
 
 $magentos = [
+  // Debenhams.
+  'dh_qa' => [
+    'url' => 'https://integration-5ojmyuq-gqhhjajenogck.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'akr2k4q7g3eipb6fm7loh07zt2zi3xrk',
+      'consumer_secret' => '60vh9v008i8z6be31mt7wp8bg9jyfe2j',
+      'access_token' => 'c87n6i81vbkzqb5txbt0834fwppdmqye',
+      'access_token_secret' => 's54ks6jdfpw6uhbs4utjxusb1ha9114b',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ],
+  ],
+  'dh_uat' => [
+    'url' => 'https://deb-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '4x8qp8svm57i1oqtw99q92hnz1c332pb',
+      'consumer_secret' => 'u1y5l7f3q3njwyzzuuchhwcdfa1r6mpb',
+      'access_token' => 'm8wak3az1btketol3v7ttgal834582s6',
+      'access_token_secret' => '2pbeyvbqcxd4eq3lh3f9nuw7q8yc9h9f',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 5],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 8, 'ar' => 11],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 20, 'ar' => 17],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 26, 'ar' => 23],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
+    ],
+  ],
   // COS.
   'cos_integration' => [
     'url' => 'https://integration-5ojmyuq-vlvasu2xupli4.eu-3.magentosite.cloud',
