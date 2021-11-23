@@ -1,6 +1,6 @@
 import { callMagentoApi, getCart } from './common';
 import { getApiEndpoint } from './utility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import StaticStorage from './staticStorage';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
