@@ -304,6 +304,9 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $page['#attached']['drupalSettings']['cart']['retryMaxAttempts'] = Settings::get('alshaya_checkout_settings')['max_native_update_attempts'] ?? 10;
   $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
+
+  $checkout_settings = Settings::get('alshaya_checkout_settings');
+  $page['#attached']['drupalSettings']['cart']['doubleCheckEnabled'] = $checkout_settings['place_order_double_check_after_exception'];
 }
 
 /**
