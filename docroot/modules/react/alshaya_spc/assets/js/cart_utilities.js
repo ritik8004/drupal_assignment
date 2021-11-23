@@ -292,4 +292,26 @@
     return analytics;
   };
 
+  /**
+   * Provides extra DataDog contexts.
+   */
+  document.addEventListener('dataDogContextAlter', (e) => {
+    const context = e.detail;
+    // These variables should be considered as helpers for troubleshooting but
+    // may in some cases not be accurate.
+    const uid = drupalSettings.userDetails.customerId;
+    if (uid) {
+      context.cCustomerId = uid;
+    }
+
+    const cartId = window.commerceBackend.getCartId();
+    if (cartId) {
+      context.cCartId = cartId;
+      const cartData = Drupal.alshayaSpc.getCartData();
+      if (typeof cartData.cart_id_int !== 'undefined') {
+        context.cCartIdInt = cartData.cart_id_int;
+      }
+    }
+  });
+
 })(jQuery, Drupal);
