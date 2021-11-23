@@ -26,7 +26,7 @@ const Tabby = {
     if (hasValue(response.available_products)) {
       const { installment } = response.available_products;
       if (installment.is_available) {
-        tabbyStatus[cart.cart.cart_total].status = 'disabled';
+        tabbyStatus[cart.cart.cart_total].status = 'enabled';
       } else {
         tabbyStatus[cart.cart.cart_total].rejection_reason = hasValue(installment.rejection_reason) ? installment.rejection_reason : '';
       }
