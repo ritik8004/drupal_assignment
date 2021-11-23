@@ -1,4 +1,4 @@
-@javascript @checkoutPayment @auth @clickCollect @fawry @tbsegprod
+@javascript @checkoutPayment @auth @clickCollect @fawry
 Feature: SPC Checkout using Click & Collect store for Guest user using Fawry payment method
 
   Background:

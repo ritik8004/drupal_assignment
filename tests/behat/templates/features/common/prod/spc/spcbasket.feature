@@ -12,7 +12,8 @@ Feature: Test basket page
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I click on Add-to-cart button
-    And I wait 5 seconds
+    And I wait 10 seconds
+    And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait 30 seconds
     And I wait for AJAX to finish
@@ -56,7 +57,7 @@ Feature: Test basket page
     And I wait 5 seconds
     And I wait for the page to load
     And I click on Add-to-cart button
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
@@ -85,7 +86,7 @@ Feature: Test basket page
     And I wait 5 seconds
     And I wait for the page to load
     And I click on Add-to-cart button
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
@@ -104,7 +105,7 @@ Feature: Test basket page
     And I wait 5 seconds
     And I wait for the page to load
     And I click on Add-to-cart button
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
