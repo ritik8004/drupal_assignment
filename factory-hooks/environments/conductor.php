@@ -1582,6 +1582,76 @@ $conductors = [
   'cosjo_prod' => [
     'site_id' => 503,
   ],
+  'dhkw_dev' => [
+    'hmac_id' => '638f920998d848a29c35c0b943778b78',
+    'hmac_secret' => 'ZDgyNDBiYTQtZjI2Yi00',
+    'site_id' => 512,
+  ],
+  'dhsa_dev' => [
+    'hmac_id' => '0ea10f093feb465fa8e654521ee8d4bd',
+    'hmac_secret' => 'ZmQ2YTlhMTItNzc1YS00',
+    'site_id' => 513,
+  ],
+  'dhae_dev' => [
+    'hmac_id' => 'c76f0bef22764605ae8bdaa6036c25c8',
+    'hmac_secret' => 'MGQzNjlhZDYtMTYxNS00',
+    'site_id' => 514,
+  ],
+  'dheg_dev' => [
+    'hmac_id' => '55d26e5023ec47dbb41892ff20f68d8e',
+    'hmac_secret' => 'MjY4N2NiNGItZTIzOS00',
+    'site_id' => 515,
+  ],
+  'dhbh_dev' => [
+    'hmac_id' => '68797fb595b945a681362a5192417ffc',
+    'hmac_secret' => 'ZjlkNGFiMGUtNGVmOS00',
+    'site_id' => 516,
+  ],
+  'dhqa_dev' => [
+    'hmac_id' => '97ed61cf86cc437785342156093439dc',
+    'hmac_secret' => 'YzI1Y2FhMGEtZTRhYy00',
+    'site_id' => 517,
+  ],
+  'dhjo_dev' => [
+    'hmac_id' => '4fad6d9a131b40a9bd96535bed7e8d8c',
+    'hmac_secret' => 'ZDU1MzA3MTYtZmFkMy00',
+    'site_id' => 518,
+  ],
+  'dhkw_uat' => [
+    'hmac_id' => '1e2c383e786c4ffd941120507d1478c7',
+    'hmac_secret' => 'MGUyMTlkNzgtYTFlMC00',
+    'site_id' => 505,
+  ],
+  'dhsa_uat' => [
+    'hmac_id' => '99e41c22663c42509aac04b658aa5ba5',
+    'hmac_secret' => 'N2JkYWRlN2ItMjM1My00',
+    'site_id' => 506,
+  ],
+  'dhae_uat' => [
+    'hmac_id' => '81c7c0d7854746eb8442818a2881d101',
+    'hmac_secret' => 'NmRhNjk2NDEtMzU3MS00',
+    'site_id' => 507,
+  ],
+  'dheg_uat' => [
+    'hmac_id' => '3ca3b7d6963741f8809908d370290452',
+    'hmac_secret' => 'YjIyNjRmNjctOTdkNS00',
+    'site_id' => 508,
+  ],
+  'dhbh_uat' => [
+    'hmac_id' => 'eb464fce240b4d0396ad895cb7a1bc27',
+    'hmac_secret' => 'Njg2ZGFjNmMtOWYwNS00',
+    'site_id' => 509,
+  ],
+  'dhqa_uat' => [
+    'hmac_id' => '346c5692c04b4f8fadd4c554a06faa05',
+    'hmac_secret' => 'NDRmNTU1Y2UtMjkwNC00',
+    'site_id' => 510,
+  ],
+  'dhjo_uat' => [
+    'hmac_id' => 'd7b914cce4b34fe99e48ca1871bb25d5',
+    'hmac_secret' => 'OTc5OGM2ZTgtZDk0MC00',
+    'site_id' => 511,
+  ],
 ];
 
 // Default values for each ACM middleware.
