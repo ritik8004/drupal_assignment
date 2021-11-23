@@ -5,9 +5,6 @@
   transition: opacity 0.2s ease-out;
   z-index: 1;
 }
-article[data-vmode="search_result"]:hover .alshaya_search_mainimage {
-  opacity: 0;
-}
 
 article[data-vmode="search_result"]:hover .alshaya_search_hoverimage {
   transition: opacity 0.2s ease-in;
