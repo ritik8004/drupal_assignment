@@ -9,7 +9,7 @@ import {
   detectCFChallenge,
   detectCaptcha,
 } from './utility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import {
   cartErrorCodes,
   getDefaultErrorMessage,

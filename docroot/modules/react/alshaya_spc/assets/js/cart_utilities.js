@@ -359,7 +359,7 @@
     if (cartId) {
       context.cCartId = cartId;
       const cartData = Drupal.alshayaSpc.getCartData();
-      if (typeof cartData.cart_id_int !== 'undefined') {
+      if (cartData && typeof cartData.cart_id_int !== 'undefined') {
         context.cCartIdInt = cartData.cart_id_int;
       }
     }
