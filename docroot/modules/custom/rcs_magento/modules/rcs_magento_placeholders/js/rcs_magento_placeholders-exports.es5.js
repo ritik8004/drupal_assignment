@@ -152,6 +152,11 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
       break;
 
     case 'navigation_menu':
+      // Early return if the root category is undefined.
+      if (typeof params.category_id === 'undefined') {
+        return null;
+      }
+
       // Prepare request parameters.
       request.data = JSON.stringify({
         // @todo: we are using 'category' API for now which is going to be
