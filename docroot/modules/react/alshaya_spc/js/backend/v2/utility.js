@@ -4,7 +4,7 @@ import {
   removeStorageInfo,
   setStorageInfo,
 } from '../../utilities/storage';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 
 /**
  * Get user role authenticated or anonymous.
