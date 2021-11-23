@@ -19,6 +19,7 @@ variables:
   language_add_to_cart_link: 'أضف إلى سلة التسوق'
   add_to_cart_link: 'Add To Bag'
   create_account: 'Create an Account'
+  language_spc_knet_option: 'عيديتي [KNET]'
   sign_in: 'Sign In'
   find_store: 'Find Store'
   language_link: 'العربية'
