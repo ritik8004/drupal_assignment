@@ -1,4 +1,4 @@
-import logger from './logger';
+import logger from '../../../js/utilities/logger';
 
 const getStringMessage = (key, replacement) => {
   try {
