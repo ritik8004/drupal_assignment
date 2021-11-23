@@ -30,6 +30,7 @@ const Tabby = {
       } else {
         tabbyStatus[cart.cart.cart_total].rejection_reason = hasValue(installment.rejection_reason) ? installment.rejection_reason : '';
       }
+      StaticStorage.set('tabbyStatus', tabbyStatus);
     }
 
     if (hasValue(response.statusText) && response.statusText === 'error') {
@@ -38,7 +39,6 @@ const Tabby = {
         '@errorCode': response.status,
       });
     }
-    StaticStorage.set('tabbyStatus', tabbyStatus);
     return tabbyStatus[cart.cart.cart_total];
   },
 };
