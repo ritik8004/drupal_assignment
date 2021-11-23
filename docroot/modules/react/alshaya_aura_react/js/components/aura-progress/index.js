@@ -1,8 +1,7 @@
 import React from 'react';
-import { getUserAuraTier, getUserDetails, getAllAuraTier } from '../../utilities/helper';
+import { getAllAuraTier } from '../../utilities/helper';
 import AuraProgressString from './progress-string';
 import isRTL from '../../../../alshaya_spc/js/utilities/rtl';
-import { getAPIData } from '../../utilities/api/fetchApiData';
 import PointsExpiryMessage
   from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import AuraProgressBar from './progress-bar';
@@ -20,8 +19,7 @@ class AuraProgressWrapper extends React.Component {
   }
 
   componentDidMount() {
-    const apiUrl = `get/loyalty-club/get-progress-tracker?uid=${getUserDetails().id}`;
-    const apiData = getAPIData(apiUrl);
+    const apiData = window.auraBackend.getProgressTracker();
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -79,6 +77,7 @@ class AuraProgressWrapper extends React.Component {
     const {
       expiringPoints,
       expiryDate,
+      tier,
     } = this.props;
 
     if (wait === true) {
@@ -89,7 +88,7 @@ class AuraProgressWrapper extends React.Component {
       );
     }
 
-    let currentTierLevel = getUserAuraTier();
+    let currentTierLevel = tier;
 
     // If user is already in tier3 i.e VIP, show the progress bar
     // for tier2 to tier3 as there is no tier beyond tier3.

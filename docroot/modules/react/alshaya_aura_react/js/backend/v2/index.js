@@ -6,7 +6,12 @@ import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
 import search from './search_helper';
 import validateInput from './validation_helper';
 import { getErrorResponse } from '../../../../js/utilities/error';
-import { getCustomerInfo, getCustomerPoints, getCustomerTier } from './customer_helper';
+import {
+  getCustomerInfo,
+  getCustomerPoints,
+  getCustomerTier,
+  getCustomerProgressTracker,
+} from './customer_helper';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -210,6 +215,44 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
       responseData = { ...responseData, ...customerTier };
     }
   }
+
+  return { data: responseData };
+};
+
+/**
+ * Fetches progress tracker for the current user.
+ *
+ * @returns {Object}
+ *   Return progress tracker data from API response.
+ */
+window.auraBackend.getProgressTracker = async () => {
+  // Get user details from drupalSettings.
+  const { customerId } = drupalSettings.userDetails;
+  const { uid } = drupalSettings.user;
+
+  if (!hasValue(customerId) || !hasValue(uid)) {
+    logger.warning('Error while trying to get progress tracker of the user. No customer available in session. Customer Id: @customerId, User Id: @uid', {
+      '@customerId': customerId,
+      '@uid': uid,
+    });
+
+    return getErrorResponse('No user in session', 404);
+  }
+
+  const progressTracker = await getCustomerProgressTracker(customerId);
+
+  if (hasValue(progressTracker.error)) {
+    logger.error('Error while trying to get progress tracker of the user with customer id @customerId. Message: @message', {
+      '@customerId': customerId,
+      '@message': progressTracker.error_message || '',
+    });
+    return getErrorResponse(progressTracker.error_message, progressTracker.error_code);
+  }
+
+  const responseData = {
+    status: true,
+    data: progressTracker,
+  };
 
   return { data: responseData };
 };
