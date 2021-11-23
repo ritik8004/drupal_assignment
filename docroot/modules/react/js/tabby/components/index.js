@@ -21,7 +21,7 @@ const TabbyWidget = (props) => {
       );
     case 'checkout':
       return (
-        <button type="button" className={classNames} data-tabby-info="installments">ⓘ</button>
+        <button type="button" className={classNames} data-tabby-info="installments" />
       );
     default:
       return null;

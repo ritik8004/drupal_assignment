@@ -1,0 +1,56 @@
+#spc-checkout {
+  .spc-checkout-payment-options {
+    .payment-method-tabby {
+      .payment-method-top-panel {
+        padding-#{$left}: 0;
+
+        @include breakpoint($desktop) {
+          align-items: inherit;
+          justify-content: space-between;
+        }
+
+        .radio-label {
+          width: auto;
+        }
+
+        .installment-popup {
+          @include icon(infomation, after) {
+            display: block;
+            font-size: 1rem;
+            width: 1.063rem;
+            height: 1.063rem;
+            color: $spc_tooltip_icon;
+            position: absolute;
+            bottom: 0;
+            #{$left}: 0;
+            padding-#{$left}: 0.3125rem;
+          }
+
+          flex-grow: 1;
+          padding-top: 0;
+          background: unset;
+          border: unset;
+          position: relative;
+        }
+      }
+
+      .tabby-promo-snippet__logo-img {
+        @include breakpoint($desktop) {
+          padding-#{$left}: 3rem;
+          margin-top: 0.625rem;
+        }
+      }
+
+      .payment-method-form {
+        .tabby {
+          padding-#{$left}: 3rem;
+          padding-#{$right}: 1.25rem;
+
+          @include breakpoint($upto-desktop) {
+            padding-top: 0.625rem;
+          }
+        }
+      }
+    }
+  }
+}

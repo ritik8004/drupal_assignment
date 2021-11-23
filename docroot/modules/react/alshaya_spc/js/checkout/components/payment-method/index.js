@@ -210,25 +210,29 @@ export default class PaymentMethod extends React.Component {
               name="payment-method"
             />
 
-            <label className="radio-sim radio-label">
-              {method.name}
-              <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
-                <div className="spc-payment-method-desc">
-                  <div className="desc-content">
-                    <CodSurchargeInformation
-                      surcharge={cart.cart.surcharge}
-                      messageKey="cod_surcharge_short_description"
-                    />
+            <div className="payment-method-label-wrapper">
+              <label className="radio-sim radio-label">
+                {method.name}
+                <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
+                  <div className="spc-payment-method-desc">
+                    <div className="desc-content">
+                      <CodSurchargeInformation
+                        surcharge={cart.cart.surcharge}
+                        messageKey="cod_surcharge_short_description"
+                      />
+                    </div>
                   </div>
-                </div>
+                </ConditionalView>
+              </label>
+
+              <ConditionalView condition={method.code === 'tabby'}>
+                <TabbyWidget
+                  pageType="checkout"
+                  classNames="installment-popup"
+                />
               </ConditionalView>
-            </label>
-            <ConditionalView condition={method.code === 'tabby'}>
-              <TabbyWidget
-                pageType="checkout"
-                classNames="installment-popup"
-              />
-            </ConditionalView>
+            </div>
+
             <PaymentMethodIcon methodName={method.code} />
           </div>
 

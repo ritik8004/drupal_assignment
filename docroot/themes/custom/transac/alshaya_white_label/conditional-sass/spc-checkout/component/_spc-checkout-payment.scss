@@ -16,6 +16,12 @@
       padding-#{$right}: 1.25rem;
       position: relative;
 
+      .payment-method-label-wrapper {
+        .radio-label {
+          display: inline;
+        }
+      }
+
       .radio-label {
         color: $spc-checkout-payment-method-txt;
         width: 100%;
