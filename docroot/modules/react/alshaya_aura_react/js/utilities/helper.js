@@ -2,30 +2,14 @@
  * Helper function to get user's AURA Status.
  */
 function getUserAuraStatus() {
-  let loyaltyStatus = 0;
-  if (typeof drupalSettings.aura !== 'undefined'
-    && typeof drupalSettings.aura.userDetails !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'loyaltyStatus')) {
-    loyaltyStatus = drupalSettings.aura.userDetails.loyaltyStatus
-      ? parseInt(drupalSettings.aura.userDetails.loyaltyStatus, 10)
-      : 0;
-  }
-
-  return loyaltyStatus;
+  return 0;
 }
 
 /**
  * Helper function to get user's AURA tier.
  */
 function getUserAuraTier() {
-  let tier = '';
-  if (typeof drupalSettings.aura !== 'undefined'
-    && typeof drupalSettings.aura.userDetails !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'tier')) {
-    tier = drupalSettings.aura.userDetails.tier || '';
-  }
-
-  return tier;
+  return 'Tier1';
 }
 
 /**

@@ -1,4 +1,4 @@
-import { postAPIData } from '../../utilities/api/fetchApiData';
+import { postAPIData, getAPIData } from '../../utilities/api/fetchApiData';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -72,3 +72,12 @@ window.auraBackend.sendLinkCardOtp = (type, value) => postAPIData('post/loyalty-
   type,
   value,
 });
+
+/**
+ * Fetches loyalty customer details for the current user.
+ *
+ * @returns {Promise}
+ *   The promise object which resolves to the response data and status in case
+ *   of success and the error object in case of error.
+ */
+window.auraBackend.getCustomerDetails = () => getAPIData('get/loyalty-club/get-customer-details');
