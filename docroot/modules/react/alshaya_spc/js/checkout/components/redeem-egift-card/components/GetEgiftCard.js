@@ -43,6 +43,7 @@ const handleSubmit = (e, props) => {
   return true;
 };
 
+// Provies the egift card form.
 const GetEgiftCard = (props) => (
   <div className="egift-wrapper">
     {egiftCardHeader({

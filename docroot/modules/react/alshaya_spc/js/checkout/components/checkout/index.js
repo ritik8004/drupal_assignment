@@ -275,7 +275,7 @@ export default class Checkout extends React.Component {
     const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
       ? Drupal.smartAgent.getInfo()
       : false;
-    // Get the egiftcard infomations.
+    // Get the egiftcard informations.
     const { egiftCard } = drupalSettings;
 
     return (

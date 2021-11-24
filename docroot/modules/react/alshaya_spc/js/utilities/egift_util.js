@@ -1,9 +1,10 @@
 import React from 'react';
 
 /**
+ * Provides the egift card header.
  *
- * @param {*} param0
- * @returns
+ * @param {*} egiftHeading
+ * @param {*} egiftSubHeading
  */
 export const egiftCardHeader = ({
   egiftHeading,
@@ -19,9 +20,13 @@ export const egiftCardHeader = ({
 
 
 /**
+ * Provides different form element.
  *
- * @param {*} param0
- * @returns
+ * @param {*} type
+ * @param {*} name
+ * @param {*} placeholder
+ * @param {*} className
+ * @param {*} buttonText
  */
 export const egiftFormElement = ({
   type = '',

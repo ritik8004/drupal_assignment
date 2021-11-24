@@ -49,7 +49,7 @@ export default class RedeemEgiftCard extends React.Component {
       <div className="redeem-egift-card">
         {/* TO update the Payment Method Icon here for egift. */}
         <PaymentMethodIcon methodName="egiftCart" />
-        <div>{Drupal.t('Redeem eGift Card')}</div>
+        <div>{Drupal.t('Redeem eGift Card', {}, { context: 'egift' })}</div>
         <ConditionalView condition={!codeSent && !codeValidated}>
           <GetEgiftCard
             getCode={this.handleGetCode}
