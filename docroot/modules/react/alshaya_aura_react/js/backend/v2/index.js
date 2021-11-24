@@ -409,11 +409,7 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
     return { data: getErrorResponse('Cart id not available.', 404) };
   }
 
-  // Request Data.
-  const data = {
-    quote_id: cartId,
-    identifier_no: '',
-  };
+  let identifierNo = '';
 
   let searchResponse = {};
   if (action === 'add') {
@@ -426,10 +422,10 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
       return { data: searchResponse };
     }
 
-    data.identifier_no = searchResponse.data.apc_identifier_number;
+    identifierNo = searchResponse.data.apc_identifier_number;
   }
 
-  const response = await setLoyaltyCard(data);
+  const response = await setLoyaltyCard(identifierNo, cartId);
 
   if (hasValue(response.error)) {
     return { data: response };
