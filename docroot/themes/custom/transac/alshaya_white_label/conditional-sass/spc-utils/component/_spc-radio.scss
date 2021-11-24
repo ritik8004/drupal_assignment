@@ -68,7 +68,8 @@ input[type=radio] {
 
 .payment-method-label-wrapper {
   padding-#{$left}: 3rem;
-  padding-top: 1.25rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   padding-#{$right}: 1.75rem;
 
   @include breakpoint($desktop) {
