@@ -15,7 +15,16 @@ const getCustomerInfo = (customerId) => {
 
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
-      if (hasValue(response.data.error) && response.status !== 200) {
+      if (hasValue(response.data.error)) {
+        let responseData = null;
+        // If we have error but response status in 200 then we assume data doesn't exist.
+        if (response.status === 200) {
+          responseData = {
+            auraStatus: 0,
+          };
+          return responseData;
+        }
+
         const message = hasValue(response.data.message) ? response.data.message : '';
         logger.error('Error while trying to fetch customer information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
           '@customerId': customerId,
@@ -27,7 +36,7 @@ const getCustomerInfo = (customerId) => {
 
       const responseData = {
         cardNumber: hasValue(response.data.apc_identifier_number) ? response.data.apc_identifier_number : '',
-        auraStatus: hasValue(response.data.apc_link) ? response.data.apc_link : 0,
+        auraStatus: hasValue(response.data.apc_link) ? response.data.apc_link : '',
         auraPoints: hasValue(response.data.apc_points) ? response.data.apc_points : 0,
         phoneNumber: hasValue(response.data.apc_phone_number) ? response.data.apc_phone_number : '',
         firstName: hasValue(response.data.apc_first_name) ? response.data.apc_first_name : '',
@@ -49,7 +58,7 @@ const getCustomerPoints = (customerId) => {
 
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
-      if (hasValue(response.data.error) && response.status !== 200) {
+      if (hasValue(response.data.error)) {
         const message = hasValue(response.data.message) ? response.data.message : '';
         logger.error('Error while trying to fetch loyalty points for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
           '@customerId': customerId,
@@ -83,7 +92,7 @@ const getCustomerTier = (customerId) => {
 
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
-      if (hasValue(response.data.error) && response.status !== 200) {
+      if (hasValue(response.data.error)) {
         const message = hasValue(response.data.message) ? response.data.message : '';
         logger.error('Error while trying to fetch tier information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
           '@customerId': customerId,
