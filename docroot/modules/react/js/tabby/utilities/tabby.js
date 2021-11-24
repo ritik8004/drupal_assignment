@@ -1,6 +1,6 @@
 import { hasValue } from '../../utilities/conditionsUtility';
 import { getApiEndpoint } from '../../../alshaya_spc/js/backend/v2/utility';
-import logger from '../../../alshaya_spc/js/utilities/logger';
+import logger from '../../utilities/logger';
 import StaticStorage from '../../../alshaya_spc/js/backend/v2/staticStorage';
 import { callMagentoApiSynchronous } from '../../../alshaya_spc/js/backend/v2/common';
 
