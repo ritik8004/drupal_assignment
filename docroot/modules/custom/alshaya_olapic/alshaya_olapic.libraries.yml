@@ -2,6 +2,7 @@ alshaya_olapic_widget:
   js:
     js/alshaya_olapic_widget.js: {}
   dependencies:
+    - core/drupalSettings
     - core/drupal
     - core/jquery
     - core/jquery.once
