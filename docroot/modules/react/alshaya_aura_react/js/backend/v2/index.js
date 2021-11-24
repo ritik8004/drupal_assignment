@@ -266,11 +266,21 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
   if (fetchStatus === true) {
     const customerInfo = await getCustomerInfo(customerId);
 
-    // @todo Add a check here to handle scenarios where customer doesn't
-    // exist in Aura. We will check this once MDC API is updated.
-    if (!hasValue(customerInfo.error)) {
-      responseData = { ...responseData, ...customerInfo };
+    if (hasValue(customerInfo.error)) {
+      logger.error('Error while trying to fetch customer information for user with customer id @customerId. Message: @message', {
+        '@customerId': customerId,
+        '@message': customerInfo.error_message || '',
+      });
+      return getErrorResponse(customerInfo.error_message, customerInfo.error_code);
     }
+
+    // If aura status is 0 i.e user is not signed up in Aura then no need
+    // to fetch other details, return from here.
+    if (customerInfo.auraStatus === 0) {
+      return customerInfo;
+    }
+
+    responseData = { ...responseData, ...customerInfo };
   }
 
   // Call helper to get customer point details only if fetch points
@@ -278,9 +288,15 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
   if (fetchPoints === true) {
     const customerPoints = await getCustomerPoints(customerId);
 
-    if (!hasValue(customerPoints.error)) {
-      responseData = { ...responseData, ...customerPoints };
+    if (hasValue(customerPoints.error)) {
+      logger.error('Error while trying to fetch customer information for user with customer id @customerId. Message: @message', {
+        '@customerId': customerId,
+        '@message': customerPoints.error_message || '',
+      });
+      return getErrorResponse(customerPoints.error_message, customerPoints.error_code);
     }
+
+    responseData = { ...responseData, ...customerPoints };
   }
 
   // Call helper to get customer tier details only if fetch tier
@@ -288,9 +304,15 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
   if (fetchTier === true) {
     const customerTier = await getCustomerTier(customerId);
 
-    if (!hasValue(customerTier.error)) {
-      responseData = { ...responseData, ...customerTier };
+    if (hasValue(customerTier.error)) {
+      logger.error('Error while trying to fetch customer information for user with customer id @customerId. Message: @message', {
+        '@customerId': customerId,
+        '@message': customerTier.error_message || '',
+      });
+      return getErrorResponse(customerTier.error_message, customerTier.error_code);
     }
+
+    responseData = { ...responseData, ...customerTier };
   }
 
   return { data: responseData };

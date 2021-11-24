@@ -16,12 +16,22 @@ const getCustomerInfo = (customerId) => {
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
       if (hasValue(response.data.error)) {
+        let responseData = null;
+        // If we have error but response status in 200 then we assume data doesn't exist.
+        if (response.status === 200) {
+          responseData = {
+            auraStatus: 0,
+          };
+          return responseData;
+        }
+
+        const message = hasValue(response.data.message) ? response.data.message : '';
         logger.error('Error while trying to fetch customer information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
           '@customerId': customerId,
           '@endpoint': endpoint,
-          '@message': response.data.error_message || '',
+          '@message': message,
         });
-        return getErrorResponse(response.data.error_message, response.data.error_code);
+        return getErrorResponse(message, 500);
       }
 
       const responseData = {
@@ -49,12 +59,13 @@ const getCustomerPoints = (customerId) => {
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
       if (hasValue(response.data.error)) {
+        const message = hasValue(response.data.message) ? response.data.message : '';
         logger.error('Error while trying to fetch loyalty points for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
           '@customerId': customerId,
           '@endpoint': endpoint,
-          '@message': response.data.error_message,
+          '@message': message,
         });
-        return getErrorResponse(response.data.error_message, response.data.error_code);
+        return getErrorResponse(message, 500);
       }
 
       const responseData = {
@@ -82,12 +93,13 @@ const getCustomerTier = (customerId) => {
   return callMagentoApi(endpoint, 'GET')
     .then((response) => {
       if (hasValue(response.data.error)) {
+        const message = hasValue(response.data.message) ? response.data.message : '';
         logger.error('Error while trying to fetch tier information for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
           '@customerId': customerId,
           '@endpoint': endpoint,
-          '@message': response.data.error_message,
+          '@message': message,
         });
-        return getErrorResponse(response.data.error_message, response.data.error_code);
+        return getErrorResponse(message, 500);
       }
 
       const responseData = {
