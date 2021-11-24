@@ -351,10 +351,22 @@ function alshaya_aura_react_alshaya_acm_customer_recent_order_build_alter(array 
  * Implements hook_library_info_alter().
  */
 function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
-  if ($extension == 'alshaya_aura_react' && isset($libraries['aura_header_library'])) {
-    $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  if ($extension == 'alshaya_aura_react') {
+    if (isset($libraries['aura_header_library'])) {
+      $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
 
-    // Add code to integrate V1/V2 js with aura header library.
-    $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
+      // Add code to integrate V1/V2 js with aura header library.
+      $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
+
+      $current_route_name = \Drupal::routeMatch()->getRouteName();
+
+      // Add library dependencies on header library based on routes.
+      if ($current_route_name === 'alshaya_aura_react.my_loyalty_club') {
+        $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_loyalty_club';
+      }
+      if ($current_route_name === 'entity.user.canonical') {
+        $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
+      }
+    }
   }
 }

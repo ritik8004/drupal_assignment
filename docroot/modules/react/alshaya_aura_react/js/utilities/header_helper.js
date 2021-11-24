@@ -16,7 +16,7 @@ function getCustomerDetails() {
   if (apiData instanceof Promise) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
-        const userLoyaltyStatus = hasValue(result.data.auraStatus) ? result.data.auraStatus : '';
+        const userLoyaltyStatus = result.data.auraStatus;
         stateValues = {
           loyaltyStatus: userLoyaltyStatus,
           tier: hasValue(result.data.tier) ? result.data.tier : '',
