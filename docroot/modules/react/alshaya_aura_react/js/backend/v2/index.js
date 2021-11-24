@@ -50,6 +50,11 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
   // Call search API to check if given mobile number is already registered or
   // not.
   let searchResponse = await search('phone', data.mobile);
+  // Check for backend error.
+  if (hasValue(searchResponse.error)) {
+    return searchResponse;
+  }
+
   // Check if the mobile number is already registered.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to do loyalty club sign up. Mobile number @mobile is already registered.', {
@@ -66,6 +71,11 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
 
   // Call search API to check if given email is already registered or not.
   searchResponse = await search('email', data.email);
+  // Check for backend error.
+  if (hasValue(searchResponse.error)) {
+    return searchResponse;
+  }
+
   // Check if email address is already register.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to do loyalty club sign up. Email address @email is already registered.', {
@@ -91,11 +101,21 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
 
   const response = await callMagentoApi('/V1/customers/quick-enrollment', 'POST', requestData);
   if (hasValue(response.data.error)) {
-    logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
+    // Check if API returns error.
+    if (response.status === 200) {
+      logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
+        '@data': JSON.stringify(data),
+        '@message': response.data.error_message,
+      });
+      return { data: getErrorResponse(response.data.error_message, response.data.error_code) };
+    }
+
+    // This means backend error has occured.
+    logger.notice('Error while trying to do loyalty club sign up. Backend Error. Request Data: @data, Message: @message', {
       '@data': JSON.stringify(data),
       '@message': response.data.error_message,
     });
-    return { data: getErrorResponse(response.data.error_message, response.data.error_code) };
+    return response.data;
   }
 
   const responseData = {
