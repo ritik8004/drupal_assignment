@@ -58,9 +58,22 @@ class AlshayaEgiftCardController extends ControllerBase {
    * View My Egift Card Page.
    */
   public function myEgiftCardPage() {
+    \Drupal::moduleHandler()->loadInclude('alshaya_egift_card', 'inc', 'alshaya_egift_card.static_strings');
     return [
-      '#markup' => '',
-    ];  }
+      '#theme' => 'my_egift_card',
+      '#strings' => _alshaya_egift_card_static_strings(),
+      '#attached' => [
+        'library' => [
+          'alshaya_egift_card/alshaya_egift_card_my_account',
+        ],
+        'drupalSettings' => [
+          'egiftCard' => [
+            'enabled' => \Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled(),
+          ]
+        ],
+      ],
+    ];
+  }
 
   /**
    * Helper method to check access.

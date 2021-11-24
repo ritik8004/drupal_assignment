@@ -30,7 +30,7 @@ alshaya_egift_card.egift_card_purchase:
   requirements:
     _access: 'TRUE'
 
-alshaya_egift_card.my_account:
+alshaya_egift_card.my_egift_card:
   path: '/user/my-egift-card'
   defaults:
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::myEgiftCardPage'

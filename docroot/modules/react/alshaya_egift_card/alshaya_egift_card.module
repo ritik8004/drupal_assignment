@@ -13,6 +13,8 @@
 function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
   // Do not proceed if egift card is not enabled.
   $egiftCard_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+  \Drupal::moduleHandler()->loadInclude('alshaya_egift_card', 'inc', 'alshaya_egift_card.static_strings');
+  $build['#strings'] = array_merge($build['#strings'], _alshaya_egift_card_static_strings());
   $build['#attached']['drupalSettings']['egiftCard'] = [
     'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
     'notSupportedPaymentMethods' => array_filter($egiftCard_settings->getNotSupportedPaymentMethods(), function($method) {
@@ -100,6 +102,12 @@ function alshaya_egift_card_theme() {
         'terms_block_content' => '',
       ],
     ],
+    'my_egift_card' => [
+      'variables' => [
+        'strings' => [],
+      ],
+      'template' => 'my-egift-card',
+    ],
   ];
 }
 
@@ -115,7 +123,7 @@ function alshaya_egift_card_alshaya_my_account_links_alter(array &$links) {
   // Add My egift card link.
   $links['alshaya_my_egift_card'] = [
     'text' => t('egift Cards'),
-    'route' => 'alshaya_egift_card.my_account',
+    'route' => 'alshaya_egift_card.my_egift_card',
     'weight' => 11,
   ];
 }
