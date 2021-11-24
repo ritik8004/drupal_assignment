@@ -84,14 +84,17 @@ const getProcessedErrorMessage = (response) => {
  *   The processed error message.
  * @param {string} code
  *   The error code.
+ * @param {Boolean} custom
+ *   Indicates whether the message is a custom message or a backend message.
  *
  * @returns {Object}
  *   The object containing the error data.
  */
-const getErrorResponse = (message, code = '-') => ({
+const getErrorResponse = (message, code = '-', custom = false) => ({
   error: true,
   error_message: message,
   error_code: code,
+  custom,
 });
 
 export {

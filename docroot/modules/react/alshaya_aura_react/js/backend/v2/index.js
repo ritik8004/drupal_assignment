@@ -3,7 +3,7 @@ import logger from '../../../../js/utilities/logger';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import auraErrorCodes from '../utility/error';
 import { sendOtp, verifyOtp } from '../../../../js/utilities/otp_helper';
-import search from './search_helper';
+import { search, searchUserDetails } from './search_helper';
 import validateInput from './validation_helper';
 import { getErrorResponse } from '../../../../js/utilities/error';
 import {
@@ -50,6 +50,11 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
   // Call search API to check if given mobile number is already registered or
   // not.
   let searchResponse = await search('phone', data.mobile);
+  // Check for backend error.
+  if (hasValue(searchResponse.error)) {
+    return searchResponse;
+  }
+
   // Check if the mobile number is already registered.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to do loyalty club sign up. Mobile number @mobile is already registered.', {
@@ -66,6 +71,11 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
 
   // Call search API to check if given email is already registered or not.
   searchResponse = await search('email', data.email);
+  // Check for backend error.
+  if (hasValue(searchResponse.error)) {
+    return searchResponse;
+  }
+
   // Check if email address is already register.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to do loyalty club sign up. Email address @email is already registered.', {
@@ -91,11 +101,21 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
 
   const response = await callMagentoApi('/V1/customers/quick-enrollment', 'POST', requestData);
   if (hasValue(response.data.error)) {
-    logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
+    // Check if API returns error.
+    if (response.status === 200) {
+      logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
+        '@data': JSON.stringify(data),
+        '@message': response.data.error_message,
+      });
+      return { data: getErrorResponse(response.data.error_message, response.data.error_code) };
+    }
+
+    // This means backend error has occured.
+    logger.notice('Error while trying to do loyalty club sign up. Backend Error. Request Data: @data, Message: @message', {
       '@data': JSON.stringify(data),
       '@message': response.data.error_message,
     });
-    return { data: getErrorResponse(response.data.error_message, response.data.error_code) };
+    return response.data;
   }
 
   const responseData = {
@@ -119,7 +139,11 @@ window.auraBackend.sendSignUpOtp = async (mobile, chosenCountryCode) => {
   // Call search API to check if given mobile number is already registered or
   // not.
   const searchResponse = await search('phone', `${chosenCountryCode}${mobile}`);
-
+  // Check for backend error.
+  if (hasValue(searchResponse.error)) {
+    return searchResponse;
+  }
+  // Check if mobile number is already registered.
   if (hasValue(searchResponse.data.apc_identifier_number)) {
     logger.error('Error while trying to send otp. Mobile number @mobile is already registered.', {
       '@mobile': mobile,
@@ -134,6 +158,10 @@ window.auraBackend.sendSignUpOtp = async (mobile, chosenCountryCode) => {
 
   // Send otp for the given mobile number.
   const responseData = await sendOtp(`${chosenCountryCode}${mobile}`, 'reg');
+  // Check for backend error.
+  if (hasValue(responseData.error)) {
+    return responseData;
+  }
 
   return { data: responseData };
 };
@@ -159,6 +187,55 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => verifyO
   type,
   chosenCountryCode,
 );
+
+/**
+ * Send Link card OTP.
+ *
+ * @param {string} type
+ *   The field for searching.
+ * @param {string} value
+ *   The field value.
+ *
+ * @returns {Promise}
+ *   Returns a promise which resolves to an object.
+ * On error, the error object is returned.
+ * On success, the success object is returned containing specific data.
+ */
+window.auraBackend.sendLinkCardOtp = async (type, value) => {
+  let responseData = {};
+
+  const searchResponse = await searchUserDetails(type, value);
+
+  if (hasValue(searchResponse.error)) {
+    logger.error('Error while trying to search mobile number to send link card OTP. Request Data: @data', {
+      '@data': JSON.stringify({ type, value }),
+    });
+    return searchResponse.custom === true ? { data: searchResponse } : searchResponse;
+  }
+
+  if (!hasValue(searchResponse.data.mobile)) {
+    logger.error('Error while trying to send link card OTP. Mobile number not found. Request Data: @data', {
+      '@data': JSON.stringify({ type, value }),
+    });
+    return { data: getErrorResponse(auraErrorCodes.NO_MOBILE_FOUND_MSG, 404) };
+  }
+
+  responseData = await sendOtp(searchResponse.data.mobile, 'link');
+
+  if (hasValue(responseData.error)) {
+    logger.error('Error while trying to send link card OTP. Backend error. Request Data: @data.', {
+      '@data': JSON.stringify({ type, value }),
+    });
+    return responseData;
+  }
+
+  if (hasValue(responseData.status)) {
+    responseData.mobile = searchResponse.data.mobile;
+    responseData.cardNumber = searchResponse.data.apc_identifier_number;
+  }
+
+  return { data: responseData };
+};
 
 /**
  * Get the loyalty customer details.

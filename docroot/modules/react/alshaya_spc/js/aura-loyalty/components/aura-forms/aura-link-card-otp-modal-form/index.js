@@ -17,7 +17,6 @@ import {
   resetInputElement,
 } from '../../utilities/link_card_sign_up_modal_helper';
 import { validateMobile, validateElementValueByType } from '../../utilities/validation_helper';
-import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
@@ -104,8 +103,8 @@ class AuraFormLinkCardOTPModal extends React.Component {
     const { linkCardOption } = this.state;
     removeError(getInlineErrorSelector(linkCardOption)[linkCardOption]);
     resetInputElement('otp');
-    const apiUrl = 'post/loyalty-club/send-link-card-otp';
-    const apiData = postAPIData(apiUrl, data);
+
+    const apiData = window.auraBackend.sendLinkCardOtp(data.type, data.value);
     showFullScreenLoader();
 
     if (apiData instanceof Promise) {
