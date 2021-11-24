@@ -10,8 +10,8 @@
  */
 function _alshaya_egift_card_translations() {
   return [
-    'My Aura' => [
-      'ar' => 'حساب أورا الخاص بي',
+    'My egift card' => [
+      'ar' => 'My egift card',
     ],
   ];
 }
