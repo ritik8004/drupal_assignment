@@ -32,18 +32,16 @@
   }
 
   function initOlapicWidgets(context) {
-    if (isOlapicInitialised) {
-      $("div[id^='olapic-']", context)
-        .once("init-olapic")
-        .each(function () {
-          var $this = $(this);
-          doRender({
-            id: $this.data("instance"), //required
-            wrapper: $this.attr("id"),
-            lang: drupalSettings.olapic_keys.lang, //optional - only used when using translation engine
-          });
+    $("div[id^='olapic-']", context)
+      .once("init-olapic")
+      .each(function () {
+        var $this = $(this);
+        doRender({
+          id: $this.data("instance"), //required
+          wrapper: $this.attr("id"),
+          lang: drupalSettings.olapic_keys.lang, //optional - only used when using translation engine
         });
-    }
+      });
   }
 
   Drupal.behaviors.alshayaOlapic = {
