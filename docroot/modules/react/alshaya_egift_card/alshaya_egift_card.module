@@ -20,6 +20,19 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     }),
   ];
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
+
+  $build['#strings'][] = [
+    'key' => 'form_egift_card_number',
+    'value' => t('Please add a valid eGift card number', [], [
+      'context' => 'egift'
+    ]),
+  ];
+  $build['#strings'][] = [
+    'key' => 'form_egift_code',
+    'value' => t('Please enter the code', [], [
+      'context' => 'egift'
+    ]),
+  ];
 }
 
 /**

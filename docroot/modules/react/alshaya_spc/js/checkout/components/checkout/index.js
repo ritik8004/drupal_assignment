@@ -33,6 +33,7 @@ import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
 import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import RedeemEgiftCard from '../redeem-egift-card';
 
 window.fetchStore = 'idle';
 
@@ -274,6 +275,8 @@ export default class Checkout extends React.Component {
     const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
       ? Drupal.smartAgent.getInfo()
       : false;
+    // Get the egiftcard infomations.
+    const { egiftCard } = drupalSettings;
 
     return (
       <>
@@ -305,6 +308,10 @@ export default class Checkout extends React.Component {
               cart={cart}
               isPostpayInitialised={isPostpayInitialised}
             />
+
+            <ConditionalView condition={typeof egiftCard !== 'undefined' && egiftCard.enabled}>
+              <RedeemEgiftCard />
+            </ConditionalView>
 
             {billingComponent}
 

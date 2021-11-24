@@ -1,7 +1,9 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
+import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
+import ValidEgiftCard from './components/ValidEgiftCard';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -9,6 +11,7 @@ export default class RedeemEgiftCard extends React.Component {
     this.state = {
       codeSent: false,
       codeValidated: false,
+      egiftEmail: '',
     };
   }
 
@@ -18,58 +21,49 @@ export default class RedeemEgiftCard extends React.Component {
   }
 
   // Perform code validation.
-  handleCodeValidation = () => {
+  handleCodeValidation = (code) => {
     // @todo To update code here once API is available.
+    if (code) {
+      this.setState({ codeValidated: true, codeSent: false });
+    }
   }
 
   // Send code to the email id.
-  handleGetCode = () => {
+  handleGetCode = (egiftCardNumber, egiftEmailId) => {
     // @todo To update code here once API is available.
-
+    if (egiftCardNumber && egiftEmailId) {
+      this.setState({ codeSent: true, egiftEmail: egiftEmailId });
+    }
   }
 
   // Remove the added egift card.
-  handleEgiftCartRemove = () => {
+  handleEgiftCardRemove = () => {
     // @todo To update code here once API is available.
   }
 
   render = () => {
     // Prepare the props based on the state values.
-    const { codeSent, codeValidated } = this.state;
+    const { codeSent, codeValidated, egiftEmail } = this.state;
 
     return (
       <div className="redeem-egift-card">
         {/* TO update the Payment Method Icon here for egift. */}
         <PaymentMethodIcon methodName="egiftCart" />
         <div>{Drupal.t('Redeem eGift Card')}</div>
-        <ConditionalView condition={!codeSent}>
-          <ValidateEgiftCard
-            callback={this.handleGetCode}
-            codeSent={codeSent}
-            codeValidated={codeValidated}
-            redeemEgiftCardTitle={Drupal.t('Verify eGift Card to redeem from card balance')}
-            redeemEgiftCardSubTitle={Drupal.t('We’ll send a verification code to your email to verify eGift card')}
-            buttonText={Drupal.t('Get Code')}
+        <ConditionalView condition={!codeSent && !codeValidated}>
+          <GetEgiftCard
+            getCode={this.handleGetCode}
           />
         </ConditionalView>
         <ConditionalView condition={codeSent}>
           <ValidateEgiftCard
-            callback={this.handleCodeValidation}
-            codeSent={codeSent}
-            codeValidated={codeValidated}
-            redeemEgiftCardTitle={Drupal.t('Verify eGift Card to redeem from card balance')}
-            redeemEgiftCardSubTitle={Drupal.t('Verification code sent to xyz@xyz.com')}
-            buttonText={Drupal.t('Verify')}
+            codeValidation={this.handleCodeValidation}
+            emailId={egiftEmail}
           />
         </ConditionalView>
         <ConditionalView condition={codeValidated}>
-          <ValidateEgiftCard
-            callback={this.handleEgiftCartRemove}
-            codeSent={codeSent}
-            codeValidated={codeValidated}
-            redeemEgiftCardTitle={Drupal.t('Your eGift card is applied - KWD 280')}
-            redeemEgiftCardSubTitle={Drupal.t('Remaining Balance - KWD 220.00')}
-            buttonText={Drupal.t('Remove')}
+          <ValidEgiftCard
+            removeCard={this.handleEgiftCardRemove}
           />
         </ConditionalView>
       </div>
