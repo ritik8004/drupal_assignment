@@ -49,7 +49,7 @@
         "drupal/facets": "^1.8",
         "drupal/field_group": "^3.0@beta",
         "drupal/form_options_attributes": "^1.0",
-        "drupal/geolocation": "^3.7",
+        "drupal/geolocation": "^1.12",
         "drupal/google_tag": "1.x-dev",
         "drupal/image_style_quality": "1.x-dev",
         "drupal/imagemagick": "^3.2",

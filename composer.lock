@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b899068eab73c736ccaa4840c859023",
+    "content-hash": "14bf8bc4e698e3a767fa6d49d63a0754",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -7398,40 +7398,26 @@
         },
         {
             "name": "drupal/geolocation",
-            "version": "3.7.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geolocation.git",
-                "reference": "8.x-3.7"
+                "reference": "8.x-1.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geolocation-8.x-3.7.zip",
-                "reference": "8.x-3.7",
-                "shasum": "796797ff4d3cc9d8b645bf2534d783d170ef77f5"
+                "url": "https://ftp.drupal.org/files/projects/geolocation-8.x-1.12.zip",
+                "reference": "8.x-1.12",
+                "shasum": "b1a3d39f4e4cdc0719e024c87212f71afb6689fa"
             },
             "require": {
-                "drupal/core": "^8.7.7 || ^9"
-            },
-            "require-dev": {
-                "drupal/address": "*",
-                "drupal/geofield": "*",
-                "drupal/geolocation_demo": "*",
-                "drupal/geolocation_geometry": "*",
-                "drupal/geolocation_geometry_data": "*",
-                "drupal/geolocation_google_maps": "*",
-                "drupal/geolocation_google_maps_demo": "*",
-                "drupal/geolocation_google_static_maps": "*",
-                "drupal/geolocation_leaflet": "*",
-                "drupal/search_api": "*",
-                "drupal/search_api_location": "*",
-                "drupal/search_api_location_views": "*"
+                "drupal/core": "^8"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.7",
-                    "datestamp": "1623052750",
+                    "version": "8.x-1.12",
+                    "datestamp": "1620891804",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7440,23 +7426,22 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
-                    "name": "derjochenmeyer",
-                    "homepage": "https://www.drupal.org/u/derjochenmeyer"
+                    "name": "ChristianAdamski",
+                    "homepage": "https://www.drupal.org/user/867880"
                 },
                 {
-                    "name": "cadamski",
-                    "homepage": "https://www.drupal.org/u/cadamski"
+                    "name": "derjochenmeyer",
+                    "homepage": "https://www.drupal.org/user/106134"
                 }
             ],
             "description": "Provides a simple geolocation Drupal field type to store and display location data (lat, lng).",
             "homepage": "https://www.drupal.org/project/geolocation",
             "support": {
-                "source": "https://git.drupal.org/project/geolocation.git",
-                "issues": "https://www.drupal.org/project/issues/geolocation"
+                "source": "https://git.drupalcode.org/project/geolocation"
             }
         },
         {
@@ -27000,6 +26985,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
+            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
