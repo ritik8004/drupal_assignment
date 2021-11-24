@@ -1,5 +1,5 @@
 import React from 'react';
-import { egiftCardHeader } from '../../../../utilities/egift_util';
+import { egiftCardHeader } from '../../utilities/egift_util';
 
 export default class ValidEgiftCard extends React.Component {
   // Handle remove card.

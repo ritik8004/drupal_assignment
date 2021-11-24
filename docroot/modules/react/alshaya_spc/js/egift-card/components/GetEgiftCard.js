@@ -1,6 +1,6 @@
 import React from 'react';
-import getStringMessage from '../../../../utilities/strings';
-import { egiftCardHeader, egiftFormElement } from '../../../../utilities/egift_util';
+import getStringMessage from '../../utilities/strings';
+import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
 
 // Validation function.
 const handleEgiftDetailValidation = (e) => {
