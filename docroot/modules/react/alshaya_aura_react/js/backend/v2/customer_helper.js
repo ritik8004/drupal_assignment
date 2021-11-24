@@ -160,29 +160,38 @@ const getCustomerProgressTracker = (customerId) => {
 };
 
 /**
- * Set loyalty card in cart.
+ * Sets loyalty card in cart.
  *
- * @return array
- *   API response status.
+ * @param {object} data
+ *   Request payload.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the status true/false or
+ * the error object.
  */
-const setLoyaltyCard = (data) => {
-  return callMagentoApi('/V1/apc/set-loyalty-card', 'POST', data).then((response) => {
-    if (response.status !== 200 && hasValue(response.data.error)) {
-      logger.notice('Error while trying to set loyalty card in cart. Request Data: @data. Message: @message.', {
-        '@data': data,
-        '@message': response.data.error_message,
+const setLoyaltyCard = (data) => callMagentoApi('/V1/apc/set-loyalty-card', 'POST', data).then((response) => {
+  if (hasValue(response.data.error)) {
+    // @todo Check this particular condition later since at present the API
+    // gives 400 response only for incorrect values.
+    if (response.status === 200) {
+      logger.notice('Error while trying to set loyalty card in cart. Request Data: @data. Message: @message', {
+        '@data': JSON.stringify(data),
+        '@message': response.data.message,
       });
-      return getErrorResponse(response.data.error_message, response.data.error_code);
+      return { status: false };
     }
 
-    responseData = {
-      'status': response,
-    };
+    logger.notice('Error while trying to set loyalty card in cart. Backend error. Request Data: @data. Message: @message', {
+      '@data': JSON.stringify(data),
+      '@message': response.data.error_message,
+    });
+    return response.data;
+  }
 
-    return responseData;
-  });
-}
-
+  return {
+    status: response,
+  };
+});
 
 export {
   getCustomerInfo,
