@@ -35,8 +35,6 @@ function alshaya_stores_finder_acq_sku_clean_synced_data_alter(&$context_results
 function alshaya_stores_finder_page_attachments(array &$attachments) {
   // Attach store finder js only on store-finder pages.
   $current_path = \Drupal::service('path.current')->getPath();
-  // Initializing geocoder.google_geocoding_api under drupalSettings.
-  $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['google_geocoding_api'] = $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['google_geocoding_api'] ?? NULL;
   if (strpos($current_path, '/store-finder') !== FALSE
       || strpos($current_path, '/cart/checkout/delivery') !== FALSE) {
     $site_country = _alshaya_custom_get_site_level_country_code();
