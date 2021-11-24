@@ -1433,7 +1433,7 @@ const paymentUpdate = async (data) => {
       method: paymentData.method,
       additional_data: (hasValue(paymentData.additional_data))
         ? paymentData.additional_data
-        : [],
+        : {},
     },
   };
 
