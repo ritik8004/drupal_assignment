@@ -10,3 +10,6 @@ alshaya_egift_card.settings:
       type: sequence
       sequence:
         type: string
+    topup_terms_conditions_text:
+      type: text_format
+      label: 'Topup: Terms and conditions block text'
