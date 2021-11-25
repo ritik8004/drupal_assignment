@@ -19,6 +19,7 @@
       &::after {
         font-size: 1.625rem;
         #{$right}: 0.3125rem;
+        font-weight: bold;
       }
     }
   }
@@ -72,7 +73,7 @@ body {
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 4rem;
+    margin-top: 4.5rem;
   }
 }
 
@@ -80,6 +81,7 @@ body {
   &::after {
     @include breakpoint($upto-desktop) {
       font-size: 1.625rem;
+      font-weight: bold;
     }
   }
 }
