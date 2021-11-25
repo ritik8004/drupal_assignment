@@ -8,9 +8,9 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 /**
  * Helper function to get customer details.
  */
-function getCustomerDetails() {
+function getCustomerDetails(data = {}) {
   // API call to get customer points for logged in users.
-  const apiData = window.auraBackend.getCustomerDetails();
+  const apiData = window.auraBackend.getCustomerDetails(data);
   let stateValues = {};
 
   if (apiData instanceof Promise) {

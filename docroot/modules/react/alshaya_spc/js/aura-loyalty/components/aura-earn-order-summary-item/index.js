@@ -2,7 +2,7 @@ import React from 'react';
 import PendingEnrollmentMessage from '../utilities/pending-enrollment-message';
 import ToolTip from '../../../utilities/tooltip';
 import ConditionalView from '../../../common/components/conditional-view';
-import { getUserAuraStatus, getAllAuraStatus } from '../../../../../alshaya_aura_react/js/utilities/helper';
+import { getAllAuraStatus } from '../../../../../alshaya_aura_react/js/utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../utilities/helper';
 
 const AuraEarnOrderSummaryItem = (props) => {
@@ -10,11 +10,12 @@ const AuraEarnOrderSummaryItem = (props) => {
     pointsEarned,
     animationDelay: animationDelayValue,
     context,
+    loyaltyStatus,
   } = props;
 
   const label = Drupal.t('Aura points earned');
 
-  const userFullyEnrolled = (getUserAuraStatus() === getAllAuraStatus().APC_LINKED_NOT_VERIFIED);
+  const userFullyEnrolled = (loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED);
 
   if (pointsEarned > 0) {
     return (
