@@ -16,13 +16,14 @@ const HeaderGuest = (props) => {
     isNotExpandable,
     clickedNotYou,
     notYouFailed,
+    tier,
   } = props;
 
   if (isMobileTab === true) {
     if (signUpComplete !== true) {
       return null;
     }
-    return <Points points={points} />;
+    return <Points points={points} tier={tier} />;
   }
 
   if (signUpComplete === true) {

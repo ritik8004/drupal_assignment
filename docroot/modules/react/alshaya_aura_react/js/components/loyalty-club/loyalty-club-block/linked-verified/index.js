@@ -1,6 +1,6 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import { getUserProfileInfo, getAllAuraTier, getUserAuraTier } from '../../../../utilities/helper';
+import { getUserProfileInfo, getAllAuraTier } from '../../../../utilities/helper';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/helper';
 
@@ -17,7 +17,7 @@ const AuraMyAccountVerifiedUser = (props) => {
   const profileInfo = getUserProfileInfo(firstName, lastName);
 
   // Current User tier class so we can change gradient for progress bar.
-  const currentTierLevel = getUserAuraTier();
+  const currentTierLevel = tier;
   const tierClass = currentTierLevel || 'no-tier';
 
   return (

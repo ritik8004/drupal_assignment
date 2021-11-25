@@ -105,6 +105,7 @@ class Header extends React.Component {
       loyaltyStatus,
       clickedNotYou,
       notYouFailed,
+      tier,
     } = this.state;
 
     const {
@@ -139,6 +140,7 @@ class Header extends React.Component {
           isHeaderShop={isHeaderShop}
           signUpComplete={signUpComplete}
           notYouFailed={notYouFailed}
+          tier={tier}
         />
       );
     }
@@ -155,6 +157,7 @@ class Header extends React.Component {
         signUpComplete={signUpComplete}
         clickedNotYou={clickedNotYou}
         notYouFailed={notYouFailed}
+        tier={tier}
       />
     );
   }

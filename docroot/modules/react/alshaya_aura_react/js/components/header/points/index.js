@@ -1,11 +1,11 @@
 import React from 'react';
-import { getUserAuraTier, getUserAuraTierLabel } from '../../../utilities/helper';
+import { getAllAuraTier } from '../../../utilities/helper';
 
 const Points = (props) => {
-  const { points } = props;
+  const { points, tier } = props;
 
-  const tierLabel = getUserAuraTierLabel();
-  const tierLevel = getUserAuraTier();
+  const tierLabel = getAllAuraTier('value')[tier];
+  const tierLevel = tier;
 
   const tierClass = tierLevel || 'no-tier';
 

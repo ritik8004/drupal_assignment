@@ -7,6 +7,7 @@ const LoggedInLinked = (props) => {
     isDesktop,
     points,
     isHeaderModalOpen,
+    tier,
   } = props;
 
   // For Desktop.
@@ -15,12 +16,13 @@ const LoggedInLinked = (props) => {
       <PointsWithLoyaltyPageLinked
         points={points}
         isHeaderModalOpen={isHeaderModalOpen}
+        tier={tier}
       />
     );
   }
 
   // For Mobile.
-  return <UserNamePoints points={points} />;
+  return <UserNamePoints points={points} tier={tier} />;
 };
 
 export default LoggedInLinked;

@@ -249,9 +249,9 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
   // Get user details from drupalSettings.
   const { customerId } = drupalSettings.userDetails;
   const { uid } = drupalSettings.user;
-  const fetchStatus = data.fetchStatus || true;
-  const fetchPoints = data.fetchPoints || true;
-  const fetchTier = data.fetchTier || true;
+  const fetchStatus = data.fetchStatus !== undefined ? data.fetchStatus : true;
+  const fetchPoints = data.fetchPoints !== undefined ? data.fetchPoints : true;
+  const fetchTier = data.fetchTier !== undefined ? data.fetchTier : true;
   let responseData = {};
 
   if (!hasValue(customerId) || !hasValue(uid)) {

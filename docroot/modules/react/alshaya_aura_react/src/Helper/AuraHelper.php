@@ -94,34 +94,6 @@ class AuraHelper {
   }
 
   /**
-   * Get user's AURA Status.
-   *
-   * @return string
-   *   User's AURA Status.
-   */
-  public function getUserAuraStatus() {
-    $uid = $this->currentUser->id();
-    $aura_status_field = $this->entityTypeManager->getStorage('user')->load($uid)->get('field_aura_loyalty_status')->getString() ?? '';
-    $status = $aura_status_field !== '' ? $aura_status_field : 0;
-
-    return $status;
-  }
-
-  /**
-   * Get user's AURA Tier.
-   *
-   * @return string
-   *   User's AURA Tier.
-   */
-  public function getUserAuraTier() {
-    $uid = $this->currentUser->id();
-    $user = $this->entityTypeManager->getStorage('user')->load($uid);
-    $tier = $user->get('field_aura_tier')->getString() ?? '';
-
-    return $tier;
-  }
-
-  /**
    * Get aura config.
    *
    * @return array

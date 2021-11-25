@@ -116,7 +116,7 @@ const OrderSummary = (props) => {
     accruedPoints, redeemedPoints,
   } = drupalSettings.order_details;
 
-  const { context } = props;
+  const { context, loyaltyStatus } = props;
   // Fawry details.
   const {
     payment: {
@@ -217,6 +217,7 @@ const OrderSummary = (props) => {
           pointsEarned={accruedPoints}
           animationDelay="0.8s"
           context={context}
+          loyaltyStatus={loyaltyStatus}
         />
         <AuraRedeemOrderSummaryItem
           pointsRedeemed={redeemedPoints}

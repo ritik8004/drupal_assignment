@@ -152,27 +152,6 @@ class LoyaltyClubController {
       if ($response) {
         $search_response = $this->auraSearchHelper->search('apcNumber', $data['statusUpdate']['apcIdentifierId']);
 
-        if (empty($search_response['error'])) {
-          $auraData = [
-            'uid' => $request_content['uid'],
-            'apcLinkStatus' => $search_response['data']['apc_link'],
-            'tier' => $search_response['data']['tier_code'],
-          ];
-
-          $updated = $this->drupal->updateUserAuraInfo($auraData);
-
-          // Check if user aura status was updated successfully in drupal.
-          if (!$updated) {
-            $message = 'Error while trying to update user AURA Status field in Drupal.';
-            $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
-              '@uid' => $request_content['uid'],
-              '@aura_status' => $request_content['apcLinkStatus'],
-              '@customer_id' => $customer_id,
-            ]);
-            return new JsonResponse($this->utility->getErrorResponse($message, 500));
-          }
-        }
-
         if ($search_response['data']['is_fully_enrolled']) {
           $customer_info = $this->auraCustomerHelper->getCustomerInfo($customer_id);
 

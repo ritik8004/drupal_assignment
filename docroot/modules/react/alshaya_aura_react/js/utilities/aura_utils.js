@@ -1,7 +1,5 @@
 import _isEmpty from 'lodash/isEmpty';
 import {
-  getUserAuraStatus,
-  getUserAuraTier,
   getPointToPriceRatio,
   getPriceToPointRatio,
   getAuraConfig,
@@ -58,8 +56,8 @@ function getAuraCheckoutLocalStorageKey() {
  */
 function getAuraDetailsDefaultState() {
   const auraDetails = {
-    loyaltyStatus: getUserAuraStatus(),
-    tier: getUserAuraTier(),
+    loyaltyStatus: 0,
+    tier: 'Tier1',
     points: 0,
     cardNumber: '',
     pointsOnHold: 0,

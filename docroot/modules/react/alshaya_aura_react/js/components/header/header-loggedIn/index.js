@@ -21,6 +21,7 @@ const HeaderLoggedIn = (props) => {
     isHeaderShop,
     signUpComplete,
     notYouFailed,
+    tier,
   } = props;
 
   if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NO_DATA
@@ -54,7 +55,7 @@ const HeaderLoggedIn = (props) => {
       if (document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title')) {
         document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title').remove();
       }
-      return <UserNamePoints points={points} />;
+      return <UserNamePoints points={points} tier={tier} />;
     }
 
     return (
@@ -63,6 +64,7 @@ const HeaderLoggedIn = (props) => {
           isDesktop={isDesktop}
           isHeaderModalOpen={isHeaderModalOpen}
           points={points}
+          tier={tier}
         />
       </>
     );
