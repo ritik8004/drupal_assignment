@@ -25,7 +25,9 @@ export default class DeliveryOptions extends React.Component {
 
   updateShippingOnVariantSelect = (e) => {
     if (e.detail && e.detail.data !== '') {
-      this.fetchShippingMethods(e.detail.data);
+      const variantInfo = e.detail.data;
+      const sku = variantInfo.parent_sku !== undefined ? variantInfo.parent_sku : variantInfo.sku;
+      this.fetchShippingMethods(sku);
     }
   }
 

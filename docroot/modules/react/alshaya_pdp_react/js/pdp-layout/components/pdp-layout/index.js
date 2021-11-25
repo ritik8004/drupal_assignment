@@ -22,6 +22,8 @@ import PpdRatingsReviews from '../pdp-ratings-reviews';
 import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import PdpExpressDelivery from '../pdp-express-delivery';
+import { isWishlistEnabled } from '../../../../../js/utilities/wishlistHelper';
+import WishlistPdpContent from '../../../../../alshaya_wishlist/js/components/wishlist-pdp-content';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -257,6 +259,15 @@ const PdpLayout = () => {
               />
             ) : outOfStock}
           </div>
+          <ConditionalView condition={isWishlistEnabled()}>
+            <div className="magv2-wishlist-pdp">
+              <WishlistPdpContent
+                variantSelected={variant}
+                skuParent={skuMainCode}
+                title={title}
+              />
+            </div>
+          </ConditionalView>
           <PdpDescription
             skuCode={skuMainCode}
             pdpDescription={description}

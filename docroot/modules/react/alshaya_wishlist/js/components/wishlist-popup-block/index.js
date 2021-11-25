@@ -5,12 +5,12 @@ import { addProductToWishList, getWishlistLabel } from '../../utilities/wishlist
 export default class WishlistPopupBlock extends React.Component {
   addToWishlist = (addToWishlist) => {
     const {
-      sku, title, url, closeWishlistModal,
+      productInfo, closeWishlistModal,
     } = this.props;
     // If user responds as yes, move item to wishlist and remove cart item.
     // Else close the popup and continue to remove cart item.
     if (addToWishlist) {
-      addProductToWishList({ sku, title, url });
+      addProductToWishList(productInfo);
     }
     closeWishlistModal();
   }

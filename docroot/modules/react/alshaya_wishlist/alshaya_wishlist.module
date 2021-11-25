@@ -8,6 +8,7 @@
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_theme().
@@ -23,29 +24,34 @@ function alshaya_wishlist_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_view().
+ * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_wishlist_node_view(array &$build, Node $entity, EntityViewDisplay $display, $view_mode) {
+function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
   // Add cache tag.
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_wishlist.settings']);
 
   // Return if the feature is not enabled and applicable to display mode.
-  if (!in_array($view_mode, ['modal', 'full']) || !\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
+  if (!in_array($context, ['matchback', 'pdp', 'modal']) || !\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
     return;
   }
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $productNode = $skuManager->getDisplayNode($sku->getSku());
+
+  // Get the current pdp layout.
+  $acm_product_config = \Drupal::config('alshaya_acm_product.settings');
+  $product_pdp_layout = $acm_product_config->get('pdp_layout');
+
+  if (!empty($productNode->get('field_select_pdp_layout')->getValue()[0]['value'])) {
+    $product_pdp_layout = $productNode->get('field_select_pdp_layout')->getValue()[0]['value'];
+  }
   // Attach wishlist libraries and add a wishlist markup for FE icon rendering.
-  // @todo we need this library only for PDP and basket page.
-  $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
-  $build['wishlist_enabled'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#attributes' => [
-      'class' => [
-        'wishlist-pdp-'.$view_mode,
-      ]
-    ],
-  ];
+  // @todo we need this library for PDP and basket page.
+  if ($product_pdp_layout !== 'magazine_v2') {
+    $build['wishlist_enabled']['#markup'] = '<div id="wishlist-pdp-full"></div>';
+    $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
+  }
 }
 
 /**

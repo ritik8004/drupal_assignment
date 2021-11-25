@@ -14,11 +14,12 @@ class WishlistButton extends React.Component {
     // false: default, if sku doesn't exist in wishlist.
     this.state = {
       addedInWishList: false,
+      productInfo: props.productInfo,
     };
   }
 
   componentDidMount = () => {
-    const { sku } = this.props;
+    const { productInfo } = this.state;
 
     // @todo: we need to listen wishlist load event that
     // will trigger from header wishlist component after
@@ -26,10 +27,30 @@ class WishlistButton extends React.Component {
     // for logged in user.
     // Check if product already exist in wishlist, and
     // set the status for the sku.
-    if (isProductExistInWishList(sku)) {
+    if (isProductExistInWishList(productInfo.sku)) {
       this.updateWishListStatus(true);
     }
+
+    // Rendering wishlist button as per sku variant info.
+    document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
   };
+
+  /**
+   * To product info state as per variant selection.
+   */
+  updateProductInfoData = (e) => {
+    const { context } = this.props;
+    if (e.detail && e.detail.data !== '' && context === 'pdp') {
+      const variantInfo = e.detail.data;
+      const productInfo = {
+        sku: variantInfo.parent_sku ? variantInfo.parent_sku : variantInfo.sku,
+        title: variantInfo.title,
+      };
+      this.setState({ productInfo }, () => {
+        this.updateWishListStatus(isProductExistInWishList(productInfo.sku));
+      });
+    }
+  }
 
   /**
    * This will update the addedInWishList state of product.
@@ -50,21 +71,19 @@ class WishlistButton extends React.Component {
    * Add or remove product from the wishlist.
    */
   toggleWishlist = () => {
-    const { addedInWishList } = this.state;
-    const { sku } = this.props;
+    const { addedInWishList, productInfo } = this.state;
 
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
-      removeProductFromWishList(sku, this.updateWishListStatus);
+      removeProductFromWishList(productInfo.sku, this.updateWishListStatus);
     } else {
-      addProductToWishList({ sku }, this.updateWishListStatus);
+      addProductToWishList(productInfo, this.updateWishListStatus);
     }
   }
 
   render() {
     const { addedInWishList } = this.state;
     const { context, position } = this.props;
-
     const classPrefix = `wishlist-icon ${context} ${position}`;
     const wishListButtonClass = addedInWishList ? `${classPrefix} in-wishlist` : classPrefix;
 

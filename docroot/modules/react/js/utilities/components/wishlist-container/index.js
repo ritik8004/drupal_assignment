@@ -13,8 +13,10 @@ function WishlistContainer(props) {
     position,
     sku,
     format,
+    title,
   } = props;
 
+  const productInfo = { sku, title };
   // Lazy load wishlist button component.
   const WishlistLazy = React.lazy(() => import('../../../../alshaya_wishlist/js/components/wishlist-button'));
 
@@ -24,7 +26,7 @@ function WishlistContainer(props) {
         <WishlistLazy
           context={context}
           position={position}
-          sku={sku}
+          productInfo={productInfo}
           format={format}
         />
       </Suspense>

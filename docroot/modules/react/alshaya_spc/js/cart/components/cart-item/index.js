@@ -305,7 +305,8 @@ export default class CartItem extends React.Component {
                 <WishlistContainer
                   context="cart"
                   position="cart-item"
-                  sku={sku}
+                  sku={parentSKU}
+                  title={title}
                   format="text"
                 />
               </div>
@@ -324,7 +325,7 @@ export default class CartItem extends React.Component {
             </button>
             <ConditionalView condition={isWishlistEnabled() && showWishlistPopup}>
               <WishlistPopupBlock
-                sku={sku}
+                sku={parentSKU}
                 title={title}
                 url={url}
                 closeWishlistModal={() => this.closeWishlistModal()}
