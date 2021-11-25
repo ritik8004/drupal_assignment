@@ -220,7 +220,6 @@ class LoyaltyCustomerController {
     try {
       // Get user details from session.
       $customer_id = $this->cart->getDrupalInfo('customer_id');
-      $uid = $this->cart->getDrupalInfo('uid');
       $data['customer'] = array_merge($request_content, ['isVerified' => 'Y']);
 
       if (!empty($customer_id)) {
@@ -233,26 +232,6 @@ class LoyaltyCustomerController {
         'status' => TRUE,
         'data' => $response,
       ];
-
-      // On API success, update user AURA Status in Drupal for logged in user.
-      if (!empty($uid) && is_array($response) && !empty($response['apc_link'])) {
-        $auraData = [
-          'uid' => $uid,
-          'apcLinkStatus' => $response['apc_link'],
-        ];
-        $updated = $this->drupal->updateUserAuraInfo($auraData);
-
-        // Check if user aura status was updated successfully in drupal.
-        if (!$updated) {
-          $message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
-          $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
-            '@uid' => $uid,
-            '@customer_id' => $customer_id,
-            '@aura_status' => $response['apc_link'],
-          ]);
-          return new JsonResponse($this->utility->getErrorResponse($message, 500));
-        }
-      }
 
       return new JsonResponse($responseData);
     }

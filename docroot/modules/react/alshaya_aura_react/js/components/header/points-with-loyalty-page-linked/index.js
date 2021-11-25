@@ -5,7 +5,7 @@ import {
 import Points from '../points';
 
 const PointsWithLoyaltyPageLinked = (props) => {
-  const { points, isHeaderModalOpen } = props;
+  const { points, isHeaderModalOpen, tier } = props;
   const { baseUrl, pathPrefix } = drupalSettings.path;
   const { id: userId } = getUserDetails();
   const previewClass = isHeaderModalOpen === true ? 'open' : '';
@@ -16,7 +16,7 @@ const PointsWithLoyaltyPageLinked = (props) => {
         className="user-points"
         href={`${baseUrl}${pathPrefix}user/${userId}/loyalty-club`}
       >
-        <Points points={points} />
+        <Points points={points} tier={tier} />
       </a>
     </div>
   );

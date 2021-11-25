@@ -131,28 +131,6 @@ function alshaya_aura_react_preprocess_html(&$variables) {
 }
 
 /**
- * Implements hook_alshaya_acm_customer_update_account_alter().
- */
-function alshaya_aura_react_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
-  // Do not proceed if AURA is not enabled.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
-    return;
-  }
-
-  if (isset($customer['extension'])) {
-    // Update user aura status and tier in drupal if changed.
-    if (!empty($customer['extension']['apc_link'])
-      && $customer['extension']['apc_link'] !== $user->get('field_aura_loyalty_status')->getString()) {
-      $user->set('field_aura_loyalty_status', $customer['extension']['apc_link']);
-    }
-    if (!empty($customer['extension']['tier_info'])
-      && $customer['extension']['tier_info'] !== $user->get('field_aura_tier')->getString()) {
-      $user->set('field_aura_tier', $customer['extension']['tier_info']);
-    }
-  }
-}
-
-/**
  * Implements hook_alshaya_spc_order_details_settings_alter().
  */
 function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings, $order) {

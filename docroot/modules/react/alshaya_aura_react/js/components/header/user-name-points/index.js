@@ -5,7 +5,7 @@ import {
 import Points from '../points';
 
 const UserNamePoints = (props) => {
-  const { points } = props;
+  const { points, tier } = props;
   const { userName } = getUserDetails();
 
   return (
@@ -14,7 +14,7 @@ const UserNamePoints = (props) => {
         <span className="name">{ userName }</span>
       </div>
       <div className="account-points">
-        <Points points={points} />
+        <Points points={points} tier={tier} />
       </div>
     </div>
   );

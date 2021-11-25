@@ -1,18 +1,4 @@
 /**
- * Helper function to get user's AURA Status.
- */
-function getUserAuraStatus() {
-  return 0;
-}
-
-/**
- * Helper function to get user's AURA tier.
- */
-function getUserAuraTier() {
-  return 'Tier1';
-}
-
-/**
  * Helper function to get all AURA Status.
  */
 function getAllAuraStatus() {
@@ -36,19 +22,6 @@ function getAllAuraTier(value) {
   }
 
   return allAuraTier;
-}
-
-/**
- * Helper function to get user's AURA tier label.
- */
-function getUserAuraTierLabel(tierValue) {
-  const tierLabels = {
-    1: Drupal.t('Hello'),
-    2: Drupal.t('Star'),
-    3: Drupal.t('VIP'),
-  };
-
-  return tierLabels[tierValue] || '';
 }
 
 /**
@@ -160,11 +133,8 @@ function getRecognitionAccrualRatio() {
 }
 
 export {
-  getUserAuraStatus,
-  getUserAuraTier,
   getAllAuraStatus,
   getAllAuraTier,
-  getUserAuraTierLabel,
   getLoyaltyBenefitsTitle,
   getLoyaltyBenefitsContent,
   getUserProfileInfo,
