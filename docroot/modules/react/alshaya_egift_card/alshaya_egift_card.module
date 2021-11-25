@@ -51,6 +51,13 @@ function alshaya_egift_card_alshaya_spc_cart_build_alter(array &$build) {
  */
 function alshaya_egift_card_theme() {
   return [
+    'egift_balance_check_block' => [
+      'variables' => [
+        'block_title' => '',
+        'block_description' => '',
+        'check_balance_button' => '',
+      ]
+    ],
     'egift_topup_terms_conditions' => [
       'variables' => [
         'content' => '',
