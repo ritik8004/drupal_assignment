@@ -449,7 +449,7 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
  * @returns {Promise}
  *   Return success/failure response.
  */
-window.auraBackend.apcStatusUpdate = async (inputData) => {
+window.auraBackend.updateUserAuraStatus = async (inputData) => {
   const data = prepareAuraUserStatusUpdateData(inputData);
 
   if (hasValue(data.error)) {

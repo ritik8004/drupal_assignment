@@ -60,7 +60,7 @@ function updateUsersLoyaltyStatus(cardNumber, link) {
   };
 
   // API call to update user's loyalty status.
-  return window.auraBackend.apcStatusUpdate(data);
+  return window.auraBackend.updateUserAuraStatus(data);
 }
 
 /**
@@ -171,7 +171,7 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
   };
 
   // API call to verify otp and update user's loyalty status.
-  const apiData = window.auraBackend.apcStatusUpdate(data);
+  const apiData = window.auraBackend.updateUserAuraStatus(data);
   showFullScreenLoader();
 
   if (apiData instanceof Promise) {
