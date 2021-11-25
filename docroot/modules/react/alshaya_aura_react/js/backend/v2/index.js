@@ -11,11 +11,8 @@ import {
   getCustomerPoints,
   getCustomerTier,
   getCustomerProgressTracker,
-<<<<<<< HEAD
   setLoyaltyCard,
-=======
   prepareAuraUserStatusUpdateData,
->>>>>>> CORE-35510: Added interfacing function to update APC status of users for V1 and V2.
 } from './customer_helper';
 
 /**
@@ -443,7 +440,7 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
   return { data: responseData };
 };
 
-/*
+/**
  * Update User's AURA Status.
  *
  * @param {Object} inputData
@@ -485,48 +482,58 @@ window.auraBackend.apcStatusUpdate = async (inputData) => {
 
   data.statusUpdate.customerId = customerId;
 
-  try {
-    const response = await callMagentoApi('/V1/customers/apc-status-update', 'POST', data);
-    let customerData = {};
-    const responseData = {};
+  const response = await callMagentoApi('/V1/customers/apc-status-update', 'POST', data);
+  if (hasValue(response.data.error)) {
+    return { data: response.data };
+  }
 
-    const searchResponse = await search('apcNumber', data.statusUpdate.apcIdentifierId);
-
-    if (hasValue(searchResponse.data.is_fully_enrolled)) {
-      const customerInfo = await getCustomerInfo(customerId);
-      if (hasValue(customerInfo.error)) {
-        throw new Error(JSON.stringify(customerInfo));
-      }
-      customerData = Object.assign(customerData, customerInfo);
-
-      const customerPoints = await getCustomerPoints(customerId);
-      if (hasValue(customerPoints.error)) {
-        throw new Error(JSON.stringify(customerPoints));
-      }
-      customerData = Object.assign(customerData, customerPoints);
-
-      const customerTier = await getCustomerTier(customerId);
-      if (hasValue(customerTier.error)) {
-        throw new Error(JSON.stringify(customerTier));
-      }
-      customerData = Object.assign(customerData, customerTier);
-    }
-
-    responseData.data = hasValue(customerData)
-      ? customerData
-      : { auraStatus: searchResponse.data.apc_link };
-
-    responseData.status = response.data;
-
+  const responseData = {
+    status: response.data,
+  };
+  // Return, if status failed to update.
+  if (response.data === false) {
     return { data: responseData };
-  } catch (e) {
-    const error = JSON.parse(e.message);
+  }
+  // Helper function to log and return error.
+  const logCustomerDataFetchError = (customerIdVal, dataVal, error) => {
     logger.notice('Error while trying to update AURA Status for user with customer id @customer_id. Request Data: @request_data. Message: @message', {
-      '@customer_id': customerId,
-      '@request_data': JSON.stringify(data),
+      '@customer_id': customerIdVal,
+      '@request_data': JSON.stringify(dataVal),
       '@message': error.error_message,
     });
-
-    return getErrorResponse(error.error_message, error.error_code);
+  };
+  let customerData = {};
+  const searchResponse = await search('apcNumber', data.statusUpdate.apcIdentifierId);
+  if (hasValue(searchResponse.error)) {
+    return { data: searchResponse };
   }
+
+  if (hasValue(searchResponse.data.is_fully_enrolled)) {
+    const customerInfo = await getCustomerInfo(customerId);
+    if (hasValue(customerInfo.error)) {
+      logCustomerDataFetchError(customerId, data, customerInfo);
+      return { data: customerInfo };
+    }
+    customerData = Object.assign(customerData, customerInfo);
+
+    const customerPoints = await getCustomerPoints(customerId);
+    if (hasValue(customerPoints.error)) {
+      logCustomerDataFetchError(customerId, data, customerPoints);
+      return { data: customerPoints };
+    }
+    customerData = Object.assign(customerData, customerPoints);
+
+    const customerTier = await getCustomerTier(customerId);
+    if (hasValue(customerTier.error)) {
+      logCustomerDataFetchError(customerId, data, customerTier);
+      return { data: customerTier };
+    }
+    customerData = Object.assign(customerData, customerTier);
+  }
+
+  responseData.data = hasValue(customerData)
+    ? customerData
+    : { auraStatus: searchResponse.data.apc_link };
+
+  return { data: responseData };
 };

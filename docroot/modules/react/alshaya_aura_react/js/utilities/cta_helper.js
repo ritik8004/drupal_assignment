@@ -210,6 +210,7 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
       // if error code is 500 show error message,
       // by default show invalid OTP error message.
       switch (result.data.error_code) {
+        case 500:
         case '500':
           showError('otp-error', result.data.error_message);
           break;
