@@ -222,16 +222,6 @@ const setLoyaltyCard = (identifierNo, quoteId) => {
 
   return callMagentoApi(endpoint, 'POST', data).then((response) => {
     if (hasValue(response.data.error)) {
-      // @todo Check this particular condition later since at present the API
-      // gives 400 response only for incorrect values.
-      if (response.status === 200) {
-        logger.notice('Error while trying to set loyalty card in cart. Request Data: @data. Message: @message', {
-          '@data': JSON.stringify(data),
-          '@message': response.data.message,
-        });
-        return { status: false };
-      }
-
       logger.notice('Error while trying to set loyalty card in cart. Backend error. Request Data: @data. Message: @message', {
         '@data': JSON.stringify(data),
         '@message': response.data.error_message,
