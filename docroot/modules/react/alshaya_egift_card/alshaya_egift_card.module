@@ -63,5 +63,10 @@ function alshaya_egift_card_theme() {
         'content' => '',
       ],
     ],
+    'egift_topup_page' => [
+      'variables' => [
+        'terms_block_content' => '',
+      ],
+    ],
   ];
 }
