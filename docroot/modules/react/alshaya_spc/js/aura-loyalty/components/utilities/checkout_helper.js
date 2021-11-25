@@ -52,8 +52,7 @@ function getUserInput(linkCardOption, chosenCountryCode) {
 function processCheckoutCart(data) {
   let stateValues = {};
 
-  const apiUrl = 'post/loyalty-club/update-loyalty-card';
-  const apiData = postAPIData(apiUrl, data);
+  const apiData = window.auraBackend.updateLoyaltyCard(data.action, data.type, data.value);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {

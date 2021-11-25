@@ -76,7 +76,7 @@ class AuraFormLinkCard extends React.Component {
 
       this.showResponse({
         type: 'failure',
-        message: getStringMessage(stateValues.error_message) || '',
+        message: getStringMessage(stateValues.error_message) || stateValues.error_message,
       });
       return;
     }

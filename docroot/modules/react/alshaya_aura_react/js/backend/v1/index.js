@@ -90,3 +90,23 @@ window.auraBackend.getCustomerDetails = () => getAPIData('get/loyalty-club/get-c
  *   of success and the error object in case of error.
  */
 window.auraBackend.getProgressTracker = () => getAPIData('get/loyalty-club/get-progress-tracker');
+
+/**
+ * Set/Unset loyalty card in cart.
+ *
+ * @param {string} action
+ *   The action, eg. 'add'.
+ * @param {string} type
+ *   The input value type.
+ * @param {string} value
+ *   The input value.
+ *
+ * @returns {Promise}
+ *   A promise that contains the data and status in case of success and error
+ * object in case of failure.
+ */
+window.auraBackend.updateLoyaltyCard = (action, type, value) => postAPIData('post/loyalty-club/update-loyalty-card', {
+  action,
+  type,
+  value,
+});

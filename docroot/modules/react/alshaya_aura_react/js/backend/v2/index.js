@@ -11,6 +11,7 @@ import {
   getCustomerPoints,
   getCustomerTier,
   getCustomerProgressTracker,
+  setLoyaltyCard,
 } from './customer_helper';
 
 /**
@@ -351,6 +352,88 @@ window.auraBackend.getProgressTracker = async () => {
   const responseData = {
     status: true,
     data: progressTracker,
+  };
+
+  return { data: responseData };
+};
+
+/**
+ * Set/Unset loyalty card in cart.
+ *
+ * @param {string} action
+ *   The action, eg. 'add'.
+ * @param {string} type
+ *   The input value type.
+ * @param {string} value
+ *   The input value.
+ *
+ * @returns {Promise}
+ *   A promise that contains the data and status in case of success and error
+ * object in case of failure.
+ */
+window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
+  let responseData = {};
+  const inputData = { action, type, value };
+
+  // Check if action is not empty.
+  if (!hasValue(action)) {
+    logger.error('Error while trying to set loyalty card in cart. Action key `add/remove` is missing. Request Data: @data', {
+      '@data': JSON.stringify(inputData),
+    });
+    return { data: getErrorResponse('Action key `add/remove` is missing.', 404) };
+  }
+
+  // Check if required data is present in request for `add` action.
+  if (action === 'add' && (!hasValue(type) || !hasValue(value))) {
+    logger.error('Error while trying to set loyalty card in cart. Required parameters missing. Request Data: @data', {
+      '@data': JSON.stringify(inputData),
+    });
+
+    let error = '';
+    if (type === 'email') {
+      error = auraErrorCodes.EMPTY_EMAIL;
+    } else if (type === 'apcNumber') {
+      error = auraErrorCodes.EMPTY_CARD;
+    } else if (type === 'phone') {
+      error = auraErrorCodes.EMPTY_MOBILE;
+    }
+
+    return { data: getErrorResponse(error, 'MISSING_DATA') };
+  }
+
+  // Get cart id from session.
+  const cartId = window.commerceBackend.getCartId();
+
+  if (!hasValue(cartId)) {
+    logger.error('Error while trying to set loyalty card in cart. Cart id not available.');
+    return { data: getErrorResponse('Cart id not available.', 404) };
+  }
+
+  let identifierNo = '';
+
+  let searchResponse = {};
+  if (action === 'add') {
+    searchResponse = await searchUserDetails(inputData.type, inputData.value);
+
+    if (hasValue(searchResponse.error)) {
+      logger.error('Error while trying to set loyalty card in cart. No card found. Request Data: @data.', {
+        '@data': JSON.stringify(inputData),
+      });
+      return { data: searchResponse };
+    }
+
+    identifierNo = searchResponse.data.apc_identifier_number;
+  }
+
+  const response = await setLoyaltyCard(identifierNo, cartId);
+
+  if (hasValue(response.error)) {
+    return { data: response };
+  }
+
+  responseData = {
+    status: response,
+    data: hasValue(searchResponse.data) ? searchResponse.data : {},
   };
 
   return { data: responseData };

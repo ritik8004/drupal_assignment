@@ -2,6 +2,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import logger from '../../../../js/utilities/logger';
 import { getErrorResponse } from '../../../../js/utilities/error';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 /**
  * Get Customer Information.
@@ -159,9 +160,56 @@ const getCustomerProgressTracker = (customerId) => {
     });
 };
 
+/**
+ * Sets loyalty card in cart.
+ *
+ * @param {string} identifierNo
+ *   Identifier number.
+ * @param {string} quoteId
+ *   Quote/Cart ID.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the status true/false or
+ * the error object.
+ */
+const setLoyaltyCard = (identifierNo, quoteId) => {
+  let endpoint = '/V1/apc/set-loyalty-card';
+  let data = { quote_id: quoteId, identifier_no: identifierNo };
+
+  if (isUserAuthenticated()) {
+    endpoint = '/V1/customers/mine/set-loyalty-card';
+    data = { identifier_no: identifierNo };
+  }
+
+  return callMagentoApi(endpoint, 'POST', data).then((response) => {
+    if (hasValue(response.data.error)) {
+      // @todo Check this particular condition later since at present the API
+      // gives 400 response only for incorrect values.
+      if (response.status === 200) {
+        logger.notice('Error while trying to set loyalty card in cart. Request Data: @data. Message: @message', {
+          '@data': JSON.stringify(data),
+          '@message': response.data.message,
+        });
+        return { status: false };
+      }
+
+      logger.notice('Error while trying to set loyalty card in cart. Backend error. Request Data: @data. Message: @message', {
+        '@data': JSON.stringify(data),
+        '@message': response.data.error_message,
+      });
+      return response.data;
+    }
+
+    return {
+      status: response,
+    };
+  });
+};
+
 export {
   getCustomerInfo,
   getCustomerPoints,
   getCustomerTier,
   getCustomerProgressTracker,
+  setLoyaltyCard,
 };
