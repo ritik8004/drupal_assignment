@@ -1,14 +1,42 @@
 import React from 'react';
+import ConditionalView from '../../../../alshaya_algolia_react/js/common/components/conditional-view';
 import { egiftCardHeader } from '../../utilities/egift_util';
+import UpdateEgiftCard from './UpdateEgiftCard';
 
 export default class ValidEgiftCard extends React.Component {
-  // Handle remove card.
-  handleRemoveCard = () => {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+      amount: 0,
+      remainingAmount: 0,
+    };
   }
 
-  // Handle the amount change.
-  handleAmountChange = () => {
+  componentDidMount = () => {
+    // @todo get amount and update the state.
+    this.setState({
+      amount: 280,
+      remainingAmount: 220.0,
+    });
+  }
+
+  openModal = (e) => {
+    this.setState({
+      open: true,
+    });
+
+    e.stopPropagation();
+  };
+
+  closeModal = () => {
+    this.setState({
+      open: false,
+    });
+  };
+
+  // Handle remove card.
+  handleRemoveCard = () => {
 
   }
 
@@ -17,18 +45,48 @@ export default class ValidEgiftCard extends React.Component {
 
   }
 
-  render = () => (
-    <div className="egift-wrapper">
-      {egiftCardHeader({
-        egiftHeading: Drupal.t('Your eGift card is applied - KWD 280', {}, { context: 'egift' }),
-        egiftSubHeading: Drupal.t('Remaining Balance - KWD 220.00', {}, { context: 'egift' }),
-      })}
+  // Update egift amount.
+  handleAmountUpdate = (updateAmount) => {
+    // @todo To call API to update the amount.
+    this.setState({
+      amount: updateAmount,
+    });
+    this.closeModal();
+  }
 
-      <div className="remove-egift-card">{Drupal.t('Remove', {}, { context: 'egift' })}</div>
-      <p><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></p>
+  render = () => {
+    const { open, amount, remainingAmount } = this.state;
+    const { currency_config: currencySettings } = drupalSettings.alshaya_spc;
 
-      <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
-      <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
-    </div>
-  )
+    return (
+      <div className="egift-wrapper">
+        {egiftCardHeader({
+          egiftHeading: Drupal.t('Applied card amount - @currencyCode @amount', {
+            '@currencyCode': currencySettings.currency_code,
+            '@amount': amount,
+          }, { context: 'egift' }),
+          egiftSubHeading: Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
+            '@currencyCode': currencySettings.currency_code,
+            '@remainingAmount': remainingAmount,
+          }, { context: 'egift' }),
+        })}
+        <ConditionalView conditional={open}>
+          <UpdateEgiftCard
+            closeModal={this.closeModal}
+            open={open}
+            amount={amount}
+            remainingAmount={remainingAmount}
+            updateAmount={this.handleAmountUpdate}
+          />
+        </ConditionalView>
+        <div className="remove-egift-card">
+          <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
+        </div>
+        <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
+
+        <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
+        <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
+      </div>
+    );
+  }
 }
