@@ -494,14 +494,7 @@ window.auraBackend.apcStatusUpdate = async (inputData) => {
   if (response.data === false) {
     return { data: responseData };
   }
-  // Helper function to log and return error.
-  const logCustomerDataFetchError = (customerIdVal, dataVal, error) => {
-    logger.notice('Error while trying to update AURA Status for user with customer id @customer_id. Request Data: @request_data. Message: @message', {
-      '@customer_id': customerIdVal,
-      '@request_data': JSON.stringify(dataVal),
-      '@message': error.error_message,
-    });
-  };
+
   let customerData = {};
   const searchResponse = await search('apcNumber', data.statusUpdate.apcIdentifierId);
   if (hasValue(searchResponse.error)) {
@@ -509,26 +502,17 @@ window.auraBackend.apcStatusUpdate = async (inputData) => {
   }
 
   if (hasValue(searchResponse.data.is_fully_enrolled)) {
-    const customerInfo = await getCustomerInfo(customerId);
-    if (hasValue(customerInfo.error)) {
-      logCustomerDataFetchError(customerId, data, customerInfo);
-      return { data: customerInfo };
-    }
-    customerData = Object.assign(customerData, customerInfo);
+    const customerInfo = getCustomerInfo(customerId);
+    const customerPoints = getCustomerPoints(customerId);
+    const customerTier = getCustomerTier(customerId);
 
-    const customerPoints = await getCustomerPoints(customerId);
-    if (hasValue(customerPoints.error)) {
-      logCustomerDataFetchError(customerId, data, customerPoints);
-      return { data: customerPoints };
-    }
-    customerData = Object.assign(customerData, customerPoints);
-
-    const customerTier = await getCustomerTier(customerId);
-    if (hasValue(customerTier.error)) {
-      logCustomerDataFetchError(customerId, data, customerTier);
-      return { data: customerTier };
-    }
-    customerData = Object.assign(customerData, customerTier);
+    const values = await Promise.all([customerInfo, customerPoints, customerTier]);
+    values.forEach((value) => {
+      // If an API call throws error, ignore it.
+      if (!hasValue(value.error)) {
+        customerData = Object.assign(customerData, value);
+      }
+    });
   }
 
   responseData.data = hasValue(customerData)
