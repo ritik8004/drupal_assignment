@@ -9,6 +9,8 @@ import Postpay from '../postpay';
 import Advantagecard from '../advantagecard';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import Tabby from '../../../../js/tabby/utilities/tabby';
+import TabbyWidget from '../../../../js/tabby/components';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -151,6 +153,14 @@ class TotalLineItems extends React.Component {
             <VatText />
           </div>
           {postpay}
+          <ConditionalView condition={isCartPage && Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby"
+              mobileOnly={false}
+              id="tabby-promo-cart"
+            />
+          </ConditionalView>
         </div>
       </div>
     );
