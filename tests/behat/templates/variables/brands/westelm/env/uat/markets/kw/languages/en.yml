@@ -62,7 +62,7 @@ variables:
   payment_type: ''
   payment_type_text: 'payment method:'
   spc_knet_option: 'Knet Test Card [KNET1]'
-  language_spc_knet_option: 'بنك اختبار كنيت [KNET1]'
+  language_spc_knet_option: 'عيديتي [KNET]'
   continue_shopping_text: 'continue shopping'
   language_continue_shopping_text: 'تابع التسوق'
   language_order_confirm_text: 'تأكيد الطلبية'

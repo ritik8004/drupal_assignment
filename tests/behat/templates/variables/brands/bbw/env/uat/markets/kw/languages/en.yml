@@ -18,6 +18,7 @@ variables:
   language_promotional_filter: ''
   empty_bag: 'Your shopping bag is empty'
   spc_search_byname: 'Mad About You'
+  language_spc_knet_option: 'عيديتي [KNET]'
   spc_search_byID: 'BWKWHDE'
   language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
   ar_collection_filter: ''

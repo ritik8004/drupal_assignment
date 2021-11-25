@@ -104,7 +104,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'cart_page_aura_header',
-      'value' => t('Aura'),
+      'value' => t('Experience Aura'),
     ],
     [
       'key' => 'cart_page_aura_accrual_label',
@@ -132,7 +132,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_aura_block_title',
-      'value' => t('Aura'),
+      'value' => t('Experience Aura'),
     ],
     [
       'key' => 'checkout_optional',

@@ -1,5 +1,3 @@
-import { getStorageItem } from '../../alshaya_spc/js/utilities/storage';
-
 /**
  * Logs messages in the backend.
  *
@@ -34,27 +32,5 @@ const logger = {
   info: (message, context) => logger.send('info', message, context),
   debug: (message, context) => logger.send('debug', message, context),
 };
-
-/**
- * Provides extra DataDog contexts.
- */
-document.addEventListener('dataDogContextAlter', (e) => {
-  const context = e.detail;
-  // These variables should be considered as helpers for troubleshooting but
-  // may in some cases not be accurate.
-  const uid = drupalSettings.userDetails.customerId;
-  if (uid) {
-    context.cCustomerId = uid;
-  }
-
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId) {
-    context.cCartId = cartId;
-    const cartIdInt = getStorageItem('cart_data', 'cart.cart_id_int');
-    if (cartIdInt) {
-      context.cCartIdInt = cartIdInt;
-    }
-  }
-});
 
 export default logger;
