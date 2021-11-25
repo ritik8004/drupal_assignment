@@ -12,6 +12,7 @@ import {
   getCustomerTier,
   getCustomerProgressTracker,
   setLoyaltyCard,
+  prepareAuraUserStatusUpdateData,
 } from './customer_helper';
 
 /**
@@ -435,6 +436,88 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
     status: response,
     data: hasValue(searchResponse.data) ? searchResponse.data : {},
   };
+
+  return { data: responseData };
+};
+
+/**
+ * Update User's AURA Status.
+ *
+ * @param {Object} inputData
+ *   Input data object.
+ *
+ * @returns {Promise}
+ *   Return success/failure response.
+ */
+window.auraBackend.updateUserAuraStatus = async (inputData) => {
+  const data = prepareAuraUserStatusUpdateData(inputData);
+
+  if (hasValue(data.error)) {
+    logger.error('Error while trying to update user AURA Status. Data: @data.', {
+      '@data': JSON.stringify(data),
+    });
+    return { data };
+  }
+
+  const { customerId } = drupalSettings.userDetails;
+  // Get user details from session.
+  const { uid } = drupalSettings.user;
+
+  // Check if we have user in session.
+  if (!hasValue(customerId) || uid === 0) {
+    logger.error('Error while trying to update user AURA Status. No user available in session. User id from request: @uid.', {
+      '@uid': inputData.uid,
+    });
+    return getErrorResponse('No user available in session', 404);
+  }
+
+  // Check if uid in the request matches the one in session.
+  if (uid !== inputData.uid) {
+    logger.error('Error while trying to update user AURA Status. User id in request doesn\'t match the one in session. User id from request: @req_uid. User id in session: @session_uid.', {
+      '@req_uid': inputData.uid,
+      '@session_uid': uid,
+    });
+    return getErrorResponse("User id in request doesn't match the one in session.", 404);
+  }
+
+  data.statusUpdate.customerId = customerId;
+
+  const response = await callMagentoApi('/V1/customers/apc-status-update', 'POST', data);
+  if (hasValue(response.data.error)) {
+    return { data: response.data };
+  }
+
+  const responseData = {
+    status: response.data,
+  };
+  // Return, if status failed to update.
+  if (response.data === false) {
+    return { data: responseData };
+  }
+
+  let customerData = {};
+  const searchResponse = await search('apcNumber', data.statusUpdate.apcIdentifierId);
+  if (hasValue(searchResponse.error)) {
+    return { data: searchResponse };
+  }
+
+  if (hasValue(searchResponse.data.is_fully_enrolled)) {
+    const customerInfo = getCustomerInfo(customerId);
+    const customerPoints = getCustomerPoints(customerId);
+    const customerTier = getCustomerTier(customerId);
+
+    const values = await Promise.all([customerInfo, customerPoints, customerTier]);
+    values.forEach((value) => {
+      // If an API call throws error, ignore it.
+      if (!hasValue(value.error)) {
+        customerData = Object.assign(customerData, value);
+      }
+    });
+  }
+
+  responseData.data = hasValue(customerData)
+    ? customerData
+    : { auraStatus: searchResponse.data.apc_link };
 
   return { data: responseData };
 };

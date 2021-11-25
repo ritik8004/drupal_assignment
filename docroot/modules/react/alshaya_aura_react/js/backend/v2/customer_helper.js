@@ -5,6 +5,45 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 /**
+ * Prepare data for aura user status update.
+ *
+ * @param {Object} data
+ *   The data to process.
+ *
+ * @returns {Object}
+ *   Error in case of missing data else the processed data.
+ */
+const prepareAuraUserStatusUpdateData = (data) => {
+  if (!hasValue(data.uid) || !hasValue(data.apcIdentifierId) || !hasValue(data.link)) {
+    logger.error('Error while trying to prepare data for updating user AURA Status. User Id, AURA Card number and Link value is required. Data: @request_data', {
+      '@request_data': JSON.stringify(data),
+    });
+    return getErrorResponse('User Id, AURA Card number and Link value is required.', 404);
+  }
+
+  const processedData = {
+    statusUpdate: {
+      apcIdentifierId: data.apcIdentifierId,
+      link: data.link,
+    },
+  };
+
+  if (hasValue(data.type) && data.type === 'withOtp') {
+    if (!hasValue(data.otp) || !hasValue(data.phoneNumber)) {
+      logger.error('Error while trying to prepare data for updating user AURA Status. OTP and mobile number is required. Data: @request_data', {
+        '@request_data': JSON.stringify(data),
+      });
+      return getErrorResponse('OTP and mobile number is required.', 404);
+    }
+
+    processedData.statusUpdate.otp = data.otp;
+    processedData.statusUpdate.phoneNumber = data.phoneNumber.replace('+', '');
+  }
+
+  return processedData;
+};
+
+/**
  * Get Customer Information.
  *
  * @returns {Promise}
@@ -207,6 +246,7 @@ const setLoyaltyCard = (identifierNo, quoteId) => {
 };
 
 export {
+  prepareAuraUserStatusUpdateData,
   getCustomerInfo,
   getCustomerPoints,
   getCustomerTier,

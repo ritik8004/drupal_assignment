@@ -1,4 +1,3 @@
-import { postAPIData } from './api/fetchApiData';
 import {
   getAllAuraStatus,
   getUserDetails,
@@ -54,15 +53,14 @@ function handleSignUp(auraUserDetails) {
 }
 
 function updateUsersLoyaltyStatus(cardNumber, link) {
-  // API call to update user's loyalty status.
-  const apiUrl = 'post/loyalty-club/apc-status-update';
   const data = {
     uid: getUserDetails().id,
     apcIdentifierId: cardNumber,
     link,
   };
 
-  return postAPIData(apiUrl, data);
+  // API call to update user's loyalty status.
+  return window.auraBackend.updateUserAuraStatus(data);
 }
 
 /**
@@ -173,8 +171,7 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
   };
 
   // API call to verify otp and update user's loyalty status.
-  const apiUrl = 'post/loyalty-club/apc-status-update';
-  const apiData = postAPIData(apiUrl, data);
+  const apiData = window.auraBackend.updateUserAuraStatus(data);
   showFullScreenLoader();
 
   if (apiData instanceof Promise) {
@@ -213,6 +210,7 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
       // if error code is 500 show error message,
       // by default show invalid OTP error message.
       switch (result.data.error_code) {
+        case 500:
         case '500':
           showError('otp-error', result.data.error_message);
           break;
