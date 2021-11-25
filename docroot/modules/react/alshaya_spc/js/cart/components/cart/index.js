@@ -33,6 +33,8 @@ import SelectAreaPanel from '../../../expressdelivery/components/select-area-pan
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -337,7 +339,14 @@ export default class Cart extends React.Component {
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
           {postPayData.postpayEligibilityMessage}
-
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby-info"
+              mobileOnly={false}
+              id="tabby-cart-info"
+            />
+          </ConditionalView>
           <ConditionalView condition={smartAgentInfo !== false}>
             <>
               <SASessionBanner agentName={smartAgentInfo.name} />
@@ -348,6 +357,14 @@ export default class Cart extends React.Component {
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
           {postPayData.postpay}
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby-mobile-preview"
+              mobileOnly
+              id="tabby-promo-cart-mobile"
+            />
+          </ConditionalView>
         </div>
         <div className="spc-main">
           <div className="spc-content">

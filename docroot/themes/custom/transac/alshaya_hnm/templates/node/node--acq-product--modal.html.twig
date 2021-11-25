@@ -35,6 +35,10 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
       {% endif %}
 
+      {% if content.tabby %}
+        <div class="tabby"> {{ content.tabby }} </div>
+      {% endif %}
+
         {% if content.promotions %}
           <div class="promotions">
             {{ content.promotions }}
