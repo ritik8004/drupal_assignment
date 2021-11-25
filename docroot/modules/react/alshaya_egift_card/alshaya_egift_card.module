@@ -45,3 +45,18 @@ function alshaya_egift_card_alshaya_spc_cart_build_alter(array &$build) {
   $build['#attached']['drupalSettings']['egiftCard'] = $egiftCard_settings->isEgiftCardEnabled();
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
 }
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_egift_card_theme() {
+  return [
+    'egift_balance_check_block' => [
+      'variables' => [
+        'block_title' => '',
+        'block_description' => '',
+        'check_balance_button' => '',
+      ],
+    ],
+  ];
+}

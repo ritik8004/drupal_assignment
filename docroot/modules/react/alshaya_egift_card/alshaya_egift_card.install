@@ -8,6 +8,10 @@
 /**
  * Implements hook_install().
  */
-
 function alshaya_egift_card_install() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_egift_card', 'alshaya_egift_card.translations');
+  if ($translations = _alshaya_egift_card_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }

@@ -5,3 +5,11 @@ alshaya_egift_card.egift_card_config:
     _title: 'Alshaya Egift Card Configurations'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_egift_card.check_balance:
+  path: '/gift-card/check-balance'
+  defaults:
+    _title: 'Check Balance Modal'
+    _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaCheckBalanceController::openModalForm'
+  requirements:
+    _permission: 'access content'
