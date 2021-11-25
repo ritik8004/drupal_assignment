@@ -5,12 +5,16 @@
         padding-#{$left}: 0;
 
         @include breakpoint($desktop) {
-          align-items: inherit;
           justify-content: space-between;
         }
 
         .radio-label {
           width: auto;
+          padding-#{$right}: 0.3125rem;
+
+          .payment-method-name-suffix {
+            padding-#{$left}: 0.3125rem;
+          }
         }
 
         .installment-popup {
@@ -21,23 +25,25 @@
             height: 1.063rem;
             color: $spc_tooltip_icon;
             position: absolute;
-            bottom: 0;
+            top: 0;
             #{$left}: 0;
-            padding-#{$left}: 0.3125rem;
           }
 
           flex-grow: 1;
-          padding-top: 0;
           background: unset;
           border: unset;
+          padding: 0;
           position: relative;
+          width: 1.063rem;
+          height: 1.063rem;
+          display: inline-block;
+          vertical-align: middle;
         }
       }
 
       .tabby-promo-snippet__logo-img {
         @include breakpoint($desktop) {
           padding-#{$left}: 3rem;
-          margin-top: 0.625rem;
         }
       }
 
@@ -53,6 +59,8 @@
       }
 
       &.disabled {
+        pointer-events: none;
+
         .payment-method-top-panel {
           opacity: 0.2;
         }
@@ -63,11 +71,6 @@
 
         .tabby-promo-snippet__logo-img {
           background-image: url('#{$base_theme_img_directory_path}/cards/tabby-disabled.svg');
-        }
-
-        .payment-method-label-wrapper {
-          padding-top: 0.563rem;
-          padding-bottom: 0.75rem;
         }
       }
     }
