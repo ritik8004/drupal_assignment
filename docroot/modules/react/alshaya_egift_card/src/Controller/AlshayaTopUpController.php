@@ -5,10 +5,8 @@ namespace Drupal\alshaya_egift_card\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Link;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
-use Drupal\block_content\Entity\BlockContent;
 
 /**
  * Alshaya Top Up Controller.
