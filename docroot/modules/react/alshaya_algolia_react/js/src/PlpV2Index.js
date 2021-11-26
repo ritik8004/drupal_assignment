@@ -20,6 +20,12 @@ import PlpApp from './plp/PlpApp';
           } = listingElement.data();
           // Adding processed class to just execute the rendering once.
           listingElement.addClass('processed');
+          // Store promotion id in localStorage for future processing.
+          if (promotionId) {
+            localStorage.setItem('promotions', JSON.stringify({
+              id: promotionId.toString(),
+            }));
+          }
           ReactDOM.render(
             <PlpApp
               categoryField={categoryField}
