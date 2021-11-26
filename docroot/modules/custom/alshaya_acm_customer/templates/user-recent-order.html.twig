@@ -1,5 +1,7 @@
 {{ attach_library('alshaya_acm_customer/recent-order') }}
 {{ attach_library('alshaya_white_label/tooltip') }}
+{% set aura_class = order.aura_enabled ? 'has-aura-points' %}
+
 <table class="user__order--detail recent__orders--list">
   <tbody class="recent__orders--body">
     <tr class="order-summary-row">
@@ -52,12 +54,12 @@
         <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
       </td>
 
-      <td class="above-mobile toggle--icon order-total-column {{ order.aura_enabled == true ? 'has-aura-points' : '' }}" colspan="{{ order.bazaarvoice ? '2' : '' }}">
+      <td class="above-mobile toggle--icon order-total-column {{ aura_class }}" colspan="{{ order.bazaarvoice ? '2' : '' }}">
         <div class="order-total-wrapper">
           <div class="light">{{ "Order Total"|t }}</div>
           <div class="dark">{{ order.totals.grand }}</div>
         </div>
-        {% if order.aura_enabled == true %}
+        {% if order.aura_enabled %}
           <div class="aura-points">
             <div class="points-earned dark">
               <span>{{ "Points Earned"|t }}</span>

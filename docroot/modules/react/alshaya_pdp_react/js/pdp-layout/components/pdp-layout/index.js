@@ -234,9 +234,9 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
-          {isAuraEnabled()
-            ? <AuraPDP mode="main" />
-            : null}
+          <ConditionalView condition={isAuraEnabled()}>
+            <AuraPDP mode="main" />
+          </ConditionalView>
           <ConditionalView condition={isExpressDeliveryEnabled()
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >

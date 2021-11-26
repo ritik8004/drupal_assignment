@@ -14,6 +14,7 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -155,9 +156,9 @@ class CrossellPopupContent extends React.Component {
                 promotions={promotions}
               />
             </div>
-            {isAuraEnabled()
-              ? <AuraPDP mode="related" />
-              : null}
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraPDP mode="related" />
+            </ConditionalView>
             {stockStatus ? (
               <PdpCart
                 skuCode={relatedSku}

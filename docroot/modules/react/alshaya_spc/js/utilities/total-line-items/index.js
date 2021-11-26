@@ -163,15 +163,13 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
-          {isAuraEnabled()
-            ? (
-              <AuraCheckoutOrderSummary
-                totals={totals}
-                dontShowVatText={dontShowVatText}
-                shippingAmount={shippingAmount}
-              />
-            )
-            : null}
+          <ConditionalView condition={isAuraEnabled()}>
+            <AuraCheckoutOrderSummary
+              totals={totals}
+              dontShowVatText={dontShowVatText}
+              shippingAmount={shippingAmount}
+            />
+          </ConditionalView>
           {postpay}
           <ConditionalView condition={isCartPage && Tabby.isTabbyEnabled()}>
             <TabbyWidget
