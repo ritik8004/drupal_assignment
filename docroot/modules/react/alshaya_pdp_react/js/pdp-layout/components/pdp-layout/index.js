@@ -213,6 +213,7 @@ const PdpLayout = () => {
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
             animateTitlePrice
+            context="main"
           />
           <div className="promotions promotions-full-view-mode">
             <PdpPromotionLabel
