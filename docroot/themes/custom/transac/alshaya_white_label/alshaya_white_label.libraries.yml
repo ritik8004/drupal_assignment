@@ -549,6 +549,11 @@ sofa-sectional:
     theme:
       css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
 
+tabby:
+  css:
+    theme:
+      css/conditional-sass/tabby/tabby.ltr.css: {}
+
 rcs-alshaya-magazine:
   css:
     theme:
