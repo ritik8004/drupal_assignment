@@ -56,7 +56,7 @@ const prepareRedeemPointsData = (data, cartId) => {
 };
 
 /**
- * Send OTP.
+ * Redeem points.
  *
  * @param {string} cardNumber
  *   User's AURA card number.
@@ -68,27 +68,31 @@ const prepareRedeemPointsData = (data, cartId) => {
  */
 const redeemPoints = (cardNumber, data) => callMagentoApi(`/V1/apc/${cardNumber}/redeem-points`, 'POST', data).then((response) => {
   if (hasValue(response.data.error)) {
-    logger.notice('Error while trying to redeem aura points. Request Data: @requestData. Message: @message', {
-      '@requestData': JSON.stringify(data),
-      '@message': response.data.error_message,
-    });
     return response.data;
   }
 
   const responseData = {
     status: true,
     data: {
-      paidWithAura: hasValue(response.redeem_response.cashback_deducted_value)
-        ? response.redeem_response.cashback_deducted_value
-        : 0,
-      balancePayable: hasValue(response.redeem_response.balance_payable)
-        ? response.redeem_response.balance_payable
-        : 0,
-      balancePoints: hasValue(response.redeem_response.house_hold_balance)
-        ? response.redeem_response.house_hold_balance
-        : 0,
+      paidWithAura: 0,
+      balancePayable: 0,
+      balancePoints: 0,
     },
   };
+
+  if (hasValue(response.data.redeem_response)) {
+    responseData.data.paidWithAura = hasValue(response.data.redeem_response.cashback_deducted_value)
+      ? response.data.redeem_response.cashback_deducted_value
+      : responseData.data.paidWithAura;
+
+    responseData.data.balancePayable = hasValue(response.data.redeem_response.balance_payable)
+      ? response.data.redeem_response.balance_payable
+      : responseData.data.balancePayable;
+
+    responseData.data.balancePoints = hasValue(response.data.redeem_response.house_hold_balance)
+      ? response.data.redeem_response.house_hold_balance
+      : responseData.data.balancePoints;
+  }
 
   return responseData;
 });
