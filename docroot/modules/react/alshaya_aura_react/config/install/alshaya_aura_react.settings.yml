@@ -7,4 +7,5 @@ aura_signup_terms_and_conditions_link: ''
 aura_unsupported_payment_methods:
   - cashondelivery
   - postpay
+  - tabby
 langcode: en
