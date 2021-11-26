@@ -56,4 +56,24 @@ class EgiftCardHelper {
     return $this->configFactory->get('alshaya_egift_card.settings')->get('payment_methods_not_supported');
   }
 
+  /**
+   * Helper to terms & condition text for topup card.
+   *
+   * @return markup
+   *   An terms and condition text from configuration.
+   */
+  public function getTermsAndConditionText() {
+    $eGift_status = $this->isEgiftCardEnabled();
+    if (!$eGift_status) {
+      return;
+    }
+    $config = $this->configFactory->get('alshaya_egift_card.settings');
+    $term_conditions_title = $config->get('topup_terms_conditions_title');
+    $term_conditions_text = $config->get('topup_terms_conditions_text')['value'];
+
+    return [
+      '#markup' => '<p>' . $term_conditions_title . '</p>' . $term_conditions_text,
+    ];
+  }
+
 }

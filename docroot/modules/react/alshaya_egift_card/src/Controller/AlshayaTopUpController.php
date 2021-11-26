@@ -3,8 +3,6 @@
 namespace Drupal\alshaya_egift_card\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 
@@ -21,35 +19,13 @@ class AlshayaTopUpController extends ControllerBase {
   protected $egiftCardHelper;
 
   /**
-   * Entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityManager;
-
-  /**
-   * The language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * The Alshaya Top Up Controller constructor.
    *
    * @param \Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
    *   EgiftCardHelper.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
-   *   Entity type manager.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
    */
-  public function __construct(EgiftCardHelper $egiftCardHelper,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              LanguageManagerInterface $language_manager) {
+  public function __construct(EgiftCardHelper $egiftCardHelper) {
     $this->egiftCardHelper = $egiftCardHelper;
-    $this->entityManager = $entity_type_manager;
-    $this->languageManager = $language_manager;
   }
 
   /**
@@ -63,8 +39,6 @@ class AlshayaTopUpController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_egift_card.egift_card_helper'),
-      $container->get('entity_type.manager'),
-      $container->get('language_manager')
     );
   }
 
@@ -76,18 +50,9 @@ class AlshayaTopUpController extends ControllerBase {
     if (!$eGift_status) {
       return;
     }
-
-    $lang = $this->languageManager->getCurrentLanguage()->getId();
-
-    // Load the block object from block id.
-    $block = $this->entityManager->getStorage('block')->load('alshayatopuptermsandconditions');
-
-    // Render the block content view.
-    $terms_block_content = $this->entityTypeManager()->getViewBuilder('block')->view($block, 'full', $lang);
-
     return [
       '#theme' => 'egift_topup_page',
-      '#terms_block_content' => $terms_block_content,
+      '#terms_block_content' => $this->egiftCardHelper->getTermsAndConditionText()['#markup'],
     ];
   }
 
