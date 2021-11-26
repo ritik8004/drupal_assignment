@@ -317,7 +317,7 @@ export default class PaymentMethod extends React.Component {
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <PaymentMethodTabby
                 ref={this.paymentMethodTabby}
-                widgetInfo={drupalSettings.tabby}
+                tabby={drupalSettings.tabby}
                 cart={cart}
               />
             </div>
