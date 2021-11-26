@@ -10,4 +10,5 @@
 $settings['aura_unsupported_payment_methods'] = [
   'cashondelivery',
   'postpay',
+  'tabby',
 ];
