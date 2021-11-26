@@ -99,7 +99,7 @@ export const addWishListInfoInStorage = (wishListData) => {
 /**
  * Utility function to add a product to wishlist for guest users.
  */
-export const addProductToWishListForGuestUsers = (productSku) => {
+export const addProductToWishListForGuestUsers = (productInfo) => {
   // Get existing wishlist data from storage.
   let wishListItems = getWishListData();
 
@@ -107,7 +107,7 @@ export const addProductToWishListForGuestUsers = (productSku) => {
   wishListItems = wishListItems || {};
 
   // Add new data to storage.
-  wishListItems[productSku] = productSku;
+  wishListItems[productInfo.sku] = productInfo;
 
   // Save back to storage.
   addWishListInfoInStorage(wishListItems);
@@ -119,7 +119,7 @@ export const addProductToWishListForGuestUsers = (productSku) => {
 export const addProductToWishList = (productInfo, setWishListStatus) => {
   // For Guest users.
   if (isAnonymousUser()) {
-    addProductToWishListForGuestUsers(productInfo.sku);
+    addProductToWishListForGuestUsers(productInfo);
   }
 
   // @todo: we need to work on for logged in users.

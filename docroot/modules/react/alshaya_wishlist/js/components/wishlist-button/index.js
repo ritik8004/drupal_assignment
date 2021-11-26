@@ -8,13 +8,13 @@ import {
 class WishlistButton extends React.Component {
   constructor(props) {
     super(props);
-
+    const { sku, title } = props;
     // Set the products status in state.
     // true: if sku exist in wishlist,
     // false: default, if sku doesn't exist in wishlist.
     this.state = {
       addedInWishList: false,
-      productInfo: props.productInfo,
+      productInfo: { sku, title },
     };
   }
 
@@ -72,7 +72,6 @@ class WishlistButton extends React.Component {
    */
   toggleWishlist = () => {
     const { addedInWishList, productInfo } = this.state;
-
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
       removeProductFromWishList(productInfo.sku, this.updateWishListStatus);

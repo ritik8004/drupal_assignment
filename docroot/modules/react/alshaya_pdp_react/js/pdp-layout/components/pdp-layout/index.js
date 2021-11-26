@@ -23,7 +23,7 @@ import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import PdpExpressDelivery from '../pdp-express-delivery';
 import { isWishlistEnabled } from '../../../../../js/utilities/wishlistHelper';
-import WishlistPdpContent from '../../../../../alshaya_wishlist/js/components/wishlist-pdp-content';
+import WishlistButton from '../../../../../alshaya_wishlist/js/components/wishlist-button';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -261,10 +261,12 @@ const PdpLayout = () => {
           </div>
           <ConditionalView condition={isWishlistEnabled()}>
             <div className="magv2-wishlist-pdp">
-              <WishlistPdpContent
-                variantSelected={variant}
-                skuParent={skuMainCode}
+              <WishlistButton
+                skuCode={skuMainCode}
                 title={title}
+                context="pdp"
+                position="top-right"
+                format="icon"
               />
             </div>
           </ConditionalView>

@@ -31,7 +31,7 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_wishlist.settings']);
 
   // Return if the feature is not enabled and applicable to display mode.
-  if (!in_array($context, ['matchback', 'pdp', 'modal']) || !\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
+  if (!in_array($context, ['matchback', 'pdp', 'modal', 'teaser']) || !\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
     return;
   }
 
@@ -49,7 +49,7 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
   // Attach wishlist libraries and add a wishlist markup for FE icon rendering.
   // @todo we need this library for PDP and basket page.
   if ($product_pdp_layout !== 'magazine_v2') {
-    $build['wishlist_enabled']['#markup'] = '<div id="wishlist-pdp-full"></div>';
+    $build['wishlist_enabled']['#markup'] = '<div class="wishlist-pdp-' . $vmode . '" data-sku-title="' .$sku->label() . '"></div>';
     $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
   }
 }
