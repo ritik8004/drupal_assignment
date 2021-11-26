@@ -64,24 +64,20 @@ export default class CompletePurchase extends React.Component {
       // For checkout_com_upapi method this
       // handle in its own component.
       if (cart.cart.payment.method !== 'checkout_com_upapi') {
-        setTimeout(() => {
-          dispatchCustomEvent('orderPaymentMethod', {
-            payment_method: Object
-              .values(drupalSettings.payment_methods)
-              .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
-              .shift().gtm_name,
-          });
-        }, 5000);
+        dispatchCustomEvent('orderPaymentMethod', {
+          payment_method: Object
+            .values(drupalSettings.payment_methods)
+            .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+            .shift().gtm_name,
+        });
       }
     } else {
       // If cart payment method is not in drupalSettings,
       // then it's a pseudo payment method.
       isPseudoPaymentMedthod = true;
-      setTimeout(() => {
-        dispatchCustomEvent('orderPaymentMethod', {
-          payment_method: cart.cart.payment.method,
-        });
-      }, 5000);
+      dispatchCustomEvent('orderPaymentMethod', {
+        payment_method: cart.cart.payment.method,
+      });
     }
 
     const checkoutButton = e.target.parentNode;

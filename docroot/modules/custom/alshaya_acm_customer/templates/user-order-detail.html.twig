@@ -25,7 +25,7 @@
 {% if bazaarvoice_strings %}
   {{ bazaarvoice_strings }}
 {% endif %}
-{% set aura_class = order.auraEnabled == true ? 'has-aura-points' %}
+{% set aura_class = order.auraEnabled ? 'has-aura-points' %}
 <div{{ attributes }}>
 
   <table class="user__order--detail {{aura_class}}">
@@ -95,7 +95,7 @@
             {{ order.total }}
           </div>
         </td>
-        {% if order.auraEnabled == true %}
+        {% if order.auraEnabled %}
           <td class="above-mobile">
             <div class="dark points-earned">
               <span>{{ "Points Earned"|t }}</span>

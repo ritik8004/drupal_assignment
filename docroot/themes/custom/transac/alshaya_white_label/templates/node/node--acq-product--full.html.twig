@@ -106,7 +106,7 @@ set classes = [
             </div>
           {% endif %}
 
-          {% if aura_enabled is defined and aura_enabled == true %}
+          {% if aura_enabled is defined and aura_enabled %}
             {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
             <div id="aura-pdp"></div>
           {% endif %}

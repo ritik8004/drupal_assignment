@@ -11,7 +11,9 @@
  */
 #}
 {% set count = order.quantity %}
-<div class="order-list-wrapper-container {{ order.auraEnabled == true ? 'has-aura-points' : '' }}">
+{% set aura_class = order.auraEnabled ? 'has-aura-points' %}
+
+<div class="order-list-wrapper-container {{aura_class}}">
   <div class="first-second wrapper">
     <a href="{{ order_detail_link }}" class="link-wrapper">
       <div class="first">
@@ -35,7 +37,7 @@
           {% endtrans %}
         </div>
       </div>
-      {% if order.auraEnabled == true %}
+      {% if order.auraEnabled %}
         <div class="aura-points-wrapper">
           <a href="{{ order_detail_link }}" class="link-wrapper">
             <div class="points-earned">
@@ -97,7 +99,7 @@
           {{ order.total }}
         </div>
       </div>
-      {% if order.auraEnabled == true %}
+      {% if order.auraEnabled %}
       <div class="aura-points-wrapper">
         <div class="points-earned">
             <span>{{ "Points Earned"|t }}</span>
