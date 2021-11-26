@@ -45,10 +45,10 @@ class AlshayaTopUpController extends ControllerBase {
    *   The language manager.
    */
   public function __construct(EgiftCardHelper $egiftCardHelper,
-                              EntityTypeManagerInterface $entity_manager,
+                              EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager) {
     $this->egiftCardHelper = $egiftCardHelper;
-    $this->entityManager = $entity_manager;
+    $this->entityManager = $entity_type_manager;
     $this->languageManager = $language_manager;
   }
 
@@ -81,8 +81,9 @@ class AlshayaTopUpController extends ControllerBase {
 
     // Load the block object from block id.
     $block = $this->entityManager->getStorage('block')->load('alshayatopuptermsandconditions');
+
     // Render the block content view.
-    $terms_block_content = $this->entityManager->getViewBuilder('block')->view($block, 'full', $lang);
+    $terms_block_content = $this->entityTypeManager()->getViewBuilder('block')->view($block, 'full', $lang);
 
     return [
       '#theme' => 'egift_topup_page',

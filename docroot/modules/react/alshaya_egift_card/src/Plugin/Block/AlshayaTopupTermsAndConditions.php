@@ -63,6 +63,7 @@ class AlshayaTopupTermsAndConditions extends BlockBase implements ContainerFacto
     $config = $this->configFactory->get('alshaya_egift_card.settings');
     return [
       '#theme' => 'egift_topup_terms_conditions',
+      '#title' => $config->get('topup_terms_conditions_title'),
       '#content' => $config->get('topup_terms_conditions_text')['value'],
     ];
   }
