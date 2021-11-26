@@ -11,6 +11,7 @@ import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -42,6 +43,7 @@ const OrderSummary = (props) => {
   }
 
   let etaLabel = Drupal.t('expected delivery within');
+  let methodIcon = '';
   const storeAddress = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
   let storePhone = '';
@@ -139,6 +141,10 @@ const OrderSummary = (props) => {
     moment.locale(currentLanguage);
   }
 
+  if (methodCode === 'tabby') {
+    methodIcon = <PaymentMethodIcon methodName={methodCode} methodLabel={method} />;
+  }
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -206,7 +212,7 @@ const OrderSummary = (props) => {
             <OrderSummaryItem type="address" label={Drupal.t('Billing address')} name={customerNameBilling} address={billingAddress.join(', ')} />
           </ConditionalView>
           <OrderSummaryItem type="mobile" label={Drupal.t('Mobile Number')} value={mobileNumber} />
-          <OrderSummaryItem label={Drupal.t('Payment method')} value={method} />
+          <OrderSummaryItem label={Drupal.t('Payment method')} value={methodIcon || method} />
           <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
           <OrderSummaryItem label={etaLabel} value={expectedDelivery} />
           <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />
