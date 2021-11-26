@@ -65,7 +65,7 @@ class EgiftCardHelper {
   public function getTermsAndConditionText() {
     $eGift_status = $this->isEgiftCardEnabled();
     if (!$eGift_status) {
-      return;
+      return '';
     }
     $config = $this->configFactory->get('alshaya_egift_card.settings');
     $term_conditions_title = $config->get('topup_terms_conditions_title');

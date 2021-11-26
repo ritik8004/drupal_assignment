@@ -48,7 +48,7 @@ class AlshayaTopUpController extends ControllerBase {
   public function topupcard() {
     $eGift_status = $this->egiftCardHelper->isEgiftCardEnabled();
     if (!$eGift_status) {
-      return;
+      return '';
     }
     return [
       '#theme' => 'egift_topup_page',
