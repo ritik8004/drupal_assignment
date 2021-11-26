@@ -135,12 +135,12 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
       self::$entityType = 'category';
-      self::$entityPath = $rcs_path_to_check;
+      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
       self::$entityPathPrefix = $category_prefix;
 
       self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
       // @todo Enable the category enrichment settings.
-      $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', self::$entityPath) : NULL;
+      $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', $rcs_path_to_check) : NULL;
       if (isset($category)) {
         self::$entityData = $category->toArray();
         self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $category->id();

@@ -1,7 +1,7 @@
 category:
   placeholder_tid:
   path_prefix: 'shop-'
-  enrichment: true
+  enrichment: false
   per_page: 12
   facets:
     color:
