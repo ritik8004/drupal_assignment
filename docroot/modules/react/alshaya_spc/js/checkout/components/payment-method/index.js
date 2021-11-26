@@ -26,6 +26,9 @@ import PaymentMethodCheckoutComUpapiFawry
 import cartActions from '../../../utilities/cart_actions';
 import { isFullPaymentDoneByAura } from '../../../aura-loyalty/components/utilities/checkout_helper';
 import isAuraEnabled from '../../../../../js/utilities/helper';
+import PaymentMethodTabby from '../payment-method-tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -35,6 +38,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodPostpay = React.createRef();
+    this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
   }
 
@@ -186,6 +190,7 @@ export default class PaymentMethod extends React.Component {
       return (null);
     }
     let additionalClasses = '';
+    let methodNameSuffix = '';
 
     // Hide by default if AB Testing is enabled and method not selected already.
     if (method.ab_testing && !(isSelected)) {
@@ -202,6 +207,14 @@ export default class PaymentMethod extends React.Component {
       ? `${additionalClasses} in-active`
       : additionalClasses;
 
+    // Set addition class for tabby.
+    if (method.code === 'tabby' && hasValue(method.status)) {
+      additionalClasses = method.status;
+      if (method.status === 'disabled') {
+        methodNameSuffix = method.rejection_reason;
+      }
+    }
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -217,20 +230,32 @@ export default class PaymentMethod extends React.Component {
                 && { disabled: disablePaymentMethod })}
             />
 
-            <label className="radio-sim radio-label">
-              {method.name}
-              <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
-                <div className="spc-payment-method-desc">
-                  <div className="desc-content">
-                    <CodSurchargeInformation
-                      surcharge={cart.cart.surcharge}
-                      messageKey="cod_surcharge_short_description"
-                    />
+            <div className="payment-method-label-wrapper">
+              <label className="radio-sim radio-label">
+                {method.name}
+                <ConditionalView condition={methodNameSuffix !== ''}>
+                  <span className="payment-method-name-suffix">{methodNameSuffix}</span>
+                </ConditionalView>
+                <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
+                  <div className="spc-payment-method-desc">
+                    <div className="desc-content">
+                      <CodSurchargeInformation
+                        surcharge={cart.cart.surcharge}
+                        messageKey="cod_surcharge_short_description"
+                      />
+                    </div>
                   </div>
-                </div>
+                </ConditionalView>
+              </label>
+
+              <ConditionalView condition={method.code === 'tabby'}>
+                <TabbyWidget
+                  pageType="checkout"
+                  classNames="installment-popup"
+                />
               </ConditionalView>
-            </label>
-            <PaymentMethodIcon methodName={method.code} />
+            </div>
+            <PaymentMethodIcon methodName={method.code} methodLabel={method.name} />
           </div>
           <ConditionalView condition={isAuraEnabled()
           && method.code === 'cashondelivery'
@@ -283,6 +308,16 @@ export default class PaymentMethod extends React.Component {
                 ref={this.PaymentMethodPostpay}
                 postpay={drupalSettings.postpay}
                 postpayWidgetInfo={drupalSettings.postpay_widget_info}
+                cart={cart}
+              />
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={(isSelected && method.code === 'tabby' && method.status === 'enabled')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodTabby
+                ref={this.paymentMethodTabby}
+                widgetInfo={drupalSettings.tabby.widgetInfo}
                 cart={cart}
               />
             </div>

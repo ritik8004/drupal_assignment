@@ -610,3 +610,8 @@ sofa-sectional:
   css:
     theme:
       css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
+
+tabby:
+  css:
+    theme:
+      css/conditional-sass/tabby/tabby.ltr.css: {}
