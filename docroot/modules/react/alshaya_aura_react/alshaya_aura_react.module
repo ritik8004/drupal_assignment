@@ -62,6 +62,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $settings['config'] = $aura_helper->getAuraConfig();
   $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
 
+  $settings['auraUnsupportedPaymentMethods'] = \Drupal\Core\Site\Settings::get('aura_unsupported_payment_methods') ?? [];
   $page['#attached']['drupalSettings']['aura'] = $settings;
 
   $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();

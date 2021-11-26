@@ -122,8 +122,7 @@ function getMembersToEarnMessage(price) {
 function redeemAuraPoints(data) {
   let stateValues = {};
 
-  const apiUrl = 'post/loyalty-club/process-redemption';
-  const apiData = callMiddlewareApi(apiUrl, 'POST', JSON.stringify(data));
+  const apiData = window.auraBackend.processRedemption(data);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
