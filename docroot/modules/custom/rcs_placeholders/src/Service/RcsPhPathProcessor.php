@@ -135,7 +135,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
       self::$entityType = 'category';
-      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
+      self::$entityPath = $rcs_path_to_check;
       self::$entityPathPrefix = $category_prefix;
 
       self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
