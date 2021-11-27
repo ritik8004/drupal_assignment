@@ -24,6 +24,10 @@ header {
   a {
     min-width: 12.5rem;
 
+    html[lang=ar] & {
+      margin-top: 0.75rem;
+    }
+
     @include breakpoint($upto-desktop) {
       min-width: 8.25rem;
       max-width: 8.25rem;
@@ -37,6 +41,8 @@ header {
       html[lang=ar] & {
         width: auto;
         margin-top: 0;
+        height: auto;
+        max-width: 8.25rem;
       }
     }
   }
@@ -51,15 +57,27 @@ header {
     @include breakpoint($upto-desktop) {
       background-size: 72%;
       top: 0.3125rem;
-      #{$left}: 0;
+      #{$left}: -0.6875rem;
+
+      html[lang=ar] & {
+        right: 0;
+      }
     }
 
-    @include breakpoint($upto-desktop) {
-      #{$left}: -0.6875rem;
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        right: -0.3125rem;
+      }
     }
 
     html[lang=ar] & {
       background-position: center left;
+    }
+
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
     }
   }
 }
@@ -135,6 +153,10 @@ header {
     .store {
       #{$right}: 17%;
       top: 1.125rem;
+
+      html[lang=ar] & {
+        left: 13%;
+      }
     }
   }
 
@@ -179,6 +201,11 @@ header {
       #{$right}: 24%;
       margin-#{$right}: 0;
       width: 2rem;
+
+      html[lang=ar] & {
+        top: 0.875rem;
+        left: 20%;
+      }
     }
   }
 

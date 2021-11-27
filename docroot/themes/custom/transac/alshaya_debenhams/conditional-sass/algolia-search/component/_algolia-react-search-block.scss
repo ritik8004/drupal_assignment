@@ -7,7 +7,7 @@
 
     html[lang=ar] & {
       padding: 0;
-      top: 2.75rem;
+      top: 3rem;
     }
   }
 
@@ -64,26 +64,19 @@
     @include breakpoint($desktop) {
       padding: 0;
       height: 1.5rem;
-    }
-
-    @include breakpoint($tablet) {
-      border-bottom-color: $algolia-auto-complete-border-bottom;
+      border: 0;
+      border-bottom: 1px solid $algolia-auto-complete-border-bottom;
       width: 18.75rem;
-      padding: 0;
     }
 
     @include breakpoint($only-tablet) {
-      border-bottom-color: $algolia-auto-complete-mobile-border;
+      border-bottom-color: $algolia-auto-complete-border;
       width: 100%;
     }
 
     &::placeholder {
       line-height: 2.5;
       font-size: 0.875rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      border-top: 0;
     }
   }
 
