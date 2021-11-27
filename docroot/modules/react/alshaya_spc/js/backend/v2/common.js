@@ -356,7 +356,7 @@ const handleResponse = (apiResponse) => {
 };
 
 /**
- * Make an AJAX call to Magento API.
+ * Get Magento API params.
  *
  * @param {string} url
  *   The url to send the request to.
@@ -365,10 +365,10 @@ const handleResponse = (apiResponse) => {
  * @param {object} data
  *   The object to send for POST request.
  *
- * @returns {Promise<AxiosPromise<object>>}
- *   Returns a promise object.
+ * @returns {object}
+ *   Returns a params object.
  */
-const callMagentoApi = (url, method = 'GET', data = {}) => {
+const getMagentoApiParams = (url, method = 'GET', data = {}) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -388,7 +388,24 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
 
   params.headers = params.headers || {};
   params.headers.RequestTime = Date.now();
+  return params;
+};
 
+/**
+ * Make an AJAX call to Magento API.
+ *
+ * @param {string} url
+ *   The url to send the request to.
+ * @param {string} method
+ *   The request method.
+ * @param {object} data
+ *   The object to send for POST request.
+ *
+ * @returns {Promise<AxiosPromise<object>>}
+ *   Returns a promise object.
+ */
+const callMagentoApi = (url, method = 'GET', data = {}) => {
+  const params = getMagentoApiParams(url, method, data);
   return Axios(params)
     .then((response) => handleResponse(response))
     .catch((error) => {
@@ -408,6 +425,42 @@ const callMagentoApi = (url, method = 'GET', data = {}) => {
 
       return error;
     });
+};
+
+/**
+ * Make an synchronous AJAX call to Magento API.
+ *
+ * @param {string} url
+ *   The url to send the request to.
+ * @param {string} method
+ *   The request method.
+ * @param {object} data
+ *   The object to send for POST request.
+ *
+ * @returns {object}
+ *   Returns a ajax response.
+ */
+const callMagentoApiSynchronous = (url, method = 'GET', data = {}) => {
+  const params = getMagentoApiParams(url, method, data);
+  let result;
+  jQuery.ajax({
+    url: params.url,
+    type: method,
+    async: false,
+    cache: false,
+    data: params.data,
+    headers: params.headers,
+    success(response) {
+      result = response;
+    },
+    error(exception) {
+      logger.error('Something happened in setting up the request that triggered an error: @message.', {
+        '@message': exception.responseText,
+      });
+      result = exception;
+    },
+  });
+  return result;
 };
 
 /**
@@ -1441,6 +1494,7 @@ export {
   associateCartToCustomer,
   callDrupalApi,
   callMagentoApi,
+  callMagentoApiSynchronous,
   preUpdateValidation,
   getCart,
   getCartWithProcessedData,
