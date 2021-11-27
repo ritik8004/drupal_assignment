@@ -13,3 +13,11 @@ alshaya_egift_card.check_balance:
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaCheckBalanceController::openModalForm'
   requirements:
     _permission: 'access content'
+
+alshaya_egift_card.topup_card:
+  path: '/gift-card/topup-card'
+  defaults:
+    _title: 'TopUp Card'
+    _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaTopUpController::topupcard'
+  requirements:
+    _permission: 'access content'

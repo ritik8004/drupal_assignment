@@ -85,6 +85,14 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
       ];
     }
 
+    $form['egift_card_configuration']['topup_terms_conditions_text'] = [
+      '#type' => 'text_format',
+      '#format' => 'rich_text',
+      '#title' => $this->t('Topup: Terms and conditions block text'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('topup_terms_conditions_text.value'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -95,6 +103,7 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
     $this->config('alshaya_egift_card.settings')
       ->set('egift_card_enabled', $form_state->getValue('enable_disable_egift_card'))
       ->set('payment_methods_not_supported', $form_state->getValue('payment_methods_not_supported'))
+      ->set('topup_terms_conditions_text', $form_state->getValue('topup_terms_conditions_text'))
       ->save();
 
     parent::submitForm($form, $form_state);

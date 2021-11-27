@@ -31,6 +31,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Please enter your card number.',
         'context' => 'egift',
       ],
+      'Terms & Conditions' => [
+        'ar' => 'Terms & Conditions',
+        'context' => 'egift',
+      ],
       'Please enter your email address.' => [
         'ar' => 'Please enter your email address.',
         'context' => 'egift',
