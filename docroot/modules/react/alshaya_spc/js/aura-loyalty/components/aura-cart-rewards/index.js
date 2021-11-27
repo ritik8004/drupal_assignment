@@ -24,10 +24,10 @@ class AuraCartRewards extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+    document.addEventListener('loyaltyStatusUpdated', this.updateState, false);
 
     if (getUserDetails().id) {
-      document.addEventListener('customerDetailsFetched', this.updateStates, false);
+      document.addEventListener('customerDetailsFetched', this.updateState, false);
 
       // Listener to refreshCart event to track any cart update action like quantity update.
       document.addEventListener('refreshCart', this.removeRedeemedPoints, false);
@@ -60,7 +60,7 @@ class AuraCartRewards extends React.Component {
       const data = {
         detail: { stateValues: localStorageValues },
       };
-      this.updateStates(data);
+      this.updateState(data);
     }
   }
 
@@ -109,7 +109,7 @@ class AuraCartRewards extends React.Component {
     redeemAuraPoints(requestData);
   };
 
-  updateStates = (data) => {
+  updateState = (data) => {
     const states = { ...data.detail.stateValues };
     states.wait = false;
     this.setState({

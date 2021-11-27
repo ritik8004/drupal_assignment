@@ -212,7 +212,7 @@ window.auraBackend.sendLinkCardOtp = async (type, value) => {
     logger.error('Error while trying to search mobile number to send link card OTP. Request Data: @data', {
       '@data': JSON.stringify({ type, value }),
     });
-    return searchResponse.custom === true ? { data: searchResponse } : searchResponse;
+    return searchResponse.custom ? { data: searchResponse } : searchResponse;
   }
 
   if (!hasValue(searchResponse.data.mobile)) {
@@ -265,7 +265,7 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
 
   // Call helper to get customer information only if fetch status
   // is not false.
-  if (fetchStatus === true) {
+  if (fetchStatus) {
     const customerInfo = await getCustomerInfo(customerId);
 
     if (hasValue(customerInfo.error)) {
@@ -287,7 +287,7 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
 
   // Call helper to get customer point details only if fetch points
   // is not false.
-  if (fetchPoints === true) {
+  if (fetchPoints) {
     const customerPoints = await getCustomerPoints(customerId);
 
     if (hasValue(customerPoints.error)) {
@@ -303,7 +303,7 @@ window.auraBackend.getCustomerDetails = async (data = {}) => {
 
   // Call helper to get customer tier details only if fetch tier
   // is not false.
-  if (fetchTier === true) {
+  if (fetchTier) {
     const customerTier = await getCustomerTier(customerId);
 
     if (hasValue(customerTier.error)) {

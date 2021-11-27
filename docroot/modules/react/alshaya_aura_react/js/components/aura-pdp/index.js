@@ -71,7 +71,7 @@ class AuraPDP extends React.Component {
     }
   };
 
-  updateStates = (data) => {
+  updateState = (data) => {
     const { stateValues, context } = data.detail;
     const { mode } = this.props;
 

@@ -19,14 +19,14 @@ const HeaderGuest = (props) => {
     tier,
   } = props;
 
-  if (isMobileTab === true) {
+  if (isMobileTab) {
     if (signUpComplete !== true) {
       return null;
     }
     return <Points points={points} tier={tier} />;
   }
 
-  if (signUpComplete === true) {
+  if (signUpComplete) {
     return (
       <>
         <HeaderLoyaltyCta
@@ -56,7 +56,7 @@ const HeaderGuest = (props) => {
       <SignUpHeader
         isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
         openHeaderModal={openHeaderModal}
-        isNotExpandable={clickedNotYou === true ? false : isNotExpandable}
+        isNotExpandable={clickedNotYou ? false : isNotExpandable}
       />
     </div>
   );

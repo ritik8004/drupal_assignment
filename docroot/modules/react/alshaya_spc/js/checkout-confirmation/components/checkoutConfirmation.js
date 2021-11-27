@@ -16,7 +16,7 @@ import logger from '../../../../js/utilities/logger';
 import isAuraEnabled from '../../../../js/utilities/helper';
 import {
   getCustomerDetails,
-} from '../../../../alshaya_aura_react/js/utilities/header_helper';
+} from '../../../../alshaya_aura_react/js/utilities/customer_helper';
 import { getUserDetails } from '../../../../alshaya_aura_react/js/utilities/helper';
 
 class CheckoutConfirmation extends React.Component {
@@ -64,14 +64,14 @@ class CheckoutConfirmation extends React.Component {
 
     // If Aura enabled and logged in user, invoke API to fetch user's loyalty status.
     if (isAuraEnabled() && getUserDetails().id) {
-      document.addEventListener('customerDetailsFetched', this.updateStates, false);
+      document.addEventListener('customerDetailsFetched', this.updateState, false);
       // Get customer details.
       getCustomerDetails({ fetchPoints: false, fetchTier: false });
     }
   }
 
   // Event listener callback to update states.
-  updateStates = (data) => {
+  updateState = (data) => {
     this.setState({
       ...data.detail.stateValues,
     });
