@@ -26,9 +26,14 @@
 
   a {
     font-size: 0.875rem;
-    padding-top: 0.5rem;
+    padding-top: 0.6875rem;
     padding-bottom: 0.625rem;
     color: $mm_l3_link_mobile;
+
+    @include breakpoint($desktop) {
+      height: auto;
+      font-size: 0.75rem;
+    }
 
     @include breakpoint($upto-desktop) {
       height: 2.875rem;
