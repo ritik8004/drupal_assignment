@@ -140,7 +140,14 @@
 }
 
 .alshaya-newsletter-subscribe {
-  max-width: 22rem;
+  @include breakpoint($tablet) {
+    max-width: 22rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 0 1.25rem;
+  }
+
   width: 100%;
 
   html[lang=ar] & {
@@ -148,7 +155,8 @@
   }
 
   @include breakpoint($only-mobile) {
-    margin: 1rem 1.25rem 2.5rem;
+    margin: 0;
+    margin-top: 2rem;
   }
 
   @include breakpoint($only-tablet) {
