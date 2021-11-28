@@ -292,30 +292,4 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
-  /**
-   * Update user's aura info.
-   *
-   * @param array $data
-   *   User's aura info.
-   *
-   * @return bool
-   *   true/false.
-   */
-  public function updateUserAuraInfo(array $data) {
-    $url = '/update/user-aura-info';
-    $options = ['form_params' => $data];
-
-    try {
-      $response = $this->invokeApiWithSession('POST', $url, $options);
-      $result = $response->getBody()->getContents();
-      return json_decode($result, TRUE);
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error occurred while updating user aura info. Data: @data. Message: @message', [
-        '@data' => json_decode($data),
-        '@message' => $e->getMessage(),
-      ]);
-    }
-  }
-
 }

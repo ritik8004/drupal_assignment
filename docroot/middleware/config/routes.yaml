@@ -63,10 +63,6 @@ payment.payment_error:
   controller: App\Controller\PaymentController::handlePaymentFail
   methods: GET
 
-loyalty_club_routes:
-  # Contains all loyalty club related routes.
-  resource: './loyalty_club_routes.yaml'
-
 card.bin_validation:
   path: /card/bin-validation
   controller: App\Controller\BinValidationController::handleBinValidation
