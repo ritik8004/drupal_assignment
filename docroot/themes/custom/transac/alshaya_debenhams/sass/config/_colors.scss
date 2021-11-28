@@ -114,8 +114,8 @@ $header_c_menu_text: $charcoal;
 //Algolia search bar.
 $algolia-input-text: $charcoal;
 $algolia-input-placeholder-text: $mid-grey;
-$algolia-auto-complete-border: $white;
-$algolia-auto-complete-mobile-border: $black;
+$algolia-auto-complete-border: $pale-grey;
+$algolia-auto-complete-mobile-border: $pale-grey;
 $algolia-auto-complete-border-bottom: $black;
 $algolia-search-clear-text-icon: $charcoal;
 $algolia-trending-title-text: $charcoal;
@@ -128,6 +128,7 @@ $algolia-auto-suggest-border: $pale-grey;
 $algolia-react-progressbar-text: $charcoal;
 $algolia-react-progressbar: $mid-grey;
 $algolia_react-facet-item-color: $charcoal;
+$algolia_sticky-header-shadow: $pale-grey;
 
 // PLP Product tile.
 $plp_tile_product_title: $charcoal;
@@ -195,3 +196,25 @@ $maintenance_container_border: $white;
 $maintenance_container_border_top: $white;
 $maintenance_body_bg: $white;
 $maintenance_link: $light-grey;
+
+// Mega menu.
+$mm_body_overlay: rgba(0, 0, 0, 0.5);
+$mm_l1_border: $pale-grey;
+$mm_l1_desktop-border: $pale-grey;
+$mm_l1_link: $charcoal;
+$mm_l1_link_hover: $charcoal;
+$mm_l1_link_active_border: $medium-sky-blue;
+$mm_l2_link: $black;
+$mm_l2_link_hover: $charcoal;
+$mm_l3_link: $mid-grey;
+$mm_l3_link_mobile: $black;
+$mm_highlight_label: $charcoal;
+$mm_highlight_title: $charcoal;
+$mm_highlight_description: $charcoal;
+$mm_l3_link_hover: $charcoal;
+
+// PLP LHN block.
+$lhn_l2: $charcoal;
+$lhn_l3: $mid-grey;
+$lhn_l4: $mid-grey;
+$lhn_sticky-header-shadow: $pale-grey;
