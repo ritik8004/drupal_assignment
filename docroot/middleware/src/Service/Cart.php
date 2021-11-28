@@ -17,9 +17,7 @@ use Drupal\alshaya_master\Helper\SortUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
-use App\Event\CartDataEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use App\EventSubscriber\Aura\CartDataSubscriber;
 
 /**
  * Class Cart methods.
@@ -2553,13 +2551,6 @@ class Cart {
 
     // Whether cart is stale or not.
     $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
-
-    // Dispatch an event for other modules/features to add/update cart data.
-    $event = new CartDataEvent($data, $cart_data);
-    // Add subscriber for aura related cart data.
-    $this->dispatcher->addSubscriber(new CartDataSubscriber());
-    $this->dispatcher->dispatch($event, CartDataEvent::EVENT_NAME);
-    $data = $event->getProcessedCartData();
 
     return $data;
   }

@@ -80,7 +80,7 @@ class AuraProgressWrapper extends React.Component {
       tier,
     } = this.props;
 
-    if (wait === true) {
+    if (wait) {
       return (
         <div className="aura-progressbar-wrapper-loading">
           <Loading />

@@ -70,10 +70,11 @@ function processCheckoutCart(data) {
           }
 
           // For add action.
-          let mobile; let
-            userCountryCode = '';
+          let mobile;
+          let userCountryCode = '';
 
           if (result.data.data.mobile) {
+            // @todo Update code to also support countries not having exactly 3 digit country code.
             const mobileWithoutPrefixPlus = result.data.data.mobile.replace('+', '');
             mobile = mobileWithoutPrefixPlus.substring(3);
             userCountryCode = mobileWithoutPrefixPlus.substring(0, 3);

@@ -11,7 +11,7 @@ import {
 import Loading from '../../../../alshaya_spc/js/utilities/loading';
 import {
   getCustomerDetails,
-} from '../../utilities/header_helper';
+} from '../../utilities/customer_helper';
 import HeaderLoggedIn from './header-loggedIn';
 import HeaderGuest from './header-guest';
 
@@ -50,10 +50,10 @@ class Header extends React.Component {
     } = this.state;
 
     // Event listener to listen to customer data API call event.
-    document.addEventListener('customerDetailsFetched', this.updateStates, false);
+    document.addEventListener('customerDetailsFetched', this.updateState, false);
 
     // Event listener to listen to actions on loyalty blocks.
-    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+    document.addEventListener('loyaltyStatusUpdated', this.updateState, false);
 
     // No API call to fetch points for anonymous users or user with
     // loyalty status APC_NOT_LINKED_NOT_U.
@@ -69,11 +69,11 @@ class Header extends React.Component {
   }
 
   // Event listener callback to update header states.
-  updateStates = (data) => {
+  updateState = (data) => {
     const { stateValues, clickedNotYou } = data.detail;
     const states = { ...stateValues };
 
-    if (clickedNotYou === true) {
+    if (clickedNotYou) {
       states.clickedNotYou = clickedNotYou;
     }
 

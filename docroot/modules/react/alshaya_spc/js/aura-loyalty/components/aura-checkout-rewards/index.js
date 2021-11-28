@@ -10,7 +10,7 @@ import AuraNotLinkedDataCheckout from './components/not-linked-data-checkout';
 import Loading from '../../../utilities/loading';
 import {
   getCustomerDetails,
-} from '../../../../../alshaya_aura_react/js/utilities/header_helper';
+} from '../../../../../alshaya_aura_react/js/utilities/customer_helper';
 import { getStorageInfo, removeStorageInfo } from '../../../utilities/storage';
 import { isDeliveryTypeSameAsInCart } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../../../js/utilities/strings';
@@ -30,7 +30,7 @@ class AuraCheckoutRewards extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+    document.addEventListener('loyaltyStatusUpdated', this.updateState, false);
     const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
     // Logged in user.
@@ -40,7 +40,7 @@ class AuraCheckoutRewards extends React.Component {
         removeStorageInfo(getAuraLocalStorageKey());
       }
 
-      document.addEventListener('customerDetailsFetched', this.updateStates, false);
+      document.addEventListener('customerDetailsFetched', this.updateState, false);
       const { loyaltyStatus } = this.state;
 
       if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
@@ -66,11 +66,11 @@ class AuraCheckoutRewards extends React.Component {
     const data = {
       detail: { stateValues: localStorageValues },
     };
-    this.updateStates(data);
+    this.updateState(data);
   }
 
   // Event listener callback to update states.
-  updateStates = (data) => {
+  updateState = (data) => {
     const states = { ...data.detail.stateValues };
 
     // Attach aura card to cart.
