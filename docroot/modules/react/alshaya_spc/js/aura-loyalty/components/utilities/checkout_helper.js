@@ -3,7 +3,7 @@ import {
   getPriceToPoint,
   getAuraDetailsDefaultState,
 } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
-import { postAPIData } from '../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
+import { postAPIData } from '../../../../../alshaya_aura_react/js/utilities/api/api_helper';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import {
   removeFullScreenLoader,

@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { getAuraConfig } from '../../../utilities/helper';
 import SignUpOtpModal from '../sign-up-otp-modal';
 
@@ -46,8 +47,7 @@ class SignUpHeader extends React.Component {
 
     return (
       <>
-        { isHeaderModalOpen && !isNotExpandable
-          && (
+        <ConditionalView condition={isHeaderModalOpen && !isNotExpandable}>
           <div className="aura-header-popup-wrapper">
             <div className="aura-popup-sub-header">
               <h3>{Drupal.t('Say hello to Aura')}</h3>
@@ -83,7 +83,7 @@ class SignUpHeader extends React.Component {
               </div>
             </div>
           </div>
-          )}
+        </ConditionalView>
         <SignUpOtpModal
           isOTPModalOpen={isOTPModalOpen}
           closeOTPModal={this.closeOTPModal}

@@ -1,4 +1,4 @@
-import _isEmpty from 'lodash/isEmpty';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 import {
   getPointToPriceRatio,
   getPriceToPointRatio,
@@ -100,7 +100,7 @@ function getProcessedMobileCountryCode() {
   const processedCountryCodes = [];
   const { phonePrefixList } = getAuraConfig();
 
-  if (!_isEmpty(phonePrefixList)) {
+  if (hasValue(phonePrefixList)) {
     phonePrefixList.forEach((code) => {
       processedCountryCodes.push({ value: code.replace('+', ''), label: code });
     });

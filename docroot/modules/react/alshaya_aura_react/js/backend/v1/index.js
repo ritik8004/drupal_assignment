@@ -1,4 +1,4 @@
-import { postAPIData, getAPIData } from '../../utilities/api/fetchApiData';
+import { postAPIData, getAPIData } from '../../utilities/api/api_helper';
 
 /**
  * Global object to help perform Aura activities for V2.
