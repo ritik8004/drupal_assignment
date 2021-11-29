@@ -353,7 +353,7 @@ const getProcessedCartData = async (cartData) => {
         data.totals.balancePayable = element.value;
       }
       if (element.code === 'aura_payment') {
-        data.totals.auraPayment = element.value;
+        data.totals.paidWithAura = element.value;
       }
     });
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
