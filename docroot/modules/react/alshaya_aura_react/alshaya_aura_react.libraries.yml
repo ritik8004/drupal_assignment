@@ -1,0 +1,34 @@
+alshaya_aura_loyalty_club:
+  js:
+    dist/loyalty_club.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
+alshaya_aura_my_accounts:
+  js:
+    dist/my_accounts.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
+aura_header_library:
+  js:
+    dist/header.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
+alshaya_aura_pdp:
+  js:
+    dist/pdp.bundle.js: {}
+    assets/js/productHelper.js: {}
+  dependencies:
+    - alshaya_react/react
+
+# This is compatible with commerce backend version 1.
+aura_backend.v1:
+  js:
+    dist/aura_backend_v1.bundle.js: {}
+
+# This is compatible with commerce backend version 2.
+aura_backend.v2:
+  js:
+    dist/aura_backend_v2.bundle.js: {}

@@ -1155,7 +1155,9 @@ class AlshayaApiWrapper {
           ];
         }
 
-        if (is_array($response)) {
+        // In few scenarios like missing required field, MDC returns error as
+        // an array but we don't need to process response if its for an error.
+        if (is_array($response) && empty($response['message'])) {
           $response = MagentoApiResponseHelper::customerFromSearchResult($response);
         }
         else {

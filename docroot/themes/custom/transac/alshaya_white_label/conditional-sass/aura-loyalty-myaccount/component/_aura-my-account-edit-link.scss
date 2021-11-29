@@ -1,0 +1,10 @@
+.aura-my-account.aura-enabled {
+  .block-page-title-block {
+    .edit-account {
+      color: $order_edit_account_link;
+      position: absolute;
+      bottom: 0.75rem;
+      #{$right}: 0;
+    }
+  }
+}

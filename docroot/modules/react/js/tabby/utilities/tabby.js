@@ -2,7 +2,7 @@ import { hasValue } from '../../utilities/conditionsUtility';
 import { getApiEndpoint } from '../../../alshaya_spc/js/backend/v2/utility';
 import logger from '../../utilities/logger';
 import StaticStorage from '../../../alshaya_spc/js/backend/v2/staticStorage';
-import { callMagentoApiSynchronous } from '../../../alshaya_spc/js/backend/v2/common';
+import { callMagentoApiSynchronous } from '../../utilities/requestHelper';
 
 const Tabby = {
   isTabbyEnabled: () => hasValue(drupalSettings.tabby)

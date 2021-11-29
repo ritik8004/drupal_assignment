@@ -81,6 +81,16 @@ libraries-override:
       theme:
         css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css
 
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
+  alshaya_white_label/aura-loyalty-pdp:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css
+
   alshaya_white_label/store_finder:
     css:
       theme:
