@@ -21,6 +21,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   /** @var \Drupal\alshaya_aura_react\Helper\AuraHelper */
   $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
   $settings['enabled'] = $aura_helper->isAuraEnabled();
+  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_aura_react.settings')->getCacheTags());
 
   // Do not proceed if AURA is not enabled.
   if ($settings['enabled'] !== TRUE) {
@@ -59,7 +60,6 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
   }
   $settings['config'] = $aura_helper->getAuraConfig();
-  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_aura_react.settings')->getCacheTags());
 
   $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
 
