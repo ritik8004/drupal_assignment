@@ -319,6 +319,9 @@ function _alshaya_aura_react_translations() {
     'Offline' => [
       'ar' => 'على الانترنت',
     ],
+    'Instore' => [
+      'ar' => 'في المحلات',
+    ],
     'All Transactions' => [
       'ar' => 'جميع المعاملات',
     ],
