@@ -7,7 +7,7 @@ function getTransactionTypeOptions() {
   return [
     { value: 'all', label: Drupal.t('All Transactions') },
     { value: 'K', label: Drupal.t('Online') },
-    { value: 'V', label: Drupal.t('Offline') },
+    { value: 'V', label: Drupal.t('Instore') },
   ];
 }
 
