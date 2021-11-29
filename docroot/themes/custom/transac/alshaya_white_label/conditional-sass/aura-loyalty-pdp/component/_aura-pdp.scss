@@ -1,0 +1,21 @@
+.aura-pdp-points-section {
+  padding: 0 0 0.75rem;
+  font-size: 1rem;
+  color: $aura-pdp-string;
+  font-family: $alshaya-thin;
+  display: flex;
+  align-items: center;
+
+  .new-pdp-magazine-layout &,
+  .magazine-layout & {
+    padding: 0;
+  }
+
+  .tooltip-anchor.question {
+    padding: 0.25rem 0.25rem 0.25rem 0;
+  }
+
+  b {
+    font-family: $alshaya-bold;
+  }
+}

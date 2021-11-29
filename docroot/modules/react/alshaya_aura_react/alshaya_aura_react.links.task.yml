@@ -1,0 +1,9 @@
+alshaya_aura_react.aura_loyalty_config:
+  route_name: alshaya_aura_react.aura_loyalty_config
+  title: 'Alshaya AURA Configurations'
+  base_route: alshaya_aura_react.aura_loyalty_config
+
+alshaya_aura_react.aura_loyalty_benefits_config:
+  route_name: alshaya_aura_react.aura_loyalty_benefits_config
+  title: 'Alshaya AURA Loyalty Benefits Configuration'
+  base_route: alshaya_aura_react.aura_loyalty_benefits_config
