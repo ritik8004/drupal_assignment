@@ -1,7 +1,7 @@
 import React from 'react';
-import ConditionalView from '../../../../alshaya_algolia_react/js/common/components/conditional-view';
-import { egiftCardHeader } from '../../utilities/egift_util';
-import UpdateEgiftCard from './UpdateEgiftCard';
+import ConditionalView from '../../common/components/conditional-view';
+import { egiftCardHeader, getCurrencyCode } from '../../utilities/egift_util';
+import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -47,31 +47,52 @@ export default class ValidEgiftCard extends React.Component {
 
   // Update egift amount.
   handleAmountUpdate = (updateAmount) => {
-    // @todo To call API to update the amount.
+    // Prepare the request object for redeem API.
+    const postData = {
+      redeem_points: {
+        action: 'set_points',
+        quote_id: '28288',
+        amount: updateAmount,
+        card_number: '4250120656063430',
+        payment_method: 'hps_payment',
+      },
+    };
     this.setState({
       amount: updateAmount,
     });
+    // Proceed only if postData object is available.
+    if (postData) {
+      // @todo To call API to update the amount.
+    }
     this.closeModal();
+  }
+
+  // get User session and linked card status.
+  getUserEgiftStatus = () => {
+    const validUser = drupalSettings.user.uid > 0;
+    // @todo To check if user is already having a linked card.
+
+    return validUser;
   }
 
   render = () => {
     const { open, amount, remainingAmount } = this.state;
-    const { currency_config: currencySettings } = drupalSettings.alshaya_spc;
+    const currencyCode = getCurrencyCode();
 
     return (
       <div className="egift-wrapper">
         {egiftCardHeader({
           egiftHeading: Drupal.t('Applied card amount - @currencyCode @amount', {
-            '@currencyCode': currencySettings.currency_code,
+            '@currencyCode': currencyCode,
             '@amount': amount,
           }, { context: 'egift' }),
           egiftSubHeading: Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
-            '@currencyCode': currencySettings.currency_code,
+            '@currencyCode': currencyCode,
             '@remainingAmount': remainingAmount,
           }, { context: 'egift' }),
         })}
         <ConditionalView conditional={open}>
-          <UpdateEgiftCard
+          <UpdateEgiftCardAmount
             closeModal={this.closeModal}
             open={open}
             amount={amount}
@@ -83,9 +104,10 @@ export default class ValidEgiftCard extends React.Component {
           <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
         </div>
         <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
-
-        <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
-        <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
+        <ConditionalView condition={this.getUserEgiftStatus()}>
+          <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
+          <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
+        </ConditionalView>
       </div>
     );
   }

@@ -63,6 +63,54 @@ function _alshaya_egift_card_translations() {
         'ar' => 'CHECK ANOTHER CARD',
         'context' => 'egift',
       ],
+      'Please enter the code.' => [
+        'ar' => 'Please enter the code.',
+        'context' => 'egift',
+      ],
+      'Please enter the amount.' => [
+        'ar' => 'Please enter the amount.',
+        'context' => 'egift',
+      ],
+      'Insufficient balance, Please topup the card or lower the redeem amount.' => [
+        'ar' => 'Insufficient balance, Please topup the card or lower the redeem amount.',
+        'context' => 'egift',
+      ],
+      'Verify eGift Card to redeem from card balance' => [
+        'ar' => 'Verify eGift Card to redeem from card balance',
+        'context' => 'egift',
+      ],
+      'We’ll send a verification code to your email to verify eGift card' => [
+        'ar' => 'We’ll send a verification code to your email to verify eGift card',
+        'context' => 'egift',
+      ],
+      'Edit amount to use' => [
+        'ar' => 'Edit amount to use',
+        'context' => 'egift',
+      ],
+      'Applied card amount - @currencyCode @amount' => [
+        'ar' => 'Applied card amount - @currencyCode @amount',
+        'context' => 'egift',
+      ],
+      'Remaining Balance - @currencyCode @remainingAmount' => [
+        'ar' => 'Remaining Balance - @currencyCode @remainingAmount',
+        'context' => 'egift',
+      ],
+      'Link this card for faster payment next time' => [
+        'ar' => 'Link this card for faster payment next time',
+        'context' => 'egift',
+      ],
+      'Verification code sent to @email' => [
+        'ar' => 'Verification code sent to @email',
+        'context' => 'egift',
+      ],
+      'Resend Code' => [
+        'ar' => 'Resend Code',
+        'context' => 'egift',
+      ],
+      'Change Card?' => [
+        'ar' => 'Change Card?',
+        'context' => 'egift',
+      ],
     ],
   ];
 

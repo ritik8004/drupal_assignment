@@ -18,6 +18,18 @@ export const egiftCardHeader = ({
   </div>
 );
 
+/**
+ * Provides the current currency code.
+ */
+export const getCurrencyCode = () => {
+  const alshayaSpc = drupalSettings.alshaya_spc;
+  if (Object.prototype.hasOwnProperty.call(alshayaSpc, 'currency_config')) {
+    return alshayaSpc.currency_config.currency_code;
+  }
+
+  return null;
+};
+
 
 /**
  * Provides different form element.

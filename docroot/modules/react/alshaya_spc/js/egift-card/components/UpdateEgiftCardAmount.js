@@ -1,15 +1,16 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
+import { egiftCardHeader, egiftFormElement, getCurrencyCode } from '../../utilities/egift_util';
 import getStringMessage from '../../utilities/strings';
 
-export default class UpdateEgiftCard extends React.Component {
-  // Handle validation of form.
+export default class UpdateEgiftCardAmount extends React.Component {
+  // Handling validation for the changing the amount of egift card.
   handleValidation = (e) => {
     const { egift_amount: egiftAmount } = e.target.elements;
     const { amount, remainingAmount } = this.props;
 
     let errors = false;
+    // Proceed only if user has entered some value.
     if (egiftAmount.value.length === 0) {
       document.getElementById('egift_amount_error').innerHTML = getStringMessage('form_egift_amount');
       errors = true;
@@ -45,7 +46,7 @@ export default class UpdateEgiftCard extends React.Component {
       remainingAmount,
     } = this.props;
 
-    const { currency_config: currencySettings } = drupalSettings.alshaya_spc;
+    const currencyCode = getCurrencyCode();
 
     return (
       <>
@@ -67,14 +68,15 @@ export default class UpdateEgiftCard extends React.Component {
               >
                 {egiftCardHeader({
                   egiftHeading: Drupal.t('Applied card amount - @currencyCode @amount', {
-                    '@currencyCode': currencySettings.currency_code,
+                    '@currencyCode': currencyCode,
                     '@amount': amount,
                   }, { context: 'egift' }),
                   egiftSubHeading: Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
-                    '@currencyCode': currencySettings.currency_code,
+                    '@currencyCode': currencyCode,
                     '@remainingAmount': remainingAmount,
                   }, { context: 'egift' }),
                 })}
+                <span>{currencyCode} </span>
                 {egiftFormElement({
                   type: 'number',
                   name: 'amount',
