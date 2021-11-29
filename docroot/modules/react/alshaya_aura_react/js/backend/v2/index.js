@@ -16,6 +16,7 @@ import {
 } from './customer_helper';
 import { getPaymentMethodSetOnCart } from '../../../../alshaya_spc/js/backend/v2/checkout.payment';
 import { prepareRedeemPointsData, redeemPoints } from './redemption_helper';
+import { isUnsupportedPaymentMethod } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -543,18 +544,11 @@ window.auraBackend.processRedemption = async (data) => {
     return { data: getErrorResponse(message, 404) };
   }
 
-  // Check if payment method in cart is supported with aura.
-  const { auraUnsupportedPaymentMethods } = drupalSettings.aura.config;
-  // @todo Figure out if the method can be moved to some common place.
   const paymentMethodSetOnCart = await getPaymentMethodSetOnCart();
-
   if (hasValue(paymentMethodSetOnCart)
-    && auraUnsupportedPaymentMethods.includes(paymentMethodSetOnCart)
+    && isUnsupportedPaymentMethod(paymentMethodSetOnCart)
   ) {
-    message = 'Error while trying to redeem aura points. Selected payment method is unsupported with Aura.';
-    logger.error(`${message} Unsupported payment methods: @unsupportedPaymentMethods`, {
-      '@unsupportedPaymentMethods': JSON.stringify(auraUnsupportedPaymentMethods),
-    });
+    logger.error(`Error while trying to redeem aura points. Selected payment method ${paymentMethodSetOnCart} is unsupported with Aura.`);
     return { data: getErrorResponse(message, 404) };
   }
 
