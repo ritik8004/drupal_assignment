@@ -570,17 +570,8 @@ window.auraBackend.processRedemption = async (data) => {
   // Get user details from session.
   const { uid } = drupalSettings.user;
 
-  // Check if we have user in session.
-  // @todo Ask if points can only be redeemed by logged in user.
-  if (uid === 0) {
-    logger.error('Error while trying to redeem aura points. No user available in session. User id from request: @uid.', {
-      '@uid': data.userId,
-    });
-    return { data: getErrorResponse('No user available in session', 404) };
-  }
-
   // Check if uid in the request matches the one in session.
-  if (uid !== data.userId) {
+  if (parseInt(uid, 10) !== parseInt(data.userId, 10)) {
     logger.error("Error while trying to redeem aura points. User id in request doesn't match the one in session. User id from request: @reqUid. User id in session: @sessionUid.", {
       '@reqUid': data.userId,
       '@sessionUid': uid,
@@ -590,8 +581,9 @@ window.auraBackend.processRedemption = async (data) => {
 
   const redeemPointsRequestData = prepareRedeemPointsData(data, cartId);
   if (hasValue(redeemPointsRequestData.error)) {
-    logger.error('Error while trying to create redeem points request data. Request data: @requestData.', {
-      '@requestData': JSON.stringify(redeemPointsRequestData),
+    logger.error('Error while trying to create redeem points request data. Request data: @requestData. Message: @message', {
+      '@requestData': JSON.stringify(data),
+      '@message': redeemPointsRequestData.error_message,
     });
     return { data: redeemPointsRequestData };
   }

@@ -1,6 +1,5 @@
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../../js/utilities/error';
-import logger from '../../../../js/utilities/logger';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 /**
@@ -18,7 +17,7 @@ const prepareRedeemPointsData = (data, cartId) => {
   let processedData = {};
 
   if (!hasValue(data.action)) {
-    return processedData;
+    return getErrorResponse('Action value is required.', 404);
   }
 
   if (data.action === 'remove points') {
@@ -44,12 +43,16 @@ const prepareRedeemPointsData = (data, cartId) => {
     if (!hasValue(processedData.redeemPoints.redeem_points)
       || !hasValue(processedData.redeemPoints.converted_money_value)
       || !hasValue(processedData.redeemPoints.currencyCode)) {
-      const message = 'Error while trying to redeem aura points. Redeem Points, Converted Money Value and Currency Code is required.';
-      logger.error(`${message} . Data: @request_data`, {
-        '@request_data': JSON.stringify(data),
-      });
-      return getErrorResponse(message, 404);
+      return getErrorResponse(
+        'Error while trying to prepare data to redeem aura points. Redeem Points, Converted Money Value and Currency Code is required.',
+        404,
+      );
     }
+  } else {
+    return getErrorResponse(
+      `Error while trying to prepare data to redeem aura points. Action value "${data.action}" is not supported.`,
+      404,
+    );
   }
 
   return processedData;
