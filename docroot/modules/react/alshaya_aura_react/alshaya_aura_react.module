@@ -12,11 +12,14 @@ use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
 use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_aura_react_page_attachments_alter(array &$page) {
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
+
   $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
   $settings['enabled'] = $aura_helper->isAuraEnabled();
 
@@ -160,6 +163,8 @@ function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings,
  * Implements hook_block_view_alter().
  */
 function alshaya_aura_react_block_view_alter(&$build, $block) {
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
+
   // Do not proceed if AURA is not enabled.
   if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
     return;
@@ -211,6 +216,8 @@ function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) 
  * Implements hook_block_view_BASE_BLOCK_ID_alter().
  */
 function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
+
   // Do not proceed if AURA is not enabled.
   if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
     return;
@@ -250,6 +257,8 @@ function _alshaya_aura_react_page_title_pre_render(array $build) {
  * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
  */
 function alshaya_aura_react_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
+
   // Do not proceed if AURA is not enabled.
   if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
     return;
@@ -284,6 +293,8 @@ function alshaya_aura_react_preprocess_node(&$variables) {
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_aura_react_alshaya_spc_checkout_build_alter(array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
+
   // Do not proceed if AURA is not enabled.
   if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
     return;
@@ -300,6 +311,8 @@ function alshaya_aura_react_alshaya_spc_checkout_build_alter(array &$build) {
  * Implements hook_alshaya_spc_cart_build_alter().
  */
 function alshaya_aura_react_alshaya_spc_cart_build_alter(array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
+
   // Do not proceed if AURA is not enabled.
   if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
     return;
@@ -313,6 +326,8 @@ function alshaya_aura_react_alshaya_spc_cart_build_alter(array &$build) {
  * Implements hook_alshaya_acm_customer_recent_order_build_alter().
  */
 function alshaya_aura_react_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
+
   // Do not proceed if AURA is not enabled.
   if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
     return;

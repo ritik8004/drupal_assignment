@@ -2,7 +2,7 @@ import React from 'react';
 import Cleave from 'cleave.js/react';
 import { getUserProfileInfo, getAllAuraTier } from '../../../../utilities/helper';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
-import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/helper';
+import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 
 const AuraMyAccountVerifiedUser = (props) => {
   const {

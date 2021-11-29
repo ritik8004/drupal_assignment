@@ -9,7 +9,7 @@ const HeaderLoyaltyCta = (props) => {
     isNotExpandable,
   } = props;
 
-  const previewClass = isHeaderModalOpen === true ? 'open' : '';
+  const previewClass = isHeaderModalOpen ? 'open' : '';
 
   if (isDesktop) {
     return (

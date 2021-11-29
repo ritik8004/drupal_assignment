@@ -51,7 +51,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     setChosenUserMobile(userMobile);
     const isValid = validateElementValueByType('signUpOtpMobile');
 
-    if (isValid === false) {
+    if (!isValid) {
       return;
     }
 
@@ -63,7 +63,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     const validationRequest = validateMobile('signUpOtpMobile', data);
     if (validationRequest instanceof Promise) {
       validationRequest.then((valid) => {
-        if (valid === true) {
+        if (valid) {
           // API call to send otp.
           const apiData = window.auraBackend.sendSignUpOtp(userMobile, chosenCountryCode);
           showFullScreenLoader();
@@ -152,7 +152,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     } = this.state;
 
     let description = '';
-    if (otpRequested === true) {
+    if (otpRequested) {
       description = [
         <span key="part1" className="part">{getStringMessage('otp_send_message')}</span>,
         <span key="part2" className="part">{getStringMessage('didnt_receive_otp_message')}</span>,
@@ -180,7 +180,7 @@ class AuraFormSignUpOTPModal extends React.Component {
       mobile_maxlength: countryMobileCodeMaxLength,
     } = getAuraConfig();
 
-    const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send one time PIN');
+    const submitButtonText = otpRequested ? Drupal.t('Verify') : Drupal.t('Send one time PIN');
 
     return (
       <div className="aura-otp-form">
@@ -203,7 +203,7 @@ class AuraFormSignUpOTPModal extends React.Component {
               maxLength={countryMobileCodeMaxLength}
               setCountryCode={setChosenCountryCode}
             />
-            <ConditionalView condition={otpRequested === true}>
+            <ConditionalView condition={otpRequested}>
               <TextField
                 type="text"
                 required={false}
@@ -215,7 +215,7 @@ class AuraFormSignUpOTPModal extends React.Component {
           <div className="aura-modal-form-actions">
             <div className="aura-otp-submit-description">
               {this.getOtpDescription()}
-              <ConditionalView condition={otpRequested === true}>
+              <ConditionalView condition={otpRequested}>
                 <span
                   className="resend-otp"
                   onClick={this.sendOtp}
@@ -224,7 +224,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                 </span>
               </ConditionalView>
             </div>
-            <ConditionalView condition={otpRequested === false}>
+            <ConditionalView condition={!otpRequested}>
               <div
                 className="aura-modal-form-submit"
                 onClick={() => this.sendOtp()}
@@ -232,7 +232,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                 {submitButtonText}
               </div>
             </ConditionalView>
-            <ConditionalView condition={otpRequested === true}>
+            <ConditionalView condition={otpRequested}>
               <div className="aura-modal-form-submit" onClick={() => this.verifyOtp()}>{submitButtonText}</div>
             </ConditionalView>
           </div>

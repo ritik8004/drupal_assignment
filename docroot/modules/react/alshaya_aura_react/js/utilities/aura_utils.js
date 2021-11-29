@@ -169,9 +169,16 @@ function removeInlineError(selector) {
  * Utility function to get not you label.
  */
 function getNotYouLabel(notYouFailed) {
-  const label = (notYouFailed === true) ? Drupal.t('Try again') : Drupal.t('Not you?');
+  const label = (notYouFailed) ? Drupal.t('Try again') : Drupal.t('Not you?');
 
   return label;
+}
+
+/**
+ * Utility function to get tooltip msg for points on hold.
+ */
+function getTooltipPointsOnHoldMsg() {
+  return Drupal.t('Your points will be credited to your account. You will be able to redeem them 14 days after delivery as per Aura Terms & Conditions and Alshaya exchange and refund policies.');
 }
 
 export {
@@ -189,4 +196,5 @@ export {
   removeInlineError,
   getNotYouLabel,
   getAuraCheckoutLocalStorageKey,
+  getTooltipPointsOnHoldMsg,
 };

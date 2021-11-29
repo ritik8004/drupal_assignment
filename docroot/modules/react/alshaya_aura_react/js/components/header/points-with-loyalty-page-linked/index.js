@@ -7,7 +7,7 @@ import Points from '../points';
 const PointsWithLoyaltyPageLinked = (props) => {
   const { points, isHeaderModalOpen, tier } = props;
   const { id: userId } = getUserDetails();
-  const previewClass = isHeaderModalOpen === true ? 'open' : '';
+  const previewClass = isHeaderModalOpen ? 'open' : '';
 
   return (
     <div className={`aura-header-link ${previewClass}`}>

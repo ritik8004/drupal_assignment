@@ -66,7 +66,7 @@ const searchUserDetails = (type, value) => {
   if (type === 'email') {
     // Call search api to get mobile number to send otp.
     return search('email', value).then((searchResponse) => {
-      if (typeof searchResponse.status !== 'undefined' && searchResponse.status === false) {
+      if (typeof searchResponse.status !== 'undefined' && !searchResponse.status) {
         return getErrorResponse(
           auraErrorCodes.EMAIL_NOT_REGISTERED,
           auraErrorCodes.INVALID_EMAIL,
@@ -81,7 +81,7 @@ const searchUserDetails = (type, value) => {
   if (type === 'cardNumber' || type === 'apcNumber') {
     // Call search api to get mobile number to send otp.
     return search('apcNumber', value).then((searchResponse) => {
-      if (typeof searchResponse.status !== 'undefined' && searchResponse.status === false) {
+      if (typeof searchResponse.status !== 'undefined' && !searchResponse.status) {
         return getErrorResponse(
           auraErrorCodes.INCORRECT_CARDNUMBER,
           auraErrorCodes.INVALID_CARDNUMBER,
@@ -96,7 +96,7 @@ const searchUserDetails = (type, value) => {
   if (type === 'mobile' || type === 'phone') {
     // Call search api to verify mobile number to send otp.
     return search('phone', value).then((searchResponse) => {
-      if (typeof searchResponse.status !== 'undefined' && searchResponse.status === false) {
+      if (typeof searchResponse.status !== 'undefined' && !searchResponse.status) {
         return getErrorResponse(
           auraErrorCodes.MOBILE_NOT_REGISTERED,
           auraErrorCodes.INVALID_MOBILE,

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_aura_react\Commands;
 use Drupal\alshaya_aura_react\Helper\AuraApiHelper;
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Provides commands to sync Aura related config from API.
@@ -81,6 +82,10 @@ class AlshayaAuraCommands extends DrushCommands {
       : array_keys($this->languageManager->getLanguages());
 
     foreach ($langcode_list as $langcode) {
+      $this->drupalLogger->info('Aura config sync started for configs @configs and language @langcode.', [
+        '@configs' => json_encode($options['configs']),
+        '@langcode' => $langcode,
+      ]);
       $this->apiHelper->getAuraApiConfig($configs, $langcode, $options['reset']);
     }
 

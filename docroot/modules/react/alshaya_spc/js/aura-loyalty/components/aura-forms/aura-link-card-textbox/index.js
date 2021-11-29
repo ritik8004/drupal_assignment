@@ -68,7 +68,7 @@ class AuraFormLinkCard extends React.Component {
     const { enableShowLinkCardMessage } = this.props;
     const { stateValues, searchData } = data.detail;
 
-    if (stateValues.error === true) {
+    if (stateValues.error) {
       this.setState({
         ...getAuraDetailsDefaultState(),
         loyaltyCardLinkedToCart: false,
@@ -247,22 +247,20 @@ class AuraFormLinkCard extends React.Component {
             </ConditionalView>
           </div>
           <div className="sub-text">
-            { loyaltyCardLinkedToCart === true
-              ? (
-                <a onClick={() => this.removeCard()}>
-                  {getStringMessage('not_you_question')}
+            <ConditionalView condition={loyaltyCardLinkedToCart}>
+              <a onClick={() => this.removeCard()}>
+                {getStringMessage('not_you_question')}
+              </a>
+            </ConditionalView>
+
+            <ConditionalView condition={!loyaltyCardLinkedToCart}>
+              <>
+                <span>{ getStringMessage('checkout_not_member_question') }</span>
+                <a onClick={() => this.openOTPModal()}>
+                  {getStringMessage('sign_up_now')}
                 </a>
-              )
-              : (
-                <>
-                  <span>{ getStringMessage('checkout_not_member_question') }</span>
-                  <a
-                    onClick={() => this.openOTPModal()}
-                  >
-                    {getStringMessage('sign_up_now')}
-                  </a>
-                </>
-              )}
+              </>
+            </ConditionalView>
           </div>
         </div>
         <ConditionalView condition={window.innerWidth >= 768}>

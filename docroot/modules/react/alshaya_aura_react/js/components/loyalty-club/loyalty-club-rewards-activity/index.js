@@ -1,6 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import { getAPIData } from '../../../utilities/api/fetchApiData';
 import { getUserDetails, getAuraConfig } from '../../../utilities/helper';
 import {
   addInlineLoader,
@@ -15,6 +14,8 @@ import {
 } from '../../../utilities/reward_activity_helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import EmptyRewardActivity from './empty-reward-activity';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { callMiddlewareApi } from '../../../../../alshaya_spc/js/backend/v1/common';
 
 class LoyaltyClubRewardsActivity extends React.Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     // API call to get reward activity for logged in users.
     const { rewardActivityTimeLimit } = getAuraConfig();
     const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${type}&duration=${rewardActivityTimeLimit}&partnerCode=${brand}`;
-    const apiData = getAPIData(apiUrl);
+    const apiData = callMiddlewareApi(apiUrl, 'GET');
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -237,8 +238,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
           />
         </div>
         <div className="reward-activity-statement">
-          {noStatement === false
-          && (
+          <ConditionalView condition={!noStatement}>
             <div className="header-row">
               <span className="date">{Drupal.t('Brand')}</span>
               <span className="order-id">{Drupal.t('Order No.')}</span>
@@ -248,7 +248,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
               <span className="aura-points">{Drupal.t('Aura points')}</span>
               <span className="status">{Drupal.t('Status')}</span>
             </div>
-          )}
+          </ConditionalView>
 
           <div className="reward-activity">
             {this.generateStatement()}

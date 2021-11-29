@@ -104,7 +104,7 @@
           );
           // Dispatching event on variant change to listen in react.
           if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
-            Drupal.dispatchProductUpdateEvent($(this));
+            Drupal.dispatchAuraProductUpdateEvent($(this));
           }
         }
       });
@@ -246,7 +246,7 @@
       if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
         $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
           // Dispatching event on quantity change to listen in react.
-          Drupal.dispatchProductUpdateEvent($(this));
+          Drupal.dispatchAuraProductUpdateEvent($(this));
         });
       }
     }

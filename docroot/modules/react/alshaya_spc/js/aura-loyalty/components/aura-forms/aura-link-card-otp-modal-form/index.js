@@ -53,7 +53,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
     const { linkCardOption } = this.state;
     const isValid = validateElementValueByType(linkCardOption, '.aura-modal-form', 'link_card');
 
-    if (isValid === false) {
+    if (!isValid) {
       return;
     }
 
@@ -77,7 +77,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
 
     if (validationRequest instanceof Promise) {
       validationRequest.then((valid) => {
-        if (valid === false) {
+        if (!valid) {
           return;
         }
         removeError(getInlineErrorSelector(linkCardOption)[linkCardOption]);
@@ -174,7 +174,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
     } = this.state;
 
     let description = '';
-    if (otpRequested === true) {
+    if (otpRequested) {
       description = [
         <span key="part1" className="part">{getStringMessage('otp_send_message')}</span>,
         <span key="part2" className="part">{getStringMessage('didnt_receive_otp_message')}</span>,
@@ -201,7 +201,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
       linkCardOption,
     } = this.state;
 
-    const submitButtonText = otpRequested === true ? Drupal.t('Link Now') : Drupal.t('Send one time PIN');
+    const submitButtonText = otpRequested ? Drupal.t('Link Now') : Drupal.t('Send one time PIN');
 
     return (
       <div className="aura-guest-user-link-card-otp-form">
@@ -243,7 +243,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
                     mobile={mobile}
                   />
                 </ConditionalView>
-                <ConditionalView condition={otpRequested === true}>
+                <ConditionalView condition={otpRequested}>
                   <TextField
                     type="text"
                     required={false}
@@ -260,7 +260,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
           <div className="aura-modal-form-actions">
             <div className="aura-new-user-t-c aura-otp-submit-description">
               {this.getOtpDescription()}
-              <ConditionalView condition={otpRequested === true}>
+              <ConditionalView condition={otpRequested}>
                 <span
                   className="resend-otp"
                   onClick={() => this.processLinkCardSendOtp()}
@@ -269,12 +269,12 @@ class AuraFormLinkCardOTPModal extends React.Component {
                 </span>
               </ConditionalView>
             </div>
-            <ConditionalView condition={otpRequested === false}>
+            <ConditionalView condition={!otpRequested}>
               <div className="aura-modal-form-submit" onClick={() => this.processLinkCardSendOtp()}>
                 {submitButtonText}
               </div>
             </ConditionalView>
-            <ConditionalView condition={otpRequested === true}>
+            <ConditionalView condition={otpRequested}>
               <div className="aura-modal-form-submit" onClick={() => this.verifyOtpAndLink()}>
                 {submitButtonText}
               </div>
