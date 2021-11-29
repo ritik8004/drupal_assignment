@@ -1,4 +1,4 @@
-import { postAPIData, getAPIData } from '../../utilities/api/fetchApiData';
+import { callMiddlewareApi } from '../../../../alshaya_spc/js/backend/v1/common';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -15,7 +15,7 @@ window.auraBackend = window.auraBackend || {};
  *   The promise object which resolves to the response data and status in case
  * of success and the error object in case of error.
  */
-window.auraBackend.loyaltyClubSignUp = (data) => postAPIData('post/loyalty-club/sign-up', data);
+window.auraBackend.loyaltyClubSignUp = (data) => callMiddlewareApi('post/loyalty-club/sign-up', 'POST', JSON.stringify(data));
 
 /**
  * Sends OTP.
@@ -28,10 +28,10 @@ window.auraBackend.loyaltyClubSignUp = (data) => postAPIData('post/loyalty-club/
  * @returns {Object}
  *   Return API response status.
  */
-window.auraBackend.sendSignUpOtp = (mobile, chosenCountryCode) => postAPIData('post/loyalty-club/send-otp', {
+window.auraBackend.sendSignUpOtp = (mobile, chosenCountryCode) => callMiddlewareApi('post/loyalty-club/send-otp', 'POST', JSON.stringify({
   mobile,
   chosenCountryCode,
-});
+}));
 
 /**
  * Verifies the OTP entered by the user.
@@ -48,12 +48,12 @@ window.auraBackend.sendSignUpOtp = (mobile, chosenCountryCode) => postAPIData('p
  * @returns {Promise}
  *   Returns an object with status value or the error object in case of failure.
  */
-window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => postAPIData('post/loyalty-club/verify-otp', {
+window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => callMiddlewareApi('post/loyalty-club/verify-otp', 'POST', JSON.stringify({
   mobile,
   otp,
   type,
   chosenCountryCode,
-});
+}));
 
 /**
  * Send Link card OTP.
@@ -68,10 +68,10 @@ window.auraBackend.verifyOtp = (mobile, otp, type, chosenCountryCode) => postAPI
  * On error, the error object is returned.
  * On success, the success object is returned containing specific data.
  */
-window.auraBackend.sendLinkCardOtp = (type, value) => postAPIData('post/loyalty-club/send-link-card-otp', {
+window.auraBackend.sendLinkCardOtp = (type, value) => callMiddlewareApi('post/loyalty-club/send-link-card-otp', 'POST', JSON.stringify({
   type,
   value,
-});
+}));
 
 /**
  * Fetches loyalty customer details for the current user.
@@ -80,7 +80,7 @@ window.auraBackend.sendLinkCardOtp = (type, value) => postAPIData('post/loyalty-
  *   The promise object which resolves to the response data and status in case
  *   of success and the error object in case of error.
  */
-window.auraBackend.getCustomerDetails = () => getAPIData('get/loyalty-club/get-customer-details');
+window.auraBackend.getCustomerDetails = () => callMiddlewareApi('get/loyalty-club/get-customer-details', 'GET');
 
 /**
  * Fetches progress tracker for the current user.
@@ -89,7 +89,7 @@ window.auraBackend.getCustomerDetails = () => getAPIData('get/loyalty-club/get-c
  *   The promise object which resolves to the response data and status in case
  *   of success and the error object in case of error.
  */
-window.auraBackend.getProgressTracker = () => getAPIData('get/loyalty-club/get-progress-tracker');
+window.auraBackend.getProgressTracker = () => callMiddlewareApi('get/loyalty-club/get-progress-tracker', 'GET');
 
 /**
  * Set/Unset loyalty card in cart.
@@ -105,11 +105,11 @@ window.auraBackend.getProgressTracker = () => getAPIData('get/loyalty-club/get-p
  *   A promise that contains the data and status in case of success and error
  * object in case of failure.
  */
-window.auraBackend.updateLoyaltyCard = (action, type, value) => postAPIData('post/loyalty-club/update-loyalty-card', {
+window.auraBackend.updateLoyaltyCard = (action, type, value) => callMiddlewareApi('post/loyalty-club/update-loyalty-card', 'POST', JSON.stringify({
   action,
   type,
   value,
-});
+}));
 
 /*
  * Update User's AURA Status.
@@ -120,4 +120,4 @@ window.auraBackend.updateLoyaltyCard = (action, type, value) => postAPIData('pos
  * @returns {Promise}
  *   Return success/failure response.
  */
-window.auraBackend.updateUserAuraStatus = (inputData) => postAPIData('post/loyalty-club/apc-status-update', inputData);
+window.auraBackend.updateUserAuraStatus = (inputData) => callMiddlewareApi('post/loyalty-club/apc-status-update', 'POST', JSON.stringify(inputData));

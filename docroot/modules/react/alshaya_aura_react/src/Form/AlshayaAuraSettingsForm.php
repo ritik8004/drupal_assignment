@@ -28,30 +28,32 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $aura_config = $this->config('alshaya_aura_react.settings');
+
     $form['alshaya_aura_react'] = [
       'aura_rewards_header_learn_more_link' => [
         '#type' => 'textfield',
         '#title' => $this->t('AURA Rewards Header Learn More Link'),
         '#description' => $this->t('Learn More link to be added in AURA Rewards popup in header. This should be an internal link. For eg. `aura/learn-more`'),
-        '#default_value' => $this->config('alshaya_aura_react.settings')->get('aura_rewards_header_learn_more_link'),
+        '#default_value' => $aura_config->get('aura_rewards_header_learn_more_link'),
       ],
       'aura_app_store_link' => [
         '#type' => 'textfield',
         '#title' => $this->t('AURA Apple App Store Link'),
         '#description' => $this->t('App Store link to be added in AURA blocks.'),
-        '#default_value' => $this->config('alshaya_aura_react.settings')->get('aura_app_store_link'),
+        '#default_value' => $aura_config->get('aura_app_store_link'),
       ],
       'aura_google_play_link' => [
         '#type' => 'textfield',
         '#title' => $this->t('AURA Google Play Store Link'),
         '#description' => $this->t('Play Store link to be added in AURA blocks.'),
-        '#default_value' => $this->config('alshaya_aura_react.settings')->get('aura_google_play_link'),
+        '#default_value' => $aura_config->get('aura_google_play_link'),
       ],
       'aura_signup_terms_and_conditions_link' => [
         '#type' => 'textfield',
         '#title' => $this->t('AURA Sign up terms and conditions Link'),
         '#description' => $this->t('Terms and Conditions link to be added in AURA Sign up popup. This should be an internal link. For eg. `aura/terms-and-conditions`'),
-        '#default_value' => $this->config('alshaya_aura_react.settings')->get('aura_signup_terms_and_conditions_link'),
+        '#default_value' => $aura_config->get('aura_signup_terms_and_conditions_link'),
       ],
     ];
 

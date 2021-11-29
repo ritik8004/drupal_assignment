@@ -3,7 +3,7 @@ import PendingEnrollmentMessage from '../utilities/pending-enrollment-message';
 import ToolTip from '../../../utilities/tooltip';
 import ConditionalView from '../../../common/components/conditional-view';
 import { getAllAuraStatus } from '../../../../../alshaya_aura_react/js/utilities/helper';
-import { getTooltipPointsOnHoldMsg } from '../utilities/helper';
+import { getTooltipPointsOnHoldMsg } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 const AuraEarnOrderSummaryItem = (props) => {
   const {

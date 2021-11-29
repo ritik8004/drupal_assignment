@@ -49,7 +49,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
             />
           </div>
         </div>
-        <ConditionalView condition={showLinkCardMessage === true}>
+        <ConditionalView condition={showLinkCardMessage}>
           <LinkYourCardMessage />
         </ConditionalView>
       </div>

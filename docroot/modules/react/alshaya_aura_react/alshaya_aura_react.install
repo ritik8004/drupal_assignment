@@ -18,12 +18,12 @@ function alshaya_aura_react_install() {
   $config->set('my_account_enabled_links', serialize($alshaya_loyalty_club));
   $config->save();
 
-  // Move blocks to current theme.
-  $configs = [
-    'block.block.myaccountsaurablock',
-    'block.block.aurarewardsheader',
-  ];
-  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura_react', 'optional', AlshayaConfigManager::MODE_REPLACE);
+  // Move myaccountsaurablock and aurarewardsheader block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
   $config_factory = \Drupal::configFactory();
 
   // Set the My Accounts AURA block to appear just below the page title.

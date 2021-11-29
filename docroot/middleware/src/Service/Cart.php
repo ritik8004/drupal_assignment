@@ -17,7 +17,6 @@ use Drupal\alshaya_master\Helper\SortUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Cart methods.
@@ -156,13 +155,6 @@ class Cart {
   protected $nativeOperations;
 
   /**
-   * Event Dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $dispatcher;
-
-  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -197,8 +189,6 @@ class Cart {
    *   Language Manager.
    * @param \App\Service\CartOperationsNative $native_operations
    *   Cart Native Operations wrapper.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-   *   Event Dispatcher.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -216,8 +206,7 @@ class Cart {
     Connection $connection,
     RequestStack $requestStack,
     LanguageManager $language_manager,
-    CartOperationsNative $native_operations,
-    EventDispatcherInterface $dispatcher
+    CartOperationsNative $native_operations
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -235,7 +224,6 @@ class Cart {
     $this->request = $requestStack->getCurrentRequest();
     $this->languageManager = $language_manager;
     $this->nativeOperations = $native_operations;
-    $this->dispatcher = $dispatcher;
   }
 
   /**

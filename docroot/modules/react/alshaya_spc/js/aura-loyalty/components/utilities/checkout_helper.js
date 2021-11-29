@@ -3,7 +3,6 @@ import {
   getPriceToPoint,
   getAuraDetailsDefaultState,
 } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
-import { postAPIData } from '../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import {
   removeFullScreenLoader,
@@ -13,12 +12,13 @@ import { getElementValueByType } from './link_card_sign_up_modal_helper';
 import { validateElementValueByType } from './validation_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { getAuraConfig } from '../../../../../alshaya_aura_react/js/utilities/helper';
+import { callMiddlewareApi } from '../../../backend/v1/common';
 
 /**
  * Utility function to get user input value.
  */
 function getUserInput(linkCardOption, chosenCountryCode) {
-  if (validateElementValueByType(linkCardOption) === false) {
+  if (!validateElementValueByType(linkCardOption)) {
     return {};
   }
 
@@ -123,7 +123,7 @@ function redeemAuraPoints(data) {
   let stateValues = {};
 
   const apiUrl = 'post/loyalty-club/process-redemption';
-  const apiData = postAPIData(apiUrl, data);
+  const apiData = callMiddlewareApi(apiUrl, 'POST', JSON.stringify(data));
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {

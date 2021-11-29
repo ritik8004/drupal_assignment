@@ -21,13 +21,16 @@ class AuraProgressBar extends React.Component {
   }
 
   animateFill = (progress) => {
+    // Variable for animation timing.
+    const duration = 1250;
+
     document.getElementById('aura-fill').animate([
       // Keyframes.
       { width: '0' },
       { width: progress },
     ], {
       // Timing options.
-      duration: 1250,
+      duration,
       easing: 'ease-in-out',
     });
 
@@ -41,7 +44,7 @@ class AuraProgressBar extends React.Component {
       if (dot !== null) {
         dot.style.visibility = 'visible';
       }
-    }, 1250);
+    }, duration);
   };
 
   render() {

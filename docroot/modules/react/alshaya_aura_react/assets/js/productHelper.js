@@ -31,7 +31,7 @@
   };
 
   // Event dispatcher on variant/quantity change to update aura accrual points.
-  Drupal.dispatchProductUpdateEvent = function (element) {
+  Drupal.dispatchAuraProductUpdateEvent = function (element) {
     var data = Drupal.getSelectedVariantDetails(element);
     const event = new CustomEvent('auraProductUpdate', {
       bubbles: true,

@@ -43,7 +43,7 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
   protected $auraHelper;
 
   /**
-   * AuraRewardsHeader constructor.
+   * MyAccountsAuraBlock constructor.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

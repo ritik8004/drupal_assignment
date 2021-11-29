@@ -491,7 +491,7 @@ window.auraBackend.updateUserAuraStatus = async (inputData) => {
     status: response.data,
   };
   // Return, if status failed to update.
-  if (response.data === false) {
+  if (!response.data) {
     return { data: responseData };
   }
 

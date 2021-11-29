@@ -56,17 +56,17 @@ class AuraFormNewAuraUserModal extends React.Component {
     let hasError = false;
 
     // Validate mobile.
-    if (validateElementValueByType('signUpMobile') === false) {
+    if (!validateElementValueByType('signUpMobile')) {
       hasError = true;
     }
 
     // Validate full name.
-    if (validateElementValueByType('fullName') === false) {
+    if (!validateElementValueByType('fullName')) {
       hasError = true;
     }
 
     // Validate email.
-    if (validateElementValueByType('signUpEmail') === false) {
+    if (!validateElementValueByType('signUpEmail')) {
       hasError = true;
     }
 

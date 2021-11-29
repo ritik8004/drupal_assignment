@@ -94,7 +94,7 @@ class AuraFormRedeemPoints extends React.Component {
   handleRedeemPointsEvent = (data) => {
     const { stateValues, action } = data.detail;
 
-    if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
+    if (Object.keys(stateValues).length === 0 || stateValues.error) {
       showError('spc-aura-link-api-response-message', drupalSettings.global_error_message);
       // Reset redemption input fields to initial value.
       this.resetInputs();
@@ -259,7 +259,7 @@ class AuraFormRedeemPoints extends React.Component {
         <span className="label">{ getStringMessage('checkout_use_your_points') }</span>
         <div className="form-items">
           <div className="inputs">
-            <ConditionalView condition={auraTransaction === false}>
+            <ConditionalView condition={!auraTransaction}>
               <AuraRedeemPointsTextField
                 name="spc-aura-redeem-field-points"
                 placeholder="0"
@@ -276,11 +276,11 @@ class AuraFormRedeemPoints extends React.Component {
                 type="money"
               />
             </ConditionalView>
-            <ConditionalView condition={auraTransaction === true}>
+            <ConditionalView condition={auraTransaction}>
               {this.getPointsRedeemedMessage()}
             </ConditionalView>
           </div>
-          <ConditionalView condition={auraTransaction === false}>
+          <ConditionalView condition={!auraTransaction}>
             <button
               type="submit"
               className="spc-aura-redeem-form-submit spc-aura-button"
@@ -292,7 +292,7 @@ class AuraFormRedeemPoints extends React.Component {
               { getStringMessage('checkout_use_points') }
             </button>
           </ConditionalView>
-          <ConditionalView condition={auraTransaction === true}>
+          <ConditionalView condition={auraTransaction}>
             <button
               type="submit"
               className="spc-aura-redeem-form-submit spc-aura-button"

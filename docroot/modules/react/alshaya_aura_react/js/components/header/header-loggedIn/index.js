@@ -45,11 +45,11 @@ const HeaderLoggedIn = (props) => {
     );
   } if (loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED
     || loyaltyStatus === getAllAuraStatus().APC_LINKED_VERIFIED) {
-    if (isHeaderShop === true) {
+    if (isHeaderShop) {
       return null;
     }
 
-    if (isMobileTab === true) {
+    if (isMobileTab) {
       // Remove the username already present in the menu because username will be
       // redundant after this username component is rendered.
       if (document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title')) {
@@ -69,7 +69,7 @@ const HeaderLoggedIn = (props) => {
       </>
     );
   } if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_DATA) {
-    if (isMobileTab === true) {
+    if (isMobileTab) {
       return Drupal.t('my account');
     }
 

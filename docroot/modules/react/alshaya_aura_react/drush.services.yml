@@ -4,5 +4,6 @@ services:
     arguments:
       - '@alshaya_aura_react.aura_api_helper'
       - '@language_manager'
+      - '@logger.factory'
     tags:
       - { name: drush.command }

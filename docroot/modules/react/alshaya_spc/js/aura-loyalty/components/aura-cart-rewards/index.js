@@ -69,7 +69,7 @@ class AuraCartRewards extends React.Component {
   handleRedeemPointsEvent = (data) => {
     const { stateValues, action } = data.detail;
 
-    if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
+    if (Object.keys(stateValues).length === 0 || stateValues.error) {
       return;
     }
 

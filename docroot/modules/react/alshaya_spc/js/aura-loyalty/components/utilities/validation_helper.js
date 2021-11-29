@@ -21,7 +21,7 @@ function validateMobile(type, data) {
   return validationRequest.then((result) => {
     if (result.status === 200 && result.data.status) {
       // If not valid mobile number.
-      if (result.data.mobile === false) {
+      if (!result.data.mobile) {
         showError(getInlineErrorSelector(type)[type], getStringMessage('form_error_valid_mobile_number'));
         isValid = false;
       } else {

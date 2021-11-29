@@ -3,8 +3,7 @@ import PointsExpiryMessage from '../../../utilities/points-expiry-message';
 import AuraFormRedeemPoints from '../../../aura-forms/aura-redeem-points';
 import PointsString from '../../../utilities/points-string';
 import ToolTip from '../../../../../utilities/tooltip';
-import { getTooltipPointsOnHoldMsg } from '../../../utilities/helper';
-import { getPriceToPoint } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getPriceToPoint, getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const AuraLinkedVerifiedCheckout = (props) => {
