@@ -127,6 +127,8 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       '/',
       $request->getPathInfo()
     );
+    // Filter out the facets params if present.
+    $rcs_path_to_check = $this->removeFacetsParams($rcs_path_to_check);
 
     $config = \Drupal::config('rcs_placeholders.settings');
 
@@ -287,6 +289,23 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     }
 
     return $url;
+  }
+
+  /**
+   * Removes the facets parameters from path (If present).
+   *
+   * @param string $path
+   *   The path containing the facets params.
+   *
+   * @return string
+   *   Return the updated string.
+   */
+  protected function removeFacetsParams(string $path) {
+    if (stripos($path, '/--', 0) !== FALSE) {
+      $path = substr($path, 0, stripos($path, '/--'));
+    }
+
+    return $path;
   }
 
 }
