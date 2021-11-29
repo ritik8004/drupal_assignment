@@ -50,16 +50,6 @@ function hook_alshaya_spc_order_details_settings_alter(array &$settings, array $
  * Allow other modules to change the build array for checkout page.
  *
  * @param array $build
- *   Reference to the build array of spc checkout.
- */
-function hook_alshaya_spc_checkout_build_alter(array &$build) {
-
-}
-
-/**
- * Allow other modules to change the build array for checkout page.
- *
- * @param array $build
  *   Reference to the build array of checkout cart.
  */
 function hook_alshaya_spc_checkout_build_alter(array &$build) {
