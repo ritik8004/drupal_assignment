@@ -14,6 +14,9 @@ import {
   setLoyaltyCard,
   prepareAuraUserStatusUpdateData,
 } from './customer_helper';
+import { getPaymentMethodSetOnCart } from '../../../../alshaya_spc/js/backend/v2/checkout.payment';
+import { prepareRedeemPointsData, redeemPoints } from './redemption_helper';
+import { isUnsupportedPaymentMethod } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -518,6 +521,76 @@ window.auraBackend.updateUserAuraStatus = async (inputData) => {
   responseData.data = hasValue(customerData)
     ? customerData
     : { auraStatus: searchResponse.data.apc_link };
+
+  return { data: responseData };
+};
+
+/**
+ * Redeem loyalty points.
+ *
+ * @param {Object} data
+ *   Data for the API call.
+ *
+ * @returns {Object}
+ *   Points and other data in case of success or error in case of failure.
+ */
+window.auraBackend.processRedemption = async (data) => {
+  let message = '';
+
+  const cartId = window.commerceBackend.getCartId();
+  if (!hasValue(cartId)) {
+    message = 'Error while trying to redeem aura points. Cart is not available for the user.';
+    logger.error(message);
+    return { data: getErrorResponse(message, 404) };
+  }
+
+  const paymentMethodSetOnCart = await getPaymentMethodSetOnCart();
+  if (hasValue(paymentMethodSetOnCart)
+    && isUnsupportedPaymentMethod(paymentMethodSetOnCart)
+  ) {
+    logger.error(`Error while trying to redeem aura points. Selected payment method ${paymentMethodSetOnCart} is unsupported with Aura.`);
+    return { data: getErrorResponse(message, 404) };
+  }
+
+  // Check if required data is present in request.
+  if (!hasValue(data.cardNumber) || !hasValue(data.userId)) {
+    message = 'Error while trying to redeem aura points. Card Number and User Id is required.';
+    logger.error(`${message} Data: @requestData`, {
+      '@requestData': JSON.stringify(data),
+    });
+    return { data: getErrorResponse(message, 404) };
+  }
+
+  // Get user details from session.
+  const { uid } = drupalSettings.user;
+
+  // Check if uid in the request matches the one in session.
+  if (parseInt(uid, 10) !== parseInt(data.userId, 10)) {
+    logger.error("Error while trying to redeem aura points. User id in request doesn't match the one in session. User id from request: @reqUid. User id in session: @sessionUid.", {
+      '@reqUid': data.userId,
+      '@sessionUid': uid,
+    });
+    return { data: getErrorResponse("User id in request doesn't match the one in session.", 404) };
+  }
+
+  const redeemPointsRequestData = prepareRedeemPointsData(data, cartId);
+  if (hasValue(redeemPointsRequestData.error)) {
+    logger.error('Error while trying to create redeem points request data. Request data: @requestData. Message: @message', {
+      '@requestData': JSON.stringify(data),
+      '@message': redeemPointsRequestData.error_message,
+    });
+    return { data: redeemPointsRequestData };
+  }
+
+  // API call to redeem points.
+  const responseData = await redeemPoints(data.cardNumber, redeemPointsRequestData);
+  if (hasValue(responseData.error)) {
+    logger.notice('Error while trying to redeem aura points. Request Data: @request_data. Message: @message', {
+      '@request_data': JSON.stringify(data),
+      '@message': responseData.error_message,
+    });
+    return { data: responseData };
+  }
 
   return { data: responseData };
 };
