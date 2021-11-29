@@ -16,5 +16,26 @@
           : Drupal.tabbyPromoInit('#' + selector, amount, 'cart');
       }
     });
+
+    // Check cart have tabby info widget.
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', Drupal.tabbyInfoChange);
+    } else {
+      Drupal.tabbyInfoChange();
+    }
   });
+
+  // Function to monitor info widget change.
+  Drupal.tabbyInfoChange = function () {
+    if (!$('.spc-pre-content').hasClass('hidden')) {
+      return;
+    }
+    setTimeout(() => {
+      // Check if tabby info is present and make pre content visible.
+      const tabbyInfo = $('.spc-tabby-info');
+      if (tabbyInfo.children().length) {
+        tabbyInfo.closest('.spc-pre-content').removeClass('hidden');
+      }
+    }, 500);
+  }
 })(jQuery, Drupal);
