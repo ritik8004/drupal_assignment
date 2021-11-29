@@ -59,7 +59,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
   }
   $settings['config'] = $aura_helper->getAuraConfig();
-  $page['#cache'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_aura_react.settings')->getCacheTags());
+  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_aura_react.settings')->getCacheTags());
 
   $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
 
