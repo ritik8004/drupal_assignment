@@ -47,8 +47,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Here is your card balance',
         'context' => 'egift',
       ],
-      'for eGift card ending' => [
-        'ar' => 'for eGift card ending',
+      'for eGift card ending in ..' => [
+        'ar' => 'for eGift card ending in ..',
         'context' => 'egift',
       ],
       'Card Valid Up To' => [

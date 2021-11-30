@@ -4,6 +4,7 @@ namespace Drupal\alshaya_egift_card\Form;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,18 +13,12 @@ use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Datetime\DateFormatter;
 
 /**
  * Check balance modal form class.
  */
 class AlshayaCheckBalanceForm extends FormBase{
-
-  /**
-   * The form builder.
-   *
-   * @var \Drupal\Core\Form\FormBuilder
-   */
-  protected $formBuilder;
 
   /**
    * Api wrapper.
@@ -33,14 +28,43 @@ class AlshayaCheckBalanceForm extends FormBase{
   protected $apiWrapper;
 
   /**
+   * The form builder.
+   *
+   * @var \Drupal\Core\Form\FormBuilder
+   */
+  protected $formBuilder;
+
+  /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Date Formatter.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter
+   */
+  protected $dateFormatter;
+
+  /**
    * AlshayaCheckBalanceForm constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
+   * @param \Drupal\Core\Form\FormBuilder $formBuilder
+   *   The form builder.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
+   * @param \Drupal\Core\Datetime\DateFormatter $date_format
+   *   Date Formatter.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper, FormBuilder $formBuilder) {
+  public function __construct(AlshayaApiWrapper $api_wrapper, FormBuilder $formBuilder, ConfigFactoryInterface $config_factory, DateFormatter $date_format) {
     $this->apiWrapper = $api_wrapper;
     $this->formBuilder = $formBuilder;
+    $this->configFactory = $config_factory;
+    $this->dateFormatter = $date_format;
   }
 
   /**
@@ -49,7 +73,9 @@ class AlshayaCheckBalanceForm extends FormBase{
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_api.api'),
-      $container->get('form_builder')
+      $container->get('form_builder'),
+      $container->get('config.factory'),
+      $container->get('date.formatter')
     );
   }
 
@@ -131,23 +157,35 @@ class AlshayaCheckBalanceForm extends FormBase{
       $ajax_response->addCommand(new ReplaceCommand('#check-balance-form', $form));
     }
     else {
-      $endpoint = 'rest/V1/egiftcard/getBalance';
-      $data = [
-        'card_number' => $card_number,
-        'email' =>  $email,
+      $endpoint = 'egiftcard/getBalance';
+      $data["accountInfo"] = [
+        "cardNumber" => $card_number,
+        "email" => $email
       ];
-      $response = $this->apiWrapper->invokeApi($endpoint, $data);
+      $response = $this->apiWrapper->invokeApi($endpoint, $data, 'JSON');
       $response = is_string($response) ? Json::decode($response) : $response;
       if (empty($response)) {
         $ajax_response->addCommand(new HtmlCommand('#api-error', $this->t('Something went wrong, please try again later.', [], ['context' => 'egift'])));
         $ajax_response->addCommand(new HtmlCommand('.form-item--error-message', ''));
       }
       else {
+        $currency_code = $this->configFactory->get('acq_commerce.currency')->get('currency_code');
+        $validity = $this->dateFormatter->format($response['validity'], 'custom', 'd-M-Y');
         $replace_modal_form = $this->formBuilder->getForm('Drupal\alshaya_egift_card\Form\AlshayaBalanceReplaceForm');
         $ajax_response->addCommand(new OpenModalDialogCommand($this->t('Check Balance & Validity', [], ['context' => 'egift']), $replace_modal_form, ['width' => 'auto', 'height' => 'auto']));
-        $ajax_response->addCommand(new HtmlCommand('#card-number', $response['account_information']['card_number']));
-        $ajax_response->addCommand(new HtmlCommand('#balance', $response['account_information']['current_balance']));
-        $ajax_response->addCommand(new HtmlCommand('#validity', $response['account_information']['validity']));
+        if (!empty($response['card_number'])) {
+          $ajax_response->addCommand(new HtmlCommand('#card-number', substr($response['card_number'], -4)));
+        }else{
+          $ajax_response->addCommand(new HtmlCommand('#card-details', $response['card_number']));
+        }
+        if (!empty($response['current_balance'])) {
+          $ajax_response->addCommand(new HtmlCommand('#balance', $currency_code . ' ' . $response['current_balance']));
+        }
+        if (!empty($response['validity'])) {
+          $ajax_response->addCommand(new HtmlCommand('#validity', $validity));
+        }else {
+          $ajax_response->addCommand(new HtmlCommand('#validity-details', ''));
+        }
       }
     }
 
