@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fe031a7f6be7c4a07aac41ab00285c6",
+    "content-hash": "2465a70aedc6ce7908cfcb2a82f1956b",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -630,7 +630,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fengyuanchen/cropper.git",
+                "url": "git@github.com:fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -11756,6 +11756,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Ajax support / Use behaviors": "https://www.drupal.org/files/issues/2021-06-03/recaptcha-ajax-2493183-225.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -26985,7 +26988,6 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
