@@ -80,8 +80,6 @@ export default class CartItems extends React.Component {
         ? (CartItems.qtyLimits[product.sku] || product.qty)
         : 0;
 
-      console.log(product);
-      console.log('product');
       // Render CartVirtualItem component for virtual Product i.e Egift card
       productItems.push(
         <ConditionalView condition={product.isEgiftCard === true}>
