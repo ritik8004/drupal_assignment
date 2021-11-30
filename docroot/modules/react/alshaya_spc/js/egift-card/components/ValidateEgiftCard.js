@@ -63,7 +63,7 @@ export default class ValidateEgiftCard extends React.Component {
               <div className="modify-wrapper">
                 <span>
                   {Drupal.t('Dint receive?', {}, { context: 'egift' })}
-                  <strong onClick={this.handleResendCode}>Resend Code</strong>
+                  <strong onClick={this.handleResendCode}>{Drupal.t('Resend Code', {}, { context: 'egift' })}</strong>
                 </span>
                 <span onClick={this.handleChangeCard}>{Drupal.t('Change Card?', {}, { context: 'egift' })}</span>
               </div>

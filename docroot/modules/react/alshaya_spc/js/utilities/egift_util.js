@@ -18,7 +18,6 @@ export const egiftCardHeader = ({
   </div>
 );
 
-
 /**
  * Provides different form element.
  *
