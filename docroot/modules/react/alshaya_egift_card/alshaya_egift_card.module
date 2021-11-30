@@ -33,6 +33,18 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
       'context' => 'egift'
     ]),
   ];
+  $build['#strings'][] = [
+    'key' => 'form_egift_amount',
+    'value' => t('Please enter the amount.', [], [
+      'context' => 'egift'
+    ]),
+  ];
+  $build['#strings'][] = [
+    'key' => 'egift_insufficient_balance',
+    'value' => t('Insufficient balance, Please topup the card or lower the redeem amount.', [], [
+      'context' => 'egift'
+    ]),
+  ];
 }
 
 /**

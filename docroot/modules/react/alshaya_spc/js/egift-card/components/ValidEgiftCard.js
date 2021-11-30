@@ -1,14 +1,43 @@
 import React from 'react';
+import getCurrencyCode from '../../../../js/utilities/util';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { egiftCardHeader } from '../../utilities/egift_util';
+import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 
 export default class ValidEgiftCard extends React.Component {
-  // Handle remove card.
-  handleRemoveCard = () => {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+      amount: 0,
+      remainingAmount: 0,
+    };
   }
 
-  // Handle the amount change.
-  handleAmountChange = () => {
+  componentDidMount = () => {
+    // @todo get amount and update the state.
+    this.setState({
+      amount: 280,
+      remainingAmount: 220.0,
+    });
+  }
+
+  openModal = (e) => {
+    this.setState({
+      open: true,
+    });
+
+    e.stopPropagation();
+  };
+
+  closeModal = () => {
+    this.setState({
+      open: false,
+    });
+  };
+
+  // Handle remove card.
+  handleRemoveCard = () => {
 
   }
 
@@ -17,18 +46,71 @@ export default class ValidEgiftCard extends React.Component {
 
   }
 
-  render = () => (
-    <div className="egift-wrapper">
-      {egiftCardHeader({
-        egiftHeading: Drupal.t('Your eGift card is applied - KWD 280', {}, { context: 'egift' }),
-        egiftSubHeading: Drupal.t('Remaining Balance - KWD 220.00', {}, { context: 'egift' }),
-      })}
+  // Update egift amount.
+  handleAmountUpdate = (updateAmount) => {
+    // Prepare the request object for redeem API.
+    const postData = {
+      redeem_points: {
+        action: 'set_points',
+        quote_id: '28288',
+        amount: updateAmount,
+        card_number: '4250120656063430',
+        payment_method: 'hps_payment',
+      },
+    };
+    this.setState({
+      amount: updateAmount,
+    });
+    // Proceed only if postData object is available.
+    if (postData) {
+      // @todo To call API to update the amount.
+    }
+    this.closeModal();
+  }
 
-      <div className="remove-egift-card">{Drupal.t('Remove', {}, { context: 'egift' })}</div>
-      <p><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></p>
+  // Whether user is applicable to link card in the account.
+  isCardLinkingApplicable = () => {
+    const validUser = drupalSettings.user.uid > 0;
+    // @todo To check if user is already having a linked card.
 
-      <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
-      <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
-    </div>
-  )
+    return validUser;
+  }
+
+  render = () => {
+    const { open, amount, remainingAmount } = this.state;
+    const currencyCode = getCurrencyCode();
+
+    return (
+      <div className="egift-wrapper">
+        {egiftCardHeader({
+          egiftHeading: Drupal.t('Applied card amount - @currencyCode @amount', {
+            '@currencyCode': currencyCode,
+            '@amount': amount,
+          }, { context: 'egift' }),
+          egiftSubHeading: Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
+            '@currencyCode': currencyCode,
+            '@remainingAmount': remainingAmount,
+          }, { context: 'egift' }),
+        })}
+
+        <ConditionalView conditional={open}>
+          <UpdateEgiftCardAmount
+            closeModal={this.closeModal}
+            open={open}
+            amount={amount}
+            remainingAmount={remainingAmount}
+            updateAmount={this.handleAmountUpdate}
+          />
+        </ConditionalView>
+        <div className="remove-egift-card">
+          <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
+        </div>
+        <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
+        <ConditionalView condition={this.isCardLinkingApplicable()}>
+          <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
+          <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
+        </ConditionalView>
+      </div>
+    );
+  }
 }
