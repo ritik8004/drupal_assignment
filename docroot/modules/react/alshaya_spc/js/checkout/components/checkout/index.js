@@ -264,6 +264,25 @@ export default class Checkout extends React.Component {
     this.setState({ cart: cartData });
   };
 
+  // Provides if all the products in cart are virtual products or not.
+  isNonVirtualProductInCart = () => {
+    const { cart: cartData } = this.state;
+    // A flag to keep track of the non-virtual products.
+    let isNonVirtual = false;
+    Object.values(cartData.cart.items).forEach((item) => {
+      // Return if we have already marked a non virtual product.
+      if (isNonVirtual) {
+        return;
+      }
+      if (Object.prototype.hasOwnProperty.call(item, 'product_type')
+        && item.product_type !== 'virtual') {
+        isNonVirtual = true;
+      }
+    });
+
+    return isNonVirtual;
+  }
+
   render() {
     const {
       wait,
@@ -311,11 +330,12 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
-
-            <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
-            <ClicknCollectContextProvider cart={cart}>
-              <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
-            </ClicknCollectContextProvider>
+            <ConditionalView condition={this.isNonVirtualProductInCart()}>
+              <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
+              <ClicknCollectContextProvider cart={cart}>
+                <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
+              </ClicknCollectContextProvider>
+            </ConditionalView>
 
             <ConditionalView condition={isAuraEnabled()}>
               <AuraCheckoutContainer cart={cart} />
