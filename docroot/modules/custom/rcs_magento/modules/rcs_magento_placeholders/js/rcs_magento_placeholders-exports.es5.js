@@ -15,9 +15,10 @@ async function handleNoItemsInResponse(request, urlKey) {
   });
 
   let response = await rcsCommerceBackend.invokeApi(request);
+  let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`;
 
   if (response.data.urlResolver === null) {
-    return rcsRedirectToPage(`${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`);
+    return rcsRedirectToPage(rcs404);
   }
 
   if ([301, 302].includes(response.data.urlResolver.redirectCode)) {
@@ -31,6 +32,9 @@ async function handleNoItemsInResponse(request, urlKey) {
       'method': 'handleNoItemsInResponse',
     },
   });
+
+  // Redirect to 404 page when proper redirection was not received.
+  return rcsRedirectToPage(rcs404);
 }
 
 exports.getEntity = async function getEntity(langcode) {
