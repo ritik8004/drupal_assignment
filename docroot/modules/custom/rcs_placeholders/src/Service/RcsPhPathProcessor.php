@@ -4,6 +4,7 @@ namespace Drupal\rcs_placeholders\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -74,23 +75,34 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   protected $languageManager;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new RcsPhPathProcessor instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->languageManager = $language_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -127,8 +139,9 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       '/',
       $request->getPathInfo()
     );
-    // Filter out the facets params if present.
-    $rcs_path_to_check = $this->removeFacetsParams($rcs_path_to_check);
+
+    // Allow other modules to alter the path.
+    $this->moduleHandler->alter('rcs_placeholders_processor_path', $rcs_path_to_check);
 
     $config = \Drupal::config('rcs_placeholders.settings');
 
@@ -289,23 +302,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     }
 
     return $url;
-  }
-
-  /**
-   * Removes the facets parameters from path (If present).
-   *
-   * @param string $path
-   *   The path containing the facets params.
-   *
-   * @return string
-   *   Return the updated string.
-   */
-  protected function removeFacetsParams(string $path) {
-    if (stripos($path, '/--', 0) !== FALSE) {
-      $path = substr($path, 0, stripos($path, '/--'));
-    }
-
-    return $path;
   }
 
 }
