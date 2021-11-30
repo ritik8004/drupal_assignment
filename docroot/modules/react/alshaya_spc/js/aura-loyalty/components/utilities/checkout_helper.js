@@ -12,7 +12,6 @@ import { getElementValueByType } from './link_card_sign_up_modal_helper';
 import { validateElementValueByType } from './validation_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { getAuraConfig } from '../../../../../alshaya_aura_react/js/utilities/helper';
-import { callMiddlewareApi } from '../../../backend/v1/common';
 
 /**
  * Utility function to get user input value.
@@ -122,8 +121,7 @@ function getMembersToEarnMessage(price) {
 function redeemAuraPoints(data) {
   let stateValues = {};
 
-  const apiUrl = 'post/loyalty-club/process-redemption';
-  const apiData = callMiddlewareApi(apiUrl, 'POST', JSON.stringify(data));
+  const apiData = window.auraBackend.processRedemption(data);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
