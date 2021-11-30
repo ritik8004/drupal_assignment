@@ -2,7 +2,6 @@ import React from 'react';
 
 import CartItem from '../cart-item';
 import CartVirtualItem from '../../../egift-card/components/egift-virtual-cart-item';
-import ConditionalView from '../../../common/components/conditional-view';
 
 export default class CartItems extends React.Component {
   static products = {};
@@ -81,8 +80,8 @@ export default class CartItems extends React.Component {
         : 0;
 
       // Render CartVirtualItem component for virtual Product i.e Egift card
-      productItems.push(
-        <ConditionalView condition={product.isEgiftCard === true}>
+      if (product.isEgiftCard) {
+        productItems.push(
           <CartVirtualItem
             animationOffset={animationOffset}
             key={key}
@@ -91,12 +90,11 @@ export default class CartItems extends React.Component {
             productPromotion={productPromotion}
             couponCode={couponCode}
             totalsItems={totals.items}
-          />
-        </ConditionalView>,
-      );
-      // Render CartItem component for Normal Products
-      productItems.push(
-        <ConditionalView condition={product.isEgiftCard !== true}>
+          />,
+        );
+      } else {
+        // Render CartItem component for Normal Products
+        productItems.push(
           <CartItem
             animationOffset={animationOffset}
             key={key}
@@ -108,9 +106,9 @@ export default class CartItems extends React.Component {
             couponCode={couponCode}
             totalsItems={totals.items}
             cartShippingMethods={cartShippingMethods}
-          />
-        </ConditionalView>,
-      );
+          />,
+        );
+      }
     });
 
     return (

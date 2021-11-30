@@ -1,20 +1,16 @@
 import React from 'react';
 
 import { updateCartItemData } from '../../../utilities/update_cart';
-import SpecialPrice from '../../../utilities/special-price';
-import dispatchCustomEvent from '../../../utilities/events';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 import Notifications from '../../../cart/components/cart-item/components/Notifications';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getStorageInfo } from '../../../../../js/utilities/storage';
 import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import AdvantageCardExcludedItem from '../../../cart/components/advantage-card';
 import { customStockErrorMessage } from '../../../utilities/checkout_util';
+import PriceElement from '../../../utilities/special-price/PriceElement';
 
 export default class CartVirtualItem extends React.Component {
-  componentDidUpdate() {
-    Drupal.ajax.bindAjaxLinks(document.getElementById('spc-cart'));
-  }
-
   /**
    * Remove item from the cart.
    */
@@ -108,14 +104,6 @@ export default class CartVirtualItem extends React.Component {
           });
         }
 
-        // If qty limit enabled.
-        if (drupalSettings.quantity_limit_enabled) {
-          const { skus, callable } = this.props;
-          Object.entries(skus).forEach(([, productSku]) => {
-            callable(productSku);
-          });
-        }
-
         return null;
       });
     }
@@ -126,18 +114,16 @@ export default class CartVirtualItem extends React.Component {
       item: {
         sku,
         id,
-        freeItem,
         title,
         price,
-        finalPrice,
       },
       qtyLimit: animationOffset,
-      couponCode,
       totalsItems,
     } = this.props;
 
     const animationDelayValue = `${0.3 + animationOffset}s`;
-
+    const senderEmail = 'asdf@gmail.com';
+    const senderMessage = 'Happy new year my beast';
     return (
       <div
         className="spc-cart-item fadeInUp"
@@ -147,28 +133,29 @@ export default class CartVirtualItem extends React.Component {
         <div className="spc-product-tile">
           <div className="spc-product-image">
             Cart Image
+            {/* @todo To update code here once API is available. */}
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                {Drupal.t('Alshaya eGift card')}
+                {Drupal.t('Alshaya eGift card', {}, { context: 'egift' })}
               </div>
               <div className="spc-product-price">
-                <SpecialPrice price={price} freeItem={freeItem} finalPrice={finalPrice} />
+                <PriceElement amount={price} />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
               <div className="spc-cart-product-attribute">
-                <span className="spc-cart-product-attribute-label">{Drupal.t('Style:')}</span>
+                <span className="spc-cart-product-attribute-label">{Drupal.t('Style:', {}, { context: 'egift' })}</span>
                 <span className="spc-cart-product-attribute-value">{title}</span>
               </div>
               <div className="spc-cart-product-attribute">
-                <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:')}</span>
-                <span className="spc-cart-product-attribute-value">address@gmail.com</span>
+                <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
+                <span className="spc-cart-product-attribute-value">{ senderEmail }</span>
               </div>
               <div className="spc-cart-product-attribute">
-                <span className="spc-cart-product-attribute-label">{Drupal.t('Message:')}</span>
-                <span className="spc-cart-product-attribute-value">Happy new year my beast</span>
+                <span className="spc-cart-product-attribute-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
+                <span className="spc-cart-product-attribute-value">{ senderMessage }</span>
               </div>
             </div>
           </div>
@@ -178,7 +165,6 @@ export default class CartVirtualItem extends React.Component {
               type="button"
               id={`remove-item-${id}`}
               className="spc-remove-btn"
-              disabled={(couponCode.length === 0 && freeItem)}
               onClick={() => { this.removeCartItem(sku, 'remove item', id); }}
             >
               <TrashIconSVG />
