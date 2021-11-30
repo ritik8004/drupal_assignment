@@ -1,0 +1,13 @@
+.c-accordion__title,
+.c-collapse__title {
+  &::after {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  &.ui-state-active {
+    &::after {
+      font-weight: bold;
+    }
+  }
+}
