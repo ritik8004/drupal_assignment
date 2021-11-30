@@ -76,7 +76,9 @@ export default class UpdateEgiftCardAmount extends React.Component {
                     '@remainingAmount': remainingAmount,
                   }, { context: 'egift' }),
                 })}
-                <span>{currencyCode} </span>
+                <span>
+                  {currencyCode}
+                </span>
                 {egiftFormElement({
                   type: 'number',
                   name: 'amount',
