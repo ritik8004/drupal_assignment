@@ -31,7 +31,7 @@ class AlshayaBalanceReplaceForm extends FormBase {
 
     $form['card_balance'] = [
       '#type' => 'item',
-      '#markup' => '<div class="balance-title">' . $this->t('Here is your card balance', [], ['context' => 'egift']) . '</div><div id="balance"></div><div class="card-details">' . $this->t('for eGift card ending', [], ['context' => 'egift']) . ' <span id="card-number"></span></div><div class="validity-details">' . $this->t('Card Valid Up To', [], ['context' => 'egift']) .  '<span id="validity"></span></div>',
+      '#markup' => '<div class="balance-title">' . $this->t('Here is your card balance', [], ['context' => 'egift']) . '</div><div id="balance"></div><div id="card-details">' . $this->t('for eGift card ending in ..', [], ['context' => 'egift']) . ' <span id="card-number"></span></div><div id="validity-details">' . $this->t('Card Valid Up To', [], ['context' => 'egift']) .  '<span id="validity"></span></div>',
     ];
 
     $link_url = Url::fromRoute('alshaya_egift_card.check_balance');
