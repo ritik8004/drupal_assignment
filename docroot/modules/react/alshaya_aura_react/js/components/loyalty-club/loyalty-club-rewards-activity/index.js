@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import { getUserDetails, getAuraConfig } from '../../../utilities/helper';
+import { getAuraConfig } from '../../../utilities/helper';
 import {
   addInlineLoader,
   removeInlineLoader,
@@ -15,7 +15,7 @@ import {
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import EmptyRewardActivity from './empty-reward-activity';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
-import { callMiddlewareApi } from '../../../../../alshaya_spc/js/backend/v1/common';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class LoyaltyClubRewardsActivity extends React.Component {
   constructor(props) {
@@ -46,29 +46,31 @@ class LoyaltyClubRewardsActivity extends React.Component {
     addInlineLoader('.reward-activity');
     // API call to get reward activity for logged in users.
     const { rewardActivityTimeLimit } = getAuraConfig();
-    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${type}&duration=${rewardActivityTimeLimit}&partnerCode=${brand}`;
-    const apiData = callMiddlewareApi(apiUrl, 'GET');
+    const apiData = window.auraBackend.getRewardActivity(
+      fromDate,
+      toDate,
+      maxResults,
+      type,
+      brand,
+      rewardActivityTimeLimit,
+    );
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        let statement = null;
-        if (result.data !== undefined && result.data.error === undefined) {
-          this.setState({
-            activity: result.data.data || null,
-            wait: false,
-            fromDate,
-            toDate,
-            type,
-            brand,
-          });
+        let statement = [];
+        if (result.data !== undefined && result.error === undefined) {
           this.setFromAndToDate(result.data.data);
-
-          statement = result.data.data;
+          statement = result.data.data || [];
         }
 
-        const hideHeader = !!((Array.isArray(statement) && statement.length === 0));
         this.setState({
-          noStatement: hideHeader,
+          activity: statement,
+          wait: false,
+          fromDate,
+          toDate,
+          type,
+          brand,
+          noStatement: !statement.length,
         });
         removeInlineLoader('.reward-activity');
       });
@@ -76,7 +78,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
   };
 
   setFromAndToDate = (activity) => {
-    if (activity === null || Object.entries(activity).length === 0) {
+    if (!hasValue(activity)) {
       return;
     }
     const date = new Date(Object.entries(activity)[0][1].date);
@@ -96,7 +98,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     const statement = [];
 
     // Check for empty reward activity.
-    if (Array.isArray(activity) && activity.length === 0) {
+    if (Array.isArray(activity) && !activity.length) {
       statement.push(
         <div className="empty-row">
           <EmptyRewardActivity />
