@@ -1,6 +1,7 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import { isPromotionFrameEnabled } from '../../utils/indexUtils';
+import fixHref from '../../../../../js/utilities/helpers';
 
 const Promotion = ({ promotion }) => (
   <span className="sku-promotion-item">
@@ -12,12 +13,12 @@ const Promotion = ({ promotion }) => (
         <>
           <ConditionalView condition={isPromotionFrameEnabled()}>
             <div className="sku-promotion-text">{promotion.text}</div>
-            <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
+            <a className="sku-promotion-link" href={fixHref(promotion[`url_${drupalSettings.path.currentLanguage}`])}>
               {Drupal.t('Shop all products in this offer')}
             </a>
           </ConditionalView>
           <ConditionalView condition={!isPromotionFrameEnabled()}>
-            <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
+            <a className="sku-promotion-link" href={fixHref(promotion[`url_${drupalSettings.path.currentLanguage}`])}>
               {promotion.text}
             </a>
           </ConditionalView>
