@@ -3,7 +3,6 @@ import React from 'react';
 import { updateCartItemData } from '../../../utilities/update_cart';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import Notifications from '../../../cart/components/cart-item/components/Notifications';
-import { getStorageInfo } from '../../../../../js/utilities/storage';
 import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import AdvantageCardExcludedItem from '../../../cart/components/advantage-card';
@@ -62,28 +61,6 @@ export default class CartVirtualItem extends React.Component {
           };
         }
 
-        let triggerRecommendedRefresh = false;
-        const itemsLength = (cartResult.items !== undefined)
-          ? Object.keys(cartResult.items).length
-          : 0;
-        if (cartResult.items !== undefined
-          && itemsLength > 0) {
-          // Trigger if item is removed.
-          if (action === 'remove item') {
-            triggerRecommendedRefresh = true;
-          } else {
-            const cartFromStorage = getStorageInfo();
-            // If number of items in storage not matches with
-            // what we get from mdc, we refresh recommended products.
-            if (cartFromStorage !== null
-              && cartFromStorage.cart !== undefined
-              && cartFromStorage.cart.items !== undefined
-              && itemsLength !== Object.keys(cartFromStorage.cart.items).length) {
-              triggerRecommendedRefresh = true;
-            }
-          }
-        }
-
         // Refreshing mini-cart.
         const eventMiniCart = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventMiniCart);
@@ -97,13 +74,6 @@ export default class CartVirtualItem extends React.Component {
           dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
         }
 
-        // Trigger recommended products refresh.
-        if (triggerRecommendedRefresh) {
-          dispatchCustomEvent('spcRefreshCartRecommendation', {
-            items: cartResult.items,
-          });
-        }
-
         return null;
       });
     }
@@ -112,22 +82,18 @@ export default class CartVirtualItem extends React.Component {
   render() {
     const {
       item: {
-        sku,
-        id,
-        title,
-        price,
+        sku, // sku of product.
+        id, // qoute_id.
+        title, // title of the product.
+        price, // price of the product.
       },
-      qtyLimit: animationOffset,
-      totalsItems,
+      totalsItems, // totals in the api response consist of adv_card_applicable.
     } = this.props;
-
-    const animationDelayValue = `${0.3 + animationOffset}s`;
     const senderEmail = 'asdf@gmail.com';
     const senderMessage = 'Happy new year my beast';
     return (
       <div
         className="spc-cart-item fadeInUp"
-        style={{ animationDelay: animationDelayValue }}
         data-sku={sku}
       >
         <div className="spc-product-tile">

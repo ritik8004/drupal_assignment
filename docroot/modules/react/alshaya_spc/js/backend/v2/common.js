@@ -393,7 +393,7 @@ const getProcessedCartData = async (cartData) => {
 
       // Set isEgiftCard for virtual product.
       let isEgiftCard = false;
-      if (item.product_type !== 'undefined' && item.product_type === 'virtual' && isEgiftCardEnabled()) {
+      if (isEgiftCardEnabled() && item.product_type !== 'undefined' && item.product_type === 'virtual') {
         isEgiftCard = true;
       }
       data.items[item.sku] = {
