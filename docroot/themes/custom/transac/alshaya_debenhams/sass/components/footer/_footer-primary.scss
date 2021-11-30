@@ -115,8 +115,9 @@
     font-size: 0.875rem;
 
     &::after {
-      font-size: 1rem;
+      font-size: 1.25rem;
       #{$right}: 1.125rem;
+      font-weight: bold;
     }
   }
 }
@@ -348,6 +349,16 @@
       padding-bottom: 1.875rem;
       border-bottom: 1px solid $accordion_border;
       border-top: 0;
+    }
+  }
+}
+
+.open--accordion {
+  .is-accordion {
+    &::after {
+      @include breakpoint($only-mobile) {
+        font-weight: bold;
+      }
     }
   }
 }
