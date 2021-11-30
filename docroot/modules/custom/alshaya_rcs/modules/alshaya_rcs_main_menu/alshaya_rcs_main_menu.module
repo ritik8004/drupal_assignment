@@ -217,3 +217,15 @@ function alshaya_rcs_main_menu_preprocess_block(&$variables) {
     $variables['attributes']['class'][] = 'block-alshaya-dp-navigation-link';
   }
 }
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function alshaya_rcs_main_menu_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  // Add template suggestion based on machine name.
+  switch ($variables['elements']['#id']) {
+    case 'alshayarcsshopby':
+      $suggestions[] = 'block__shopby';
+      break;
+  }
+}

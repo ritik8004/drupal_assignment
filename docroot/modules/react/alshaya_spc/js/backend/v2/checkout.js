@@ -24,7 +24,7 @@ import {
   isUserAuthenticated,
   getIp,
 } from './utility';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
 import {
   getPaymentMethods,
@@ -1263,6 +1263,17 @@ const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('upapi', 0
 const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay', 0) !== -1;
 
 /**
+ * Checks if tabby payment method.
+ *
+ * @param {string} paymentMethod
+ *   Payment method code.
+ *
+ * @return {bool}
+ *   TRUE if payment methods from tabby
+ */
+const isTabbyPaymentMethod = (paymentMethod) => paymentMethod.indexOf('tabby', 0) !== -1;
+
+/**
  * Prepare message to log when API fail after payment successful.
  *
  * @param {array} cart
@@ -1422,7 +1433,7 @@ const paymentUpdate = async (data) => {
       method: paymentData.method,
       additional_data: (hasValue(paymentData.additional_data))
         ? paymentData.additional_data
-        : [],
+        : {},
     },
   };
 
@@ -1459,7 +1470,9 @@ const paymentUpdate = async (data) => {
   }
 
   // If upapi payment method (payment method via checkout.com).
-  if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
+  if (isUpapiPaymentMethod(paymentData.method)
+    || isPostpayPaymentMethod(paymentData.method)
+    || isTabbyPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
     params.payment.additional_data.successUrl = `${window.location.origin}${Drupal.url('spc/payment-callback/success')}`;
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
@@ -1713,9 +1726,25 @@ window.commerceBackend.getCartForCheckout = async () => {
   return getCart()
     .then(async (response) => {
       const cart = response;
+
+      // Check if response itself is empty.
+      // This could happen for multiple reasons,
+      // For example isAnonymousUserWithoutCart or we got 404.
+      if (!hasValue(cart) || !hasValue(cart.data)) {
+        logger.warning('Empty response received for getCart API call.');
+
+        return {
+          data: {
+            error: true,
+            error_code: 500,
+            error_message: 'Empty response received.',
+          },
+        };
+      }
+
       const cartId = window.commerceBackend.getCartId();
 
-      if (!hasValue(cart.data) || hasValue(cart.data.error_message)) {
+      if (hasValue(cart.data.error_message)) {
         logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,
           '@message': cart.data.error_message,
