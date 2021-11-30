@@ -336,6 +336,11 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Check if the tabby is enabled.
+    if (Tabby.isTabbyEnabled()) {
+      preContentActive = 'visible';
+    }
+
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
