@@ -391,10 +391,10 @@ const getProcessedCartData = async (cartData) => {
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
-      // Set productType to identify virtual product.
-      let productType = 'phisical';
-      if (item.product_type !== 'undefined') {
-        productType = item.product_type;
+      // Set isEgiftCard for virtual product.
+      let isEgiftCard = false;
+      if (item.product_type !== 'undefined' && item.product_type === 'virtual' && isEgiftCardEnabled()) {
+        isEgiftCard = true;
       }
       data.items[item.sku] = {
         id: item.item_id,
@@ -404,40 +404,37 @@ const getProcessedCartData = async (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
-        product_type: productType,
+        isEgiftCard,
       };
 
       // Get stock data on cart and checkout pages.
       const spcPageType = window.spcPageType || '';
-      // No need of stick data for Virtual products.
-      // i.e egift card.
-      if (productType !== 'virtual' && isEgiftCardEnabled()) {
-        if (spcPageType === 'cart' || spcPageType === 'checkout') {
-          // Suppressing the lint error for now.
-          // eslint-disable-next-line no-await-in-loop
-          const stockInfo = await getProductStatus(item.sku);
+      // No need of stock data for egift card products.
+      if ((spcPageType === 'cart' || spcPageType === 'checkout') && !isEgiftCard) {
+        // Suppressing the lint error for now.
+        // eslint-disable-next-line no-await-in-loop
+        const stockInfo = await getProductStatus(item.sku);
 
-          // Do not show the products which are not available in
-          // system but only available in cart.
-          if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
-            logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
-              '@sku': item.sku,
-              '@cartId': data.cart_id_int,
-              '@stockInfo': JSON.stringify(stockInfo || {}),
-            });
+        // Do not show the products which are not available in
+        // system but only available in cart.
+        if (!hasValue(stockInfo) || hasValue(stockInfo.error)) {
+          logger.warning('Product not available in system but available in cart. SKU: @sku, CartId: @cartId, StockInfo: @stockInfo.', {
+            '@sku': item.sku,
+            '@cartId': data.cart_id_int,
+            '@stockInfo': JSON.stringify(stockInfo || {}),
+          });
 
-            delete data.items[item.sku];
-            // eslint-disable-next-line no-continue
-            continue;
-          }
+          delete data.items[item.sku];
+          // eslint-disable-next-line no-continue
+          continue;
+        }
 
-          data.items[item.sku].in_stock = stockInfo.in_stock;
-          data.items[item.sku].stock = stockInfo.stock;
+        data.items[item.sku].in_stock = stockInfo.in_stock;
+        data.items[item.sku].stock = stockInfo.stock;
 
-          // If any item is OOS.
-          if (!hasValue(stockInfo.in_stock) || !hasValue(stockInfo.stock)) {
-            data.in_stock = false;
-          }
+        // If any item is OOS.
+        if (!hasValue(stockInfo.in_stock) || !hasValue(stockInfo.stock)) {
+          data.in_stock = false;
         }
       }
 
