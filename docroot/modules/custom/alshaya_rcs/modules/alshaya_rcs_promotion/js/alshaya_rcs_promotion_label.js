@@ -161,7 +161,9 @@
       // Prepare cart object.
       let cartInfo = [];
       // Define sku and view_mode based on the request type.
-      let queryProductSku, queryProductViewMode, queryCartAttr, queryCartPrice = '';
+      let queryProductSku = '',
+      queryProductViewMode = '',
+      queryCartAttr = '';
       if (type === 'product') {
         queryProductSku = `sku: "${sku}"`;
         queryProductViewMode = `view_mode: "${viewMode}"`;
@@ -170,16 +172,17 @@
         queryCartAttr = `
           subtotal: ${cartData.totals.subtotal_incl_tax}
           applied_rules: "${cartData.appliedRules}"`;
-        // Conditionaly adding the price attribute in query because it's
-        // required for cart Graphql query only and this cannot be passed
-        // as an extra attribute for product dynamic promotion query.
-        queryCartPrice = `price: ${cartData.items[key].price}`
       }
       for (const key in cartData.items) {
         cartInfo.push(`{
             sku: "${cartData.items[key].sku}",
             qty: ${parseInt(cartData.items[key].qty)}
-            ${queryCartPrice}
+            ${
+              // Conditionaly adding the price attribute in query because it's
+              // required for cart Graphql query only and this cannot be passed
+              // as an extra attribute for product dynamic promotion query.
+              type === 'cart' ? 'price: ' + cartData.items[key].price : ''
+            }
           }`);
       }
       // Prepare graphql query here.
@@ -214,7 +217,7 @@
       });
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
-      // Update the response variable based on response.
+      // Update the response variable based on querytype.
       response = response.data[queryType];
     }
 

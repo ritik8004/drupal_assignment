@@ -33,12 +33,13 @@ const PromotionsDynamicLabelsUtil = {
       });
       // Update the response array with the modified one.
       response.products_labels = productLabels;
-      RcsEventManager.fire('applyDynamicPromotions', {
-        detail: {
-          response
-        }
-      });
     }
+    // Fire the event to update dynamic promotion.
+    RcsEventManager.fire('applyDynamicPromotions', {
+      detail: {
+        response
+      },
+    });
   },
 };
 

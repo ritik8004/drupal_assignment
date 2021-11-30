@@ -56,7 +56,7 @@ function alshaya_rcs_promotion_rcs_placeholders_graphql_query() {
         'label',
         'type',
         'coupon',
-        'coupon_discount',
+        'couponDiscount',
         'threshold_reached',
       ],
     ],
