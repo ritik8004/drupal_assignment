@@ -8,6 +8,22 @@
   }
 }
 
+.block-system-branding-block {
+  .site-brand-home {
+    .logo {
+      img {
+        width: 18.75rem;
+        height: 1.61rem;
+
+        html[lang=ar] & {
+          width: 17.94rem;
+          height: 3.75rem;
+        }
+      }
+    }
+  }
+}
+
 .c-pre-content__region {
   border: 0;
 

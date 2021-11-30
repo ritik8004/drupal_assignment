@@ -54,6 +54,46 @@ function applyEllipsis(value) {
 }
 
 /**
+ * Gets legal notice value from config.
+ *
+ * @returns {object}
+ *   Object containing the legal notice details.
+ */
+function getLegalNotice() {
+  return {
+    status: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.status)
+      ? drupalSettings.alshayaRcs.legalNotice.status
+      : false,
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.label)
+      ? drupalSettings.alshayaRcs.legalNotice.label
+      : '',
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.legalNotice.summary)
+      ? drupalSettings.alshayaRcs.legalNotice.summary.value
+      : '',
+  };
+}
+
+/**
+ * Gets additional PDP description value from config.
+ *
+ * @returns {object}
+ *   Object containing the additional description.
+ */
+function getAdditionalPdpDescription() {
+  return {
+    status: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.status)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.status
+      : false,
+    label: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.label)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.label
+      : '',
+    summary: Drupal.hasValue(drupalSettings.alshayaRcs.additionalPdpDescription.summary)
+      ? drupalSettings.alshayaRcs.additionalPdpDescription.summary.value
+      : '',
+  };
+}
+
+/**
  * Replace placeholders and get related products.
  *
  * @param {object} products
@@ -228,7 +268,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(upsell_products, rcsTranslatedText('You may also like', {}, 'alshaya_static_text|pdp_upsell_title'));
+      html = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
       break;
 
     case 'mobile-related-products':
@@ -239,7 +279,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(related_products, rcsTranslatedText('Related', {}, 'alshaya_static_text|pdp_related_title'));
+      html = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
       break;
 
     case 'mobile-crosssell-products':
@@ -250,7 +290,7 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(crosssell_products, rcsTranslatedText('Customers also bought', {}, 'alshaya_static_text|pdp_crosssell_title'));
+      html = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
       break;
 
     case 'classic-gallery':
@@ -505,7 +545,8 @@ exports.computePhFilters = function (input, filter) {
 
           // Add a disabled option which will be used as the label for the option.
           let selectOption = jQuery('<option></option>');
-          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(rcsTranslatedText(`Select ${option.attribute_code}`));
+          let text = Drupal.t(`Select @attr`, { '@attr': option.attribute_code });
+          selectOption.attr({selected: 'selected', disabled: 'disabled'}).text(text);
           configurableOptionsList.append(selectOption);
 
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -623,20 +664,26 @@ exports.computePhFilters = function (input, filter) {
       data = input.description;
 
       // Add legal notice.
-      data.legal_notice = {
-        enabled: drupalSettings.alshayaRcs.legal_notice_enabled,
-        label: drupalSettings.alshayaRcs.legal_notice_label,
-        summary: drupalSettings.alshayaRcs.legal_notice_summary,
-      };
+      data.legal_notice = getLegalNotice();
+
+      // Add Additional description.
+      data.additional_description = getAdditionalPdpDescription();
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`field.product.${filter}`, data);
+      value = handlebarsRenderer.render(`product.${filter}.block`, data);
       break;
 
     case 'short_description':
       // Prepare the object data for rendering.
       data = (input.short_description) ? input.short_description : input.description;
-      data.read_more = false;
+
+      // Add description (Used inside short description on Magazine layout).
+      data.description = input.description;
+      // Add legal notice.
+      data.description.legal_notice = getLegalNotice();
+
+      // Add Additional description.
+      data.description.additional_description = getAdditionalPdpDescription();
 
       // Apply ellipsis.
       let tmp = applyEllipsis(data.html);
@@ -644,7 +691,7 @@ exports.computePhFilters = function (input, filter) {
       data.read_more = tmp.read_more;
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`field.product.${filter}`, data);
+      value = handlebarsRenderer.render(`product.${filter}.block`, data);
       break;
 
     case 'promotions':

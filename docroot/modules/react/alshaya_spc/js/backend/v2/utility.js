@@ -4,7 +4,7 @@ import {
   removeStorageInfo,
   setStorageInfo,
 } from '../../utilities/storage';
-import logger from '../../utilities/logger';
+import logger from '../../../../js/utilities/logger';
 
 /**
  * Get user role authenticated or anonymous.
@@ -131,6 +131,12 @@ const getApiEndpoint = (action, params = {}) => {
       endpoint = isUserAuthenticated()
         ? '/V1/customer-order/me/getLastOrder'
         : '';
+      break;
+
+    case 'getTabbyAvailableProducts':
+      endpoint = isUserAuthenticated()
+        ? '/V1/carts/mine/tabby-available-products'
+        : `/V1/guest-carts/${params.cartId}/tabby-available-products`;
       break;
 
     default:

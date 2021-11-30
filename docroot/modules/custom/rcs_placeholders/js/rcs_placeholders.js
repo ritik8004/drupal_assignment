@@ -92,7 +92,6 @@
 
   // Process the Drupal.t markup from middleware.
   // For direct access we should not use this class.
-  // This is added for middleware in rcsTranslatedText().
   $('.rcs-drupal-t').each((index, item) => {
     $(item).replaceWith(Drupal.t(
       $(item).attr('data-str'),

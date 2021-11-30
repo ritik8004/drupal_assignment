@@ -1,0 +1,51 @@
+.l-one--w {
+  #alshaya-algolia-search {
+    .c-content__region {
+      width: 100%;
+
+      @include breakpoint($tablet) {
+        .alias--cart & {
+          width: 75.5%;
+          float: none;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+}
+
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        font-size: 0.8125rem;
+        text-transform: uppercase;
+
+        &::after {
+          #{$right}: 1.5rem;
+        }
+      }
+    }
+  }
+
+  .c-page-title {
+    font-weight: normal;
+  }
+
+  .c-products__item {
+    .special--price {
+      margin-#{$left}: 0.625rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
+    }
+
+    .price-currency {
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0.0625rem;
+      }
+    }
+  }
+}

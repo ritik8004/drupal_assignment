@@ -1,0 +1,46 @@
+<div class="content--short-description">
+  <h2 class="field__label">{{t 'Product Description' }}</h2>
+  <div class="field__content-wrapper">
+    <div class="field__content">
+      <div class="desc-wrapper">
+        {{#if label }}
+          <div class="desc-label">
+            {{ label }}
+          </div>
+        {{/if}}
+        {{#if value }}
+          <div class="desc-value">
+            {{ value }}
+          </div>
+        {{/if}}
+      </div>
+        {{#with description}}
+        <div class="desc-wrapper">
+          {{#if label }}
+            <div class="desc-label">
+              {{ label }}
+            </div>
+          {{/if}}
+          <div class="desc-value">
+            <p>
+              {{{ html }}}
+            </p>
+            {{#if legal_notice.status }}
+            <div class="legal-notice desc-wrapper">
+              <div class="desc-label">
+                {{ legal_notice.label }}
+              </div>
+              <div class="desc-value">
+                {{ legal_notice.summary }}
+              </div>
+            </div>
+            {{/if}}
+          </div>
+        </div>
+      {{/with}}
+    </div>
+    {{#if read_more }}
+      <span class="read-more-description-link-mobile">{{t 'Read more' }}</span>
+    {{/if}}
+  </div>
+</div>

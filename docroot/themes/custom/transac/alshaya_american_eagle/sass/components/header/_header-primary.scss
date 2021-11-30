@@ -445,6 +445,7 @@ header {
   #mini-cart-wrapper {
     @include breakpoint($only-tablet) {
       margin-top: -1.375rem;
+      width: 2rem;
     }
   }
 }

@@ -48,3 +48,16 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_debenhams
     }
   }
 }
+
+// Mixin styles the label input fields.
+// Apply on label inside form elements.
+@mixin placeholder-label() {
+  font-size: 1rem;
+  color: $primary_input_label;
+  position: absolute;
+  #{$left}: 0;
+  top: -0.125rem;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+  font-family: $dh-light;
+}
