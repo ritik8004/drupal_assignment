@@ -2,7 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import getCurrencyCode from '../../../../js/utilities/util';
 import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
-import getStringMessage from '../../utilities/strings';
+import getStringMessage from '../../../../js/utilities/strings';
 
 export default class UpdateEgiftCardAmount extends React.Component {
   // Handling validation for the changing the amount of egift card.
