@@ -16,6 +16,12 @@ import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import {
+  isFullPaymentDoneByAura,
+  isPaymentMethodSetAsAura,
+  isUnsupportedPaymentMethod,
+} from '../../../aura-loyalty/components/utilities/checkout_helper';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
@@ -104,6 +110,12 @@ export default class PaymentMethods extends React.Component {
       return false;
     }
 
+    // We disable the other payment methods when full payment is done by aura points
+    // and payment method is set as `aura_payment`.
+    if (isAuraEnabled() && isPaymentMethodSetAsAura(cart)) {
+      return false;
+    }
+
     if (isDeliveryTypeSameAsInCart(cart)) {
       if (Postpay.isPostpayEnabled() && Postpay.isAvailable(this) == null) {
         return false;
@@ -114,12 +126,19 @@ export default class PaymentMethods extends React.Component {
   };
 
   selectDefault = () => {
+    const { cart } = this.props;
+
+    // If full payment is being done by aura then we change payment method to `aura_payment`.
+    if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
+      this.changePaymentMethod('aura_payment');
+      return;
+    }
+
     if (!(this.isActive())) {
       return;
     }
 
     const allPaymentMethods = this.getPaymentMethods(true);
-    const { cart } = this.props;
     const { postpayAvailable } = this.state;
 
     // Prepare object containing only the methods available for use.
@@ -143,6 +162,7 @@ export default class PaymentMethods extends React.Component {
     }
 
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
+
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
       || paymentDiv === null
@@ -252,6 +272,14 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    // If aura enabled and aura points redeemed then do not allow
+    // to select any payment method that is unsupported with aura.
+    if (isAuraEnabled()
+      && cart.cart.totals.paidWithAura > 0
+      && isUnsupportedPaymentMethod(method)) {
+      return;
+    }
+
     // If method is already selected in cart we simply
     // trigger the events.
     if (method && cart.cart.payment.method === method) {
@@ -305,6 +333,7 @@ export default class PaymentMethods extends React.Component {
 
   render = () => {
     const methods = [];
+    let disablePaymentMethod = '';
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
@@ -313,6 +342,13 @@ export default class PaymentMethods extends React.Component {
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
     Object.entries(activePaymentMethods).forEach(([, method], index) => {
+      // If aura enabled and customer is paying some amount of the order
+      // using aura points then disable the payment methods that are
+      // not supported with Aura.
+      if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
+        disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
+      }
+
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
       methods.push(<PaymentMethod
@@ -324,6 +360,10 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
+        {...(isAuraEnabled()
+          && disablePaymentMethod
+          && { disablePaymentMethod }
+        )}
       />);
     });
 

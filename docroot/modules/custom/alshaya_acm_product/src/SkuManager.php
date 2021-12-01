@@ -849,7 +849,8 @@ class SkuManager {
     $promos = $this->productCacheManager->get($sku, $cache_key);
 
     if (!is_array($promos)) {
-      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
+      // Use 'all' for context to get promotions for Algolia / Search.
+      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart'], NULL, NULL, 'all');
       $tags = [];
       foreach (array_keys($promos) as $id) {
         $tags[] = 'node:' . $id;
@@ -907,9 +908,12 @@ class SkuManager {
       $query->condition('nid', $promotion_nids, 'IN');
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
-      if (!empty($context)) {
+
+      // Use 'all' for context to get promotions for both web and app.
+      if (!empty($context) && $context !== 'all') {
         $query->condition('field_acq_promotion_context', $context);
       }
+
       $query->exists('field_acq_promotion_label');
       $promotion_nids = $query->execute();
     }

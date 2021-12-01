@@ -105,6 +105,12 @@ set classes = [
               <p>{{ content.delivery_in_only_city_text }}</p>
             </div>
           {% endif %}
+
+          {% if aura_enabled is defined and aura_enabled %}
+            {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+            <div id="aura-pdp"></div>
+          {% endif %}
+
         </div>
       {% endblock %}
 

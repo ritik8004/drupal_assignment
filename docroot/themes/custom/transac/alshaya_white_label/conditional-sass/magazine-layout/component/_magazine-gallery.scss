@@ -374,6 +374,10 @@
   line-height: 0;
 }
 
+.magazine-layout-node .acq-content-product {
+  overflow: visible;
+}
+
 @include breakpoint($mobile) {
   .description-details {
     div,

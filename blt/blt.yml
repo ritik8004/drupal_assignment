@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: (MMCPA|ACR2|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP|VMA)
+  prefix: (MMCPA|ACR2|AURA|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP|VMA)
   human_name: Alshaya
   profile:
     name: alshaya_transac
@@ -63,7 +63,7 @@ command-hooks:
     command: 'echo ''No pre-config-import configured.'''
   post-deploy-build:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash middleware-build.sh ${deploy.dir}/docroot/middleware; bash middleware-build.sh ${deploy.dir}/docroot/appointment; bash post-deploy-build.sh ${deploy.dir}'
+    command: 'bash middleware-build.sh ${deploy.dir}; bash post-deploy-build.sh ${deploy.dir}'
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''

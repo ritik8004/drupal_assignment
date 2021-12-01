@@ -123,10 +123,11 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
+  $search_direction = 'self';
   $description_value = '';
   $desc = $skuManager->fetchProductAttribute($sku_entity, 'attr_description', $search_direction);
 
+  // Get data from article level.
   if (!empty($desc)) {
     $description_value .= $desc;
   }
@@ -194,9 +195,11 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
 function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $search_direction = 'parent';
+  // Get data from article level "color variant".
   $parent_sku = $skuManager->getParentSkuBySku($child);
-  $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', 'self');
-  $washing_instructions = $skuManager->fetchProductAttribute($child, 'attr_washing_instructions', 'self');
+  $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', $search_direction);
+  $washing_instructions = $skuManager->fetchProductAttribute($child, 'attr_washing_instructions', $search_direction);
   $markupText = _alshaya_cos_transac_get_formated_text($composition, $washing_instructions);
   $composition_markup = '';
   if (!empty($markupText)) {
@@ -215,7 +218,7 @@ function alshaya_cos_transac_sku_variant_info_alter(array &$variant, SKUInterfac
     'markup' => $composition_markup,
   ];
 
-  $warning = $skuManager->fetchProductAttribute($child, 'attr_article_warning', 'self');
+  $warning = $skuManager->fetchProductAttribute($child, 'attr_article_warning', $search_direction);
   $warning_markup = '';
   if (!empty($warning)) {
     $markup = [

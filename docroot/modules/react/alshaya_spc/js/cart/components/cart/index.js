@@ -17,6 +17,8 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
+import AuraCartContainer from '../../../aura-loyalty/components/aura-cart-rewards/aura-cart-container';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
 import Postpay from '../../../utilities/postpay';
@@ -178,11 +180,20 @@ export default class Cart extends React.Component {
         this.updateCartMessage('error', qtyMismatchErrorInfo.message);
       }
     }
+
+    // Event listerner to update any change in cart totals.
+    document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
   }
+
+  // Event listener to update cart totals.
+  handleTotalsUpdateEvent = (event) => {
+    const { totals } = event.detail;
+    this.setState({ totals });
+  };
 
   saveDynamicPromotions = (event) => {
     const {
@@ -324,6 +335,11 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Check if the tabby is enabled.
+    if (Tabby.isTabbyEnabled()) {
+      preContentActive = 'visible';
+    }
+
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -397,6 +413,9 @@ export default class Cart extends React.Component {
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
             />
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCartContainer totals={totals} />
+            </ConditionalView>
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}

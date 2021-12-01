@@ -95,6 +95,8 @@ $lang_switch_active: $charcoal;
 
 // Accordion
 $accordion_border: $pale-grey;
+$accordion_sub_title: $charcoal;
+$accordion_title: $charcoal;
 
 // Header.
 $header_border: $pale-grey;
@@ -110,6 +112,11 @@ $header_secondary_menu_link_mobile: $charcoal;
 $header_secondary_menu_link: $charcoal;
 $header_mobile_menu_arrow: $charcoal;
 $header_c_menu_text: $charcoal;
+
+// Homepage Slider
+$hp_slider_dots: $dark-grey;
+$instagram_dots_default: $white;
+$instagram_dots_default_border: $dark-grey;
 
 //Algolia search bar.
 $algolia-input-text: $charcoal;
@@ -218,3 +225,34 @@ $lhn_l2: $charcoal;
 $lhn_l3: $mid-grey;
 $lhn_l4: $mid-grey;
 $lhn_sticky-header-shadow: $pale-grey;
+
+// Product detail page.
+$pdp_product_special_price_text: $sale-red;
+$pdp_product_discount_price: $sale-red;
+$pdp_product_price: $charcoal;
+$pdp_product_discount_text: $sale-red;
+$pdp_size_option_selected_text: $charcoal;
+$pdp_size_option_selected_bg: $white;
+$pdp_size_option_border: $pale-grey;
+$pdp_size_option_text: $charcoal;
+$pdp_swatch_selected_border: $charcoal;
+$pdp_cc_btn_border: $medium-sky-blue;
+$pdp_cc_btn_bg: $white;
+$pdp_accordion_title: $charcoal;
+$pdp_title_section_border: $pale-grey;
+$pdp_skus_border: $pale-grey;
+$gallery_arrows_border: $charcoal;
+$pdp_sidebar_label: $charcoal;
+$pdp_sidebar_link: $charcoal;
+$free-gifts-modal-product-item-code: $spanish-grey;
+$pdp_product_itemcode: $spanish-grey;
+$pdp_size_selected_text: $charcoal;
+$pdp_size_option_border: $grey;
+$pdp_size_selected_border: $mid-grey;
+$pdp_size_option_hover_bg: $light-grey;
+$pdp_cc_storefinder_input: $charcoal;
+$pdp_cc_btn_text: $charcoal;
+$pdp_desc_wrapper_border: $charcoal;
+$pdp_desc_wrapper_close_bg: $charcoal;
+$pdp_sizeguide_link: $charcoal;
+$pdp_product_special_price: $sale-red;
