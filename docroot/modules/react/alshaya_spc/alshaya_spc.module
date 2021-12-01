@@ -295,8 +295,17 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // without any language suffix so HTTP_HOST is enough.
   $page['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
 
-  // Use proxy on local env as here we don't have Cloudflare.
-  if (Settings::get('env') === 'local') {
+  // List of environments to use proxy in from Settings.
+  $environments_to_use_proxy = Settings::get('environments_to_use_proxy', [
+    'local',
+    'dev',
+    'dev2',
+    'dev3',
+    'qa2'
+  ]);
+
+  // Use proxy on only specific environments.
+  if (in_array(Settings::get('env_name'), $environments_to_use_proxy)) {
     $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
@@ -305,6 +314,9 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   $page['#attached']['drupalSettings']['cart']['retryMaxAttempts'] = Settings::get('alshaya_checkout_settings')['max_native_update_attempts'] ?? 10;
   $page['#attached']['drupalSettings']['cart']['exceptionMessages'] = Settings::get('alshaya_spc.exception_message', []);
+
+  $checkout_settings = Settings::get('alshaya_checkout_settings');
+  $page['#attached']['drupalSettings']['cart']['doubleCheckEnabled'] = $checkout_settings['place_order_double_check_after_exception'];
 
   $languages = $language_manager->getLanguages();
   $page['#attached']['drupalSettings']['alshayaSpc']['languages'] = array_keys($languages);

@@ -37,6 +37,7 @@ export const drupalSettings = {
 // test about the function not being found.
 // This is most likely because this function is included by Drupal and is not a
 // part of react.
+window.commerceBackend = window.commerceBackend || {};
 window.commerceBackend.getProductStatus = function () {}
 
 export default {

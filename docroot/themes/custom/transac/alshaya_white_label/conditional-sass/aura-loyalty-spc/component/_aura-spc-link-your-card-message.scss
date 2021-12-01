@@ -1,0 +1,25 @@
+.spc-aura-link-your-card-message {
+  margin-top: 0.3125rem;
+  padding: 1rem !important;
+  padding-#{$left}: 3.625rem !important;
+  position: relative;
+
+  > span {
+    padding-#{$left}: 3px;
+    color: $aura-item-upgrade-highlight;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  @include icon('infomation') {
+    width: 2rem;
+    height: 2rem;
+    color: $aura-item-upgrade-highlight;
+    display: inline-flex;
+    font-size: 2rem;
+    position: absolute;
+    #{$left}: 1.125rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

@@ -65,6 +65,7 @@ class SimpleProductForm extends React.Component {
             productInfo={productInfo}
             skuCode={skuCode}
             stockQty={stockQty}
+            context={context}
           />
         </div>
         {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (
