@@ -177,11 +177,12 @@ $store_finder_text: $charcoal;
 $store_finder_border_hover: $grey;
 $store_finder_search_label: $charcoal;
 $store_finder_search_input: $grey;
-$store_finder_search_input_mobile_border: $mid-grey;
+$store_finder_search_input_mobile_border: $grey;
 $store_finder_search_input_border: $grey;
 $store_finder_btn_act_hover_state: $white;
 $store_finder_individual_list_view: $white;
 $store_finder_individual_hour_border: $grey;
+$store_finder_search_results_tile_link: $charcoal;
 
 // Store finder gloassary.
 $store_finder_glossary_alphabet: $charcoal;
@@ -256,3 +257,16 @@ $pdp_desc_wrapper_border: $charcoal;
 $pdp_desc_wrapper_close_bg: $charcoal;
 $pdp_sizeguide_link: $charcoal;
 $pdp_product_special_price: $sale-red;
+
+// SPC
+$spc-cart-background: $anti-flash-white;
+
+// cart
+$minicart_notification_border: $charcoal;
+$minicart_notification_shadow: $light-grey;
+$minicart_notification_text: $mid-grey;
+$minicart_notification_product_title: $charcoal;
+$minicart_notification_btn_bg: $white;
+$cart_notification_arrow_bg: $white;
+$primary_minicart_quantity_bg: $medium-sky-blue;
+$minicart_notification_btn_text: $charcoal;
