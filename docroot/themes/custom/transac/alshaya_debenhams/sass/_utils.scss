@@ -61,3 +61,42 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_debenhams
   pointer-events: none;
   font-family: $dh-light;
 }
+
+@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $styles {
+      background: url($imgpath) $repeat;
+      background-size: contain;
+
+      @include icon_img_styles($height, $width);
+    }
+  }
+
+  &:hover::#{$position} {
+    @if $styles {
+      background: url($imgpath) $repeat;
+      background-size: contain;
+      opacity: 0.8;
+
+      @include icon_img_styles($height, $width);
+    }
+  }
+
+  @content;
+}
+
+// Mixin for Sticky button.
+@mixin stickyButton($left-postion: 0, $zindex: 5) {
+  position: fixed;
+  bottom: 0;
+  #{$left}: $left-postion;
+  z-index: $zindex;
+  margin-bottom: 0;
+  border: 0.5rem solid $white;
+  box-shadow: 0 -75px 100px 3px $sticky-btn;
+  transition-property: none !important;
+}

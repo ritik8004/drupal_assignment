@@ -18,10 +18,10 @@ use Drupal\Core\Cache\Cache;
  * Implements hook_page_attachments_alter().
  */
 function alshaya_aura_react_page_attachments_alter(array &$page) {
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], ['config:alshaya_aura_react.settings']);
-
+  /** @var \Drupal\alshaya_aura_react\Helper\AuraHelper */
   $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
   $settings['enabled'] = $aura_helper->isAuraEnabled();
+  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_aura_react.settings')->getCacheTags());
 
   // Do not proceed if AURA is not enabled.
   if ($settings['enabled'] !== TRUE) {
@@ -60,6 +60,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
   }
   $settings['config'] = $aura_helper->getAuraConfig();
+
   $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
 
   $page['#attached']['drupalSettings']['aura'] = $settings;

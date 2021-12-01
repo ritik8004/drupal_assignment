@@ -18,6 +18,7 @@ import {
   getInlineErrorSelector,
 } from '../../utilities/link_card_sign_up_modal_helper';
 import { validateMobile, validateElementValueByType } from '../../utilities/validation_helper';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -140,6 +141,14 @@ class AuraFormSignUpOTPModal extends React.Component {
             openNewUserModal();
           }
           showError(getInlineErrorSelector('otp').otp, getStringMessage('form_error_invalid_otp'));
+        } else if (result.data.error !== 'undefined') {
+          let message = getStringMessage(result.data.error_message);
+          message = hasValue(message) ? message : result.data.error_message;
+
+          this.setState({
+            messageType: 'error',
+            messageContent: message,
+          });
         }
         removeFullScreenLoader();
       });

@@ -111,7 +111,7 @@ window.auraBackend.updateLoyaltyCard = (action, type, value) => callMiddlewareAp
   value,
 }));
 
-/*
+/**
  * Update User's AURA Status.
  *
  * @param {Object} inputData
@@ -120,4 +120,15 @@ window.auraBackend.updateLoyaltyCard = (action, type, value) => callMiddlewareAp
  * @returns {Promise}
  *   Return success/failure response.
  */
-window.auraBackend.updateUserAuraStatus = (inputData) => callMiddlewareApi('post/loyalty-club/apc-status-update', 'POST', JSON.stringify(inputData));
+window.auraBackend.updateUserAuraStatus = (inputData) => callMiddlewareApi('post/loyalty-club/apc-status-update', inputData);
+
+/**
+ * Redeem loyalty points.
+ *
+ * @param {Object} data
+ *   Data for the API call.
+ *
+ * @returns {Object}
+ *   Points and other data in case of success or error in case of failure.
+ */
+window.auraBackend.processRedemption = (data) => callMiddlewareApi('post/loyalty-club/process-redemption', data);

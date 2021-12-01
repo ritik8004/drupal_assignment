@@ -71,6 +71,10 @@
 }
 
 body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3rem;
+  }
+
   @include breakpoint($upto-desktop) {
     html[lang=ar] & {
       margin-top: 3.75rem;
