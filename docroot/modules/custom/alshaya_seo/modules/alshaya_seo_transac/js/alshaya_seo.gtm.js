@@ -992,8 +992,9 @@ const productRecommendationsSuffix = 'pr-';
    * @param currencyCode
    * @param listName
    * @param position
+   * @param event
    */
-  Drupal.alshaya_seo_gtm_push_product_clicks = function (element, currencyCode, listName, position) {
+  Drupal.alshaya_seo_gtm_push_product_clicks = function (element, currencyCode, listName, position, event) {
     // Don't trigger product click event for items in cross-sell on Mobile.
     if (((element.closest('.owl-item').length !== 0) ||
             (element.closest('.no-carousel').length == 0)) &&
@@ -1034,7 +1035,7 @@ const productRecommendationsSuffix = 'pr-';
 
     // Trigger Product Details View
     var quickView = 'yes';
-    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView);
+    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView, event);
   };
   /**
    * Helper function to push lead events.
@@ -1229,10 +1230,21 @@ const productRecommendationsSuffix = 'pr-';
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
+   * @param {string} listName
+   *   The product information.
    * @param {string} quickView
-   *   The value to add .
+   *   The value to add.
+   * @param {object} event
+   *   The triggered event.
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName = null, quickView = '', event = null) {
+
+    // Checking if event is triggered with Meta keys.
+    // Do not push productDetailView to dataLayer in this scenario.
+    if (event && event.metaKey === true) {
+      return;
+    }
+
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';

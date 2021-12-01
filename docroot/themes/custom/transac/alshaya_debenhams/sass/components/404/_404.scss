@@ -1,0 +1,43 @@
+.not-found {
+  .not-found__body {
+    .maintenance-page & {
+      font-family: $dh-regular;
+    }
+
+    position: static;
+    display: flex;
+    color: $primary_text;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.875rem;
+    width: 100%;
+
+    @include breakpoint($upto-desktop) {
+      width: auto;
+      padding: 0 1.25rem;
+    }
+
+    h2 {
+      .maintenance-page & {
+        font-family: $dh-Juana-black;
+      }
+    }
+  }
+}
+
+.maintenance-page {
+  .maintenance__logo {
+    float: none;
+    text-align: center;
+
+    svg,
+    img {
+      height: 3.4375rem;
+      width: 12.375rem;
+    }
+  }
+
+  .not-found {
+    line-height: 1.5;
+  }
+}
