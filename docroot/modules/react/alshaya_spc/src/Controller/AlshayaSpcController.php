@@ -786,6 +786,10 @@ class AlshayaSpcController extends ControllerBase {
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
     }
 
+    // Invoke the alter hook to allow other modules to change
+    // the order detail settings.
+    $this->moduleHandler->alter('alshaya_spc_order_details_settings', $settings, $order);
+
     $build = [
       '#theme' => 'spc_confirmation',
       '#strings' => $strings,
@@ -857,6 +861,10 @@ class AlshayaSpcController extends ControllerBase {
         case 'mobile':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
+
+          if (!empty($data['chosenCountryCode'])) {
+            $country_mobile_code = '+' . $data['chosenCountryCode'];
+          }
 
           $raw_number = $value;
           if (strpos($value, $country_mobile_code) === FALSE) {

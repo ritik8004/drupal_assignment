@@ -13,7 +13,6 @@
 /docroot/themes/custom/*/package-lock.json
 /docroot/themes/custom/transac/alshaya_example_subtheme
 /docroot/themes/custom/README.md
-/docroot/proxy
 /phpcs.xml.dist
 /hooks/dev
 /hooks/prod

@@ -1,0 +1,19 @@
+.spc-aura-pending-enrollment-message {
+  padding-top: 0.875rem;
+  border-radius: 0.625rem;
+  color: $aura-spc-pending-enrollment-text;
+  background: $aura-spc-cart-block-pending-enrollment;
+  font-family: $aura-regular;
+
+  html[lang=ar] & {
+    background: $aura-spc-cart-block-pending-enrollment-ar;
+  }
+
+  .message {
+    padding: 0 1.25rem 0.625rem;
+  }
+
+  .app-links {
+    padding-#{$left}: 0.625rem;
+  }
+}

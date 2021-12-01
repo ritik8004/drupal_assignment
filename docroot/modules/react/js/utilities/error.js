@@ -1,4 +1,4 @@
-import { hasValue, isArray } from '../../../../js/utilities/conditionsUtility';
+import { hasValue, isArray } from './conditionsUtility';
 
 /**
  * Contains cart error codes.
@@ -77,7 +77,28 @@ const getProcessedErrorMessage = (response) => {
   return msg;
 };
 
+/**
+ * Returns the error in a specific format.
+ *
+ * @param {string} message
+ *   The processed error message.
+ * @param {string} code
+ *   The error code.
+ * @param {Boolean} custom
+ *   Indicates whether the message is a custom message or a backend message.
+ *
+ * @returns {Object}
+ *   The object containing the error data.
+ */
+const getErrorResponse = (message, code = '-', custom = false) => ({
+  error: true,
+  error_message: message,
+  error_code: code,
+  custom,
+});
+
 export {
+  getErrorResponse,
   cartErrorCodes,
   getDefaultErrorMessage,
   getExceptionMessageType,
