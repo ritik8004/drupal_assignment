@@ -37,6 +37,11 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
+    And I wait 5 seconds
+    And I fill in Qpay pin code
+    And I click jQuery "#pay" element on page
+    And I wait 10 seconds
+    Then I should be on "/checkout/confirmation" page
 
   @cc @hd @language @desktop @Qpay
   Scenario: As a Guest, I should be able to checkout using Qpay in second language
@@ -70,6 +75,11 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
+    And I wait 5 seconds
+    And I fill in Qpay pin code
+    And I click jQuery "#pay" element on page
+    And I wait 10 seconds
+    Then I should be on "/{language_short}/checkout/confirmation" page
 
   @cc @hd @language @mobile @Qpay
   Scenario: As a Guest, I should be able to checkout using Qpay in second language
@@ -106,7 +116,7 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     Then I press "btnSubmit"
     And I wait 2 seconds
     And I fill in Qpay pin code
-    And I press "pay"
+    And I click jQuery "#pay" element on page
     And I wait 5 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page

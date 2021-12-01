@@ -34,7 +34,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method
     And I wait for AJAX to finish
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for AJAX to finish
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
@@ -52,6 +52,11 @@ Feature: SPC Checkout Click and Collect using QPay Payment method
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
+    And I wait 10 seconds
+    And I fill in Qpay pin code
+    And I click jQuery "#pay" element on page
+    And I wait 10 seconds
+    Then I should be on "/checkout/confirmation" page
 
   @cc @cnc @language @desktop @Qpay
   Scenario: As a Guest, I should be able to checkout using click and collect with qpay
@@ -102,6 +107,12 @@ Feature: SPC Checkout Click and Collect using QPay Payment method
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
+    And I wait 10 seconds
+    And I fill in Qpay pin code
+    And I click jQuery "#pay" element on page
+    And I wait 10 seconds
+    Then I should be on "{language_short}/checkout/confirmation" page
+
 
   @cc @cnc @mobile @Qpay
   Scenario: As a Guest, I should be able to checkout using click and collect with qpay
@@ -155,7 +166,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method
     Then I press "btnSubmit"
     And I wait 2 seconds
     And I fill in Qpay pin code
-    And I press "pay"
+    And I click jQuery "#pay" element on page
     And I wait 5 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
