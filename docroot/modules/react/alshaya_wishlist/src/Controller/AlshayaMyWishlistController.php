@@ -139,7 +139,6 @@ class AlshayaMyWishlistController extends ControllerBase {
    * Returns page title.
    */
   public function getWishListTitle() {
-    // @todo need to use wishlist_label token.
     return $this->t('My @wishlist_label', [
       '@wishlist_label' => $this->tokenManager->replace('[alshaya_wishlist:wishlist_label]'),
     ]);
