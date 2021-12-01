@@ -406,7 +406,7 @@ class MobileAppUtility {
     $deeplink_url = $this->getRedirectUrl($deeplink_url);
     $params = !empty($url->isRouted()) ? $url->getRouteParameters() : NULL;
     if (empty($params)) {
-      if ($url->getRouteName() === 'view.magazine_articles.list') {
+      if ($url->isRouted() && $url->getRouteName() === 'view.magazine_articles.list') {
         return self::ENDPOINT_PREFIX
         . 'page/magazine-block';
       }
@@ -416,6 +416,7 @@ class MobileAppUtility {
         . $deeplink_url;
       }
     }
+    $entity = NULL;
     if (isset($params['taxonomy_term'])) {
       $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
     }
