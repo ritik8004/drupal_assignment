@@ -49,6 +49,12 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
+    And I wait 10 seconds
+    And I fill in Qpay pin code
+    And I click jQuery "#pay" element on page
+    And I wait 10 seconds
+    Then I should be on "/checkout/confirmation" page
+
 
   @cc @cnc @language @desktop @Qpay
   Scenario: As authenticated user, I should be able to checkout using click and collect with qpay
@@ -94,6 +100,11 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
+    And I wait 10 seconds
+    And I fill in Qpay pin code
+    And I click jQuery "#pay" element on page
+    And I wait 10 seconds
+    Then I should be on "{language_short}/checkout/confirmation" page
 
   @cc @cnc @language @mobile @Qpay
   Scenario: As authenticated user, I should be able to checkout using click and collect with qpay
@@ -142,7 +153,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     Then I press "btnSubmit"
     And I wait 2 seconds
     And I fill in Qpay pin code
-    And I press "pay"
+    And I click jQuery "#pay" element on page
     And I wait 5 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
