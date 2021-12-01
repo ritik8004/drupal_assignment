@@ -23,6 +23,8 @@ class CheckoutConfirmation extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {};
+
     // Set loyaltyStatus state variable only for logged in users if Aura enabled.
     if (isAuraEnabled() && getUserDetails().id) {
       this.state = {
