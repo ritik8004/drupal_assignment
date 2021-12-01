@@ -165,48 +165,6 @@ const getIp = () => Axios({ url: 'https://www.cloudflare.com/cdn-cgi/trace' })
     }).filter((value) => value != null)[0];
   });
 
-/**
- * Helper to detect Captcha.
- *
- * @param <object> response
- *   The API response.
- */
-const detectCaptcha = (response) => {
-  // Check status code.
-  if (response.status !== 403) {
-    return;
-  }
-
-  // Check that content contains a string.
-  if (response.data.indexOf('captcha-bypass') < 0) {
-    return;
-  }
-
-  // Log.
-  logger.debug('API response contains Captcha.');
-};
-
-/**
- * Helper to detect CloudFlare javascript challenge.
- *
- * @param <object> response
- *   The API response.
- */
-const detectCFChallenge = (response) => {
-  // Check status code.
-  if (response.status !== 503) {
-    return;
-  }
-
-  // Check that content contains a string.
-  if (response.data.indexOf('DDos') < 0) {
-    return;
-  }
-
-  // Log.
-  logger.debug('API response contains CF Challenge.');
-};
-
 /* eslint-disable import/prefer-default-export */
 export {
   getApiEndpoint,
@@ -214,6 +172,4 @@ export {
   getIp,
   getCartIdFromStorage,
   removeCartIdFromStorage,
-  detectCFChallenge,
-  detectCaptcha,
 };

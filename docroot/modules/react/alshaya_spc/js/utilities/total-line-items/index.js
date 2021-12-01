@@ -4,6 +4,8 @@ import VatText from '../vat-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
+import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/aura-checkout-order-summary';
+import isAuraEnabled from '../../../../js/utilities/helper';
 import PostpayCart from '../../cart/components/postpay/postpay';
 import Postpay from '../postpay';
 import Advantagecard from '../advantagecard';
@@ -78,6 +80,15 @@ class TotalLineItems extends React.Component {
     const { totals, isCartPage, collectionCharge } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
+
+    // Check for aura totals.
+    let dontShowVatText = false;
+    const { paidWithAura } = totals;
+
+    if (paidWithAura > 0) {
+      dontShowVatText = true;
+    }
+
     // Using a separate variable(shippingAmount) to update the value
     // not using the variable in props(totals) as it will
     // update the global value.
@@ -152,6 +163,13 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
+          <ConditionalView condition={isAuraEnabled()}>
+            <AuraCheckoutOrderSummary
+              totals={totals}
+              dontShowVatText={dontShowVatText}
+              shippingAmount={shippingAmount}
+            />
+          </ConditionalView>
           {postpay}
           <ConditionalView condition={isCartPage && Tabby.isTabbyEnabled()}>
             <TabbyWidget

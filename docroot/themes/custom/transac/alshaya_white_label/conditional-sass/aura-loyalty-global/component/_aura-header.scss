@@ -1,0 +1,268 @@
+.block-aura-rewards-header {
+  text-transform: initial;
+  font-family: $aura-bold;
+
+  @include breakpoint($desktop) {
+    display: inline-block;
+  }
+}
+
+.aura-rewards-wrapper {
+  position: relative;
+  font-size: initial;
+
+  @include breakpoint($upto-desktop) {
+    background-color: $mobile-aura-link-bg;
+  }
+
+  ul {
+    font-size: initial;
+  }
+
+  .aura-header-link {
+    cursor: pointer;
+
+    a {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+
+      &.user-points {
+        width: 3.375rem;
+
+        @include breakpoint($desktop) {
+          min-width: 3.375rem;
+          margin-#{$right}: 0.875rem;
+          margin-#{$left}: 0.3125rem;
+          width: auto;
+        }
+      }
+
+      width: 6.375rem;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+
+      svg {
+        max-width: 3.6875rem;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .aura-header-popup-wrapper {
+    padding: 1.25rem;
+
+    @include breakpoint($upto-desktop) {
+      display: block;
+    }
+
+    @include breakpoint($desktop) {
+      position: absolute;
+      width: 100%;
+      min-width: 19.6875rem;
+      padding: 1.875rem;
+      border-radius: 0.625rem;
+      box-shadow: 0 0.125rem 1.25rem 0 rgba(0, 0, 0, 0.24);
+      #{$left}: 50%;
+      top: calc(100% + 0.3125rem);
+      transform: translateX(-50%);
+      background: $aura-block-bg-desktop;
+
+      html[lang='ar'] & {
+        transform: translateX(50%);
+      }
+
+      &.sign-up-complete {
+        padding: 1.25rem;
+
+        .aura-popup-body {
+          margin-bottom: 1.25rem;
+        }
+
+        .aura-popup-footer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .create-an-account {
+            background: $primary_btn_bg;
+            color: $primary_btn_text;
+            font-family: $alshaya-bold;
+            font-size: 0.875rem;
+            width: 13.8125rem;
+            height: 2.875rem;
+            text-transform: uppercase;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+          }
+
+          .sign-in {
+            color: $aura-header-sign-link;
+            text-decoration: underline;
+            margin-top: 1.25rem;
+            background: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+body.aura-enabled {
+  .aura-popup-header {
+    .title {
+      font-family: $alshaya-thin;
+      font-size: 1.125rem;
+      text-align: #{$left};
+      line-height: normal;
+
+      html[lang=ar] & {
+        line-height: 2.25rem;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 1.5rem;
+      }
+
+      &--one {
+        color: $title-blue;
+        margin-bottom: 0.375rem;
+      }
+
+      &--two {
+        color: $title-pink;
+        margin-bottom: 0.625rem;
+
+        @include breakpoint($upto-desktop) {
+          margin-bottom: 1.75rem;
+        }
+      }
+    }
+  }
+
+  .aura-popup-sub-header {
+    h3 {
+      color: $aura-purple;
+      font-size: 1.5rem;
+      line-height: 2rem;
+      margin: 0 0 0.375rem;
+      text-align: #{$left};
+
+      @include breakpoint($desktop) {
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .aura-popup-body {
+    margin-bottom: 1rem;
+    text-align: center;
+
+    @include breakpoint($desktop) {
+      margin-bottom: 1.5rem;
+      text-align: #{$left};
+    }
+
+    p {
+      font-family: $aura-regular;
+      font-size: 0.8125rem;
+      line-height: 1.1875rem;
+      color: $benefits-text;
+      margin: 0;
+      padding: 0;
+
+      @include breakpoint($desktop) {
+        display: block;
+        font-size: 0.875rem;
+        line-height: 1.4375rem;
+      }
+    }
+
+    p.desktop-only {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
+
+    a.learn-more {
+      font-size: 0.875rem;
+      line-height: 1.4375rem;
+      color: $aura-header-popup-learn-more-link;
+
+      @include breakpoint($desktop) {
+        padding: 0.5rem 0 0;
+      }
+    }
+  }
+
+  .aura-popup-footer {
+    text-align: center;
+
+    a {
+      font-size: 1rem;
+      border-radius: 1.75rem;
+      font-family: $aura-regular;
+    }
+
+    .join-aura {
+      background: $join-aura-link-bg;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.3125rem 1.75rem;
+      height: 2.875rem;
+      color: $join-aura-link;
+      letter-spacing: 0.0443rem;
+      font-family: $aura-bold;
+      border-radius: 1.75rem;
+      cursor: pointer;
+    }
+
+    .learn-more {
+      color: $learn-more-link;
+      text-decoration: none;
+      background: none;
+    }
+
+    &-bottom {
+      p {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        line-height: 1.4375rem;
+        margin-top: 0.875rem;
+        margin-bottom: 0;
+        color: $aura-header-popup-footer-text;
+
+        @include breakpoint($desktop) {
+          margin-top: 1.125rem;
+        }
+      }
+    }
+  }
+
+  .header--wrapper {
+    @include breakpoint($desktop) {
+      z-index: 7;
+    }
+  }
+}
+
+#aura-header-modal {
+  @include breakpoint($desktop) {
+    .aura-header-waiting-wrapper {
+      .spc-loading-container {
+        min-height: 1rem;
+
+        .spc-loader {
+          min-height: 1rem;
+        }
+      }
+    }
+  }
+}
