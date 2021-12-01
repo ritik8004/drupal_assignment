@@ -68,10 +68,10 @@
         impression.variant = '';
         searchImpressions.push(impression);
 
-        $(this).once('js-event').on('click', function (event) {
+        $(this).once('js-event').on('click', function (e) {
           var that = $(this);
           var position = $(this).attr('data-insights-position');
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.reactTeaserView.price.currency, 'Search Results Page', position, event);
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.reactTeaserView.price.currency, 'Search Results Page', position);
         });
 
         // When search results load, process only the default number of

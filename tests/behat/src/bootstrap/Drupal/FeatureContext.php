@@ -2411,7 +2411,7 @@ JS;
    */
   public function iFillinQpayPin()
   {
-    $this->getSession()->executeScript("jQuery('#code').val('EWqkqrfnrM0=,g+8WOynUiEc=,AAgbpZAMi2s=,IHO+KVh/Zn8=,BPw/OgQmym0=,TGtG0oHxTgw=,');");
+    $this->getSession()->executeScript("jQuery('#pinField').val('123456');");
   }
 
   /**
