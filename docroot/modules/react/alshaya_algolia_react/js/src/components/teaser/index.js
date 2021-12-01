@@ -20,7 +20,7 @@ import Promotions from '../promotions';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType,
+  hit, gtmContainer = null, pageType, addtobag,
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
@@ -34,7 +34,7 @@ const Teaser = ({
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
       let collectionLabelValue = hit.collection_labels[plpAttributes[i]];
-      if (pageType === 'plp' && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
+      if ((pageType === 'plp' || pageType === 'wishlist') && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
         collectionLabelValue = hit.collection_labels[currentLanguage][plpAttributes[i]];
       }
       if (hit && hit.collection_labels && collectionLabelValue) {
@@ -47,7 +47,7 @@ const Teaser = ({
     }
   }
   let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
-  if (pageType === 'plp' && productListIndexStatus()) {
+  if ((pageType === 'plp' || pageType === 'wishlist') && productListIndexStatus()) {
     overallRating = overallRating[currentLanguage];
   }
   let labelItems = '';
@@ -58,7 +58,7 @@ const Teaser = ({
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
   const attribute = [];
   Object.entries(hit).forEach(([key, value]) => {
-    if (pageType === 'plp'
+    if ((pageType === 'plp' || pageType === 'wishlist')
       && productListIndexStatus()
       && value !== null) {
       if (value[currentLanguage] !== undefined) {
@@ -144,7 +144,7 @@ const Teaser = ({
           </a>
           {/* @todo: we need to move this to proper place. */}
           <WishlistContainer
-            context="plp"
+            context={pageType}
             position="top-right"
             sku={hit.sku}
             format="icon"
@@ -210,6 +210,8 @@ const Teaser = ({
           stockQty={hit.stock_quantity}
           productData={attribute.atb_product_data}
           isBuyable={attribute.is_buyable}
+          // Force component to render even if feature is disabled.
+          force={addtobag}
         />
       </article>
     </div>

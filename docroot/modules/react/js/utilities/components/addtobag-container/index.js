@@ -3,14 +3,14 @@ import { isAddToBagEnabled } from '../../addToBagHelper';
 import EmptyErrorBoundary from '../empty-error-boundary/EmptyErrorBoundary';
 
 function AddToBagContainer(props) {
-  const { productData, isBuyable } = props;
+  const { productData, isBuyable, force } = props;
 
   // Return if product data is undefined or empty.
   if (typeof productData === 'undefined' || !productData) {
     return null;
   }
 
-  if (isAddToBagEnabled()) {
+  if (isAddToBagEnabled() || force) {
     const AddToBagLazy = React.lazy(() => import('../../../../alshaya_add_to_bag/js/components/addtobag' /* webpackChunkName: "atb" */));
 
     return (
@@ -22,6 +22,7 @@ function AddToBagContainer(props) {
             stockQty={props.stockQty}
             productData={productData}
             isBuyable={isBuyable}
+            force={force}
           />
         </Suspense>
       </EmptyErrorBoundary>

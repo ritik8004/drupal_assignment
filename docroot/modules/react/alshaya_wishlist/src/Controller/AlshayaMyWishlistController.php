@@ -71,13 +71,14 @@ class AlshayaMyWishlistController extends ControllerBase {
   /**
    * Prepare wishlist page content.
    */
-  public function wishList() {
+  public function wishList($context) {
     $cache_tags = [];
 
     $settings = [
       'enabled' => $this->wishListHelper->isWishListEnabled(),
       'config' => $this->wishListHelper->getWishListConfig(),
       'userDetails' => $this->wishListHelper->getWishListUserDetails(),
+      'context' => $context,
     ];
 
     $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
@@ -105,7 +106,8 @@ class AlshayaMyWishlistController extends ControllerBase {
    * Returns page title.
    */
   public function getWishListTitle() {
-    return $this->t('My Favourites');
+    // @todo need to use wishlist_label token.
+    return $this->t('My Wishlist');
   }
 
   /**
