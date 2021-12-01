@@ -1,0 +1,9 @@
+{% extends 'page.html.twig' %}
+{% if logged_in %}
+  {% set attributes = attributes.addClass('l-two--sf c-loyalty-club-page') %}
+{% else %}
+  {% set attributes = attributes.addClass('l-one--w c-loyalty-club-page') %}
+{% endif %}
+{% block attach_library %}
+  {{ attach_library('alshaya_white_label/my-account') }}
+{% endblock %}

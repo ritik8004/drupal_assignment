@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @fawry @tbsegprod
+@javascript @auth @checkoutPayment @homeDelivery @fawry
 Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
 
   Background:

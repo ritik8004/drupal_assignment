@@ -1,0 +1,28 @@
+.spc-aura-points-upgrade-item {
+  padding-top: 0.875rem;
+  padding-#{$right}: 1.25rem;
+  padding-bottom: 0.875rem;
+  padding-#{$left}: 3.625rem;
+  background: $aura-item-upgrade-bg;
+  border-radius: 0.625rem;
+  color: $aura-item-upgrade-txt;
+  position: relative;
+  font-family: $aura-regular;
+
+  b {
+    font-family: $aura-bold;
+    color: $aura-item-upgrade-highlight;
+  }
+
+  @include icon('infomation') {
+    width: 1.625rem;
+    height: 1.625rem;
+    color: $aura-item-upgrade-highlight;
+    display: inline-flex;
+    font-size: 1.625rem;
+    position: absolute;
+    #{$left}: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

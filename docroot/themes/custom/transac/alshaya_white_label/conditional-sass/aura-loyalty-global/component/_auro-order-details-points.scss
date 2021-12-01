@@ -1,0 +1,88 @@
+#block-content {
+  .order-items {
+    li .order-list-wrapper-container.has-aura-points {
+      @include breakpoint($only-mobile) {
+        height: 10.9375rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 0;
+      }
+
+      .first-second {
+        @include breakpoint($only-mobile) {
+          height: 11.25rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 30%;
+        }
+
+        @include breakpoint($desktop) {
+          width: 12.5rem;
+        }
+
+        .aura-points-wrapper {
+          @include breakpoint($tablet) {
+            display: none;
+          }
+        }
+      }
+
+      .second-third {
+        @include breakpoint($only-tablet) {
+          width: 38%;
+        }
+      }
+
+      .fourth {
+        @include breakpoint($only-tablet) {
+          width: 34%;
+        }
+
+        @include breakpoint($desktop) {
+          width: 19.6875rem;
+          padding-#{$left}: 3.75rem;
+        }
+
+        .order-total-wrapper,
+        .aura-points-wrapper {
+          @include breakpoint($desktop) {
+            float: $left;
+          }
+        }
+
+        .aura-points-wrapper {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+
+          @include breakpoint($desktop) {
+            margin-#{$left}: 1.25rem;
+          }
+        }
+      }
+
+      .aura-points-wrapper {
+        @include breakpoint($only-mobile) {
+          padding: 0.5rem 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          padding-top: 0.3125rem;
+        }
+
+        span {
+          color: $user_order_list_dark;
+          font-size: 0.75rem;
+
+          &:first-child {
+            min-width: 6rem;
+            display: inline-block;
+            margin-#{$right}: 1.125rem;
+          }
+        }
+      }
+    }
+  }
+}

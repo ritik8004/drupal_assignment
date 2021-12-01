@@ -16,8 +16,16 @@ import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import {
+  isFullPaymentDoneByAura,
+  isPaymentMethodSetAsAura,
+  isUnsupportedPaymentMethod,
+} from '../../../aura-loyalty/components/utilities/checkout_helper';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -102,6 +110,12 @@ export default class PaymentMethods extends React.Component {
       return false;
     }
 
+    // We disable the other payment methods when full payment is done by aura points
+    // and payment method is set as `aura_payment`.
+    if (isAuraEnabled() && isPaymentMethodSetAsAura(cart)) {
+      return false;
+    }
+
     if (isDeliveryTypeSameAsInCart(cart)) {
       if (Postpay.isPostpayEnabled() && Postpay.isAvailable(this) == null) {
         return false;
@@ -112,20 +126,43 @@ export default class PaymentMethods extends React.Component {
   };
 
   selectDefault = () => {
+    const { cart } = this.props;
+
+    // If full payment is being done by aura then we change payment method to `aura_payment`.
+    if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
+      this.changePaymentMethod('aura_payment');
+      return;
+    }
+
     if (!(this.isActive())) {
       return;
     }
 
-    const paymentMethods = this.getPaymentMethods(true);
+    const allPaymentMethods = this.getPaymentMethods(true);
+    const { postpayAvailable } = this.state;
+
+    // Prepare object containing only the methods available for use.
+    const paymentMethods = {};
+    Object.keys(allPaymentMethods).forEach((key) => {
+      // If status is set and disabled, do not use the method.
+      if (hasValue(allPaymentMethods[key].status) && allPaymentMethods[key].status === 'disabled') {
+        return;
+      }
+
+      // If postpay is not available remove from available methods list.
+      if (key === 'postpay' && !postpayAvailable[cart.cart.cart_total]) {
+        return;
+      }
+
+      paymentMethods[key] = allPaymentMethods[key];
+    });
 
     if (Object.keys(paymentMethods).length === 0) {
       return;
     }
 
-    const { postpayAvailable } = this.state;
-    const { cart } = this.props;
-
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
+
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
       || paymentDiv === null
@@ -134,24 +171,16 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
         && paymentMethods[cart.cart.payment.method] !== undefined) {
-        // For PostPay there is additional check required on frontend, it is
-        // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
-          this.changePaymentMethod(cart.cart.payment.method);
-          return;
-        }
+        this.changePaymentMethod(cart.cart.payment.method);
+        return;
       }
 
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
         && paymentMethods[cart.cart.payment.default] !== undefined) {
-        // For PostPay there is additional check required on frontend, it is
-        // available for order amount within specific limit only.
-        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
-          this.changePaymentMethod(cart.cart.payment.default);
-          return;
-        }
+        this.changePaymentMethod(cart.cart.payment.default);
+        return;
       }
 
       // Select first payment method by default.
@@ -181,7 +210,20 @@ export default class PaymentMethods extends React.Component {
           if (method.code === 'postpay' && !Postpay.isAvailable(this)) {
             return;
           }
+
+          if (method.code === 'tabby' && !Tabby.isAvailable()) {
+            return;
+          }
+
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
+          // Get the product available for tabby.
+          if (method.code === 'tabby') {
+            const available = Tabby.productAvailable(this);
+            paymentMethods[method.code].status = available.status;
+            if (hasValue(available.rejection_reason)) {
+              paymentMethods[method.code].rejection_reason = available.rejection_reason;
+            }
+          }
         }
       });
     } else {
@@ -227,6 +269,14 @@ export default class PaymentMethods extends React.Component {
     const { cart, refreshCart } = this.props;
 
     if (!this.isActive()) {
+      return;
+    }
+
+    // If aura enabled and aura points redeemed then do not allow
+    // to select any payment method that is unsupported with aura.
+    if (isAuraEnabled()
+      && cart.cart.totals.paidWithAura > 0
+      && isUnsupportedPaymentMethod(method)) {
       return;
     }
 
@@ -283,6 +333,7 @@ export default class PaymentMethods extends React.Component {
 
   render = () => {
     const methods = [];
+    let disablePaymentMethod = '';
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
@@ -291,6 +342,13 @@ export default class PaymentMethods extends React.Component {
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
     Object.entries(activePaymentMethods).forEach(([, method], index) => {
+      // If aura enabled and customer is paying some amount of the order
+      // using aura points then disable the payment methods that are
+      // not supported with Aura.
+      if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
+        disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
+      }
+
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
       methods.push(<PaymentMethod
@@ -302,6 +360,10 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
+        {...(isAuraEnabled()
+          && disablePaymentMethod
+          && { disablePaymentMethod }
+        )}
       />);
     });
 

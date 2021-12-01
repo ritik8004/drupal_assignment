@@ -26,7 +26,7 @@ class AlshayaYamlProcess {
   protected $collectedFilesList;
 
   // List of markets for which the tests are available
-  protected $alshayaMarkets = ['kw', 'sa', 'ae', 'eg', 'qa'];
+  protected $alshayaMarkets = ['kw', 'sa', 'ae', 'eg', 'qa', 'bh'];
 
   protected $alshayaLanguages = ['en', 'ar'];
 

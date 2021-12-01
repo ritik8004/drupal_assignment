@@ -137,6 +137,11 @@ libraries-override:
         theme:
           css/conditional-sass/my-account/my-account.ltr.css: css/conditional-sass/my-account/my-account.ltr.css
 
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
   alshaya_white_label/contact:
     css:
       theme:
@@ -156,3 +161,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css: css/conditional-sass/checkout-confirmation-pudo-aramex/checkout-confirmation-pudo-aramex.ltr.css
+
+  alshaya_white_label/tabby:
+    css:
+      theme:
+        css/conditional-sass/tabby/tabby.ltr.css: css/conditional-sass/tabby/tabby.ltr.css

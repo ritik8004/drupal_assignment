@@ -117,6 +117,31 @@ header {
               margin-top: 2px;
             }
           }
+
+          img {
+            width: 11.25rem;
+            height: 1.1rem;
+
+            @include breakpoint($tablet) {
+              width: 21.875rem;
+              height: 2.125rem;
+            }
+
+            html[lang="ar"] & {
+              width: 11rem;
+              height: 2.4365rem;
+
+              @include breakpoint($tablet) {
+                width: 15.8125rem;
+                height: 3.5rem;
+              }
+
+              @include breakpoint($desktop) {
+                width: 21.875rem;
+                height: 4.8125rem;
+              }
+            }
+          }
         }
 
         img {
@@ -267,8 +292,12 @@ header {
     }
   }
 
-  @include breakpoint($only-tablet) {
-    #mini-cart-wrapper {
+  #mini-cart-wrapper {
+    @include breakpoint($only-mobile) {
+      width: 2rem;
+    }
+
+    @include breakpoint($only-tablet) {
       float: $right;
       margin-top: -0.8125rem;
 
@@ -803,6 +832,11 @@ header .block-views-exposed-filter-blocksearch-page {
   header .region__header .block-system-branding-block .site-brand-home a {
     max-width: 13.125rem;
     margin-top: 0.5rem;
+
+    img {
+      width: 13.125rem;
+      height: 1.275rem;
+    }
   }
 }
 
@@ -810,6 +844,11 @@ header .block-views-exposed-filter-blocksearch-page {
   header .region__header .block-system-branding-block .site-brand-home a {
     max-width: 12.5rem;
     margin-top: 0.5rem;
+
+    img {
+      width: 12.5rem;
+      height: 1.21375rem;
+    }
   }
 }
 

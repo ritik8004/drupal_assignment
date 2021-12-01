@@ -1,4 +1,4 @@
-import hasValue from '../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader } from './checkout_util';
 import { removeStorageInfo, setStorageInfo, getStorageInfo } from './storage';
 import getStringMessage from './strings';
