@@ -92,7 +92,7 @@ export default class AddToBagSimple extends React.Component {
     if (cartData) {
       if (typeof cartData.items === 'undefined') {
         logger.warning('Error updating cart. cartData.items is undefined. cart: @cartData', {
-          '@cartData': JSON.stringify(cartData),
+          '@cartData': cartData,
         });
         return [];
       }
