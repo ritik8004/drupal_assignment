@@ -5,19 +5,23 @@
       amount = e.detail.data().totals.base_grand_total;
     }
     catch (e) {
+      Drupal.alshayaLogger('warning', 'amount is invalid on cart page for tabby.');
+      return;
+    }
+
+    // Check if the amount is invalid.
+    if (typeof amount === 'undefined') {
       return;
     }
 
     const tabbyWidget = $('#spc-cart').find('.' + drupalSettings.tabby.widgetInfo.class);
-    tabbyWidget.show();
-    // Check if the amount is invalid.
-    if (typeof amount === 'undefined' || !(amount)) {
-      if (typeof amount !== 'undefined') {
-        tabbyWidget.hide();
-      }
+    // Check if the amount is zero.
+    if (!(amount)) {
+      tabbyWidget.hide();
       return;
     }
 
+    tabbyWidget.show();
     tabbyWidget.each(function () {
       const selector = $(this).attr('id');
       if (selector !== undefined) {

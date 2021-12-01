@@ -41,6 +41,7 @@
 
     // Check if the amount is invalid.
     if (typeof variantPrice === 'undefined' || !(variantPrice)) {
+      Drupal.alshayaLogger('warning', 'amount is invalid on pdp page for tabby.');
       return;
     }
 
