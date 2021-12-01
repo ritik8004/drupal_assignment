@@ -70,8 +70,7 @@ class WishlistProductList extends React.Component {
       <>
         <div className="c-plp c-plp-only l-one--w lhn-without-sidebar l-container">
           <LoginMessage />
-          {/* @todo: dynamic the index name */}
-          <InstantSearch indexName="local_hmae_product_list" searchClient={searchClient}>
+          <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
             <Configure
               // To test the pagination we can hardcode this to static number.
               hitsPerPage={itemsPerPage}

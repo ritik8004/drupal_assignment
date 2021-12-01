@@ -9,6 +9,8 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_wishlist\Helper\WishListHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig;
+use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 
 /**
  * AlshayaMyWishlistController for wishlist page.
@@ -38,6 +40,13 @@ class AlshayaMyWishlistController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * Algolia React Config Helper.
+   *
+   * @var \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig
+   */
+  protected $algoliaConfigHelper;
+
+  /**
    * AlshayaMyWishlistController constructor.
    *
    * @param \Drupal\alshaya_wishlist\Helper\WishListHelper $wishlist_helper
@@ -46,15 +55,19 @@ class AlshayaMyWishlistController extends ControllerBase {
    *   Config Factory service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module services.
+   * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig $algolia_config_helper
+   *   Algolia React Config Helper.
    */
   public function __construct(
     WishListHelper $wishlist_helper,
     ConfigFactoryInterface $config_factory,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    AlshayaAlgoliaReactConfig $algolia_config_helper
   ) {
     $this->wishListHelper = $wishlist_helper;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
+    $this->algoliaConfigHelper = $algolia_config_helper;
   }
 
   /**
@@ -64,7 +77,8 @@ class AlshayaMyWishlistController extends ControllerBase {
     return new static(
       $container->get('alshaya_wishlist.helper'),
       $container->get('config.factory'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_algoila_react.alshaya_algolia_react_config')
     );
   }
 
@@ -83,6 +97,12 @@ class AlshayaMyWishlistController extends ControllerBase {
 
     $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_wishlist', 'inc', 'alshaya_wishlist.static_strings');
+
+    // Get the PLP algolia index from config.
+    $page_type = AlshayaAlgoliaReactPLP::PAGE_TYPE;
+    $page_sub_type = AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE;
+    $algoliaConfig = $this->algoliaConfigHelper->getAlgoliaReactCommonConfig($page_type, $page_sub_type);
+    $settings['indexName'] = $algoliaConfig[$page_type]['indexName'];
 
     return [
       '#theme' => 'my_wishlist',
