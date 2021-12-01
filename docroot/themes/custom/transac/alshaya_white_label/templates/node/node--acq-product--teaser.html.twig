@@ -19,7 +19,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
       {{ content.labels }}
     </div>
-
+    {% if content.wishlist_enabled %}
+      {{ content.wishlist_enabled }}
+    {% endif %}
     {{ title_prefix }}
     {% if not page %}
       <h2{{ title_attributes.addClass("c-products__item__label") }}>

@@ -421,6 +421,9 @@
 
   Drupal.getSelectedCombination = function (form) {
     var selectedValues = Drupal.getSelectedValues(form);
+    // Trigger an event to pass selected configurable options.
+    var configurableCombinationsEvent = new CustomEvent('onConfigurationOptionsLoad', {bubbles: true, detail: { data: selectedValues }});
+    document.dispatchEvent(configurableCombinationsEvent);
     var selectedCombination = '';
 
     for (var code in selectedValues) {

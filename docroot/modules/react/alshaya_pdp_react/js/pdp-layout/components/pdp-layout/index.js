@@ -262,9 +262,10 @@ const PdpLayout = () => {
           <ConditionalView condition={isWishlistEnabled()}>
             <div className="magv2-wishlist-pdp">
               <WishlistButton
-                skuCode={skuMainCode}
+                sku={skuMainCode}
                 title={title}
-                context="pdp"
+                configurableCombinations={configurableCombinations}
+                context="newpdp"
                 position="top-right"
                 format="icon"
               />
