@@ -1,5 +1,4 @@
 import React from 'react';
-import { callMagentoApi } from '../../../../alshaya_spc/js/backend/v2/common';
 import {
   getApiEndpoint,
   getQueryStringForEgiftCards,
@@ -8,6 +7,7 @@ import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 import EgiftCardsListStepOne from '../egifts-card-step-one';
 import EgiftCardStepTwo from '../egift-card-step-two';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 export default class EgiftCardPurchase extends React.Component {
   constructor(props) {
