@@ -8,19 +8,10 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Alshaya Egift Cards Controller.
+ */
 class AlshayaEgiftCardController extends ControllerBase {
-
-  protected $configFactory;
-
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
-  }
-
-  public static function create(ContainerInterface $container): AlshayaEgiftCardController {
-    return new static(
-      $container->get('config.factory'),
-    );
-  }
 
   /**
    * Egift card purchase page.
@@ -29,7 +20,7 @@ class AlshayaEgiftCardController extends ControllerBase {
    *   Markup for eGift card purchase react app.
    */
   public function eGiftCardPurchase():array {
-    $config = $this->configFactory->get('alshaya_egift_card.settings');
+    $config = $this->config('alshaya_egift_card.settings');
 
     $build = [
       '#type' => 'markup',
