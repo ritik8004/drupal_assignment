@@ -224,4 +224,14 @@
       }
     }
   }
+
+  .logged-in {
+    .c-menu-primary {
+      .hamburger--menu {
+        padding: 0;
+        margin-top: -0.125rem;
+        margin-#{$left}: 1.25rem;
+      }
+    }
+  }
 }
