@@ -20,7 +20,9 @@ import Promotions from '../promotions';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType, addtobag,
+  hit, gtmContainer = null, pageType, showAddToBag,
+  // showAddToBag is to force add to bag button display
+  // even if feature is disabled.
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
@@ -142,13 +144,15 @@ const Teaser = ({
               setSlider={setSlider}
             />
           </a>
-          {/* @todo: we need to move this to proper place. */}
-          <WishlistContainer
-            context={pageType}
-            position="top-right"
-            sku={hit.sku}
-            format="icon"
-          />
+          <ConditionalView condition={pageType !== 'wishlist'}>
+            {/* @todo: we need to move this to proper place. */}
+            <WishlistContainer
+              context={pageType}
+              position="top-right"
+              sku={hit.sku}
+              format="icon"
+            />
+          </ConditionalView>
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -210,9 +214,18 @@ const Teaser = ({
           stockQty={hit.stock_quantity}
           productData={attribute.atb_product_data}
           isBuyable={attribute.is_buyable}
-          // Force component to render even if feature is disabled.
-          force={addtobag}
+          // If showAddToBag is true, add to bag button will display,
+          // regardless the add to bag feature is enabled/disabled.
+          showAddToBag={showAddToBag}
         />
+        <ConditionalView condition={pageType === 'wishlist'}>
+          <WishlistContainer
+            context={pageType}
+            position="top-right"
+            sku={hit.sku}
+            format="link"
+          />
+        </ConditionalView>
       </article>
     </div>
   );

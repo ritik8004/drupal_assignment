@@ -3,7 +3,7 @@ import {
   Configure,
   InstantSearch,
 } from 'react-instantsearch-dom';
-import { searchClient } from '../../../../alshaya_algolia_react/js/src/config/SearchClient';
+import { searchClient } from '../../../../js/utilities/algoliaHelper';
 import LoginMessage from '../login-message';
 import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
@@ -16,6 +16,7 @@ class WishlistProductList extends React.Component {
     this.state = {
       wait: true,
       filters: null,
+      wishListItemsCount: 0,
     };
   }
 
@@ -27,36 +28,39 @@ class WishlistProductList extends React.Component {
       const filters = [];
       let finalFilter = '';
 
-      // Do not show out of stock products.
-      if (drupalSettings.algoliaSearch.filterOos === true) {
-        finalFilter = '(stock > 0) AND ';
-      }
-
       Object.keys(wishListItems).forEach((key, index) => {
-        // Push sku filter with filter score.
+        // Prepare filter to pass in search widget. For example,
+        // 1. "sku:0433350007 OR sku:0778064001 OR sku:HM0485540011187007"
+        // 2. "sku:0433350007<score=5> OR sku:0778064001<score=4>
+        // OR sku:HM0485540011187007<score=3>".
+        // We are using filter scoring to sort the results. So
+        // the higher score item will display first.
         filters.push(`sku: ${key}<score=${wishListItemsCount - index}>`);
       });
 
-      // Prepare filter to pass in search widget. For example,
-      // 1. filters="sku:0433350007 OR sku:0778064001 OR sku:HM0485540011187007"
-      // 2. filters="sku:0433350007<score=5> OR sku:0778064001<score=4>
-      // OR sku:HM0485540011187007<score=3>"
+      // Prepare the final filter to pass in search widget.
       finalFilter = `${finalFilter}(${filters.join(' OR ')})`;
 
       // Update the state as filters are ready.
       this.setState({
         wait: false,
         filters: finalFilter,
+        wishListItemsCount,
       });
     }
   }
 
   render() {
-    const { wait, filters } = this.state;
+    const { wait, filters, wishListItemsCount } = this.state;
 
     // Return null if products data are not available yet.
     if (wait) {
-      // @todo: add no result display component.
+      return null;
+    }
+
+    // Render empty wishlist component if wishlist is empty.
+    if (!wishListItemsCount) {
+      // @todo: render empty wishlist component.
       return null;
     }
 

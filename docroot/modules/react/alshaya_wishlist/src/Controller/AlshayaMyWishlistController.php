@@ -112,10 +112,8 @@ class AlshayaMyWishlistController extends ControllerBase {
     $this->moduleHandler->loadInclude('alshaya_wishlist', 'inc', 'alshaya_wishlist.static_strings');
 
     // Get the PLP algolia index from config.
-    $page_type = AlshayaAlgoliaReactPLP::PAGE_TYPE;
-    $page_sub_type = AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE;
-    $algoliaConfig = $this->algoliaConfigHelper->getAlgoliaReactCommonConfig($page_type, $page_sub_type);
-    $settings['indexName'] = $algoliaConfig[$page_type]['indexName'];
+    $algoliaConfig = $this->algoliaConfigHelper->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
+    $settings['indexName'] = $algoliaConfig[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
 
     return [
       '#theme' => 'my_wishlist',
@@ -139,7 +137,7 @@ class AlshayaMyWishlistController extends ControllerBase {
    * Returns page title.
    */
   public function getWishListTitle() {
-    return $this->t('My @wishlist_label', [
+    return $this->t('my @wishlist_label', [
       '@wishlist_label' => $this->tokenManager->replace('[alshaya_wishlist:wishlist_label]'),
     ]);
   }
