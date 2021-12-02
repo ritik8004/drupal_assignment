@@ -76,8 +76,7 @@ class WishlistButton extends React.Component {
         className={wishListButtonClass}
         onClick={() => this.toggleWishlist()}
       >
-        {/* @todo: Display wishlist icon here. */}
-        {Drupal.t(buttonText)}
+        {Drupal.t(buttonText, {}, { context: 'wishlist' })}
       </div>
     );
   }

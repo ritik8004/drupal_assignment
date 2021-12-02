@@ -20,9 +20,11 @@ import Promotions from '../promotions';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType, showAddToBag,
-  // showAddToBag is to force add to bag button display
-  // even if feature is disabled.
+  hit, gtmContainer = null, pageType, showAddToBag, extraInfo,
+  // 'showAddToBag' is used to decide whether we want
+  // to show the add to bag button or not.
+  // 'extraInfo' is used to pass additional information that
+  // we want to use in this component.
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
@@ -39,7 +41,7 @@ const Teaser = ({
       // @todo: we need to check for wishlist condition and see if we can avoid
       // it and rather use something else everywhere. For ex, if we want to use
       // different search index later this condition may cause issues.
-      if ((pageType === 'plp' || pageType === 'wishlist') && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
+      if ((pageType === 'plp') && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
         collectionLabelValue = hit.collection_labels[currentLanguage][plpAttributes[i]];
       }
       if (hit && hit.collection_labels && collectionLabelValue) {
@@ -52,7 +54,7 @@ const Teaser = ({
     }
   }
   let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
-  if ((pageType === 'plp' || pageType === 'wishlist') && productListIndexStatus()) {
+  if ((pageType === 'plp') && productListIndexStatus()) {
     overallRating = overallRating[currentLanguage];
   }
   let labelItems = '';
@@ -63,7 +65,7 @@ const Teaser = ({
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
   const attribute = [];
   Object.entries(hit).forEach(([key, value]) => {
-    if ((pageType === 'plp' || pageType === 'wishlist')
+    if ((pageType === 'plp')
       && productListIndexStatus()
       && value !== null) {
       if (value[currentLanguage] !== undefined) {
@@ -100,6 +102,11 @@ const Teaser = ({
     && showReviewsRating !== undefined
     && showReviewsRating === 1
     && overallRating !== '');
+
+  // Prepare a flag to identify if current request is from the wishlist page.
+  const isWishlist = (typeof extraInfo !== 'undefined'
+    && typeof extraInfo.isWishlist !== 'undefined'
+    && extraInfo.isWishlist);
 
   return (
     <div className={teaserClass}>
@@ -147,10 +154,10 @@ const Teaser = ({
               setSlider={setSlider}
             />
           </a>
-          <ConditionalView condition={pageType !== 'wishlist'}>
+          <ConditionalView condition={!isWishlist}>
             {/* @todo: we need to move this to proper place. */}
             <WishlistContainer
-              context={pageType}
+              context="wishlist"
               position="top-right"
               sku={hit.sku}
               format="icon"
@@ -217,13 +224,13 @@ const Teaser = ({
           stockQty={hit.stock_quantity}
           productData={attribute.atb_product_data}
           isBuyable={attribute.is_buyable}
-          // If showAddToBag is true, add to bag button will display,
-          // regardless the add to bag feature is enabled/disabled.
+          // 'showAddToBag' is used to decide whether we
+          // want to show the add to bag button or not.
           showAddToBag={showAddToBag}
         />
-        <ConditionalView condition={pageType === 'wishlist'}>
+        <ConditionalView condition={isWishlist}>
           <WishlistContainer
-            context={pageType}
+            context="wishlist"
             position="top-right"
             sku={hit.sku}
             format="link"
