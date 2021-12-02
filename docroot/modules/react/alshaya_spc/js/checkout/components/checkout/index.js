@@ -274,8 +274,11 @@ export default class Checkout extends React.Component {
       if (isNonVirtual) {
         return;
       }
-      if (Object.prototype.hasOwnProperty.call(item, 'product_type')
-        && item.product_type !== 'virtual') {
+      // If there is no product type for the cart item then it's non virtual
+      // product.
+      if (!Object.prototype.hasOwnProperty.call(item, 'product_type')) {
+        isNonVirtual = true;
+      } else if (item.product_type !== 'virtual') {
         isNonVirtual = true;
       }
     });
