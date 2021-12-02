@@ -13,7 +13,9 @@ import {
   getCustomerProgressTracker,
   setLoyaltyCard,
   prepareAuraUserStatusUpdateData,
+  getCustomerRewardActivity,
 } from './customer_helper';
+import { formatDate } from '../../utilities/reward_activity_helper';
 import { getPaymentMethodSetOnCart } from '../../../../alshaya_spc/js/backend/v2/checkout.payment';
 import { prepareRedeemPointsData, redeemPoints } from './redemption_helper';
 import { isUnsupportedPaymentMethod } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
@@ -591,6 +593,95 @@ window.auraBackend.processRedemption = async (data) => {
     });
     return { data: responseData };
   }
+
+  return { data: responseData };
+};
+
+/** Fetches reward activity for the current user.
+ *
+ * @param {string} fromDate
+ *   From date.
+ * @param {string} toDate
+ *   To date.
+ * @param {string} maxResults
+ *   Max results to fetch.
+ * @param {string} channel
+ *   Online(K)/ InStore(V).
+ * @param {string} partnerCode
+ *   The brand code.
+ * @param {string} duration
+ *   The duration of transactions.
+ *
+ * @returns {Object}
+ *   Return reward activity data from API response.
+ */
+window.auraBackend.getRewardActivity = async (fromDate = '', toDate = '', maxResults = 0, channel = '', partnerCode = '', duration = '') => {
+  // Get user details from drupalSettings.
+  const { customerId } = drupalSettings.userDetails;
+  const { uid } = drupalSettings.user;
+
+  if (!hasValue(customerId) || !hasValue(uid)) {
+    logger.warning('Error while trying to get reward activity of the user. No customer available in session. Customer Id: @customerId, User Id: @uid', {
+      '@customerId': customerId,
+      '@uid': uid,
+    });
+
+    return getErrorResponse('No user in session', 404);
+  }
+
+  // API call to get reward activity.
+  let rewardActivity = await getCustomerRewardActivity(
+    customerId,
+    fromDate,
+    toDate,
+    maxResults,
+    channel,
+    partnerCode,
+  );
+
+  // Check if request is to get last transaction of the user and response is not empty.
+  if (!hasValue(fromDate)
+    && !hasValue(toDate)
+    && parseInt(maxResults, 10) === 1
+    && hasValue(rewardActivity)) {
+    // If last transaction is before given duration, return empty.
+    const lastTransactionData = rewardActivity.shift();
+    const currentDate = new Date();
+    const dateOfDuration = currentDate.setMonth(currentDate.getMonth() - duration);
+
+    if (Date.parse(lastTransactionData.date) < dateOfDuration) {
+      return {
+        data: {
+          status: true,
+          data: [],
+        },
+      };
+    }
+
+    // API call to get reward activity data.
+    const lastTransactionDate = new Date(lastTransactionData.date);
+    rewardActivity = await getCustomerRewardActivity(
+      customerId,
+      formatDate(new Date(lastTransactionDate.getFullYear(), lastTransactionDate.getMonth()), 'YYYY-MM-DD'),
+      formatDate(new Date(lastTransactionDate.getFullYear(), lastTransactionDate.getMonth(), lastTransactionDate.getDate()), 'YYYY-MM-DD'),
+      0,
+      channel,
+      partnerCode,
+    );
+  }
+
+  if (hasValue(rewardActivity.error)) {
+    logger.error('Error while trying to get reward activity of the user with customer id @customerId. Message: @message', {
+      '@customerId': customerId,
+      '@message': rewardActivity.error_message || '',
+    });
+    return getErrorResponse(rewardActivity.error_message, rewardActivity.error_code);
+  }
+
+  const responseData = {
+    status: true,
+    data: rewardActivity,
+  };
 
   return { data: responseData };
 };
