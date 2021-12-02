@@ -45,10 +45,10 @@ export default class EgiftCardPurchase extends React.Component {
               <EgiftCardStepTwo />
               <div className="action-buttons">
                 <button type="submit" name="add-to-cart" className="btn">
-                  {Drupal.t('add to bag')}
+                  {Drupal.t('add to bag', {}, { context: 'egift' })}
                 </button>
                 <button type="submit" name="checkout" className="btn">
-                  {Drupal.t('checkout')}
+                  {Drupal.t('checkout', {}, { context: 'egift' })}
                 </button>
               </div>
             </form>
@@ -56,7 +56,7 @@ export default class EgiftCardPurchase extends React.Component {
         </ConditionalView>
         <ConditionalView condition={egiftItems === null && flag === true}>
           <div>
-            <p>{Drupal.t('Not Found.')}</p>
+            <p>{Drupal.t('No eGift cards found.', {}, { context: 'egift' })}</p>
           </div>
         </ConditionalView>
       </>

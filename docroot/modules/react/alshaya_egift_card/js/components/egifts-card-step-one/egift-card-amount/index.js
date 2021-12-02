@@ -1,5 +1,6 @@
 import React from 'react';
 import EgiftCardOpenAmountField from '../egift-card-open-amount-field';
+import getCurrencyCode from '../../../../../js/utilities/util';
 
 const EgiftCardAmount = (props) => {
   const { selected } = props;
@@ -12,8 +13,8 @@ const EgiftCardAmount = (props) => {
       <p>
         {
           Drupal.t('Amount @currencyCode', {
-            '@currencyCode': drupalSettings.alshaya_spc.currency_config.currency_code,
-          })
+            '@currencyCode': getCurrencyCode(),
+          }, { context: 'egift' })
         }
       </p>
       <ul>

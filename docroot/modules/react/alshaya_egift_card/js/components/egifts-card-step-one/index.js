@@ -34,7 +34,7 @@ export default class EgiftCardsListStepOne extends React.Component {
     return (
       <>
         <p className="step-title" style={{ width: '100%' }}>
-          { Drupal.t('1. Select your style and card amount') }
+          { Drupal.t('1. Select your style and card amount', {}, { context: 'egift' }) }
         </p>
         <div className="step-one-wrapper" style={style}>
           <HeroImage item={selectedItem} />

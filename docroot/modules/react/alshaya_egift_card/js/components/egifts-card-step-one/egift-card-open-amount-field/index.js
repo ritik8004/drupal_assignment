@@ -33,7 +33,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
     const openAmount = e.target.value;
     if (this.isAmount(openAmount) === false) {
       this.setState({
-        openAmountMessage: Drupal.t('Please enter amount.'),
+        openAmountMessage: Drupal.t('Please enter amount or select from above.', {}, { context: 'egift' }),
       });
       return;
     }
