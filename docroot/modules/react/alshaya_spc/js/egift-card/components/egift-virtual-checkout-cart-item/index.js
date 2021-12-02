@@ -1,8 +1,8 @@
 import React from 'react';
+
 import PriceElement from '../../../utilities/special-price/PriceElement';
 
 export default class CheckoutVirtualCartItem extends React.Component {
-
   render() {
     const {
       item: {
