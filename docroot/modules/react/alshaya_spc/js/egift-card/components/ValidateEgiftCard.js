@@ -17,8 +17,10 @@ export default class ValidateEgiftCard extends React.Component {
       document.getElementById('egift_verification_code_error').innerHTML = '';
     }
     if (!errors) {
-      codeValidation(egiftCode.value);
+      return codeValidation(egiftCode.value);
     }
+
+    return false;
   }
 
   // Resend the code for egift card verification.

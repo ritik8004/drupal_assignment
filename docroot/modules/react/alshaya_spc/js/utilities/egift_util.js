@@ -1,4 +1,6 @@
 import React from 'react';
+import { isUserAuthenticated } from '../../../js/utilities/helper';
+import { callMagentoApi } from '../../../js/utilities/requestHelper';
 
 /**
  * Provides the egift card header.
@@ -65,3 +67,52 @@ export const egiftFormElement = ({
 
   return rtnTemplate;
 };
+
+/**
+ * Gets magento api endpoint by user role.
+ *
+ * @param {string} action
+ *   Callname for the API.
+ * @param {object} params
+ *   The object with cartId, itemId.
+ *
+ * @returns {string}
+ *   The api endpoint.
+ */
+export const getApiEndpoint = (action, params = {}) => {
+  let endpoint = '';
+  switch (action) {
+    case 'eGiftSendOtp':
+      endpoint = `/V1/sendemailotp/email/${params.email}`;
+      break;
+
+    case 'eGiftVerifyOtp':
+      endpoint = `/V1/verifyemailotp/email/${params.email}/otp/${params.otp}`;
+      break;
+
+    default:
+      logger.critical('Endpoint does not exist for action: @action.', {
+        '@action': action,
+      });
+  }
+
+  return endpoint;
+};
+
+/**
+ * Gets egift response from magento api endpoint.
+ *
+ * @param {string} action
+ *   Callname for the API.
+ * @param {string} method
+ *   The request method.
+ * @param {object} data
+ *   The object containing API data.
+ *
+ * @returns {object}
+ *   The response object.
+ */
+export const callEgiftApi = (action, method, data = {}) => {
+  const endpoint = getApiEndpoint(action, data);
+  return callMagentoApi(endpoint, method);
+}

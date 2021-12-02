@@ -1,6 +1,8 @@
 import React from 'react';
+import logger from '../../../js/utilities/logger';
 import ConditionalView from '../common/components/conditional-view';
 import PaymentMethodIcon from '../svg-component/payment-method-svg';
+import { callEgiftApi } from '../utilities/egift_util';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
 import ValidEgiftCard from './components/ValidEgiftCard';
@@ -22,17 +24,35 @@ export default class RedeemEgiftCard extends React.Component {
 
   // Perform code validation.
   handleCodeValidation = (code) => {
-    // @todo To update code here once API is available.
+    // Call the otp verification API.
     if (code) {
-      this.setState({ codeValidated: true, codeSent: false });
+      const response = callEgiftApi('eGiftVerifyOtp', 'GET', {
+        email: egiftEmailId,
+        otp: code,
+      });
+      // Proceed only if we don't have any errors.
+      if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+        this.setState({ codeValidated: response.data, codeSent: false });
+      } else if (response.data.error) {
+        document.getElementById('egift_verification_code_error').innerHTML = response.data.error.message;
+        return false;
+      }
     }
+
+    return true;
   }
 
   // Send code to the email id.
   handleGetCode = (egiftCardNumber, egiftEmailId) => {
-    // @todo To update code here once API is available.
+    // Call api endpoint to send OTP.
     if (egiftCardNumber && egiftEmailId) {
-      this.setState({ codeSent: true, egiftEmail: egiftEmailId });
+      const response = callEgiftApi('eGiftSendOtp', 'GET', {
+        email: egiftEmailId,
+      });
+      // Proceed only if we don't have any errors.
+      if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+        this.setState({ codeSent: response.data, egiftEmail: egiftEmailId });
+      }
     }
   }
 
