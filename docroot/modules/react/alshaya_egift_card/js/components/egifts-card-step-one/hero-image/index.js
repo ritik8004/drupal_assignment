@@ -1,6 +1,9 @@
 import React from 'react';
 import { getMdcMediaUrl } from '../../../utilities';
 
+/**
+ * Show egift card hero image from selected item.
+ */
 const HeroImage = (props) => {
   const { item } = props;
   const media = item.media_gallery_entries;
@@ -9,12 +12,9 @@ const HeroImage = (props) => {
     title: item.name,
     alt: item.name,
   };
-  const style = {
-    width: '50%',
-  };
 
   return (
-    <div className="hero-image-wrapper" style={style}>
+    <div className="hero-image-wrapper" style={{ width: '50%' }}>
       <img
         src={image.url}
         alt={image.alt}

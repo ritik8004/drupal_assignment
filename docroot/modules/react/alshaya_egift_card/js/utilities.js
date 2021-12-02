@@ -1,30 +1,3 @@
-import logger from '../../js/utilities/logger';
-
-/**
- * Get endpoint for egift apis.
- *
- * @param {string} action
- *   Action for the endpoint.
- *
- * @returns {string}
- *   The api endpoint.
- */
-const getApiEndpoint = (action) => {
-  let endpoint = '';
-  switch (action) {
-    case 'getEgiftCardsProductList':
-      endpoint = '/V1/products';
-      break;
-
-    default:
-      logger.critical('Endpoint does not exist for action: @action.', {
-        '@action': action,
-      });
-  }
-
-  return endpoint;
-};
-
 /**
  * Get query string for egift list api.
  *
@@ -45,21 +18,11 @@ const getQueryStringForEgiftCards = () => ({
 });
 
 /**
- * Check if number is positive integer.
- */
-const isInDesiredForm = (str) => {
-  const n = Math.floor(Number(str));
-  return n !== Infinity && String(n) === str && n >= 0;
-};
-
-/**
  * Get proxy / masked mdc url with media path.
  */
 const getMdcMediaUrl = () => drupalSettings.egiftCard.mdcMediaUrl;
 
 export {
-  getApiEndpoint,
   getQueryStringForEgiftCards,
   getMdcMediaUrl,
-  isInDesiredForm,
 };

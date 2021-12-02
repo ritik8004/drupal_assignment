@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  getApiEndpoint,
   getQueryStringForEgiftCards,
 } from '../../utilities';
 import ConditionalView
@@ -19,9 +18,8 @@ export default class EgiftCardPurchase extends React.Component {
   }
 
   async componentDidMount() {
-    const endpoint = getApiEndpoint('getEgiftCardsProductList');
     const params = getQueryStringForEgiftCards();
-    const response = await callMagentoApi(endpoint, 'GET', params);
+    const response = await callMagentoApi('/V1/products', 'GET', params);
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
       this.setState({
         egiftItems: response.data.items,

@@ -1,5 +1,4 @@
 import React from 'react';
-import { isInDesiredForm } from '../../../utilities';
 
 export default class EgiftCardOpenAmountField extends React.Component {
   constructor(props) {
@@ -9,16 +8,30 @@ export default class EgiftCardOpenAmountField extends React.Component {
     };
   }
 
+  /**
+   * Remove error message on focus.
+   */
   handleErrorMessage() {
     this.setState({
       openAmountMessage: '',
     });
   }
 
+  /**
+   * Check if number is positive integer.
+   */
+  isAmount = (str) => {
+    const n = Math.floor(Number(str));
+    return n !== Infinity && String(n) === str && n >= 0;
+  };
+
+  /**
+   * Validate open amount field on blur.
+   */
   handleOpenAmount(e) {
     const element = e.target;
     const openAmount = e.target.value;
-    if (isInDesiredForm(openAmount) === false) {
+    if (this.isAmount(openAmount) === false) {
       this.setState({
         openAmountMessage: Drupal.t('Please enter amount.'),
       });
@@ -64,7 +77,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
           data-amount-from={eGiftCardAttributes.amount_open_from_hps.value}
           data-amount-to={eGiftCardAttributes.amount_open_to_hps.value}
           onBlur={(e) => this.handleOpenAmount(e)}
-          onFocus={this.handleErrorMessage}
+          onFocus={() => this.handleErrorMessage()}
         />
         <div className="display-error">
           <span className="error-message" ref={this.myRef}>
