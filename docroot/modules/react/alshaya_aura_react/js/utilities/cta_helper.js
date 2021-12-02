@@ -85,7 +85,7 @@ function handleNotYou(cardNumber) {
   // Logged in users.
   removeInlineError('.error-placeholder');
   addInlineLoader('.not-you-wrapper');
-  const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
+  const apiData = updateUsersLoyaltyStatus(cardNumber, 'N');
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
