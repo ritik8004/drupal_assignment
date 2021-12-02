@@ -5,6 +5,7 @@ namespace Drupal\alshaya_wishlist\Helper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Path\CurrentPathStack;
 
 /**
  * Helper class for Wishlist.
@@ -30,19 +31,30 @@ class WishListHelper {
   protected $currentUser;
 
   /**
+   * Current path service.
+   *
+   * @var \Drupal\Core\Path\CurrentPathStack
+   */
+  protected $currentPath;
+
+  /**
    * WishListHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
    *   The current user object.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    AccountProxyInterface $account_proxy
+    AccountProxyInterface $account_proxy,
+    CurrentPathStack $current_path
   ) {
     $this->configFactory = $config_factory;
     $this->currentUser = $account_proxy;
+    $this->currentPath = $current_path;
   }
 
   /**
@@ -85,6 +97,24 @@ class WishListHelper {
     ];
 
     return $user_details;
+  }
+
+  /**
+   * Check if current page is wishlist product listing page.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function isWishListPage() {
+    $current_path = $this->currentPath->getPath();
+
+    // Check if the wishlist path exist in the current path.
+    if (strpos($current_path, '/wishlist') !== FALSE) {
+      return TRUE;
+    }
+
+    // Return false always, if not a wishlist page.
+    return FALSE;
   }
 
 }

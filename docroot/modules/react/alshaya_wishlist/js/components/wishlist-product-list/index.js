@@ -72,28 +72,26 @@ class WishlistProductList extends React.Component {
 
     return (
       <>
-        <div className="c-plp c-plp-only l-one--w lhn-without-sidebar l-container">
-          <LoginMessage />
-          <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
-            <Configure
-              // To test the pagination we can hardcode this to static number.
-              hitsPerPage={itemsPerPage}
-              filters={filters}
-            />
-            <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
-              <ProductInfiniteHits
-                gtmContainer="wishlist page"
-                pageType="wishlist"
-              >
-                {(paginationArgs) => (
-                  <WishlistPagination {...paginationArgs}>
-                    {Drupal.t('Load more products')}
-                  </WishlistPagination>
-                )}
-              </ProductInfiniteHits>
-            </div>
-          </InstantSearch>
-        </div>
+        <LoginMessage />
+        <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
+          <Configure
+            // To test the pagination we can hardcode this to static number.
+            hitsPerPage={itemsPerPage}
+            filters={filters}
+          />
+          <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
+            <ProductInfiniteHits
+              gtmContainer="wishlist page"
+              pageType="wishlist"
+            >
+              {(paginationArgs) => (
+                <WishlistPagination {...paginationArgs}>
+                  {Drupal.t('Load more products')}
+                </WishlistPagination>
+              )}
+            </ProductInfiniteHits>
+          </div>
+        </InstantSearch>
       </>
     );
   }
