@@ -4,6 +4,8 @@
   font-family: $dh-semibold;
   border-radius: 1.3125rem;
   padding: 0.625rem 1.5rem 0.375rem;
+  color: $primary_btn_text;
+  text-transform: unset;
 
   &:hover {
     background: $primary_btn_hover_bg;
@@ -19,6 +21,8 @@
   background: $primary_brand_button;
   border-radius: 1.3125rem;
   padding: 0.625rem 1.5rem 0.375rem;
+  color: $primary_btn_text;
+  text-transform: unset;
 
   &:hover {
     background: $primary_btn_hover_bg;
