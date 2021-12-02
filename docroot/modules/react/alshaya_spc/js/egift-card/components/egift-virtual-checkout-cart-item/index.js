@@ -5,7 +5,6 @@ class CheckoutVirtualCartItem extends React.Component {
   render() {
     const {
       item: {
-        id,
         title,
         price,
       },
