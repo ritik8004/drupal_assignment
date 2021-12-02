@@ -13,7 +13,7 @@ export default class EgiftCardPurchase extends React.Component {
     super(props);
     this.state = {
       egiftItems: null,
-      flag: false,
+      apiCallFlag: false, // Set when API call is complete.
     };
   }
 
@@ -26,12 +26,12 @@ export default class EgiftCardPurchase extends React.Component {
       });
     }
     this.setState({
-      flag: true,
+      apiCallFlag: true,
     });
   }
 
   render() {
-    const { egiftItems, flag } = this.state;
+    const { egiftItems, apiCallFlag } = this.state;
 
     return (
       <>
@@ -54,7 +54,7 @@ export default class EgiftCardPurchase extends React.Component {
             </form>
           </div>
         </ConditionalView>
-        <ConditionalView condition={egiftItems === null && flag === true}>
+        <ConditionalView condition={egiftItems === null && apiCallFlag === true}>
           <div>
             <p>{Drupal.t('No eGift cards found.', {}, { context: 'egift' })}</p>
           </div>
