@@ -20,7 +20,9 @@ import Promotions from '../promotions';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType,
+  hit, gtmContainer = null, pageType, showAddToBag,
+  // showAddToBag is to force add to bag button display
+  // even if feature is disabled.
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
@@ -34,7 +36,10 @@ const Teaser = ({
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
       let collectionLabelValue = hit.collection_labels[plpAttributes[i]];
-      if (pageType === 'plp' && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
+      // @todo: we need to check for wishlist condition and see if we can avoid
+      // it and rather use something else everywhere. For ex, if we want to use
+      // different search index later this condition may cause issues.
+      if ((pageType === 'plp' || pageType === 'wishlist') && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
         collectionLabelValue = hit.collection_labels[currentLanguage][plpAttributes[i]];
       }
       if (hit && hit.collection_labels && collectionLabelValue) {
@@ -47,7 +52,7 @@ const Teaser = ({
     }
   }
   let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
-  if (pageType === 'plp' && productListIndexStatus()) {
+  if ((pageType === 'plp' || pageType === 'wishlist') && productListIndexStatus()) {
     overallRating = overallRating[currentLanguage];
   }
   let labelItems = '';
@@ -58,7 +63,7 @@ const Teaser = ({
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
   const attribute = [];
   Object.entries(hit).forEach(([key, value]) => {
-    if (pageType === 'plp'
+    if ((pageType === 'plp' || pageType === 'wishlist')
       && productListIndexStatus()
       && value !== null) {
       if (value[currentLanguage] !== undefined) {
@@ -142,13 +147,15 @@ const Teaser = ({
               setSlider={setSlider}
             />
           </a>
-          {/* @todo: we need to move this to proper place. */}
-          <WishlistContainer
-            context="plp"
-            position="top-right"
-            sku={hit.sku}
-            format="icon"
-          />
+          <ConditionalView condition={pageType !== 'wishlist'}>
+            {/* @todo: we need to move this to proper place. */}
+            <WishlistContainer
+              context={pageType}
+              position="top-right"
+              sku={hit.sku}
+              format="icon"
+            />
+          </ConditionalView>
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -210,7 +217,18 @@ const Teaser = ({
           stockQty={hit.stock_quantity}
           productData={attribute.atb_product_data}
           isBuyable={attribute.is_buyable}
+          // If showAddToBag is true, add to bag button will display,
+          // regardless the add to bag feature is enabled/disabled.
+          showAddToBag={showAddToBag}
         />
+        <ConditionalView condition={pageType === 'wishlist'}>
+          <WishlistContainer
+            context={pageType}
+            position="top-right"
+            sku={hit.sku}
+            format="link"
+          />
+        </ConditionalView>
       </article>
     </div>
   );

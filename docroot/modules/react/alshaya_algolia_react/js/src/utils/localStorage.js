@@ -65,7 +65,7 @@ function storeClickedItem(event, pageType) {
     page: Drupal.algoliaGetActualPageNumber(),
   };
 
-  if (pageType === 'plp') {
+  if (pageType === 'plp' || pageType === 'wishlist') {
     localStorage.setItem(
       `${pageType}:${window.location.pathname}`,
       JSON.stringify(storageDetails),
