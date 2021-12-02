@@ -1,0 +1,10 @@
+.l-two--sf {
+  @include breakpoint($desktop) {
+    @include container(77rem);
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 1.25rem;
+    padding-#{$right}: 1.25rem;
+  }
+}
