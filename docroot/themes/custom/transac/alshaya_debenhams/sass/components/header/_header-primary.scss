@@ -51,6 +51,12 @@ header {
 .block-cart-mini-block,
 .block-alshaya-react-mini-cart,
 .static-minicart-wrapper {
+  .cart-link-total {
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+  }
+
   .cart-link {
     background-position: center $right;
 
@@ -78,6 +84,16 @@ header {
       @include breakpoint($only-mobile) {
         margin-top: 0;
       }
+    }
+  }
+
+  .quantity {
+    #{$left}: 0;
+    bottom: -0.4375rem;
+
+    @include breakpoint($only-mobile) {
+      #{$left}: -0.1875rem;
+      bottom: -0.75rem;
     }
   }
 }

@@ -54,3 +54,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/spc-utils:
+    css:
+      theme:
+        css/conditional-sass/spc-utils/spc-utils.ltr.css: css/conditional-sass/spc-utils/spc-utils.ltr.css
