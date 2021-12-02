@@ -151,6 +151,10 @@ export default class Cart extends React.Component {
 
     // Event handle for Dynamic Promotion available.
     document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
+    // Add RCS Event Listner only is RCS module is enabled.
+    if (Object.prototype.hasOwnProperty.call(drupalSettings, 'rcsPhSettings')) {
+      window.RcsEventManager.addListener('applyDynamicPromotions', this.saveDynamicPromotions);
+    }
 
     // Event to trigger after free gift detail modal open.
     document.addEventListener('openFreeGiftModalEvent', openFreeGiftModal, false);
