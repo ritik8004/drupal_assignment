@@ -12,6 +12,13 @@
 
       context.logSource = 'drupal_module';
 
+      // Let other modules alter contexts.
+      document.dispatchEvent(new CustomEvent('dataDogContextAlter', {
+          bubbles: true,
+          detail: context,
+        })
+      );
+
       // Get the status from supported list of status of DataDog.
       var status = 'debug';
 

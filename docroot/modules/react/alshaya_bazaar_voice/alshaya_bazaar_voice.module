@@ -327,25 +327,38 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
         'productId' => $sanitized_sku,
         'productData' => $productReviewStats[$sanitized_sku]['productData'] ?? NULL,
       ];
-      // Adding product and review data for SEO.
-      $product_schema_data['aggregateRating'] = [
-        '@type' => 'AggregateRating',
-        'ratingValue' => number_format((float)$productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
-        'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
-      ];
+      // Get the range of ratings for SEO.
+      if (!empty($productData['ReviewStatistics']['RatingDistribution'])) {
+        $range = array_column($productData['ReviewStatistics']['RatingDistribution'], 'RatingValue');
+      }
+      if ($productData['ReviewStatistics']['TotalReviewCount'] > 0) {
+        // Adding product and review data for SEO.
+        $product_schema_data['aggregateRating'] = [
+          '@type' => 'AggregateRating',
+          'bestRating' => max($range),
+          'ratingValue' => number_format((float)$productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
+          'worstRating' => min($range),
+          'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
+        ];
+      }
+
       if ($productReviewStats !== NULL && isset($productReviewStats[$sanitized_sku]['reviews'])) {
         foreach ($productReviewStats[$sanitized_sku]['reviews'] as $review) {
-          $product_schema_data['review'][] = [
-            '@type' => 'Review',
-            'author' =>  $review['UserNickname'],
-            'datePublished' => $review['SubmissionTime'],
-            'description' => $review['ReviewText'],
-            'name' => $review['Title'],
-            'reviewRating' => [
-              '@type' => 'Rating',
-              'ratingValue' => $review['Rating'],
-            ],
-          ];
+          if ($review['UserNickname'] !== null) {
+            $product_schema_data['review'][] = [
+              '@type' => 'Review',
+              'author' => $review['UserNickname'],
+              'datePublished' => $review['SubmissionTime'],
+              'description' => $review['ReviewText'],
+              'name' => $review['Title'],
+              'reviewRating' => [
+                '@type' => 'Rating',
+                'bestRating' => max($range),
+                'ratingValue' => $review['Rating'],
+                'worstRating' => min($range),
+              ],
+            ];
+          }
         }
       }
     }

@@ -1,8 +1,6 @@
 /**
  * Logs messages in the backend.
  *
- * @todo This is a placeholder for logger.
- *
  * @param {string} level
  *   The error level.
  * @param {string} message

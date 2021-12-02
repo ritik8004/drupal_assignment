@@ -57,6 +57,10 @@ set classes = [
             <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
+          {% if content.tabby %}
+            <div class="tabby"> {{ content.tabby }} </div>
+          {% endif %}
+
           <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
           {% if vat_text %}
@@ -101,6 +105,12 @@ set classes = [
               <p>{{ content.delivery_in_only_city_text }}</p>
             </div>
           {% endif %}
+
+          {% if aura_enabled is defined and aura_enabled %}
+            {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+            <div id="aura-pdp"></div>
+          {% endif %}
+
         </div>
       {% endblock %}
 

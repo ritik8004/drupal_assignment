@@ -55,5 +55,29 @@
         }
       }
     }
+
+    &.in-active {
+      .radio-sim.radio-label {
+        color: $aura-spc-cod-disabled-elements;
+
+        &::before {
+          color: $aura-spc-cod-disabled-elements;
+        }
+      }
+
+      .payment-method-bottom-panel.no-payment-description {
+        color: $aura-spc-cod-disabled-text;
+      }
+
+      svg {
+        #react-box {
+          stroke: $aura-spc-cod-disabled-elements;
+        }
+
+        #cod-svg-text {
+          fill: $aura-spc-cod-disabled-elements;
+        }
+      }
+    }
   }
 }

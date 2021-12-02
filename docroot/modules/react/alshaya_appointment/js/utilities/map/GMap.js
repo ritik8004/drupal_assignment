@@ -1,7 +1,7 @@
-import _isEmpty from 'lodash/isEmpty';
 import isRTL from '../rtl';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { getDefaultMapCenter } from './map_utils';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export default class Gmap {
   constructor() {
@@ -87,14 +87,14 @@ export default class Gmap {
    * Set center of the map.
    */
   setCenter = (coords, callBackFunc = null) => {
-    if (!_isEmpty(coords)) {
+    if (hasValue(coords)) {
       this.map.googleMap.setCenter(coords);
       this.map.googleMap.setZoom(this.map.settings.zoom);
       return;
     }
 
     const defaultLocation = getDefaultMapCenter();
-    if (!_isEmpty(defaultLocation)) {
+    if (hasValue(defaultLocation)) {
       const { lat, lng } = defaultLocation;
       const position = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
       this.map.googleMap.setCenter(position);

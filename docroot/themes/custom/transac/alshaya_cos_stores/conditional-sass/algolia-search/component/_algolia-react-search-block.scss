@@ -193,6 +193,12 @@
       }
     }
 
+    .react-autosuggest__suggestions-list {
+      .react-autosuggest__suggestion {
+        cursor: pointer;
+      }
+    }
+
     .react-autosuggest__suggestions-container {
       &--open {
         border-width: 0.0625rem;

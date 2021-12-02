@@ -22,14 +22,10 @@
    * Push insights to Algolia when product added to the cart.
    * @param queryId
    *   Unique search identifier.
-   * @param product
-   *   jQuery object which contains all gtm attributes.
+   * @param objectId
+   *   Sku value of the product.
    */
-  Drupal.pushAlshayaAlgoliaInsightsAddToCart = function (queryId, product) {
-    // Convert the product to a jQuery object, if not already.
-    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
-      product = $(product);
-    }
+  Drupal.pushAlshayaAlgoliaInsightsAddToCart = function (queryId, objectId) {
 
     try {
       window.aa('convertedObjectIDsAfterSearch', {
@@ -37,7 +33,7 @@
         eventName: 'Add to cart',
         index: "...",
         queryID: queryId,
-        objectIDs: [product.attr('data-insights-object-id')]
+        objectIDs: [objectId],
       });
     }
     catch (e) {
