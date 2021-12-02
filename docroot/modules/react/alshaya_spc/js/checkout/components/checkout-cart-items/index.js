@@ -9,12 +9,12 @@ const CheckoutCartItems = ({ items, context, couponCode }) => {
     if (product.isEgiftCard) {
       // Virtual product component for egift card.
       productItems.push(
-        <CheckoutVirtualCartItem key={key} item={product}/>,
+        <CheckoutVirtualCartItem key={key} item={product} />,
       );
     } else {
       // Normal products.
       productItems.push(
-        <CheckoutCartItem key={key} couponCode={couponCode} item={product} context={context}/>,
+        <CheckoutCartItem key={key} couponCode={couponCode} item={product} context={context} />,
       );
     }
   });
