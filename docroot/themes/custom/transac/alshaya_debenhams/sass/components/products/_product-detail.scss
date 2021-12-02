@@ -12,12 +12,13 @@
 .content {
   &__title_wrapper {
     @include breakpoint($only-mobile) {
-      margin-bottom: 1.25rem;
-      padding: 0 1.25rem;
+      margin: 0 1.25rem;
+      margin-bottom: 0.75rem;
     }
 
     .price {
       font-size: 1rem;
+      margin-bottom: 0.625rem;
 
       &--discount {
         font-size: 0.875rem;
@@ -34,6 +35,8 @@
       color: $primary_text;
       font-weight: normal;
       font-size: 1.5625rem;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
     }
 
     h1 {
@@ -42,6 +45,13 @@
 
     .content--item-code {
       font-size: 0.75rem;
+    }
+
+    .content--brand {
+      font-size: 1.125rem;
+      font-family: $dh-semibold;
+      margin-bottom: 0.625rem;
+      letter-spacing: 1.5px;
     }
   }
 
@@ -123,11 +133,6 @@
       margin-#{$left}: 0.5rem;
       border: 2px solid $pdp_cc_btn_border;
 
-      html[lang=ar] & {
-        line-height: 1.4;
-        letter-spacing: 1.14px;
-      }
-
       &:hover {
         background: $primary_btn_hover_bg;
         border: 2px solid $primary_btn_hover_border;
@@ -168,6 +173,10 @@
 
 .basic-details-wrapper .field--name-field-skus {
   .form-item-configurables-size {
+    @include breakpoint($only-mobile) {
+      margin-top: 1.25rem;
+    }
+
     @include breakpoint($tablet) {
       order: 1;
     }
@@ -276,8 +285,11 @@
   }
 
   #configurable_ajax {
+    margin-top: 0.625rem;
+
     @include breakpoint($only-mobile) {
       width: 100%;
+      margin-top: 0;
     }
   }
 
@@ -419,5 +431,24 @@
   .address {
     padding-top: 0;
     font-family: $dh-light;
+  }
+}
+
+.nodetype--acq_product,
+.acq-content-product-modal {
+  .content__title_wrapper {
+    .vat-text {
+      font-size: 0.75rem;
+      margin-#{$right}: 0.375rem;
+      width: 30%;
+      margin-#{$right}: 0;
+      margin-bottom: 1.25rem;
+    }
+
+    .content--item-code {
+      width: 68%;
+      text-align: $right;
+      margin-bottom: 1.25rem;
+    }
   }
 }
