@@ -73,7 +73,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
                               DefaultFacetManager $facets_manager,
                               EntityTypeManagerInterface $entityTypeManager,
                               LanguageManagerInterface $language_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $request);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $request, $entityTypeManager);
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
     $this->entityTypeManager = $entityTypeManager;
