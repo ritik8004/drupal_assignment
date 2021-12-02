@@ -9,3 +9,35 @@
     }
   }
 }
+
+.c-user--node {
+  &.l-two--sf aside {
+    &.c-sidebar-first {
+      .my-account-mobile-title1 {
+        @include breakpoint($only-mobile) {
+          margin-top: 0.75rem;
+          font-family: $dh-Juana-black;
+        }
+      }
+
+      li a {
+        &::after {
+          @include breakpoint($only-mobile) {
+            #{$right}: -0.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  .c-sidebar-first {
+    .my-account-nav {
+      a {
+        &::after {
+          font-size: 1.625rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
