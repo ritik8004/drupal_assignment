@@ -69,4 +69,5 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $settings['config'] = $wishlist_helper->getWishListConfig();
   $settings['userDetails'] = $wishlist_helper->getWishListUserDetails();
   $page['#attached']['drupalSettings']['wishlist'] = $settings;
+  $page['#attached']['library'][] = 'alshaya_white_label/wishlist';
 }
