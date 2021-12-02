@@ -264,8 +264,8 @@ export default class Checkout extends React.Component {
     this.setState({ cart: cartData });
   };
 
-  // Provides if all the products in cart are virtual products or not.
-  isNonVirtualProductInCart = () => {
+  // Checks if cart has only egift card products or other products as well.
+  isCartHasOnlyEgiftCard = () => {
     const { cart: cartData } = this.state;
     // A flag to keep track of the non-virtual products.
     let isNonVirtual = false;
@@ -330,7 +330,7 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
-            <ConditionalView condition={this.isNonVirtualProductInCart()}>
+            <ConditionalView condition={this.isCartHasOnlyEgiftCard()}>
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
                 <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
