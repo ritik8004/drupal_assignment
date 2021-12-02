@@ -54,15 +54,17 @@ export default class DeliveryOptions extends React.Component {
     const currentArea = getDeliveryAreaStorage();
     const attr = document.getElementsByClassName('sku-base-form');
     const productSku = variantSelected !== undefined ? variantSelected : attr[0].getAttribute('data-sku');
-    showFullScreenLoader();
-    getCartShippingMethods(currentArea, productSku).then(
-      (response) => {
-        if (response !== null) {
-          this.checkShippingMethods(response, productSku);
-        }
-        removeFullScreenLoader();
-      },
-    );
+    if (productSku && productSku !== null) {
+      showFullScreenLoader();
+      getCartShippingMethods(currentArea, productSku).then(
+        (response) => {
+          if (response && response !== null) {
+            this.checkShippingMethods(response, productSku);
+          }
+          removeFullScreenLoader();
+        },
+      );
+    }
   }
 
   getPanelData = (data) => {
