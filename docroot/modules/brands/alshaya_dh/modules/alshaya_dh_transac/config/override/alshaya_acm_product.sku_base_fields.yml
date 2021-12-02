@@ -91,5 +91,5 @@ fields:
     index: 1
 
   Fabric:
-    label: 'Sleeve length'
+    label: 'Fabric'
     index: 1
