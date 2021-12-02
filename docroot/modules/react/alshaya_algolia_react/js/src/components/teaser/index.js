@@ -36,6 +36,9 @@ const Teaser = ({
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
       let collectionLabelValue = hit.collection_labels[plpAttributes[i]];
+      // @todo: we need to check for wishlist condition and see if we can avoid
+      // it and rather use something else everywhere. For ex, if we want to use
+      // different search index later this condition may cause issues.
       if ((pageType === 'plp' || pageType === 'wishlist') && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
         collectionLabelValue = hit.collection_labels[currentLanguage][plpAttributes[i]];
       }
