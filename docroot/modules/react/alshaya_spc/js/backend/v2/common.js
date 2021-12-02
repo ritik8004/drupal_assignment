@@ -20,6 +20,7 @@ import getAgentDataForExtension from './smartAgent';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
+import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -390,6 +391,11 @@ const getProcessedCartData = async (cartData) => {
       // @todo check why item id is different from v1 and v2 for
       // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
 
+      // Set isEgiftCard for virtual product.
+      let isEgiftCard = false;
+      if (isEgiftCardEnabled() && item.product_type !== 'undefined' && item.product_type === 'virtual') {
+        isEgiftCard = true;
+      }
       data.items[item.sku] = {
         id: item.item_id,
         title: item.name,
@@ -398,11 +404,13 @@ const getProcessedCartData = async (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
+        isEgiftCard,
       };
 
       // Get stock data on cart and checkout pages.
       const spcPageType = window.spcPageType || '';
-      if (spcPageType === 'cart' || spcPageType === 'checkout') {
+      // No need of stock data for egift card products.
+      if ((spcPageType === 'cart' || spcPageType === 'checkout') && !isEgiftCard) {
         // Suppressing the lint error for now.
         // eslint-disable-next-line no-await-in-loop
         const stockInfo = await getProductStatus(item.sku);

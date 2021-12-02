@@ -63,6 +63,22 @@ function _alshaya_egift_card_translations() {
         'ar' => 'CHECK ANOTHER CARD',
         'context' => 'egift',
       ],
+      'Style:' => [
+        'ar' => 'Style:',
+        'context' => 'egift',
+      ],
+      'Send to:' => [
+        'ar' => 'Send to:',
+        'context' => 'egift',
+      ],
+      'Message:' => [
+        'ar' => 'Message:',
+        'context' => 'egift',
+      ],
+      'Alshaya eGift card' => [
+        'ar' => 'Alshaya eGift card',
+        'context' => 'egift',
+      ],
       'Please enter the code.' => [
         'ar' => 'Please enter the code.',
         'context' => 'egift',
