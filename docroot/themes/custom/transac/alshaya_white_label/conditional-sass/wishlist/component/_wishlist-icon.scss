@@ -1,0 +1,16 @@
+.wishlist-icon {
+  background: url('#{$base_theme_img_directory_path}/icons/wishlist-empty.svg') no-repeat;
+  width: 2.4375rem;
+  height: 2.4375rem;
+  cursor: pointer;
+
+  &.in-wishlist {
+    background-image: url('#{$base_theme_img_directory_path}/icons/wishlist-filled.svg');
+  }
+
+  @include breakpoint($desktop) {
+    &:hover {
+      background-image: url('#{$base_theme_img_directory_path}/icons/wishlist-filled.svg');
+    }
+  }
+}

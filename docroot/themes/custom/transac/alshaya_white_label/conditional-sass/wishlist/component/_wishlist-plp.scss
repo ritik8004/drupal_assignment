@@ -1,0 +1,15 @@
+.c-plp {
+  .c-products__item {
+    .field--type-sku {
+      position: relative;
+    }
+
+    .wishlist-icon {
+      position: absolute;
+      top: 0.625rem;
+      z-index: 2;
+      #{$right}: 0.625rem;
+      font-size: 0;
+    }
+  }
+}
