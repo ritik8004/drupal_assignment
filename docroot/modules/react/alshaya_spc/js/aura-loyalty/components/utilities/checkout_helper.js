@@ -179,6 +179,30 @@ function isUnsupportedPaymentMethod(paymentMethod) {
   return auraUnsupportedPaymentMethods.includes(paymentMethod);
 }
 
+/**
+ * Helper function to get aura points to earn from sales api.
+ */
+function getAuraPointsToEarn(items, cardNumber) {
+  let stateValues = {};
+  const apiData = window.auraBackend.getAuraPointsToEarn(items, cardNumber);
+
+  if (apiData instanceof Promise) {
+    apiData.then((result) => {
+      removeFullScreenLoader();
+      if (result.data !== undefined && result.data.error === undefined) {
+        if (result.data.status) {
+          stateValues = {
+            auraPointsToEarn: result.data.data.apc_points,
+          };
+        }
+      } else {
+        stateValues = result.data || { error: true };
+      }
+      dispatchCustomEvent('auraPointsToEarnApiInvoked', { stateValues });
+    });
+  }
+}
+
 export {
   getUserInput,
   processCheckoutCart,
@@ -187,4 +211,5 @@ export {
   isPaymentMethodSetAsAura,
   isFullPaymentDoneByAura,
   isUnsupportedPaymentMethod,
+  getAuraPointsToEarn,
 };
