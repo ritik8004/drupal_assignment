@@ -82,7 +82,7 @@ class WishlistProductList extends React.Component {
           <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
             <ProductInfiniteHits
               gtmContainer="wishlist page"
-              pageType="wishlist"
+              pageType="plp"
             >
               {(paginationArgs) => (
                 <WishlistPagination {...paginationArgs}>

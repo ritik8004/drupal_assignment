@@ -29,6 +29,7 @@ const ProductInfiniteHits = connectInfiniteHits(({
                 hit={hit}
                 gtmContainer={gtmContainer}
                 pageType={pageType}
+                extraInfo={{ isWishlist: true }}
                 showAddToBag
               />
             ))
