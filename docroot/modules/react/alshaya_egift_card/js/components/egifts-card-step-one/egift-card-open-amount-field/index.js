@@ -45,7 +45,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
         openAmountMessage: Drupal.t('Please enter amount in the range of @amountFrom to @amountTo', {
           '@amountFrom': amountFrom,
           '@amountTo': amountTo,
-        }),
+        }, { context: 'egift' }),
       });
     }
   }
@@ -53,12 +53,16 @@ export default class EgiftCardOpenAmountField extends React.Component {
   render() {
     const { selected } = this.props;
     const { openAmountMessage } = this.state;
+
+    // Get all egift card attributes.
     const attributes = selected.custom_attributes;
     const eGiftCardAttributes = [];
     attributes.forEach((attribute) => {
       eGiftCardAttributes[attribute.attribute_code] = attribute;
     });
 
+    // Don't show open amount field if allow_open_amount_hps attribute
+    // from api response for card item is 0.
     if (eGiftCardAttributes.allow_open_amount_hps.value === '0') {
       return null;
     }

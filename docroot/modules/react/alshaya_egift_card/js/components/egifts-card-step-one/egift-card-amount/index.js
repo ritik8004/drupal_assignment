@@ -2,10 +2,16 @@ import React from 'react';
 import EgiftCardOpenAmountField from '../egift-card-open-amount-field';
 import getCurrencyCode from '../../../../../js/utilities/util';
 
+/**
+ * Show list of egift card selectable amounts from api.
+ */
 const EgiftCardAmount = (props) => {
   const { selected } = props;
+
+  // Get amounts that user can select from api response items.
   const amounts = selected.extension_attributes.hps_giftcard_amount;
 
+  // List all amounts.
   const listItems = amounts.map((amount) => (<li key={amount.value}>{amount.value}</li>));
 
   return (

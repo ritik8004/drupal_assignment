@@ -14,8 +14,11 @@ export default class EgiftCardsListStepOne extends React.Component {
   }
 
   handleEgiftSelect = (id) => {
+    // Get all egift card items.
     const { items } = this.state;
+
     items.forEach((item) => {
+      // If item id matches then set as selected item.
       if (item.id === id) {
         this.setState({
           selectedItem: item,
