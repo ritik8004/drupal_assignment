@@ -95,6 +95,8 @@ $lang_switch_active: $charcoal;
 
 // Accordion
 $accordion_border: $pale-grey;
+$accordion_sub_title: $charcoal;
+$accordion_title: $charcoal;
 
 // Header.
 $header_border: $pale-grey;
@@ -102,6 +104,7 @@ $header_search_active_bg: $white;
 $header_mobile_menu_close_bg: $charcoal;
 $header_toggle_sign_active_tab: $black;
 $header_toggle_sign_default: $light-grey;
+$header_my_account_h3_title: $charcoal;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $pale-grey;
@@ -111,11 +114,16 @@ $header_secondary_menu_link: $charcoal;
 $header_mobile_menu_arrow: $charcoal;
 $header_c_menu_text: $charcoal;
 
+// Homepage Slider
+$hp_slider_dots: $dark-grey;
+$instagram_dots_default: $white;
+$instagram_dots_default_border: $dark-grey;
+
 //Algolia search bar.
 $algolia-input-text: $charcoal;
 $algolia-input-placeholder-text: $mid-grey;
-$algolia-auto-complete-border: $white;
-$algolia-auto-complete-mobile-border: $black;
+$algolia-auto-complete-border: $pale-grey;
+$algolia-auto-complete-mobile-border: $pale-grey;
 $algolia-auto-complete-border-bottom: $black;
 $algolia-search-clear-text-icon: $charcoal;
 $algolia-trending-title-text: $charcoal;
@@ -128,6 +136,7 @@ $algolia-auto-suggest-border: $pale-grey;
 $algolia-react-progressbar-text: $charcoal;
 $algolia-react-progressbar: $mid-grey;
 $algolia_react-facet-item-color: $charcoal;
+$algolia_sticky-header-shadow: $pale-grey;
 
 // PLP Product tile.
 $plp_tile_product_title: $charcoal;
@@ -150,6 +159,7 @@ $social_auth_login_button_border: $charcoal;
 $user_login_sub_text: $charcoal;
 $user_login_link_btn_text: $charcoal;
 $user_login_section_title: $charcoal;
+$user_account_nav: $black;
 
 // User Form
 $user_field_link: $mid-grey;
@@ -169,11 +179,12 @@ $store_finder_text: $charcoal;
 $store_finder_border_hover: $grey;
 $store_finder_search_label: $charcoal;
 $store_finder_search_input: $grey;
-$store_finder_search_input_mobile_border: $mid-grey;
+$store_finder_search_input_mobile_border: $grey;
 $store_finder_search_input_border: $grey;
 $store_finder_btn_act_hover_state: $white;
 $store_finder_individual_list_view: $white;
 $store_finder_individual_hour_border: $grey;
+$store_finder_search_results_tile_link: $charcoal;
 
 // Store finder gloassary.
 $store_finder_glossary_alphabet: $charcoal;
@@ -195,3 +206,97 @@ $maintenance_container_border: $white;
 $maintenance_container_border_top: $white;
 $maintenance_body_bg: $white;
 $maintenance_link: $light-grey;
+
+// Mega menu.
+$mm_body_overlay: rgba(0, 0, 0, 0.5);
+$mm_l1_border: $pale-grey;
+$mm_l1_desktop-border: $pale-grey;
+$mm_l1_link: $charcoal;
+$mm_l1_link_hover: $charcoal;
+$mm_l1_link_active_border: $medium-sky-blue;
+$mm_l2_link: $black;
+$mm_l2_link_hover: $charcoal;
+$mm_l3_link: $mid-grey;
+$mm_l3_link_mobile: $black;
+$mm_highlight_label: $charcoal;
+$mm_highlight_title: $charcoal;
+$mm_highlight_description: $charcoal;
+$mm_l3_link_hover: $charcoal;
+
+// PLP LHN block.
+$lhn_l2: $charcoal;
+$lhn_l3: $mid-grey;
+$lhn_l4: $mid-grey;
+$lhn_sticky-header-shadow: $pale-grey;
+
+// Product detail page.
+$pdp_product_special_price_text: $sale-red;
+$pdp_product_discount_price: $sale-red;
+$pdp_product_price: $charcoal;
+$pdp_product_discount_text: $sale-red;
+$pdp_size_option_selected_text: $charcoal;
+$pdp_size_option_selected_bg: $white;
+$pdp_size_option_border: $pale-grey;
+$pdp_size_option_text: $charcoal;
+$pdp_swatch_selected_border: $charcoal;
+$pdp_cc_btn_border: $medium-sky-blue;
+$pdp_cc_btn_bg: $white;
+$pdp_accordion_title: $charcoal;
+$pdp_title_section_border: $pale-grey;
+$pdp_skus_border: $pale-grey;
+$gallery_arrows_border: $charcoal;
+$pdp_sidebar_label: $charcoal;
+$pdp_sidebar_link: $charcoal;
+$free-gifts-modal-product-item-code: $spanish-grey;
+$pdp_product_itemcode: $spanish-grey;
+$pdp_size_selected_text: $charcoal;
+$pdp_size_option_border: $grey;
+$pdp_size_selected_border: $mid-grey;
+$pdp_size_option_hover_bg: $light-grey;
+$pdp_cc_storefinder_input: $charcoal;
+$pdp_cc_btn_text: $charcoal;
+$pdp_desc_wrapper_border: $charcoal;
+$pdp_desc_wrapper_close_bg: $charcoal;
+$pdp_sizeguide_link: $charcoal;
+$pdp_product_special_price: $sale-red;
+
+// SPC
+$spc-cart-background: $anti-flash-white;
+
+// cart
+$minicart_notification_border: $charcoal;
+$minicart_notification_shadow: $light-grey;
+$minicart_notification_text: $mid-grey;
+$minicart_notification_product_title: $charcoal;
+$minicart_notification_btn_bg: $white;
+$cart_notification_arrow_bg: $white;
+$primary_minicart_quantity_bg: $medium-sky-blue;
+$minicart_notification_btn_text: $charcoal;
+
+// Address form.
+$address_form_radio: $charcoal;
+$address_button_border: $grey;
+$address_button_text: $charcoal;
+$address_book_delete_cancel: $charcoal;
+$address_book_delete_close: $black;
+$address_pp_delete_closebtn: $black;
+$address_book_delete_close_icon: $white;
+
+// My Account pages
+$my_account_mobile_back_link: $black;
+$password_tooltip_list: $charcoal;
+$user_nav_link: $black;
+$user_nav_mobile_link: $black;
+$user_nav_mobile_title2: $charcoal;
+$user_order_list_text: $charcoal;
+$user_order_list_dark: $charcoal;
+$windows-blue: $black;
+$block_acm_customer_txt: $black;
+
+// User Form
+$user_field_link: $charcoal;
+$user_form_text: $charcoal;
+$my_account_nav: $charcoal;
+$my_account_nav_active: $black;
+$my_account_nav_hover: $black;
+$user_form_layout_divider_color: $grey;

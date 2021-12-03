@@ -27,6 +27,8 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
+import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import validateCartResponse from '../../../utilities/validation_util';
 import { getStorageInfo } from '../../../utilities/storage';
 import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
@@ -74,6 +76,9 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
+          // Event listerner to update any change in totals in cart object.
+          document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
           this.processAddressFromLocalStorage(result);
           this.processCheckout(result);
         });
@@ -248,6 +253,16 @@ export default class Checkout extends React.Component {
     );
   };
 
+  // Event listener to update totals in cart.
+  handleTotalsUpdateEvent = (event) => {
+    const { cart } = this.state;
+    const { totals } = event.detail;
+    const cartData = cart;
+    cartData.cart.totals = { ...cartData.cart.totals, ...totals };
+
+    this.setState({ cart: cartData });
+  };
+
   render() {
     const {
       wait,
@@ -298,6 +313,10 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={cart}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
             </ClicknCollectContextProvider>
+
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCheckoutContainer cart={cart} />
+            </ConditionalView>
 
             <PaymentMethods
               ref={this.paymentMethods}

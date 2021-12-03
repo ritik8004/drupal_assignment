@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: (MMCPA|ACR2|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP|VMA)
+  prefix: (MMCPA|ACR2|AURA|CORE|AAVS|BBWAE|MAPP|KOTBP|ALGO|MCP|VMA)
   human_name: Alshaya
   profile:
     name: alshaya_transac
@@ -63,7 +63,7 @@ command-hooks:
     command: 'echo ''No pre-config-import configured.'''
   post-deploy-build:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash middleware-build.sh ${deploy.dir}/docroot/middleware; bash middleware-build.sh ${deploy.dir}/docroot/appointment; bash post-deploy-build.sh ${deploy.dir}'
+    command: 'bash middleware-build.sh ${deploy.dir}; bash post-deploy-build.sh ${deploy.dir}'
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''
@@ -73,8 +73,6 @@ command-hooks:
 import: '${repo.root}/blt/setup.local.xml'
 behat:
   web-driver: chrome
-  chrome:
-    args: '--window-size=1920,1080'
 multisite:
   name:
     - g
@@ -85,7 +83,10 @@ validate:
     functions: [alshaya_main_menu, alshaya_secondary_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
-# We must disable security checks for module updates until
-# https://github.com/drush-ops/drush/issues/3748 will be fixed
-# (test with drush pm:security command)
-disable-targets.tests.security.check.updates: true
+disable-targets:
+  tests:
+    behat: { all: true, run: true }
+    security: { check: { updates: true } }
+tests:
+  chrome:
+    args: '--window-size=1920,1080'

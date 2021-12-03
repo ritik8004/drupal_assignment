@@ -1,0 +1,9 @@
+.c-user-edit {
+  #user-form {
+    @include breakpoint($only-tablet) {
+      #edit-account {
+        margin-top: 2rem;
+      }
+    }
+  }
+}

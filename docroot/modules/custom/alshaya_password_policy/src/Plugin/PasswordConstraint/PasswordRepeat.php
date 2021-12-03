@@ -7,6 +7,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\password_policy\PasswordConstraintBase;
 use Drupal\password_policy\PasswordPolicyValidation;
 use Drupal\Core\Database\Database;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Password\PasswordInterface;
 
@@ -61,18 +62,17 @@ class PasswordRepeat extends PasswordConstraintBase implements ContainerFactoryP
   /**
    * {@inheritdoc}
    */
-  public function validate($password, $user_context) {
+  public function validate($password, UserInterface $user_context) {
     $configuration = $this->getConfiguration();
     $validation = new PasswordPolicyValidation();
-
-    if (empty($user_context['uid'])) {
+    if (empty($user_context->id())) {
       return $validation;
     }
 
     // Query for users hashes.
     $hashes = Database::getConnection()->select('password_policy_history', 'pph')
       ->fields('pph', ['pass_hash'])
-      ->condition('uid', $user_context['uid'])
+      ->condition('uid', $user_context->id())
       ->orderBy('timestamp', 'DESC')
       ->range(0, $configuration['history_repeats'])
       ->execute()
