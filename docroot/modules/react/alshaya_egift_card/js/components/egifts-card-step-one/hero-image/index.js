@@ -7,6 +7,7 @@ import { getMdcMediaUrl } from '../../../utilities';
 const HeroImage = (props) => {
   const { item } = props;
   const media = item.media_gallery_entries;
+  // @todo handle cards without image.
   const image = {
     url: (media.length > 0) ? `${getMdcMediaUrl()}${media[0].file}` : '',
     title: item.name,

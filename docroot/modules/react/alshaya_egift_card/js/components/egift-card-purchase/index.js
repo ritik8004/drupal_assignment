@@ -13,7 +13,7 @@ export default class EgiftCardPurchase extends React.Component {
     super(props);
     this.state = {
       egiftItems: null,
-      apiCallFlag: false, // Set when API call is complete.
+      wait: false, // Waiting till we get data from api and show to user.
     };
   }
 
@@ -26,15 +26,20 @@ export default class EgiftCardPurchase extends React.Component {
       });
     }
     this.setState({
-      apiCallFlag: true,
+      wait: true,
     });
   }
 
   render() {
-    const { egiftItems, apiCallFlag } = this.state;
+    const { egiftItems, wait } = this.state;
 
     return (
       <>
+        <ConditionalView condition={egiftItems === null && wait === true}>
+          <div>
+            <p>{Drupal.t('No eGift cards found.', {}, { context: 'egift' })}</p>
+          </div>
+        </ConditionalView>
         <ConditionalView condition={egiftItems !== null}>
           <div className="egifts-form-wrap">
             <form onSubmit={this.handleSubmit}>
@@ -52,11 +57,6 @@ export default class EgiftCardPurchase extends React.Component {
                 </button>
               </div>
             </form>
-          </div>
-        </ConditionalView>
-        <ConditionalView condition={egiftItems === null && apiCallFlag === true}>
-          <div>
-            <p>{Drupal.t('No eGift cards found.', {}, { context: 'egift' })}</p>
           </div>
         </ConditionalView>
       </>
