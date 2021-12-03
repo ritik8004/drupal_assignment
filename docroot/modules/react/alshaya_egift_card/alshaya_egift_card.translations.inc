@@ -127,6 +127,70 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Change Card?',
         'context' => 'egift',
       ],
+      'add to bag' => [
+        'ar' => 'add to bag',
+        'context' => 'egift',
+      ],
+      'checkout' => [
+        'ar' => 'checkout',
+        'context' => 'egift',
+      ],
+      'No eGift cards found.' => [
+        'ar' => 'No eGift cards found.',
+        'context' => 'egift',
+      ],
+      '1. Select your style and card amount' => [
+        'ar' => '1. Select your style and card amount',
+        'context' => 'egift',
+      ],
+      '2. Enter Gift card details' => [
+        'ar' => '2. Enter Gift card details',
+        'context' => 'egift',
+      ],
+      'Buying this gift for' => [
+        'ar' => 'Buying this gift for',
+        'context' => 'egift',
+      ],
+      'Friends and family' => [
+        'ar' => 'Friends and family',
+        'context' => 'egift',
+      ],
+      'Myself' => [
+        'ar' => 'Myself',
+        'context' => 'egift',
+      ],
+      'Recipient Details' => [
+        'ar' => 'Recipient Details',
+        'context' => 'egift',
+      ],
+      'Name*' => [
+        'ar' => 'Name*',
+        'context' => 'egift',
+      ],
+      'Email*' => [
+        'ar' => 'Email*',
+        'context' => 'egift',
+      ],
+      'Write a message' => [
+        'ar' => 'Write a message',
+        'context' => 'egift',
+      ],
+      'Message' => [
+        'ar' => 'Message',
+        'context' => 'egift',
+      ],
+      'Please enter amount or select from above.' => [
+        'ar' => 'Please enter amount or select from above.',
+        'context' => 'egift',
+      ],
+      'Please enter amount in the range of @amountFrom to @amountTo' => [
+        'ar' => 'Please enter amount in the range of @amountFrom to @amountTo',
+        'context' => 'egift',
+      ],
+      'Amount @currencyCode' => [
+        'ar' => 'Amount @currencyCode',
+        'context' => 'egift',
+      ],
     ],
   ];
 
