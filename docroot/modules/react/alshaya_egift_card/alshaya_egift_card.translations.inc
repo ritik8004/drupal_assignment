@@ -203,6 +203,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Please add a email id in your account to perform this operation.',
         'context' => 'egift',
       ],
+      'Please enter a valid amount' => [
+        'ar' => 'Please enter a valid amount',
+        'context' => 'egift',
+      ],
     ],
   ];
 

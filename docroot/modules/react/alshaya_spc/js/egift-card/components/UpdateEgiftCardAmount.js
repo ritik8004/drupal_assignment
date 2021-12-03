@@ -18,6 +18,9 @@ export default class UpdateEgiftCardAmount extends React.Component {
     } else if (egiftAmount.value > (amount + remainingAmount)) {
       document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_insufficient_balance');
       errors = true;
+    } else if (egiftAmount.value <= 0) {
+      document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_valid_amount');
+      errors = true;
     } else {
       document.getElementById('egift_amount_error').innerHTML = '';
     }
