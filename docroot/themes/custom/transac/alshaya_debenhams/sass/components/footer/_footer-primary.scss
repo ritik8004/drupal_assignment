@@ -115,8 +115,9 @@
     font-size: 0.875rem;
 
     &::after {
-      font-size: 1rem;
+      font-size: 1.25rem;
       #{$right}: 1.125rem;
+      font-weight: bold;
     }
   }
 }
@@ -140,15 +141,19 @@
 }
 
 .alshaya-newsletter-subscribe {
-  max-width: 22rem;
   width: 100%;
 
-  html[lang=ar] & {
-    width: 95%;
+  @include breakpoint($tablet) {
+    max-width: 22rem;
   }
 
   @include breakpoint($only-mobile) {
-    margin: 1rem 1.25rem 2.5rem;
+    padding: 0 1.25rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 0;
+    margin-top: 2rem;
   }
 
   @include breakpoint($only-tablet) {
@@ -340,6 +345,16 @@
       padding-bottom: 1.875rem;
       border-bottom: 1px solid $accordion_border;
       border-top: 0;
+    }
+  }
+}
+
+.open--accordion {
+  .is-accordion {
+    &::after {
+      @include breakpoint($only-mobile) {
+        font-weight: bold;
+      }
     }
   }
 }

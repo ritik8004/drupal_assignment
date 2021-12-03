@@ -6,19 +6,12 @@ import {
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
-  callDrupalApi,
-  callMagentoApi,
   getCartCustomerEmail,
   getCartCustomerId,
   matchStockQuantity,
   isCartHasOosItem,
   getProductStatus,
-  getCartSettings,
 } from './common';
-import {
-  cartErrorCodes,
-  getDefaultErrorMessage,
-} from './error';
 import {
   getApiEndpoint,
   isUserAuthenticated,
@@ -42,6 +35,8 @@ import {
   isArray,
 } from '../../../../js/utilities/conditionsUtility';
 import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
+import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities/error';
+import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -206,12 +201,14 @@ const processLastOrder = (orderData) => {
  *
  * @param {string} customerId
  *   The customer id.
+ * @param {boolean} force
+ *   Bypass static cache.
  * @returns {Promise<AxiosPromise<Object>>}
  *   Customer last order or null.
  */
-const getLastOrder = async (customerId) => {
+const getLastOrder = async (customerId, force = false) => {
   const staticOrder = StaticStorage.get('last_order');
-  if (staticOrder !== null) {
+  if (!force && staticOrder !== null) {
     return staticOrder;
   }
 
@@ -1189,7 +1186,12 @@ const getProcessedCheckoutData = async (cartData) => {
 
     // If payment method is not available in the list, we set the first
     // available payment method in React, here we remove it from response.
-    if (typeof response.payment.method !== 'undefined' && !codes.includes(response.payment.method)) {
+    // `aura_payment` is pseudo payment method, it won't be in
+    // the list of payment methods so do not remove payment method
+    // if it's `aura_payment`.
+    if (typeof response.payment.method !== 'undefined'
+      && !codes.includes(response.payment.method)
+      && response.payment.method !== 'aura_payment') {
       delete (response.payment.method);
     }
 
@@ -1261,6 +1263,17 @@ const isUpapiPaymentMethod = (paymentMethod) => paymentMethod.indexOf('upapi', 0
  *   TRUE if payment methods from postpay
  */
 const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay', 0) !== -1;
+
+/**
+ * Checks if tabby payment method.
+ *
+ * @param {string} paymentMethod
+ *   Payment method code.
+ *
+ * @return {bool}
+ *   TRUE if payment methods from tabby
+ */
+const isTabbyPaymentMethod = (paymentMethod) => paymentMethod.indexOf('tabby', 0) !== -1;
 
 /**
  * Prepare message to log when API fail after payment successful.
@@ -1422,7 +1435,7 @@ const paymentUpdate = async (data) => {
       method: paymentData.method,
       additional_data: (hasValue(paymentData.additional_data))
         ? paymentData.additional_data
-        : [],
+        : {},
     },
   };
 
@@ -1459,7 +1472,9 @@ const paymentUpdate = async (data) => {
   }
 
   // If upapi payment method (payment method via checkout.com).
-  if (isUpapiPaymentMethod(paymentData.method) || isPostpayPaymentMethod(paymentData.method)) {
+  if (isUpapiPaymentMethod(paymentData.method)
+    || isPostpayPaymentMethod(paymentData.method)
+    || isTabbyPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
     params.payment.additional_data.successUrl = `${window.location.origin}${Drupal.url('spc/payment-callback/success')}`;
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
@@ -1713,9 +1728,25 @@ window.commerceBackend.getCartForCheckout = async () => {
   return getCart()
     .then(async (response) => {
       const cart = response;
+
+      // Check if response itself is empty.
+      // This could happen for multiple reasons,
+      // For example isAnonymousUserWithoutCart or we got 404.
+      if (!hasValue(cart) || !hasValue(cart.data)) {
+        logger.warning('Empty response received for getCart API call.');
+
+        return {
+          data: {
+            error: true,
+            error_code: 500,
+            error_message: 'Empty response received.',
+          },
+        };
+      }
+
       const cartId = window.commerceBackend.getCartId();
 
-      if (!hasValue(cart.data) || hasValue(cart.data.error_message)) {
+      if (hasValue(cart.data.error_message)) {
         logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,
           '@message': cart.data.error_message,
@@ -1906,10 +1937,16 @@ window.commerceBackend.addShippingMethod = async (data) => {
   }
 
   if (!hasValue(carrierInfo)) {
-    carrierInfo = {
-      code: shippingMethods[0].carrier_code,
-      method: shippingMethods[0].method_code,
-    };
+    // Find the first available method.
+    const selectedMethod = shippingMethods.find(
+      (method) => method.available === true,
+    );
+    if (selectedMethod && selectedMethod !== null) {
+      carrierInfo = {
+        code: selectedMethod.carrier_code,
+        method: selectedMethod.method_code,
+      };
+    }
   }
 
   const params = {
@@ -2128,13 +2165,39 @@ window.commerceBackend.placeOrder = async (data) => {
         return { data: result };
       }
 
-      if (!hasValue(response.data) || hasValue(response.data.error)) {
+      if (!hasValue(response.data)) {
+        logger.warning('Got empty response while placing the order.');
         return response;
       }
 
-      const orderId = parseInt(response.data, 10);
-      if (!orderId) {
-        logger.error('Place order returned an empty order id. Response: @response Cart: @cart .', {
+      let orderId = parseInt(response.data, 10);
+
+      // In case of errors, double check the order.
+      if (hasValue(response.data.error)
+        && response.data.error_code >= 500
+        && getCartSettings('doubleCheckEnabled')
+        && isUserAuthenticated()
+        && !isPostpayPaymentMethod(data.data.paymentMethod.method)
+        && !isUpapiPaymentMethod(data.data.paymentMethod.method)
+      ) {
+        // Get quote_id from last order to compare with cart id.
+        const lastOrder = await getLastOrder(drupalSettings.userDetails.customerId, true);
+        if (hasValue(lastOrder)
+          && hasValue(lastOrder.quote_id)
+          && lastOrder.quote_id === cart.data.cart.id
+        ) {
+          orderId = lastOrder.order_id;
+          // We were able to match the last order id with the cart submitted.
+          logger.warning('Place order failed but order was placed, we will move forward. Message: @message. Reserved order id: @reservedOrderId. Cart id: @cartId', {
+            '@cartId': cart.data.cart.id,
+            '@message': (hasValue(response.data.error_message)) ? response.data.error_message : '',
+            '@reservedOrderId': (hasValue(cart.data.cart.reserved_order_id)) ? cart.data.cart.reserved_order_id : '',
+          });
+        }
+      }
+
+      if (!orderId || Number.isNaN(orderId)) {
+        logger.error('Place order failed. Response: @response, Cart: @cart.', {
           '@response': JSON.stringify(response),
           '@cart': JSON.stringify(cart),
         });

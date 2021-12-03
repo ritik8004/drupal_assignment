@@ -1,0 +1,10 @@
+.size-guide-link {
+  font-size: 1rem;
+  text-decoration: underline;
+  font-family: $dh-light;
+
+  @include breakpoint($only-tablet) {
+    top: 0;
+    z-index: 1;
+  }
+}

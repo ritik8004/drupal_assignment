@@ -11,10 +11,10 @@
       $('#alshaya-algolia-plp').once('seoGoogleTagManager').on('plp-results-updated', function (event, results) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('#alshaya-algolia-plp'), drupalSettings, event);
 
-        $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', $('#alshaya-algolia-plp')).once('product-list-clicked').on('click', function (event) {
+        $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', $('#alshaya-algolia-plp')).once('product-list-clicked').on('click', function () {
           var that = $(this);
           var position = parseInt($(this).attr('data-insights-position'));
-          Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, $('body').attr('gtm-list-name'), position, event);
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, $('body').attr('gtm-list-name'), position);
         });
       });
 
