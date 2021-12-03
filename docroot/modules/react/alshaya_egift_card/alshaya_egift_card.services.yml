@@ -3,3 +3,7 @@ services:
     class: Drupal\alshaya_egift_card\Helper\EgiftCardHelper
     arguments:
       - '@config.factory'
+  alshaya_egift_card.egift_list_breadcrumb:
+    class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaEgiftCardBreadcrumb
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
