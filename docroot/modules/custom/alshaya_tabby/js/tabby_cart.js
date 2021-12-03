@@ -5,12 +5,14 @@
       amount = e.detail.data().totals.base_grand_total;
     }
     catch (e) {
-      Drupal.alshayaLogger('warning', 'amount is invalid on cart page for tabby.');
-      return;
+      amount = null;
     }
 
     // Check if the amount is invalid.
-    if (typeof amount === 'undefined') {
+    if (typeof amount === 'undefined' || amount === null) {
+      Drupal.alshayaLogger('warning', 'Invalid amount on cart page for tabby. Cart: @cart.', {
+        '@cart': e.detail.data(),
+      });
       return;
     }
 
