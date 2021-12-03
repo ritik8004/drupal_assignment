@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_performance\Commands;
 
-use Drupal\Core\File\FileSystem;
+use Drupal\Core\File\FileSystemInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -13,17 +13,17 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
   /**
    * File System service.
    *
-   * @var \Drupal\Core\File\FileSystem
+   * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
 
   /**
    * AlshayaPerformanceDrushCommands constructor.
    *
-   * @param \Drupal\Core\File\FileSystem $file_system
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   File System service.
    */
-  public function __construct(FileSystem $file_system) {
+  public function __construct(FileSystemInterface $file_system) {
     $this->fileSystem = $file_system;
   }
 

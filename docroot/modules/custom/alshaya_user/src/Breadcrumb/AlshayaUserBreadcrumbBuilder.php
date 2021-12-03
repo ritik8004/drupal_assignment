@@ -113,7 +113,7 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       'entity.user.edit_form' => [
         'user' => $current_user_id,
       ],
-      'entity.profile.type.user_profile_form' => [
+      'profile.user_page.multiple' => [
         'user' => $current_user_id,
         'profile_type' => 'address_book',
       ],

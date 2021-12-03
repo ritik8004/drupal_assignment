@@ -24,6 +24,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
 
 /**
  * Provides a resource to get product details excliding linked products.
@@ -123,6 +124,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $requestStack;
 
   /**
+   * Product Options Helper.
+   *
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
+   */
+  protected $optionsHelper;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -155,6 +163,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   The Product Category helper service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
+   *   Product Options Helper.
    */
   public function __construct(
     array $configuration,
@@ -171,7 +181,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
     ProductCategoryHelper $product_category_helper,
-    RequestStack $request_stack
+    RequestStack $request_stack,
+    ProductOptionsHelper $options_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -189,6 +200,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->skuInfoHelper = $sku_info_helper;
     $this->productCategoryHelper = $product_category_helper;
     $this->requestStack = $request_stack->getCurrentRequest();
+    $this->optionsHelper = $options_helper;
   }
 
   /**
@@ -210,7 +222,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('alshaya_acm_product.category_helper'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('alshaya_product_options.helper')
     );
   }
 
@@ -556,6 +569,12 @@ class ProductExcludeLinkedResource extends ResourceBase {
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
+        // Key to flag size label.
+        $combinations['attribute_sku'][$attribute_code]['showLabel'] = FALSE;
+        $alternates = $this->optionsHelper->getSizeGroup($attribute_code);
+        if ($alternates) {
+          $combinations['attribute_sku'][$attribute_code]['showLabel'] = TRUE;
+        }
       }
     }
 

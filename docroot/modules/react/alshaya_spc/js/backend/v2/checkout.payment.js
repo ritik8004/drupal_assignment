@@ -1,10 +1,11 @@
-import { callMagentoApi, getCart } from './common';
+import { getCart } from './common';
 import { getApiEndpoint } from './utility';
 import logger from '../../../../js/utilities/logger';
 import StaticStorage from './staticStorage';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 window.commerceBackend = window.commerceBackend || {};
 

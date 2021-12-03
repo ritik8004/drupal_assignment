@@ -155,7 +155,7 @@
 
     // Add product click handler.
     document.querySelectorAll('.spc-recommended-products a').forEach(function (element, index) {
-      element.addEventListener('click', function (event) {
+      element.addEventListener('click', function () {
         var listName = Drupal.alshayaSeoSpc.getRecommendationsListName();
         // Currently the elements do not have GTM attributes. So we fetch them
         // and add them to each element and send them to be processed by the
@@ -169,7 +169,7 @@
         for (i = 0; i < attribute_keys.length; i++) {
           element.setAttribute('gtm-' + attribute_keys[i], elementGtmAttributes[attribute_keys[i]]);
         }
-        Drupal.alshaya_seo_gtm_push_product_clicks($(element), drupalSettings.gtm.currency, listName, position, event);
+        Drupal.alshaya_seo_gtm_push_product_clicks($(element), drupalSettings.gtm.currency, listName, position);
       });
     });
   });
