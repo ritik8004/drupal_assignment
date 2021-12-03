@@ -182,7 +182,9 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   }
 
   // If Aura enabled, display points earned and redeemed.
-  $orderRow['auraEnabled'] = \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled();
+  $orderRow['auraEnabled'] = \Drupal::hasService('alshaya_aura_react.aura_helper')
+    ? \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()
+    : FALSE;
   if ($orderRow['auraEnabled']) {
     $orderRow['apcAccruedPoints'] = $order['extension']['apc_accrued_points'] ?? '';
     $orderRow['apcRedeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? '';
