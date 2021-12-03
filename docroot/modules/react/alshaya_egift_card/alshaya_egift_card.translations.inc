@@ -191,6 +191,18 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Amount @currencyCode',
         'context' => 'egift',
       ],
+      'Amount updated failed! Please try again after sometime.' => [
+        'ar' => 'Amount updated failed! Please try again after sometime.',
+        'context' => 'egift',
+      ],
+      'There was some error while removing the gift card. Please try again' => [
+        'ar' => 'There was some error while removing the gift card. Please try again',
+        'context' => 'egift',
+      ],
+      'Please add a email id in your account to perform this operation.' => [
+        'ar' => 'Please add a email id in your account to perform this operation.',
+        'context' => 'egift',
+      ],
     ],
   ];
 

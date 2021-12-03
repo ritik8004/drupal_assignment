@@ -6,7 +6,7 @@ import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 import { getApiEndpoint } from '../../backend/v2/utility';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import logger from '../../../../js/utilities/logger';
-import dispatchCustomEvent from '../../utilities/events';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ export default class ValidEgiftCard extends React.Component {
 
   // Handle remove card.
   handleRemoveCard = () => {
-    const { quoteId } = this.props;
+    const { quoteId, removeCard } = this.props;
     const postData = {
       redeem_points: {
         action: 'remove_points',
@@ -60,7 +60,7 @@ export default class ValidEgiftCard extends React.Component {
         if (result.error !== undefined) {
           messageInfo = {
             type: 'error',
-            message: result.response_message,
+            message: Drupal.t('There was some error while removing the gift card. Please try again', {}, { context: 'egift' }),
           };
         } else {
           messageInfo = {
@@ -68,6 +68,9 @@ export default class ValidEgiftCard extends React.Component {
             message: result.response_message,
           };
         }
+        // Trigger the remove method of parent component to move back to the
+        // initial redeem stage.
+        removeCard();
       });
       // Trigger message.
       if (messageInfo !== null) {
@@ -99,37 +102,53 @@ export default class ValidEgiftCard extends React.Component {
       // Invoke the redemption API to update the redeem amount.
       const endpoint = getApiEndpoint('eGiftRedemption');
       const response = callMagentoApi(endpoint, 'POST', postData);
-      if (typeof response.data !== 'undefined'
-        && typeof response.data.error === 'undefined') {
+      if (response instanceof Promise) {
         // Update the amount in state.
-        this.setState({
-          amount: updateAmount,
+        response.then((result) => {
+          if (result.error === undefined && result.data !== undefined) {
+            this.setState({
+              amount: updateAmount,
+            });
+          } else if (result.error || result.status !== 200) {
+            return false;
+          }
+
+          return true;
         });
       }
     }
-    this.closeModal();
+
+    return true;
   }
 
   // Whether user is applicable to link card in the account.
   isCardLinkingApplicable = () => {
-    // @todo To fetch the email value from localStorage or static storage.
-    const params = { email: 'admin@example.com' };
-    const endpoint = getApiEndpoint('eGiftHpsSearch', params);
-    if (endpoint) {
-      // Invoke magento API to check if any egift card is already associated
-      // with the user account.
-      const response = callMagentoApi(endpoint, 'GET');
-      if (typeof response.data !== 'undefined'
-        && typeof response.data.error === 'undefined') {
-        // return false if card number is already linked else true.
-        return !response.data.card_number;
-      }
-      // Handle error response.
-      if (response.data.error) {
-        logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
-          '@emailId': params.email,
-          '@response': JSON.stringify(response.data),
-        });
+    const params = { email: drupalSettings.userDetails.userEmailID };
+    if (params.email) {
+      const endpoint = getApiEndpoint('eGiftHpsSearch', params);
+      if (endpoint) {
+        // Invoke magento API to check if any egift card is already associated
+        // with the user account.
+        const response = callMagentoApi(endpoint, 'GET');
+        if (response instanceof Promise) {
+          response.then((result) => {
+            if (result.data !== 'undefined'
+              && result.error === 'undefined') {
+              // return false if card number is already linked else true.
+              return !result.data.card_number;
+            }
+            // Handle error response.
+            if (result.error) {
+              logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
+                '@emailId': params.email,
+                '@response': JSON.stringify(result.data),
+              });
+            }
+            return false;
+          });
+        }
+      } else {
+        document.getElementById('egift_linkcard_error').innerHTML = Drupal.t('Please add a email id in your account to perform this operation.', {}, { context: 'egift' });
       }
     }
 
@@ -169,6 +188,7 @@ export default class ValidEgiftCard extends React.Component {
         <ConditionalView condition={this.isCardLinkingApplicable()}>
           <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
           <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
+          <div id="egift_linkcard_error" className="error" />
         </ConditionalView>
       </div>
     );

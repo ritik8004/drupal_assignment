@@ -32,8 +32,15 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (!this.handleValidation(e)) {
       // @todo To perform Amount update.
       const { egift_amount: egiftAmount } = e.target.elements;
-      const { updateAmount } = this.props;
-      updateAmount(egiftAmount.value);
+      const { updateAmount, closeModal } = this.props;
+      // Display the message based on update status.
+      const updateStatus = updateAmount(egiftAmount.value);
+      if (updateStatus) {
+        // Close the modal if data updated successfully.
+        closeModal();
+      } else {
+        document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_amount_update_failed');
+      }
     }
 
     return false;
@@ -84,6 +91,7 @@ export default class UpdateEgiftCardAmount extends React.Component {
                   type: 'number',
                   name: 'amount',
                   className: 'amount',
+                  value: amount,
                 })}
                 {egiftFormElement({
                   type: 'submit',

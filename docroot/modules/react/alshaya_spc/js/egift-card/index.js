@@ -38,7 +38,11 @@ export default class RedeemEgiftCard extends React.Component {
 
   // Remove the added egift card.
   handleEgiftCardRemove = () => {
-    // @todo To update code here once API is available.
+    // Reset the state to move back to initial redeem stage.
+    this.setState({
+      codeSent: false,
+      codeValidated: false,
+    });
   }
 
   render = () => {

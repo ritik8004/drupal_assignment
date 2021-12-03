@@ -33,6 +33,7 @@ export const egiftFormElement = ({
   placeholder = '',
   className = '',
   buttonText = '',
+  value = '',
 }) => {
   // Separate template based on type.
   let rtnTemplate = '';
@@ -55,6 +56,7 @@ export const egiftFormElement = ({
             name={`egift_${name}`}
             placeholder={placeholder}
             className={className}
+            defaultValue={value}
           />
           <div id={`egift_${name}_error`} className="error" />
         </div>
