@@ -127,17 +127,20 @@ class WishlistButton extends React.Component {
 
   render() {
     const { addedInWishList } = this.state;
-    const { context, position } = this.props;
-    const classPrefix = `wishlist-icon ${context} ${position}`;
+    const { context, position, format } = this.props;
+
+    // Display format can be 'link' or 'icon'.
+    const formatClass = format || 'icon';
+    const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
     const wishListButtonClass = addedInWishList ? `${classPrefix} in-wishlist` : classPrefix;
+    const buttonText = addedInWishList ? 'Remove' : 'Add to wishlist';
 
     return (
       <div
         className={wishListButtonClass}
         onClick={() => this.toggleWishlist()}
       >
-        {/* @todo: Display wishlist icon here. */}
-        {Drupal.t('Add to wishlist')}
+        {Drupal.t(buttonText, {}, { context: 'wishlist' })}
       </div>
     );
   }

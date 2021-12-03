@@ -549,7 +549,7 @@ sofa-sectional:
     theme:
       css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
 
-my-wishlist-page:
+wishlist:
   css:
     theme:
-      css/conditional-sass/my-wishlist-page/my-wishlist-page.ltr.css: {}
+      css/conditional-sass/wishlist/wishlist.ltr.css: {}
