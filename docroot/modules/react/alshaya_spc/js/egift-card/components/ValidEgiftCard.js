@@ -47,16 +47,16 @@ export default class ValidEgiftCard extends React.Component {
       redeem_points: {
         action: 'remove_points',
         quote_id: quoteId,
-      }
-    }
+      },
+    };
     // Invoke the redemption API.
     const endpoint = getApiEndpoint('eGiftRedemption');
     const response = callMagentoApi(endpoint, 'POST', postData);
     if (response instanceof Promise) {
       // Handle the error and success message after the egift card is removed
       // from the cart.
+      let messageInfo = null;
       response.then((result) => {
-        let messageInfo = null;
         if (result.error !== undefined) {
           messageInfo = {
             type: 'error',
