@@ -852,32 +852,6 @@ function template_preprocess_rcs_sku_base_form(&$variables) {
 }
 
 /**
- * Implements hook_rcs_handlebars_templates_alter().
- */
-function alshaya_rcs_product_rcs_handlebars_templates_alter(&$templates, $entity) {
-  if (!$entity || $entity->bundle() !== 'rcs_product') {
-    return;
-  }
-
-  $path = drupal_get_path('module', 'alshaya_rcs_product');
-
-  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-  switch ($sku_manager->getPdpLayout($entity)) {
-    case 'pdp-magazine':
-      $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-full-magazine-block.handlebars";
-      break;
-
-    default:
-      $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-block.handlebars";
-  }
-
-  $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
-  $templates['product']['order_quantity_limit'] = "$path/templates/rcs-product-order-quantity-limit.handlebars";
-  $templates['product']['promotions'] = "$path/templates/rcs-product-promotions.handlebars";
-}
-
-/**
  * Implements hook_rcs_handlebars_templates().
  */
 function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
@@ -885,20 +859,32 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     return;
   }
 
-  $path = drupal_get_path('module', 'alshaya_rcs_product');
-  $templates = ['gallery' => []];
-  $templates['gallery']['product'] = [
-    'product_zoom' => "$path/templates/rcs-product-zoom.handlebars",
-    'product_labels' => "$path/templates/rcs-product-labels.handlebars",
-    'block' => [
-      'product_zoom_default_gallery' => "$path/templates/rcs-product-zoom-default-gallery-block.handlebars",
-      'product_zoom_mobile_gallery' => "$path/templates/rcs-product-zoom-mobile-gallery-block.handlebars",
-      'product_zoom_modal_gallery' => "$path/templates/rcs-product-zoom-modal-gallery-block.handlebars",
-      'product_zoom_magazine_gallery' => "$path/templates/rcs-product-zoom-magazine-gallery-block.handlebars",
-    ],
+  // Libraries to attach.
+  $libraries = [
+    'product.block.description',
+    'product.order_quantity_limit',
+    'product.promotions',
+    'gallery.product.product_zoom',
+    'gallery.product.product_labels',
+    'gallery.product.block.product_zoom_default_gallery',
+    'gallery.product.block.product_zoom_mobile_gallery',
+    'gallery.product.block.product_zoom_modal_gallery',
+    'gallery.product.block.product_zoom_magazine_gallery',
   ];
 
-  return $templates;
+  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  switch ($sku_manager->getPdpLayout($entity)) {
+    case 'pdp-magazine':
+      $libraries[] = 'product.block.short_description.pdp-magazine';
+      break;
+
+    default:
+      $libraries[] = 'product.block.short_description.pdp';
+  }
+
+  return $libraries;
 }
 
 /**

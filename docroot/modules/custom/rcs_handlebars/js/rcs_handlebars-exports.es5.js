@@ -1,27 +1,10 @@
 const Handlebars = require("handlebars");
 
 /**
- * Returns the value from object using nested keys i.e. "field.field_name"
- *
- * @param path string
- *   The path for the value inside the object separated by .
- * @param obj
- *   The object.
- * @param separator
- *   The separator, defaults to .
- * @return {*}
- *   The data.
- */
-function resolvePath(path, obj=self, separator='.') {
-  var properties = Array.isArray(path) ? path : path.split(separator)
-  return properties.reduce((prev, curr) => prev && prev[curr], obj)
-}
-
-/**
  * Render Handlebars templates.
  *
- * @param {object} path
- *   The path in the object. i.e "block.block_name"
+ * @param {string} name
+ *   The template name i.e "block.block_name"
  *
  * @param {object} data
  *   The data.
@@ -29,7 +12,7 @@ function resolvePath(path, obj=self, separator='.') {
  * @returns {object}
  *   Returns the object containing the value and ellipsis information.
  */
-function handlebarsRender(template, data) {
+function handlebarsRender(name, data) {
   const templates = (typeof window !== 'undefined')
     ? window.rcsHandlebarsTemplates
     : rcsHandlebarsTemplates;
@@ -42,7 +25,7 @@ function handlebarsRender(template, data) {
   }
 
   // Get the source template.
-  const source = resolvePath(template, templates);
+  const source = templates[name];
 
   // Compile source.
   const render = Handlebars.compile(source);
