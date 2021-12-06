@@ -13,6 +13,14 @@ export default class EgiftCardsListStepOne extends React.Component {
     };
   }
 
+  /**
+   * Reset step 2 fields when user selects different egift card.
+   */
+  resetStepTwo() {
+    const { handleAmountSelect } = this.props;
+    handleAmountSelect(false, 0);
+  }
+
   handleEgiftSelect = (id) => {
     // Get all egift card items.
     const { items } = this.state;
@@ -22,13 +30,14 @@ export default class EgiftCardsListStepOne extends React.Component {
       if (item.id === id) {
         this.setState({
           selectedItem: item,
-        });
+        }, () => this.resetStepTwo());
       }
     });
   }
 
   render() {
     const { items, selectedItem } = this.state;
+    const { handleAmountSelect } = this.props;
 
     const style = {
       display: 'flex',
@@ -46,7 +55,7 @@ export default class EgiftCardsListStepOne extends React.Component {
             selected={selectedItem}
             handleEgiftSelect={this.handleEgiftSelect}
           />
-          <EgiftCardAmount selected={selectedItem} />
+          <EgiftCardAmount selected={selectedItem} handleAmountSelect={handleAmountSelect} />
         </div>
       </>
     );

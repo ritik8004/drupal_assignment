@@ -14,6 +14,8 @@ export default class EgiftCardPurchase extends React.Component {
     this.state = {
       egiftItems: null,
       wait: false, // Waiting till we get data from api and show to user.
+      activateStepTwo: false, // Set on amount select to show step 2.
+      amountSet: 0,
     };
   }
 
@@ -30,8 +32,23 @@ export default class EgiftCardPurchase extends React.Component {
     });
   }
 
+  /**
+   * Show next step fields when user select amount.
+   */
+  handleAmountSelect = (activate, amount) => {
+    this.setState({
+      activateStepTwo: activate,
+      amountSet: amount,
+    });
+  }
+
   render() {
-    const { egiftItems, wait } = this.state;
+    const {
+      egiftItems,
+      wait,
+      activateStepTwo,
+      amountSet,
+    } = this.state;
 
     return (
       <>
@@ -46,8 +63,9 @@ export default class EgiftCardPurchase extends React.Component {
               <EgiftCardsListStepOne
                 items={egiftItems}
                 handleEgiftSelect={this.handleEgiftSelect}
+                handleAmountSelect={this.handleAmountSelect}
               />
-              <EgiftCardStepTwo />
+              <EgiftCardStepTwo activate={activateStepTwo} />
               <div className="action-buttons">
                 <button type="submit" name="add-to-cart" className="btn">
                   {Drupal.t('add to bag', {}, { context: 'egift' })}
@@ -56,6 +74,7 @@ export default class EgiftCardPurchase extends React.Component {
                   {Drupal.t('checkout', {}, { context: 'egift' })}
                 </button>
               </div>
+              <input type="hidden" name="egift-amount" value={amountSet} />
             </form>
           </div>
         </ConditionalView>

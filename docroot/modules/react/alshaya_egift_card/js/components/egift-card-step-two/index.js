@@ -9,9 +9,10 @@ export default class EgiftCardStepTwo extends React.Component {
   }
 
   render() {
-    const { active } = this.state;
+    const { activate } = this.props;
     let classList = 'step-two-wrapper';
-    if (active) {
+
+    if (activate) {
       classList = `${classList} active`;
     }
 
