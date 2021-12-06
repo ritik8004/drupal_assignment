@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  getPriceToPoint,
   getAuraDetailsDefaultState,
 } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
@@ -101,15 +100,14 @@ function processCheckoutCart(data) {
 /**
  * Utility function points to earn message.
  */
-function getMembersToEarnMessage(price) {
+function getMembersToEarnMessage(pointsToEarn) {
   const toEarnMessageP1 = `${getStringMessage('checkout_members_will_earn')} `;
   const toEarnMessageP2 = ` ${getStringMessage('checkout_with_this_purchase')}`;
-  const points = getPriceToPoint(price);
 
   return (
     <span className="spc-checkout-aura-points-to-earn">
       { toEarnMessageP1 }
-      <PointsString points={points} />
+      <PointsString points={pointsToEarn} />
       { toEarnMessageP2 }
     </span>
   );
