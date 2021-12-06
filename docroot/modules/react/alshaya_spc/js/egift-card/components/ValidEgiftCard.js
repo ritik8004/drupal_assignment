@@ -7,6 +7,7 @@ import { getApiEndpoint } from '../../backend/v2/utility';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import logger from '../../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../../js/utilities/events';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -81,7 +82,13 @@ export default class ValidEgiftCard extends React.Component {
 
   // Update the user account with egift card.
   handleCardLink = () => {
+    // Extract the current user email.
+    const params = { email: drupalSettings.userDetails.userEmailID };
+    if (params.email) {
+      // @todo Call user acount link API.
+    }
 
+    return false;
   }
 
   // Update egift amount.
@@ -123,6 +130,11 @@ export default class ValidEgiftCard extends React.Component {
 
   // Whether user is applicable to link card in the account.
   isCardLinkingApplicable = () => {
+    // Return if user is not authenticated.
+    if (isUserAuthenticated()) {
+      return false;
+    }
+
     const params = { email: drupalSettings.userDetails.userEmailID };
     if (params.email) {
       const endpoint = getApiEndpoint('eGiftHpsSearch', params);
@@ -141,14 +153,12 @@ export default class ValidEgiftCard extends React.Component {
             if (result.error) {
               logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
                 '@emailId': params.email,
-                '@response': JSON.stringify(result.data),
+                '@response': result.data,
               });
             }
             return false;
           });
         }
-      } else {
-        document.getElementById('egift_linkcard_error').innerHTML = Drupal.t('Please add a email id in your account to perform this operation.', {}, { context: 'egift' });
       }
     }
 
