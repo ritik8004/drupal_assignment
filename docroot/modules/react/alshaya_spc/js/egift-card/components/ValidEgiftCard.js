@@ -3,6 +3,8 @@ import getCurrencyCode from '../../../../js/utilities/util';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { egiftCardHeader } from '../../utilities/egift_util';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
+import { getApiEndpoint } from '../../backend/v2/utility';
+import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -70,10 +72,28 @@ export default class ValidEgiftCard extends React.Component {
 
   // Whether user is applicable to link card in the account.
   isCardLinkingApplicable = () => {
-    const validUser = drupalSettings.user.uid > 0;
-    // @todo To check if user is already having a linked card.
+    // @todo To fetch the email value from localStorage or static storage.
+    const params = { email: 'test@test.com' };
+    const endpoint = getApiEndpoint('eGiftHpsSearch', params);
+    if (endpoint) {
+      // Invoke magento API to check if any egift card is already associated
+      // with the user account.
+      const response = callMagentoApi(endpoint, 'GET');
+      if (typeof response.data !== 'undefined'
+        && typeof response.data.error === 'undefined') {
+        // return false if card number is already linked else true.
+        return !response.data.card_number;
+      }
+      // Handle error response.
+      if (response.data.error) {
+        logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
+          '@emailId': params.email,
+          '@response': JSON.stringify(response.data),
+        });
+      }
+    }
 
-    return validUser;
+    return false;
   }
 
   render = () => {
