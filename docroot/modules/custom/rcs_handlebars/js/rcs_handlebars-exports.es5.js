@@ -3,8 +3,8 @@ const Handlebars = require("handlebars");
 /**
  * Render Handlebars templates.
  *
- * @param {string} name
- *   The template name i.e "block.block_name"
+ * @param {string} id
+ *   The library id i.e "article.block.foo"
  *
  * @param {object} data
  *   The data.
@@ -12,7 +12,7 @@ const Handlebars = require("handlebars");
  * @returns {object}
  *   Returns the object containing the value and ellipsis information.
  */
-function handlebarsRender(name, data) {
+function handlebarsRender(id, data) {
   const templates = (typeof window !== 'undefined')
     ? window.rcsHandlebarsTemplates
     : rcsHandlebarsTemplates;
@@ -25,7 +25,7 @@ function handlebarsRender(name, data) {
   }
 
   // Get the source template.
-  const source = templates[name];
+  const source = templates[id];
 
   // Compile source.
   const render = Handlebars.compile(source);
