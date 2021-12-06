@@ -1,6 +1,6 @@
 import React from 'react';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
-import { getWishlistLabel, isAnonymousUser } from '../../../utilities/wishlist-utils';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { getWishlistLabel, isAnonymousUser } from '../../utilities/wishlist-utils';
 
 const WishlistNotification = ({
   wishListItemData,

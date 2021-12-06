@@ -13,7 +13,6 @@ const renderWishListButton = (elementSelector) => {
   const selectedEelement = document.querySelector(elementSelector);
   if (selectedEelement) {
     const { sku } = selectedEelement.closest('article').dataset;
-    const { vmode } = selectedEelement.closest('article').dataset;
     const title = selectedEelement.getAttribute('data-sku-title');
     if (sku && title) {
       ReactDOM.render(
@@ -21,7 +20,6 @@ const renderWishListButton = (elementSelector) => {
           sku={sku}
           title={title}
           context="pdp"
-          vmode={vmode}
           position="top-right"
           format="icon"
         />,

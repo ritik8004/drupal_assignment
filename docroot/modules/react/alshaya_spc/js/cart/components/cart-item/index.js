@@ -327,7 +327,7 @@ export default class CartItem extends React.Component {
               <WishlistPopupBlock
                 sku={parentSKU}
                 title={title}
-                url={url}
+                cartImage={cartImage}
                 closeWishlistModal={() => this.closeWishlistModal()}
               />
             </ConditionalView>

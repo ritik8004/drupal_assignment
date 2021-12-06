@@ -1,14 +1,16 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import CheckoutItemImage from '../../../../alshaya_spc/js/utilities/checkout-item-image';
 import { addProductToWishList, getWishlistLabel } from '../../utilities/wishlist-utils';
 
 export default class WishlistPopupBlock extends React.Component {
   addToWishlist = (addToWishlist) => {
     const {
-      productInfo, closeWishlistModal,
+      sku, title, closeWishlistModal,
     } = this.props;
     // If user responds as yes, move item to wishlist and remove cart item.
     // Else close the popup and continue to remove cart item.
+    const productInfo = { sku, title };
     if (addToWishlist) {
       addProductToWishList(productInfo);
     }
@@ -16,6 +18,7 @@ export default class WishlistPopupBlock extends React.Component {
   }
 
   render() {
+    const { cartImage } = this.props;
     return (
       <div className="wishlist-popup-container">
         <Popup
@@ -25,6 +28,7 @@ export default class WishlistPopupBlock extends React.Component {
           closeOnEscape={false}
         >
           <div className="wishlist-popup-block">
+            <CheckoutItemImage img_data={cartImage} />
             <div className="wishlist-question">
               {Drupal.t('Do you want to move the product to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
             </div>
