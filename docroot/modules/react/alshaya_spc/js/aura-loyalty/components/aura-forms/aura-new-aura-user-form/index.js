@@ -16,6 +16,7 @@ import {
   getInlineErrorSelector,
 } from '../../utilities/link_card_sign_up_modal_helper';
 import { validateElementValueByType } from '../../utilities/validation_helper';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class AuraFormNewAuraUserModal extends React.Component {
   constructor(props) {
@@ -121,9 +122,11 @@ class AuraFormNewAuraUserModal extends React.Component {
             return;
           }
 
+          let message = getStringMessage(result.data.error_message);
+          message = hasValue(message) ? message : getStringMessage('form_error_sign_up_failed_message');
           this.setState({
             messageType: 'error',
-            messageContent: getStringMessage(result.data.error_message),
+            messageContent: message,
           });
           removeFullScreenLoader();
           return;
