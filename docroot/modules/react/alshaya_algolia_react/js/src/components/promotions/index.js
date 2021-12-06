@@ -7,15 +7,15 @@ const Promotion = ({ promotion }) => (
   <span className="sku-promotion-item">
     {(drupalSettings.algoliaSearch.pageSubType !== 'undefined'
       && drupalSettings.algoliaSearch.pageSubType === 'promotion'
-      && ((typeof drupalSettings.algoliaSearch.promotionNodeId !== 'undefined'
-        && typeof promotion.id !== 'undefined'
+      && ((drupalSettings.algoliaSearch.promotionNodeId !== 'undefined'
+        && promotion.id !== 'undefined'
         && drupalSettings.algoliaSearch.promotionNodeId === promotion.id)
       // Adding check of rule_id as for V3, we don't have promotion id but we
       // have rule_id. So using promotion.id for V1 and promotion.rule_id for
       // V3.
-      || (promotion.rule_id !== 'undefined' && JSON.parse(localStorage.getItem('promotions'))
-      && JSON.parse(localStorage.getItem('promotions')).id === promotion.rule_id))) ? (
-        <span className="sku-promotion-text">{promotion.text}</span>
+      || (promotion.rule_id !== 'undefined'
+        && drupalSettings.algoliaSearch.promotionNodeId === promotion.rule_id))) ? (
+          <span className="sku-promotion-text">{promotion.text}</span>
       ) : (
         <>
           <ConditionalView condition={isPromotionFrameEnabled()}>
