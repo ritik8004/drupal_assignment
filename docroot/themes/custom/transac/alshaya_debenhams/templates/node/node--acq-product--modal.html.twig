@@ -1,0 +1,9 @@
+{% extends "@alshaya_white_label/node/node--acq-product--modal.html.twig" %}
+
+{% block productBrand %}
+  {% if content.product_brand %}
+    <div class="content--brand">
+      {{ content.product_brand }}
+   </div>
+  {% endif %}
+{% endblock %}

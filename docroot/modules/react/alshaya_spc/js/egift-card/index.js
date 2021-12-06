@@ -38,12 +38,17 @@ export default class RedeemEgiftCard extends React.Component {
 
   // Remove the added egift card.
   handleEgiftCardRemove = () => {
-    // @todo To update code here once API is available.
+    // Reset the state to move back to initial redeem stage.
+    this.setState({
+      codeSent: false,
+      codeValidated: false,
+    });
   }
 
   render = () => {
     // Prepare the props based on the state values.
     const { codeSent, codeValidated, egiftEmail } = this.state;
+    const { cart: cartData } = this.props;
 
     return (
       <div className="redeem-egift-card">
@@ -64,6 +69,7 @@ export default class RedeemEgiftCard extends React.Component {
         <ConditionalView condition={codeValidated}>
           <ValidEgiftCard
             removeCard={this.handleEgiftCardRemove}
+            quoteId={cartData.cart.cart_id_int}
           />
         </ConditionalView>
       </div>

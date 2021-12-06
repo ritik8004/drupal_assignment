@@ -1,5 +1,4 @@
 import React from 'react';
-import ConditionalView from "../../../js/utilities/components/conditional-view";
 
 /**
  * Provides the egift card header.
@@ -34,7 +33,7 @@ export const egiftFormElement = ({
   placeholder = '',
   className = '',
   buttonText = '',
-  changeHandler,
+  value = '',
 }) => {
   // Separate template based on type.
   let rtnTemplate = '';
@@ -52,25 +51,14 @@ export const egiftFormElement = ({
     default:
       rtnTemplate = (
         <div className={`egift-type-${type}`}>
-          <ConditionalView condition={changeHandler}>
-            <input
-              onChange={changeHandler}
-              type={type}
-              name={`egift_${name}`}
-              placeholder={placeholder}
-              className={className}
-            />
-            <div id={`egift_${name}_error`} className="error" />
-          </ConditionalView>
-          <ConditionalView condition={!changeHandler}>
-            <input
-              type={type}
-              name={`egift_${name}`}
-              placeholder={placeholder}
-              className={className}
-            />
-            <div id={`egift_${name}_error`} className="error" />
-          </ConditionalView>
+          <input
+            type={type}
+            name={`egift_${name}`}
+            placeholder={placeholder}
+            className={className}
+            defaultValue={value}
+          />
+          <div id={`egift_${name}_error`} className="error" />
         </div>
       );
   }

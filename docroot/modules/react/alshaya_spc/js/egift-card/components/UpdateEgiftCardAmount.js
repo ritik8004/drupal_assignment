@@ -2,7 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import getCurrencyCode from '../../../../js/utilities/util';
 import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
-import getStringMessage from '../../utilities/strings';
+import getStringMessage from '../../../../js/utilities/strings';
 
 export default class UpdateEgiftCardAmount extends React.Component {
   // Handling validation for the changing the amount of egift card.
@@ -18,6 +18,9 @@ export default class UpdateEgiftCardAmount extends React.Component {
     } else if (egiftAmount.value > (amount + remainingAmount)) {
       document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_insufficient_balance');
       errors = true;
+    } else if (egiftAmount.value <= 0) {
+      document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_valid_amount');
+      errors = true;
     } else {
       document.getElementById('egift_amount_error').innerHTML = '';
     }
@@ -32,8 +35,15 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (!this.handleValidation(e)) {
       // @todo To perform Amount update.
       const { egift_amount: egiftAmount } = e.target.elements;
-      const { updateAmount } = this.props;
-      updateAmount(egiftAmount.value);
+      const { updateAmount, closeModal } = this.props;
+      // Display the message based on update status.
+      const updateStatus = updateAmount(egiftAmount.value);
+      if (updateStatus) {
+        // Close the modal if data updated successfully.
+        closeModal();
+      } else {
+        document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_amount_update_failed');
+      }
     }
 
     return false;
@@ -84,6 +94,7 @@ export default class UpdateEgiftCardAmount extends React.Component {
                   type: 'number',
                   name: 'amount',
                   className: 'amount',
+                  value: amount,
                 })}
                 {egiftFormElement({
                   type: 'submit',

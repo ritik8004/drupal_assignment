@@ -1,5 +1,5 @@
 import React from 'react';
-import getStringMessage from '../../utilities/strings';
+import getStringMessage from '../../../../js/utilities/strings';
 import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
 
 // Validation function.

@@ -276,7 +276,7 @@ export default class Checkout extends React.Component {
       }
       // If there is no product type for the cart item then it's non virtual
       // product.
-      if (!Object.prototype.hasOwnProperty.call(item, 'product_type') || item.product_type !== 'virtual') {
+      if (!item.isEgiftCard) {
         isNonVirtual = true;
       }
     });
@@ -350,7 +350,7 @@ export default class Checkout extends React.Component {
             />
 
             <ConditionalView condition={typeof egiftCard !== 'undefined' && egiftCard.enabled}>
-              <RedeemEgiftCard />
+              <RedeemEgiftCard cart={cart} />
             </ConditionalView>
 
             {billingComponent}
