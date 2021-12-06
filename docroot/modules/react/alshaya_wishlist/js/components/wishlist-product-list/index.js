@@ -4,7 +4,7 @@ import {
   InstantSearch,
 } from 'react-instantsearch-dom';
 import { searchClient } from '../../../../js/utilities/algoliaHelper';
-import LoginMessage from '../login-message';
+import LoginMessage from '../../../../js/utilities/components/login-message';
 import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
 import { getWishListData } from '../../utilities/wishlist-utils';
