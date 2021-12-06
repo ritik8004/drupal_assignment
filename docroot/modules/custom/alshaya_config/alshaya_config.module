@@ -131,8 +131,8 @@ function alshaya_config_modules_installed($modules) {
           try{
             $manager->updateConfigTranslations($translation, $langcode, $module);
           } catch (\Exception $e) {
-            \Drupal::logger($module)->notice('Error while saving config for translation: @override from module @module. Message: @message', [
-              '@override' => $override,
+            \Drupal::logger($module)->notice('Error while saving config for translation: @translation from module @module. Message: @message', [
+              '@translation' => $translation,
               '@module' => $module,
               '@message' => $e->getMessage(),
             ]);
