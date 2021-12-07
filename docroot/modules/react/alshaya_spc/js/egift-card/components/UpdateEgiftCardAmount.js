@@ -7,23 +7,27 @@ import getStringMessage from '../../../../js/utilities/strings';
 export default class UpdateEgiftCardAmount extends React.Component {
   // Handling validation for the changing the amount of egift card.
   handleValidation = (e) => {
-    const { egift_amount: egiftAmount } = e.target.elements;
-    const { amount, remainingAmount } = this.props;
+    const { value: egiftAmount } = e.target.elements.egift_amount;
+    const { amount, remainingAmount, cart } = this.props;
 
     let errors = false;
+    let message = '';
     // Proceed only if user has entered some value.
-    if (egiftAmount.value.length === 0) {
-      document.getElementById('egift_amount_error').innerHTML = getStringMessage('form_egift_amount');
+    if (egiftAmount.length === 0) {
+      message = getStringMessage('form_egift_amount');
       errors = true;
-    } else if (egiftAmount.value > (amount + remainingAmount)) {
-      document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_insufficient_balance');
+    } else if (egiftAmount > (amount + remainingAmount)) {
+      message = getStringMessage('egift_insufficient_balance');
       errors = true;
-    } else if (egiftAmount.value <= 0) {
-      document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_valid_amount');
+    } else if (egiftAmount <= 0) {
+      message = getStringMessage('egift_valid_amount');
       errors = true;
-    } else {
-      document.getElementById('egift_amount_error').innerHTML = '';
+    } else if (egiftAmount > cart.totals.base_grand_total) {
+      message = Drupal.t('Redeem amount should be less than or equal to the cart value.');
+      errors = true;
     }
+
+    document.getElementById('egift_amount_error').innerHTML = message;
 
     return errors;
   }
@@ -35,13 +39,10 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (!this.handleValidation(e)) {
       // @todo To perform Amount update.
       const { egift_amount: egiftAmount } = e.target.elements;
-      const { updateAmount, closeModal } = this.props;
+      const { updateAmount } = this.props;
       // Display the message based on update status.
       const updateStatus = updateAmount(egiftAmount.value);
-      if (updateStatus) {
-        // Close the modal if data updated successfully.
-        closeModal();
-      } else {
+      if (!updateStatus) {
         document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_amount_update_failed');
       }
     }

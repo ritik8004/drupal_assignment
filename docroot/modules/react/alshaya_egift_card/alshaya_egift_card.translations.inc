@@ -207,6 +207,26 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Please enter a valid amount',
         'context' => 'egift',
       ],
+      'Please enter a valid card number.' => [
+        'ar' => 'Please enter a valid card number.',
+        'context' => 'egift',
+      ],
+      'Didn’t receive?' => [
+        'ar' => 'Didn’t receive?',
+        'context' => 'egift',
+      ],
+      'Verification code sent successfully.' => [
+        'ar' => 'Verification code sent successfully.',
+        'context' => 'egift',
+      ],
+      'Redeem amount should be less than or equal to the cart value.' => [
+        'ar' => 'Redeem amount should be less than or equal to the cart value.',
+        'context' => 'egift',
+      ],
+      'Pay @currencyCode @pendingAmount using another payment method to complete purchase' => [
+        'ar' => 'Pay @currencyCode @pendingAmount using another payment method to complete purchase',
+        'context' => 'egift',
+      ],
     ],
   ];
 

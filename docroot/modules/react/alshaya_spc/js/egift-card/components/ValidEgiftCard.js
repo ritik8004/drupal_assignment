@@ -1,13 +1,14 @@
 import React from 'react';
 import getCurrencyCode from '../../../../js/utilities/util';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { egiftCardHeader } from '../../utilities/egift_util';
+import { callEgiftApi, egiftCardHeader } from '../../utilities/egift_util';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
-import { getApiEndpoint } from '../../backend/v2/utility';
-import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import logger from '../../../../js/utilities/logger';
-import dispatchCustomEvent from '../../../../js/utilities/events';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -16,15 +17,80 @@ export default class ValidEgiftCard extends React.Component {
       open: false,
       amount: 0,
       remainingAmount: 0,
+      redeemedFully: false,
+      pendingAmount: 0,
     };
   }
 
   componentDidMount = () => {
-    // @todo get amount and update the state.
-    this.setState({
-      amount: 280,
-      remainingAmount: 220.0,
-    });
+    // Calculate the remaining amount and egift card amount to be used.
+    const {
+      egiftCardNumber,
+      egiftEmail,
+      cart,
+      quoteId,
+    } = this.props;
+
+    let postData = {
+      accountInfo: {
+        cardNumber: egiftCardNumber,
+        email: egiftEmail,
+      },
+    };
+    showFullScreenLoader();
+    // Call balance API to get the current balance of egift card number.
+    const response = callEgiftApi('eGiftGetBalance', 'POST', postData);
+    if (response instanceof Promise) {
+      response.then((result) => {
+        // Remove the loader as response is available.
+        removeFullScreenLoader();
+        if (result.error === undefined && result.data !== undefined && result.status === 200) {
+          // Calculate the remaining amount based on cart value.
+          const currentBalance = result.data.current_balance;
+          const cartTotal = cart.totals.base_grand_total;
+          if (currentBalance < cartTotal) {
+            // Set the flag to display message to pay pending amount using other
+            // payment method.
+            this.setState({
+              redeemedFully: true,
+              pendingAmount: cartTotal - currentBalance,
+            });
+          } else if (currentBalance >= cartTotal) {
+            this.setState({
+              amount: cartTotal,
+              remainingAmount: currentBalance - cartTotal,
+            });
+          }
+
+          const { amount: updateAmount } = this.state;
+          if (updateAmount > 0) {
+            // update the post data object.
+            postData = {
+              redeem_points: {
+                action: 'set_points',
+                quote_id: quoteId,
+                amount: updateAmount,
+                card_number: egiftCardNumber,
+                payment_method: 'hps_payment',
+              },
+            };
+            showFullScreenLoader();
+            // Perform redemption by calling the redemption API.
+            const redemptionResponse = callEgiftApi('eGiftRedemption', 'POST', postData);
+            if (redemptionResponse instanceof Promise) {
+              redemptionResponse.then((res) => {
+                // Remove the loader as response is available.
+                removeFullScreenLoader();
+                if (res.error === undefined && res.data !== undefined && res.state === 200) {
+                  // @todo To handle the summary block update once redemption is done.
+                  window.commerceBackend.refreshCart({});
+                }
+              });
+            }
+          }
+        }
+      });
+    }
   }
 
   openModal = (e) => {
@@ -50,34 +116,26 @@ export default class ValidEgiftCard extends React.Component {
         quote_id: quoteId,
       },
     };
+    let errors = false;
+    showFullScreenLoader();
     // Invoke the redemption API.
-    const endpoint = getApiEndpoint('eGiftRedemption');
-    const response = callMagentoApi(endpoint, 'POST', postData);
+    const response = callEgiftApi('eGiftRedemption', 'POST', postData);
     if (response instanceof Promise) {
       // Handle the error and success message after the egift card is removed
       // from the cart.
-      let messageInfo = null;
       response.then((result) => {
+        removeFullScreenLoader();
         if (result.error !== undefined) {
-          messageInfo = {
-            type: 'error',
-            message: Drupal.t('There was some error while removing the gift card. Please try again', {}, { context: 'egift' }),
-          };
-        } else {
-          messageInfo = {
-            type: 'success',
-            message: result.response_message,
-          };
+          document.getElementById('egift_remove_card_error').innerHTML = Drupal.t('There was some error while removing the gift card. Please try again', {}, { context: 'egift' });
+          errors = true;
         }
         // Trigger the remove method of parent component to move back to the
         // initial redeem stage.
         removeCard();
       });
-      // Trigger message.
-      if (messageInfo !== null) {
-        dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
-      }
     }
+
+    return errors;
   }
 
   // Update the user account with egift card.
@@ -94,33 +152,35 @@ export default class ValidEgiftCard extends React.Component {
   // Update egift amount.
   handleAmountUpdate = (updateAmount) => {
     // Prepare the request object for redeem API.
-    const { quoteId } = this.props;
+    const { quoteId, egiftCardNumber } = this.props;
+
     const postData = {
       redeem_points: {
         action: 'set_points',
         quote_id: quoteId,
         amount: updateAmount,
-        card_number: '4250120656063430',
+        card_number: egiftCardNumber,
         payment_method: 'hps_payment',
       },
     };
     // Proceed only if postData object is available.
     if (postData) {
+      showFullScreenLoader();
       // Invoke the redemption API to update the redeem amount.
-      const endpoint = getApiEndpoint('eGiftRedemption');
-      const response = callMagentoApi(endpoint, 'POST', postData);
+      const response = callEgiftApi('eGiftRedemption', 'POST', postData);
       if (response instanceof Promise) {
-        // Update the amount in state.
         response.then((result) => {
-          if (result.error === undefined && result.data !== undefined) {
+          // Remove loader once result is available.
+          removeFullScreenLoader();
+          if (result.error === undefined && result.status === 200) {
             this.setState({
               amount: updateAmount,
+              open: false,
             });
-          } else if (result.error || result.status !== 200) {
-            return false;
+            return true;
           }
 
-          return true;
+          return false;
         });
       }
     }
@@ -137,28 +197,25 @@ export default class ValidEgiftCard extends React.Component {
 
     const params = { email: drupalSettings.userDetails.userEmailID };
     if (params.email) {
-      const endpoint = getApiEndpoint('eGiftHpsSearch', params);
-      if (endpoint) {
-        // Invoke magento API to check if any egift card is already associated
-        // with the user account.
-        const response = callMagentoApi(endpoint, 'GET');
-        if (response instanceof Promise) {
-          response.then((result) => {
-            if (result.data !== 'undefined'
-              && result.error === 'undefined') {
-              // return false if card number is already linked else true.
-              return !result.data.card_number;
-            }
-            // Handle error response.
-            if (result.error) {
-              logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
-                '@emailId': params.email,
-                '@response': result.data,
-              });
-            }
-            return false;
-          });
-        }
+      // Invoke magento API to check if any egift card is already associated
+      // with the user account.
+      const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params);
+      if (response instanceof Promise) {
+        response.then((result) => {
+          if (result.data !== 'undefined'
+            && result.error === 'undefined') {
+            // return false if card number is already linked else true.
+            return !result.data.card_number;
+          }
+          // Handle error response.
+          if (result.error) {
+            logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
+              '@emailId': params.email,
+              '@response': result.data,
+            });
+          }
+          return false;
+        });
       }
     }
 
@@ -166,7 +223,15 @@ export default class ValidEgiftCard extends React.Component {
   }
 
   render = () => {
-    const { open, amount, remainingAmount } = this.state;
+    const {
+      open,
+      amount,
+      remainingAmount,
+      redeemedFully,
+      pendingAmount,
+    } = this.state;
+
+    const { cart } = this.props;
     const currencyCode = getCurrencyCode();
 
     return (
@@ -189,12 +254,19 @@ export default class ValidEgiftCard extends React.Component {
             amount={amount}
             remainingAmount={remainingAmount}
             updateAmount={this.handleAmountUpdate}
+            cart={cart}
           />
         </ConditionalView>
         <div className="remove-egift-card">
           <button type="button" onClick={this.handleRemoveCard}>{Drupal.t('Remove', {}, { context: 'egift' })}</button>
+          <div id="egift_remove_card_error" className="error" />
         </div>
         <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
+        <ConditionalView condition={redeemedFully}>
+          <div className="full-redeemed">
+            {Drupal.t('Pay @currencyCode @pendingAmount using another payment method to complete purchase', { '@currencyCode': currencyCode, '@pendingAmount': pendingAmount }, { context: 'egift' })}
+          </div>
+        </ConditionalView>
         <ConditionalView condition={this.isCardLinkingApplicable()}>
           <input type="checkbox" id="link-egift-card" onChange={this.handleCardLink} />
           <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
