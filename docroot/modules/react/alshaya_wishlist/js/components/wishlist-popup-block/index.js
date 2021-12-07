@@ -28,9 +28,11 @@ export default class WishlistPopupBlock extends React.Component {
           closeOnEscape={false}
         >
           <div className="wishlist-popup-block">
-            <CheckoutItemImage img_data={cartImage} />
-            <div className="wishlist-question">
-              {Drupal.t('Do you want to move the product to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+            <div className="wishlist-image-container">
+              <CheckoutItemImage img_data={cartImage} />
+              <div className="wishlist-question">
+                {Drupal.t('Do you want to move this item to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+              </div>
             </div>
             <div className="wishlist-options">
               <button
@@ -39,7 +41,7 @@ export default class WishlistPopupBlock extends React.Component {
                 type="button"
                 onClick={() => this.addToWishlist(true)}
               >
-                {Drupal.t('Yes')}
+                {Drupal.t('Yes, move to @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
               </button>
               <button
                 className="wishlist-no"
@@ -47,7 +49,7 @@ export default class WishlistPopupBlock extends React.Component {
                 type="button"
                 onClick={() => this.addToWishlist(false)}
               >
-                {Drupal.t('No')}
+                {Drupal.t('No, remove it')}
               </button>
             </div>
           </div>
