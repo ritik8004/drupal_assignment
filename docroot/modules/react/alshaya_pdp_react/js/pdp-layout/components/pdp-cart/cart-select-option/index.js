@@ -95,7 +95,8 @@ class CartSelectOption extends React.Component {
           }
         }
         // Trigger an event on variant select.
-        const currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', { bubbles: true, detail: { data: parentSkuSelected } });
+        // Only considers variant when url is changed.
+        const currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', { bubbles: true, detail: { data: variantInfo } });
         document.dispatchEvent(currentSelectedVariantEvent);
       }
     }

@@ -11,8 +11,10 @@ function WishlistContainer(props) {
   const {
     context,
     position,
+    skuCode,
     sku,
     format,
+    title,
   } = props;
 
   // Lazy load wishlist button component.
@@ -24,8 +26,10 @@ function WishlistContainer(props) {
         <WishlistLazy
           context={context}
           position={position}
-          sku={sku}
           format={format}
+          skuCode={skuCode}
+          sku={sku}
+          title={title}
         />
       </Suspense>
     </EmptyErrorBoundary>
