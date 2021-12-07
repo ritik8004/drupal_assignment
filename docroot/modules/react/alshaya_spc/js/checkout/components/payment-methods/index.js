@@ -26,6 +26,10 @@ import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import PaymentMethodLinkedCard from "../../../egift-card/components/payment-method-linked-card";
+import {getUserLinkedCardNumber} from '../../../utilities/egift_util';
+import {isUserAuthenticated} from '../../../../../js/utilities/helper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -337,7 +341,7 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
-    const activePaymentMethods = Object.values(this.getPaymentMethods(active))
+    let activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
@@ -368,13 +372,26 @@ export default class PaymentMethods extends React.Component {
     });
 
     const activeClass = active ? 'active' : 'in-active';
-
+    const egiftCardStatus = getUserLinkedCardNumber();
+    console.log(isEgiftCardEnabled(), isUserAuthenticated, egiftCardStatus.card_available);
     return (
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
-        <ConditionalView condition={Object.keys(methods).length > 0}>
-          <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
-          <div className={`payment-methods ${activeClass}`}>{methods}</div>
-        </ConditionalView>
+        <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
+        <ConditionalView condition={ isEgiftCardEnabled() && isUserAuthenticated && egiftCardStatus.card_available }>
+          <PaymentMethodLinkedCard
+            cart={cart}
+            changePaymentMethod={this.changePaymentMethod}
+            isSelected={cart.cart.payment.method === 'checkout_com_egift_linked_card'}
+            animationOffset={0.4}
+            {...(isAuraEnabled()
+              && disablePaymentMethod
+              && { disablePaymentMethod }
+            )}
+          />
+          </ConditionalView>
+          <ConditionalView condition={Object.keys(methods).length > 0}>
+            <div className={`payment-methods ${activeClass}`}>{methods}</div>
+          </ConditionalView>
       </div>
     );
   }

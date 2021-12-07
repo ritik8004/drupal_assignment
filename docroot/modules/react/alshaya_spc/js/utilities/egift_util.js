@@ -130,3 +130,40 @@ export const callEgiftApi = (action, method, postData, param = {}) => {
   const endpoint = getApiEndpoint(action, param);
   return callMagentoApi(endpoint, method, postData);
 };
+
+/*
+ * Provides users card number if it is linked.
+ */
+export const getUserLinkedCardNumber = () => {
+  // Return if user is not authenticated.
+  if (!isUserAuthenticated()) {
+    return { 'card_available': false };
+  }
+
+  const params = { email: drupalSettings.userDetails.userEmailID };
+  if (params.email) {
+    const endpoint = getApiEndpoint('eGiftHpsSearch', params);
+    if (endpoint) {
+      // Invoke magento API to check if any egift card is already associated
+      // with the user account.
+      const response = callMagentoApi(endpoint, 'GET');
+      if (response instanceof Promise) {
+        response.then((result) => {
+          if (result.data !== 'undefined'
+            && result.error === 'undefined') {
+            return { 'card_available': true, 'card_number': result.data.card_number};
+          }
+          // Handle error response.
+          if (result.error) {
+            logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
+              '@emailId': params.email,
+              '@response': result.data,
+            });
+          }
+          return { 'card_available': false };
+        });
+      }
+    }
+  }
+  return { 'card_available': false };
+};

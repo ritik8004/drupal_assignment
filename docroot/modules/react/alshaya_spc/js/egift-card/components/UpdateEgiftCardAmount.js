@@ -39,7 +39,10 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (!this.handleValidation(e)) {
       // @todo To perform Amount update.
       const { egift_amount: egiftAmount } = e.target.elements;
-      const { updateAmount } = this.props;
+      const { updateAmount, cartTotal, handleExceedingAmount } = this.props;
+      if (cartTotal.cart.cart_total > egiftAmount.value){
+        handleExceedingAmount(cartTotal.cart.cart_total - egiftAmount.value);
+      }
       // Display the message based on update status.
       const updateStatus = updateAmount(egiftAmount.value);
       if (!updateStatus) {

@@ -29,13 +29,11 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import PaymentMethodTabby from '../payment-method-tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import PaymentMethodLinkedCard from '../../../egift-card/components/payment-method-linked-card';
-import ValidateEgiftCard from '../../../egift-card/components/ValidEgiftCard';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
-    this.egiftCardhelper = new ValidateEgiftCard();
+
     this.paymentMethodCheckoutCom = React.createRef();
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
@@ -221,7 +219,6 @@ export default class PaymentMethod extends React.Component {
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
           <div className="payment-method-top-panel">
-            <ConditionalView condition={method.code !== 'checkout_com_linked_card'}>
             <input
               id={`payment-method-${method.code}`}
               className={method.code}
@@ -259,17 +256,11 @@ export default class PaymentMethod extends React.Component {
               </ConditionalView>
             </div>
             <PaymentMethodIcon methodName={method.code} methodLabel={method.name} />
-            </ConditionalView>
           </div>
-
-          <ConditionalView condition={method.code === 'checkout_com_linked_card' && drupalSettings.user.uid > 0 && this.egiftCardhelper.isCardLinkingApplicable()}>
-          <PaymentMethodLinkedCard cart={cart} />
-          </ConditionalView>
-
           <ConditionalView condition={isAuraEnabled()
-          && method.code === 'cashondelivery'
-          && disablePaymentMethod === true
-          && !isFullPaymentDoneByAura(cart)}
+            && method.code === 'cashondelivery'
+            && disablePaymentMethod === true
+            && !isFullPaymentDoneByAura(cart)}
           >
             <div className="payment-method-bottom-panel no-payment-description">
               {Drupal.t('Cash on delivery is not available along with the Aura points.')}
