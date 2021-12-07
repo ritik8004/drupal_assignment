@@ -9,7 +9,7 @@ const AuraNotLinkedData = (props) => {
 
   return (
     <div className="block-content registered-user-unlinked-card">
-      <PointsToEarnMessage price={pointsToEarn} loyaltyStatus={loyaltyStatus} wait={wait} />
+      <PointsToEarnMessage pointsToEarn={pointsToEarn} loyaltyStatus={loyaltyStatus} wait={wait} />
       <div className="actions">
         <AuraFormUnlinkedCard cardNumber={cardNumber} />
       </div>
