@@ -186,18 +186,25 @@ export default class Cart extends React.Component {
     // Event listerner to update any change in cart totals.
     document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
 
+    // If aura is enabled, add a listner to update aura customer details.
     if (isAuraEnabled()) {
-      document.addEventListener('customerDetailsFetched', (e) => {
-        this.setState({
-          auraDetails: { ...e.detail.stateValues },
-        });
-      }, false);
+      document.addEventListener('customerDetailsFetched', this.updateAuraDetails, false);
     }
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
+    if (isAuraEnabled()) {
+      document.removeEventListener('customerDetailsFetched', this.updateAuraDetails, false);
+    }
   }
+
+  // Event listener to update aura details.
+  updateAuraDetails = (event) => {
+    this.setState({
+      auraDetails: { ...event.detail.stateValues },
+    });
+  };
 
   // Event listener to update cart totals.
   handleTotalsUpdateEvent = (event) => {
