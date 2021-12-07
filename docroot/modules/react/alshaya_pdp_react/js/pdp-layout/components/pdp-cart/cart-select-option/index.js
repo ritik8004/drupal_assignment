@@ -94,6 +94,9 @@ class CartSelectOption extends React.Component {
             langSwitcherElem[i].setAttribute('href', variantInfo.url[hrefLang]);
           }
         }
+        // Trigger an event on variant select.
+        const currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', { bubbles: true, detail: { data: parentSkuSelected } });
+        document.dispatchEvent(currentSelectedVariantEvent);
       }
     }
 
