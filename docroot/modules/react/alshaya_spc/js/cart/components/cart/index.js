@@ -418,7 +418,7 @@ export default class Cart extends React.Component {
               items={items}
             />
             <ConditionalView condition={isAuraEnabled()}>
-              <AuraCartContainer totals={totals} />
+              <AuraCartContainer totals={totals} items={items} />
             </ConditionalView>
             <OrderSummaryBlock
               totals={totals}

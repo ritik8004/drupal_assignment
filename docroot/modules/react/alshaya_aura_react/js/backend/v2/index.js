@@ -19,6 +19,8 @@ import { formatDate } from '../../utilities/reward_activity_helper';
 import { getPaymentMethodSetOnCart } from '../../../../alshaya_spc/js/backend/v2/checkout.payment';
 import { prepareRedeemPointsData, redeemPoints } from './redemption_helper';
 import { isUnsupportedPaymentMethod } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
+import { getAuraConfig } from '../../utilities/helper';
+import { getPriceToPoint } from '../../utilities/aura_utils';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -684,4 +686,72 @@ window.auraBackend.getRewardActivity = async (fromDate = '', toDate = '', maxRes
   };
 
   return { data: responseData };
+};
+
+/**
+ * Fetches aura points to earn for the current user.
+ *
+ * @returns {Object}
+ *   Return aura points to earn.
+ */
+window.auraBackend.getAuraPointsToEarn = async (items, cardNumber) => {
+  const { isoCurrencyCode } = getAuraConfig();
+
+  if (!hasValue(items)) {
+    logger.warning('Error while trying to get aura points to earn. Product details is required.');
+
+    return getErrorResponse('Product details is required.', 404);
+  }
+
+  // If card number is empty, assuming user is not signed up in Aura so
+  // calculate points to earn using dictionary API ratio.
+  if (!hasValue(cardNumber)) {
+    let totalPrice = 0;
+    Object.entries(items).forEach(([, item]) => {
+      totalPrice += (item.qty * item.price);
+    });
+
+    return {
+      data:
+      {
+        status: true,
+        data: { apc_points: getPriceToPoint(totalPrice) },
+      },
+    };
+  }
+
+  const endpoint = `/V1/apc/${cardNumber}/sales`;
+
+  // Prepare request data.
+  const products = [];
+
+  Object.entries(items).forEach(([, item]) => {
+    const itemDetails = {
+      code: item.sku,
+      quantity: item.qty,
+      amount: item.qty * item.price,
+    };
+    products.push(itemDetails);
+  });
+
+  const requestData = {
+    sales: {
+      currencyCode: isoCurrencyCode,
+      products,
+    },
+  };
+
+  const response = await callMagentoApi(endpoint, 'POST', requestData);
+
+  // Check if API returns error.
+  if (hasValue(response.data.error)) {
+    logger.notice('Error while trying to get aura points to earn. Request Data: @data, Endpoint: @endpoint, Message: @message', {
+      '@data': JSON.stringify(requestData),
+      '@endpoint': endpoint,
+      '@message': response.data.error_message,
+    });
+    return getErrorResponse(response.data.error_message, response.data.error_code);
+  }
+
+  return { data: response };
 };
