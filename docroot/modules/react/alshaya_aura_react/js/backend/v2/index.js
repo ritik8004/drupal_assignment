@@ -112,9 +112,9 @@ window.auraBackend.loyaltyClubSignUp = async (data) => {
     if (response.status === 200) {
       logger.notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', {
         '@data': JSON.stringify(data),
-        '@message': response.data.error_message,
+        '@message': response.data.message,
       });
-      return { data: getErrorResponse(response.data.error_message, response.data.error_code) };
+      return { data: getErrorResponse(response.data.message) };
     }
 
     // This means backend error has occured.
