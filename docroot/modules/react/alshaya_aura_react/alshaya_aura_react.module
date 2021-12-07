@@ -361,6 +361,11 @@ function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
       if ($current_route_name === 'entity.user.canonical') {
         $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
       }
+
+      // Add aura js dependency on cart.
+      if ($current_route_name === 'acq_cart.cart') {
+        $libraries['aura_header_library']['dependencies'][] = 'alshaya_spc/cart';
+      }
     }
   }
 }

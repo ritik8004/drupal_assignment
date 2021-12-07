@@ -56,6 +56,7 @@ export default class Cart extends React.Component {
       message: null,
       cartShippingMethods: null,
       panelContent: null,
+      auraDetails: null,
     };
   }
 
@@ -184,6 +185,14 @@ export default class Cart extends React.Component {
 
     // Event listerner to update any change in cart totals.
     document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', (e) => {
+        this.setState({
+          auraDetails: { ...e.detail.stateValues },
+        });
+      }, false);
+    }
   }
 
   componentWillUnmount() {
@@ -295,6 +304,7 @@ export default class Cart extends React.Component {
       cartShippingMethods,
       panelContent,
       collectionCharge,
+      auraDetails,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -415,7 +425,7 @@ export default class Cart extends React.Component {
               items={items}
             />
             <ConditionalView condition={isAuraEnabled()}>
-              <AuraCartContainer totals={totals} />
+              <AuraCartContainer totals={totals} auraDetails={auraDetails} />
             </ConditionalView>
             <OrderSummaryBlock
               totals={totals}
