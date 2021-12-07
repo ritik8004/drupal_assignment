@@ -1091,10 +1091,6 @@ const productRecommendationsSuffix = 'pr-';
     };
 
     dataLayer.push(data);
-
-    // Trigger Product Details View
-    var quickView = 'yes';
-    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView);
   };
   /**
    * Helper function to push lead events.
