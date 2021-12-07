@@ -1,7 +1,10 @@
 enabled: true
-empty_wishlist_message: ''
+empty_wishlist_message: 'your [alshaya_wishlist:wishlist_label] is empty.'
 # Config for local storage expiration time for guest
 # and logged in users, default 300 sec (5 min).
 local_storage_expiration_guest: 300
 local_storage_expiration_logged_in: 300
 wishlist_label: 'wishlist'
+# Config for removing products from wishlist after it's been
+# added to cart from PDP, PLP, Wishlist or any other pages.
+remove_after_addtocart: true

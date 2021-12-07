@@ -17,3 +17,6 @@ alshaya_wishlist.settings:
     wishlist_label:
       type: text
       label: 'Label used for wishlist feature as per brand requirement.'
+    remove_after_addtocart:
+      type: boolean
+      label: 'Remove product from wishlist after product added to cart.'

@@ -82,6 +82,7 @@ class WishListHelper {
       'emptyWishListMessage' => $this->tokenManager->replace($alshaya_wishlist_config->get('empty_wishlist_message')) ?? '',
       'localStorageExpirationForGuest' => $alshaya_wishlist_config->get('local_storage_expiration_guest'),
       'localStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('local_storage_expiration_logged_in'),
+      'remove_after_addtocart' => $alshaya_wishlist_config->get('remove_after_addtocart'),
     ];
 
     return $config;
