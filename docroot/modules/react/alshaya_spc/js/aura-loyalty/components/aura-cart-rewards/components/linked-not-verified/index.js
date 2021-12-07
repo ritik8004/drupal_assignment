@@ -7,7 +7,7 @@ const AuraLinkedNotVerified = (props) => {
 
   return (
     <div className="block-content registered-user-linked-pending-enrollment">
-      <PointsToEarnMessage price={pointsToEarn} loyaltyStatus={loyaltyStatus} wait={wait} />
+      <PointsToEarnMessage pointsToEarn={pointsToEarn} loyaltyStatus={loyaltyStatus} wait={wait} />
       <div className="actions">
         <PendingEnrollmentMessage />
       </div>
