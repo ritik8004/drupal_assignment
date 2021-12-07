@@ -55,7 +55,6 @@ body {
       text-transform: capitalize;
       padding-top: 0.4375rem;
       font-size: 0.75rem;
-      height: 1.75rem;
 
       &::after,
       &::before {
@@ -65,8 +64,6 @@ body {
   }
 
   li {
-    height: 1.75rem;
-
     @include breakpoint($upto-desktop) {
       height: auto;
       margin-#{$left}: 0;
