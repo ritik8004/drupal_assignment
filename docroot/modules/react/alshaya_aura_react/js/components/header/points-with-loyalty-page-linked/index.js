@@ -13,7 +13,7 @@ const PointsWithLoyaltyPageLinked = (props) => {
     <div className={`aura-header-link ${previewClass}`}>
       <a
         className="user-points"
-        href={Drupal.url(`user/${userId}/loyalty-club`)}
+        href={Drupal.url(`user/loyalty-club?user=${userId}`)}
       >
         <Points points={points} tier={tier} />
       </a>

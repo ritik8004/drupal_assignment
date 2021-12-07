@@ -360,6 +360,11 @@ const getProcessedCartData = async (cartData) => {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
 
+  // If egift card enabled, add the hps_redeemed_amount in cart.
+  if (isEgiftCardEnabled() && hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
+    data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
+  }
+
   if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
     // We use null to show "Excluding Delivery".
     data.totals.shipping_incl_tax = null;
@@ -1079,12 +1084,12 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
 };
 
 /**
- * Gets governates list items.
+ * Gets product shipping methods.
  *
  * @returns {Promise<object>}
  *  returns list of governates.
  */
-window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined) => {
+const getProductShippingMethods = async (currentArea, sku = undefined) => {
   let cartId = null;
   if (sku === undefined) {
     const cartData = window.commerceBackend.getCartDataFromStorage();
@@ -1155,4 +1160,5 @@ export {
   getProductStatus,
   getLocations,
   prepareFilterUrl,
+  getProductShippingMethods,
 };

@@ -29,6 +29,7 @@
         text-transform: capitalize;
         height: 2.75rem;
         padding-top: 0.875rem;
+        font-family: $dh-medium;
 
         &::after {
           content: '';
@@ -42,7 +43,7 @@
 
       &:hover {
         a.menu--one__link {
-          font-family: $dh-medium;
+          font-weight: bold;
 
           &::after {
             background-color: $mm_l1_link_active_border;
