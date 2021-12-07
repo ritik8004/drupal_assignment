@@ -5,7 +5,7 @@ import AddToBagSimple from '../addtobag-simple';
 
 const AddToBag = (props) => {
   const {
-    sku, url, stockQty, productData, isBuyable,
+    sku, url, stockQty, productData, isBuyable, extraInfo,
   } = props;
 
   const skuType = productData.sku_type;
@@ -19,6 +19,7 @@ const AddToBag = (props) => {
           productData={productData}
           url={url}
           isBuyable={isBuyable}
+          extraInfo={extraInfo}
         />
       </ConditionalView>
 
@@ -28,6 +29,7 @@ const AddToBag = (props) => {
           url={url}
           productData={productData}
           isBuyable={isBuyable}
+          extraInfo={extraInfo}
         />
       </ConditionalView>
     </>

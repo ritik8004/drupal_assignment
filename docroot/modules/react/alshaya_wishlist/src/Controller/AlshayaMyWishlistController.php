@@ -139,7 +139,7 @@ class AlshayaMyWishlistController extends ControllerBase {
   public function getWishListTitle() {
     return $this->t('my @wishlist_label', [
       '@wishlist_label' => $this->tokenManager->replace('[alshaya_wishlist:wishlist_label]'),
-    ]);
+    ], ['context' => 'wishlist']);
   }
 
   /**

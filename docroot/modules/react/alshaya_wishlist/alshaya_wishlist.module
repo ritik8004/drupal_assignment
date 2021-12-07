@@ -86,3 +86,18 @@ function alshaya_wishlist_preprocess_page(array &$variables) {
   // Add classes similar to PLP without left sidebar.
   $variables['attributes']['class'][] = 'c-plp c-plp-only l-one--w lhn-without-sidebar';
 }
+
+/**
+ * Implements hook_alshaya_add_to_bag_feature_status_alter().
+ */
+function alshaya_wishlist_alshaya_add_to_bag_feature_status_alter(bool &$add_to_bag_feature_status) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Return if wishlist feature is not enabled or current path
+  // doesn't matche with the wishlist product listing page.
+  if (!$wishlist_helper->isWishListEnabled() || !$wishlist_helper->isWishListPage()) {
+    return;
+  }
+
+  // Mark add to bag feature status true for the my wishlist page.
+  $add_to_bag_feature_status = TRUE;
+}

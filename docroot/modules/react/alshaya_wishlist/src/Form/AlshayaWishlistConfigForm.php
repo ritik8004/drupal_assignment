@@ -53,6 +53,14 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#default_value' => $wishlist_config->get('empty_wishlist_message'),
     ];
 
+    // Add the token tree UI.
+    $form['alshaya_wishlist']['token_tree'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => ['alshaya_wishlist'],
+      '#show_restricted' => TRUE,
+      '#weight' => 90,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 

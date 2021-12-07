@@ -29,8 +29,11 @@ const ProductInfiniteHits = connectInfiniteHits(({
                 hit={hit}
                 gtmContainer={gtmContainer}
                 pageType={pageType}
-                extraInfo={{ isWishlist: true }}
-                showAddToBag
+                extraInfo={{
+                  isWishlistPage: true,
+                  showAddToBag: true,
+                  addToCartButtonText: Drupal.t('Move to basket', {}, { context: 'wishlist' }),
+                }}
               />
             ))
           }

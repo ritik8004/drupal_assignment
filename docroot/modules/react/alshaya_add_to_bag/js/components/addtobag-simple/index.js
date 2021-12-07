@@ -252,7 +252,7 @@ export default class AddToBagSimple extends React.Component {
 
   render() {
     const {
-      sku, isBuyable, url,
+      sku, isBuyable, url, extraInfo,
     } = this.props;
 
     const {
@@ -279,6 +279,12 @@ export default class AddToBagSimple extends React.Component {
       ? getStringMessage('purchase_limit_error_msg')
       : qtyLimitMessage;
 
+    let addToCartText = getStringMessage('add_to_cart');
+    // Check if button text is available in extraInfo.
+    if (typeof extraInfo.addToCartButtonText !== 'undefined') {
+      addToCartText = extraInfo.addToCartButtonText;
+    }
+
     return (
       <div
         className={`addtobag-button-container ${wrapperClasses}`}
@@ -292,7 +298,7 @@ export default class AddToBagSimple extends React.Component {
               type="button"
               onClick={this.onClickHandler}
             >
-              {getStringMessage('add_to_cart')}
+              {addToCartText}
             </button>
           </div>
         </ConditionalView>

@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Path\CurrentPathStack;
+use Drupal\Core\Utility\Token;
 
 /**
  * Helper class for Wishlist.
@@ -38,6 +39,13 @@ class WishListHelper {
   protected $currentPath;
 
   /**
+   * Token manager.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $tokenManager;
+
+  /**
    * WishListHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -46,15 +54,19 @@ class WishListHelper {
    *   The current user object.
    * @param \Drupal\Core\Path\CurrentPathStack $current_path
    *   The current path service.
+   * @param \Drupal\Core\Utility\Token $token_manager
+   *   Token manager.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     AccountProxyInterface $account_proxy,
-    CurrentPathStack $current_path
+    CurrentPathStack $current_path,
+    Token $token_manager
   ) {
     $this->configFactory = $config_factory;
     $this->currentUser = $account_proxy;
     $this->currentPath = $current_path;
+    $this->tokenManager = $token_manager;
   }
 
   /**
@@ -67,7 +79,7 @@ class WishListHelper {
     $alshaya_wishlist_config = $this->configFactory->get('alshaya_wishlist.settings');
 
     $config = [
-      'emptyWishListMessage' => $alshaya_wishlist_config->get('empty_wishlist_message') ?? '',
+      'emptyWishListMessage' => $this->tokenManager->replace($alshaya_wishlist_config->get('empty_wishlist_message')) ?? '',
       'localStorageExpirationForGuest' => $alshaya_wishlist_config->get('local_storage_expiration_guest'),
       'localStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('local_storage_expiration_logged_in'),
     ];

@@ -46,5 +46,9 @@ function _alshaya_wishlist_translations() {
       'ar' => 'هل تريد نقل المنتج إلىwishlist_label؟',
       'context' => 'wishlist',
     ],
+    'Move to basket' => [
+      'ar' => 'انتقل إلى السلة',
+      'context' => 'wishlist',
+    ],
   ];
 }

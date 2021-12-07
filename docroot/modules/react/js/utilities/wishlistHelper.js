@@ -11,6 +11,14 @@ export const isWishlistEnabled = () => {
 };
 
 /**
+ * Helper function to check if isWishlistPage
+ * exists in given object.
+ */
+export const isWishlistPage = (extraInfo) => ((typeof extraInfo !== 'undefined'
+    && typeof extraInfo.isWishlistPage !== 'undefined'
+    && extraInfo.isWishlistPage));
+
+/**
  * Returns the wishlist info local storage expiration time for guest users.
  *
  * @returns integer
