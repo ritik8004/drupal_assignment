@@ -11,7 +11,7 @@ function WishlistContainer(props) {
   const {
     context,
     position,
-    skuMainCode,
+    skuCode,
     sku,
     format,
     title,
@@ -27,7 +27,7 @@ function WishlistContainer(props) {
           context={context}
           position={position}
           format={format}
-          skuMainCode={skuMainCode}
+          skuCode={skuCode}
           sku={sku}
           title={title}
         />

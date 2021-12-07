@@ -311,6 +311,14 @@ export default class CartItem extends React.Component {
                 />
               </div>
             </ConditionalView>
+            <ConditionalView condition={showWishlistPopup}>
+              <WishlistPopupBlock
+                sku={parentSKU}
+                title={title}
+                cartImage={cartImage}
+                closeWishlistModal={() => this.closeWishlistModal()}
+              />
+            </ConditionalView>
           </div>
           <div className="spc-product-tile-actions">
             <button
@@ -323,14 +331,6 @@ export default class CartItem extends React.Component {
             >
               <TrashIconSVG />
             </button>
-            <ConditionalView condition={isWishlistEnabled() && showWishlistPopup}>
-              <WishlistPopupBlock
-                sku={parentSKU}
-                title={title}
-                cartImage={cartImage}
-                closeWishlistModal={() => this.closeWishlistModal()}
-              />
-            </ConditionalView>
             <div className="qty">
               <div className="qty-loader-placeholder" />
               <CartQuantitySelect

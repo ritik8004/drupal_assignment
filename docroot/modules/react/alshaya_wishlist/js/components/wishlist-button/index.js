@@ -14,13 +14,12 @@ class WishlistButton extends React.Component {
     // false: default, if sku doesn't exist in wishlist.
     this.state = {
       addedInWishList: false,
-      sku: props.sku,
-      skuMainCode: props.skuMainCode ? props.skuMainCode : props.sku,
+      skuCode: props.skuCode ? props.skuCode : props.sku,
     };
   }
 
   componentDidMount = () => {
-    const { skuMainCode } = this.state;
+    const { skuCode } = this.state;
     const { context } = this.props;
     // @todo: we need to listen wishlist load event that
     // will trigger from header wishlist component after
@@ -28,7 +27,7 @@ class WishlistButton extends React.Component {
     // for logged in user.
     // Check if product already exist in wishlist, and
     // set the status for the sku.
-    if (isProductExistInWishList(skuMainCode)) {
+    if (isProductExistInWishList(skuCode)) {
       this.updateWishListStatus(true);
     }
 
@@ -61,14 +60,13 @@ class WishlistButton extends React.Component {
     let variants = null;
     const dataObj = {};
     const { productInfo, configurableCombinations } = drupalSettings;
-    const { context } = this.props;
-    const { sku } = this.state;
+    const { context, sku } = this.props;
     let currentSku = sku;
 
     // Get sku base form element from page html.
     const form = document.querySelector('.sku-base-form');
     // Get variant sku from selected variant attribute.
-    const variantSku = context === 'newpdp'
+    const variantSku = context === 'magazinev2'
       ? document.getElementById('pdp-add-to-cart-form-main').getAttribute('variantselected')
       : form.querySelector('[name="selected_variant_sku"]').value;
 
@@ -77,15 +75,17 @@ class WishlistButton extends React.Component {
       const attributes = configurableCombinations[sku].configurables;
       const options = [];
       Object.keys(attributes).forEach((key) => {
-        const option = {
-          option_id: attributes[key].code,
-          option_value: context === 'newpdp'
-            ? document.querySelector(`#pdp-add-to-cart-form-main #${key}`).querySelectorAll('.active')[0].value
-            : form.querySelector(`[data-configurable-code="${key}"]`).value,
-        };
         // Skipping the pseudo attributes.
         if (drupalSettings.psudo_attribute === undefined
           || drupalSettings.psudo_attribute !== attributes[key].attribute_id) {
+          // Getting active option value from html selector.
+          // Html selectors are different for magazine v2 and old pdp.
+          const option = {
+            option_id: attributes[key].code,
+            option_value: context === 'magazinev2'
+              ? document.querySelector(`#pdp-add-to-cart-form-main #${key}`).querySelectorAll('.active')[0].value
+              : form.querySelector(`[data-configurable-code="${key}"]`).value,
+          };
           options.push(option);
         }
       });
@@ -110,7 +110,7 @@ class WishlistButton extends React.Component {
    */
   getProductTitle = (currentSku, variantSku, variants) => {
     const { productInfo } = drupalSettings;
-    const { sku } = this.state;
+    const { sku } = this.props;
     if (productInfo[currentSku]) {
       return productInfo[currentSku].cart_title;
     } if (productInfo[sku] && variants !== null) {
@@ -123,23 +123,23 @@ class WishlistButton extends React.Component {
    * Add or remove product from the wishlist.
    */
   toggleWishlist = () => {
-    const { addedInWishList, skuMainCode } = this.state;
+    const { addedInWishList, skuCode } = this.state;
     const { title, context } = this.props;
     let productData = {};
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
-      removeProductFromWishList(skuMainCode, this.updateWishListStatus);
+      removeProductFromWishList(skuCode, this.updateWishListStatus);
       return;
     }
-    if (context === 'pdp' || context === 'newpdp') {
+    if (context === 'pdp' || context === 'magazinev2') {
       productData = this.processProductData();
     } else {
       productData = {
-        sku: skuMainCode,
+        sku: skuCode,
         title,
       };
     }
-    if (productData && Object.keys(productData).length !== 0) {
+    if (Object.keys(productData).length !== 0) {
       addProductToWishList(productData, this.updateWishListStatus);
     }
   }
@@ -152,7 +152,7 @@ class WishlistButton extends React.Component {
       const variantInfo = e.detail.data;
       const variantSku = variantInfo.parent_sku ? variantInfo.parent_sku : variantInfo.sku;
       this.setState({
-        skuMainCode: variantSku,
+        skuCode: variantSku,
       });
       this.updateWishListStatus(isProductExistInWishList(variantSku));
     }
