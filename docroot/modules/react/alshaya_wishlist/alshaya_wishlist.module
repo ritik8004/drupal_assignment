@@ -93,3 +93,10 @@ function alshaya_wishlist_preprocess_page(array &$variables) {
   // Add classes similar to PLP without left sidebar.
   $variables['attributes']['class'][] = 'c-plp c-plp-only l-one--w lhn-without-sidebar';
 }
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_wishlist_preprocess_html(&$variables) {
+  $variables['attributes']['class'][] = 'wishlist-enabled';
+}
