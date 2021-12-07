@@ -86,8 +86,8 @@
       a,
       span {
         margin-top: 0.75rem;
-        width: 2.375rem;
-        border-radius: 50%;
+        min-width: 2.375rem;
+        border-radius: 1.375rem;
         padding-bottom: 0.625rem;
 
         &.picked {
