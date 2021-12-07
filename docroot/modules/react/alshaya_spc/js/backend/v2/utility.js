@@ -139,16 +139,6 @@ const getApiEndpoint = (action, params = {}) => {
         : `/V1/guest-carts/${params.cartId}/tabby-available-products`;
       break;
 
-    case 'eGiftHpsSearch':
-      endpoint = isUserAuthenticated()
-        ? `/V1/egiftcard/hps-search/email/${params.email}`
-        : '';
-      break;
-
-    case 'eGiftRedemption':
-      endpoint = '/V1/egiftcard/transact';
-      break;
-
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,

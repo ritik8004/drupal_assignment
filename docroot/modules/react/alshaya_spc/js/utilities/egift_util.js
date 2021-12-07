@@ -1,6 +1,6 @@
 import React from 'react';
-import { isUserAuthenticated } from '../../../js/utilities/helper';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
+import logger from '../../../js/utilities/logger';
 
 /**
  * Provides the egift card header.
@@ -90,6 +90,18 @@ export const getApiEndpoint = (action, params = {}) => {
       endpoint = `/V1/verifyemailotp/email/${params.email}/otp/${params.otp}`;
       break;
 
+    case 'eGiftGetBalance':
+      endpoint = '/V1/egiftcard/getBalance';
+      break;
+
+    case 'eGiftRedemption':
+      endpoint = '/V1/egiftcard/transact';
+      break;
+
+    case 'eGiftHpsSearch':
+      endpoint = `/V1/egiftcard/hps-search/email/${params.email}`;
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
@@ -106,13 +118,15 @@ export const getApiEndpoint = (action, params = {}) => {
  *   Callname for the API.
  * @param {string} method
  *   The request method.
- * @param {object} data
- *   The object containing API data.
+ * @param {object} postData
+ *   The object containing post data
+ * @param {object} param
+ *   The object containing param info.
  *
  * @returns {object}
  *   The response object.
  */
-export const callEgiftApi = (action, method, data = {}) => {
-  const endpoint = getApiEndpoint(action, data);
-  return callMagentoApi(endpoint, method);
-}
+export const callEgiftApi = (action, method, postData, param = {}) => {
+  const endpoint = getApiEndpoint(action, param);
+  return callMagentoApi(endpoint, method, postData);
+};
