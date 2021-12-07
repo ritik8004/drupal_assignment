@@ -24,6 +24,7 @@ import PpdRatingsReviews from '../pdp-ratings-reviews';
 import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import PdpExpressDelivery from '../pdp-express-delivery';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -271,6 +272,13 @@ const PdpLayout = () => {
               />
             ) : outOfStock}
           </div>
+          <WishlistContainer
+            sku={skuItemCode}
+            skuCode={skuMainCode}
+            context="magazinev2"
+            position="top-right"
+            format="icon"
+          />
           <PdpDescription
             skuCode={skuMainCode}
             pdpDescription={description}

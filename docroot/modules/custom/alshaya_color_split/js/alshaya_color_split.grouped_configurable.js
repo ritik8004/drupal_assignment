@@ -56,7 +56,7 @@
 
             // Trigger an event on variant select.
             // Only considers variant when url is changed.
-            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: variantInfo.parent_sku }});
+            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: variantInfo }});
             document.dispatchEvent(currentSelectedVariantEvent);
           }
 

@@ -25,7 +25,9 @@ export default class DeliveryOptions extends React.Component {
 
   updateShippingOnVariantSelect = (e) => {
     if (e.detail && e.detail.data !== '') {
-      this.fetchShippingMethods(e.detail.data);
+      const variantInfo = e.detail.data;
+      const sku = variantInfo.parent_sku !== undefined ? variantInfo.parent_sku : variantInfo.sku;
+      this.fetchShippingMethods(sku);
     }
   }
 
@@ -54,15 +56,17 @@ export default class DeliveryOptions extends React.Component {
     const currentArea = getDeliveryAreaStorage();
     const attr = document.getElementsByClassName('sku-base-form');
     const productSku = variantSelected !== undefined ? variantSelected : attr[0].getAttribute('data-sku');
-    showFullScreenLoader();
-    getCartShippingMethods(currentArea, productSku).then(
-      (response) => {
-        if (response !== null) {
-          this.checkShippingMethods(response, productSku);
-        }
-        removeFullScreenLoader();
-      },
-    );
+    if (productSku && productSku !== null) {
+      showFullScreenLoader();
+      getCartShippingMethods(currentArea, productSku).then(
+        (response) => {
+          if (response && response !== null) {
+            this.checkShippingMethods(response, productSku);
+          }
+          removeFullScreenLoader();
+        },
+      );
+    }
   }
 
   getPanelData = (data) => {

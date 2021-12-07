@@ -1,6 +1,6 @@
 import React from 'react';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
-import { getWishlistLabel, isAnonymousUser } from '../../../utilities/wishlist-utils';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { getWishlistLabel, isAnonymousUser } from '../../utilities/wishlist-utils';
 
 const WishlistNotification = ({
   wishListItemData,
@@ -11,9 +11,8 @@ const WishlistNotification = ({
   return (
     <div className="wishlist-notification notification">
       <div className="product-name">
-        <a href={`${wishListItemData.url}`} className="product-title">
-          {Drupal.t('@productName saved to your @wishlist_label on this visit', { '@productName': wishListItemData.title, '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
-        </a>
+        <span>{Drupal.t('@productName', { '@productName': wishListItemData.title }, { context: 'wishlist' })}</span>
+        <span>{Drupal.t('saved to your @wishlist_label on this visit', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
       </div>
       <ConditionalView condition={isAnonymousUser()}>
         <div className="wishlist-query">
@@ -24,8 +23,8 @@ const WishlistNotification = ({
             {Drupal.t('Sign in to your account or register a new one.', {}, { context: 'wishlist' })}
           </div>
           <div className="actions">
-            <a href="/user/login">{Drupal.t('Sign in', {}, { context: 'wishlist' })}</a>
-            <a href="/user/register">{Drupal.t('Register', {}, { context: 'wishlist' })}</a>
+            <a href="/user/login" className="sign-in">{Drupal.t('Sign in', {}, { context: 'wishlist' })}</a>
+            <a href="/user/register" className="register">{Drupal.t('Register', {}, { context: 'wishlist' })}</a>
           </div>
         </div>
       </ConditionalView>
