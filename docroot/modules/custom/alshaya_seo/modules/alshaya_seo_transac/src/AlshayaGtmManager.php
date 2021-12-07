@@ -67,6 +67,7 @@ class AlshayaGtmManager {
     'entity.node.canonical:advanced_page' => 'advanced page',
     'entity.node.canonical:department_page' => 'department page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
+    'entity.node.canonical:rcs_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
     'system.404' => 'page not found',
