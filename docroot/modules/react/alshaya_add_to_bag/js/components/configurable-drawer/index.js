@@ -13,6 +13,9 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import Lozenges
   from '../../../../alshaya_algolia_react/js/common/components/lozenges';
 import getStringMessage from '../../../../js/utilities/strings';
+import { isWishlistPage } from '../../../../js/utilities/wishlistHelper';
+import LoginMessage from '../../../../js/utilities/components/login-message';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 class ConfigurableProductDrawer extends React.Component {
   constructor(props) {
@@ -91,6 +94,9 @@ class ConfigurableProductDrawer extends React.Component {
         onDrawerClose={onDrawerClose}
       >
         <div className="configurable-product-form-wrapper">
+          <ConditionalView condition={isWishlistPage(extraInfo) && !isUserAuthenticated()}>
+            <LoginMessage />
+          </ConditionalView>
           <div className="gallery-wrapper">
             <Slider
               dots
