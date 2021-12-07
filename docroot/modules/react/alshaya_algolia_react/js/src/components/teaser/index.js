@@ -173,6 +173,13 @@ const Teaser = ({
                 </ul>
               </div>
               )}
+            <ConditionalView condition={attribute.attr_brand_name !== undefined}>
+              <h2 className="listing-brand-name">
+                <div>
+                  {attribute.attr_brand_name}
+                </div>
+              </h2>
+            </ConditionalView>
             <h2 className="field--name-name">
               <a href={attribute.url} className="product-selected-url">
                 <div className="aa-suggestion">

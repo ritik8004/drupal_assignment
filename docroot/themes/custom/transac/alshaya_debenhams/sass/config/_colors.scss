@@ -18,7 +18,7 @@ $green: #00ac8d;
 $primary_text: $charcoal;
 $primary_link: $black;
 $content_pagetitle: $charcoal;
-$content_pagetitle_border: $grey;
+$content_pagetitle_border: $pale-grey;
 $primary_link-hover: $mid-grey;
 $primary_link-active: $black;
 $primary_border: $pale-grey;
@@ -134,15 +134,9 @@ $algolia-react-sidebar-label-color: $charcoal;
 $algolia-suggestion-text: $mid-grey;
 $algolia-auto-suggest-border: $pale-grey;
 $algolia-react-progressbar-text: $charcoal;
-$algolia-react-progressbar: $mid-grey;
+$algolia-react-progressbar: $pale-grey;
 $algolia_react-facet-item-color: $charcoal;
 $algolia_sticky-header-shadow: $pale-grey;
-
-// PLP Product tile.
-$plp_tile_product_title: $charcoal;
-$plp_tile_product_title_hover: $charcoal;
-$plp_tile_product_special_price: $sale-red;
-$plp_tite_product_promo_text: $sale-red;
 
 // Contact Page
 $webform_contact_legend: $charcoal;
@@ -223,12 +217,6 @@ $mm_highlight_title: $charcoal;
 $mm_highlight_description: $charcoal;
 $mm_l3_link_hover: $charcoal;
 
-// PLP LHN block.
-$lhn_l2: $charcoal;
-$lhn_l3: $mid-grey;
-$lhn_l4: $mid-grey;
-$lhn_sticky-header-shadow: $pale-grey;
-
 // Product detail page.
 $pdp_product_special_price_text: $sale-red;
 $pdp_product_discount_price: $sale-red;
@@ -251,7 +239,7 @@ $free-gifts-modal-product-item-code: $spanish-grey;
 $pdp_product_itemcode: $spanish-grey;
 $pdp_size_selected_text: $charcoal;
 $pdp_size_option_border: $grey;
-$pdp_size_selected_border: $mid-grey;
+$pdp_size_selected_border: $spanish-grey;
 $pdp_size_option_hover_bg: $light-grey;
 $pdp_cc_storefinder_input: $charcoal;
 $pdp_cc_btn_text: $charcoal;
@@ -259,6 +247,7 @@ $pdp_desc_wrapper_border: $charcoal;
 $pdp_desc_wrapper_close_bg: $charcoal;
 $pdp_sizeguide_link: $charcoal;
 $pdp_product_special_price: $sale-red;
+$pdp_white_color_attribute_border: $spanish-grey;
 
 // SPC
 $spc-cart-background: $anti-flash-white;
@@ -300,3 +289,47 @@ $my_account_nav: $charcoal;
 $my_account_nav_active: $black;
 $my_account_nav_hover: $black;
 $user_form_layout_divider_color: $grey;
+
+// VAT text
+$vat: $spanish-grey;
+$vat_dark: $pale-grey;
+
+// Product listing page and search page.
+$plp_filter_active_tick: $charcoal;
+$plp_facet_clear_text: $charcoal;
+$plp_selected_filter_label_text: $black;
+$plp_facet_filter_bg: $medium-sky-blue;
+$plp_facet_filter_link: $charcoal;
+$plp_facet_summary_filter_icon: $charcoal;
+$plp_all_filter_filter_arrow: $charcoal;
+$plp_filter_icon: $charcoal;
+$plp_filter_selected_text: $charcoal;
+$plp_clear_all_text_disabled: $mid-grey;
+$plp_search_count: $mid-grey;
+$plp_clear_all_btn_border: $medium-sky-blue;
+
+// PLP Product tile.
+$plp_tile_product_title: $charcoal;
+$plp_tile_product_title_hover: $charcoal;
+$plp_tile_product_special_price: $sale-red;
+$plp_tite_product_promo_text: $sale-red;
+$plp_tile_product_text: $charcoal;
+
+// PLP Filter bar.
+$plp_filterbar_clearall_border: $medium-sky-blue;
+$plp_filterbar_clearall_text: $charcoal;
+$plp_grid_active_color: $charcoal;
+
+// PLP All filter colors
+$plp_all_filter_title: $page_title;
+$plp_clear_all_btn_disabled: $mid-grey;
+$plp_clear_all_btn_text: $charcoal;
+$plp_all_filter_button_color: $primary_btn_bg;
+$plp_all_filter_close_btn: $charcoal;
+$plp_mobile_separator: $pale-grey;
+
+// PLP LHN block.
+$lhn_l2: $black;
+$lhn_l3: $black;
+$lhn_l4: $black;
+$lhn_sticky-header-shadow: $pale-grey;

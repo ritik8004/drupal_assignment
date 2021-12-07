@@ -364,3 +364,17 @@ function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_acm_customer_update_order_summary_alter().
+ */
+function alshaya_aura_react_alshaya_acm_customer_update_order_summary_alter(array &$order, array &$orderRow) {
+  // Do not proceed if AURA is not enabled.
+  $orderRow['auraEnabled'] = \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled();
+  if (!$orderRow['auraEnabled']) {
+    return;
+  }
+
+  $orderRow['apcAccruedPoints'] = $order['extension']['apc_accrued_points'] ?? '';
+  $orderRow['apcRedeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? '';
+}
