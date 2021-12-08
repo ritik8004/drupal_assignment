@@ -2,7 +2,9 @@
 .nodetype--store {
   .store-finder--wrapper {
     @include breakpoint($desktop) {
-      width: 51.7%;
+      html[lang=ar] & {
+        width: 51.7%;
+      }
     }
 
     html[lang=ar] & {
