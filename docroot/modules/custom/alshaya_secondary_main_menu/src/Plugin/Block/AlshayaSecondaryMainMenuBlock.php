@@ -141,17 +141,18 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
    */
   public function getColumnDataMenuAlgo($menu) {
     $columns_tree = [];
+    $language = $this->languageManager->getCurrentLanguage()->getId();
+    $default_lang = $this->languageManager->getDefaultLanguage()->getId();
     foreach ($menu['#items'] as $l2s) {
       if ($l2s['original_link'] instanceof MenuLinkContent) {
         $uuid = $l2s['original_link']->getDerivativeId();
         $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
         $l2s['highlight_paragraph'] = $entity->get('field_secondary_menu_highlight')->getValue();
-        $language = $this->languageManager->getCurrentLanguage()->getId();
-        $default_lang = $this->languageManager->getDefaultLanguage()->getId();
         foreach ($l2s['highlight_paragraph'] as $tr) {
           $paragraph = Paragraph::load($tr['target_id']);
-          $language = ($paragraph->hasTranslation($language)) ? $language : $default_lang;
-          $paragraph = $paragraph->getTranslation($language);
+          if ($language != $default_lang && !($paragraph->hasTranslation($language))) {
+            $paragraph = $paragraph->getTranslation($default_lang);
+          }
           $l2s['highlight_paragraph']['paragraph_type'] = $paragraph->getParagraphType()->id();
           $l2s['highlight_paragraph']['img'] = $paragraph->field_highlight_image->getValue();
           $l2s['highlight_paragraph']['imageUrl'] = $paragraph->get('field_highlight_image')->entity->uri->value;
