@@ -68,7 +68,7 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $wishlist_settings->getCacheTags());
 
   // Do not proceed if wishlist is not enabled.
-  if ($settings['enabled'] !== TRUE) {
+  if (!$settings['enabled']) {
     return;
   }
 

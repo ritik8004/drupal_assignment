@@ -2,7 +2,6 @@
   background: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty.svg') no-repeat;
   width: 1.875rem;
   height: 1.875rem;
-  cursor: pointer;
 
   @include breakpoint($desktop) {
     width: 2.4375rem;
@@ -16,7 +15,12 @@
   }
 }
 
-.in-wishlist {
+.wishlist-button-wrapper {
+  cursor: pointer;
+}
+
+.in-wishlist,
+.wishlist-link.wishlist-active {
   .wishlist-icon {
     background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
   }
