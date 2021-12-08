@@ -169,32 +169,3 @@ export const getUserLinkedCardNumber = () => {
   }
   return { 'card_available': false };
 };
-
-export const redeemAmount = (cart, amount, egiftCardNumber) => {
-  const postData = {
-    redeem_points: {
-      action: 'set_points',
-      quote_id: cart.cart_id_int,
-      amount: amount,
-      card_number: egiftCardNumber,
-      payment_method: 'hps_payment',
-    },
-  };
-  // Proceed only if postData object is available.
-  if (postData) {
-    showFullScreenLoader();
-    // Invoke the redemption API to update the redeem amount.
-    const response = callEgiftApi('eGiftRedemption', 'POST', postData);
-    if (response instanceof Promise) {
-      response.then((result) => {
-        // Remove loader once result is available.
-        removeFullScreenLoader();
-        if (result.error === undefined && result.status === 200) {
-          return true;
-        }
-        return false;
-      });
-    }
-  }
-  return false;
-};
