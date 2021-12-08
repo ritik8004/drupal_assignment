@@ -379,12 +379,6 @@
       text-decoration: none;
     }
   }
-
-  .read-more-description-link-mobile:not(.matchback-readmore) {
-    @include breakpoint($tablet) {
-      display: block !important;
-    }
-  }
 }
 
 // Layout of the detail page
