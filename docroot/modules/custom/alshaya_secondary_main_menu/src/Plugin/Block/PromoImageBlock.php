@@ -101,6 +101,8 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
     ];
     $tree = $this->menuTree->transform($tree, $manipulators);
     $promo_menu = $this->menuTree->build($tree);
+    $language = $this->languageManager->getCurrentLanguage()->getId();
+    $default_lang = $this->languageManager->getDefaultLanguage()->getId();
     // If no data, no need to render the block.
     if (empty($promo_menu['#items'])) {
       return [];
@@ -110,12 +112,11 @@ class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterfa
         $uuid = $item['original_link']->getDerivativeId();
         $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
         $item['promo_paragraph'] = $entity->get('field_promo_images')->getValue();
-        $language = $this->languageManager->getCurrentLanguage()->getId();
-        $default_lang = $this->languageManager->getDefaultLanguage()->getId();
         foreach ($item['promo_paragraph'] as $tr) {
           $paragraph = Paragraph::load($tr['target_id']);
-          $language = ($paragraph->hasTranslation($language)) ? $language : $default_lang;
-          $paragraph = $paragraph->getTranslation($language);
+          if ($language != $default_lang && !($paragraph->hasTranslation($language))) {
+            $paragraph = $paragraph->getTranslation($default_lang);
+          }
           $link_to_image = $paragraph->field_link_to_image->getValue();
           $img_title = $paragraph->get('field_image_title')->value;
           $promo_menu['#items']['promo_buttons'][] =
