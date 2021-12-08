@@ -46,6 +46,8 @@ export default class ValidEgiftCard extends React.Component {
         removeFullScreenLoader();
         if (result.error === undefined && result.data !== undefined && result.status === 200) {
           // Calculate the remaining amount based on cart value.
+          // @todo For remaining balance we will use some key from cart only and
+          // no calculation on FE;
           const currentBalance = result.data.current_balance;
           const cartTotal = cart.totals.base_grand_total;
           if (currentBalance < cartTotal) {
