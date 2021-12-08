@@ -3,11 +3,13 @@ import PointsToEarnMessage from '../../../utilities/points-to-earn';
 import AuraFormUnlinkedCard from '../../../aura-forms/aura-unlinked-card';
 
 const AuraNotLinkedData = (props) => {
-  const { price, cardNumber, loyaltyStatus } = props;
+  const {
+    pointsToEarn, cardNumber, loyaltyStatus, wait,
+  } = props;
 
   return (
     <div className="block-content registered-user-unlinked-card">
-      <PointsToEarnMessage price={price} loyaltyStatus={loyaltyStatus} />
+      <PointsToEarnMessage pointsToEarn={pointsToEarn} loyaltyStatus={loyaltyStatus} wait={wait} />
       <div className="actions">
         <AuraFormUnlinkedCard cardNumber={cardNumber} />
       </div>
