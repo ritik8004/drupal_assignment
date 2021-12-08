@@ -163,6 +163,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Recipient Details',
         'context' => 'egift',
       ],
+      'My Details' => [
+        'ar' => 'My Details',
+        'context' => 'egift',
+      ],
       'Name*' => [
         'ar' => 'Name*',
         'context' => 'egift',
