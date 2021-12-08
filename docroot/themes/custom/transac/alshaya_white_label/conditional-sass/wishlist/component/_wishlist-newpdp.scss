@@ -15,6 +15,14 @@ body.wishlist-enabled {
           .wishlist-icon {
             color: $wishlist-newpdp-button;
           }
+
+          &:hover {
+            background: transparent;
+          }
+        }
+
+        &:hover {
+          background: $plp-secondary-cta-hover-bg;
         }
       }
 
