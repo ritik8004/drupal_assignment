@@ -453,13 +453,12 @@ const getProcessedCartData = async (cartData) => {
           data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
         }
         // Extension attributes information for eGift products.
-        if (typeof item.extension_attributes.is_egift !== 'undefined' && item.extension_attributes.is_egift) {
+        if (isEgiftCardEnabled() && typeof item.extension_attributes.is_egift !== 'undefined' && item.extension_attributes.is_egift) {
           if (typeof item.extension_attributes.egift_options !== 'undefined') {
             data.items[item.sku].egiftOptions = item.extension_attributes.egift_options;
           }
           if (typeof item.extension_attributes.product_media !== 'undefined') {
-            // eslint-disable-next-line prefer-destructuring
-            data.items[item.sku].media = item.extension_attributes.product_media[0];
+            data.items[item.sku].media = item.extension_attributes.product_media[0].file;
           }
         }
       }

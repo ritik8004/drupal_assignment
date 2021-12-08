@@ -94,7 +94,7 @@ export default class CartVirtualItem extends React.Component {
     } = this.props;
     // Egift card product image.
     const cartImage = {
-      url: (typeof media.file !== 'undefined') ? media.file : undefined,
+      url: (media.length > 0) ? media : undefined,
       alt: title,
       title,
     };
