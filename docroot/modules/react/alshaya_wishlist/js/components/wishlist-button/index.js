@@ -165,7 +165,7 @@ class WishlistButton extends React.Component {
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
-    const wishListButtonClass = addedInWishList ? `${classPrefix} in-wishlist` : classPrefix;
+    const wishListButtonClass = addedInWishList ? 'in-wishlist wishlist-button-wrapper' : 'wishlist-button-wrapper';
     const buttonText = addedInWishList ? 'Remove' : 'Add to wishlist';
 
     return (
@@ -173,7 +173,9 @@ class WishlistButton extends React.Component {
         className={wishListButtonClass}
         onClick={() => this.toggleWishlist()}
       >
-        {Drupal.t(buttonText, {}, { context: 'wishlist' })}
+        <div className={classPrefix}>
+          {Drupal.t(buttonText, {}, { context: 'wishlist' })}
+        </div>
       </div>
     );
   }

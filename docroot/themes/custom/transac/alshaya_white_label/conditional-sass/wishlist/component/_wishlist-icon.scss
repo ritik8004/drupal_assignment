@@ -9,13 +9,15 @@
     height: 2.4375rem;
   }
 
-  &.in-wishlist {
-    background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
-  }
-
   @include breakpoint($desktop) {
     &:hover {
       background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
     }
+  }
+}
+
+.in-wishlist {
+  .wishlist-icon {
+    background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled.svg');
   }
 }
