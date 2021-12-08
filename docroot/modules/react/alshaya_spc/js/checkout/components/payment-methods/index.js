@@ -26,6 +26,7 @@ import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -108,6 +109,14 @@ export default class PaymentMethods extends React.Component {
 
     if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
       return false;
+    }
+    // Enable only selected payment methods when egift is enabled.
+    if (isEgiftCardEnabled()) {
+      if (cart.cart.payment.method in drupalSettings.egiftCard.notSupportedPaymentMethods) {
+        return false;
+      } else {
+        return true;
+      }
     }
 
     // We disable the other payment methods when full payment is done by aura points

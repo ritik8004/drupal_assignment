@@ -264,26 +264,6 @@ export default class Checkout extends React.Component {
     this.setState({ cart: cartData });
   };
 
-  // Checks if cart has only egift card products or other products as well.
-  isCartHasOnlyEgiftCard = () => {
-    const { cart: cartData } = this.state;
-    // A flag to keep track of the non-virtual products.
-    let isNonVirtual = false;
-    Object.values(cartData.cart.items).forEach((item) => {
-      // Return if we have already marked a non virtual product.
-      if (isNonVirtual) {
-        return;
-      }
-      // If there is no product type for the cart item then it's non virtual
-      // product.
-      if (!item.isEgiftCard) {
-        isNonVirtual = true;
-      }
-    });
-
-    return isNonVirtual;
-  }
-
   render() {
     const {
       wait,
@@ -331,7 +311,7 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
-            <ConditionalView condition={this.isCartHasOnlyEgiftCard()}>
+            <ConditionalView condition={isCartHasOnlyEgiftCard(cart.cart)}>
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
                 <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />

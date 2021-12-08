@@ -1,6 +1,7 @@
 import React from 'react';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
 import logger from '../../../js/utilities/logger';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Provides the egift card header.
@@ -130,3 +131,31 @@ export const callEgiftApi = (action, method, postData, param = {}) => {
   const endpoint = getApiEndpoint(action, param);
   return callMagentoApi(endpoint, method, postData);
 };
+
+/**
+ * Checks if cart has only egift card products or other products as well.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @return {boolean}
+ *   true if it's contains non virtual product else false.
+ */
+export const isCartHasOnlyEgiftCard = (cart) => {
+  // A flag to keep track of the non-virtual products.
+  let isNonVirtual = false;
+  Object.values(cart.items).forEach((item) => {
+    // Return if we have already marked a non virtual product.
+    if (isNonVirtual) {
+      return;
+    }
+    // If there is no product type for the cart item then it's non virtual
+    // product.
+    if ((hasValue(item.product_type) && item.product_type !== 'virtual')
+      || (hasValue(item.isEgiftCard) && !item.isEgiftCard && hasValue(item.product_type))) {
+      isNonVirtual = true;
+    }
+  });
+
+  return isNonVirtual;
+}
