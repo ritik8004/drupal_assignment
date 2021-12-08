@@ -152,7 +152,7 @@ export default class ValidEgiftCard extends React.Component {
   }
 
   // Update egift amount.
-  handleAmountUpdate = (cart, updateAmount, egiftCardNumber, redeemAmount, amount, handleExceedingAmount) => {
+  handleAmountUpdate = (cart, updateAmount, egiftCardNumber, redeemAmount, cardBalance, handleExceedingAmount) => {
     // Prepare the request object for redeem API.
     const postData = {
       redeem_points: {
@@ -184,8 +184,8 @@ export default class ValidEgiftCard extends React.Component {
             if (cart.cart_total > updateAmount) {
               handleExceedingAmount(true, cart.cart_total - updateAmount, false);
             }
-            if (amount > cart.cart_total && updateAmount <= cart.cart_total) {
-              redeemAmount(true, amount - updateAmount, false);
+            if (cardBalance > cart.cart_total && updateAmount <= cart.cart_total) {
+              redeemAmount(true, cardBalance - updateAmount, false);
             }
             return true;
           }
