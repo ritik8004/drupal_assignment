@@ -3,6 +3,7 @@ import {
   isProductExistInWishList,
   addProductToWishList,
   removeProductFromWishList,
+  getWishlistLabel,
 } from '../../utilities/wishlist-utils';
 
 class WishlistButton extends React.Component {
@@ -166,7 +167,19 @@ class WishlistButton extends React.Component {
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
     const wishListButtonClass = addedInWishList ? 'in-wishlist wishlist-button-wrapper' : 'wishlist-button-wrapper';
-    const buttonText = addedInWishList ? 'Remove' : 'Add to wishlist';
+
+    // Wishlist text for my-wishlist page.
+    let buttonText = addedInWishList ? 'Remove' : 'Add to @wishlist_label';
+
+    // Wishlist text for PDP layouts.
+    if (context === 'pdp' || context === 'magazinev2') {
+      buttonText = addedInWishList ? 'Added to @wishlist_label' : 'Add to @wishlist_label';
+    }
+
+    // Wishlist text for Basket page.
+    if (context === 'cart') {
+      buttonText = addedInWishList ? 'Remove from @wishlist_label' : 'Move to @wishlist_label';
+    }
 
     return (
       <div
@@ -174,7 +187,7 @@ class WishlistButton extends React.Component {
         onClick={() => this.toggleWishlist()}
       >
         <div className={classPrefix}>
-          {Drupal.t(buttonText, {}, { context: 'wishlist' })}
+          {Drupal.t(buttonText, { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
         </div>
       </div>
     );
