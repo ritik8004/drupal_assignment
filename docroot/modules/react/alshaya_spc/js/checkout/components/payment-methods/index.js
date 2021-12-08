@@ -341,7 +341,7 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
-    let activePaymentMethods = Object.values(this.getPaymentMethods(active))
+    const activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
 
