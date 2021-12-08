@@ -27,8 +27,9 @@ class AuraNotLinkedNoData extends React.Component {
 
   render() {
     const {
-      price,
+      pointsToEarn,
       loyaltyStatus,
+      wait,
     } = this.props;
 
     const {
@@ -38,7 +39,11 @@ class AuraNotLinkedNoData extends React.Component {
     return (
       <>
         <div className="block-content guest-user">
-          <PointsToEarnMessage price={price} loyaltyStatus={loyaltyStatus} />
+          <PointsToEarnMessage
+            pointsToEarn={pointsToEarn}
+            loyaltyStatus={loyaltyStatus}
+            wait={wait}
+          />
           <div className="actions">
             <div className="spc-join-aura-link-wrapper submit">
               <a
