@@ -150,14 +150,12 @@ export default class ValidEgiftCard extends React.Component {
   }
 
   // Update egift amount.
-  handleAmountUpdate = (updateAmount) => {
+  handleAmountUpdate = (cart, updateAmount, egiftCardNumber, redeemAmount, amount, handleExceedingAmount) => {
     // Prepare the request object for redeem API.
-    const { quoteId, egiftCardNumber } = this.props;
-
     const postData = {
       redeem_points: {
         action: 'set_points',
-        quote_id: quoteId,
+        quote_id: cart.cart_id_int,
         amount: updateAmount,
         card_number: egiftCardNumber,
         payment_method: 'hps_payment',
@@ -172,11 +170,21 @@ export default class ValidEgiftCard extends React.Component {
         response.then((result) => {
           // Remove loader once result is available.
           removeFullScreenLoader();
-          if (result.error === undefined && result.status === 200) {
+          // if (result.error === undefined && result.status === 200) {
+          if (result.status === 200) {
             this.setState({
               amount: updateAmount,
               open: false,
             });
+            if (cart.cart_total === updateAmount) {
+              handleExceedingAmount(true, 0, false);
+            }
+            if (cart.cart_total > updateAmount) {
+              handleExceedingAmount(true, cart.cart_total - updateAmount, false);
+            }
+            if (amount > cart.cart_total && updateAmount <= cart.cart_total) {
+              redeemAmount(true, amount - updateAmount, false);
+            }
             return true;
           }
 
@@ -184,7 +192,6 @@ export default class ValidEgiftCard extends React.Component {
         });
       }
     }
-
     return true;
   }
 

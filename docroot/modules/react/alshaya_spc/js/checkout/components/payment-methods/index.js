@@ -27,7 +27,7 @@ import CheckoutComUpapiApplePay
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
-import PaymentMethodLinkedCard from "../../../egift-card/components/payment-method-linked-card";
+import PaymentMethodLinkedCard from '../../../egift-card/components/payment-method-linked-card';
 import {getUserLinkedCardNumber} from '../../../utilities/egift_util';
 import {isUserAuthenticated} from '../../../../../js/utilities/helper';
 
@@ -373,11 +373,10 @@ export default class PaymentMethods extends React.Component {
 
     const activeClass = active ? 'active' : 'in-active';
     const egiftCardStatus = getUserLinkedCardNumber();
-    console.log(isEgiftCardEnabled(), isUserAuthenticated, egiftCardStatus.card_available);
     return (
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
-        <ConditionalView condition={ isEgiftCardEnabled() && isUserAuthenticated && egiftCardStatus.card_available }>
+        <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated && egiftCardStatus.card_available}>
           <PaymentMethodLinkedCard
             cart={cart}
             changePaymentMethod={this.changePaymentMethod}
@@ -388,10 +387,10 @@ export default class PaymentMethods extends React.Component {
               && { disablePaymentMethod }
             )}
           />
-          </ConditionalView>
-          <ConditionalView condition={Object.keys(methods).length > 0}>
-            <div className={`payment-methods ${activeClass}`}>{methods}</div>
-          </ConditionalView>
+        </ConditionalView>
+        <ConditionalView condition={Object.keys(methods).length > 0}>
+          <div className={`payment-methods ${activeClass}`}>{methods}</div>
+        </ConditionalView>
       </div>
     );
   }
