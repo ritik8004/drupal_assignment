@@ -379,12 +379,6 @@
       text-decoration: none;
     }
   }
-
-  .read-more-description-link-mobile:not(.matchback-readmore) {
-    @include breakpoint($tablet) {
-      display: block !important;
-    }
-  }
 }
 
 // Layout of the detail page
@@ -439,6 +433,8 @@
     h2 {
       border-bottom: 1px solid $primary_border;
       margin-top: 0.9375rem;
+      font-size: 1.125rem;
+      font-weight: normal;
     }
 
     .details-care-wrapper {

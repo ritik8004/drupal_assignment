@@ -83,6 +83,7 @@ $footer_link: $black;
 $footer_link_hover: $black;
 $footer_subscribe_btn_border: $medium-sky-blue;
 $newsletter_submit_btn: $white;
+$lang_switch_firsttime_bg: $charcoal;
 
 // Copyright
 $copyright_footer_bg: $pale-grey;
@@ -179,6 +180,9 @@ $store_finder_btn_act_hover_state: $white;
 $store_finder_individual_list_view: $white;
 $store_finder_individual_hour_border: $grey;
 $store_finder_search_results_tile_link: $charcoal;
+$store_finder_search_results_hour_label: $charcoal;
+$store_finder_search_results_tile_icon: $charcoal;
+$store_finder_search_results_hour_icon_open: $charcoal;
 
 // Store finder gloassary.
 $store_finder_glossary_alphabet: $charcoal;
@@ -338,3 +342,8 @@ $lhn_sticky-header-shadow: $pale-grey;
 
 // Modal
 $modal_close_bg: $charcoal;
+
+// Back to top
+$btt_bg: $pale-grey;
+$btt_text: $charcoal;
+$btt_border: $light-grey;
