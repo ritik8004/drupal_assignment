@@ -17,11 +17,16 @@ export default class EgiftCardStepTwo extends React.Component {
     const eGiftFor = e.target.value;
     // Hide message field if egift card is for self
     // and show if its for friends and family.
+    const eGiftForLabelElement = document.getElementById('recipient-label');
     if (eGiftFor === 'Myself') {
+      // Update label
+      eGiftForLabelElement.innerHTML = Drupal.t('My Details', {}, { context: 'egift' });
       this.setState({
         showMessageField: false,
       });
     } else {
+      // Update label
+      eGiftForLabelElement.innerHTML = Drupal.t('Recipient Details', {}, { context: 'egift' });
       this.setState({
         showMessageField: true,
       });
@@ -67,7 +72,9 @@ export default class EgiftCardStepTwo extends React.Component {
             </div>
             <div className="recipient">
               <label>
-                {Drupal.t('Recipient Details', {}, { context: 'egift' })}
+                <span id="recipient-label">
+                  {Drupal.t('Recipient Details', {}, { context: 'egift' })}
+                </span>
                 <input
                   type="text"
                   name="egift-recipient-name"
