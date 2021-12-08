@@ -33,7 +33,7 @@ const EgiftCardAmount = (props) => {
       <ul>
         {listItems}
       </ul>
-      <EgiftCardOpenAmountField selected={selected} />
+      <EgiftCardOpenAmountField selected={selected} handleAmountSelect={handleAmountSelect} />
     </div>
   );
 };

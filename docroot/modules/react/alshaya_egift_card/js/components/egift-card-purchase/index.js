@@ -73,6 +73,16 @@ export default class EgiftCardPurchase extends React.Component {
       Drupal.cartNotification.triggerNotification(productData);
     }
     removeFullScreenLoader();
+
+    // Reset eGift card purchase form.
+    this.setState({
+      activateStepTwo: false, // Set on amount select to show step 2.
+      amountSet: 0,
+    });
+
+    // Empty open amount field.
+    document.getElementById('open-amount').value = '';
+
     return response;
   };
 
