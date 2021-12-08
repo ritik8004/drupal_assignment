@@ -432,6 +432,21 @@
     padding-top: 0;
     font-family: $dh-light;
   }
+
+  .desc-value {
+    padding-top: 0.75rem;
+
+    h2 {
+      border-bottom: 1px solid $primary_border;
+      margin-top: 0.9375rem;
+    }
+
+    .details-care-wrapper {
+      .details-care-label {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
 }
 
 .nodetype--acq_product,

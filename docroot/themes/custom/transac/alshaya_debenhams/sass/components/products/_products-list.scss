@@ -44,12 +44,20 @@
     text-align: $left;
 
     .field--name-name,
+    .listing-brand-name,
     .special-price-block {
       padding: 0 0.9375rem;
     }
 
-    .field--name-name {
+    .field--name-name,
+    .listing-brand-name {
       letter-spacing: 1.12px;
+    }
+
+    .listing-brand-name {
+      font-family: 'SofiaPro-SemiBold';
+      font-size: 0.875rem;
+      margin-top: 1.875rem;
     }
 
     @include breakpoint($desktop) {
