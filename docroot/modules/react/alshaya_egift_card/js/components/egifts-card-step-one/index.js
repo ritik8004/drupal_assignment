@@ -21,11 +21,15 @@ export default class EgiftCardsListStepOne extends React.Component {
     handleAmountSelect(false, 0);
   }
 
+  /**
+   * Handle egift card select from list.
+   */
   handleEgiftSelect = (id) => {
     // Get all egift card items.
     const { items } = this.state;
 
     items.forEach((item) => {
+      // Set state for selected eGift card.
       // If item id matches then set as selected item.
       if (item.id === id) {
         this.setState({
@@ -56,6 +60,7 @@ export default class EgiftCardsListStepOne extends React.Component {
             handleEgiftSelect={this.handleEgiftSelect}
           />
           <EgiftCardAmount selected={selectedItem} handleAmountSelect={handleAmountSelect} />
+          <input type="hidden" name="egift-sku" value={selectedItem.sku} />
         </div>
       </>
     );

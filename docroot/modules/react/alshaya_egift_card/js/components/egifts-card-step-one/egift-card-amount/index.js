@@ -12,7 +12,14 @@ const EgiftCardAmount = (props) => {
   const amounts = selected.extension_attributes.hps_giftcard_amount;
 
   // List all amounts.
-  const listItems = amounts.map((amount) => (<li onClick={() => handleAmountSelect(true, amount.value)} key={amount.value}>{amount.value}</li>));
+  const listItems = amounts.map((amount) => (
+    <li
+      onClick={() => handleAmountSelect(true, amount.value)}
+      key={amount.value}
+    >
+      {amount.value}
+    </li>
+  ));
 
   return (
     <div className="egift-card-amounts">

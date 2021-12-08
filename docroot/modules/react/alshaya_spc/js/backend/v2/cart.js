@@ -212,6 +212,11 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         quote_id: cartId,
       },
     };
+
+    if (data.product_type === 'virtual') {
+      itemData.cartItem.product_type = data.product_type;
+      itemData.cartItem.product_option = data.options;
+    }
   }
 
   if (data.action === 'update item') {
