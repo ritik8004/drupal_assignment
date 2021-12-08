@@ -5,3 +5,4 @@ services:
       - '@config.factory'
       - '@current_user'
       - '@path.current'
+      - '@token'
