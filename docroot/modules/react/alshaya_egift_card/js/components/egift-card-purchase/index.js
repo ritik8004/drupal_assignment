@@ -41,6 +41,7 @@ export default class EgiftCardPurchase extends React.Component {
     this.setState({
       activateStepTwo: activate,
       amountSet: amount,
+      action: 'add-to-cart',
     });
   }
 
@@ -81,7 +82,15 @@ export default class EgiftCardPurchase extends React.Component {
     });
 
     // Empty open amount field.
-    document.getElementById('open-amount').value = '';
+    if (document.getElementById('open-amount') !== null) {
+      document.getElementById('open-amount').value = '';
+    }
+
+    // Redirect user to checkout if action button checkout is clicked.
+    const { action } = this.state;
+    if (action === 'checkout') {
+      window.location = Drupal.url('checkout');
+    }
 
     return response;
   };
@@ -229,6 +238,7 @@ export default class EgiftCardPurchase extends React.Component {
                   name="add-to-cart"
                   className="btn"
                   disabled={!activateStepTwo}
+                  onClick={() => { this.state.action = 'add-to-cart'; }}
                 >
                   {Drupal.t('add to bag', {}, { context: 'egift' })}
                 </button>
@@ -237,6 +247,7 @@ export default class EgiftCardPurchase extends React.Component {
                   name="checkout"
                   className="btn"
                   disabled={!activateStepTwo}
+                  onClick={() => { this.state.action = 'checkout'; }}
                 >
                   {Drupal.t('checkout', {}, { context: 'egift' })}
                 </button>
