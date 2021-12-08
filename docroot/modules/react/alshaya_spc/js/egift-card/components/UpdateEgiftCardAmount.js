@@ -4,7 +4,7 @@ import getCurrencyCode from '../../../../js/utilities/util';
 import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
 import getStringMessage from '../../../../js/utilities/strings';
 
-export default class UpdateEgiftCardAmount extends React.Component {xx
+export default class UpdateEgiftCardAmount extends React.Component {
   // Handling validation for the changing the amount of egift card.
   handleValidation = (e) => {
     const { value: egiftAmount } = e.target.elements.egift_amount;
