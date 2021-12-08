@@ -453,7 +453,7 @@ const getProcessedCartData = async (cartData) => {
           data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
         }
         // Extension attributes information for eGift products.
-        if (isEgiftCardEnabled() && typeof item.extension_attributes.is_egift !== 'undefined' && item.extension_attributes.is_egift) {
+        if (isEgiftCard && typeof item.extension_attributes.is_egift !== 'undefined' && item.extension_attributes.is_egift) {
           if (typeof item.extension_attributes.egift_options !== 'undefined') {
             data.items[item.sku].egiftOptions = item.extension_attributes.egift_options;
           }
