@@ -296,6 +296,14 @@
   }
 }
 
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      top: -0.125rem;
+    }
+  }
+}
+
 .highlights {
   .highlighted {
     &.title_subtitle {
