@@ -231,10 +231,28 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
 
   $entity_type = $node ? 'node' : 'taxonomy_term';
 
+  if (isset($data['tabs'][0]['entity.' . $entity_type . '.edit_form'])) {
+    $edit_tab = &$data['tabs'][0]['entity.' . $entity_type . '.edit_form'];
+  }
+  else {
+    $edit_tab = NULL;
+  }
+
+  if (isset($data['tabs'][0]['entity.' . $entity_type . '.delete_form'])) {
+    $delete_tab = &$data['tabs'][0]['entity.' . $entity_type . '.delete_form'];
+  }
+  else {
+    $delete_tab = NULL;
+  }
+
   // If the entity is enriched, we only alter the tabs label.
   if (($node && $node->nid->value !== $config->get('product.placeholder_nid')) || ($term && $term->tid->value !== $config->get('category.placeholder_tid'))) {
-    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['title'] = t('Edit the enrichment');
-    $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['title'] = t('Delete the enrichment');
+    if ($edit_tab) {
+      $edit_tab['#link']['title'] = t('Edit the enrichment');
+    }
+    if ($delete_tab) {
+      $delete_tab['#link']['title'] = t('Delete the enrichment');
+    }
   }
   // If the entity is not enriched, alter the tabs links.
   else {
@@ -252,8 +270,10 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
       $url = Url::fromUserInput('/admin/structure/taxonomy/manage/rcs_category/add?name=#rcs.category.name#&slug=' . $config->get('category.path_prefix') . '#rcs.category.slug#');
     }
 
-    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['url'] = $url;
-    $data['tabs'][0]['entity.' . $entity_type . '.edit_form']['#link']['title'] = t('Enrich');
+    if ($edit_tab) {
+      $edit_tab['#link']['url'] = $url;
+      $edit_tab['#link']['title'] = t('Enrich');
+    }
   }
 }
 
