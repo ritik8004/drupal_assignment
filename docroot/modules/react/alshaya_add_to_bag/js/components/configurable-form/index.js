@@ -280,7 +280,12 @@ export default class ConfigurableForm extends React.Component {
   }
 
   render() {
-    const { sku, selectedVariant, productData, extraInfo } = this.props;
+    const {
+      sku,
+      selectedVariant,
+      productData,
+      extraInfo,
+    } = this.props;
     const configurableAttributes = productData.configurable_attributes;
     const { formAttributeValues, quantity, errorMessage } = this.state;
     const hiddenAttributes = getHiddenFormAttributes();
