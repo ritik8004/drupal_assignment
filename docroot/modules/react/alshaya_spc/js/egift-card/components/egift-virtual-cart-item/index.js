@@ -8,6 +8,7 @@ import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import AdvantageCardExcludedItem from '../../../cart/components/advantage-card';
 import { customStockErrorMessage } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import CheckoutItemImage from '../../../utilities/checkout-item-image';
 
 export default class CartVirtualItem extends React.Component {
   /**
@@ -86,11 +87,25 @@ export default class CartVirtualItem extends React.Component {
         id, // qoute_id.
         title, // title of the product.
         price, // price of the product.
+        egiftOptions, // other information of product.
+        media, // Product image.
       },
       totalsItems, // totals in the api response consist of adv_card_applicable.
     } = this.props;
-    const senderEmail = 'asdf@gmail.com';
-    const senderMessage = 'Happy new year my beast';
+    // Egift card product image.
+    const cartImage = {
+      url: (typeof media.file !== 'undefined') ? media.file : undefined,
+      alt: title,
+      title,
+    };
+    // Reciepient email.
+    const recieptEmail = (typeof egiftOptions.hps_giftcard_recipient_email !== 'undefined')
+      ? egiftOptions.hps_giftcard_recipient_email
+      : '';
+    // Gift card message.
+    const giftCardMessage = (typeof egiftOptions.hps_giftcard_message !== 'undefined')
+      ? egiftOptions.hps_giftcard_message
+      : '';
     return (
       <div
         className="spc-cart-item fadeInUp"
@@ -98,8 +113,7 @@ export default class CartVirtualItem extends React.Component {
       >
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            Cart Image
-            {/* @todo To update code here once API is available. */}
+            <CheckoutItemImage img_data={cartImage} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
@@ -117,11 +131,11 @@ export default class CartVirtualItem extends React.Component {
               </div>
               <div className="spc-cart-product-attribute">
                 <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
-                <span className="spc-cart-product-attribute-value">{ senderEmail }</span>
+                <span className="spc-cart-product-attribute-value">{ recieptEmail }</span>
               </div>
               <div className="spc-cart-product-attribute">
                 <span className="spc-cart-product-attribute-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
-                <span className="spc-cart-product-attribute-value">{ senderMessage }</span>
+                <span className="spc-cart-product-attribute-value">{ giftCardMessage }</span>
               </div>
             </div>
           </div>
