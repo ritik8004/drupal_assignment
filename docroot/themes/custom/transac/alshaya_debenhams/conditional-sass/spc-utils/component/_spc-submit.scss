@@ -1,0 +1,13 @@
+.checkout-link {
+  &:not(.checkout_com_applepay) {
+    background: $primary_brand_button;
+    height: 2.625rem;
+    border-radius: 1.3125rem;
+
+    a {
+      font-family: $dh-semibold;
+      text-transform: unset;
+      height: 2.625rem;
+    }
+  }
+}
