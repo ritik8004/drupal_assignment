@@ -10,7 +10,9 @@ const EgiftCheckoutOrderSummary = (props) => {
 
   const { egiftRedeemedAmount, balancePayable } = totals;
 
-  if (egiftRedeemedAmount === undefined || balancePayable === undefined || egiftRedeemedAmount === 0) {
+  if (egiftRedeemedAmount === undefined
+    || balancePayable === undefined
+    || egiftRedeemedAmount === 0) {
     return null;
   }
 
@@ -21,12 +23,12 @@ const EgiftCheckoutOrderSummary = (props) => {
         title={Drupal.t('Paid With eGfit card')}
         value={egiftRedeemedAmount}
       />
-        <TotalLineItem
-          name="balance-payable"
-          title={Drupal.t('Balance Payable')}
-          value={balancePayable}
-          showZeroValue
-        />
+      <TotalLineItem
+        name="balance-payable"
+        title={Drupal.t('Balance Payable')}
+        value={balancePayable}
+        showZeroValue
+      />
     </div>
   );
 };

@@ -361,11 +361,11 @@ const getProcessedCartData = async (cartData) => {
   }
 
   // If egift card enabled, add the hps_redeemed_amount and balance_payble in cart.
-  if (isEgiftCardEnabled() && hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
+  if (isEgiftCardEnabled()) {
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
-    if (hasValue(cartData.totals.extension_attributes.balancePayable)) {
+    if (typeof cartData.totals.extension_attributes.balance_payble !== 'undefined') {
       data.totals.balancePayable = cartData.totals.extension_attributes.balance_payble;
     }
   }
