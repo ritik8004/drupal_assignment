@@ -12,6 +12,8 @@ use Drupal\Component\Utility\NestedArray;
  */
 class HandlebarsService {
 
+  const HANDLEBARS_JS_DIR = 'public://rcs_handlebars';
+
   /**
    * The file system.
    *
@@ -70,7 +72,7 @@ class HandlebarsService {
    *   The public directory.
    */
   protected function getDir() {
-    return 'public://rcs_handlebars';
+    return self::HANDLEBARS_JS_DIR;
   }
 
   /**
