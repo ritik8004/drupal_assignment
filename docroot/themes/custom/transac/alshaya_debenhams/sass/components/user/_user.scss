@@ -6,6 +6,22 @@
       padding-right: 1.25rem;
     }
   }
+
+  .change-pwd-form {
+    .form-submit {
+      text-transform: unset;
+    }
+  }
+
+  .user-form,
+  .change-pwd-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-submit {
+      text-transform: unset;
+    }
+  }
 }
 
 .path--user {
