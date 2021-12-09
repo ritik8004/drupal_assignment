@@ -49,6 +49,7 @@ exports.render = function render(
  * Register helper for string translations.
  * Limitation: Only supports @ filter and one argument.
  * @todo Find a way to support multiple arguments and other filters.
+ * @todo Support contexts.
  */
 Handlebars.registerHelper('t', (str, args, options) => {
   args = args.hash || {};
