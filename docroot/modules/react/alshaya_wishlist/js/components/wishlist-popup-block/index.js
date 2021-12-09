@@ -15,12 +15,14 @@ export default class WishlistPopupBlock extends React.Component {
     if (addToWishlist) {
       addProductToWishList(productInfo);
     }
-    closeWishlistModal();
+    // If user clicked on yes/no in popup, we pass true as response.
+    closeWishlistModal(true);
   }
 
   closeModal = () => {
     const { closeWishlistModal } = this.props;
-    closeWishlistModal('close modal');
+    // If user simply clicks on close, we pass false as response.
+    closeWishlistModal(false);
   }
 
   render() {
