@@ -1,0 +1,11 @@
+#spc-checkout-confirmation {
+  .spc-order-summary {
+    margin-bottom: 1.875rem;
+  }
+
+  .spc-pre-content {
+    .spc-checkout-confirmation-print-button {
+      @include btn();
+    }
+  }
+}
