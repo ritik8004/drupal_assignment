@@ -22,7 +22,7 @@
       <div class="menu__link-wrapper menu-two__link-wrapper">
         {% set style = '' %}
           {% if level1.tag is not empty %}
-            <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.title }}" {{ level1.tag_attr }}>{{ level1.title }}</{{ level1.tag }}>
+            <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.title }}" gtm-menu-title="{{ level1.gtm_menu_title }}" {{ level1.tag_attr }}>{{ level1.title }}</{{ level1.tag }}>
           {% endif %}
       </div>
       {% if level1.below is not empty %}

@@ -3,11 +3,11 @@ import parse from 'html-react-parser';
 import { getLoyaltyBenefitsTitle, getLoyaltyBenefitsContent } from '../../../utilities/helper';
 import ToolTip from '../../../../../alshaya_spc/js/utilities/tooltip';
 
-const LoyaltyClubBenefits = () => {
+const LoyaltyClubBenefits = ({ active }) => {
   const loyaltyBenefitsTitle = getLoyaltyBenefitsTitle();
 
   return (
-    <div className="loyalty-club-details-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.4s' }}>
+    <div className={`loyalty-club-details-wrapper loyalty-tab-content fadeInUp${active}`} style={{ animationDelay: '0.4s' }}>
       <div className="title">
         <span className="title-1">{loyaltyBenefitsTitle.title1}</span>
         <span className="title-2">{loyaltyBenefitsTitle.title2}</span>
