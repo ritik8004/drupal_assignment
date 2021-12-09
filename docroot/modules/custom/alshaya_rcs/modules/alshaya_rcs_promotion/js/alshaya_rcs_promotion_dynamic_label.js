@@ -22,8 +22,10 @@ const PromotionsDynamicLabelsUtil = {
 
     const productLabels = {};
     const response = Drupal.alshayaPromotions.getRcsDynamicLabel('', cartData, '', 'cart');
-    if (response && response.products_labels) {
-      response.products_labels.forEach((item) => {
+    const { cart_labels, products_labels } = response;
+
+    if (products_labels) {
+      products_labels.forEach((item) => {
         // @todo To remove this once we get the proper empty array response
         // from Magento.
         if (!item.labels) {
@@ -31,13 +33,19 @@ const PromotionsDynamicLabelsUtil = {
         }
         productLabels[item.sku] = item;
       });
+      // Update the threshold_reached to array if null as we are checking
+      // length.
+      if (!cart_labels.next_eligible.threshold_reached) {
+        response.cart_labels.next_eligible.threshold_reached = [];
+      }
       // Update the response array with the modified one.
       response.products_labels = productLabels;
     }
     // Fire the event to update dynamic promotion.
     RcsEventManager.fire('applyDynamicPromotions', {
       detail: {
-        response
+        cart_labels: response.cart_labels,
+        products_labels: response.products_labels,
       },
     });
   },

@@ -132,6 +132,10 @@
     padding-#{$right}: 0;
     border: 1px solid $primary_input_border;
 
+    html[lang=ar] & {
+      padding-left: 0;
+    }
+
     @include breakpoint($only-tablet) {
       padding-#{$right}: 10%;
 
@@ -190,6 +194,10 @@
     &-item {
       max-width: 12.5rem;
       margin-#{$right}: 0.625rem;
+
+      html[lang=ar] & {
+        max-width: 14rem;
+      }
 
       @include breakpoint($only-mobile) {
         max-width: 21rem;
@@ -292,6 +300,14 @@
       li {
         margin-top: 0.25rem;
       }
+    }
+  }
+}
+
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      top: -0.125rem;
     }
   }
 }

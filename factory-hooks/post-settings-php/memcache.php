@@ -54,6 +54,15 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
           'factory' => ['@memcache.backend.cache.factory', 'get'],
           'arguments' => ['container'],
         ],
+        'memcache.factory' => [
+          'class' => 'Drupal\memcache\Driver\MemcacheDriverFactory',
+          'arguments' => ['@memcache.settings'],
+        ],
+        'memcache.timestamp.invalidator.bin' => [
+          'class' => 'Drupal\memcache\Invalidator\MemcacheTimestampInvalidator',
+          # Adjust tolerance factor as appropriate when not running memcache on localhost.
+          'arguments' => ['@memcache.factory', 'memcache_bin_timestamps', 0.001],
+        ],
         'cache_tags_provider.container' => [
           'class' => 'Drupal\Core\Cache\DatabaseCacheTagsChecksum',
           'arguments' => ['@database'],
@@ -64,6 +73,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
             'container',
             '@memcache.backend.cache.container',
             '@cache_tags_provider.container',
+            '@memcache.timestamp.invalidator.bin',
           ],
         ],
       ],

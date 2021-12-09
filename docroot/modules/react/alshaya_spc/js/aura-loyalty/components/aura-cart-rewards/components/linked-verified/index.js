@@ -4,12 +4,12 @@ import PointsExpiryMessage from '../../../utilities/points-expiry-message';
 
 const AuraLinkedVerified = (props) => {
   const {
-    price, expiringPoints, expiryDate, loyaltyStatus,
+    pointsToEarn, expiringPoints, expiryDate, loyaltyStatus, wait,
   } = props;
 
   return (
     <div className="block-content registered-user-linked">
-      <PointsToEarnMessage price={price} loyaltyStatus={loyaltyStatus} />
+      <PointsToEarnMessage pointsToEarn={pointsToEarn} loyaltyStatus={loyaltyStatus} wait={wait} />
       <div className="actions">
         <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
       </div>

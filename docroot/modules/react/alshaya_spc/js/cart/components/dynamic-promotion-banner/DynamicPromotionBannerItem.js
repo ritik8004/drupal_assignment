@@ -11,6 +11,11 @@ const DynamicPromotionBannerItem = (props) => {
     ruleId,
   } = props;
 
+  // Proceed only if we have proper label value.
+  if (!label) {
+    return '';
+  }
+
   if (status === 'inactive') {
     return (
       <div className={`promotion ${type}`} threshold={threshold} data-rule-id={ruleId}>

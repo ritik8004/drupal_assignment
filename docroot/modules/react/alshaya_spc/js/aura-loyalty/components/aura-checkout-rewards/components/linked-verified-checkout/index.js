@@ -3,20 +3,19 @@ import PointsExpiryMessage from '../../../utilities/points-expiry-message';
 import AuraFormRedeemPoints from '../../../aura-forms/aura-redeem-points';
 import PointsString from '../../../utilities/points-string';
 import ToolTip from '../../../../../utilities/tooltip';
-import { getPriceToPoint, getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const AuraLinkedVerifiedCheckout = (props) => {
   const {
     pointsInAccount,
-    price,
+    pointsToEarn,
     expiringPoints,
     expiryDate,
     cardNumber,
     totals,
     paymentMethodInCart,
   } = props;
-  const pointsToEarn = getPriceToPoint(price);
 
   return (
     <>

@@ -1064,12 +1064,12 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
 };
 
 /**
- * Gets governates list items.
+ * Gets product shipping methods.
  *
  * @returns {Promise<object>}
  *  returns list of governates.
  */
-window.commerceBackend.getShippingMethods = async (currentArea, sku = undefined) => {
+const getProductShippingMethods = async (currentArea, sku = undefined) => {
   let cartId = null;
   if (sku === undefined) {
     const cartData = window.commerceBackend.getCartDataFromStorage();
@@ -1140,4 +1140,5 @@ export {
   getProductStatus,
   getLocations,
   prepareFilterUrl,
+  getProductShippingMethods,
 };

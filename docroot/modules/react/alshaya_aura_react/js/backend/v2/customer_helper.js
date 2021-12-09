@@ -235,6 +235,76 @@ const setLoyaltyCard = (identifierNo, quoteId) => {
   });
 };
 
+/**
+ * Get Customer Reward Activity.
+ *
+ * @param {string} customerId
+ *   The customer Id.
+ * @param {string} fromDate
+ *   From date.
+ * @param {string} toDate
+ *   To date.
+ * @param {string} maxResults
+ *   Max result to fetch.
+ * @param {string} channel
+ *   Online(K)/ InStore(V).
+ * @param {string} partnerCode
+ *   The brand code.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object containing customer data in case of
+ *   success or an error object in case of failure.
+ */
+const getCustomerRewardActivity = (
+  customerId,
+  fromDate,
+  toDate,
+  maxResults,
+  channel,
+  partnerCode,
+) => {
+  // We are always passing `orderField=date:DESC`.
+  const endpoint = `/V1/customers/apcTransactions?customerId=${customerId}&fromDate=${fromDate}&toDate=${toDate}&orderField=date:DESC&maxResults=${maxResults}&channel=${channel}&partnerCode=${partnerCode}`;
+
+  return callMagentoApi(endpoint, 'GET')
+    .then((response) => {
+      if (hasValue(response.data.error)) {
+        logger.error('Error while trying to get reward activity of the user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+          '@customerId': customerId,
+          '@endpoint': endpoint,
+          '@message': response.data.error_message || '',
+        });
+        return getErrorResponse(response.data.error_message, response.data.error_code);
+      }
+
+      const transactions = [];
+      if (hasValue(response.data.apc_transactions)) {
+        response.data.apc_transactions.forEach((transaction) => {
+          const transactionData = {
+            orderNo: transaction.trn_no,
+            date: transaction.date,
+            orderTotal: transaction.total_value,
+            currencyCode: transaction.currency_code,
+            channel: transaction.channel,
+            auraPoints: transaction.points,
+            brandName: transaction.location_name,
+          };
+
+          const pointBalances = hasValue(transaction.points_balances)
+            ? transaction.points_balances.shift()
+            : [];
+          if (hasValue(pointBalances)) {
+            transactionData.status = pointBalances.status;
+            transactionData.statusName = pointBalances.status_name;
+          }
+
+          transactions.push(transactionData);
+        });
+      }
+      return transactions;
+    });
+};
+
 export {
   prepareAuraUserStatusUpdateData,
   getCustomerInfo,
@@ -242,4 +312,5 @@ export {
   getCustomerTier,
   getCustomerProgressTracker,
   setLoyaltyCard,
+  getCustomerRewardActivity,
 };

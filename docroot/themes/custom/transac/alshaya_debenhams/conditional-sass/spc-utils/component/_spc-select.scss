@@ -1,0 +1,9 @@
+.spc-select {
+  .spcSelect__control {
+    .spcSelect__dropdown-indicator {
+      &::before {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}

@@ -65,5 +65,15 @@ function hook_alshaya_acm_customer_recent_order_build_alter(array &$build) {
 }
 
 /**
+ * Alter order summary for order list.
+ *
+ * @param array $orderRow
+ *   Array of order summary.
+ */
+function hook_alshaya_acm_customer_update_order_summary_alter(array &$order, array &$orderRow) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
