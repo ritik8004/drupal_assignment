@@ -40,7 +40,6 @@ import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/u
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
 import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
-import { isCartHasOnlyEgiftCard } from '../../utilities/egift_util';
 
 window.commerceBackend = window.commerceBackend || {};
 

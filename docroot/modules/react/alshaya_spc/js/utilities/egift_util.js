@@ -37,6 +37,7 @@ export const egiftFormElement = ({
   className = '',
   buttonText = '',
   value = '',
+  disabled = false,
 }) => {
   // Separate template based on type.
   let rtnTemplate = '';
@@ -48,6 +49,7 @@ export const egiftFormElement = ({
           id={`egift-${name}`}
           type={type}
           value={Drupal.t(buttonText, {}, { context: 'egift' })}
+          disabled={disabled}
         />
       );
       break;
@@ -60,6 +62,7 @@ export const egiftFormElement = ({
             placeholder={placeholder}
             className={className}
             defaultValue={value}
+            disabled={disabled}
           />
           <div id={`egift_${name}_error`} className="error" />
         </div>
@@ -141,7 +144,7 @@ export const callEgiftApi = (action, method, postData, param = {}) => {
  * @return {boolean}
  *   true if it's contains non virtual product else false.
  */
-export const isCartHasOnlyEgiftCard = (cart) => {
+export const cartContainsNonVirtualProduct = (cart) => {
   // A flag to keep track of the non-virtual products.
   let isNonVirtual = false;
   Object.values(cart.items).forEach((item) => {
@@ -158,4 +161,13 @@ export const isCartHasOnlyEgiftCard = (cart) => {
   });
 
   return isNonVirtual;
-}
+};
+
+/**
+ * Utility function to check if given payment method is unsupported with egift.
+ */
+export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
+  const { notSupportedPaymentMethods } = drupalSettings.egiftCard;
+
+  return paymentMethod in notSupportedPaymentMethods;
+};

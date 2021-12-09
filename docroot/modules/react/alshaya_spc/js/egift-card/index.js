@@ -1,7 +1,7 @@
 import React from 'react';
 import ConditionalView from '../common/components/conditional-view';
 import PaymentMethodIcon from '../svg-component/payment-method-svg';
-import { callEgiftApi } from '../utilities/egift_util';
+import { callEgiftApi, isEgiftUnsupportedPaymentMethod } from '../utilities/egift_util';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
 import ValidEgiftCard from './components/ValidEgiftCard';
@@ -19,11 +19,14 @@ export default class RedeemEgiftCard extends React.Component {
       codeValidated: false,
       egiftEmail: '',
       egiftCardNumber: '',
+      paymentMethod: '',
     };
   }
 
   // Update the state variables.
   componentDidMount = () => {
+    // On payment method update, we refetch the cart to get payment method.
+    document.addEventListener('refreshCompletePurchaseSection', this.updatePaymentMethod, false);
     // Change the redemption screen based on the cart redemption status.
     const { cart: cartData } = this.props;
     // Change the state of redeemption if egift is already available.
@@ -32,6 +35,21 @@ export default class RedeemEgiftCard extends React.Component {
         codeSent: false,
         codeValidated: true,
       });
+    }
+  }
+
+  // Update the payment method.
+  updatePaymentMethod = () => {
+    const currentCart = window.commerceBackend.getRawCartDataFromStorage();
+    if (hasValue(currentCart.payment) && hasValue(currentCart.payment.method)) {
+      this.setState({
+        paymentMethod: currentCart.payment.method,
+      });
+    }
+    // Cancel the redemption and move back to the initial screen of redemption.
+    const { paymentMethod } = this.state;
+    if (isEgiftUnsupportedPaymentMethod(paymentMethod)) {
+      this.handleEgiftCardRemove();
     }
   }
 
@@ -98,11 +116,34 @@ export default class RedeemEgiftCard extends React.Component {
 
   // Remove the added egift card.
   handleEgiftCardRemove = () => {
-    // Reset the state to move back to initial redeem stage.
-    this.setState({
-      codeSent: false,
-      codeValidated: false,
-    });
+    const { cart: cartData } = this.props;
+    const postData = {
+      redeem_points: {
+        action: 'remove_points',
+        quote_id: cartData.cart.cart_id_int,
+      },
+    };
+    let errors = true;
+    showFullScreenLoader();
+    // Invoke the redemption API.
+    const response = callEgiftApi('eGiftRedemption', 'POST', postData);
+    if (response instanceof Promise) {
+      // Handle the error and success message after the egift card is removed
+      // from the cart.
+      response.then((result) => {
+        removeFullScreenLoader();
+        if (result.error !== undefined) {
+          errors = false;
+        }
+        // Reset the state to move back to initial redeem stage.
+        this.setState({
+          codeSent: false,
+          codeValidated: false,
+        });
+      });
+    }
+
+    return !errors;
   }
 
   render = () => {
@@ -112,6 +153,7 @@ export default class RedeemEgiftCard extends React.Component {
       codeValidated,
       egiftEmail,
       egiftCardNumber,
+      paymentMethod,
     } = this.state;
     const { cart: cartData } = this.props;
 
@@ -125,6 +167,7 @@ export default class RedeemEgiftCard extends React.Component {
             getCode={this.handleGetCode}
             egiftEmail={egiftEmail}
             egiftCardNumber={egiftCardNumber}
+            paymentMethod={paymentMethod}
           />
         </ConditionalView>
         <ConditionalView condition={codeSent}>
@@ -139,7 +182,6 @@ export default class RedeemEgiftCard extends React.Component {
         <ConditionalView condition={codeValidated}>
           <ValidEgiftCard
             removeCard={this.handleEgiftCardRemove}
-            quoteId={cartData.cart.cart_id_int}
             egiftCardNumber={egiftCardNumber}
             egiftEmail={egiftEmail}
             cart={cartData.cart}

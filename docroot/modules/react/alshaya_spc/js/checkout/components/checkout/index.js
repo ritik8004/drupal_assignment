@@ -36,6 +36,8 @@ import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import RedeemEgiftCard from '../../../egift-card';
+import { cartContainsNonVirtualProduct } from '../../../utilities/egift_util';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 window.fetchStore = 'idle';
 
@@ -290,8 +292,6 @@ export default class Checkout extends React.Component {
     const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
       ? Drupal.smartAgent.getInfo()
       : false;
-    // Get the egiftcard informations.
-    const { egiftCard } = drupalSettings;
 
     return (
       <>
@@ -311,7 +311,7 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
-            <ConditionalView condition={isCartHasOnlyEgiftCard(cart.cart)}>
+            <ConditionalView condition={cartContainsNonVirtualProduct(cart.cart)}>
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
                 <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
@@ -329,7 +329,7 @@ export default class Checkout extends React.Component {
               isPostpayInitialised={isPostpayInitialised}
             />
 
-            <ConditionalView condition={typeof egiftCard !== 'undefined' && egiftCard.enabled}>
+            <ConditionalView condition={isEgiftCardEnabled()}>
               <RedeemEgiftCard cart={cart} />
             </ConditionalView>
 
