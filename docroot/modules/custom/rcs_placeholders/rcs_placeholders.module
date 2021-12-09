@@ -238,20 +238,13 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
     $edit_tab = NULL;
   }
 
-  if (isset($data['tabs'][0]['entity.' . $entity_type . '.delete_form'])) {
-    $delete_tab = &$data['tabs'][0]['entity.' . $entity_type . '.delete_form'];
-  }
-  else {
-    $delete_tab = NULL;
-  }
-
   // If the entity is enriched, we only alter the tabs label.
   if (($node && $node->nid->value !== $config->get('product.placeholder_nid')) || ($term && $term->tid->value !== $config->get('category.placeholder_tid'))) {
     if ($edit_tab) {
       $edit_tab['#link']['title'] = t('Edit the enrichment');
     }
-    if ($delete_tab) {
-      $delete_tab['#link']['title'] = t('Delete the enrichment');
+    if (isset($data['tabs'][0]['entity.' . $entity_type . '.delete_form'])) {
+      $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['title'] = t('Delete the enrichment');
     }
   }
   // If the entity is not enriched, alter the tabs links.
