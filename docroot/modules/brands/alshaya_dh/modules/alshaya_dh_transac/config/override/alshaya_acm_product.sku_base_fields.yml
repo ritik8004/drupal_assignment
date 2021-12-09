@@ -28,7 +28,6 @@ fields:
 
   brand_name:
     label: 'Brand'
-    type: 'string'
     index: 1
     facet: 1
 
@@ -78,18 +77,18 @@ fields:
     label: 'Length'
     index: 1
 
-  NeckLine:
+  neckline:
     label: 'NeckLine'
     index: 1
 
-  Detail:
+  detail:
     label: 'Detail'
     index: 1
 
-  Design:
+  design:
     label: 'Design'
     index: 1
 
-  Fabric:
+  fabric:
     label: 'Fabric'
     index: 1

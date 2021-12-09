@@ -69,10 +69,10 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     'attr_style_taxonomy' => t('Style'),
     'attr_sleeve_length' => t('Sleeve Length'),
     'attr_length' => t('Length'),
-    'attr_NeckLine' => t('Neckline'),
-    'attr_Detail' => t('Detail'),
-    'attr_Design' => t('Design'),
-    'attr_Fabric' => t('Fabric'),
+    'attr_neckline' => t('Neckline'),
+    'attr_detail' => t('Detail'),
+    'attr_design' => t('Design'),
+    'attr_fabric' => t('Fabric'),
   ];
 
   $properties = [];
