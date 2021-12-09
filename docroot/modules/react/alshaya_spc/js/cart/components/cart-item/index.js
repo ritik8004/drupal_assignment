@@ -82,14 +82,14 @@ export default class CartItem extends React.Component {
    * To close the wishlist confirmation popup.
    * Once popup closes, we move on to deleting the item from cart.
    */
-  closeWishlistModal = (response = true) => {
+  closeWishlistModal = (removeFromBasket = true) => {
     const { item: { sku, id } } = this.props;
-    if (!response) {
+    if (!removeFromBasket) {
       this.setState({
         showWishlistPopup: false,
       });
     } else {
-      this.setState({ showWishlistPopup: false, wishlistResponse: response }, () => {
+      this.setState({ showWishlistPopup: false, wishlistResponse: removeFromBasket }, () => {
         this.removeCartItem(sku, 'remove item', id);
       });
     }
@@ -316,7 +316,7 @@ export default class CartItem extends React.Component {
                   format="text"
                 />
               </div>
-              {/* When user clicks on delete, pop is shown asking for product to be added to wishlist. */}
+              {/* When user clicks on delete, pop shown asking if product added to wishlist. */}
               <ConditionalView condition={showWishlistPopup}>
                 <WishlistPopupBlock
                   sku={parentSKU}
