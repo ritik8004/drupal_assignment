@@ -13,6 +13,7 @@ import getStringMessage from '../../../../../js/utilities/strings';
 import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { redeemAuraPoints, getAuraPointsToEarn } from '../utilities/checkout_helper';
 import dispatchCustomEvent from '../../../utilities/events';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class AuraCartRewards extends React.Component {
   constructor(props) {
@@ -31,8 +32,6 @@ class AuraCartRewards extends React.Component {
     document.addEventListener('refreshCart', this.getAuraPoints, false);
 
     if (getUserDetails().id) {
-      document.addEventListener('customerDetailsFetched', this.updateState, false);
-
       // Listener to refreshCart event to track any cart update action like quantity update.
       document.addEventListener('refreshCart', this.removeRedeemedPoints, false);
       // Listener to promoCodeSuccess event to track when promo code is applied on cart.
@@ -43,12 +42,22 @@ class AuraCartRewards extends React.Component {
       // Listener to redeem points API event to update cart total based on response.
       document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
 
-      const { loyaltyStatus } = this.state;
+      // Update state with aura details from props.
+      const { auraDetails } = this.props;
 
-      if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
-        this.setState({
-          wait: false,
-        });
+      if (hasValue(auraDetails)) {
+        const data = {
+          detail: { stateValues: auraDetails },
+        };
+        this.updateState(data);
+
+        const { loyaltyStatus } = this.state;
+
+        if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+          this.setState({
+            wait: false,
+          });
+        }
       }
     } else {
       // Guest user.
