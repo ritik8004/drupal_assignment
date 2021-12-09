@@ -39,6 +39,15 @@
       drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
       drupalSettings[productKey][sku]['gtm_attributes']['price'];
 
+    // Check if the amount is invalid.
+    if (typeof variantPrice === 'undefined' || !(variantPrice)) {
+      Drupal.alshayaLogger('warning', 'Invalid amount on PDP page for tabby. SKU: @sku, Variant SKU: @variant', {
+        '@sku': sku,
+        '@variant': variant,
+      });
+      return;
+    }
+
     // Tabby promo change event.
     const tabbyWidget = $(element).closest('.entity--type-node').find('.' + drupalSettings.tabby.widgetInfo.class);
     tabbyWidget.each(function () {
