@@ -86,8 +86,8 @@
       a,
       span {
         margin-top: 0.75rem;
-        width: 2.375rem;
-        border-radius: 50%;
+        min-width: 2.375rem;
+        border-radius: 1.375rem;
         padding-bottom: 0.625rem;
 
         &.picked {
@@ -379,12 +379,6 @@
       text-decoration: none;
     }
   }
-
-  .read-more-description-link-mobile:not(.matchback-readmore) {
-    @include breakpoint($tablet) {
-      display: block !important;
-    }
-  }
 }
 
 // Layout of the detail page
@@ -431,6 +425,23 @@
   .address {
     padding-top: 0;
     font-family: $dh-light;
+  }
+
+  .desc-value {
+    padding-top: 0.75rem;
+
+    h2 {
+      border-bottom: 1px solid $primary_border;
+      margin-top: 0.9375rem;
+      font-size: 1.125rem;
+      font-weight: normal;
+    }
+
+    .details-care-wrapper {
+      .details-care-label {
+        font-family: $alshaya-bold;
+      }
+    }
   }
 }
 

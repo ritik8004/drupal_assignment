@@ -1,0 +1,17 @@
+.spc-cart-item-warnings:not(:empty),
+.spc-cart-item-alerts:not(:empty) {
+  .spc-cart-item-warnings-item:not(:empty),
+  .spc-cart-item-alerts-item:not(:empty) {
+    font-size: 0.875rem;
+  }
+}
+
+.spc-cart-item-warnings:not(:empty) {
+  .spc-cart-item-warnings-item:not(:empty) {
+    font-family: $dh-semibold;
+  }
+}
+
+.delivery-in-only-city-text:not(:empty) {
+  font-size: 0.875rem;
+}

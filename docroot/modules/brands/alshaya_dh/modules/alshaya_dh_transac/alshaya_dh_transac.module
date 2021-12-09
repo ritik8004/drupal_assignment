@@ -78,6 +78,9 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
   $properties = [];
   foreach ($list_of_attributes as $key => $title) {
     if ($value = $sku_entity->get($key)->getString()) {
+      if ($key === 'attr_details_and_care') {
+        $value = '<p>' . $value . '</p>';
+      }
       $properties[] = [
         'label' => $title,
         'value' => $value,
