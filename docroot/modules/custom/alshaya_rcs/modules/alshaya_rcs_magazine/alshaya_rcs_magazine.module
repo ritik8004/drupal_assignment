@@ -26,9 +26,9 @@ function alshaya_rcs_magazine_rcs_handlebars_templates_alter(&$templates, $entit
     return;
   }
 
-  $templates['product.teaser'] = "alshaya_rcs_product";
-  $templates['product.block.price'] = "alshaya_rcs_product";
-  $templates['product.block.price.item'] = "alshaya_rcs_product";
+  $templates['product.teaser'] = 'alshaya_rcs_product';
+  $templates['product.block.price'] = 'alshaya_rcs_product';
+  $templates['product.block.price.item'] = 'alshaya_rcs_product';
 }
 
 
