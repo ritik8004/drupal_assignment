@@ -32,7 +32,7 @@ import DeliveryAreaSelect from '../delivery-area-select';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isExpressDeliveryEnabled, checkAreaAvailabilityStatusOnCart } from '../../../../../js/utilities/expressDeliveryHelper';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
@@ -57,6 +57,7 @@ export default class Cart extends React.Component {
       cartShippingMethods: null,
       panelContent: null,
       auraDetails: null,
+      showAreaAvailabilityStatusOnCart: false,
     };
   }
 
@@ -163,6 +164,8 @@ export default class Cart extends React.Component {
     // Show labels for delivery methods if express delivery enabled.
     if (isExpressDeliveryEnabled()) {
       document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
+      document.addEventListener('refreshCart', this.displayShippingMethods, false);
+      // document.addEventListener('refreshCart', this.showDeliveryArea, false);
     }
 
     // Display message from cookies.
@@ -232,6 +235,16 @@ export default class Cart extends React.Component {
     this.updateCartMessage(type, message);
   };
 
+  showDeliveryArea = () => {
+    // Check if SDD/ED not available for any product.
+    const { cartShippingMethods } = this.state;
+    if (cartShippingMethods !== null && checkAreaAvailabilityStatusOnCart(cartShippingMethods)) {
+      this.setState({
+        showAreaAvailabilityStatusOnCart: true,
+      });
+    }
+  };
+
   updateCartMessage = (actionMessageType, actionMessage) => {
     this.setState({ actionMessageType, actionMessage });
     if (document.getElementsByClassName('spc-messages-container').length > 0) {
@@ -272,7 +285,9 @@ export default class Cart extends React.Component {
           this.setState({
             cartShippingMethods: response,
           });
+          // this.showDeliveryArea();
         }
+        this.showDeliveryArea();
         removeFullScreenLoader();
       },
     );
@@ -312,6 +327,7 @@ export default class Cart extends React.Component {
       panelContent,
       collectionCharge,
       auraDetails,
+      showAreaAvailabilityStatusOnCart,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -411,6 +427,7 @@ export default class Cart extends React.Component {
                   animationDelayValue="0.4s"
                   getPanelData={this.getPanelData}
                   removePanelData={this.removePanelData}
+                  showAreaAvailabilityStatusOnCart={showAreaAvailabilityStatusOnCart}
                 />
               </ConditionalView>
             </div>
