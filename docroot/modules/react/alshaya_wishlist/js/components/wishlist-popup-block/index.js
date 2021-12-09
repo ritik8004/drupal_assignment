@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import CheckoutItemImage from '../../../../alshaya_spc/js/utilities/checkout-item-image';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { addProductToWishList, getWishlistLabel } from '../../utilities/wishlist-utils';
 
 export default class WishlistPopupBlock extends React.Component {
@@ -14,11 +15,18 @@ export default class WishlistPopupBlock extends React.Component {
     if (addToWishlist) {
       addProductToWishList(productInfo);
     }
-    closeWishlistModal();
+    // If user clicked on yes/no in popup, we pass true as response.
+    closeWishlistModal(true);
+  }
+
+  closeModal = () => {
+    const { closeWishlistModal } = this.props;
+    // If user simply clicks on close, we pass false as response.
+    closeWishlistModal(false);
   }
 
   render() {
-    const { cartImage } = this.props;
+    const { itemImage } = this.props;
     return (
       <div className="wishlist-popup-container">
         <Popup
@@ -28,11 +36,12 @@ export default class WishlistPopupBlock extends React.Component {
           closeOnEscape={false}
         >
           <div className="wishlist-popup-block">
-            <div className="wishlist-image-container">
-              <CheckoutItemImage img_data={cartImage} />
-              <div className="wishlist-question">
-                {Drupal.t('Do you want to move this item to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
-              </div>
+            <ConditionalView condition={itemImage}>
+              <CheckoutItemImage img_data={itemImage} />
+            </ConditionalView>
+            <a className="close-modal" onClick={() => this.closeModal()}>Close</a>
+            <div className="wishlist-question">
+              {Drupal.t('Do you want to move this item to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
             </div>
             <div className="wishlist-options">
               <button

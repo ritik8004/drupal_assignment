@@ -272,6 +272,7 @@ const PdpLayout = () => {
               />
             ) : outOfStock}
           </div>
+          {/* Here skuMainCode is parent sku of variant selected */}
           <WishlistContainer
             sku={skuItemCode}
             skuCode={skuMainCode}

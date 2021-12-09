@@ -65,6 +65,7 @@ class WishlistButton extends React.Component {
     let currentSku = sku;
 
     // Get sku base form element from page html.
+    // @todo check data attribute for modal view.
     const form = document.querySelector('.sku-base-form');
     // Get variant sku from selected variant attribute.
     const variantSku = context === 'magazinev2'

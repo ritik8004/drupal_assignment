@@ -19,10 +19,10 @@ function WishlistContainer(props) {
 
   // Lazy load wishlist button component.
   const WishlistLazy = React.lazy(() => import('../../../../alshaya_wishlist/js/components/wishlist-button'));
-
   return (
     <EmptyErrorBoundary>
       <Suspense fallback={<div />}>
+        {/* skuCode is parent sku of selected variant and sku is default sku of current pdp. */}
         <WishlistLazy
           context={context}
           position={position}
