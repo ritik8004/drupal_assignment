@@ -74,6 +74,7 @@ export default class ValidEgiftCard extends React.Component {
                 amount: updateAmount,
                 card_number: egiftCardNumber,
                 payment_method: 'hps_payment',
+                email: egiftEmail,
               },
             };
             showFullScreenLoader();
@@ -83,7 +84,7 @@ export default class ValidEgiftCard extends React.Component {
               redemptionResponse.then((res) => {
                 // Remove the loader as response is available.
                 removeFullScreenLoader();
-                if (res.error === undefined && res.data !== undefined && res.state === 200) {
+                if (res.error === undefined && res.data !== undefined && res.status === 200) {
                   // @todo To handle the summary block update once redemption is done.
                   window.commerceBackend.refreshCart({});
                 }
@@ -154,7 +155,7 @@ export default class ValidEgiftCard extends React.Component {
   // Update egift amount.
   handleAmountUpdate = (updateAmount) => {
     // Prepare the request object for redeem API.
-    const { quoteId, egiftCardNumber } = this.props;
+    const { quoteId, egiftCardNumber, egiftEmail } = this.props;
 
     const postData = {
       redeem_points: {
@@ -163,6 +164,7 @@ export default class ValidEgiftCard extends React.Component {
         amount: updateAmount,
         card_number: egiftCardNumber,
         payment_method: 'hps_payment',
+        email: egiftEmail,
       },
     };
     // Proceed only if postData object is available.
