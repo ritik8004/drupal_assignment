@@ -23,25 +23,13 @@ const AuraProgressString = (props) => {
     );
   }
 
-  if (showDotClass === 'pointer') {
+  // Show string when user is not in vip tier or
+  // if progress ratio is less than 100.
+  if (showDotClass === 'pointer' || progressRatio !== 100) {
     return (
       <>
         <div className="aura-progress-string">
           <span className="aura-progress-string--label">{Drupal.t('You are here')}</span>
-          <span className="aura-progress-string--string">
-            {`${Drupal.t('Earn')} ${difference} ${Drupal.t('points to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
-          </span>
-        </div>
-      </>
-    );
-  }
-
-  // Show string when user is not in vip tier,
-  // if progress ratio is less than 100.
-  if (progressRatio !== 100) {
-    return (
-      <>
-        <div className="aura-progress-string">
           <span className="aura-progress-string--string">
             {`${Drupal.t('Earn')} ${difference} ${Drupal.t('points to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
           </span>
