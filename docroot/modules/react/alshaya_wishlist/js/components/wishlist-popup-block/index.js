@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import CheckoutItemImage from '../../../../alshaya_spc/js/utilities/checkout-item-image';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { addProductToWishList, getWishlistLabel } from '../../utilities/wishlist-utils';
 
 export default class WishlistPopupBlock extends React.Component {
@@ -17,8 +18,13 @@ export default class WishlistPopupBlock extends React.Component {
     closeWishlistModal();
   }
 
+  closeModal = () => {
+    const { closeWishlistModal } = this.props;
+    closeWishlistModal('close modal');
+  }
+
   render() {
-    const { cartImage } = this.props;
+    const { itemImage } = this.props;
     return (
       <div className="wishlist-popup-container">
         <Popup
@@ -28,7 +34,10 @@ export default class WishlistPopupBlock extends React.Component {
           closeOnEscape={false}
         >
           <div className="wishlist-popup-block">
-            <CheckoutItemImage img_data={cartImage} />
+            <ConditionalView condition={itemImage}>
+              <CheckoutItemImage img_data={itemImage} />
+            </ConditionalView>
+            <a className="close-modal" onClick={() => this.closeModal()}>Close</a>
             <div className="wishlist-question">
               {Drupal.t('Do you want to move the product to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
             </div>

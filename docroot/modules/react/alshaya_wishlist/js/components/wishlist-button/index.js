@@ -3,6 +3,7 @@ import {
   isProductExistInWishList,
   addProductToWishList,
   removeProductFromWishList,
+  getWishlistLabel,
 } from '../../utilities/wishlist-utils';
 
 class WishlistButton extends React.Component {
@@ -64,6 +65,7 @@ class WishlistButton extends React.Component {
     let currentSku = sku;
 
     // Get sku base form element from page html.
+    // @todo check data attribute for modal view.
     const form = document.querySelector('.sku-base-form');
     // Get variant sku from selected variant attribute.
     const variantSku = context === 'magazinev2'
@@ -165,8 +167,11 @@ class WishlistButton extends React.Component {
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
+    const wishlistLabel = getWishlistLabel();
     const wishListButtonClass = addedInWishList ? `${classPrefix} in-wishlist` : classPrefix;
-    const buttonText = addedInWishList ? 'Remove' : 'Add to wishlist';
+    const buttonText = addedInWishList ?
+      Drupal.t('Added to @wishlist_label', { '@wishlist_label': wishlistLabel }, { context: 'wishlist' }) :
+      Drupal.t('Add to @wishlist_label', { '@wishlist_label': wishlistLabel }, { context: 'wishlist' });
 
     return (
       <div
