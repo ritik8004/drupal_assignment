@@ -11,8 +11,9 @@ import Loading from '../../../utilities/loading';
 import { getStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import { redeemAuraPoints } from '../utilities/checkout_helper';
+import { redeemAuraPoints, getAuraPointsToEarn } from '../utilities/checkout_helper';
 import dispatchCustomEvent from '../../../utilities/events';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class AuraCartRewards extends React.Component {
   constructor(props) {
@@ -25,10 +26,12 @@ class AuraCartRewards extends React.Component {
 
   componentDidMount() {
     document.addEventListener('loyaltyStatusUpdated', this.updateState, false);
+    // Listener to get the updated aura points.
+    document.addEventListener('auraPointsToEarnApiInvoked', this.handleAuraPointsToEarn, false);
+    // Listener to refreshCart event to track any cart update action like quantity update.
+    document.addEventListener('refreshCart', this.getAuraPoints, false);
 
     if (getUserDetails().id) {
-      document.addEventListener('customerDetailsFetched', this.updateState, false);
-
       // Listener to refreshCart event to track any cart update action like quantity update.
       document.addEventListener('refreshCart', this.removeRedeemedPoints, false);
       // Listener to promoCodeSuccess event to track when promo code is applied on cart.
@@ -39,22 +42,29 @@ class AuraCartRewards extends React.Component {
       // Listener to redeem points API event to update cart total based on response.
       document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
 
-      const { loyaltyStatus } = this.state;
+      // Update state with aura details from props.
+      const { auraDetails } = this.props;
 
-      if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
-        this.setState({
-          wait: false,
-        });
+      if (hasValue(auraDetails)) {
+        const data = {
+          detail: { stateValues: auraDetails },
+        };
+        this.updateState(data);
+
+        const { loyaltyStatus } = this.state;
+
+        if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+          this.setState({
+            wait: false,
+          });
+        }
       }
     } else {
       // Guest user.
-      const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+      let localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
       if (localStorageValues === null) {
-        this.setState({
-          wait: false,
-        });
-        return;
+        localStorageValues = { wait: false };
       }
 
       const data = {
@@ -62,6 +72,26 @@ class AuraCartRewards extends React.Component {
       };
       this.updateState(data);
     }
+  }
+
+  // Prepare data and call helper to invoke aura points sales API.
+  getAuraPoints = () => {
+    const { items } = this.props;
+    const { cardNumber } = this.state;
+    this.setState({
+      waitForPoints: true,
+    });
+    getAuraPointsToEarn(items, cardNumber);
+  }
+
+  // Event listener callback to trigger an event to get aura points.
+  handleAuraPointsToEarn = (data) => {
+    const states = { ...data.detail.stateValues };
+    states.wait = false;
+    states.waitForPoints = false;
+    this.setState({
+      ...states,
+    });
   }
 
   // Event listener callback for redeem points API event to
@@ -111,10 +141,11 @@ class AuraCartRewards extends React.Component {
 
   updateState = (data) => {
     const states = { ...data.detail.stateValues };
-    states.wait = false;
     this.setState({
       ...states,
     });
+    // Get the aura points to earn from sales API.
+    this.getAuraPoints();
   };
 
   getSectionTitle = (allAuraStatus, loyaltyStatus) => {
@@ -130,7 +161,6 @@ class AuraCartRewards extends React.Component {
 
   render() {
     const allAuraStatus = getAllAuraStatus();
-    const { totals } = this.props;
 
     const {
       wait,
@@ -138,6 +168,8 @@ class AuraCartRewards extends React.Component {
       expiryDate,
       cardNumber,
       loyaltyStatus,
+      auraPointsToEarn,
+      waitForPoints,
     } = this.state;
 
     if (wait) {
@@ -149,13 +181,6 @@ class AuraCartRewards extends React.Component {
       );
     }
 
-    // Get price points from total without delivery charges.
-    let price = 0;
-    if (typeof totals.base_grand_total_without_surcharge !== 'undefined'
-      && typeof totals.shipping_incl_tax !== 'undefined') {
-      price = totals.base_grand_total_without_surcharge - totals.shipping_incl_tax;
-    }
-
     return (
       <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
@@ -165,35 +190,39 @@ class AuraCartRewards extends React.Component {
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
           <AuraNotLinkedNoData
-            price={price}
+            pointsToEarn={auraPointsToEarn}
             loyaltyStatus={loyaltyStatus}
+            wait={waitForPoints}
           />
         </ConditionalView>
 
         {/* Registered with Linked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
           <AuraLinkedVerified
-            price={price}
+            pointsToEarn={auraPointsToEarn}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
             loyaltyStatus={loyaltyStatus}
+            wait={waitForPoints}
           />
         </ConditionalView>
 
         {/* Registered with Linked Loyalty Card - Pending Enrollment */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
           <AuraLinkedNotVerified
-            price={price}
+            pointsToEarn={auraPointsToEarn}
             loyaltyStatus={loyaltyStatus}
+            wait={waitForPoints}
           />
         </ConditionalView>
 
         {/* Registered with Unlinked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
           <AuraNotLinkedData
-            price={price}
+            pointsToEarn={auraPointsToEarn}
             cardNumber={cardNumber}
             loyaltyStatus={loyaltyStatus}
+            wait={waitForPoints}
           />
         </ConditionalView>
       </div>

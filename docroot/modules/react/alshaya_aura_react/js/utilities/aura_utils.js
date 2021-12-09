@@ -68,6 +68,7 @@ function getAuraDetailsDefaultState() {
     mobile: '',
     firstName: '',
     lastName: '',
+    auraPointsToEarn: 0,
   };
 
   return auraDetails;

@@ -355,11 +355,16 @@ function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
       $current_route_name = \Drupal::routeMatch()->getRouteName();
 
       // Add library dependencies on header library based on routes.
-      if ($current_route_name === 'alshaya_aura_react.my_loyalty_club') {
-        $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_loyalty_club';
-      }
-      if ($current_route_name === 'entity.user.canonical') {
-        $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
+      switch ($current_route_name) {
+        case 'alshaya_aura_react.my_loyalty_club':
+          $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_loyalty_club';
+          break;
+        case 'entity.user.canonical':
+          $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
+          break;
+        case 'acq_cart.cart':
+          $libraries['aura_header_library']['dependencies'][] = 'alshaya_spc/cart';
+          break;
       }
     }
   }
