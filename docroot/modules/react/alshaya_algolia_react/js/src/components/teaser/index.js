@@ -18,11 +18,10 @@ import {
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType, showAddToBag, extraInfo,
-  // 'showAddToBag' is used to decide whether we want
-  // to show the add to bag button or not.
+  hit, gtmContainer = null, pageType, extraInfo,
   // 'extraInfo' is used to pass additional information that
   // we want to use in this component.
 }) => {
@@ -103,11 +102,6 @@ const Teaser = ({
     && showReviewsRating === 1
     && overallRating !== '');
 
-  // Prepare a flag to identify if current request is from the wishlist page.
-  const isWishlist = (typeof extraInfo !== 'undefined'
-    && typeof extraInfo.isWishlist !== 'undefined'
-    && extraInfo.isWishlist);
-
   return (
     <div className={teaserClass}>
       <article
@@ -154,7 +148,8 @@ const Teaser = ({
               setSlider={setSlider}
             />
           </a>
-          <ConditionalView condition={!isWishlist}>
+          {/* Render the component if the page isn't wishlist listing page. */}
+          <ConditionalView condition={!isWishlistPage(extraInfo)}>
             {/* @todo: we need to move this to proper place. */}
             <WishlistContainer
               context="wishlist"
@@ -232,11 +227,11 @@ const Teaser = ({
           stockQty={hit.stock_quantity}
           productData={attribute.atb_product_data}
           isBuyable={attribute.is_buyable}
-          // 'showAddToBag' is used to decide whether we
-          // want to show the add to bag button or not.
-          showAddToBag={showAddToBag}
+          // Pass extra information to the component for update the behaviour.
+          extraInfo={extraInfo}
         />
-        <ConditionalView condition={isWishlist}>
+        {/* Render the component if the page is wishlist listing page. */}
+        <ConditionalView condition={isWishlistPage(extraInfo)}>
           <WishlistContainer
             context="wishlist"
             position="top-right"

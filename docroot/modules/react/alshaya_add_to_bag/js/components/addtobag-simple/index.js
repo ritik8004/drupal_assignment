@@ -14,6 +14,7 @@ import { isProductBuyable } from '../../../../js/utilities/display';
 import NotBuyableButton from '../buttons/not-buyable';
 import getStringMessage from '../../../../js/utilities/strings';
 import logger from '../../../../js/utilities/logger';
+import { isWishlistPage } from '../../../../js/utilities/wishlistHelper';
 
 export default class AddToBagSimple extends React.Component {
   constructor(props) {
@@ -252,7 +253,7 @@ export default class AddToBagSimple extends React.Component {
 
   render() {
     const {
-      sku, isBuyable, url,
+      sku, isBuyable, url, extraInfo,
     } = this.props;
 
     const {
@@ -269,7 +270,7 @@ export default class AddToBagSimple extends React.Component {
     }
 
     // Define component visibility condition.
-    const btnCondition = (typeof cartQty === 'undefined') || (cartQty === 0) || (cartQty === null);
+    let btnCondition = (typeof cartQty === 'undefined') || (cartQty === 0) || (cartQty === null);
     const wrapperClasses = (!btnCondition ? 'addtobag-button-qty-wrapper' : '');
     const isEnabledDecreaseBtn = (cartQty > 0);
     const isEnabledIncreaseBtn = (cartQty < stockQtyLimit || stockQtyLimit === 0);
@@ -278,6 +279,19 @@ export default class AddToBagSimple extends React.Component {
     qtyLimitMessage = (!isEnabledIncreaseBtn && !isHideMaxSaleMsg())
       ? getStringMessage('purchase_limit_error_msg')
       : qtyLimitMessage;
+
+    let addToCartText = getStringMessage('add_to_cart');
+    // Check if button text is available in extraInfo. For example we are
+    // passing a different button text for the wishlist page.
+    if (typeof extraInfo.addToCartButtonText !== 'undefined') {
+      addToCartText = extraInfo.addToCartButtonText;
+    }
+
+    // If the current page the wishlist page, we always want to show
+    // add to bag button component and not increase/decrease component.
+    if (isWishlistPage(extraInfo)) {
+      btnCondition = true;
+    }
 
     return (
       <div
@@ -292,7 +306,7 @@ export default class AddToBagSimple extends React.Component {
               type="button"
               onClick={this.onClickHandler}
             >
-              {getStringMessage('add_to_cart')}
+              {addToCartText}
             </button>
           </div>
         </ConditionalView>

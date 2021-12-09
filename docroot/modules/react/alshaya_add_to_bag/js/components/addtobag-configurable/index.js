@@ -14,6 +14,9 @@ export default class AddToBagConfigurable extends React.Component {
       drawerStatus: 'closed',
       productInfo: null,
     };
+
+    // Store reference to the main container.
+    this.buttonContainerRef = React.createRef();
   }
 
   /**
@@ -71,6 +74,10 @@ export default class AddToBagConfigurable extends React.Component {
     const { drawerStatus } = this.state;
     const nextStatus = (drawerStatus === 'opened') ? 'closed' : 'opened';
 
+    // Trigger Product Details View GTM push.
+    // Sending parameter 'yes' for quick view.
+    Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'), document.querySelector('body').getAttribute('gtm-list-name'), 'yes');
+
     this.setState({
       drawerStatus: nextStatus,
       productInfo: productInfoData,
@@ -94,13 +101,24 @@ export default class AddToBagConfigurable extends React.Component {
 
   render() {
     const { drawerStatus, productInfo } = this.state;
-    const { sku, isBuyable, url } = this.props;
+    const {
+      sku,
+      isBuyable,
+      url,
+      extraInfo,
+    } = this.props;
 
     // Early return if product is not buyable.
     if (!isProductBuyable(isBuyable)) {
       return (
         <NotBuyableButton url={url} />
       );
+    }
+
+    let addToCartText = getStringMessage('view_options');
+    // Check if button text is available in extraInfo.
+    if (typeof extraInfo.addToCartButtonText !== 'undefined') {
+      addToCartText = extraInfo.addToCartButtonText;
     }
 
     return (
@@ -111,8 +129,9 @@ export default class AddToBagConfigurable extends React.Component {
             id={`addtobag-button-${sku}`}
             type="button"
             onClick={this.handleOnClick}
+            ref={this.buttonContainerRef}
           >
-            {`${getStringMessage('view_options')}`}
+            {addToCartText}
           </button>
         </div>
         <ConditionalView condition={drawerStatus === 'opened'}>
@@ -123,6 +142,7 @@ export default class AddToBagConfigurable extends React.Component {
               productData={productInfo}
               sku={sku}
               url={url}
+              extraInfo={extraInfo}
             />,
             document.querySelector('#configurable-drawer'),
           )}

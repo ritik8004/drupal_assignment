@@ -25,7 +25,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
   };
 
   render() {
-    const { price, cartId } = this.props;
+    const { pointsToEarn, cartId } = this.props;
     const { showLinkCardMessage } = this.state;
 
     return (
@@ -35,7 +35,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
             { getStringMessage('checkout_earn_and_redeem') }
             <ToolTip enable question>{ getStringMessage('checkout_earn_and_redeem_tooltip') }</ToolTip>
           </div>
-          <div className="subtitle-2">{ getMembersToEarnMessage(price) }</div>
+          <div className="subtitle-2">{ getMembersToEarnMessage(pointsToEarn) }</div>
         </div>
         <div className="spc-aura-link-card-form">
           <div className="label">

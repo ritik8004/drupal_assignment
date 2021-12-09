@@ -167,18 +167,29 @@ class WishlistButton extends React.Component {
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
-    const wishlistLabel = getWishlistLabel();
-    const wishListButtonClass = addedInWishList ? `${classPrefix} in-wishlist` : classPrefix;
-    const buttonText = addedInWishList ?
-      Drupal.t('Added to @wishlist_label', { '@wishlist_label': wishlistLabel }, { context: 'wishlist' }) :
-      Drupal.t('Add to @wishlist_label', { '@wishlist_label': wishlistLabel }, { context: 'wishlist' });
+    const wishListButtonClass = addedInWishList ? 'in-wishlist wishlist-button-wrapper' : 'wishlist-button-wrapper';
+
+    // Wishlist text for my-wishlist page.
+    let buttonText = addedInWishList ? 'Remove' : 'Add to @wishlist_label';
+
+    // Wishlist text for PDP layouts.
+    if (context === 'pdp' || context === 'magazinev2') {
+      buttonText = addedInWishList ? 'Added to @wishlist_label' : 'Add to @wishlist_label';
+    }
+
+    // Wishlist text for Basket page.
+    if (context === 'cart') {
+      buttonText = addedInWishList ? 'Remove from @wishlist_label' : 'Move to @wishlist_label';
+    }
 
     return (
       <div
         className={wishListButtonClass}
         onClick={() => this.toggleWishlist()}
       >
-        {Drupal.t(buttonText, {}, { context: 'wishlist' })}
+        <div className={classPrefix}>
+          {Drupal.t(buttonText, { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+        </div>
       </div>
     );
   }

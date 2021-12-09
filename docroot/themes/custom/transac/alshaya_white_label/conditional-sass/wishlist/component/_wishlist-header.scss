@@ -1,0 +1,126 @@
+body.wishlist-enabled {
+  .block-alshaya-wishlist {
+    width: auto;
+    text-align: $right;
+    flex-grow: 1;
+  }
+
+  .wishlist-header {
+    padding-#{$right}: 0.9375rem;
+    position: relative;
+  }
+
+  .wishlist-notification {
+    border: 1px solid $wishlist-header-notification-border;
+    border-radius: 0.25rem;
+    padding: 0.9375rem;
+    position: absolute;
+    z-index: 999;
+    background: $wishlist-header-notification-bg;
+    max-width: 19rem;
+    #{$right}: 0;
+    top: 2.5rem;
+    text-align: center;
+
+    .product-name {
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+
+      span {
+        display: block;
+      }
+    }
+
+    .wishlist-query {
+      font-size: 0.875rem;
+      line-height: 1rem;
+      font-family: $alshaya-bold;
+      padding-top: 0.6875rem;
+    }
+
+    .wishlist-user-login {
+      .login-message {
+        font-size: 0.75rem;
+        padding-top: 0.3125rem;
+        color: $wishlist-header-login-message;
+      }
+    }
+
+    .actions {
+      padding-top: 1.25rem;
+      display: flex;
+
+      a {
+        font-family: $alshaya-bold;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        width: 8.125rem;
+        height: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        letter-spacing: 0.0625rem;
+        line-height: 1;
+
+        &.sign-in {
+          background: $wishlist-button-bg;
+          color: $wishlist-button-txt;
+
+          &:hover {
+            background: $wishlist-button-bg-hover;
+          }
+        }
+
+        &.register {
+          border: 1px solid $wishlist-button-border;
+          margin-#{$left}: 0.875rem;
+        }
+      }
+    }
+  }
+
+  .wishlist-icon {
+    background-size: contain;
+    font-size: 0;
+    display: block;
+    margin-#{$left}: auto;
+  }
+
+  .block-alshaya-react-mini-cart {
+    @include breakpoint($desktop) {
+      width: auto;
+      top: 0;
+    }
+
+    #mini-cart-wrapper {
+      min-width: auto;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .region__menu-primary {
+      .store {
+        display: none;
+      }
+    }
+  }
+
+  #wishlist-header-wrapper {
+    position: absolute;
+    top: 0.375rem;
+    #{$right}: 1.75rem;
+
+    @include breakpoint($only-tablet) {
+      top: 0;
+      #{$right}: 2.5rem;
+
+      .wishlist-header {
+        padding-#{$right}: 1.5625rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      position: unset;
+    }
+  }
+}

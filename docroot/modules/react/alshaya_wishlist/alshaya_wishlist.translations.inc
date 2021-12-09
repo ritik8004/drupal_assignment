@@ -14,8 +14,24 @@ function _alshaya_wishlist_translations() {
       'ar' => 'يتم حفظ العناصر لهذه الزيارة فقط. لحفظها في وقت لاحق ، قم بتسجيل الدخول إلى حسابك أو تسجيل حساب جديد.',
       'context' => 'wishlist',
     ],
-    'Add to wishlist' => [
-      'ar' => 'أضف إلى قائمة الامنيات',
+    'Add to @wishlist_label' => [
+      'ar' => 'أضف إلى @wishlist_label',
+      'context' => 'wishlist',
+    ],
+    'Added to @wishlist_label' => [
+      'ar' => 'مضاف إلى @wishlist_label',
+      'context' => 'wishlist',
+    ],
+    'Remove' => [
+      'ar' => 'يزيل',
+      'context' => 'wishlist',
+    ],
+    'Move to @wishlist_label' => [
+      'ar' => 'الانتقال إلى @wishlist_label',
+      'context' => 'wishlist',
+    ],
+    'Remove from @wishlist_label' => [
+      'ar' => 'حذف من @wishlist_label',
       'context' => 'wishlist',
     ],
     'my @wishlist_label' => [
@@ -44,6 +60,10 @@ function _alshaya_wishlist_translations() {
     ],
     'Do you want to move the product to @wishlist_label?' => [
       'ar' => 'هل تريد نقل المنتج إلىwishlist_label؟',
+      'context' => 'wishlist',
+    ],
+    'Move to basket' => [
+      'ar' => 'انتقل إلى السلة',
       'context' => 'wishlist',
     ],
   ];

@@ -37,6 +37,13 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#default_value' => $wishlist_config->get('enabled'),
     ];
 
+    $form['alshaya_wishlist']['remove_after_addtocart'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Remove from wishlist'),
+      '#description' => $this->t('If checked, product will be removed from the wishlist it has been added to cart from PDP, PLP, Wishlist or any other pages.'),
+      '#default_value' => $wishlist_config->get('remove_after_addtocart'),
+    ];
+
     $form['alshaya_wishlist']['wishlist_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Wishlist Label'),
@@ -53,6 +60,14 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#default_value' => $wishlist_config->get('empty_wishlist_message'),
     ];
 
+    // Add the token tree UI.
+    $form['alshaya_wishlist']['token_tree'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => ['alshaya_wishlist'],
+      '#show_restricted' => TRUE,
+      '#weight' => 90,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -62,6 +77,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_wishlist.settings')
       ->set('enabled', $form_state->getValue('enabled'))
+      ->set('remove_after_addtocart', $form_state->getValue('remove_after_addtocart'))
       ->set('empty_wishlist_message', $form_state->getValue('empty_wishlist_message'))
       ->set('wishlist_label', $form_state->getValue('wishlist_label'))
       ->save();

@@ -280,7 +280,12 @@ export default class ConfigurableForm extends React.Component {
   }
 
   render() {
-    const { sku, selectedVariant, productData } = this.props;
+    const {
+      sku,
+      selectedVariant,
+      productData,
+      extraInfo,
+    } = this.props;
     const configurableAttributes = productData.configurable_attributes;
     const { formAttributeValues, quantity, errorMessage } = this.state;
     const hiddenAttributes = getHiddenFormAttributes();
@@ -306,6 +311,12 @@ export default class ConfigurableForm extends React.Component {
 
     const groupData = {};
     let { groupCode } = this.state;
+
+    let addToCartText = getStringMessage('add_to_cart');
+    // Check if button text is available in extraInfo.
+    if (typeof extraInfo.addToCartButtonText !== 'undefined') {
+      addToCartText = extraInfo.addToCartButtonText;
+    }
 
     return (
       <>
@@ -395,7 +406,7 @@ export default class ConfigurableForm extends React.Component {
               // Disable add to bag button if max sale limit has reached.
               disabled={isMaxSaleQtyReached(selectedVariant, productData)}
             >
-              {getStringMessage('add_to_cart')}
+              {addToCartText}
             </button>
           </div>
         </form>

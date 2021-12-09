@@ -36,6 +36,11 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   $page['#attached']['drupalSettings']['add_to_bag']['display_addtobag'] = $add_to_bag_feature_status;
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $add_to_bag_settings->getCacheTags());
 
+  // Allow other modules to update the feature status so all the required
+  // libraries and settings will be available on the page but the main
+  // feature status in drupalSettings still says false.
+  \Drupal::moduleHandler()->alter('alshaya_add_to_bag_feature_status', $add_to_bag_feature_status);
+
   if (!$add_to_bag_feature_status) {
     return;
   }
