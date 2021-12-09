@@ -255,12 +255,8 @@ class HandlebarsService {
         // Make sure that folder structure is created.
         $dir = $this->prepareDirectories("$extension/$id");
         $uri = $dir . '/' . basename($path) . '.js';
-
-        // Check if file exists and continue.
-        if (!file_exists($uri)) {
-          $script = $this->generateScript($extension, $id, $path);
-          $this->fileSystem->saveData($script, $uri, 1);
-        }
+        $script = $this->generateScript($extension, $id, $path);
+        $this->fileSystem->saveData($script, $uri, 1);
 
         // Replace the library path.
         $libraries[$id]['js'][$this->getRelativePath($uri)] = $details;
