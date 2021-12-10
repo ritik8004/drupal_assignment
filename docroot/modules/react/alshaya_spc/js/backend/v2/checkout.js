@@ -37,6 +37,8 @@ import {
 import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
 import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities/error';
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import { isCollectionPoint } from '../../utilities/cnc_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -454,7 +456,13 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     stores = stores.slice(0, cncStoresLimit);
   }
 
+  const isCollectionPointEnabled = collectionPointsEnabled();
   stores.forEach((store) => {
+    // Do not fetch Store data from Drupal if PUDO is disabled and the store
+    // is a collection point.
+    if (!isCollectionPointEnabled && isCollectionPoint(store)) {
+      return;
+    }
     storeInfoPromises.push(getStoreInfo(store));
   });
 
