@@ -398,10 +398,14 @@ const getProcessedCartData = async (cartData) => {
 
       // Set isEgiftCard for virtual product.
       let isEgiftCard = false;
+      let itemKey = item.sku;
       if (isEgiftCardEnabled() && item.product_type !== 'undefined' && item.product_type === 'virtual') {
         isEgiftCard = true;
+        // to show multiple egift product in cart seperately changing this to item_id,
+        // as sku will be the same.
+        itemKey = item.item_id;
       }
-      data.items[item.sku] = {
+      data.items[itemKey] = {
         id: item.item_id,
         title: item.name,
         qty: item.qty,
@@ -429,13 +433,13 @@ const getProcessedCartData = async (cartData) => {
             '@stockInfo': JSON.stringify(stockInfo || {}),
           });
 
-          delete data.items[item.sku];
+          delete data.items[itemKey];
           // eslint-disable-next-line no-continue
           continue;
         }
 
-        data.items[item.sku].in_stock = stockInfo.in_stock;
-        data.items[item.sku].stock = stockInfo.stock;
+        data.items[itemKey].in_stock = stockInfo.in_stock;
+        data.items[itemKey].stock = stockInfo.stock;
 
         // If any item is OOS.
         if (!hasValue(stockInfo.in_stock) || !hasValue(stockInfo.stock)) {
@@ -445,20 +449,20 @@ const getProcessedCartData = async (cartData) => {
 
       if (typeof item.extension_attributes !== 'undefined') {
         if (typeof item.extension_attributes.error_message !== 'undefined') {
-          data.items[item.sku].error_msg = item.extension_attributes.error_message;
+          data.items[itemKey].error_msg = item.extension_attributes.error_message;
           data.is_error = true;
         }
 
         if (typeof item.extension_attributes.promo_rule_id !== 'undefined') {
-          data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
+          data.items[itemKey].promoRuleId = item.extension_attributes.promo_rule_id;
         }
         // Extension attributes information for eGift products.
         if (isEgiftCard && typeof item.extension_attributes.is_egift !== 'undefined' && item.extension_attributes.is_egift) {
           if (typeof item.extension_attributes.egift_options !== 'undefined') {
-            data.items[item.sku].egiftOptions = item.extension_attributes.egift_options;
+            data.items[itemKey].egiftOptions = item.extension_attributes.egift_options;
           }
           if (typeof item.extension_attributes.product_media !== 'undefined') {
-            data.items[item.sku].media = item.extension_attributes.product_media[0].file;
+            data.items[itemKey].media = item.extension_attributes.product_media[0].file;
           }
         }
       }
@@ -470,15 +474,15 @@ const getProcessedCartData = async (cartData) => {
           // Final price to use.
           // For the free gift the key 'price_incl_tax' is missing.
           if (typeof totalItem.price_incl_tax !== 'undefined') {
-            data.items[item.sku].finalPrice = totalItem.price_incl_tax;
+            data.items[itemKey].finalPrice = totalItem.price_incl_tax;
           } else {
-            data.items[item.sku].finalPrice = totalItem.base_price;
+            data.items[itemKey].finalPrice = totalItem.base_price;
           }
 
           // Free Item is only for free gift products which are having
           // price 0, rest all are free but still via different rules.
           if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
-            data.items[item.sku].freeItem = true;
+            data.items[itemKey].freeItem = true;
           }
         }
       });
