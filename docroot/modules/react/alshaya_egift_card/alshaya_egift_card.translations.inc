@@ -223,10 +223,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Redeem amount should be less than or equal to the cart value.',
         'context' => 'egift',
       ],
-      'Card is expired' => [
-        'ar' => 'Card is expired',
-        'context' => 'egift',
-      ],
       'Pay using egift card (Available Balance: @currencyCode @amount)' => [
         'ar' => 'Pay using egift card (Available Balance: @currencyCode @amount)',
         'context' => 'egift',
@@ -247,7 +243,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
         'context' => 'egift',
       ],
-      'Linked card has 0 Balance please use another payment method to complete purchase' => [
+      'Linked card has 0 balance please use another payment method to complete purchase' => [
         'ar' => 'Linked card has 0 Balance please use another payment method to complete purchase',
         'context' => 'egift',
       ],

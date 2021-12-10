@@ -16,7 +16,7 @@ import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import isAuraEnabled, { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import {
   isFullPaymentDoneByAura,
   isPaymentMethodSetAsAura,
@@ -27,10 +27,7 @@ import CheckoutComUpapiApplePay
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
-import PaymentMethodLinkedCard from '../../../egift-card/components/payment-method-linked-card';
-import {callEgiftApi} from '../../../utilities/egift_util';
-import {isUserAuthenticated} from '../../../../../js/utilities/helper';
-import logger from "../../../../../js/utilities/logger";
+import PaymentMethodLinkedEgift from '../../../egift-card/components/payment-method-linked-egift-card';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -38,34 +35,10 @@ export default class PaymentMethods extends React.Component {
     this.paymentMethodRefs = [];
     this.state = {
       postpayAvailable: [],
-      linkedCard: false,
-      linkedCardNumber: 0,
     };
   }
 
   componentDidMount = () => {
-    // Call egift search api if egift module is enabled.
-    if (isEgiftCardEnabled()) {
-      const params = { email: drupalSettings.userDetails.userEmailID };
-      const response = callEgiftApi('eGiftHpsSearch', 'GET', params);
-      if (response instanceof Promise) {
-        response.then((result) => {
-          if (typeof result.data !== 'undefined' && typeof result.error === 'undefined') {
-            this.setState({
-              linkedCard: true,
-              linkedCardNumber: result.data.card_number,
-            });
-          }
-          // Handle error response.
-          if (result.error) {
-            logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
-              '@emailId': params.email,
-              '@response': result.data,
-            });
-          }
-        });
-      }
-    }
     this.selectDefault();
     // We want this to be executed once all other JS execution is finished.
     // For this we use setTimeout with 1 ms.
@@ -365,7 +338,6 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
-    const { linkedCard, linkedCardNumber } = this.state;
 
     const activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
@@ -401,18 +373,10 @@ export default class PaymentMethods extends React.Component {
     return (
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
-        <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated() && linkedCard === true}>
-          <PaymentMethodLinkedCard
+        <ConditionalView condition={isEgiftCardEnabled() && !isUserAuthenticated()}>
+          <PaymentMethodLinkedEgift
             cart={cart}
-            linkCardStatus={linkedCard}
-            cardNumber={linkedCardNumber}
-            changePaymentMethod={this.changePaymentMethod}
-            isSelected={cart.cart.payment.method === 'checkout_com_egift_linked_card'}
             animationOffset={0.4}
-            {...(isAuraEnabled()
-              && disablePaymentMethod
-              && { disablePaymentMethod }
-            )}
           />
         </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>
