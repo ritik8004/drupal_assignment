@@ -39,7 +39,6 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (!this.handleValidation(e)) {
       // @todo To perform Amount update.
       const { egift_amount: egiftAmount } = e.target.elements;
-      // eslint-disable-next-line max-len
       const {
         updateAmount,
         cart,
@@ -48,23 +47,13 @@ export default class UpdateEgiftCardAmount extends React.Component {
         redeemAmount,
         cardBalance,
       } = this.props;
-      // Calculations for showing remaining balance.
-      handleExceedingAmount(true, 0, false);
-      // Hide exceed error message if cart total is equal to user input.
-      if (cart.cart_total === egiftAmount.value) {
-        handleExceedingAmount(true, 0, false);
-      }
-      // Show exceed error message if cart total is greater than to user input.
-      if (cart.cart_total > egiftAmount.value) {
-        handleExceedingAmount(true, cart.cart_total - egiftAmount.value, false);
-      }
-      // Show remaining balance after redemption.
-      if (cardBalance > cart.cart_total && egiftAmount.value <= cart.cart_total) {
-        redeemAmount(true, cardBalance - egiftAmount.value, false);
-      }
       // Display the message based on update status.
-      // eslint-disable-next-line max-len
-      const updateStatus = updateAmount(cart, egiftAmount.value, egiftCardNumber, redeemAmount, cardBalance, handleExceedingAmount);
+      const updateStatus = updateAmount(cart,
+        egiftAmount.value,
+        egiftCardNumber,
+        redeemAmount,
+        cardBalance,
+        handleExceedingAmount);
       if (!updateStatus) {
         document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_amount_update_failed');
       }

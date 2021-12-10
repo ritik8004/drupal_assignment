@@ -152,8 +152,12 @@ export default class ValidEgiftCard extends React.Component {
   }
 
   // Update egift amount.
-  // eslint-disable-next-line max-len
-  handleAmountUpdate = (cart, updateAmount, egiftCardNumber, redeemAmount, cardBalance, handleExceedingAmount) => {
+  handleAmountUpdate = (cart,
+    updateAmount,
+    egiftCardNumber,
+    redeemAmount,
+    cardBalance,
+    handleExceedingAmount) => {
     // Prepare the request object for redeem API.
     const postData = {
       redeem_points: {
@@ -162,6 +166,7 @@ export default class ValidEgiftCard extends React.Component {
         amount: updateAmount,
         card_number: egiftCardNumber,
         payment_method: 'hps_payment',
+        email: drupalSettings.userDetails.userEmailID,
       },
     };
     // Proceed only if postData object is available.
@@ -179,12 +184,17 @@ export default class ValidEgiftCard extends React.Component {
               amount: updateAmount,
               open: false,
             });
+            // Calculations for showing remaining balance.
+            handleExceedingAmount(true, 0, false);
+            // Hide exceed error message if cart total is equal to user input.
             if (cart.cart_total === updateAmount) {
               handleExceedingAmount(true, 0, false);
             }
+            // Show exceed error message if cart total is greater than to user input.
             if (cart.cart_total > updateAmount) {
               handleExceedingAmount(true, cart.cart_total - updateAmount, false);
             }
+            // Show remaining balance after redemption.
             if (cardBalance > cart.cart_total && updateAmount <= cart.cart_total) {
               redeemAmount(true, cardBalance - updateAmount, false);
             }

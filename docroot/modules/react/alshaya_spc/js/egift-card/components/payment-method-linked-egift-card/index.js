@@ -7,7 +7,6 @@ import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import ValidEgiftCard from '../ValidEgiftCard';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { callEgiftApi } from '../../../utilities/egift_util';
-import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -42,81 +41,84 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
   }
 
   componentDidMount() {
-    // Check if egift module enabled.
-    if (isEgiftCardEnabled()) {
-      const { cart } = this.props;
-      const params = { email: drupalSettings.userDetails.userEmailID };
-      // Invoke magento API to get the user card number.
-      const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params);
-      if (response instanceof Promise) {
-        response.then((result) => {
-          // eslint-disable-next-line max-len
-          if (result.status === 200 && result.data.card_number !== null && result.data.response_type !== false) {
-            this.setState({
-              linkedEgiftCard: true,
-              linkedEgiftCardNumber: result.data.card_number,
-              apiWait: true,
-            });
-          }
-          // Handle error response.
-          // eslint-disable-next-line max-len
-          if (result.status === 200 && result.data.account_id === null && result.data.response_type === false) {
-            logger.error('Error while calling the egift HPS Search. EmailId: @emailId . Response: @response', {
-              '@emailId': params.email,
-              '@response': result.data.response_message,
-            });
-            this.setState({
-              apiWait: false,
-              apiErrorMessage: result.data.response_message,
-            });
-          }
+    const { cart } = this.props;
+    const params = { email: drupalSettings.userDetails.userEmailID };
+    // Invoke magento API to get the user card number.
+    const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params);
+    if (response instanceof Promise) {
+      response.then((result) => {
+        if (result.status === 200 && result.data.card_number !== null &&
+          result.data.response_type !== false) {
+          this.setState({
+            linkedEgiftCard: true,
+            linkedEgiftCardNumber: result.data.card_number,
+          });
+        }
+        // Handle error response.
+        if (result.status === 200 && result.data.account_id === null &&
+          result.data.response_type === false) {
+          logger.error('Error while calling the egift HPS Search. EmailId: @emailId . Response: @response', {
+            '@emailId': params.email,
+            '@response': result.data.response_message,
+          });
+          this.setState({
+            apiErrorMessage: result.data.response_message,
+          });
+        }
+        this.setState({
+          apiWait: true,
         });
-      }
-      const { linkedEgiftCardNumber } = this.state;
-      // Invoke magento API to check if card has balance.
-      // eslint-disable-next-line max-len
-      const postData = { accountInfo: { cardNumber: linkedEgiftCardNumber, email: drupalSettings.userDetails.userEmailID } };
-      const balanceResponse = callEgiftApi('eGiftGetBalance', 'POST', postData);
-      if (balanceResponse instanceof Promise) {
-        balanceResponse.then((result) => {
-          // eslint-disable-next-line max-len
-          if (result.status === 200 && result.data.current_balance !== null && result.data.response_type !== false) {
-            const currentTime = Math.floor(Date.now() / 1000);
-            this.setState({
-              egiftCardBalance: result.data.current_balance,
-              isEgiftCardValid: (currentTime < result.data.expiry_date_timestamp),
-            });
-            // Handle if user already performed redemption.
-            if (cart.cart.totals.extension_attributes.hps_redeemed_amount > 0) {
-              if (cart.cart.cart_total > result.data.current_balance) {
-                // eslint-disable-next-line max-len
-                this.handleExceedingAmount(true, cart.cart.cart_total - result.data.current_balance, false);
-              }
-              if (cart.cart.cart_total <= result.data.current_balance) {
-                // eslint-disable-next-line max-len
-                this.getRedeemAmount(true, result.data.current_balance - cart.cart.cart_total, false);
-              }
-              this.setState({
-                apiWait: true,
-                redeemed: true,
-                setChecked: true,
-              });
+      });
+    }
+    const { linkedEgiftCardNumber } = this.state;
+    // Invoke magento API to check if card has balance.
+    const postData = {
+      accountInfo: {
+        cardNumber: linkedEgiftCardNumber,
+        email: drupalSettings.userDetails.userEmailID,
+      },
+    };
+    const balanceResponse = callEgiftApi('eGiftGetBalance', 'POST', postData);
+    if (balanceResponse instanceof Promise) {
+      balanceResponse.then((result) => {
+        if (result.status === 200 && result.data.current_balance !== null &&
+          result.data.response_type !== false) {
+          const currentTime = Math.floor(Date.now() / 1000);
+          this.setState({
+            egiftCardBalance: result.data.current_balance,
+            isEgiftCardValid: (currentTime < result.data.expiry_date_timestamp),
+          });
+          // Handle if user already performed redemption.
+          if (cart.cart.totals.extension_attributes.hps_redeemed_amount > 0) {
+            if (cart.cart.cart_total > result.data.current_balance) {
+              this.handleExceedingAmount(true,
+                cart.cart.cart_total - result.data.current_balance,
+                false);
             }
-          }
-          // Handle error response.
-          // eslint-disable-next-line max-len
-          if (result.status === 200 && result.data.account_id === null && result.data.response_type === false) {
-            logger.error('Error while calling the eGiftGetBalance. CardNumber: @cardNumber . Response: @response', {
-              '@cardNumber': postData.accountInfo.cardNumber,
-              '@response': result.data.response_message,
-            });
+            if (cart.cart.cart_total <= result.data.current_balance) {
+              this.setRedeemAmount(true, result.data.current_balance - cart.cart.cart_total, false);
+            }
             this.setState({
-              apiWait: false,
-              apiErrorMessage: result.data.response_message,
+              redeemed: true,
+              setChecked: true,
             });
           }
+        }
+        // Handle error response.
+        if (result.status === 200 && result.data.account_id === null &&
+          result.data.response_type === false) {
+          logger.error('Error while calling the eGiftGetBalance. CardNumber: @cardNumber . Response: @response', {
+            '@cardNumber': postData.accountInfo.cardNumber,
+            '@response': result.data.response_message,
+          });
+          this.setState({
+            apiErrorMessage: result.data.response_message,
+          });
+        }
+        this.setState({
+          apiWait: true,
         });
-      }
+      });
     }
   }
 
@@ -144,7 +146,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
   };
 
   // Get redeemed amount.
-  getRedeemAmount = (status, redeemAmount, model) => {
+  setRedeemAmount = (status, redeemAmount, model) => {
     this.setState({
       redeemed: status,
       amount: redeemAmount,
@@ -183,8 +185,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           response.then((result) => {
             // Remove loader once result is available.
             removeFullScreenLoader();
-            // eslint-disable-next-line max-len
-            if (result.status === 200 && result.data.redeemed_amount !== null && result.data.response_type !== false) {
+            if (result.status === 200 && result.data.redeemed_amount !== null &&
+              result.data.response_type !== false) {
               if (cart.cart.cart_total <= egiftCardBalance) {
                 this.setState({
                   redeemed: true,
@@ -212,10 +214,12 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 '@response': result.data.response_message,
               });
               this.setState({
-                apiWait: false,
                 apiErrorMessage: result.data.response_message,
               });
             }
+            this.setState({
+              apiWait: true,
+            });
           });
         }
       }
@@ -238,7 +242,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
         response.then((result) => {
           removeFullScreenLoader();
           if (result.status === 200 && result.data.response_type !== false) {
-            this.getRedeemAmount(false, 0, false);
+            this.setRedeemAmount(false, 0, false);
           }
           if (result.data.response_type === false) {
             logger.error('Error while calling the cancel eGiftRedemption. Action: @action Response: @response', {
@@ -246,10 +250,12 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               '@response': result.data.response_message,
             });
             this.setState({
-              apiWait: false,
               apiErrorMessage: result.data.response_message,
             });
           }
+        });
+        this.setState({
+          apiWait: true,
         });
       }
     }
@@ -257,10 +263,23 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
   render() {
     const {
-      // eslint-disable-next-line max-len
-      openModal, egiftCardBalance, remainingAmount, apiErrorMessage, setChecked, exceedingAmount, redeemed, apiWait, linkedEgiftCard, amount, linkedEgiftCardNumber, isEgiftCardValid,
+      openModal,
+      egiftCardBalance,
+      remainingAmount,
+      apiErrorMessage,
+      setChecked,
+      exceedingAmount,
+      redeemed,
+      apiWait,
+      linkedEgiftCard,
+      amount,
+      linkedEgiftCardNumber,
+      isEgiftCardValid,
     } = this.state;
-    const { cart, animationOffset } = this.props;
+    const {
+      cart,
+      animationOffset,
+    } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
     if (!apiWait && !linkedEgiftCard) {
       return (<></>);
@@ -303,7 +322,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                     remainingAmount={remainingAmount}
                     amount={cart.cart.totals.base_grand_total}
                     updateAmount={this.egiftCardhelper.handleAmountUpdate}
-                    redeemAmount={this.getRedeemAmount}
+                    redeemAmount={this.setRedeemAmount}
                     handleExceedingAmount={this.handleExceedingAmount}
                     cart={cart.cart}
                     egiftCardNumber={linkedEgiftCardNumber}
