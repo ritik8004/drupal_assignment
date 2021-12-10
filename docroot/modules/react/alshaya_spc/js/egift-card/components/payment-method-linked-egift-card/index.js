@@ -3,7 +3,6 @@ import getCurrencyCode from '../../../../../js/utilities/util';
 import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
-import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import ValidEgiftCard from '../ValidEgiftCard';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { callEgiftApi } from '../../../utilities/egift_util';

@@ -373,7 +373,7 @@ export default class PaymentMethods extends React.Component {
     return (
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
-        <ConditionalView condition={isEgiftCardEnabled() && !isUserAuthenticated()}>
+        <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
           <PaymentMethodLinkedEgiftCard
             cart={cart}
           />
