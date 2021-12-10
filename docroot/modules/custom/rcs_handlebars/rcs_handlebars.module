@@ -24,10 +24,3 @@ function rcs_handlebars_entity_view_alter(array &$build, EntityInterface $entity
 function rcs_handlebars_library_info_alter(&$libraries, $extension) {
   \Drupal::service('rcs_handlebars.service')->libraryInfoAlter($libraries, $extension);
 }
-
-/**
- * Implements hook_cache_flush().
- */
-function rcs_handlebars_cache_flush() {
-  \Drupal::service('rcs_handlebars.service')->cacheClear();
-}
