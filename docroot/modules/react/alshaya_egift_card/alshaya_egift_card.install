@@ -5,6 +5,8 @@
  * Install file.
  */
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_install().
  */
@@ -13,5 +15,15 @@ function alshaya_egift_card_install() {
   module_load_include('inc', 'alshaya_egift_card', 'alshaya_egift_card.translations');
   if ($translations = _alshaya_egift_card_get_translations()) {
     alshaya_i18n_save_translations($translations);
+  }
+
+  // Allow breadcrumb on url.
+  $block = \Drupal::service('entity_type.manager')->getStorage('block')->load('breadcrumbs');
+  $visibility = $block->getVisibility();
+  $breadcrumb_url_string = PHP_EOL . '/' . Url::fromRoute('alshaya_egift_card.egift_card_purchase', [])->getInternalPath();
+  if (isset($visibility['request_path']['pages']) && !stripos($visibility['request_path']['pages'], $breadcrumb_url_string)) {
+    $visibility['request_path']['pages'] = $visibility['request_path']['pages'] . $breadcrumb_url_string;
+    $block->setVisibilityConfig('request_path', $visibility['request_path']);
+    $block->save();
   }
 }

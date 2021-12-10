@@ -1,0 +1,24 @@
+.aura-enabled .toggle--sign {
+  .aura-logged-in-rewards-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .account.one,
+  .account--logged_in.one {
+    @include breakpoint($upto-desktop) {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+
+      #points-wrapper-mobile-menu,
+      .account-points {
+        padding-top: 3px;
+      }
+    }
+  }
+}

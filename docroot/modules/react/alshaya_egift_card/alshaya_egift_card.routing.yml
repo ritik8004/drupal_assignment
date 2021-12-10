@@ -21,3 +21,11 @@ alshaya_egift_card.topup_card:
     _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaTopUpController::topupcard'
   requirements:
     _permission: 'access content'
+
+alshaya_egift_card.egift_card_purchase:
+  path: '/egift-card/purchase'
+  defaults:
+    _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::eGiftCardPurchase'
+    _title: 'Buy eGift Card'
+  requirements:
+    _access: 'TRUE'

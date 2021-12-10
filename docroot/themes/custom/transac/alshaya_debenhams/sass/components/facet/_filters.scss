@@ -1,0 +1,69 @@
+.show-all-filters,
+.show-all-filters-algolia {
+  font-size: 0.8125rem;
+  font-family: $dh-semibold;
+  text-transform: capitalize;
+
+  @include breakpoint($only-mobile) {
+    color: $primary_link;
+  }
+
+  .upto-desktop {
+    font-size: 0.875rem;
+    font-family: $alshaya-thin;
+  }
+
+  .filter {
+    &__foot {
+      .facet-all-count {
+        .view-header.search-count {
+          font-size: 0.875rem !important;
+        }
+      }
+    }
+  }
+}
+
+.alias--search {
+  aside {
+    &.c-sidebar-first {
+      .c-accordion__title {
+        &::after {
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      a {
+        width: 8.25rem;
+        min-width: 8.25rem;
+
+        html[lang=ar] & {
+          width: 8.25rem;
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+.c-facet {
+  &.c-accordion,
+  &.c-collapse-item {
+    &:not(.block-facet-blockcategory-facet-search) {
+      &:not(.algolia-plp-category-facet) ul,
+      ul {
+        .facet-item {
+          span {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}

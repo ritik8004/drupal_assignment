@@ -1,7 +1,4 @@
 import {
-  callDrupalApi,
-  callMagentoApi,
-  getCartSettings,
   isAnonymousUserWithoutCart,
   isAuthenticatedUserWithoutCart,
   updateCart,
@@ -15,7 +12,6 @@ import {
   removeCartIdFromStorage,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
-import { getExceptionMessageType } from './error';
 import { setStorageInfo } from '../../utilities/storage';
 import cartActions from '../../utilities/cart_actions';
 import StaticStorage from './staticStorage';
@@ -24,6 +20,8 @@ import {
   isString,
   isNumber,
 } from '../../../../js/utilities/conditionsUtility';
+import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import { getExceptionMessageType } from '../../../../js/utilities/error';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -214,6 +212,13 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         quote_id: cartId,
       },
     };
+
+    // Check if product type is virtual (eg: eGift card), if product type
+    // is virtual then update product type and options to cart item.
+    if (data.product_type === 'virtual') {
+      itemData.cartItem.product_type = data.product_type;
+      itemData.cartItem.product_option = data.options;
+    }
   }
 
   if (data.action === 'update item') {

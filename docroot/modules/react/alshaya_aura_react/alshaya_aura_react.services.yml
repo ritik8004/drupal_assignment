@@ -1,0 +1,28 @@
+services:
+  alshaya_aura_react.aura_helper:
+    class: Drupal\alshaya_aura_react\Helper\AuraHelper
+    arguments:
+      - '@current_user'
+      - '@entity_type.manager'
+      - '@mobile_number.util'
+      - '@config.factory'
+      - '@alshaya_aura_react.aura_api_helper'
+      - '@language_manager'
+  alshaya_aura_react.aura_api_helper:
+    class: Drupal\alshaya_aura_react\Helper\AuraApiHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@logger.factory'
+      - '@cache.aura_api_config'
+      - '@mobile_number.util'
+      - '@language_manager'
+  cache.aura_api_config:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [aura_api_config]
+  alshaya_aura_react.loyalty_club_breadcrumb:
+    class: Drupal\alshaya_aura_react\Breadcrumb\AlshayaLoyaltyClubBreadcrumb
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }

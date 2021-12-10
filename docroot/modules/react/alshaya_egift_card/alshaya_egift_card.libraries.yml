@@ -3,3 +3,9 @@ alshaya_egift_card_my_account:
     dist/my_account.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_egift_card_purchase:
+  js:
+    dist/egift_card_purchase.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

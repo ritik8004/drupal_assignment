@@ -4,6 +4,7 @@ var buildPath = '/modules/react/alshaya_egift_card/dist/';
 var config = {
   entry: {
     my_account: './js/my-account',
+    egift_card_purchase: './js/egift-card-purchase',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

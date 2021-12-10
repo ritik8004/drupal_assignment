@@ -63,6 +63,174 @@ function _alshaya_egift_card_translations() {
         'ar' => 'CHECK ANOTHER CARD',
         'context' => 'egift',
       ],
+      'Style:' => [
+        'ar' => 'Style:',
+        'context' => 'egift',
+      ],
+      'Send to:' => [
+        'ar' => 'Send to:',
+        'context' => 'egift',
+      ],
+      'Message:' => [
+        'ar' => 'Message:',
+        'context' => 'egift',
+      ],
+      'Alshaya eGift card' => [
+        'ar' => 'Alshaya eGift card',
+        'context' => 'egift',
+      ],
+      'Please enter the code.' => [
+        'ar' => 'Please enter the code.',
+        'context' => 'egift',
+      ],
+      'Please enter the amount.' => [
+        'ar' => 'Please enter the amount.',
+        'context' => 'egift',
+      ],
+      'Insufficient balance, Please topup the card or lower the redeem amount.' => [
+        'ar' => 'Insufficient balance, Please topup the card or lower the redeem amount.',
+        'context' => 'egift',
+      ],
+      'Verify eGift Card to redeem from card balance' => [
+        'ar' => 'Verify eGift Card to redeem from card balance',
+        'context' => 'egift',
+      ],
+      'We’ll send a verification code to your email to verify eGift card' => [
+        'ar' => 'We’ll send a verification code to your email to verify eGift card',
+        'context' => 'egift',
+      ],
+      'Edit amount to use' => [
+        'ar' => 'Edit amount to use',
+        'context' => 'egift',
+      ],
+      'Applied card amount - @currencyCode @amount' => [
+        'ar' => 'Applied card amount - @currencyCode @amount',
+        'context' => 'egift',
+      ],
+      'Remaining Balance - @currencyCode @remainingAmount' => [
+        'ar' => 'Remaining Balance - @currencyCode @remainingAmount',
+        'context' => 'egift',
+      ],
+      'Link this card for faster payment next time' => [
+        'ar' => 'Link this card for faster payment next time',
+        'context' => 'egift',
+      ],
+      'Verification code sent to @email' => [
+        'ar' => 'Verification code sent to @email',
+        'context' => 'egift',
+      ],
+      'Resend Code' => [
+        'ar' => 'Resend Code',
+        'context' => 'egift',
+      ],
+      'Change Card?' => [
+        'ar' => 'Change Card?',
+        'context' => 'egift',
+      ],
+      'add to bag' => [
+        'ar' => 'add to bag',
+        'context' => 'egift',
+      ],
+      'checkout' => [
+        'ar' => 'checkout',
+        'context' => 'egift',
+      ],
+      'No eGift cards found.' => [
+        'ar' => 'No eGift cards found.',
+        'context' => 'egift',
+      ],
+      '1. Select your style and card amount' => [
+        'ar' => '1. Select your style and card amount',
+        'context' => 'egift',
+      ],
+      '2. Enter Gift card details' => [
+        'ar' => '2. Enter Gift card details',
+        'context' => 'egift',
+      ],
+      'Buying this gift for' => [
+        'ar' => 'Buying this gift for',
+        'context' => 'egift',
+      ],
+      'Friends and family' => [
+        'ar' => 'Friends and family',
+        'context' => 'egift',
+      ],
+      'Myself' => [
+        'ar' => 'Myself',
+        'context' => 'egift',
+      ],
+      'Recipient Details' => [
+        'ar' => 'Recipient Details',
+        'context' => 'egift',
+      ],
+      'My Details' => [
+        'ar' => 'My Details',
+        'context' => 'egift',
+      ],
+      'Name*' => [
+        'ar' => 'Name*',
+        'context' => 'egift',
+      ],
+      'Email*' => [
+        'ar' => 'Email*',
+        'context' => 'egift',
+      ],
+      'Write a message' => [
+        'ar' => 'Write a message',
+        'context' => 'egift',
+      ],
+      'Message' => [
+        'ar' => 'Message',
+        'context' => 'egift',
+      ],
+      'Please enter amount or select from above.' => [
+        'ar' => 'Please enter amount or select from above.',
+        'context' => 'egift',
+      ],
+      'Please enter amount in the range of @amountFrom to @amountTo' => [
+        'ar' => 'Please enter amount in the range of @amountFrom to @amountTo',
+        'context' => 'egift',
+      ],
+      'Amount @currencyCode' => [
+        'ar' => 'Amount @currencyCode',
+        'context' => 'egift',
+      ],
+      'Amount updated failed! Please try again after sometime.' => [
+        'ar' => 'Amount updated failed! Please try again after sometime.',
+        'context' => 'egift',
+      ],
+      'There was some error while removing the gift card. Please try again' => [
+        'ar' => 'There was some error while removing the gift card. Please try again',
+        'context' => 'egift',
+      ],
+      'Please add a email id in your account to perform this operation.' => [
+        'ar' => 'Please add a email id in your account to perform this operation.',
+        'context' => 'egift',
+      ],
+      'Please enter a valid amount' => [
+        'ar' => 'Please enter a valid amount',
+        'context' => 'egift',
+      ],
+      'Please enter a valid card number.' => [
+        'ar' => 'Please enter a valid card number.',
+        'context' => 'egift',
+      ],
+      'Didn’t receive?' => [
+        'ar' => 'Didn’t receive?',
+        'context' => 'egift',
+      ],
+      'Verification code sent successfully.' => [
+        'ar' => 'Verification code sent successfully.',
+        'context' => 'egift',
+      ],
+      'Redeem amount should be less than or equal to the cart value.' => [
+        'ar' => 'Redeem amount should be less than or equal to the cart value.',
+        'context' => 'egift',
+      ],
+      'Pay @currencyCode @pendingAmount using another payment method to complete purchase' => [
+        'ar' => 'Pay @currencyCode @pendingAmount using another payment method to complete purchase',
+        'context' => 'egift',
+      ],
     ],
   ];
 

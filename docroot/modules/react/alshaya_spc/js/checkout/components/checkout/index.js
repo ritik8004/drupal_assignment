@@ -27,6 +27,8 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
+import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import validateCartResponse from '../../../utilities/validation_util';
 import { getStorageInfo } from '../../../utilities/storage';
 import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
@@ -75,6 +77,9 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
+          // Event listerner to update any change in totals in cart object.
+          document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
           this.processAddressFromLocalStorage(result);
           this.processCheckout(result);
         });
@@ -249,6 +254,36 @@ export default class Checkout extends React.Component {
     );
   };
 
+  // Event listener to update totals in cart.
+  handleTotalsUpdateEvent = (event) => {
+    const { cart } = this.state;
+    const { totals } = event.detail;
+    const cartData = cart;
+    cartData.cart.totals = { ...cartData.cart.totals, ...totals };
+
+    this.setState({ cart: cartData });
+  };
+
+  // Checks if cart has only egift card products or other products as well.
+  isCartHasOnlyEgiftCard = () => {
+    const { cart: cartData } = this.state;
+    // A flag to keep track of the non-virtual products.
+    let isNonVirtual = false;
+    Object.values(cartData.cart.items).forEach((item) => {
+      // Return if we have already marked a non virtual product.
+      if (isNonVirtual) {
+        return;
+      }
+      // If there is no product type for the cart item then it's non virtual
+      // product.
+      if (!item.isEgiftCard) {
+        isNonVirtual = true;
+      }
+    });
+
+    return isNonVirtual;
+  }
+
   render() {
     const {
       wait,
@@ -296,11 +331,16 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
+            <ConditionalView condition={this.isCartHasOnlyEgiftCard()}>
+              <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
+              <ClicknCollectContextProvider cart={cart}>
+                <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
+              </ClicknCollectContextProvider>
+            </ConditionalView>
 
-            <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
-            <ClicknCollectContextProvider cart={cart}>
-              <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
-            </ClicknCollectContextProvider>
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCheckoutContainer cart={cart} />
+            </ConditionalView>
 
             <PaymentMethods
               ref={this.paymentMethods}
@@ -310,7 +350,7 @@ export default class Checkout extends React.Component {
             />
 
             <ConditionalView condition={typeof egiftCard !== 'undefined' && egiftCard.enabled}>
-              <RedeemEgiftCard />
+              <RedeemEgiftCard cart={cart} />
             </ConditionalView>
 
             {billingComponent}

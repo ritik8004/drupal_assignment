@@ -41,6 +41,9 @@ const productRecommendationsSuffix = 'pr-';
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
+        product.attr('gtm-main-sku', variantInfo['parent_sku']);
+
+        Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange(product);
       });
 
       // For simple grouped products.
@@ -53,6 +56,8 @@ const productRecommendationsSuffix = 'pr-';
         }
 
         var variantInfo = drupalSettings[productKey][sku]['group'][variant];
+
+        Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange($(this));
 
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
@@ -703,6 +708,61 @@ const productRecommendationsSuffix = 'pr-';
   };
 
   /**
+   * Gtm event for grouped simple and configurable product
+   *
+   * @param product
+   *   jQuery object which contains all gtm attributes.
+   */
+  Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange = function (product) {
+    // Convert the product to a jQuery object, if not already.
+    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
+      product = $(product);
+    }
+
+    // Datalayer push for product detail view
+    // when url is changed wrt variant.
+    let lastUrl = location.href;
+    const observer = new MutationObserver(() => {
+      const url = location.href;
+      if (url !== lastUrl) {
+        lastUrl = url;
+        var amount = product.attr('gtm-price').replace(/\,/g,'');
+        // Prepare data.
+        var data = {
+          event: 'productDetailView',
+          ecommerce: {
+            currencyCode: drupalSettings.gtm.currency,
+            detail: {
+              products: {
+                name: product.attr('gtm-name'),
+                id: product.attr('gtm-main-sku'),
+                price: parseFloat(amount),
+                category: product.attr('gtm-category'),
+                variant: product.attr('gtm-product-sku'),
+                dimension2: product.attr('gtm-sku-type'),
+                dimension3: product.attr('gtm-dimension3'),
+                dimension4: product.attr('gtm-dimension4')
+              }
+            }
+          }
+        };
+        if (product.attr('gtm-brand')) {
+          data.ecommerce.detail.products.brand = product.attr('gtm-brand');
+        }
+        // Push into datalayer.
+        dataLayer.push(data);
+      }
+    });
+    observer.observe(document, {subtree: true, childList: true});
+
+    // Detach the observer to avoid multiple occurence.
+    setTimeout(function () {
+      observer.disconnect();
+    }, 500);
+
+  }
+
+  /**
    * Function to provide product data object.
    *
    * @param product
@@ -992,9 +1052,8 @@ const productRecommendationsSuffix = 'pr-';
    * @param currencyCode
    * @param listName
    * @param position
-   * @param event
    */
-  Drupal.alshaya_seo_gtm_push_product_clicks = function (element, currencyCode, listName, position, event) {
+  Drupal.alshaya_seo_gtm_push_product_clicks = function (element, currencyCode, listName, position) {
     // Don't trigger product click event for items in cross-sell on Mobile.
     if (((element.closest('.owl-item').length !== 0) ||
             (element.closest('.no-carousel').length == 0)) &&
@@ -1032,10 +1091,6 @@ const productRecommendationsSuffix = 'pr-';
     };
 
     dataLayer.push(data);
-
-    // Trigger Product Details View
-    var quickView = 'yes';
-    Drupal.alshayaSeoGtmPushProductDetailView(element, listName, quickView, event);
   };
   /**
    * Helper function to push lead events.
@@ -1230,21 +1285,10 @@ const productRecommendationsSuffix = 'pr-';
    *
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
-   * @param {string} listName
-   *   The product information.
    * @param {string} quickView
-   *   The value to add.
-   * @param {object} event
-   *   The triggered event.
+   *   The value to add .
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName = null, quickView = '', event = null) {
-
-    // Checking if event is triggered with Meta keys.
-    // Do not push productDetailView to dataLayer in this scenario.
-    if (event && event.metaKey === true) {
-      return;
-    }
-
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext, listName, quickView = '') {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';

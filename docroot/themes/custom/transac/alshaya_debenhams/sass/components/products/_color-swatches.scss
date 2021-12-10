@@ -1,0 +1,28 @@
+.sku-base-form {
+  .form-wrapper {
+    .configurable-swatch,
+    .configurable-select {
+      .select2Option {
+        display: block;
+      }
+    }
+
+    .configurable-swatch {
+      .li-swatch-image {
+        img {
+          border-radius: 50%;
+        }
+
+        a,
+        span {
+          &.picked,
+          &:hover {
+            &::after {
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
+}

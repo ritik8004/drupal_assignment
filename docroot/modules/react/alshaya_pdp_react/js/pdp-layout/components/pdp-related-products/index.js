@@ -37,7 +37,7 @@ class PdpRelatedProducts extends React.Component {
 
   render() {
     const {
-      getPanelData, removePanelData, keyId,
+      getPanelData, removePanelData, keyId, cardNumber,
     } = this.props;
     const { products, sectionTitle } = this.state;
 
@@ -48,6 +48,7 @@ class PdpRelatedProducts extends React.Component {
         getPanelData={getPanelData}
         removePanelData={removePanelData}
         key={keyId}
+        cardNumber={cardNumber}
       />
     ) : null;
   }

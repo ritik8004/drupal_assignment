@@ -1,14 +1,33 @@
 <div class="main--menu" data-menu-timing="{{ settings.desktop_main_menu_highlight_timing }}">
-<div class="toggle--sign no--desktop">
-  <div class="shop one active">{{ 'shop' | t }}</div>
-  <div class="account one">{{ "sign in" | t }} / {{ "register" | t }}</div>
-  <div class="account--logged_in one">{{ 'my account' | t }}</div>
-</div>
+  <div class="toggle--sign no--desktop">
+    <div class="shop one active">{{ 'shop' | t }}</div>
+    {% if logged_in %}
+      {% if aura_enabled is defined and aura_enabled %}
+        <div class="account--logged_in one" id="username-points-wrapper-mobile-menu"></div>
+      {% else %}
+        <div class="account--logged_in one">{{ 'my account' | t }}</div>
+      {% endif %}
+    {% else %}
+      {% if aura_enabled is defined and aura_enabled %}
+        <div class="account one">
+          {{ "sign in" | t }} / {{ "register" | t }}
+          <span id="points-wrapper-mobile-menu"></span>
+        </div>
+      {% else %}
+        <div class="account one">{{ "sign in" | t }} / {{ "register" | t }}</div>
+      {% endif %}
+    {% endif %}
+  </div>
   <div class="mobile--close no--desktop">
     <span></span>
   </div>
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
+    {% if aura_enabled is defined and aura_enabled %}
+      <div class="no--desktop">
+        <div id="aura-mobile-header-shop"></div>
+      </div>
+    {% endif %}
     {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
       {% for key1, level1menu in column_tree %}
         {% set level1 = level1menu.l1_object %}
@@ -21,7 +40,6 @@
     {% endif %}
   </ul>
 </div>
-
 
 {% macro getlevel1items(level1,level1menu) %}
   {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
@@ -42,13 +60,13 @@
         {% endif %}
 
         {% if level1.icon is not empty %}
-          <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>
+          <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" gtm-menu-title="{{ level1.gtm_menu_title }}" {{ level1.tag_attr }}>
             <span class="icon"><img src="{{ level1.icon.url }}" alt="{{ level1.label }}"/></span>
             {{ level1.label }}
           </{{ level1.tag }}>
         {% else %}
           {% if level1.tag is not empty %}
-          <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
+          <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" gtm-menu-title="{{ level1.gtm_menu_title }}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
           {% endif %}
         {% endif %}
       </div>

@@ -33,6 +33,16 @@ function hook_alshaya_acm_customer_order_details_alter(array &$order) {
 }
 
 /**
+ * Alter build array of alshaya_user_recent_orders block.
+ *
+ * @param array $build
+ *   Block build array.
+ */
+function hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+
+}
+
+/**
  * Alter order build after processing order details.
  *
  * @param array $order
@@ -51,6 +61,16 @@ function hook_alshaya_acm_customer_orders_details_build_alter(array &$order, arr
  *   Build array.
  */
 function hook_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+
+}
+
+/**
+ * Alter order summary for order list.
+ *
+ * @param array $orderRow
+ *   Array of order summary.
+ */
+function hook_alshaya_acm_customer_update_order_summary_alter(array &$order, array &$orderRow) {
 
 }
 
