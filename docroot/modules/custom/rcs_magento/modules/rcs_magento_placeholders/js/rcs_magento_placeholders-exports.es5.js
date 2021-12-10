@@ -134,7 +134,7 @@ exports.getEntity = async function getEntity(langcode) {
   return result;
 };
 
-exports.getData = async function getData(placeholder, params, entity, langcode) {
+exports.getData = async function getData(placeholder, params, entity, langcode, markup, loaderOnUpdates = false) {
   const request = {
     uri: '/graphql',
     method: 'POST',
@@ -236,6 +236,11 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
   }
 
   if (result !== null) {
+    // Display loader.
+    if (loaderOnUpdates) {
+      RcsEventManager.fire('startLoader');
+    }
+
     // Creating custom event to to perform extra operation and update the result
     // object.
     const updateResult = RcsEventManager.fire('rcsUpdateResults', {
@@ -244,6 +249,11 @@ exports.getData = async function getData(placeholder, params, entity, langcode) 
         placeholder: placeholder,
       }
     });
+
+    // Hide loader.
+    if (loaderOnUpdates) {
+      RcsEventManager.fire('stopLoader');
+    }
 
     return updateResult.detail.result;
   }

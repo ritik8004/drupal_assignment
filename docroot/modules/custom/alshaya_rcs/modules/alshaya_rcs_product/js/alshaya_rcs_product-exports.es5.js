@@ -663,7 +663,7 @@ exports.computePhFilters = function (input, filter) {
       data.additional_description = getAdditionalPdpDescription();
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`product.${filter}.block`, data);
+      value = handlebarsRenderer.render(`product.block.${filter}`, data);
       break;
 
     case 'short_description':
@@ -684,7 +684,7 @@ exports.computePhFilters = function (input, filter) {
       data.read_more = tmp.read_more;
 
       // Render handlebars plugin.
-      value = handlebarsRenderer.render(`product.${filter}.block`, data);
+      value = handlebarsRenderer.render(`product.block.${filter}.${drupalSettings.alshayaRcs.pdpLayout}`, data);
       break;
 
     case 'promotions':

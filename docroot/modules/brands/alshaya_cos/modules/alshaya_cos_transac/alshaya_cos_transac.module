@@ -48,17 +48,14 @@ function alshaya_cos_transac_rcs_handlebars_templates_alter(&$templates, $entity
     return;
   }
 
-  $path = drupal_get_path('module', 'alshaya_cos_transac');
-
-  // Override default template for description block.
-  $templates['product']['description']['block'] = "$path/templates/rcs-product-description-block.handlebars";
-  $templates['product']['description-details']['block'] = "$path/templates/rcs-product-description-details-block.handlebars";
+  $templates['product.block.description'] = 'alshaya_cos_transac';
+  $templates['product.block.description_details'] = 'alshaya_cos_transac';
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
   if ($sku_manager->getPdpLayout($entity) == 'pdp-magazine') {
-    // Override default template for short description block when using magazine layout.
-    $templates['product']['short_description']['block'] = "$path/templates/rcs-product-short-description-full-magazine-block.handlebars";
+    $templates['product.block.short_description.pdp-magazine'] = "alshaya_cos_transac";
   }
 }
 

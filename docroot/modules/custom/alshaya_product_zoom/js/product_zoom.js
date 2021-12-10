@@ -132,9 +132,11 @@
         }
       }
 
-      var modalLightSlider = $('.acq-content-product-modal #lightSlider');
-      if (modalLightSlider.length > 0 && !modalLightSlider.hasClass('product-zoom-processed')) {
-        modalLightSlider.addClass('product-zoom-processed');
+      var $modalZoomContainer = $('.acq-content-product-modal #product-zoom-container:not(.product-zoom-processed)');
+      if ($modalZoomContainer.length > 0) {
+        $modalZoomContainer.addClass('product-zoom-processed');
+
+        var modalLightSlider = $modalZoomContainer.find('#lightSlider');
         Drupal.productZoomApplyRtl(modalLightSlider, Drupal.getSlickOptions('slickCSUSOptions'), context);
 
         $('li a', modalLightSlider).once('bind-js-modal').off('click').on('click', function (e) {

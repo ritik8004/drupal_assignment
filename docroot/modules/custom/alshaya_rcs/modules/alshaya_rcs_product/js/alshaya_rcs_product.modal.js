@@ -32,7 +32,7 @@
           sku = $(this).parent('article').data('sku');
         }
 
-        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku})
+        globalThis.rcsPhCommerceBackend.getData('product-recommendation', {sku: sku}, null, null, null, true)
           .then(function (entity) {
             if (entity === null || typeof entity === 'undefined') {
               return;

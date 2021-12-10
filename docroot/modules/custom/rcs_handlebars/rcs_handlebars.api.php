@@ -10,25 +10,19 @@
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity being processed.
+ *
+ * @return array
+ *   The list of libraries.
  */
 function hook_rcs_handlebars_templates(\Drupal\Core\Entity\EntityInterface $entity) {
-  // List of handlebars templates to be embedded on the page.
+  // List of handlebars libraries to be attached to the entity.
   return [
-    // List of block templates.
-    'block' => [],
-    // List of field templates.
-    'field' => [
-      // Entity name.
-      'page' => [
-        // Field Name and path.
-        'title' => "/path/template.handlebars",
-      ],
-    ],
+    'article.block.foo' => 'my_module_name',
   ];
 }
 
 /**
- * Allows module to alter the handlebars templates added by other modules.
+ * Allows a different module to override the original template.
  *
  * @param array $templates
  *   The array of templates to alter.
@@ -36,10 +30,9 @@ function hook_rcs_handlebars_templates(\Drupal\Core\Entity\EntityInterface $enti
  *   The entity being processed.
  */
 function hook_rcs_handlebars_templates_alter(array &$templates, \Drupal\Core\Entity\EntityInterface $entity) {
-  if (!$entity || $entity->bundle() !== 'page') {
+  if ($entity->bundle() !== 'page') {
     return;
   }
 
-  // Alter list of handlebars templates.
-  $templates['field']['page']['description'] = '/path/description.handlebars';
+  $templates['article.block.foo'] = 'my_module_name';
 }

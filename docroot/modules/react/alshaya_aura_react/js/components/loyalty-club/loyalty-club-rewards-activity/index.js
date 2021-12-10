@@ -184,6 +184,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       noStatement,
       fromDate,
     } = this.state;
+    const { active } = this.props;
     const transactionTypeOptions = getTransactionTypeOptions();
     const transactionBrandOptions = getTransactionBrandOptions();
 
@@ -196,7 +197,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     }
 
     return (
-      <div className="loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.6s' }}>
+      <div className={`loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp${active}`} style={{ animationDelay: '0.6s' }}>
         <div className="filters">
           <Select
             ref={this.dateSelectRef}
