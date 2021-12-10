@@ -114,6 +114,7 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
+      var $document = $(document);
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         var productData = e.detail.productData;
         Drupal.cartNotification.triggerNotification(productData);
@@ -160,7 +161,7 @@
         }
       });
 
-      $(document).ajaxComplete(function (event, xhr, settings) {
+      $document.ajaxComplete(function (event, xhr, settings) {
         if (!settings.hasOwnProperty('extraData')) {
           Drupal.cartNotification.spinner_stop();
         }
@@ -294,6 +295,19 @@
           }, 'slow');
         }
       };
+
+      if (window.RcsEventManager) {
+        $document
+          .once("rcs-event-loaders")
+          .each(() => {
+            window.RcsEventManager.addListener("startLoader", () => {
+              Drupal.cartNotification.spinner_start();
+            });
+            window.RcsEventManager.addListener("stopLoader", () => {
+              Drupal.cartNotification.spinner_stop();
+            });
+          });
+      }
     }
   };
 
