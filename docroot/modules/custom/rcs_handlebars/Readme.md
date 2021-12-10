@@ -16,7 +16,7 @@ to attach libraries to the entity, see rcs_handlebars.api.php. i.e.
 function hook_rcs_handlebars_templates(\Drupal\Core\Entity\EntityInterface $entity) {
   // List of handlebars libraries to be attached to the entity.
   return [
-    'article.block.foo',
+    'article.block.foo' => 'my_module_name',
   ];
 }
 ```

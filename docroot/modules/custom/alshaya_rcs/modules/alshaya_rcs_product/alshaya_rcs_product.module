@@ -861,15 +861,15 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
 
   // Libraries to attach.
   $libraries = [
-    'product.block.description',
-    'product.order_quantity_limit',
-    'product.promotions',
-    'gallery.product.product_zoom',
-    'gallery.product.product_labels',
-    'gallery.product.block.product_zoom_default_gallery',
-    'gallery.product.block.product_zoom_mobile_gallery',
-    'gallery.product.block.product_zoom_modal_gallery',
-    'gallery.product.block.product_zoom_magazine_gallery',
+    'product.block.description' => 'alshaya_rcs_product',
+    'product.order_quantity_limit' => 'alshaya_rcs_product',
+    'product.promotions' => 'alshaya_rcs_product',
+    'gallery.product.product_zoom' => 'alshaya_rcs_product',
+    'gallery.product.product_labels' => 'alshaya_rcs_product',
+    'gallery.product.block.product_zoom_default_gallery' => 'alshaya_rcs_product',
+    'gallery.product.block.product_zoom_mobile_gallery' => 'alshaya_rcs_product',
+    'gallery.product.block.product_zoom_modal_gallery' => 'alshaya_rcs_product',
+    'gallery.product.block.product_zoom_magazine_gallery' => 'alshaya_rcs_product',
   ];
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
@@ -877,11 +877,11 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
 
   switch ($sku_manager->getPdpLayout($entity)) {
     case 'pdp-magazine':
-      $libraries[] = 'product.block.short_description.pdp-magazine';
+      $libraries['product.block.short_description.pdp-magazine'] = 'alshaya_rcs_product';
       break;
 
     default:
-      $libraries[] = 'product.block.short_description.pdp';
+      $libraries['product.block.short_description.pdp'] = 'alshaya_rcs_product';
   }
 
   return $libraries;

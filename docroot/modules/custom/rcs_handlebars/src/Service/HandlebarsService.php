@@ -5,7 +5,6 @@ namespace Drupal\rcs_handlebars\Service;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Component\Utility\NestedArray;
 
 /**
  * Service for Handlebars templates.
@@ -122,40 +121,6 @@ class HandlebarsService {
   }
 
   /**
-   * Invoke hook to collect list of libraries to attach to entities.
-   *
-   * @param string $hook
-   *   The hook name.
-   * @param array $args
-   *   The arguments.
-   *
-   * @return array
-   *   The result array.
-   */
-  protected function invoke($hook, array $args = []) {
-    $return = [];
-    $implementations = $this->moduleHandler->getImplementations($hook);
-    foreach ($implementations as $module) {
-      $function = $module . '_' . $hook;
-      $result = call_user_func_array($function, $args);
-      if (isset($result) && is_array($result)) {
-        // Invert keys.
-        $result = array_flip($result);
-        // Add extension name.
-        foreach ($result as $key => $item) {
-          $result[$key] = $module;
-        }
-        $return = NestedArray::mergeDeep($return, $result);
-      }
-      elseif (isset($result)) {
-        $return[] = $result;
-      }
-    }
-
-    return $return;
-  }
-
-  /**
    * Attaches respective libraries to entities.
    *
    * @param array $build
@@ -165,7 +130,7 @@ class HandlebarsService {
    */
   public function attachLibraries(array &$build, EntityInterface $entity) {
     // Invoke hook to get default libraries.
-    $rcs_handlebars_libraries = $this->invoke('rcs_handlebars_templates', [$entity]);
+    $rcs_handlebars_libraries = $this->moduleHandler->invokeAll('rcs_handlebars_templates', [$entity]);
 
     // Allow other modules to alter libraries.
     $this->moduleHandler->alter('rcs_handlebars_templates', $rcs_handlebars_libraries, $entity);
