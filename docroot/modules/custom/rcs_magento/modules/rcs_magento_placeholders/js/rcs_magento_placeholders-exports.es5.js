@@ -237,8 +237,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
   if (result !== null) {
     // Display loader.
-    if (loaderOnUpdates && typeof Drupal.cartNotification.spinner_start === 'function') {
-      Drupal.cartNotification.spinner_start();
+    if (loaderOnUpdates) {
+      RcsEventManager.fire('startLoader');
     }
 
     // Creating custom event to to perform extra operation and update the result
@@ -251,8 +251,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
     });
 
     // Hide loader.
-    if (loaderOnUpdates && typeof Drupal.cartNotification.spinner_stop === 'function') {
-      Drupal.cartNotification.spinner_stop();
+    if (loaderOnUpdates) {
+      RcsEventManager.fire('stopLoader');
     }
 
     return updateResult.detail.result;
