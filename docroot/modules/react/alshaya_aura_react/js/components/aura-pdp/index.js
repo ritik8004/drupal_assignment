@@ -50,7 +50,7 @@ class AuraPDP extends React.Component {
     }
 
     const productPoints = (selector !== null)
-      ? parseInt(selector.innerText.replace(/,/g, ''), 10)
+      ? Math.round(selector.innerText.replace(/,/g, ''))
       : 0;
 
     return productPoints;

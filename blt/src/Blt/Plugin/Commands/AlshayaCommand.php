@@ -1,6 +1,6 @@
 <?php
 
-namespace Acquia\Blt\Custom\Hooks;
+namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Consolidation\AnnotatedCommand\CommandData;
@@ -8,7 +8,7 @@ use Consolidation\AnnotatedCommand\CommandData;
 /**
  * This class defines hooks.
  */
-class AlshayaCustomHook extends BltTasks {
+class AlshayaCommand extends BltTasks {
 
   /**
    * This will be called post `git:pre-commit` command is executed.
