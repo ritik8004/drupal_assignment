@@ -296,6 +296,10 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       if ($key !== 'my_account') {
         $link_item_class_name = 'my-account-' . strtolower(str_replace(' ', '-', $link['text']));
         $options['attributes']['class'][] = ' ' . $link_item_class_name;
+
+        if (isset($link['class'])) {
+          $options['attributes']['class'][] = $link['class'];
+        }
       }
       else {
         $link_item_class_name = strtolower(str_replace(' ', '-', $link['text']));
