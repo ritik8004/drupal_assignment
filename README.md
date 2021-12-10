@@ -37,9 +37,8 @@ Cf. `blt deploy`.
 
 Any code merged into upstream branch is automatically back-merged.
 
-There is Heroku APP running to do this.
-
-Back merges are done from master => uat => qa => develop => develop-*
+* There is Heroku APP running to do this.
+* Back merges are done from master => uat => qa => develop => develop-*
 
 ### Local git repository
 
