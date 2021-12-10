@@ -180,27 +180,28 @@ export default class ValidEgiftCard extends React.Component {
           removeFullScreenLoader();
           // if (result.error === undefined && result.status === 200) {
           if (result.status === 200) {
-            this.setState({
-              amount: updateAmount,
-              open: false,
-            });
-            // Calculations for showing remaining balance.
-            handleExceedingAmount(true, 0, false);
-            // Hide exceed error message if cart total is equal to user input.
-            if (cart.cart_total === updateAmount) {
+            if (result.data.redeemed_amount !== null && result.data.response_type !== false) {
+              this.setState({
+                amount: updateAmount,
+                open: false,
+              });
+              // Calculations for showing remaining balance.
               handleExceedingAmount(true, 0, false);
+              // Hide exceed error message if cart total is equal to user input.
+              if (cart.cart_total === updateAmount) {
+                handleExceedingAmount(true, 0, false);
+              }
+              // Show exceed error message if cart total is greater than to user input.
+              if (cart.cart_total > updateAmount) {
+                handleExceedingAmount(true, cart.cart_total - updateAmount, false);
+              }
+              // Show remaining balance after redemption.
+              if (cardBalance > cart.cart_total && updateAmount <= cart.cart_total) {
+                redeemAmount(true, cardBalance - updateAmount, false);
+              }
+              return true;
             }
-            // Show exceed error message if cart total is greater than to user input.
-            if (cart.cart_total > updateAmount) {
-              handleExceedingAmount(true, cart.cart_total - updateAmount, false);
-            }
-            // Show remaining balance after redemption.
-            if (cardBalance > cart.cart_total && updateAmount <= cart.cart_total) {
-              redeemAmount(true, cardBalance - updateAmount, false);
-            }
-            return true;
           }
-
           return false;
         });
       }

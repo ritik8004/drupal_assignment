@@ -376,7 +376,6 @@ export default class PaymentMethods extends React.Component {
         <ConditionalView condition={isEgiftCardEnabled() && !isUserAuthenticated()}>
           <PaymentMethodLinkedEgiftCard
             cart={cart}
-            animationOffset={0.4}
           />
         </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>
