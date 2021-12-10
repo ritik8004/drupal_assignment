@@ -40,7 +40,14 @@ export default class UpdateEgiftCardAmount extends React.Component {
       // @todo To perform Amount update.
       const { egift_amount: egiftAmount } = e.target.elements;
       // eslint-disable-next-line max-len
-      const { updateAmount, cart, handleExceedingAmount, egiftCardNumber, redeemAmount, cardBalance } = this.props;
+      const {
+        updateAmount,
+        cart,
+        handleExceedingAmount,
+        egiftCardNumber,
+        redeemAmount,
+        cardBalance,
+      } = this.props;
       // Calculations for showing remaining balance.
       handleExceedingAmount(true, 0, false);
       // Hide exceed error message if cart total is equal to user input.

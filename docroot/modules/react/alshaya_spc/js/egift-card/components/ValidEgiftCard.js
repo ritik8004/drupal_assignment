@@ -152,6 +152,7 @@ export default class ValidEgiftCard extends React.Component {
   }
 
   // Update egift amount.
+  // eslint-disable-next-line max-len
   handleAmountUpdate = (cart, updateAmount, egiftCardNumber, redeemAmount, cardBalance, handleExceedingAmount) => {
     // Prepare the request object for redeem API.
     const postData = {

@@ -9,7 +9,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { callEgiftApi } from '../../../utilities/egift_util';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
-class PaymentMethodLinkedEgift extends React.Component {
+class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
     super(props);
     this.egiftCardhelper = new ValidEgiftCard();
@@ -45,7 +45,7 @@ class PaymentMethodLinkedEgift extends React.Component {
     // Check if egift module enabled.
     if (isEgiftCardEnabled()) {
       const { cart } = this.props;
-      let params = { email: drupalSettings.userDetails.userEmailID };
+      const params = { email: drupalSettings.userDetails.userEmailID };
       // Invoke magento API to get the user card number.
       const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params);
       if (response instanceof Promise) {
@@ -75,13 +75,13 @@ class PaymentMethodLinkedEgift extends React.Component {
       const { linkedEgiftCardNumber } = this.state;
       // Invoke magento API to check if card has balance.
       // eslint-disable-next-line max-len
-      let postData = { accountInfo: { cardNumber: linkedEgiftCardNumber, email: drupalSettings.userDetails.userEmailID } };
+      const postData = { accountInfo: { cardNumber: linkedEgiftCardNumber, email: drupalSettings.userDetails.userEmailID } };
       const balanceResponse = callEgiftApi('eGiftGetBalance', 'POST', postData);
       if (balanceResponse instanceof Promise) {
         balanceResponse.then((result) => {
           // eslint-disable-next-line max-len
           if (result.status === 200 && result.data.current_balance !== null && result.data.response_type !== false) {
-            let currentTime = Math.floor(Date.now() / 1000);
+            const currentTime = Math.floor(Date.now() / 1000);
             this.setState({
               egiftCardBalance: result.data.current_balance,
               isEgiftCardValid: (currentTime < result.data.expiry_date_timestamp),
@@ -164,7 +164,7 @@ class PaymentMethodLinkedEgift extends React.Component {
       this.setState({
         exceedingAmount: 0,
       });
-      let postData = {
+      const postData = {
         redeem_points: {
           action: 'set_points',
           quote_id: cart.cart.cart_id_int,
@@ -223,7 +223,7 @@ class PaymentMethodLinkedEgift extends React.Component {
       this.setState({
         exceedingAmount: 0,
       });
-      let postData = {
+      const postData = {
         redeem_points: {
           action: 'remove_points',
           quote_id: cart.cart.cart_id_int,
@@ -343,4 +343,4 @@ class PaymentMethodLinkedEgift extends React.Component {
   }
 }
 
-export default PaymentMethodLinkedEgift;
+export default PaymentMethodLinkedEgiftCard;

@@ -27,7 +27,7 @@ import CheckoutComUpapiApplePay
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
-import PaymentMethodLinkedEgift from '../../../egift-card/components/payment-method-linked-egift-card';
+import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -374,7 +374,7 @@ export default class PaymentMethods extends React.Component {
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
         <ConditionalView condition={isEgiftCardEnabled() && !isUserAuthenticated()}>
-          <PaymentMethodLinkedEgift
+          <PaymentMethodLinkedEgiftCard
             cart={cart}
             animationOffset={0.4}
           />
