@@ -166,25 +166,25 @@ class AlshayaCheckBalanceForm extends FormBase{
       $response = $this->apiWrapper->invokeApi($endpoint, $data, 'JSON');
       $response = is_string($response) ? Json::decode($response) : $response;
       // Show error message in case of api dowm.
-      if (empty($response)) {
-        $ajax_response->addCommand(new HtmlCommand('#api-error', $this->t('Something went wrong, please try again later.', [], ['context' => 'egift'])));
+      if (!empty($response) && $response['response_type'] == false) {
+        $ajax_response->addCommand(new HtmlCommand('#api-error', $response['response_message']));
         $ajax_response->addCommand(new HtmlCommand('.form-item--error-message', ''));
       }
       else {
         // In case of success show success modal with api response.
         $currency_code = $this->configFactory->get('acq_commerce.currency')->get('currency_code');
-        $validity = $this->dateFormatter->format($response['validity'], 'custom', 'd-M-Y');
         $replace_modal_form = $this->formBuilder->getForm('Drupal\alshaya_egift_card\Form\AlshayaBalanceReplaceForm');
         $ajax_response->addCommand(new OpenModalDialogCommand($this->t('Check Balance & Validity', [], ['context' => 'egift']), $replace_modal_form, ['width' => 'auto', 'height' => 'auto']));
-        if (!empty($response['card_number'])) {
+        if (!empty($response['card_number']) && $response['card_number'] != '') {
           $ajax_response->addCommand(new HtmlCommand('#card-number', substr($response['card_number'], -4)));
         }else{
           $ajax_response->addCommand(new HtmlCommand('#card-details', $response['card_number']));
         }
-        if (!empty($response['current_balance'])) {
+        if (!empty($response['current_balance'] && $response['current_balance'] != '')) {
           $ajax_response->addCommand(new HtmlCommand('#balance', $currency_code . ' ' . $response['current_balance']));
         }
-        if (!empty($response['validity'])) {
+        if (!empty($response['expiry_date_timestamp'] && $response['expiry_date_timestamp'] != '')) {
+          $validity = $this->dateFormatter->format($response['expiry_date_timestamp'], 'custom', 'd-M-Y');
           $ajax_response->addCommand(new HtmlCommand('#validity', $validity));
         }else {
           $ajax_response->addCommand(new HtmlCommand('#validity-details', ''));
