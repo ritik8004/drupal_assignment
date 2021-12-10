@@ -1,7 +1,7 @@
 variables:
   url_product_page: 'buy-connor-side-table-limestone.html'
-  product_listing_page_url: '/shop-furniture/'
-  spc_product_listing_page: '/shop-furniture/'
-  spc_basket_page: '/shop-furniture/'
+  product_listing_page_url: '/shop-new-arrivals/test-new-product/new-products/'
+  spc_product_listing_page: '/shop-new-arrivals/test-new-product/new-products/'
+  spc_basket_page: '/shop-new-arrivals/test-new-product/new-products/'
   spc_pdp_page: 'buy-connor-side-table-limestone.html'
-  spc_bank_product: ''
+  spc_bank_product: 'buy-mid-century-leather-counter-stool-saddle.html'

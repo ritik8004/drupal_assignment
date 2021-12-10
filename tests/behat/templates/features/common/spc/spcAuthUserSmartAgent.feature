@@ -1,4 +1,4 @@
-@javascript @auth @smartAgent @mckwuat @pbkwuat @bbwkwuat @flkwuat @hmkwuat @tbskwuat
+@javascript @auth @smartAgent
 Feature: SPC to verify Smart Agent user functionality for authenticated user
 
   Background:
