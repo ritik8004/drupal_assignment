@@ -13,7 +13,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
   /**
    * Remove error message on focus.
    */
-  handleErrorMessage() {
+  handleErrorMessage = () => {
     // Reset error message to empty.
     document.getElementById('open-amount-error').innerHTML = '';
   }
