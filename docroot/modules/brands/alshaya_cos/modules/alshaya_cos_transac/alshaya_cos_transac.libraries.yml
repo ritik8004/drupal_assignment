@@ -5,3 +5,18 @@ product:
   dependencies:
     - core/jquery
     - rcs_placeholders/helpers
+
+product.block.description:
+  version: 1.x
+  js:
+    templates/rcs-product-description-block.handlebars: { }
+
+product.block.description_details:
+  version: 1.x
+  js:
+    templates/rcs-product-description-details-block.handlebars: { }
+
+product.block.short_description.pdp-magazine:
+  version: 1.x
+  js:
+    templates/rcs-product-short-description-full-magazine-block.handlebars: { }

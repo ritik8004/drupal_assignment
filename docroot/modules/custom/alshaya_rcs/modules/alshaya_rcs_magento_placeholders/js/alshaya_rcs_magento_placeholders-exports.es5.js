@@ -98,7 +98,7 @@ exports.render = function render(
       });
 
       // Render template.
-      html = handlebarsRenderer.render('field.magazine_article.product_teaser', { data: data });
+      html = handlebarsRenderer.render('product.teaser', { data: data });
       break;
 
     case "delivery-option":
