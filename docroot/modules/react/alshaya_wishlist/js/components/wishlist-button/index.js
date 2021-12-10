@@ -34,7 +34,7 @@ class WishlistButton extends React.Component {
 
     // Rendering wishlist button as per sku variant info.
     // Event listener is not required for new pdp.
-    if (context === 'pdp') {
+    if (context !== 'magazinev2') {
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
     }
   };
@@ -60,28 +60,42 @@ class WishlistButton extends React.Component {
   processProductData = () => {
     let variants = null;
     const dataObj = {};
-    const { productInfo, configurableCombinations } = drupalSettings;
+    const { configurableCombinations } = drupalSettings;
     const { context, sku } = this.props;
+    const options = [];
     let currentSku = sku;
+    const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
+    const productInfo = drupalSettings[productKey];
+    let form = null;
 
     // Get sku base form element from page html.
-    // @todo check data attribute for modal view.
-    const form = document.querySelector('.sku-base-form');
+    // Except new pdp magazine v2 layouts.
+    if (context !== 'magazinev2') {
+      const elementSelector = context === 'pdp' ? '.wishlist-pdp-full' : `.wishlist-pdp-${context}`;
+      // For matchback, get html content from data attribute
+      const selectedEelement = context === 'matchback'
+        ? document.querySelector(`[data-matchback-sku="${sku}"]`)
+        : document.querySelector(elementSelector);
+      // Render sku base form for all layouts.
+      form = selectedEelement !== null
+        ? selectedEelement.closest('article').querySelector('.sku-base-form')
+        : null;
+    }
+
     // Get variant sku from selected variant attribute.
-    const variantSku = context === 'magazinev2'
-      ? document.getElementById('pdp-add-to-cart-form-main').getAttribute('variantselected')
-      : form.querySelector('[name="selected_variant_sku"]').value;
+    const variantSku = context !== 'magazinev2' && form !== null
+      ? form.querySelector('[name="selected_variant_sku"]').value
+      : document.getElementById('pdp-add-to-cart-form-main').getAttribute('variantselected');
 
     // For configurable skus, load attribute options.
-    if (configurableCombinations) {
+    if (configurableCombinations && configurableCombinations[sku]) {
       const attributes = configurableCombinations[sku].configurables;
-      const options = [];
       Object.keys(attributes).forEach((key) => {
         // Skipping the pseudo attributes.
         if (drupalSettings.psudo_attribute === undefined
           || drupalSettings.psudo_attribute !== attributes[key].attribute_id) {
-          // Getting active option value from html selector.
-          // Html selectors are different for magazine v2 and old pdp.
+          // Getting active option value from html selector of pdp.
+          // Html selectors are different for magazine v2.
           const option = {
             option_id: attributes[key].code,
             option_value: context === 'magazinev2'
@@ -91,30 +105,28 @@ class WishlistButton extends React.Component {
           options.push(option);
         }
       });
-      dataObj.options = options;
-      currentSku = productInfo[sku].variants[variantSku].parent_sku;
       if (productInfo[sku] && productInfo[sku].variants) {
         variants = productInfo[sku].variants;
+        currentSku = productInfo[sku].variants[variantSku].parent_sku;
       }
     } else if (productInfo[sku] && productInfo[sku].group) {
       currentSku = variantSku;
       variants = productInfo[sku].group;
     }
-
     // Save required product attributes and return.
     dataObj.sku = currentSku;
-    dataObj.title = this.getProductTitle(currentSku, variantSku, variants);
+    dataObj.title = this.getProductTitle(currentSku, variantSku, variants, productInfo);
+    dataObj.options = options;
     return dataObj;
   }
 
   /**
    * Fetch product title for main sku or variant selected.
    */
-  getProductTitle = (currentSku, variantSku, variants) => {
-    const { productInfo } = drupalSettings;
+  getProductTitle = (currentSku, variantSku, variants, productInfo) => {
     const { sku } = this.props;
-    if (productInfo[currentSku]) {
-      return productInfo[currentSku].cart_title;
+    if (drupalSettings.productInfo[currentSku]) {
+      return drupalSettings.productInfo[currentSku].cart_title;
     } if (productInfo[sku] && variants !== null) {
       return variants[variantSku].cart_title;
     }
@@ -133,7 +145,8 @@ class WishlistButton extends React.Component {
       removeProductFromWishList(skuCode, this.updateWishListStatus);
       return;
     }
-    if (context === 'pdp' || context === 'magazinev2') {
+    const pdpLayouts = ['pdp', 'magazinev2', 'modal', 'matchback'];
+    if (pdpLayouts.includes(context)) {
       productData = this.processProductData();
     } else {
       productData = {
@@ -150,9 +163,8 @@ class WishlistButton extends React.Component {
    * Update product info state as per variant selection.
    */
   updateProductInfoData = (e) => {
-    if (e.detail && e.detail.data !== '') {
-      const variantInfo = e.detail.data;
-      const variantSku = variantInfo.parent_sku ? variantInfo.parent_sku : variantInfo.sku;
+    if (e.detail && e.detail.data.sku) {
+      const variantSku = e.detail.data.sku;
       this.setState({
         skuCode: variantSku,
       });
@@ -173,7 +185,8 @@ class WishlistButton extends React.Component {
     let buttonText = addedInWishList ? 'Remove' : 'Add to @wishlist_label';
 
     // Wishlist text for PDP layouts.
-    if (context === 'pdp' || context === 'magazinev2') {
+    const pdpLayouts = ['pdp', 'magazinev2', 'modal', 'matchback'];
+    if (pdpLayouts.includes(context)) {
       buttonText = addedInWishList ? 'Added to @wishlist_label' : 'Add to @wishlist_label';
     }
 

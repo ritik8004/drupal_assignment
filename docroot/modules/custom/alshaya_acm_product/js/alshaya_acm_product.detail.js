@@ -206,6 +206,12 @@
           $(firstAttribute).removeProp('selected').removeAttr('selected');
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
+
+          // Add event to trigger on matchback load.
+          if (viewMode === 'matchback') {
+            var currentMatchBackLoad = new CustomEvent('onMatchbackLoad', {bubbles: true, detail: { data: sku }});
+            document.dispatchEvent(currentMatchBackLoad);
+          }
         }
       });
 

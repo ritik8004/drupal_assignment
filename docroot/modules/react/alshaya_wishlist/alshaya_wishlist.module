@@ -48,9 +48,10 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
     $product_pdp_layout = $productNode->get('field_select_pdp_layout')->getValue()[0]['value'];
   }
   // Attach wishlist libraries and add a wishlist markup for FE icon rendering.
-  // @todo we need this library for PDP and basket page.
   if ($product_pdp_layout !== 'magazine_v2') {
-    $build['wishlist_enabled']['#markup'] = '<div class="wishlist-pdp-' . $vmode . '" data-sku-title="' .$sku->label() . '"></div>';
+    $build['wishlist_enabled']['#markup'] = $context === 'matchback'
+    ? '<div class="wishlist-pdp-' . $vmode . '" data-matchback-sku="' .$sku->getSku() . '"></div>'
+    : '<div class="wishlist-pdp-' . $vmode . '"></div>';
     $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
   }
 }
