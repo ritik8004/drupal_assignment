@@ -138,6 +138,18 @@
         margin-bottom: 0.625rem;
       }
     }
+
+    &.registered-user-linked,
+    &.registered-user-linked-pending-enrollment,
+    &.registered-user-unlinked-card {
+      .spc-aura-points-to-earn {
+        .spc-aura-highlight {
+          .spc-loading-container {
+            min-height: auto;
+          }
+        }
+      }
+    }
   }
 
   .block-content.registered-user-unlinked-card {
@@ -239,16 +251,6 @@
 
       a {
         cursor: pointer;
-      }
-    }
-  }
-
-  .block-content.registered-user-linked {
-    .spc-aura-points-to-earn {
-      .spc-aura-highlight {
-        .spc-loading-container {
-          min-height: auto;
-        }
       }
     }
   }
