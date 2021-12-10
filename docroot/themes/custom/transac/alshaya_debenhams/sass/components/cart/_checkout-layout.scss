@@ -1,0 +1,15 @@
+.block-customer-service-block {
+  text-transform: unset;
+  font-size: 0.875rem;
+  font-family: $dh-semibold;
+
+  p {
+    font-family: $alshaya-thin;
+
+    &:last-child {
+      .light {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}
