@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  getMdcMediaUrl,
+  getImageUrl,
   getQueryStringForEgiftCards,
 } from '../../utilities';
 import ConditionalView
@@ -170,8 +170,7 @@ export default class EgiftCardPurchase extends React.Component {
       }
     });
 
-    const media = product.media_gallery_entries;
-    const productImage = (media.length > 0) ? `${getMdcMediaUrl()}${media[0].file}` : '';
+    const productImage = getImageUrl(product.custom_attributes, 'thumbnail');
 
     window.commerceBackend.addUpdateRemoveCartItem(params).then(
       (response) => {
@@ -225,7 +224,7 @@ export default class EgiftCardPurchase extends React.Component {
         </ConditionalView>
         <ConditionalView condition={egiftItems !== null}>
           <div className="egifts-form-wrap">
-            <form onSubmit={this.handleSubmit} className="egift-form sku-base-form  ">
+            <form onSubmit={this.handleSubmit} className="egift-form">
               <EgiftCardsListStepOne
                 items={egiftItems}
                 handleEgiftSelect={this.handleEgiftSelect}

@@ -20,9 +20,19 @@ const getQueryStringForEgiftCards = () => ({
 /**
  * Get proxy / masked mdc url with media path.
  */
-const getMdcMediaUrl = () => drupalSettings.egiftCard.mdcMediaUrl;
+const getImageUrl = (customAttributes, type) => {
+  let url = '';
+  if (customAttributes.length > 0) {
+    customAttributes.forEach((attribute) => {
+      if (typeof attribute.attribute_code !== 'undefined' && attribute.attribute_code === type) {
+        url = attribute.value;
+      }
+    });
+  }
+  return url;
+};
 
 export {
   getQueryStringForEgiftCards,
-  getMdcMediaUrl,
+  getImageUrl,
 };
