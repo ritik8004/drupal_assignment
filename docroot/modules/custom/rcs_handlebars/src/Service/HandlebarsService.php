@@ -232,11 +232,4 @@ class HandlebarsService {
     }
   }
 
-  /**
-   * Removes dynamically generated js files.
-   */
-  public function cacheClear() {
-    $this->fileSystem->deleteRecursive($this->getDir());
-  }
-
 }
