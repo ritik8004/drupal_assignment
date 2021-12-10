@@ -85,6 +85,7 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
     'text' => t('My Aura'),
     'route' => 'alshaya_aura_react.my_loyalty_club',
     'weight' => 11,
+    'class' => 'my-account-my-aura',
   ];
 }
 
