@@ -122,6 +122,14 @@ function alshaya_dh_transac_install() {
     ->set('map_marker.active', '/modules/brands/alshaya_dh/images/dh-pin-active.svg')
     ->set('map_marker.in_active', '/modules/brands/alshaya_dh/images/dh-pin-inactive.svg')
     ->save();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services .= ",'Instagram:instagram','Email:email'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }
 
 /**

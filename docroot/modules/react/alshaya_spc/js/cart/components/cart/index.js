@@ -55,6 +55,7 @@ export default class Cart extends React.Component {
       message: null,
       cartShippingMethods: null,
       panelContent: null,
+      auraDetails: null,
     };
   }
 
@@ -187,11 +188,26 @@ export default class Cart extends React.Component {
 
     // Event listerner to update any change in cart totals.
     document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
+    // If aura is enabled, add a listner to update aura customer details.
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', this.updateAuraDetails, false);
+    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
+    if (isAuraEnabled()) {
+      document.removeEventListener('customerDetailsFetched', this.updateAuraDetails, false);
+    }
   }
+
+  // Event listener to update aura details.
+  updateAuraDetails = (event) => {
+    this.setState({
+      auraDetails: { ...event.detail.stateValues },
+    });
+  };
 
   // Event listener to update cart totals.
   handleTotalsUpdateEvent = (event) => {
@@ -298,6 +314,7 @@ export default class Cart extends React.Component {
       cartShippingMethods,
       panelContent,
       collectionCharge,
+      auraDetails,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -418,7 +435,7 @@ export default class Cart extends React.Component {
               items={items}
             />
             <ConditionalView condition={isAuraEnabled()}>
-              <AuraCartContainer totals={totals} items={items} />
+              <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
             </ConditionalView>
             <OrderSummaryBlock
               totals={totals}

@@ -1,0 +1,12 @@
+body.aura-enabled {
+  // This is only needed in desktop to align all blocks in same.
+  @include breakpoint($desktop) {
+    .region__menu-secondary {
+      > div,
+      > nav {
+        vertical-align: top;
+        height: 1.75rem;
+      }
+    }
+  }
+}
