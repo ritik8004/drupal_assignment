@@ -52,6 +52,11 @@ product.promotions:
   js:
     templates/rcs-product-order-quantity-limit.handlebars: {}
 
+product.delivery_options:
+  version: 1.x
+  js:
+    templates/rcs-pdp-delivery-option-click-and-collect.handlebars: {}
+
 product.block.price:
   version: 1.x
   js:
