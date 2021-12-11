@@ -34,6 +34,13 @@ There are 2 git repositories on the project:
 The synchronisation between the 2 repositories is ensured by blt.
 Cf. `blt deploy`.
 
+#### Back merges
+
+Any code merged into upstream branch is automatically back-merged.
+
+* There is Heroku APP running to do this
+* Back merges are done from master => uat => qa => develop => develop-*
+
 ### Local git repository
 
 Each developer uses a fork of the main repository for his developments and
