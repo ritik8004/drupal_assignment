@@ -14,6 +14,7 @@ use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Datetime\DateFormatter;
 
 /**
  * Check balance modal form class.
@@ -42,6 +43,14 @@ class AlshayaCheckBalanceForm extends FormBase{
   protected $configFactory;
 
   /**
+   * Date Formatter.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter
+   */
+  protected $dateFormatter;
+  private $currentTime;
+
+  /**
    * AlshayaCheckBalanceForm constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -50,11 +59,14 @@ class AlshayaCheckBalanceForm extends FormBase{
    *   The form builder.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\Core\Datetime\DateFormatter $date_format
+   *   Date Formatter.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper, FormBuilder $formBuilder, ConfigFactoryInterface $config_factory) {
+  public function __construct(AlshayaApiWrapper $api_wrapper, FormBuilder $formBuilder, ConfigFactoryInterface $config_factory, DateFormatter $date_format) {
     $this->apiWrapper = $api_wrapper;
     $this->formBuilder = $formBuilder;
     $this->configFactory = $config_factory;
+    $this->dateFormatter = $date_format;
   }
 
   /**
@@ -64,7 +76,8 @@ class AlshayaCheckBalanceForm extends FormBase{
     return new static(
       $container->get('alshaya_api.api'),
       $container->get('form_builder'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('date.formatter')
     );
   }
 
@@ -159,6 +172,7 @@ class AlshayaCheckBalanceForm extends FormBase{
       }
       else {
         $currency_code = $this->configFactory->get('acq_commerce.currency')->get('currency_code');
+        $validity = $this->dateFormatter->format($response['validity'], 'custom', 'd-M-Y');
         $replace_modal_form = $this->formBuilder->getForm('Drupal\alshaya_egift_card\Form\AlshayaBalanceReplaceForm');
         $ajax_response->addCommand(new OpenModalDialogCommand($this->t('Check Balance & Validity', [], ['context' => 'egift']), $replace_modal_form, ['width' => 'auto', 'height' => 'auto']));
         if (!empty($response['card_number'])) {
@@ -170,7 +184,7 @@ class AlshayaCheckBalanceForm extends FormBase{
           $ajax_response->addCommand(new HtmlCommand('#balance', $currency_code . ' ' . $response['current_balance']));
         }
         if (!empty($response['validity'])) {
-          $ajax_response->addCommand(new HtmlCommand('#validity', $response['validity']));
+          $ajax_response->addCommand(new HtmlCommand('#validity', $validity));
         }else {
           $ajax_response->addCommand(new HtmlCommand('#validity-details', ''));
         }

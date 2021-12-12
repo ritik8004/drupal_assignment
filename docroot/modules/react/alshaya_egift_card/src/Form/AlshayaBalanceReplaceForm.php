@@ -31,7 +31,7 @@ class AlshayaBalanceReplaceForm extends FormBase {
 
     $form['card_balance'] = [
       '#type' => 'item',
-      '#markup' => '<div class="balance-title">' . $this->t('Here is your card balance', [], ['context' => 'egift']) . '</div><div id="balance"></div><div id="card-details">' . $this->t('for eGift card ending in ..', [], ['context' => 'egift']) . ' <span id="card-number"></span></div><div id="validity-details">' . $this->t('Card Valid Up To', [], ['context' => 'egift']) .  '<span id="validity"></span></div>',
+      '#markup' => '<div class="balance-title">' . $this->t('Here is your card balance', [], ['context' => 'egift']) . '</div><div id="balance"></div><div id="card-details">' . $this->t('for eGift card ending in ..', [], ['context' => 'egift']) . ' <span id="card-number"></span></div><div id="validity-details">' . $this->t('Card Valid Up To ', [], ['context' => 'egift']) .  '<span id="validity"></span></div>',
     ];
 
     $link_url = Url::fromRoute('alshaya_egift_card.check_balance');
@@ -46,7 +46,7 @@ class AlshayaBalanceReplaceForm extends FormBase {
 
     $form['topup'] = [
       '#type' => 'item',
-      '#markup' => Link::fromTextAndUrl($this->t('TOP UP CARD', [], ['context' => 'egift']), $link_url)->toString(),
+      '#markup' => Link::fromTextAndUrl($this->t('TOP UP CARD', [], ['context' => 'egift']), Url::fromRoute('alshaya_egift_card.topup_card'))->toString(),
     ];
 
     $form['check_another_card'] = [
