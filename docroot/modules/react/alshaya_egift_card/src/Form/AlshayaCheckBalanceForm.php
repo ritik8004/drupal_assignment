@@ -4,7 +4,6 @@ namespace Drupal\alshaya_egift_card\Form;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilder;
@@ -48,7 +47,6 @@ class AlshayaCheckBalanceForm extends FormBase{
    * @var \Drupal\Core\Datetime\DateFormatter
    */
   protected $dateFormatter;
-  private $currentTime;
 
   /**
    * AlshayaCheckBalanceForm constructor.
