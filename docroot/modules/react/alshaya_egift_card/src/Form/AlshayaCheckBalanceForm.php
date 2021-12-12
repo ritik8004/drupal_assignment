@@ -162,13 +162,16 @@ class AlshayaCheckBalanceForm extends FormBase{
         "cardNumber" => $card_number,
         "email" => $email
       ];
+      // Call the getBalance Api.
       $response = $this->apiWrapper->invokeApi($endpoint, $data, 'JSON');
       $response = is_string($response) ? Json::decode($response) : $response;
+      // Show error message in case of api dowm.
       if (empty($response)) {
         $ajax_response->addCommand(new HtmlCommand('#api-error', $this->t('Something went wrong, please try again later.', [], ['context' => 'egift'])));
         $ajax_response->addCommand(new HtmlCommand('.form-item--error-message', ''));
       }
       else {
+        // In case of success show success modal with api response.
         $currency_code = $this->configFactory->get('acq_commerce.currency')->get('currency_code');
         $validity = $this->dateFormatter->format($response['validity'], 'custom', 'd-M-Y');
         $replace_modal_form = $this->formBuilder->getForm('Drupal\alshaya_egift_card\Form\AlshayaBalanceReplaceForm');
