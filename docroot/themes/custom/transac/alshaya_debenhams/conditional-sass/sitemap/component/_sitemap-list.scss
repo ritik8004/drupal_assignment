@@ -1,0 +1,52 @@
+.path--sitemap {
+  .page-standard {
+    max-width: 74rem;
+
+    @include breakpoint($upto-desktop) {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+  }
+
+  .sitemap {
+    text-transform: capitalize;
+  }
+
+  .level--1__label {
+    font-family: $dh-semibold;
+
+    &:hover {
+      color: $primary_link;
+      text-decoration: underline;
+    }
+  }
+
+  .level--2__label {
+    font-family: $dh-semibold;
+    font-size: 0.875rem;
+
+    &:hover {
+      color: $primary_link;
+      text-decoration: underline;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .level--2__children {
+    @include breakpoint($only-mobile) {
+      margin-top: 0.625rem;
+    }
+  }
+
+  .level--3__label {
+    font-size: 0.875rem;
+    color: $primary_link;
+
+    &:hover {
+      color: $primary_link;
+    }
+  }
+}
