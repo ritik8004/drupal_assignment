@@ -126,7 +126,40 @@ export const getApiEndpoint = (action, params = {}) => {
  * @returns {object}
  *   The response object.
  */
-export const callEgiftApi = (action, method, postData, params = {}) => {
+export const callEgiftApi = (action, method, postData, params) => {
   const endpoint = getApiEndpoint(action, params);
   return callMagentoApi(endpoint, method, postData);
+};
+
+/**
+ * Performs egift redemption.
+ *
+ * @param {int} quoteId
+ *   Cart id.
+ * @param {int} updateAmount
+ *   Amount needs to be redeemed.
+ * @param {int} egiftCardNumber
+ *   Card number needs to be redeemed.
+ * @param {string} cardType
+ *   Card type to identify from which it redeemed.
+ *
+ * @returns {object}
+ *   The response object.
+ */
+export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardType) => {
+  const postData = {
+    redeem_points: {
+      action: 'set_points',
+      quote_id: quoteId,
+      amount: updateAmount,
+      card_number: egiftCardNumber,
+      payment_method: 'hps_payment',
+      card_type: cardType,
+      email: 'vasanthkumaar.a@gmail.com',
+    },
+  };
+
+  // Invoke the redemption API to update the redeem amount.
+  const response = callEgiftApi('eGiftRedemption', 'POST', postData);
+  return response;
 };

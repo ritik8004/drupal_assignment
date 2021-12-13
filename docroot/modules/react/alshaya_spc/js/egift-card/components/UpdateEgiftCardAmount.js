@@ -22,7 +22,7 @@ export default class UpdateEgiftCardAmount extends React.Component {
     } else if (egiftAmount <= 0) {
       message = getStringMessage('egift_valid_amount');
       errors = true;
-    } else if (egiftAmount > cart.totals.base_grand_total) {
+    } else if (egiftAmount > cart.cart.totals.base_grand_total) {
       message = Drupal.t('Redeem amount should be less than or equal to the cart value.');
       errors = true;
     }
@@ -39,21 +39,9 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (!this.handleValidation(e)) {
       // @todo To perform Amount update.
       const { egift_amount: egiftAmount } = e.target.elements;
-      const {
-        updateAmount,
-        cart,
-        handleExceedingAmount,
-        egiftCardNumber,
-        redeemAmount,
-        cardBalance,
-      } = this.props;
+      const { updateAmount } = this.props;
       // Display the message based on update status.
-      const updateStatus = updateAmount(cart,
-        egiftAmount.value,
-        egiftCardNumber,
-        redeemAmount,
-        cardBalance,
-        handleExceedingAmount);
+      const updateStatus = updateAmount(egiftAmount.value);
       if (!updateStatus) {
         document.getElementById('egift_amount_error').innerHTML = getStringMessage('egift_amount_update_failed');
       }

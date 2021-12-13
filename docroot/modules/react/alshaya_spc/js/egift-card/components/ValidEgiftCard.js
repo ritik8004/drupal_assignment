@@ -1,7 +1,7 @@
 import React from 'react';
 import getCurrencyCode from '../../../../js/utilities/util';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { callEgiftApi, egiftCardHeader } from '../../utilities/egift_util';
+import { callEgiftApi, egiftCardHeader, performRedemption } from '../../utilities/egift_util';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 import logger from '../../../../js/utilities/logger';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
@@ -138,7 +138,7 @@ export default class ValidEgiftCard extends React.Component {
     }
 
     return errors;
-  }
+  };
 
   // Update the user account with egift card.
   handleCardLink = () => {
@@ -149,62 +149,29 @@ export default class ValidEgiftCard extends React.Component {
     }
 
     return false;
-  }
+  };
 
   // Update egift amount.
-  handleAmountUpdate = (cart,
-    updateAmount,
-    egiftCardNumber,
-    redeemAmount,
-    cardBalance,
-    handleExceedingAmount) => {
+  handleAmountUpdate = (updateAmount) => {
     // Prepare the request object for redeem API.
-    const postData = {
-      redeem_points: {
-        action: 'set_points',
-        quote_id: cart.cart_id_int,
-        amount: updateAmount,
-        card_number: egiftCardNumber,
-        payment_method: 'hps_payment',
-        email: drupalSettings.userDetails.userEmailID,
-      },
-    };
-    // Proceed only if postData object is available.
-    if (postData) {
-      showFullScreenLoader();
-      // Invoke the redemption API to update the redeem amount.
-      const response = callEgiftApi('eGiftRedemption', 'POST', postData);
-      if (response instanceof Promise) {
-        response.then((result) => {
-          // Remove loader once result is available.
-          removeFullScreenLoader();
-          // if (result.error === undefined && result.status === 200) {
-          if (result.status === 200) {
-            if (result.data.redeemed_amount !== null && result.data.response_type !== false) {
-              this.setState({
-                amount: updateAmount,
-                open: false,
-              });
-              // Calculations for showing remaining balance.
-              handleExceedingAmount(true, 0, false);
-              // Hide exceed error message if cart total is equal to user input.
-              if (cart.cart_total === updateAmount) {
-                handleExceedingAmount(true, 0, false);
-              }
-              // Show exceed error message if cart total is greater than to user input.
-              if (cart.cart_total > updateAmount) {
-                handleExceedingAmount(true, cart.cart_total - updateAmount, false);
-              }
-              // Show remaining balance after redemption.
-              if (cardBalance > cart.cart_total && updateAmount <= cart.cart_total) {
-                redeemAmount(true, cardBalance - updateAmount, false);
-              }
-              return true;
-            }
+    const { quoteId, egiftCardNumber } = this.props;
+    showFullScreenLoader();
+    const response = performRedemption(quoteId, updateAmount, egiftCardNumber, 'guest');
+    if (response instanceof Promise) {
+      response.then((result) => {
+        // Remove loader once result is available.
+        removeFullScreenLoader();
+        if (result.status === 200) {
+          if (result.data.redeemed_amount !== null && result.data.response_type !== false) {
+            this.setState({
+              amount: updateAmount,
+              open: false,
+            });
           }
-          return false;
-        });
-      }
+          return true;
+        }
+        return false;
+      });
     }
     return true;
   }
