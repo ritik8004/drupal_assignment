@@ -40,6 +40,7 @@ export default class PaymentMethods extends React.Component {
 
   componentDidMount = () => {
     this.selectDefault();
+
     // We want this to be executed once all other JS execution is finished.
     // For this we use setTimeout with 1 ms.
     setTimeout(() => {
@@ -338,7 +339,6 @@ export default class PaymentMethods extends React.Component {
 
     const active = this.isActive();
     const { cart, refreshCart } = this.props;
-
     const activePaymentMethods = Object.values(this.getPaymentMethods(active))
       .sort((a, b) => a.weight - b.weight);
     const animationInterval = 0.4 / Object.keys(activePaymentMethods).length;
@@ -368,6 +368,7 @@ export default class PaymentMethods extends React.Component {
         )}
       />);
     });
+
     const activeClass = active ? 'active' : 'in-active';
 
     return (
