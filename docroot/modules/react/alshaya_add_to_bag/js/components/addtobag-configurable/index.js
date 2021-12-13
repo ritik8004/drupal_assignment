@@ -105,6 +105,8 @@ export default class AddToBagConfigurable extends React.Component {
       sku,
       isBuyable,
       url,
+      // 'extraInfo' is used to pass additional information that
+      // we want to use in this component.
       extraInfo,
     } = this.props;
 
