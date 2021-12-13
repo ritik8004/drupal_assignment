@@ -328,10 +328,10 @@
     // Push navigation events in dataLayer for super category block.
     // Top navigation for VS brand.
     $('.block-alshaya-super-category').find('.menu--one__link').once().on('click', function () {
-      var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).data('super-category-label');
+      var label = $(this).data('super-category-label');
       var navigationData = {
         event: 'Top Navigation',
-        eventLabel: menuLabel
+        eventLabel: label
       };
       pushNavigationData(navigationData, true);
     });
@@ -339,22 +339,20 @@
     // Push navigation events in dataLayer for super category block.
     // Top navigation for WE, PB, PBK brand.
     $('#block-supermenu').find('ul.menu li a').once().on('click', function () {
-      // Getting GTM menu label for Top menu items.
-      var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).text();
+      var label = $(this).text();
       var navigationData = {
         event: 'Top Navigation',
-        eventLabel: menuLabel
+        eventLabel: label
       };
       pushNavigationData(navigationData, true);
     });
 
     // Push navigation events in dataLayer for 1st Level in main menu.
     $('.block-alshaya-main-menu').find('.menu--one__link').once().on('click', function () {
-      // Getting GTM menu label for L1 menu items.
-      var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).text();
+      var label = $(this).text();
       var navigationData = {
         event: 'Category Navigation',
-        eventLabel: menuLabel
+        eventLabel: label
       };
       pushNavigationData(navigationData);
     });
@@ -362,14 +360,11 @@
     // Push navigation events in dataLayer for 2nd Level.
     $('.menu--two__list-item .menu-two__link').once().on('click', function () {
       // Create the event label with parent menu item and current target link text.
-      var parentLink = $(this).closest('.menu--one__list-item').find('.menu--one__link');
-      // Getting GTM menu label for L1 menu items.
-      var parentLabel = (typeof parentLink.attr('gtm-menu-title') !== 'undefined' && parentLink.attr('gtm-menu-title') !== false) ? parentLink.attr('gtm-menu-title') : parentLink.text();
-      // Getting GTM menu label for L2 menu items.
-      var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).text();
+      var label = $(this).closest('.menu--one__list-item').find('.menu--one__link').text();
+      label += ' > ' + $(this).text();
       var navigationData = {
         event: 'Sub Category',
-        eventLabel: parentLabel + ' > ' + menuLabel
+        eventLabel: label
       };
       pushNavigationData(navigationData);
     });
@@ -377,38 +372,28 @@
     // Push navigation events in dataLayer for 3rd Level.
     $('.menu--three__link').once().on('click', function () {
       // Create the event label with parent menu item and current target link text.
-      var parentLink = $(this).closest('.menu--one__list-item').find('.menu--one__link');
-      // Getting GTM menu label for L1 menu items.
-      var parentLabel = (typeof parentLink.attr('gtm-menu-title') !== 'undefined' && parentLink.attr('gtm-menu-title') !== false) ? parentLink.attr('gtm-menu-title') : parentLink.text();
-
-      var nextChildLink = $(this).closest('.menu--two__list-item').find('.menu-two__link');
-      // Getting GTM menu label for L2 menu items and appending L1.
-      parentLabel = (typeof nextChildLink.attr('gtm-menu-title') !== 'undefined' && nextChildLink.attr('gtm-menu-title') !== false) ? (parentLabel + ' > ' + nextChildLink.attr('gtm-menu-title')) : (parentLabel + ' > ' + nextChildLink.text());
-
-      // Getting GTM menu label for L3 menu items and appending L1 + L2.
-      var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? (parentLabel + ' > ' + $(this).attr('gtm-menu-title')) : (parentLabel + ' > ' + $(this).text());
+      var label = $(this).closest('.menu--one__list-item').find('.menu--one__link').text();
+      label += ' > ' + $(this).closest('.menu--two__list-item').find('.menu-two__link').text();
 
       // If the menu item is 4th level.
       if ($(this).closest('.menu__list-item').hasClass('menu--four__list-item')) {
-        nextChildLink = $(this).closest('.menu--three__list-item').find('.menu--three__link').first();
-        // Getting GTM menu label for L4 menu items and appending L1 + L2 + L3.
-        menuLabel = (typeof nextChildLink.attr('gtm-menu-title') !== 'undefined' && nextChildLink.attr('gtm-menu-title') !== false) ? (menuLabel + ' > ' + nextChildLink.attr('gtm-menu-title')) : (menuLabel + ' > ' + nextChildLink.text());
+        label += ' > ' + $(this).closest('.menu--three__list-item').find('.menu--three__link').first().text();
       }
 
+      label += ' > ' + $(this).text();
       var navigationData = {
         event: 'Sub Category',
-        eventLabel: menuLabel
+        eventLabel: label
       };
       pushNavigationData(navigationData);
     });
 
     // Push navigation events in dataLayer for 1st Level in secondary menu.
     $('.block-alshaya-secondary-main-menu').find('.menu--one__link').once().on('click', function () {
-      // Getting GTM menu label for L1 menu items in secondary menu.
-      var menuLabel = (typeof $(this).attr('gtm-menu-title') !== 'undefined' && $(this).attr('gtm-menu-title') !== false) ? $(this).attr('gtm-menu-title') : $(this).text();
+      var label = $(this).text();
       var navigationData = {
         event: 'Secondary Navigation',
-        eventLabel: menuLabel
+        eventLabel: label
       };
       pushNavigationData(navigationData);
     });
@@ -440,7 +425,7 @@
 
     // If super category block exist on the page, we need to prepend
     // super category label before pushing data to dataLayer.
-    var superCategoryLabel = $('.block-alshaya-super-category').find('.menu--one__link.active').attr('gtm-menu-title');
+    var superCategoryLabel = $('.block-alshaya-super-category').find('.menu--one__link.active').data('super-category-label');
     navigationData.eventLabel = superCategoryLabel + ' > ' + navigationData.eventLabel;
     dataLayer.push(navigationData);
     return true;
