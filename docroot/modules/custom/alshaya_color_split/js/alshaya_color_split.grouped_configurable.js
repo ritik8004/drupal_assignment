@@ -38,11 +38,10 @@
 
         // Trigger an event on variant select.
         // Only considers variant when url is changed.
-        const eventData = {
+        var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: {
           viewMode: node.attr('data-vmode'),
           sku: $(this).find('.selected-parent-sku').val(),
-        };
-        var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: eventData }});
+        }}});
         document.dispatchEvent(currentSelectedVariantEvent);
 
         // Update sameday and express delivery labels on variant change.

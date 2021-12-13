@@ -67,6 +67,7 @@ class WishlistButton extends React.Component {
     const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
     const productInfo = drupalSettings[productKey];
     let form = null;
+    let variantSku = '';
 
     // Get sku base form element from page html.
     // Except new pdp magazine v2 layouts.
@@ -80,12 +81,13 @@ class WishlistButton extends React.Component {
       form = selectedEelement !== null
         ? selectedEelement.closest('article').querySelector('.sku-base-form')
         : null;
+      if (form !== null) {
+        // Get variant sku from selected variant attribute.
+        variantSku = form.querySelector('[name="selected_variant_sku"]').value;
+      }
+    } else {
+      variantSku = document.getElementById('pdp-add-to-cart-form-main').getAttribute('variantselected');
     }
-
-    // Get variant sku from selected variant attribute.
-    const variantSku = context !== 'magazinev2' && form !== null
-      ? form.querySelector('[name="selected_variant_sku"]').value
-      : document.getElementById('pdp-add-to-cart-form-main').getAttribute('variantselected');
 
     // For configurable skus, load attribute options.
     if (configurableCombinations && configurableCombinations[sku]) {
@@ -125,8 +127,8 @@ class WishlistButton extends React.Component {
    */
   getProductTitle = (currentSku, variantSku, variants, productInfo) => {
     const { sku } = this.props;
-    if (drupalSettings.productInfo[currentSku]) {
-      return drupalSettings.productInfo[currentSku].cart_title;
+    if (productInfo[currentSku]) {
+      return productInfo[currentSku].cart_title;
     } if (productInfo[sku] && variants !== null) {
       return variants[variantSku].cart_title;
     }
@@ -145,8 +147,8 @@ class WishlistButton extends React.Component {
       removeProductFromWishList(skuCode, this.updateWishListStatus);
       return;
     }
-    const pdpLayouts = ['pdp', 'magazinev2', 'modal', 'matchback'];
-    if (pdpLayouts.includes(context)) {
+    const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback'];
+    if (viewModes.includes(context)) {
       productData = this.processProductData();
     } else {
       productData = {
@@ -160,15 +162,17 @@ class WishlistButton extends React.Component {
   }
 
   /**
-   * Update product info state as per variant selection.
+   * Update wishlist button state as per variant selection.
    */
   updateProductInfoData = (e) => {
+    e.preventDefault();
     if (e.detail && e.detail.data.sku) {
       const variantSku = e.detail.data.sku;
       this.setState({
         skuCode: variantSku,
+      }, () => {
+        this.updateWishListStatus(isProductExistInWishList(variantSku));
       });
-      this.updateWishListStatus(isProductExistInWishList(variantSku));
     }
   }
 
@@ -185,8 +189,8 @@ class WishlistButton extends React.Component {
     let buttonText = addedInWishList ? 'Remove' : 'Add to @wishlist_label';
 
     // Wishlist text for PDP layouts.
-    const pdpLayouts = ['pdp', 'magazinev2', 'modal', 'matchback'];
-    if (pdpLayouts.includes(context)) {
+    const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback'];
+    if (viewModes.includes(context)) {
       buttonText = addedInWishList ? 'Added to @wishlist_label' : 'Add to @wishlist_label';
     }
 

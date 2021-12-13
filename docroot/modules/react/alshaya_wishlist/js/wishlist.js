@@ -8,6 +8,10 @@ import WishlistButton from './components/wishlist-button';
  *
  * @param {string} elementSelector
  *  Element selector for rendering wishlist button.
+ * @param {string} content
+ *  Context for PDP view mode.
+ * @param {string} elementSelector
+ *  Current product sku code.
  */
 const renderWishListButton = (elementSelector, context, skuCode) => {
   let selectedEelement = null;
