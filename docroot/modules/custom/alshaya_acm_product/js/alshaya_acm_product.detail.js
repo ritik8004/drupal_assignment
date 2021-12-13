@@ -133,6 +133,10 @@
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
           if (typeof variantInfo === 'undefined') {
+            Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, selected: @selected', {
+              '@sku': sku,
+              '@selected': selected,
+            });
             return;
           }
 
@@ -342,6 +346,16 @@
     for (var code in selectedValues) {
       if (code == selectedCode) {
         break;
+      }
+
+      if (selectedValues === null) {
+        Drupal.alshayaLogger('warning', 'Error occurred during fetching nextcode from Drupal.alshayaAcmProductSelectConfiguration, sku: @sku, combinations: @combinations, selectedCode: @selectedCode, selectedValue: @selectedValue', {
+          '@sku': sku,
+          '@combinations': combinations,
+          '@selectedCode': selectedCode,
+          '@selectedValue': selectedValue,
+        });
+        return;
       }
 
       combinations = combinations[code][selectedValues[code]];
