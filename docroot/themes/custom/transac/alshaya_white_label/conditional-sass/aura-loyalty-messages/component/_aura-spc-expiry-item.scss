@@ -11,7 +11,6 @@
 
   @include breakpoint($only-mobile) {
     padding: 0.875rem;
-    padding-#{$left}: 3rem;
   }
 
   b {
