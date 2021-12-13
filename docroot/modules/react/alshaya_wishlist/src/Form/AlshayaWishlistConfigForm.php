@@ -49,6 +49,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#title' => $this->t('Wishlist Label'),
       '#description' => $this->t('Label used for wishlist feature as per brand requirement.'),
       '#maxlength' => 255,
+      '#required' => TRUE,
       '#default_value' => $wishlist_config->get('wishlist_label'),
     ];
 
