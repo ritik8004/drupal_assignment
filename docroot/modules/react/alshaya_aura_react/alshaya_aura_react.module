@@ -41,22 +41,38 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
 
   $settings['allAuraTier'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([AuraDictionaryApiConstants::APC_TIER_TYPES], \Drupal::languageManager()->getCurrentLanguage()->getId())[AuraDictionaryApiConstants::APC_TIER_TYPES];
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
+  $current_route = \Drupal::routeMatch();
+  $current_route_name = $current_route->getRouteName();
+  // Add library dependencies on header library based on routes.
+  switch ($current_route_name) {
+    case 'alshaya_aura_react.my_loyalty_club':
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library_loyalty_club';
+      break;
 
-  $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
+    case 'entity.user.canonical':
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library_user';
+      break;
+
+    case 'acq_cart.cart':
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library_cart';
+      break;
+
+    default:
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
+  }
   $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
 
-  $current_route = \Drupal::routeMatch();
   // Attach aura library on cart/checkout page.
-  if (in_array($current_route->getRouteName(), ['acq_cart.cart', 'alshaya_spc.checkout'])) {
+  if (in_array($current_route_name, ['acq_cart.cart', 'alshaya_spc.checkout'])) {
     $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc';
   }
-  elseif ($current_route->getRouteName() === 'alshaya_spc.checkout.confirmation') {
+  elseif ($current_route_name === 'alshaya_spc.checkout.confirmation') {
     $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc-confirmation';
   }
-  elseif ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
+  elseif ($current_route_name === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp';
   }
-  elseif ($current_route->getRouteName() === 'entity.user.canonical') {
+  elseif ($current_route_name === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
   }
   $settings['config'] = $aura_helper->getAuraConfig();
@@ -85,6 +101,7 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
     'text' => t('My Aura'),
     'route' => 'alshaya_aura_react.my_loyalty_club',
     'weight' => 11,
+    'class' => 'my-account-my-aura',
   ];
 }
 
@@ -338,40 +355,6 @@ function alshaya_aura_react_alshaya_acm_customer_recent_order_build_alter(array 
     $build['recent_order'][$key]['#order']['aura_enabled'] = TRUE;
     $build['recent_order'][$key]['#order']['apc_accrued_points'] = $order['#order']['extension']['apc_accrued_points'];
     $build['recent_order'][$key]['#order']['apc_redeemed_points'] = $order['#order']['extension']['apc_redeemed_points'];
-  }
-}
-
-/**
- * Implements hook_library_info_alter().
- */
-function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
-  if ($extension == 'alshaya_aura_react') {
-    if (isset($libraries['aura_header_library'])) {
-      $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
-
-      // Add code to integrate V1/V2 js with aura header library.
-      $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
-
-      $current_route_name = \Drupal::routeMatch()->getRouteName();
-
-      // Add library dependencies on header library based on routes.
-      switch ($current_route_name) {
-        case 'alshaya_aura_react.my_loyalty_club':
-          $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_loyalty_club';
-          break;
-        case 'entity.user.canonical':
-          $libraries['aura_header_library']['dependencies'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
-          break;
-        case 'acq_cart.cart':
-          $libraries['aura_header_library']['dependencies'][] = 'alshaya_spc/cart';
-          break;
-      }
-
-      // Add aura js dependency on cart.
-      if ($current_route_name === 'acq_cart.cart') {
-        $libraries['aura_header_library']['dependencies'][] = 'alshaya_spc/cart';
-      }
-    }
   }
 }
 
