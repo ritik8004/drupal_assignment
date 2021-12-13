@@ -1010,9 +1010,11 @@ const applyDefaultShipping = async (order) => {
     const { methods } = response;
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
+      // Check if last order's method is available for the order.
       if (typeof method.carrier_code !== 'undefined'
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
+        && method.available
       ) {
         logger.debug('Setting shipping/billing address from user last HD order. Cart: @cartId, Address: @address, Billing: @billing.', {
           '@cartId': window.commerceBackend.getCartId(),
@@ -1027,6 +1029,18 @@ const applyDefaultShipping = async (order) => {
   return false;
 };
 
+/**
+ * Returns first available method.
+ *
+ * @param {array}
+ *   Methods array.
+ *
+ * @return {array}
+ *   First available method.
+ */
+const firstAvailableDeliveryMethod = (methods) => methods.find(
+  (element) => element.available === true,
+);
 /**
  * Apply defaults to cart for customer.
  *
@@ -1079,8 +1093,7 @@ const applyDefaults = async (data, customerId) => {
         '@cartId': window.commerceBackend.getCartId(),
         '@address': JSON.stringify(address),
       });
-
-      return selectHd(address, methods[0], address, methods);
+      return selectHd(address, firstAvailableDeliveryMethod(methods), address, methods);
     }
   }
 
@@ -1094,8 +1107,12 @@ const applyDefaults = async (data, customerId) => {
         '@cartId': window.commerceBackend.getCartId(),
         '@address': JSON.stringify(data.shipping.address),
       });
-
-      return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
+      return selectHd(
+        data.shipping.address,
+        firstAvailableDeliveryMethod(methods),
+        data.shipping.address,
+        methods,
+      );
     }
   }
 
