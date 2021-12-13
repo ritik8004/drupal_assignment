@@ -1,0 +1,16 @@
+body.wishlist-enabled {
+  .wishlist-notification {
+    .actions {
+      a {
+        font-family: $alshaya-thin;
+        text-transform: inherit;
+
+        &.sign-in {
+          &:hover {
+            opacity: 0.75;
+          }
+        }
+      }
+    }
+  }
+}
