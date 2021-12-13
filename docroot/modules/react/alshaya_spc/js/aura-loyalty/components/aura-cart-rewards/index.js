@@ -89,13 +89,16 @@ class AuraCartRewards extends React.Component {
   }
 
   // Prepare data and call helper to invoke aura points sales API.
-  getAuraPoints = () => {
+  getAuraPoints = (card = '') => {
     const { items } = this.props;
     const { cardNumber } = this.state;
+    const userCardNumber = (typeof card === 'string' && hasValue(card))
+      ? card
+      : cardNumber;
     this.setState({
       waitForPoints: true,
     });
-    getAuraPointsToEarn(items, cardNumber);
+    getAuraPointsToEarn(items, userCardNumber);
   }
 
   // Event listener callback to trigger an event to get aura points.
@@ -159,7 +162,7 @@ class AuraCartRewards extends React.Component {
       ...states,
     });
     // Get the aura points to earn from sales API.
-    this.getAuraPoints();
+    this.getAuraPoints(states.cardNumber);
   };
 
   getSectionTitle = (allAuraStatus, loyaltyStatus) => {
