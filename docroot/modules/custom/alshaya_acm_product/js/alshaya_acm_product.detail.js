@@ -133,9 +133,10 @@
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
           if (typeof variantInfo === 'undefined') {
-            Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, selected: @selected', {
+            Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, selected: @selected, variant: @variant', {
               '@sku': sku,
               '@selected': selected,
+              '@variant': variant,
             });
             return;
           }
