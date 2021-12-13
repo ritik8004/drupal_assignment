@@ -5,16 +5,30 @@ export default class EgiftCardOpenAmountField extends React.Component {
     super(props);
     this.state = {
       openAmountMessage: '',
+      openAmountInputDisabled: false, // Enable field by default.
+      actionDisable: true, // Disable open amount submit by default.
     };
   }
 
   /**
    * Remove error message on focus.
    */
-  handleErrorMessage() {
-    this.setState({
-      openAmountMessage: '',
-    });
+  handleErrorMessage = () => {
+    // Reset error message to empty.
+    document.getElementById('open-amount-error').innerHTML = '';
+  }
+
+  handleChange = () => {
+    const openAmount = document.getElementById('open-amount').value;
+    if (openAmount !== '') {
+      // Remove any error message.
+      document.getElementById('open-amount-error').innerHTML = '';
+
+      // Enable open amount submit.
+      this.setState({
+        actionDisable: false,
+      });
+    }
   }
 
   /**
@@ -70,8 +84,8 @@ export default class EgiftCardOpenAmountField extends React.Component {
     }
 
     // Min and Max value allowed for open amount.
-    const amountFrom = parseFloat(element.getAttribute('data-amount-from'));
-    const amountTo = parseFloat(element.getAttribute('data-amount-to'));
+    const amountFrom = parseFloat(element.getAttribute('min'));
+    const amountTo = parseFloat(element.getAttribute('max'));
 
     // Compare if user input for open amount lies in the allowed range.
     if (parseFloat(openAmount) < amountFrom || parseFloat(openAmount) > amountTo) {
@@ -83,12 +97,21 @@ export default class EgiftCardOpenAmountField extends React.Component {
     } else {
       // If open amount is in range then select it for step 2.
       handleAmountSelect(true, openAmount);
+
+      // Unset active from any item amounts.
+      const amountElements = document.querySelectorAll('.item-amount');
+      [].forEach.call(amountElements, (el) => {
+        el.classList.remove('active');
+      });
+
+      // Lock open amount input field.
+      element.disabled = true;
     }
   }
 
   render() {
     const { selected } = this.props;
-    const { openAmountMessage } = this.state;
+    const { openAmountMessage, actionDisable, openAmountInputDisabled } = this.state;
 
     // Get all egift card attributes.
     const attributes = selected.custom_attributes;
@@ -115,16 +138,15 @@ export default class EgiftCardOpenAmountField extends React.Component {
           type="number"
           min={eGiftCardAttributes.amount_open_from_hps.value}
           max={eGiftCardAttributes.amount_open_to_hps.value}
-          data-amount-from={eGiftCardAttributes.amount_open_from_hps.value}
-          data-amount-to={eGiftCardAttributes.amount_open_to_hps.value}
-          onBlur={(e) => this.handleOpenAmount(e)}
           onFocus={() => this.handleErrorMessage()}
           onKeyPress={this.handleKeypress}
+          onChange={this.handleChange}
+          disabled={openAmountInputDisabled}
         />
         <div className="error" id="open-amount-error">
           { openAmountMessage }
         </div>
-        <button type="button" onClick={this.handleSubmit}>
+        <button type="button" onClick={this.handleSubmit} disabled={actionDisable}>
           <span className="open-amount-submit">&nbsp;</span>
         </button>
       </div>

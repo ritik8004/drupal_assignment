@@ -19,8 +19,20 @@ const AuraMyAccountPendingFullEnrollment = () => {
           {Drupal.t('To use your points online, please download the AURA app and provide us with a few more details.')}
         </div>
         <div className="app-links">
-          <a href={appleAppStoreLink}><AppStoreSVG store="appstore" /></a>
-          <a href={googlePlayStoreLink}><AppStoreSVG store="playstore" /></a>
+          <a
+            href={appleAppStoreLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <AppStoreSVG store="appstore" />
+          </a>
+          <a
+            href={googlePlayStoreLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <AppStoreSVG store="playstore" />
+          </a>
         </div>
       </div>
       <div className="aura-model">

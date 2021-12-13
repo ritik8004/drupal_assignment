@@ -6,3 +6,4 @@ swatches:
 plp_slider:
   item: 3
   margin: 3
+swatch_plp_limit: 4

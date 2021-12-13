@@ -3,4 +3,10 @@ form.user-communication-preference {
   input[type=checkbox]:checked ~ label {
     font-weight: normal;
   }
+
+  .form-submit {
+    font-size: 1rem;
+    font-weight: normal;
+    height: 2.625rem;
+  }
 }

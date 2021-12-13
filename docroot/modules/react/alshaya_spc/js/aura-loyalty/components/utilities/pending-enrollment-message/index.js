@@ -17,8 +17,20 @@ const PendingEnrollmentMessage = () => {
           {message}
         </div>
         <div className="app-links">
-          <a href={appleAppStoreLink}><AppStoreSVG store="appstore" /></a>
-          <a href={googlePlayStoreLink}><AppStoreSVG store="playstore" /></a>
+          <a
+            href={appleAppStoreLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <AppStoreSVG store="appstore" />
+          </a>
+          <a
+            href={googlePlayStoreLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <AppStoreSVG store="playstore" />
+          </a>
         </div>
       </div>
     </div>

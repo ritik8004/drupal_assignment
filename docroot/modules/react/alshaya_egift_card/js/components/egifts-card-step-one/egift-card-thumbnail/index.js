@@ -1,11 +1,13 @@
 import React from 'react';
-import { getMdcMediaUrl } from '../../../utilities';
+import { getImageUrl } from '../../../utilities';
 
 const EgiftCardThumbnail = (props) => {
   const { item, selected, handleEgiftSelect } = props;
-  const media = item.media_gallery_entries;
+
+  const { custom_attributes: customAttributes } = item || [];
+
   const thumbnailImage = {
-    url: (media.length > 0) ? `${getMdcMediaUrl()}${media[0].file}` : '',
+    url: getImageUrl(customAttributes, 'thumbnail'),
     title: item.name,
     alt: item.name,
   };
