@@ -1,15 +1,16 @@
 import React from 'react';
-import { getMdcMediaUrl } from '../../../utilities';
+import { getImageUrl } from '../../../utilities';
 
 /**
  * Show egift card hero image from selected item.
  */
 const HeroImage = (props) => {
   const { item } = props;
-  const media = item.media_gallery_entries;
+  const { custom_attributes: customAttributes } = item || [];
+
   // @todo handle cards without image.
   const image = {
-    url: (media.length > 0) ? `${getMdcMediaUrl()}${media[0].file}` : '',
+    url: getImageUrl(customAttributes, 'image'),
     title: item.name,
     alt: item.name,
   };

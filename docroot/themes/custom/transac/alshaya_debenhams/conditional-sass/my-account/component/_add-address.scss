@@ -13,7 +13,12 @@
         @include btn();
 
         line-height: normal;
+        height: 2.625rem;
       }
+    }
+
+    .js-form-type-select label {
+      color: $primary_input_label;
     }
   }
 }

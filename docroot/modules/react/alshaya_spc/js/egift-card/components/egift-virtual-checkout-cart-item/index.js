@@ -1,6 +1,7 @@
 import React from 'react';
 
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import CheckoutItemImage from '../../../utilities/checkout-item-image';
 
 class CheckoutVirtualCartItem extends React.Component {
   constructor(props) {
@@ -13,16 +14,29 @@ class CheckoutVirtualCartItem extends React.Component {
       item: {
         title,
         price,
+        egiftOptions,
+        media,
       },
     } = this.props;
-    const senderEmail = 'asdf@gmail.com';
-    const senderMessage = 'Happy new year my beast';
+    // Egift card product image.
+    const cartImage = {
+      url: (media.length > 0) ? media : undefined,
+      alt: title,
+      title,
+    };
+    // Reciepient email.
+    const recieptEmail = (typeof egiftOptions.hps_giftcard_recipient_email !== 'undefined')
+      ? egiftOptions.hps_giftcard_recipient_email
+      : '';
+    // Gift card message.
+    const giftCardMessage = (typeof egiftOptions.hps_giftcard_message !== 'undefined')
+      ? egiftOptions.hps_giftcard_message
+      : '';
 
     return (
       <div className="product-item">
         <div className="spc-product-image">
-          Cart Image
-          {/* @todo To update code here once API is available. */}
+          <CheckoutItemImage img_data={cartImage} />
         </div>
         <div className="spc-product-meta-data">
           <div className="spc-product-title-price">
@@ -39,11 +53,11 @@ class CheckoutVirtualCartItem extends React.Component {
           </div>
           <div className="spc-cart-product-attribute">
             <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
-            <span className="spc-cart-product-attribute-value">{ senderEmail }</span>
+            <span className="spc-cart-product-attribute-value">{ recieptEmail }</span>
           </div>
           <div className="spc-cart-product-attribute">
             <span className="spc-cart-product-attribute-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
-            <span className="spc-cart-product-attribute-value">{ senderMessage }</span>
+            <span className="spc-cart-product-attribute-value">{ giftCardMessage }</span>
           </div>
         </div>
       </div>

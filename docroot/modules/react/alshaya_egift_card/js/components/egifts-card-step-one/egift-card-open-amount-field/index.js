@@ -5,17 +5,54 @@ export default class EgiftCardOpenAmountField extends React.Component {
     super(props);
     this.state = {
       openAmountMessage: '',
+      openAmountInputDisabled: false, // Enable field by default.
+      actionDisable: true, // Disable open amount submit by default.
     };
   }
 
   /**
    * Remove error message on focus.
    */
-  handleErrorMessage() {
-    this.setState({
-      openAmountMessage: '',
-    });
+  handleErrorMessage = () => {
+    // Reset error message to empty.
+    document.getElementById('open-amount-error').innerHTML = '';
   }
+
+  handleChange = () => {
+    const openAmount = document.getElementById('open-amount').value;
+    if (openAmount !== '') {
+      // Remove any error message.
+      document.getElementById('open-amount-error').innerHTML = '';
+
+      // Enable open amount submit.
+      this.setState({
+        actionDisable: false,
+      });
+    }
+  }
+
+  /**
+   * Handle submit open amount.
+   */
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Remove any error message.
+    document.getElementById('open-amount-error').innerHTML = '';
+
+    // Set open amount.
+    this.handleOpenAmount(e);
+  }
+
+  /**
+   * Trigger submit when user clicks enter on open amount field.
+   */
+  handleKeypress = (e) => {
+    // It triggers by pressing the enter key
+    if (e.key === 'Enter') {
+      this.handleSubmit(e);
+    }
+  };
 
   /**
    * Check if number is positive integer.
@@ -29,30 +66,52 @@ export default class EgiftCardOpenAmountField extends React.Component {
    * Validate open amount field on blur.
    */
   handleOpenAmount(e) {
-    const element = e.target;
-    const openAmount = e.target.value;
+    e.preventDefault();
+
+    // Get open amount input element.
+    const element = document.getElementById('open-amount');
+
+    // Get open amount value.
+    const openAmount = element.value;
+
+    const { handleAmountSelect } = this.props;
+
+    // Check if amount enter by user is whole number.
     if (this.isAmount(openAmount) === false) {
-      this.setState({
-        openAmountMessage: Drupal.t('Please enter amount or select from above.', {}, { context: 'egift' }),
-      });
+      document.getElementById('open-amount-error').innerHTML = Drupal.t('Please enter amount or select from above.', {}, { context: 'egift' });
+      handleAmountSelect(false, 0);
       return;
     }
-    const amountFrom = parseFloat(element.getAttribute('data-amount-from'));
-    const amountTo = parseFloat(element.getAttribute('data-amount-to'));
 
+    // Min and Max value allowed for open amount.
+    const amountFrom = parseFloat(element.getAttribute('min'));
+    const amountTo = parseFloat(element.getAttribute('max'));
+
+    // Compare if user input for open amount lies in the allowed range.
     if (parseFloat(openAmount) < amountFrom || parseFloat(openAmount) > amountTo) {
-      this.setState({
-        openAmountMessage: Drupal.t('Please enter amount in the range of @amountFrom to @amountTo', {
-          '@amountFrom': amountFrom,
-          '@amountTo': amountTo,
-        }, { context: 'egift' }),
+      document.getElementById('open-amount-error').innerHTML = Drupal.t('Please enter amount in the range of @amountFrom to @amountTo', {
+        '@amountFrom': amountFrom,
+        '@amountTo': amountTo,
+      }, { context: 'egift' });
+      handleAmountSelect(false, 0);
+    } else {
+      // If open amount is in range then select it for step 2.
+      handleAmountSelect(true, openAmount);
+
+      // Unset active from any item amounts.
+      const amountElements = document.querySelectorAll('.item-amount');
+      [].forEach.call(amountElements, (el) => {
+        el.classList.remove('active');
       });
+
+      // Lock open amount input field.
+      element.disabled = true;
     }
   }
 
   render() {
     const { selected } = this.props;
-    const { openAmountMessage } = this.state;
+    const { openAmountMessage, actionDisable, openAmountInputDisabled } = this.state;
 
     // Get all egift card attributes.
     const attributes = selected.custom_attributes;
@@ -73,22 +132,21 @@ export default class EgiftCardOpenAmountField extends React.Component {
           { drupalSettings.alshaya_spc.currency_config.currency_code }
         </span>
         <input
+          id="open-amount"
           className="egift-open-amount-field"
           name="egift-open-amount"
           type="number"
           min={eGiftCardAttributes.amount_open_from_hps.value}
           max={eGiftCardAttributes.amount_open_to_hps.value}
-          data-amount-from={eGiftCardAttributes.amount_open_from_hps.value}
-          data-amount-to={eGiftCardAttributes.amount_open_to_hps.value}
-          onBlur={(e) => this.handleOpenAmount(e)}
           onFocus={() => this.handleErrorMessage()}
+          onKeyPress={this.handleKeypress}
+          onChange={this.handleChange}
+          disabled={openAmountInputDisabled}
         />
-        <div className="display-error">
-          <span className="error-message" ref={this.myRef}>
-            { openAmountMessage }
-          </span>
+        <div className="error" id="open-amount-error">
+          { openAmountMessage }
         </div>
-        <button type="button">
+        <button type="button" onClick={this.handleSubmit} disabled={actionDisable}>
           <span className="open-amount-submit">&nbsp;</span>
         </button>
       </div>

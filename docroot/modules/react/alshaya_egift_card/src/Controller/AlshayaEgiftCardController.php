@@ -28,6 +28,7 @@ class AlshayaEgiftCardController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_card_purchase',
+          'alshaya_acm_cart_notification/cart_notification_js',
         ],
       ],
     ];

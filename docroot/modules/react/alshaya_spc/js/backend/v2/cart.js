@@ -212,6 +212,13 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         quote_id: cartId,
       },
     };
+
+    // Check if product type is virtual (eg: eGift card), if product type
+    // is virtual then update product type and options to cart item.
+    if (data.product_type === 'virtual') {
+      itemData.cartItem.product_type = data.product_type;
+      itemData.cartItem.product_option = data.options;
+    }
   }
 
   if (data.action === 'update item') {

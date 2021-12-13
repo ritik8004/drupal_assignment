@@ -13,6 +13,14 @@ $anti-flash-white: #f2f2f2;
 $medium-sky-blue: #7be7d8;
 $aquq: #b0f1e8;
 $green: #00ac8d;
+$promo-blue: #1989ff;
+$lemon: #faef98;
+$_spc-discount-text: $sale-red;
+$_spc-radio-filled: $charcoal;
+$_spc-area-panel-placeholder: $anti-flash-white;
+$_spc-billing-help: $promo-blue;
+$_spc-cart-alert: $sale-red;
+$_spc-warning-bg: $lemon;
 
 // Global elements.
 $primary_text: $charcoal;
@@ -37,7 +45,7 @@ $primary_input_focus_border: $grey;
 $primary_input_inline_error: $sale-red;
 
 // Form Items
-$formitem_label: $grey;
+$formitem_label: $charcoal;
 
 //Buttons.
 $primary_btn_bg: $white;
@@ -255,6 +263,66 @@ $pdp_white_color_attribute_border: $spanish-grey;
 
 // SPC
 $spc-cart-background: $anti-flash-white;
+$spc-empty-text: $charcoal;
+$spc-checkout_section_title: $black;
+$spc-product-title: $charcoal;
+$spc-product-price: $charcoal;
+$spc-product-attributes: $mid-grey;
+$spc-promo-code-error: $sale-red;
+$spc-promo-code-success: $green;
+$spc-select-border: $grey;
+$spc-totals-line-item-color: $charcoal;
+$spc-order-total-suffix-text: $mid-grey;
+$spc-promo-code-placeholder-text: $charcoal;
+$spc-promo-code-border: $grey;
+$spc-promo-code-close-icon: $charcoal;
+$spc-cart-promo-code-submit-enabled: $white;
+$spc-order-summary-product-area-bg: $pale-grey;
+$spc-checkout-delivery-method-txt: $charcoal;
+$spc-deliver-button: $white;
+$spc-delivery-customer-info-highlight: $charcoal;
+$spc-delivery-info-text: $charcoal;
+$spc-checkout-payment-method-txt: $black;
+$spc-cc-placeholder: $mid-grey;
+$spc-deliver-button: $black;
+$spc-tooltip-bg: $white;
+$spc-tooltip-text: $dark-grey;
+$spc-tooltip-border: $dark-grey;
+$spc_tooltip_icon: $dark-grey;
+$spc_tooltip_icon_border: $dark-grey;
+$spc-deliver-button: $white;
+$spc-cnc-store-search-icon: $charcoal;
+$spc-cnc-toggle-bg-active: $charcoal;
+$spc-cnc-toggle-bg: $white;
+$spc-checkout-success-message-background: $green;
+$spc-promotion-link: $sale-red;
+$spc-cart-item-alert: $promo-blue;
+$spc-checkout-error-message-background: $sale-red;
+$spc-order-summary-discount-text: $charcoal;
+$spc-checkout-header-border: $pale-grey;
+$spc-checkout-page-title-border: $spanish-grey;
+$spc-checkout-radio-filled: $charcoal;
+$spc-checkout-delivery-method-txt: $mid-grey;
+$spc-delivery-customer-info-highlight: $charcoal;
+$spc-delivery-info-text: $charcoal;
+$spc-delivery-info-separator: $grey;
+$spc-carrier-title: $dark-grey;
+$spc-carrier-price: $charcoal;
+$spc-method-title: $mid-grey;
+$spc-checkout-payment-method-desc: $charcoal;
+$spc-checkout-order-detail-label: $charcoal;
+$spc-cnc-store-item-text-impress: $charcoal;
+
+// Checkout Global.
+$checkout_section_titles: $charcoal;
+$checkout_login_link_text: $charcoal;
+$checkout_login_submit_button_background: $white;
+$checkout_guest_button_border: $medium-sky-blue;
+$checkout_guest_button_txt: $charcoal;
+$checkout_footer_border-top: $grey;
+$checkout_footer_txt: $dark-grey;
+$checkout_header_border-bottom: $grey;
+$checkout_footer_light_txt: $dark-grey;
 
 // cart
 $minicart_notification_border: $charcoal;
@@ -267,6 +335,9 @@ $primary_minicart_quantity_bg: $medium-sky-blue;
 $minicart_notification_btn_text: $charcoal;
 $primary_minicart_text: $charcoal;
 $primary_minicart_quantity_text: $charcoal;
+$basket_fixed_percentage_inactive_header_promo_bg: $medium-sky-blue;
+$basket_fixed_percentage_inactive_header_promo_txt: $charcoal;
+$basket_active_promotion_icon: $charcoal;
 
 // Address form.
 $address_form_radio: $charcoal;
