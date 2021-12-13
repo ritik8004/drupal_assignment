@@ -44,10 +44,15 @@
 
         // Trigger an event on variant select.
         // Only considers variant when url is changed.
-        var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: {
-          viewMode,
-          sku: $(this).val(),
-        }}});
+        var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {
+          bubbles: true,
+          detail: {
+            data: {
+              viewMode,
+              sku: $(this).val(),
+            }
+          }
+        });
         document.dispatchEvent(currentSelectedVariantEvent);
 
         if (viewMode === 'full' || viewMode === 'matchback' || viewMode === 'matchback_mobile') {
