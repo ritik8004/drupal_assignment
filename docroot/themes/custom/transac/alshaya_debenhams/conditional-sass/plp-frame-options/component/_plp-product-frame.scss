@@ -1,0 +1,48 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
+  .c-products__item {
+    &.product-frame {
+      border: 0;
+    }
+
+    &.product-element-alignment {
+      .product-plp-detail-wrapper {
+        .field--name-name {
+          @include breakpoint($tablet) {
+            height: 2.5rem;
+            margin: 0;
+          }
+        }
+
+        .special-price-block {
+          html[lang=ar] & {
+            height: 3rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            height: 3rem;
+          }
+
+          @include breakpoint($desktop) {
+            height: 3rem;
+          }
+        }
+
+        .alignment-placeholder {
+          height: 0.9375rem;
+          margin-bottom: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+#top-results .ais-Hits-item {
+  @include breakpoint($only-mobile) {
+    border: 0;
+
+    .alshaya_search_mainimage {
+      height: 16rem !important;
+    }
+  }
+}

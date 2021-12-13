@@ -55,9 +55,10 @@
     }
 
     .listing-brand-name {
-      font-family: 'SofiaPro-SemiBold';
+      font-family: $dh-semibold;
       font-size: 0.875rem;
-      margin-top: 1.875rem;
+      margin-top: 0;
+      margin-bottom: 0.75rem;
     }
 
     @include breakpoint($desktop) {
@@ -71,6 +72,37 @@
             text-decoration: none;
           }
         }
+      }
+    }
+  }
+
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        border: 1px solid $primary_border;
+        margin-bottom: 2.25rem;
+
+        @include breakpoint($only-mobile) {
+          height: 16rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 20.75rem;
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-mobile) {
+            height: 16rem;
+          }
+        }
+      }
+    }
+
+    &.view-search,
+    &.view-algolia-plp {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0.5rem;
+        padding-#{$right}: 0.5rem;
       }
     }
   }
