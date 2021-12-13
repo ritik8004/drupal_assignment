@@ -116,8 +116,10 @@
     attach: function (context, settings) {
       var $document = $(document);
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
-        var productData = e.detail.productData;
-        Drupal.cartNotification.triggerNotification(productData);
+        setTimeout(function triggerSuccessNotification() {
+          var productData = e.detail.productData;
+          Drupal.cartNotification.triggerNotification(productData);
+        }, 1200);
       });
 
       $('.sku-base-form').once('cart-notification-failed').on('product-add-to-cart-failed', function () {
