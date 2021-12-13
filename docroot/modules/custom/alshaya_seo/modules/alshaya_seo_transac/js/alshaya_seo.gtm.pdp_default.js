@@ -9,10 +9,11 @@
   var productDetailViewTriggered = false;
   Drupal.behaviors.alshayaSeoGtmPdpBehavior = {
     attach: function (context, settings) {
-      if (!productDetailViewTriggered && $('.entity--type-node').not('[gtm-name *= "#"]').length > 0) {
+      var node = jQuery('.entity--type-node.node--view-mode-full').not('[data-sku *= "#"]');
+      if (!productDetailViewTriggered && node.length > 0) {
         productDetailViewTriggered = true;
         // Trigger productDetailView event.
-        Drupal.alshayaSeoGtmPushProductDetailView($('.entity--type-node'));
+        Drupal.alshayaSeoGtmPushProductDetailView(node);
       }
     }
   }
