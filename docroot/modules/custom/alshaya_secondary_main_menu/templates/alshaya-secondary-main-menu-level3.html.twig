@@ -5,9 +5,9 @@
       <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
         {% if level3.url.toString is not empty %}
-          <a href="{{level3.url}}" class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ level3.sub-nav-class }}" gtm-menu-title="{{ level3.gtm_menu_title }}">{{ level3.title }}</a>
+          <a href="{{level3.url}}" class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ level3.sub-nav-class }}">{{ level3.title }}</a>
         {% else %}
-          <div class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ level3.sub-nav-class }}" gtm-menu-title="{{ level3.gtm_menu_title }}">{{ level3.title }}</div>
+          <div class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ level3.sub-nav-class }}">{{ level3.title }}</div>
         {% endif %}
         </div>
       </li>
