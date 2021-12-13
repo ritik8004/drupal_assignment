@@ -326,7 +326,6 @@
    */
   function pushNavigationDataToDataLayer() {
     // Push navigation events in dataLayer for super category block.
-    // Top navigation for VS brand.
     $('.block-alshaya-super-category').find('.menu--one__link').once().on('click', function () {
       var label = $(this).data('super-category-label');
       var navigationData = {
@@ -336,18 +335,7 @@
       pushNavigationData(navigationData, true);
     });
 
-    // Push navigation events in dataLayer for super category block.
-    // Top navigation for WE, PB, PBK brand.
-    $('#block-supermenu').find('ul.menu li a').once().on('click', function () {
-      var label = $(this).text();
-      var navigationData = {
-        event: 'Top Navigation',
-        eventLabel: label
-      };
-      pushNavigationData(navigationData, true);
-    });
-
-    // Push navigation events in dataLayer for 1st Level in main menu.
+    // Push navigation events in dataLayer for 1st Level.
     $('.block-alshaya-main-menu').find('.menu--one__link').once().on('click', function () {
       var label = $(this).text();
       var navigationData = {
@@ -383,16 +371,6 @@
       label += ' > ' + $(this).text();
       var navigationData = {
         event: 'Sub Category',
-        eventLabel: label
-      };
-      pushNavigationData(navigationData);
-    });
-
-    // Push navigation events in dataLayer for 1st Level in secondary menu.
-    $('.block-alshaya-secondary-main-menu').find('.menu--one__link').once().on('click', function () {
-      var label = $(this).text();
-      var navigationData = {
-        event: 'Secondary Navigation',
         eventLabel: label
       };
       pushNavigationData(navigationData);
