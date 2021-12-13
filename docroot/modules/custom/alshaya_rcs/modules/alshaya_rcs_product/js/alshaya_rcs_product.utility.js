@@ -25,16 +25,16 @@
   };
 
   /**
-   * Get the stock status of the given sku.
+   * Fetches product stock data from storage.
    *
    * @param {string} sku
-   *   The sku value.
+   *   The sku for which stock is to be fetched.
+   *
+   * @returns {null|object}
+   *   Stock data if found else null.
    */
-  window.commerceBackend.getProductStatus = async function (sku) {
+  const getProductStock = function (sku) {
     let stock = null;
-    // Product data, containing stock information, is already present in local
-    // storage before this function is invoked. So no need to call a separate
-    // API to fetch stock status for V2.
     Drupal.alshayaSpc.getLocalStorageProductData(sku, function (product) {
       stock = {
         stock: product.stock.qty,
@@ -44,6 +44,35 @@
       };
     });
 
+    return stock;
+  }
+
+  /**
+   * Get the stock status of the given sku.
+   *
+   * @param {string} sku
+   *   The sku value.
+   * @param {string} parentSKU
+   *   The parent sku value.
+   *
+   * @returns {object}
+   *   The product stock data.
+   */
+  window.commerceBackend.getProductStatus = async function (sku, parentSKU) {
+    // Product data, containing stock information, is already present in local
+    // storage before this function is invoked. So no need to call a separate
+    // API to fetch stock status for V2.
+    let stock = getProductStock(sku);
+
+    if (stock !== null) {
+      return stock;
+    }
+
+    // Since we did not find stock data in local storage/it is expired, we
+    // fetch the complete product data and then fetch the stock.
+    await window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+
+    stock = getProductStock(sku);
     return stock;
   };
 

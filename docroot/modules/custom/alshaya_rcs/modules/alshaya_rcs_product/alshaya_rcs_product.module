@@ -179,6 +179,15 @@ function alshaya_rcs_product_alshaya_spc_cart_build_alter(array &$build) {
 }
 
 /**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_rcs_product_alshaya_spc_checkout_build_alter(array &$build) {
+  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
+  $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+}
+
+/**
  * Implements hook_alshaya_spc_checkout_confirmation_order_build().
  */
 function alshaya_rcs_product_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
