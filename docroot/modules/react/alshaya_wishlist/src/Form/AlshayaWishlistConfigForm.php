@@ -60,6 +60,27 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#default_value' => $wishlist_config->get('empty_wishlist_message'),
     ];
 
+    $form['alshaya_wishlist']['share'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Share your wishlist configurations'),
+    ];
+
+    $form['alshaya_wishlist']['share']['email_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('E-Mail Subject'),
+      '#description' => $this->t('Provides a share wishlist email subject.'),
+      '#maxlength' => 255,
+      '#default_value' => $wishlist_config->get('empty_wishlist_message'),
+    ];
+
+    $form['alshaya_wishlist']['share']['email_template'] = [
+      '#type' => 'text_format',
+      '#format' => 'mail_text',
+      '#allowed_formats' => ['mail_text'],
+      '#title' => $this->t('E-Mail Template'),
+      '#default_value' => $wishlist_config->get('email_template.value') ?? '',
+    ];
+
     // Add the token tree UI.
     $form['alshaya_wishlist']['token_tree'] = [
       '#theme' => 'token_tree_link',
@@ -80,6 +101,8 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       ->set('remove_after_addtocart', $form_state->getValue('remove_after_addtocart'))
       ->set('empty_wishlist_message', $form_state->getValue('empty_wishlist_message'))
       ->set('wishlist_label', $form_state->getValue('wishlist_label'))
+      ->set('email_subject', $form_state->getValue('email_subject'))
+      ->set('email_template', $form_state->getValue('email_template'))
       ->save();
 
     parent::submitForm($form, $form_state);
