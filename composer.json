@@ -400,9 +400,6 @@
             },
             "drupal/metatag": {
                 "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2021-08-03/metatag-3077442-6.patch"
-            },
-            "drupal/datalayer": {
-                "Trigger and event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
             }
         },
         "installer-paths": {
