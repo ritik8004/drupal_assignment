@@ -152,7 +152,9 @@ const Teaser = ({
               )}
             {/* Adding placeholder div for alignment
             if brand name is not available and debenhams frame feature is enabled. */}
-            <ConditionalView condition={!attribute.attr_brand_name && isProductElementAlignmentEnabled()}>
+            <ConditionalView
+              condition={!attribute.attr_brand_name && isProductElementAlignmentEnabled()}
+            >
               <div className="alignment-placeholder" />
             </ConditionalView>
             <ConditionalView condition={attribute.attr_brand_name !== undefined}>
