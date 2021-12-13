@@ -2,8 +2,8 @@
   @include icon(chevronup, after) {
     font-size: 1.5rem;
     position: absolute;
-    top: 0.625rem;
-    #{$right}: 0;
+    top: 0.5rem;
+    #{$right}: 0.125rem;
     background: transparent;
     font-weight: bold;
 
