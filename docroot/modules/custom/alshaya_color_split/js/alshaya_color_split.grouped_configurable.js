@@ -36,6 +36,19 @@
           return;
         }
 
+        // Trigger an event on variant select.
+        // Only considers variant when url is changed.
+        var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {
+          bubbles: true,
+          detail: {
+            data: {
+              viewMode: node.attr('data-vmode'),
+              sku: $(this).find('.selected-parent-sku').val(),
+            }
+          }
+        });
+        document.dispatchEvent(currentSelectedVariantEvent);
+
         // Update sameday and express delivery labels on variant change.
         if (drupalSettings.expressDelivery !== 'undefined' && drupalSettings.expressDelivery.enabled) {
           for (var option in variantInfo.delivery_options) {
@@ -53,11 +66,6 @@
             url = Drupal.removeURLParameter(url, 'selected');
             window.history.replaceState(variantInfo, variantInfo.title, url);
             productChanged = true;
-
-            // Trigger an event on variant select.
-            // Only considers variant when url is changed.
-            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: variantInfo }});
-            document.dispatchEvent(currentSelectedVariantEvent);
           }
 
           $('.language-switcher-language-url .language-link').each(function () {

@@ -24,10 +24,9 @@ export default class DeliveryOptions extends React.Component {
   }
 
   updateShippingOnVariantSelect = (e) => {
-    if (e.detail && e.detail.data !== '') {
-      const variantInfo = e.detail.data;
-      const sku = variantInfo.parent_sku !== undefined ? variantInfo.parent_sku : variantInfo.sku;
-      this.fetchShippingMethods(sku);
+    // For express delivery, we only consider pdp in full view mode.
+    if (e.detail && e.detail.data.sku && e.detail.data.viewMode === 'full') {
+      this.fetchShippingMethods(e.detail.data.sku);
     }
   }
 
