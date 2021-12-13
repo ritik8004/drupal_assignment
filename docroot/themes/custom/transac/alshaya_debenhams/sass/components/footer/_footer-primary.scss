@@ -195,10 +195,6 @@
       max-width: 12.5rem;
       margin-#{$right}: 0.625rem;
 
-      html[lang=ar] & {
-        max-width: 14rem;
-      }
-
       @include breakpoint($only-mobile) {
         max-width: 21rem;
         width: 100%;
