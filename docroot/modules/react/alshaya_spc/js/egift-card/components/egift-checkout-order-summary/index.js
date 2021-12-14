@@ -8,10 +8,11 @@ const EgiftCheckoutOrderSummary = (props) => {
     return null;
   }
 
-  const { egiftRedeemedAmount, balancePayable } = totals;
+  const { egiftRedeemedAmount, eGiftbalancePayable } = totals;
 
-  if (egiftRedeemedAmount === undefined
-    || balancePayable === undefined
+  // If we dont have egiftRedeemedAmount and eGiftbalancePayable dont show egift-order-summary.
+  if (egiftRedeemedAmount === undefined // Redeem Amount entered by user.
+    || eGiftbalancePayable === undefined // Balance payable remaining amount to be paid.
     || egiftRedeemedAmount === 0) {
     return null;
   }
@@ -26,7 +27,7 @@ const EgiftCheckoutOrderSummary = (props) => {
       <TotalLineItem
         name="balance-payable"
         title={Drupal.t('Balance Payable')}
-        value={balancePayable}
+        value={eGiftbalancePayable}
         showZeroValue
       />
     </div>

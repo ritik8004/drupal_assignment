@@ -366,7 +366,7 @@ const getProcessedCartData = async (cartData) => {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
     if (typeof cartData.totals.extension_attributes.balance_payble !== 'undefined') {
-      data.totals.balancePayable = cartData.totals.extension_attributes.balance_payble;
+      data.totals.eGiftbalancePayable = cartData.totals.extension_attributes.balance_payble;
     }
   }
 

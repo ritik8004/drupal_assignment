@@ -9,6 +9,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import dispatchCustomEvent from '../../utilities/events';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -67,6 +68,7 @@ export default class ValidEgiftCard extends React.Component {
           const { amount: updateAmount } = this.state;
           if (updateAmount > 0) {
             // update the post data object.
+            // For Redeemption card_type to be always 'guest' for both guest and logged-in users.
             postData = {
               redeem_points: {
                 action: 'set_points',
@@ -74,7 +76,7 @@ export default class ValidEgiftCard extends React.Component {
                 amount: updateAmount,
                 card_number: egiftCardNumber,
                 payment_method: 'hps_payment',
-                email: egiftEmail,
+                card_type: 'guest', // card type to be guest or linked.
               },
             };
             showFullScreenLoader();
@@ -82,11 +84,20 @@ export default class ValidEgiftCard extends React.Component {
             const redemptionResponse = callEgiftApi('eGiftRedemption', 'POST', postData);
             if (redemptionResponse instanceof Promise) {
               redemptionResponse.then((res) => {
-                // Remove the loader as response is available.
-                removeFullScreenLoader();
                 if (res.error === undefined && res.data !== undefined && res.status === 200) {
-                  // @todo To handle the summary block update once redemption is done.
-                  window.commerceBackend.refreshCart({});
+                  const apiData = window.commerceBackend.refreshCart({});
+                  if (apiData instanceof Promise) {
+                    apiData.then((data) => {
+                      if (data.data !== undefined && data.data.error === undefined) {
+                        if (data.status === 200) {
+                          // Update Egift card line item.
+                          dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                          // Remove the loader as response is available.
+                          removeFullScreenLoader();
+                        }
+                      }
+                    });
+                  }
                 }
               });
             }
@@ -155,7 +166,7 @@ export default class ValidEgiftCard extends React.Component {
   // Update egift amount.
   handleAmountUpdate = (updateAmount) => {
     // Prepare the request object for redeem API.
-    const { quoteId, egiftCardNumber, egiftEmail } = this.props;
+    const { quoteId, egiftCardNumber } = this.props;
 
     const postData = {
       redeem_points: {
@@ -164,7 +175,7 @@ export default class ValidEgiftCard extends React.Component {
         amount: updateAmount,
         card_number: egiftCardNumber,
         payment_method: 'hps_payment',
-        email: egiftEmail,
+        card_type: 'guest',
       },
     };
     // Proceed only if postData object is available.
@@ -175,12 +186,23 @@ export default class ValidEgiftCard extends React.Component {
       if (response instanceof Promise) {
         response.then((result) => {
           // Remove loader once result is available.
-          removeFullScreenLoader();
           if (result.error === undefined && result.status === 200) {
             this.setState({
               amount: updateAmount,
               open: false,
             });
+            const apiData = window.commerceBackend.refreshCart({});
+            if (apiData instanceof Promise) {
+              apiData.then((data) => {
+                if (data.data !== undefined && data.data.error === undefined) {
+                  if (data.status === 200) {
+                    // Update Egift card line item.
+                    dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                    removeFullScreenLoader();
+                  }
+                }
+              });
+            }
             return true;
           }
 
