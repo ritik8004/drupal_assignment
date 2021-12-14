@@ -318,9 +318,13 @@ class AlshayaSpcOrderHelper {
    *   The response containing required SKU data.
    */
   public function getSkuDetailsV2(array $item) {
+    $parent_sku = $item['product_type'] === 'configurable'
+      ? $item['extension_attributes']['parent_product_sku']
+      : NULL;
+
     return [
       'sku' => $item['sku'],
-      'parentSKU' => $item['extension_attributes']['parent_product_sku'],
+      'parentSKU' => $parent_sku,
       'product_type' => $item['product_type'],
       'freeItem' => ($item['price_incl_tax'] == 0),
       'title' => $item['name'],
