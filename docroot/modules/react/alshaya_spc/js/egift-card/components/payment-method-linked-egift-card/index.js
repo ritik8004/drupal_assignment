@@ -80,38 +80,41 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       balanceResponse.then((result) => {
         if (result.status === 200) {
           if (result.data.current_balance !== null && result.data.response_type !== false) {
-            const currentBalance = result.data.current_balance;
             const currentTime = Math.floor(Date.now() / 1000);
             this.setState({
-              egiftCardBalance: currentBalance,
+              egiftCardBalance: result.data.current_balance,
               redeemedFully: false,
               // Check if the linked card is valid or not.
               isEgiftCardValid: (currentTime < result.data.expiry_date_timestamp),
             });
-            const redeemedAmount = cart.totals.extension_attributes.hps_redeemed_amount;
+            const redeemedAmount = cart.cart.totals.egiftRedeemedAmount;
             const cartTotal = cart.cart.totals.base_grand_total;
-            const redemptionType = cart.totals.extension_attributes.hps_redemption_type;
-            // Check if user has already performed redemption on page load.
-            if (redeemedAmount > 0 && redemptionType === 'linked') {
-              if (currentBalance < cartTotal) {
-                // Check if current balance is less than cart total.
-                // then show pending amount to be paid using another payment method.
+            const redemptionType = cart.cart.totals.egiftRedemptionType;
+            if (typeof redeemedAmount !== 'undefined' && typeof redemptionType !== 'undefined') {
+              // Check if user has already performed redemption on page load.
+              if (redeemedAmount > 0 && redemptionType === 'linked') {
+                if (result.data.current_balance < cartTotal) {
+                  // Check if current balance is less than cart total.
+                  // then show pending amount to be paid using another payment method.
+                  this.setState({
+                    pendingAmount: cartTotal - result.data.current_balance,
+                  });
+                } else if (result.data.current_balance >= cartTotal) {
+                  // Check if current balance is greater than cart total.
+                  // then show remaining balance.
+                  this.setState({
+                    remainingAmount: result.data.current_balance - redeemedAmount,
+                    modalInputAmount: cartTotal,
+                  });
+                }
                 this.setState({
-                  pendingAmount: cartTotal - currentBalance,
-                });
-              } else if (currentBalance >= cartTotal) {
-                // Check if current balance is greater than cart total then show remaining balance.
-                this.setState({
-                  remainingAmount: currentBalance - redeemedAmount,
+                  redeemedFully: true,
+                  setChecked: true,
                 });
               }
-              this.setState({
-                redeemedFully: true,
-                setChecked: true,
-              });
             }
             // Dont redeem in case if balance is 0.
-            if (currentBalance === 0) {
+            if (result.data.current_balance === 0) {
               this.setState({
                 redeemedFully: false,
               });
