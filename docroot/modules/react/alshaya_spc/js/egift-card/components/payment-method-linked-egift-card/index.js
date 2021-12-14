@@ -81,15 +81,16 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
         if (result.status === 200) {
           if (result.data.current_balance !== null && result.data.response_type !== false) {
             const currentBalance = result.data.current_balance;
-            const redeemedAmount = cart.totals.extension_attributes.hps_redeemed_amount;
-            const cartTotal = cart.cart.totals.base_grand_total;
-            const redemptionType = cart.totals.extension_attributes.hps_redeemed_amount;
             const currentTime = Math.floor(Date.now() / 1000);
             this.setState({
               egiftCardBalance: currentBalance,
+              redeemedFully: false,
               // Check if the linked card is valid or not.
               isEgiftCardValid: (currentTime < result.data.expiry_date_timestamp),
             });
+            const redeemedAmount = cart.totals.extension_attributes.hps_redeemed_amount;
+            const cartTotal = cart.cart.totals.base_grand_total;
+            const redemptionType = cart.totals.extension_attributes.hps_redeemed_amount;
             // Check if user has already performed redemption on page load.
             if (redeemedAmount > 0 && redemptionType === 'linked') {
               if (currentBalance < cartTotal) {
@@ -105,8 +106,14 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 });
               }
               this.setState({
-                redeemedFully: (currentBalance !== 0),
+                redeemedFully: true,
                 setChecked: true,
+              });
+            }
+            // Dont redeem in case if balance is 0.
+            if (currentBalance === 0) {
+              this.setState({
+                redeemedFully: false,
               });
             }
           }
@@ -189,7 +196,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 });
               }
               this.setState({
-                redeemedFully: (egiftCardBalance !== 0),
+                redeemedFully: true,
               });
               // Refresh the cart to show the price summary changes.
               window.commerceBackend.refreshCart({});
@@ -227,6 +234,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               redeemedFully: false,
               remainingAmount: 0,
             });
+            window.commerceBackend.refreshCart({});
           }
           if (result.data.response_type === false) {
             logger.error('Error while calling the cancel eGiftRedemption. Action: @action Response: @response', {
