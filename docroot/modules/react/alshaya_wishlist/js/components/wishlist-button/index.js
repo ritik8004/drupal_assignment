@@ -41,13 +41,18 @@ class WishlistButton extends React.Component {
     // We pass options directly for plp product drawer
     // So we only need to get options for pdp layouts
     // Also, check if it is configurable product.
-    if (context !== 'productDrawer' && configurableCombinations
-        && variantSelected !== null) {
-      this.getSelectedOptions(variantSelected, configurableCombinations);
+    if (context !== 'productDrawer' && this.isConfigurableProduct(sku, configurableCombinations)
+      && variantSelected !== null) {
+      this.getSelectedOptions(variantSelected, configurableCombinations[sku]);
     }
     // Set title for simple sku product on page load.
-    if (configurableCombinations === undefined && context === 'pdp') {
-      const { productInfo } = drupalSettings;
+    // We need to set title only for old pdp, modal and matchback.
+    // For new pdp and side drawer, we get all data through props.
+    const viewModes = ['pdp', 'modal', 'matchback'];
+    if (!(this.isConfigurableProduct(sku, configurableCombinations))
+      && viewModes.includes(context)) {
+      const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
+      const productInfo = drupalSettings[productKey];
       this.setState({
         title: productInfo[sku].cart_title,
       });
@@ -61,16 +66,31 @@ class WishlistButton extends React.Component {
   };
 
   /**
+   * Check if current product if configurable.
+   *
+   * @param {string} sku
+   *  Sku code of product.
+   *
+   * @param {object} configurableCombinations
+   *  Contains configurable options for grouped product.
+   */
+  isConfigurableProduct = (sku, configurableCombinations) => {
+    if (configurableCombinations && configurableCombinations[sku]) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * This will update the selected options state of product.
    *
-   * @param {bool} configurableCombinations
+   * @param {object} configurableCombinations
    *  Contains configurable options for grouped product.
    */
   getSelectedOptions = (variantSelected, configurableCombinations) => {
-    const { sku } = this.props;
-    if (configurableCombinations[sku].bySku[variantSelected]) {
+    if (configurableCombinations.bySku[variantSelected]) {
       this.setState({
-        options: configurableCombinations[sku].bySku[variantSelected],
+        options: configurableCombinations.bySku[variantSelected],
       });
     }
   }
@@ -117,6 +137,7 @@ class WishlistButton extends React.Component {
   updateProductInfoData = (e) => {
     e.preventDefault();
     if (e.detail && e.detail.data.sku && e.detail.data.variantSelected) {
+      const { sku } = this.props;
       const { configurableCombinations } = drupalSettings;
       this.setState({
         skuCode: e.detail.data.sku,
@@ -126,8 +147,9 @@ class WishlistButton extends React.Component {
         // Update wishlist button status for selected variant.
         this.updateWishListStatus(isProductExistInWishList(e.detail.data.sku));
         // Get selected attribute options for selected variant.
-        if (configurableCombinations && e.detail.data.variantSelected) {
-          this.getSelectedOptions(e.detail.data.variantSelected, configurableCombinations);
+        if (this.isConfigurableProduct(sku, configurableCombinations)
+          && e.detail.data.variantSelected) {
+          this.getSelectedOptions(e.detail.data.variantSelected, configurableCombinations[sku]);
         }
       });
     }
