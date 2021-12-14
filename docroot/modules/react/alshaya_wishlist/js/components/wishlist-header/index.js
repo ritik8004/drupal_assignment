@@ -59,7 +59,7 @@ export default class WishlistHeader extends React.Component {
     const wishlistActiveClass = wishListItemCount !== 0 ? 'wishlist-active' : 'wishlist-inactive';
     return (
       <div className="wishlist-header">
-        <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('my-wishlist')}>
+        <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('wishlist')}>
           <span className="wishlist-icon">{Drupal.t('my @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
         </a>
         <ConditionalView condition={wishListItemData !== null}>

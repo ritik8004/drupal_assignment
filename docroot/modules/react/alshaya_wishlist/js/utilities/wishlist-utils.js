@@ -189,3 +189,16 @@ export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? 
  * Utility function to get wishlist notification time.
  */
 export const getWishlistNotificationTime = () => (3000);
+
+/**
+ * Helper function to check if Wishlist sharing is enabled.
+ */
+export const isShareWishlistEnabled = () => {
+  if (typeof drupalSettings.wishlist !== 'undefined'
+    && typeof drupalSettings.wishlist.config !== 'undefined'
+    && typeof drupalSettings.wishlist.config.enabledShare !== 'undefined') {
+    return drupalSettings.wishlist.config.enabledShare;
+  }
+
+  return false;
+};

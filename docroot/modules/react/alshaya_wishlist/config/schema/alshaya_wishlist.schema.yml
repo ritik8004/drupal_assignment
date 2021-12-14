@@ -2,7 +2,7 @@ alshaya_wishlist.settings:
   type: config_object
   label: 'Alshaya Wishlist Configuration'
   mapping:
-    wishlist_enabled:
+    enabled:
       type: boolean
       label: 'Switch to enable and disable Wishlist.'
     empty_wishlist_message:
@@ -20,3 +20,12 @@ alshaya_wishlist.settings:
     remove_after_addtocart:
       type: boolean
       label: 'Remove product from wishlist after product added to cart.'
+    email_subject:
+      type: text
+      label: 'Email subject to share your favourite products.'
+    email_template:
+      type: text_format
+      label: 'Email template to share your favourite products.'
+    enabled_share:
+      type: boolean
+      label: 'Switch to enable and disable Wishlist sharing feature.'

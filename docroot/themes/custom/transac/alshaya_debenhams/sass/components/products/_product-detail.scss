@@ -450,15 +450,7 @@
   .content__title_wrapper {
     .vat-text {
       font-size: 0.75rem;
-      margin-#{$right}: 0.375rem;
-      width: 30%;
-      margin-#{$right}: 0;
-      margin-bottom: 1.25rem;
-    }
-
-    .content--item-code {
-      width: 68%;
-      text-align: $right;
+      margin-#{$right}: 1rem;
       margin-bottom: 1.25rem;
     }
   }
