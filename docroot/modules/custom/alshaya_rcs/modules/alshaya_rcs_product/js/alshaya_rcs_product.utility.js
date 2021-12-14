@@ -20,6 +20,8 @@
     await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
+
+    window.commerceBackend.callProductDataCallbacks(sku);
   };
 
   /**

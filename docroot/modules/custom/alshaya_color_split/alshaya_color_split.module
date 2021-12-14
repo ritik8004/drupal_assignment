@@ -484,7 +484,11 @@ function alshaya_color_split_rcs_placeholders_graphql_query_alter(&$queries) {
 function alshaya_color_split_page_attachments(array &$attachments) {
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  if (!in_array($route_name, ['acq_cart.cart', 'entity.node.canonical'])) {
+  if (!in_array($route_name, [
+    'acq_cart.cart',
+    'entity.node.canonical',
+    'alshaya_spc.checkout.confirmation',
+    ])) {
     return;
   }
   if ($route_name === 'entity.node.canonical') {
