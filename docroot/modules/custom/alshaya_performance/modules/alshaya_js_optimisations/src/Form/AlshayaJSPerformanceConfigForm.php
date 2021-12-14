@@ -107,7 +107,7 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    // Validate YAML.
+    // Validate YAML syntax.
   }
 
   /**
@@ -125,6 +125,8 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
     $config->set('enable_uglification', $form_state->getValue('enable_uglification'));
     $config->save();
 
+    // Clear JS file / aggregates Cache.
+    // Trigger hook_library_info_alter.
     return parent::submitForm($form, $form_state);
   }
 
