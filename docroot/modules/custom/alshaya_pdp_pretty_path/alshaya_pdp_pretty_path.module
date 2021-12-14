@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+ /**
+ * Implements hook_alshaya_search_algolia_object_alter().
+ */
+function alshaya_pdp_pretty_path_alshaya_search_algolia_object_alter(array &$object) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('alshaya_pdp_pretty_path.settings');
+  $pretty_path_attribute = $config->get('pdp_pretty_path_attribute');
+  $logger = \Drupal::logger('alshaya_pdp_pretty_path');
+
+  if ($pretty_path_attribute && !empty($object['attr_' . $pretty_path_attribute])) {
+    /** @var \Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper $pdpPrettyPathHelper */
+    $pdpPrettyPathHelper = \Drupal::service('alshaya_pdp_pretty_path.helper');
+    $attr_value = $object['attr_' . $pretty_path_attribute];
+    $new_url = $pdpPrettyPathHelper->overridePdpUrl($object['url'], $pretty_path_attribute, strtolower($attr_value[0]));
+    $object['url'] = $new_url;
+  }
+}
