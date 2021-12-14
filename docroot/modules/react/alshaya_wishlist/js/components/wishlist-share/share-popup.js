@@ -35,6 +35,7 @@ export default class SharePopup extends React.Component {
    */
   emailClickHandler = (e) => {
     // Open mailto with window location helper.
+    // @todo: need to replace the share link in the email body text.
     window.location = `mailto:?subject=${encodeURIComponent(drupalSettings.wishlist.config.shareEmailSubject) || ''}&body=${encodeURIComponent(drupalSettings.wishlist.config.shareEmailMessage) || ''}`;
     e.preventDefault();
   }
