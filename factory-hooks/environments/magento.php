@@ -8,8 +8,69 @@
 global $magentos;
 
 $magentos = [
+  // Debenhams.
+  'dh_qa' => [
+    'url' => 'https://integration-5ojmyuq-gqhhjajenogck.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'akr2k4q7g3eipb6fm7loh07zt2zi3xrk',
+      'consumer_secret' => '60vh9v008i8z6be31mt7wp8bg9jyfe2j',
+      'access_token' => 'c87n6i81vbkzqb5txbt0834fwppdmqye',
+      'access_token_secret' => 's54ks6jdfpw6uhbs4utjxusb1ha9114b',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ],
+  ],
+  'dh_uat' => [
+    'url' => 'https://deb-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '4x8qp8svm57i1oqtw99q92hnz1c332pb',
+      'consumer_secret' => 'u1y5l7f3q3njwyzzuuchhwcdfa1r6mpb',
+      'access_token' => 'm8wak3az1btketol3v7ttgal834582s6',
+      'access_token_secret' => '2pbeyvbqcxd4eq3lh3f9nuw7q8yc9h9f',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 5],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 8, 'ar' => 11],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 20, 'ar' => 17],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 26, 'ar' => 23],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
+    ],
+  ],
   // COS.
-  'cos_qa' => [
+  'cos_integration' => [
     'url' => 'https://integration-5ojmyuq-vlvasu2xupli4.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => '6ih9p46w6xvqzo0ldex9xdhwuxgoyhyp',
@@ -34,6 +95,36 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 11, 'ar' => 12],
+    ],
+  ],
+  'cos_qa' => [
+    'url' => 'https://cos-qa.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'glln7apd2n5vuor8be0v0yjfztz5mtt6',
+      'consumer_secret' => 'a27mtkmxptaswxu3yjrzjuvsm877wwd6',
+      'access_token' => 'o1xcap908mxgqsyb4lil0pw12eiqlczl',
+      'access_token_secret' => 'hj4s8hu6vyztxv52rebyc2heumruqaee',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 40, 'ar' => 37],
     ],
   ],
   'cos_uat' => [
@@ -232,6 +323,52 @@ $magentos = [
       'store_id' => ['en' => 13, 'ar' => 12],
     ],
   ],
+  // For Aura
+  'mc_apc' => [
+    'url' => 'http://apc-7vc7xgy-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'avfy048yx6a25ubw8y2g6kq2qq0u9tnu',
+      'consumer_secret' => 'l7ujalr4galohhhc0cbuoepd3gp3w9y4',
+      'access_token' => 'vc7wk1ravvhfokih2nmy6q8mptuw220k',
+      'access_token_secret' => 'fv9w2ljiz7u287sozmhzzwow9b3lf3t6',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 7],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 13, 'ar' => 12],
+    ],
+  ],
+  'mc_upgrade' => [
+    'url' => 'http://magento-upgrade-kb5pcqa-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
+      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
+      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
+      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+  ],
   'mc_sit' => [
     'url' => 'https://mc-sit.store.alshaya.com',
     'magento_secrets' => [
@@ -417,6 +554,31 @@ $magentos = [
     ],
     'bh' => [
       'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'hm_apc' => [
+    'url' => 'http://apc-7vc7xgy-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'pims_base_url' => 'http://34.249.182.88:3010',
+    'magento_secrets' => [
+      'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
+      'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
     ],
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
@@ -685,6 +847,33 @@ $magentos = [
       'store_id' => ['en' => 37, 'ar' => 34],
     ],
   ],
+  'vs_apc' => [
+    'url' => 'https://apc-7vc7xgy-kpwgmbven7d7y.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'ykhx46sjfr2wp7682ph7hvwivt9gf92p',
+      'consumer_secret' => 'ws58leuqt6746q0cwlh6m9hplh84dkm9',
+      'access_token' => '9zlyoagmn5mssm4yoke8bpuhak03hmxp',
+      'access_token_secret' => 'q6zj91t4kysy4bmnl7dnj6eng38l4znr',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
   'vs_uat' => [
     'url' => 'https://vs-uat2.store.alshaya.com',
     'magento_secrets' => [
@@ -763,6 +952,33 @@ $magentos = [
     ],
     'jo' => [
       'store_id' => ['en' => 14, 'ar' => 13],
+    ],
+  ],
+  'bbw_apc' => [
+    'url' => 'http://apc-7vc7xgy-bbk3lvknero4c.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
+      'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
+      'access_token' => 'oiy66ouu8mpeorbu47cke2xsdhfku3jg',
+      'access_token_secret' => '2ovq0ccau2cd60a2xfterr2y2fi711w4',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 5, 'ar' => 6],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
   'bbw_oms_sit' => [
@@ -850,6 +1066,33 @@ $magentos = [
   // Foot Locker.
   'fl_qa' => [
     'url' => 'https://integration-5ojmyuq-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'f0er5posi7oc9e2p96195mb20e2hh05q',
+      'consumer_secret' => 'f0h2pwyren0ooppm6ix50705l5iouekj',
+      'access_token' => 'tkkes5bu2l9qn8y3hbaex7x6xbcsfvxr',
+      'access_token_secret' => 'p8e71whrsnx4pdim61wyush1qp5tvqqs',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'fl_apc' => [
+    'url' => 'http://apc-7vc7xgy-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'f0er5posi7oc9e2p96195mb20e2hh05q',
       'consumer_secret' => 'f0h2pwyren0ooppm6ix50705l5iouekj',
@@ -1130,6 +1373,36 @@ $magentos = [
       'store_id' => ['en' => 14, 'ar' => 13],
     ],
   ],
+  'aeo_apc' => [
+    'url' => 'https://apc-uovxi7i-tw5uijob6hir2.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
+      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
+      'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
+      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ],
+  ],
   'aeo_training' => [
     'url' => 'https://aeo-training.store.alshaya.com',
     'magento_secrets' => [
@@ -1244,6 +1517,30 @@ $magentos = [
   ],
   'mu_qa' => [
     'url' => 'https://integration-5ojmyuq-szaftnexsfo4k.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'd8gfbetgjq5ivnqoqas85hdpi1zdplf1',
+      'consumer_secret' => 'gaxphnn61qgg5js9dsy2xrwlc70dehn5',
+      'access_token' => '214yfy8hauwdqu4b25ci573iefokdp85',
+      'access_token_secret' => 'z6jfn1akazvc86cpq5v1ymwi5ikcouhr',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+  ],
+  'mu_apc' => [
+    'url' => 'https://apc-7vc7xgy-szaftnexsfo4k.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'd8gfbetgjq5ivnqoqas85hdpi1zdplf1',
       'consumer_secret' => 'gaxphnn61qgg5js9dsy2xrwlc70dehn5',
@@ -1388,6 +1685,33 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 34, 'ar' => 31],
+    ],
+  ],
+  'bp_apc' => [
+    'url' => 'https://apc-7vc7xgy-gdyoujibngne2.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '10t6mj4t46m69exspxelmqna1t3fnz8u',
+      'consumer_secret' => 'ozboevrqwoeogwohpeu7hlcvr2hbljkt',
+      'access_token' => '5mmlp5u88lkyio7umw2cb5a93tb3656e',
+      'access_token_secret' => '5c538s6tshp6344pez3mpvvzhtfi70qi',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
   'bp_uat' => [

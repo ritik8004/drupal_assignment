@@ -215,12 +215,12 @@ class AlshayaSpcController extends ControllerBase {
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
           'global_error_message' => _alshaya_spc_global_error_message(),
+          'address_fields' => _alshaya_spc_get_address_fields(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
-            'address_fields' => _alshaya_spc_get_address_fields(),
           ],
         ],
       ],
@@ -328,12 +328,15 @@ class AlshayaSpcController extends ControllerBase {
     $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
+    $collection_points_config = $this->config('alshaya_spc.collection_points');
+
     $cache_tags = Cache::mergeTags(
       $cache_tags,
       array_merge(
         $spc_cnc_config->getCacheTags(),
         $store_finder_config->getCacheTags(),
-        $geolocation_config->getCacheTags()
+        $geolocation_config->getCacheTags(),
+        $collection_points_config->getCacheTags(),
       )
     );
 
@@ -606,6 +609,7 @@ class AlshayaSpcController extends ControllerBase {
           'global_error_message' => _alshaya_spc_global_error_message(),
           'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
           'cncStoreInfoCacheTime' => $checkout_settings->get('cnc_store_info_cache_time'),
+          'cnc_collection_points_enabled' => $collection_points_config->get('click_collect_collection_points_enabled'),
         ],
       ],
       '#cache' => [
@@ -786,6 +790,10 @@ class AlshayaSpcController extends ControllerBase {
       $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
     }
 
+    // Invoke the alter hook to allow other modules to change
+    // the order detail settings.
+    $this->moduleHandler->alter('alshaya_spc_order_details_settings', $settings, $order);
+
     $build = [
       '#theme' => 'spc_confirmation',
       '#strings' => $strings,
@@ -857,6 +865,10 @@ class AlshayaSpcController extends ControllerBase {
         case 'mobile':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
+
+          if (!empty($data['chosenCountryCode'])) {
+            $country_mobile_code = '+' . $data['chosenCountryCode'];
+          }
 
           $raw_number = $value;
           if (strpos($value, $country_mobile_code) === FALSE) {

@@ -2,12 +2,18 @@ import React from 'react';
 import moment from 'moment';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
+import AuraEarnOrderSummaryItem
+  from '../../../aura-loyalty/components/aura-earn-order-summary-item';
+import AuraRedeemOrderSummaryItem
+  from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
+import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 
-const OrderSummary = () => {
+const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
   const orderNumber = drupalSettings.order_details.order_number;
   const mobileNumber = drupalSettings.order_details.mobile_number;
@@ -37,6 +43,7 @@ const OrderSummary = () => {
   }
 
   let etaLabel = Drupal.t('expected delivery within');
+  let methodIcon = '';
   const storeAddress = [];
   const storeInfo = drupalSettings.order_details.delivery_type_info.store;
   let storePhone = '';
@@ -107,6 +114,11 @@ const OrderSummary = () => {
   // Customer name on shipping.
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
 
+  const {
+    accruedPoints, redeemedPoints,
+  } = drupalSettings.order_details;
+
+  const { context, loyaltyStatus } = props;
   // Fawry details.
   const {
     payment: {
@@ -127,6 +139,10 @@ const OrderSummary = () => {
   const { currentLanguage } = drupalSettings.path;
   if (currentLanguage !== undefined) {
     moment.locale(currentLanguage);
+  }
+
+  if (methodCode === 'tabby') {
+    methodIcon = <PaymentMethodIcon methodName={methodCode} methodLabel={method} />;
   }
 
   return (
@@ -196,12 +212,24 @@ const OrderSummary = () => {
             <OrderSummaryItem type="address" label={Drupal.t('Billing address')} name={customerNameBilling} address={billingAddress.join(', ')} />
           </ConditionalView>
           <OrderSummaryItem type="mobile" label={Drupal.t('Mobile Number')} value={mobileNumber} />
-          <OrderSummaryItem label={Drupal.t('Payment method')} value={method} />
+          <OrderSummaryItem label={Drupal.t('Payment method')} value={methodIcon || method} />
           <OrderSummaryItem label={Drupal.t('delivery type')} value={deliveryType} />
           <OrderSummaryItem label={etaLabel} value={expectedDelivery} />
           <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>
+      <ConditionalView condition={isAuraEnabled()}>
+        <AuraEarnOrderSummaryItem
+          pointsEarned={accruedPoints}
+          animationDelay="0.8s"
+          context={context}
+          loyaltyStatus={loyaltyStatus}
+        />
+        <AuraRedeemOrderSummaryItem
+          pointsRedeemed={redeemedPoints}
+          animationDelay="1s"
+        />
+      </ConditionalView>
     </div>
   );
 };

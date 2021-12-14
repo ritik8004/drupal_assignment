@@ -9,7 +9,7 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
  */
 const onSwatchSelect = (e, attributeName, onClick) => {
   e.preventDefault();
-  const swatchValue = e.currentTarget.firstChild.dataset.value;
+  const swatchValue = e.currentTarget.dataset.value;
   onClick(attributeName, swatchValue);
 };
 
@@ -53,20 +53,19 @@ const Swatch = (props) => {
   return (
     <li
       className={isColor ? `li-swatch-color ${classes}` : `li-swatch-image ${classes}`}
+      data-value={value}
       onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
     >
-      <ConditionalView condition={isColor}>
+      <ConditionalView condition={(isColor) && (data !== null)}>
         <a
           id={`value${value}`}
-          data-value={value}
           href="#"
           style={{ backgroundColor: data }}
         />
       </ConditionalView>
-      <ConditionalView condition={!isColor}>
+      <ConditionalView condition={(!isColor) && (data !== null)}>
         <a
           id={`value${value}`}
-          data-value={value}
           href="#"
         >
           <img loading="lazy" src={data} />

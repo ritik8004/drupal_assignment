@@ -1,0 +1,14 @@
+diff --git a/core/lib/Drupal/Core/Asset/AssetResolver.php b/core/lib/Drupal/Core/Asset/AssetResolver.php
+--- a/core/lib/Drupal/Core/Asset/AssetResolver.php
++++ b/core/lib/Drupal/Core/Asset/AssetResolver.php	(date 1639137816458)
+@@ -115,6 +115,10 @@
+     // hook_library_info_alter().
+     $libraries_to_load = $this->getLibrariesToLoad($assets);
+     $cid = 'css:' . $theme_info->getName() . ':' . Crypt::hashBase64(serialize($libraries_to_load)) . (int) $optimize;
++
++    // Allow having different CSS files for different direction.
++    // We want to allow executing hook_css_alter() for different direction.
++    $cid .= ':' . $this->languageManager->getCurrentLanguage()->getDirection();
+     if ($cached = $this->cache->get($cid)) {
+       return $cached->data;
+     }

@@ -132,6 +132,8 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       $express_status = [
         'enabled' => TRUE,
       ];
+
+      $libraries[] = 'alshaya_white_label/sameday-express-delivery';
     }
 
     return [

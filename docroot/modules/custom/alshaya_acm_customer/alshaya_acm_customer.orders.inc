@@ -186,6 +186,9 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
                                ? \Drupal::service('alshaya_acm_customer.orders_manager')->getRefundText($order['payment']['method'])
                                : NULL;
 
+  // Invoke the alter hook to allow all modules to modify order details.
+  \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_order_summary', $order, $orderRow);
+
   return $orderRow;
 }
 

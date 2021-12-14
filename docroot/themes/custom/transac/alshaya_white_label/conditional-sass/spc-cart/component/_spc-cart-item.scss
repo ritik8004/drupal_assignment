@@ -130,6 +130,11 @@
       html[lang=ar] & {
         line-height: normal;
       }
+
+      .spc-cart-product-attribute-label {
+        display: inline-block;
+        margin-#{$right}: 0.1875rem;
+      }
     }
   }
 }

@@ -1,7 +1,10 @@
-#alshaya-algolia-search {
+#alshaya-algolia-search,
+#block-alshaya-algolia-react-plp,
+#block-alshayaalgoliareactproductlist {
   .filter-fixed-top {
     .show-all-filters-algolia,
-    .block-facet-blockcategory-facet-search {
+    .block-facet-blockcategory-facet-search,
+    .block-facet-blockcategory-facet-plp {
       @include breakpoint($only-mobile) {
         top: 3.125rem;
       }

@@ -14,6 +14,8 @@ import PdpRelatedProducts from '../pdp-related-products';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 import magv2Sticky from '../../../utilities/magv2StickySidebar';
 import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
@@ -76,6 +78,7 @@ const PdpLayout = () => {
     freeGiftMessage,
     freeGiftPromoType,
     deliveryOptions,
+    expressDeliveryClass,
   } = productValues;
 
   const emptyRes = (
@@ -126,6 +129,7 @@ const PdpLayout = () => {
     });
   };
 
+  const [cardNumber, setCard] = useState(null);
   const stickyButton = () => {
     const headerButton = () => {
       if ((buttonRef !== null) && (buttonRef !== undefined)) {
@@ -149,6 +153,13 @@ const PdpLayout = () => {
   useEffect(() => {
     sidebarSticky();
     showStickyHeader();
+
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', (e) => {
+        const { stateValues } = e.detail;
+        setCard(stateValues.cardNumber);
+      });
+    }
     stickyButton();
   },
   []);
@@ -202,6 +213,7 @@ const PdpLayout = () => {
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
             animateTitlePrice
+            context="main"
           />
           <div className="promotions promotions-full-view-mode">
             <PdpPromotionLabel
@@ -222,14 +234,17 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
+          <ConditionalView condition={isAuraEnabled()}>
+            <AuraPDP mode="main" />
+          </ConditionalView>
           <ConditionalView condition={isExpressDeliveryEnabled()
             && checkProductExpressDeliveryStatus(skuItemCode)}
           >
-            <div className="express-delivery">
+            <div className={`express-delivery ${expressDeliveryClass}`}>
               {deliveryOptions && deliveryOptions !== null
                 && Object.keys(deliveryOptions).length > 0
                 && Object.keys(deliveryOptions).map((option) => (
-                  <div key={option} className={`express-delivery-text ${option}`}>
+                  <div key={option} className={`express-delivery-text ${deliveryOptions[option].status}`}>
                     <span>{deliveryOptions[option].label}</span>
                   </div>
                 ))}
@@ -269,9 +284,7 @@ const PdpLayout = () => {
             removePanelData={removePanelData}
           />
           <ConditionalView condition={isExpressDeliveryEnabled()}>
-            <PdpExpressDelivery
-              variantSelected={variant}
-            />
+            <PdpExpressDelivery />
           </ConditionalView>
           <ConditionalView condition={!isExpressDeliveryEnabled()}>
             <PdpStandardDelivery />
@@ -292,6 +305,7 @@ const PdpLayout = () => {
               skuItemCode={skuItemCode}
               getPanelData={getPanelData}
               removePanelData={removePanelData}
+              cardNumber={cardNumber}
             />
           ))}
         </div>

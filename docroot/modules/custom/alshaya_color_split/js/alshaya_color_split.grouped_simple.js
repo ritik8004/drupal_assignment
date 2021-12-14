@@ -32,6 +32,16 @@
         // Trigger event for other modules to hook into.
         $(node).trigger('group-item-selected', [$(this).val()]);
 
+        // Update sameday and express delivery labels on variant change.
+        if (drupalSettings.expressDelivery !== 'undefined' && drupalSettings.expressDelivery.enabled) {
+          for (var option in variantInfo.delivery_options) {
+            $(node).find('.' + option).removeClass('active in-active');
+            $(node).find('.' + option).addClass(variantInfo.delivery_options[option].status);;
+          }
+          $(node).find('.express-delivery').removeClass('active in-active');
+          $(node).find('.express-delivery').addClass(variantInfo.express_delivery_class);
+        }
+
         if (viewMode === 'full' || viewMode === 'matchback' || viewMode === 'matchback_mobile') {
           $(node).find('.content--item-code .field__value').html($(this).val());
 
@@ -39,6 +49,11 @@
             var url = variantInfo.url[$('html').attr('lang')] + location.search;
             url = Drupal.removeURLParameter(url, 'selected');
             window.history.replaceState(variantInfo, variantInfo.title, url);
+
+            // Trigger an event on variant select.
+            // Only considers variant when url is changed.
+            var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: $(this).val() }});
+            document.dispatchEvent(currentSelectedVariantEvent);
           }
 
           $('.language-switcher-language-url .language-link').each(function () {
