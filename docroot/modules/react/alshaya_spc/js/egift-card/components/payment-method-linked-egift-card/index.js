@@ -6,6 +6,7 @@ import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
 import ValidEgiftCard from '../ValidEgiftCard';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { callEgiftApi, performRedemption } from '../../../utilities/egift_util';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
   componentDidMount() {
     const { cart } = this.props;
-    const params = { email: drupalSettings.userDetails.userEmailID };
+    const params = { email: 'vasanthkumaar.a@gmail.com' };
     // Invoke magento API to get the user card number.
     const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params);
     if (response instanceof Promise) {
@@ -72,7 +73,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     const balanceData = {
       accountInfo: {
         cardNumber: linkedEgiftCardNumber,
-        email: drupalSettings.userDetails.userEmailID,
+        email: 'vasanthkumaar.a@gmail.com',
       },
     };
     const balanceResponse = callEgiftApi('eGiftGetBalance', 'POST', balanceData);
@@ -107,6 +108,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                     modalInputAmount: cartTotal,
                   });
                 }
+                // Set checked if already performed redemption o page load.
                 this.setState({
                   redeemedFully: true,
                   setChecked: true,
@@ -187,8 +189,19 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               this.setState({
                 redeemedFully: true,
               });
-              // Refresh the cart to show the price summary changes.
-              window.commerceBackend.refreshCart({});
+              // Trigger event to update price summary block.
+              const cartData = window.commerceBackend.getCart(true);
+              if (cartData instanceof Promise) {
+                cartData.then((data) => {
+                  if (data.data !== undefined && data.data.error === undefined) {
+                    if (data.status === 200) {
+                      // Update Egift card line item.
+                      dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                      removeFullScreenLoader();
+                    }
+                  }
+                });
+              }
             }
             if (res.status === 200 && res.data.response_type === false) {
               logger.error('Error while calling the eGiftRedemption. Action: @action CardNumber: @cardNumber Response: @response', {
@@ -223,7 +236,19 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               redeemedFully: false,
               remainingAmount: 0,
             });
-            window.commerceBackend.refreshCart({});
+            // Trigger event to update price summary block.
+            const cartData = window.commerceBackend.getCart(true);
+            if (cartData instanceof Promise) {
+              cartData.then((data) => {
+                if (data.data !== undefined && data.data.error === undefined) {
+                  if (data.status === 200) {
+                    // Update Egift card line item.
+                    dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                    removeFullScreenLoader();
+                  }
+                }
+              });
+            }
           }
           if (result.data.response_type === false) {
             logger.error('Error while calling the cancel eGiftRedemption. Action: @action Response: @response', {
@@ -269,6 +294,19 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 remainingAmount: egiftCardBalance - result.data.redeemed_amount,
                 modalInputAmount: result.data.balance_payable + result.data.redeemed_amount,
                 openModal: false,
+              });
+            }
+            // Trigger event to update price summary block.
+            const cartData = window.commerceBackend.getCart(true);
+            if (cartData instanceof Promise) {
+              cartData.then((data) => {
+                if (data.data !== undefined && data.data.error === undefined) {
+                  if (data.status === 200) {
+                    // Update Egift card line item.
+                    dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                    removeFullScreenLoader();
+                  }
+                }
               });
             }
           }

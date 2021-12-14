@@ -365,12 +365,18 @@ const getProcessedCartData = async (cartData) => {
   if (isEgiftCardEnabled()) {
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
+    } else {
+      data.totals.egiftRedeemedAmount = 0;
     }
     if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
       data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
+    } else {
+      data.totals.egiftRedemptionType = '';
     }
     if (typeof cartData.totals.extension_attributes.balance_payble !== 'undefined') {
       data.totals.eGiftbalancePayable = cartData.totals.extension_attributes.balance_payble;
+    } else {
+      data.totals.egiftRedeemedAmount = 0;
     }
   }
 
