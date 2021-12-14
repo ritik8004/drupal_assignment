@@ -168,7 +168,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           amount: cart.cart.totals.base_grand_total,
           cardNumber: linkedEgiftCardNumber,
           payment_method: 'hps_payment',
-          email: drupalSettings.userDetails.userEmailID,
           card_type: 'linked',
         },
       };
@@ -296,22 +295,36 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
   render() {
     const {
+      // OpenModal.
       openModal,
-      remainingAmount,
-      apiErrorMessage,
-      setChecked,
-      egiftCardBalance,
+      // Pending amount to pay using other payment methods.
       pendingAmount,
-      redeemedFully,
-      renderWait,
-      linkedEgiftCard,
+      // Remaining Balance.
+      remainingAmount,
+      // check if checkbox is checked.
+      setChecked,
+      // check if egift card is valid.
       isEgiftCardValid,
+      // check if user performed redemption already.
+      redeemedFully,
+      // Amount to be passed to updatedEgiftCardAmount component after calculations.
       modalInputAmount,
+      // Actual Card Balance.
+      egiftCardBalance,
+      // Check if user has linked egift card.
+      linkedEgiftCard,
+      // Api render wait time.
+      renderWait,
+      // Api failure error messages.
+      apiErrorMessage,
     } = this.state;
+    // Cart object need to be passed to UpdateGiftCardAmount.
     const { cart } = this.props;
+    // Return if no linked card and if any api fails.
     if (!renderWait && !linkedEgiftCard) {
       return null;
     }
+    // Disable checkbox when egiftcard balance is 0.
     const disabled = (egiftCardBalance === 0);
 
     return (

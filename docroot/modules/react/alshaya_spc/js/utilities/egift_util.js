@@ -155,7 +155,6 @@ export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardTy
       card_number: egiftCardNumber,
       payment_method: 'hps_payment',
       card_type: cardType,
-      email: drupalSettings.userDetails.userEmailID,
     },
   };
 
