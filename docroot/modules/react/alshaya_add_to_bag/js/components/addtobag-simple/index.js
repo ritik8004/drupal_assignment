@@ -13,6 +13,7 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import { isProductBuyable } from '../../../../js/utilities/display';
 import NotBuyableButton from '../buttons/not-buyable';
 import getStringMessage from '../../../../js/utilities/strings';
+import logger from '../../../../js/utilities/logger';
 
 export default class AddToBagSimple extends React.Component {
   constructor(props) {
@@ -89,6 +90,13 @@ export default class AddToBagSimple extends React.Component {
     const stateData = {};
 
     if (cartData) {
+      if (typeof cartData.items === 'undefined') {
+        logger.warning('Error updating cart. cartData.items is undefined. cart: @cartData', {
+          '@cartData': cartData,
+        });
+        return [];
+      }
+
       if (typeof cartData.cart_id !== 'undefined') {
         // If the cart ID is different than change the current state value.
         if (cartData.cart_id !== cartId) {

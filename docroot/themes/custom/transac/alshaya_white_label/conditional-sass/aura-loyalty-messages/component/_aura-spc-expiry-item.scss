@@ -1,0 +1,36 @@
+.spc-aura-points-expiry-item {
+  padding-top: 0.875rem;
+  padding-#{$right}: 1.25rem;
+  padding-bottom: 0.875rem;
+  padding-#{$left}: 3.625rem;
+  background: $aura-expiry-item-bg;
+  border-radius: 0.625rem;
+  color: $aura-expiry-item-txt;
+  position: relative;
+  font-family: $aura-regular;
+
+  @include breakpoint($only-mobile) {
+    padding: 0.875rem;
+  }
+
+  b {
+    font-family: $aura-bold;
+
+    @include force-ltr;
+  }
+
+  @include icon('warning') {
+    width: 27px;
+    height: 25px;
+    display: inline-flex;
+    font-size: 26px;
+    position: absolute;
+    #{$left}: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include breakpoint($only-mobile) {
+      #{$left}: 0.8125rem;
+    }
+  }
+}

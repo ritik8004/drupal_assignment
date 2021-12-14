@@ -1,0 +1,21 @@
+.alias--contact {
+  .webform-submission-alshaya-contact-form {
+    .contact-us-feedback,
+    .contact-us-type,
+    .contact-us-reason {
+      .select2-container {
+        .select2-selection {
+          .select2-selection__rendered {
+            font-family: $dh-light;
+          }
+        }
+      }
+    }
+  }
+}
+
+.webform-submission-alshaya-contact-form {
+  fieldset.form-item {
+    margin-top: 0;
+  }
+}

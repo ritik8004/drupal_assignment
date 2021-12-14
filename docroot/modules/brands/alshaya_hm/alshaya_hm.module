@@ -354,19 +354,16 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
       $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
       $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
       $vars['product_attribute_labels'] = $labels;
+      // Show delivery option labels if express delivery is enabled.
       if ($express_delivery_config->get('status')) {
-        $sku = $parent_sku->getSku();
-        $delivery_options = alshaya_acm_product_get_delivery_options($sku);
-        if ($delivery_options !== NULL) {
-          // Show delivery options as per order defined in config.
-          $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-          foreach ($delivery_options_order as $option) {
-            if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
-              $options[$option]['#markup'] = $delivery_options[$option]['label'];
-            }
+        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku->getSku());
+        if (!empty($delivery_options['values'])) {
+          foreach ($delivery_options['values'] as $key => $option) {
+            $vars['delivery_options'][$key]['status']['#markup'] = $option['status'];
+            $vars['delivery_options'][$key]['label']['#markup'] = $option['label'];
           }
         }
-        $vars['delivery_options'] = $options ?? '';
+        $vars['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
       }
     }
   }
@@ -416,6 +413,12 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
           }
         }
         $object['collection_labels'] = $object['collection_labels'] ?? (object)$object['collection_labels'];
+        $concept_values = $sku->get('attr_concept')->getValue();
+        if (!empty($concept_values)) {
+          $object['attr_concept'] = array_map(function ($item) {
+            return $item['value'];
+          }, $concept_values);
+        }
       }
     }
   }

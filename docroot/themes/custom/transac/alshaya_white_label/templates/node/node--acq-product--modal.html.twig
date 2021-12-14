@@ -41,6 +41,10 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
       {% endif %}
 
+      {% if content.tabby %}
+        <div class="tabby"> {{ content.tabby }} </div>
+      {% endif %}
+
         {% if content.promotions %}
           <div class="promotions">
             {{ content.promotions }}
@@ -57,6 +61,11 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
           <span class="field__label">{{ 'Item Code'|t }}:</span>
           {{ content.item_code }}
         </div>
+
+        {% if aura_enabled is defined and aura_enabled %}
+          {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+          <div id="aura-pdp-modal"></div>
+        {% endif %}
 
       </div>
 

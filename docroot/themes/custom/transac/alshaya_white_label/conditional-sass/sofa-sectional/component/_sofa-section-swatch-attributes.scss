@@ -112,14 +112,12 @@
         }
 
         .swatch-color {
+          font-family: $alshaya-bold;
           font-size: 0.75rem;
-          font-weight: 600;
           line-height: 0.8125rem;
           margin: 0.125rem 0 0.3125rem;
-          text-overflow: ellipsis;
           overflow: hidden;
           max-width: 5rem;
-          white-space: nowrap;
         }
 
         .swatch-fabric {

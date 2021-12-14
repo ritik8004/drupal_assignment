@@ -296,6 +296,10 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       if ($key !== 'my_account') {
         $link_item_class_name = 'my-account-' . strtolower(str_replace(' ', '-', $link['text']));
         $options['attributes']['class'][] = ' ' . $link_item_class_name;
+
+        if (isset($link['class'])) {
+          $options['attributes']['class'][] = $link['class'];
+        }
       }
       else {
         $link_item_class_name = strtolower(str_replace(' ', '-', $link['text']));
@@ -329,12 +333,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       '#markup' => '<h3 class="my-account-title">' . $this->t('Welcome, @name', [
         '@name' => $this->userInfo->getName(),
       ]) . '</h3>',
+      '#weight' => -2,
     ];
 
     $build['my_account_mobile_title'] = [
       '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->t('logged in as @name', [
         '@name' => $this->userInfo->getName(),
       ]) . '</h4>',
+      '#weight' => -2,
     ];
 
     $build['my_account_links'] = [

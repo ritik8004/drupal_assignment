@@ -420,6 +420,68 @@ sub-brand-logo:
     theme:
       css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
 
+aura-loyalty-tooltip:
+  css:
+    theme:
+      css/conditional-sass/aura-tooltip/aura-tooltip.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/tooltip
+
+aura-loyalty-messages:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-messages/aura-loyalty-messages.ltr.css: {}
+
+aura-loyalty-spc-common:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc-common/aura-loyalty-spc-common.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+    - alshaya_white_label/aura-loyalty-messages
+
+aura-loyalty-forms:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: {}
+
+aura-loyalty-spc:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-spc-common
+    - alshaya_white_label/aura-loyalty-forms
+
+aura-loyalty-spc-confirmation:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc-confirmation/aura-loyalty-spc-confirmation.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-spc-common
+
+aura-loyalty-global:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: {}
+
+aura-loyalty-myaccount:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+    - alshaya_white_label/aura-loyalty-messages
+    - alshaya_white_label/aura-loyalty-forms
+    - alshaya_white_label/alshaya-react-animate
+
+aura-loyalty-pdp:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+
 alshaya-fit-calculator:
   css:
     theme:
@@ -548,3 +610,8 @@ sofa-sectional:
   css:
     theme:
       css/conditional-sass/sofa-sectional/sofa-sectional.ltr.css: {}
+
+tabby:
+  css:
+    theme:
+      css/conditional-sass/tabby/tabby.ltr.css: {}

@@ -937,9 +937,9 @@ export const editDefaultAddressFromStorage = (address, areaSelected) => {
   Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
     if (addressData[val.key] !== undefined && val.visible === true) {
       if (key === 'administrative_area') {
-        addressData[val.key] = areaSelected.value.area;
+        addressData[val.key] = areaSelected.value[val.key];
       } else if (key === 'area_parent') {
-        addressData[val.key] = areaSelected.value.governate;
+        addressData[val.key] = areaSelected.value[val.key];
       } else {
         addressData[val.key] = '';
       }

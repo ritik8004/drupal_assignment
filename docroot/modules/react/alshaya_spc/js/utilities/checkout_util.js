@@ -2,7 +2,7 @@ import axios from 'axios';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-import hasValue from '../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -411,6 +411,10 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
       const continueCheckoutLink = (drupalSettings.user.uid === 0)
         ? 'cart/login'
         : 'checkout';
+
+      // Dispatch an event when user is moving to checkout page by
+      // clicking on `continue to checkout` link.
+      dispatchCustomEvent('continueToCheckoutFromCart', { cartResult });
 
       // Redirect to next page.
       window.location.href = Drupal.url(continueCheckoutLink);

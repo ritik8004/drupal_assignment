@@ -18,6 +18,8 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
+import AuraCartContainer from '../../../aura-loyalty/components/aura-cart-rewards/aura-cart-container';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
 import Postpay from '../../../utilities/postpay';
@@ -32,7 +34,9 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities
 import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
-import hasValue from '../../../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import Tabby from '../../../../../js/tabby/utilities/tabby';
+import TabbyWidget from '../../../../../js/tabby/components';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -52,6 +56,7 @@ export default class Cart extends React.Component {
       message: null,
       cartShippingMethods: null,
       panelContent: null,
+      auraDetails: null,
     };
   }
 
@@ -177,11 +182,35 @@ export default class Cart extends React.Component {
         this.updateCartMessage('error', qtyMismatchErrorInfo.message);
       }
     }
+
+    // Event listerner to update any change in cart totals.
+    document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
+    // If aura is enabled, add a listner to update aura customer details.
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', this.updateAuraDetails, false);
+    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
+    if (isAuraEnabled()) {
+      document.removeEventListener('customerDetailsFetched', this.updateAuraDetails, false);
+    }
   }
+
+  // Event listener to update aura details.
+  updateAuraDetails = (event) => {
+    this.setState({
+      auraDetails: { ...event.detail.stateValues },
+    });
+  };
+
+  // Event listener to update cart totals.
+  handleTotalsUpdateEvent = (event) => {
+    const { totals } = event.detail;
+    this.setState({ totals });
+  };
 
   saveDynamicPromotions = (event) => {
     const {
@@ -282,6 +311,7 @@ export default class Cart extends React.Component {
       cartShippingMethods,
       panelContent,
       collectionCharge,
+      auraDetails,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -323,6 +353,11 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Check if the tabby is enabled.
+    if (Tabby.isTabbyEnabled()) {
+      preContentActive = 'visible';
+    }
+
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -337,7 +372,14 @@ export default class Cart extends React.Component {
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
           {postPayData.postpayEligibilityMessage}
-
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby-info"
+              mobileOnly={false}
+              id="tabby-cart-info"
+            />
+          </ConditionalView>
           <ConditionalView condition={smartAgentInfo !== false}>
             <>
               <SASessionBanner agentName={smartAgentInfo.name} />
@@ -348,6 +390,14 @@ export default class Cart extends React.Component {
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
           {postPayData.postpay}
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+            <TabbyWidget
+              pageType="cart"
+              classNames="spc-tabby-mobile-preview"
+              mobileOnly
+              id="tabby-promo-cart-mobile"
+            />
+          </ConditionalView>
         </div>
         <div className="spc-main">
           <div className="spc-content">
@@ -381,6 +431,9 @@ export default class Cart extends React.Component {
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
             />
+            <ConditionalView condition={isAuraEnabled()}>
+              <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
+            </ConditionalView>
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}

@@ -17,10 +17,7 @@ export default class DeliveryOptions extends React.Component {
   }
 
   componentDidMount() {
-    const { variantSelected } = this.props;
-    if (variantSelected !== undefined) {
-      this.fetchShippingMethods(variantSelected);
-    }
+    this.fetchShippingMethods();
     // Updating shipping methods as per selection of variant.
     document.addEventListener('onSkuVariantSelect', this.updateShippingOnVariantSelect, false);
     document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
@@ -50,25 +47,18 @@ export default class DeliveryOptions extends React.Component {
 
   displayShippingMethods = (event) => {
     event.preventDefault();
-    const { variantSelected } = this.props;
-    let productSku = null;
-    // Get product sku from props variable for new pdp.
-    // And for old pdp, we are fetching from page html.
-    if (variantSelected !== undefined) {
-      productSku = variantSelected;
-    } else if (document.querySelector('[name="selected_variant_sku"]') !== null) {
-      productSku = document.querySelector('[name="selected_variant_sku"]').getAttribute('value');
-    }
-    this.fetchShippingMethods(productSku);
+    this.fetchShippingMethods();
   }
 
-  fetchShippingMethods = (productSku) => {
-    if (productSku !== null) {
-      const currentArea = getDeliveryAreaStorage();
+  fetchShippingMethods = (variantSelected) => {
+    const currentArea = getDeliveryAreaStorage();
+    const attr = document.getElementsByClassName('sku-base-form');
+    const productSku = variantSelected !== undefined ? variantSelected : attr[0].getAttribute('data-sku');
+    if (productSku && productSku !== null) {
       showFullScreenLoader();
       getCartShippingMethods(currentArea, productSku).then(
         (response) => {
-          if (response !== null) {
+          if (response && response !== null) {
             this.checkShippingMethods(response, productSku);
           }
           removeFullScreenLoader();

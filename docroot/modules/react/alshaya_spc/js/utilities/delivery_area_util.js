@@ -1,7 +1,8 @@
-import hasValue from '../../../js/utilities/conditionsUtility';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader } from './checkout_util';
 import { removeStorageInfo, setStorageInfo, getStorageInfo } from './storage';
 import getStringMessage from './strings';
+import { getProductShippingMethods } from '../backend/v2/common';
 
 export const getGovernatesList = () => window.commerceBackend.getGovernatesList()
   .then(
@@ -57,7 +58,7 @@ export const getDeliveryAreaList = (governateId) => window.commerceBackend.getDe
     Drupal.logJavascriptError('get-delivery-areas', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
   });
 
-export const getCartShippingMethods = (currArea, sku) => window.commerceBackend.getShippingMethods(
+export const getCartShippingMethods = (currArea, sku) => getProductShippingMethods(
   currArea,
   sku,
 )
@@ -119,20 +120,38 @@ export const getDeliveryAreaStorage = () => {
   return null;
 };
 
+export const getAreaFieldKey = () => {
+  if (drupalSettings.address_fields) {
+    return drupalSettings.address_fields.administrative_area.key;
+  }
+  return null;
+};
+
+export const getAreaParentFieldKey = () => {
+  if (drupalSettings.address_fields) {
+    return drupalSettings.address_fields.area_parent.key;
+  }
+  return null;
+};
+
 /**
  * Storing delivery area values choosen by user.
  */
 export const setDeliveryAreaStorage = (areaSelected) => {
-  removeStorageInfo('deliveryinfo-areadata');
-  const { currentLanguage } = drupalSettings.path;
-  const deliveryArea = {
-    label: {
-      [currentLanguage]: areaSelected.label,
-    },
-    value: {
-      area: areaSelected.area,
-      governate: areaSelected.governate,
-    },
-  };
-  setStorageInfo(deliveryArea, 'deliveryinfo-areadata');
+  const areaFieldKey = getAreaFieldKey();
+  const areaParentFieldKey = getAreaParentFieldKey();
+  if (areaFieldKey !== null && areaParentFieldKey !== null) {
+    removeStorageInfo('deliveryinfo-areadata');
+    const { currentLanguage } = drupalSettings.path;
+    const deliveryArea = {
+      label: {
+        [currentLanguage]: areaSelected.label,
+      },
+      value: {
+        [areaFieldKey]: areaSelected.area,
+        [areaParentFieldKey]: areaSelected.governate,
+      },
+    };
+    setStorageInfo(deliveryArea, 'deliveryinfo-areadata');
+  }
 };

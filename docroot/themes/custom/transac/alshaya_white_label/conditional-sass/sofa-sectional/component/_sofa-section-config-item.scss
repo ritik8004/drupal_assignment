@@ -6,18 +6,19 @@
 
   .sofa-section-config-item-title {
     font-family: $alshaya-bold;
-    font-weight: 600;
     width: 35%;
     padding-#{$right}: 0.3125rem;
     margin-#{$right}: 0.625rem;
     text-align: $right;
     color: $sofa-sectional-title;
+
+    @include breakpoint($only-tablet) {
+      width: 42%;
+    }
   }
 
   .sofa-section-config-item-value {
     width: 62%;
-    text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
   }
 }

@@ -52,16 +52,31 @@ export default class CompletePurchase extends React.Component {
     if (!this.completePurchaseButtonActive()) {
       return;
     }
-    // Dispatch the event for all payment method
-    // except checkout_com_upapi method.
-    // For checkout_com_upapi method this
-    // handle in its own component.
-    if (cart.cart.payment.method !== 'checkout_com_upapi') {
+
+    // Flag to track pseudo payment method.
+    let isPseudoPaymentMedthod = false;
+
+    // Check if payment method in cart is a pseudo method
+    // or not and accordingly dispatch event.
+    if (drupalSettings.payment_methods[cart.cart.payment.method]) {
+      // Dispatch the event for all payment method
+      // except checkout_com_upapi method.
+      // For checkout_com_upapi method this
+      // handle in its own component.
+      if (cart.cart.payment.method !== 'checkout_com_upapi') {
+        dispatchCustomEvent('orderPaymentMethod', {
+          payment_method: Object
+            .values(drupalSettings.payment_methods)
+            .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+            .shift().gtm_name,
+        });
+      }
+    } else {
+      // If cart payment method is not in drupalSettings,
+      // then it's a pseudo payment method.
+      isPseudoPaymentMedthod = true;
       dispatchCustomEvent('orderPaymentMethod', {
-        payment_method: Object
-          .values(drupalSettings.payment_methods)
-          .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
-          .shift().gtm_name,
+        payment_method: cart.cart.payment.method,
       });
     }
 
@@ -69,7 +84,10 @@ export default class CompletePurchase extends React.Component {
     checkoutButton.classList.add('in-active');
 
     try {
-      const validated = await validateBeforePlaceOrder();
+      const validated = (isPseudoPaymentMedthod === false)
+        ? await validateBeforePlaceOrder()
+        : true;
+
       if (validated === false) {
         if (this.completePurchaseButtonActive()) {
           checkoutButton.classList.remove('in-active');
@@ -176,12 +194,20 @@ export default class CompletePurchase extends React.Component {
       ? cart.cart.payment.method
       : '';
 
-    let buttonText = Drupal.t('complete purchase');
+    let buttonText = '';
 
-    if (paymentMethod === 'postpay') {
-      buttonText = Drupal.t('Continue with postpay');
-    } else if (paymentMethod === 'checkout_com_upapi_benefitpay') {
-      buttonText = Drupal.t('Continue with Benefit pay');
+    switch (paymentMethod) {
+      case 'postpay':
+        buttonText = Drupal.t('Continue with postpay');
+        break;
+      case 'checkout_com_upapi_benefitpay':
+        buttonText = Drupal.t('Continue with Benefit pay');
+        break;
+      case 'tabby':
+        buttonText = Drupal.t('Continue with tabby');
+        break;
+      default:
+        buttonText = Drupal.t('complete purchase');
     }
 
     return (

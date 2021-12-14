@@ -95,10 +95,6 @@
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
-          // Trigger an event on variant select.
-          // Sending selected variant sku in the parameter.
-          var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {bubbles: true, detail: { data: $('[name="selected_variant_sku"]', form).val() }});
-          document.dispatchEvent(currentSelectedVariantEvent);
           form.trigger(
             'variant-selected',
             [
@@ -106,6 +102,10 @@
               code
             ]
           );
+          // Dispatching event on variant change to listen in react.
+          if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
+            Drupal.dispatchAuraProductUpdateEvent($(this));
+          }
         }
       });
 
@@ -243,6 +243,12 @@
         });
       }
 
+      if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
+        $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
+          // Dispatching event on quantity change to listen in react.
+          Drupal.dispatchAuraProductUpdateEvent($(this));
+        });
+      }
     }
   };
 
@@ -348,6 +354,17 @@
     if (combinations[selectedCode][selectedValue] === 1) {
       return;
     }
+
+    if (typeof combinations[selectedCode][selectedValue] !== 'object' || combinations[selectedCode][selectedValue] === null) {
+      Drupal.alshayaLogger('warning', 'Error occurred during attribute selection, sku: @sku, combinations: @combinations, selectedCode: @selectedCode, selectedValue: @selectedValue', {
+        '@sku': sku,
+        '@combinations': combinations,
+        '@selectedCode': selectedCode,
+        '@selectedValue': selectedValue,
+      });
+      return;
+    }
+
     var nextCode = Object.keys(combinations[selectedCode][selectedValue])[0];
     var nextValues = Object.keys(combinations[selectedCode][selectedValue][nextCode]);
     Drupal.alshayaAcmProductSelectConfiguration(form, nextCode, nextValues);
@@ -522,7 +539,7 @@
           }
         }
       }
-      else if (variantInfo !== '') {
+      else if (typeof variantInfo !== 'undefined' && variantInfo !== '') {
         var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined"
           ? variantInfo.orderLimitMsg : '';
 

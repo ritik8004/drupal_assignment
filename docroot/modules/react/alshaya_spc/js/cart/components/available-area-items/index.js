@@ -1,5 +1,5 @@
 import React from 'react';
-import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { getAreaFieldKey, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 
 const AvailableAreaItems = ({
   attr, value, parentId, isStandardDelivery,
@@ -9,9 +9,10 @@ const AvailableAreaItems = ({
   const samedayDeliveryClass = isSameDayDelivery ? 'active' : 'disabled';
   const expressDeliveryClass = isExpressDelivery ? 'active' : 'disabled';
   const currentArea = getDeliveryAreaStorage();
+  const areaFieldKey = getAreaFieldKey();
   let activeClass = 'in-active';
-  if (currentArea !== null) {
-    if (parseInt(currentArea.value.area, 10) === attr) {
+  if (currentArea !== null && areaFieldKey !== null) {
+    if (parseInt(currentArea.value[areaFieldKey], 10) === attr) {
       activeClass = 'active';
     }
   }

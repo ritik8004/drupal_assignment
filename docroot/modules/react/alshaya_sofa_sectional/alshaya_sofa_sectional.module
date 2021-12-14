@@ -21,14 +21,22 @@ function alshaya_sofa_sectional_node_view(array &$build, Node $entity, EntityVie
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_sofa_sectional.settings']);
 
   // Return if the feature is not applicable on the entity and display mode.
-  if ($view_mode !== 'full' || !\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($entity)) {
+  if (!in_array($view_mode, ['modal', 'full']) || !\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($entity)) {
     return;
   }
 
   // Attach Sofa and Sectional libraries.
-  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
   $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional_utilities';
+  $build['#attached']['library'][] = 'alshaya_sofa_sectional/sofa_sectional';
   $build['#attached']['library'][] = 'alshaya_white_label/sofa-sectional';
+
+  // Attach additional library to dispatch modal load event.
+  if ($view_mode == 'modal') {
+    $build['#attached']['library'][] = 'alshaya_sofa_sectional/product_modal_view';
+  }
+
+  // Attach a unique class with view mode to render form in context.
+  $build['#attributes']['class'][] = 'has-sofa-sectional-'. $view_mode .'-form';
 
   // Add a unique class if PDP has a sofa and sectional form.
   $build['#attributes']['class'][] = 'has-sofa-sectional-form';
@@ -44,8 +52,10 @@ function alshaya_sofa_sectional_alshaya_acm_product_skubaseform_alter(&$form, SK
   // Get the current node from the sku entity.
   $node = $skuManager->getDisplayNode($sku_entity);
 
-  // Return if feature isn't applicable for this entity.
-  if (!\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($node)) {
+  // Return if configurable options are not available for the product
+  // and feature isn't applicable for this entity.
+  if (!isset($form['#attached']['drupalSettings']['configurableCombinations'])
+  || !\Drupal::service('alshaya_sofa_sectional.helper')->isSofaSectionalFeatureApplicable($node)) {
     return;
   }
 

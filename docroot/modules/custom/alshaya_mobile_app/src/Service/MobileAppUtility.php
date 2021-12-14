@@ -406,10 +406,17 @@ class MobileAppUtility {
     $deeplink_url = $this->getRedirectUrl($deeplink_url);
     $params = !empty($url->isRouted()) ? $url->getRouteParameters() : NULL;
     if (empty($params)) {
-      return self::ENDPOINT_PREFIX
+      if ($url->isRouted() && $url->getRouteName() === 'view.magazine_articles.list') {
+        return self::ENDPOINT_PREFIX
+        . 'page/magazine-block';
+      }
+      else {
+        return self::ENDPOINT_PREFIX
         . 'deeplink?url='
         . $deeplink_url;
+      }
     }
+    $entity = NULL;
     if (isset($params['taxonomy_term'])) {
       $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
     }
@@ -1079,14 +1086,27 @@ class MobileAppUtility {
 
       try {
         // Get the taxonomy term ID of the target term.
-        $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();
-        if (!empty($params) && !empty($params['taxonomy_term'])) {
-          $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
+        $route = Url::fromUri('internal:' . $internal_path);
+        $params = !empty($route->isRouted()) ? $route->getRouteParameters() : NULL;
+        if (empty($params)) {
+          if ($route->getRouteName() === 'view.magazine_articles.list') {
+            $deeplink = self::ENDPOINT_PREFIX . 'page/magazine-block';
+          }
+          else {
+            $deeplink = self::ENDPOINT_PREFIX
+            . 'deeplink?url='
+            . $internal_path;
+          }
+        }
+        else {
+          if (!empty($params) && !empty($params['taxonomy_term'])) {
+            $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
 
-          // Get path and deeplink of target term.
-          if ($redirected_term instanceof TermInterface
-            && $redirected_term->bundle() == 'acq_product_category') {
-            $deeplink = $this->getDeepLink($redirected_term);
+            // Get path and deeplink of target term.
+            if ($redirected_term instanceof TermInterface
+              && $redirected_term->bundle() == 'acq_product_category') {
+              $deeplink = $this->getDeepLink($redirected_term);
+            }
           }
         }
       }

@@ -155,14 +155,8 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDelivery'] = $express_delivery_config->get('status');
       // Show delivery options as per order in express delivery config.
       $delivery_options = alshaya_acm_product_get_delivery_options($sku);
-      $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-      if ($delivery_options !== NULL) {
-        foreach ($delivery_options_order as $option) {
-          if ($delivery_options[$option]['status'] && $delivery_options[$option]['label']) {
-            $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'][$option]['label'] = $delivery_options[$option]['label'];
-          }
-        }
-      }
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'] = $delivery_options['values'];
+      $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
     }
 
     // Set delivery options only if product is buyable.
@@ -302,6 +296,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['firstChild'] = reset($sorted_variants);
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['rawGallery'] = $variant_gallery;
         $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $child->get('final_price')->getString());
+
+        $parent_sku = $this->skuManager->getParentSkuBySku($child);
+        $delivery_options = alshaya_acm_product_get_delivery_options($parent_sku->getSku());
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['deliveryOptions'] = $delivery_options['values'];
+        $vars['#attached']['drupalSettings']['productInfo'][$sku]['variants'][$child_sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
         if ($child_sku == reset($sorted_variants)) {
           $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $variant_gallery;
         }
