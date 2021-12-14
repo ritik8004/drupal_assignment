@@ -66,8 +66,8 @@ function _alshaya_wishlist_translations() {
       'ar' => 'انتقل إلى السلة',
       'context' => 'wishlist',
     ],
-    'Share' => [
-      'ar' => 'إرسال',
+    'Share All' => [
+      'ar' => 'شارك الكل',
       'context' => 'wishlist',
     ],
     'Share Your List' => [
