@@ -26,7 +26,7 @@ export default class RedeemEgiftCard extends React.Component {
   // Update the state variables.
   componentDidMount = () => {
     // On payment method update, we refetch the cart to get payment method.
-    document.addEventListener('refreshCompletePurchaseSection', this.updatePaymentMethod, false);
+    document.addEventListener('refreshCartOnPaymentMethod', this.updatePaymentMethod, false);
     // Change the redemption screen based on the cart redemption status.
     const { cart: cartData } = this.props;
     // Change the state of redeemption if egift is already available.
@@ -36,20 +36,26 @@ export default class RedeemEgiftCard extends React.Component {
         codeValidated: true,
       });
     }
+    // Update the payment method.
+    if (hasValue(cartData.cart.payment) && hasValue(cartData.cart.payment.method)) {
+      this.setState({
+        paymentMethod: cartData.cart.payment.method,
+      });
+    }
   }
 
   // Update the payment method.
-  updatePaymentMethod = () => {
-    const currentCart = window.commerceBackend.getRawCartDataFromStorage();
+  updatePaymentMethod = (event) => {
+    const currentCart = event.detail.cart;
     if (hasValue(currentCart.payment) && hasValue(currentCart.payment.method)) {
+      // Cancel the redemption and move back to the initial screen of redemption.
+      if (isEgiftUnsupportedPaymentMethod(currentCart.payment.method)) {
+        this.handleEgiftCardRemove();
+      }
+      // Updated the state with current payment method.
       this.setState({
         paymentMethod: currentCart.payment.method,
       });
-    }
-    // Cancel the redemption and move back to the initial screen of redemption.
-    const { paymentMethod } = this.state;
-    if (isEgiftUnsupportedPaymentMethod(paymentMethod)) {
-      this.handleEgiftCardRemove();
     }
   }
 

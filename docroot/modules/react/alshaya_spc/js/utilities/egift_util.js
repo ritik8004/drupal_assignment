@@ -144,7 +144,7 @@ export const callEgiftApi = (action, method, postData, param = {}) => {
  * @return {boolean}
  *   true if it's contains non virtual product else false.
  */
-export const cartContainsNonVirtualProduct = (cart) => {
+export const cartContainsOnlyNonVirtualProduct = (cart) => {
   // A flag to keep track of the non-virtual products.
   let isNonVirtual = false;
   Object.values(cart.items).forEach((item) => {
