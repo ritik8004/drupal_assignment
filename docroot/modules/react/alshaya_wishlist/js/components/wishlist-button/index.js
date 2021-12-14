@@ -35,6 +35,9 @@ class WishlistButton extends React.Component {
       this.updateWishListStatus(true);
     }
 
+    // We pass options directly for plp product drawer
+    // So we only need to get options for pdp layouts
+    // Also, check if it is configurable product.
     if (context !== 'productDrawer' && configurableCombinations) {
       this.getSelectedOptions(configurableCombinations);
     }
