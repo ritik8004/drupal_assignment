@@ -29,7 +29,6 @@ export default class ValidEgiftCard extends React.Component {
       egiftCardNumber,
       egiftEmail,
       cart,
-      quoteId,
     } = this.props;
 
     let postData = {
@@ -72,7 +71,7 @@ export default class ValidEgiftCard extends React.Component {
             postData = {
               redeem_points: {
                 action: 'set_points',
-                quote_id: quoteId,
+                quote_id: cart.cart_id_int,
                 amount: updateAmount,
                 card_number: egiftCardNumber,
                 payment_method: 'hps_payment',

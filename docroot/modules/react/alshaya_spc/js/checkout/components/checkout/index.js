@@ -261,7 +261,7 @@ export default class Checkout extends React.Component {
     const { cart } = this.state;
     const { totals } = event.detail;
     const cartData = cart;
-    cartData.cart.totals = { ...cartData.cart.totals, ...totals };
+    cartData.cart.totals = { ...totals };
 
     this.setState({ cart: cartData });
   };

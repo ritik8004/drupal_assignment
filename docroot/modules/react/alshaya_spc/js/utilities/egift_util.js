@@ -171,3 +171,25 @@ export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
 
   return paymentMethod in notSupportedPaymentMethods;
 };
+
+/**
+ * Checks if redemptions is performed or not.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @return {boolean}
+ *   true if egift redemption is done by guest else false.
+ */
+export const isEgiftRedemptionDone = (cart) => {
+  if (hasValue(cart.totals)) {
+    const { egiftRedeemedAmount, egiftRedemptionType } = cart.totals;
+
+    if (hasValue(egiftRedeemedAmount)
+      && hasValue(egiftRedemptionType)) {
+      return true;
+    }
+  }
+
+  return false;
+};

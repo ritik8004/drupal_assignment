@@ -26,6 +26,8 @@ import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod } from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -280,6 +282,13 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    // Allow change payment method only if it's allowed for egift.
+    if (isEgiftCardEnabled()
+      && isEgiftUnsupportedPaymentMethod(method)
+      && isEgiftRedemptionDone(cart.cart)) {
+      return;
+    }
+
     // If method is already selected in cart we simply
     // trigger the events.
     if (method && cart.cart.payment.method === method) {
@@ -348,6 +357,10 @@ export default class PaymentMethods extends React.Component {
       if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
         disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
       }
+      // Disable the payment method that are not supported by egift.
+      if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)) {
+        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code);
+      }
 
       this.paymentMethodRefs[method.code] = React.createRef();
       const animationOffset = animationInterval * index;
@@ -360,7 +373,7 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
-        {...(isAuraEnabled()
+        {...((isAuraEnabled() || (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)))
           && disablePaymentMethod
           && { disablePaymentMethod }
         )}

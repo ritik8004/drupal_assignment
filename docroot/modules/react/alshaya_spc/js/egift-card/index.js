@@ -10,6 +10,8 @@ import {
   showFullScreenLoader,
 } from '../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
+import dispatchCustomEvent from '../../../js/utilities/events';
+import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -19,14 +21,16 @@ export default class RedeemEgiftCard extends React.Component {
       codeValidated: false,
       egiftEmail: '',
       egiftCardNumber: '',
-      paymentMethod: '',
+      redemptionDisabled: false,
     };
   }
 
   // Update the state variables.
   componentDidMount = () => {
     // On payment method update, we refetch the cart to get payment method.
-    document.addEventListener('refreshCartOnPaymentMethod', this.updatePaymentMethod, false);
+    document.addEventListener('refreshCartOnPaymentMethod', this.changeRedemptionStatusBasedOnPaymentMethod, false);
+    // Allow other components to disable/enable redemption.
+    document.addEventListener('changeEgiftRedemptionStatus', this.changeRedemptionStatus, false);
     // Change the redemption screen based on the cart redemption status.
     const { cart: cartData } = this.props;
     // Change the state of redeemption if egift is already available.
@@ -37,26 +41,40 @@ export default class RedeemEgiftCard extends React.Component {
       });
     }
     // Update the payment method.
-    if (hasValue(cartData.cart.payment) && hasValue(cartData.cart.payment.method)) {
+    if (isEgiftCardEnabled()
+      && hasValue(cartData.cart.payment)
+      && hasValue(cartData.cart.payment.method)) {
       this.setState({
-        paymentMethod: cartData.cart.payment.method,
+        redemptionDisabled: isEgiftUnsupportedPaymentMethod(cartData.cart.payment.method),
       });
     }
   }
 
   // Update the payment method.
-  updatePaymentMethod = (event) => {
+  changeRedemptionStatusBasedOnPaymentMethod = (event) => {
     const currentCart = event.detail.cart;
-    if (hasValue(currentCart.payment) && hasValue(currentCart.payment.method)) {
-      // Cancel the redemption and move back to the initial screen of redemption.
-      if (isEgiftUnsupportedPaymentMethod(currentCart.payment.method)) {
-        this.handleEgiftCardRemove();
-      }
-      // Updated the state with current payment method.
+    if (hasValue(currentCart.payment)
+      && hasValue(currentCart.payment.method)) {
+      // Updated the state of redemption.
+      const redemptionStatus = isEgiftUnsupportedPaymentMethod(currentCart.payment.method);
       this.setState({
-        paymentMethod: currentCart.payment.method,
+        redemptionDisabled: redemptionStatus,
       });
+      // If redemption is disabled then move redemption status to initial stage.
+      if (redemptionStatus) {
+        this.setState({
+          codeSent: false,
+          codeValidated: false,
+        });
+      }
     }
+  }
+
+  // Update the redemption status.
+  changeRedemptionStatus = (status) => {
+    this.setState({
+      redemptionDisabled: status,
+    });
   }
 
   // Perform code validation.
@@ -140,12 +158,29 @@ export default class RedeemEgiftCard extends React.Component {
         removeFullScreenLoader();
         if (result.error !== undefined) {
           errors = false;
+        } else {
+          // Reset the state to move back to initial redeem stage.
+          this.setState({
+            codeSent: false,
+            codeValidated: false,
+          });
+          // Update the cart total.
+          showFullScreenLoader();
+          const currentCart = window.commerceBackend.getCart(true);
+
+          if (currentCart instanceof Promise) {
+            currentCart.then((data) => {
+              removeFullScreenLoader();
+              if (data.data !== undefined && data.data.error === undefined) {
+                if (data.status === 200) {
+                  // Update Egift card line item.
+                  dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                  removeFullScreenLoader();
+                }
+              }
+            });
+          }
         }
-        // Reset the state to move back to initial redeem stage.
-        this.setState({
-          codeSent: false,
-          codeValidated: false,
-        });
       });
     }
 
@@ -159,7 +194,7 @@ export default class RedeemEgiftCard extends React.Component {
       codeValidated,
       egiftEmail,
       egiftCardNumber,
-      paymentMethod,
+      redemptionDisabled,
     } = this.state;
     const { cart: cartData } = this.props;
 
@@ -173,7 +208,7 @@ export default class RedeemEgiftCard extends React.Component {
             getCode={this.handleGetCode}
             egiftEmail={egiftEmail}
             egiftCardNumber={egiftCardNumber}
-            paymentMethod={paymentMethod}
+            redemptionDisabled={redemptionDisabled}
           />
         </ConditionalView>
         <ConditionalView condition={codeSent}>

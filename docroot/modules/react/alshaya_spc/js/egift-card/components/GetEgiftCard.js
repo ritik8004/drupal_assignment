@@ -53,14 +53,10 @@ const handleSubmit = (e, props) => {
 
 // Provies the egift card form.
 const GetEgiftCard = (props) => {
-  const { egiftEmail, egiftCardNumber, paymentMethod } = props;
+  const { egiftEmail, egiftCardNumber, redemptionDisabled } = props;
   // Check if the payment method is supported or not.
-  let redemptionDisabled = false;
   let additionalClasses = '';
-  if (hasValue(paymentMethod)) {
-    // Set redemption status based on the payment method.
-    redemptionDisabled = isEgiftUnsupportedPaymentMethod(paymentMethod);
-
+  if (hasValue(redemptionDisabled)) {
     // Add `in-active` class if redemptionDisabled property is true.
     additionalClasses = redemptionDisabled
       ? `${additionalClasses} in-active`

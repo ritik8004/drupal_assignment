@@ -40,6 +40,7 @@ import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/u
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
 import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { cartContainsOnlyNonVirtualProduct } from '../../utilities/egift_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -1169,7 +1170,8 @@ const getProcessedCheckoutData = async (cartData) => {
   // Shipping method will not be available for egift, So adding egift enabled
   // condition to execute this statement.
   if (!hasValue(data.payment.methods)
-    && (hasValue(data.shipping.method) || isEgiftCardEnabled())
+    && (hasValue(data.shipping.method)
+    || (isEgiftCardEnabled() && !cartContainsOnlyNonVirtualProduct(data.cart)))
   ) {
     const paymentMethods = await getPaymentMethods();
     if (hasValue(paymentMethods)) {
