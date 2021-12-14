@@ -9,6 +9,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -67,6 +68,7 @@ export default class ValidEgiftCard extends React.Component {
           const { amount: updateAmount } = this.state;
           if (updateAmount > 0) {
             // update the post data object.
+            // For Redeemption card_type to be always 'guest' for both guest and logged-in users.
             postData = {
               redeem_points: {
                 action: 'set_points',
@@ -74,6 +76,7 @@ export default class ValidEgiftCard extends React.Component {
                 amount: updateAmount,
                 card_number: egiftCardNumber,
                 payment_method: 'hps_payment',
+                card_type: 'guest', // card type to be guest or linked.
               },
             };
             showFullScreenLoader();
@@ -81,11 +84,20 @@ export default class ValidEgiftCard extends React.Component {
             const redemptionResponse = callEgiftApi('eGiftRedemption', 'POST', postData);
             if (redemptionResponse instanceof Promise) {
               redemptionResponse.then((res) => {
-                // Remove the loader as response is available.
-                removeFullScreenLoader();
-                if (res.error === undefined && res.data !== undefined && res.state === 200) {
-                  // @todo To handle the summary block update once redemption is done.
-                  window.commerceBackend.refreshCart({});
+                if (res.error === undefined && res.data !== undefined && res.status === 200) {
+                  const cartData = window.commerceBackend.getCart(true);
+                  if (cartData instanceof Promise) {
+                    cartData.then((data) => {
+                      if (data.data !== undefined && data.data.error === undefined) {
+                        if (data.status === 200) {
+                          // Update Egift card line item.
+                          dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                          // Remove the loader as response is available.
+                          removeFullScreenLoader();
+                        }
+                      }
+                    });
+                  }
                 }
               });
             }
@@ -156,6 +168,7 @@ export default class ValidEgiftCard extends React.Component {
     // Prepare the request object for redeem API.
     const { quoteId, egiftCardNumber } = this.props;
     showFullScreenLoader();
+    // Invoke the redemption API to update the redeem amount.
     const response = performRedemption(quoteId, updateAmount, egiftCardNumber, 'guest');
     if (response instanceof Promise) {
       response.then((result) => {
@@ -167,8 +180,20 @@ export default class ValidEgiftCard extends React.Component {
               amount: updateAmount,
               open: false,
             });
+            const cartData = window.commerceBackend.getCart(true);
+            if (cartData instanceof Promise) {
+              cartData.then((data) => {
+                if (data.data !== undefined && data.data.error === undefined) {
+                  if (data.status === 200) {
+                    // Update Egift card line item.
+                    dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+                    removeFullScreenLoader();
+                  }
+                }
+              });
+            }
+            return true;
           }
-          return true;
         }
         return false;
       });

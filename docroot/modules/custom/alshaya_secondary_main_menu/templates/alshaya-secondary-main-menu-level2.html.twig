@@ -7,9 +7,9 @@
           <li class="menu__list-item menu--two__list-item {{ columns.class|join(' ') }} {{ columns.move_to_right ? 'move-to-right' : '' }}">
             <div class="menu__link-wrapper menu-two__link-wrapper">
               {% if columns.url.toString is not empty %}
-                <a href="{{columns.url}}" class="menu__link menu-two__link {{ columns.class|join(' ') }} {{columns.sub_nav_class}}" title="{{columns.title}}" gtm-menu-title="{{ columns.gtm_menu_title }}">{{ columns.title }}</a>
+                <a href="{{columns.url}}" class="menu__link menu-two__link {{ columns.class|join(' ') }} {{columns.sub_nav_class}}" title="{{columns.title}}">{{ columns.title }}</a>
               {% else %}
-                <div class="menu__link menu-two__link {{ columns.class|join(' ') }} {{columns.sub_nav_class}}" gtm-menu-title="{{ columns.gtm_menu_title }}">{{ columns.title }}</div>
+                <div class="menu__link menu-two__link {{ columns.class|join(' ') }} {{columns.sub_nav_class}}">{{ columns.title }}</div>
               {% endif %}
             </div>
               {% if columns.below is not empty %}

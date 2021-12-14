@@ -235,6 +235,14 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay @currencyCode @pendingAmount using another payment method to complete purchase',
         'context' => 'egift',
       ],
+      'Paid With eGfit card' => [
+        'ar' => 'Paid With eGfit card',
+        'context' => 'egift',
+      ],
+      'Balance Payable' => [
+        'ar' => 'Balance Payable',
+        'context' => 'egift',
+      ],
       'Pay using egift card (Remaining Balance: @currencyCode @amount)' => [
         'ar' => 'Pay using egift card (Remaining Balance: @currencyCode @amount)',
         'context' => 'egift',
@@ -251,8 +259,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Linked card has 0 Balance please use another payment method to complete purchase',
         'context' => 'egift',
       ],
-
-
     ],
   ];
 
