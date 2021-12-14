@@ -13,17 +13,20 @@ class WishlistButton extends React.Component {
     // Set the products status in state.
     // true: if sku exist in wishlist,
     // false: default, if sku doesn't exist in wishlist.
+    // Setting variant selected for current variant.
+    // Options are selected attribute options for default product.
     this.state = {
       addedInWishList: false,
       skuCode: props.skuCode ? props.skuCode : props.sku,
       variantSelected: props.variantSelected ? props.variantSelected : null,
       options: props.options ? props.options : null,
+      title: props.title ? props.title : '',
     };
   }
 
   componentDidMount = () => {
-    const { skuCode } = this.state;
-    const { context } = this.props;
+    const { skuCode, variantSelected } = this.state;
+    const { context, sku } = this.props;
     const { configurableCombinations } = drupalSettings;
     // @todo: we need to listen wishlist load event that
     // will trigger from header wishlist component after
@@ -35,8 +38,19 @@ class WishlistButton extends React.Component {
       this.updateWishListStatus(true);
     }
 
-    if (context !== 'productDrawer' && configurableCombinations) {
-      this.getSelectedOptions(configurableCombinations);
+    // We pass options directly for plp product drawer
+    // So we only need to get options for pdp layouts
+    // Also, check if it is configurable product.
+    if (context !== 'productDrawer' && configurableCombinations
+        && variantSelected !== null) {
+      this.getSelectedOptions(variantSelected, configurableCombinations);
+    }
+    // Set title for simple sku product on page load.
+    if (configurableCombinations === undefined && context === 'pdp') {
+      const { productInfo } = drupalSettings;
+      this.setState({
+        title: productInfo[sku].cart_title,
+      });
     }
 
     // Rendering wishlist button as per sku variant info.
@@ -52,9 +66,8 @@ class WishlistButton extends React.Component {
    * @param {bool} configurableCombinations
    *  Contains configurable options for grouped product.
    */
-  getSelectedOptions = (configurableCombinations) => {
+  getSelectedOptions = (variantSelected, configurableCombinations) => {
     const { sku } = this.props;
-    const { variantSelected } = this.state;
     if (configurableCombinations[sku].bySku[variantSelected]) {
       this.setState({
         options: configurableCombinations[sku].bySku[variantSelected],
@@ -78,31 +91,23 @@ class WishlistButton extends React.Component {
   }
 
   /**
-   * Fetch product title for main sku or variant selected.
-   */
-  getProductTitle = (currentSku, variantSku, variants, productInfo) => {
-    const { sku } = this.props;
-    if (productInfo[currentSku]) {
-      return productInfo[currentSku].cart_title;
-    } if (productInfo[sku] && variants !== null) {
-      return variants[variantSku].cart_title;
-    }
-    return '';
-  }
-
-  /**
    * Add or remove product from the wishlist.
    */
   toggleWishlist = () => {
-    const { addedInWishList, skuCode, options } = this.state;
-    const { title, sku } = this.props;
+    const {
+      addedInWishList, skuCode, options, title,
+    } = this.state;
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
       removeProductFromWishList(skuCode, this.updateWishListStatus);
       return;
     }
 
-    const productData = { sku, title, options };
+    const productData = {
+      sku: skuCode,
+      title,
+      options,
+    };
     addProductToWishList(productData, this.updateWishListStatus);
   }
 
@@ -112,11 +117,18 @@ class WishlistButton extends React.Component {
   updateProductInfoData = (e) => {
     e.preventDefault();
     if (e.detail && e.detail.data.sku && e.detail.data.variantSelected) {
+      const { configurableCombinations } = drupalSettings;
       this.setState({
         skuCode: e.detail.data.sku,
         variantSelected: e.detail.data.variantSelected,
+        title: e.detail.data.title,
       }, () => {
+        // Update wishlist button status for selected variant.
         this.updateWishListStatus(isProductExistInWishList(e.detail.data.sku));
+        // Get selected attribute options for selected variant.
+        if (configurableCombinations && e.detail.data.variantSelected) {
+          this.getSelectedOptions(e.detail.data.variantSelected, configurableCombinations);
+        }
       });
     }
   }

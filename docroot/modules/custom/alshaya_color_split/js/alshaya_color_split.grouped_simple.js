@@ -50,6 +50,8 @@
             data: {
               viewMode,
               sku: $(this).val(),
+              variantSelected: $(this).val(),
+              title: variantInfo.cart_title,
             }
           }
         });

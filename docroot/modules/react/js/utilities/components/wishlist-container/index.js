@@ -15,6 +15,8 @@ function WishlistContainer(props) {
     sku,
     format,
     title,
+    options,
+    variantSelected,
   } = props;
 
   // Lazy load wishlist button component.
@@ -30,6 +32,8 @@ function WishlistContainer(props) {
           skuCode={skuCode}
           sku={sku}
           title={title}
+          options={options}
+          variantSelected={variantSelected}
         />
       </Suspense>
     </EmptyErrorBoundary>
