@@ -9,7 +9,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
-import dispatchCustomEvent from '../../utilities/events';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -85,9 +85,9 @@ export default class ValidEgiftCard extends React.Component {
             if (redemptionResponse instanceof Promise) {
               redemptionResponse.then((res) => {
                 if (res.error === undefined && res.data !== undefined && res.status === 200) {
-                  const apiData = window.commerceBackend.refreshCart({});
-                  if (apiData instanceof Promise) {
-                    apiData.then((data) => {
+                  const cartData = window.commerceBackend.getCart(true);
+                  if (cartData instanceof Promise) {
+                    cartData.then((data) => {
                       if (data.data !== undefined && data.data.error === undefined) {
                         if (data.status === 200) {
                           // Update Egift card line item.
@@ -191,9 +191,9 @@ export default class ValidEgiftCard extends React.Component {
               amount: updateAmount,
               open: false,
             });
-            const apiData = window.commerceBackend.refreshCart({});
-            if (apiData instanceof Promise) {
-              apiData.then((data) => {
+            const cartData = window.commerceBackend.getCart(true);
+            if (cartData instanceof Promise) {
+              cartData.then((data) => {
                 if (data.data !== undefined && data.data.error === undefined) {
                   if (data.status === 200) {
                     // Update Egift card line item.
