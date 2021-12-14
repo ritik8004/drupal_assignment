@@ -1,3 +1,5 @@
+import { hasValue } from './conditionsUtility';
+
 /**
  * Helper function to check if Express delivery is enabled.
  */
@@ -31,8 +33,10 @@ const checkShippingMethodsStatus = (shippingMethods) => {
   let count = 0;
   if (typeof shippingMethods !== 'undefined') {
     shippingMethods.forEach((shippingMethod) => {
-      if ((shippingMethod.carrier_code === 'SAMEDAY') || (shippingMethod.carrier_code === 'EXPRESS')) {
-        count += 1;
+      if (shippingMethod.available !== 'undefined' && shippingMethod.available) {
+        if ((shippingMethod.carrier_code === 'SAMEDAY') || (shippingMethod.carrier_code === 'EXPRESS')) {
+          count += 1;
+        }
       }
     });
     if (count > 0) {
@@ -49,17 +53,15 @@ const checkShippingMethodsStatus = (shippingMethods) => {
  */
 const checkAreaAvailabilityStatusOnCart = (cartShippingMethods) => {
   let show = true;
-  if (typeof cartShippingMethods !== 'undefined') {
+  if (typeof cartShippingMethods !== 'undefined' && !hasValue(cartShippingMethods.error)) {
     cartShippingMethods.forEach((cartShippingMethodsList) => {
       const shippingMethods = cartShippingMethodsList.applicable_shipping_methods;
       const status = checkShippingMethodsStatus(shippingMethods);
-      if (status !== true) {
+      if (status === false) {
         show = false;
       }
     });
-    if (show === false) {
-      return show;
-    }
+    return show;
   }
   return true;
 };

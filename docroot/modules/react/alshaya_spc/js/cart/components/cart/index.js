@@ -37,6 +37,7 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import dispatchCustomEvent from '../../../utilities/events';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -147,6 +148,9 @@ export default class Cart extends React.Component {
           countAsPageview: false,
         });
       }
+      // Event to trigger to Show Delivery Area Select if express delivery enabled.
+      const { currentArea } = this.state;
+      dispatchCustomEvent('displayShippingMethods', currentArea);
     }, false);
 
     // Event handles cart message update.
@@ -164,8 +168,6 @@ export default class Cart extends React.Component {
     // Show labels for delivery methods if express delivery enabled.
     if (isExpressDeliveryEnabled()) {
       document.addEventListener('displayShippingMethods', this.displayShippingMethods, false);
-      document.addEventListener('refreshCart', this.displayShippingMethods, false);
-      // document.addEventListener('refreshCart', this.showDeliveryArea, false);
     }
 
     // Display message from cookies.
@@ -238,7 +240,9 @@ export default class Cart extends React.Component {
   showDeliveryArea = () => {
     // Check if SDD/ED not available for any product.
     const { cartShippingMethods } = this.state;
-    if (cartShippingMethods !== null && checkAreaAvailabilityStatusOnCart(cartShippingMethods)) {
+    if (!hasValue(cartShippingMethods.error)
+      && cartShippingMethods !== null
+      && checkAreaAvailabilityStatusOnCart(cartShippingMethods)) {
       this.setState({
         showAreaAvailabilityStatusOnCart: true,
       });
@@ -285,7 +289,6 @@ export default class Cart extends React.Component {
           this.setState({
             cartShippingMethods: response,
           });
-          // this.showDeliveryArea();
         }
         this.showDeliveryArea();
         removeFullScreenLoader();
