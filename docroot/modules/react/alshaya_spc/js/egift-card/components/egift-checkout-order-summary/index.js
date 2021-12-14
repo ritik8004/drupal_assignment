@@ -21,12 +21,12 @@ const EgiftCheckoutOrderSummary = (props) => {
     <div className="egift-order-summary">
       <TotalLineItem
         name="paid-with-egift"
-        title={Drupal.t('Paid With eGfit card')}
+        title={Drupal.t('Paid With eGfit card', {}, { context: 'egift' })}
         value={egiftRedeemedAmount}
       />
       <TotalLineItem
         name="balance-payable"
-        title={Drupal.t('Balance Payable')}
+        title={Drupal.t('Balance Payable', {}, { context: 'egift' })}
         value={eGiftbalancePayable}
         showZeroValue
       />
