@@ -158,22 +158,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     const { linkedEgiftCardNumber, egiftCardBalance } = this.state;
     const { cart } = this.props;
     if (e.target.checked === true) {
-      // Calculate the remaining amount based on cart value.
-      // @todo For remaining balance we will use some key from cart only and
-      // no calculation on FE;
-      const postData = {
-        redeem_points: {
-          action: 'set_points',
-          quote_id: cart.cart.cart_id_int,
-          amount: cart.cart.totals.base_grand_total,
-          cardNumber: linkedEgiftCardNumber,
-          payment_method: 'hps_payment',
-          card_type: 'linked',
-        },
-      };
       showFullScreenLoader();
       // Perform redemption by calling the redemption API.
-      const redemptionResponse = callEgiftApi('eGiftRedemption', 'POST', postData);
+      const redemptionResponse = performRedemption(cart.cart.cart_id_int, cart.cart.totals.base_grand_total, linkedEgiftCardNumber, 'linked');
       if (redemptionResponse instanceof Promise) {
         redemptionResponse.then((res) => {
           // Remove the loader as response is available.
@@ -205,8 +192,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             }
             if (res.status === 200 && res.data.response_type === false) {
               logger.error('Error while calling the eGiftRedemption. Action: @action CardNumber: @cardNumber Response: @response', {
-                '@action': postData.redeem_points.action,
-                '@cardNumber': postData.redeem_points.cardNumber,
+                '@action': 'set_points',
+                '@cardNumber': linkedEgiftCardNumber,
                 '@response': res.data.response_message,
               });
               this.setState({
