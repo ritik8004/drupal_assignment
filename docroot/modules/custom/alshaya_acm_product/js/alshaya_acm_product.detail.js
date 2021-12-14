@@ -131,6 +131,23 @@
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          var parentSku = variantInfo.parent_sku;
+          var title = variantInfo.cart_title;
+
+          // Trigger an event on variant select.
+          // Only considers variant when url is changed.
+          var currentSelectedVariantEvent = new CustomEvent('onSkuVariantSelect', {
+            bubbles: true,
+            detail: {
+              data: {
+                viewMode,
+                sku: parentSku,
+                variantSelected: selected,
+                title,
+              }
+            }
+          });
+          document.dispatchEvent(currentSelectedVariantEvent);
 
           if (typeof variantInfo === 'undefined') {
             return;
