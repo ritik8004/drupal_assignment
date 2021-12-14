@@ -83,6 +83,7 @@ class WishListHelper {
       'localStorageExpirationForGuest' => $alshaya_wishlist_config->get('local_storage_expiration_guest'),
       'localStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('local_storage_expiration_logged_in'),
       'removeAfterAddtocart' => $alshaya_wishlist_config->get('remove_after_addtocart'),
+      'enabledShare' => $alshaya_wishlist_config->get('enabled_share'),
       'shareEmailSubject' => $this->tokenManager->replace($alshaya_wishlist_config->get('email_subject')) ?? '',
       'shareEmailMessage' => $this->tokenManager->replace($alshaya_wishlist_config->get('email_template.value')) ?? '',
     ];
