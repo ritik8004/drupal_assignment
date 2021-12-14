@@ -15,9 +15,9 @@ export default class SharePopup extends React.Component {
    * Close the modal with the parent state change.
    */
   closeModal = () => {
-    const { closeWishlistModal } = this.props;
+    const { closeWishlistShareModal } = this.props;
     // If user simply clicks on close, we pass false as response.
-    closeWishlistModal(false);
+    closeWishlistShareModal(false);
   }
 
   /**
@@ -68,7 +68,7 @@ export default class SharePopup extends React.Component {
                 className="email-share-link"
                 onClick={(e) => this.emailClickHandler(e)}
               >
-                {Drupal.t('Email')}
+                {Drupal.t('Email', {}, { context: 'wishlist' })}
               </button>
               {copyLinkStatus
                 ? (

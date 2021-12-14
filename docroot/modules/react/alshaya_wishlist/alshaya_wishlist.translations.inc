@@ -86,5 +86,9 @@ function _alshaya_wishlist_translations() {
       'ar' => 'تم نسخ الرابط',
       'context' => 'wishlist',
     ],
+    'Email' => [
+      'ar' => 'البريد الإلكتروني',
+      'context' => 'wishlist',
+    ],
   ];
 }
