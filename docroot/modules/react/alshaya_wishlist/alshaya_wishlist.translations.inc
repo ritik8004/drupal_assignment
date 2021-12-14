@@ -66,5 +66,25 @@ function _alshaya_wishlist_translations() {
       'ar' => 'انتقل إلى السلة',
       'context' => 'wishlist',
     ],
+    'Share' => [
+      'ar' => 'إرسال',
+      'context' => 'wishlist',
+    ],
+    'Share Your List' => [
+      'ar' => 'شارك قائمتك',
+      'context' => 'wishlist',
+    ],
+    'Share all your favourites with friends and family.' => [
+      'ar' => 'شارك كل ما تفضله مع الأصدقاء والعائلة.',
+      'context' => 'wishlist',
+    ],
+    'Copy Link' => [
+      'ar' => 'نسخ الوصلة',
+      'context' => 'wishlist',
+    ],
+    'Link Copied' => [
+      'ar' => 'تم نسخ الرابط',
+      'context' => 'wishlist',
+    ],
   ];
 }

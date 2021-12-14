@@ -66,6 +66,13 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#title' => $this->t('Share your wishlist configurations'),
     ];
 
+    $form['alshaya_wishlist']['share']['enabled_share'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Wishlist Share'),
+      '#description' => $this->t('Switch to enable or disable Wishlist share feature.'),
+      '#default_value' => $wishlist_config->get('enabled_share'),
+    ];
+
     $form['alshaya_wishlist']['share']['email_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('E-Mail Subject'),
@@ -80,6 +87,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#allowed_formats' => ['mail_text'],
       '#title' => $this->t('E-Mail Template'),
       '#default_value' => $wishlist_config->get('email_template.value') ?? '',
+      '#required' => TRUE,
     ];
 
     // Add the token tree UI.
@@ -104,6 +112,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       ->set('wishlist_label', $form_state->getValue('wishlist_label'))
       ->set('email_subject', $form_state->getValue('email_subject'))
       ->set('email_template', $form_state->getValue('email_template'))
+      ->set('enabled_share', $form_state->getValue('enabled_share'))
       ->save();
 
     parent::submitForm($form, $form_state);
