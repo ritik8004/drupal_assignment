@@ -279,6 +279,8 @@ const PdpLayout = () => {
             context="magazinev2"
             position="top-right"
             format="icon"
+            title={title}
+            variantSelected={variant}
           />
           <PdpDescription
             skuCode={skuMainCode}

@@ -16,12 +16,15 @@ class WishlistButton extends React.Component {
     this.state = {
       addedInWishList: false,
       skuCode: props.skuCode ? props.skuCode : props.sku,
+      variantSelected: props.variantSelected ? props.variantSelected : null,
+      options: props.options ? props.options : null,
     };
   }
 
   componentDidMount = () => {
     const { skuCode } = this.state;
     const { context } = this.props;
+    const { configurableCombinations } = drupalSettings;
     // @todo: we need to listen wishlist load event that
     // will trigger from header wishlist component after
     // wishlist data are fetched from MDC on page load
@@ -32,12 +35,32 @@ class WishlistButton extends React.Component {
       this.updateWishListStatus(true);
     }
 
+    if (context !== 'productDrawer' && configurableCombinations) {
+      this.getSelectedOptions(configurableCombinations);
+    }
+
     // Rendering wishlist button as per sku variant info.
     // Event listener is not required for new pdp.
     if (context !== 'magazinev2') {
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
     }
   };
+
+  /**
+   * This will update the selected options state of product.
+   *
+   * @param {bool} configurableCombinations
+   *  Contains configurable options for grouped product.
+   */
+  getSelectedOptions = (configurableCombinations) => {
+    const { sku } = this.props;
+    const { variantSelected } = this.state;
+    if (configurableCombinations[sku].bySku[variantSelected]) {
+      this.setState({
+        options: configurableCombinations[sku].bySku[variantSelected],
+      });
+    }
+  }
 
   /**
    * This will update the addedInWishList state of product.
@@ -52,74 +75,6 @@ class WishlistButton extends React.Component {
         addedInWishList: status,
       });
     }
-  }
-
-  /**
-   * Process selected product attributes and save into storage.
-   */
-  processProductData = () => {
-    let variants = null;
-    const dataObj = {};
-    const { configurableCombinations } = drupalSettings;
-    const { context, sku } = this.props;
-    const options = [];
-    let currentSku = sku;
-    const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
-    const productInfo = drupalSettings[productKey];
-    let form = null;
-    let variantSku = '';
-
-    // Get sku base form element from page html.
-    // Except new pdp magazine v2 layouts.
-    if (context !== 'magazinev2') {
-      const elementSelector = context === 'pdp' ? '.wishlist-pdp-full' : `.wishlist-pdp-${context}`;
-      // For matchback, get html content from data attribute
-      const selectedEelement = context === 'matchback'
-        ? document.querySelector(`[data-matchback-sku="${sku}"]`)
-        : document.querySelector(elementSelector);
-      // Render sku base form for all layouts.
-      form = selectedEelement !== null
-        ? selectedEelement.closest('article').querySelector('.sku-base-form')
-        : null;
-      if (form !== null) {
-        // Get variant sku from selected variant attribute.
-        variantSku = form.querySelector('[name="selected_variant_sku"]').value;
-      }
-    } else {
-      variantSku = document.getElementById('pdp-add-to-cart-form-main').getAttribute('variantselected');
-    }
-
-    // For configurable skus, load attribute options.
-    if (configurableCombinations && configurableCombinations[sku]) {
-      const attributes = configurableCombinations[sku].configurables;
-      Object.keys(attributes).forEach((key) => {
-        // Skipping the pseudo attributes.
-        if (drupalSettings.psudo_attribute === undefined
-          || drupalSettings.psudo_attribute !== attributes[key].attribute_id) {
-          // Getting active option value from html selector of pdp.
-          // Html selectors are different for magazine v2.
-          const option = {
-            option_id: attributes[key].code,
-            option_value: context === 'magazinev2'
-              ? document.querySelector(`#pdp-add-to-cart-form-main #${key}`).querySelectorAll('.active')[0].value
-              : form.querySelector(`[data-configurable-code="${key}"]`).value,
-          };
-          options.push(option);
-        }
-      });
-      if (productInfo[sku] && productInfo[sku].variants) {
-        variants = productInfo[sku].variants;
-        currentSku = productInfo[sku].variants[variantSku].parent_sku;
-      }
-    } else if (productInfo[sku] && productInfo[sku].group) {
-      currentSku = variantSku;
-      variants = productInfo[sku].group;
-    }
-    // Save required product attributes and return.
-    dataObj.sku = currentSku;
-    dataObj.title = this.getProductTitle(currentSku, variantSku, variants, productInfo);
-    dataObj.options = options;
-    return dataObj;
   }
 
   /**
@@ -139,26 +94,16 @@ class WishlistButton extends React.Component {
    * Add or remove product from the wishlist.
    */
   toggleWishlist = () => {
-    const { addedInWishList, skuCode } = this.state;
-    const { title, context } = this.props;
-    let productData = {};
+    const { addedInWishList, skuCode, options } = this.state;
+    const { title, sku } = this.props;
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
       removeProductFromWishList(skuCode, this.updateWishListStatus);
       return;
     }
-    const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback'];
-    if (viewModes.includes(context)) {
-      productData = this.processProductData();
-    } else {
-      productData = {
-        sku: skuCode,
-        title,
-      };
-    }
-    if (Object.keys(productData).length !== 0) {
-      addProductToWishList(productData, this.updateWishListStatus);
-    }
+
+    const productData = { sku, title, options };
+    addProductToWishList(productData, this.updateWishListStatus);
   }
 
   /**
@@ -166,12 +111,12 @@ class WishlistButton extends React.Component {
    */
   updateProductInfoData = (e) => {
     e.preventDefault();
-    if (e.detail && e.detail.data.sku) {
-      const variantSku = e.detail.data.sku;
+    if (e.detail && e.detail.data.sku && e.detail.data.variantSelected) {
       this.setState({
-        skuCode: variantSku,
+        skuCode: e.detail.data.sku,
+        variantSelected: e.detail.data.variantSelected,
       }, () => {
-        this.updateWishListStatus(isProductExistInWishList(variantSku));
+        this.updateWishListStatus(isProductExistInWishList(e.detail.data.sku));
       });
     }
   }
@@ -189,7 +134,7 @@ class WishlistButton extends React.Component {
     let buttonText = addedInWishList ? 'Remove' : 'Add to @wishlist_label';
 
     // Wishlist text for PDP layouts.
-    const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback'];
+    const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback', 'productDrawer'];
     if (viewModes.includes(context)) {
       buttonText = addedInWishList ? 'Added to @wishlist_label' : 'Add to @wishlist_label';
     }

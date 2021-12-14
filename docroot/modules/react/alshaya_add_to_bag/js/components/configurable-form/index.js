@@ -18,6 +18,7 @@ import SizeGuide from '../size-guide';
 import ErrorMessage from '../error-message';
 import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
 import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
+import WishlistContainer from '../../../../js/utilities/components/wishlist-container';
 
 export default class ConfigurableForm extends React.Component {
   constructor(props) {
@@ -285,6 +286,7 @@ export default class ConfigurableForm extends React.Component {
       selectedVariant,
       productData,
       extraInfo,
+      parentSku,
     } = this.props;
     const configurableAttributes = productData.configurable_attributes;
     const { formAttributeValues, quantity, errorMessage } = this.state;
@@ -409,6 +411,16 @@ export default class ConfigurableForm extends React.Component {
               {addToCartText}
             </button>
           </div>
+          {/* Here skuMainCode is parent sku of variant selected */}
+          <WishlistContainer
+            sku={sku}
+            skuCode={parentSku}
+            context="productDrawer"
+            position="centre"
+            format="link"
+            title={productData.title}
+            options={formAttributeValues}
+          />
         </form>
       </>
     );
