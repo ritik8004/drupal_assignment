@@ -155,7 +155,7 @@ export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardTy
       card_number: egiftCardNumber,
       payment_method: 'hps_payment',
       card_type: cardType,
-      email: 'vasanthkumaar.a@gmail.com',
+      email: drupalSettings.userDetails.userEmailID,
     },
   };
 
