@@ -12,23 +12,30 @@ namespace Drupal\alshaya_pdp_pretty_path\Service;
 class AlshayaPdpPrettyPathHelper {
 
   /**
-   * Get Overridden URL.
+   * Get swatch URLs.
    *
-   * @param string $url
-   *   PDP current url.
-   * @param string $attribute_code
-   *   Attribute to pretty path.
-   * @param string $attribute_value
-   *   Attribute value to pretty path.
+   * @param array $object
+   *   Algolia object.
+   * @param array $swatch_attributes
+   *   List of swatch attributes.
    *
-   * @return string
-   *   New URL.
+   * @return array
+   *   Swatch URLs.
    */
-  public function overridePdpUrl($url, $attribute_code, $attribute_value) {
-    $prefix = '/-' . $attribute_code . '-' . $attribute_value;
+  public function prepareSwatchUrls(array $object, array $swatch_attributes) {
+    $swatch_urls = [];
     $suffix = '.html';
+    foreach ($swatch_attributes as $attribute) {
+      $attribute_values = $object['attr_' . $attribute];
+      if (!empty($attribute_values)) {
+        foreach ($object['swatches'] as $value) {
+          $prefix = '/-' . $attribute . '-' . preg_replace('/[\s]/', '_', strtolower($value['display_label']));
+          $swatch_urls[$value['child_id']] = str_replace($suffix, $prefix . $suffix, $object['url']);
+        }
+      }
+    }
 
-    return str_replace($suffix, $prefix . $suffix, $url);
+    return $swatch_urls;
   }
 
 }

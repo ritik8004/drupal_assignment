@@ -1,8 +1,3 @@
 services:
   alshaya_pdp_pretty_path.helper:
     class: Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper
-  alshaya_pdp_pretty_path.path_processor:
-    class: Drupal\alshaya_pdp_pretty_path\PathProcessor\PathProcessorPdpPrettyPath
-    arguments: ['@current_route_match', '@path_alias.manager']
-    tags:
-      - { name: path_processor_outbound, priority: 500 }

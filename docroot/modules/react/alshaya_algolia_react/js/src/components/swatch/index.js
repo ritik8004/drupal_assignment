@@ -1,8 +1,12 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
-const Swatch = ({ swatch, url }) => {
-  const selectedImage = `${url}?selected=${swatch.child_id}`;
+const Swatch = ({ swatch, url, swatchUrls }) => {
+  let selectedImage = `${url}?selected=${swatch.child_id}`;
+  if (swatchUrls !== undefined) {
+    selectedImage = swatchUrls[swatch.child_id];
+  }
+
   return (
     <a href={selectedImage}>
       <span className="swatch-block swatch-image">
@@ -14,7 +18,7 @@ const Swatch = ({ swatch, url }) => {
   );
 };
 
-const Swatches = ({ swatches, url }) => {
+const Swatches = ({ swatches, url, swatchUrls }) => {
   if (typeof swatches === 'undefined') {
     return null;
   }
@@ -47,7 +51,7 @@ const Swatches = ({ swatches, url }) => {
     swatcheContainer = (
       <div className="swatches">
         {swatches.slice(0, limit).map(
-          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} />,
+          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} swatchUrls={swatchUrls} />,
         )}
         {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={url}>{swatchMoreText}</a> : null}
       </div>
