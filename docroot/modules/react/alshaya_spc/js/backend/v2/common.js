@@ -360,9 +360,17 @@ const getProcessedCartData = async (cartData) => {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
 
-  // If egift card enabled, add the hps_redeemed_amount in cart.
-  if (isEgiftCardEnabled() && hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
-    data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
+  // If egift card enabled, add the hps_redeemed_amount and balance_payble in cart.
+  if (isEgiftCardEnabled()) {
+    if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
+      data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
+    }
+    if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
+      data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
+    }
+    if (typeof cartData.totals.extension_attributes.balance_payble !== 'undefined') {
+      data.totals.eGiftbalancePayable = cartData.totals.extension_attributes.balance_payble;
+    }
   }
 
   if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
