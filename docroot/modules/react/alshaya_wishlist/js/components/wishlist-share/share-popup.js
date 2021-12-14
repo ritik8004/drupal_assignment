@@ -60,7 +60,7 @@ export default class SharePopup extends React.Component {
             </a>
             <div className="header">{Drupal.t('Share Your List', {}, { context: 'wishlist' })}</div>
             <div className="content">
-              {Drupal.t('Share all your faviourites with friends and family.')}
+              {Drupal.t('Share all your favourites with friends and family.')}
             </div>
             <div className="actions">
               <button
