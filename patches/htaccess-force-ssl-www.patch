@@ -1,0 +1,13 @@
+diff --git a/.htaccess b/.htaccess
+index a9d3efdf2ff..9ef712e3990 100644
+--- a/.htaccess
++++ b/.htaccess
+@@ -137,7 +137,7 @@ AddOutputFilterByType DEFLATE application/x-font-ttf
+   RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
+   # Don't redirect on all *.cosstores.com domains.
+   RewriteCond %{HTTP_HOST} !\.cosstores\.com$ [NC]
+-  RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
++  RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
+   # VirtualDocumentRoot and the rewrite rules are not working properly.
