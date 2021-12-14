@@ -57,10 +57,11 @@
   }
 
   .l-container {
-    @include container(77rem);
+    @include container(74rem);
 
-    .path--cart & {
-      @include container(77rem);
+    .path--cart &,
+    .path--checkout & {
+      @include container(64rem);
     }
   }
 }
