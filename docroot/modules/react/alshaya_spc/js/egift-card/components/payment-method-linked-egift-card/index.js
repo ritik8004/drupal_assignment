@@ -90,7 +90,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             });
             const redeemedAmount = cart.totals.extension_attributes.hps_redeemed_amount;
             const cartTotal = cart.cart.totals.base_grand_total;
-            const redemptionType = cart.totals.extension_attributes.hps_redeemed_amount;
+            const redemptionType = cart.totals.extension_attributes.hps_redemption_type;
             // Check if user has already performed redemption on page load.
             if (redeemedAmount > 0 && redemptionType === 'linked') {
               if (currentBalance < cartTotal) {
