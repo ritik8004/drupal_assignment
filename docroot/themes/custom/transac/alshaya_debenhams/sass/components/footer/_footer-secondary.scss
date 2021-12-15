@@ -59,8 +59,12 @@
   .l-container {
     @include container(74rem);
 
-    .path--cart &,
-    .path--checkout & {
+    .path--cart & {
+      @include container(74rem);
+    }
+
+    .path--checkout &,
+    .alias--cart-login & {
       @include container(64rem);
     }
   }
