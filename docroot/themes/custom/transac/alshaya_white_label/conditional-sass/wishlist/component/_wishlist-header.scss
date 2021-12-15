@@ -74,6 +74,10 @@ body.wishlist-enabled {
         &.register {
           border: 1px solid $wishlist-button-border;
           margin-#{$left}: 0.875rem;
+
+          &:hover {
+            color: inherit;
+          }
         }
       }
     }

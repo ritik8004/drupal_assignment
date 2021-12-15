@@ -1,5 +1,5 @@
 .wishlist-enabled {
-  &.nodetype--acq_product {
+  &.nodetype--acq_product:not(.magazine-layout) {
     .content__main {
       position: relative;
     }
@@ -18,5 +18,21 @@
         }
       }
     }
+  }
+
+  .wishlist-pdp-modal {
+    position: absolute;
+    top: 0;
+    #{$right}: 1.25rem;
+  }
+
+  .cross-sell-product-component-left {
+    position: relative;
+  }
+
+  .wishlist-pdp-matchback {
+    position: absolute;
+    top: 0.3125rem;
+    #{$right}: 0.3125rem;
   }
 }

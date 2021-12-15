@@ -416,8 +416,8 @@ export default class ConfigurableForm extends React.Component {
             sku={sku}
             skuCode={parentSku}
             context="productDrawer"
-            position="centre"
-            format="link"
+            position="top"
+            format="icon"
             title={productData.title}
             options={formAttributeValues}
           />
