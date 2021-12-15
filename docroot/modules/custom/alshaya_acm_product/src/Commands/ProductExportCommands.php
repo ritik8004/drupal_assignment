@@ -326,10 +326,6 @@ class ProductExportCommands extends DrushCommands {
           // We append "meta_" to the key as it is the requirement for the
           // Magento side import.
           $return["meta_$key"] = $tag['#attributes']['content'];
-
-          if ($key === 'twitter:url') {
-            $return[$key] = self::convertAbsoluteToRelativeUrl($tag['#attributes']['content'], $node->language()->getId());
-          }
           break;
       }
     }
