@@ -3,15 +3,12 @@ import EgiftCardThumbnail from '../egift-card-thumbnail';
 
 const EgiftsCardList = (props) => {
   const { items, selected, handleEgiftSelect } = props;
-  const style = {
-    display: 'flex-grow',
-  };
 
   return (
-    <div className="egift-list-wrap" style={style}>
-      <span className="selected-card-name">
+    <div className="egift-list-wrapper">
+      <div className="selected-card-name subtitle-text">
         {selected.name}
-      </span>
+      </div>
       <ul>
         {
           items.map((item) => (

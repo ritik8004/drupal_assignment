@@ -1,0 +1,150 @@
+#egift-card-purchase-wrapper {
+  @include breakpoint($tablet) {
+    padding: 0 2.5rem;
+  }
+
+  .step-title {
+    font-family: $alshaya-bold;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+
+    @include breakpoint($tablet) {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .step-wrapper {
+    .step-title {
+      font-family: $alshaya-bold;
+      font-size: 1.25rem;
+      line-height: 1.25rem;
+      margin: 0;
+    }
+  }
+
+  .step-one-wrapper {
+    margin-top: 1.5rem;
+
+    @include breakpoint($tablet) {
+      display: flex;
+    }
+  }
+
+  .step-two-wrapper {
+    padding-top: 1.5rem;
+    margin-top: 2.0625rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #dadada;
+    border-top: 1px solid #dadada;
+
+    &:not(.active) {
+      .step-title {
+        color: #d0d0d0;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      padding-bottom: 0.625rem;
+    }
+
+    .step-two-fields {
+      margin-top: 40px;
+    }
+
+    .egift-purchase-input-title {
+      font-family: $alshaya-bold;
+      font-size: 1rem;
+      line-height: 1.25rem;
+    }
+  }
+
+  .hero-image-wrapper,
+  .egift-card-purchase-config-wrapper {
+    @include breakpoint($tablet) {
+      width: 50%;
+    }
+  }
+
+  .hero-image-wrapper {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .egift-purchase-input-field-container {
+    margin-bottom: 2.25rem;
+
+    @include breakpoint($tablet) {
+      display: flex;
+      margin-bottom: 3.125rem;
+    }
+
+    .egift-purchase-input-title {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.375rem;
+      }
+
+      @include breakpoint($tablet) {
+        width: 11.625rem;
+        margin-#{$right}: 1.625rem;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .action-buttons {
+    @include breakpoint($only-mobile) {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @include breakpoint($tablet) {
+      text-align: $right;
+    }
+
+    button[type="submit"] {
+      font-family: $alshaya-bold;
+      font-size: 0.8125rem;
+      background: $primary_btn_bg;
+      border-radius: 0;
+      color: $primary_btn_text;
+      border: 1px solid $primary_btn_bg;
+      text-transform: lowercase;
+      padding: 1rem;
+      display: inline-block;
+      height: 3rem;
+      line-height: 1rem;
+
+      &:nth-of-type(1) {
+        margin-#{$right}: 0.75rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 48%;
+      }
+
+      @include breakpoint($tablet) {
+        min-width: 10rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    button[disabled] {
+      color: #707070;
+
+      &.egift-purchase-add-to-cart-button {
+        border-color: #d7d7d7;
+        background: transparent;
+      }
+
+      &.egift-purchase-checkout-button {
+        border-color: #d0d0d0;
+        background: #d0d0d0;
+      }
+    }
+  }
+}

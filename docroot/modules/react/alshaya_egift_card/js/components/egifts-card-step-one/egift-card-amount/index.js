@@ -47,14 +47,14 @@ const EgiftCardAmount = (props) => {
   ));
 
   return (
-    <div className="egift-card-amounts">
-      <p>
+    <div className="egift-card-amount-list-wrapper">
+      <div className="egift-card-amount-list-title subtitle-text">
         {
           Drupal.t('Amount @currencyCode', {
             '@currencyCode': getCurrencyCode(),
           }, { context: 'egift' })
         }
-      </p>
+      </div>
       <ul>
         {listItems}
       </ul>

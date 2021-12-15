@@ -43,24 +43,22 @@ export default class EgiftCardsListStepOne extends React.Component {
     const { items, selectedItem } = this.state;
     const { handleAmountSelect } = this.props;
 
-    const style = {
-      display: 'flex',
-    };
-
     return (
       <>
-        <p className="step-title" style={{ width: '100%' }}>
+        <p className="step-title fadeInUp">
           { Drupal.t('1. Select your style and card amount', {}, { context: 'egift' }) }
         </p>
-        <div className="step-one-wrapper" style={style}>
+        <div className="step-wrapper step-one-wrapper fadeInUp">
           <HeroImage item={selectedItem} />
-          <EgiftsCardList
-            items={items}
-            selected={selectedItem}
-            handleEgiftSelect={this.handleEgiftSelect}
-          />
-          <EgiftCardAmount selected={selectedItem} handleAmountSelect={handleAmountSelect} />
-          <input type="hidden" name="egift-sku" value={selectedItem.sku} />
+          <div className="egift-card-purchase-config-wrapper">
+            <EgiftsCardList
+              items={items}
+              selected={selectedItem}
+              handleEgiftSelect={this.handleEgiftSelect}
+            />
+            <EgiftCardAmount selected={selectedItem} handleAmountSelect={handleAmountSelect} />
+            <input type="hidden" name="egift-sku" value={selectedItem.sku} />
+          </div>
         </div>
       </>
     );
