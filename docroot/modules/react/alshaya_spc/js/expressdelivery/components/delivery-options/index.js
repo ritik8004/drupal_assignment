@@ -1,5 +1,5 @@
 import React from 'react';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isExpressDeliveryEnabled, checkShippingMethodsStatus } from '../../../../../js/utilities/expressDeliveryHelper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import { getCartShippingMethods, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
@@ -91,6 +91,10 @@ export default class DeliveryOptions extends React.Component {
     if (shippingMethods === null) {
       return null;
     }
+    let showCheckAreaAvailability = false;
+    if (shippingMethods !== null && checkShippingMethodsStatus(shippingMethods)) {
+      showCheckAreaAvailability = true;
+    }
 
     return (
       <div className="content express-delivery-detail">
@@ -100,6 +104,7 @@ export default class DeliveryOptions extends React.Component {
         <PdpSelectArea
           getPanelData={this.getPanelData}
           removePanelData={this.removePanelData}
+          showCheckAreaAvailability={showCheckAreaAvailability}
         />
         <div className="select-area-popup-wrapper">
           <SelectAreaPanel
