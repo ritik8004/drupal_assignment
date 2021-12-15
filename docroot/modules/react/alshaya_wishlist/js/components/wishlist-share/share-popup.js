@@ -24,9 +24,9 @@ export default class SharePopup extends React.Component {
    * Handler to copy the share link on clipboard.
    */
   copyShareLink = () => {
+    const { wishlistShareLink } = this.props;
     // Set the copyLinkStatus to true when link is copied.
-    // @todo: change the url with the actual share link.
-    navigator.clipboard.writeText('https://www.google.com/');
+    navigator.clipboard.writeText(wishlistShareLink);
     this.setState({ copyLinkStatus: true });
   }
 
@@ -34,10 +34,18 @@ export default class SharePopup extends React.Component {
    * Handler to open the email client with share link.
    */
   emailClickHandler = (e) => {
-    // Open mailto with window location helper.
-    // @todo: need to replace the share link in the email body text.
-    window.location = `mailto:?subject=${encodeURIComponent(drupalSettings.wishlist.config.shareEmailSubject) || ''}&body=${encodeURIComponent(drupalSettings.wishlist.config.shareEmailMessage) || ''}`;
     e.preventDefault();
+    const { wishlistShareLink } = this.props;
+    const shareEmailSubject = drupalSettings.wishlist.config.shareEmailSubject || '';
+    let shareEmailMessage = drupalSettings.wishlist.config.shareEmailMessage || '';
+
+    // Replace the wishlist share link with placeholder.
+    if (shareEmailMessage) {
+      shareEmailMessage = shareEmailMessage.replace('[alshaya_wishlist:wishlist_share_url]', wishlistShareLink);
+    }
+
+    // Open mailto with window location helper.
+    window.location = `mailto:?subject=${encodeURIComponent(shareEmailSubject)}&body=${encodeURIComponent(shareEmailMessage)}`;
   }
 
   render() {

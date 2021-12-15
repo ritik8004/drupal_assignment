@@ -2,6 +2,7 @@ import React from 'react';
 import ShareIcon from './share-icon';
 import SharePopup from './share-popup';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { getWishlistShareLink } from '../../utilities/wishlist-utils';
 
 class WishlistShare extends React.Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class WishlistShare extends React.Component {
         </button>
         <ConditionalView condition={showSharePopup}>
           <SharePopup
+            wishlistShareLink={getWishlistShareLink()}
             closeWishlistShareModal={this.closeWishlistShareModal}
           />
         </ConditionalView>
