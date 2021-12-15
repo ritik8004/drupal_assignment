@@ -1,6 +1,7 @@
 import React from 'react';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
 import logger from '../../../js/utilities/logger';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Provides the egift card header.
@@ -36,6 +37,7 @@ export const egiftFormElement = ({
   className = '',
   buttonText = '',
   value = '',
+  disabled = false,
 }) => {
   // Separate template based on type.
   let rtnTemplate = '';
@@ -47,6 +49,7 @@ export const egiftFormElement = ({
           id={`egift-${name}`}
           type={type}
           value={Drupal.t(buttonText, {}, { context: 'egift' })}
+          disabled={disabled}
         />
       );
       break;
@@ -59,6 +62,7 @@ export const egiftFormElement = ({
             placeholder={placeholder}
             className={className}
             defaultValue={value}
+            disabled={disabled}
           />
           <div id={`egift_${name}_error`} className="error" />
         </div>
@@ -129,4 +133,63 @@ export const getApiEndpoint = (action, params = {}) => {
 export const callEgiftApi = (action, method, postData, param = {}) => {
   const endpoint = getApiEndpoint(action, param);
   return callMagentoApi(endpoint, method, postData);
+};
+
+/**
+ * Checks if cart has only egift card products or other products as well.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @return {boolean}
+ *   true if it's contains non virtual product else false.
+ */
+export const cartContainsOnlyNonVirtualProduct = (cart) => {
+  // A flag to keep track of the non-virtual products.
+  let isNonVirtual = false;
+  Object.values(cart.items).forEach((item) => {
+    // Return if we have already marked a non virtual product.
+    if (isNonVirtual) {
+      return;
+    }
+    // If there is no product type for the cart item then it's non virtual
+    // product.
+    if ((hasValue(item.product_type) && item.product_type !== 'virtual')
+      || (hasValue(item.isEgiftCard) && !item.isEgiftCard && hasValue(item.product_type))) {
+      isNonVirtual = true;
+    }
+  });
+
+  return isNonVirtual;
+};
+
+/**
+ * Utility function to check if given payment method is unsupported with egift.
+ */
+export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
+  const { notSupportedPaymentMethods } = drupalSettings.egiftCard;
+
+  return paymentMethod in notSupportedPaymentMethods;
+};
+
+/**
+ * Checks if redemptions is performed or not.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @return {boolean}
+ *   true if egift redemption is done by guest else false.
+ */
+export const isEgiftRedemptionDone = (cart) => {
+  if (hasValue(cart.totals)) {
+    const { egiftRedeemedAmount, egiftRedemptionType } = cart.totals;
+
+    if (hasValue(egiftRedeemedAmount)
+      && hasValue(egiftRedemptionType)) {
+      return true;
+    }
+  }
+
+  return false;
 };

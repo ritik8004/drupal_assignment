@@ -1,6 +1,7 @@
 import React from 'react';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../js/utilities/strings';
-import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
+import { egiftCardHeader, egiftFormElement, isEgiftUnsupportedPaymentMethod } from '../../utilities/egift_util';
 
 // Validation function.
 const handleEgiftDetailValidation = (e) => {
@@ -31,6 +32,11 @@ const handleEgiftDetailValidation = (e) => {
 // Handles form submission.
 const handleSubmit = (e, props) => {
   e.preventDefault();
+  // Return if paymethod method is disabled.
+  const { paymentMethod } = props;
+  if (hasValue(paymentMethod) && isEgiftUnsupportedPaymentMethod(paymentMethod)) {
+    return;
+  }
   // Perform validation.
   const valid = handleEgiftDetailValidation(e);
   const { getCode } = props;
@@ -41,20 +47,24 @@ const handleSubmit = (e, props) => {
     // Display inline error message if OTP is not sent.
     if (!status) {
       document.getElementById('egift_getcard_error').innerHTML = Drupal.t('Error while sending OTP, Please try again.', {}, { context: 'egift' });
-
-      return false;
     }
   }
-
-  return true;
 };
 
 // Provies the egift card form.
 const GetEgiftCard = (props) => {
-  const { egiftEmail, egiftCardNumber } = props;
+  const { egiftEmail, egiftCardNumber, redemptionDisabled } = props;
+  // Check if the payment method is supported or not.
+  let additionalClasses = '';
+  if (hasValue(redemptionDisabled)) {
+    // Add `in-active` class if redemptionDisabled property is true.
+    additionalClasses = redemptionDisabled
+      ? `${additionalClasses} in-active`
+      : `${additionalClasses} active`;
+  }
 
   return (
-    <div className="egift-wrapper">
+    <div className={`egift-wrapper ${additionalClasses}`}>
       <div id="egift_getcard_error" className="error" />
       {egiftCardHeader({
         egiftHeading: Drupal.t('Verify eGift Card to redeem from card balance', {}, { context: 'egift' }),
@@ -73,6 +83,7 @@ const GetEgiftCard = (props) => {
             placeholder: 'eGift Card Number',
             className: 'card-number',
             value: egiftCardNumber,
+            disabled: redemptionDisabled,
           })}
           {egiftFormElement({
             type: 'email',
@@ -80,11 +91,13 @@ const GetEgiftCard = (props) => {
             placeholder: 'Email address',
             className: 'email',
             value: egiftEmail,
+            disabled: redemptionDisabled,
           })}
           {egiftFormElement({
             type: 'submit',
             name: 'button',
             buttonText: 'Get Code',
+            disabled: redemptionDisabled,
           })}
         </form>
       </div>

@@ -6,6 +6,8 @@ import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { cartContainsOnlyNonVirtualProduct } from '../../utilities/egift_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -23,7 +25,10 @@ const getPaymentMethods = async () => {
     return null;
   }
 
-  if (!hasValue(cart.data.shipping) || !hasValue(cart.data.shipping.method)) {
+  // This condition should not be validated when egift is enabled.
+  const nonVirtualProductInCart = cartContainsOnlyNonVirtualProduct(cart.data.cart);
+  if (!(isEgiftCardEnabled() && !nonVirtualProductInCart)
+    && (!hasValue(cart.data.shipping) || !hasValue(cart.data.shipping.method))) {
     logger.notice('Shipping method not available, not loading payment methods. CartID: @cartId.', {
       '@cartId': cart.data.id,
     });
