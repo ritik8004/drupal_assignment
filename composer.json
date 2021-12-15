@@ -347,6 +347,9 @@
             },
             "drupal/datalayer": {
                 "Trigger and event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+            },
+            "drupal/config_rewrite": {
+                "Configuration Rewrite module conflicts with s3fs module": "https://www.drupal.org/files/issues/2021-07-20/3203786-4.patch"
             }
         },
         "installer-paths": {
