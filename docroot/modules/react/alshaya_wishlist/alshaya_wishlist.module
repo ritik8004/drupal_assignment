@@ -113,3 +113,20 @@ function alshaya_wishlist_alshaya_add_to_bag_feature_status_alter(bool &$add_to_
 function alshaya_wishlist_preprocess_html(&$variables) {
   $variables['attributes']['class'][] = 'wishlist-enabled';
 }
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_wishlist_alshaya_my_account_links_alter(array &$links) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Add my wishlist links for my account page.
+  if ($wishlist_helper->isWishListEnabled()) {
+    $links['alshaya_wishlist'] = [
+      'text' => t('my @wishlist_label', [
+        '@wishlist_label' => \Drupal::service('token')->replace('[alshaya_wishlist:wishlist_label]'),
+      ], ['context' => 'wishlist']),
+      'route' => 'alshaya_wishlist.users_wishlist',
+      'weight' => 42,
+    ];
+  }
+}
