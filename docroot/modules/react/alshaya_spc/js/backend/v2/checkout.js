@@ -2227,6 +2227,10 @@ window.commerceBackend.placeOrder = async (data) => {
           '@cart': JSON.stringify(cart),
         });
 
+        // Check if the response has error.
+        if (hasValue(response.data.error)) {
+          return { data: response.data };
+        }
         result.error = true;
         result.error_code = 604;
         result.success = false;
