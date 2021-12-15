@@ -251,7 +251,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
   }
 
-  if (result !== null) {
+  if (result && result !== null) {
     // Display loader.
     if (loaderOnUpdates) {
       RcsEventManager.fire('startLoader');
@@ -259,19 +259,21 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = RcsEventManager.fire('rcsUpdateResults', {
-      detail: {
-        result: result,
-        placeholder: placeholder,
-      }
+    result.map(item => {
+      const updateResult = RcsEventManager.fire('rcsUpdateResults', {
+        detail: {
+          result: item,
+          placeholder: placeholder,
+        }
+      });
+
+      return updateResult.detail.result;
     });
 
     // Hide loader.
     if (loaderOnUpdates) {
       RcsEventManager.fire('stopLoader');
     }
-
-    return updateResult.detail.result;
   }
 
   return result;
