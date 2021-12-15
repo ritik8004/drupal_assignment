@@ -1,0 +1,4 @@
+alshaya_js_optimisations.settings:
+  title: 'JS Performance Settings'
+  route_name: alshaya_js_optimisations.settings
+  base_route: system.performance_settings
