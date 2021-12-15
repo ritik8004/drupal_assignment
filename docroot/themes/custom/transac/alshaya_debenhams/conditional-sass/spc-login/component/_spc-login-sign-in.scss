@@ -23,6 +23,14 @@
         font-family: $dh-Juana-semibold;
       }
     }
+
+    .ashaya-spc-login-form {
+      .form-actions {
+        button {
+          height: 2.625rem;
+        }
+      }
+    }
   }
 
   .checkout-login-wrapper {

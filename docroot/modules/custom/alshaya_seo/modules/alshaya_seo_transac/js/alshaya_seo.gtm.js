@@ -21,7 +21,7 @@ const productRecommendationsSuffix = 'pr-';
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+      $('body').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', '.sku-base-form', function (event, variant, code) {
         var product = $(this).closest('[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';

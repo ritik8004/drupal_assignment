@@ -169,6 +169,13 @@ class AlshayaSpcOrderHelper {
   protected $skuImagesHelper;
 
   /**
+   * Spc helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -206,7 +213,9 @@ class AlshayaSpcOrderHelper {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
    * @param \Drupal\alshaya_acm_product\SkuImagesHelper $images_helper
-   *   Sku imagese helper.
+   *   Sku images helper.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Spc helper service.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               AlshayaAddressBookManager $address_book_manager,
@@ -225,7 +234,8 @@ class AlshayaSpcOrderHelper {
                               ConfigFactory $configFactory,
                               StoresFinderUtility $store_finder,
                               RendererInterface $renderer,
-                              SkuImagesHelper $images_helper) {
+                              SkuImagesHelper $images_helper,
+                              AlshayaSpcHelper $spc_helper) {
     $this->moduleHandler = $module_handler;
     $this->addressBookManager = $address_book_manager;
     $this->currentUser = $current_user;
@@ -244,6 +254,7 @@ class AlshayaSpcOrderHelper {
     $this->storeFinder = $store_finder;
     $this->renderer = $renderer;
     $this->skuImagesHelper = $images_helper;
+    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -301,6 +312,30 @@ class AlshayaSpcOrderHelper {
   }
 
   /**
+   * Fetches SKU details required for order confirmation page with V2 backend.
+   *
+   * @return array
+   *   The response containing required SKU data.
+   */
+  private function getSkuDetailsV2(array $item) {
+    $parent_sku = $item['product_type'] === 'configurable'
+      ? $item['extension_attributes']['parent_product_sku']
+      : NULL;
+
+    return [
+      'sku' => $item['sku'],
+      'parentSKU' => $parent_sku,
+      'product_type' => $item['product_type'],
+      'freeItem' => ($item['price_incl_tax'] == 0),
+      'title' => $item['name'],
+      'finalPrice' => $this->skuInfoHelper->formatPriceDisplay((float) $item['price']),
+      'id' => $item['item_id'],
+      // Added quantity of product for checkout olapic pixel.
+      'qtyOrdered' => $item['qty_ordered'],
+    ];
+  }
+
+  /**
    * Responds to GET requests.
    *
    * Returns available delivery method data.
@@ -309,6 +344,10 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
+    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
+      return $this->getSkuDetailsV2($item);
+    }
+
     // We will use this as flag in React to avoid reading from local storage
     // and also avoid doing API call.
     $data['prepared'] = TRUE;

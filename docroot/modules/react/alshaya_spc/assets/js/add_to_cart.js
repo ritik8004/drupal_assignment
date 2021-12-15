@@ -126,7 +126,7 @@
                   productData.options = [];
 
                   // Get the key-value pair of selected option name and value.
-                  $('#configurable_ajax select').each(function () {
+                  $('#configurable_ajax select', closestForm).each(function () {
                     var configLabel = $(this).attr('data-default-title');
                     var configValue = $(this).find('option:selected').text();
                     productData.options.push(configLabel + ": " + configValue);

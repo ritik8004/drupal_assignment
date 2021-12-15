@@ -31,7 +31,7 @@ class CheckoutCartItem extends React.Component {
 
     const parentSKU = item.product_type === 'configurable' ? item.parentSKU : null;
     // Key will be like 'product:en:testsku'
-    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, parentSKU);
+    Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback, { parentSKU });
   }
 
   /**

@@ -58,10 +58,7 @@ class HandlebarsService {
    *   The relative path.
    */
   protected function getRelativePath($uri) {
-    return '/' . str_replace($_SERVER['DOCUMENT_ROOT'] . '/',
-      '',
-      $this->fileSystem->realpath($uri)
-    );
+    return file_url_transform_relative(file_create_url($uri));
   }
 
   /**

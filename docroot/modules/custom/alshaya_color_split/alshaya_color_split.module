@@ -484,17 +484,24 @@ function alshaya_color_split_rcs_placeholders_graphql_query_alter(&$queries) {
 function alshaya_color_split_page_attachments(array &$attachments) {
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  if (!in_array($route_name, ['acq_cart.cart', 'entity.node.canonical'])) {
+
+  if (!in_array($route_name, [
+    'entity.node.canonical',
+    'acq_cart.cart',
+    'alshaya_spc.checkout',
+    'alshaya_spc.checkout.confirmation',
+    ])) {
     return;
   }
+
   if ($route_name === 'entity.node.canonical') {
     $node = $route_match->getParameter('node');
     if ($node->bundle() !== 'rcs_product') {
       return;
     }
+    $attachments['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
   }
 
-  $attachments['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
   $attachments['#attached']['library'][] = 'alshaya_color_split/rcs_grouped_products';
 
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
