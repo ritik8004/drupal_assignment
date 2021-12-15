@@ -165,24 +165,6 @@ export const removeProductFromWishList = (productSku, setWishListStatus) => {
 /**
  * Utility function to prepare product details for wishlist.
  */
-export const prepareProductDetailsForWishList = (productSku) => {
-  // @todo: Need to decide and implement the logic to prepare product data.
-  const productDetails = {
-    sku: productSku,
-    nid: '100',
-    alt: 'Benchwright Console Table',
-    title: 'Benchwright Console Table',
-    original_price: 200,
-    final_price: 150,
-    url: 'https://www.potterybarn.ae/sites/g/files/bndsjb1296/files/styles/product_zoom_medium_606x504/public/media/website/var/assets/GroupProductImages/benchwright-console-table/201824_0225_benchwright-console-table-rustic-mahogany-z.129478.jpg?itok=PCfrTwVf',
-  };
-
-  return productDetails;
-};
-
-/**
- * Utility function to prepare product details for wishlist.
- */
 export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? drupalSettings.wishlist.wishlist_label : '');
 
 /**
@@ -201,4 +183,22 @@ export const isShareWishlistEnabled = () => {
   }
 
   return false;
+};
+
+/**
+ * Helper function to generate the wishlist share link with wishlist data.
+ */
+export const getWishlistShareLink = () => {
+  // Get existing wishlist data from storage.
+  const wishListItems = getWishListData();
+
+  // Return if no existing data found.
+  if (!wishListItems) {
+    return null;
+  }
+
+  // Prepare the share wishlist url if items are available.
+  // @todo: reduce the length of the URL.
+  const shareItemsParams = btoa(JSON.stringify(wishListItems));
+  return Drupal.url.toAbsolute(`wishlist/share?data=${shareItemsParams}`);
 };

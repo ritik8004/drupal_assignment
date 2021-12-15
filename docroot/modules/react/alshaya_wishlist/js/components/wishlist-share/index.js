@@ -2,6 +2,7 @@ import React from 'react';
 import ShareIcon from './share-icon';
 import SharePopup from './share-popup';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { getWishlistShareLink } from '../../utilities/wishlist-utils';
 
 class WishlistShare extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class WishlistShare extends React.Component {
    * To open the wishlist share popup.
    * Popup will show up while clicking on share link.
    */
-  openWishlistModal = () => {
+  openWishListShareModal = () => {
     this.setState({
       showSharePopup: true,
     });
@@ -24,7 +25,7 @@ class WishlistShare extends React.Component {
   /**
    * To close the wishlist share popup.
    */
-  closeWishlistModal = () => {
+  closeWishlistShareModal = () => {
     this.setState({
       showSharePopup: false,
     });
@@ -35,13 +36,14 @@ class WishlistShare extends React.Component {
 
     return (
       <>
-        <button type="button" onClick={this.openWishlistModal}>
+        <button type="button" onClick={this.openWishListShareModal}>
           <span className="text">{Drupal.t('Share', {}, { context: 'wishlist' })}</span>
           <span className="icon"><ShareIcon /></span>
         </button>
         <ConditionalView condition={showSharePopup}>
           <SharePopup
-            closeWishlistModal={this.closeWishlistModal}
+            wishlistShareLink={getWishlistShareLink()}
+            closeWishlistShareModal={this.closeWishlistShareModal}
           />
         </ConditionalView>
       </>

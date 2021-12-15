@@ -108,6 +108,11 @@ class AlshayaMyWishlistController extends ControllerBase {
       'context' => $context,
     ];
 
+    // If context is 'share' wishlist then pass query string data to settings.
+    if ($context == 'share') {
+      // @todo pass the query string encoded skus to drupal settings.
+    }
+
     $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_wishlist', 'inc', 'alshaya_wishlist.static_strings');
 
