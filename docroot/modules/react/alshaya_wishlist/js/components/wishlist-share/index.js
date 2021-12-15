@@ -37,7 +37,7 @@ class WishlistShare extends React.Component {
     return (
       <>
         <button type="button" onClick={this.openWishListShareModal}>
-          <span className="text">{Drupal.t('Share', {}, { context: 'wishlist' })}</span>
+          <span className="text">{Drupal.t('Share All', {}, { context: 'wishlist' })}</span>
           <span className="icon"><ShareIcon /></span>
         </button>
         <ConditionalView condition={showSharePopup}>
