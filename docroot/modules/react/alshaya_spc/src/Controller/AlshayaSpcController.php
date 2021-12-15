@@ -730,10 +730,19 @@ class AlshayaSpcController extends ControllerBase {
       if (in_array($item['sku'], array_keys($productList))) {
         continue;
       }
-      // Populate price and other info from order response data.
-      $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
-      // Calculate the ordered quantity of each sku.
-      $number_of_items += $productList[$item['sku']]['qtyOrdered'];
+      // If its a egift card product.
+      if ($item['is_virtual']) {
+        $productList[$item['item_id']] = $this->egiftCardProductItem($item);
+        // Calculate the ordered quantity of each sku.
+        $number_of_items += $productList[$item['item_id']]['qtyOrdered'];
+      }
+      else {
+        // For Normal Products.
+        // Populate price and other info from order response data.
+        $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
+        // Calculate the ordered quantity of each sku.
+        $number_of_items += $productList[$item['sku']]['qtyOrdered'];
+      }
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -1035,6 +1044,29 @@ class AlshayaSpcController extends ControllerBase {
     $build['#cache']['contexts'][] = 'user';
 
     return $build;
+  }
+
+  /**
+   * Prepare Egift card product item.
+   *
+   * @param array $item
+   *   Item array.
+   *
+   * @return array
+   *   Item array updated with Egift card product.
+   */
+  private function egiftCardProductItem(array $item) {
+    $item['prepared'] = TRUE;
+    $item['isEgiftCard'] = TRUE;
+    $item['title'] = $item['name'];
+    $item['sku'] = $item['sku'];
+    $item['qtyOrdered'] = $item['qty_ordered'];
+    $item['finalPrice'] = $item['price'];
+    $item['id'] = $item['item_id'];
+    $item['media'] = $item['extension_attributes']['product_media'][0]['file'];
+    $item['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE);
+
+    return $item;
   }
 
 }
