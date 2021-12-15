@@ -49,7 +49,7 @@ function bazaar_voice_local_tasks_alter(&$local_tasks) {
  */
 function bazaar_voice_library_info_build() {
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
-	$bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
+  $bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
   $bazaar_voice_url = $bazaar_voice->getBvDynamicScriptCode();
   $libraries = [];
 
