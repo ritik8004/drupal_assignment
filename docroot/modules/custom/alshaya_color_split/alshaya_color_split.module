@@ -499,9 +499,9 @@ function alshaya_color_split_page_attachments(array &$attachments) {
     if ($node->bundle() !== 'rcs_product') {
       return;
     }
+    $attachments['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
   }
 
-  $attachments['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
   $attachments['#attached']['library'][] = 'alshaya_color_split/rcs_grouped_products';
 
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');

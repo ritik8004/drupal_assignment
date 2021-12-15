@@ -112,8 +112,25 @@
     }
 
     const parentSKU = Drupal.hasValue(extraData.parentSKU) ? extraData.parentSKU : null;
-    window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+    window.commerceBackend.getProductDataFromBackend(sku, parentSKU).then(function () {
+      window.commerceBackend.callProductDataCallbacks(sku);
+    });
   };
+
+  /**
+   * V2 version of Drupal.alshayaSpc.getProductData().
+   *
+   * This method uses async/await instead of the callback invocation method
+   * followed by the V1 version.
+   *
+   * @param {string} sku
+   *   SKU value.
+   * @param {string|null} parentSKU
+   *   Parent sku value.
+   */
+  Drupal.alshayaSpc.getProductDataV2 = async function (sku, parentSKU = null) {
+    await window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+  }
 
   Drupal.alshayaSpc.storeProductData = function (data) {
     var langcode = $('html').attr('lang');

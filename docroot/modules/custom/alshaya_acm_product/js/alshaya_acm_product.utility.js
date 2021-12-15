@@ -4,6 +4,10 @@
   /**
    * Fetch the product data from backend.
    *
+   * This is just a helper method for Drupal.alshayaSpc.getProductData() and
+   * Drupal.alshayaSpc.getProductDataV2().
+   * Do not invoke directly.
+   *
    * @param {string} sku
    *   The sku value.
    * @param {string} parentSKU

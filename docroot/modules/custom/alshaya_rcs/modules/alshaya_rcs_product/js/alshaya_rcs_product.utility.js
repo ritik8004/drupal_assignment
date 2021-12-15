@@ -8,6 +8,10 @@
   /**
    * Fetch the product data from backend.
    *
+   * This is just a helper method for Drupal.alshayaSpc.getProductData() and
+   * Drupal.alshayaSpc.getProductDataV2().
+   * Do not invoke directly.
+   *
    * @param {string} sku
    *   The sku value.
    * @param {string} parentSKU
@@ -20,8 +24,6 @@
     await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
-
-    window.commerceBackend.callProductDataCallbacks(sku);
   };
 
   /**
@@ -70,7 +72,7 @@
 
     // Since we did not find stock data in local storage/it is expired, we
     // fetch the complete product data and then fetch the stock.
-    await window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+    await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
 
     stock = getProductStock(sku);
     return stock;
