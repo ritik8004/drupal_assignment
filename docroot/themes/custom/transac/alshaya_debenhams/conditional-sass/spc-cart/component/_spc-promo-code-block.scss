@@ -17,6 +17,8 @@
   }
 
   .promo-remove {
+    height: 2.625rem;
+
     &.active {
       &::after {
         color: $spc-promo-code-close-icon;
@@ -34,5 +36,6 @@
     height: 2.625rem;
     margin-#{$left}: 1rem;
     vertical-align: middle;
+    padding: 0;
   }
 }
