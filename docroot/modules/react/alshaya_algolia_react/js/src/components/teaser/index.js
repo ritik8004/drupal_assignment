@@ -188,13 +188,7 @@ const Teaser = ({
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            <ConditionalView condition={showSwatches}>
-              <Swatches
-                swatches={attribute.swatches}
-                url={attribute.url}
-                swatchUrls={attribute.swatch_urls}
-              />
-            </ConditionalView>
+            {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
           <ConditionalView condition={
               isExpressDeliveryEnabled()

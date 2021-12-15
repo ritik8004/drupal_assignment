@@ -18,24 +18,19 @@ class AlshayaPdpPrettyPathHelper {
    *   Algolia object.
    * @param array $swatch_attributes
    *   List of swatch attributes.
-   *
-   * @return array
-   *   Swatch URLs.
    */
-  public function prepareSwatchUrls(array $object, array $swatch_attributes) {
+  public function prepareAndIndexSwatchUrls(array &$object, array $swatch_attributes) {
     $swatch_urls = [];
     $suffix = '.html';
     foreach ($swatch_attributes as $attribute) {
       $attribute_values = $object['attr_' . $attribute];
       if (!empty($attribute_values)) {
-        foreach ($object['swatches'] as $value) {
+        foreach ($object['swatches'] as $key => $value) {
           $prefix = '/-' . $attribute . '-' . preg_replace('/[\s]/', '_', strtolower($value['display_label']));
-          $swatch_urls[$value['child_id']] = str_replace($suffix, $prefix . $suffix, $object['url']);
+          $object['swatches'][$key]['url'] = str_replace($suffix, $prefix . $suffix, $object['url']);
         }
       }
     }
-
-    return $swatch_urls;
   }
 
 }

@@ -16,9 +16,6 @@ function alshaya_pdp_pretty_path_alshaya_search_algolia_object_alter(array &$obj
   if (!empty($swatch_attribute)) {
     /** @var \Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper $pdpPrettyPathHelper */
     $pdpPrettyPathHelper = \Drupal::service('alshaya_pdp_pretty_path.helper');
-    $swatch_urls = $pdpPrettyPathHelper->prepareSwatchUrls($object, $swatch_attribute);
-    if (!empty($swatch_urls)) {
-      $object['swatch_urls'] = $swatch_urls;
-    }
+    $pdpPrettyPathHelper->prepareAndIndexSwatchUrls($object, $swatch_attribute);
   }
 }
