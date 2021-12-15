@@ -49,16 +49,16 @@ const checkShippingMethodsStatus = (shippingMethods) => {
 
 /**
  * Helper function to check if ED/SDD is disabled for
- * any product in cart.
+ * all the products in cart.
  */
 const checkAreaAvailabilityStatusOnCart = (cartShippingMethods) => {
-  let show = true;
+  let show = false;
   if (typeof cartShippingMethods !== 'undefined' && !hasValue(cartShippingMethods.error)) {
     cartShippingMethods.forEach((cartShippingMethodsList) => {
       const shippingMethods = cartShippingMethodsList.applicable_shipping_methods;
       const status = checkShippingMethodsStatus(shippingMethods);
-      if (status === false) {
-        show = false;
+      if (status === true) {
+        show = true;
       }
     });
     return show;

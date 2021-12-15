@@ -1,5 +1,5 @@
 import React from 'react';
-import ConditionalView from '../../../common/components/conditional-view';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { getAreaFieldKey, getDeliveryAreaStorage, getDeliveryAreaValue } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import { setStorageInfo } from '../../../utilities/storage';
@@ -88,7 +88,7 @@ export default class DeliveryAreaSelect extends React.Component {
     const { getPanelData, animationDelayValue, showAreaAvailabilityStatusOnCart } = this.props;
 
     return (
-      <ConditionalView condition={showAreaAvailabilityStatusOnCart === true}>
+      <ConditionalView condition={showAreaAvailabilityStatusOnCart}>
         <div id="delivery-area-select" className="fadeInUp" style={{ animationDelay: animationDelayValue }}>
           <div className="delivery-area-label">
             <span>{`${Drupal.t('Deliver to')}: `}</span>

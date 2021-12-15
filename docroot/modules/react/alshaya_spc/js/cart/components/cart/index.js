@@ -37,7 +37,7 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
-import dispatchCustomEvent from '../../../utilities/events';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -58,6 +58,7 @@ export default class Cart extends React.Component {
       cartShippingMethods: null,
       panelContent: null,
       auraDetails: null,
+      // To show/hide Area Select option based on SSD/ED availability.
       showAreaAvailabilityStatusOnCart: false,
     };
   }
@@ -237,7 +238,7 @@ export default class Cart extends React.Component {
     this.updateCartMessage(type, message);
   };
 
-  showDeliveryArea = () => {
+  cartItemsHasSDDOrEpressDelivery = () => {
     // Check if SDD/ED not available for any product.
     const { cartShippingMethods } = this.state;
     if (!hasValue(cartShippingMethods.error)
@@ -245,6 +246,10 @@ export default class Cart extends React.Component {
       && checkAreaAvailabilityStatusOnCart(cartShippingMethods)) {
       this.setState({
         showAreaAvailabilityStatusOnCart: true,
+      });
+    } else {
+      this.setState({
+        showAreaAvailabilityStatusOnCart: false,
       });
     }
   };
@@ -290,7 +295,7 @@ export default class Cart extends React.Component {
             cartShippingMethods: response,
           });
         }
-        this.showDeliveryArea();
+        this.cartItemsHasSDDOrEpressDelivery();
         removeFullScreenLoader();
       },
     );
