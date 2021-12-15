@@ -43,6 +43,11 @@ export default class CartItem extends React.Component {
   componentDidMount() {
     const { item } = this.props;
     Drupal.alshayaSpc.getProductData(item.sku, this.productDataCallback);
+
+    if (isWishlistEnabled()) {
+      // Add event listener for add to wishlist action.
+      document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
+    }
   }
 
   componentDidUpdate() {
@@ -92,6 +97,23 @@ export default class CartItem extends React.Component {
       this.setState({ showWishlistPopup: false, wishlistResponse: removeFromBasket }, () => {
         this.removeCartItem(sku, 'remove item', id);
       });
+    }
+  };
+
+  /**
+   * Once item is added to wishlist, remove item from cart.
+   */
+  handleAddToWishList = (e) => {
+    if (e.detail.productInfo.sku) {
+      const { item: { sku, id } } = this.props;
+      const { productInfo: { parentSKU } } = this.state;
+      // Compare with sku in case of simple sku.
+      // Or compare with parent sku in case of configurable sku.
+      if (e.detail.productInfo.sku === sku || e.detail.productInfo.sku === parentSKU) {
+        this.setState({ wishlistResponse: true }, () => {
+          this.removeCartItem(sku, 'remove item', id);
+        });
+      }
     }
   };
 
@@ -280,6 +302,23 @@ export default class CartItem extends React.Component {
       ? 'sku-max-quantity-limit-reached'
       : '';
 
+    const attributeOptions = [];
+    // Add configurable options only for configurable product.
+    if (isWishlistEnabled() && parentSKU) {
+      Object.keys(options).forEach((key) => {
+        const option = {
+          option_id: options[key].option_id,
+          option_value: options[key].option_value,
+        };
+
+        // Skipping the psudo attributes.
+        if (drupalSettings.psudo_attribute === undefined
+          || drupalSettings.psudo_attribute !== option.option_id) {
+          attributeOptions.push(option);
+        }
+      });
+    }
+
     return (
       <div
         className={`spc-cart-item fadeInUp ${qtyLimitClass}`}
@@ -311,8 +350,9 @@ export default class CartItem extends React.Component {
                 <WishlistContainer
                   context="cart"
                   position="cart-item"
-                  sku={parentSKU}
+                  sku={parentSKU || sku}
                   title={title}
+                  options={attributeOptions}
                   format="text"
                 />
               </div>
