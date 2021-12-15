@@ -81,8 +81,9 @@ const getCncStatusForCart = async (data) => {
     // We should ideally have ony one call to an endpoint and pass
     // The list of items. This look could happen in the backend.
     // Suppressing the lint error for now.
+    const parentSKU = item.product_type === 'configurable' ? item.extension_attributes.parent_product_sku : null;
     // eslint-disable-next-line no-await-in-loop
-    const productStatus = await getProductStatus(item.sku);
+    const productStatus = await getProductStatus(item.sku, parentSKU);
     if (hasValue(productStatus)
       && isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
