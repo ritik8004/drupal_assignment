@@ -1,6 +1,8 @@
 import React from 'react';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
 import logger from '../../../js/utilities/logger';
+import dispatchCustomEvent from '../../../js/utilities/events';
+import { removeFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
 
 /**
  * Provides the egift card header.
@@ -161,4 +163,22 @@ export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardTy
   // Invoke the redemption API to update the redeem amount.
   const response = callEgiftApi('eGiftRedemption', 'POST', postData);
   return response;
+};
+
+/**
+ * Triggers custom event to update price summary block.
+ */
+export const updatePriceSummaryBlock = () => {
+  const cartData = window.commerceBackend.getCart(true);
+  if (cartData instanceof Promise) {
+    cartData.then((data) => {
+      if (data.data !== undefined && data.data.error === undefined) {
+        if (data.status === 200) {
+          // Update Egift card line item.
+          dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+          removeFullScreenLoader();
+        }
+      }
+    });
+  }
 };
