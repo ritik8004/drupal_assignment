@@ -41,7 +41,8 @@ class WishlistButton extends React.Component {
     // We pass options directly for plp product drawer
     // So we only need to get options for pdp layouts
     // Also, check if it is configurable product.
-    if (context !== 'productDrawer' && this.isConfigurableProduct(sku, configurableCombinations)
+    if (context !== 'productDrawer' && context !== 'cart'
+      && this.isConfigurableProduct(sku, configurableCombinations)
       && variantSelected !== null) {
       this.getSelectedOptions(variantSelected, configurableCombinations[sku]);
     }
@@ -89,9 +90,20 @@ class WishlistButton extends React.Component {
    */
   getSelectedOptions = (variantSelected, configurableCombinations) => {
     if (configurableCombinations.bySku[variantSelected]) {
-      this.setState({
-        options: configurableCombinations.bySku[variantSelected],
+      const options = [];
+      Object.keys(configurableCombinations.bySku[variantSelected]).forEach((key) => {
+        const option = {
+          option_id: configurableCombinations.configurables[key].attribute_id,
+          option_value: configurableCombinations.bySku[variantSelected][key],
+        };
+
+        // Skipping the psudo attributes.
+        if (drupalSettings.psudo_attribute === undefined
+          || drupalSettings.psudo_attribute !== option.option_id) {
+          options.push(option);
+        }
       });
+      this.setState({ options });
     }
   }
 
@@ -117,6 +129,7 @@ class WishlistButton extends React.Component {
     const {
       addedInWishList, skuCode, options, title,
     } = this.state;
+
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
       removeProductFromWishList(skuCode, this.updateWishListStatus);
