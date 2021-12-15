@@ -218,8 +218,9 @@ exports.render = function render(
       let cncEnabled = window.commerceBackend.isProductAvailableForClickAndCollect(entity);
       if (cncEnabled || isProductAvailableForHomeDelivery(entity)) {
         const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
-        const homeDelivery = jQuery('.rcs-templates--delivery_option-home-delivery').clone().children();
-        jQuery('.field__content', deliveryOptionsWrapper).append(homeDelivery);
+
+        const hdHtml = handlebarsRenderer.render('product.delivery_option_hd', drupalSettings.alshaya_home_delivery);
+        jQuery('.field__content', deliveryOptionsWrapper).append(hdHtml);
 
         // Add click and collect to the delivery options field.
         const ccData = {
@@ -236,7 +237,7 @@ exports.render = function render(
           select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
           store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
         };
-        const ccHtml = handlebarsRenderer.render('product.delivery_options', ccData);
+        const ccHtml = handlebarsRenderer.render('product.delivery_option_cnc', ccData);
         jQuery('.field__content', deliveryOptionsWrapper).append(ccHtml);
 
         html += deliveryOptionsWrapper.html();

@@ -5,6 +5,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\Html;
 
 /**
  * Implements hook_theme().
@@ -64,15 +65,6 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     ],
     'rcs_pdp_delivery_option' => [
       'variables' => [],
-    ],
-    'rcs_pdp_delivery_option_home_delivery' => [
-      'render element' => 'elements',
-      'variables' => [
-        'title' => NULL,
-        'title_price' => NULL,
-        'subtitle' => NULL,
-        'options' => [],
-      ],
     ],
     'rcs_not_buyable_product' => [
       'variables' => [
@@ -263,16 +255,11 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $alshaya_master_settings->getCacheTags());
 
-  // PDP Delivery options.
-  // Click and Collect.
+  // PDP Click and Collect.
   $build['#attached']['library'] = [
     'alshaya_click_collect/click-and-collect.pdp',
   ];
   $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
-
-  // Adding shipping options.
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
   $config = alshaya_click_collect_get_config();
 
   // Here we just show static text, we will get stores info using ajax.
@@ -294,6 +281,13 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ];
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $cnc_settings->getCacheTags());
   $build['#cache']['tags'][] = 'click-collect-cache-tag';
+
+  // PDP Home delivery.
+  $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
+  $home_delivery_config['title_class'] = Html::getClass($home_delivery_config['title']);
+  $build['#attached']['drupalSettings']['alshaya_home_delivery'] = $home_delivery_config;
+  $config = \Drupal::config('alshaya_acm_product.home_delivery');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
 }
 
 /**
@@ -522,21 +516,6 @@ function alshaya_rcs_product_theme_suggestions_page_alter(array &$suggestions, a
  */
 function alshaya_rcs_product_theme_suggestions_product_zoom_alter(array &$suggestions, array $variables) {
   $suggestions[] = 'rcs_product_zoom';
-}
-
-/**
- * Implememts template_preprocess_HOOK().
- */
-function template_preprocess_rcs_pdp_delivery_option_home_delivery(array &$variables) {
-  $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
-
-  $variables['title'] = $home_delivery_config['title'];
-  $variables['subtitle'] = $home_delivery_config['subtitle'];
-  $variables['options'] = [
-    'standard_title' => $home_delivery_config['standard_title'],
-    'standard_subtitle' => $home_delivery_config['standard_subtitle'],
-  ];
-  $variables['#cache']['tags'] = \Drupal::config('alshaya_acm_product.home_delivery')->getCacheTags();
 }
 
 /**
@@ -847,7 +826,8 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.block.description' => 'alshaya_rcs_product',
     'product.order_quantity_limit' => 'alshaya_rcs_product',
     'product.promotions' => 'alshaya_rcs_product',
-    'product.delivery_options' => 'alshaya_rcs_product',
+    'product.delivery_option_cnc' => 'alshaya_rcs_product',
+    'product.delivery_option_hd' => 'alshaya_rcs_product',
     'gallery.product.product_zoom' => 'alshaya_rcs_product',
     'gallery.product.product_labels' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_default_gallery' => 'alshaya_rcs_product',
