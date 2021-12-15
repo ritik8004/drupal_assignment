@@ -292,6 +292,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     'help_text' => $config['help_text'],
     'select_option_text' => $config['select_option_text'],
   ];
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $cnc_settings->getCacheTags());
+  $build['#cache']['tags'][] = 'click-collect-cache-tag';
 }
 
 /**
