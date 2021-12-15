@@ -1,3 +1,5 @@
+import { hasValue } from './conditionsUtility';
+
 /**
  * Helper function to check if Express delivery is enabled.
  */
@@ -23,7 +25,50 @@ const checkProductExpressDeliveryStatus = (sku) => {
   return false;
 };
 
+/**
+ * Helper function to check if ED/SDD is present
+ * in the shipping methods array.
+ */
+const checkShippingMethodsStatus = (shippingMethods) => {
+  let count = 0;
+  if (typeof shippingMethods !== 'undefined') {
+    shippingMethods.forEach((shippingMethod) => {
+      if (shippingMethod.available !== 'undefined' && shippingMethod.available) {
+        if ((shippingMethod.carrier_code === 'SAMEDAY') || (shippingMethod.carrier_code === 'EXPRESS')) {
+          count += 1;
+        }
+      }
+    });
+    if (count > 0) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+/**
+ * Helper function to check if ED/SDD is disabled for
+ * all the products in cart.
+ */
+const checkAreaAvailabilityStatusOnCart = (cartShippingMethods) => {
+  let show = false;
+  if (typeof cartShippingMethods !== 'undefined' && !hasValue(cartShippingMethods.error)) {
+    cartShippingMethods.forEach((cartShippingMethodsList) => {
+      const shippingMethods = cartShippingMethodsList.applicable_shipping_methods;
+      const status = checkShippingMethodsStatus(shippingMethods);
+      if (status === true) {
+        show = true;
+      }
+    });
+    return show;
+  }
+  return true;
+};
+
 export {
   isExpressDeliveryEnabled,
   checkProductExpressDeliveryStatus,
+  checkShippingMethodsStatus,
+  checkAreaAvailabilityStatusOnCart,
 };
