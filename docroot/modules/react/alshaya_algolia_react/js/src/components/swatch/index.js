@@ -2,7 +2,11 @@ import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
 const Swatch = ({ swatch, url }) => {
-  const selectedImage = `${url}?selected=${swatch.child_id}`;
+  let selectedImage = `${url}?selected=${swatch.child_id}`;
+  if (swatch.url !== undefined) {
+    selectedImage = swatch.url;
+  }
+
   return (
     <a href={selectedImage}>
       <span className="swatch-block swatch-image">

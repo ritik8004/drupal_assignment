@@ -1,0 +1,3 @@
+services:
+  alshaya_pdp_pretty_path.helper:
+    class: Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper
