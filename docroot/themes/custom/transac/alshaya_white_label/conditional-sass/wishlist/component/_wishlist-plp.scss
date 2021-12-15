@@ -19,3 +19,20 @@
     }
   }
 }
+
+.wishlist-enabled {
+  &.overlay-product-modal {
+    .configurable-product-form-wrapper {
+      position: relative;
+    }
+
+    .wishlist-icon {
+      &.productDrawer {
+        position: absolute;
+        top: 1.25rem;
+        #{$right}: 1.25rem;
+        font-size: 0;
+      }
+    }
+  }
+}
