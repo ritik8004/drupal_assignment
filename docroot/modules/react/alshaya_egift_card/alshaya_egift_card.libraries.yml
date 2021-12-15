@@ -9,3 +9,9 @@ alshaya_egift_card_purchase:
     dist/egift_card_purchase.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_egift_topup_purchase:
+  js:
+    dist/egift_topup_purchase.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

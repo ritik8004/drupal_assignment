@@ -5,6 +5,7 @@ var config = {
   entry: {
     my_account: './js/my-account',
     egift_card_purchase: './js/egift-card-purchase',
+    egift_topup_purchase: './js/egift-topup-purchase',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
