@@ -37,6 +37,8 @@ import {
 import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
 import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities/error';
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
+import { isCollectionPoint } from '../../utilities/cnc_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -455,7 +457,13 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     stores = stores.slice(0, cncStoresLimit);
   }
 
+  const isCollectionPointEnabled = collectionPointsEnabled();
   stores.forEach((store) => {
+    // Do not fetch the Store data from Drupal if PUDO is disabled and the store
+    // is a collection point.
+    if (!isCollectionPointEnabled && isCollectionPoint(store)) {
+      return;
+    }
     storeInfoPromises.push(getStoreInfo(store));
   });
 
@@ -1003,9 +1011,11 @@ const applyDefaultShipping = async (order) => {
     const { methods } = response;
     for (let i = 0; i < methods.length; i++) {
       const method = methods[i];
+      // Check if last order's method is available for the order.
       if (typeof method.carrier_code !== 'undefined'
         && order.shipping.method.indexOf(method.carrier_code, 0) === 0
         && order.shipping.method.indexOf(method.method_code, 0) !== -1
+        && method.available
       ) {
         logger.debug('Setting shipping/billing address from user last HD order. Cart: @cartId, Address: @address, Billing: @billing.', {
           '@cartId': window.commerceBackend.getCartId(),
@@ -1020,6 +1030,18 @@ const applyDefaultShipping = async (order) => {
   return false;
 };
 
+/**
+ * Returns first available method.
+ *
+ * @param {array}
+ *   Methods array.
+ *
+ * @return {array}
+ *   First available method.
+ */
+const firstAvailableDeliveryMethod = (methods) => methods.find(
+  (element) => element.available === true,
+);
 /**
  * Apply defaults to cart for customer.
  *
@@ -1072,8 +1094,7 @@ const applyDefaults = async (data, customerId) => {
         '@cartId': window.commerceBackend.getCartId(),
         '@address': JSON.stringify(address),
       });
-
-      return selectHd(address, methods[0], address, methods);
+      return selectHd(address, firstAvailableDeliveryMethod(methods), address, methods);
     }
   }
 
@@ -1087,8 +1108,12 @@ const applyDefaults = async (data, customerId) => {
         '@cartId': window.commerceBackend.getCartId(),
         '@address': JSON.stringify(data.shipping.address),
       });
-
-      return selectHd(data.shipping.address, methods[0], data.shipping.address, methods);
+      return selectHd(
+        data.shipping.address,
+        firstAvailableDeliveryMethod(methods),
+        data.shipping.address,
+        methods,
+      );
     }
   }
 
@@ -2203,6 +2228,10 @@ window.commerceBackend.placeOrder = async (data) => {
           '@cart': JSON.stringify(cart),
         });
 
+        // If response already has error details return them as is.
+        if (hasValue(response.data.error)) {
+          return response;
+        }
         result.error = true;
         result.error_code = 604;
         result.success = false;

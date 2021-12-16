@@ -16,7 +16,9 @@ const PointsExpiryMessage = (props) => {
 
   return (
     <div className="spc-aura-points-expiry-item">
-      {parse(message)}
+      <div>
+        {parse(message)}
+      </div>
     </div>
   );
 };

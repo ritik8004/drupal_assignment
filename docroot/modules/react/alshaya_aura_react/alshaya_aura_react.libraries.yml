@@ -15,6 +15,33 @@ aura_header_library:
     dist/header.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_aura_react/aura_backend.v2
+
+# Header library for cart page.
+aura_header_library_cart:
+  js:
+    dist/header.bundle.js: {}
+  dependencies:
+    - alshaya_spc/cart
+    - alshaya_aura_react/aura_backend.v2
+
+# Header library for user account page.
+aura_header_library_user:
+  js:
+    dist/header.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+    - alshaya_aura_react/alshaya_aura_my_accounts
+    - alshaya_aura_react/aura_backend.v2
+
+# Header library for aura loyalty club page.
+aura_header_library_loyalty_club:
+  js:
+    dist/header.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+    - alshaya_aura_react/alshaya_aura_loyalty_club
+    - alshaya_aura_react/aura_backend.v2
 
 alshaya_aura_pdp:
   js:

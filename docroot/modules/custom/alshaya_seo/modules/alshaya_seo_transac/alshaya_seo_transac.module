@@ -45,7 +45,6 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['gtm']['log_errors_to_ga'] = Settings::get('log_errors_to_ga', 0);
 
   if (_alshaya_seo_process_gtm()) {
-    $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_initial_data_push';
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 

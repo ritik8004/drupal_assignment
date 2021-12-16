@@ -329,12 +329,15 @@ class AlshayaSpcController extends ControllerBase {
     $spc_cnc_config = $this->config('alshaya_spc.click_n_collect');
     $store_finder_config = $this->config('alshaya_stores_finder.settings');
     $geolocation_config = $this->config('geolocation.settings');
+    $collection_points_config = $this->config('alshaya_spc.collection_points');
+
     $cache_tags = Cache::mergeTags(
       $cache_tags,
       array_merge(
         $spc_cnc_config->getCacheTags(),
         $store_finder_config->getCacheTags(),
-        $geolocation_config->getCacheTags()
+        $geolocation_config->getCacheTags(),
+        $collection_points_config->getCacheTags(),
       )
     );
 
@@ -608,6 +611,7 @@ class AlshayaSpcController extends ControllerBase {
           'global_error_message' => _alshaya_spc_global_error_message(),
           'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
           'cncStoreInfoCacheTime' => $checkout_settings->get('cnc_store_info_cache_time'),
+          'cnc_collection_points_enabled' => $collection_points_config->get('click_collect_collection_points_enabled'),
         ],
       ],
       '#cache' => [
