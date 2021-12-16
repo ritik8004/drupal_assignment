@@ -15,6 +15,7 @@ import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -159,6 +160,16 @@ class CrossellPopupContent extends React.Component {
             <ConditionalView condition={isAuraEnabled()}>
               <AuraPDP mode="related" />
             </ConditionalView>
+            <WishlistContainer
+              sku={relatedSku}
+              skuCode={skuMainCode}
+              context="magazinev2-related"
+              position="top-right"
+              format="link"
+              title={title}
+              variantSelected={variantSelected}
+              configurableCombinations={configurableCombinations}
+            />
             {stockStatus ? (
               <PdpCart
                 skuCode={relatedSku}

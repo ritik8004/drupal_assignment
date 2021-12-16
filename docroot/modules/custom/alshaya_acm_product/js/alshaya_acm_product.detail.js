@@ -127,6 +127,19 @@
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
 
+        // Dispatch event on modal load each time to perform action on load.
+        // Like we are rendering Sofa form and wishlist icon on modal load event.
+        if (viewMode === 'modal') {
+          var productModalViewEvent = new CustomEvent('onModalLoad', { bubbles: true });
+          document.dispatchEvent(productModalViewEvent);
+        }
+
+        // Add event to trigger on matchback load.
+        if (viewMode === 'matchback') {
+          var currentMatchBackLoad = new CustomEvent('onMatchbackLoad', {bubbles: true, detail: { data: sku }});
+          document.dispatchEvent(currentMatchBackLoad);
+        }
+
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
@@ -228,12 +241,6 @@
           $(firstAttribute).removeProp('selected').removeAttr('selected');
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
-
-          // Add event to trigger on matchback load.
-          if (viewMode === 'matchback') {
-            var currentMatchBackLoad = new CustomEvent('onMatchbackLoad', {bubbles: true, detail: { data: sku }});
-            document.dispatchEvent(currentMatchBackLoad);
-          }
         }
       });
 

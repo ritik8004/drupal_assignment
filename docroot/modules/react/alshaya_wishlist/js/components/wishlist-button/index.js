@@ -19,7 +19,7 @@ class WishlistButton extends React.Component {
       addedInWishList: false,
       skuCode: props.skuCode ? props.skuCode : props.sku,
       variantSelected: props.variantSelected ? props.variantSelected : null,
-      options: props.options ? props.options : null,
+      options: props.options ? props.options : [],
       title: props.title ? props.title : '',
     };
   }
@@ -27,7 +27,11 @@ class WishlistButton extends React.Component {
   componentDidMount = () => {
     const { skuCode, variantSelected } = this.state;
     const { context, sku } = this.props;
-    const { configurableCombinations } = drupalSettings;
+    let { configurableCombinations } = drupalSettings;
+    if (context === 'magazinev2-related') {
+      ({ configurableCombinations } = this.props);
+    }
+
     // @todo: we need to listen wishlist load event that
     // will trigger from header wishlist component after
     // wishlist data are fetched from MDC on page load
@@ -145,26 +149,58 @@ class WishlistButton extends React.Component {
   }
 
   /**
+   * Check if current variant exists in same group of main sku.
+   */
+  ifExistsInSameGroup = (skuItem) => {
+    const { sku, context } = this.props;
+    const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
+    const productInfo = drupalSettings[productKey];
+    let found = false;
+    // Check in variant list for grouped configurable product.
+    // Else check in item list for grouped simple product.
+    if (productInfo[sku].variants) {
+      Object.values(productInfo[sku].variants).forEach((variant) => {
+        if (variant.parent_sku && variant.parent_sku === skuItem) {
+          found = true;
+        }
+      });
+    } else if (productInfo[sku].group) {
+      Object.values(productInfo[sku].group).forEach((item) => {
+        if (item.sku && item.sku === skuItem) {
+          found = true;
+        }
+      });
+    }
+    return found;
+  }
+
+  /**
    * Update wishlist button state as per variant selection.
    */
   updateProductInfoData = (e) => {
     e.preventDefault();
-    if (e.detail && e.detail.data.sku && e.detail.data.variantSelected) {
-      const { sku } = this.props;
-      const { configurableCombinations } = drupalSettings;
-      this.setState({
-        skuCode: e.detail.data.sku,
-        variantSelected: e.detail.data.variantSelected,
-        title: e.detail.data.title,
-      }, () => {
-        // Update wishlist button status for selected variant.
-        this.updateWishListStatus(isProductExistInWishList(e.detail.data.sku));
-        // Get selected attribute options for selected variant.
-        if (this.isConfigurableProduct(sku, configurableCombinations)
-          && e.detail.data.variantSelected) {
-          this.getSelectedOptions(e.detail.data.variantSelected, configurableCombinations[sku]);
+    if (e.detail) {
+      const parentSkuSelected = e.detail.data.sku;
+      const { variantSelected, title } = e.detail.data;
+      if (e.detail && parentSkuSelected && variantSelected) {
+        const { sku } = this.props;
+        if (sku === e.detail.data.sku || this.ifExistsInSameGroup(parentSkuSelected)) {
+          const { configurableCombinations } = drupalSettings;
+          this.setState({
+            skuCode: parentSkuSelected,
+            variantSelected,
+            title,
+          }, () => {
+            // Update wishlist button status for selected variant.
+            this.updateWishListStatus(isProductExistInWishList(parentSkuSelected));
+            // Get selected attribute options for selected variant.
+            if (this.isConfigurableProduct(sku, configurableCombinations)
+              && variantSelected) {
+              this.getSelectedOptions(variantSelected, configurableCombinations[sku]);
+            }
+          });
         }
-      });
+      }
     }
   }
 
