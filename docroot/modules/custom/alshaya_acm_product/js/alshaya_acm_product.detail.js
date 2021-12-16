@@ -129,14 +129,9 @@
 
         // Dispatch event on modal load each time to perform action on load.
         // We need to load wishlist component first before we set product data.
-        if (viewMode === 'modal') {
-          var productModalViewEvent = new CustomEvent('onModalLoad', { bubbles: true });
-          document.dispatchEvent(productModalViewEvent);
-        }
-
-        // Add event to trigger on matchback load.
-        if (viewMode === 'matchback') {
-          var currentMatchBackLoad = new CustomEvent('onMatchbackLoad', {bubbles: true, detail: { data: sku }});
+        if (viewMode === 'modal' || viewMode === 'matchback') {
+          var eventName = (viewMode === 'modal') ? 'onModalLoad' : 'onMatchbackLoad';
+          var currentMatchBackLoad = new CustomEvent(eventName, {bubbles: true, detail: { data: sku }});
           document.dispatchEvent(currentMatchBackLoad);
         }
 
