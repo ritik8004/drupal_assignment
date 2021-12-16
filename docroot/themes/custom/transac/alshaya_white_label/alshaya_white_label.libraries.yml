@@ -615,3 +615,10 @@ tabby:
   css:
     theme:
       css/conditional-sass/tabby/tabby.ltr.css: {}
+
+egift-purchase-page:
+  css:
+    theme:
+      css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate

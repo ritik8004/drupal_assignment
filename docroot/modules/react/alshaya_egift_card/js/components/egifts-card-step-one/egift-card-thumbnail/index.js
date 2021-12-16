@@ -18,12 +18,11 @@ const EgiftCardThumbnail = (props) => {
   }
 
   return (
-    <li onClick={() => handleEgiftSelect(item.id)}>
+    <li className={classList} onClick={() => handleEgiftSelect(item.id)}>
       <img
         src={thumbnailImage.url}
         alt={thumbnailImage.alt}
         title={thumbnailImage.title}
-        className={classList}
       />
     </li>
   );

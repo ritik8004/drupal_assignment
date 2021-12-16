@@ -16,7 +16,7 @@ const HeroImage = (props) => {
   };
 
   return (
-    <div className="hero-image-wrapper" style={{ width: '50%' }}>
+    <div className="hero-image-wrapper">
       <img
         src={image.url}
         alt={image.alt}

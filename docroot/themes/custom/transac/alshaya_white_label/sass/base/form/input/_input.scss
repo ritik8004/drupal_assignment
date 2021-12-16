@@ -8,6 +8,7 @@ input[type="email"],
 input[type="password"],
 input[type="submit"],
 input[type="tel"],
+input[type="number"],
 textarea {
   border-radius: 0;
   -webkit-appearance: none;
@@ -53,6 +54,7 @@ textarea {
     input[type="email"],
     input[type="password"],
     input[type="tel"],
+    input[type="number"],
     textarea {
       width: 100%;
       border: none;

@@ -223,19 +223,19 @@ export default class EgiftCardPurchase extends React.Component {
           </div>
         </ConditionalView>
         <ConditionalView condition={egiftItems !== null}>
-          <div className="egifts-form-wrap">
-            <form onSubmit={this.handleSubmit} className="egift-form">
+          <div className="egifts-form-wrapper">
+            <form onSubmit={this.handleSubmit} className="egift-form fadeInUp">
               <EgiftCardsListStepOne
                 items={egiftItems}
                 handleEgiftSelect={this.handleEgiftSelect}
                 handleAmountSelect={this.handleAmountSelect}
               />
               <EgiftCardStepTwo activate={activateStepTwo} />
-              <div className="action-buttons">
+              <div className="action-buttons sku-base-form fadeInUp">
                 <button
                   type="submit"
                   name="add-to-cart"
-                  className="btn"
+                  className="btn egift-purchase-add-to-cart-button"
                   disabled={!activateStepTwo}
                   onClick={() => { this.state.action = 'add-to-cart'; }}
                 >
@@ -244,7 +244,7 @@ export default class EgiftCardPurchase extends React.Component {
                 <button
                   type="submit"
                   name="checkout"
-                  className="btn"
+                  className="btn egift-purchase-checkout-button"
                   disabled={!activateStepTwo}
                   onClick={() => { this.state.action = 'checkout'; }}
                 >
