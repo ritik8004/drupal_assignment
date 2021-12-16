@@ -193,7 +193,7 @@ const Teaser = ({
           <ConditionalView condition={
               isExpressDeliveryEnabled()
               && hit.attr_express_delivery !== undefined
-              && (hit.attr_express_delivery[0] === '1' || hit.attr_express_delivery[drupalSettings.gtm.language][0] === '1')
+              && (hit.attr_express_delivery[0] === '1' || hit.attr_express_delivery[currentLanguage][0] === '1')
             }
           >
             <div className="express_delivery">
