@@ -62,7 +62,7 @@ class WishlistButton extends React.Component {
 
     // Rendering wishlist button as per sku variant info.
     // Event listener is not required for new pdp.
-    if (context !== 'magazinev2' || context !== 'magazinev2-related') {
+    if (context !== 'magazinev2' && context !== 'magazinev2-related') {
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
     }
   };
