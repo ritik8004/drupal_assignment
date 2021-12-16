@@ -80,9 +80,9 @@
     .cloudzoom__image {
       .img-wrap {
         @include breakpoint($desktop) {
-          height: 37.5rem;
+          height: 38rem;
           // Adding some buffer and restricting height in case of very tall aspect ratio.
-          max-height: 37.5rem;
+          max-height: 38rem;
           // Adding some height for loader icon
           min-height: 20rem;
           background: $pdp_gallery_img_bg;
