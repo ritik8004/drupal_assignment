@@ -136,5 +136,40 @@
         margin-#{$right}: 0.1875rem;
       }
     }
+
+    &.egift-cart-item {
+      .egift-product-title,
+      .egift-product-price {
+        font-size: 0.875rem;
+        line-height: 1.125rem;
+      }
+  
+      .egift-cart-message-label {
+        vertical-align: middle;
+      }
+  
+      .egift-cart-message-value {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 8.9rem;
+        display: inline-block;
+        vertical-align: bottom;
+      }
+
+      @include breakpoint($upto-tablet) {
+        .egift-product-tile {
+          grid-template-columns: 5.4375rem 1fr 2rem;
+        }
+
+        .spc-cart-product-attribute {
+          display: flex;
+        }
+
+        .egift-cart-message-value {
+          width: 8rem;
+        }
+      }
+    }
   }
 }
