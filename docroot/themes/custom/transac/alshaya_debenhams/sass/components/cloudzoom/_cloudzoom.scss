@@ -85,7 +85,6 @@
           max-height: 38rem;
           // Adding some height for loader icon
           min-height: 20rem;
-          background: $pdp_gallery_img_bg;
 
           .acq-content-product-modal & {
             img {
@@ -180,6 +179,7 @@
     img {
       @include breakpoint($desktop) {
         object-fit: scale-down;
+        height: auto;
       }
     }
   }
