@@ -24,8 +24,8 @@ export default class EgiftTopupFor extends React.Component {
    * Get User linked card helper.
    */
   getUserLinkedCard = () => {
-    const { userEmailID } = drupalSettings.userDetails;
-    const result = callMagentoApi(`/V1/egiftcard/hps-search/email/${userEmailID}`, 'GET', {}, false);
+    // Call to get customer linked card details.
+    const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
       result.then((response) => {
         if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
