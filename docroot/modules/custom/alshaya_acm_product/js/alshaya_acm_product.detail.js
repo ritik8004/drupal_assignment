@@ -128,7 +128,7 @@
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
 
         // Dispatch event on modal load each time to perform action on load.
-        // Like we are rendering Sofa form and wishlist icon on modal load event.
+        // We need to load wishlist component first before we set product data.
         if (viewMode === 'modal') {
           var productModalViewEvent = new CustomEvent('onModalLoad', { bubbles: true });
           document.dispatchEvent(productModalViewEvent);

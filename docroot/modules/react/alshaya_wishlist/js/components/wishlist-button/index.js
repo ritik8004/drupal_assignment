@@ -182,7 +182,7 @@ class WishlistButton extends React.Component {
     if (e.detail) {
       const parentSkuSelected = e.detail.data.sku;
       const { variantSelected, title } = e.detail.data;
-      if (e.detail && parentSkuSelected && variantSelected) {
+      if (parentSkuSelected && variantSelected) {
         const { sku } = this.props;
         if (sku === e.detail.data.sku || this.ifExistsInSameGroup(parentSkuSelected)) {
           const { configurableCombinations } = drupalSettings;
