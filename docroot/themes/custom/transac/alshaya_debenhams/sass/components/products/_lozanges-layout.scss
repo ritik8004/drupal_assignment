@@ -1,0 +1,35 @@
+.labels-wrapper {
+  > .labels-container {
+    &.top-left {
+      @include breakpoint($tablet) {
+        #{$left}: 0.1875rem;
+      }
+    }
+
+    &.top-right {
+      @include breakpoint($tablet) {
+        #{$right}: 0.1875rem;
+      }
+    }
+
+    &.bottom-left {
+      @include breakpoint($tablet) {
+        #{$left}: 0.1875rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        bottom: 2rem;
+      }
+    }
+
+    &.bottom-right {
+      @include breakpoint($tablet) {
+        #{$right}: 0.1875rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        bottom: 2rem;
+      }
+    }
+  }
+}

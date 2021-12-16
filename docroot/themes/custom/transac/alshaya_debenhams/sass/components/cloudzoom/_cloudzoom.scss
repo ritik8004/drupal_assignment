@@ -62,9 +62,19 @@
 }
 
 .cloudzoom {
+  @include breakpoint($desktop) {
+    &.thumbnail-count-1 {
+      margin-#{$right}: 3.125rem;
+    }
+
+    &:not(.thumbnail-count-1) {
+      margin-#{$right}: 6.125rem;
+    }
+  }
+
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
-      width: calc(100% - 7.625rem);
+      width: calc(100% - 13.25rem);
     }
 
     .cloudzoom__image {
@@ -75,6 +85,7 @@
           max-height: 37.5rem;
           // Adding some height for loader icon
           min-height: 20rem;
+          background: $pdp_gallery_img_bg;
 
           .acq-content-product-modal & {
             img {
@@ -144,6 +155,32 @@
   &.thumbnail-count-1 {
     #cloud-zoom-big {
       #{$left}: 141.8% !important;
+    }
+
+    .labels-wrapper > {
+      .labels-container {
+        &.top-right,
+        &.bottom-right {
+          @include breakpoint($tablet) {
+            #{$right}: 8.3125rem;
+          }
+        }
+
+        &.top-left,
+        &.bottom-left {
+          @include breakpoint($tablet) {
+            #{$left}: 8.3125rem;
+          }
+        }
+      }
+    }
+  }
+
+  #cloud-zoom-wrap {
+    img {
+      @include breakpoint($desktop) {
+        object-fit: scale-down;
+      }
     }
   }
 }
