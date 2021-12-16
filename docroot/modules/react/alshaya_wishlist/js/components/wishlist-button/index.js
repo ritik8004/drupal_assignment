@@ -27,10 +27,7 @@ class WishlistButton extends React.Component {
   componentDidMount = () => {
     const { skuCode, variantSelected } = this.state;
     const { context, sku } = this.props;
-    let { configurableCombinations } = drupalSettings;
-    if (context === 'magazinev2-related') {
-      ({ configurableCombinations } = this.props);
-    }
+    const { configurableCombinations } = drupalSettings;
 
     // @todo: we need to listen wishlist load event that
     // will trigger from header wishlist component after
@@ -53,9 +50,9 @@ class WishlistButton extends React.Component {
     // Set title for simple sku product on page load.
     // We need to set title only for old pdp, modal and matchback.
     // For new pdp and side drawer, we get all data through props.
-    const viewModes = ['pdp', 'modal', 'matchback'];
+    const contextArray = ['pdp', 'modal', 'matchback'];
     if (!(this.isConfigurableProduct(sku, configurableCombinations))
-      && viewModes.includes(context)) {
+      && contextArray.includes(context)) {
       const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
       const productInfo = drupalSettings[productKey];
       this.setState({
@@ -65,7 +62,7 @@ class WishlistButton extends React.Component {
 
     // Rendering wishlist button as per sku variant info.
     // Event listener is not required for new pdp.
-    if (context !== 'magazinev2') {
+    if (context !== 'magazinev2' || context !== 'magazinev2-related') {
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
     }
   };

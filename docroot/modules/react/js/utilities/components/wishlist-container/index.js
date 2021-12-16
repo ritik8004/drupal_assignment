@@ -17,7 +17,6 @@ function WishlistContainer(props) {
     title,
     options,
     variantSelected,
-    configurableCombinations,
   } = props;
 
   // Lazy load wishlist button component.
@@ -35,7 +34,6 @@ function WishlistContainer(props) {
           title={title}
           options={options}
           variantSelected={variantSelected}
-          configurableCombinations={configurableCombinations}
         />
       </Suspense>
     </EmptyErrorBoundary>
