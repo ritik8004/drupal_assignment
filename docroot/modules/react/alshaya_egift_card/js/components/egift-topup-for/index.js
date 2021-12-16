@@ -58,7 +58,6 @@ export default class EgiftTopupFor extends React.Component {
     const { wait, userCard, optionGiftForSelf } = this.state;
     const cardNumber = (userCard !== null) ? userCard.card_number : '';
     const responseType = (userCard !== null) ? userCard.response_type : null;
-    const responseMessage = (userCard !== null) ? userCard.response_message : null;
 
     return (
       <div>
@@ -98,9 +97,6 @@ export default class EgiftTopupFor extends React.Component {
                 name="card_number"
                 value={cardNumber !== null ? cardNumber : ''}
               />
-            </ConditionalView>
-            <ConditionalView condition={wait === true && responseType === false}>
-              { responseType === false && <div className="error">{responseMessage}</div>}
             </ConditionalView>
           </div>
         </ConditionalView>
