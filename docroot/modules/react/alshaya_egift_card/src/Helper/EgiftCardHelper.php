@@ -70,7 +70,9 @@ class EgiftCardHelper {
       return '';
     }
     $config = $this->configFactory->get('alshaya_egift_card.settings');
-    $term_conditions_text = $config->get('topup_terms_conditions_text')['value'];
+    $term_conditions_text = $config->get('topup_terms_conditions_text') != null
+      ? $config->get('topup_terms_conditions_text')['value']
+      : '';
 
     return [
       '#markup' => '<p>' . $this->t('Terms & Conditions', [], ['context' => 'egift']) . '</p>' . $term_conditions_text,
