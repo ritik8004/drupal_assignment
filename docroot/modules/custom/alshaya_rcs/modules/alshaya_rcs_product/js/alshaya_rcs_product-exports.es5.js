@@ -215,39 +215,33 @@ exports.render = function render(
         break;
       }
 
-      const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
-      const cncEnabled = window.commerceBackend.isProductAvailableForClickAndCollect(entity);
-      const isDeliveryOptionsAvailable = isProductAvailableForHomeDelivery(entity) || cncEnabled;
+      let cncEnabled = window.commerceBackend.isProductAvailableForClickAndCollect(entity);
+      if (cncEnabled || isProductAvailableForHomeDelivery(entity)) {
+        const deliveryOptionsWrapper = jQuery('.rcs-templates--delivery_option').clone();
 
-      if (isDeliveryOptionsAvailable) {
-        const homeDelivery = jQuery('.rcs-templates--delivery_option-home-delivery').clone().children();
-        jQuery('.field__content', deliveryOptionsWrapper).append(homeDelivery);
-
-        const clickAndCollect = jQuery('.rcs-templates--delivery_option-click-and-collect').clone().children();
-
-        if (entity.type_id === 'configurable') {
-          jQuery('.c-accordion_content .simple', clickAndCollect).remove();
-        }
-        else {
-          jQuery('.c-accordion_content .configurable', clickAndCollect).remove();
-        }
-
-        clickAndCollect.attr({
-          'data-state': cncEnabled ? 'enabled' : 'disabled',
-          'data-product-type': entity.type_id,
-          'data-sku-clean': window.commerceBackend.cleanCssIdentifier(entity.sku),
-        });
-
-        const subTitle = cncEnabled
-          ? drupalSettings.alshaya_click_collect.subtitle.enabled
-          : drupalSettings.alshaya_click_collect.subtitle.disabled;
-        jQuery('.subtitle', clickAndCollect).html(subTitle);
+        const hdHtml = handlebarsRenderer.render('product.delivery_option_hd', drupalSettings.alshaya_home_delivery);
+        jQuery('.field__content', deliveryOptionsWrapper).append(hdHtml);
 
         // Add click and collect to the delivery options field.
-        jQuery('.field__content', deliveryOptionsWrapper).append(clickAndCollect);
-      }
+        const ccData = {
+          state: cncEnabled ? 'enabled' : 'disabled',
+          title: drupalSettings.alshaya_click_collect.title,
+          subtitle: (cncEnabled === true)
+            ? drupalSettings.alshaya_click_collect.subtitle.enabled
+            : drupalSettings.alshaya_click_collect.subtitle.disabled,
+          sku: entity.sku,
+          sku_clean: window.commerceBackend.cleanCssIdentifier(entity.sku),
+          sku_type: entity.type_id,
+          help_text: drupalSettings.alshaya_click_collect.help_text,
+          available_at_title: '',
+          select_option_text: drupalSettings.alshaya_click_collect.select_option_text,
+          store_finder_form: drupalSettings.alshaya_click_collect.store_finder_form,
+        };
+        const ccHtml = handlebarsRenderer.render('product.delivery_option_cnc', ccData);
+        jQuery('.field__content', deliveryOptionsWrapper).append(ccHtml);
 
-      html += deliveryOptionsWrapper.html();
+        html += deliveryOptionsWrapper.html();
+      }
       break;
 
     case 'product_category_list':
