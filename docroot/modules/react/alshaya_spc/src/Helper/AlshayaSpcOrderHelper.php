@@ -329,6 +329,7 @@ class AlshayaSpcOrderHelper {
       $data['isEgiftCard'] = $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_enabled');
       $data['media'] = $item['extension_attributes']['product_media'][0]['file'];
       $data['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE);
+      $data['price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
       return $data;
     }
 
