@@ -24,11 +24,11 @@ export default class EgiftTopPurchase extends React.Component {
     super(props);
 
     this.state = {
-      topUpCard: null,
+      topUpCard: null, // Store top-up card details.
       wait: false, // Flag to check api call is complete.
-      amountSet: 0,
-      activate: false,
-      displayFormError: '',
+      amountSet: 0, // Amount select by user.
+      disableSubmit: false, // Flag to enable / disable top-up submit button.
+      displayFormError: '', // Display form errors.
     };
   }
 
@@ -50,7 +50,7 @@ export default class EgiftTopPurchase extends React.Component {
   handleAmountSelect = (activate, amount) => {
     this.setState({
       amountSet: amount,
-      activate: true,
+      disableSubmit: false,
       displayFormError: '',
     });
   }
@@ -123,7 +123,7 @@ export default class EgiftTopPurchase extends React.Component {
     const {
       topUpCard,
       wait,
-      activate,
+      disableSubmit,
       amountSet,
       displayFormError,
     } = this.state;
@@ -152,7 +152,7 @@ export default class EgiftTopPurchase extends React.Component {
               type="submit"
               name="top-up"
               className="btn"
-              disabled={!activate}
+              disabled={disableSubmit}
             >
               {Drupal.t('Top-up', {}, { context: 'egift' })}
             </button>
