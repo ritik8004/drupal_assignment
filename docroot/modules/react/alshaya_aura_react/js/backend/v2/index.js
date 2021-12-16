@@ -591,7 +591,7 @@ window.auraBackend.processRedemption = async (data) => {
   if (hasValue(responseData.error)) {
     logger.notice('Error while trying to redeem aura points. Request Data: @request_data. Message: @message', {
       '@request_data': JSON.stringify(data),
-      '@message': responseData.error_message,
+      '@message': responseData.message,
     });
     return { data: responseData };
   }
