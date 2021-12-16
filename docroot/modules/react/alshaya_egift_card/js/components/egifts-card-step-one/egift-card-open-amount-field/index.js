@@ -23,13 +23,20 @@ export default class EgiftCardOpenAmountField extends React.Component {
     if (openAmount !== '') {
       // Remove any error message.
       document.getElementById('open-amount-error').innerHTML = '';
-
-      // Enable open amount submit.
-      this.setState({
-        actionDisable: false,
-      });
     }
+
+    this.setState({
+      actionDisable: openAmount === '',
+    });
   }
+
+  handleEvent = (e) => {
+    if (e.currentTarget.value.length > 0) {
+      e.currentTarget.classList.add('focus');
+    } else {
+      e.currentTarget.classList.remove('focus');
+    }
+  };
 
   /**
    * Handle submit open amount.
@@ -128,27 +135,29 @@ export default class EgiftCardOpenAmountField extends React.Component {
 
     return (
       <div className="egift-open-amount-wrapper">
-        <span className="open-amount-currency">
-          { drupalSettings.alshaya_spc.currency_config.currency_code }
-        </span>
-        <input
-          id="open-amount"
-          className="egift-open-amount-field"
-          name="egift-open-amount"
-          type="number"
-          min={eGiftCardAttributes.amount_open_from_hps.value}
-          max={eGiftCardAttributes.amount_open_to_hps.value}
-          onFocus={() => this.handleErrorMessage()}
-          onKeyPress={this.handleKeypress}
-          onChange={this.handleChange}
-          disabled={openAmountInputDisabled}
-        />
-        <div className="error" id="open-amount-error">
+        <div className="egift-purchase-input-textfield-item">
+          <input
+            id="open-amount"
+            className="egift-open-amount-field"
+            name="egift-open-amount"
+            type="number"
+            min={eGiftCardAttributes.amount_open_from_hps.value}
+            max={eGiftCardAttributes.amount_open_to_hps.value}
+            onFocus={() => this.handleErrorMessage()}
+            onKeyPress={this.handleKeypress}
+            onChange={this.handleChange}
+            disabled={openAmountInputDisabled}
+            onBlur={(e) => this.handleEvent(e)}
+          />
+          <label>{Drupal.t('Enter amount', {}, { context: 'egift' })}</label>
+          <span className="open-amount-currency">
+            { drupalSettings.alshaya_spc.currency_config.currency_code }
+          </span>
+        </div>
+        <button type="button" onClick={this.handleSubmit} disabled={actionDisable} />
+        <div className="error egift-error" id="open-amount-error">
           { openAmountMessage }
         </div>
-        <button type="button" onClick={this.handleSubmit} disabled={actionDisable}>
-          <span className="open-amount-submit">&nbsp;</span>
-        </button>
       </div>
     );
   }

@@ -231,7 +231,7 @@ export default class EgiftCardPurchase extends React.Component {
                 handleAmountSelect={this.handleAmountSelect}
               />
               <EgiftCardStepTwo activate={activateStepTwo} />
-              <div className="action-buttons fadeInUp">
+              <div className="action-buttons sku-base-form fadeInUp">
                 <button
                   type="submit"
                   name="add-to-cart"

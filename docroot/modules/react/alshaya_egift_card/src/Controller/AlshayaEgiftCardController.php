@@ -24,7 +24,7 @@ class AlshayaEgiftCardController extends ControllerBase {
 
     $build = [
       '#type' => 'markup',
-      '#markup' => '<div id="egift-card-purchase-wrapper">loading...</div>',
+      '#markup' => '<div id="egift-card-purchase-wrapper"></div>',
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_card_purchase',

@@ -59,7 +59,6 @@ export default class EgiftCardStepTwo extends React.Component {
           <div className="step-two-fields fadeInUp">
             <div
               className="egift-for-field egift-purchase-input-field-container"
-              onChange={(e) => this.handleChange(e)}
             >
               <div className="egift-purchase-input-title">
                 {Drupal.t('Buying this gift for', {}, { context: 'egift' })}
@@ -72,6 +71,7 @@ export default class EgiftCardStepTwo extends React.Component {
                     name="egift-for"
                     id="egiftFor-friends-family"
                     value="Friends and family"
+                    onChange={(e) => this.handleChange(e)}
                   />
                   <label htmlFor="egiftFor-friends-family">
                     {Drupal.t('Friends and family', {}, { context: 'egift' })}
@@ -79,11 +79,11 @@ export default class EgiftCardStepTwo extends React.Component {
                 </div>
                 <div className="egift-purchase-input-field-item">
                   <input
-                    defaultChecked={showMessageField}
                     type="radio"
                     name="egift-for"
                     id="egiftFor-myself"
                     value="Myself"
+                    onChange={(e) => this.handleChange(e)}
                   />
                   <label htmlFor="egiftFor-myself">
                     {Drupal.t('Myself', {}, { context: 'egift' })}
@@ -104,7 +104,7 @@ export default class EgiftCardStepTwo extends React.Component {
                   />
                   <div className="c-input__bar" />
                   <label>{Drupal.t('Name*', {}, { context: 'egift' })}</label>
-                  <div id="fullname-error" className="error" />
+                  <div id="fullname-error" className="error egift-error" />
                 </div>
                 <div className="egift-purchase-input-textfield-item egift-purchase-input-textfield-email">
                   <input
@@ -114,7 +114,7 @@ export default class EgiftCardStepTwo extends React.Component {
                   />
                   <div className="c-input__bar" />
                   <label>{Drupal.t('Email*', {}, { context: 'egift' })}</label>
-                  <div id="email-error" className="error" />
+                  <div id="email-error" className="error egift-error" />
                 </div>
               </div>
             </div>
@@ -134,7 +134,7 @@ export default class EgiftCardStepTwo extends React.Component {
                     <div className="c-input__bar" />
                     <label>{Drupal.t('Message', {}, { context: 'egift' })}</label>
                     <div className="textarea-character-limit">200</div>
-                    <div id="email-error" className="error" />
+                    <div id="email-error" className="error egift-error" />
                   </div>
                 </div>
               </div>
