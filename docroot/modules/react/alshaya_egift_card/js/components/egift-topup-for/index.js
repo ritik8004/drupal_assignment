@@ -18,15 +18,9 @@ export default class EgiftTopupFor extends React.Component {
    */
   handleChange = (e) => {
     const eGiftFor = e.target.value;
-    if (eGiftFor === 'self') {
-      this.setState({
-        optionGiftForSelf: true,
-      });
-    } else {
-      this.setState({
-        optionGiftForSelf: false,
-      });
-    }
+    this.setState({
+      optionGiftForSelf: (eGiftFor === 'self'),
+    });
   };
 
   render() {
@@ -84,7 +78,7 @@ export default class EgiftTopupFor extends React.Component {
         <ConditionalView condition={isUserAuthenticated() === false}>
           {Drupal.t('Card Details', {}, { context: 'egift' })}
         </ConditionalView>
-        <ConditionalView condition={linkedCardNumber === null}>
+        <ConditionalView condition={linkedCardNumber === null || optionGiftForSelf === false}>
           <div className="egift-card-number-wrapper">
             <input
               type="text"

@@ -115,12 +115,11 @@ export default class EgiftTopPurchase extends React.Component {
       linkedCardNumber,
     } = this.state;
 
-    let cardNumber = '';
-    if (data.get('egift-for') === 'self') {
-      cardNumber = linkedCardNumber;
-    } else {
-      cardNumber = data.get('card_number');
-    }
+    // Get top-up card for options. For anonymous top-up-type default set to other.
+    const egiftCardFor = data.get('egift-for') !== null ? data.get('egift-for') : 'other';
+    // If card for options is self then get linked-card-number from state
+    // else get card-number from field.
+    const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number');
 
     // Prepare params for add top-up to cart.
     const params = {
@@ -131,7 +130,7 @@ export default class EgiftTopPurchase extends React.Component {
         customer_email: (isUserAuthenticated()) ? drupalSettings.userDetails.userEmailID : 'test@test.com',
         card_number: cardNumber,
         // For anonymous top-up-type default set to other.
-        top_up_type: data.get('egift-for') !== null ? data.get('egift-for') : 'other',
+        top_up_type: egiftCardFor,
       },
     };
 
