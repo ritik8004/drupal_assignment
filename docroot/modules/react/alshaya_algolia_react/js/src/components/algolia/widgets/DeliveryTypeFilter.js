@@ -12,14 +12,14 @@ const DeliveryTypeFilter = ({
   }
   const deliveryItems = [];
   if (!hasValue(items)) {
-    return null;
+    return <ul />;
   }
   Object.entries(items).forEach(([key, item]) => {
     deliveryItems[key] = item;
   });
   const { facetValues } = props;
   if (!hasValue(deliveryItems)) {
-    return null;
+    return <ul />;
   }
   return (
     <ul>
