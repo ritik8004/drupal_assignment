@@ -18,6 +18,7 @@ import {
   getProcessedErrorMessage,
 } from '../../../../js/utilities/error';
 import { setStorageInfo } from '../../../../js/utilities/storage';
+import logger from '../../../../js/utilities/logger';
 
 export default class EgiftTopPurchase extends React.Component {
   constructor(props) {
@@ -27,7 +28,9 @@ export default class EgiftTopPurchase extends React.Component {
       topUpCard: null, // Store top-up card details.
       wait: false, // Flag to check api call is complete.
       amountSet: 0, // Amount select by user.
-      disableSubmit: false, // Flag to enable / disable top-up submit button.
+      linkedCardNumber: null, // User linked card number.
+      linkedCardBalance: null, // User linked card balance.
+      disableSubmit: true, // Flag to enable / disable top-up submit button.
       displayFormError: '', // Display form errors.
     };
   }
@@ -40,20 +43,42 @@ export default class EgiftTopPurchase extends React.Component {
       this.setState({
         topUpCard: response.data.items[0],
         wait: true,
-      });
+      }, () => this.getUserLinkedCard());
     }
   }
 
   /**
+   * Get User linked card helper.
+   */
+  getUserLinkedCard = () => {
+    if (!isUserAuthenticated()) {
+      return;
+    }
+    // Call to get customer linked card details.
+    const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
+    if (result instanceof Promise) {
+      result.then((response) => {
+        if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+          this.setState({
+            linkedCardNumber: response.data.card_number !== null ? response.data.card_number : null,
+            linkedCardBalance:
+              response.data.current_balance !== null ? response.data.current_balance : null,
+          });
+        }
+      });
+    }
+  };
+
+  /**
    * Show next step fields when user select amount.
    */
-  handleAmountSelect = (activate, amount) => {
+  handleAmountSelect = (submitButtonState, amount) => {
     this.setState({
       amountSet: amount,
-      disableSubmit: false,
+      disableSubmit: !submitButtonState,
       displayFormError: '',
     });
-  }
+  };
 
   /**
    * Set the quote id received from topup api response in storage.
@@ -66,25 +91,46 @@ export default class EgiftTopPurchase extends React.Component {
     setStorageInfo(topUpQuote, 'topupQuote');
   };
 
+  logAddTopupError = (params, response) => {
+    logger.error('Error while trying adding top-up. @params @response', {
+      '@params': params,
+      '@response': response,
+    });
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     showFullScreenLoader();
+
+    // Unset any errors displayed in previous submission.
     this.setState({
       displayFormError: '',
     });
 
     // Get Form data.
     const data = new FormData(e.target);
+    const {
+      topUpCard,
+      amountSet,
+      linkedCardNumber,
+    } = this.state;
+
+    let cardNumber = '';
+    if (data.get('egift-for') === 'self') {
+      cardNumber = linkedCardNumber;
+    } else {
+      cardNumber = data.get('card_number');
+    }
 
     // Prepare params for add top-up to cart.
     const params = {
       topup: {
-        sku: data.get('egift-sku'),
-        amount: data.get('egift-amount'),
+        sku: topUpCard.sku,
+        amount: amountSet,
         // @todo update customer email for anonymous user.
         customer_email: (isUserAuthenticated()) ? drupalSettings.userDetails.userEmailID : 'test@test.com',
-        card_number: data.get('card_number'),
-        top_up_type: 'self',
+        card_number: cardNumber,
+        top_up_type: data.get('egift-for'),
       },
     };
 
@@ -94,12 +140,15 @@ export default class EgiftTopPurchase extends React.Component {
     if (result instanceof Promise) {
       result.then((response) => {
         removeFullScreenLoader();
+
+        // In case of exception from magento, log error and show default error message.
         if (response.data.error) {
           this.setState({
-            displayFormError: response.data.error_message,
-          });
+            displayFormError: getDefaultErrorMessage(),
+          }, () => this.logAddTopupError(params, response));
         }
 
+        // In case of 200 response but with error process error message to display and log error.
         if (typeof response.data.response_type !== 'undefined' && response.data.response_type === false) {
           let message = getProcessedErrorMessage(response);
           if (message === undefined) {
@@ -107,7 +156,7 @@ export default class EgiftTopPurchase extends React.Component {
           }
           this.setState({
             displayFormError: message,
-          });
+          }, () => this.logAddTopupError(params, response));
         }
 
         // Redirect user to checkout if response type is true.
@@ -124,9 +173,15 @@ export default class EgiftTopPurchase extends React.Component {
       topUpCard,
       wait,
       disableSubmit,
-      amountSet,
+      linkedCardNumber,
+      linkedCardBalance,
       displayFormError,
     } = this.state;
+
+    if (!wait) {
+      // Return if wait is false as no top-up card found.
+      return null;
+    }
 
     return (
       <div className="egifts-form-wrap">
@@ -136,17 +191,14 @@ export default class EgiftTopPurchase extends React.Component {
               <HeroImage item={topUpCard} />
             </div>
             <div className="egift-topup-fields-wrap">
-              <EgiftTopupFor />
+              <EgiftTopupFor
+                linkedCardNumber={linkedCardNumber}
+                linkedCardBalance={linkedCardBalance}
+              />
               <EgiftCardAmount selected={topUpCard} handleAmountSelect={this.handleAmountSelect} />
-              <input type="hidden" name="egift-amount" value={amountSet} />
             </div>
           </ConditionalView>
           <div className="action-buttons">
-            <input
-              type="hidden"
-              name="egift-sku"
-              value={(topUpCard !== null) ? topUpCard.sku : ''}
-            />
             <div className="error form-error">{displayFormError}</div>
             <button
               type="submit"

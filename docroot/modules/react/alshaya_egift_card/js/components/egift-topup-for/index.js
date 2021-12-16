@@ -2,7 +2,6 @@ import React from 'react';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
-import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import getCurrencyCode from '../../../../js/utilities/util';
 
 export default class EgiftTopupFor extends React.Component {
@@ -10,38 +9,9 @@ export default class EgiftTopupFor extends React.Component {
     super(props);
 
     this.state = {
-      wait: false, // Wait for the API call for linked card details.
-      linkedCardNumber: null, // User linked card number.
-      linkedCardBalance: null, // User linked card balance.
       optionGiftForSelf: true, // By default eGift for self is checked.
     };
   }
-
-  componentDidMount = () => {
-    // Get user linked eGift card.
-    this.getUserLinkedCard();
-  }
-
-  /**
-   * Get User linked card helper.
-   */
-  getUserLinkedCard = () => {
-    // Call to get customer linked card details.
-    const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
-    if (result instanceof Promise) {
-      result.then((response) => {
-        if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
-          this.setState({
-            linkedCardNumber: response.data.card_number !== null ? response.data.card_number : null,
-            linkedCardBalance:
-              response.data.current_balance !== null ? response.data.current_balance : null,
-            wait: true,
-            optionGiftForSelf: true,
-          });
-        }
-      });
-    }
-  };
 
   /**
    * Select option self or other for top-up card.
@@ -51,23 +21,23 @@ export default class EgiftTopupFor extends React.Component {
     if (eGiftFor === 'self') {
       this.setState({
         optionGiftForSelf: true,
-        wait: true,
       });
     } else {
       this.setState({
         optionGiftForSelf: false,
-        wait: false,
       });
     }
   };
 
   render() {
     const {
-      wait,
-      linkedCardNumber,
-      linkedCardBalance,
       optionGiftForSelf,
     } = this.state;
+
+    const {
+      linkedCardNumber,
+      linkedCardBalance,
+    } = this.props;
 
     return (
       <div>
@@ -93,20 +63,20 @@ export default class EgiftTopupFor extends React.Component {
               {Drupal.t('Other\'s Card', {}, { context: 'egift' })}
             </label>
           </div>
-          <ConditionalView condition={wait === true}>
+          <ConditionalView condition={optionGiftForSelf === true}>
             <div className="card-details">
               <span className="egift-linked-card-balance">
                 {
-                  Drupal.t('Card Balance: @currency @balance', {
-                    '@currency': getCurrencyCode(),
-                    '@balance': linkedCardBalance !== null ? linkedCardBalance : '',
-                  }, { context: 'egift' })
-                }
+                Drupal.t('Card Balance: @currency @balance', {
+                  '@currency': getCurrencyCode(),
+                  '@balance': linkedCardBalance !== null ? linkedCardBalance : '',
+                }, { context: 'egift' })
+              }
               </span>
               <span className="egift-linked-card-balance">
                 {
-                  Drupal.t('Card No: @cardNo', { '@cardNo': linkedCardNumber !== null ? linkedCardNumber : '' }, { context: 'egift' })
-                }
+                Drupal.t('Card No: @cardNo', { '@cardNo': linkedCardNumber !== null ? linkedCardNumber : '' }, { context: 'egift' })
+              }
               </span>
             </div>
           </ConditionalView>
@@ -114,7 +84,7 @@ export default class EgiftTopupFor extends React.Component {
         <ConditionalView condition={isUserAuthenticated() === false}>
           {Drupal.t('Card Details', {}, { context: 'egift' })}
         </ConditionalView>
-        <ConditionalView condition={wait === false}>
+        <ConditionalView condition={linkedCardNumber === null}>
           <div className="egift-card-number-wrapper">
             <input
               type="text"
