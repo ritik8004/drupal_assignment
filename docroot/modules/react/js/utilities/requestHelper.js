@@ -255,11 +255,13 @@ const handleResponse = (apiResponse) => {
  *   The request method.
  * @param {object} data
  *   The object to send for POST request.
+ * @param {object} useBearerToken
+ *   Flag to use bearer token or not.
  *
  * @returns {object}
  *   Returns a params object.
  */
-const getMagentoApiParams = (url, method = 'GET', data = {}) => {
+const getMagentoApiParams = (url, method = 'GET', data = {}, useBearerToken = true) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -269,7 +271,7 @@ const getMagentoApiParams = (url, method = 'GET', data = {}) => {
     },
   };
 
-  if (isUserAuthenticated()) {
+  if (isUserAuthenticated() && useBearerToken) {
     params.headers.Authorization = `Bearer ${window.drupalSettings.userDetails.customerToken}`;
   }
 
@@ -295,12 +297,14 @@ const getMagentoApiParams = (url, method = 'GET', data = {}) => {
  *   The request method.
  * @param {object} data
  *   The object to send for POST request.
+ * @param {object} useBearerToken
+ *   Flag to use bearer token or not.
  *
  * @returns {Promise<AxiosPromise<object>>}
  *   Returns a promise object.
  */
-const callMagentoApi = (url, method = 'GET', data = {}) => {
-  const params = getMagentoApiParams(url, method, data);
+const callMagentoApi = (url, method = 'GET', data = {}, useBearerToken = true) => {
+  const params = getMagentoApiParams(url, method, data, useBearerToken);
   return Axios(params)
     .then((response) => handleResponse(response))
     .catch((error) => {

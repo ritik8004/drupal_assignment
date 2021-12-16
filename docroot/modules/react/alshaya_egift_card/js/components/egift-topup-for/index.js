@@ -11,40 +11,58 @@ export default class EgiftTopupFor extends React.Component {
     this.state = {
       wait: false, // Wait for the API call for linked card details.
       userCard: null, // User linked card data.
+      optionGiftForSelf: true, // By default eGift for self is checked.
     };
   }
 
-  handleChange = (e) => {
-    const eGiftFor = e.target.value;
-    const email = 'avinash.shukla@acquia.com';
-    if (eGiftFor === 'my card') {
-      const result = callMagentoApi(`/V1/egiftcard/hps-search/email/${email}`, 'GET', {});
-      if (result instanceof Promise) {
-        result.then((response) => {
-          if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
-            this.setState({
-              userCard: response.data,
-              wait: true,
-            });
-          }
-        });
-      }
-    } else {
-      this.setState({
-        userCard: null,
-      });
-    }
+  componentDidMount = () => {
+    // Get user linked eGift card.
+    this.getUserLinkedCard();
   }
 
+  /**
+   * Get User linked card helper.
+   */
+  getUserLinkedCard = () => {
+    const { userEmailID } = drupalSettings.userDetails;
+    const result = callMagentoApi(`/V1/egiftcard/hps-search/email/${userEmailID}`, 'GET', {}, false);
+    if (result instanceof Promise) {
+      result.then((response) => {
+        if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+          this.setState({
+            userCard: response.data,
+            wait: true,
+            optionGiftForSelf: true,
+          });
+        }
+      });
+    }
+  };
+
+  /**
+   * Select option self or other for top-up card.
+   */
+  handleChange = (e) => {
+    const eGiftFor = e.target.value;
+    if (eGiftFor === 'self') {
+      this.getUserLinkedCard();
+    } else {
+      this.setState({
+        optionGiftForSelf: false,
+        wait: false,
+      });
+    }
+  };
+
   render() {
-    const { wait, userCard } = this.state;
+    const { wait, userCard, optionGiftForSelf } = this.state;
     const cardNumber = (userCard !== null) ? userCard.card_number : '';
     const responseType = (userCard !== null) ? userCard.response_type : null;
     const responseMessage = (userCard !== null) ? userCard.response_message : null;
 
     return (
       <div>
-        <ConditionalView condition={isUserAuthenticated() === true}>
+        <ConditionalView condition={isUserAuthenticated() === true && userCard !== null}>
           <div
             className="egift-for-field"
             onChange={(e) => this.handleChange(e)}
@@ -52,15 +70,16 @@ export default class EgiftTopupFor extends React.Component {
             <label>
               {Drupal.t('Top-up for', {}, { context: 'egift' })}
               <input
+                defaultChecked={optionGiftForSelf}
                 type="radio"
                 name="egift-for"
-                value="my card"
+                value="self"
               />
               {Drupal.t('My Card', {}, { context: 'egift' })}
               <input
                 type="radio"
                 name="egift-for"
-                value="others card"
+                value="other"
               />
               {Drupal.t('Other\'s Card', {}, { context: 'egift' })}
             </label>
@@ -88,10 +107,10 @@ export default class EgiftTopupFor extends React.Component {
         <ConditionalView condition={isUserAuthenticated() === false}>
           {Drupal.t('Card Details', {}, { context: 'egift' })}
         </ConditionalView>
-        <ConditionalView condition={userCard === null}>
+        <ConditionalView condition={wait === false}>
           <div className="egift-card-number-wrapper">
             <input
-              type="number"
+              type="text"
               id="card_number"
               name="card_number"
               placeholder={Drupal.t('eGift Card number', {}, { context: 'egift' })}
