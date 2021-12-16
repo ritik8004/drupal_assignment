@@ -14,6 +14,7 @@ function alshaya_media_assets_rcs_placeholders_graphql_query_alter(&$queries) {
     'assets_swatch',
     'assets_pdp',
     'assets_cart',
+    'assets_teaser',
   );
 
   // Query for teaser assets for product recommendations.
