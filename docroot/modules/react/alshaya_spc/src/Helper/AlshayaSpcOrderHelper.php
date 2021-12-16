@@ -395,7 +395,8 @@ class AlshayaSpcOrderHelper {
     $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
     $orderDetails['delivery_charge'] = $order['totals']['shipping'];
 
-    $shipping_info = explode(' - ', $order['shipping_description']);
+    $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
+    $shipping_info = $express_delivery_config->get('status') ? explode(' - ', $order['shipping_description'], 2) : explode(' - ', $order['shipping_description']);
     $orderDetails['delivery_method'] = $shipping_info[0];
     $orderDetails['delivery_method_description'] = ($order['shipping']['extension_attributes']['click_and_collect_type'] === 'pudo_pickup')
       ? $shipping_info[0]
