@@ -146,6 +146,8 @@ $_appointment-delete-red: #e82d35;
 $_ancestral-water: #d0d0d0;
 $_screeching_white: #eee;
 $_shilling: #a3a3a3;
+$egift-disabled-gray1: #d7d7d7;
+$egift-disabled-gray2: #707070;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2056,3 +2058,11 @@ $sofa-sectional-active-border: $_sofa-section-grey2;
 $sofa-sectional-disabled-clear-option-text: $primary_text;
 $sofa-sectional-disabled-clear-option-border: $light-greyish;
 $sofa-sectional-select-border: $new-pdp-blue;
+
+// eGift purchase page.
+$egift-purchase-page-border: $warm-grey-two;
+$egift-input-radio-background: $white-five;
+$egift-purchase-inactive-step-text: $_ancestral-water;
+$egift-purchase-disabled-btn-border: $egift-disabled-gray1;
+$egift-purchase-disabled-btn-text: $egift-disabled-gray2;
+$egift-purchase-radio-label: $mothercare-black;

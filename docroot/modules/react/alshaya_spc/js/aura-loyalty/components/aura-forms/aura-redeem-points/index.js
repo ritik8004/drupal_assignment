@@ -95,7 +95,7 @@ class AuraFormRedeemPoints extends React.Component {
     const { stateValues, action } = data.detail;
 
     if (Object.keys(stateValues).length === 0 || stateValues.error) {
-      showError('spc-aura-link-api-response-message', drupalSettings.global_error_message);
+      showError('spc-aura-link-api-response-message', stateValues.message);
       // Reset redemption input fields to initial value.
       this.resetInputs();
       return;

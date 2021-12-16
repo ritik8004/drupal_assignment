@@ -4,5 +4,5 @@ import EgiftCardPurchase from './components/egift-card-purchase';
 
 ReactDom.render(
   <EgiftCardPurchase />,
-  document.getElementById('egift-card-wrapper'),
+  document.getElementById('egift-card-purchase-wrapper'),
 );

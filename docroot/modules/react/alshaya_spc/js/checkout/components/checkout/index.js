@@ -36,6 +36,8 @@ import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import RedeemEgiftCard from '../../../egift-card';
+import { cartContainsOnlyNonVirtualProduct } from '../../../utilities/egift_util';
+import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 window.fetchStore = 'idle';
 
@@ -259,30 +261,10 @@ export default class Checkout extends React.Component {
     const { cart } = this.state;
     const { totals } = event.detail;
     const cartData = cart;
-    cartData.cart.totals = { ...cartData.cart.totals, ...totals };
+    cartData.cart.totals = { ...totals };
 
     this.setState({ cart: cartData });
   };
-
-  // Checks if cart has only egift card products or other products as well.
-  isCartHasOnlyEgiftCard = () => {
-    const { cart: cartData } = this.state;
-    // A flag to keep track of the non-virtual products.
-    let isNonVirtual = false;
-    Object.values(cartData.cart.items).forEach((item) => {
-      // Return if we have already marked a non virtual product.
-      if (isNonVirtual) {
-        return;
-      }
-      // If there is no product type for the cart item then it's non virtual
-      // product.
-      if (!item.isEgiftCard) {
-        isNonVirtual = true;
-      }
-    });
-
-    return isNonVirtual;
-  }
 
   render() {
     const {
@@ -310,8 +292,6 @@ export default class Checkout extends React.Component {
     const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
       ? Drupal.smartAgent.getInfo()
       : false;
-    // Get the egiftcard informations.
-    const { egiftCard } = drupalSettings;
 
     return (
       <>
@@ -331,7 +311,7 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
-            <ConditionalView condition={this.isCartHasOnlyEgiftCard()}>
+            <ConditionalView condition={cartContainsOnlyNonVirtualProduct(cart.cart)}>
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
                 <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
@@ -349,7 +329,7 @@ export default class Checkout extends React.Component {
               isPostpayInitialised={isPostpayInitialised}
             />
 
-            <ConditionalView condition={typeof egiftCard !== 'undefined' && egiftCard.enabled}>
+            <ConditionalView condition={isEgiftCardEnabled()}>
               <RedeemEgiftCard cart={cart} />
             </ConditionalView>
 

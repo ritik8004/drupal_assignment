@@ -39,6 +39,8 @@ import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
+import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { cartContainsOnlyNonVirtualProduct } from '../../utilities/egift_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -1165,9 +1167,11 @@ const getProcessedCheckoutData = async (cartData) => {
     }
     data.shipping.methods = response.methods;
   }
-
+  // Shipping method will not be available for egift, So adding egift enabled
+  // condition to execute this statement.
   if (!hasValue(data.payment.methods)
-    && hasValue(data.shipping.method)
+    && (hasValue(data.shipping.method)
+    || (isEgiftCardEnabled() && !cartContainsOnlyNonVirtualProduct(data.cart)))
   ) {
     const paymentMethods = await getPaymentMethods();
     if (hasValue(paymentMethods)) {
@@ -2227,6 +2231,10 @@ window.commerceBackend.placeOrder = async (data) => {
           '@cart': JSON.stringify(cart),
         });
 
+        // If response already has error details return them as is.
+        if (hasValue(response.data.error)) {
+          return response;
+        }
         result.error = true;
         result.error_code = 604;
         result.success = false;

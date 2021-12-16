@@ -18,6 +18,28 @@ const getQueryStringForEgiftCards = () => ({
 });
 
 /**
+ * Get Params for Top up card seach criteria.
+ */
+const getParamsForTopUpCardSearch = () => ({
+  /* eslint-disable no-dupe-keys */
+  'searchCriteria[pageSize]': 5,
+  'searchCriteria[currentPage]': 1,
+  'searchCriteria[filterGroups][0][filters][0][field]': 'visibility',
+  'searchCriteria[filterGroups][0][filters][0][value]': 4,
+  'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
+  'searchCriteria[filterGroups][1][filters][0][field]': 'status',
+  'searchCriteria[filterGroups][1][filters][0][value]': 1,
+  'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
+  'searchCriteria[filterGroups][1][filters][0][field]': 'sku',
+  'searchCriteria[filterGroups][1][filters][0][value]': 'giftcard_topup',
+  'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
+  'searchCriteria[filterGroups][2][filters][0][field]': 'type_id',
+  'searchCriteria[filterGroups][2][filters][0][value]': 'virtual',
+  'searchCriteria[filterGroups][2][filters][0][conditionType]': 'eq',
+  /* eslint-enable no-dupe-keys */
+});
+
+/**
  * Get proxy / masked mdc url with media path.
  */
 const getImageUrl = (customAttributes, type) => {
@@ -34,5 +56,6 @@ const getImageUrl = (customAttributes, type) => {
 
 export {
   getQueryStringForEgiftCards,
+  getParamsForTopUpCardSearch,
   getImageUrl,
 };

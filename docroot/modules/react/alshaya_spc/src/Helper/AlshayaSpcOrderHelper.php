@@ -322,6 +322,14 @@ class AlshayaSpcOrderHelper {
     $data['isNonRefundable'] = NULL;
     // Added quantity of product for checkout olapic pixel.
     $data['qtyOrdered'] = $item['qty_ordered'];
+    // Prepare Egift Card Product,If item is virtual means its an egift card.
+    if ($item['is_virtual']) {
+      $data['isEgiftCard'] = $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_enabled');
+      $data['media'] = $item['extension_attributes']['product_media'][0]['file'];
+      $data['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE);
+      $data['price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
+      return $data;
+    }
 
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);

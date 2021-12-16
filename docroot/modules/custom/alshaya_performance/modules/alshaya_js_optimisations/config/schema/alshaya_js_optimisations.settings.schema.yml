@@ -1,0 +1,23 @@
+alshaya_js_optimisations.settings:
+  type: config_object
+  label: 'JS Performance Settings'
+  mapping:
+    enable_uglification:
+      type: boolean
+      label: 'Enable JS Uglification'
+    critical_js:
+      type: mapping
+      label: 'Critical JS Settings'
+      mapping:
+        enabled:
+          type: boolean
+          label: 'Enable Critical JS'
+        critical:
+          type: string
+          label: 'Critical Scripts'
+        sitewide:
+          type: string
+          label: 'Sitewide Scripts'
+        ie_only:
+          type: string
+          label: 'IE Only Scripts'

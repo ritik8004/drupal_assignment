@@ -10,6 +10,14 @@ export default class EgiftCardStepTwo extends React.Component {
     };
   }
 
+  handleEvent = (e) => {
+    if (e.currentTarget.value.length > 0) {
+      e.currentTarget.classList.add('focus');
+    } else {
+      e.currentTarget.classList.remove('focus');
+    }
+  };
+
   /**
    * Egift show or hide message field on selecting for field.
    */
@@ -36,7 +44,7 @@ export default class EgiftCardStepTwo extends React.Component {
   render() {
     const { showMessageField } = this.state;
     const { activate } = this.props;
-    let classList = 'step-two-wrapper';
+    let classList = 'step-wrapper step-two-wrapper';
 
     if (activate) {
       classList = `${classList} active`;
@@ -44,61 +52,91 @@ export default class EgiftCardStepTwo extends React.Component {
 
     return (
       <div className={classList}>
-        <p className="step-title" style={{ width: '100%' }}>
+        <p className="step-title fadeInUp">
           { Drupal.t('2. Enter Gift card details', {}, { context: 'egift' }) }
         </p>
         <ConditionalView condition={activate === true}>
-          <div className="step-two-fields">
+          <div className="step-two-fields fadeInUp">
             <div
-              className="egift-for-field"
-              onChange={(e) => this.handleChange(e)}
+              className="egift-for-field egift-purchase-input-field-container"
             >
-              <label>
+              <div className="egift-purchase-input-title">
                 {Drupal.t('Buying this gift for', {}, { context: 'egift' })}
-                <input
-                  defaultChecked={showMessageField}
-                  type="radio"
-                  name="egift-for"
-                  value="Friends and family"
-                />
-                {Drupal.t('Friends and family', {}, { context: 'egift' })}
-                <input
-                  type="radio"
-                  name="egift-for"
-                  value="Myself"
-                />
-                {Drupal.t('Myself', {}, { context: 'egift' })}
-              </label>
+              </div>
+              <div className="egift-purchase-input-field-wrapper">
+                <div className="egift-purchase-input-field-item">
+                  <input
+                    defaultChecked={showMessageField}
+                    type="radio"
+                    name="egift-for"
+                    id="egiftFor-friends-family"
+                    value="Friends and family"
+                    onChange={(e) => this.handleChange(e)}
+                  />
+                  <label htmlFor="egiftFor-friends-family">
+                    {Drupal.t('Friends and family', {}, { context: 'egift' })}
+                  </label>
+                </div>
+                <div className="egift-purchase-input-field-item">
+                  <input
+                    type="radio"
+                    name="egift-for"
+                    id="egiftFor-myself"
+                    value="Myself"
+                    onChange={(e) => this.handleChange(e)}
+                  />
+                  <label htmlFor="egiftFor-myself">
+                    {Drupal.t('Myself', {}, { context: 'egift' })}
+                  </label>
+                </div>
+              </div>
             </div>
-            <div className="recipient">
-              <label>
-                <span id="recipient-label">
-                  {Drupal.t('Recipient Details', {}, { context: 'egift' })}
-                </span>
-                <input
-                  type="text"
-                  name="egift-recipient-name"
-                  placeholder={Drupal.t('Name*', {}, { context: 'egift' })}
-                />
-                <div id="fullname-error" />
-                <input
-                  type="email"
-                  name="egift-recipient-email"
-                  placeholder={Drupal.t('Email*', {}, { context: 'egift' })}
-                />
-                <div id="email-error" />
-              </label>
+            <div className="recipient egift-purchase-input-field-container">
+              <div id="recipient-label" className="egift-purchase-input-title">
+                {Drupal.t('Recipient Details', {}, { context: 'egift' })}
+              </div>
+              <div className="egift-purchase-input-textfield-wrapper">
+                <div className="egift-purchase-input-textfield-item egift-purchase-input-textfield-name">
+                  <input
+                    type="text"
+                    name="egift-recipient-name"
+                    onBlur={(e) => this.handleEvent(e)}
+                  />
+                  <div className="c-input__bar" />
+                  <label>{Drupal.t('Name*', {}, { context: 'egift' })}</label>
+                  <div id="fullname-error" className="error egift-error" />
+                </div>
+                <div className="egift-purchase-input-textfield-item egift-purchase-input-textfield-email">
+                  <input
+                    type="email"
+                    name="egift-recipient-email"
+                    onBlur={(e) => this.handleEvent(e)}
+                  />
+                  <div className="c-input__bar" />
+                  <label>{Drupal.t('Email*', {}, { context: 'egift' })}</label>
+                  <div id="email-error" className="error egift-error" />
+                </div>
+              </div>
             </div>
             <ConditionalView condition={showMessageField === true}>
-              <div className="egift-message">
-                <label>
+              <div className="egift-message egift-purchase-input-field-container">
+                <div className="egift-purchase-input-title">
                   {Drupal.t('Write a message', {}, { context: 'egift' })}
-                  <textarea
-                    name="egift-message"
-                    placeholder={Drupal.t('Message', {}, { context: 'egift' })}
-                    rows="1"
-                  />
-                </label>
+                </div>
+                <div className="egift-purchase-input-textfield-wrapper">
+                  <div className="egift-purchase-input-textfield-item">
+                    <textarea
+                      name="egift-message"
+                      onBlur={(e) => this.handleEvent(e)}
+                      rows="1"
+                      maxLength="200"
+                    />
+                    <div className="c-input__bar" />
+                    <label>{Drupal.t('Message', {}, { context: 'egift' })}</label>
+                    <div className="textarea-character-limit">200</div>
+                    <div id="email-error" className="error egift-error" />
+                  </div>
+                </div>
               </div>
             </ConditionalView>
           </div>

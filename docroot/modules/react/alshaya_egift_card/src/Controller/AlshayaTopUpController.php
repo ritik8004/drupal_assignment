@@ -53,6 +53,11 @@ class AlshayaTopUpController extends ControllerBase {
     return [
       '#theme' => 'egift_topup_page',
       '#terms_block_content' => $this->egiftCardHelper->getTermsAndConditionText()['#markup'],
+      '#attached' => [
+        'library' => [
+          'alshaya_egift_card/alshaya_egift_topup_purchase',
+        ],
+      ],
     ];
   }
 

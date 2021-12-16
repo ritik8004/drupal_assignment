@@ -29,7 +29,6 @@ export default class ValidEgiftCard extends React.Component {
       egiftCardNumber,
       egiftEmail,
       cart,
-      quoteId,
     } = this.props;
 
     let postData = {
@@ -72,7 +71,7 @@ export default class ValidEgiftCard extends React.Component {
             postData = {
               redeem_points: {
                 action: 'set_points',
-                quote_id: quoteId,
+                quote_id: cart.cart_id_int,
                 amount: updateAmount,
                 card_number: egiftCardNumber,
                 payment_method: 'hps_payment',
@@ -123,34 +122,14 @@ export default class ValidEgiftCard extends React.Component {
 
   // Handle remove card.
   handleRemoveCard = () => {
-    const { quoteId, removeCard } = this.props;
-    const postData = {
-      redeem_points: {
-        action: 'remove_points',
-        quote_id: quoteId,
-      },
-    };
-    let errors = false;
-    showFullScreenLoader();
-    // Invoke the redemption API.
-    const response = callEgiftApi('eGiftRedemption', 'POST', postData);
-    if (response instanceof Promise) {
-      // Handle the error and success message after the egift card is removed
-      // from the cart.
-      response.then((result) => {
-        removeFullScreenLoader();
-        if (result.error !== undefined) {
-          document.getElementById('egift_remove_card_error').innerHTML = Drupal.t('There was some error while removing the gift card. Please try again', {}, { context: 'egift' });
-          errors = true;
-        }
-        // Trigger the remove method of parent component to move back to the
-        // initial redeem stage.
-        removeCard();
-      });
+    const { removeCard } = this.props;
+    const status = removeCard();
+    if (status) {
+      document.getElementById('egift_remove_card_error').innerHTML = Drupal.t('There was some error while removing the gift card. Please try again', {}, { context: 'egift' });
     }
 
-    return errors;
-  };
+    return !status;
+  }
 
   // Update the user account with egift card.
   handleCardLink = () => {
