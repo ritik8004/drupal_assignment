@@ -3,6 +3,7 @@ import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import getCurrencyCode from '../../../../js/utilities/util';
 
 export default class EgiftTopupFor extends React.Component {
   constructor(props) {
@@ -10,7 +11,8 @@ export default class EgiftTopupFor extends React.Component {
 
     this.state = {
       wait: false, // Wait for the API call for linked card details.
-      userCard: null, // User linked card data.
+      linkedCardNumber: null, // User linked card number.
+      linkedCardBalance: null, // User linked card balance.
       optionGiftForSelf: true, // By default eGift for self is checked.
     };
   }
@@ -30,7 +32,9 @@ export default class EgiftTopupFor extends React.Component {
       result.then((response) => {
         if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
           this.setState({
-            userCard: response.data,
+            linkedCardNumber: response.data.card_number !== null ? response.data.card_number : null,
+            linkedCardBalance:
+              response.data.current_balance !== null ? response.data.current_balance : null,
             wait: true,
             optionGiftForSelf: true,
           });
@@ -45,7 +49,10 @@ export default class EgiftTopupFor extends React.Component {
   handleChange = (e) => {
     const eGiftFor = e.target.value;
     if (eGiftFor === 'self') {
-      this.getUserLinkedCard();
+      this.setState({
+        optionGiftForSelf: true,
+        wait: true,
+      });
     } else {
       this.setState({
         optionGiftForSelf: false,
@@ -55,13 +62,16 @@ export default class EgiftTopupFor extends React.Component {
   };
 
   render() {
-    const { wait, userCard, optionGiftForSelf } = this.state;
-    const cardNumber = (userCard !== null) ? userCard.card_number : '';
-    const responseType = (userCard !== null) ? userCard.response_type : null;
+    const {
+      wait,
+      linkedCardNumber,
+      linkedCardBalance,
+      optionGiftForSelf,
+    } = this.state;
 
     return (
       <div>
-        <ConditionalView condition={isUserAuthenticated() === true && userCard !== null}>
+        <ConditionalView condition={isUserAuthenticated() === true && linkedCardNumber !== null}>
           <div
             className="egift-for-field"
             onChange={(e) => this.handleChange(e)}
@@ -83,22 +93,23 @@ export default class EgiftTopupFor extends React.Component {
               {Drupal.t('Other\'s Card', {}, { context: 'egift' })}
             </label>
           </div>
-          <div className="card-details">
-            <ConditionalView condition={wait === true && responseType === true}>
-              <span className="egift-linked-card-balance">{Drupal.t('Card Balance: ', {}, { context: 'egift' })}</span>
+          <ConditionalView condition={wait === true}>
+            <div className="card-details">
               <span className="egift-linked-card-balance">
                 {
-                  Drupal.t('Card No: @cardNo', { '@cardNo': cardNumber !== null ? cardNumber : '' }, { context: 'egift' })
+                  Drupal.t('Card Balance: @currency @balance', {
+                    '@currency': getCurrencyCode(),
+                    '@balance': linkedCardBalance !== null ? linkedCardBalance : '',
+                  }, { context: 'egift' })
                 }
               </span>
-              <input
-                type="hidden"
-                id="card_number"
-                name="card_number"
-                value={cardNumber !== null ? cardNumber : ''}
-              />
-            </ConditionalView>
-          </div>
+              <span className="egift-linked-card-balance">
+                {
+                  Drupal.t('Card No: @cardNo', { '@cardNo': linkedCardNumber !== null ? linkedCardNumber : '' }, { context: 'egift' })
+                }
+              </span>
+            </div>
+          </ConditionalView>
         </ConditionalView>
         <ConditionalView condition={isUserAuthenticated() === false}>
           {Drupal.t('Card Details', {}, { context: 'egift' })}
