@@ -730,10 +730,12 @@ class AlshayaSpcController extends ControllerBase {
       if (in_array($item['sku'], array_keys($productList))) {
         continue;
       }
+      // For Egift card set itemKey as item_id.
+      $itemKey = $item['is_virtual'] ? $item['item_id'] : $item['sku'];
       // Populate price and other info from order response data.
-      $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
+      $productList[$itemKey] = $this->orderHelper->getSkuDetails($item);
       // Calculate the ordered quantity of each sku.
-      $number_of_items += $productList[$item['sku']]['qtyOrdered'];
+      $number_of_items += $productList[$itemKey]['qtyOrdered'];
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
