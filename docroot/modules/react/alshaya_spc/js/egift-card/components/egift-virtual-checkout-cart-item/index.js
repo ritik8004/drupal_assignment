@@ -34,30 +34,32 @@ class CheckoutVirtualCartItem extends React.Component {
       : '';
 
     return (
-      <div className="product-item">
+      <div className="product-item egift-cart-item">
         <div className="spc-product-image">
           <CheckoutItemImage img_data={cartImage} />
         </div>
         <div className="spc-product-meta-data">
           <div className="spc-product-title-price">
-            <div className="spc-product-title">
+            <div className="spc-product-title egift-product-title">
               {Drupal.t('Alshaya eGift card', {}, { context: 'egift' })}
             </div>
-            <div className="spc-product-price">
+            <div className="spc-product-price egift-product-price">
               <PriceElement amount={price} />
             </div>
           </div>
-          <div className="spc-cart-product-attributes">
-            <span className="spc-cart-product-attribute-label">{Drupal.t('Style:', {}, { context: 'egift' })}</span>
-            <span className="spc-cart-product-attribute-value">{title}</span>
-          </div>
-          <div className="spc-cart-product-attribute">
-            <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
-            <span className="spc-cart-product-attribute-value">{ recieptEmail }</span>
-          </div>
-          <div className="spc-cart-product-attribute">
-            <span className="spc-cart-product-attribute-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
-            <span className="spc-cart-product-attribute-value">{ giftCardMessage }</span>
+          <div className="spc-product-attributes">
+            <div className="spc-product-attribute">
+              <span className="spc-cart-product-attribute-label">{Drupal.t('Style:', {}, { context: 'egift' })}</span>
+              <span className="spc-cart-product-attribute-value">{title}</span>
+            </div>
+            <div className="spc-product-attribute">
+              <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
+              <span className="spc-cart-product-attribute-value">{ recieptEmail }</span>
+            </div>
+            <div className="spc-product-attribute egift-cart-message-attribute">
+              <span className="spc-cart-product-attribute-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
+              <span className="spc-cart-product-attribute-value egift-cart-message-value">{ giftCardMessage }</span>
+            </div>
           </div>
         </div>
       </div>

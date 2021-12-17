@@ -3,6 +3,7 @@ services:
     class: Drupal\alshaya_egift_card\Helper\EgiftCardHelper
     arguments:
       - '@config.factory'
+      - '@token'
   alshaya_egift_card.egift_list_breadcrumb:
     class: Drupal\alshaya_egift_card\Breadcrumb\AlshayaEgiftCardBreadcrumb
     tags:

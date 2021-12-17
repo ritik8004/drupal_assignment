@@ -4,6 +4,7 @@ namespace Drupal\alshaya_egift_card\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\token\TokenInterface;
 
 /**
  * Helper class for Egift Card.
@@ -21,21 +22,26 @@ class EgiftCardHelper {
   protected $configFactory;
 
   /**
-   * The api helper object.
+   * Token Interface.
    *
-   * @var Drupal\alshaya_egift_card\Helper\EgiftCardHelper
+   * @var \Drupal\token\TokenInterface
    */
+  protected $token;
 
-    /**
-     * EgiftCardHelper constructor.
-     *
-     * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-     *   Config Factory service object.
-     */
+  /**
+   * EgiftCardHelper constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
+   * @param \Drupal\token\TokenInterface $token
+   *   Token interface.
+   */
   public function __construct(
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    TokenInterface $token
   ) {
     $this->configFactory = $config_factory;
+    $this->token = $token;
   }
 
   /**
@@ -71,7 +77,7 @@ class EgiftCardHelper {
     }
     $config = $this->configFactory->get('alshaya_egift_card.settings');
     $term_conditions_text = $config->get('topup_terms_conditions_text') != null
-      ? $config->get('topup_terms_conditions_text')['value']
+      ? $this->token->replace($config->get('topup_terms_conditions_text')['value'])
       : '';
 
     return [
