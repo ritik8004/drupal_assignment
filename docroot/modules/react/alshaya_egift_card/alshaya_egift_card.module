@@ -20,6 +20,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
     }),
   ];
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
+  $build['#attached']['library'][] = 'alshaya_white_label/egift-card-checkout';
 
   $build['#strings'][] = [
     'key' => 'form_egift_card_number',
