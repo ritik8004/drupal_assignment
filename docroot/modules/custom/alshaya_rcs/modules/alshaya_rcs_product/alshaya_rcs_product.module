@@ -289,9 +289,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $alshaya_master_settings->getCacheTags());
 
   // PDP Click and Collect.
-  $build['#attached']['library'] = [
-    'alshaya_click_collect/click-and-collect.pdp',
-  ];
+  $build['#attached']['library'][] = 'alshaya_click_collect/click-and-collect.pdp';
+
   $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
   $config = alshaya_click_collect_get_config();
 

@@ -26,8 +26,8 @@ const PromotionsDynamicLabelsUtil = {
 
     if (products_labels) {
       products_labels.forEach((item) => {
-        // @todo To remove this once we get the proper empty array response
-        // from Magento.
+        // Settings labels as an empty array if the response is null from
+        // Magento, as we treat this as an array to perform computation.
         if (!item.labels) {
           item.labels = [];
         }
