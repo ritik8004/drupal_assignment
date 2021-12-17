@@ -27,29 +27,6 @@
   };
 
   /**
-   * Fetches product stock data from storage.
-   *
-   * @param {string} sku
-   *   The sku for which stock is to be fetched.
-   *
-   * @returns {null|object}
-   *   Stock data if found else null.
-   */
-  const getProductStock = function (sku) {
-    let stock = null;
-    Drupal.alshayaSpc.getLocalStorageProductData(sku, function (product) {
-      stock = {
-        stock: product.stock.qty,
-        in_stock: product.stock.in_stock,
-        cnc_enabled: product.cncEnabled,
-        max_sale_qty: product.maxSaleQty,
-      };
-    });
-
-    return stock;
-  }
-
-  /**
    * Get the stock status of the given sku.
    *
    * @param {string} sku
@@ -64,18 +41,14 @@
     // Product data, containing stock information, is already present in local
     // storage before this function is invoked. So no need to call a separate
     // API to fetch stock status for V2.
-    let stock = getProductStock(sku);
+    const product = await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
 
-    if (stock !== null) {
-      return stock;
-    }
-
-    // Since we did not find stock data in local storage/it is expired, we
-    // fetch the complete product data and then fetch the stock.
-    await Drupal.alshayaSpc.getProductDataV2(sku, parentSKU);
-
-    stock = getProductStock(sku);
-    return stock;
+    return {
+      stock: product.stock.qty,
+      in_stock: product.stock.in_stock,
+      cnc_enabled: product.cncEnabled,
+      max_sale_qty: product.maxSaleQty,
+    };
   };
 
   /**

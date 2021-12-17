@@ -118,6 +118,40 @@
   };
 
   /**
+   * Fetches the product data from local storage.
+   *
+   * The difference of this with Drupal.alshayaSpc.getLocalStorageProductData()
+   * is that the function directly returns the data instead of calling the
+   * callback.
+   *
+   * @param {string} sku
+   *   SKU value.
+   *
+   * @returns {Object|Boolean}
+   *   If product is found in storage, it is returned else false is returned.
+   */
+  Drupal.alshayaSpc.getLocalStorageProductDataV2 = function (sku) {
+    var langcode = $('html').attr('lang');
+    var key = ['product', langcode, sku].join(':');
+
+    var data = null;
+
+    try {
+      data = JSON.parse(localStorage.getItem(key));
+    }
+    catch (e) {
+      // Do nothing, we will use PDP API to get the info again.
+    }
+
+    var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
+    var currentTime = new Date().getTime();
+    if (data !== null && ((currentTime - data.created) < expireTime)) {
+      return data;
+    }
+    return false;
+  };
+
+  /**
    * V2 version of Drupal.alshayaSpc.getProductData().
    *
    * This method uses async/await instead of the callback invocation method
@@ -129,7 +163,16 @@
    *   Parent sku value.
    */
   Drupal.alshayaSpc.getProductDataV2 = async function (sku, parentSKU = null) {
+    var data = Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
+    if (data) {
+      return data;
+    }
+
+    // Call API, fetch data and store product data in storage.
     await window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+
+    // Return product data from storage.
+    return Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
   }
 
   Drupal.alshayaSpc.storeProductData = function (data) {

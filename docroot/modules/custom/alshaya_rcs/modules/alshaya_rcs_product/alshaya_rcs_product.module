@@ -147,12 +147,37 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
 }
 
 /**
+ * Gets required cnc settings.
+ *
+ * @return array
+ *   CnC settings and cache metadata.
+ */
+function _getCncSettings() {
+  $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
+
+  return [
+    'drupalSettings' => [
+      'alshaya_click_collect' => [
+        'status' => $cnc_settings->get('feature_status'),
+      ],
+    ],
+    '#cache' => [
+      'tags' => $cnc_settings->getCacheTags(),
+    ],
+  ];
+}
+
+/**
  * Implements hook_alshaya_spc_cart_build_alter().
  */
 function alshaya_rcs_product_alshaya_spc_cart_build_alter(array &$build) {
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
   $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+
+  $cnc_settings = _getCncSettings();
+  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
+  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
 }
 
 /**
@@ -162,6 +187,10 @@ function alshaya_rcs_product_alshaya_spc_checkout_build_alter(array &$build) {
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
   $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+
+  $cnc_settings = _getCncSettings();
+  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
+  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
 }
 
 /**
@@ -171,6 +200,10 @@ function alshaya_rcs_product_alshaya_spc_checkout_confirmation_order_build_alter
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
   $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+
+  $cnc_settings = _getCncSettings();
+  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
+  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
 }
 
 /**
