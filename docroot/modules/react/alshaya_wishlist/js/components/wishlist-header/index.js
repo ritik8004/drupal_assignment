@@ -1,20 +1,39 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { smoothScrollTo } from '../../../../js/utilities/smoothScroll';
-import { getWishlistLabel, getWishlistNotificationTime } from '../../utilities/wishlist-utils';
+import {
+  getWishlistLabel,
+  getWishlistNotificationTime,
+  getWishListData,
+  isAnonymousUser,
+  getWishlistFromBackend,
+} from '../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
 
 export default class WishlistHeader extends React.Component {
   constructor(props) {
     super(props);
+
+    // Get the wishlist items and set the count in state.
+    const wishListItems = getWishListData() || {};
+    const wishListItemCount = Object.keys(wishListItems).length;
+
     this.state = {
-      wishListItemCount: 0,
+      wishListItemCount,
       wishListItemData: null,
     };
   }
 
   componentDidMount() {
-    // @todo Add logic to get wishlist content for current user.
+    // Check if wishlist data is null and user is an authenticate user,
+    // we will call backend api to get data from magento and
+    // store the wishlist info data in local storage.
+    if ((getWishListData() === null) && !isAnonymousUser()) {
+      getWishlistFromBackend();
+
+      // Add event listener for get wishlist from backend success.
+      document.addEventListener('getWishlistFromBackendSuccess', this.handleWishListItemsCount, false);
+    }
 
     // Add event listener for add to wishlist action.
     document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
@@ -23,6 +42,19 @@ export default class WishlistHeader extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.timer);
   }
+
+  /**
+   * Once item is available change the icon state in header.
+   */
+  handleWishListItemsCount = () => {
+    // Get the wishlist items.
+    const wishListItems = getWishListData() || {};
+    const wishListItemCount = Object.keys(wishListItems).length;
+
+    if (wishListItemCount > 0) {
+      this.setState({ wishListItemCount });
+    }
+  };
 
   /**
    * Set timer for wishlist notifcation.

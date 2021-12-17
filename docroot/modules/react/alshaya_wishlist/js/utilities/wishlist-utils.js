@@ -1,6 +1,12 @@
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { getStorageInfo, setStorageInfo } from '../../../js/utilities/storage';
-import { getWishlistInfoStorageExpirationForGuest } from '../../../js/utilities/wishlistHelper';
+import {
+  getWishlistInfoStorageExpirationForGuest,
+  getWishlistInfoStorageExpirationForLoggedIn,
+} from '../../../js/utilities/wishlistHelper';
+import { callMagentoApi } from '../../../js/utilities/requestHelper';
+import logger from '../../../js/utilities/logger';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Check if user is anonymous.
@@ -15,13 +21,12 @@ export const isAnonymousUser = () => (drupalSettings.user.uid === 0);
 export const getWishListStorageKey = () => 'wishlistInfo';
 
 /**
- * Return the wishlist info available in local storage.
- * Return null if wishlist info in local storage is expired.
+ * Return the current wishlist info if available.
  *
  * @returns {object}
  *  An object of wishlist information.
  */
-export const getWishListInfoForGuestUsers = () => {
+export const getWishListData = () => {
   // Get local storage key for the wishlist.
   const storageKey = getWishListStorageKey();
 
@@ -34,7 +39,9 @@ export const getWishListInfoForGuestUsers = () => {
   }
 
   // Configurable expiration time, by default it is 300s.
-  const storageExpireTime = getWishlistInfoStorageExpirationForGuest();
+  const storageExpireTime = isAnonymousUser()
+    ? getWishlistInfoStorageExpirationForGuest()
+    : getWishlistInfoStorageExpirationForLoggedIn();
   const expireTime = storageExpireTime * 1000;
   const currentTime = new Date().getTime();
 
@@ -46,22 +53,6 @@ export const getWishListInfoForGuestUsers = () => {
   }
 
   return wishListInfo.infoData;
-};
-
-/**
- * Return the current wishlist info if available.
- *
- * @returns {object}
- *  An object of wishlist information.
- */
-export const getWishListData = () => {
-  // For Guest users.
-  if (isAnonymousUser()) {
-    return getWishListInfoForGuestUsers();
-  }
-
-  // @todo: we need to work on for logged in users.
-  return null;
 };
 
 /**
@@ -114,19 +105,80 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
 };
 
 /**
+ * Adds/removes products from wishlist in backend using API.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+export const addRemoveWishlistItemsInBackend = async (data, action) => {
+  // Early return is no action is provided.
+  if (typeof action === 'undefined') {
+    return null;
+  }
+
+  let requestMethod = null;
+  let requestUrl = null;
+  let itemData = null;
+
+  if (action === 'addWishlistItem') {
+    requestMethod = 'POST';
+    requestUrl = '/V1/wishlist/me/item/add';
+    itemData = {
+      items: [
+        {
+          sku: data.sku,
+        },
+      ],
+    };
+  }
+
+  const response = await callMagentoApi(requestUrl, requestMethod, itemData);
+  if (hasValue(response.data) && hasValue(response.data.error)) {
+    logger.warning('Error adding item to wishlist. Post: @post, Response: @response', {
+      '@post': JSON.stringify(itemData),
+      '@response': JSON.stringify(response.data),
+    });
+  }
+
+  return response;
+};
+
+/**
+ * Utility function to add a product to wishlist for logged in users.
+ */
+export const addProductToWishListForLoggedInUsers = (productInfo) => (
+  addRemoveWishlistItemsInBackend(
+    productInfo,
+    'addWishlistItem',
+  ));
+
+/**
  * Utility function to add a product to wishlist.
  */
 export const addProductToWishList = (productInfo, setWishListStatus) => {
-  // For Guest users.
+  // For anonymouse users.
   if (isAnonymousUser()) {
     addProductToWishListForGuestUsers(productInfo);
+    if (setWishListStatus) {
+      setWishListStatus(true);
+    }
+    dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
+    return;
   }
 
-  // @todo: we need to work on for logged in users.
-  if (setWishListStatus) {
-    setWishListStatus(true);
-  }
-  dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
+  // For logged in users.
+  addProductToWishListForLoggedInUsers(productInfo).then((response) => {
+    if (typeof response.data.status !== 'undefined'
+      && response.data.status) {
+      if (setWishListStatus) {
+        setWishListStatus(true);
+      }
+      dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
+    }
+  });
 };
 
 /**
@@ -201,4 +253,49 @@ export const getWishlistShareLink = () => {
   // @todo: reduce the length of the URL.
   const shareItemsParams = btoa(JSON.stringify(wishListItems));
   return Drupal.url.toAbsolute(`wishlist/share?data=${shareItemsParams}`);
+};
+
+/**
+ * Get the wishlist information from the backend using API.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+export const getWishlistFromBackend = async () => {
+  const requestMethod = 'GET';
+  const requestUrl = '/V1/wishlist/me/items';
+
+  const response = await callMagentoApi(requestUrl, requestMethod);
+  if (hasValue(response.data)) {
+    if (hasValue(response.data.error)) {
+      logger.warning('Error getting wishlist items. Response: @response', {
+        '@response': JSON.stringify(response.data),
+      });
+    }
+
+    if (hasValue(response.data.items)) {
+      const wishListItems = {};
+
+      response.data.items.forEach((item) => {
+        wishListItems[item.sku] = {
+          sku: item.sku,
+          options: item.options,
+        };
+      });
+
+      // Save back to storage.
+      addWishListInfoInStorage(wishListItems);
+
+      // Dispatch an event from other modules to know
+      // that wishlist data is available in storage.
+      const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', { bubbles: true });
+      document.dispatchEvent(getWishlistFromBackendSuccess);
+    }
+  }
+
+  // If required to do explicit operation from where this function called.
+  return response;
 };

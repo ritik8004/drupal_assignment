@@ -4,20 +4,21 @@ import {
   addProductToWishList,
   removeProductFromWishList,
   getWishlistLabel,
+  isAnonymousUser,
 } from '../../utilities/wishlist-utils';
 
 class WishlistButton extends React.Component {
   constructor(props) {
     super(props);
-
+    const skuCode = props.skuCode ? props.skuCode : props.sku;
     // Set the products status in state.
     // true: if sku exist in wishlist,
     // false: default, if sku doesn't exist in wishlist.
     // Setting variant selected for current variant.
     // Options are selected attribute options for default product.
     this.state = {
-      addedInWishList: false,
-      skuCode: props.skuCode ? props.skuCode : props.sku,
+      addedInWishList: isProductExistInWishList(skuCode),
+      skuCode,
       variantSelected: props.variantSelected ? props.variantSelected : null,
       options: props.options ? props.options : null,
       title: props.title ? props.title : '',
@@ -25,18 +26,9 @@ class WishlistButton extends React.Component {
   }
 
   componentDidMount = () => {
-    const { skuCode, variantSelected } = this.state;
+    const { variantSelected } = this.state;
     const { context, sku } = this.props;
     const { configurableCombinations } = drupalSettings;
-    // @todo: we need to listen wishlist load event that
-    // will trigger from header wishlist component after
-    // wishlist data are fetched from MDC on page load
-    // for logged in user.
-    // Check if product already exist in wishlist, and
-    // set the status for the sku.
-    if (isProductExistInWishList(skuCode)) {
-      this.updateWishListStatus(true);
-    }
 
     // We pass options directly for plp product drawer
     // So we only need to get options for pdp layouts
@@ -63,6 +55,24 @@ class WishlistButton extends React.Component {
     // Event listener is not required for new pdp.
     if (context !== 'magazinev2') {
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
+    }
+
+    if (!isAnonymousUser()) {
+      // Add event listener for get wishlist load event for logged in user.
+      document.addEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
+    }
+  };
+
+  /**
+   * Check if current product already exist in the wishlist.
+   */
+  checkProductStatusInWishlist = () => {
+    const { skuCode } = this.state;
+
+    // Check if product already exist in wishlist, and
+    // set the status for the sku.
+    if (isProductExistInWishList(skuCode)) {
+      this.updateWishListStatus(true);
     }
   };
 
