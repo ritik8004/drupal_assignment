@@ -105,7 +105,7 @@ export const getApiEndpoint = (action, params = {}) => {
       break;
 
     case 'eGiftHpsSearch':
-      endpoint = `/V1/egiftcard/hps-search/email/${params.email}`;
+      endpoint = '/V1/customers/hpsCustomerData';
       break;
 
     default:
@@ -138,7 +138,6 @@ export const callEgiftApi = (action, method, postData, params) => {
 };
 
 /**
- <<<<<<< HEAD
  * Performs egift redemption.
  *
  * @param {int} quoteId
