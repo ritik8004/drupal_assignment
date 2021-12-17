@@ -1,0 +1,16 @@
+.spc-order-summary-block {
+  .spc-product-attributes {
+    .spc-cart-product-attribute-value {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 7.9rem;
+      display: inline-block;
+      vertical-align: bottom;
+
+      @include breakpoint($desktop) {
+        width: 8.9rem;
+      }
+    }
+  }
+}

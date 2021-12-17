@@ -622,3 +622,8 @@ egift-purchase-page:
       css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+
+egift-card-checkout:
+  css:
+    theme:
+      css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: {}
