@@ -127,6 +127,14 @@
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
 
+        // Dispatch event on modal load each time to perform action on load.
+        // We need to load wishlist component first before we set product data.
+        if (viewMode === 'modal' || viewMode === 'matchback') {
+          var eventName = (viewMode === 'modal') ? 'onModalLoad' : 'onMatchbackLoad';
+          var currentMatchBackLoad = new CustomEvent(eventName, {bubbles: true, detail: { data: sku }});
+          document.dispatchEvent(currentMatchBackLoad);
+        }
+
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
@@ -228,12 +236,6 @@
           $(firstAttribute).removeProp('selected').removeAttr('selected');
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
-
-          // Add event to trigger on matchback load.
-          if (viewMode === 'matchback') {
-            var currentMatchBackLoad = new CustomEvent('onMatchbackLoad', {bubbles: true, detail: { data: sku }});
-            document.dispatchEvent(currentMatchBackLoad);
-          }
         }
       });
 
