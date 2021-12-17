@@ -323,7 +323,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                     </ConditionalView>
                   </div>
                 </div>
-                <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
+                <ConditionalView condition={cart.cart.totals.egiftRedemptionType === 'linked'}>
+                  <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
+                </ConditionalView>
               </div>
             </ConditionalView>
           </div>
