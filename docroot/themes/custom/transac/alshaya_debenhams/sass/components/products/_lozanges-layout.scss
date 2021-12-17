@@ -1,0 +1,71 @@
+.labels-wrapper {
+  > .labels-container {
+    &.top-left {
+      @include breakpoint($tablet) {
+        #{$left}: 0;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        top: 0.625rem;
+
+        @include breakpoint($tablet) {
+          top: 0.625rem;
+        }
+      }
+    }
+
+    &.top-right {
+      @include breakpoint($tablet) {
+        #{$right}: 0;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        top: 0.625rem;
+
+        @include breakpoint($tablet) {
+          top: 0.625rem;
+        }
+      }
+    }
+
+    &.bottom-left {
+      @include breakpoint($tablet) {
+        #{$left}: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        bottom: 2rem;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        bottom: 0.625rem;
+
+        @include breakpoint($tablet) {
+          bottom: 0.625rem;
+        }
+      }
+    }
+
+    &.bottom-right {
+      @include breakpoint($tablet) {
+        #{$right}: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        bottom: 2rem;
+      }
+
+      .c-plp &,
+      .view-product-slider & {
+        bottom: 0.625rem;
+
+        @include breakpoint($tablet) {
+          bottom: 0.625rem;
+        }
+      }
+    }
+  }
+}
