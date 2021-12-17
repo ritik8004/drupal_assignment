@@ -63,6 +63,13 @@ class WishlistButton extends React.Component {
     }
   };
 
+  componentWillUnmount = () => {
+    if (!isAnonymousUser()) {
+      // Remove event listener bind in componentDidMount.
+      document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
+    }
+  };
+
   /**
    * Check if current product already exist in the wishlist.
    */

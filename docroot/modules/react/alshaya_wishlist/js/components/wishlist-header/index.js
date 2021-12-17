@@ -29,9 +29,11 @@ export default class WishlistHeader extends React.Component {
     // we will call backend api to get data from magento and
     // store the wishlist info data in local storage.
     if ((getWishListData() === null) && !isAnonymousUser()) {
+      // Load wishlist information from the magento backend.
       getWishlistFromBackend();
 
-      // Add event listener for get wishlist from backend success.
+      // Add event listener for updating the wishlist icon
+      // status after wishlist info loaded from backend.
       document.addEventListener('getWishlistFromBackendSuccess', this.handleWishListItemsCount, false);
     }
 
