@@ -1,10 +1,9 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { smoothScrollTo } from '../../../../js/utilities/smoothScroll';
 import { getWishlistLabel, getWishlistNotificationTime } from '../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
 
-export default class WishlistHeader extends React.Component {
+export default class WishlistStickyHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,21 +47,20 @@ export default class WishlistHeader extends React.Component {
   handleAddToWishList = (data) => {
     const { productInfo } = data.detail;
     const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
-    if (querySelector !== null) {
+    if (querySelector === null) {
       return;
     }
     this.setTimer();
     this.setState({
       wishListItemData: productInfo,
     });
-    smoothScrollTo('#wishlist-header-wrapper');
   };
 
   render() {
     const { wishListItemCount, wishListItemData } = this.state;
     const wishlistActiveClass = wishListItemCount !== 0 ? 'wishlist-active' : 'wishlist-inactive';
     return (
-      <div className="wishlist-header top-wrapper">
+      <div className="wishlist-header sticky-wrapper">
         <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('wishlist')}>
           <span className="wishlist-icon">{Drupal.t('my @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
         </a>
