@@ -1,5 +1,5 @@
 egift_card_enabled: true # Config to enable/disable egift card feature.
 payment_methods_not_supported: { }
 topup_terms_conditions_text:
-  value: '<ol><li>Top-up can be done only for Active E-Gift Cards</li><li>Minimum Top-up amount is 5 AED</li><li>Top-up will extend your validity by additional 3 months</li></ol>'
+  value: '<ol><li>Top-up can be done only for Active E-Gift Cards</li><li>Minimum Top-up amount is 5 [alshaya_seo:currency]</li><li>Top-up will extend your validity by additional 3 months</li></ol>'
   format: rich_text
