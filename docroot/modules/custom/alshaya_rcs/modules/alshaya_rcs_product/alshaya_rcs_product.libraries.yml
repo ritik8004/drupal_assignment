@@ -50,7 +50,7 @@ product.order_quantity_limit:
 product.promotions:
   version: 1.x
   js:
-    templates/rcs-product-order-quantity-limit.handlebars: {}
+    templates/rcs-product-promotions.handlebars: {}
 
 product.delivery_option_cnc:
   version: 1.x
