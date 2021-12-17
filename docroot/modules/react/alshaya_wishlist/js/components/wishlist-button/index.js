@@ -20,7 +20,7 @@ class WishlistButton extends React.Component {
       addedInWishList: isProductExistInWishList(skuCode),
       skuCode,
       variantSelected: props.variantSelected ? props.variantSelected : null,
-      options: props.options ? props.options : null,
+      options: props.options ? props.options : [],
       title: props.title ? props.title : '',
     };
   }
@@ -41,9 +41,9 @@ class WishlistButton extends React.Component {
     // Set title for simple sku product on page load.
     // We need to set title only for old pdp, modal and matchback.
     // For new pdp and side drawer, we get all data through props.
-    const viewModes = ['pdp', 'modal', 'matchback'];
+    const contextArray = ['pdp', 'modal', 'matchback'];
     if (!(this.isConfigurableProduct(sku, configurableCombinations))
-      && viewModes.includes(context)) {
+      && contextArray.includes(context)) {
       const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
       const productInfo = drupalSettings[productKey];
       this.setState({
@@ -53,7 +53,7 @@ class WishlistButton extends React.Component {
 
     // Rendering wishlist button as per sku variant info.
     // Event listener is not required for new pdp.
-    if (context !== 'magazinev2') {
+    if (context !== 'magazinev2' && context !== 'magazinev2-related') {
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
     }
 
@@ -155,26 +155,58 @@ class WishlistButton extends React.Component {
   }
 
   /**
+   * Check if current variant exists in same group of main sku.
+   */
+  ifExistsInSameGroup = (skuItem) => {
+    const { sku, context } = this.props;
+    const productKey = context === 'matchback' ? 'matchback' : 'productInfo';
+    const productInfo = drupalSettings[productKey];
+    let found = false;
+    // Check in variant list for grouped configurable product.
+    // Else check in item list for grouped simple product.
+    if (productInfo[sku].variants) {
+      Object.values(productInfo[sku].variants).forEach((variant) => {
+        if (variant.parent_sku && variant.parent_sku === skuItem) {
+          found = true;
+        }
+      });
+    } else if (productInfo[sku].group) {
+      Object.values(productInfo[sku].group).forEach((item) => {
+        if (item.sku && item.sku === skuItem) {
+          found = true;
+        }
+      });
+    }
+    return found;
+  }
+
+  /**
    * Update wishlist button state as per variant selection.
    */
   updateProductInfoData = (e) => {
     e.preventDefault();
-    if (e.detail && e.detail.data.sku && e.detail.data.variantSelected) {
-      const { sku } = this.props;
-      const { configurableCombinations } = drupalSettings;
-      this.setState({
-        skuCode: e.detail.data.sku,
-        variantSelected: e.detail.data.variantSelected,
-        title: e.detail.data.title,
-      }, () => {
-        // Update wishlist button status for selected variant.
-        this.updateWishListStatus(isProductExistInWishList(e.detail.data.sku));
-        // Get selected attribute options for selected variant.
-        if (this.isConfigurableProduct(sku, configurableCombinations)
-          && e.detail.data.variantSelected) {
-          this.getSelectedOptions(e.detail.data.variantSelected, configurableCombinations[sku]);
+    if (e.detail) {
+      const parentSkuSelected = e.detail.data.sku;
+      const { variantSelected, title } = e.detail.data;
+      if (parentSkuSelected && variantSelected) {
+        const { sku } = this.props;
+        if (sku === e.detail.data.sku || this.ifExistsInSameGroup(parentSkuSelected)) {
+          const { configurableCombinations } = drupalSettings;
+          this.setState({
+            skuCode: parentSkuSelected,
+            variantSelected,
+            title,
+          }, () => {
+            // Update wishlist button status for selected variant.
+            this.updateWishListStatus(isProductExistInWishList(parentSkuSelected));
+            // Get selected attribute options for selected variant.
+            if (this.isConfigurableProduct(sku, configurableCombinations)
+              && variantSelected) {
+              this.getSelectedOptions(variantSelected, configurableCombinations[sku]);
+            }
+          });
         }
-      });
+      }
     }
   }
 

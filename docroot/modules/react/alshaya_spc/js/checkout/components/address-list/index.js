@@ -14,6 +14,8 @@ import getStringMessage from '../../../utilities/strings';
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import Loading from '../../../utilities/loading';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 export default class AddressList extends React.Component {
   isComponentMounted = false;
@@ -85,7 +87,12 @@ export default class AddressList extends React.Component {
       cart, closeModal, headingText, showEditButton, type, formContext, areaUpdated,
     } = this.props;
 
+    const processNewAddressForAddressChange = isExpressDeliveryEnabled() && areaUpdated;
+
     const addressItem = [];
+    // Get Selected Area.
+    const areaSelected = processNewAddressForAddressChange ? getDeliveryAreaStorage() : '';
+    let isAddressSelected = false;
     Object.entries(addressList).forEach(([key, address]) => {
       const addressData = (type === 'billing')
         ? cart.cart.billing_address
@@ -97,6 +104,13 @@ export default class AddressList extends React.Component {
         && addressData.customer_address_id.toString() === address.address_mdc_id) {
         isSelected = true;
       }
+      // Mark address not selected if area is updated
+      if (processNewAddressForAddressChange
+        && areaSelected.area !== 'undefined'
+        && (areaSelected.area !== address.administrative_area)) {
+        isSelected = false;
+      }
+      isAddressSelected = isSelected;
       addressItem.push(
         <AddressItem
           isSelected={isSelected}
@@ -112,12 +126,27 @@ export default class AddressList extends React.Component {
       );
     });
 
+    // Show New Address form on if Area is updated,
+    // And updated area is not available in Address List.
+    let showNewAddressForm = false;
+    showNewAddressForm = (processNewAddressForAddressChange && !isAddressSelected);
+
+    // Get Default Value fromm Form.
     const defaultVal = {
       static: {
         fullname: `${window.drupalSettings.user_name.fname} ${window.drupalSettings.user_name.lname}`,
         telephone: drupalSettings.user_name.mobile,
       },
     };
+    if (showNewAddressForm && areaSelected !== 'undefined') {
+      Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
+        if (val.visible === true) {
+          if (key === 'administrative_area' || key === 'area_parent') {
+            defaultVal[val.key] = areaSelected !== null ? areaSelected.value[val.key] : '';
+          }
+        }
+      });
+    }
 
     return (
       <>
@@ -132,7 +161,12 @@ export default class AddressList extends React.Component {
                 <div className="spc-add-new-address-btn" onClick={() => triggerOpenModal(2)}>
                   {getStringMessage('add_new_address')}
                 </div>
-                <Popup className="spc-address-list-new-address" open={isModalOpen} closeOnDocumentClick={false} closeOnEscape={false}>
+                <Popup
+                  className="spc-address-list-new-address"
+                  open={processNewAddressForAddressChange ? showNewAddressForm : isModalOpen}
+                  closeOnDocumentClick={false}
+                  closeOnEscape={false}
+                >
                   <AddressForm
                     closeModal={triggerCloseModal}
                     showEmail={false}
