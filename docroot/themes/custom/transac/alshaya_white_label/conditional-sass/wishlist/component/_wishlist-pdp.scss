@@ -6,9 +6,13 @@
 
     .wishlist-pdp-full {
       position: absolute;
-      #{$right}: 7rem;
+      #{$right}: 3rem;
       z-index: 2;
       top: 0.9375rem;
+
+      @include breakpoint($desktop) {
+        #{$right}: 7rem;
+      }
     }
 
     .wishlist-button-wrapper {

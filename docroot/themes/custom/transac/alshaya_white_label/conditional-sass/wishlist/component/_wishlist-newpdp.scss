@@ -34,5 +34,15 @@ body.wishlist-enabled {
         width: 100%;
       }
     }
+
+    .magv2-crossell-popup-content-wrapper {
+      position: relative;
+
+      .wishlist-icon {
+        position: absolute;
+        top: 1.25rem;
+        #{$right}: 1.25rem;
+      }
+    }
   }
 }
