@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e67ba1036916daf36a0c09e9f1b4a1f1",
+    "content-hash": "0fff9c3b90b7aff0ab5068b753906b13",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -630,7 +630,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fengyuanchen/cropper.git",
+                "url": "git@github.com:fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -4759,63 +4759,6 @@
             }
         },
         {
-            "name": "drupal/block_content_machine_name",
-            "version": "1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/block_content_machine_name.git",
-                "reference": "8.x-1.6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/block_content_machine_name-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "1f0f1ac9036b396c2e9b028c470b5114982e1faa"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/machine_name_widget": "^2.0@alpha"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1601187751",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "patches_applied": {
-                    "Not compatible with Drupal 9 when install with composer": "https://www.drupal.org/files/issues/2021-02-22/3199593-1.patch"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Mitesh Patel",
-                    "homepage": "https://www.drupal.org/u/miteshmap",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "vbouchet",
-                    "homepage": "https://www.drupal.org/user/1671428"
-                }
-            ],
-            "description": "Creates machine name field for block_content and allows user to create default blocks with machine name.",
-            "homepage": "http://drupal.org/project/block_content_machine_name",
-            "support": {
-                "source": "http://cgit.drupalcode.org/block_content_machine_name",
-                "issues": "https://www.drupal.org/project/issues/block_content_machine_name"
-            }
-        },
-        {
             "name": "drupal/block_field",
             "version": "1.0.0-rc2",
             "source": {
@@ -5876,10 +5819,10 @@
                     "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1",
                     "Add getoriginal method for languageConfigOverride": "https://www.drupal.org/files/issues/2021-11-10/getOriginal-method-for-languageConfigOverride-3248728-3.patch",
                     "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch",
+                    "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2020-10-01/2685749-85.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-01-14/3143958-11-subprofile-support-8.9.x.patch",
-                    "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch",
-                    "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2019-12-16/2685749-73.patch"
+                    "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch"
                 }
             },
             "autoload": {
@@ -9436,64 +9379,6 @@
             "homepage": "https://www.drupal.org/project/link_attributes",
             "support": {
                 "source": "https://git.drupalcode.org/project/link_attributes"
-            }
-        },
-        {
-            "name": "drupal/machine_name_widget",
-            "version": "2.0.0-alpha2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/machine_name_widget.git",
-                "reference": "8.x-2.0-alpha2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/machine_name_widget-8.x-2.0-alpha2.zip",
-                "reference": "8.x-2.0-alpha2",
-                "shasum": "7f6ce9b6f2461b1cf902609aa2bf47f7136b99fe"
-            },
-            "require": {
-                "drupal/core": "^8.7.7 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.0-alpha2",
-                    "datestamp": "1586494928",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                },
-                "branch-alias": {
-                    "dev-8.x-2.x": "2.x-dev"
-                },
-                "enable-patching": true,
-                "patches": {
-                    "drupal/core": {
-                        "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2019-12-16/2685749-73.patch"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "davidwbarratt",
-                    "homepage": "https://www.drupal.org/user/411675",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
-                }
-            ],
-            "description": "Provides a machine name widget.",
-            "homepage": "https://www.drupal.org/project/machine_name_widget",
-            "support": {
-                "source": "https://git.drupalcode.org/project/machine_name_widget"
             }
         },
         {
