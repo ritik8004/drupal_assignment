@@ -2,6 +2,8 @@ import React from 'react';
 
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
+import ConditionalView from '../../../common/components/conditional-view';
+import { getCardNumberForTopUpItem } from '../../../utilities/egift_util';
 
 class CheckoutVirtualCartItem extends React.Component {
   constructor(props) {
@@ -16,6 +18,7 @@ class CheckoutVirtualCartItem extends React.Component {
         price,
         egiftOptions,
         media,
+        isTopUp,
       },
     } = this.props;
     // Egift card product image.
@@ -32,6 +35,8 @@ class CheckoutVirtualCartItem extends React.Component {
     const giftCardMessage = (typeof egiftOptions.hps_giftcard_message !== 'undefined')
       ? egiftOptions.hps_giftcard_message
       : '';
+    // Gift card number for top-up. @todo update the key for card number.
+    const cardNumberForTopUp = getCardNumberForTopUpItem(egiftOptions);
 
     return (
       <div className="product-item egift-cart-item">
@@ -48,18 +53,26 @@ class CheckoutVirtualCartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-attributes">
-            <div className="spc-product-attribute">
-              <span className="spc-cart-product-attribute-label">{Drupal.t('Style:', {}, { context: 'egift' })}</span>
-              <span className="spc-cart-product-attribute-value">{title}</span>
-            </div>
-            <div className="spc-product-attribute">
-              <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
-              <span className="spc-cart-product-attribute-value">{ recieptEmail }</span>
-            </div>
-            <div className="spc-product-attribute egift-cart-message-attribute">
-              <span className="spc-cart-product-attribute-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
-              <span className="spc-cart-product-attribute-value egift-cart-message-value">{ giftCardMessage }</span>
-            </div>
+            <ConditionalView condition={isTopUp === '1'}>
+              <div className="spc-cart-product-attribute">
+                <span className="spc-cart-product-attribute-label">{Drupal.t('Card No:', {}, { context: 'egift' })}</span>
+                <span className="spc-cart-product-attribute-value">{cardNumberForTopUp}</span>
+              </div>
+            </ConditionalView>
+            <ConditionalView condition={isTopUp === '0'}>
+              <div className="spc-product-attribute">
+                <span className="spc-cart-product-attribute-label">{Drupal.t('Style:', {}, { context: 'egift' })}</span>
+                <span className="spc-cart-product-attribute-value">{title}</span>
+              </div>
+              <div className="spc-product-attribute">
+                <span className="spc-cart-product-attribute-label">{Drupal.t('Send to:', {}, { context: 'egift' })}</span>
+                <span className="spc-cart-product-attribute-value">{ recieptEmail }</span>
+              </div>
+              <div className="spc-product-attribute egift-cart-message-attribute">
+                <span className="spc-cart-product-attribute-label">{Drupal.t('Message:', {}, { context: 'egift' })}</span>
+                <span className="spc-cart-product-attribute-value egift-cart-message-value">{ giftCardMessage }</span>
+              </div>
+            </ConditionalView>
           </div>
         </div>
       </div>

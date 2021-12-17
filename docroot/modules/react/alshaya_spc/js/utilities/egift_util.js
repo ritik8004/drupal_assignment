@@ -193,3 +193,14 @@ export const isEgiftRedemptionDone = (cart) => {
 
   return false;
 };
+
+/**
+ * Return card number from eGift top-up item options.
+ *
+ * @todo update the option key for card number.
+ */
+export const getCardNumberForTopUpItem = (egiftOptions) => (
+  (typeof egiftOptions.hps_card_number !== 'undefined')
+    ? egiftOptions.hps_card_number
+    : ''
+);

@@ -60,18 +60,13 @@ export default class EgiftTopupFor extends React.Component {
           <ConditionalView condition={optionGiftForSelf === true}>
             <div className="card-details">
               <span className="egift-linked-card-balance">
-                {
-                Drupal.t('Card Balance: @currency @balance', {
-                  '@currency': getCurrencyCode(),
-                  '@balance': linkedCardBalance !== null ? linkedCardBalance : '',
-                }, { context: 'egift' })
-              }
+                {Drupal.t('Card Balance:', {}, { context: 'egift' })}
               </span>
+              <span>{`${getCurrencyCode()} ${linkedCardBalance !== null ? linkedCardBalance : ''}`}</span>
               <span className="egift-linked-card-balance">
-                {
-                Drupal.t('Card No: @cardNo', { '@cardNo': linkedCardNumber !== null ? linkedCardNumber : '' }, { context: 'egift' })
-              }
+                {Drupal.t('Card No:', {}, { context: 'egift' })}
               </span>
+              <span>{ linkedCardNumber !== null ? linkedCardNumber : '' }</span>
             </div>
           </ConditionalView>
         </ConditionalView>

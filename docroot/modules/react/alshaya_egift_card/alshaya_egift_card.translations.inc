@@ -239,6 +239,38 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Balance Payable',
         'context' => 'egift',
       ],
+      'Top-up' => [
+        'ar' => 'Top-up',
+        'context' => 'egift',
+      ],
+      'Top-up for' => [
+        'ar' => 'Top-up for',
+        'context' => 'egift',
+      ],
+      'My Card' => [
+        'ar' => 'My Card',
+        'context' => 'egift',
+      ],
+      'Other\'s Card' => [
+        'ar' => 'Other\'s Card',
+        'context' => 'egift',
+      ],
+      'Card Balance:' => [
+        'ar' => 'Card Balance:',
+        'context' => 'egift',
+      ],
+      'Card No:' => [
+        'ar' => 'Card No:',
+        'context' => 'egift',
+      ],
+      'eGift Card number' => [
+        'ar' => 'eGift Card number',
+        'context' => 'egift',
+      ],
+      'Card Details' => [
+        'ar' => 'Card Details',
+        'context' => 'egift',
+      ],
     ],
   ];
 
