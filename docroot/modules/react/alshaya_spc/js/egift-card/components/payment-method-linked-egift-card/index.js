@@ -89,10 +89,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             }
           } else {
           // Handle error response.
-            logger.error('Error while calling the egift HPS Search. EmailId: @emailId . Response: @response', {
-              '@emailId': 'hammadghani56@gmail.com',
-              '@response': result.data.response_message,
-            });
+            logger.error('Error while calling the egift HPS Search');
             this.setState({
               apiErrorMessage: result.data.response_message,
               renderWait: false,
