@@ -653,7 +653,7 @@
     var swatchParam = swatchParam.split('-');
     for (var i in variants) {
       for (var j in variants[i]['configurableOptions']) {
-        var attrId  = variants[i]['configurableOptions'][j]['attribute_id'].replace('attr_', '');
+        var attrId = variants[i]['configurableOptions'][j]['attribute_id'].replace('attr_', '');
         if (attrId === swatchParam[0]) {
           var swatchVal = variants[i]['configurableOptions'][j]['value'];
           swatchVal = Drupal.cleanSwatchVal(swatchVal);
