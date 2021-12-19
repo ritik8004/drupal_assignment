@@ -6,7 +6,7 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_dh:alshaya_dh
+  - alshaya_pdp_pretty_path:alshaya_pdp_pretty_path
   - alshaya_mobile_app:alshaya_mobile_app
-  - datadog_js:datadog_js
 themes:
   - alshaya_debenhams

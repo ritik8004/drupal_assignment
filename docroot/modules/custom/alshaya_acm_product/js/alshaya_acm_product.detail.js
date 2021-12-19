@@ -43,11 +43,28 @@
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
         var selected = $(this).val();
-        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
+        // Use swatch from query in case pdp pretty path is enabled.
+        var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
+        var sku = $(this).parents('form').attr('data-sku');
+        var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
+        var variantInfo = drupalSettings[productKey][sku];
+        if (variantInfo.swatch_param !== undefined) {
+          var swatchParam = variantInfo.swatch_param.split('-');
+          var swatchVal = $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').text();
+          swatchVal = Drupal.cleanSwatchVal(swatchVal);
 
+          if (swatchParam[1] !== swatchVal) {
+            var url = variantInfo.url.split('/-');
+            var newQuery = '/-' + swatchParam[0] + '-' + swatchVal;
+            var newUrl = url[0] + newQuery + '.html' + location.search;
+            drupalSettings[productKey][sku]['swatch_param'] = swatchParam[0] + '-' + swatchVal;
+            window.history.replaceState(variantInfo, variantInfo.title, newUrl);
+          }
+        }
+
+        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
         $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
           var swatchSelector = $(this).parent().siblings('.select2Option');
-
           if (typeof swatchSelector !== 'undefined') {
             var selectedIndex = $(this).index();
             swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
@@ -183,15 +200,14 @@
 
         if (drupalSettings[productKey][sku]['variants']) {
           var variants = drupalSettings[productKey][sku]['variants'];
-
+          var swatchParam = drupalSettings[productKey][sku]['swatch_param'];
           // Use first child provided in settings if available.
           // Use the first variant otherwise.
           var selectedSku = (typeof drupalSettings.configurableCombinations[sku]['firstChild'] === 'undefined')
             ? Object.keys(variants)[0]
             : drupalSettings.configurableCombinations[sku]['firstChild'];
 
-          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
-
+          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, variants, swatchParam);
           if (selectedSkuFromQueryParam !== '') {
             selectedSku = selectedSkuFromQueryParam;
           }
@@ -410,8 +426,8 @@
     var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
     var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
     var variants = drupalSettings[productKey][sku]['variants'];
-    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
-
+    var swatchParam = drupalSettings[productKey][sku]['swatch_param'];
+    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, variants, swatchParam);
     if (selectedSku) {
       $(select).removeProp('selected').removeAttr('selected');
       var attributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][selectedCode];
@@ -610,12 +626,15 @@
     return productKey
   };
 
-  Drupal.getSelectedProductFromQueryParam = function (viewMode, variants) {
+  Drupal.getSelectedProductFromQueryParam = function (viewMode, variants, swatchParam) {
+    // Use swatch from query parameter if pdp pretty path is enabled.
+    if (swatchParam !== undefined) {
+      return Drupal.getSelectedProductFromPdpPrettyPath(swatchParam, variants);
+    }
     // Use selected from query parameter only for main product.
     var selected = (viewMode === 'full')
       ? parseInt(Drupal.getQueryVariable('selected'))
       : 0;
-    var selectedSku = '';
 
     if (selected > 0) {
       for (var i in variants) {
@@ -627,6 +646,34 @@
     }
 
     return selectedSku;
+  };
+
+  Drupal.getSelectedProductFromPdpPrettyPath = function (swatchParam, variants) {
+    var selectedSku = '';
+    var swatchParam = swatchParam.split('-');
+    for (var i in variants) {
+      for (var j in variants[i]['configurableOptions']) {
+        var attrId  = variants[i]['configurableOptions'][j]['attribute_id'].replace('attr_', '');
+        if (attrId === swatchParam[0]) {
+          var swatchVal = variants[i]['configurableOptions'][j]['value'];
+          swatchVal = Drupal.cleanSwatchVal(swatchVal);
+          if (swatchVal === swatchParam[1]) {
+            selectedSku = variants[i]['sku'];
+            break;
+          }
+        }
+      }
+      if (selectedSku !== '') {
+        break;
+      }
+    }
+
+    return selectedSku;
+  };
+
+  Drupal.cleanSwatchVal = function (swatchVal) {
+    var swatchVal = swatchVal.replace(/ /g, "_");
+    return swatchVal.toLowerCase();
   };
 
 })(jQuery, Drupal, drupalSettings);

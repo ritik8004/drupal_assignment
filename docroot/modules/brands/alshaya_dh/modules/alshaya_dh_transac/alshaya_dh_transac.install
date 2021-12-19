@@ -11,6 +11,8 @@
 function alshaya_dh_transac_install() {
   // Enable algolia as default search index.
   \Drupal::service('module_installer')->install(['alshaya_search_algolia']);
+  // Enable datadog js module for using v2.
+  \Drupal::service('module_installer')->install(['datadog_js']);
   // Enable pims module for using v2.
   \Drupal::service('module_installer')->install(['alshaya_pims']);
 
