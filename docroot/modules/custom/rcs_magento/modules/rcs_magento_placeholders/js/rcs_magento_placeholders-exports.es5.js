@@ -155,7 +155,8 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
   };
 
   let response = null;
-  let result = null;
+  let result = [];
+  let processed = false;
 
   switch (placeholder) {
     // No need to fetch anything. The markup will be there in the document body.
@@ -232,17 +233,21 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'order_teaser':
-      if (params.skus) {
-        request.data = JSON.stringify({
-          query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.products}}`
+      if (Drupal.hasValue(params['parent-skus'])
+        && Drupal.hasValue(params['item-skus'])) {
+        const parentSkus = JSON.parse(params['parent-skus']);
+        const itemSkus = JSON.parse(params['item-skus']);
+        parentSkus.forEach((sku, key) => {
+          const product = Drupal.alshayaSpc.getProductDataV2(itemSkus[key], sku);
+          if (product instanceof Promise) {
+            product.then((item) => {
+              result[item['sku']] = item;
+            });
+          }
         });
-
-        response = await rcsCommerceBackend.invokeApi(request);
-        // Get exact data from response.
-        if (response !== null) {
-          result = response.data.products.items;
-        }
       }
+      // Set process flag as true to bypass the updateResult event.
+      process = true;
 
       break;
 
@@ -259,16 +264,18 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
     // Creating custom event to to perform extra operation and update the result
     // object.
-    result.map(item => {
-      const updateResult = RcsEventManager.fire('rcsUpdateResults', {
-        detail: {
-          result: item,
-          placeholder: placeholder,
-        }
-      });
+    if (!processed) {
+      result.map(item => {
+        const updateResult = RcsEventManager.fire('rcsUpdateResults', {
+          detail: {
+            result: item,
+            placeholder: placeholder,
+          }
+        });
 
-      return updateResult.detail.result;
-    });
+        return updateResult.detail.result;
+      });
+    }
 
     // Hide loader.
     if (loaderOnUpdates) {

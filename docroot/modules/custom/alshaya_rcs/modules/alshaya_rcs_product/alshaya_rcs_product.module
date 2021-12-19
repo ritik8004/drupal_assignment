@@ -907,8 +907,9 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
  * Implements hook_alshaya_acm_customer_recent_order_build_alter().
  */
 function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array &$build) {
-  // Add data attributes.
-  $data = [];
+  // Store parent and item skus.
+  $parentSkus = [];
+  $itemSkus = [];
   // Updated recent order build array.
   if (array_key_exists('recent_order', $build)) {
     $orders = $build['recent_order'];
@@ -916,7 +917,8 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
       // Iterate over each order item.
       foreach ($order['#order']['items'] as $key => $item) {
         $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
-        $data[] = $item['extension_attributes']['parent_product_sku'];
+        $parentSkus[] = $item['extension_attributes']['parent_product_sku'];
+        $itemSkus[] = $item['sku'];
       }
     }
 
@@ -925,7 +927,8 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
         '#attributes' => [
           'id' => 'rcs-ph-order_teaser',
           'class' => ['block-alshaya-acm-customer'],
-          'data-param-skus' => Json::encode(array_unique($data)),
+          'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
+          'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
         ]
       ]
     ];
@@ -940,7 +943,8 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
  */
 function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
   // Add data attributes.
-  $data = [];
+  $parentSkus = [];
+  $itemSkus = [];
   // Update the product image with RCS Token.
   foreach ($build['#products'] as $key => &$item) {
     // Add name placeholder if the product type is simple.
@@ -948,7 +952,9 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       $item['name'] = '#rcs.orderDetails.name#';
     }
     $item['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
-    $data[$key] = $item['extension_attributes']['parent_product_sku'];
+    $parentSkus[$key] = $item['extension_attributes']['parent_product_sku'];
+    // Store the item sku.
+    $itemSkus[$key] = $item['sku'];
     // Attribute placeholders.
     $item['attributes'][] = [
       'label' => '#rcs.orderDetailAttribute.attr_label#',
@@ -966,7 +972,8 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
     'container' => [
       '#attributes' => [
         'id' => 'rcs-ph-order_teaser',
-        'data-param-skus' => Json::encode(array_unique($data)),
+        'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
+        'data-param-item-skus' => Json::encode(array_unique($itemSkus))
       ]
     ]
   ];
@@ -992,7 +999,6 @@ function _alshaya_rcs_product_get_order_teaser_image(array $item) {
       'title' => $item['name'],
       'alt' => $item['name'],
       'class' => ['rcs-image'],
-      'data-parent-sku' => $item['extension_attributes']['parent_product_sku'],
       'data-item-sku' => $item['sku'],
       '#skip_lazy_loading' => TRUE,
     ],

@@ -18,18 +18,9 @@ exports.render = function render(
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(innerHtml);
   // Proceed only if inputs is not empty.
-  if (inputs.length) {
+  if (inputs) {
     // Get row item HTML.
     let rowElms = innerHtmlObj.find('tr.order-item-row');
-    // Prepare the input variable.
-    let variants = [], data = [];
-    inputs.forEach(input => {
-      data[input['sku']] = input;
-      // Get all the variants.
-      input.variants.forEach(item => {
-        variants[item.product['sku']] = item.product;
-      });
-    });
     // Iterate each order row item and replace the placeholders with proper
     // data.
     if (rowElms) {
@@ -37,8 +28,7 @@ exports.render = function render(
         const dataAttr = jQuery(row).find('img.rcs-image').data();
         if (dataAttr) {
           jQuery(row).html(replaceOrderPlaceHolders(
-            variants[String(dataAttr.itemSku)],
-            data[String(dataAttr.parentSku)],
+            inputs[dataAttr.itemSku],
             row.outerHTML,
             settings,
           ));
@@ -53,10 +43,8 @@ exports.render = function render(
 /**
  * Replace the placeholders with the Mobile menu block items.
  *
- * @param {object} variant
- *   The product variant object for table row item.
  * @param {object} product
- *   The parent product object for table row item.
+ *   The product object for table row item.
  * @param {string} itemHtml
  *   The row HTML with Placeholders.
  * @param {object} settings
@@ -64,9 +52,9 @@ exports.render = function render(
  * @returns
  *   {string} Row HTML with proper data.
  */
-const replaceOrderPlaceHolders = function (variant, product, itemHtml, settings) {
+const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   // Return if variant is empty.
-  if (typeof variant === 'undefined') {
+  if (typeof product === 'undefined') {
     return itemHtml;
   }
   let htmlElms = '';
@@ -78,7 +66,8 @@ const replaceOrderPlaceHolders = function (variant, product, itemHtml, settings)
     htmlElms = replaceIndividualPlaceHolder(
       imagePlaceHolder[0].outerHTML,
       'orderDetails',
-      { 'image': window.commerceBackend.getTeaserImage(product), 'name': product.name },
+      // @todo To change the product image to teaser image.
+      { 'image': product.image, 'name': product.title },
       settings,
     );
     imagePlaceHolder.replaceWith(htmlElms);
@@ -95,12 +84,12 @@ const replaceOrderPlaceHolders = function (variant, product, itemHtml, settings)
   let attrPlaceHolder = innerHtmlObj.find('div.attr-wrapper:first');
   if (attrPlaceHolder.length > 0) {
     htmlElms = '';
-    product.configurable_options.forEach(item => {
+    product.options.forEach(item => {
       // Get labelValue if attr_code is color.
       htmlElms += replaceIndividualPlaceHolder(
         attrPlaceHolder[0].outerHTML,
         'orderDetailAttribute',
-        { 'attr_label': item.label, 'attr_value': window.commerceBackend.getAttributeValueLabel(item.attribute_code, variant[item.attribute_code]) },
+        { 'attr_label': item.label, 'attr_value': item.value },
         settings,
       );
     });
