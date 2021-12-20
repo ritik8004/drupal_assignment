@@ -1,0 +1,8 @@
+#egift-topup-wrapper {
+  .action-buttons {
+    button[disabled] {
+      border-color: $egift-purchase-inactive-step-text;
+      background: $egift-purchase-inactive-step-text;
+    }
+  }
+}

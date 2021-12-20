@@ -616,12 +616,18 @@ tabby:
     theme:
       css/conditional-sass/tabby/tabby.ltr.css: {}
 
+egift-common:
+  css:
+    theme:
+      css/conditional-sass/egift-common/egift-common.ltr.css: {}
+
 egift-purchase-page:
   css:
     theme:
       css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+    - alshaya_white_label/egift-common
 
 egift-card-checkout:
   css:
@@ -632,3 +638,10 @@ egift-cart:
   css:
     theme:
       css/conditional-sass/egift-cart/egift-cart.ltr.css: {}
+
+egift-topup-page:
+  css:
+    theme:
+      css/conditional-sass/egift-topup-page/egift-topup-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/egift-common
