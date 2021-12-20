@@ -37,10 +37,7 @@ const Teaser = ({
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
       let collectionLabelValue = hit.collection_labels[plpAttributes[i]];
-      // @todo: we need to check for wishlist condition and see if we can avoid
-      // it and rather use something else everywhere. For ex, if we want to use
-      // different search index later this condition may cause issues.
-      if ((pageType === 'plp') && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
+      if (pageType === 'plp' && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
         collectionLabelValue = hit.collection_labels[currentLanguage][plpAttributes[i]];
       }
       if (hit && hit.collection_labels && collectionLabelValue) {
@@ -53,7 +50,7 @@ const Teaser = ({
     }
   }
   let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
-  if ((pageType === 'plp') && productListIndexStatus()) {
+  if (pageType === 'plp' && productListIndexStatus()) {
     overallRating = overallRating[currentLanguage];
   }
   let labelItems = '';
@@ -64,7 +61,7 @@ const Teaser = ({
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
   const attribute = [];
   Object.entries(hit).forEach(([key, value]) => {
-    if ((pageType === 'plp')
+    if (pageType === 'plp'
       && productListIndexStatus()
       && value !== null) {
       if (value[currentLanguage] !== undefined) {

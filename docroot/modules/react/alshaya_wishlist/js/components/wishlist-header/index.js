@@ -1,20 +1,68 @@
 import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { smoothScrollTo } from '../../../../js/utilities/smoothScroll';
-import { getWishlistLabel, getWishlistNotificationTime } from '../../utilities/wishlist-utils';
+import {
+  getWishlistLabel,
+  getWishlistNotificationTime,
+  getWishListData,
+  isAnonymousUser,
+  getWishlistFromBackend,
+  addWishListInfoInStorage,
+} from '../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export default class WishlistHeader extends React.Component {
   constructor(props) {
     super(props);
+
+    // Get the wishlist items from the local storage
+    // and set the count in state.
+    const wishListItems = getWishListData() || {};
+    const wishListItemCount = Object.keys(wishListItems).length;
+
     this.state = {
-      wishListItemCount: 0,
+      wishListItemCount,
       wishListItemData: null,
     };
   }
 
   componentDidMount() {
-    // @todo Add logic to get wishlist content for current user.
+    // Check if wishlist data is null and user is an authenticate user,
+    // we will call backend api to get data from magento and
+    // store the wishlist info data in local storage.
+    if ((getWishListData() === null) && !isAnonymousUser()) {
+      // Load wishlist information from the magento backend.
+      getWishlistFromBackend().then((response) => {
+        if (hasValue(response.data.items)) {
+          const wishListItems = {};
+
+          response.data.items.forEach((item) => {
+            wishListItems[item.sku] = {
+              sku: item.sku,
+              options: item.options,
+              // We need this for removing the item from the wishlist.
+              wishlistItemId: item.wishlist_item_id,
+            };
+          });
+
+          // Save back to storage.
+          addWishListInfoInStorage(wishListItems);
+
+          // Update the wishlist header icon color state
+          // if we have product available in wishlist.
+          const wishListItemCount = Object.keys(wishListItems).length;
+          if (wishListItemCount > 0) {
+            this.setState({ wishListItemCount });
+          }
+
+          // Dispatch an event for other modules to know
+          // that wishlist data is available in storage.
+          const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', { bubbles: true });
+          document.dispatchEvent(getWishlistFromBackendSuccess);
+        }
+      });
+    }
 
     // Add event listener for add to wishlist action.
     document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);

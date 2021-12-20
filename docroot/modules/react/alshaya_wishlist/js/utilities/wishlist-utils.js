@@ -1,6 +1,12 @@
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { getStorageInfo, setStorageInfo } from '../../../js/utilities/storage';
-import { getWishlistInfoStorageExpirationForGuest } from '../../../js/utilities/wishlistHelper';
+import {
+  getWishlistInfoStorageExpirationForGuest,
+  getWishlistInfoStorageExpirationForLoggedIn,
+} from '../../../js/utilities/wishlistHelper';
+import { callMagentoApi } from '../../../js/utilities/requestHelper';
+import logger from '../../../js/utilities/logger';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Check if user is anonymous.
@@ -15,13 +21,12 @@ export const isAnonymousUser = () => (drupalSettings.user.uid === 0);
 export const getWishListStorageKey = () => 'wishlistInfo';
 
 /**
- * Return the wishlist info available in local storage.
- * Return null if wishlist info in local storage is expired.
+ * Return the current wishlist info if available.
  *
  * @returns {object}
  *  An object of wishlist information.
  */
-export const getWishListInfoForGuestUsers = () => {
+export const getWishListData = () => {
   // Get local storage key for the wishlist.
   const storageKey = getWishListStorageKey();
 
@@ -34,7 +39,9 @@ export const getWishListInfoForGuestUsers = () => {
   }
 
   // Configurable expiration time, by default it is 300s.
-  const storageExpireTime = getWishlistInfoStorageExpirationForGuest();
+  const storageExpireTime = isAnonymousUser()
+    ? getWishlistInfoStorageExpirationForGuest()
+    : getWishlistInfoStorageExpirationForLoggedIn();
   const expireTime = storageExpireTime * 1000;
   const currentTime = new Date().getTime();
 
@@ -46,22 +53,6 @@ export const getWishListInfoForGuestUsers = () => {
   }
 
   return wishListInfo.infoData;
-};
-
-/**
- * Return the current wishlist info if available.
- *
- * @returns {object}
- *  An object of wishlist information.
- */
-export const getWishListData = () => {
-  // For Guest users.
-  if (isAnonymousUser()) {
-    return getWishListInfoForGuestUsers();
-  }
-
-  // @todo: we need to work on for logged in users.
-  return null;
 };
 
 /**
@@ -111,28 +102,130 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
 
   // Save back to storage.
   addWishListInfoInStorage(wishListItems);
+
+  // Always return a Promise object.
+  return new Promise((resolve) => {
+    resolve({ data: { status: true } });
+  });
 };
+
+/**
+ * Adds/removes products from wishlist in backend using API.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+export const addRemoveWishlistItemsInBackend = async (data, action) => {
+  // Early return is no action is provided.
+  if (typeof action === 'undefined') {
+    return null;
+  }
+
+  let requestMethod = null;
+  let requestUrl = null;
+  let itemData = null;
+
+  switch (action) {
+    case 'addWishlistItem':
+      requestMethod = 'POST';
+      requestUrl = '/V1/wishlist/me/item/add';
+      itemData = {
+        items: [
+          {
+            sku: data.sku,
+          },
+        ],
+      };
+      break;
+
+    case 'removeWishlistItem':
+      requestMethod = 'DELETE';
+      requestUrl = `/V1/wishlist/me/item/${data.wishlistItemId}/delete`;
+      break;
+
+    default:
+      logger.critical('Endpoint does not exist for action: @action.', {
+        '@action': action,
+      });
+  }
+
+  // Call magento backend with the api details.
+  const response = await callMagentoApi(requestUrl, requestMethod, itemData);
+
+  // Log if there are errors in the response.
+  if (hasValue(response.data) && hasValue(response.data.error)) {
+    logger.warning('Error adding item to wishlist. Post: @post, Response: @response', {
+      '@post': JSON.stringify(itemData),
+      '@response': JSON.stringify(response.data),
+    });
+  }
+
+  return response;
+};
+
+/**
+ * Get the wishlist information from the backend using API.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+export const getWishlistFromBackend = async () => {
+  // Call magento api to get the wishlist items of current logged in user.
+  const response = await callMagentoApi('/V1/wishlist/me/items', 'GET');
+  if (hasValue(response.data)) {
+    if (hasValue(response.data.error)) {
+      logger.warning('Error getting wishlist items. Response: @response', {
+        '@response': JSON.stringify(response.data),
+      });
+    }
+  }
+
+  // Return response to perform necessary operation
+  // from where this function called.
+  return response;
+};
+
+/**
+ * Utility function to add a product to wishlist for logged in users.
+ */
+export const addProductToWishListForLoggedInUsers = (productInfo) => (
+  addRemoveWishlistItemsInBackend(
+    productInfo,
+    'addWishlistItem',
+  ));
 
 /**
  * Utility function to add a product to wishlist.
  */
-export const addProductToWishList = (productInfo, setWishListStatus) => {
-  // For Guest users.
+export const addProductToWishList = (productInfo) => {
+  // For anonymouse users.
   if (isAnonymousUser()) {
-    addProductToWishListForGuestUsers(productInfo);
+    return addProductToWishListForGuestUsers(productInfo);
   }
 
-  // @todo: we need to work on for logged in users.
-  if (setWishListStatus) {
-    setWishListStatus(true);
-  }
-  dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
+  // For logged in users.
+  return addProductToWishListForLoggedInUsers(productInfo);
 };
 
 /**
- * Utility function to remove a product from wishlist for guest users.
+ * Utility function to add a product to wishlist for logged in users.
  */
-export const removeProductFromWishListForGuestUsers = (productSku) => {
+export const removeProductFromWishListForLoggedInUsers = (productInfo) => (
+  addRemoveWishlistItemsInBackend(
+    productInfo,
+    'removeWishlistItem',
+  ));
+
+/**
+ * Utility function to remove a product from wishlist.
+ */
+export const removeProductFromWishList = (productSku, setWishListStatus) => {
   // Get existing wishlist data from storage.
   const wishListItems = getWishListData();
 
@@ -141,25 +234,47 @@ export const removeProductFromWishListForGuestUsers = (productSku) => {
     return;
   }
 
-  // Remove the entry for given productSku from existing storage data.
-  delete wishListItems[productSku];
-
-  // Save back to storage.
-  addWishListInfoInStorage(wishListItems);
-};
-
-/**
- * Utility function to remove a product from wishlist.
- */
-export const removeProductFromWishList = (productSku, setWishListStatus) => {
-  // For Guest users.
+  // For guest users.
   if (isAnonymousUser()) {
-    removeProductFromWishListForGuestUsers(productSku);
+    // Remove the entry for given productSku from existing storage data.
+    delete wishListItems[productSku];
+
+    // Save back to storage.
+    addWishListInfoInStorage(wishListItems);
+
+    // Set the product wishlist status.
+    setWishListStatus(false);
+
+    // Dispatch an event for other modules when product removed.
+    dispatchCustomEvent('productRemovedFromWishlist', { sku: productSku, addedInWishList: false });
+
+    // return if anonymous user.
+    return;
   }
 
-  // @todo: we need to work on for logged in users.
-  setWishListStatus(false);
-  dispatchCustomEvent('productRemovedFromWishlist', { sku: productSku, addedInWishList: false });
+  // For logged in users, first check if the product exist
+  // and product's wishlistItemId exist.
+  if (typeof wishListItems[productSku] !== 'undefined'
+    && typeof wishListItems[productSku].wishlistItemId !== 'undefined') {
+    removeProductFromWishListForLoggedInUsers({
+      wishlistItemId: wishListItems[productSku].wishlistItemId,
+    }).then((response) => {
+      if (typeof response.data.status !== 'undefined'
+        && response.data.status) {
+        // Remove the entry for given productSku from existing storage data.
+        delete wishListItems[productSku];
+
+        // Save back to storage.
+        addWishListInfoInStorage(wishListItems);
+
+        // Set the product wishlist status.
+        setWishListStatus(false);
+
+        // Dispatch an event for other modules when product removed.
+        dispatchCustomEvent('productRemovedFromWishlist', { sku: productSku, addedInWishList: false });
+      }
+    });
+  }
 };
 
 /**
