@@ -15,6 +15,7 @@ import {
 import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { makeFullName } from '../../../utilities/cart_customer_util';
+import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -86,7 +87,8 @@ export default class CnCBillingAddress extends React.Component {
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show billing.
-    if (cart.cart.shipping.method === null) {
+    if (cart.cart.shipping.method === null
+      && !cartContainsOnlyVirtualProduct(cart.cart)) {
       return (null);
     }
 
@@ -100,12 +102,15 @@ export default class CnCBillingAddress extends React.Component {
     }
 
     const shippingAddress = cart.cart.shipping.address;
-    const editAddressData = {
-      static: {
-        fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
-        telephone: shippingAddress.telephone,
-      },
-    };
+    let editAddressData = {};
+    if (shippingAddress) {
+      editAddressData = {
+        static: {
+          fullname: makeFullName(shippingAddress.firstname || '', shippingAddress.lastname || ''),
+          telephone: shippingAddress.telephone,
+        },
+      };
+    }
 
     const activeClass = this.isActive() ? 'active' : 'in-active';
 

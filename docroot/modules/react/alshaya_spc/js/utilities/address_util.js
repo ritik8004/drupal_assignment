@@ -17,6 +17,7 @@ import {
 import { setStorageInfo } from './storage';
 import { isExpressDeliveryEnabled } from '../../../js/utilities/expressDeliveryHelper';
 import { setDeliveryAreaStorage } from './delivery_area_util';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -716,9 +717,12 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           document.getElementById('mobile-error').innerHTML = '';
           document.getElementById('mobile-error').classList.remove('error');
 
-          target.email = {
-            value: shipping.email,
-          };
+          // Add this only when we are not passing email via form.
+          if (!hasValue(target.email.value)) {
+            target.email = {
+              value: shipping.email,
+            };
+          }
           const formData = prepareAddressDataFromForm(target);
 
           // For logged in user add customer id from shipping.

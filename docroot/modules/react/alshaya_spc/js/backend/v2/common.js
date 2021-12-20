@@ -21,6 +21,7 @@ import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollecti
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
 import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -248,7 +249,11 @@ const formatCart = (cartData) => {
   // to allow users to fill addresses.
   if (shippingMethod === '') {
     data.shipping = {};
-    data.cart.billing_address = {};
+    // Bypass this empty settings of billing address for egift enabled and
+    // containing only virtual item in cart.
+    if (!cartContainsOnlyVirtualProduct(data.cart)) {
+      data.cart.billing_address = {};
+    }
   }
   return data;
 };

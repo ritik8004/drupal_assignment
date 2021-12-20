@@ -4,6 +4,7 @@ import logger from '../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import { removeFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
+import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 
 /**
  * Provides the egift card header.
@@ -198,9 +199,13 @@ export const updatePriceSummaryBlock = () => {
  *   The cart object.
  *
  * @return {boolean}
- *   true if it's contains non virtual product else false.
+ *   true if it contain's virtual product else false.
  */
-export const cartContainsOnlyNonVirtualProduct = (cart) => {
+export const cartContainsOnlyVirtualProduct = (cart) => {
+  // If egift card is not enabled then return true.
+  if (!isEgiftCardEnabled()) {
+    return false;
+  }
   // A flag to keep track of the non-virtual products.
   let isNonVirtual = false;
   Object.values(cart.items).forEach((item) => {
@@ -211,12 +216,12 @@ export const cartContainsOnlyNonVirtualProduct = (cart) => {
     // If there is no product type for the cart item then it's non virtual
     // product.
     if ((hasValue(item.product_type) && item.product_type !== 'virtual')
-      || (hasValue(item.isEgiftCard) && !item.isEgiftCard && hasValue(item.product_type))) {
+      || (hasValue(item.isEgiftCard) && !item.isEgiftCard)) {
       isNonVirtual = true;
     }
   });
 
-  return isNonVirtual;
+  return !isNonVirtual;
 };
 
 /**
