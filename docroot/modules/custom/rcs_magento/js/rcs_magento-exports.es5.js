@@ -24,6 +24,9 @@ exports.invokeApi = async function (request) {
     method: request.method,
     headers,
     data: request.data,
+    // This will help to prevent the spinner from stopping on ajax complete in
+    // cart_notification.js.
+    rcs: true,
     success: function (response) {
       return response;
     },
@@ -61,6 +64,9 @@ exports.invokeApi = async function (request) {
     headers,
     async: false,
     data: request.data,
+    // This will help to prevent the spinner from stopping on ajax complete in
+    // cart_notification.js.
+    rcs: true,
     success: function (response) {
       result = response;
     },
