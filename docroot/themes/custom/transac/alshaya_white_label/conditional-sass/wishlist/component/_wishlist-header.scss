@@ -111,8 +111,8 @@ body.wishlist-enabled {
 
   #wishlist-header-wrapper {
     position: absolute;
-    top: 0.375rem;
-    #{$right}: 1.75rem;
+    top: 1.125rem;
+    #{$right}: 1.875rem;
 
     @include breakpoint($only-tablet) {
       top: 0;
@@ -125,6 +125,42 @@ body.wishlist-enabled {
 
     @include breakpoint($desktop) {
       position: unset;
+    }
+
+    .wishlist-header {
+      padding-bottom: 0.25rem;
+    }
+  }
+
+  .sticky-filter-wrapper {
+    .wishlist-icon {
+      display: none;
+    }
+  }
+
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .wishlist-header.sticky-wrapper {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 11;
+        #{$right}: 1.5rem;
+
+        @include breakpoint($desktop) {
+          &:last-child {
+            #{$right}: calc((100vw - 79.75rem) / 2);
+          }
+
+          &:nth-last-child(2) {
+            #{$right}: calc((100vw - 73.5rem) / 2);
+          }
+        }
+      }
+
+      .wishlist-icon {
+        display: block;
+      }
     }
   }
 }
