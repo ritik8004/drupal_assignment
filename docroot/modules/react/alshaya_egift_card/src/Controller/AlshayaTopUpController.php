@@ -56,6 +56,7 @@ class AlshayaTopUpController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_topup_purchase',
+          'alshaya_white_label/egift-topup-page',
         ],
       ],
     ];

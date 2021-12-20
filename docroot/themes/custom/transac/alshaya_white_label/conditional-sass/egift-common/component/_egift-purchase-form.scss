@@ -1,0 +1,121 @@
+.egifts-form-wrapper {
+  @include breakpoint($tablet) {
+    padding: 0 2.5rem;
+  }
+
+  .step-one-wrapper {
+    margin-top: 1.5rem;
+
+    @include breakpoint($tablet) {
+      display: flex;
+    }
+  }
+
+  .hero-image-wrapper,
+  .egift-card-purchase-config-wrapper,
+  .egift-topup-fields-wrapper {
+    @include breakpoint($tablet) {
+      width: 50%;
+    }
+  }
+
+  .hero-image-wrapper {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .egift-open-amount-wrapper {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+
+    .egift-purchase-input-textfield-item {
+      flex-grow: 1;
+    }
+
+    .open-amount-currency {
+      display: none;
+      font-size: 0.875rem;
+      position: absolute;
+      #{$left}: 0;
+      top: 0.1875rem;
+    }
+
+    input:focus ~ .open-amount-currency,
+    input.focus ~ .open-amount-currency {
+      display: block;
+    }
+
+    button {
+      background: $primary_btn_bg;
+      border-radius: 0;
+      border: 1px solid $primary_btn_bg;
+      height: 2.25rem;
+      width: 2.25rem;
+      margin-#{$left}: 1rem;
+      padding: 0.5rem;
+
+      &[disabled] {
+        border-color: $egift-purchase-inactive-step-text;
+        background: $egift-purchase-inactive-step-text;
+        color: $egift-purchase-disabled-btn-text;
+      }
+
+      &::after {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/new-pdp-tick-icon.svg') center center no-repeat;
+        display: inline-block;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+
+    #open-amount-error {
+      padding-#{$right}: 3.25rem;
+    }
+  }
+
+  .action-buttons {
+    button[type="submit"] {
+      font-family: $alshaya-bold;
+      font-size: 0.8125rem;
+      background: $primary_btn_bg;
+      border-radius: 0;
+      color: $primary_btn_text;
+      border: 1px solid $primary_btn_bg;
+      text-transform: lowercase;
+      padding: 1rem;
+      display: inline-block;
+      height: 3rem;
+      line-height: 1rem;
+
+      @include breakpoint($only-mobile) {
+        width: 48%;
+      }
+
+      @include breakpoint($tablet) {
+        min-width: 10rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    button[disabled] {
+      color: $egift-purchase-disabled-btn-text;
+    }
+  }
+}
+
+.step-two-wrapper,
+.topup-page {
+  padding: 1rem 0;
+  margin-top: 2.0625rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid $egift-purchase-page-border;
+  border-top: 1px solid $egift-purchase-page-border;
+
+  @include breakpoint($tablet) {
+    padding: 1.5rem 0;
+  }
+}
