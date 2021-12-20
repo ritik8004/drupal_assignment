@@ -1,4 +1,6 @@
 {{ attach_library('alshaya_white_label/rcs-product-related') }}
-<div id="rcs-ph-crosssell-products" class="horizontal-crossell above-mobile-block"></div>
+{% if display_crosssell %}
+  <div id="rcs-ph-crosssell-products" class="horizontal-crossell above-mobile-block"></div>
+{% endif %}
 <div id="rcs-ph-upsell-products" class="horizontal-upell above-mobile-block"></div>
 <div id="rcs-ph-related-products" class="horizontal-related above-mobile-block"></div>
