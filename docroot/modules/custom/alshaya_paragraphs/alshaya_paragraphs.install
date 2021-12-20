@@ -15,10 +15,11 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Enhance existing paragraph and added accordian and mul row mul col paragraph type.
  */
-function alshaya_paragraphs_update_8130() {
+function alshaya_paragraphs_update_8143() {
   $configs = [
     'paragraphs.paragraphs_type.accordion_paragraph.yml',
     'paragraphs.paragraphs_type.multiple_row_multiple_col.yml',
+    'paragraphs.paragraphs_type.product_carousel_category.yml',
     'field.storage.paragraph.field_group_title.yml',
     'field.storage.paragraph.field_title_and_content.yml',
     'field.storage.paragraph.field_image_title_subtitle.yml',
