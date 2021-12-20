@@ -13,7 +13,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     this.state = {
       // OpenModal.
       openModal: false,
-      // Pending amount to pay using other payment methods.
+      // eGift balance Payable to pay using other payment methods.
       eGiftbalancePayable: 0,
       // Remaining Balance of egift card.
       egiftCardRemainingBalance: 0,
