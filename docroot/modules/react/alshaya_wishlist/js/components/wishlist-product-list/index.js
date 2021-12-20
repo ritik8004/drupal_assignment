@@ -8,38 +8,67 @@ import LoginMessage from '../../../../js/utilities/components/login-message';
 import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
 import PageEmptyMessage from '../../../../js/utilities/components/page-empty-message';
-import { getWishListData } from '../../utilities/wishlist-utils';
+import { getWishListData, isAnonymousUser } from '../../utilities/wishlist-utils';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
 
 class WishlistProductList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      wait: true,
-      filters: null,
-      wishListItemsCount: 0,
-    };
-  }
-
-  componentDidMount() {
     // Get the wishlist items.
     const wishListItems = getWishListData() || {};
     const wishListItemsCount = Object.keys(wishListItems).length;
 
-    // Early return if no products in wishlist.
-    if (!wishListItemsCount) {
-      // Update the state with wishListItemsCount and return.
-      this.setState({
-        wait: false,
-        wishListItemsCount,
-      });
-      return;
+    const filters = (wishListItemsCount > 0)
+      ? this.getFiltersFromWishListItems(wishListItems)
+      : null;
+
+    this.state = {
+      filters,
+      wishListItemsCount,
+    };
+  }
+
+  componentDidMount() {
+    if (!isAnonymousUser()) {
+      // Add event listener for get wishlist load event for logged in user.
+      // This will execute when wishlist loaded from the backend
+      // and page loads before.
+      document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
     }
+  }
 
-    // Proceed further if we have products in wishlist.
+  /**
+   * Update product listing on my wishlist page after
+   * wishlist info is available in storage.
+   */
+  updateWisListProductsList = () => {
+    // Get the wishlist items.
+    const wishListItems = getWishListData() || {};
+    const wishListItemsCount = Object.keys(wishListItems).length;
+
+    const filters = (wishListItemsCount > 0)
+      ? this.getFiltersFromWishListItems(wishListItems)
+      : null;
+
+    this.setState({
+      filters,
+      wishListItemsCount,
+    });
+  };
+
+  /**
+   * Prepare search filters for the provided wishlist items.
+   *
+   * @param {object} wishListItems
+   *  Data containing wishlist items information.
+   *
+   * @returns {string}
+   *  Filters to pass in search widget.
+   */
+  getFiltersFromWishListItems = (wishListItems) => {
+    const wishListItemsCount = Object.keys(wishListItems).length;
     const filters = [];
-    let finalFilter = '';
-
     Object.keys(wishListItems).forEach((key, index) => {
       // Prepare filter to pass in search widget. For example,
       // 1. "sku:0433350007 OR sku:0778064001 OR sku:HM0485540011187007"
@@ -51,23 +80,11 @@ class WishlistProductList extends React.Component {
     });
 
     // Prepare the final filter to pass in search widget.
-    finalFilter = `${finalFilter}(${filters.join(' OR ')})`;
-
-    // Update the state as filters are ready.
-    this.setState({
-      wait: false,
-      filters: finalFilter,
-      wishListItemsCount,
-    });
-  }
+    return `(${filters.join(' OR ')})`;
+  };
 
   render() {
-    const { wait, filters, wishListItemsCount } = this.state;
-
-    // Return null if products data are not available yet.
-    if (wait) {
-      return null;
-    }
+    const { filters, wishListItemsCount } = this.state;
 
     // Render empty wishlist component if wishlist is empty.
     if (!wishListItemsCount) {
@@ -83,7 +100,9 @@ class WishlistProductList extends React.Component {
 
     return (
       <>
-        <LoginMessage />
+        <ConditionalView condition={isAnonymousUser()}>
+          <LoginMessage />
+        </ConditionalView>
         <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
           <Configure
             // To test the pagination we can hardcode this to static number.

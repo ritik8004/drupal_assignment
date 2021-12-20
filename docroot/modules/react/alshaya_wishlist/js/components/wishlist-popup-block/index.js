@@ -2,7 +2,15 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import CheckoutItemImage from '../../../../alshaya_spc/js/utilities/checkout-item-image';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { addProductToWishList, getWishlistLabel } from '../../utilities/wishlist-utils';
+import {
+  addProductToWishList,
+  getWishlistLabel,
+  isAnonymousUser,
+  getWishlistFromBackend,
+  addWishListInfoInStorage,
+} from '../../utilities/wishlist-utils';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class WishlistPopupBlock extends React.Component {
   addToWishlist = (addToWishlist) => {
@@ -13,7 +21,46 @@ export default class WishlistPopupBlock extends React.Component {
     // Else close the popup and continue to remove cart item.
     const productInfo = { sku, title };
     if (addToWishlist) {
-      addProductToWishList(productInfo);
+      // Add product to the wishlist. For guest users it'll store in local
+      // storage and for logged in user this will store in backend using API
+      // then will update the local storage as well.
+      addProductToWishList(productInfo).then((response) => {
+        if (typeof response.data.status !== 'undefined'
+          && response.data.status) {
+          // Prepare and dispatch an event when product added to the storage
+          // so other components like wishlist header can listen and do the
+          // needful.
+          dispatchCustomEvent('productAddedToWishlist', {
+            productInfo,
+            addedInWishList: true,
+          });
+
+          // If user is logged in we need to update the products from
+          // backend via api and update in local storage to get
+          // the wishlist_item_id from the backend that we use while
+          // removing the product from backend for logged in user.
+          if (!isAnonymousUser()) {
+            // Load wishlist information from the magento backend.
+            getWishlistFromBackend().then((responseData) => {
+              if (hasValue(responseData.data.items)) {
+                const wishListItems = {};
+
+                responseData.data.items.forEach((item) => {
+                  wishListItems[item.sku] = {
+                    sku: item.sku,
+                    options: item.options,
+                    // We need this for removing the item from the wishlist.
+                    wishlistItemId: item.wishlist_item_id,
+                  };
+                });
+
+                // Save back to storage.
+                addWishListInfoInStorage(wishListItems);
+              }
+            });
+          }
+        }
+      });
     }
     // If user clicked on yes/no in popup, we pass true as response.
     closeWishlistModal(true);

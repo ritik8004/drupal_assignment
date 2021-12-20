@@ -4,39 +4,34 @@ import {
   addProductToWishList,
   removeProductFromWishList,
   getWishlistLabel,
+  isAnonymousUser,
+  getWishlistFromBackend,
+  addWishListInfoInStorage,
+  getWishListData,
 } from '../../utilities/wishlist-utils';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 class WishlistButton extends React.Component {
   constructor(props) {
     super(props);
-
+    const skuCode = props.skuCode ? props.skuCode : props.sku;
     // Set the products status in state.
     // true: if sku exist in wishlist,
     // false: default, if sku doesn't exist in wishlist.
     // Setting variant selected for current variant.
     // Options are selected attribute options for default product.
     this.state = {
-      addedInWishList: false,
-      skuCode: props.skuCode ? props.skuCode : props.sku,
+      addedInWishList: isProductExistInWishList(skuCode),
+      skuCode,
       options: props.options ? props.options : [],
       title: props.title ? props.title : '',
     };
   }
 
   componentDidMount = () => {
-    const { skuCode } = this.state;
     const { context, sku } = this.props;
     const { configurableCombinations } = drupalSettings;
-
-    // @todo: we need to listen wishlist load event that
-    // will trigger from header wishlist component after
-    // wishlist data are fetched from MDC on page load
-    // for logged in user.
-    // Check if product already exist in wishlist, and
-    // set the status for the sku.
-    if (isProductExistInWishList(skuCode)) {
-      this.updateWishListStatus(true);
-    }
 
     const contextArray = ['pdp', 'modal', 'matchback'];
     if (contextArray.includes(context)) {
@@ -51,6 +46,33 @@ class WishlistButton extends React.Component {
       // Rendering wishlist button as per sku variant info.
       // Event listener is only required for old pdp, modal and matchback.
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
+    }
+
+    if (!isAnonymousUser()) {
+      // Add event listener for get wishlist load event for logged in user.
+      // This will execute when wishlist loaded from the backend
+      // and page loads before.
+      document.addEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
+    }
+  };
+
+  componentWillUnmount = () => {
+    if (!isAnonymousUser()) {
+      // Remove event listener bind in componentDidMount.
+      document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
+    }
+  };
+
+  /**
+   * Check if current product already exist in the wishlist.
+   */
+  checkProductStatusInWishlist = () => {
+    const { skuCode } = this.state;
+
+    // Check if product already exist in wishlist, and
+    // set the status for the sku.
+    if (isProductExistInWishList(skuCode)) {
+      this.updateWishListStatus(true);
     }
   };
 
@@ -120,16 +142,86 @@ class WishlistButton extends React.Component {
 
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
-      removeProductFromWishList(skuCode, this.updateWishListStatus);
+      removeProductFromWishList(skuCode).then((response) => {
+        if (typeof response.data.status !== 'undefined'
+          && response.data.status) {
+          // Get existing wishlist data from storage.
+          const wishListItems = getWishListData();
+
+          // Remove the entry for given product sku from existing storage data.
+          delete wishListItems[skuCode];
+
+          // Save back to storage.
+          addWishListInfoInStorage(wishListItems);
+
+          // Prepare and dispatch an event when product removed from the storage
+          // so other components like wishlist header can listen and do the
+          // needful.
+          dispatchCustomEvent('productRemovedFromWishlist', {
+            sku: skuCode,
+            addedInWishList: true,
+          });
+
+          // Set the product wishlist status.
+          this.updateWishListStatus(false);
+        }
+      });
+
+      // don't execute further if product is removed from the wishlist.
       return;
     }
 
-    const productData = {
+    // Prepare the product info to store.
+    const productInfo = {
       sku: skuCode,
       title,
       options,
     };
-    addProductToWishList(productData, this.updateWishListStatus);
+
+    // Add product to the wishlist. For guest users it'll store in local
+    // storage and for logged in user this will store in backend using API
+    // then will update the local storage as well.
+    addProductToWishList(productInfo).then((response) => {
+      if (typeof response.data.status !== 'undefined'
+        && response.data.status) {
+        // Prepare and dispatch an event when product added to the storage
+        // so other components like wishlist header can listen and do the
+        // needful.
+        dispatchCustomEvent('productAddedToWishlist', {
+          productInfo,
+          addedInWishList: true,
+        });
+
+        // If user is logged in we need to update the products from
+        // backend via api and update in local storage to get
+        // the wishlist_item_id from the backend that we use while
+        // removing the product from backend for logged in user.
+        if (!isAnonymousUser()) {
+          // Load wishlist information from the magento backend.
+          getWishlistFromBackend().then((responseData) => {
+            if (hasValue(responseData.data.items)) {
+              const wishListItems = {};
+
+              // Prepare the information to save in the local storage.
+              responseData.data.items.forEach((item) => {
+                wishListItems[item.sku] = {
+                  sku: item.sku,
+                  options: item.options,
+                  // We need this for removing the item from the wishlist.
+                  wishlistItemId: item.wishlist_item_id,
+                };
+              });
+
+              // Save back to storage.
+              addWishListInfoInStorage(wishListItems);
+            }
+          });
+        }
+
+        // Update the wishlist button state.
+        this.updateWishListStatus(true);
+      }
+    });
   }
 
   /**
