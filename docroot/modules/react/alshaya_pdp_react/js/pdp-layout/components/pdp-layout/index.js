@@ -186,6 +186,8 @@ const PdpLayout = () => {
           brandLogoAlt={brandLogoAlt}
           brandLogoTitle={brandLogoTitle}
           skuCode={skuItemCode}
+          skuMainCode={skuMainCode}
+          variantSelected={variant}
           configurableCombinations={configurableCombinations}
           productInfo={productInfo}
           pdpLabelRefresh={pdpLabelRefresh}
@@ -204,6 +206,18 @@ const PdpLayout = () => {
           >
             <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
+          { /* Wishlist icon for new pdp mobile appears on gallery. */}
+          <ConditionalView condition={window.innerWidth < 768}>
+            <WishlistContainer
+              sku={skuItemCode}
+              skuCode={skuMainCode}
+              context="magazinev2"
+              position="top-right"
+              format="icon"
+              title={title}
+              variantSelected={variant}
+            />
+          </ConditionalView>
         </div>
         <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
@@ -273,15 +287,17 @@ const PdpLayout = () => {
             ) : outOfStock}
           </div>
           {/* Here skuMainCode is parent sku of variant selected */}
-          <WishlistContainer
-            sku={skuItemCode}
-            skuCode={skuMainCode}
-            context="magazinev2"
-            position="top-right"
-            format="icon"
-            title={title}
-            variantSelected={variant}
-          />
+          <ConditionalView condition={window.innerWidth > 767}>
+            <WishlistContainer
+              sku={skuItemCode}
+              skuCode={skuMainCode}
+              context="magazinev2"
+              position="top-right"
+              format="link"
+              title={title}
+              variantSelected={variant}
+            />
+          </ConditionalView>
           <PdpDescription
             skuCode={skuMainCode}
             pdpDescription={description}

@@ -1,7 +1,7 @@
 import React from 'react';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { getWishlistLabel, getWishlistNotificationTime } from '../../utilities/wishlist-utils';
-import WishlistNotification from '../wishlist-notification';
+import WishlistNotification from '../../../../alshaya_wishlist/js/components/wishlist-notification';
+import { getWishlistLabel, getWishlistNotificationTime } from '../../../../alshaya_wishlist/js/utilities/wishlist-utils';
+import ConditionalView from '../conditional-view';
 
 export default class WishlistStickyHeader extends React.Component {
   constructor(props) {
@@ -13,8 +13,6 @@ export default class WishlistStickyHeader extends React.Component {
   }
 
   componentDidMount() {
-    // @todo Add logic to get wishlist content for current user.
-
     // Add event listener for add to wishlist action.
     document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
   }
@@ -46,6 +44,7 @@ export default class WishlistStickyHeader extends React.Component {
    */
   handleAddToWishList = (data) => {
     const { productInfo } = data.detail;
+    // Check if sticky wrapper is active on screen.
     const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
     if (querySelector === null) {
       return;

@@ -47,6 +47,7 @@ export default class WishlistHeader extends React.Component {
    */
   handleAddToWishList = (data) => {
     const { productInfo } = data.detail;
+    // Check if sticky wrapper is active on screen.
     const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
     if (querySelector !== null) {
       return;
