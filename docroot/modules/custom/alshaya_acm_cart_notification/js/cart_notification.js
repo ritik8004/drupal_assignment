@@ -162,7 +162,10 @@
       });
 
       $document.ajaxComplete(function (event, xhr, settings) {
-        if (!settings.hasOwnProperty('extraData')) {
+        // For RCS operations, we have the startLoader and stopLoader event
+        // listeners to manage the loader behavior.
+        if (!settings.hasOwnProperty('extraData')
+          && !Drupal.hasValue(settings.rcs)) {
           Drupal.cartNotification.spinner_stop();
         }
         else if ((settings.hasOwnProperty('extraData')) &&
