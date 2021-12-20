@@ -477,11 +477,43 @@ class LocalCommand extends BltTasks {
    */
   public function addQaAccount(string $mail) {
     foreach ($this->envs as $env) {
+      // Dev and Test use same server so skip it for one.
+      if ($env === 'test') {
+        continue;
+      }
+
       foreach ($this->stacks as $stack) {
         $this->io()->writeln("$env - $stack");
         $task = $this->taskDrush();
         $task->interactive(FALSE);
         $task->drush('ssh "echo ' . $mail . ' >> ~/qa_accounts.txt"')
+          ->alias($stack . $env)
+          ->printOutput(TRUE);
+        $result = $task->run();
+        $this->io()->writeln($result->getMessage());
+      }
+    }
+  }
+
+  /**
+   * Clear QA accounts file.
+   *
+   * @command local:clear-qa-accounts
+   *
+   * @description Clear QA accounts file on all non-prod envs.
+   */
+  public function clearQaAccounts() {
+    foreach ($this->envs as $env) {
+      // Dev and Test use same server so skip it for one.
+      if ($env === 'test') {
+        continue;
+      }
+
+      foreach ($this->stacks as $stack) {
+        $this->io()->writeln("$env - $stack");
+        $task = $this->taskDrush();
+        $task->interactive(FALSE);
+        $task->drush('ssh "rm ~/qa_accounts.txt"')
           ->alias($stack . $env)
           ->printOutput(TRUE);
         $result = $task->run();
