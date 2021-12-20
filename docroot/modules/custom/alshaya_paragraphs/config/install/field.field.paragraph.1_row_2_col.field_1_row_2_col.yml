@@ -4,7 +4,9 @@ dependencies:
   config:
     - field.storage.paragraph.field_1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col
+    - paragraphs.paragraphs_type.block_reference
     - paragraphs.paragraphs_type.image_title_subtitle
+    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.promo_block
     - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.title_textarea
@@ -27,15 +29,14 @@ settings:
   handler_settings:
     negate: 0
     target_bundles:
+      block_reference: block_reference
       image_title_subtitle: image_title_subtitle
       promo_block: promo_block
+      product_carousel_category: product_carousel_category
       section_divider: section_divider
       title_textarea: title_textarea
       video: video
     target_bundles_drag_drop:
-      1_row_2_col:
-        weight: 22
-        enabled: false
       1_row_1_col:
         weight: 23
         enabled: false
@@ -44,6 +45,9 @@ settings:
         enabled: false
       1_row_1st_col_2_row_2nd_col:
         weight: 25
+        enabled: false
+      1_row_2_col:
+        weight: 22
         enabled: false
       1_row_2_col_1_2_dept:
         weight: 26
@@ -63,8 +67,17 @@ settings:
       1_row_3_col_dept:
         weight: 31
         enabled: false
+      1_row_3_col_flex:
+        weight: 41
+        enabled: false
       1_row_3_col_text:
         weight: 32
+        enabled: false
+      1_row_4_col:
+        weight: 46
+        enabled: false
+      accordion_paragraph:
+        weight: 47
         enabled: false
       banner:
         weight: 33
@@ -73,7 +86,10 @@ settings:
         weight: 34
         enabled: false
       block_reference:
+        enabled: true
         weight: 35
+      delivery_usp_block:
+        weight: 44
         enabled: false
       image_title_subtitle:
         enabled: true
@@ -81,36 +97,30 @@ settings:
       main_menu_highlight:
         weight: 37
         enabled: false
+      multiple_row_multiple_col:
+        weight: 54
+        enabled: false
       offers_bordered:
         weight: 38
         enabled: false
+      product_carousel_category:
+        enabled: true
+        weight: 43
       promo_block:
         enabled: true
         weight: 39
+      promo_block_button:
+        weight: 50
+        enabled: false
       promo_block_text:
         weight: 40
         enabled: false
       related_info_one_column:
         weight: 41
         enabled: false
-      1_row_3_col_flex:
-        weight: 41
-        enabled: false
-      views_reference:
-        weight: 42
-        enabled: false
-      product_carousel_category:
-        enabled: false
-        weight: 43
-      delivery_usp_block:
-        weight: 44
-        enabled: false
       section_divider:
         enabled: true
         weight: 49
-      promo_block_button:
-        weight: 50
-        enabled: false
       slug_banner:
         weight: 54
         enabled: false
@@ -123,4 +133,7 @@ settings:
       video:
         enabled: true
         weight: 57
+      views_reference:
+        weight: 42
+        enabled: false
 field_type: entity_reference_revisions
