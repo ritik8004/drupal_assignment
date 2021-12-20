@@ -231,10 +231,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay using egift card (Available Balance: @currencyCode @amount)',
         'context' => 'egift',
       ],
-      'Pay @currencyCode @pendingAmount using another payment method to complete purchase' => [
-        'ar' => 'Pay @currencyCode @pendingAmount using another payment method to complete purchase',
-        'context' => 'egift',
-      ],
       'Paid With eGfit card' => [
         'ar' => 'Paid With eGfit card',
         'context' => 'egift',
