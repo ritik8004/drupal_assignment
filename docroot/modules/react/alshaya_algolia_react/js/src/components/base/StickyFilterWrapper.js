@@ -51,13 +51,14 @@ const StickyFilterWrapper = React.forwardRef(({ callback, pageType = null }, ref
         {callback(filtersCallBack)}
       </div>
 
+      { /* Add wishlist icon for the desktop view wishlist feature enabled. */}
+      <ConditionalView condition={!isMobile() && isWishlistEnabled()}>
+        <WishlistStickyHeader />
+      </ConditionalView>
+
       { /* Add static minicart for the desktop view if addToBag feature enabled. */}
       <ConditionalView condition={!isMobile() && isAddToBagEnabled()}>
         <StaticMinicart />
-      </ConditionalView>
-      { /* Add wishlist icon for the desktop view wishlist feature enabled. */}
-      <ConditionalView condition={isWishlistEnabled()}>
-        <WishlistStickyHeader />
       </ConditionalView>
     </div>
   );
