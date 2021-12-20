@@ -5,7 +5,10 @@ import {
   removeProductFromWishList,
   getWishlistLabel,
   isAnonymousUser,
+  getWishlistFromBackend,
+  addWishListInfoInStorage,
 } from '../../utilities/wishlist-utils';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class WishlistButton extends React.Component {
   constructor(props) {
@@ -153,12 +156,64 @@ class WishlistButton extends React.Component {
       return;
     }
 
-    const productData = {
+    // Prepare the product info to store.
+    const productInfo = {
       sku: skuCode,
       title,
       options,
     };
-    addProductToWishList(productData, this.updateWishListStatus);
+
+    // Add product to the wishlist. For guest users it'll store in local
+    // storage and for logged in user this will store in backend using API
+    // then will update the local storage as well.
+    addProductToWishList(productInfo).then((response) => {
+      if (typeof response.data.status !== 'undefined'
+        && response.data.status) {
+        // Update the wishlist button state.
+        this.updateWishListStatus(true);
+
+        // Prepare and dispatch an event when product added to the storage
+        // so other components like wishlist header can listen and do the
+        // needful.
+        const productAddedToWishlistEvent = new CustomEvent(
+          'productAddedToWishlist',
+          {
+            bubbles: true,
+            detail: {
+              productInfo,
+              addedInWishList: true,
+            },
+          },
+        );
+        document.dispatchEvent(productAddedToWishlistEvent);
+
+        // If user is logged in we need to update the products from
+        // backend via api and update in local storage to get
+        // the wishlist_item_id from the backend that we use while
+        // removing the product from backend for logged in user.
+        if (!isAnonymousUser()) {
+          // Load wishlist information from the magento backend.
+          getWishlistFromBackend().then((responseData) => {
+            if (hasValue(responseData.data.items)) {
+              const wishListItems = {};
+
+              // Prepare the information to save in the local storage.
+              responseData.data.items.forEach((item) => {
+                wishListItems[item.sku] = {
+                  sku: item.sku,
+                  options: item.options,
+                  // We need this for removing the item from the wishlist.
+                  wishlistItemId: item.wishlist_item_id,
+                };
+              });
+
+              // Save back to storage.
+              addWishListInfoInStorage(wishListItems);
+            }
+          });
+        }
+      }
+    });
   }
 
   /**

@@ -102,6 +102,11 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
 
   // Save back to storage.
   addWishListInfoInStorage(wishListItems);
+
+  // Always return a Promise object.
+  return new Promise((resolve) => {
+    resolve({ data: { status: true } });
+  });
 };
 
 /**
@@ -179,30 +184,10 @@ export const getWishlistFromBackend = async () => {
         '@response': JSON.stringify(response.data),
       });
     }
-
-    if (hasValue(response.data.items)) {
-      const wishListItems = {};
-
-      response.data.items.forEach((item) => {
-        wishListItems[item.sku] = {
-          sku: item.sku,
-          options: item.options,
-          // We need this for removing the item from the wishlist.
-          wishlistItemId: item.wishlist_item_id,
-        };
-      });
-
-      // Save back to storage.
-      addWishListInfoInStorage(wishListItems);
-
-      // Dispatch an event for other modules to know
-      // that wishlist data is available in storage.
-      const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', { bubbles: true });
-      document.dispatchEvent(getWishlistFromBackendSuccess);
-    }
   }
 
-  // If required to do explicit operation from where this function called.
+  // Return response to perform necessary operation
+  // from where this function called.
   return response;
 };
 
@@ -218,30 +203,14 @@ export const addProductToWishListForLoggedInUsers = (productInfo) => (
 /**
  * Utility function to add a product to wishlist.
  */
-export const addProductToWishList = (productInfo, setWishListStatus) => {
+export const addProductToWishList = (productInfo) => {
   // For anonymouse users.
   if (isAnonymousUser()) {
-    addProductToWishListForGuestUsers(productInfo);
-    if (setWishListStatus) {
-      setWishListStatus(true);
-    }
-    dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
-    return;
+    return addProductToWishListForGuestUsers(productInfo);
   }
 
   // For logged in users.
-  addProductToWishListForLoggedInUsers(productInfo).then((response) => {
-    if (typeof response.data.status !== 'undefined'
-      && response.data.status) {
-      // Update products in storage from backend.
-      getWishlistFromBackend();
-
-      if (setWishListStatus) {
-        setWishListStatus(true);
-      }
-      dispatchCustomEvent('productAddedToWishlist', { productInfo, addedInWishList: true });
-    }
-  });
+  return addProductToWishListForLoggedInUsers(productInfo);
 };
 
 /**
