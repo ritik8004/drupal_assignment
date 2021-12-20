@@ -156,6 +156,16 @@ class CrossellPopupContent extends React.Component {
             >
               <Lozenges labels={labels} sku={relatedSku} />
             </PdpGallery>
+            <WishlistContainer
+              sku={relatedSku}
+              skuCode={skuMainCode}
+              context="magazinev2-related"
+              position="top-right"
+              format="icon"
+              title={title}
+              variantSelected={variantSelected}
+              options={options}
+            />
             <PdpInfo
               title={title}
               finalPrice={parseFloat(finalPrice)
@@ -179,16 +189,6 @@ class CrossellPopupContent extends React.Component {
             <ConditionalView condition={isAuraEnabled()}>
               <AuraPDP mode="related" />
             </ConditionalView>
-            <WishlistContainer
-              sku={relatedSku}
-              skuCode={skuMainCode}
-              context="magazinev2-related"
-              position="top-right"
-              format="link"
-              title={title}
-              variantSelected={variantSelected}
-              options={options}
-            />
             {stockStatus ? (
               <PdpCart
                 skuCode={relatedSku}
