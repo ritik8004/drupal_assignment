@@ -1,7 +1,7 @@
 import React from 'react';
 import getCurrencyCode from '../../../../js/utilities/util';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { callEgiftApi, egiftCardHeader } from '../../utilities/egift_util';
+import { callEgiftApi, egiftCardHeader, performRedemption } from '../../utilities/egift_util';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
 import logger from '../../../../js/utilities/logger';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
@@ -140,32 +140,21 @@ export default class ValidEgiftCard extends React.Component {
     }
 
     return false;
-  }
+  };
 
   // Update egift amount.
   handleAmountUpdate = (updateAmount) => {
     // Prepare the request object for redeem API.
-    const { cart, egiftCardNumber } = this.props;
-
-    const postData = {
-      redeem_points: {
-        action: 'set_points',
-        quote_id: cart.cart_id_int,
-        amount: updateAmount,
-        card_number: egiftCardNumber,
-        payment_method: 'hps_payment',
-        card_type: 'guest',
-      },
-    };
-    // Proceed only if postData object is available.
-    if (postData) {
-      showFullScreenLoader();
-      // Invoke the redemption API to update the redeem amount.
-      const response = callEgiftApi('eGiftRedemption', 'POST', postData);
-      if (response instanceof Promise) {
-        response.then((result) => {
-          // Remove loader once result is available.
-          if (result.error === undefined && result.status === 200) {
+    const { quoteId, egiftCardNumber } = this.props;
+    showFullScreenLoader();
+    // Invoke the redemption API to update the redeem amount.
+    const response = performRedemption(quoteId, updateAmount, egiftCardNumber, 'guest');
+    if (response instanceof Promise) {
+      response.then((result) => {
+        // Remove loader once result is available.
+        removeFullScreenLoader();
+        if (result.status === 200) {
+          if (result.data.redeemed_amount !== null && result.data.response_type !== false) {
             this.setState({
               amount: updateAmount,
               open: false,
@@ -184,12 +173,10 @@ export default class ValidEgiftCard extends React.Component {
             }
             return true;
           }
-
-          return false;
-        });
-      }
+        }
+        return false;
+      });
     }
-
     return true;
   }
 

@@ -338,7 +338,7 @@ const getProcessedCartData = async (cartData) => {
     },
     items: [],
     ...(collectionPointsEnabled() && hasValue(cartData.shipping))
-      && { collection_charge: cartData.shipping.price_amount || '' },
+    && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
   // Totals.
@@ -348,7 +348,8 @@ const getProcessedCartData = async (cartData) => {
   }
 
   // If Aura enabled, add aura related details.
-  if (isAuraEnabled()) {
+  // If Egift card is enabled get balance_payable.
+  if (isAuraEnabled() || isEgiftCardEnabled()) {
     cartData.totals.total_segments.forEach((element) => {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
@@ -357,19 +358,21 @@ const getProcessedCartData = async (cartData) => {
         data.totals.paidWithAura = element.value;
       }
     });
+  }
+  if (isAuraEnabled()) {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
 
-  // If egift card enabled, add the hps_redeemed_amount and balance_payble in cart.
+  // If egift card enabled, add the hps_redeemed_amount
+  // add hps_redemption_type and balance_payble to cart.
   if (isEgiftCardEnabled()) {
+    data.totals.egiftRedeemedAmount = 0;
+    data.totals.egiftRedemptionType = '';
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
     if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
       data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
-    }
-    if (typeof cartData.totals.extension_attributes.balance_payble !== 'undefined') {
-      data.totals.eGiftbalancePayable = cartData.totals.extension_attributes.balance_payble;
     }
   }
 
@@ -477,6 +480,10 @@ const getProcessedCartData = async (cartData) => {
           if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
             data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
           }
+        }
+        // If any product in cart is for Topup.
+        if (isEgiftCard && typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
+          data.egiftTopup = item.extension_attributes.is_topup;
         }
       }
 

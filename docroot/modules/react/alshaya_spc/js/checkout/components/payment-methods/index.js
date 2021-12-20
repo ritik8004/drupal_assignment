@@ -16,7 +16,7 @@ import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import isAuraEnabled, { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import {
   isFullPaymentDoneByAura,
   isPaymentMethodSetAsAura,
@@ -27,6 +27,7 @@ import CheckoutComUpapiApplePay
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
+import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
 import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod } from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
@@ -384,8 +385,13 @@ export default class PaymentMethods extends React.Component {
 
     return (
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
+        <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
+        <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
+          <PaymentMethodLinkedEgiftCard
+            cart={cart}
+          />
+        </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>
-          <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>
         </ConditionalView>
       </div>

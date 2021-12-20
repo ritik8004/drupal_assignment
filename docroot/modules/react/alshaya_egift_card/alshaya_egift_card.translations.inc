@@ -227,8 +227,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Redeem amount should be less than or equal to the cart value.',
         'context' => 'egift',
       ],
-      'Pay @currencyCode @pendingAmount using another payment method to complete purchase' => [
-        'ar' => 'Pay @currencyCode @pendingAmount using another payment method to complete purchase',
+      'Pay using egift card (Available Balance: @currencyCode @amount)' => [
+        'ar' => 'Pay using egift card (Available Balance: @currencyCode @amount)',
         'context' => 'egift',
       ],
       'Paid With eGfit card' => [
@@ -237,6 +237,26 @@ function _alshaya_egift_card_translations() {
       ],
       'Balance Payable' => [
         'ar' => 'Balance Payable',
+        'context' => 'egift',
+      ],
+      'Pay using egift card (Remaining Balance: @currencyCode @amount)' => [
+        'ar' => 'Pay using egift card (Remaining Balance: @currencyCode @amount)',
+        'context' => 'egift',
+      ],
+      'Pay using egift card (Card is expired)' => [
+        'ar' => 'Pay using egift card (Card is expired)',
+        'context' => 'egift',
+      ],
+      'Pay @currencyCode @amount using another payment method to complete purchase' => [
+        'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
+        'context' => 'egift',
+      ],
+      'Pay @currencyCode @amount using another payment method to complete purchase' => [
+        'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
+        'context' => 'egift',
+      ],
+      'Pay using egift card (Available Balance 0)' => [
+        'ar' => 'Pay using egift card (Available Balance 0)',
         'context' => 'egift',
       ],
       'Top-up' => [

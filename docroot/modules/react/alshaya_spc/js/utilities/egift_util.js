@@ -1,6 +1,8 @@
 import React from 'react';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
 import logger from '../../../js/utilities/logger';
+import dispatchCustomEvent from '../../../js/utilities/events';
+import { removeFullScreenLoader } from '../../../js/utilities/showRemoveFullScreenLoader';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
@@ -106,6 +108,10 @@ export const getApiEndpoint = (action, params = {}) => {
       endpoint = `/V1/egiftcard/hps-search/email/${params.email}`;
       break;
 
+    case 'eGiftHpsCustomerData':
+      endpoint = '/V1/customers/hpsCustomerData';
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
@@ -124,15 +130,65 @@ export const getApiEndpoint = (action, params = {}) => {
  *   The request method.
  * @param {object} postData
  *   The object containing post data
- * @param {object} param
+ * @param {object} params
  *   The object containing param info.
  *
  * @returns {object}
  *   The response object.
  */
-export const callEgiftApi = (action, method, postData, param = {}) => {
-  const endpoint = getApiEndpoint(action, param);
+export const callEgiftApi = (action, method, postData, params) => {
+  const endpoint = getApiEndpoint(action, params);
   return callMagentoApi(endpoint, method, postData);
+};
+
+/**
+ * Performs egift redemption.
+ *
+ * @param {int} quoteId
+ *   Cart id.
+ * @param {int} updateAmount
+ *   Amount needs to be redeemed.
+ * @param {int} egiftCardNumber
+ *   Card number needs to be redeemed.
+ * @param {string} cardType
+ *   Card type to identify from which it redeemed.
+ *
+ * @returns {object}
+ *   The response object.
+ */
+export const performRedemption = (quoteId, updateAmount, egiftCardNumber, cardType) => {
+  const postData = {
+    redeem_points: {
+      action: 'set_points',
+      quote_id: quoteId,
+      amount: updateAmount,
+      card_number: egiftCardNumber,
+      payment_method: 'hps_payment',
+      card_type: cardType,
+    },
+  };
+
+  // Invoke the redemption API to update the redeem amount.
+  const response = callEgiftApi('eGiftRedemption', 'POST', postData);
+  return response;
+};
+
+/**
+ * Triggers custom event to update price summary block.
+ */
+export const updatePriceSummaryBlock = () => {
+  const cartData = window.commerceBackend.getCart(true);
+  if (cartData instanceof Promise) {
+    cartData.then((data) => {
+      if (data.data !== undefined && data.data.error === undefined) {
+        if (data.status === 200) {
+          // Update Egift card line item.
+          dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
+          removeFullScreenLoader();
+        }
+      }
+    });
+  }
 };
 
 /**
