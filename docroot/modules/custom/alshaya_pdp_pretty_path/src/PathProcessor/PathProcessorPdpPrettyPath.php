@@ -56,12 +56,13 @@ class PathProcessorPdpPrettyPath implements InboundPathProcessorInterface, Outbo
     // For e.g: en/buy-oversized-checked-pocket-detail-shacket/-color-khaki.html
     // => en/node/376.
     $suffix = '.html';
-    if (stripos($path, '/-', 0) !== FALSE) {
+    if (stripos($path, '/-', 0) !== FALSE && stripos($path, $suffix, 0) !== FALSE) {
       $path_alias = substr($path, 0, stripos($path, '/-')) . $suffix;
       $pdp_path = $this->aliasManager->getPathByAlias($path_alias);
       if ($pdp_path) {
         self::$paths[$path_alias] = $path;
         self::$paths[$pdp_path] = $path;
+        // Update with original pdp path.
         $path = $pdp_path;
       }
     }
