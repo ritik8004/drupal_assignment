@@ -2,7 +2,8 @@ import React from 'react';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import ConditionalView
   from '../../../../js/utilities/components/conditional-view';
-import getCurrencyCode from '../../../../js/utilities/util';
+import PriceElement
+  from '../../../../js/utilities/components/price/price-element';
 
 export default class EgiftTopupFor extends React.Component {
   constructor(props) {
@@ -59,10 +60,12 @@ export default class EgiftTopupFor extends React.Component {
           </div>
           <ConditionalView condition={optionGiftForSelf === true}>
             <div className="card-details">
-              <span className="egift-linked-card-balance">
-                {Drupal.t('Card Balance:', {}, { context: 'egift' })}
+              <span className="egift-linked-card-balance-label">
+                {Drupal.t('Card Balance: ', {}, { context: 'egift' })}
               </span>
-              <span>{`${getCurrencyCode()} ${linkedCardBalance !== null ? linkedCardBalance : ''}`}</span>
+              <PriceElement
+                amount={linkedCardBalance !== null ? parseFloat(linkedCardBalance) : undefined}
+              />
               <span className="egift-linked-card-balance">
                 {Drupal.t('Card No:', {}, { context: 'egift' })}
               </span>

@@ -475,7 +475,7 @@ const getProcessedCartData = async (cartData) => {
 
           // If eGift product is top-up card add check to the product item.
           if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
-            data.items[itemKey].isTopUp = item.extension_attributes.is_topup;
+            data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
           }
         }
       }

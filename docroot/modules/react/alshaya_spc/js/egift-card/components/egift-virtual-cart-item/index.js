@@ -131,13 +131,13 @@ export default class CartVirtualItem extends React.Component {
               </div>
             </div>
             <div className="spc-product-attributes-wrapper egift-product-attributes-wrapper">
-              <ConditionalView condition={isTopUp === '1'}>
+              <ConditionalView condition={isTopUp}>
                 <div className="spc-cart-product-attributes">
                   <span className="spc-cart-product-attribute-label">{Drupal.t('Card No:', {}, { context: 'egift' })}</span>
                   <span className="spc-cart-product-attribute-value">{cardNumberForTopUp}</span>
                 </div>
               </ConditionalView>
-              <ConditionalView condition={isTopUp === '0'}>
+              <ConditionalView condition={isTopUp === false}>
                 <div className="spc-cart-product-attribute">
                   <span className="spc-cart-product-attribute-label">{Drupal.t('Style:', {}, { context: 'egift' })}</span>
                   <span className="spc-cart-product-attribute-value">{title}</span>
