@@ -57,10 +57,3 @@ add_free_gift_promotions:
   dependencies:
     - core/jquery
     - core/drupalSettings
-
-# Library to attach with products detail view in modal.
-product_modal_view:
-  js:
-    js/product_modal_view.js: { }
-  dependencies:
-    - core/drupal

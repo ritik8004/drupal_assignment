@@ -25,6 +25,7 @@ import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import PdpExpressDelivery from '../pdp-express-delivery';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
+import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -173,6 +174,9 @@ const PdpLayout = () => {
     setPanelContent(null);
   }, [panelContent]);
 
+  // Get configurable options only for configurable product.
+  const options = getAttributeOptionsForWishlist(configurableCombinations, skuItemCode, variant);
+
   return (skuItemCode) ? (
     <>
       <div className={`magv2-header ${(isMobile ? 'fadeInVertical' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
@@ -187,11 +191,11 @@ const PdpLayout = () => {
           brandLogoTitle={brandLogoTitle}
           skuCode={skuItemCode}
           skuMainCode={skuMainCode}
-          variantSelected={variant}
           configurableCombinations={configurableCombinations}
           productInfo={productInfo}
           pdpLabelRefresh={pdpLabelRefresh}
           context="main"
+          options={options}
         />
       </div>
       <div className="magv2-main" ref={mainContainer}>
@@ -215,7 +219,7 @@ const PdpLayout = () => {
               position="top-right"
               format="icon"
               title={title}
-              variantSelected={variant}
+              options={options}
             />
           </ConditionalView>
         </div>
@@ -295,7 +299,7 @@ const PdpLayout = () => {
               position="top-right"
               format="link"
               title={title}
-              variantSelected={variant}
+              options={options}
             />
           </ConditionalView>
           <PdpDescription

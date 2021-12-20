@@ -19,6 +19,7 @@ import ErrorMessage from '../error-message';
 import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
 import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
 import WishlistContainer from '../../../../js/utilities/components/wishlist-container';
+import { isWishlistEnabled } from '../../../../js/utilities/wishlistHelper';
 
 export default class ConfigurableForm extends React.Component {
   constructor(props) {
@@ -320,6 +321,23 @@ export default class ConfigurableForm extends React.Component {
       addToCartText = extraInfo.addToCartButtonText;
     }
 
+    const options = [];
+    // Add configurable options only for configurable product.
+    if (isWishlistEnabled() && configurableAttributes && formAttributeValues) {
+      Object.keys(formAttributeValues).forEach((key) => {
+        const option = {
+          option_id: configurableAttributes[key].id,
+          option_value: formAttributeValues[key],
+        };
+
+        // Skipping the psudo attributes.
+        if (drupalSettings.psudo_attribute === undefined
+          || drupalSettings.psudo_attribute !== option.option_id) {
+          options.push(option);
+        }
+      });
+    }
+
     return (
       <>
         <form className="sku-form" data-sku={sku} key={sku} ref={this.formRef}>
@@ -419,7 +437,7 @@ export default class ConfigurableForm extends React.Component {
             position="top"
             format="icon"
             title={productData.title}
-            options={formAttributeValues}
+            options={options}
           />
         </form>
       </>

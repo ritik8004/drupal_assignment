@@ -20,7 +20,7 @@ export default class PdpHeader extends React.PureComponent {
       pdpLabelRefresh,
       context,
       skuMainCode,
-      variantSelected,
+      options,
     } = this.props;
 
     const { checkoutFeatureStatus } = drupalSettings;
@@ -63,7 +63,7 @@ export default class PdpHeader extends React.PureComponent {
             position="top-right"
             format="icon"
             title={title}
-            variantSelected={variantSelected}
+            options={options}
           />
           <div id="block-alshayareactcartminicartblock" dataBlockPluginId="alshaya_react_mini_cart" className="block block-alshaya-spc block-alshaya-react-mini-cart">
             <div id="mini-cart-wrapper">
