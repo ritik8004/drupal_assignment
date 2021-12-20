@@ -10,6 +10,7 @@ import {
   addWishListInfoInStorage,
 } from '../../utilities/wishlist-utils';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class WishlistPopupBlock extends React.Component {
   addToWishlist = (addToWishlist) => {
@@ -29,17 +30,10 @@ export default class WishlistPopupBlock extends React.Component {
           // Prepare and dispatch an event when product added to the storage
           // so other components like wishlist header can listen and do the
           // needful.
-          const productAddedToWishlistEvent = new CustomEvent(
-            'productAddedToWishlist',
-            {
-              bubbles: true,
-              detail: {
-                productInfo,
-                addedInWishList: true,
-              },
-            },
-          );
-          document.dispatchEvent(productAddedToWishlistEvent);
+          dispatchCustomEvent('productAddedToWishlist', {
+            productInfo,
+            addedInWishList: true,
+          });
 
           // If user is logged in we need to update the products from
           // backend via api and update in local storage to get

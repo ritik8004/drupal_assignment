@@ -7,8 +7,10 @@ import {
   isAnonymousUser,
   getWishlistFromBackend,
   addWishListInfoInStorage,
+  getWishListData,
 } from '../../utilities/wishlist-utils';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 class WishlistButton extends React.Component {
   constructor(props) {
@@ -62,6 +64,8 @@ class WishlistButton extends React.Component {
 
     if (!isAnonymousUser()) {
       // Add event listener for get wishlist load event for logged in user.
+      // This will execute when wishlist loaded from the backend
+      // and page loads before.
       document.addEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
   };
@@ -152,7 +156,32 @@ class WishlistButton extends React.Component {
 
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
-      removeProductFromWishList(skuCode, this.updateWishListStatus);
+      removeProductFromWishList(skuCode).then((response) => {
+        if (typeof response.data.status !== 'undefined'
+          && response.data.status) {
+          // Get existing wishlist data from storage.
+          const wishListItems = getWishListData();
+
+          // Remove the entry for given product sku from existing storage data.
+          delete wishListItems[skuCode];
+
+          // Save back to storage.
+          addWishListInfoInStorage(wishListItems);
+
+          // Prepare and dispatch an event when product removed from the storage
+          // so other components like wishlist header can listen and do the
+          // needful.
+          dispatchCustomEvent('productRemovedFromWishlist', {
+            sku: skuCode,
+            addedInWishList: true,
+          });
+
+          // Set the product wishlist status.
+          this.updateWishListStatus(false);
+        }
+      });
+
+      // don't execute further if product is removed from the wishlist.
       return;
     }
 
@@ -169,23 +198,13 @@ class WishlistButton extends React.Component {
     addProductToWishList(productInfo).then((response) => {
       if (typeof response.data.status !== 'undefined'
         && response.data.status) {
-        // Update the wishlist button state.
-        this.updateWishListStatus(true);
-
         // Prepare and dispatch an event when product added to the storage
         // so other components like wishlist header can listen and do the
         // needful.
-        const productAddedToWishlistEvent = new CustomEvent(
-          'productAddedToWishlist',
-          {
-            bubbles: true,
-            detail: {
-              productInfo,
-              addedInWishList: true,
-            },
-          },
-        );
-        document.dispatchEvent(productAddedToWishlistEvent);
+        dispatchCustomEvent('productAddedToWishlist', {
+          productInfo,
+          addedInWishList: true,
+        });
 
         // If user is logged in we need to update the products from
         // backend via api and update in local storage to get
@@ -212,6 +231,9 @@ class WishlistButton extends React.Component {
             }
           });
         }
+
+        // Update the wishlist button state.
+        this.updateWishListStatus(true);
       }
     });
   }

@@ -31,7 +31,9 @@ class WishlistProductList extends React.Component {
 
   componentDidMount() {
     if (!isAnonymousUser()) {
-      // Add event listener for get wishlist from backend success.
+      // Add event listener for get wishlist load event for logged in user.
+      // This will execute when wishlist loaded from the backend
+      // and page loads before.
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
     }
   }
