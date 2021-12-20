@@ -1,4 +1,3 @@
-import dispatchCustomEvent from '../../../js/utilities/events';
 import { getStorageInfo, setStorageInfo } from '../../../js/utilities/storage';
 import {
   getWishlistInfoStorageExpirationForGuest,
@@ -225,56 +224,45 @@ export const removeProductFromWishListForLoggedInUsers = (productInfo) => (
 /**
  * Utility function to remove a product from wishlist.
  */
-export const removeProductFromWishList = (productSku, setWishListStatus) => {
+export const removeProductFromWishList = (productSku) => {
   // Get existing wishlist data from storage.
   const wishListItems = getWishListData();
 
   // Return is no existing data found.
-  if (!wishListItems) {
-    return;
+  if (!wishListItems
+    || typeof wishListItems[productSku] === 'undefined') {
+    logger.warning('Product not found in local storage. Product SKU: @productSku. Wishlist Data: @wishlistData.', {
+      '@productSku': productSku,
+      '@wishlistData': JSON.stringify(wishListItems),
+    });
+    // Always return a Promise object.
+    return new Promise((resolve) => {
+      resolve(null);
+    });
   }
 
   // For guest users.
   if (isAnonymousUser()) {
-    // Remove the entry for given productSku from existing storage data.
-    delete wishListItems[productSku];
-
-    // Save back to storage.
-    addWishListInfoInStorage(wishListItems);
-
-    // Set the product wishlist status.
-    setWishListStatus(false);
-
-    // Dispatch an event for other modules when product removed.
-    dispatchCustomEvent('productRemovedFromWishlist', { sku: productSku, addedInWishList: false });
-
-    // return if anonymous user.
-    return;
-  }
-
-  // For logged in users, first check if the product exist
-  // and product's wishlistItemId exist.
-  if (typeof wishListItems[productSku] !== 'undefined'
-    && typeof wishListItems[productSku].wishlistItemId !== 'undefined') {
-    removeProductFromWishListForLoggedInUsers({
-      wishlistItemId: wishListItems[productSku].wishlistItemId,
-    }).then((response) => {
-      if (typeof response.data.status !== 'undefined'
-        && response.data.status) {
-        // Remove the entry for given productSku from existing storage data.
-        delete wishListItems[productSku];
-
-        // Save back to storage.
-        addWishListInfoInStorage(wishListItems);
-
-        // Set the product wishlist status.
-        setWishListStatus(false);
-
-        // Dispatch an event for other modules when product removed.
-        dispatchCustomEvent('productRemovedFromWishlist', { sku: productSku, addedInWishList: false });
-      }
+    // Always return a Promise object.
+    return new Promise((resolve) => {
+      resolve({ data: { status: true } });
     });
   }
+
+  // For logged in users, check if product's wishlistItemId exist.
+  // If not return Promise object with null response.
+  if (typeof wishListItems[productSku].wishlistItemId === 'undefined') {
+    // Always return a Promise object.
+    return new Promise((resolve) => {
+      resolve(null);
+    });
+  }
+
+  // If wishlistItemId exists, do remove product from backend
+  // and return the response of API call.
+  return removeProductFromWishListForLoggedInUsers({
+    wishlistItemId: wishListItems[productSku].wishlistItemId,
+  });
 };
 
 /**
