@@ -49,9 +49,7 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
   }
   // Attach wishlist libraries and add a wishlist markup for FE icon rendering.
   if ($product_pdp_layout !== 'magazine_v2') {
-    $build['wishlist_enabled']['#markup'] = $vmode === 'matchback'
-    ? '<div class="wishlist-pdp-' . $vmode . '" data-matchback-sku="' .$sku->getSku() . '"></div>'
-    : '<div class="wishlist-pdp-' . $vmode . '"></div>';
+    $build['wishlist_enabled']['#markup'] = '<div class="wishlist-pdp-' . $vmode . '"></div>';
     $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
   }
 }

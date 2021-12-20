@@ -8,56 +8,44 @@ import WishlistButton from './components/wishlist-button';
  *
  * @param {string} elementSelector
  *  Element selector for rendering wishlist button.
- * @param {string} content
+ * @param {string} context
  *  Context for PDP view mode.
- * @param {string} elementSelector
- *  Current product sku code.
  */
-const renderWishListButton = (elementSelector, context, skuCode) => {
-  let selectedEelement = null;
-  let sku;
-  if (skuCode && context === 'matchback') {
-    selectedEelement = document.querySelector(`[data-matchback-sku="${skuCode}"]`);
-    sku = skuCode;
-  } else {
-    selectedEelement = document.querySelector(elementSelector);
-    if (selectedEelement !== null) {
-      sku = selectedEelement.closest('article').getAttribute('data-sku');
+const renderWishListButton = (elementSelector, context) => {
+  const selectedElements = document.getElementsByClassName(elementSelector);
+  Array.from(selectedElements).forEach((element) => {
+    const sku = element.closest('article').getAttribute('data-sku');
+    if (sku && sku !== null) {
+      ReactDOM.render(
+        <WishlistButton
+          sku={sku}
+          context={context}
+          position="top-right"
+          format="icon"
+        />,
+        element,
+      );
     }
-  }
-  if (sku && selectedEelement !== null) {
-    ReactDOM.render(
-      <WishlistButton
-        sku={sku}
-        context={context}
-        position="top-right"
-        format="icon"
-      />,
-      selectedEelement,
-    );
-  }
+  });
 };
 
 /**
  * Method to handle the modal on load event and render component.
  */
 const handleModalOnLoad = () => {
-  renderWishListButton('.wishlist-pdp-modal', 'modal');
+  renderWishListButton('wishlist-pdp-modal', 'modal');
 };
 
 /**
  * Method to handle the matchback on load event and render component.
  */
-const handleMatchBackLoad = (e) => {
-  if (e.detail && e.detail.data) {
-    const sku = e.detail.data;
-    renderWishListButton('.wishlist-pdp-matchback', 'matchback', sku);
-  }
+const handleMatchBackLoad = () => {
+  renderWishListButton('wishlist-pdp-matchback', 'matchback');
 };
 
 // Check if the wishlist element on PDP exist and
 // data-sku is present, then render the wishlist button.
-renderWishListButton('.wishlist-pdp-full', 'pdp');
+renderWishListButton('wishlist-pdp-full', 'pdp');
 
 // Add modal load event listener to render
 // wishlist button whenever modal opens.
