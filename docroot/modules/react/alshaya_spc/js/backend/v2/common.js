@@ -472,6 +472,11 @@ const getProcessedCartData = async (cartData) => {
           if (typeof item.extension_attributes.product_media !== 'undefined') {
             data.items[itemKey].media = item.extension_attributes.product_media[0].file;
           }
+
+          // If eGift product is top-up card add check to the product item.
+          if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
+            data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
+          }
         }
       }
 
