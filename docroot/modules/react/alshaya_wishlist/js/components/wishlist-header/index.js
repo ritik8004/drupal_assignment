@@ -95,6 +95,11 @@ export default class WishlistHeader extends React.Component {
    */
   handleAddToWishList = (data) => {
     const { productInfo } = data.detail;
+    // Check if sticky wrapper is active on screen.
+    const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
+    if (querySelector !== null) {
+      return;
+    }
     this.setTimer();
     this.setState({
       wishListItemData: productInfo,
@@ -106,7 +111,7 @@ export default class WishlistHeader extends React.Component {
     const { wishListItemCount, wishListItemData } = this.state;
     const wishlistActiveClass = wishListItemCount !== 0 ? 'wishlist-active' : 'wishlist-inactive';
     return (
-      <div className="wishlist-header">
+      <div className="wishlist-header top-wrapper">
         <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('wishlist')}>
           <span className="wishlist-icon">{Drupal.t('my @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
         </a>
