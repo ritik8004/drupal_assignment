@@ -247,16 +247,48 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay using egift card (Remaining Balance: @currencyCode @amount)',
         'context' => 'egift',
       ],
-      'Card is expired please use another payment method to complete purchase' => [
-        'ar' => 'Card is expired please use another payment method to complete purchase',
+      'Pay using egift card (Card is expired)' => [
+        'ar' => 'Pay using egift card (Card is expired)',
         'context' => 'egift',
       ],
       'Pay @currencyCode @amount using another payment method to complete purchase' => [
         'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
         'context' => 'egift',
       ],
-      'Linked card has 0 balance please use another payment method to complete purchase' => [
-        'ar' => 'Linked card has 0 Balance please use another payment method to complete purchase',
+      'Pay using egift card (Available Balance 0)' => [
+        'ar' => 'Pay using egift card (Available Balance 0)',
+        'context' => 'egift',
+      ],
+      'Top-up' => [
+        'ar' => 'Top-up',
+        'context' => 'egift',
+      ],
+      'Top-up for' => [
+        'ar' => 'Top-up for',
+        'context' => 'egift',
+      ],
+      'My Card' => [
+        'ar' => 'My Card',
+        'context' => 'egift',
+      ],
+      'Other\'s Card' => [
+        'ar' => 'Other\'s Card',
+        'context' => 'egift',
+      ],
+      'Card Balance:' => [
+        'ar' => 'Card Balance:',
+        'context' => 'egift',
+      ],
+      'Card No:' => [
+        'ar' => 'Card No:',
+        'context' => 'egift',
+      ],
+      'eGift Card number' => [
+        'ar' => 'eGift Card number',
+        'context' => 'egift',
+      ],
+      'Card Details' => [
+        'ar' => 'Card Details',
         'context' => 'egift',
       ],
     ],
