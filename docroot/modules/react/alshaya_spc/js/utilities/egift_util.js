@@ -105,6 +105,10 @@ export const getApiEndpoint = (action, params = {}) => {
       break;
 
     case 'eGiftHpsSearch':
+      endpoint = `/V1/egiftcard/hps-search/email/${params.email}`;
+      break;
+
+    case 'eGiftHpsCustomerData':
       endpoint = '/V1/customers/hpsCustomerData';
       break;
 
