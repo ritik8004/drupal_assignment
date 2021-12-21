@@ -1672,29 +1672,34 @@ const validateBeforePaymentFinalise = async () => {
     errorMessage = 'Cart contains some items which are not in stock.';
     errorCode = cartErrorCodes.cartHasOOSItem;
   } else if (!hasValue(cartData.shipping.method)
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
     logger.error('Error while finalizing payment. No shipping method available. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!hasValue(cartData.shipping.address)
-    || !hasValue(cartData.shipping.address.custom_attributes)
+  } else if ((!hasValue(cartData.shipping.address)
+    || !hasValue(cartData.shipping.address.custom_attributes))
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // If shipping address not have custom attributes.
     isError = true;
     logger.error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!isAddressExtensionAttributesValid(cartData)) {
+  } else if (!isAddressExtensionAttributesValid(cartData)
+    && !cartContainsOnlyVirtualProduct(cartData.cart)) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     isError = true;
     logger.error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!hasValue(cartData.shipping.address.firstname)
-    || !hasValue(cartData.shipping.address.lastname)
+  } else if ((!hasValue(cartData.shipping.address)
+    || !hasValue(cartData.shipping.address.firstname)
+    || !hasValue(cartData.shipping.address.lastname))
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // If first/last name not available in shipping address.
     isError = true;
