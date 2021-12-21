@@ -37,6 +37,23 @@ async function handleNoItemsInResponse(request, urlKey) {
   return rcsRedirectToPage(rcs404);
 }
 
+/**
+ * Prepares query string for GraphQL GET request.
+ *
+ * @param {string} data
+ *   The string to prepare.
+ *
+ * @returns {string}
+ *   The compressed and URL safe string.
+ */
+function prepareQuery(data) {
+  // Remove unnecessary characters.
+  let query = global.rcsQueryCompressor(data);
+  // Encode to valid uri format.
+  query = encodeURIComponent(query);
+  return `query=${query}`;
+}
+
 exports.getEntity = async function getEntity(langcode) {
   const pageType = rcsPhGetPageType();
   if (!pageType) {
@@ -63,10 +80,8 @@ exports.getEntity = async function getEntity(langcode) {
       // Remove .html suffix from the full path.
       let prodUrlKey = urlKey.replace('.html', '');
 
-      // Build query.
-      request.data = global.rcsQueryCompressor(`{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`);
-      // This is done separately, otherwise the compressing does not work.
-      request.data = JSON.stringify({query: `${request.data}`});
+      // Compress the query.
+      request.data = prepareQuery(`{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products} }`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -81,9 +96,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'category':
       // Build query.
-      request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`
-      });
+      request.data = prepareQuery(`{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -163,17 +176,15 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       }
 
       // Prepare request parameters.
-      request.data = JSON.stringify({
-        // @todo: we are using 'category' API for now which is going to be
-        // deprecated, but only available API to support both 2.3 and 2.4
-        // magento version, so as suggested we are using this for now but
-        // need to change this when this got deprecated in coming magento
-        // version and replace it with 'categoryList' magento API.
-        query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
-            ${drupalSettings.alshayaRcs.navigationMenu.query}
-          }
-        }`
-      });
+      // @todo: we are using 'category' API for now which is going to be
+      // deprecated, but only available API to support both 2.3 and 2.4
+      // magento version, so as suggested we are using this for now but
+      // need to change this when this got deprecated in coming magento
+      // version and replace it with 'categoryList' magento API.
+      request.data = prepareQuery(`{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
+          ${drupalSettings.alshayaRcs.navigationMenu.query}
+        }
+      }`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
@@ -273,12 +284,11 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
   let response = null;
   let result = null;
+  let requestData = null;
 
   switch (placeholder) {
     case 'products-in-style':
-      request.data = JSON.stringify({
-        query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      request.data = prepareQuery(`{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`);
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
       result = response.data.products.items;
@@ -319,9 +329,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
         return staticOption;
       }
 
-      request.data = JSON.stringify({
-        query: `{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`
-      });
+      request.data = prepareQuery(`{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`);
 
       result = rcsCommerceBackend.invokeApiSynchronous(request);
 
