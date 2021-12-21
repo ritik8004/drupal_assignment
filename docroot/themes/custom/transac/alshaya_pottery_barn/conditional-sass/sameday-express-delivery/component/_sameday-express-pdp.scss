@@ -14,6 +14,10 @@
       }
     }
   }
+
+  .express-delivery-subtitle {
+    margin-top: 0;
+  }
 }
 
 .ui-state-active {
@@ -25,6 +29,8 @@
 }
 
 .c-accordion__title {
+  letter-spacing: 0;
+
   &::after {
     transition: transform 0.3s ease-in-out;
     display: flex;
