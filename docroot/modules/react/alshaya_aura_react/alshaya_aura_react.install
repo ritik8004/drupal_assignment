@@ -40,3 +40,24 @@ function alshaya_aura_react_install() {
     alshaya_i18n_save_translations($translations);
   }
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Aura translation strings.
+ */
+function alshaya_aura_react_update_8001() {
+  // Add translations.
+  $strings = [
+    'You are here' => [
+      'ar' => 'أنت هنا',
+    ],
+    'An AURA card is already associated with your email address. Link your card in just one click.' => [
+      'ar' => 'يمكنك ربط برنامج المكافآت أورا بعنوان بريدكالإلكتروني بضغطة واحدة فقط'
+    ],
+    'Your points for this purchase will be added to your account.' => [
+      'ar' => 'سيتم إضافة النقاط الخاصة بك إلى هذاالحساب.',
+    ]
+  ];
+  alshaya_i18n_save_translations($strings);
+}
