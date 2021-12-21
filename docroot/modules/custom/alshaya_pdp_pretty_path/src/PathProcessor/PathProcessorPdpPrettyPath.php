@@ -60,9 +60,10 @@ class PathProcessorPdpPrettyPath implements InboundPathProcessorInterface, Outbo
       $path_alias = substr($path, 0, stripos($path, '/-')) . $suffix;
       $pdp_path = $this->aliasManager->getPathByAlias($path_alias);
       if ($pdp_path) {
+        // Keep alias and original path in static array to process
+        // in outboud request.
         self::$paths[$path_alias] = $path;
         self::$paths[$pdp_path] = $path;
-        // Update with original pdp path.
         $path = $pdp_path;
       }
     }

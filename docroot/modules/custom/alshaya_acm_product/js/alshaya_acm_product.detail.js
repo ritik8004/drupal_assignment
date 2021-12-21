@@ -373,7 +373,6 @@
     var sku = $(form).attr('data-sku');
     var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
     var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-    var variants = drupalSettings[productKey][sku]['variants'];
     var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, drupalSettings[productKey][sku]);
 
     if (selectedSku) {
@@ -610,8 +609,8 @@
 
   Drupal.getSelectedSkuFromQueryParameter = function (viewMode, variants) {
     var selected = (viewMode === 'full')
-    ? parseInt(Drupal.getQueryVariable('selected'))
-    : 0;
+      ? parseInt(Drupal.getQueryVariable('selected'))
+      : 0;
     var selectedSku = '';
 
     if (selected > 0) {
