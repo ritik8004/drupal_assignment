@@ -157,6 +157,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $delivery_options = alshaya_acm_product_get_delivery_options($sku);
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['deliveryOptions'] = $delivery_options['values'];
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['expressDeliveryClass'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
+      $store_finder_settings = \Drupal::config('alshaya_stores_finder.settings');
+      $vars['#attached']['drupalSettings']['areaBockFormPlaceholder'] = $store_finder_settings->get('store_search_placeholder');
+      $vars['#cache']['tags'] = Cache::mergeTags($vars['#cache']['tags'] ?? [], $store_finder_settings->getCacheTags());
     }
 
     // Set delivery options only if product is buyable.

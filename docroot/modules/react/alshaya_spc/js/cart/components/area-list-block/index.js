@@ -171,6 +171,10 @@ export default class AreaListBlock extends React.Component {
     if (drupalSettings.address_fields) {
       governateDefaultLabel = drupalSettings.address_fields.area_parent.label;
     }
+    let areaPlaceHolder = '';
+    if (drupalSettings.areaBockFormPlaceholder) {
+      areaPlaceHolder = drupalSettings.areaBockFormPlaceholder;
+    }
     return (
       <div className="spc-delivery-wrapper">
         <div className="spc-delivery-area">
@@ -196,7 +200,7 @@ export default class AreaListBlock extends React.Component {
               </ConditionalView>
               <div className="area-label">{`${Drupal.t('Search area')}`}</div>
               <div className="spc-filter-panel-search-form-item">
-                <input className="spc-filter-panel-search-field" type="text" placeholder={Drupal.t('e.g. Dubai')} onChange={this.filterList} />
+                <input className="spc-filter-panel-search-field" type="text" placeholder={getStringMessage('area_placeholder_text', { '@label': areaPlaceHolder })} onChange={this.filterList} />
               </div>
               <div className="delivery-type-wrapper">
                 <span className="standard-delivery">{Drupal.t('Standard')}</span>
