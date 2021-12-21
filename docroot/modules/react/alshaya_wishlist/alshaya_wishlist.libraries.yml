@@ -15,3 +15,12 @@ wishlistheader:
     dist/wishlistheader.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+wishlist_add_to_cart:
+  version: 1.x
+  js:
+    assets/js/wishlist_add_to_cart.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal

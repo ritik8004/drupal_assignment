@@ -46,6 +46,12 @@ class WishlistButton extends React.Component {
       // Rendering wishlist button as per sku variant info.
       // Event listener is only required for old pdp, modal and matchback.
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
+      // Handle wishlist state for item when it is added to cart.
+      document.addEventListener('onProductAddToCart', this.handleProductAddToCart);
+    } else {
+      // Handle wishlist state for item when it is added to cart.
+      // This event listener if generic and called directly for new pdp.
+      document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
 
     if (!isAnonymousUser()) {
@@ -62,6 +68,52 @@ class WishlistButton extends React.Component {
       document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
   };
+
+  /**
+   * Handle item removal from wishlist.
+   *
+   * @param {string} sku
+   *  Sku code of product.
+   */
+  handleProductRemovalFromWishlist = (sku) => {
+    removeProductFromWishList(sku).then((response) => {
+      if (typeof response.data !== 'undefined'
+        && typeof response.data.status !== 'undefined'
+        && response.data.status) {
+        // Get existing wishlist data from storage.
+        const wishListItems = getWishListData();
+
+        // Remove the entry for given product sku from existing storage data.
+        delete wishListItems[sku];
+
+        // Save back to storage.
+        addWishListInfoInStorage(wishListItems);
+
+        // Prepare and dispatch an event when product removed from the storage
+        // so other components like wishlist header can listen and do the
+        // needful.
+        dispatchCustomEvent('productRemovedFromWishlist', {
+          sku,
+          addedInWishList: true,
+        });
+
+        // Set the product wishlist status.
+        this.updateWishListStatus(false);
+      }
+    });
+  }
+
+  /**
+   * This event listener function called when item added to cart.
+   *
+   * @param {object} event
+   *  Event detail containing product data.
+   */
+  handleProductAddToCart = (event) => {
+    if (event.detail && event.detail.productData) {
+      this.handleProductRemovalFromWishlist(event.detail.productData.sku);
+    }
+  }
 
   /**
    * Check if current product already exist in the wishlist.
@@ -142,31 +194,7 @@ class WishlistButton extends React.Component {
 
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
-      removeProductFromWishList(skuCode).then((response) => {
-        if (typeof response.data !== 'undefined'
-          && typeof response.data.status !== 'undefined'
-          && response.data.status) {
-          // Get existing wishlist data from storage.
-          const wishListItems = getWishListData();
-
-          // Remove the entry for given product sku from existing storage data.
-          delete wishListItems[skuCode];
-
-          // Save back to storage.
-          addWishListInfoInStorage(wishListItems);
-
-          // Prepare and dispatch an event when product removed from the storage
-          // so other components like wishlist header can listen and do the
-          // needful.
-          dispatchCustomEvent('productRemovedFromWishlist', {
-            sku: skuCode,
-            addedInWishList: false,
-          });
-
-          // Set the product wishlist status.
-          this.updateWishListStatus(false);
-        }
-      });
+      this.handleProductRemovalFromWishlist(skuCode);
 
       // don't execute further if product is removed from the wishlist.
       return;
