@@ -45,7 +45,7 @@ exports.getEntity = async function getEntity(langcode) {
 
   const request = {
     uri: '/graphql',
-    method: 'POST',
+    method: 'GET',
     headers: [
       ["Content-Type", "application/json"],
     ],
@@ -137,7 +137,7 @@ exports.getEntity = async function getEntity(langcode) {
 exports.getData = async function getData(placeholder, params, entity, langcode, markup, loaderOnUpdates = false) {
   const request = {
     uri: '/graphql',
-    method: 'POST',
+    method: 'GET',
     headers: [
       ['Content-Type', 'application/json'],
       ['Store', drupalSettings.rcs.commerceBackend.store],
@@ -264,7 +264,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
-    method: 'POST',
+    method: 'GET',
     headers: [
       ['Content-Type', 'application/json'],
       ['Store', drupalSettings.rcs.commerceBackend.store],

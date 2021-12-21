@@ -23,7 +23,7 @@ exports.invokeApi = async function (request) {
     url: drupalSettings.rcs.commerceBackend.baseUrl + request.uri,
     method: request.method,
     headers,
-    data: request.data,
+    data: globalThis.rcsQueryCompressor(request.data),
     // This will help to prevent the spinner from stopping on ajax complete in
     // cart_notification.js.
     rcs: true,
@@ -63,7 +63,7 @@ exports.invokeApi = async function (request) {
     method: request.method,
     headers,
     async: false,
-    data: request.data,
+    data: globalThis.rcsQueryCompressor(request.data),
     // This will help to prevent the spinner from stopping on ajax complete in
     // cart_notification.js.
     rcs: true,
