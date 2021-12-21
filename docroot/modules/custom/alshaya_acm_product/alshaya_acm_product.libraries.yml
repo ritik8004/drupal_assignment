@@ -7,6 +7,15 @@ product_view:
     - core/jquery.once
     - core/drupal
 
+product_pdp_path:
+  version: 1.x
+  js:
+    js/alshaya_acm_product.pdp_path.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
 product_detail:
   version: 1.x
   js:
@@ -20,6 +29,7 @@ product_detail:
     - clientside_validation_jquery/cv.jquery.validate
     - alshaya_master/common_functions
     - alshaya_acm_product/product_view
+    - alshaya_acm_product/product_pdp_path
     - alshaya_acm_cart_notification/cart_notification_js
     - alshaya_white_label/jquery_mobile_touch_swipe
     - alshaya_white_label/attribute

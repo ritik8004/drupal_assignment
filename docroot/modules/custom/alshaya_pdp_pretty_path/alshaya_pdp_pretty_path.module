@@ -57,6 +57,6 @@ function alshaya_pdp_pretty_path_node_view(array &$build, EntityInterface $entit
  */
 function alshaya_pdp_pretty_path_library_info_alter(&$libraries, $extension) {
   if ($extension === 'alshaya_acm_product') {
-    unset($libraries['product_detail']['js']['js/alshaya_acm_product.detail.js']);
+    unset($libraries['product_pdp_path']['js']['js/alshaya_acm_product.pdp_path.js']);
   }
 }

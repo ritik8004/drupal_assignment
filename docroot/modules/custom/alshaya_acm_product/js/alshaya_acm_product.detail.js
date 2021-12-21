@@ -40,42 +40,6 @@
         Drupal.getRelatedProductPosition();
       });
 
-      // Trigger matchback color change on main product color change.
-      $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
-        var selected = $(this).val();
-        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
-
-        $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
-          var swatchSelector = $(this).parent().siblings('.select2Option');
-
-          if (typeof swatchSelector !== 'undefined') {
-            var selectedIndex = $(this).index();
-            swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
-
-            // Add selected sku id in matchback product URL.
-            var sku = $(this).parents('form').attr('data-sku');
-            var selectedValue = $(this).text();
-            var variants = drupalSettings[viewMode][sku].variants
-            var selectedId = '';
-
-            // Get the entity id of the color selected.
-            $.each(variants, function (key, value) {
-              $.each(value.configurableOptions, function (i, e) {
-                if (e.attribute_id === 'attr_color' && e.value === selectedValue) {
-                  selectedId = value.id;
-                }
-              });
-              if (selectedId !== '') {
-                var productLinkSelector = $('article[data-sku="' + sku + '"]').find('a.full-prod-link');
-                var productLinkValue = productLinkSelector.attr('href').split('?')[0];
-                productLinkSelector.attr('href', productLinkValue + '?selected=' + selectedId);
-                return false;
-              }
-            });
-          }
-        });
-      });
-
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
         var form = $(this).parents('form');
         var sku = $(form).attr('data-sku');
@@ -190,7 +154,7 @@
             ? Object.keys(variants)[0]
             : drupalSettings.configurableCombinations[sku]['firstChild'];
 
-          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, drupalSettings[productKey][sku]);
 
           if (selectedSkuFromQueryParam !== '') {
             selectedSku = selectedSkuFromQueryParam;
@@ -410,7 +374,7 @@
     var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
     var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
     var variants = drupalSettings[productKey][sku]['variants'];
-    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, drupalSettings[productKey][sku]);
 
     if (selectedSku) {
       $(select).removeProp('selected').removeAttr('selected');
@@ -610,11 +574,44 @@
     return productKey
   };
 
-  Drupal.getSelectedProductFromQueryParam = function (viewMode, variants) {
-    // Use selected from query parameter only for main product.
+  Drupal.getSelectedForMatchback = function (selected) {
+    var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
+
+    $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
+      var swatchSelector = $(this).parent().siblings('.select2Option');
+
+      if (typeof swatchSelector !== 'undefined') {
+        var selectedIndex = $(this).index();
+        swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
+
+        // Add selected sku id in matchback product URL.
+        var sku = $(this).parents('form').attr('data-sku');
+        var selectedValue = $(this).text();
+        var variants = drupalSettings[viewMode][sku].variants
+        var selectedId = '';
+
+        // Get the entity id of the color selected.
+        $.each(variants, function (key, value) {
+          $.each(value.configurableOptions, function (i, e) {
+            if (e.attribute_id === 'attr_color' && e.value === selectedValue) {
+              selectedId = value.id;
+            }
+          });
+          if (selectedId !== '') {
+            var productLinkSelector = $('article[data-sku="' + sku + '"]').find('a.full-prod-link');
+            var productLinkValue = productLinkSelector.attr('href').split('?')[0];
+            productLinkSelector.attr('href', productLinkValue + '?selected=' + selectedId);
+            return false;
+          }
+        });
+      }
+    });
+  };
+
+  Drupal.getSelectedSkuFromQueryParameter = function (viewMode, variants) {
     var selected = (viewMode === 'full')
-      ? parseInt(Drupal.getQueryVariable('selected'))
-      : 0;
+    ? parseInt(Drupal.getQueryVariable('selected'))
+    : 0;
     var selectedSku = '';
 
     if (selected > 0) {
