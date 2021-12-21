@@ -38,11 +38,14 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
   componentDidMount() {
     const { cart } = this.props;
+
     // @todo if users tries topup for the same card.
-    // Invoke magento API to get the user card number
+
     // Logged in user email..
     const customerEmail = drupalSettings.userDetails.userEmailID;
+    // Invoke magento API to get the user card number
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
+
     if (response instanceof Promise) {
       response.then((result) => {
         if (result.status === 200) {
