@@ -80,7 +80,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             if (currentBalance !== null && currentBalance > 0) {
               let isRedeemed = false;
               let remainingAmount = 0;
-              let isChecked = true;
+              let isChecked = false;
 
               // Check if user has already linked Egift card.
               if (cart.cart.totals.egiftRedeemedAmount > 0 && cart.cart.totals.egiftRedemptionType === 'linked') {
