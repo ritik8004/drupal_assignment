@@ -1,0 +1,21 @@
+body.wishlist-enabled {
+  .wishlist-header {
+    padding-#{$right}: 0.3125rem;
+
+    .wishlist-icon {
+      width: 2.125rem;
+      height: 2.125rem;
+      background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty-header.svg');
+    }
+
+    .wishlist-active {
+      .wishlist-icon {
+        background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-header.svg');
+      }
+    }
+  }
+
+  #wishlist-header-wrapper {
+    top: 0.25rem;
+  }
+}
