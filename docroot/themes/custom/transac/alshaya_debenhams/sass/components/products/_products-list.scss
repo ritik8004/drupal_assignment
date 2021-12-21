@@ -58,7 +58,7 @@
       font-family: $dh-semibold;
       font-size: 0.875rem;
       margin-top: 0;
-      margin-bottom: 0.75rem;
+      line-height: 0.75;
     }
 
     @include breakpoint($desktop) {
@@ -84,6 +84,7 @@
 
         @include breakpoint($only-mobile) {
           height: 16rem;
+          margin-bottom: 1.625rem;
         }
 
         @include breakpoint($desktop) {
@@ -114,6 +115,10 @@
     padding: 0 0.875rem;
     display: flex;
     align-items: center;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
 
     & > a {
       .swatch-block {
