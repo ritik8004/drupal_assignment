@@ -16,7 +16,7 @@ import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
-import { isWishlistEnabled } from '../../../../../js/utilities/wishlistHelper';
+import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -118,23 +118,9 @@ class CrossellPopupContent extends React.Component {
       <span className="out-of-stock">{Drupal.t('Out of Stock')}</span>
     );
 
-    const options = [];
-    // Add configurable options only for configurable product.
-    if (isWishlistEnabled() && configurableCombinations !== ''
-      && configurableCombinations[relatedSku] && variantSelected) {
-      Object.keys(configurableCombinations[relatedSku].bySku[variantSelected]).forEach((key) => {
-        const option = {
-          option_id: configurableCombinations[relatedSku].configurables[key].attribute_id,
-          option_value: configurableCombinations[relatedSku].bySku[variantSelected][key],
-        };
-
-        // Skipping the psudo attributes.
-        if (drupalSettings.psudo_attribute === undefined
-          || drupalSettings.psudo_attribute !== option.option_id) {
-          options.push(option);
-        }
-      });
-    }
+    // Get configurable options only for configurable product.
+    const options = getAttributeOptionsForWishlist(configurableCombinations,
+      relatedSku, variantSelected);
 
     return (relatedProductData) ? (
       <PdpPopupContainer className="magv2-crossell-popup-container">
@@ -163,7 +149,6 @@ class CrossellPopupContent extends React.Component {
               position="top-right"
               format="icon"
               title={title}
-              variantSelected={variantSelected}
               options={options}
             />
             <PdpInfo

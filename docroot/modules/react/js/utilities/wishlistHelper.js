@@ -39,3 +39,37 @@ export const getWishlistInfoStorageExpirationForLoggedIn = () => ((typeof drupal
   && typeof drupalSettings.wishlist.config.localStorageExpirationForLoggedIn !== 'undefined')
   ? parseInt(drupalSettings.wishlist.config.localStorageExpirationForLoggedIn, 10)
   : 0);
+
+/**
+ * Returns the attribute options for configurable product.
+ *
+ * @param {array} configurableCombinations
+ *  Array of configurable combinations of current product.
+ * @param {string} skuItemCode
+ *  Sku code of main parent product.
+ * @param {string} variant
+ *  Sku code of variant.
+ *
+ * @returns array
+ *  Attribute options of configurabel product.
+ */
+export const getAttributeOptionsForWishlist = (configurableCombinations, skuItemCode, variant) => {
+  // Add configurable options only for configurable product.
+  const options = [];
+  if (isWishlistEnabled() && configurableCombinations !== ''
+    && configurableCombinations[skuItemCode] && variant) {
+    Object.keys(configurableCombinations[skuItemCode].bySku[variant]).forEach((key) => {
+      const option = {
+        option_id: configurableCombinations[skuItemCode].configurables[key].attribute_id,
+        option_value: configurableCombinations[skuItemCode].bySku[variant][key],
+      };
+
+      // Skipping the psudo attributes.
+      if (drupalSettings.psudo_attribute === undefined
+        || drupalSettings.psudo_attribute !== option.option_id) {
+        options.push(option);
+      }
+    });
+  }
+  return options;
+};
