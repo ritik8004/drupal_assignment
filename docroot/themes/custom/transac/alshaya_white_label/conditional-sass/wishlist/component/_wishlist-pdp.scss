@@ -1,5 +1,5 @@
 .wishlist-enabled {
-  &.nodetype--acq_product:not(.magazine-layout) {
+  &.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
     .content__main {
       position: relative;
     }

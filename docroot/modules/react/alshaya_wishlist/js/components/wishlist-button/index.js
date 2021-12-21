@@ -77,7 +77,8 @@ class WishlistButton extends React.Component {
    */
   handleProductRemovalFromWishlist = (sku) => {
     removeProductFromWishList(sku).then((response) => {
-      if (typeof response.data.status !== 'undefined'
+      if (typeof response.data !== 'undefined'
+        && typeof response.data.status !== 'undefined'
         && response.data.status) {
         // Get existing wishlist data from storage.
         const wishListItems = getWishListData();
@@ -242,6 +243,11 @@ class WishlistButton extends React.Component {
 
               // Save back to storage.
               addWishListInfoInStorage(wishListItems);
+
+              // Prepare and dispatch an event when product added to the storage
+              // so other components like wishlist header can listen and do the
+              // needful.
+              dispatchCustomEvent('productAddedToWishlist', {});
             }
           });
         }
