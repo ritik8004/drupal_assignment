@@ -143,7 +143,8 @@ class WishlistButton extends React.Component {
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
       removeProductFromWishList(skuCode).then((response) => {
-        if (typeof response.data.status !== 'undefined'
+        if (typeof response.data !== 'undefined'
+          && typeof response.data.status !== 'undefined'
           && response.data.status) {
           // Get existing wishlist data from storage.
           const wishListItems = getWishListData();

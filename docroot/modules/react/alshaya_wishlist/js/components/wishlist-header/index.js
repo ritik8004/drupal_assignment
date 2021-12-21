@@ -8,6 +8,8 @@ import {
   isAnonymousUser,
   getWishlistFromBackend,
   addWishListInfoInStorage,
+  isWishlistMergeEnabled,
+  addRemoveWishlistItemsInBackend,
 } from '../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -31,37 +33,57 @@ export default class WishlistHeader extends React.Component {
     // Check if wishlist data is null and user is an authenticate user,
     // we will call backend api to get data from magento and
     // store the wishlist info data in local storage.
-    if ((getWishListData() === null) && !isAnonymousUser()) {
-      // Load wishlist information from the magento backend.
-      getWishlistFromBackend().then((response) => {
-        if (hasValue(response.data.items)) {
-          const wishListItems = {};
+    // If wishlist data available and user just logged in then we may have
+    // wishlist merge flag enabled so we need to check that too. If merge
+    // wishlist is enabled, we need to move local storage data to backend
+    // via api call and update local storage from backend.
+    if (!isAnonymousUser()) {
+      // Get wishlist data from the local storage.
+      const wishListData = getWishListData();
+      if (wishListData === null) {
+      // Load wishlist information from the magento backend, if wishlist
+      // data is empty in local storage for authenticate users.
+        this.loadWishlistFromBackend();
+      } else if (isWishlistMergeEnabled()) {
+        // Merge wishlist information to the magento backend from local storage,
+        // if wishlist data available in local storage and merging wishlist
+        // data flag is set to true.
 
-          response.data.items.forEach((item) => {
-            wishListItems[item.sku] = {
-              sku: item.sku,
-              options: item.options,
-              // We need this for removing the item from the wishlist.
-              wishlistItemId: item.wishlist_item_id,
-            };
-          });
-
-          // Save back to storage.
-          addWishListInfoInStorage(wishListItems);
-
-          // Update the wishlist header icon color state
-          // if we have product available in wishlist.
-          const wishListItemCount = Object.keys(wishListItems).length;
-          if (wishListItemCount > 0) {
-            this.setState({ wishListItemCount });
+        // Prepare the wishlist item data to push in backend api.
+        const itemData = [];
+        Object.values(wishListData).forEach((item) => {
+          // Prepare sku options if available to push in backend api.
+          const skuOptions = [];
+          if (item.options.length > 0) {
+            item.options.forEach((option) => {
+              skuOptions.push({
+                id: option.option_id,
+                value: option.option_value,
+              });
+            });
           }
 
-          // Dispatch an event for other modules to know
-          // that wishlist data is available in storage.
-          const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', { bubbles: true });
-          document.dispatchEvent(getWishlistFromBackendSuccess);
+          itemData.push({
+            sku: item.sku,
+            options: skuOptions,
+          });
+        });
+
+        // If we have items for wishlist then add the items in backend
+        // wishlist with api call. Once added successfully, we need to
+        // load the latest wishlist information from backend as well.
+        if (itemData.length > 0) {
+          addRemoveWishlistItemsInBackend(
+            itemData,
+            'mergeWishlistItems',
+          ).then((response) => {
+            if (typeof response.data.status !== 'undefined'
+              && response.data.status) {
+              this.loadWishlistFromBackend();
+            }
+          });
         }
-      });
+      }
     }
 
     // Add event listener for add to wishlist action.
@@ -71,6 +93,41 @@ export default class WishlistHeader extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.timer);
   }
+
+  /**
+   * Helper function to load wishlist information from the magento backend.
+   */
+  loadWishlistFromBackend = () => {
+    getWishlistFromBackend().then((response) => {
+      if (hasValue(response.data.items)) {
+        const wishListItems = {};
+
+        response.data.items.forEach((item) => {
+          wishListItems[item.sku] = {
+            sku: item.sku,
+            options: item.options,
+            // We need this for removing the item from the wishlist.
+            wishlistItemId: item.wishlist_item_id,
+          };
+        });
+
+        // Save back to storage.
+        addWishListInfoInStorage(wishListItems);
+
+        // Update the wishlist header icon color state
+        // if we have product available in wishlist.
+        const wishListItemCount = Object.keys(wishListItems).length;
+        if (wishListItemCount > 0) {
+          this.setState({ wishListItemCount });
+        }
+
+        // Dispatch an event for other modules to know
+        // that wishlist data is available in storage.
+        const getWishlistFromBackendSuccess = new CustomEvent('getWishlistFromBackendSuccess', { bubbles: true });
+        document.dispatchEvent(getWishlistFromBackendSuccess);
+      }
+    });
+  };
 
   /**
    * Set timer for wishlist notifcation.

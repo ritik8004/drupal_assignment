@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_theme().
@@ -76,6 +77,18 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $settings['userDetails'] = $wishlist_helper->getWishListUserDetails();
   $page['#attached']['drupalSettings']['wishlist'] = $settings;
   $page['#attached']['library'][] = 'alshaya_white_label/wishlist';
+
+  // Check if one time user login identification cookie is set
+  // and add a drupal settings in wishlist for enable merging.
+  // After that remove cookie so the merge feature works only
+  // once. We will use this drupal setting variable on front
+  // to sync the wishlist from local storage to magento backend
+  // once user logged in.
+  if (isset($_COOKIE['merge_user_wishlist'])) {
+    $page['#attached']['drupalSettings']['wishlist']['merge'] = TRUE;
+    unset($_COOKIE['merge_user_wishlist']);
+    setcookie('merge_user_wishlist', null, ['expires' => -1, 'path' => '/', 'secure' => TRUE]);
+  }
 }
 
 /**
@@ -127,4 +140,14 @@ function alshaya_wishlist_alshaya_my_account_links_alter(array &$links) {
       'weight' => 42,
     ];
   }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_wishlist_user_login(UserInterface $account) {
+  // Set a one time cookie when user logged in. We will
+  // use this above in hook_page_attachments_alter to set
+  // a drupal settings variable to perform action on front.
+  setcookie('merge_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
 }
