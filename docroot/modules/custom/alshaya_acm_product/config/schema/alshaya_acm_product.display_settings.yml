@@ -27,3 +27,6 @@ alshaya_acm_product.display_settings:
     show_color_images_on_filter:
       type: integer
       label: 'Flag to show images from specific color on filter.'
+    show_brand_name_plp:
+      type: boolean
+      label: 'Flag to show brand name on plp/srp teaser view.'
