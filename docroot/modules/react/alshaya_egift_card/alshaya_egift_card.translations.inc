@@ -251,10 +251,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
         'context' => 'egift',
       ],
-      'Pay @currencyCode @amount using another payment method to complete purchase' => [
-        'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
-        'context' => 'egift',
-      ],
       'Pay using egift card (Available Balance 0)' => [
         'ar' => 'Pay using egift card (Available Balance 0)',
         'context' => 'egift',
@@ -289,6 +285,33 @@ function _alshaya_egift_card_translations() {
       ],
       'Card Details' => [
         'ar' => 'Card Details',
+        'context' => 'egift',
+      ],
+      'My eGift Card' => [
+        'ar' => 'My eGift Card',
+      ],
+      'Balanace:' => [
+        'ar' => 'Balanace:',
+        'context' => 'egift',
+      ],
+      'Gift Card number' => [
+        'ar' => 'Gift Card number',
+        'context' => 'egift',
+      ],
+      'Expires on' => [
+        'ar' => 'Expires on',
+        'context' => 'egift',
+      ],
+      'Card Type' => [
+        'ar' => 'Card Type',
+        'context' => 'egift',
+      ],
+      'Top up' => [
+        'ar' => 'Top up',
+        'context' => 'egift',
+      ],
+      'Link my egift card' => [
+        'ar' => 'Link my egift card',
         'context' => 'egift',
       ],
     ],

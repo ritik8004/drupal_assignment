@@ -58,10 +58,10 @@ class AlshayaEgiftCardController extends ControllerBase {
    * View My Egift Card Page.
    */
   public function myEgiftCardPage() {
-    \Drupal::moduleHandler()->loadInclude('alshaya_egift_card', 'inc', 'alshaya_egift_card.static_strings');
+    $config = $this->config('alshaya_egift_card.settings');
+
     return [
       '#theme' => 'my_egift_card',
-      '#strings' => _alshaya_egift_card_static_strings(),
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_card_my_account',
@@ -72,6 +72,9 @@ class AlshayaEgiftCardController extends ControllerBase {
           ]
         ],
       ],
+      '#cache' => [
+        'tags' => Cache::mergeTags([], $config->getCacheTags()),
+      ]
     ];
   }
 
