@@ -76,6 +76,8 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $settings['userDetails'] = $wishlist_helper->getWishListUserDetails();
   $page['#attached']['drupalSettings']['wishlist'] = $settings;
   $page['#attached']['library'][] = 'alshaya_white_label/wishlist';
+  // Add custom js library to handle add to cart action for wishlist.
+  $build['#attached']['library'][] = 'alshaya_wishlist/wishlist_add_to_cart';
 }
 
 /**
