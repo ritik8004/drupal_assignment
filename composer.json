@@ -491,6 +491,9 @@
         "install-phantomjs": [
             "rm -rf vendor/bin/phantomjs",
             "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "build-middlewares": [
+            "bash blt/scripts/middleware-build.sh ."
         ]
     },
     "config": {
