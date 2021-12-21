@@ -210,18 +210,6 @@ const PdpLayout = () => {
           >
             <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
-          { /* Wishlist icon for new pdp mobile appears on gallery. */}
-          <ConditionalView condition={window.innerWidth < 768}>
-            <WishlistContainer
-              sku={skuItemCode}
-              skuCode={skuMainCode}
-              context="magazinev2"
-              position="top-right"
-              format="icon"
-              title={title}
-              options={options}
-            />
-          </ConditionalView>
         </div>
         <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
