@@ -160,7 +160,7 @@ class WishlistButton extends React.Component {
           // needful.
           dispatchCustomEvent('productRemovedFromWishlist', {
             sku: skuCode,
-            addedInWishList: true,
+            addedInWishList: false,
           });
 
           // Set the product wishlist status.
@@ -215,6 +215,11 @@ class WishlistButton extends React.Component {
 
               // Save back to storage.
               addWishListInfoInStorage(wishListItems);
+
+              // Prepare and dispatch an event when product added to the storage
+              // so other components like wishlist header can listen and do the
+              // needful.
+              dispatchCustomEvent('productAddedToWishlist', {});
             }
           });
         }

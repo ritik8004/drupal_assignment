@@ -326,13 +326,3 @@ export const getWishlistShareLink = () => {
   const shareItemsParams = btoa(JSON.stringify(wishListItems));
   return Drupal.url.toAbsolute(`wishlist/share?data=${shareItemsParams}`);
 };
-
-/**
- * Helper function to check if wishlist merge is enabled. We get this true
- * once when anonymouse user logged in with some existing data of
- * wishlist in local storage. With this flag, we will merge local storage
- * wishlist information to backend via API call.
- */
-export const isWishlistMergeEnabled = () => (typeof drupalSettings.wishlist.merge !== 'undefined'
-  ? drupalSettings.wishlist.merge
-  : null);

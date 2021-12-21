@@ -8,7 +8,6 @@ import {
   isAnonymousUser,
   getWishlistFromBackend,
   addWishListInfoInStorage,
-  isWishlistMergeEnabled,
   addRemoveWishlistItemsInBackend,
 } from '../../utilities/wishlist-utils';
 import WishlistNotification from '../wishlist-notification';
@@ -44,7 +43,7 @@ export default class WishlistHeader extends React.Component {
       // Load wishlist information from the magento backend, if wishlist
       // data is empty in local storage for authenticate users.
         this.loadWishlistFromBackend();
-      } else if (isWishlistMergeEnabled()) {
+      } else if (hasValue(drupalSettings.wishlist.merge)) {
         // Merge wishlist information to the magento backend from local storage,
         // if wishlist data available in local storage and merging wishlist
         // data flag is set to true.
@@ -88,9 +87,13 @@ export default class WishlistHeader extends React.Component {
 
     // Add event listener for add to wishlist action.
     document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
+
+    // Add event listener for remove product to wishlist action.
+    document.addEventListener('productRemovedFromWishlist', this.handleRemoveToWishList, false);
   }
 
   componentWillUnmount() {
+    // Clear notification timeout.
     clearTimeout(this.timer);
   }
 
@@ -152,16 +155,38 @@ export default class WishlistHeader extends React.Component {
    */
   handleAddToWishList = (data) => {
     const { productInfo } = data.detail;
+
     // Check if sticky wrapper is active on screen.
     const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
     if (querySelector !== null) {
       return;
     }
+
+    // Set timer for the wishlist notification.
     this.setTimer();
+
+    // Get the wishlist items from the local storage
+    // and set the count in state.
+    const wishListItems = getWishListData() || {};
+    const wishListItemCount = Object.keys(wishListItems).length;
+
     this.setState({
-      wishListItemData: productInfo,
+      wishListItemCount,
+      wishListItemData: productInfo || null,
     });
     smoothScrollTo('#wishlist-header-wrapper');
+  };
+
+  /**
+   * Once item is removed from wishlist,
+   * check and update the header icon state.
+   */
+  handleRemoveToWishList = () => {
+    // Get the wishlist items from the local storage
+    // and set the count in state.
+    const wishListItems = getWishListData() || {};
+    const wishListItemCount = Object.keys(wishListItems).length;
+    this.setState({ wishListItemCount });
   };
 
   render() {

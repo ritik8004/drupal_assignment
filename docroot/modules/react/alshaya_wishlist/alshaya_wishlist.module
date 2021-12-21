@@ -84,7 +84,8 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   // once. We will use this drupal setting variable on front
   // to sync the wishlist from local storage to magento backend
   // once user logged in.
-  if (isset($_COOKIE['merge_user_wishlist'])) {
+  if (isset($_COOKIE['merge_user_wishlist'])
+    && !\Drupal::currentUser()->isAnonymous()) {
     $page['#attached']['drupalSettings']['wishlist']['merge'] = TRUE;
     unset($_COOKIE['merge_user_wishlist']);
     setcookie('merge_user_wishlist', null, ['expires' => -1, 'path' => '/', 'secure' => TRUE]);
@@ -146,8 +147,13 @@ function alshaya_wishlist_alshaya_my_account_links_alter(array &$links) {
  * Implements hook_user_login().
  */
 function alshaya_wishlist_user_login(UserInterface $account) {
-  // Set a one time cookie when user logged in. We will
-  // use this above in hook_page_attachments_alter to set
-  // a drupal settings variable to perform action on front.
-  setcookie('merge_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Check if the wishlist feature is enabled.
+  if ($wishlist_helper->isWishListEnabled()) {
+    // Set a one time cookie when user logged in. We will
+    // use this above in hook_page_attachments_alter to set
+    // a drupal settings variable to perform action on front.
+    // For example, we will merge wishlist soon after user logged in.
+    setcookie('merge_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
+  }
 }
