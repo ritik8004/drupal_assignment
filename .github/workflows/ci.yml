@@ -1,0 +1,238 @@
+# @todo Port cron rules from travis
+# @todo skip back merge commits.
+on: [push]
+# @todo uncomment
+#on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Setup environment to build Composer, NPM and generate artifacts, installs Drupal, run tests and Deploy
+    runs-on: ubuntu-18.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        # @todo find a way to only use the matrix on steps beyond and including site install
+        # @todo keep only commented line
+#        drupal-profile: ['alshaya_non_transac' ]
+        drupal-profile: [ 'alshaya_transac', 'alshaya_non_transac' ]
+
+    container:
+      image: devwithlando/php:7.4-fpm-4
+
+    services:
+      database:
+        image: mysql:5.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 32574:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      memcache1:
+        image: memcached:latest
+
+      memcache2:
+        image: memcached:latest
+
+    env:
+      COMPOSER_MEMORY_LIMIT: -1
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER_PASSWORD: drupal
+      MYSQL_USER_NAME: drupal
+      MYSQL_DATABASE_NAME: drupal
+      MYSQL_HOST: database
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      SSH_DEPLOYMENT_KEY: ${{ secrets.BLT_SSH_DEPLOYMENT_KEY }}
+      INSTALL_TYPE: install
+      PROFILE: ${{ matrix.drupal-profile }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+#      - name: Check for early exit
+#        run: (if ! git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)' exit 0)
+
+#      - name: Branch validate
+#        run: bash ${GITHUB_WORKSPACE}/blt/scripts/deploy_branch_validate.sh
+
+#      - name: Configure credentials
+#        run: git config --global github.accesstoken "${secrets.GITHUB_OAUTH_TOKEN}"
+
+#      - name: Run Lint and PHPCS
+#        run: bash $SCRIPT_DIR/test_app.sh
+
+      - name: Run Composer install
+        run: |
+          composer --version
+          composer global require hirak/prestissimo
+          composer validate --no-check-all --ansi
+          composer install --no-interaction
+
+      - name: Prepare bin executables
+        run: |
+          ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
+          ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
+
+      - name: Build all middleware
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/middleware-build.sh "${GITHUB_WORKSPACE}"
+
+      - name: Cache dependencies installed with Composer
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.composer-cache.outputs.dir }}"
+            ~/.drush/cache
+            $GITHUB_WORKSPACE/vendor
+            $GITHUB_WORKSPACE/docroot/core
+            $GITHUB_WORKSPACE/docroot/middleware
+            $GITHUB_WORKSPACE/docroot/middleware/vendor
+            $GITHUB_WORKSPACE/docroot/libraries
+            $GITHUB_WORKSPACE/docroot/modules/contrib
+            $GITHUB_WORKSPACE/docroot/themes/contrib
+            $GITHUB_WORKSPACE/docroot/profiles/contrib
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "8.17.0"
+
+      - name: Install Gulp
+        run: npm install -g gulp-cli
+        # if: bash "$(which gulp)"==""
+
+#      - name: Frontend setup
+#        run: ${$GITHUB_WORKSPACE}/blt/scripts/frontend-setup.sh "${$GITHUB_WORKSPACE}/docroot"
+
+      - name: Cache node modules
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      # @todo check if this really works or we need one step per directory
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.npm-cache-dir.outputs.dir }}"
+            ~/.npm
+            ~/.nvm
+            $GITHUB_WORKSPACE/docroot/modules/react
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_add_to_bag
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_algolia_react
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_appointment
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_pdp_react
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_react
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_spc
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_sofa_sectional
+            $GITHUB_WORKSPACE/docroot/modules/react/alshaya_stylefinder
+            $GITHUB_WORKSPACE/docroot/themes/custom/amp
+            $GITHUB_WORKSPACE/docroot/themes/custom/transac
+            $GITHUB_WORKSPACE/docroot/themes/custom/non_transac
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+#      - name: Validate
+#        run: blt validate:all
+
+#      - name: Build
+#        run: blt source:build
+
+#      - name: Run unit tests (PHP and JS)
+#        run: bash $SCRIPT_DIR/test_app.sh
+
+      # Prepare artifacts to be used to install and test on multiple profiles.
+#      - uses: montudor/action-zip@v1
+#        with:
+#          args: zip -r -q -y ./artifact.zip ./
+
+      # @Todo check if its possible to cache artifacts using GITHUB_REF as key
+#      - name: Upload artifacts
+#        uses: actions/upload-artifact@v2
+#        if: success()
+#        with:
+#          name: my-artifacts
+#          retention-days: 1
+#          path: ./artifact.zip
+
+#  Install:
+#    name: Installs Drupal and run tests
+#    runs-on: ubuntu-18.04
+#    needs: build
+
+#      - name: Prepare BLT executable
+#        run: ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
+
+#      - name: Restore artifacts
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: my-artifacts
+#
+#      - uses: montudor/action-zip@v1
+#        with:
+#          args: unzip -qq ./artifact.zip -d ./
+#
+#      - name: Clean up
+#        run: rm ./artifact.zip
+
+      # Delete artifacts
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: my-artifacts
+
+#      - name: Show files
+#        run: |
+#          ls -al ${GITHUB_WORKSPACE}/blt/scripts/github_actions
+#          ls -al ${GITHUB_WORKSPACE}
+
+      - name: Setup environment
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/github_actions/setup_env.sh
+
+      - name: Disable Telemetry
+        run: blt blt:telemetry:disable --no-interaction
+
+#          echo "blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --verbose"
+      - name: Install profile
+        run: |
+          cd ${GITHUB_WORKSPACE}/docroot
+          drush st
+          blt drupal:install
+          drush pml
+
+      # For deployment steps below to work, the repository must have
+      # deployment/ssh private key added as a secret with name: BLT_SSH_DEPLOYMENT_KEY
+      - name: Prepare deployment key
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ env.SSH_DEPLOYMENT_KEY }}"
+        if: ${{ env.SSH_DEPLOYMENT_KEY }}
+
+      - name: Deploy branch
+        run: bash $SCRIPT_DIR/deploy_branch.sh
+        if: ${{ env.SSH_DEPLOYMENT_KEY && github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/master') }}
+
+      - name: Deploy tag
+        run: bash $SCRIPT_DIR/deploy_tag.sh
+        if: ${{ env.SSH_DEPLOYMENT_KEY && github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
+
+      # @todo add slack notifications
+#      - name: Notify slack
+#        env:
+#          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
+#        uses: pullreminders/slack-action@master
+#        with:
+#          args: '{\"channel\":\"github\",\"text\":\"Hello world\"}'
+
+      # @todo add email notifications
