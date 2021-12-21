@@ -3,7 +3,7 @@ import getCurrencyCode from '../../../../../js/utilities/util';
 import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
-import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { callEgiftApi, performRedemption, updatePriceSummaryBlock } from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
@@ -39,37 +39,55 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
   componentDidMount() {
     const { cart } = this.props;
     // @todo if users tries topup for the same card.
-    // Invoke magento API to get the user card number.
+    // Invoke magento API to get the user card number
+    // Logged in user email..
+    const customerEmail = drupalSettings.userDetails.userEmailID;
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
     if (response instanceof Promise) {
       response.then((result) => {
         if (result.status === 200) {
-          if (result.data.card_number !== null && result.data.response_type !== false) {
+          if (result.data.card_number !== null && result.data.response_type) {
+            // Card Available Balance.
             const currentBalance = result.data.current_balance;
             // Current Time stamp to check for expiry.
             const currentTime = Math.floor(Date.now() / 1000);
-            // IF expired or 0 balance card then no need to proceed further show message.
-            if (currentTime > result.data.expiry_date_timestamp || currentBalance === 0) {
+
+            // IF 0 balance card then no need to proceed further.
+            if (currentBalance === 0) {
               this.setState({
                 egiftCardActualBalance: currentBalance,
-                isEgiftCardExpired: (currentTime > result.data.expiry_date_timestamp),
+                egiftLinkedCardNumber: result.data.card_number,
                 renderWait: false,
               });
               return;
             }
+
+            // IF Expired card then no need to proceed further.
+            if (currentTime > result.data.expiry_date_timestamp) {
+              this.setState({
+                egiftCardActualBalance: currentBalance,
+                isEgiftCardExpired: (currentTime > result.data.expiry_date_timestamp),
+                egiftLinkedCardNumber: result.data.card_number,
+                renderWait: false,
+              });
+              return;
+            }
+
+            // If card with Balance and not Expired.
             if (currentBalance !== null && currentBalance > 0) {
               let isRedeemed = false;
               let remainingAmount = 0;
-              let isChecked = false;
+              let isChecked = true;
+
               // Check if user has already linked Egift card.
               if (cart.cart.totals.egiftRedeemedAmount > 0 && cart.cart.totals.egiftRedemptionType === 'linked') {
                 // Set checked if already performed linking of egift card.
                 isChecked = true;
                 isRedeemed = true;
-                //
+
+                // Check if card available balance is greater than cart total.
+                // then calculate the remaining balance of the Card.
                 if (currentBalance >= cart.cart.totals.base_grand_total) {
-                  // Check if current balance is greater than cart total.
-                  // then show remaining balance of the Card.
                   remainingAmount = currentBalance - cart.cart.totals.egiftRedeemedAmount;
                 }
               }
@@ -77,6 +95,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               const balancePayable = (hasValue(cart.cart.totals.balancePayable))
                 ? cart.cart.totals.balancePayable
                 : 0;
+
+              // Set state to show Pay using egift card option under Payment Methods.
               this.setState({
                 isEgiftCardredeemed: isRedeemed,
                 setChecked: isChecked,
@@ -86,18 +106,21 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 isEgiftCardExpired: (currentTime > result.data.expiry_date_timestamp),
                 modalInputAmount: cart.cart.totals.base_grand_total,
                 egiftLinkedCardNumber: result.data.card_number,
-                apiErrorMessage: '',
-                renderWait: true,
               });
             }
           } else {
-          // Handle error response.
-            logger.error('Error while calling the egift HPS Search');
-            this.setState({
-              apiErrorMessage: result.data.response_message,
-              renderWait: false,
+            // If Empty Response form eGiftHpsCustomerData Api.
+            logger.error('Empty Response @customerEmail. Message: @message', {
+              '@customerEmail': customerEmail,
+              '@message': result.data.response_message,
             });
           }
+        } else {
+          // If eGiftHpsCustomerData API is returning Error.
+          logger.error('Error while calling the egift HPS Customer Data Api @customerEmail. Message: @message', {
+            '@customerEmail': customerEmail,
+            '@message': result.data.error_message,
+          });
         }
       });
     }
@@ -124,7 +147,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     // On checking the checkbox this will be executed.
     if (e.target.checked) {
       showFullScreenLoader();
-      // Perform redemption by calling the redemption API.
+      // Perform linking of Egift card by calling the redemption API.
       const redemptionResponse = performRedemption(
         cart.cart.cart_id_int,
         cart.cart.totals.base_grand_total,
@@ -134,17 +157,22 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       if (redemptionResponse instanceof Promise) {
         redemptionResponse.then((res) => {
           if (res.status === 200) {
-            if (res.data.card_number !== null && res.data.response_type !== false) {
-              // Perform calculations and set state.
+            if (res.data.card_number !== null && res.data.response_type) {
+              // Perform calculations and set state for linking card.
               this.performCalculations(
                 res.data.balance_payable,
                 res.data.redeemed_amount,
                 egiftCardActualBalance,
+                res.data.card_number,
               );
-              // Trigger event to update price summary block.
+              // Trigger event to update price in order summary block.
               updatePriceSummaryBlock();
+              // Set checkbox status to checked as redemption was successfull.
+              this.setState({
+                setChecked: e.target.checked,
+              });
             } else {
-              logger.error('Error while calling the eGiftRedemption. Action: @action CardNumber: @cardNumber Response: @response', {
+              logger.error('Empty Response in eGiftRedemption for linked card. Action: @action CardNumber: @cardNumber Response: @response', {
                 '@action': 'set_points',
                 '@cardNumber': egiftLinkedCardNumber,
                 '@response': res.data.response_message,
@@ -152,12 +180,25 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               this.setState({
                 apiErrorMessage: res.data.response_message,
               });
+              removeFullScreenLoader();
             }
+          } else {
+            logger.error('Error while calling the eGiftRedemption linked card. Action: @action CardNumber: @cardNumber Response: @response', {
+              '@action': 'set_points',
+              '@cardNumber': egiftLinkedCardNumber,
+              '@response': res.data.error_message,
+            });
+            this.setState({
+              apiErrorMessage: Drupal.t('Something went wrong please try again later.', {}, { context: 'egift' }),
+              renderWait: false,
+              setChecked: false,
+            });
+            removeFullScreenLoader();
           }
         });
       }
     } else {
-      // On unchecking the checkbox this will be executed to remve redemption.
+      // On unchecking the checkbox this will be executed to remove redemption.
       const postData = {
         redeem_points: {
           action: 'remove_points',
@@ -168,36 +209,45 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       showFullScreenLoader();
       // Invoke the remove redemption API.
       const response = callEgiftApi('eGiftRedemption', 'POST', postData);
+
       if (response instanceof Promise) {
-        // Handle the error and success message after the egift card is removed
-        // from the cart.
-        let errorMsg = '';
+        // Handle the error and success message after the egift card is unlinked.
         response.then((result) => {
           if (result.status === 200) {
-            if (result.data.response_type !== false) {
+            if (result.data.response_type) {
               // Trigger event to update price summary block.
               updatePriceSummaryBlock();
+
+              this.setState({
+                isEgiftCardredeemed: false,
+                egiftCardRemainingBalance: 0,
+                eGiftbalancePayable: 0,
+                apiErrorMessage: '',
+                setChecked: e.target.checked,
+              });
             } else {
-              logger.error('Error while calling the cancel eGiftRedemption. Action: @action Response: @response', {
+              logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {
                 '@action': postData.redeem_points.action,
+                '@cardNumber': egiftLinkedCardNumber,
                 '@response': result.data.response_message,
               });
-              errorMsg = result.data.response_message;
+              removeFullScreenLoader();
             }
+          } else {
+            logger.error('Error while calling the cancel eGiftRedemption for unlinking egift card. Action: @action, CardNumber: @cardNumber, Response: @response', {
+              '@action': postData.redeem_points.action,
+              '@cardNumber': egiftLinkedCardNumber,
+              '@response': result.data.error_message,
+            });
+            removeFullScreenLoader();
             this.setState({
-              isEgiftCardredeemed: false,
-              egiftCardRemainingBalance: 0,
-              eGiftbalancePayable: 0,
-              apiErrorMessage: errorMsg,
+              apiErrorMessage: Drupal.t('Something went wrong please try again later.', {}, { context: 'egift' }),
+              renderWait: false,
             });
           }
         });
       }
     }
-    // Reset the state to move back to initial redeem stage.
-    this.setState({
-      setChecked: e.target.checked,
-    });
   };
 
   // Update egift amount.
@@ -206,11 +256,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     showFullScreenLoader();
     // Prepare the request object for redeem API.
     const { cart } = this.props;
+
+    // Api call to update the redemption amount.
     const response = performRedemption(cart.cart.cart_id_int, updateAmount, egiftLinkedCardNumber, 'linked');
     if (response instanceof Promise) {
       response.then((result) => {
         if (result.status === 200) {
-          if (result.data.redeemed_amount !== null && result.data.response_type !== false) {
+          if (result.data.redeemed_amount !== null && result.data.response_type) {
             const balancePayable = result.data.balance_payable;
             const redeemedAmount = result.data.redeemed_amount;
             // Perform calculations and set state.
@@ -218,8 +270,9 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               balancePayable,
               redeemedAmount,
               egiftCardActualBalance,
+              result.data.card_number,
             );
-            // Trigger event to update price summary block.
+            // Trigger event to update price in order summary block.
             updatePriceSummaryBlock();
           }
           return true;
@@ -231,7 +284,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
   }
 
   // Perform Calulations and set state.
-  performCalculations = (balancePayable, redeemedAmount, egiftCardActualBalance) => {
+  performCalculations = (balancePayable, redeemedAmount, egiftCardActualBalance, cardNumber) => {
     const remainingAmount = egiftCardActualBalance - redeemedAmount;
     let inputAmount = redeemedAmount;
     if (balancePayable === 0 && redeemedAmount > 0) {
@@ -248,6 +301,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       eGiftbalancePayable: balancePayable,
       egiftCardRemainingBalance: remainingAmount,
       modalInputAmount: inputAmount,
+      egiftLinkedCardNumber: cardNumber,
       openModal: false,
     });
   }
@@ -269,55 +323,55 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     // Cart object need to be passed to UpdateGiftCardAmount.
     const { cart } = this.props;
     // Return if no linked card and if any api fails.
-    if (!renderWait && egiftLinkedCardNumber == null) {
+    if (renderWait && egiftLinkedCardNumber == null) {
       return null;
     }
-    // Disable checkbox when egiftcard balance is 0.
+    // Disable checkbox when egiftcard balance is 0 or is expired.
     const disabled = (egiftCardActualBalance === 0 || isEgiftCardExpired);
+
+    // If card redeemed subtract the redeemed amount from card balance and show.
+    let cardBlanceAmount = egiftCardActualBalance;
+    if (isEgiftCardredeemed && !disabled) {
+      cardBlanceAmount = egiftCardRemainingBalance;
+    }
+
     return (
       <>
         <div className="payment-method fadeInUp payment-method-checkout_com_egift_linked_card">
           <div className="payment-method-top-panel">
+
             <div className="payment-method-label-wrapper">
               <ConditionalView condition={disabled}>
                 <input type="checkbox" id="link-egift-card" disabled={disabled} />
               </ConditionalView>
+
               <ConditionalView condition={!disabled}>
                 <input type="checkbox" id="link-egift-card" checked={setChecked} onChange={this.handleOnClick} />
               </ConditionalView>
+
               <label className="checkbox-sim checkbox-label egift-link-card-label">
                 <ConditionalView condition={isEgiftCardExpired}>
                   {
                     Drupal.t('Pay using egift card (Card is expired)', {}, { context: 'egift' })
                   }
                 </ConditionalView>
-                <ConditionalView condition={egiftCardActualBalance === 0}>
-                  {
-                    Drupal.t('Pay using egift card (Available Balance 0)', {}, { context: 'egift' })
-                  }
-                </ConditionalView>
-                <ConditionalView condition={!isEgiftCardredeemed}>
+
+                <ConditionalView condition={!isEgiftCardExpired}>
                   {
                     Drupal.t('Pay using egift card (Available Balance: @currencyCode @amount)',
                       {
-                        '@currencyCode': getCurrencyCode(), '@amount': egiftCardActualBalance,
-                      }, { context: 'egift' })
-                  }
-                </ConditionalView>
-                <ConditionalView condition={isEgiftCardredeemed}>
-                  {
-                    Drupal.t('Pay using egift card (Available Balance: @currencyCode @amount)',
-                      {
-                        '@currencyCode': getCurrencyCode(), '@amount': egiftCardRemainingBalance,
+                        '@currencyCode': getCurrencyCode(), '@amount': cardBlanceAmount,
                       }, { context: 'egift' })
                   }
                 </ConditionalView>
               </label>
             </div>
+
             {/* FE to update Payment Icon SVG any where here. */}
             <ConditionalView condition={apiErrorMessage !== ''}>
               <div id="api-error">{apiErrorMessage}</div>
             </ConditionalView>
+
             <ConditionalView condition={!isEgiftCardExpired}>
               <div className="payment-method-bottom-panel payment-method-form checkout_com_egift_linked_card">
                 <ConditionalView conditional={openModal}>
@@ -330,23 +384,28 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                     cart={cart}
                   />
                 </ConditionalView>
-                <div className="spc-payment-method-desc">
-                  <div className="desc-content">
-                    <ConditionalView condition={eGiftbalancePayable > 0}>
+
+                <ConditionalView condition={eGiftbalancePayable > 0}>
+                  <div className="spc-payment-method-desc">
+                    <div className="desc-content">
                       {
                         Drupal.t('Pay @currencyCode @amount using another payment method to complete purchase',
                           {
                             '@currencyCode': getCurrencyCode(), '@amount': eGiftbalancePayable,
                           }, { context: 'egift' })
                       }
-                    </ConditionalView>
+                    </div>
                   </div>
-                </div>
+                </ConditionalView>
+
+
                 <ConditionalView condition={cart.cart.totals.egiftRedemptionType === 'linked'}>
                   <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
                 </ConditionalView>
+
               </div>
             </ConditionalView>
+
           </div>
         </div>
       </>
