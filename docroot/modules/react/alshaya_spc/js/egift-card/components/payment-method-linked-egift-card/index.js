@@ -28,23 +28,17 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       // Egift Card Balance.
       egiftCardActualBalance: 0,
       // Check if user has linked egift card.
-      egiftLinkedCardNumber: '',
+      egiftLinkedCardNumber: null,
       // Api render wait time.
       renderWait: true,
       // Api render wait time.
-      inValid: false,
-      // Api failure error messages.
       apiErrorMessage: '',
     };
   }
 
   componentDidMount() {
     const { cart } = this.props;
-    let egiftTopup = 'active';
-    // Set in-active if any product in cart is for topup.
-    if (typeof cart.cart.egiftTopup !== 'undefined' && cart.cart.egiftTopup === 1) {
-      egiftTopup = 'in-active';
-    }
+    // @todo if users tries topup for the same card.
     // Invoke magento API to get the user card number.
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
     if (response instanceof Promise) {
@@ -54,35 +48,32 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
             const currentBalance = result.data.current_balance;
             // Current Time stamp to check for expiry.
             const currentTime = Math.floor(Date.now() / 1000);
-            // Its an Invalid card if Balance is 0 or is expired.
-            let inValid = false;
-            // IF invalid card then no need to proceed further show message.
+            // IF expired or 0 balance card then no need to proceed further show message.
             if (currentTime > result.data.expiry_date_timestamp || currentBalance === 0) {
-              inValid = true;
               this.setState({
                 egiftCardActualBalance: currentBalance,
                 isEgiftCardExpired: (currentTime > result.data.expiry_date_timestamp),
-                inValid: true,
                 renderWait: false,
-                activeClass: egiftTopup,
               });
+              return;
             }
-            if (currentBalance !== null && !inValid) {
+            if (currentBalance !== null && currentBalance > 0) {
               let isRedeemed = false;
               let remainingAmount = 0;
               let isChecked = false;
               // Check if user has already linked Egift card.
               if (cart.cart.totals.egiftRedeemedAmount > 0 && cart.cart.totals.egiftRedemptionType === 'linked') {
-                if (currentBalance >= cart.cart.totals.base_grand_total) {
-                  // Check if current balance is greater than cart total.
-                  // then show remaining balance.
-                  remainingAmount = currentBalance - cart.cart.totals.egiftRedeemedAmount;
-                }
                 // Set checked if already performed linking of egift card.
                 isChecked = true;
                 isRedeemed = true;
+                //
+                if (currentBalance >= cart.cart.totals.base_grand_total) {
+                  // Check if current balance is greater than cart total.
+                  // then show remaining balance of the Card.
+                  remainingAmount = currentBalance - cart.cart.totals.egiftRedeemedAmount;
+                }
               }
-              // balancePayable amount to show in ordersummary.
+              // balancePayable amount to show in order summary.
               const balancePayable = (hasValue(cart.cart.totals.balancePayable))
                 ? cart.cart.totals.balancePayable
                 : 0;
@@ -96,9 +87,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 modalInputAmount: cart.cart.totals.base_grand_total,
                 egiftLinkedCardNumber: result.data.card_number,
                 apiErrorMessage: '',
-                inValid: false,
                 renderWait: true,
-                activeClass: egiftTopup,
               });
             }
           } else {
@@ -130,14 +119,10 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
   // perform on checking / unchecking the checkbox
   handleOnClick = (e) => {
-    // Reset the state to move back to initial redeem stage.
-    this.setState({
-      setChecked: e.target.checked,
-    });
     const { egiftLinkedCardNumber, egiftCardActualBalance } = this.state;
     const { cart } = this.props;
     // On checking the checkbox this will be executed.
-    if (e.target.checked === true) {
+    if (e.target.checked) {
       showFullScreenLoader();
       // Perform redemption by calling the redemption API.
       const redemptionResponse = performRedemption(
@@ -209,6 +194,10 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
         });
       }
     }
+    // Reset the state to move back to initial redeem stage.
+    this.setState({
+      setChecked: e.target.checked,
+    });
   };
 
   // Update egift amount.
@@ -275,9 +264,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       egiftCardActualBalance,
       egiftLinkedCardNumber,
       renderWait,
-      inValid,
       apiErrorMessage,
-      activeClass,
     } = this.state;
     // Cart object need to be passed to UpdateGiftCardAmount.
     const { cart } = this.props;
@@ -289,27 +276,27 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     const disabled = (egiftCardActualBalance === 0 || isEgiftCardExpired);
     return (
       <>
-        <div className={`payment-method fadeInUp payment-method-checkout_com_egift_linked_card ${activeClass}`}>
+        <div className="payment-method fadeInUp payment-method-checkout_com_egift_linked_card">
           <div className="payment-method-top-panel">
             <div className="payment-method-label-wrapper">
-              <ConditionalView condition={inValid && disabled}>
+              <ConditionalView condition={disabled}>
                 <input type="checkbox" id="link-egift-card" disabled={disabled} />
               </ConditionalView>
-              <ConditionalView condition={!inValid && !disabled}>
-                <input type="checkbox" id="link-egift-card" checked={setChecked} onChange={this.handleOnClick} disabled={disabled} />
+              <ConditionalView condition={!disabled}>
+                <input type="checkbox" id="link-egift-card" checked={setChecked} onChange={this.handleOnClick} />
               </ConditionalView>
               <label className="checkbox-sim checkbox-label egift-link-card-label">
-                <ConditionalView condition={inValid && isEgiftCardExpired}>
+                <ConditionalView condition={isEgiftCardExpired}>
                   {
                     Drupal.t('Pay using egift card (Card is expired)', {}, { context: 'egift' })
                   }
                 </ConditionalView>
-                <ConditionalView condition={inValid && egiftCardActualBalance === 0}>
+                <ConditionalView condition={egiftCardActualBalance === 0}>
                   {
                     Drupal.t('Pay using egift card (Available Balance 0)', {}, { context: 'egift' })
                   }
                 </ConditionalView>
-                <ConditionalView condition={!inValid && !isEgiftCardredeemed}>
+                <ConditionalView condition={!isEgiftCardredeemed}>
                   {
                     Drupal.t('Pay using egift card (Available Balance: @currencyCode @amount)',
                       {
@@ -317,7 +304,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                       }, { context: 'egift' })
                   }
                 </ConditionalView>
-                <ConditionalView condition={!inValid && isEgiftCardredeemed}>
+                <ConditionalView condition={isEgiftCardredeemed}>
                   {
                     Drupal.t('Pay using egift card (Available Balance: @currencyCode @amount)',
                       {
@@ -355,7 +342,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                     </ConditionalView>
                   </div>
                 </div>
-                <ConditionalView condition={!inValid && cart.cart.totals.egiftRedemptionType === 'linked'}>
+                <ConditionalView condition={cart.cart.totals.egiftRedemptionType === 'linked'}>
                   <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
                 </ConditionalView>
               </div>

@@ -364,16 +364,15 @@ const getProcessedCartData = async (cartData) => {
   }
 
   // If egift card enabled, add the hps_redeemed_amount
-  // add hps_redemption_type and balance_payble to cart.
-  if (isEgiftCardEnabled()) {
-    data.totals.egiftRedeemedAmount = 0;
-    data.totals.egiftRedemptionType = '';
-    if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
-      data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
-    }
-    if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
-      data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
-    }
+  // add hps_redemption_type to cart.
+  if (isEgiftCardEnabled() && hasValue(cartData.totals.extension_attributes)) {
+    const extensionAttributesHps = cartData.totals.extension_attributes;
+    data.totals.egiftRedeemedAmount = (hasValue(extensionAttributesHps.hps_redeemed_amount))
+      ? extensionAttributesHps.hps_redeemed_amount
+      : 0;
+    data.totals.egiftRedemptionType = (hasValue(extensionAttributesHps.hps_redemption_type))
+      ? extensionAttributesHps.hps_redemption_type
+      : '';
   }
 
   if (!hasValue(cartData.shipping) || !hasValue(cartData.shipping.method)) {
