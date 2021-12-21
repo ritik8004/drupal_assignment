@@ -7,3 +7,4 @@ plp_slider:
   item: 3
   margin: 3
 swatch_plp_limit: 4
+show_brand_name_plp: true

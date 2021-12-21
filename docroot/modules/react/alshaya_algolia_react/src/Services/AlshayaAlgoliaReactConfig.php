@@ -249,6 +249,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showSwatches' => $display_settings->get('color_swatches'),
         'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
       ],
+      'showBrandName' => $display_settings->get('show_brand_name_plp'),
     ];
     // Allow other modules to alter or add extra configs
     // in agolia react common configurations.
