@@ -80,7 +80,7 @@ To prepare your local env:
 * Run:
   * From outside VM:
     * `composer clear-cache`
-    * `composer install`
+    * `composer install --ignore-platform-reqs -n`
     * `composer blt-alias`
     * `vagrant up`
     * `vagrant ssh` to ssh into your vm
@@ -89,6 +89,7 @@ To prepare your local env:
       If any case composer version of your local machine and VM is not matching then downgrade or upgrade the version as per your requirement. Then run : `composer self-update --1` (i.e 1.10.10)
 
   * From inside VM:
+    * `composer build-middlewares`
     * `blt blt:init:git-hooks`
     * `blt blt:init:settings`
     * `blt frontend:setup`
