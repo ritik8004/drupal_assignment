@@ -37,11 +37,6 @@ function alshaya_wishlist_install() {
   $alshaya_wishlist['alshaya_wishlist'] = 'alshaya_wishlist';
   $config->set('my_account_enabled_links', serialize($alshaya_wishlist));
   $config->save();
-
-  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $helper */
-  $helper = \Drupal::service('alshaya_search_algolia.index_helper');
-  // Add new filter only sku facet required for my wishlist page to build.
-  $helper->addCustomFacetToIndex(['filterOnly(sku)']);
 }
 
 /**
