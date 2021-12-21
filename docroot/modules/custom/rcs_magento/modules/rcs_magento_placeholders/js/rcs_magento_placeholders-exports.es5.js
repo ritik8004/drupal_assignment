@@ -64,9 +64,7 @@ exports.getEntity = async function getEntity(langcode) {
       let prodUrlKey = urlKey.replace('.html', '');
 
       // Build query.
-      request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      request.data = `query: { products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`;
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
