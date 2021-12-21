@@ -136,7 +136,9 @@ export default class CnCBillingAddress extends React.Component {
                       closeModal={triggerCloseModal}
                       cart={cart}
                       processAddress={this.processAddress}
-                      showEmail={false}
+                      // Show email id field in case of egift card is enabled
+                      // and cart contains only virtual products.
+                      showEmail={cartContainsOnlyVirtualProduct(cart.cart)}
                       showEditButton={false}
                       type="billing"
                       formContext="billing"
