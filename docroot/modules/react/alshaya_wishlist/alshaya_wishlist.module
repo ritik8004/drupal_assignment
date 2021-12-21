@@ -84,11 +84,22 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   // once. We will use this drupal setting variable on front
   // to sync the wishlist from local storage to magento backend
   // once user logged in.
-  if (isset($_COOKIE['merge_user_wishlist'])
+  $cookies = \Drupal::request()->cookies;
+  if ($cookies->get('merge_user_wishlist')
     && !\Drupal::currentUser()->isAnonymous()) {
-    $page['#attached']['drupalSettings']['wishlist']['merge'] = TRUE;
-    unset($_COOKIE['merge_user_wishlist']);
-    setcookie('merge_user_wishlist', null, ['expires' => -1, 'path' => '/', 'secure' => TRUE]);
+    // This flag indicates that merge local storage data to
+    // magento backend for the user just logged in.
+    $page['#attached']['drupalSettings']['wishlist']['mergeWishlistForLoggedInUsers'] = TRUE;
+    $cookies->remove('merge_user_wishlist');
+    setcookie(
+      'merge_user_wishlist',
+      null,
+      [
+        'expires' => REQUEST_TIME - 3600,
+        'path' => '/',
+        'secure' => TRUE
+      ]
+    );
   }
 }
 

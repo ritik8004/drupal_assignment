@@ -43,7 +43,7 @@ export default class WishlistHeader extends React.Component {
       // Load wishlist information from the magento backend, if wishlist
       // data is empty in local storage for authenticate users.
         this.loadWishlistFromBackend();
-      } else if (hasValue(drupalSettings.wishlist.merge)) {
+      } else if (hasValue(drupalSettings.wishlist.mergeWishlistForLoggedInUsers)) {
         // Merge wishlist information to the magento backend from local storage,
         // if wishlist data available in local storage and merging wishlist
         // data flag is set to true.
