@@ -17,5 +17,11 @@ body.wishlist-enabled {
 
   #wishlist-header-wrapper {
     top: 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        top: 0.5rem;
+      }
+    }
   }
 }
