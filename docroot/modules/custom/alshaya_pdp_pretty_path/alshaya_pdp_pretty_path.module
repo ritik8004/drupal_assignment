@@ -48,15 +48,7 @@ function alshaya_pdp_pretty_path_node_view(array &$build, EntityInterface $entit
     $clean_param = preg_replace('/.html/', '', $param);
 
     $build['#attached']['library'][] = 'alshaya_pdp_pretty_path/pdp_pretty_path_detail';
+    $build['#cache']['contexts'][] = 'url.path';
     $build['#attached']['drupalSettings'][$settingsKey][$sku->getSku()]['swatch_param'] = $clean_param ?? '';
-  }
-}
-
-/**
- * Implements hook_library_info_alter().
- */
-function alshaya_pdp_pretty_path_library_info_alter(&$libraries, $extension) {
-  if ($extension === 'alshaya_acm_product') {
-    unset($libraries['product_pdp_path']['js']['js/alshaya_acm_product.pdp_path.js']);
   }
 }

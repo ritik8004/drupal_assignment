@@ -40,6 +40,49 @@
         Drupal.getRelatedProductPosition();
       });
 
+      // Trigger matchback color change on main product color change.
+      $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
+        var selected = $(this).val();
+        var sku = $(this).parents('form').attr('data-sku');
+        var productKey = Drupal.getProductKeyForProductViewMode('full');
+        var variantInfo = drupalSettings[productKey][sku];
+        // Use swatch value to update query param from pretty path.
+        if (variantInfo.swatch_param !== undefined) {
+          Drupal.getSelectedProductFromSwatch(sku, selected, productKey);
+        }
+
+        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
+        $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
+          var swatchSelector = $(this).parent().siblings('.select2Option');
+
+          if (typeof swatchSelector !== 'undefined') {
+            var selectedIndex = $(this).index();
+            swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
+
+            // Add selected sku id in matchback product URL.
+            var sku = $(this).parents('form').attr('data-sku');
+            var selectedValue = $(this).text();
+            var variants = drupalSettings[viewMode][sku].variants
+            var selectedId = '';
+
+            // Get the entity id of the color selected.
+            $.each(variants, function (key, value) {
+              $.each(value.configurableOptions, function (i, e) {
+                if (e.attribute_id === 'attr_color' && e.value === selectedValue) {
+                  selectedId = value.id;
+                }
+              });
+              if (selectedId !== '') {
+                var productLinkSelector = $('article[data-sku="' + sku + '"]').find('a.full-prod-link');
+                var productLinkValue = productLinkSelector.attr('href').split('?')[0];
+                productLinkSelector.attr('href', productLinkValue + '?selected=' + selectedId);
+                return false;
+              }
+            });
+          }
+        });
+      });
+
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
         var form = $(this).parents('form');
         var sku = $(form).attr('data-sku');
@@ -573,45 +616,17 @@
     return productKey
   };
 
-  Drupal.getSelectedForMatchback = function (selected) {
-    var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
-
-    $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
-      var swatchSelector = $(this).parent().siblings('.select2Option');
-
-      if (typeof swatchSelector !== 'undefined') {
-        var selectedIndex = $(this).index();
-        swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
-
-        // Add selected sku id in matchback product URL.
-        var sku = $(this).parents('form').attr('data-sku');
-        var selectedValue = $(this).text();
-        var variants = drupalSettings[viewMode][sku].variants
-        var selectedId = '';
-
-        // Get the entity id of the color selected.
-        $.each(variants, function (key, value) {
-          $.each(value.configurableOptions, function (i, e) {
-            if (e.attribute_id === 'attr_color' && e.value === selectedValue) {
-              selectedId = value.id;
-            }
-          });
-          if (selectedId !== '') {
-            var productLinkSelector = $('article[data-sku="' + sku + '"]').find('a.full-prod-link');
-            var productLinkValue = productLinkSelector.attr('href').split('?')[0];
-            productLinkSelector.attr('href', productLinkValue + '?selected=' + selectedId);
-            return false;
-          }
-        });
-      }
-    });
-  };
-
-  Drupal.getSelectedSkuFromQueryParameter = function (viewMode, variants) {
+  Drupal.getSelectedProductFromQueryParam = function (viewMode, productInfo) {
+    var selectedSku = '';
+    // Use swatch from query parameter if pdp pretty path module is enabled.
+    if (productInfo.swatch_param !== undefined) {
+      selectedSku = Drupal.getSelectedSkuFromPdpPrettyPath(productInfo);
+    }
+    // Use selected from query parameter only for main product.
+    var variants = productInfo['variants'];
     var selected = (viewMode === 'full')
       ? parseInt(Drupal.getQueryVariable('selected'))
       : 0;
-    var selectedSku = '';
 
     if (selected > 0) {
       for (var i in variants) {
