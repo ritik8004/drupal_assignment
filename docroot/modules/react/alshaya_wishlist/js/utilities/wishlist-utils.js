@@ -128,21 +128,42 @@ export const addRemoveWishlistItemsInBackend = async (data, action) => {
   let itemData = null;
 
   switch (action) {
-    case 'addWishlistItem':
+    case 'addWishlistItem': {
       requestMethod = 'POST';
       requestUrl = '/V1/wishlist/me/item/add';
+
+      // Prepare sku options if available to push in backend api.
+      const skuOptions = [];
+      if (data.options.length > 0) {
+        data.options.forEach((option) => {
+          skuOptions.push({
+            id: option.option_id,
+            value: option.option_value,
+          });
+        });
+      }
+
+      // Prepare wishlist item to push in backend api.
       itemData = {
         items: [
           {
             sku: data.sku,
+            options: skuOptions,
           },
         ],
       };
       break;
+    }
 
     case 'removeWishlistItem':
       requestMethod = 'DELETE';
       requestUrl = `/V1/wishlist/me/item/${data.wishlistItemId}/delete`;
+      break;
+
+    case 'mergeWishlistItems':
+      requestMethod = 'POST';
+      requestUrl = '/V1/wishlist/me/item/add';
+      itemData = { items: data };
       break;
 
     default:

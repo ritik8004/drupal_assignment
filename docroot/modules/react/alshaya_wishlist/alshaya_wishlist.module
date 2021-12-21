@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\Node;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_theme().
@@ -76,6 +77,30 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   $settings['userDetails'] = $wishlist_helper->getWishListUserDetails();
   $page['#attached']['drupalSettings']['wishlist'] = $settings;
   $page['#attached']['library'][] = 'alshaya_white_label/wishlist';
+
+  // Check if one time user login identification cookie is set
+  // and add a drupal settings in wishlist for enable merging.
+  // After that remove cookie so the merge feature works only
+  // once. We will use this drupal setting variable on front
+  // to sync the wishlist from local storage to magento backend
+  // once user logged in.
+  $cookies = \Drupal::request()->cookies;
+  if ($cookies->get('merge_user_wishlist')
+    && !\Drupal::currentUser()->isAnonymous()) {
+    // This flag indicates that merge local storage data to
+    // magento backend for the user just logged in.
+    $page['#attached']['drupalSettings']['wishlist']['mergeWishlistForLoggedInUsers'] = TRUE;
+    $cookies->remove('merge_user_wishlist');
+    setcookie(
+      'merge_user_wishlist',
+      null,
+      [
+        'expires' => REQUEST_TIME - 3600,
+        'path' => '/',
+        'secure' => TRUE
+      ]
+    );
+  }
 }
 
 /**
@@ -126,5 +151,20 @@ function alshaya_wishlist_alshaya_my_account_links_alter(array &$links) {
       'route' => 'alshaya_wishlist.users_wishlist',
       'weight' => 42,
     ];
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_wishlist_user_login(UserInterface $account) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+  // Check if the wishlist feature is enabled.
+  if ($wishlist_helper->isWishListEnabled()) {
+    // Set a one time cookie when user logged in. We will
+    // use this above in hook_page_attachments_alter to set
+    // a drupal settings variable to perform action on front.
+    // For example, we will merge wishlist soon after user logged in.
+    setcookie('merge_user_wishlist', TRUE, ['path' => '/', 'secure' => TRUE]);
   }
 }
