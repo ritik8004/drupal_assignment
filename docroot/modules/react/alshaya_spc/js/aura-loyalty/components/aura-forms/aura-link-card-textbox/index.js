@@ -17,6 +17,7 @@ import {
   removeStorageInfo,
 } from '../../../../../../js/utilities/storage';
 import getStringMessage from '../../../../utilities/strings';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class AuraFormLinkCard extends React.Component {
   constructor(props) {
@@ -89,11 +90,6 @@ class AuraFormLinkCard extends React.Component {
     if (searchData) {
       const { cartId } = this.props;
       const dataForStorage = { cartId, ...searchData };
-
-      // Get mobile number without country code to set in storage.
-      if (searchData.key === 'mobile' || searchData.key === 'mobileCheckout') {
-        dataForStorage.value = searchData.value.substring(3);
-      }
 
       setStorageInfo(dataForStorage, getAuraCheckoutLocalStorageKey());
     }
@@ -174,11 +170,17 @@ class AuraFormLinkCard extends React.Component {
       chosenCountryCode,
     } = this.state;
 
-    const userInput = getUserInput(`${linkCardOption}Checkout`, chosenCountryCode);
+    const userInput = getUserInput(`${linkCardOption}Checkout`);
 
-    if (Object.keys(userInput).length !== 0) {
+    if (hasValue(userInput)) {
+      const { type } = userInput;
       showFullScreenLoader();
-      processCheckoutCart({ ...userInput, action: 'add' });
+      const data = { ...userInput, action: 'add' };
+
+      if (type === 'phone') {
+        data.countryCode = chosenCountryCode;
+      }
+      processCheckoutCart(data);
     }
   };
 
