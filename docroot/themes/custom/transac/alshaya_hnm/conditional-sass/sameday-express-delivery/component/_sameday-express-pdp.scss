@@ -5,10 +5,6 @@
     }
   }
 
-  #express-delivery-options {
-    border-bottom: none;
-  }
-
   @include breakpoint($only-mobile) {
     .simple-swatch-effect + .express-delivery,
     .product-swatch + .express-delivery {
