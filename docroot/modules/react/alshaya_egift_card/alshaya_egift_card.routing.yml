@@ -31,9 +31,9 @@ alshaya_egift_card.egift_card_purchase:
     _access: 'TRUE'
 
 alshaya_egift_card.my_egift_card:
-  path: '/user/my-egift-card'
+  path: '/user/gift-card'
   defaults:
-    _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::myEgiftCardPage'
+    _controller: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::getLinkedCardPage'
     _title: 'eGift Card'
   requirements:
     _custom_access: '\Drupal\alshaya_egift_card\Controller\AlshayaEgiftCardController::checkAccess'

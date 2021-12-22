@@ -2,7 +2,6 @@ import React from 'react';
 import EgiftCardLinked from './my-account-egift-card-linked';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import EgiftCardNotLinked from './my-account-egift-card-not-linked';
-import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 class MyAccount extends React.Component {
@@ -22,9 +21,6 @@ class MyAccount extends React.Component {
    * Get User linked card helper.
    */
   getUserLinkedCard = () => {
-    if (!isUserAuthenticated()) {
-      return;
-    }
     // Call to get customer linked card details.
     const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
@@ -53,6 +49,13 @@ class MyAccount extends React.Component {
     });
   }
 
+  /**
+   * Shows card after user links the card.
+   */
+  showCard = () => {
+    this.getUserLinkedCard();
+  }
+
   render() {
     const { wait, linkedCard } = this.state;
     // Return if API call for Users linkedCard is not complete.
@@ -69,7 +72,7 @@ class MyAccount extends React.Component {
         </ConditionalView>
         <ConditionalView condition={linkedCard === null}>
           <div className="egift-my-account">
-            <EgiftCardNotLinked />
+            <EgiftCardNotLinked handleCardChange={this.removeCard} showCard={this.showCard} />
           </div>
         </ConditionalView>
       </>

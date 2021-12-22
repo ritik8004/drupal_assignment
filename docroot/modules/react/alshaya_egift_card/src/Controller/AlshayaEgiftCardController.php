@@ -57,7 +57,7 @@ class AlshayaEgiftCardController extends ControllerBase {
   /**
    * View My Egift Card Page.
    */
-  public function myEgiftCardPage() {
+  public function getLinkedCardPage() {
     $config = $this->config('alshaya_egift_card.settings');
 
     return [
