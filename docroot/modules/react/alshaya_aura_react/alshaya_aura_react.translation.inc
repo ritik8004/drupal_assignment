@@ -95,7 +95,7 @@ function _alshaya_aura_react_translations() {
       'ar' => 'تأكيد',
     ],
     'By clicking submit, you agree to have read and accepted our' => [
-      'ar' => 'بالضغط على زر إرسال، فأنكم توافقون على الخاصة بنا',
+      'ar' => 'عند الضغط على إرسال، أنت تقر بأنك قرأت ووافقت على',
     ],
     'Terms & Conditions' => [
       'ar' => 'البنود و الظروف',

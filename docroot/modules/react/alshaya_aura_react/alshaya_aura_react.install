@@ -57,7 +57,10 @@ function alshaya_aura_react_update_8001() {
     ],
     'Your points for this purchase will be added to your account.' => [
       'ar' => 'سيتم إضافة النقاط الخاصة بك إلى هذاالحساب.',
-    ]
+    ],
+    'By clicking submit, you agree to have read and accepted our' => [
+      'ar' => 'عند الضغط على إرسال، أنت تقر بأنك قرأت ووافقت على',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
