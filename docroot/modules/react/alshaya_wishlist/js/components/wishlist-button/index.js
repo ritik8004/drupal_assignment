@@ -54,7 +54,9 @@ class WishlistButton extends React.Component {
 
     // Handle wishlist state for item when it is added to cart.
     // This event listener if generic and called directly for new pdp.
-    if (context === 'magazinev2' || context === 'magazinev2-related') {
+    // Defining context array for new pdp and other product layout build in react.
+    const reactContextArray = ['magazinev2', 'magazinev2-related', 'productDrawer'];
+    if (reactContextArray.includes(context)) {
       document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
 
