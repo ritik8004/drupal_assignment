@@ -43,8 +43,15 @@
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
         var selected = $(this).val();
-        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
+        var sku = $(this).parents('form').attr('data-sku');
+        var productKey = Drupal.getProductKeyForProductViewMode('full');
+        var variantInfo = drupalSettings[productKey][sku];
+        // Use swatch value to update query param from pretty path.
+        if (variantInfo.swatch_param !== undefined) {
+          Drupal.getSelectedProductFromSwatch(sku, selected, productKey);
+        }
 
+        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
         $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
           var swatchSelector = $(this).parent().siblings('.select2Option');
 
@@ -215,7 +222,7 @@
             ? Object.keys(variants)[0]
             : drupalSettings.configurableCombinations[sku]['firstChild'];
 
-          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+          var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, drupalSettings[productKey][sku]);
 
           if (selectedSkuFromQueryParam !== '') {
             selectedSku = selectedSkuFromQueryParam;
@@ -434,8 +441,7 @@
     var sku = $(form).attr('data-sku');
     var viewMode = $(form).parents('article.entity--type-node:first').attr('data-vmode')
     var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-    var variants = drupalSettings[productKey][sku]['variants'];
-    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, variants);
+    var selectedSku = Drupal.getSelectedProductFromQueryParam(viewMode, drupalSettings[productKey][sku]);
 
     if (selectedSku) {
       $(select).removeProp('selected').removeAttr('selected');
@@ -638,12 +644,17 @@
     return productKey
   };
 
-  Drupal.getSelectedProductFromQueryParam = function (viewMode, variants) {
+  Drupal.getSelectedProductFromQueryParam = function (viewMode, productInfo) {
+    var selectedSku = '';
+    // Use swatch from query parameter if pdp pretty path module is enabled.
+    if (productInfo.swatch_param !== undefined) {
+      selectedSku = Drupal.getSelectedSkuFromPdpPrettyPath(productInfo);
+    }
     // Use selected from query parameter only for main product.
+    var variants = productInfo['variants'];
     var selected = (viewMode === 'full')
       ? parseInt(Drupal.getQueryVariable('selected'))
       : 0;
-    var selectedSku = '';
 
     if (selected > 0) {
       for (var i in variants) {
