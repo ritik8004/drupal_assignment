@@ -1,0 +1,74 @@
+/* ------- 1. Brand Colors ------- */
+/* ------- 2. Primary Colors ------- */
+/* ------- 2. Header Colors ------- */
+/* ------- 3. Footer Colors ------- */
+/* -------- 4. step1 -------------- */
+/* -------- 5. step2 -------------- */
+/* -------- 6. step3 -------------- */
+/* -------- calender -------------- */
+/* -------- 7. step4 -------------- */
+/* -------- 8. error -------------- */
+/* -------- 9. step5 -------------- */
+/* -------- 10. steps form --------- */
+/* -------- 11. step6 -------------- */
+/* -------- 12. loading-overlay --- */
+/* --------------- 13. sticky footer ----------- */
+/* ----------- 14. sticky footer timer --------- */
+/* ------------ 15. order status --------------- */
+@font-face {
+  font-family: 'Ubuntu';
+  src: url("Ubuntu.eot");
+  src: url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu.woff2") format("woff2"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu.woff") format("woff"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu.ttf") format("truetype"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu.svg#Ubuntu") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenSans';
+  src: url("OpenSans.eot");
+  src: url("/themes/custom/transac_lite/kidzania/fonts/OpenSans.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans.woff2") format("woff2"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans.woff") format("woff"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans.ttf") format("truetype"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans.svg#OpenSans") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ubuntu-Bold';
+  src: url("Ubuntu-Bold.eot");
+  src: url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu-Bold.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu-Bold.woff2") format("woff2"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu-Bold.woff") format("woff"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu-Bold.ttf") format("truetype"), url("/themes/custom/transac_lite/kidzania/fonts/Ubuntu-Bold.svg#Ubuntu-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenSans-Bold';
+  src: url("OpenSans-Extrabold.eot");
+  src: url("/themes/custom/transac_lite/kidzania/fonts/OpenSans-Extrabold.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans-Extrabold.woff2") format("woff2"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans-Extrabold.woff") format("woff"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans-Extrabold.ttf") format("truetype"), url("/themes/custom/transac_lite/kidzania/fonts/OpenSans-Extrabold.svg#OpenSans-Extrabold") format("svg");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-regular.eot");
+  src: url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-regular.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-regular.woff") format("woff"), url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-regular.ttf") format("truetype"), url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-regular.svg#NotoKufiArabic-Bold") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-bold';
+  src: url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-bold.eot");
+  src: url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-bold.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-bold.woff") format("woff"), url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-bold.ttf") format("truetype"), url("/themes/custom/transac_lite/kidzania/fonts/alshaya-cairo-bold.svg#NotoKufiArabic-Bold") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src: url("/themes/custom/transac_lite/kidzania/fonts/icomoon.eot?vey8d6");
+  src: url("/themes/custom/transac_lite/kidzania/fonts/icomoon.eot?vey8d6#iefix") format("embedded-opentype"), url("/themes/custom/transac_lite/kidzania/fonts/icomoon.ttf?vey8d6") format("truetype"), url("/themes/custom/transac_lite/kidzania/fonts/icomoon.woff?vey8d6") format("woff"), url("/themes/custom/transac_lite/kidzania/fonts/icomoon.svg?vey8d6#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ---------- Color Module Styles ----------- */
