@@ -11,6 +11,7 @@ import { getElementValueByType } from './link_card_sign_up_modal_helper';
 import { validateElementValueByType } from './validation_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { getAuraConfig } from '../../../../../alshaya_aura_react/js/utilities/helper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 /**
  * Utility function to get user input value.
@@ -28,7 +29,9 @@ function getUserInput(linkCardOption, chosenCountryCode) {
 
   if (linkCardOption === 'mobile' || linkCardOption === 'mobileCheckout') {
     element.type = 'phone';
-    element.value = chosenCountryCode + element.value;
+    element.value = hasValue(chosenCountryCode)
+      ? chosenCountryCode + element.value
+      : element.value;
   }
 
   if (linkCardOption === 'emailCheckout') {
@@ -49,8 +52,11 @@ function getUserInput(linkCardOption, chosenCountryCode) {
  */
 function processCheckoutCart(data) {
   let stateValues = {};
+  const value = (data.type === 'phone')
+    ? data.countryCode + data.value
+    : data.value;
 
-  const apiData = window.auraBackend.updateLoyaltyCard(data.action, data.type, data.value);
+  const apiData = window.auraBackend.updateLoyaltyCard(data.action, data.type, value);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
@@ -68,25 +74,18 @@ function processCheckoutCart(data) {
           }
 
           // For add action.
-          let mobile;
-          let userCountryCode = '';
-
-          if (result.data.data.mobile) {
-            // @todo Update code to also support countries not having exactly 3 digit country code.
-            const mobileWithoutPrefixPlus = result.data.data.mobile.replace('+', '');
-            mobile = mobileWithoutPrefixPlus.substring(3);
-            userCountryCode = mobileWithoutPrefixPlus.substring(0, 3);
-          }
-
           stateValues = {
             loyaltyStatus: result.data.data.apc_link || 0,
             points: result.data.data.apc_points || 0,
             cardNumber: result.data.data.apc_identifier_number || '',
             tier: result.data.data.tier_code || '',
             email: result.data.data.email || '',
-            mobile,
-            userCountryCode,
           };
+
+          if (data.type === 'phone') {
+            stateValues.mobile = data.value;
+            stateValues.userCountryCode = data.countryCode;
+          }
         }
       } else {
         stateValues = result.data;
