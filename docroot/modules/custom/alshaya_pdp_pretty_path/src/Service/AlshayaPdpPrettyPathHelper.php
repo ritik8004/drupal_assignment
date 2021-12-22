@@ -22,7 +22,7 @@ class AlshayaPdpPrettyPathHelper {
   public function prepareAndIndexSwatchUrls(array &$object, array $swatch_attributes) {
     foreach ($swatch_attributes as $attribute) {
       $attribute_values = $object['attr_' . $attribute];
-      if (!empty($attribute_values)) {
+      if (!empty($attribute_values) && !empty($object['swatches'])) {
         foreach ($object['swatches'] as $key => $value) {
           $object['swatches'][$key]['url'] = $this->preparePrettyPathUrl($object['url'], $attribute, $value['display_label']);
         }
