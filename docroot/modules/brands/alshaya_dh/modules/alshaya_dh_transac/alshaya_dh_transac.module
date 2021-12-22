@@ -76,10 +76,12 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
   ];
 
   $properties = [];
+  $details_and_care_value = '';
   foreach ($list_of_attributes as $key => $title) {
     if ($value = $sku_entity->get($key)->getString()) {
       if ($key === 'attr_details_and_care') {
-        $value = '<p>' . $value . '</p>';
+        $details_and_care_value = '<p>' . $value . '</p>';
+        $value = '';
       }
       $properties[] = [
         'label' => $title,
@@ -93,7 +95,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
       '#theme' => 'pdp_details_care',
       '#properties' => $properties,
     ];
-
+    $description_value .= $details_and_care_value;
     $description_value .= render($details_and_care);
   }
 
