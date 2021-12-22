@@ -368,10 +368,6 @@ function alshaya_spc_preprocess_page(&$variables) {
         'key' => 'governate_label',
         'value' => t('Select @label', [], ['context' => 'delivery_area']),
       ],
-      [
-        'key' => 'area_placeholder_text',
-        'value' => t('@label', [], ['context' => 'delivery_area']),
-      ]
     ],
   ];
   $variables['page']['content']['commerce_backend'] = $strings;

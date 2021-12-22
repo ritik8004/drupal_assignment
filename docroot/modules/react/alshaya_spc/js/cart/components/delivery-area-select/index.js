@@ -59,10 +59,13 @@ export default class DeliveryAreaSelect extends React.Component {
 
   openModal = () => {
     document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
+    let areaPanelPlaceHolder = '';
+    areaPanelPlaceHolder = drupalSettings.areaBlockFormPlaceholder;
 
     return (
       <AreaListBlock
         closeModal={() => this.closeModal()}
+        placeHolderText={areaPanelPlaceHolder}
       />
     );
   };

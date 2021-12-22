@@ -224,7 +224,8 @@ class AlshayaSpcController extends ControllerBase {
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
-          // Key added to get dynamic area value.
+          // This key gets the dynamic area value of the area placeholder
+          // and will be used in SDD/ED delievry area panel on Cart page.
           'areaBlockFormPlaceholder' => $store_finder_settings->get('store_search_placeholder'),
         ],
       ],

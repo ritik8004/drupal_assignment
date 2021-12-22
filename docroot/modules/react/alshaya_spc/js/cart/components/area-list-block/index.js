@@ -166,19 +166,10 @@ export default class AreaListBlock extends React.Component {
     const {
       governateOptions, governateDefault, items, activeItem,
     } = this.state;
-    const { closeModal } = this.props;
+    const { closeModal, placeHolderText } = this.props;
     let governateDefaultLabel = '';
     if (drupalSettings.address_fields) {
       governateDefaultLabel = drupalSettings.address_fields.area_parent.label;
-    }
-    // Get area placeholder value
-    // drupalSettings.clickNCollect.cncFormPlaceholder - for V2 layout
-    // drupalSettings.areaBlockFormPlaceholder - other layouts
-    let areaPlaceHolder = '';
-    if (drupalSettings.areaBlockFormPlaceholder) {
-      areaPlaceHolder = drupalSettings.areaBlockFormPlaceholder;
-    } else if (drupalSettings.clickNCollect.cncFormPlaceholder) {
-      areaPlaceHolder = drupalSettings.clickNCollect.cncFormPlaceholder;
     }
     return (
       <div className="spc-delivery-wrapper">
@@ -205,7 +196,7 @@ export default class AreaListBlock extends React.Component {
               </ConditionalView>
               <div className="area-label">{`${Drupal.t('Search area')}`}</div>
               <div className="spc-filter-panel-search-form-item">
-                <input className="spc-filter-panel-search-field" type="text" placeholder={getStringMessage('area_placeholder_text', { '@label': areaPlaceHolder })} onChange={this.filterList} />
+                <input className="spc-filter-panel-search-field" type="text" placeholder={placeHolderText} onChange={this.filterList} />
               </div>
               <div className="delivery-type-wrapper">
                 <span className="standard-delivery">{Drupal.t('Standard')}</span>
