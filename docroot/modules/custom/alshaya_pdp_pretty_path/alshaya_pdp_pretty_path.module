@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -51,5 +52,25 @@ function alshaya_pdp_pretty_path_node_view(array &$build, EntityInterface $entit
     // whenever the url gets changed on swatch selection.
     $build['#cache']['contexts'][] = 'url.path';
     $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['swatch_param'] = $clean_param ?? '';
+  }
+}
+
+/**
+ * Implements hook_alshaya_feed_variant_info_alter().
+ */
+function alshaya_pdp_pretty_path_alshaya_feed_variant_info_alter(&$variant, SKUInterface $sku) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $swatch_attributes = $skuManager->getPdpSwatchAttributes();
+  /** @var \Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper $pdpPrettyPathHelper */
+  $pdpPrettyPathHelper = \Drupal::service('alshaya_pdp_pretty_path.helper');
+
+  foreach ($swatch_attributes as $attribute) {
+    $value = $sku->get('attr_' . $attribute)->getString();
+    if (!empty($value)) {
+      $variant['url'] = $pdpPrettyPathHelper->preparePrettyPathUrl(strtok($variant['url'], '?'), $attribute, $value);
+      // Use only first swatch attribute for pretty path.
+      break;
+    }
   }
 }
