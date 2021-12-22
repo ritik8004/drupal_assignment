@@ -12,10 +12,11 @@ dependencies:
     - field.field.node.advanced_page.field_show_left_menu
     - field.field.node.advanced_page.field_slider
     - field.field.node.advanced_page.field_use_as_department_page
+    - field.field.node.advanced_page.field_use_as_egift_landing_page
     - node.type.advanced_page
+    - workflows.workflow.alshaya_workflow
   module:
     - content_moderation
-    - datetime
     - field_group
     - metatag
     - paragraphs
@@ -24,10 +25,9 @@ dependencies:
 third_party_settings:
   field_group:
     group_views_reference:
-      children:
-        - field_views
+      children: {  }
       parent_name: ''
-      weight: 25
+      weight: 21
       label: 'Views Reference'
       format_type: details
       format_settings:
@@ -40,7 +40,7 @@ third_party_settings:
       children:
         - field_banner
       parent_name: ''
-      weight: 11
+      weight: 10
       label: 'Banner full width'
       format_type: details
       format_settings:
@@ -53,11 +53,10 @@ third_party_settings:
       children:
         - field_related_info
       parent_name: ''
-      weight: 14
+      weight: 13
       label: Related
       format_type: details
       format_settings:
-        label: Related
         element: div
         show_label: true
         label_element: h3
@@ -73,21 +72,19 @@ third_party_settings:
       children:
         - field_promo_blocks
       parent_name: ''
-      weight: 16
+      weight: 14
       label: 'Promo blocks'
       format_type: details
       format_settings:
-        label: 'Promo blocks'
         required_fields: true
         id: ''
         classes: ''
         open: false
       region: content
     group_block_reference:
-      children:
-        - field_block
+      children: {  }
       parent_name: ''
-      weight: 13
+      weight: 12
       label: 'Block Reference'
       format_type: details
       format_settings:
@@ -102,7 +99,7 @@ third_party_settings:
         - field_product_category
         - field_show_left_menu
       parent_name: ''
-      weight: 8
+      weight: 7
       format_type: fieldset
       format_settings:
         id: ''
@@ -119,11 +116,12 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 9
+    weight: 8
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
+      show_summary: false
     third_party_settings: {  }
     region: content
   created:
@@ -146,7 +144,7 @@ content:
     region: content
   field_delivery_banner:
     type: entity_reference_paragraphs
-    weight: 18
+    weight: 17
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -157,8 +155,9 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 17
-    settings: {  }
+    weight: 16
+    settings:
+      sidebar: true
     third_party_settings: {  }
     type: metatag_firehose
     region: content
@@ -201,7 +200,7 @@ content:
     third_party_settings: {  }
   field_slider:
     type: entity_reference_paragraphs
-    weight: 10
+    weight: 9
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -218,12 +217,26 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  field_use_as_egift_landing_page:
+    type: boolean_checkbox
+    weight: 15
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   langcode:
     type: language_select
     weight: 1
-    settings: {  }
+    settings:
+      include_locked: true
     third_party_settings: {  }
     region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 19
+    settings: {  }
+    region: content
+    third_party_settings: {  }
   path:
     type: path
     weight: 6
@@ -237,6 +250,13 @@ content:
     weight: 4
     third_party_settings: {  }
     region: content
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 20
+    region: content
+    third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
@@ -253,7 +273,7 @@ content:
     third_party_settings: {  }
     region: content
   translation:
-    weight: 12
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -264,6 +284,12 @@ content:
       match_operator: CONTAINS
       size: 60
       placeholder: ''
+      match_limit: 10
     third_party_settings: {  }
     region: content
+  url_redirects:
+    weight: 18
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden: {  }

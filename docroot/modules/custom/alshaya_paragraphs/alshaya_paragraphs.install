@@ -19,7 +19,6 @@ function alshaya_paragraphs_update_8130() {
   $configs = [
     'paragraphs.paragraphs_type.accordion_paragraph.yml',
     'paragraphs.paragraphs_type.multiple_row_multiple_col.yml',
-    'paragraphs.paragraphs_type.product_carousel_category.yml',
     'field.storage.paragraph.field_group_title.yml',
     'field.storage.paragraph.field_title_and_content.yml',
     'field.storage.paragraph.field_image_title_subtitle.yml',
@@ -36,7 +35,12 @@ function alshaya_paragraphs_update_8130() {
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
   $configs = [
+    'field.storage.node.field_use_as_egift_landing_page.yml',
     'field.field.node.advanced_page.field_promo_blocks.yml',
+    'field.field.node.advanced_page.field_use_as_egift_landing_page.yml',
+    'core.entity_form_display.node.advanced_page.default.yml',
+    'core.entity_view_display.node.advanced_page.default.yml',
+    'core.entity_view_display.node.advanced_page.teaser.yml',
   ];
   alshaya_config_install_configs($configs, 'alshaya_advanced_page');
 }

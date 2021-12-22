@@ -74,6 +74,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
       }
     }
   }
+  // Add custom class for advanced page content type for egift landing page.
+  if ($node instanceof NodeInterface && $node->bundle() === 'advanced_page') {
+    if (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1) {
+      $variables['attributes']['class'][] = 'egift-landing-page';
+    }
+  }
 
   $current_route = \Drupal::routeMatch();
 
@@ -1317,6 +1323,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         '#mobile_image' => !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image),
         '#default_image' => _alshaya_white_label_get_image_url($default_image),
       ];
+    }
+  }
+  // Form the accodian content for egift.
+  if ($variables['elements']['#paragraph']->getType() == 'accordion_paragraph') {
+    foreach($variables['elements']['field_title_and_content'] as $key => $value) {
+      if(is_int($key)) {
+        $variables['title_content'][$key] = $value;
+      }
     }
   }
 
