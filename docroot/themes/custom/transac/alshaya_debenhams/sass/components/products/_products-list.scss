@@ -74,6 +74,12 @@
         }
       }
     }
+
+    .promotions {
+      .sku-promotion-item {
+        margin-#{$left}: 0;
+      }
+    }
   }
 
   .c-products-list {
