@@ -364,7 +364,7 @@ const getProcessedCartData = async (cartData) => {
   }
 
   // If egift card enabled, add the hps_redeemed_amount
-  // add hps_redemption_type and balance_payble to cart.
+  // add hps_redemption_type to cart.
   if (isEgiftCardEnabled()) {
     data.totals.egiftRedeemedAmount = 0;
     data.totals.egiftRedemptionType = '';
