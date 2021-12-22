@@ -396,7 +396,9 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   ];
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
-
+  $store_finder_settings = \Drupal::config('alshaya_stores_finder.settings');
+  $build['#attached']['drupalSettings']['areaBlockFormPlaceholder'] = $store_finder_settings->get('store_search_placeholder');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $store_finder_settings->getCacheTags());
   $build['#attached']['library'][] = 'alshaya_white_label/sameday-express-delivery';
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
