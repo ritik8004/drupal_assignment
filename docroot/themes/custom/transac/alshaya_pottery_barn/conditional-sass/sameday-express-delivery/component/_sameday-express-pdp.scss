@@ -1,14 +1,9 @@
 .acq-content-product {
   #express-delivery-options {
-    border-bottom: none;
-
     .cart-shipping-method {
       .shipping-method-detail-wrapper {
         .method-title {
           font-size: 0.6875rem;
-          line-height: 1.2;
-          text-transform: none;
-          color: $spc-product-attributes;
         }
       }
     }
@@ -28,12 +23,5 @@
 }
 
 .c-accordion__title {
-  letter-spacing: 0;
-
-  &::after {
-    transition: transform 0.3s ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  letter-spacing: normal;
 }
