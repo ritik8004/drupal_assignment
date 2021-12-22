@@ -1,0 +1,9 @@
+#alshaya-algolia-search {
+  .c-products__item {
+    &.promotion-frame {
+      .field--name-field-skus {
+        display: block;
+      }
+    }
+  }
+}
