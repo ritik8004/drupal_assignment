@@ -319,6 +319,9 @@ class AlshayaFeedSkuInfoHelper {
             'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
             'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
+          // Allow other modules to add/alter variant info.
+          $this->moduleHandler->alter('alshaya_feed_variant_info', $variant, $child);
+
           $product[$lang][] = array_merge($parentProduct, $variant);
         }
 
