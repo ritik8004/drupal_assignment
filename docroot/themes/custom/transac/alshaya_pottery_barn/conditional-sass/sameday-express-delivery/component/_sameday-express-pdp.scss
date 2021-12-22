@@ -1,0 +1,27 @@
+.acq-content-product {
+  #express-delivery-options {
+    .cart-shipping-method {
+      .shipping-method-detail-wrapper {
+        .method-title {
+          font-size: 0.6875rem;
+        }
+      }
+    }
+  }
+
+  .express-delivery-subtitle {
+    margin-top: 0;
+  }
+}
+
+.ui-state-active {
+  .c-accordion__title {
+    &::after {
+      top: 1rem;
+    }
+  }
+}
+
+.c-accordion__title {
+  letter-spacing: normal;
+}
