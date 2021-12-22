@@ -224,7 +224,8 @@ class AlshayaSpcController extends ControllerBase {
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
-          'areaBockFormPlaceholder' => $store_finder_settings->get('store_search_placeholder'),
+          // Key added to get dynamic area value.
+          'areaBlockFormPlaceholder' => $store_finder_settings->get('store_search_placeholder'),
         ],
       ],
       '#cache' => [

@@ -171,9 +171,14 @@ export default class AreaListBlock extends React.Component {
     if (drupalSettings.address_fields) {
       governateDefaultLabel = drupalSettings.address_fields.area_parent.label;
     }
+    // Get area placeholder value
+    // drupalSettings.clickNCollect.cncFormPlaceholder - for V2 layout
+    // drupalSettings.areaBlockFormPlaceholder - other layouts
     let areaPlaceHolder = '';
-    if (drupalSettings.areaBockFormPlaceholder) {
-      areaPlaceHolder = drupalSettings.areaBockFormPlaceholder;
+    if (drupalSettings.areaBlockFormPlaceholder) {
+      areaPlaceHolder = drupalSettings.areaBlockFormPlaceholder;
+    } else if (drupalSettings.clickNCollect.cncFormPlaceholder) {
+      areaPlaceHolder = drupalSettings.clickNCollect.cncFormPlaceholder;
     }
     return (
       <div className="spc-delivery-wrapper">
