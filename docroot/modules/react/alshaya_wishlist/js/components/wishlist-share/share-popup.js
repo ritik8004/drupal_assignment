@@ -1,5 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { getWishlistNotificationTime } from '../../utilities/wishlist-utils';
 
 export default class SharePopup extends React.Component {
   constructor(props) {
@@ -8,6 +10,7 @@ export default class SharePopup extends React.Component {
     this.state = {
       // To identify if share link is copied or not.
       copyLinkStatus: false,
+      hideCopyLinkText: false,
     };
   }
 
@@ -28,6 +31,25 @@ export default class SharePopup extends React.Component {
     // Set the copyLinkStatus to true when link is copied.
     navigator.clipboard.writeText(wishlistShareLink);
     this.setState({ copyLinkStatus: true });
+    // Set timer for the link copy text.
+    this.setTimer();
+  }
+
+  /**
+   * Set timer for the link copy text.
+   */
+  setTimer() {
+    if (this.timer != null) {
+      clearTimeout(this.timer);
+    }
+
+    // Hide copy text after certain milliseconds.
+    this.timer = setTimeout(() => {
+      this.setState({
+        hideCopyLinkText: true,
+      });
+      this.timer = null;
+    }, getWishlistNotificationTime());
   }
 
   /**
@@ -49,7 +71,7 @@ export default class SharePopup extends React.Component {
   }
 
   render() {
-    const { copyLinkStatus } = this.state;
+    const { copyLinkStatus, hideCopyLinkText } = this.state;
 
     return (
       <div className="wishlist-share-popup-container">
@@ -78,23 +100,25 @@ export default class SharePopup extends React.Component {
               >
                 {Drupal.t('Email', {}, { context: 'wishlist' })}
               </button>
-              {copyLinkStatus
-                ? (
-                  <span
-                    className="copy-share-link link-copied"
-                  >
-                    {Drupal.t('Link Copied', {}, { context: 'wishlist' })}
-                  </span>
-                )
-                : (
-                  <button
-                    type="button"
-                    className="copy-share-link"
-                    onClick={this.copyShareLink}
-                  >
-                    {Drupal.t('Copy Link', {}, { context: 'wishlist' })}
-                  </button>
-                )}
+              <ConditionalView condition={!hideCopyLinkText}>
+                {copyLinkStatus
+                  ? (
+                    <span
+                      className="copy-share-link link-copied"
+                    >
+                      {Drupal.t('Link Copied', {}, { context: 'wishlist' })}
+                    </span>
+                  )
+                  : (
+                    <button
+                      type="button"
+                      className="copy-share-link"
+                      onClick={this.copyShareLink}
+                    >
+                      {Drupal.t('Copy Link', {}, { context: 'wishlist' })}
+                    </button>
+                  )}
+              </ConditionalView>
             </div>
           </div>
         </Popup>

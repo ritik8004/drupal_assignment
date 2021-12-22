@@ -20,6 +20,7 @@ import { isDisplayConfigurableBoxes } from '../../../../js/utilities/display';
 import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
 import WishlistContainer from '../../../../js/utilities/components/wishlist-container';
 import { isWishlistEnabled } from '../../../../js/utilities/wishlistHelper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 export default class ConfigurableForm extends React.Component {
   constructor(props) {
@@ -278,6 +279,15 @@ export default class ConfigurableForm extends React.Component {
       setTimeout(() => {
         onItemAddedToCart(true);
       }, 500);
+
+      // Dispatch add to cart event for product drawer components.
+      const productInfo = {
+        sku: parentSku,
+        quantity,
+        variant: selectedVariant,
+        options,
+      };
+      dispatchCustomEvent('product-add-to-cart-success', { productInfo });
     });
   }
 

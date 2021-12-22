@@ -47,10 +47,16 @@ class WishlistButton extends React.Component {
       // Event listener is only required for old pdp, modal and matchback.
       document.addEventListener('onSkuVariantSelect', this.updateProductInfoData, false);
       // Handle wishlist state for item when it is added to cart.
+      // We call custom event listener defined in wishlist module.
+      // This is only for old pdp, modal and matchback.
       document.addEventListener('onProductAddToCart', this.handleProductAddToCart);
-    } else {
-      // Handle wishlist state for item when it is added to cart.
-      // This event listener if generic and called directly for new pdp.
+    }
+
+    // Handle wishlist state for item when it is added to cart.
+    // This event listener if generic and called directly for new pdp.
+    // Defining context array for new pdp and other product layout build in react.
+    const reactContextArray = ['magazinev2', 'magazinev2-related', 'productDrawer'];
+    if (reactContextArray.includes(context)) {
       document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
 
