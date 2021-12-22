@@ -29,12 +29,10 @@ function alshaya_pdp_pretty_path_alshaya_feed_variant_info_alter(&$variant, SKUI
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $swatch_attributes = $skuManager->getPdpSwatchAttributes();
-  $suffix = '.html';
-  foreach ($swatch_attributes as $attribute) {
-    if ($color = $sku->get('attr_' . $attribute)->getString()) {
-      $url = strtok($variant['url'], '?');
-      $prefix = '/-' . $attribute . '-' . preg_replace('/[\s]/', '_', strtolower($color));
-      $variant['url'] = str_replace($suffix, $prefix . $suffix, $url);
-    }
+  /** @var \Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper $pdpPrettyPathHelper */
+  $pdpPrettyPathHelper = \Drupal::service('alshaya_pdp_pretty_path.helper');
+  $swatch_value = $sku->get('attr_' . $swatch_attributes[0])->getString();
+  if (!empty($swatch_value)) {
+    $variant['url'] = $pdpPrettyPathHelper->preparePrettyPathUrl(strtok($variant['url'], '?'), $swatch_attributes[0], $swatch_value);
   }
 }
