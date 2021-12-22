@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.advanced_page.field_use_as_department_page
     - field.field.node.advanced_page.field_use_as_egift_landing_page
     - node.type.advanced_page
-    - workflows.workflow.alshaya_workflow
   module:
     - content_moderation
     - field_group
@@ -40,7 +39,7 @@ third_party_settings:
       children:
         - field_banner
       parent_name: ''
-      weight: 10
+      weight: 11
       label: 'Banner full width'
       format_type: details
       format_settings:
@@ -53,7 +52,7 @@ third_party_settings:
       children:
         - field_related_info
       parent_name: ''
-      weight: 13
+      weight: 14
       label: Related
       format_type: details
       format_settings:
@@ -72,7 +71,7 @@ third_party_settings:
       children:
         - field_promo_blocks
       parent_name: ''
-      weight: 14
+      weight: 15
       label: 'Promo blocks'
       format_type: details
       format_settings:
@@ -84,7 +83,7 @@ third_party_settings:
     group_block_reference:
       children: {  }
       parent_name: ''
-      weight: 12
+      weight: 13
       label: 'Block Reference'
       format_type: details
       format_settings:
@@ -99,7 +98,7 @@ third_party_settings:
         - field_product_category
         - field_show_left_menu
       parent_name: ''
-      weight: 7
+      weight: 8
       format_type: fieldset
       format_settings:
         id: ''
@@ -116,7 +115,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 8
+    weight: 9
     settings:
       rows: 9
       summary_rows: 3
@@ -200,7 +199,7 @@ content:
     third_party_settings: {  }
   field_slider:
     type: entity_reference_paragraphs
-    weight: 9
+    weight: 10
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -219,7 +218,7 @@ content:
     third_party_settings: {  }
   field_use_as_egift_landing_page:
     type: boolean_checkbox
-    weight: 15
+    weight: 7
     region: content
     settings:
       display_label: true
@@ -273,7 +272,7 @@ content:
     third_party_settings: {  }
     region: content
   translation:
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
