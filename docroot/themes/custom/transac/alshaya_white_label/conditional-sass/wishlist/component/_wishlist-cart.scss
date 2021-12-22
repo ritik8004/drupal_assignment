@@ -94,5 +94,20 @@
         }
       }
     }
+
+    .close-modal {
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      font-size: 0;
+      background: $wishlist-basket-modal-close-bg;
+      padding: 0.5rem;
+      cursor: pointer;
+
+      @include icon(close, before) {
+        font-size: 1rem;
+        color: $wishlist-basket-modal-close;
+      }
+    }
   }
 }

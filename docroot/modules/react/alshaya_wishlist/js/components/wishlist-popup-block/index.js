@@ -88,12 +88,14 @@ export default class WishlistPopupBlock extends React.Component {
           closeOnEscape={false}
         >
           <div className="wishlist-popup-block">
-            <ConditionalView condition={itemImage}>
-              <CheckoutItemImage img_data={itemImage} />
-            </ConditionalView>
             <a className="close-modal" onClick={() => this.closeModal()}>Close</a>
-            <div className="wishlist-question">
-              {Drupal.t('Do you want to move this item to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+            <div className="wishlist-image-container">
+              <ConditionalView condition={itemImage}>
+                <CheckoutItemImage img_data={itemImage} />
+              </ConditionalView>
+              <div className="wishlist-question">
+                {Drupal.t('Do you want to move this item to @wishlist_label?', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+              </div>
             </div>
             <div className="wishlist-options">
               <button
