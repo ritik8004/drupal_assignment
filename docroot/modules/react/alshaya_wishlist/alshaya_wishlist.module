@@ -88,9 +88,10 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
   // once user logged in.
   $cookies = \Drupal::request()->cookies;
   if ($cookies->get('merge_user_wishlist')
-    && !\Drupal::currentUser()->isAnonymous()) {
+    && \Drupal::currentUser()->isAuthenticated()
+    && alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
     // This flag indicates that merge local storage data to
-    // magento backend for the user just logged in.
+    // magento backend for the customer just logged in.
     $page['#attached']['drupalSettings']['wishlist']['mergeWishlistForLoggedInUsers'] = TRUE;
     $cookies->remove('merge_user_wishlist');
     setcookie(
