@@ -39,8 +39,7 @@ import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities
 import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
-import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
-import { cartContainsOnlyNonVirtualProduct } from '../../utilities/egift_util';
+import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -1167,11 +1166,11 @@ const getProcessedCheckoutData = async (cartData) => {
     }
     data.shipping.methods = response.methods;
   }
-  // Shipping method will not be available for egift, So adding egift enabled
-  // condition to execute this statement.
+  // Shipping method will not be available when egift is enabled and cart
+  // contain only virtual items.
   if (!hasValue(data.payment.methods)
     && (hasValue(data.shipping.method)
-    || (isEgiftCardEnabled() && !cartContainsOnlyNonVirtualProduct(data.cart)))
+    || cartContainsOnlyVirtualProduct(data.cart))
   ) {
     const paymentMethods = await getPaymentMethods();
     if (hasValue(paymentMethods)) {
@@ -1617,10 +1616,13 @@ const isAddressExtensionAttributesValid = (data) => {
 
   const cartAddressCustom = [];
 
-  // Prepare cart address field data.
-  data.shipping.address.custom_attributes.forEach((item) => {
-    cartAddressCustom[item.attribute_code] = item.value;
-  });
+  if (hasValue(data.shipping.address)
+    && hasValue(data.shipping.address.custom_attributes)) {
+    // Prepare cart address field data.
+    data.shipping.address.custom_attributes.forEach((item) => {
+      cartAddressCustom[item.attribute_code] = item.value;
+    });
+  }
 
   // Check each required field in custom attributes available in cart
   // shipping address or not.
@@ -1670,29 +1672,34 @@ const validateBeforePaymentFinalise = async () => {
     errorMessage = 'Cart contains some items which are not in stock.';
     errorCode = cartErrorCodes.cartHasOOSItem;
   } else if (!hasValue(cartData.shipping.method)
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // Check if shipping method is present else throw error.
     isError = true;
     logger.error('Error while finalizing payment. No shipping method available. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!hasValue(cartData.shipping.address)
-    || !hasValue(cartData.shipping.address.custom_attributes)
+  } else if ((!hasValue(cartData.shipping.address)
+    || !hasValue(cartData.shipping.address.custom_attributes))
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // If shipping address not have custom attributes.
     isError = true;
     logger.error('Error while finalizing payment. Shipping address not contains all info. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!isAddressExtensionAttributesValid(cartData)) {
+  } else if (!isAddressExtensionAttributesValid(cartData)
+    && !cartContainsOnlyVirtualProduct(cartData.cart)) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     isError = true;
     logger.error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', {
       '@cart': JSON.stringify(cartData),
     });
-  } else if (!hasValue(cartData.shipping.address.firstname)
-    || !hasValue(cartData.shipping.address.lastname)
+  } else if ((!hasValue(cartData.shipping.address)
+    || !hasValue(cartData.shipping.address.firstname)
+    || !hasValue(cartData.shipping.address.lastname))
+    && !cartContainsOnlyVirtualProduct(cartData.cart)
   ) {
     // If first/last name not available in shipping address.
     isError = true;
@@ -2091,7 +2098,11 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // Check if shipping method is present else throw error.
-  if (!hasValue(cart.data.shipping.method)) {
+  // Skip the shipping and billing address validation when egift card is enabled
+  // and cart contain only virtual products.
+  const egiftWithVirtualProduct = cartContainsOnlyVirtualProduct(cart.data.cart);
+  if (!hasValue(cart.data.shipping.method)
+  && !egiftWithVirtualProduct) {
     logger.error('Error while placing order. No shipping method available. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
@@ -2105,7 +2116,9 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // Check if shipping address not have custom attributes.
-  if (!hasValue(cart.data.shipping.address.custom_attributes)) {
+  if (hasValue(cart.data.shipping.address)
+    && !hasValue(cart.data.shipping.address.custom_attributes)
+    && !egiftWithVirtualProduct) {
     logger.error('Error while placing order. Shipping address not contains all info. Cart: @cart', {
       '@cart': JSON.stringify(cart),
     });
@@ -2118,7 +2131,8 @@ window.commerceBackend.placeOrder = async (data) => {
     };
   }
 
-  if (!isAddressExtensionAttributesValid(cart.data)) {
+  if (!isAddressExtensionAttributesValid(cart.data)
+    && !egiftWithVirtualProduct) {
     // If address extension attributes doesn't contain all the required
     // fields or required field value is empty, not process/place order.
     logger.error('Error while placing order. Shipping address not contains all required extension attributes. Cart: @cart', {
@@ -2134,8 +2148,10 @@ window.commerceBackend.placeOrder = async (data) => {
   }
 
   // If first/last name not available in shipping address.
-  if (!hasValue(cart.data.shipping.address.firstname)
-    || !hasValue(cart.data.shipping.address.lastname)) {
+  if (hasValue(cart.data.shipping.address)
+    && (!hasValue(cart.data.shipping.address.firstname)
+    || !hasValue(cart.data.shipping.address.lastname))
+    && !egiftWithVirtualProduct) {
     logger.error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', {
       '@cart': JSON.stringify(cart),
     });

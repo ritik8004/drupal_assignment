@@ -399,8 +399,9 @@ class AlshayaSpcOrderHelper {
    */
   public function getOrderDetails(array $order) {
     $orderDetails = [];
-
-    $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    if (in_array('address', $order['shipping'])) {
+      $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
+    }
     $orderDetails['delivery_charge'] = $order['totals']['shipping'];
 
     $express_delivery_config = $this->configFactory->get('alshaya_spc.express_delivery');
@@ -550,6 +551,11 @@ class AlshayaSpcOrderHelper {
    *   Formatted number if possible, as is otherwise.
    */
   public function getFormattedMobileNumber(string $number) {
+    // Return if number is empty or null.
+    if (empty($number)) {
+      return '';
+    }
+
     try {
       return $this->mobileUtil->getFormattedMobileNumber($number);
     }
@@ -573,7 +579,9 @@ class AlshayaSpcOrderHelper {
     $country_list = $this->countryRepository->getList();
     $processed['country'] = $country_list[$processed['country_code']];
 
-    $processed['telephone'] = $this->getFormattedMobileNumber($processed['mobile_number']['value']);
+    if (in_array('mobile_number', $processed)) {
+      $processed['telephone'] = $this->getFormattedMobileNumber($processed['mobile_number']['value']);
+    }
 
     // Remove empty items.
     return array_filter($processed);

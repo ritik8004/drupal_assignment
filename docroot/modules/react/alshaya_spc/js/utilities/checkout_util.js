@@ -3,6 +3,7 @@ import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
+import { cartContainsOnlyVirtualProduct } from './egift_util';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -510,6 +511,22 @@ export const isDeliveryTypeSameAsInCart = (cart) => {
   }
 
   return false;
+};
+
+/**
+ * Determines if shipping method is set in cart.
+ *
+ * @param {object} cart
+ *   The cart object.
+ */
+export const isShippingMethodSet = (cart) => {
+  // Set this as true if egift card is enabled and only virtual product is added
+  // in the cart.
+  if (cartContainsOnlyVirtualProduct(cart.cart)) {
+    return true;
+  }
+
+  return cart.cart.shipping.method !== null;
 };
 
 /**
