@@ -15,7 +15,7 @@ mkdir -p /root/.ssh
 cp ~/.ssh/config /root/.ssh/config
 
 # Set the git configuration
-git config --global user.name "github-actions-CI"
+git config --global user.name "Github-Actions-CI"
 git config --global user.email "noreply@github.com"
 
 # Up the PHP Memory Limit

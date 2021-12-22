@@ -1,0 +1,117 @@
+name: Validate Pull Request
+
+on: [pull_request_target, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Validate Pull Request
+    runs-on: ubuntu-18.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        drupal-profile: [ 'alshaya_transac' ]
+
+    container:
+      image: devwithlando/php:7.4-fpm-4
+
+    services:
+      database:
+        image: mariadb
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 32574:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      memcache:
+        image: memcached:latest
+
+    env:
+      COMPOSER_MEMORY_LIMIT: -1
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER_PASSWORD: drupal
+      MYSQL_USER_NAME: drupal
+      MYSQL_DATABASE_NAME: drupal
+      MYSQL_HOST: database
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      SSH_DEPLOYMENT_KEY: ${{ secrets.BLT_SSH_DEPLOYMENT_KEY }}
+      INSTALL_TYPE: install
+      PROFILE: ${{ matrix.drupal-profile }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Composer install
+        run: |
+          composer self-update
+          composer self-update --1
+          composer global require hirak/prestissimo
+          composer validate --no-check-all --ansi
+          composer install --no-interaction
+          composer install --no-interaction
+          composer install --no-interaction
+
+      - name: Prepare bin executables
+        run: |
+          ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
+          ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
+
+      - name: Build all middleware
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/middleware-build.sh "${GITHUB_WORKSPACE}"
+
+      - name: Cache dependencies installed with Composer
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.composer-cache.outputs.dir }}"
+            ~/.drush/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "8.17.0"
+
+      - name: Install Gulp
+        run: npm install -g gulp-cli
+
+      - name: Frontend setup and validate
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/github_actions/frontend-setup.sh
+
+      - name: React setup and validate
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/github_actions/react-setup.sh
+
+      - name: Cache node modules
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      # @todo check if this really works or we need one step per directory
+      - uses: actions/cache@v2
+        with:
+          path: |
+            "${{ steps.npm-cache-dir.outputs.dir }}"
+            ~/.npm
+            ~/.nvm
+          key: ${{ runner.os }}-node
+
+
+      - name: Setup environment
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/github_actions/setup_env.sh
+
+      - name: Disable Telemetry
+        run: blt blt:telemetry:disable --no-interaction
+
+      - name: Run Tests
+        run: bash ${GITHUB_WORKSPACE}/blt/scripts/github_actions/run_tests.sh
+
