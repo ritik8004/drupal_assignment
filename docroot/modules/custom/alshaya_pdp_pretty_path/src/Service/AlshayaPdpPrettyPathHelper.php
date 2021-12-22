@@ -20,10 +20,14 @@ class AlshayaPdpPrettyPathHelper {
    *   List of swatch attributes.
    */
   public function prepareAndIndexSwatchUrls(array &$object, array $swatch_attributes) {
-    $attribute_values = $object['attr_' . $swatch_attributes[0]];
-    if (!empty($attribute_values)) {
-      foreach ($object['swatches'] as $key => $value) {
-        $object['swatches'][$key]['url'] = $this->preparePrettyPathUrl($object['url'], $swatch_attributes[0], $value['display_label']);
+    foreach ($swatch_attributes as $attribute) {
+      $attribute_values = $object['attr_' . $attribute];
+      if (!empty($attribute_values)) {
+        foreach ($object['swatches'] as $key => $value) {
+          $object['swatches'][$key]['url'] = $this->preparePrettyPathUrl($object['url'], $attribute, $value['display_label']);
+        }
+        // Use only first swatch attribute for pretty path.
+        break;
       }
     }
   }

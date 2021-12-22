@@ -31,8 +31,13 @@ function alshaya_pdp_pretty_path_alshaya_feed_variant_info_alter(&$variant, SKUI
   $swatch_attributes = $skuManager->getPdpSwatchAttributes();
   /** @var \Drupal\alshaya_pdp_pretty_path\Service\AlshayaPdpPrettyPathHelper $pdpPrettyPathHelper */
   $pdpPrettyPathHelper = \Drupal::service('alshaya_pdp_pretty_path.helper');
-  $swatch_value = $sku->get('attr_' . $swatch_attributes[0])->getString();
-  if (!empty($swatch_value)) {
-    $variant['url'] = $pdpPrettyPathHelper->preparePrettyPathUrl(strtok($variant['url'], '?'), $swatch_attributes[0], $swatch_value);
+
+  foreach ($swatch_attributes as $attribute) {
+    $value = $sku->get('attr_' . $attribute)->getString();
+    if (!empty($value)) {
+      $variant['url'] = $pdpPrettyPathHelper->preparePrettyPathUrl(strtok($variant['url'], '?'), $attribute, $value);
+      // Use only first swatch attribute for pretty path.
+      break;
+    }
   }
 }
