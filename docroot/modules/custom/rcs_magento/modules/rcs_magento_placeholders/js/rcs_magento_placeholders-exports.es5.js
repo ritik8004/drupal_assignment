@@ -287,13 +287,8 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
     case 'product':
       // Build query.
       const operator = typeof params.op !== 'undefined' ? params.op : 'eq';
-      // We do it this way so that the quotes around the array elements are
-      // escaped after stringify like [\"abcd\", \"xyz\"].
-      // If this does not happen, then grapqhl response gives malformed request
-      // error.
-      const filterValue = operator === 'in' ? JSON.stringify(params.sku).replace(/"/g, '\\"') : `\\"${params.sku}\\"`;
-      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: filterValue }}) ${rcsPhGraphqlQuery.products}}`);
-      request.data = request.data.replace('filterValue', filterValue);
+      const filterValue = operator === 'in' ? JSON.stringify(params.sku) : `"${params.sku}"`;
+      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: ${filterValue} }}) ${rcsPhGraphqlQuery.products}}`);
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
 
