@@ -155,26 +155,27 @@ export default class WishlistHeader extends React.Component {
    */
   handleAddToWishList = (data) => {
     const { productInfo } = data.detail;
+    if (productInfo) {
+      // Check if sticky wrapper is active on screen.
+      const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
+      if (querySelector !== null) {
+        return;
+      }
 
-    // Check if sticky wrapper is active on screen.
-    const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
-    if (querySelector !== null) {
-      return;
+      // Set timer for the wishlist notification.
+      this.setTimer();
+
+      // Get the wishlist items from the local storage
+      // and set the count in state.
+      const wishListItems = getWishListData() || {};
+      const wishListItemCount = Object.keys(wishListItems).length;
+
+      this.setState({
+        wishListItemCount,
+        wishListItemData: productInfo || null,
+      });
+      smoothScrollTo('#wishlist-header-wrapper');
     }
-
-    // Set timer for the wishlist notification.
-    this.setTimer();
-
-    // Get the wishlist items from the local storage
-    // and set the count in state.
-    const wishListItems = getWishListData() || {};
-    const wishListItemCount = Object.keys(wishListItems).length;
-
-    this.setState({
-      wishListItemCount,
-      wishListItemData: productInfo || null,
-    });
-    smoothScrollTo('#wishlist-header-wrapper');
   };
 
   /**

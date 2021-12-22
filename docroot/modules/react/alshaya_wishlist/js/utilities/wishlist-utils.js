@@ -97,7 +97,11 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
   wishListItems = wishListItems || {};
 
   // Add new data to storage.
-  wishListItems[productInfo.sku] = productInfo;
+  // We only need to store sku and options and not title.
+  wishListItems[productInfo.sku] = {
+    sku: productInfo.sku,
+    options: productInfo.options,
+  };
 
   // Save back to storage.
   addWishListInfoInStorage(wishListItems);

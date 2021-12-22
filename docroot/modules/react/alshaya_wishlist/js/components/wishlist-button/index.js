@@ -11,6 +11,7 @@ import {
 } from '../../utilities/wishlist-utils';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
+import { addInlineLoader, removeInlineLoader } from '../../../../js/utilities/wishlistHelper';
 
 class WishlistButton extends React.Component {
   constructor(props) {
@@ -193,7 +194,7 @@ class WishlistButton extends React.Component {
   /**
    * Add or remove product from the wishlist.
    */
-  toggleWishlist = () => {
+  toggleWishlist = (e) => {
     const {
       addedInWishList, skuCode, options, title,
     } = this.state;
@@ -204,6 +205,12 @@ class WishlistButton extends React.Component {
 
       // don't execute further if product is removed from the wishlist.
       return;
+    }
+
+    if (e.currentTarget.classList.length > 0) {
+      // Adding loader icon to wishlist button.
+      e.currentTarget.classList.add('loading');
+      addInlineLoader('.wishlist-loader .loading');
     }
 
     // Prepare the product info to store.
@@ -254,9 +261,14 @@ class WishlistButton extends React.Component {
               // so other components like wishlist header can listen and do the
               // needful.
               dispatchCustomEvent('productAddedToWishlist', {});
+
+              // Removing loader icon to wishlist button.
+              removeInlineLoader('.wishlist-loader .loading');
             }
           });
         }
+        // Removing loader icon from wishlist button for anonymous user.
+        removeInlineLoader('.wishlist-loader .loading');
 
         // Update the wishlist button state.
         this.updateWishListStatus(true);
@@ -344,8 +356,8 @@ class WishlistButton extends React.Component {
 
     return (
       <div
-        className={wishListButtonClass}
-        onClick={() => this.toggleWishlist()}
+        className={`${wishListButtonClass} wishlist-loader`}
+        onClick={(e) => this.toggleWishlist(e)}
       >
         <div className={classPrefix}>
           {Drupal.t(buttonText, { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
