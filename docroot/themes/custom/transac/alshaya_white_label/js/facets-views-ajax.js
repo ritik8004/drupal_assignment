@@ -33,7 +33,7 @@
 
         // Get the View for the current facet.
         var view = $('.view-id-' + facetSettings.view_id + '.view-display-id-' + facetSettings.current_display_id).first();
-        if (view.length == 0) {
+        if (view.length === 0) {
           return;
         }
         var dom_id_start = 'js-view-dom-id-';
