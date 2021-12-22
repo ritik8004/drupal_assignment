@@ -185,14 +185,7 @@
             }
           }`);
       }
-      // Prepare graphql query here.
-      const request = {
-        uri: '/graphql',
-        method: 'POST',
-        headers: [
-          ["Content-Type", "application/json"],
-        ],
-      };
+
       // Change the query type and body based on the type of the request.
       let queryType = 'promoDynamicLabelProduct';
       let queryBody = rcsPhGraphqlQuery.product_dynamic_promotions;
@@ -200,23 +193,15 @@
         queryType = 'promoDynamicLabelCart';
         queryBody = rcsPhGraphqlQuery.cart_dynamic_promotions;
       }
-      request.data = JSON.stringify({
-        query: `{${queryType}(
-            ${queryProductSku}
-            context: "web"
-            ${queryProductViewMode}
-            cart: {
-              ${queryCartAttr}
-              items: [
-                ${cartInfo}
-              ]
-            }
-          )
-            ${queryBody}
-          }`
-      });
 
-      response = rcsCommerceBackend.invokeApiSynchronous(request);
+      response = globalThis.rcsPhCommerceBackend.getDataSynchronous('dynamic-promotion-label', {
+        queryType,
+        queryProductSku,
+        queryProductViewMode,
+        queryCartAttr,
+        cartInfo,
+        queryBody,
+      });
       // Update the response variable based on querytype.
       response = response.data[queryType];
     }

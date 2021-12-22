@@ -37,6 +37,23 @@ async function handleNoItemsInResponse(request, urlKey) {
   return rcsRedirectToPage(rcs404);
 }
 
+/**
+ * Prepares query string for GraphQL GET request.
+ *
+ * @param {string} data
+ *   The string to prepare.
+ *
+ * @returns {string}
+ *   The compressed and URL safe string.
+ */
+function prepareQuery(data) {
+  // Remove unnecessary characters.
+  let query = global.rcsQueryCompressor(data);
+  // Encode to valid uri format.
+  query = encodeURIComponent(query);
+  return `query=${query}`;
+}
+
 exports.getEntity = async function getEntity(langcode) {
   const pageType = rcsPhGetPageType();
   if (!pageType) {
@@ -45,9 +62,10 @@ exports.getEntity = async function getEntity(langcode) {
 
   const request = {
     uri: '/graphql',
-    method: 'POST',
+    method: 'GET',
     headers: [
       ["Content-Type", "application/json"],
+      ["Store", drupalSettings.rcs.commerceBackend.store],
     ],
   };
 
@@ -57,16 +75,11 @@ exports.getEntity = async function getEntity(langcode) {
 
   switch (pageType) {
     case 'product':
-      // Add extra headers.
-      request.headers.push(["Store", drupalSettings.rcs.commerceBackend.store]);
-
       // Remove .html suffix from the full path.
       let prodUrlKey = urlKey.replace('.html', '');
 
-      // Build query.
-      request.data = JSON.stringify({
-        query: `{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      // Compress the query.
+      request.data = prepareQuery(`{ products(filter: { url_key: { eq: "${prodUrlKey}" }}) ${rcsPhGraphqlQuery.products} }`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -81,9 +94,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'category':
       // Build query.
-      request.data = JSON.stringify({
-        query: `{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`
-      });
+      request.data = prepareQuery(`{ categories(filters: { url_path: { eq: "${urlKey}" }}) ${rcsPhGraphqlQuery.categories}}`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -97,9 +108,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     case 'promotion':
       // Build query.
-      request.data = JSON.stringify({
-        query: `{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`
-      });
+      request.data = prepareQuery(`{ promotionUrlResolver(url_key: "${urlKey}") ${rcsPhGraphqlQuery.promotions}}`);
 
       // Fetch response.
       response = await rcsCommerceBackend.invokeApi(request);
@@ -137,7 +146,7 @@ exports.getEntity = async function getEntity(langcode) {
 exports.getData = async function getData(placeholder, params, entity, langcode, markup, loaderOnUpdates = false) {
   const request = {
     uri: '/graphql',
-    method: 'POST',
+    method: 'GET',
     headers: [
       ['Content-Type', 'application/json'],
       ['Store', drupalSettings.rcs.commerceBackend.store],
@@ -163,17 +172,15 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       }
 
       // Prepare request parameters.
-      request.data = JSON.stringify({
-        // @todo: we are using 'category' API for now which is going to be
-        // deprecated, but only available API to support both 2.3 and 2.4
-        // magento version, so as suggested we are using this for now but
-        // need to change this when this got deprecated in coming magento
-        // version and replace it with 'categoryList' magento API.
-        query: `{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
-            ${drupalSettings.alshayaRcs.navigationMenu.query}
-          }
-        }`
-      });
+      // @todo: we are using 'category' API for now which is going to be
+      // deprecated, but only available API to support both 2.3 and 2.4
+      // magento version, so as suggested we are using this for now but
+      // need to change this when this got deprecated in coming magento
+      // version and replace it with 'categoryList' magento API.
+      request.data = prepareQuery(`{category(id: ${drupalSettings.alshayaRcs.navigationMenu.rootCategory}) {
+          ${drupalSettings.alshayaRcs.navigationMenu.query}
+        }
+      }`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
@@ -184,9 +191,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'field_magazine_shop_the_story':
-      request.data = JSON.stringify({
-        query: `{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.magazine_shop_the_story}}`
-      });
+      request.data = prepareQuery(`{ products(filter: { sku: { in: ${params.skus} }}) ${rcsPhGraphqlQuery.magazine_shop_the_story}}`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       // Get exact data from response.
@@ -201,8 +206,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
       break;
 
     case 'labels':
-        request.data = JSON.stringify({
-          query: `query{
+        request.data = prepareQuery(`{
             amLabelProvider(productIds: [${params.productIds}], mode: PRODUCT){
               items{
                 image
@@ -211,8 +215,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
                 product_id
               }
             }
-          }`
-      });
+          }`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.amLabelProvider;
@@ -220,9 +223,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
     case 'product-recommendation':
       // @TODO Review this query to use only fields that are required for the display.
-      request.data = JSON.stringify({
-        query: `{ products(filter: { sku: { eq: "${params.sku}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      request.data = prepareQuery(`{ products(filter: { sku: { eq: "${params.sku}" }}) ${rcsPhGraphqlQuery.products}}`);
 
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items[0];
@@ -264,7 +265,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
   const request = {
     uri: '/graphql',
-    method: 'POST',
+    method: 'GET',
     headers: [
       ['Content-Type', 'application/json'],
       ['Store', drupalSettings.rcs.commerceBackend.store],
@@ -276,9 +277,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
   switch (placeholder) {
     case 'products-in-style':
-      request.data = JSON.stringify({
-        query: `{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      request.data = prepareQuery(`{ products(filter: { style_code: { match: "${params.styleCode}" }}) ${rcsPhGraphqlQuery.products}}`);
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
       result = response.data.products.items;
@@ -293,9 +292,7 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       // If this does not happen, then grapqhl response gives malformed request
       // error.
       const filterValue = operator === 'in' ? JSON.stringify(params.sku).replace(/"/g, '\\"') : `\\"${params.sku}\\"`;
-      request.data = JSON.stringify({
-        query: `{ products(filter: { sku: { ${operator}: filterValue }}) ${rcsPhGraphqlQuery.products}}`
-      });
+      request.data = prepareQuery(`{ products(filter: { sku: { ${operator}: filterValue }}) ${rcsPhGraphqlQuery.products}}`);
       request.data = request.data.replace('filterValue', filterValue);
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
@@ -319,13 +316,29 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
         return staticOption;
       }
 
-      request.data = JSON.stringify({
-        query: `{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`
-      });
+      request.data = prepareQuery(`{ customAttributeMetadata(attributes: { entity_type: "4", attribute_code: "${params.attributeCode}" }) ${rcsPhGraphqlQuery.product_options}}`);
 
       result = rcsCommerceBackend.invokeApiSynchronous(request);
 
       RcsPhStaticStorage.set(staticKey, result);
+      break;
+
+    case 'dynamic-promotion-label':
+      request.data = prepareQuery(`{${params.queryType}(
+            ${params.queryProductSku}
+            context: "web"
+            ${params.queryProductViewMode}
+            cart: {
+              ${params.queryCartAttr}
+              items: [
+                ${params.cartInfo}
+              ]
+            }
+          )
+            ${params.queryBody}
+          }`
+        );
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
       break;
 
     default:
