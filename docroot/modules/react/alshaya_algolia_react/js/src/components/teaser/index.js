@@ -100,6 +100,13 @@ const Teaser = ({
     && showReviewsRating === 1
     && overallRating !== '');
 
+  // Check if it's a wishlist page and stock status
+  // of the sku available in extraInfo data. If stock
+  // status says OOS then show the OOS button.
+  const showOOSButton = (isWishlistPage(extraInfo)
+    && typeof extraInfo.inStock !== 'undefined'
+    && !extraInfo.inStock);
+
   return (
     <div className={teaserClass}>
       <article
@@ -231,15 +238,26 @@ const Teaser = ({
             </div>
           </ConditionalView>
         </div>
-        <AddToBagContainer
-          url={attribute.url}
-          sku={hit.sku}
-          stockQty={hit.stock_quantity}
-          productData={attribute.atb_product_data}
-          isBuyable={attribute.is_buyable}
-          // Pass extra information to the component for update the behaviour.
-          extraInfo={extraInfo}
-        />
+        {/* Don't render component on wishlist page if product is OOS. */}
+        <ConditionalView condition={!showOOSButton}>
+          <AddToBagContainer
+            url={attribute.url}
+            sku={hit.sku}
+            stockQty={hit.stock_quantity}
+            productData={attribute.atb_product_data}
+            isBuyable={attribute.is_buyable}
+            // Pass extra information to the component for update the behaviour.
+            extraInfo={extraInfo}
+          />
+        </ConditionalView>
+        {/* Render OOS message on wishlist page if product is OOS. */}
+        <ConditionalView condition={showOOSButton}>
+          <div className="oos-text-container">
+            <span className="oos-text">
+              { Drupal.t('Out of stock') }
+            </span>
+          </div>
+        </ConditionalView>
         {/* Render the component if the page is wishlist listing page. */}
         <ConditionalView condition={isWishlistPage(extraInfo)}>
           <WishlistContainer

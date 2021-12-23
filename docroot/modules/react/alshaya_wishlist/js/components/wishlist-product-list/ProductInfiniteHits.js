@@ -3,6 +3,7 @@ import connectInfiniteHits from '../../../../alshaya_algolia_react/js/src/compon
 import Teaser from '../../../../alshaya_algolia_react/js/src/components/teaser';
 import { removeLoader } from '../../../../alshaya_algolia_react/js/src/utils';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { getWishlistItemInStockStatus } from '../../utilities/wishlist-utils';
 
 const ProductInfiniteHits = connectInfiniteHits(({
   hits, hasMore, refineNext, children = null, gtmContainer, pageType,
@@ -33,6 +34,7 @@ const ProductInfiniteHits = connectInfiniteHits(({
                   isWishlistPage: true,
                   showAddToBag: true,
                   addToCartButtonText: Drupal.t('Move to basket', {}, { context: 'wishlist' }),
+                  inStock: getWishlistItemInStockStatus(hit),
                 }}
               />
             ))
