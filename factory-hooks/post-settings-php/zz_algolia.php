@@ -48,3 +48,6 @@ if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
   $config['alshaya_algolia_react.settings']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];
   $config['alshaya_algolia_react.settings']['search_api_key'] = $settings['algolia_sandbox.settings']['search_api_key'];
 }
+
+print_r($config);
+echo $algolia_env;
