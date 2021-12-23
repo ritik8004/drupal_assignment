@@ -3,7 +3,7 @@ var buildPath = '/modules/react/alshaya_egift_card/dist/';
 
 var config = {
   entry: {
-    my_account: './js/my-egift-Card',
+    my_egift_card: './js/my-egift-card',
     egift_card_purchase: './js/egift-card-purchase',
     egift_topup_purchase: './js/egift-topup-purchase',
   },
