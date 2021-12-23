@@ -3,6 +3,10 @@ import EgiftCardLinked from './my-account-egift-card-linked';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import EgiftCardNotLinked from './my-account-egift-card-not-linked';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class MyEgiftCard extends React.Component {
   constructor(props) {
@@ -21,20 +25,18 @@ class MyEgiftCard extends React.Component {
    * Get User linked card helper.
    */
   getUserLinkedCard = () => {
+    showFullScreenLoader();
     // Call to get customer linked card details.
     const result = callMagentoApi('/V1/customers/hpsCustomerData', 'GET', {});
     if (result instanceof Promise) {
       result.then((response) => {
+        removeFullScreenLoader();
         if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
           this.setState({
             linkedCard: response.data,
             wait: false,
           });
         }
-      });
-    } else {
-      this.setState({
-        wait: false,
       });
     }
   };
@@ -45,7 +47,6 @@ class MyEgiftCard extends React.Component {
   removeCard = () => {
     this.setState({
       linkedCard: null,
-      wait: false,
     });
   }
 
@@ -54,7 +55,7 @@ class MyEgiftCard extends React.Component {
    */
   showCard = () => {
     this.getUserLinkedCard();
-  }
+  };
 
   render() {
     const { wait, linkedCard } = this.state;

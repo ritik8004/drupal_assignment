@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment/moment';
 import PriceElement
   from '../../../../../js/utilities/components/price/price-element';
 import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
@@ -12,9 +11,7 @@ import {
 class EgiftCardLinked extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      apiError: '',
-    };
+    this.state = {};
   }
 
   /**
@@ -23,41 +20,66 @@ class EgiftCardLinked extends React.Component {
   removeCardAction = (e) => {
     e.preventDefault();
     showFullScreenLoader();
-    const { removeCard } = this.props;
     // Call magento API to remove linked eGift card.
     return callMagentoApi('/V1/egiftcard/unlinkcard', 'POST', {})
       .then((response) => {
         removeFullScreenLoader();
         // Check for error from handleResponse.
         if (typeof response.data !== 'undefined' && typeof response.data.error !== 'undefined' && response.data.error) {
-          this.setState({
-            apiError: response.data.error_message,
-          }, () => logger.error('Error while unlinking card. @error', { '@error': JSON.stringify(response.data) }));
+          logger.error('Error while unlinking card. @error', { '@error': JSON.stringify(response.data) });
         }
 
         // Remove card if no error response returned.
-        if (typeof response.data !== 'undefined' && response.data.response_type === true) {
+        if (typeof response.data !== 'undefined' && response.data.response_type) {
+          // Calls parent component method to reset and show link new card form.
+          const { removeCard } = this.props;
           removeCard();
         }
       });
   }
 
+  /**
+   * Get day in st, nd, rd, th format.
+   */
+  dateNthFormat = (d) => {
+    if (d > 3 && d < 21) return 'th';
+    switch (d % 10) {
+      case 1: {
+        return 'st';
+      }
+      case 2: {
+        return 'nd';
+      }
+      case 3: {
+        return 'rd';
+      }
+      default: {
+        return 'th';
+      }
+    }
+  }
+
   render() {
     const { linkedCard } = this.props;
-    const { apiError } = this.state;
     // Return if User linked card data is null.
     if (linkedCard === null) {
       return null;
     }
 
-    let expiredCard = 'egift-linked-card-expiry';
-    if (linkedCard.expiry_date_timestamp < moment().unix()) {
-      expiredCard += ' expired-card';
+    // Set expired card class.
+    let expiredCard = false;
+    const currentTimeStamp = Date.now() / 1000;
+    if (linkedCard.expiry_date_timestamp < currentTimeStamp) {
+      expiredCard = true;
     }
+
+    // Get formatted expiry date.
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const expiryDate = new Date(linkedCard.expiry_date_timestamp);
+    const expiryDateFormatted = `${this.dateNthFormat(expiryDate.getDate())}, ${months[expiryDate.getMonth()]} ${expiryDate.getFullYear()}`;
 
     return (
       <div className="egift-card-linked-wrapper">
-        <div className="error">{ apiError }</div>
         <div className="egift-card-linked-wrapper-top">
           <div className="egift-linked-thumbnail">
             <img
@@ -86,8 +108,12 @@ class EgiftCardLinked extends React.Component {
           <div className="egift-linked-card-number-value">{linkedCard.card_number}</div>
           <div className={expiredCard}>
             <div className="egift-linked-expires">{Drupal.t('Expires on', {}, { context: 'egift' })}</div>
-            <div className="egift-linked-expires-value">{moment.unix(linkedCard.expiry_date_timestamp).format('Do, MMM YYYY')}</div>
-            {(expiredCard.indexOf('expired-card') > -1) && <span>{Drupal.t('This card has expired.', {}, { context: 'egift' })}</span>}
+            <div
+              className={(expiredCard ? 'egift-linked-expires-value expired-card' : 'egift-linked-expires-value')}
+            >
+              {expiryDateFormatted}
+            </div>
+            {expiredCard && <span>{Drupal.t('This card has expired.', {}, { context: 'egift' })}</span>}
           </div>
           <div className="egift-linked-card-type">{Drupal.t('Card Type', {}, { context: 'egift' })}</div>
           <div className="egift-linked-card-type-value">{linkedCard.card_type}</div>
