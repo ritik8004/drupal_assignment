@@ -35,59 +35,80 @@ export default class EgiftTopupFor extends React.Component {
     } = this.props;
 
     return (
-      <div>
+      <>
         <ConditionalView condition={isUserAuthenticated() === true && linkedCardNumber !== null}>
-          <div
-            className="egift-for-field"
-            onChange={(e) => this.handleChange(e)}
-          >
-            <label>
+          <div className="egift-for-field">
+            <div className="egift-purchase-input-title subtitle-text">
               {Drupal.t('Top-up for', {}, { context: 'egift' })}
-              <input
-                defaultChecked={optionGiftForSelf}
-                type="radio"
-                name="egift-for"
-                value="self"
-              />
-              {Drupal.t('My Card', {}, { context: 'egift' })}
-              <input
-                type="radio"
-                name="egift-for"
-                value="other"
-              />
-              {Drupal.t('Other\'s Card', {}, { context: 'egift' })}
-            </label>
+            </div>
+            <div className="egift-input-field-wrapper">
+              <div className="egift-input-field-item">
+                <input
+                  defaultChecked={optionGiftForSelf}
+                  type="radio"
+                  name="egift-for"
+                  id="egiftFor-self"
+                  value="self"
+                  onChange={(e) => this.handleChange(e)}
+                />
+                <label htmlFor="egiftFor-self">
+                  {Drupal.t('My Card', {}, { context: 'egift' })}
+                </label>
+              </div>
+              <div className="egift-input-field-item">
+                <input
+                  type="radio"
+                  name="egift-for"
+                  id="egiftFor-other"
+                  value="other"
+                  onChange={(e) => this.handleChange(e)}
+                />
+                <label htmlFor="egiftFor-other">
+                  {Drupal.t('Other\'s Card', {}, { context: 'egift' })}
+                </label>
+              </div>
+            </div>
           </div>
           <ConditionalView condition={optionGiftForSelf === true}>
             <div className="card-details">
-              <span className="egift-linked-card-balance-label">
-                {Drupal.t('Card Balance: ', {}, { context: 'egift' })}
-              </span>
-              <PriceElement
-                amount={linkedCardBalance !== null ? parseFloat(linkedCardBalance) : undefined}
-              />
-              <span className="egift-linked-card-balance">
-                {Drupal.t('Card No:', {}, { context: 'egift' })}
-              </span>
-              <span>{ linkedCardNumber !== null ? linkedCardNumber : '' }</span>
+              <div className="egift-linked-card-balance">
+                <span className="egift-linked-card-balance-label">
+                  {Drupal.t('Card Balance: ', {}, { context: 'egift' })}
+                </span>
+                <PriceElement
+                  amount={linkedCardBalance !== null ? parseFloat(linkedCardBalance) : undefined}
+                />
+              </div>
+              <div className="egift-linked-card-balance">
+                <span className="egift-linked-card-balance-label">
+                  {Drupal.t('Card No:', {}, { context: 'egift' })}
+                </span>
+                <span>{ linkedCardNumber !== null ? linkedCardNumber : '' }</span>
+              </div>
             </div>
           </ConditionalView>
         </ConditionalView>
         <ConditionalView condition={isUserAuthenticated() === false}>
-          {Drupal.t('Card Details', {}, { context: 'egift' })}
-        </ConditionalView>
-        <ConditionalView condition={linkedCardNumber === null || optionGiftForSelf === false}>
-          <div className="egift-card-number-wrapper">
-            <input
-              type="text"
-              id="card_number"
-              name="card_number"
-              placeholder={Drupal.t('eGift Card number', {}, { context: 'egift' })}
-              required
-            />
+          <div className="card-details-label">
+            {Drupal.t('Card Details', {}, { context: 'egift' })}
           </div>
         </ConditionalView>
-      </div>
+        <ConditionalView condition={linkedCardNumber === null || optionGiftForSelf === false}>
+          <div className="egift-input-textfield-wrapper">
+            <div className="egift-input-textfield-item egift-topup-card-number">
+              <input
+                type="text"
+                id="card_number"
+                name="card_number"
+                required
+                onBlur={(e) => this.handleEvent(e)}
+              />
+              <div className="c-input__bar" />
+              <label>{Drupal.t('eGift Card number', {}, { context: 'egift' })}</label>
+            </div>
+          </div>
+        </ConditionalView>
+      </>
     );
   }
 }

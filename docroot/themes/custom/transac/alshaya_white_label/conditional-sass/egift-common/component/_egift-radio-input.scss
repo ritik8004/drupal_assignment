@@ -1,9 +1,9 @@
-.egift-purchase-input-field {
+.egift-input-field {
   &-wrapper {
     display: flex;
     align-items: center;
 
-    .egift-purchase-input-field-item {
+    .egift-input-field-item {
       &:first-child {
         margin-#{$right}: 4.375rem;
       }

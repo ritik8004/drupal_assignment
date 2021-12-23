@@ -10,22 +10,6 @@
       max-width: 21.75rem;
     }
 
-    .selected-card-name,
-    .egift-card-amount-list-title {
-      font-family: $alshaya-bold;
-      font-size: 0.8125rem;
-      line-height: 1.25rem;
-      margin-bottom: 0.6875rem;
-
-      @include breakpoint($only-mobile) {
-        text-align: $left;
-      }
-
-      @include breakpoint($tablet) {
-        margin-bottom: 0.8125rem;
-      }
-    }
-
     ul {
       padding-#{$left}: 0;
       margin-bottom: 0;
@@ -41,6 +25,25 @@
           margin-#{$right}: 0;
         }
       }
+    }
+  }
+
+  .subtitle-text {
+    font-family: $alshaya-bold;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    margin-bottom: 0.6875rem;
+
+    html[lang=en] & {
+      letter-spacing: 0.65px;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: $left;
+    }
+
+    @include breakpoint($tablet) {
+      margin-bottom: 0.8125rem;
     }
   }
 
@@ -63,6 +66,10 @@
       width: 3.375rem;
       height: 2.0625rem;
       border: 1px solid $plp-quick-view-product-size-active-bg;
+
+      html[lang=en] & {
+        letter-spacing: 1px;
+      }
 
       @include breakpoint($tablet) {
         width: 3rem;

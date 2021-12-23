@@ -135,7 +135,7 @@ export default class EgiftCardOpenAmountField extends React.Component {
 
     return (
       <div className="egift-open-amount-wrapper">
-        <div className="egift-purchase-input-textfield-item">
+        <div className="egift-input-textfield-item">
           <input
             id="open-amount"
             className="egift-open-amount-field"
