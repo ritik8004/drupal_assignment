@@ -43,10 +43,19 @@
     font-size: 0.875rem;
     text-align: $left;
 
+    @include breakpoint($only-mobile) {
+      font-size: 0.8125rem;
+    }
+
     .field--name-name,
     .listing-brand-name,
     .special-price-block {
       padding: 0 0.9375rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 0;
+        padding-#{$left}: 0.8125rem;
+      }
     }
 
     .field--name-name,
@@ -151,5 +160,13 @@
 .price--discount {
   @include breakpoint($tablet) {
     font-size: 0.875rem;
+  }
+}
+
+.node--view-mode-search-result {
+  .has--special--price {
+    @include breakpoint($only-mobile) {
+      display: inline-block;
+    }
   }
 }
