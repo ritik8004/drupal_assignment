@@ -314,6 +314,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Link my egift card',
         'context' => 'egift',
       ],
+      'eGift Card' => [
+        'ar' => 'eGift Card',
+        'context' => 'egift',
+      ]
     ],
   ];
 

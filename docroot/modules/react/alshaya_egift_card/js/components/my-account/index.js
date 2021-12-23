@@ -4,7 +4,7 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import EgiftCardNotLinked from './my-account-egift-card-not-linked';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
-class MyAccount extends React.Component {
+class MyEgiftCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -80,4 +80,4 @@ class MyAccount extends React.Component {
   }
 }
 
-export default MyAccount;
+export default MyEgiftCard;

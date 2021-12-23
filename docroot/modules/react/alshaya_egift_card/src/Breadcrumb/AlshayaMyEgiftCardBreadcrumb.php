@@ -6,7 +6,7 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
-use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -19,17 +19,17 @@ class AlshayaMyEgiftCardBreadcrumb implements BreadcrumbBuilderInterface {
   /**
    * The current user service object.
    *
-   * @var \Drupal\Core\Session\AccountProxy
+   * @var \Drupal\Core\Session\AccountInterface
    */
-  public $currentUser;
+  protected $currentUser;
 
   /**
    * AlshayaStaticPageBreadcrumbBuilder constructor.
    *
-   * @param \Drupal\Core\Session\AccountProxy $current_user
+   * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current account object.
    */
-  public function __construct(AccountProxy $current_user) {
+  public function __construct(AccountInterface $current_user) {
     $this->currentUser = $current_user;
   }
 

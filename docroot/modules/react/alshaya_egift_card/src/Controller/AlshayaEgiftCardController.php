@@ -68,7 +68,7 @@ class AlshayaEgiftCardController extends ControllerBase {
         ],
         'drupalSettings' => [
           'egiftCard' => [
-            'enabled' => \Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled(),
+            'enabled' => $this->egiftCardHelper->isEgiftCardEnabled(),
           ]
         ],
       ],
@@ -85,11 +85,8 @@ class AlshayaEgiftCardController extends ControllerBase {
    *   Return access result object.
    */
   public function checkAccess() {
-    // Only logged in users will be able to access the My account egift card page.
-    if ($this->currentUser->isAnonymous()) {
-      return AccessResult::forbidden();
-    }
-    return AccessResult::allowedIf($this->egiftCardHelper->isEgiftCardEnabled());
+    // Only logged-in users will be able to access my eGift card page if enabled.
+    return AccessResult::allowedIf($this->egiftCardHelper->isEgiftCardEnabled() && $this->currentUser->isAuthenticated());
   }
 
   /**

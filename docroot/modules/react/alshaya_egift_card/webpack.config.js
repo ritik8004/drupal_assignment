@@ -1,9 +1,9 @@
-var path  = require("path");
+var path = require("path");
 var buildPath = '/modules/react/alshaya_egift_card/dist/';
 
 var config = {
   entry: {
-    my_account: './js/my-account',
+    my_account: './js/my-egift-Card',
     egift_card_purchase: './js/egift-card-purchase',
     egift_topup_purchase: './js/egift-topup-purchase',
   },

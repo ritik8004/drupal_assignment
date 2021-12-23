@@ -116,13 +116,13 @@ function alshaya_egift_card_theme() {
  */
 function alshaya_egift_card_alshaya_my_account_links_alter(array &$links) {
   // Do not proceed if Egift card is not enabled.
-  if (\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled() !== TRUE) {
+  if (!\Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled()) {
     return;
   }
 
   // Add My egift card link.
   $links['alshaya_my_egift_card'] = [
-    'text' => t('egift Cards'),
+    'text' => t('eGift Card', [], ['context' => 'egift']),
     'route' => 'alshaya_egift_card.my_egift_card',
     'weight' => 11,
   ];
