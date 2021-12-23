@@ -38,17 +38,17 @@ if (empty($_acsf_site_name) && $settings['env'] == 'local') {
     die();
   }
 
-  // We hardcode vsae site for travis Drupal installation.
-  // We must choose some site to test whether Drupal installation works
-  // properly. But it doesn't really matter too much which site we will install
-  // locally, as we only run very simplistic behat tests against it.
-  if ($env == 'travis') {
-    echo "Setting up vsae for travis environment.";
-    $_acsf_site_name = 'vsae';
-  }
-
   // Ensure hash salt is unique for each site.
   $settings['hash_salt'] = hash('sha256', $_acsf_site_name . $settings['env']);
+}
+
+// We hardcode vsae site for travis Drupal installation.
+// We must choose some site to test whether Drupal installation works
+// properly. But it doesn't really matter too much which site we will install
+// locally, as we only run very simplistic behat tests against it.
+if (empty($_acsf_site_name) && $env == 'travis') {
+  echo "Setting up vsae for travis environment.";
+  $_acsf_site_name = 'vsae';
 }
 
 require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
