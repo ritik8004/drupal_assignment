@@ -362,7 +362,7 @@ class WishlistButton extends React.Component {
     const { context, position, format } = this.props;
 
     // If product is already removed from wishlist page, button is not required.
-    if (!addedInWishList && context === 'wishlist-page') {
+    if (!addedInWishList && context === 'wishlist_page') {
       return null;
     }
 
