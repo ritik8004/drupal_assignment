@@ -13,6 +13,8 @@ export default class DeliveryOptions extends React.Component {
     this.state = {
       shippingMethods: null,
       panelContent: null,
+      isSddEdAvailableForProduct: false,
+      checkSddEdAvailabilityStatus: true,
     };
   }
 
@@ -55,41 +57,57 @@ export default class DeliveryOptions extends React.Component {
     const currentArea = getDeliveryAreaStorage();
     const attr = document.getElementsByClassName('sku-base-form');
     const productSku = variantSelected !== undefined ? variantSelected : attr[0].getAttribute('data-sku');
-    const { isSddEdAvailableForProduct } = this.state;
+    const { checkSddEdAvailabilityStatus } = this.state;
     if (productSku && productSku !== null) {
       showFullScreenLoader();
-      // Check if Product Supports SSD/ED by passing null currArea.
-      getCartShippingMethods(null, productSku).then(
-        (response) => {
-          if (response && response !== null) {
-            if (Array.isArray(response) && response.length !== 0) {
-              const shippingMethodObj = response.find(
-                (element) => element.product_sku === productSku,
-              );
-              // Set default shipping methods so that
-              // If product does not support SSD/ED.
-              // Default methods will be shown.
-              this.setState({
-                shippingMethods: shippingMethodObj.applicable_shipping_methods,
-              });
-              if (shippingMethodObj && Object.keys(shippingMethodObj).length !== 0) {
-                if (typeof (isSddEdAvailableForProduct) === 'undefined'
-                && checkShippingMethodsStatus(shippingMethodObj.applicable_shipping_methods)) {
+      // fetch product level SSD/ED status only on initial load
+      if (checkSddEdAvailabilityStatus) {
+        getCartShippingMethods(null, productSku).then(
+          (response) => {
+            if (response && response !== null) {
+              if (Array.isArray(response) && response.length !== 0) {
+                const shippingMethodObj = response.find(
+                  (element) => element.product_sku === productSku,
+                );
+                if (shippingMethodObj && Object.keys(shippingMethodObj).length !== 0) {
+                  // Set default shipping methods so that
+                  // If product does not support SSD/ED.
+                  // Default methods will be shown.
                   this.setState({
-                    isSddEdAvailableForProduct: true,
+                    shippingMethods: shippingMethodObj.applicable_shipping_methods,
                   });
-                  // if products supports SSD/ED
-                  // Show area based delivery Selection to user.
-                  if (currentArea !== null) {
-                    this.addShippingMethodWithArea(currentArea, productSku);
+                  // Check if SDD/ED is available on product level.
+                  if (checkShippingMethodsStatus(shippingMethodObj.applicable_shipping_methods)) {
+                    this.setState({
+                      isSddEdAvailableForProduct: true,
+                    });
+                    // if products supports SSD/ED
+                    // Show area based delivery Selection to user.
+                    if (currentArea !== null) {
+                      this.addShippingMethodWithArea(currentArea, productSku);
+                    }
+                  } else {
+                    // Don't show DeliveryAreaSelect if product does notsupport
+                    // SDD/ED on product level.
+                    this.setState({
+                      isSddEdAvailableForProduct: false,
+                    });
                   }
+                  // Setting check area availablity to false,
+                  // to stop product level API call if user only
+                  // Area change.
+                  this.setState({
+                    checkSddEdAvailabilityStatus: false,
+                  });
                 }
               }
             }
-          }
-          removeFullScreenLoader();
-        },
-      );
+          },
+        );
+      } else {
+        this.addShippingMethodWithArea(currentArea, productSku);
+      }
+      removeFullScreenLoader();
     }
   }
 
