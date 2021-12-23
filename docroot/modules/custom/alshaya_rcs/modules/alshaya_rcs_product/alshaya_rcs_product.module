@@ -949,7 +949,7 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   foreach ($build['#products'] as $key => &$item) {
     // Add name placeholder if the product type is simple.
     if ($item['type'] === 'simple') {
-      $item['name'] = '#rcs.orderDetails.name#';
+      $item['name'] = '#rcs.productItem.name#';
     }
     $item['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
     $parentSkus[$key] = $item['extension_attributes']['parent_product_sku'];
@@ -957,8 +957,8 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
     $itemSkus[$key] = $item['sku'];
     // Attribute placeholders.
     $item['attributes'][] = [
-      'label' => '#rcs.orderDetailAttribute.attr_label#',
-      'value' => '#rcs.orderDetailAttribute.attr_value#',
+      'label' => '#rcs.productItemAttribute.attr_label#',
+      'value' => '#rcs.productItemAttribute.attr_value#',
     ];
     // If 'applied_rule_ids' is set and price is 0, set the free gift label.
     // Using base_price instead of price here as the price is set as markup.
@@ -995,7 +995,7 @@ function _alshaya_rcs_product_get_order_teaser_image(array $item) {
   return [
     '#theme' => 'image',
     '#attributes' => [
-      'src' => '#rcs.orderDetails.image#',
+      'src' => '#rcs.productItem.image#',
       'title' => $item['name'],
       'alt' => $item['name'],
       'class' => ['rcs-image'],

@@ -65,7 +65,7 @@ const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   if (imagePlaceHolder.length > 0) {
     htmlElms = replaceIndividualPlaceHolder(
       imagePlaceHolder[0].outerHTML,
-      'orderDetails',
+      'productItem',
       // @todo To change the product image to teaser image.
       { 'image': product.image, 'name': product.title },
       settings,
@@ -75,7 +75,7 @@ const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   // Update the product name placeholder if present.
   htmlElms = replaceIndividualPlaceHolder(
     innerHtmlObj[0].innerHTML,
-    'orderDetails',
+    'productItem',
     { 'name': product.name },
     settings,
   );
@@ -88,7 +88,7 @@ const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
       // Get labelValue if attr_code is color.
       htmlElms += replaceIndividualPlaceHolder(
         attrPlaceHolder[0].outerHTML,
-        'orderDetailAttribute',
+        'productItemAttribute',
         { 'attr_label': item.label, 'attr_value': item.value },
         settings,
       );
