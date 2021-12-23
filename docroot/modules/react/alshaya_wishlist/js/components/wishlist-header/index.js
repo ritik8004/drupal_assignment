@@ -25,6 +25,7 @@ export default class WishlistHeader extends React.Component {
     this.state = {
       wishListItemCount,
       wishListItemData: null,
+      headerClass: 'header-wrapper',
     };
   }
 
@@ -160,8 +161,18 @@ export default class WishlistHeader extends React.Component {
     if (productInfo) {
       // Check if sticky wrapper is active on screen.
       const querySelector = document.querySelector('.filter-fixed-top .sticky-filter-wrapper');
-      if (querySelector !== null) {
-        return;
+      // If sticky header is not present, scroll user to header.
+      // Else show notification on sticky header.
+      if (querySelector === null) {
+        smoothScrollTo('#wishlist-header-wrapper');
+      } else {
+        this.setState({
+          headerClass: 'sticky-wrapper',
+        });
+      }
+
+      if (!isAnonymousUser()) {
+        this.loadWishlistFromBackend();
       }
 
       // Set timer for the wishlist notification.
@@ -176,7 +187,6 @@ export default class WishlistHeader extends React.Component {
         wishListItemCount,
         wishListItemData: productInfo || null,
       });
-      smoothScrollTo('#wishlist-header-wrapper');
     }
   };
 
@@ -193,10 +203,10 @@ export default class WishlistHeader extends React.Component {
   };
 
   render() {
-    const { wishListItemCount, wishListItemData } = this.state;
+    const { wishListItemCount, wishListItemData, headerClass } = this.state;
     const wishlistActiveClass = wishListItemCount !== 0 ? 'wishlist-active' : 'wishlist-inactive';
     return (
-      <div className="wishlist-header top-wrapper">
+      <div className={`wishlist-header ${headerClass}`}>
         <a className={`wishlist-link ${wishlistActiveClass}`} href={Drupal.url('wishlist')}>
           <span className="wishlist-icon">{Drupal.t('my @wishlist_label', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}</span>
         </a>
