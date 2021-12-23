@@ -360,8 +360,10 @@ export const getWishlistItemInStockStatus = (searchResult) => {
   // If the 'is_in_stock' key is set for stock info, we will use that.
   if (!isAnonymousUser()) {
     const skuInfo = getWishListDataForSku(searchResult.sku);
-    return (typeof skuInfo.inStock !== 'undefined'
+    if (skuInfo !== null) {
+      return (typeof skuInfo.inStock !== 'undefined'
       && skuInfo.inStock);
+    }
   }
 
   // For anonymous user we check stock status in given search result record.

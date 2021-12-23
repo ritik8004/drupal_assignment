@@ -12,6 +12,7 @@ import {
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { addInlineLoader, removeInlineLoader } from '../../../../js/utilities/showRemoveInlineLoader';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class WishlistButton extends React.Component {
   constructor(props) {
@@ -84,6 +85,7 @@ class WishlistButton extends React.Component {
    */
   handleProductRemovalFromWishlist = (sku) => {
     removeProductFromWishList(sku).then((response) => {
+      const { context } = this.props;
       if (typeof response.data !== 'undefined'
         && typeof response.data.status !== 'undefined'
         && response.data.status) {
@@ -107,8 +109,13 @@ class WishlistButton extends React.Component {
         // Set the product wishlist status.
         this.updateWishListStatus(false);
 
-        // Removing loader icon from wishlist button.
-        removeInlineLoader('.wishlist-loader .loading');
+        // For wishlist page, we remove full loader.
+        // For other layouts, we remove inline loader of button.
+        if (context === 'wishlist_page') {
+          removeFullScreenLoader();
+        } else {
+          removeInlineLoader('.wishlist-loader .loading');
+        }
       }
     });
   }
@@ -201,8 +208,9 @@ class WishlistButton extends React.Component {
     const {
       addedInWishList, skuCode, options, title,
     } = this.state;
-
-    if (e.currentTarget.classList.length > 0) {
+    const { context } = this.props;
+    // We don't need inline loader for buttons on wishlist page.
+    if (e.currentTarget.classList.length > 0 && context !== 'wishlist_page') {
       // Adding loader icon to wishlist button.
       e.currentTarget.classList.add('loading');
       addInlineLoader('.wishlist-loader .loading');
@@ -210,6 +218,10 @@ class WishlistButton extends React.Component {
 
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
+      // Add full screen loader for wishlist page.
+      if (context === 'wishlist_page') {
+        showFullScreenLoader();
+      }
       this.handleProductRemovalFromWishlist(skuCode);
 
       // don't execute further if product is removed from the wishlist.
@@ -348,6 +360,11 @@ class WishlistButton extends React.Component {
   render() {
     const { addedInWishList } = this.state;
     const { context, position, format } = this.props;
+
+    // If product is already removed from wishlist page, button is not required.
+    if (!addedInWishList && context === 'wishlist_page') {
+      return null;
+    }
 
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';

@@ -261,7 +261,7 @@ const Teaser = ({
         {/* Render the component if the page is wishlist listing page. */}
         <ConditionalView condition={isWishlistPage(extraInfo)}>
           <WishlistContainer
-            context="wishlist"
+            context="wishlist_page"
             position="top-right"
             sku={hit.sku}
             format="link"
