@@ -114,6 +114,10 @@ body.wishlist-enabled {
     top: 1.125rem;
     #{$right}: 1.875rem;
 
+    @include breakpoint($only-mobile) {
+      z-index: 1;
+    }
+
     @include breakpoint($only-tablet) {
       top: 0;
       #{$right}: 2.5rem;
@@ -160,6 +164,14 @@ body.wishlist-enabled {
 
       .wishlist-icon {
         display: block;
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-algolia-react-autocomplete.show-algolia-search-bar {
+        z-index: 2;
       }
     }
   }
