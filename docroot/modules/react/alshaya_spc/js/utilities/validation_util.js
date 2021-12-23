@@ -62,7 +62,7 @@ const validateCartResponse = (response) => {
     if (window.location.pathname.search(/checkout/i) >= 0) {
       let errorMessage = drupalSettings.global_error_message;
       // This happens when cart is locked.
-      if (errorCode === 500 && typeof response.error_message !== 'undefined') {
+      if (errorCode === 610 && typeof response.error_message !== 'undefined') {
         errorMessage = response.error_message;
       }
       dispatchCustomEvent('spcCheckoutMessageUpdate', {
