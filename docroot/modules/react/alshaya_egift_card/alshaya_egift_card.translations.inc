@@ -115,8 +115,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Link this card for faster payment next time',
         'context' => 'egift',
       ],
-      'Verification code sent to @email' => [
-        'ar' => 'Verification code sent to @email',
+      'Verification code is send to email address registered with the card number.' => [
+        'ar' => 'Verification code is send to email address registered with the card number.',
         'context' => 'egift',
       ],
       'Resend Code' => [

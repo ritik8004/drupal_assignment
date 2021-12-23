@@ -17,7 +17,7 @@ class AlshayaEgiftCardController extends ControllerBase {
   /**
    * Egiftcard Helper service object.
    *
-   * @var Drupal\alshaya_egift_card\Helper\EgiftCardHelper
+   * @var \Drupal\alshaya_egift_card\Helper\EgiftCardHelper
    */
   protected $egiftCardHelper;
 
@@ -31,7 +31,7 @@ class AlshayaEgiftCardController extends ControllerBase {
   /**
    * AlshayaEgiftCardController constructor.
    *
-   * @param Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
+   * @param \Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
    *   The egift card helper service.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
@@ -61,15 +61,11 @@ class AlshayaEgiftCardController extends ControllerBase {
     $config = $this->config('alshaya_egift_card.settings');
 
     return [
-      '#theme' => 'my_egift_card',
+      '#type' => 'markup',
+      '#markup' => '<div id="my-egift-card"></div>',
       '#attached' => [
         'library' => [
           'alshaya_egift_card/alshaya_egift_card_my_account',
-        ],
-        'drupalSettings' => [
-          'egiftCard' => [
-            'enabled' => $this->egiftCardHelper->isEgiftCardEnabled(),
-          ]
         ],
       ],
       '#cache' => [

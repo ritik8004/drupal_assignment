@@ -38,6 +38,9 @@ class EgiftCardNotLinked extends React.Component {
           this.setState({
             enableVerifyCode: true,
           });
+          document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {
+            '@email': drupalSettings.userDetails.userEmailID,
+          }, { context: 'egift' });
         }
         return true;
       });
@@ -51,7 +54,7 @@ class EgiftCardNotLinked extends React.Component {
     showFullScreenLoader();
     this.getOtpCode().then((response) => {
       if (typeof response !== 'undefined' && response) {
-        document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to @email', {
+        document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {
           '@email': drupalSettings.userDetails.userEmailID,
         }, { context: 'egift' });
       }
@@ -137,11 +140,13 @@ class EgiftCardNotLinked extends React.Component {
 
           // If response is true, otp is verified, link card to the customer.
           if (typeof response.data !== 'undefined' && response.data === true) {
-            // Link eGift card to customer.
+            // Get params for link card api.
             const params = {
               card_number: cardNumber,
+              customerId: drupalSettings.userDetails.customerId,
             };
 
+            // Call link eGift card API.
             callMagentoApi('/V1/egiftcard/link', 'POST', params).then((result) => {
               removeFullScreenLoader();
               // Check for error from handleResponse.

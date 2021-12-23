@@ -102,12 +102,6 @@ function alshaya_egift_card_theme() {
         'terms_block_content' => '',
       ],
     ],
-    'my_egift_card' => [
-      'variables' => [
-        'strings' => [],
-      ],
-      'template' => 'my-egift-card',
-    ],
   ];
 }
 
