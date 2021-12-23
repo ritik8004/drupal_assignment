@@ -69,7 +69,7 @@ class EgiftCardLinked extends React.Component {
           </div>
           <div className="egift-linked-title">{Drupal.t('My eGift Card', {}, { context: 'egift' })}</div>
           <div className="egift-linked-balance">
-            {Drupal.t('Balanace:')}
+            {Drupal.t('Balanace:', {}, { context: 'egift' })}
             <PriceElement amount={parseFloat(linkedCard.current_balance)} />
           </div>
           <button

@@ -37,7 +37,7 @@ class AlshayaMyEgiftCardBreadcrumb implements BreadcrumbBuilderInterface {
    * {@inheritdoc}
    */
   public function applies(RouteMatchInterface $route_match) {
-    return $route_match->getRouteName() == 'alshaya_egift_card.my_account';
+    return $route_match->getRouteName() == 'alshaya_egift_card.my_egift_card';
   }
 
   /**
@@ -48,7 +48,7 @@ class AlshayaMyEgiftCardBreadcrumb implements BreadcrumbBuilderInterface {
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     $user_id = $this->currentUser->id();
     $breadcrumb->addLink(Link::createFromRoute($this->t('My Account'), 'entity.user.canonical', ['user' => $user_id]));
-    $breadcrumb->addLink(Link::createFromRoute($this->t('Egift Card'), 'alshaya_egift_card.my_account'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Egift Card'), 'alshaya_egift_card.my_egift_card'));
     $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;
   }

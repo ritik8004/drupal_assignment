@@ -131,21 +131,19 @@ class EgiftCardNotLinked extends React.Component {
           if (typeof response.data !== 'undefined' && typeof response.data.error !== 'undefined' && response.data.error) {
             document.getElementById('egift-code-error').innerHTML = response.data.error_message;
             logger.error('Error while verifying otp. @error', { '@error': JSON.stringify(response.data) });
+            removeFullScreenLoader();
             return false;
           }
 
           // If response is true, otp is verified, link card to the customer.
           if (typeof response.data !== 'undefined' && response.data === true) {
-            // @todo update params for link card API.
+            // Link eGift card to customer.
             const params = {
-              accountInfo: {
-                cardNumber,
-                email: userEmailID,
-              },
+              card_number: cardNumber,
             };
 
-            // Link eGift card to customer.
             callMagentoApi('/V1/egiftcard/link', 'POST', params).then((result) => {
+              removeFullScreenLoader();
               // Check for error from handleResponse.
               if (typeof result.data !== 'undefined' && typeof result.data.error !== 'undefined' && result.data.error) {
                 document.getElementById('egift-code-error').innerHTML = result.data.error_message;
@@ -184,7 +182,7 @@ class EgiftCardNotLinked extends React.Component {
         </div>
         <div className="egift-link-card-instruction">
           {
-            Drupal.t('We’ll send a verification code to your email to verify and link eGift card', {}, { context: 'egift' })
+            Drupal.t('We\'ll send a verification code to your email to verify and link eGift card', {}, { context: 'egift' })
           }
         </div>
         <div id="resend-success" className="egift-resend-message" />
@@ -200,7 +198,7 @@ class EgiftCardNotLinked extends React.Component {
               name="egift-card-number"
               placeholder={Drupal.t('eGift Card Number', {}, { context: 'egift' })}
               className="egift-card-number"
-              disabled={enableVerifyCode}
+              readOnly={enableVerifyCode}
               onFocus={() => this.clearErrors()}
             />
             <div id="egift-card-number-error" className="error" />

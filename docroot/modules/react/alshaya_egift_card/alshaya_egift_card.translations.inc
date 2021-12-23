@@ -302,6 +302,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Expires on',
         'context' => 'egift',
       ],
+      'This card has expired.' => [
+        'ar' => 'This card has expired.',
+        'context' => 'egift',
+      ],
       'Card Type' => [
         'ar' => 'Card Type',
         'context' => 'egift',
@@ -317,7 +321,48 @@ function _alshaya_egift_card_translations() {
       'eGift Card' => [
         'ar' => 'eGift Card',
         'context' => 'egift',
-      ]
+      ],
+      'You dont have any eGift card linked to your account, link card to use it for your purchases' => [
+        'ar' => 'You dont have any eGift card linked to your account, link card to use it for your purchases',
+        'context' => 'egift',
+      ],
+      'We\'ll send a verification code to your email to verify and link eGift card' => [
+        'ar' => 'We\'ll send a verification code to your email to verify and link eGift card',
+        'context' => 'egift',
+      ],
+      'Get Code' => [
+        'ar' => 'Get Code',
+        'context' => 'egift',
+      ],
+      'Enter verification code' => [
+        'ar' => 'Enter verification code',
+        'context' => 'egift',
+      ],
+      'Didn\'t receive?' => [
+        'ar' => 'Didn\'t receive?',
+        'context' => 'egift',
+      ],
+      'Verify' => [
+        'ar' => 'Verify',
+        'context' => 'egift',
+      ],
+      'Please enter an eGift card number.' => [
+        'ar' => 'Please enter an eGift card number.',
+        'context' => 'egift',
+      ],
+      'Please enter a valid eGift card number.' => [
+        'ar' => 'Please enter a valid eGift card number.',
+        'context' => 'egift',
+      ],
+      'Please enter verification code.' => [
+        'ar' => 'Please enter verification code.',
+        'context' => 'egift',
+      ],
+      'Please enter a valid verification code.' => [
+        'ar' => 'Please enter a valid verification code.',
+        'context' => 'egift',
+      ],
+
     ],
   ];
 
