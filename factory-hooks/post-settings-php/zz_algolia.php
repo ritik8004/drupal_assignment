@@ -49,5 +49,7 @@ if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
   $config['alshaya_algolia_react.settings']['search_api_key'] = $settings['algolia_sandbox.settings']['search_api_key'];
 }
 
+echo "Custom debugging information";
 print_r($config);
 echo $algolia_env;
+echo $_acsf_site_name;
