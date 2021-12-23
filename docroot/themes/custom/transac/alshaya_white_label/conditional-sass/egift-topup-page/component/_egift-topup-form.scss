@@ -1,4 +1,57 @@
 #egift-topup-wrapper {
+  .card-details {
+    margin: 1.0625rem 0 1.5rem;
+
+    html[lang=en] & {
+      letter-spacing: 0.65px;
+    }
+
+    .egift-linked-card-balance {
+      margin-bottom: 0.5rem;
+
+      &-label {
+        margin-#{$right}: 0.3125rem;
+      }
+
+      .price-amount {
+        padding-#{$left}: 0.1875rem;
+      }
+
+      span {
+        display: inline-block;
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+      }
+    }
+  }
+
+  .subtitle-text {
+    @include breakpoint($tablet) {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .card-details-label {
+    margin-bottom: 1.625rem;
+  }
+
+  .egift-topup-card-number {
+    margin-bottom: 2.1875rem;
+    margin-top: 0.625rem;
+  }
+
+  .egift-input-textfield-wrapper {
+    @include breakpoint($upto-desktop) {
+      width: 100%;
+    }
+  }
+
+  .egift-for-field ~ .egift-input-textfield-wrapper {
+    .egift-topup-card-number {
+      margin-top: 2.1875rem;
+    }
+  }
+
   .action-buttons {
     button[disabled] {
       border-color: $egift-purchase-inactive-step-text;

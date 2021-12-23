@@ -58,13 +58,13 @@ export default class EgiftCardStepTwo extends React.Component {
         <ConditionalView condition={activate === true}>
           <div className="step-two-fields fadeInUp">
             <div
-              className="egift-for-field egift-purchase-input-field-container"
+              className="egift-for-field egift-input-field-container"
             >
-              <div className="egift-purchase-input-title">
+              <div className="egift-input-title">
                 {Drupal.t('Buying this gift for', {}, { context: 'egift' })}
               </div>
-              <div className="egift-purchase-input-field-wrapper">
-                <div className="egift-purchase-input-field-item">
+              <div className="egift-input-field-wrapper">
+                <div className="egift-input-field-item">
                   <input
                     defaultChecked={showMessageField}
                     type="radio"
@@ -77,7 +77,7 @@ export default class EgiftCardStepTwo extends React.Component {
                     {Drupal.t('Friends and family', {}, { context: 'egift' })}
                   </label>
                 </div>
-                <div className="egift-purchase-input-field-item">
+                <div className="egift-input-field-item">
                   <input
                     type="radio"
                     name="egift-for"
@@ -91,12 +91,12 @@ export default class EgiftCardStepTwo extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="recipient egift-purchase-input-field-container">
-              <div id="recipient-label" className="egift-purchase-input-title">
+            <div className="recipient egift-input-field-container">
+              <div id="recipient-label" className="egift-input-title">
                 {Drupal.t('Recipient Details', {}, { context: 'egift' })}
               </div>
-              <div className="egift-purchase-input-textfield-wrapper">
-                <div className="egift-purchase-input-textfield-item egift-purchase-input-textfield-name">
+              <div className="egift-input-textfield-wrapper">
+                <div className="egift-input-textfield-item egift-input-textfield-name">
                   <input
                     type="text"
                     name="egift-recipient-name"
@@ -106,7 +106,7 @@ export default class EgiftCardStepTwo extends React.Component {
                   <label>{Drupal.t('Name*', {}, { context: 'egift' })}</label>
                   <div id="fullname-error" className="error egift-error" />
                 </div>
-                <div className="egift-purchase-input-textfield-item egift-purchase-input-textfield-email">
+                <div className="egift-input-textfield-item egift-input-textfield-email">
                   <input
                     type="email"
                     name="egift-recipient-email"
@@ -119,12 +119,12 @@ export default class EgiftCardStepTwo extends React.Component {
               </div>
             </div>
             <ConditionalView condition={showMessageField === true}>
-              <div className="egift-message egift-purchase-input-field-container">
-                <div className="egift-purchase-input-title">
+              <div className="egift-message egift-input-field-container">
+                <div className="egift-input-title">
                   {Drupal.t('Write a message', {}, { context: 'egift' })}
                 </div>
-                <div className="egift-purchase-input-textfield-wrapper">
-                  <div className="egift-purchase-input-textfield-item">
+                <div className="egift-input-textfield-wrapper">
+                  <div className="egift-input-textfield-item">
                     <textarea
                       name="egift-message"
                       onBlur={(e) => this.handleEvent(e)}

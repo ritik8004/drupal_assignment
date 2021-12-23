@@ -21,15 +21,9 @@
     }
   }
 
-  .step-one-wrapper {
-    margin-top: 1.5rem;
-
-    @include breakpoint($tablet) {
-      display: flex;
-    }
-  }
-
   .step-two-wrapper {
+    border-bottom: 1px solid $egift-purchase-page-border;
+
     &:not(.active) {
       .step-title {
         color: $egift-purchase-inactive-step-text;
@@ -40,43 +34,10 @@
       margin-top: 2.5rem;
     }
 
-    .egift-purchase-input-title {
+    .egift-input-title {
       font-family: $alshaya-bold;
       font-size: 1rem;
       line-height: 1.25rem;
-    }
-  }
-
-  .egift-purchase-input-field-container {
-    margin-bottom: 2.25rem;
-
-    @include breakpoint($only-mobile) {
-      &:last-child {
-        @include breakpoint($only-mobile) {
-          margin-bottom: 1.25rem;
-        }
-
-        @include breakpoint($tablet) {
-          margin-bottom: 2.25rem;
-        }
-      }
-    }
-
-    @include breakpoint($tablet) {
-      display: flex;
-      margin-bottom: 3.125rem;
-    }
-
-    .egift-purchase-input-title {
-      @include breakpoint($only-mobile) {
-        margin-bottom: 1.375rem;
-      }
-
-      @include breakpoint($tablet) {
-        width: 11.625rem;
-        margin-#{$right}: 1.625rem;
-        flex-shrink: 0;
-      }
     }
   }
 
