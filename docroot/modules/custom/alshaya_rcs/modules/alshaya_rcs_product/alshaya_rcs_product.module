@@ -913,12 +913,13 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
   // Updated recent order build array.
   if (array_key_exists('recent_order', $build)) {
     $orders = $build['recent_order'];
+    $counter = 0;
     foreach ($orders as $id => $order) {
       // Iterate over each order item.
       foreach ($order['#order']['items'] as $key => $item) {
         $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
-        $parentSkus[] = $item['extension_attributes']['parent_product_sku'];
-        $itemSkus[] = $item['sku'];
+        array_push($parentSkus, $item['extension_attributes']['parent_product_sku']);
+        array_push($itemSkus, $item['sku']);
       }
     }
 
