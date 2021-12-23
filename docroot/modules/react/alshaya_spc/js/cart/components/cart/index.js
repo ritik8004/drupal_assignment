@@ -32,11 +32,12 @@ import DeliveryAreaSelect from '../delivery-area-select';
 import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
-import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isExpressDeliveryEnabled, checkAreaAvailabilityStatusOnCart } from '../../../../../js/utilities/expressDeliveryHelper';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -57,6 +58,11 @@ export default class Cart extends React.Component {
       cartShippingMethods: null,
       panelContent: null,
       auraDetails: null,
+      // To show/hide Area Select option based on SSD/ED availability.
+      showAreaAvailabilityStatusOnCart: false,
+      // if set to true, execution will check/recheck
+      // DeliveryAreaSelect availability on cart page.
+      checkShowAreaAvailabilityStatus: true,
     };
   }
 
@@ -146,6 +152,14 @@ export default class Cart extends React.Component {
           countAsPageview: false,
         });
       }
+      // Event to trigger to Show Delivery Area Select if express delivery enabled.
+      const { currentArea } = this.state;
+      // setting checkShowAreaAvailabilityStatus to true will do the recheck for
+      // whether to show DeliveryAreaSelect or not on cart page.
+      this.setState({
+        checkShowAreaAvailabilityStatus: true,
+      });
+      dispatchCustomEvent('displayShippingMethods', currentArea);
     }, false);
 
     // Event handles cart message update.
@@ -265,18 +279,66 @@ export default class Cart extends React.Component {
 
   displayShippingMethods = (event) => {
     const currentArea = event.detail;
+    const { checkShowAreaAvailabilityStatus } = this.state;
     showFullScreenLoader();
+    // fetch product level SSD/ED status only on initial load
+    // or when user removes any product.
+    if (checkShowAreaAvailabilityStatus) {
+      // check shipping Methods without area to get the
+      // Default shipping methods.
+      getCartShippingMethods(null).then(
+        (response) => {
+          if (response !== null) {
+            this.setState({
+              cartShippingMethods: response,
+            });
+            // Check if SDD/ED is available on product level.
+            if (!hasValue(response.error)
+              && response !== null
+              && checkAreaAvailabilityStatusOnCart(response)) {
+              this.setState({
+                showAreaAvailabilityStatusOnCart: true,
+              });
+              // fetch Area based shipping methods if current area
+              // is selected by user.
+              if (currentArea !== null) {
+                this.setCartShippingMethods(currentArea);
+              }
+            } else {
+              // Don't show DeliveryAreaSelect if no product supports
+              // SDD/ED on product level.
+              this.setState({
+                showAreaAvailabilityStatusOnCart: false,
+              });
+            }
+            // Setting check area availablity to false,
+            // to stop product level API call if user only
+            // Area change.
+            this.setState({
+              checkShowAreaAvailabilityStatus: false,
+            });
+          }
+        },
+      );
+    } else {
+      // set Cart shipping methods based on selected area.
+      this.setCartShippingMethods(currentArea);
+    }
+    removeFullScreenLoader();
+  }
+
+  setCartShippingMethods = (currentArea) => {
     getCartShippingMethods(currentArea).then(
-      (response) => {
-        if (response !== null) {
+      (responseWithArea) => {
+        if (responseWithArea !== null) {
           this.setState({
-            cartShippingMethods: response,
+            cartShippingMethods: responseWithArea,
           });
         }
-        removeFullScreenLoader();
       },
     );
   }
+
 
   // Adding panel for area list block.
   getPanelData = (data) => {
@@ -312,6 +374,7 @@ export default class Cart extends React.Component {
       panelContent,
       collectionCharge,
       auraDetails,
+      showAreaAvailabilityStatusOnCart,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -411,6 +474,7 @@ export default class Cart extends React.Component {
                   animationDelayValue="0.4s"
                   getPanelData={this.getPanelData}
                   removePanelData={this.removePanelData}
+                  showAreaAvailabilityStatusOnCart={showAreaAvailabilityStatusOnCart}
                 />
               </ConditionalView>
             </div>
