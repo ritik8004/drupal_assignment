@@ -25,10 +25,12 @@
         margin-bottom: 1.25rem;
         text-align: center;
 
-        &:hover {
-          color: $wishlist-button-txt;
-          background: $wishlist-magazine-pdp-button-hover-bg;
-          border-color: $wishlist-magazine-pdp-button-hover-border;
+        @include breakpoint($desktop) {
+          &:hover {
+            color: $wishlist-button-txt;
+            background: $wishlist-magazine-pdp-button-hover-bg;
+            border-color: $wishlist-magazine-pdp-button-hover-border;
+          }
         }
 
         @include breakpoint($only-tablet) {
