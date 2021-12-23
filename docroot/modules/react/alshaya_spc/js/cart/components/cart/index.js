@@ -60,6 +60,9 @@ export default class Cart extends React.Component {
       auraDetails: null,
       // To show/hide Area Select option based on SSD/ED availability.
       showAreaAvailabilityStatusOnCart: false,
+      // if set to true, execution will check/recheck
+      // DeliveryAreaSelect availability on cart page.
+      checkShowAreaAvailabilityStatus: true,
     };
   }
 
@@ -151,6 +154,11 @@ export default class Cart extends React.Component {
       }
       // Event to trigger to Show Delivery Area Select if express delivery enabled.
       const { currentArea } = this.state;
+      // setting checkShowAreaAvailabilityStatus to true will do the recheck for
+      // whether to show DeliveryAreaSelect or not on cart page.
+      this.setState({
+        checkShowAreaAvailabilityStatus: true,
+      });
       dispatchCustomEvent('displayShippingMethods', currentArea);
     }, false);
 
@@ -238,22 +246,6 @@ export default class Cart extends React.Component {
     this.updateCartMessage(type, message);
   };
 
-  cartItemsHasSDDOrEpressDelivery = () => {
-    // Check if SDD/ED not available for any product.
-    const { cartShippingMethods } = this.state;
-    if (!hasValue(cartShippingMethods.error)
-      && cartShippingMethods !== null
-      && checkAreaAvailabilityStatusOnCart(cartShippingMethods)) {
-      this.setState({
-        showAreaAvailabilityStatusOnCart: true,
-      });
-    } else {
-      this.setState({
-        showAreaAvailabilityStatusOnCart: false,
-      });
-    }
-  };
-
   updateCartMessage = (actionMessageType, actionMessage) => {
     this.setState({ actionMessageType, actionMessage });
     if (document.getElementsByClassName('spc-messages-container').length > 0) {
@@ -287,19 +279,57 @@ export default class Cart extends React.Component {
 
   displayShippingMethods = (event) => {
     const currentArea = event.detail;
+    const { checkShowAreaAvailabilityStatus } = this.state;
     showFullScreenLoader();
+    // fetch product level SSD/ED status only on initial load
+    // or when user removes any product.
+    if (checkShowAreaAvailabilityStatus) {
+      // check shipping Methods without area to get the
+      // Default shipping methods.
+      getCartShippingMethods(null).then(
+        (response) => {
+          if (response !== null) {
+            this.setState({
+              cartShippingMethods: response,
+            });
+            if (!hasValue(response.error)
+              && response !== null
+              && checkAreaAvailabilityStatusOnCart(response)) {
+              this.setState({
+                showAreaAvailabilityStatusOnCart: true,
+              });
+              if (currentArea !== null) {
+                this.setCartShippingMethods(currentArea);
+              }
+            } else {
+              this.setState({
+                showAreaAvailabilityStatusOnCart: false,
+              });
+            }
+            this.setState({
+              checkShowAreaAvailabilityStatus: false,
+            });
+          }
+        },
+      );
+    } else {
+      this.setCartShippingMethods(currentArea);
+    }
+    removeFullScreenLoader();
+  }
+
+  setCartShippingMethods = (currentArea) => {
     getCartShippingMethods(currentArea).then(
-      (response) => {
-        if (response !== null) {
+      (responseWithArea) => {
+        if (responseWithArea !== null) {
           this.setState({
-            cartShippingMethods: response,
+            cartShippingMethods: responseWithArea,
           });
         }
-        this.cartItemsHasSDDOrEpressDelivery();
-        removeFullScreenLoader();
       },
     );
   }
+
 
   // Adding panel for area list block.
   getPanelData = (data) => {
