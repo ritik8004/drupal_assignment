@@ -292,20 +292,28 @@ export default class Cart extends React.Component {
             this.setState({
               cartShippingMethods: response,
             });
+            // Check if SDD/ED is available on product level.
             if (!hasValue(response.error)
               && response !== null
               && checkAreaAvailabilityStatusOnCart(response)) {
               this.setState({
                 showAreaAvailabilityStatusOnCart: true,
               });
+              // fetch Area based shipping methods if current area
+              // is selected by user.
               if (currentArea !== null) {
                 this.setCartShippingMethods(currentArea);
               }
             } else {
+              // Don't show DeliveryAreaSelect if no product supports
+              // SDD/ED on product level.
               this.setState({
                 showAreaAvailabilityStatusOnCart: false,
               });
             }
+            // Setting check area availablity to false,
+            // to stop product level API call if user only
+            // Area change.
             this.setState({
               checkShowAreaAvailabilityStatus: false,
             });
@@ -313,6 +321,7 @@ export default class Cart extends React.Component {
         },
       );
     } else {
+      // set Cart shipping methods based on selected area.
       this.setCartShippingMethods(currentArea);
     }
     removeFullScreenLoader();
