@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.advanced_page.field_use_as_department_page
     - field.field.node.advanced_page.field_use_as_egift_landing_page
     - node.type.advanced_page
-    - workflows.workflow.alshaya_workflow
   module:
     - content_moderation
     - field_group
