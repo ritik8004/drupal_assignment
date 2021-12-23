@@ -115,8 +115,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Link this card for faster payment next time',
         'context' => 'egift',
       ],
-      'Verification code sent to @email' => [
-        'ar' => 'Verification code sent to @email',
+      'Verification code is send to email address registered with the card number.' => [
+        'ar' => 'Verification code is send to email address registered with the card number.',
         'context' => 'egift',
       ],
       'Resend Code' => [
@@ -251,10 +251,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
         'context' => 'egift',
       ],
-      'Pay @currencyCode @amount using another payment method to complete purchase' => [
-        'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
-        'context' => 'egift',
-      ],
       'Pay using egift card (Available Balance 0)' => [
         'ar' => 'Pay using egift card (Available Balance 0)',
         'context' => 'egift',
@@ -291,6 +287,82 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Card Details',
         'context' => 'egift',
       ],
+      'My eGift Card' => [
+        'ar' => 'My eGift Card',
+      ],
+      'Balanace:' => [
+        'ar' => 'Balanace:',
+        'context' => 'egift',
+      ],
+      'Gift Card number' => [
+        'ar' => 'Gift Card number',
+        'context' => 'egift',
+      ],
+      'Expires on' => [
+        'ar' => 'Expires on',
+        'context' => 'egift',
+      ],
+      'This card has expired.' => [
+        'ar' => 'This card has expired.',
+        'context' => 'egift',
+      ],
+      'Card Type' => [
+        'ar' => 'Card Type',
+        'context' => 'egift',
+      ],
+      'Top up' => [
+        'ar' => 'Top up',
+        'context' => 'egift',
+      ],
+      'Link my egift card' => [
+        'ar' => 'Link my egift card',
+        'context' => 'egift',
+      ],
+      'eGift Card' => [
+        'ar' => 'eGift Card',
+        'context' => 'egift',
+      ],
+      'You dont have any eGift card linked to your account, link card to use it for your purchases' => [
+        'ar' => 'You dont have any eGift card linked to your account, link card to use it for your purchases',
+        'context' => 'egift',
+      ],
+      'We\'ll send a verification code to your email to verify and link eGift card' => [
+        'ar' => 'We\'ll send a verification code to your email to verify and link eGift card',
+        'context' => 'egift',
+      ],
+      'Get Code' => [
+        'ar' => 'Get Code',
+        'context' => 'egift',
+      ],
+      'Enter verification code' => [
+        'ar' => 'Enter verification code',
+        'context' => 'egift',
+      ],
+      'Didn\'t receive?' => [
+        'ar' => 'Didn\'t receive?',
+        'context' => 'egift',
+      ],
+      'Verify' => [
+        'ar' => 'Verify',
+        'context' => 'egift',
+      ],
+      'Please enter an eGift card number.' => [
+        'ar' => 'Please enter an eGift card number.',
+        'context' => 'egift',
+      ],
+      'Please enter a valid eGift card number.' => [
+        'ar' => 'Please enter a valid eGift card number.',
+        'context' => 'egift',
+      ],
+      'Please enter verification code.' => [
+        'ar' => 'Please enter verification code.',
+        'context' => 'egift',
+      ],
+      'Please enter a valid verification code.' => [
+        'ar' => 'Please enter a valid verification code.',
+        'context' => 'egift',
+      ],
+
     ],
   ];
 
