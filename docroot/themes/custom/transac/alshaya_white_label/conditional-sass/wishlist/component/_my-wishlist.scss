@@ -114,6 +114,8 @@
     background-color: $wishlist-button-bg;
     border: none;
     color: $wishlist-button-txt;
+    margin: 1.5rem 0 0;
+    width: 100%;
 
     &:hover {
       background-color: $my-wishlist-share-modal-hover-bg;
@@ -121,6 +123,25 @@
 
     @include breakpoint($only-mobile) {
       padding: 0.5rem;
+    }
+  }
+
+  .oos-text-container {
+    .oos-text {
+      margin: 1.5rem 0 0;
+      width: 100%;
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+      font-family: $alshaya-bold;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: $wishlist-oos;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid $wishlist-oos-border;
+      cursor: pointer;
     }
   }
 
@@ -133,7 +154,6 @@
   .in-wishlist {
     .wishlist-link {
       padding-top: 0.625rem;
-      width: calc(100% - 2.5rem);
 
       &:hover {
         text-decoration: underline;
