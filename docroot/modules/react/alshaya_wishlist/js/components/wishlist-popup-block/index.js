@@ -51,6 +51,8 @@ export default class WishlistPopupBlock extends React.Component {
                     options: item.options,
                     // We need this for removing the item from the wishlist.
                     wishlistItemId: item.wishlist_item_id,
+                    // OOS status of product in backend.
+                    inStock: item.is_in_stock,
                   };
                 });
 
