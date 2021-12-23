@@ -26,18 +26,18 @@ content:
   body:
     label: hidden
     type: text_summary_or_trimmed
-    weight: 2
+    weight: 101
     settings:
       trim_length: 600
     third_party_settings: {  }
     region: content
   links:
-    weight: 1
+    weight: 100
     region: content
     settings: {  }
     third_party_settings: {  }
   sharethis:
-    weight: 0
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

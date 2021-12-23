@@ -17,32 +17,23 @@ use Symfony\Component\Yaml\Yaml;
  */
 function alshaya_paragraphs_update_8130() {
   $configs = [
-    'paragraphs.paragraphs_type.accordion_paragraph.yml',
-    'paragraphs.paragraphs_type.multiple_row_multiple_col.yml',
-    'field.storage.paragraph.field_group_title.yml',
-    'field.storage.paragraph.field_title_and_content.yml',
-    'field.storage.paragraph.field_image_title_subtitle.yml',
-    'field.storage.paragraph.field_button_link.yml',
-    'field.field.paragraph.accordion_paragraph.field_title_and_content.yml',
-    'field.field.paragraph.accordion_paragraph.field_group_title.yml',
-    'field.field.paragraph.multiple_row_multiple_col.field_group_title.yml',
-    'field.field.paragraph.multiple_row_multiple_col.field_image_title_subtitle.yml',
-    'field.field.paragraph.1_row_2_col.field_1_row_2_col.yml',
-    'core.entity_view_display.paragraph.accordion_paragraph.default.yml',
-    'core.entity_form_display.paragraph.accordion_paragraph.default.yml',
-    'core.entity_view_display.paragraph.multiple_row_multiple_col.default.yml',
-    'core.entity_form_display.paragraph.multiple_row_multiple_col.default.yml',
+    'paragraphs.paragraphs_type.accordion_paragraph',
+    'paragraphs.paragraphs_type.multiple_row_multiple_col',
+    'field.storage.paragraph.field_group_title',
+    'field.storage.paragraph.field_title_and_content',
+    'field.storage.paragraph.field_image_title_subtitle',
+    'field.storage.paragraph.field_button_link',
+    'field.field.paragraph.accordion_paragraph.field_title_and_content',
+    'field.field.paragraph.accordion_paragraph.field_group_title',
+    'field.field.paragraph.multiple_row_multiple_col.field_group_title',
+    'field.field.paragraph.multiple_row_multiple_col.field_image_title_subtitle',
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col',
+    'core.entity_view_display.paragraph.accordion_paragraph.default',
+    'core.entity_form_display.paragraph.accordion_paragraph.default',
+    'core.entity_view_display.paragraph.multiple_row_multiple_col.default',
+    'core.entity_form_display.paragraph.multiple_row_multiple_col.default',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-  $configs = [
-    'field.storage.node.field_use_as_egift_landing_page.yml',
-    'field.field.node.advanced_page.field_promo_blocks.yml',
-    'field.field.node.advanced_page.field_use_as_egift_landing_page.yml',
-    'core.entity_form_display.node.advanced_page.default.yml',
-    'core.entity_view_display.node.advanced_page.default.yml',
-    'core.entity_view_display.node.advanced_page.teaser.yml',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_advanced_page');
 }
 
 /**
