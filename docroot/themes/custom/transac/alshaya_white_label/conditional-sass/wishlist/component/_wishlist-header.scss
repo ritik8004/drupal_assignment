@@ -150,6 +150,7 @@ body.wishlist-enabled {
         transform: translateY(-50%);
         z-index: 11;
         #{$right}: 1.5rem;
+        min-width: 16.5rem;
 
         @include breakpoint($desktop) {
           &:last-child {
