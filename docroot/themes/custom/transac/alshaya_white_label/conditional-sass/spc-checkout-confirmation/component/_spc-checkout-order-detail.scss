@@ -21,6 +21,7 @@
 
     .spc-value {
       color: $spc-checkout-payment-method-desc;
+      text-align: $right;
 
       &.phone-number {
         html[lang=ar] & {
