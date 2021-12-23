@@ -35,6 +35,9 @@ class WishlistProductList extends React.Component {
       // This will execute when wishlist loaded from the backend
       // and page loads before.
       document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
+
+      // Update wishlist items after any product is removed.
+      document.addEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
     }
   }
 
