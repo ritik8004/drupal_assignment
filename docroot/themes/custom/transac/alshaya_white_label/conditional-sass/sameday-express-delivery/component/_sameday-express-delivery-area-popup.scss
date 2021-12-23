@@ -352,9 +352,9 @@ body.overlay-delivery-area {
       &::before {
         content: '';
         position: relative;
-        width: 24px;
+        width: 1.5rem;
         height: 1.25rem;
-        background: #fff;
+        background: $primary_bg;
         display: inline-block;
         border-radius: 100%;
         border: 1px solid $primary_radiobtn_empty;
