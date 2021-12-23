@@ -38,9 +38,7 @@ class EgiftCardNotLinked extends React.Component {
           this.setState({
             enableVerifyCode: true,
           });
-          document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {
-            '@email': drupalSettings.userDetails.userEmailID,
-          }, { context: 'egift' });
+          document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {}, { context: 'egift' });
         }
         return true;
       });
@@ -54,9 +52,7 @@ class EgiftCardNotLinked extends React.Component {
     showFullScreenLoader();
     this.getOtpCode().then((response) => {
       if (typeof response !== 'undefined' && response) {
-        document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {
-          '@email': drupalSettings.userDetails.userEmailID,
-        }, { context: 'egift' });
+        document.getElementById('resend-success').innerHTML = Drupal.t('Verification code is send to email address registered with the card number.', {}, { context: 'egift' });
       }
     });
   }
