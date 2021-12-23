@@ -62,7 +62,7 @@
 
     .price-currency {
       @include breakpoint($only-mobile) {
-        margin-#{$right}: 0.0625rem;
+        margin-#{$right}: 0;
       }
     }
   }
