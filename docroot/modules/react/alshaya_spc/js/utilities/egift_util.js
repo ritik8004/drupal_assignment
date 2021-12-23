@@ -193,6 +193,34 @@ export const updatePriceSummaryBlock = () => {
 };
 
 /**
+ * Checks if cart contains atleast a single normal product.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @return {boolean}
+ *   true if it contain's atleast one normal product else false.
+ */
+export const cartContainsAnyNormalProduct = (cart) => {
+  // A flag to keep track of the non-virtual products.
+  let isNonVirtual = false;
+  Object.values(cart.items).forEach((item) => {
+    // Return if we have already marked a non virtual product.
+    if (isNonVirtual || !hasValue(item)) {
+      return;
+    }
+    // If there is no product type for the cart item then it's non virtual
+    // product.
+    if ((hasValue(item.product_type) && item.product_type !== 'virtual')
+      || (Object.prototype.hasOwnProperty.call(item, 'isEgiftCard') && !item.isEgiftCard)) {
+      isNonVirtual = true;
+    }
+  });
+
+  return isNonVirtual;
+};
+
+/**
  * Checks if cart has only egift card products or other products as well.
  *
  * @param {object} cart
@@ -206,22 +234,8 @@ export const cartContainsOnlyVirtualProduct = (cart) => {
   if (!isEgiftCardEnabled()) {
     return false;
   }
-  // A flag to keep track of the non-virtual products.
-  let isNonVirtual = false;
-  Object.values(cart.items).forEach((item) => {
-    // Return if we have already marked a non virtual product.
-    if (isNonVirtual) {
-      return;
-    }
-    // If there is no product type for the cart item then it's non virtual
-    // product.
-    if ((hasValue(item.product_type) && item.product_type !== 'virtual')
-      || (hasValue(item.isEgiftCard) && !item.isEgiftCard)) {
-      isNonVirtual = true;
-    }
-  });
 
-  return !isNonVirtual;
+  return !cartContainsAnyNormalProduct(cart);
 };
 
 /**
