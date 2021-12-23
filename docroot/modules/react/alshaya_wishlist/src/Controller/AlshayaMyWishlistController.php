@@ -122,7 +122,6 @@ class AlshayaMyWishlistController extends ControllerBase {
 
     return [
       '#theme' => 'my_wishlist',
-      '#strings' => _alshaya_wishlist_static_strings(),
       '#attached' => [
         'drupalSettings' => [
           'wishlist' => $settings,

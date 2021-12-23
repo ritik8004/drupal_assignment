@@ -3,5 +3,3 @@ type: module
 description: 'Provides the Alshaya Product WishList feature.'
 package: 'Alshaya'
 core_version_requirement: ^8.8 || ^9
-dependencies:
-  - alshaya_algolia_react:alshaya_algolia_react

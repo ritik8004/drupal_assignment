@@ -70,6 +70,25 @@ export const isProductExistInWishList = (productSku) => {
 };
 
 /**
+ * Return the sku info from wishlist if available.
+ *
+ * @returns {string}
+ *  Sku to get information for.
+ */
+export const getWishListDataForSku = (sku) => {
+  // Get existing wishlist data from storage.
+  const wishListItems = getWishListData();
+
+  // Return null if product sku is not in existing data.
+  if (!wishListItems
+    || !Object.prototype.hasOwnProperty.call(wishListItems, sku)) {
+    return null;
+  }
+
+  return wishListItems[sku];
+};
+
+/**
  * Add wishlist information in the local storage.
  *
  * @param {object} wishListData
@@ -329,4 +348,27 @@ export const getWishlistShareLink = () => {
   // @todo: reduce the length of the URL.
   const shareItemsParams = btoa(JSON.stringify(wishListItems));
   return Drupal.url.toAbsolute(`wishlist/share?data=${shareItemsParams}`);
+};
+
+/**
+ * Helper function to check the stock status of the product with search
+ * results and if user logged in then we will check in the local storage
+ * wishlist data as well for backend stock status.
+ */
+export const getWishlistItemInStockStatus = (searchResult) => {
+  // For logged in users we will check in wishlist local storage data.
+  // If the 'is_in_stock' key is set for stock info, we will use that.
+  if (!isAnonymousUser()) {
+    const skuInfo = getWishListDataForSku(searchResult.sku);
+    return (typeof skuInfo.inStock !== 'undefined'
+      && skuInfo.inStock);
+  }
+
+  // For anonymous user we check stock status in given search result record.
+  if (typeof searchResult.stock !== 'undefined') {
+    return (searchResult.stock !== 0);
+  }
+
+  // Return false by default.
+  return true;
 };

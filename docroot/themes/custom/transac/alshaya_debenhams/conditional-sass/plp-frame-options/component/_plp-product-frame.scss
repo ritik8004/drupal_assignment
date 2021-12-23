@@ -20,12 +20,7 @@
         }
 
         .special-price-block {
-          html[lang=ar] & {
-            height: 3rem;
-          }
-
           @include breakpoint($only-mobile) {
-            height: 3rem;
             line-height: 1.3;
           }
 

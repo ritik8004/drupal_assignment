@@ -55,17 +55,52 @@ export default class DeliveryOptions extends React.Component {
     const currentArea = getDeliveryAreaStorage();
     const attr = document.getElementsByClassName('sku-base-form');
     const productSku = variantSelected !== undefined ? variantSelected : attr[0].getAttribute('data-sku');
+    const { isSddEdAvailableForProduct } = this.state;
     if (productSku && productSku !== null) {
       showFullScreenLoader();
-      getCartShippingMethods(currentArea, productSku).then(
+      // Check if Product Supports SSD/ED by passing null currArea.
+      getCartShippingMethods(null, productSku).then(
         (response) => {
           if (response && response !== null) {
-            this.checkShippingMethods(response, productSku);
+            if (Array.isArray(response) && response.length !== 0) {
+              const shippingMethodObj = response.find(
+                (element) => element.product_sku === productSku,
+              );
+              // Set default shipping methods so that
+              // If product does not support SSD/ED.
+              // Default methods will be shown.
+              this.setState({
+                shippingMethods: shippingMethodObj.applicable_shipping_methods,
+              });
+              if (shippingMethodObj && Object.keys(shippingMethodObj).length !== 0) {
+                if (typeof (isSddEdAvailableForProduct) === 'undefined'
+                && checkShippingMethodsStatus(shippingMethodObj.applicable_shipping_methods)) {
+                  this.setState({
+                    isSddEdAvailableForProduct: true,
+                  });
+                  // if products supports SSD/ED
+                  // Show area based delivery Selection to user.
+                  if (currentArea !== null) {
+                    this.addShippingMethodWithArea(currentArea, productSku);
+                  }
+                }
+              }
+            }
           }
           removeFullScreenLoader();
         },
       );
     }
+  }
+
+  addShippingMethodWithArea = (currentArea, productSku) => {
+    getCartShippingMethods(currentArea, productSku).then(
+      (responseWithArea) => {
+        if (responseWithArea && responseWithArea !== null) {
+          this.checkShippingMethods(responseWithArea, productSku);
+        }
+      },
+    );
   }
 
   getPanelData = (data) => {
@@ -83,17 +118,13 @@ export default class DeliveryOptions extends React.Component {
   };
 
   render() {
-    const { shippingMethods, panelContent } = this.state;
+    const { shippingMethods, panelContent, isSddEdAvailableForProduct } = this.state;
     // If expressDelivery is not enabled we exit.
     if (isExpressDeliveryEnabled() === false) {
       return null;
     }
     if (shippingMethods === null) {
       return null;
-    }
-    let showCheckAreaAvailability = false;
-    if (shippingMethods !== null && checkShippingMethodsStatus(shippingMethods)) {
-      showCheckAreaAvailability = true;
     }
 
     return (
@@ -104,7 +135,7 @@ export default class DeliveryOptions extends React.Component {
         <PdpSelectArea
           getPanelData={this.getPanelData}
           removePanelData={this.removePanelData}
-          showCheckAreaAvailability={showCheckAreaAvailability}
+          showCheckAreaAvailability={isSddEdAvailableForProduct}
         />
         <div className="select-area-popup-wrapper">
           <SelectAreaPanel
