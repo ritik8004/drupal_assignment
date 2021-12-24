@@ -145,7 +145,7 @@ export default class CartItem extends React.Component {
         document.dispatchEvent(eventCart);
 
         // Update cart shipping methods on cart update.
-        if (isExpressDeliveryEnabled()) {
+        if (isExpressDeliveryEnabled() && action === 'remove item') {
           const currentArea = getDeliveryAreaStorage();
           dispatchCustomEvent('displayShippingMethods', currentArea);
         }
@@ -159,6 +159,7 @@ export default class CartItem extends React.Component {
         if (triggerRecommendedRefresh) {
           dispatchCustomEvent('spcRefreshCartRecommendation', {
             items: cartResult.items,
+            triggerRecommendedRefresh,
           });
         }
 

@@ -5,6 +5,8 @@ import SectionTitle from '../../../utilities/section-title';
 import { getRecommendedProducts } from '../../../utilities/checkout_util';
 import isRTL from '../../../utilities/rtl';
 import dispatchCustomEvent from '../../../utilities/events';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 // Use smoothscroll to fill for Safari and IE,
 // Otherwise while scrollIntoView() is supported by all,
 // Smooth transition is not supported apart from Chrome & FF.
@@ -73,7 +75,14 @@ export default class CartRecommendedProducts extends React.Component {
   };
 
   spcRefreshCartRecommendation = (event) => {
-    const { items } = event.detail;
+    const { items, triggerRecommendedRefresh } = event.detail;
+    if (!triggerRecommendedRefresh) {
+      // Update cart shipping methods on recommendation refresh.
+      if (isExpressDeliveryEnabled()) {
+        const currentArea = getDeliveryAreaStorage();
+        dispatchCustomEvent('displayShippingMethods', currentArea);
+      }
+    }
     this.spcRecommendationHandler(items);
   };
 
