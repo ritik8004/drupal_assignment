@@ -73,6 +73,7 @@ export default createConnector({
         refine: function refine() {},
         refinePrevious: function refinePrevious() {},
         refineNext: function refineNext() {},
+        nbHits: 0,
       };
     }
 
@@ -146,6 +147,7 @@ export default createConnector({
       hasMore,
       refinePrevious,
       refineNext,
+      nbHits: results.nbHits,
     };
   },
   getSearchParameters: function getSearchParameters(searchParameters, props, searchState) {
