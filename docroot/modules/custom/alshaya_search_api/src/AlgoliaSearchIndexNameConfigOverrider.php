@@ -26,6 +26,9 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
     global $_acsf_site_name;
 
     $algolia_env = Settings::get('env');
+    // Use local env for travis.
+    $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
+
     $algolia_settings = Settings::get('algolia_sandbox.settings');
 
     // We want to use Algolia index name with 01 prefix all the time.
