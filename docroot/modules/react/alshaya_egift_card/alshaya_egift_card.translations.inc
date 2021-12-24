@@ -358,10 +358,7 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Please enter a valid verification code.',
         'context' => 'egift',
       ],
-      'Something went wrong please try again later.' => [
-        'ar' => 'Something went wrong please try again later.',
-        'context' => 'egift',
-      ],
+
     ],
   ];
 
