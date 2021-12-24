@@ -27,7 +27,7 @@
         "drupal/amptheme": "^3.0",
         "drupal/autologout": "^1.0",
         "drupal/back_to_top": "^1.1",
-        "drupal/better_exposed_filters": "^5.0@beta",
+        "drupal/better_exposed_filters": "^5.0",
         "drupal/block_field": "^1.0@alpha",
         "drupal/captcha": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
@@ -223,8 +223,8 @@
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
-            "drupal/better_exposed_filter": {
-                "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
+            "drupal/better_exposed_filters": {
+                "Version 5 should enable jQuery dependencies": "https://www.drupal.org/files/issues/2021-12-24/enable_dependencies-3193305-5.patch"
             },
             "drupal/core": {
                 "Showing taxonomy value in default language only after using in contextual filter in views": "https://www.drupal.org/files/issues/2020-09-26/3084138-16.patch",
