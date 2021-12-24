@@ -23,6 +23,8 @@ import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
 import AdvantageCardExcludedItem from '../advantage-card';
 import CartShippingMethods from '../cart-shipping-methods';
+import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -142,6 +144,12 @@ export default class CartItem extends React.Component {
         const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventCart);
 
+        // Update cart shipping methods on cart update.
+        if (isExpressDeliveryEnabled() && action === 'remove item') {
+          const currentArea = getDeliveryAreaStorage();
+          dispatchCustomEvent('displayShippingMethods', currentArea);
+        }
+
         // Trigger message.
         if (messageInfo !== null) {
           dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
@@ -151,6 +159,7 @@ export default class CartItem extends React.Component {
         if (triggerRecommendedRefresh) {
           dispatchCustomEvent('spcRefreshCartRecommendation', {
             items: cartResult.items,
+            triggerRecommendedRefresh,
           });
         }
 
