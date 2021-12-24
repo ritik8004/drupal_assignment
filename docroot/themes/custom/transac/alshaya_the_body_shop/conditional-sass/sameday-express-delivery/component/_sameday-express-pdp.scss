@@ -1,0 +1,15 @@
+.acq-content-product {
+  .express-delivery-title {
+    border-top: none;
+  }
+
+  .express-delivery-title-wrapper {
+    &.ui-state-active {
+      .c-accordion__title {
+        &::after {
+          transform: translate(0, -50%);
+        }
+      }
+    }
+  }
+}

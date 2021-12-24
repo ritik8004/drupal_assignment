@@ -1,0 +1,5 @@
+name: Machine Name Widget
+type: module
+description: Provides a patch to core until Issue 2685749 is committed.
+core_version_requirement: '^8.7.7 || ^9'
+package: Field types

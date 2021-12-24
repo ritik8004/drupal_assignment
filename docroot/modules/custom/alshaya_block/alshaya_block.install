@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Alshaya block install file.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updates machine_name field in block_content bundles.
+ */
+function alshaya_block_update_8101() {
+  // Fetching bundles under block_content entity.
+  $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo('block_content');
+  foreach ($bundles as $bundleId => $bundleInfo) {
+    $config = \Drupal::service('config.factory')->getEditable('core.entity_form_display.block_content.' . $bundleId . '.default');
+    $content = $config->get('content');
+    if (isset($content['machine_name']['settings'])) {
+      $content['machine_name']['settings'] = [
+        'source_field' => 'info',
+        'disable_on_edit' => TRUE,
+        'replace_pattern' => '[^a-z0-9_]+',
+        'replace' => '_',
+      ];
+    }
+    $config->set('content', $content)->save();
+  }
+  drupal_flush_all_caches();
+}
