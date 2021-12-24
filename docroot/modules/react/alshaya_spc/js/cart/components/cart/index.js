@@ -37,7 +37,6 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
-import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -153,13 +152,11 @@ export default class Cart extends React.Component {
         });
       }
       // Event to trigger to Show Delivery Area Select if express delivery enabled.
-      const { currentArea } = this.state;
       // setting checkShowAreaAvailabilityStatus to true will do the recheck for
       // whether to show DeliveryAreaSelect or not on cart page.
       this.setState({
         checkShowAreaAvailabilityStatus: true,
       });
-      dispatchCustomEvent('displayShippingMethods', currentArea);
     }, false);
 
     // Event handles cart message update.
