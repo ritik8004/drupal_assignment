@@ -32,7 +32,7 @@ function _alshaya_aura_react_translations() {
       'ar' => 'يرجى تنزيل تطبيق أورا وتزويدنا ببعض التفاصيل الإضافية وذلك لاستخدام النقاط عبر أونلاين.',
     ],
     'An Aura card is already associated with your email address. Link your card in just one click.' => [
-      'ar' => 'يُمكنك ربط بطاقة أورا ببريدك الإلكتروني من خلال ضغطة زر واحدة.',
+      'ar' => 'يمكنك ربط برنامج المكافآت أورا بعنوان بريدكالإلكتروني بضغطة واحدة فقط',
     ],
     'Do you want to link now?' => [
       'ar' => 'هل ترغب في الربط الآن؟',
@@ -95,7 +95,7 @@ function _alshaya_aura_react_translations() {
       'ar' => 'تأكيد',
     ],
     'By clicking submit, you agree to have read and accepted our' => [
-      'ar' => 'بالضغط على زر إرسال، فأنكم توافقون على الخاصة بنا',
+      'ar' => 'عند الضغط على إرسال، أنت تقر بأنك قرأت ووافقت على',
     ],
     'Terms & Conditions' => [
       'ar' => 'البنود و الظروف',
@@ -200,7 +200,7 @@ function _alshaya_aura_react_translations() {
       'ar' => 'رقم AURA غير صحيح. يرجى إعادة إدخال رقم بطاقة AURA صحيح.',
     ],
     'Your points for this purchase will be added to your account.' => [
-      'ar' => 'نقاط عملية الشراء الحالية سيتم إضافتها إلى حسابك',
+      'ar' => 'سيتم إضافة النقاط الخاصة بك إلى هذاالحساب.',
     ],
     'Full name' => [
       'ar' => 'الاسم بالكامل',
@@ -390,6 +390,9 @@ function _alshaya_aura_react_translations() {
     ],
     'To see your offers and rewards, visit your AURA MENA app or' => [
       'ar' => 'لمعرفة العروض والمكافآت الخاصة بك، قم بزيارة تطبيق أورا أو',
+    ],
+    'You are here' => [
+      'ar' => 'أنت هنا',
     ],
   ];
 }

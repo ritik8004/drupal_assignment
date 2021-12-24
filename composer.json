@@ -28,7 +28,6 @@
         "drupal/autologout": "^1.0",
         "drupal/back_to_top": "^1.1",
         "drupal/better_exposed_filters": "^5.0@beta",
-        "drupal/block_content_machine_name": "^1.6",
         "drupal/block_field": "^1.0@alpha",
         "drupal/captcha": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
@@ -264,7 +263,8 @@
                 "CORE-34870 - Log JS and CSS aggregated files creation": "patches/core/logs_for_aggregated_css_and_js_dump.patch",
                 "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1",
                 "Add getoriginal method for languageConfigOverride": "https://www.drupal.org/files/issues/2021-11-10/getOriginal-method-for-languageConfigOverride-3248728-3.patch",
-                "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch"
+                "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch",
+                "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2020-10-01/2685749-85.patch"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
@@ -326,9 +326,6 @@
             },
             "drupal/metatag": {
                 "Metatags' current language through the language manager doesn't work (Decoupled Drupal)": "https://www.drupal.org/files/issues/2021-08-03/metatag-3077442-6.patch"
-            },
-            "drupal/block_content_machine_name": {
-                "Not compatible with Drupal 9 when install with composer": "https://www.drupal.org/files/issues/2021-02-22/3199593-1.patch"
             },
             "drupal/conditional_fields": {
                 "Removing unnecessary module_load_include call": "https://www.drupal.org/files/issues/2021-09-17/Removing_unnecessary_module_load_include_call-change_3236355-1.patch"

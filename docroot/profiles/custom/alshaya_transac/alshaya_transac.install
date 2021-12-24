@@ -944,6 +944,8 @@ function alshaya_transac_install() {
     'alshaya_spc',
     'alshaya_pdp_layouts',
     'alshaya_acm_dashboard',
+    'datadog_js',
+    'alshaya_algolia_react',
   ];
 
   // Add 10 MB per module we are going to enable above.

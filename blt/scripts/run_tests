@@ -12,15 +12,16 @@ else
 
   echo -en "travis_fold:start:Validate\r"
   blt validate:all
-  npm install -g gulp-cli
-  blt source:build
   echo -en "travis_fold:end:Validate\r"
 
   if ([ ${INSTALL_TYPE} == 'install' ])
   then
     echo -en "travis_fold:start:Setup\r"
 
-    blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --verbose
+    # Setup site.
+    blt setup:settings --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --verbose
+    blt setup:hash-salt --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --verbose
+    blt setup:drupal:install --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --verbose
 
     cd ${BUILD_DIR}/docroot
     drush @self --uri=default alshaya-post-drupal-install --brand_module="alshaya_vs" --country_code="ae"

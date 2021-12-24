@@ -1,0 +1,17 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp,
+#top-results {
+  .c-products__item.promotion-frame {
+    .sku-promotion-text--ellipse {
+      border: 0;
+      font-size: 0.875rem;
+      padding-#{$left}: 0;
+    }
+
+    .product-plp-detail-wrapper {
+      .promotions {
+        margin: 0.5rem 1rem;
+      }
+    }
+  }
+}
