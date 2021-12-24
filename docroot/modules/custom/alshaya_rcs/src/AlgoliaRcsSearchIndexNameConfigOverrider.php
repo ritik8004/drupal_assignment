@@ -24,6 +24,8 @@ class AlgoliaRcsSearchIndexNameConfigOverrider implements ConfigFactoryOverrideI
 
     $site_info = alshaya_get_site_country_code();
     $algolia_env = Settings::get('algolia_env');
+    // Use local env for travis.
+    $algolia_env = $algolia_env === 'travis' ? 'local' : $algolia_env;
 
     $overrides['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
     $overrides['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $site_info['country_code'];
