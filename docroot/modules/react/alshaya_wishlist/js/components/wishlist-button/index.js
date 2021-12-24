@@ -11,6 +11,8 @@ import {
 } from '../../utilities/wishlist-utils';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
+import { addInlineLoader, removeInlineLoader } from '../../../../js/utilities/showRemoveInlineLoader';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class WishlistButton extends React.Component {
   constructor(props) {
@@ -83,6 +85,7 @@ class WishlistButton extends React.Component {
    */
   handleProductRemovalFromWishlist = (sku) => {
     removeProductFromWishList(sku).then((response) => {
+      const { context } = this.props;
       if (typeof response.data !== 'undefined'
         && typeof response.data.status !== 'undefined'
         && response.data.status) {
@@ -105,6 +108,14 @@ class WishlistButton extends React.Component {
 
         // Set the product wishlist status.
         this.updateWishListStatus(false);
+
+        // For wishlist page, we remove full loader.
+        // For other layouts, we remove inline loader of button.
+        if (context === 'wishlist_page') {
+          removeFullScreenLoader();
+        } else {
+          removeInlineLoader('.wishlist-loader .loading');
+        }
       }
     });
   }
@@ -193,13 +204,24 @@ class WishlistButton extends React.Component {
   /**
    * Add or remove product from the wishlist.
    */
-  toggleWishlist = () => {
+  toggleWishlist = (e) => {
     const {
       addedInWishList, skuCode, options, title,
     } = this.state;
+    const { context } = this.props;
+    // We don't need inline loader for buttons on wishlist page.
+    if (e.currentTarget.classList.length > 0 && context !== 'wishlist_page') {
+      // Adding loader icon to wishlist button.
+      e.currentTarget.classList.add('loading');
+      addInlineLoader('.wishlist-loader .loading');
+    }
 
     // If product already in wishlist remove this else add.
     if (addedInWishList) {
+      // Add full screen loader for wishlist page.
+      if (context === 'wishlist_page') {
+        showFullScreenLoader();
+      }
       this.handleProductRemovalFromWishlist(skuCode);
 
       // don't execute further if product is removed from the wishlist.
@@ -219,19 +241,27 @@ class WishlistButton extends React.Component {
     addProductToWishList(productInfo).then((response) => {
       if (typeof response.data.status !== 'undefined'
         && response.data.status) {
-        // Prepare and dispatch an event when product added to the storage
-        // so other components like wishlist header can listen and do the
-        // needful.
-        dispatchCustomEvent('productAddedToWishlist', {
-          productInfo,
-          addedInWishList: true,
-        });
+        // For anonymous user, we update only storage and wishlist button status.
+        // We don't need an api call here.
+        if (isAnonymousUser()) {
+          // Prepare and dispatch an event when product added to the storage
+          // so other components like wishlist header can listen and do the
+          // needful.
+          dispatchCustomEvent('productAddedToWishlist', {
+            productInfo,
+            addedInWishList: true,
+          });
 
-        // If user is logged in we need to update the products from
-        // backend via api and update in local storage to get
-        // the wishlist_item_id from the backend that we use while
-        // removing the product from backend for logged in user.
-        if (!isAnonymousUser()) {
+          // Removing loader icon from wishlist button for anonymous user.
+          removeInlineLoader('.wishlist-loader .loading');
+
+          // Update the wishlist button state.
+          this.updateWishListStatus(true);
+        } else {
+          // If user is logged in we need to update the products from
+          // backend via api and update in local storage to get
+          // the wishlist_item_id from the backend that we use while
+          // removing the product from backend for logged in user.
           // Load wishlist information from the magento backend.
           getWishlistFromBackend().then((responseData) => {
             if (hasValue(responseData.data.items)) {
@@ -255,13 +285,19 @@ class WishlistButton extends React.Component {
               // Prepare and dispatch an event when product added to the storage
               // so other components like wishlist header can listen and do the
               // needful.
-              dispatchCustomEvent('productAddedToWishlist', {});
+              dispatchCustomEvent('productAddedToWishlist', {
+                productInfo,
+                addedInWishList: true,
+              });
+
+              // Removing loader icon to wishlist button.
+              removeInlineLoader('.wishlist-loader .loading');
+
+              // Update the wishlist button state.
+              this.updateWishListStatus(true);
             }
           });
         }
-
-        // Update the wishlist button state.
-        this.updateWishListStatus(true);
       }
     });
   }
@@ -325,6 +361,11 @@ class WishlistButton extends React.Component {
     const { addedInWishList } = this.state;
     const { context, position, format } = this.props;
 
+    // If product is already removed from wishlist page, button is not required.
+    if (!addedInWishList && context === 'wishlist_page') {
+      return null;
+    }
+
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
@@ -346,8 +387,8 @@ class WishlistButton extends React.Component {
 
     return (
       <div
-        className={wishListButtonClass}
-        onClick={() => this.toggleWishlist()}
+        className={`${wishListButtonClass} wishlist-loader`}
+        onClick={(e) => this.toggleWishlist(e)}
       >
         <div className={classPrefix}>
           {Drupal.t(buttonText, { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}

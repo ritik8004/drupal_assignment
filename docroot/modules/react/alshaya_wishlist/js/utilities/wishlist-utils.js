@@ -116,7 +116,11 @@ export const addProductToWishListForGuestUsers = (productInfo) => {
   wishListItems = wishListItems || {};
 
   // Add new data to storage.
-  wishListItems[productInfo.sku] = productInfo;
+  // We only need to store sku and options and not title.
+  wishListItems[productInfo.sku] = {
+    sku: productInfo.sku,
+    options: productInfo.options,
+  };
 
   // Save back to storage.
   addWishListInfoInStorage(wishListItems);
@@ -356,8 +360,10 @@ export const getWishlistItemInStockStatus = (searchResult) => {
   // If the 'is_in_stock' key is set for stock info, we will use that.
   if (!isAnonymousUser()) {
     const skuInfo = getWishListDataForSku(searchResult.sku);
-    return (typeof skuInfo.inStock !== 'undefined'
+    if (skuInfo !== null) {
+      return (typeof skuInfo.inStock !== 'undefined'
       && skuInfo.inStock);
+    }
   }
 
   // For anonymous user we check stock status in given search result record.
