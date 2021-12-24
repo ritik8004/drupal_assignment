@@ -29,7 +29,7 @@ import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
 import DeliveryAreaSelect from '../delivery-area-select';
-import { getCartShippingMethods, getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { getCartShippingMethods } from '../../../utilities/delivery_area_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../utilities/checkout_util';
 import SelectAreaPanel from '../../../expressdelivery/components/select-area-panel';
 import { isExpressDeliveryEnabled, checkAreaAvailabilityStatusOnCart } from '../../../../../js/utilities/expressDeliveryHelper';
@@ -37,7 +37,6 @@ import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxColle
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
-import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -153,13 +152,11 @@ export default class Cart extends React.Component {
         });
       }
       // Event to trigger to Show Delivery Area Select if express delivery enabled.
-      const { currentArea } = getDeliveryAreaStorage();
       // setting checkShowAreaAvailabilityStatus to true will do the recheck for
       // whether to show DeliveryAreaSelect or not on cart page.
       this.setState({
         checkShowAreaAvailabilityStatus: true,
       });
-      dispatchCustomEvent('displayShippingMethods', currentArea);
     }, false);
 
     // Event handles cart message update.
