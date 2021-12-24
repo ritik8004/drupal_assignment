@@ -220,6 +220,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   let promotions = '';
   let deliveryOptions = null;
   let expressDeliveryClass = '';
+  let isProductBuyable = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -313,7 +314,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     'upsell',
     'related',
   ];
-
+  isProductBuyable = productInfo[skuItemCode].is_product_buyable;
   return {
     brandLogo,
     brandLogoAlt,
@@ -339,6 +340,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     freeGiftPromoType,
     deliveryOptions,
     expressDeliveryClass,
+    isProductBuyable,
   };
 };
 
