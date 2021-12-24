@@ -179,7 +179,7 @@
    * V2 version of Drupal.alshayaSpc.getProductData().
    *
    * This method is syncronous to execute code in sequence so that we have
-   *
+   * proper execution of code.
    *
    * @param {string} sku
    *   SKU value.

@@ -173,10 +173,7 @@ function _getCncSettings() {
  */
 function alshaya_rcs_product_alshaya_spc_cart_build_alter(array &$build) {
   _alshaya_rcs_product_get_product_image_config($build);
-
-  $cnc_settings = _getCncSettings();
-  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
-  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+  _alshaya_rcs_product_get_cnc_config($build);
 }
 
 /**
@@ -184,10 +181,7 @@ function alshaya_rcs_product_alshaya_spc_cart_build_alter(array &$build) {
  */
 function alshaya_rcs_product_alshaya_spc_checkout_build_alter(array &$build) {
   _alshaya_rcs_product_get_product_image_config($build);
-
-  $cnc_settings = _getCncSettings();
-  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
-  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+  _alshaya_rcs_product_get_cnc_config($build);
 }
 
 /**
@@ -195,10 +189,7 @@ function alshaya_rcs_product_alshaya_spc_checkout_build_alter(array &$build) {
  */
 function alshaya_rcs_product_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
   _alshaya_rcs_product_get_product_image_config($build);
-
-  $cnc_settings = _getCncSettings();
-  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
-  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+  _alshaya_rcs_product_get_cnc_config($build);
 }
 
 /**
@@ -947,6 +938,8 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
     ];
 
     _alshaya_color_split_attach_info($build);
+    _alshaya_rcs_product_get_product_image_config($build);
+    _alshaya_rcs_product_get_cnc_config($build);
   }
 }
 
@@ -991,6 +984,8 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   ];
 
   _alshaya_color_split_attach_info($build);
+  _alshaya_rcs_product_get_product_image_config($build);
+  _alshaya_rcs_product_get_cnc_config($build);
 }
 
 /**
@@ -1026,4 +1021,16 @@ function _alshaya_rcs_product_get_product_image_config(array &$build) {
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
   $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+}
+
+/**
+ * Attach required settings related to CnC.
+ *
+ * @param Array $build
+ *   An array containing build information.
+ */
+function _alshaya_rcs_product_get_cnc_config(array &$build) {
+  $cnc_settings = _getCncSettings();
+  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
+  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
 }

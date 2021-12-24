@@ -249,7 +249,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
     // Creating custom event to to perform extra operation and update the result
     // object.
-    const updateResult = await RcsEventManager.fire('rcsUpdateResults', {
+    const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
         result: result,
         params: params,
