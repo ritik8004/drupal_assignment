@@ -1,0 +1,17 @@
+.acq-content-product {
+  .express-delivery-subtitle {
+    margin-top: 0;
+  }
+}
+
+.ui-state-active {
+  .c-accordion__title {
+    &::after {
+      top: 0.75rem;
+    }
+  }
+}
+
+.c-accordion__title {
+  letter-spacing: 0;
+}
