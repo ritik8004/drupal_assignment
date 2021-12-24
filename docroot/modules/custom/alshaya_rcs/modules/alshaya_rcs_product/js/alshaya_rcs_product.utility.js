@@ -218,29 +218,4 @@
     return galleryProduct.media_teaser;
   };
 
-  // Event listener to update the data layer object with the proper category
-  // data.
-  RcsEventManager.addListener('rcsUpdateResults', (e) => {
-    // Only when placeholder is order_teaser.
-    if (Drupal.hasValue(e.detail.placeholder)
-      && e.detail.placeholder === 'order_teaser'
-      && e.detail.params) {
-      // Extract parent skus and item skus.
-      const params = e.detail.params;
-      const result = [];
-      if (Drupal.hasValue(params['parent-skus'])
-        && Drupal.hasValue(params['item-skus'])) {
-        // Get the product data based on sku.
-        const parentSkus = JSON.parse(params['parent-skus']);
-        const itemSkus = JSON.parse(params['item-skus']);
-
-        parentSkus.forEach((sku, key) => {
-          const product = Drupal.alshayaSpc.getProductDataV2Syncronous(itemSkus[key], sku);
-          result[itemSkus[key]] = product;
-        });
-      }
-      e.detail.result = result;
-    }
-  });
-
 })(Drupal);
