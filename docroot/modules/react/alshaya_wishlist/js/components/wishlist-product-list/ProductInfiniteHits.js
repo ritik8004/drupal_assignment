@@ -36,7 +36,12 @@ const ProductInfiniteHits = connectInfiniteHits(({
         dispatchCustomEvent(
           'showNotificationMessage',
           {
-            message: Drupal.t("Some product in your wishlist doesn't exist anymore!"),
+            // @todo: need to confirm the message and add translation.
+            message: Drupal.t(
+              "Some product in your wishlist doesn't exist anymore!",
+              {},
+              { context: 'wishlist' },
+            ),
           },
         );
 
