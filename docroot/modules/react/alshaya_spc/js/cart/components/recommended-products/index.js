@@ -76,12 +76,10 @@ export default class CartRecommendedProducts extends React.Component {
 
   spcRefreshCartRecommendation = (event) => {
     const { items, triggerRecommendedRefresh } = event.detail;
-    if (!triggerRecommendedRefresh) {
-      // Update cart shipping methods on recommendation refresh.
-      if (isExpressDeliveryEnabled()) {
-        const currentArea = getDeliveryAreaStorage();
-        dispatchCustomEvent('displayShippingMethods', currentArea);
-      }
+    // Update cart shipping methods on recommendation refresh.
+    if (isExpressDeliveryEnabled() && !triggerRecommendedRefresh) {
+      const currentArea = getDeliveryAreaStorage();
+      dispatchCustomEvent('displayShippingMethods', currentArea);
     }
     this.spcRecommendationHandler(items);
   };
