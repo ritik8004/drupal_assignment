@@ -251,10 +251,6 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
         'context' => 'egift',
       ],
-      'Pay using egift card (Available Balance 0)' => [
-        'ar' => 'Pay using egift card (Available Balance 0)',
-        'context' => 'egift',
-      ],
       'Top-up' => [
         'ar' => 'Top-up',
         'context' => 'egift',
