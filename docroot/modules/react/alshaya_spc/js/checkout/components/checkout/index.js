@@ -36,7 +36,7 @@ import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import RedeemEgiftCard from '../../../egift-card';
-import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { cartContainsAnyNormalProduct } from '../../../utilities/egift_util';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 
 window.fetchStore = 'idle';
@@ -311,7 +311,7 @@ export default class Checkout extends React.Component {
                 {errorSuccessMessage}
               </CheckoutMessage>
               )}
-            <ConditionalView condition={!cartContainsOnlyVirtualProduct(cart.cart)}>
+            <ConditionalView condition={cartContainsAnyNormalProduct(cart.cart)}>
               <DeliveryMethods cart={cart} refreshCart={this.refreshCart} />
               <ClicknCollectContextProvider cart={cart}>
                 <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
