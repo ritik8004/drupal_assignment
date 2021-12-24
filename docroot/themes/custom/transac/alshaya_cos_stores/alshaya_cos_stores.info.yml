@@ -109,3 +109,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css
+
+  alshaya_white_label/sameday-express-delivery:
+    css:
+      theme:
+        css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
