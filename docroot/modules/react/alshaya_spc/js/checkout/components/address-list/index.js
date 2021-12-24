@@ -16,6 +16,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import Loading from '../../../utilities/loading';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class AddressList extends React.Component {
   isComponentMounted = false;
@@ -75,6 +76,18 @@ export default class AddressList extends React.Component {
       addEditAddressToCustomer(e);
     }
   };
+
+  /**
+   * Callback to check if we need to open new address modal.
+   * @todo Revisit code to check if Modal(addNewAddress) inside
+   * Modal(hdInfo) scenario can be better implemented.
+   */
+  newAddressButtonRef = (el) => {
+    if (hasValue(el)) {
+      // Manually triggering click on new address button to open the modal.
+      el.click();
+    }
+  }
 
   render() {
     const { addressList } = this.state;
@@ -158,12 +171,19 @@ export default class AddressList extends React.Component {
           <WithModal modalStatusKey="addNewAddress">
             {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
               <>
-                <div className="spc-add-new-address-btn" onClick={() => triggerOpenModal(2)}>
+                <div
+                  className="spc-add-new-address-btn"
+                  onClick={() => triggerOpenModal(2)}
+                  {...(processNewAddressForAddressChange
+                    && showNewAddressForm
+                    && { ref: this.newAddressButtonRef }
+                  )}
+                >
                   {getStringMessage('add_new_address')}
                 </div>
                 <Popup
                   className="spc-address-list-new-address"
-                  open={processNewAddressForAddressChange ? showNewAddressForm : isModalOpen}
+                  open={isModalOpen}
                   closeOnDocumentClick={false}
                   closeOnEscape={false}
                 >
