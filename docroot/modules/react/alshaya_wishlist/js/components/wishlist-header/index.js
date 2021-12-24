@@ -4,12 +4,14 @@ import { smoothScrollTo } from '../../../../js/utilities/smoothScroll';
 import {
   getWishlistLabel,
   getWishlistNotificationTime,
-  getWishListData,
-  isAnonymousUser,
   getWishlistFromBackend,
-  addWishListInfoInStorage,
   addRemoveWishlistItemsInBackend,
 } from '../../utilities/wishlist-utils';
+import {
+  isAnonymousUser,
+  addWishListInfoInStorage,
+  getWishListData,
+} from '../../../../js/utilities/wishlistHelper';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 

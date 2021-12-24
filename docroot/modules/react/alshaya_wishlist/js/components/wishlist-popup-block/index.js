@@ -5,10 +5,12 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import {
   addProductToWishList,
   getWishlistLabel,
-  isAnonymousUser,
   getWishlistFromBackend,
-  addWishListInfoInStorage,
 } from '../../utilities/wishlist-utils';
+import {
+  isAnonymousUser,
+  addWishListInfoInStorage,
+} from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 

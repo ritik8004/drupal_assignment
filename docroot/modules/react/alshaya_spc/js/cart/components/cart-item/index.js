@@ -23,10 +23,9 @@ import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
 import AdvantageCardExcludedItem from '../advantage-card';
 import CartShippingMethods from '../cart-shipping-methods';
-import { isWishlistEnabled } from '../../../../../js/utilities/wishlistHelper';
+import { isWishlistEnabled, isProductExistInWishList } from '../../../../../js/utilities/wishlistHelper';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import WishlistPopupBlock from '../../../../../alshaya_wishlist/js/components/wishlist-popup-block';
-import { isProductExistInWishList } from '../../../../../alshaya_wishlist/js/utilities/wishlist-utils';
 
 export default class CartItem extends React.Component {
   constructor(props) {

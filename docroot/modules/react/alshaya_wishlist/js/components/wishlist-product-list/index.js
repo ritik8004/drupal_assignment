@@ -9,7 +9,7 @@ import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
 import PageEmptyMessage from '../../../../js/utilities/components/page-empty-message';
 import NotificationMessage from '../../../../js/utilities/components/notification-message';
-import { getWishListData, isAnonymousUser } from '../../utilities/wishlist-utils';
+import { getWishListData, isAnonymousUser } from '../../../../js/utilities/wishlistHelper';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 

@@ -13,20 +13,27 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import Lozenges
   from '../../../../alshaya_algolia_react/js/common/components/lozenges';
 import getStringMessage from '../../../../js/utilities/strings';
-import { isWishlistPage } from '../../../../js/utilities/wishlistHelper';
+import { isWishlistPage, getFirstChildWithWishlistData } from '../../../../js/utilities/wishlistHelper';
 import LoginMessage from '../../../../js/utilities/components/login-message';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 class ConfigurableProductDrawer extends React.Component {
   constructor(props) {
     super(props);
-    const { productData } = props;
+    const { sku, productData, extraInfo } = props;
 
     // Check for the firstChild is set for the default variant otherwise
     // set the first variant in the list as the default variant.
-    const firstChild = (productData.configurable_combinations.firstChild !== 'undefined')
+    let firstChild = (productData.configurable_combinations.firstChild !== 'undefined')
       ? productData.configurable_combinations.firstChild
       : productData.variants[0].sku;
+
+    // If the current page is withlist page, we will check if user has
+    // choosen a specific variant to stroe in wishlist. If we found one
+    // we open the same child variant in the drawer.
+    if (isWishlistPage(extraInfo)) {
+      firstChild = getFirstChildWithWishlistData(sku, productData) || firstChild;
+    }
 
     this.state = {
       selectedVariant: firstChild,
