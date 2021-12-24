@@ -368,3 +368,45 @@ export const getWishlistItemInStockStatus = (searchResult) => {
   // Return false by default.
   return true;
 };
+
+/**
+ * Remove products from the wishlist which are not available in
+ * given products array. We are using this function to show the
+ * notification message on my wishlist page when products in
+ * wishlist does not found in algolia search results.
+ */
+export const removeDiffFromWishlist = (productsObj) => {
+  // Return if no products provided for diff check and remove.
+  if (!hasValue(productsObj)) {
+    return;
+  }
+
+  // Get existing wishlist data from storage.
+  const wishListItems = getWishListData();
+
+  if (wishListItems) {
+    Object.keys(wishListItems).forEach((keySku) => {
+      // Check if wishlist product sku exist in given
+      // products array and if not, we will remove that
+      // product from the wishlist of users.
+      if (!productsObj.find(
+        (productObj) => productObj.sku === keySku,
+      )) {
+        // Call remove product from wishlist function. This
+        // will handle removing product from wishlist for both
+        // anonymous and logged in users.
+        removeProductFromWishList(keySku).then((response) => {
+          if (typeof response.data !== 'undefined'
+            && typeof response.data.status !== 'undefined'
+            && response.data.status) {
+            // Remove the entry for given product sku from existing storage data.
+            delete wishListItems[keySku];
+
+            // Save back to storage.
+            addWishListInfoInStorage(wishListItems);
+          }
+        });
+      }
+    });
+  }
+};

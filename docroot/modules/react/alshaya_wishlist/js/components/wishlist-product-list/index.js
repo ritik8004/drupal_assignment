@@ -8,6 +8,7 @@ import LoginMessage from '../../../../js/utilities/components/login-message';
 import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
 import PageEmptyMessage from '../../../../js/utilities/components/page-empty-message';
+import NotificationMessage from '../../../../js/utilities/components/notification-message';
 import { getWishListData, isAnonymousUser } from '../../utilities/wishlist-utils';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
@@ -103,6 +104,7 @@ class WishlistProductList extends React.Component {
         <ConditionalView condition={isAnonymousUser()}>
           <LoginMessage />
         </ConditionalView>
+        <NotificationMessage />
         <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
           <Configure
             // To test the pagination we can hardcode this to static number.
@@ -113,6 +115,7 @@ class WishlistProductList extends React.Component {
             <ProductInfiniteHits
               gtmContainer="wishlist page"
               pageType="plp"
+              wishListItemsCount={wishListItemsCount}
             >
               {(paginationArgs) => (
                 <WishlistPagination {...paginationArgs}>

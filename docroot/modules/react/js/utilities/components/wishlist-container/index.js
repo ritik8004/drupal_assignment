@@ -19,7 +19,7 @@ function WishlistContainer(props) {
   } = props;
 
   // Lazy load wishlist button component.
-  const WishlistLazy = React.lazy(() => import('../../../../alshaya_wishlist/js/components/wishlist-button'));
+  const WishlistLazy = React.lazy(() => import('../../../../alshaya_wishlist/js/components/wishlist-button' /* webpackChunkName: "wls" */));
   return (
     <EmptyErrorBoundary>
       <Suspense fallback={<div />}>
