@@ -41,8 +41,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     // @todo if users tries topup for the same card.
 
-    // Logged in user email..
-    const customerEmail = drupalSettings.userDetails.userEmailID;
     // Invoke magento API to get the user card number
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
 
@@ -114,14 +112,14 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           } else {
             // If Empty Response form eGiftHpsCustomerData Api.
             logger.error('Empty Response @customerEmail. Message: @message', {
-              '@customerEmail': customerEmail,
+              '@customerEmail': drupalSettings.userDetails.userEmailID,
               '@message': result.data.response_message,
             });
           }
         } else {
           // If eGiftHpsCustomerData API is returning Error.
           logger.error('Error while calling the egift HPS Customer Data Api @customerEmail. Message: @message', {
-            '@customerEmail': customerEmail,
+            '@customerEmail': drupalSettings.userDetails.userEmailID,
             '@message': result.data.error_message,
           });
         }
@@ -172,7 +170,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               updatePriceSummaryBlock();
               // Set checkbox status to checked as redemption was successfull.
               this.setState({
-                setChecked: e.target.checked,
+                setChecked: true,
               });
             } else {
               logger.error('Empty Response in eGiftRedemption for linked card. Action: @action CardNumber: @cardNumber Response: @response', {
@@ -226,7 +224,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 egiftCardRemainingBalance: 0,
                 eGiftbalancePayable: 0,
                 apiErrorMessage: '',
-                setChecked: e.target.checked,
+                setChecked: false,
               });
             } else {
               logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {
