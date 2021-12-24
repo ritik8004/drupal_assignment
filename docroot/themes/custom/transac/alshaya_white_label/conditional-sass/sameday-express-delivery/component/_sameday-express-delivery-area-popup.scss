@@ -334,7 +334,7 @@ body.overlay-delivery-area {
       &.active {
         .area-select-item-wrapper {
           &::before {
-            border-width: 0.1875rem;
+            border: 0.1875rem solid $primary_radiobtn_filled;
           }
         }
       }
