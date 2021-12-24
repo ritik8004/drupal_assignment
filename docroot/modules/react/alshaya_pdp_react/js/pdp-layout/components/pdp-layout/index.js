@@ -79,6 +79,7 @@ const PdpLayout = () => {
     freeGiftPromoType,
     deliveryOptions,
     expressDeliveryClass,
+    isProductBuyable,
   } = productValues;
 
   const emptyRes = (
@@ -283,7 +284,7 @@ const PdpLayout = () => {
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />
-          <ConditionalView condition={isExpressDeliveryEnabled()}>
+          <ConditionalView condition={isExpressDeliveryEnabled() && isProductBuyable}>
             <PdpExpressDelivery />
           </ConditionalView>
           <ConditionalView condition={!isExpressDeliveryEnabled()}>
