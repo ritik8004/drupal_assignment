@@ -17,11 +17,11 @@
    * @param {string} parentSKU
    *   (optional) The parent sku value.
    */
-  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   };
@@ -222,31 +222,25 @@
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Only when placeholder is order_teaser.
-    if (!Drupal.hasValue(e.detail.placeholder)
-      && e.detail.placeholder !== 'order_teaser'
-      && !Drupal.hasValue(e.detail.params)) {
-      return;
-    }
+    if (Drupal.hasValue(e.detail.placeholder)
+      && e.detail.placeholder === 'order_teaser'
+      && e.detail.params) {
+      // Extract parent skus and item skus.
+      const params = e.detail.params;
+      const result = [];
+      if (Drupal.hasValue(params['parent-skus'])
+        && Drupal.hasValue(params['item-skus'])) {
+        // Get the product data based on sku.
+        const parentSkus = JSON.parse(params['parent-skus']);
+        const itemSkus = JSON.parse(params['item-skus']);
 
-    // Extract parent skus and item skus.
-    const params = e.detail.params;
-    const result = [];
-    if (Drupal.hasValue(params['parent-skus'])
-      && Drupal.hasValue(params['item-skus'])) {
-      // Get the product data based on sku.
-      const parentSkus = JSON.parse(params['parent-skus']);
-      const itemSkus = JSON.parse(params['item-skus']);
-
-      parentSkus.forEach((sku, key) => {
-        const product = Drupal.alshayaSpc.getProductDataV2(itemSkus[key], sku);
-        if (product instanceof Promise) {
-          product.then((item) => {
-            result[itemSkus[key]] = item;
-          })
-        }
-      });
+        parentSkus.forEach((sku, key) => {
+          const product = Drupal.alshayaSpc.getProductDataV2Syncronous(itemSkus[key], sku);
+          result[itemSkus[key]] = product;
+        });
+      }
+      e.detail.result = result;
     }
-    e.detail.result = result;
   });
 
 })(Drupal);

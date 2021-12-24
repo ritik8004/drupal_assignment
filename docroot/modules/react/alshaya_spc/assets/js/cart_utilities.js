@@ -175,6 +175,30 @@
     return Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
   }
 
+  /**
+   * V2 version of Drupal.alshayaSpc.getProductData().
+   *
+   * This method is syncronous to execute code in sequence so that we have
+   *
+   *
+   * @param {string} sku
+   *   SKU value.
+   * @param {string|null} parentSKU
+   *   Parent sku value.
+   */
+  Drupal.alshayaSpc.getProductDataV2Syncronous = function (sku, parentSKU = null) {
+    var data = Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
+    if (data) {
+      return data;
+    }
+
+    // Call API, fetch data and store product data in storage.
+    window.commerceBackend.getProductDataFromBackend(sku, parentSKU);
+
+    // Return product data from storage.
+    return Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
+  }
+
   Drupal.alshayaSpc.storeProductData = function (data) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, data.sku].join(':');
