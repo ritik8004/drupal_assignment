@@ -5,7 +5,6 @@ dependencies:
     - taxonomy.vocabulary.rcs_category
   enforced:
     module:
-      - alshaya_rcs_main_menu
       - content_translation
 third_party_settings:
   content_translation:
