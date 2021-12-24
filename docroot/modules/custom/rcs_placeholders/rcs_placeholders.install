@@ -138,3 +138,28 @@ function rcs_placeholders_install() {
     ->schema()
     ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+ function rcs_placeholders_uninstall() {
+   // Remove module configs.
+    $config_ids = [
+      'field.storage.node.field_metatags',
+      'field.storage.node.field_product_slug',
+      'field.storage.taxonomy_term.field_category_slug',
+      'field.storage.taxonomy_term.field_metatags',
+      'metatag.metatag_defaults.node__rcs_product',
+      'metatag.metatag_defaults.taxonomy_term__rcs_category',
+      'metatag.settings',
+      'node.type.rcs_promotion',
+      'pathauto.pattern.rcs_category',
+      'pathauto.pattern.rcs_product',
+      'pathauto.pattern.rcs_promotion',
+      'system.menu.rcs-navigation',
+    ];
+    foreach ($config_ids as $config_id) {
+      $config = \Drupal::service('config.factory')->getEditable($config_id);
+      $config->delete();
+    }
+ }
