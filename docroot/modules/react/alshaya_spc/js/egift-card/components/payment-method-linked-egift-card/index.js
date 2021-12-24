@@ -190,7 +190,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               '@response': res.data.error_message,
             });
             this.setState({
-              apiErrorMessage: Drupal.t('Something went wrong please try again later.', {}, { context: 'egift' }),
+              apiErrorMessage: Drupal.t('Something went wrong, please try again later.', {}, { context: 'egift' }),
               renderWait: false,
               setChecked: false,
             });
