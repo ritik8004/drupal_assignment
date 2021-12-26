@@ -219,6 +219,18 @@
     .method-title {
       display: none;
     }
+
+    @include breakpoint($desktop) {
+      .shipping-tags-first-row {
+        .information-icon {
+          &::after {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
   }
 
   #delivery-area-select {
@@ -295,5 +307,9 @@
         }
       }
     }
+  }
+
+  .spc-checkout-section-title {
+    text-transform: none;
   }
 }
