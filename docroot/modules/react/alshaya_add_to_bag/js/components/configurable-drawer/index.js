@@ -29,7 +29,7 @@ class ConfigurableProductDrawer extends React.Component {
       : productData.variants[0].sku;
 
     // If the current page is withlist page, we will check if user has
-    // choosen a specific variant to stroe in wishlist. If we found one
+    // choosen a specific variant to store in wishlist. If we found one
     // we open the same child variant in the drawer.
     if (isWishlistPage(extraInfo)) {
       firstChild = getFirstChildWithWishlistData(sku, productData) || firstChild;
