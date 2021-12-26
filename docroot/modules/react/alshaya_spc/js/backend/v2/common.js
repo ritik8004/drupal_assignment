@@ -373,6 +373,8 @@ const getProcessedCartData = async (cartData) => {
   if (isEgiftCardEnabled()) {
     data.totals.egiftRedeemedAmount = 0;
     data.totals.egiftRedemptionType = '';
+    // Top-up card number.
+    data.topupCardNumber = [];
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
@@ -485,6 +487,11 @@ const getProcessedCartData = async (cartData) => {
           if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
             data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
           }
+
+          // If eGift product is top-up card add has card number.
+          data.topupCardNumber[i] = (hasValue(item.extension_attributes.topup_card_number))
+            ? item.extension_attributes.topup_card_number
+            : 0;
         }
         // If any product in cart is for Topup.
         if (isEgiftCard && typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {

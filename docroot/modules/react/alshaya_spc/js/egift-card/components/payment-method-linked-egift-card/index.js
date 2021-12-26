@@ -39,8 +39,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
   componentDidMount() {
     const { cart } = this.props;
 
-    // @todo if users tries topup for the same card.
-
     // Invoke magento API to get the user card number
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
 
@@ -327,8 +325,12 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     if (renderWait && egiftLinkedCardNumber == null) {
       return null;
     }
-    // Disable checkbox when egiftcard balance is 0 or is expired.
-    const disabled = (egiftCardActualBalance === 0 || isEgiftCardExpired);
+
+    // Disable checkbox when egiftcard balance is 0 or is expired,
+    // Or trying to topup same card as linked.
+    const disabled = (egiftCardActualBalance === 0
+      || isEgiftCardExpired
+      || (cart.cart.topupCardNumber).includes(egiftLinkedCardNumber));
 
     // If card redeemed subtract the redeemed amount from card balance and show.
     let cardBlanceAmount = egiftCardActualBalance;
@@ -350,7 +352,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 <input type="checkbox" id="link-egift-card" checked={setChecked} onChange={this.handleOnClick} />
               </ConditionalView>
 
-              <label className="checkbox-sim checkbox-label egift-link-card-label">
+              <label htmlFor="link-egift-card" className="checkbox-sim checkbox-label egift-link-card-label">
                 <ConditionalView condition={isEgiftCardExpired}>
                   {
                     Drupal.t('Pay using egift card (Card is expired)', {}, { context: 'egift' })
