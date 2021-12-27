@@ -63,7 +63,6 @@ export default class MyEgiftTopUp extends React.Component {
       topup: {
         sku: topUpCard.sku,
         amount: amountSet,
-        // @todo update customer email for anonymous user.
         customer_email: drupalSettings.userDetails.userEmailID,
         card_number: cardNumber,
         top_up_type: 'self', // Top-up for linked card.
