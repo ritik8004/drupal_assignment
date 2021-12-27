@@ -6,6 +6,7 @@ import {
   isEgiftRedemptionDone,
   isEgiftUnsupportedPaymentMethod,
   isValidResponse,
+  isValidResponseWithFalseResult,
 } from '../utilities/egift_util';
 import GetEgiftCard from './components/GetEgiftCard';
 import ValidateEgiftCard from './components/ValidateEgiftCard';
@@ -17,6 +18,7 @@ import {
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../js/utilities/egiftCardHelper';
 import dispatchCustomEvent from '../../../js/utilities/events';
+import getStringMessage from '../../../js/utilities/strings';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -86,14 +88,17 @@ export default class RedeemEgiftCard extends React.Component {
 
   // Perform code validation.
   handleCodeValidation = async (code) => {
-    // Call the otp verification API.
-    showFullScreenLoader();
-    let errors = false;
-
     const { egiftEmail, egiftCardNumber } = this.state;
+    // Default result object.
+    let result = {
+      error: false,
+      message: '',
+    };
     if (code) {
       // Extract cart to get card_id.
       const { cart: cartData } = this.props;
+      // Call the otp verification API.
+      showFullScreenLoader();
       const response = await callEgiftApi('eGiftRedemption', 'POST', {
         redeem_points: {
           action: 'set_points',
@@ -117,23 +122,36 @@ export default class RedeemEgiftCard extends React.Component {
                 dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
                 // Change the state of redemption once cart is updated.
                 this.setState({ codeValidated: response.data.response_type, codeSent: false });
-                removeFullScreenLoader();
               }
             }
           });
         }
+      } else if (isValidResponseWithFalseResult(response)) {
+        result = {
+          error: true,
+          message: response.data.response_message,
+        };
       } else {
-        errors = true;
+        result = {
+          error: true,
+          message: getStringMessage('egift_endpoint_down'),
+        };
       }
+      // Remove loader once processing is done.
+      removeFullScreenLoader();
     }
 
-    return errors;
+    return result;
   }
 
   // Send code to the email id.
   handleGetCode = async (egiftCardNumber) => {
     showFullScreenLoader();
-    let errors = false;
+    // Default result object.
+    let result = {
+      error: false,
+      message: '',
+    };
     // Call api endpoint to send OTP.
     if (egiftCardNumber) {
       // Extract the card_id from props.
@@ -152,14 +170,22 @@ export default class RedeemEgiftCard extends React.Component {
           egiftEmail: response.data.email,
           egiftCardNumber: response.data.card_number,
         });
+      } else if (isValidResponseWithFalseResult(response)) {
+        result = {
+          error: true,
+          message: response.data.response_message,
+        };
       } else {
-        errors = true;
+        result = {
+          error: true,
+          message: getStringMessage('egift_endpoint_down'),
+        };
       }
     }
     // Remove loader once processing is done.
     removeFullScreenLoader();
 
-    return errors;
+    return result;
   }
 
   // Remove the added egift card.
@@ -171,7 +197,11 @@ export default class RedeemEgiftCard extends React.Component {
         quote_id: cartData.cart.cart_id_int,
       },
     };
-    let errors = false;
+    // Default result object.
+    let result = {
+      error: false,
+      message: '',
+    };
     showFullScreenLoader();
     // Invoke the redemption API.
     const response = await callEgiftApi('eGiftRedemption', 'POST', postData);
@@ -195,11 +225,19 @@ export default class RedeemEgiftCard extends React.Component {
           }
         });
       }
+    } else if (isValidResponseWithFalseResult(response)) {
+      result = {
+        error: true,
+        message: response.data.response_message,
+      };
     } else {
-      errors = true;
+      result = {
+        error: true,
+        message: getStringMessage('egift_endpoint_down'),
+      };
     }
 
-    return errors;
+    return result;
   }
 
   // Change the egift card.
@@ -232,6 +270,7 @@ export default class RedeemEgiftCard extends React.Component {
             getCode={this.handleGetCode}
             egiftCardNumber={egiftCardNumber}
             redemptionDisabled={redemptionDisabled}
+            cart={cartData.cart}
           />
         </ConditionalView>
         <ConditionalView condition={codeSent}>

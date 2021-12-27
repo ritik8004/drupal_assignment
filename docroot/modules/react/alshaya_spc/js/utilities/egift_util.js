@@ -135,7 +135,7 @@ export const getApiEndpoint = (action, params = {}) => {
  *   The object containing param info.
  *
  * @returns {object}
- *   The response object.
+ *   Returns the promise object.
  */
 export const callEgiftApi = (action, method, postData, params, useBearerToken = false) => {
   const endpoint = getApiEndpoint(action, params);
@@ -295,4 +295,18 @@ export const getCardNumberForTopUpItem = (egiftOptions) => (
 export const isValidResponse = (response) => hasValue(response.data)
   && hasValue(response.data.response_type)
   && response.data.response_type
+  && response.status === 200;
+
+/**
+ * Checks if the response is invalid with 200 status.
+ *
+ * @param {object} response
+ *   The response object.
+ *
+ * @return {boolean}
+ *   True if response is invalid with 200 status else false.
+ */
+export const isValidResponseWithFalseResult = (response) => hasValue(response.data)
+  && hasValue(response.data.response_type)
+  && !response.data.response_type
   && response.status === 200;

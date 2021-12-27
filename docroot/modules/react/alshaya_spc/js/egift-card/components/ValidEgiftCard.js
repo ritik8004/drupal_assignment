@@ -6,6 +6,7 @@ import {
   egiftCardHeader,
   isEgiftRedemptionDone,
   isValidResponse,
+  isValidResponseWithFalseResult,
   performRedemption,
 } from '../../utilities/egift_util';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
@@ -17,6 +18,7 @@ import {
 } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import getStringMessage from '../../../../js/utilities/strings';
 
 export default class ValidEgiftCard extends React.Component {
   constructor(props) {
@@ -25,6 +27,8 @@ export default class ValidEgiftCard extends React.Component {
       open: false,
       amount: 0,
       pendingAmount: 0,
+      isLinkedCardApplicable: false,
+      cardLinked: false,
     };
   }
 
@@ -32,7 +36,7 @@ export default class ValidEgiftCard extends React.Component {
     // Calculate the remaining amount and egift card amount to be used.
     const {
       cart,
-      removeCard,
+      egiftCardNumber,
     } = this.props;
 
     // Proceed only if redemption is done.
@@ -41,12 +45,41 @@ export default class ValidEgiftCard extends React.Component {
         amount: cart.totals.egiftRedeemedAmount,
         pendingAmount: cart.totals.balancePayable,
       });
-    } else if (isEgiftRedemptionDone(cart, 'linked')) {
-      // Disable guest redemption.
-      dispatchCustomEvent('changeEgiftRedemptionStatus', { status: true });
-    } else {
-      // Move back to the initial stage of redemption.
-      removeCard();
+    }
+
+    // Validate if link card is applicable.
+    if (isUserAuthenticated()
+      && drupalSettings.userDetails.userEmailID) {
+      const params = { email: drupalSettings.userDetails.userEmailID };
+      // Invoke magento API to check if any egift card is already associated
+      // with the user account.
+      const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params, true);
+      if (response instanceof Promise) {
+        response.then((result) => {
+          if (isValidResponse(result)) {
+            // Set linked card applicable to true if card_number is not
+            // available.
+            if (hasValue(result.data.card_number)
+              && !result.data.card_number) {
+              this.setState({
+                isLinkedCardApplicable: true,
+              });
+            }
+            // Updated the card linked state based on the search response.
+            if (hasValue(result.data.card_number)
+              && result.data.card_number === egiftCardNumber) {
+              this.setState({
+                cardLinked: true,
+              });
+            }
+          } else {
+            logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
+              '@emailId': params.email,
+              '@response': result,
+            });
+          }
+        });
+      }
     }
   }
 
@@ -67,13 +100,11 @@ export default class ValidEgiftCard extends React.Component {
   // Handle remove card.
   handleRemoveCard = async () => {
     const { removeCard } = this.props;
-    const errors = await removeCard();
+    const result = await removeCard();
     // Display the error message based on the response.
-    if (errors) {
-      document.getElementById('egift_remove_card_error').innerHTML = Drupal.t('There was some error while removing the gift card. Please try again', {}, { context: 'egift' });
+    if (result.error) {
+      document.getElementById('egift_remove_card_error').innerHTML = result.message;
     }
-
-    return !errors;
   }
 
   // Update the user account with egift card.
@@ -81,7 +112,7 @@ export default class ValidEgiftCard extends React.Component {
     // Extract the current user email.
     const email = drupalSettings.userDetails.userEmailID;
     const { egiftCardNumber } = this.props;
-    const { egift_link_card: egiftLinkCard } = e.target.elements;
+    const { checked: egiftLinkCard } = e.target;
 
     if (hasValue(email)) {
       showFullScreenLoader();
@@ -94,7 +125,14 @@ export default class ValidEgiftCard extends React.Component {
           response.then((result) => {
             removeFullScreenLoader();
             if (isValidResponse(result)) {
-              // @todo To display message for successful link.
+              this.setState({
+                cardLinked: true,
+              });
+            } else if (isValidResponseWithFalseResult(result)) {
+              // Show the error message when result is false.
+              document.getElementById('egift_linkcard_error').innerHTML = result.response_message;
+            } else {
+              document.getElementById('egift_linkcard_error').innerHTML = getStringMessage('egift_endpoint_down');
             }
           });
         }
@@ -104,7 +142,14 @@ export default class ValidEgiftCard extends React.Component {
           response.then((result) => {
             removeFullScreenLoader();
             if (isValidResponse(result)) {
-              // @todo To display message for successful unlink.
+              // Update the card link status once the unlink is successful.
+              this.setState({
+                cardLinked: false,
+              });
+            } else if (isValidResponseWithFalseResult(result)) {
+              document.getElementById('egift_linkcard_error').innerHTML = result.response_message;
+            } else {
+              document.getElementById('egift_linkcard_error').innerHTML = getStringMessage('egift_endpoint_down');
             }
           });
         }
@@ -154,45 +199,13 @@ export default class ValidEgiftCard extends React.Component {
     return true;
   }
 
-  // Whether user is applicable to link card in the account.
-  isCardLinkingApplicable = () => {
-    // Return if user is not authenticated.
-    if (isUserAuthenticated()) {
-      return false;
-    }
-
-    const params = { email: drupalSettings.userDetails.userEmailID };
-    if (params.email) {
-      // Invoke magento API to check if any egift card is already associated
-      // with the user account.
-      const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params);
-      if (response instanceof Promise) {
-        response.then((result) => {
-          if (result.data !== 'undefined'
-            && result.error === 'undefined') {
-            // return false if card number is already linked else true.
-            return !result.data.card_number;
-          }
-          // Handle error response.
-          if (result.error) {
-            logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
-              '@emailId': params.email,
-              '@response': result.data,
-            });
-          }
-          return false;
-        });
-      }
-    }
-
-    return false;
-  }
-
   render = () => {
     const {
       open,
       amount,
       pendingAmount,
+      isLinkedCardApplicable,
+      cardLinked,
     } = this.state;
 
     const { cart } = this.props;
@@ -226,12 +239,13 @@ export default class ValidEgiftCard extends React.Component {
             {Drupal.t('Pay @currencyCode @pendingAmount using another payment method to complete purchase', { '@currencyCode': currencyCode, '@pendingAmount': pendingAmount }, { context: 'egift' })}
           </div>
         </ConditionalView>
-        <ConditionalView condition={this.isCardLinkingApplicable()}>
+        <ConditionalView condition={isLinkedCardApplicable}>
           <input
             type="checkbox"
             id="link-egift-card"
             name="egift_link_card"
             onChange={this.handleCardLink}
+            checked={cardLinked}
           />
           <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
           <div id="egift_linkcard_error" className="error" />

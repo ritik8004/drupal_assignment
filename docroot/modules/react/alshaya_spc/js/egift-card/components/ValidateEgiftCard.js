@@ -30,13 +30,11 @@ export default class ValidateEgiftCard extends React.Component {
   // Resend the code for egift card verification.
   handleResendCode = async () => {
     const { resendCode, egiftCardNumber } = this.props;
-    const errors = await resendCode(egiftCardNumber);
+    const result = await resendCode(egiftCardNumber);
     // If errors if true then display inline error message.
-    if (errors) {
-      document.getElementById('egift_verification_code_error').innerHTML = Drupal.t('Error while sending OTP, Please try again.', {}, { context: 'egift' });
+    if (result.error) {
+      document.getElementById('egift_verification_code_error').innerHTML = result.message;
     }
-
-    return !errors;
   }
 
   // Move back to the getEgift component.

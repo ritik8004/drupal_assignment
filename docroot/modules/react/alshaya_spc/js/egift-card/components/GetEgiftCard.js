@@ -4,9 +4,10 @@ import getStringMessage from '../../../../js/utilities/strings';
 import { egiftCardHeader, egiftFormElement, isEgiftUnsupportedPaymentMethod } from '../../utilities/egift_util';
 
 // Validation function.
-const handleEgiftDetailValidation = (e) => {
+const handleEgiftDetailValidation = (e, props) => {
   let errors = false;
   const { egift_card_number: egiftCardNumber } = e.target.elements;
+  const { cart: cartData } = props;
   // Egift card number validation.
   if (egiftCardNumber.value.length === 0) {
     document.getElementById('egift_card_number_error').innerHTML = getStringMessage('form_egift_card_number');
@@ -14,6 +15,9 @@ const handleEgiftDetailValidation = (e) => {
   } else if (!egiftCardNumber.value.match(/^[a-z0-9A-Z]+$/i)) {
     // Check if the card number is valid or not.
     document.getElementById('egift_card_number_error').innerHTML = getStringMessage('egift_valid_card_number');
+    errors = true;
+  } else if (cartData.topupCardNumber === egiftCardNumber.value) {
+    document.getElementById('egift_card_number_error').innerHTML = Drupal.t('You cannot redeem the same card which you\'re trying to topup.', {}, { context: 'egift' });
     errors = true;
   } else {
     document.getElementById('egift_card_number_error').innerHTML = '';
@@ -31,15 +35,15 @@ const handleSubmit = async (e, props) => {
     return;
   }
   // Perform validation.
-  const valid = handleEgiftDetailValidation(e);
-  const { getCode } = props;
+  const valid = handleEgiftDetailValidation(e, props);
   // Proceed only if validation is passed.
   if (valid) {
+    const { getCode } = props;
     const { egift_card_number: egiftCardNumber } = e.target.elements;
-    const errors = await getCode(egiftCardNumber.value);
+    const result = await getCode(egiftCardNumber.value);
     // Display inline error message if OTP is not sent.
-    if (errors) {
-      document.getElementById('egift_card_number_error').innerHTML = Drupal.t('Error while sending OTP, Please try again.', {}, { context: 'egift' });
+    if (result.error) {
+      document.getElementById('egift_card_number_error').innerHTML = result.message;
     }
   }
 };
