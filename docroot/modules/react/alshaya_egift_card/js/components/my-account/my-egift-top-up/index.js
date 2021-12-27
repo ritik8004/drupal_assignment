@@ -1,6 +1,5 @@
 import React from 'react';
 import EgiftCardAmount from '../../egifts-card-step-one/egift-card-amount';
-import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import { getParamsForTopUpCardSearch } from '../../../utilities';
 import {
@@ -65,7 +64,7 @@ export default class MyEgiftTopUp extends React.Component {
         sku: topUpCard.sku,
         amount: amountSet,
         // @todo update customer email for anonymous user.
-        customer_email: (isUserAuthenticated()) ? drupalSettings.userDetails.userEmailID : 'test@test.com',
+        customer_email: drupalSettings.userDetails.userEmailID,
         card_number: cardNumber,
         top_up_type: 'self', // Top-up for linked card.
       },
