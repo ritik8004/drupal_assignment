@@ -143,12 +143,23 @@ function rcs_placeholders_install() {
  * Implements hook_uninstall().
  */
  function rcs_placeholders_uninstall() {
+    // Drop table indexes.
+    $schema = \Drupal::database()->schema();
+    $schema->dropIndex('node__field_product_slug', 'node__field_product_slug');
+    $schema->dropIndex('node__field_metatags', 'node__field_metatags');
+    $schema->dropIndex('taxonomy_term__field_category_slug', 'taxonomy_term__field_category_slug');
+    $schema->dropIndex('taxonomy_term__field_metatags', 'taxonomy_term__field_metatags');
+
    // Remove module configs.
     $config_ids = [
       'field.storage.node.field_metatags',
       'field.storage.node.field_product_slug',
       'field.storage.taxonomy_term.field_category_slug',
       'field.storage.taxonomy_term.field_metatags',
+      'field.field.node.rcs_product.field_metatags',
+      'field.field.node.rcs_product.field_product_slug',
+      'field.field.taxonomy_term.rcs_category.field_category_slug',
+      'field.field.taxonomy_term.rcs_category.field_metatags',
       'metatag.metatag_defaults.node__rcs_product',
       'metatag.metatag_defaults.taxonomy_term__rcs_category',
       'metatag.settings',
