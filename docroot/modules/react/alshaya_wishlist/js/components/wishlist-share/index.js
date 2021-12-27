@@ -55,6 +55,21 @@ class WishlistShare extends React.Component {
   };
 
   /**
+   * On click handler for the share button link. If user is anonymous we
+   * redirect user to login page else the modal popup will open.
+   */
+  onShareAllClick = () => {
+    // Redirect to login page if custom is not logged in.
+    if (isAnonymousUser()) {
+      window.location = Drupal.url(`user/login?destination=${drupalSettings.path.currentPath}`);
+      return;
+    }
+
+    // Open wishlist share modal if custom is logged in.
+    this.openWishListShareModal();
+  };
+
+  /**
    * To open the wishlist share popup.
    * Popup will show up while clicking on share link.
    */
@@ -83,7 +98,7 @@ class WishlistShare extends React.Component {
 
     return (
       <>
-        <button type="button" onClick={this.openWishListShareModal}>
+        <button type="button" onClick={this.onShareAllClick}>
           <span className="text">{Drupal.t('Share All', {}, { context: 'wishlist' })}</span>
           <span className="icon"><ShareIcon /></span>
         </button>
