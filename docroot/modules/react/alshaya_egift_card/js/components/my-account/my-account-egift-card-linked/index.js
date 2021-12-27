@@ -7,11 +7,16 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import ConditionalView
+  from '../../../../../js/utilities/components/conditional-view';
+import MyEgiftTopUp from '../my-egift-top-up';
 
 class EgiftCardLinked extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      topUpForm: false, // Show / hide top-up form.
+    };
   }
 
   /**
@@ -42,21 +47,37 @@ class EgiftCardLinked extends React.Component {
    * Get day in st, nd, rd, th format.
    */
   dateNthFormat = (d) => {
-    if (d > 3 && d < 21) return 'th';
+    if (d > 3 && d < 21) return `${d}th`;
     switch (d % 10) {
       case 1: {
-        return 'st';
+        return `${d}st`;
       }
       case 2: {
-        return 'nd';
+        return `${d}nd`;
       }
       case 3: {
-        return 'rd';
+        return `${d}rd`;
       }
       default: {
-        return 'th';
+        return `${d}th`;
       }
     }
+  }
+
+  /**
+   * Handle Top-up button click.
+   */
+  handleTopUp = (e) => {
+    e.preventDefault();
+    this.setState({
+      topUpForm: true,
+    });
+  }
+
+  handleCancelTopUp = () => {
+    this.setState({
+      topUpForm: false,
+    });
   }
 
   render() {
@@ -65,6 +86,8 @@ class EgiftCardLinked extends React.Component {
     if (linkedCard === null) {
       return null;
     }
+
+    const { topUpForm } = this.state;
 
     // Set expired card class.
     let expiredCard = false;
@@ -75,7 +98,7 @@ class EgiftCardLinked extends React.Component {
 
     // Get formatted expiry date.
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const expiryDate = new Date(linkedCard.expiry_date_timestamp);
+    const expiryDate = new Date(linkedCard.expiry_date);
     const expiryDateFormatted = `${this.dateNthFormat(expiryDate.getDate())}, ${months[expiryDate.getMonth()]} ${expiryDate.getFullYear()}`;
 
     return (
@@ -103,22 +126,37 @@ class EgiftCardLinked extends React.Component {
             <span className="egift-linked-card-remove">&nbsp;</span>
           </button>
         </div>
-        <div className="egift-card-linked-wrapper-bottom">
-          <div className="egift-linked-card-number">{Drupal.t('Gift Card number', {}, { context: 'egift' })}</div>
-          <div className="egift-linked-card-number-value">{linkedCard.card_number}</div>
-          <div className={expiredCard}>
-            <div className="egift-linked-expires">{Drupal.t('Expires on', {}, { context: 'egift' })}</div>
-            <div
-              className={(expiredCard ? 'egift-linked-expires-value expired-card' : 'egift-linked-expires-value')}
-            >
-              {expiryDateFormatted}
+        <ConditionalView condition={topUpForm === false}>
+          <div className="egift-card-linked-wrapper-bottom">
+            <div className="egift-linked-card-number">{Drupal.t('Gift Card number', {}, { context: 'egift' })}</div>
+            <div className="egift-linked-card-number-value">{linkedCard.card_number}</div>
+            <div className={expiredCard}>
+              <div className="egift-linked-expires">{Drupal.t('Expires on', {}, { context: 'egift' })}</div>
+              <div
+                className={(expiredCard ? 'egift-linked-expires-value expired-card' : 'egift-linked-expires-value')}
+              >
+                {expiryDateFormatted}
+              </div>
+              {expiredCard && <span>{Drupal.t('This card has expired.', {}, { context: 'egift' })}</span>}
             </div>
-            {expiredCard && <span>{Drupal.t('This card has expired.', {}, { context: 'egift' })}</span>}
+            <div className="egift-linked-card-type">{Drupal.t('Card Type', {}, { context: 'egift' })}</div>
+            <div className="egift-linked-card-type-value">{linkedCard.card_type}</div>
+            <button
+              id="egift-topup-button"
+              type="button"
+              className="egift-topup"
+              onClick={(e) => this.handleTopUp(e)}
+            >
+              {Drupal.t('Top up', {}, { context: 'egift' })}
+            </button>
           </div>
-          <div className="egift-linked-card-type">{Drupal.t('Card Type', {}, { context: 'egift' })}</div>
-          <div className="egift-linked-card-type-value">{linkedCard.card_type}</div>
-          <button id="egift-topup-button" type="button" className="egift-topup">{Drupal.t('Top up', {}, { context: 'egift' })}</button>
-        </div>
+        </ConditionalView>
+        <ConditionalView condition={topUpForm}>
+          <MyEgiftTopUp
+            handleCancelTopUp={this.handleCancelTopUp}
+            cardNumber={linkedCard.card_number}
+          />
+        </ConditionalView>
       </div>
     );
   }
