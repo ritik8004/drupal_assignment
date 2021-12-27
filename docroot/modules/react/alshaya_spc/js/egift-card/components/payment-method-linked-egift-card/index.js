@@ -31,15 +31,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       egiftLinkedCardNumber: null,
       // Api render wait time.
       renderWait: true,
-      // Api render wait time.
+      // Api Error message.
       apiErrorMessage: '',
     };
   }
 
   componentDidMount() {
     const { cart } = this.props;
-
-    // @todo if users tries topup for the same card.
 
     // Invoke magento API to get the user card number
     const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {});
@@ -48,6 +46,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       response.then((result) => {
         if (result.status === 200) {
           if (result.data.card_number !== null && result.data.response_type) {
+            // While doing topup of same egift card which is linked to the logged in customer,
+            // dont show linked card redemption section in checkout page.
+            if (hasValue(cart.cart.topupCardNumber)
+              && result.data.card_number === cart.cart.topupCardNumber) {
+              return;
+            }
+
             // Card Available Balance.
             const currentBalance = result.data.current_balance;
             // Current Time stamp to check for expiry.
@@ -350,7 +355,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
                 <input type="checkbox" id="link-egift-card" checked={setChecked} onChange={this.handleOnClick} />
               </ConditionalView>
 
-              <label className="checkbox-sim checkbox-label egift-link-card-label">
+              <label htmlFor="link-egift-card" className="checkbox-sim checkbox-label egift-link-card-label">
                 <ConditionalView condition={isEgiftCardExpired}>
                   {
                     Drupal.t('Pay using egift card (Card is expired)', {}, { context: 'egift' })
