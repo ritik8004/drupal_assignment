@@ -332,7 +332,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     if (renderWait && egiftLinkedCardNumber == null) {
       return null;
     }
-
     // Disable checkbox when egiftcard balance is 0 or is expired.
     const disabled = (egiftCardActualBalance === 0 || isEgiftCardExpired);
 
