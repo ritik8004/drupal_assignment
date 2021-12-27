@@ -31,7 +31,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       egiftLinkedCardNumber: null,
       // Api render wait time.
       renderWait: true,
-      // Api render wait time.
+      // Api Error message.
       apiErrorMessage: '',
     };
   }
@@ -46,6 +46,13 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       response.then((result) => {
         if (result.status === 200) {
           if (result.data.card_number !== null && result.data.response_type) {
+            // IF trying to topup with same linked card then dont show Redemption using linked
+            // card in Checkout page.
+            if (hasValue(cart.cart.topupCardNumber)
+              && result.data.card_number === cart.cart.topupCardNumber) {
+              return;
+            }
+
             // Card Available Balance.
             const currentBalance = result.data.current_balance;
             // Current Time stamp to check for expiry.
@@ -328,9 +335,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     // Disable checkbox when egiftcard balance is 0 or is expired,
     // Or trying to topup same card as linked.
-    const disabled = (egiftCardActualBalance === 0
-      || isEgiftCardExpired
-      || (cart.cart.topupCardNumber).includes(egiftLinkedCardNumber));
+    const disabled = (egiftCardActualBalance === 0 || isEgiftCardExpired);
 
     // If card redeemed subtract the redeemed amount from card balance and show.
     let cardBlanceAmount = egiftCardActualBalance;
