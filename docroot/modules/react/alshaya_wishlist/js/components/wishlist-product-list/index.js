@@ -41,8 +41,13 @@ class WishlistProductList extends React.Component {
     document.addEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
   }
 
+  /**
+   * Remove event listners after component gets unmount.
+   */
   componentWillUnmount() {
-    document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
+    if (!isAnonymousUser()) {
+      document.removeEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
+    }
     document.removeEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
   }
 
