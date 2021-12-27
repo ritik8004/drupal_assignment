@@ -1,0 +1,15 @@
+.alias--cart {
+  .shipping-methods {
+    .sku-cart-delivery-methods {
+      .shipping-tags-first-row {
+        .information-icon {
+          &::after {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+}
