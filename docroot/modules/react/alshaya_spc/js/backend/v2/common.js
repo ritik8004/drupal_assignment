@@ -1127,12 +1127,12 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
  * @returns {Promise<object>}
  *  returns list of governates.
  */
-const getProductShippingMethods = async (currentArea, sku = undefined) => {
-  let cartId = null;
-  if (sku === undefined) {
+const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
+  let cartIdInt = cartId;
+  if (sku === undefined && cartId === null) {
     const cartData = window.commerceBackend.getCartDataFromStorage();
     if (cartData.cart.cart_id !== null) {
-      cartId = cartData.cart.cart_id_int;
+      cartIdInt = cartData.cart.cart_id_int;
     }
   }
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
@@ -1149,7 +1149,7 @@ const getProductShippingMethods = async (currentArea, sku = undefined) => {
   try {
     const params = {
       productAndAddressInformation: {
-        cart_id: cartId,
+        cart_id: cartIdInt,
         product_sku: (sku !== undefined) ? sku : null,
         address: {
           custom_attributes: attributes,
