@@ -3,7 +3,11 @@ import connectInfiniteHits from '../../../../alshaya_algolia_react/js/src/compon
 import Teaser from '../../../../alshaya_algolia_react/js/src/components/teaser';
 import { removeLoader } from '../../../../alshaya_algolia_react/js/src/utils';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { getWishlistItemInStockStatus, removeDiffFromWishlist } from '../../utilities/wishlist-utils';
+import {
+  getWishlistItemInStockStatus,
+  removeDiffFromWishlist,
+  getWishlistLabel,
+} from '../../utilities/wishlist-utils';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 
 const ProductInfiniteHits = connectInfiniteHits(({
@@ -38,8 +42,8 @@ const ProductInfiniteHits = connectInfiniteHits(({
           {
             // @todo: need to confirm the message and add translation.
             message: Drupal.t(
-              "Some product in your wishlist doesn't exist anymore!",
-              {},
+              "Some product in your @wishlist_label doesn't exist anymore!",
+              { '@wishlist_label': getWishlistLabel() },
               { context: 'wishlist' },
             ),
           },

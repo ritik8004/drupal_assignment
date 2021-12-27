@@ -1,14 +1,16 @@
 import React from 'react';
 import {
-  isProductExistInWishList,
   addProductToWishList,
   removeProductFromWishList,
   getWishlistLabel,
-  isAnonymousUser,
   getWishlistFromBackend,
+} from '../../utilities/wishlist-utils';
+import {
+  isProductExistInWishList,
+  isAnonymousUser,
   addWishListInfoInStorage,
   getWishListData,
-} from '../../utilities/wishlist-utils';
+} from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { addInlineLoader, removeInlineLoader } from '../../../../js/utilities/showRemoveInlineLoader';
