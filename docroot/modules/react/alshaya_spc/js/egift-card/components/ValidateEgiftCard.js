@@ -4,7 +4,7 @@ import { egiftCardHeader, egiftFormElement } from '../../utilities/egift_util';
 
 export default class ValidateEgiftCard extends React.Component {
   // handle submit.
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     // Extract the code .
     const { egift_verification_code: egiftCode } = e.target.elements;
@@ -17,28 +17,26 @@ export default class ValidateEgiftCard extends React.Component {
       document.getElementById('egift_verification_code_error').innerHTML = '';
     }
     if (!errors) {
-      const status = codeValidation(egiftCode.value);
-      if (!status) {
+      const errorResponse = await codeValidation(egiftCode.value);
+      if (errorResponse) {
         document.getElementById('egift_verification_code_error').innerHTML = Drupal.t('Something went wrong, please try again later.', {}, { context: 'egift' });
       }
-      return status;
+      return !errorResponse;
     }
 
     return false;
   }
 
   // Resend the code for egift card verification.
-  handleResendCode = () => {
-    const { resendCode, egiftEmail, egiftCardNumber } = this.props;
-    const status = resendCode(egiftCardNumber, egiftEmail);
-    // If status if false then display and inline error.
-    if (!status) {
+  handleResendCode = async () => {
+    const { resendCode, egiftCardNumber } = this.props;
+    const errors = await resendCode(egiftCardNumber);
+    // If errors if true then display inline error message.
+    if (errors) {
       document.getElementById('egift_verification_code_error').innerHTML = Drupal.t('Error while sending OTP, Please try again.', {}, { context: 'egift' });
-
-      return false;
     }
 
-    return true;
+    return !errors;
   }
 
   // Move back to the getEgift component.
@@ -48,7 +46,7 @@ export default class ValidateEgiftCard extends React.Component {
   }
 
   render = () => {
-    const { egiftEmail } = this.props;
+    const { egiftEmail, egiftCardNumber } = this.props;
     return (
       <>
         <div className="egift-wrapper">
@@ -64,6 +62,14 @@ export default class ValidateEgiftCard extends React.Component {
               id="egift-val-form"
               onSubmit={this.handleSubmit}
             >
+              {egiftFormElement({
+                type: 'text',
+                name: 'card_number',
+                placeholder: 'eGift Card Number',
+                className: 'card-number',
+                value: egiftCardNumber,
+                disabled: true,
+              })}
               {egiftFormElement({
                 type: 'text',
                 name: 'verification_code',

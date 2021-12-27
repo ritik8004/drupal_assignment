@@ -137,6 +137,13 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    // If full payment is being done by egift then change the payment method to
+    // 'hps_payment'.
+    if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)) {
+      this.changePaymentMethod('hps_payment');
+      return;
+    }
+
     if (!(this.isActive())) {
       return;
     }

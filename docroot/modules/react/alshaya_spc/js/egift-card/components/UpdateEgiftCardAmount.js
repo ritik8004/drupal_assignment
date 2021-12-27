@@ -16,13 +16,13 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (egiftAmount.length === 0) {
       message = getStringMessage('form_egift_amount');
       errors = true;
-    } else if (egiftAmount > (amount + remainingAmount)) {
+    } else if (remainingAmount && (egiftAmount > (amount + remainingAmount))) {
       message = getStringMessage('egift_insufficient_balance');
       errors = true;
     } else if (egiftAmount <= 0) {
       message = getStringMessage('egift_valid_amount');
       errors = true;
-    } else if (egiftAmount > cart.cart.totals.base_grand_total) {
+    } else if (egiftAmount > cart.cart_total) {
       message = Drupal.t('Redeem amount should be less than or equal to the cart value.');
       errors = true;
     }
@@ -83,10 +83,10 @@ export default class UpdateEgiftCardAmount extends React.Component {
                     '@currencyCode': currencyCode,
                     '@amount': amount,
                   }, { context: 'egift' }),
-                  egiftSubHeading: Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
+                  egiftSubHeading: (remainingAmount ? Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
                     '@currencyCode': currencyCode,
                     '@remainingAmount': remainingAmount,
-                  }, { context: 'egift' }),
+                  }, { context: 'egift' }) : ''),
                 })}
                 <span>
                   {currencyCode}

@@ -89,14 +89,6 @@ export const egiftFormElement = ({
 export const getApiEndpoint = (action, params = {}) => {
   let endpoint = '';
   switch (action) {
-    case 'eGiftSendOtp':
-      endpoint = `/V1/sendemailotp/email/${params.email}`;
-      break;
-
-    case 'eGiftVerifyOtp':
-      endpoint = `/V1/verifyemailotp/email/${params.email}/otp/${params.otp}`;
-      break;
-
     case 'eGiftGetBalance':
       endpoint = '/V1/egiftcard/getBalance';
       break;
@@ -111,6 +103,14 @@ export const getApiEndpoint = (action, params = {}) => {
 
     case 'eGiftHpsCustomerData':
       endpoint = '/V1/customers/hpsCustomerData';
+      break;
+
+    case 'eGiftLinkCard':
+      endpoint = '/V1/egiftcard/link';
+      break;
+
+    case 'eGiftUnlinkCard':
+      endpoint = '/V1/egiftcard/unlinkcard';
       break;
 
     default:
@@ -137,9 +137,9 @@ export const getApiEndpoint = (action, params = {}) => {
  * @returns {object}
  *   The response object.
  */
-export const callEgiftApi = (action, method, postData, params) => {
+export const callEgiftApi = (action, method, postData, params, useBearerToken = false) => {
   const endpoint = getApiEndpoint(action, params);
-  return callMagentoApi(endpoint, method, postData);
+  return callMagentoApi(endpoint, method, postData, useBearerToken);
 };
 
 /**
@@ -252,16 +252,19 @@ export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
  *
  * @param {object} cart
  *   The cart object.
+ * @param {string} redemptionType
+ *   The type of redemption done.
  *
  * @return {boolean}
  *   true if egift redemption is done by guest else false.
  */
-export const isEgiftRedemptionDone = (cart) => {
+export const isEgiftRedemptionDone = (cart, redemptionType = 'guest') => {
   if (hasValue(cart.totals)) {
     const { egiftRedeemedAmount, egiftRedemptionType } = cart.totals;
 
     if (hasValue(egiftRedeemedAmount)
-      && hasValue(egiftRedemptionType)) {
+      && hasValue(egiftRedemptionType)
+      && egiftRedemptionType === redemptionType) {
       return true;
     }
   }
@@ -279,3 +282,17 @@ export const getCardNumberForTopUpItem = (egiftOptions) => (
     ? egiftOptions.hps_card_number
     : ''
 );
+
+/**
+ * Checks if the response is valid and successful.
+ *
+ * @param {object} response
+ *   The response object.
+ *
+ * @return {boolean}
+ *   True if response is valid and successful else false.
+ */
+export const isValidResponse = (response) => hasValue(response.data)
+  && hasValue(response.data.response_type)
+  && response.data.response_type
+  && response.status === 200;

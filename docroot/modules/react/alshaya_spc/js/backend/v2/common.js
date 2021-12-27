@@ -373,11 +373,15 @@ const getProcessedCartData = async (cartData) => {
   if (isEgiftCardEnabled()) {
     data.totals.egiftRedeemedAmount = 0;
     data.totals.egiftRedemptionType = '';
+    data.totals.egiftCardNumber = '';
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
     if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
       data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
+    }
+    if (hasValue(cartData.cart.extension_attributes.hps_redemption_card_number)) {
+      data.totals.egiftCardNumber = cartData.cart.extension_attributes.hps_redemption_card_number;
     }
   }
 
