@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fff9c3b90b7aff0ab5068b753906b13",
+    "content-hash": "966928cc354d61a5349f0642187df41b",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4559,17 +4559,17 @@
         },
         {
             "name": "drupal/better_exposed_filters",
-            "version": "5.0.0-beta3",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/better_exposed_filters.git",
-                "reference": "8.x-5.0-beta3"
+                "reference": "8.x-5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-5.0-beta3.zip",
-                "reference": "8.x-5.0-beta3",
-                "shasum": "23f00fe898cd9e4f2278ef790bc9f1d197312ac3"
+                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-5.0.zip",
+                "reference": "8.x-5.0",
+                "shasum": "ef575591af202b5c6867841ce58e1f447455e502"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9",
@@ -4581,12 +4581,15 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-5.0-beta3",
-                    "datestamp": "1625665853",
+                    "version": "8.x-5.0",
+                    "datestamp": "1634748760",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Version 5 should enable jQuery dependencies": "https://www.drupal.org/files/issues/2021-12-24/enable_dependencies-3193305-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -27502,7 +27505,6 @@
     "stability-flags": {
         "acquia/acsf-tools": 20,
         "drupal/acquia_purge": 10,
-        "drupal/better_exposed_filters": 10,
         "drupal/block_field": 15,
         "drupal/captcha": 10,
         "drupal/change_pwd_page": 10,
