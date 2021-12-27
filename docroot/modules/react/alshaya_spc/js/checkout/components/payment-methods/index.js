@@ -28,7 +28,7 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
 import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
-import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod } from '../../../utilities/egift_util';
+import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -139,7 +139,7 @@ export default class PaymentMethods extends React.Component {
 
     // If full payment is being done by egift then change the payment method to
     // 'hps_payment'.
-    if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)) {
+    if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart)) {
       this.changePaymentMethod('hps_payment');
       return;
     }

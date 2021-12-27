@@ -273,6 +273,33 @@ export const isEgiftRedemptionDone = (cart, redemptionType = 'guest') => {
 };
 
 /**
+ * Checks if the full payment is done by egift or not.
+ *
+ * @param {object} cart
+ *   The cart object.
+ *
+ * @return {boolean}
+ *   Returns True if full payment is done by egift else false.
+ */
+export const isFullPaymentDoneByEgift = (cart) => {
+  if (hasValue(cart.totals)) {
+    const {
+      egiftRedeemedAmount,
+      egiftRedemptionType,
+      balancePayable,
+    } = cart.totals;
+
+    if (hasValue(egiftRedeemedAmount)
+      && hasValue(egiftRedemptionType)
+      && balancePayable <= 0) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+/**
  * Return card number from eGift top-up item options.
  *
  * @todo update the option key for card number.
