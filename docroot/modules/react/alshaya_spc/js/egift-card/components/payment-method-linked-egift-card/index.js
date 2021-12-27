@@ -46,8 +46,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       response.then((result) => {
         if (result.status === 200) {
           if (result.data.card_number !== null && result.data.response_type) {
-            // IF trying to topup with same linked card then dont show Redemption using linked
-            // card in Checkout page.
+            // While doing topup of same egift card which is linked to the logged in customer,
+            // dont show linked card redemption section in checkout page.
             if (hasValue(cart.cart.topupCardNumber)
               && result.data.card_number === cart.cart.topupCardNumber) {
               return;
@@ -333,8 +333,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       return null;
     }
 
-    // Disable checkbox when egiftcard balance is 0 or is expired,
-    // Or trying to topup same card as linked.
+    // Disable checkbox when egiftcard balance is 0 or is expired.
     const disabled = (egiftCardActualBalance === 0 || isEgiftCardExpired);
 
     // If card redeemed subtract the redeemed amount from card balance and show.

@@ -486,7 +486,7 @@ const getProcessedCartData = async (cartData) => {
             data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
           }
 
-          // If eGift product is top-up card add has card number.
+          // If eGift product is to top-up a card add has card number.
           data.topupCardNumber = (hasValue(item.extension_attributes.topup_card_number))
             ? item.extension_attributes.topup_card_number
             : null;
