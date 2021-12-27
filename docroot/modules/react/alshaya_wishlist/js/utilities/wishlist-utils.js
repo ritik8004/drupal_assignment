@@ -136,6 +136,30 @@ export const getWishlistFromBackend = async () => {
 };
 
 /**
+ * Get the shared wishlist information from the backend using API.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+export const getSharedWishlistFromBackend = async () => {
+  // Call magento api to get the wishlist items from sharing code.
+  // @todo: need to replace the request URL with get shared wishlist
+  // api, once available in QA environment.
+  const response = await callMagentoApi('/V1/wishlist/me/items', 'GET');
+  if (hasValue(response.data)) {
+    if (hasValue(response.data.error)) {
+      logger.warning('Error getting wishlist items. Response: @response', {
+        '@response': JSON.stringify(response.data),
+      });
+    }
+  }
+
+  // Return response to perform necessary operation
+  // from where this function called.
+  return response;
+};
+
+/**
  * Utility function to add a product to wishlist for logged in users.
  */
 export const addProductToWishListForLoggedInUsers = (productInfo) => (
@@ -219,19 +243,6 @@ export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? 
  * Utility function to get wishlist notification time.
  */
 export const getWishlistNotificationTime = () => (3000);
-
-/**
- * Helper function to check if Wishlist sharing is enabled.
- */
-export const isShareWishlistEnabled = () => {
-  if (typeof drupalSettings.wishlist !== 'undefined'
-    && typeof drupalSettings.wishlist.config !== 'undefined'
-    && typeof drupalSettings.wishlist.config.enabledShare !== 'undefined') {
-    return drupalSettings.wishlist.config.enabledShare;
-  }
-
-  return false;
-};
 
 /**
  * Get the raw wishlist information from the backend using API.

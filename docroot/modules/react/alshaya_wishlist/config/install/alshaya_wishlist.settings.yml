@@ -3,8 +3,9 @@ enabled: true
 # their favourite list. Token, [alshaya_wishlist:wishlist_label], is used to
 # replace during the preprocess of text for FE.
 empty_wishlist_message: 'your [alshaya_wishlist:wishlist_label] is empty.'
-# Local storage expiration time for guest and logged-in users in seconds.
-local_storage_expiration_guest: 86400
+# Local storage expiration time for guest (default to 7 days)
+# and logged-in users (default to 5 mins) in seconds.
+local_storage_expiration_guest: 604800
 local_storage_expiration_logged_in: 300
 wishlist_label: 'favourite'
 # Config for removing products from wishlist after it's been

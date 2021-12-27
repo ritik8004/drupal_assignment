@@ -12,6 +12,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig;
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 use Drupal\Core\Utility\Token;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * AlshayaMyWishlistController for wishlist page.
@@ -98,7 +99,7 @@ class AlshayaMyWishlistController extends ControllerBase {
   /**
    * Prepare wishlist page content.
    */
-  public function wishList($context) {
+  public function wishList(Request $request, $context) {
     $cache_tags = [];
 
     $settings = [
@@ -110,7 +111,8 @@ class AlshayaMyWishlistController extends ControllerBase {
 
     // If context is 'share' wishlist then pass query string data to settings.
     if ($context == 'share') {
-      // @todo pass the query string encoded skus to drupal settings.
+      // Get the sharing code if available with query string.
+      $settings['sharingCode'] = $request->query->get('data');
     }
 
     $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
