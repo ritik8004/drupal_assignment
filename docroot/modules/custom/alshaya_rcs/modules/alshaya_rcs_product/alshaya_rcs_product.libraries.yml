@@ -106,3 +106,8 @@ gallery.product.block.product_zoom_magazine_gallery:
   version: 1.x
   js:
     templates/rcs-product-zoom-magazine-gallery-block.handlebars: {}
+
+product.order:
+  version: 1.x
+  js:
+    js/alshaya_rcs_order.js: {}

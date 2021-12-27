@@ -941,6 +941,8 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
     _alshaya_rcs_product_get_product_image_config($build);
     _alshaya_rcs_product_get_cnc_config($build);
   }
+  // Attaching order library.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
 }
 
 /**
@@ -986,6 +988,9 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   _alshaya_color_split_attach_info($build);
   _alshaya_rcs_product_get_product_image_config($build);
   _alshaya_rcs_product_get_cnc_config($build);
+
+  // Attaching order library.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
 }
 
 /**

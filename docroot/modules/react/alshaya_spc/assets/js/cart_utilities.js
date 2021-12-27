@@ -186,7 +186,7 @@
    * @param {string|null} parentSKU
    *   Parent sku value.
    */
-  Drupal.alshayaSpc.getProductDataV2Syncronous = function (sku, parentSKU = null) {
+  Drupal.alshayaSpc.getProductDataV2Synchronous = function (sku, parentSKU = null) {
     var data = Drupal.alshayaSpc.getLocalStorageProductDataV2(sku);
     if (data) {
       return data;

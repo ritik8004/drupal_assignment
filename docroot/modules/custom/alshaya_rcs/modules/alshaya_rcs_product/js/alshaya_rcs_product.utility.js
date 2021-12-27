@@ -17,7 +17,7 @@
    * @param {string} parentSKU
    *   (optional) The parent sku value.
    */
-  window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
