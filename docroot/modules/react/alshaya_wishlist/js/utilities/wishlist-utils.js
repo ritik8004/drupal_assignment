@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import {
   isAnonymousUser,
   getWishListData,
@@ -114,9 +115,6 @@ export const addRemoveWishlistItemsInBackend = async (data, action) => {
 
 /**
  * Get the wishlist information from the backend using API.
- *
- * @param {object} data
- *   The data object to send in the API call.
  *
  * @returns {Promise<object>}
  *   A promise object.
@@ -236,21 +234,73 @@ export const isShareWishlistEnabled = () => {
 };
 
 /**
+ * Get the raw wishlist information from the backend using API.
+ *
+ * @returns {Promise<object>}
+ *   A promise object.
+ */
+export const getWishlistInfoFromBackend = async () => {
+  // Call magento api to get the wishlist items of current logged in user.
+  const response = await callMagentoApi('/V1/wishlist/me/get', 'GET');
+  if (hasValue(response.data)) {
+    if (hasValue(response.data.error)) {
+      logger.warning('Error getting wishlist items. Response: @response', {
+        '@response': JSON.stringify(response.data),
+      });
+    }
+  }
+
+  // Return response to perform necessary operation
+  // from where this function called.
+  return response;
+};
+
+export const getWishlistShareCode = () => {
+  // First check if the wishlist share code available in cookies.
+  if (Cookies.get('wlsShareCode')) {
+    return Cookies.get('wlsShareCode');
+  }
+
+  // If we don't have one available in cookies, we need to get this
+  // from the backend via API call and set that in cookies.
+  let wlsShareCode = null;
+
+  // Call magento api to get the wishlist details of current logged in user.
+  getWishlistInfoFromBackend().then((response) => {
+    if (hasValue(response.data)) {
+      if (hasValue(response.data.status)
+        && hasValue(response.data.sharing_code)) {
+        wlsShareCode = response.data.sharing_code;
+        Cookies.set('wlsShareCode', wlsShareCode, { expires: 1, path: '/' });
+      }
+    }
+  });
+
+  // Return wlsShareCode, so,
+  // If one is available in backend, that will be returned
+  // else null value will be returned.
+  return wlsShareCode;
+};
+
+/**
  * Helper function to generate the wishlist share link with wishlist data.
  */
 export const getWishlistShareLink = () => {
-  // Get existing wishlist data from storage.
-  const wishListItems = getWishListData();
-
-  // Return if no existing data found.
-  if (!wishListItems) {
+  // Return if user is anonymous.
+  if (isAnonymousUser()) {
     return null;
   }
 
-  // Prepare the share wishlist url if items are available.
-  // @todo: reduce the length of the URL.
-  const shareItemsParams = btoa(JSON.stringify(wishListItems));
-  return Drupal.url.toAbsolute(`wishlist/share?data=${shareItemsParams}`);
+  // Get wishlist sharing code.
+  const sharCode = getWishlistShareCode();
+  // Return if sharing code is null.
+  if (!sharCode) {
+    return null;
+  }
+
+  // Prepare the share wishlist url with wishlist sharing code.
+  const encodedShareCode = btoa(sharCode);
+  return Drupal.url.toAbsolute(`wishlist/share?data=${encodedShareCode}`);
 };
 
 /**
