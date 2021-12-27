@@ -245,7 +245,7 @@ const PdpLayout = () => {
               {deliveryOptions && deliveryOptions !== null
                 && Object.keys(deliveryOptions).length > 0
                 && Object.keys(deliveryOptions).map((option) => (
-                  <div key={option} className={`express-delivery-text ${deliveryOptions[option].status}`}>
+                  <div key={option} className={`express-delivery-text ${option} ${deliveryOptions[option].status}`}>
                     <span>{deliveryOptions[option].label}</span>
                   </div>
                 ))}
