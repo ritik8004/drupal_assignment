@@ -333,9 +333,8 @@ body.overlay-delivery-area {
 
       &.active {
         .area-select-item-wrapper {
-          @include icon(radio-filled, before) {
-            font-size: 3rem;
-            color: $sameday-express-delivery-radio-button;
+          &::before {
+            border-width: 0.1875rem;
           }
         }
       }
@@ -350,8 +349,18 @@ body.overlay-delivery-area {
       align-items: center;
       width: 100%;
 
-      @include icon(radio-empty, before) {
-        font-size: 3rem;
+      &::before {
+        content: '';
+        position: relative;
+        width: 1.5rem;
+        height: 1.25rem;
+        background: $primary_bg;
+        display: inline-block;
+        border-radius: 100%;
+        border: 1px solid $primary_radiobtn_empty;
+        margin-#{$right}: 1rem;
+        margin-#{$left}: 1rem;
+        vertical-align: middle;
       }
     }
 
