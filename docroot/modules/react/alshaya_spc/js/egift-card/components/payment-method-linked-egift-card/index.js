@@ -6,6 +6,7 @@ import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { callEgiftApi, performRedemption, updatePriceSummaryBlock } from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
 
 class PaymentMethodLinkedEgiftCard extends React.Component {
   constructor(props) {
@@ -343,7 +344,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     return (
       <>
-        <div className="payment-method fadeInUp payment-method-checkout_com_egift_linked_card">
+        <div className="payment-method payment-method-checkout_com_egift_linked_card">
           <div className="payment-method-top-panel">
 
             <div className="payment-method-label-wrapper">
@@ -364,54 +365,58 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
                 <ConditionalView condition={!isEgiftCardExpired}>
                   {
-                    Drupal.t('Pay using egift card (Available Balance: @currencyCode @amount)',
-                      {
-                        '@currencyCode': getCurrencyCode(), '@amount': cardBlanceAmount,
-                      }, { context: 'egift' })
+                    Drupal.t('Pay using egift card', { context: 'egift' })
                   }
-                </ConditionalView>
-              </label>
-            </div>
-
-            {/* FE to update Payment Icon SVG any where here. */}
-            <ConditionalView condition={apiErrorMessage !== ''}>
-              <div id="api-error">{apiErrorMessage}</div>
-            </ConditionalView>
-
-            <ConditionalView condition={!isEgiftCardExpired}>
-              <div className="payment-method-bottom-panel payment-method-form checkout_com_egift_linked_card">
-                <ConditionalView conditional={openModal}>
-                  <UpdateEgiftCardAmount
-                    closeModal={this.closeModal}
-                    open={openModal}
-                    amount={modalInputAmount}
-                    remainingAmount={egiftCardRemainingBalance}
-                    updateAmount={this.handleAmountUpdate}
-                    cart={cart}
-                  />
-                </ConditionalView>
-
-                <ConditionalView condition={eGiftbalancePayable > 0}>
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">
                       {
-                        Drupal.t('Pay @currencyCode @amount using another payment method to complete purchase',
+                        Drupal.t('(Available Balance: @currencyCode @amount)',
                           {
-                            '@currencyCode': getCurrencyCode(), '@amount': eGiftbalancePayable,
+                            '@currencyCode': getCurrencyCode(), '@amount': cardBlanceAmount,
                           }, { context: 'egift' })
                       }
                     </div>
                   </div>
                 </ConditionalView>
+              </label>
+              <ConditionalView condition={!isEgiftCardExpired}>
+                <div className="payment-method-bottom-panel payment-method-form checkout_com_egift_linked_card">
+                  <ConditionalView conditional={openModal}>
+                    <UpdateEgiftCardAmount
+                      closeModal={this.closeModal}
+                      open={openModal}
+                      amount={modalInputAmount}
+                      remainingAmount={egiftCardRemainingBalance}
+                      updateAmount={this.handleAmountUpdate}
+                      cart={cart}
+                    />
+                  </ConditionalView>
+
+                  <ConditionalView condition={eGiftbalancePayable > 0}>
+                    <div className="spc-payment-method-desc">
+                      <div className="desc-content">
+                        {
+                          Drupal.t('Pay @currencyCode @amount using another payment method to complete purchase',
+                            {
+                              '@currencyCode': getCurrencyCode(), '@amount': eGiftbalancePayable,
+                            }, { context: 'egift' })
+                        }
+                      </div>
+                    </div>
+                  </ConditionalView>
 
 
-                <ConditionalView condition={cart.cart.totals.egiftRedemptionType === 'linked'}>
-                  <div onClick={this.openModal}><strong>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</strong></div>
-                </ConditionalView>
+                  <ConditionalView condition={cart.cart.totals.egiftRedemptionType === 'linked'}>
+                    <div className="edit-egift-payment-amount" onClick={this.openModal}>{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
+                  </ConditionalView>
 
-              </div>
+                </div>
+              </ConditionalView>
+            </div>
+            <LinkedEgiftSVG />
+            <ConditionalView condition={apiErrorMessage !== ''}>
+              <div id="api-error">{apiErrorMessage}</div>
             </ConditionalView>
-
           </div>
         </div>
       </>

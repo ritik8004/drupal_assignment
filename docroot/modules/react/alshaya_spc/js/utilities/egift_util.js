@@ -17,10 +17,12 @@ export const egiftCardHeader = ({
   egiftSubHeading,
 }) => (
   <div className="egift-header-wrapper">
-    <p>
-      <strong>{egiftHeading}</strong>
-    </p>
-    <p>{egiftSubHeading}</p>
+    <div className="egift-header-title">
+      {egiftHeading}
+    </div>
+    <div className="egift-header-subtitle">
+      {egiftSubHeading}
+    </div>
   </div>
 );
 
@@ -29,19 +31,32 @@ export const egiftCardHeader = ({
  *
  * @param {*} type
  * @param {*} name
- * @param {*} placeholder
+ * @param {*} label
  * @param {*} className
  * @param {*} buttonText
  */
 export const egiftFormElement = ({
   type = '',
   name = '',
-  placeholder = '',
+  label = '',
   className = '',
   buttonText = '',
   value = '',
   disabled = false,
 }) => {
+  const handleEvent = (e) => {
+    if (e.currentTarget.value.length > 0) {
+      e.currentTarget.classList.add('focus');
+    } else {
+      e.currentTarget.classList.remove('focus');
+    }
+  };
+
+  let focusClass = '';
+  if (value !== undefined && value !== '') {
+    focusClass += ' focus';
+  }
+
   // Separate template based on type.
   let rtnTemplate = '';
   switch (type) {
@@ -56,17 +71,41 @@ export const egiftFormElement = ({
         />
       );
       break;
-    default:
+
+    case 'number':
       rtnTemplate = (
-        <div className={`egift-type-${type}`}>
+        <div className={`egift-type-${type} spc-type-textfield egift-input-item`}>
           <input
             type={type}
             name={`egift_${name}`}
-            placeholder={placeholder}
+            className={`${className} ${focusClass}`}
+            defaultValue={value}
+            disabled={disabled}
+            onBlur={(e) => handleEvent(e)}
+          />
+          <div className="c-input__bar" />
+          <label>{label}</label>
+          <span className="open-amount-currency">
+            { drupalSettings.alshaya_spc.currency_config.currency_code }
+          </span>
+          <div id={`egift_${name}_error`} className="error" />
+        </div>
+      );
+      break;
+
+    default:
+      rtnTemplate = (
+        <div className={`egift-type-${type} spc-type-textfield`}>
+          <input
+            type={type}
+            name={`egift_${name}`}
             className={className}
             defaultValue={value}
             disabled={disabled}
+            onBlur={(e) => handleEvent(e)}
           />
+          <div className="c-input__bar" />
+          <label>{label}</label>
           <div id={`egift_${name}_error`} className="error" />
         </div>
       );

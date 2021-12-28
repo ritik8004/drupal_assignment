@@ -1,0 +1,20 @@
+.checkout_com_egift_linked_card {
+  .popup-content {
+    .egift-amount-update-wrapper {
+      .egift-header-title {
+        font-family: $hnm-demibold;
+      }
+
+      .egift-button {
+        font-family: $hnm-demibold;
+        text-transform: uppercase;
+      }
+
+      .close {
+        &::before {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
