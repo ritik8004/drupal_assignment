@@ -2,8 +2,9 @@ import React from 'react';
 import ShareIcon from './share-icon';
 import SharePopup from './share-popup';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { getWishlistShareLink } from '../../utilities/wishlist-utils';
+import { getWishlistInfoFromBackend } from '../../utilities/wishlist-utils';
 import { getWishListData, isAnonymousUser } from '../../../../js/utilities/wishlistHelper';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class WishlistShare extends React.Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class WishlistShare extends React.Component {
     const wishListItemsCount = Object.keys(wishListItems).length;
 
     this.state = {
-      showSharePopup: false,
+      wishlistShareLink: null,
       wishListItemsCount,
     };
   }
@@ -70,12 +71,28 @@ class WishlistShare extends React.Component {
   };
 
   /**
-   * To open the wishlist share popup.
-   * Popup will show up while clicking on share link.
+   * Prepare the wishlist share link and open the wishlist share popup.
+   * Popup will show up once we have share link created.
    */
   openWishListShareModal = () => {
-    this.setState({
-      showSharePopup: true,
+    // Call magento api to get the wishlist details of current logged in user.
+    getWishlistInfoFromBackend().then((response) => {
+      if (hasValue(response.data)) {
+        if (hasValue(response.data.status)
+          && hasValue(response.data.sharing_code)) {
+          // Prepare the share wishlist url with wishlist
+          // sharing code and user name.
+          const encodedShareUrl = btoa(JSON.stringify({
+            sharedCode: response.data.sharing_code,
+            sharedUserName: drupalSettings.userDetails.userName || null,
+          }));
+
+          // Update the wishlist share link in state to open the popup.
+          this.setState({
+            wishlistShareLink: Drupal.url.toAbsolute(`wishlist/share?data=${encodedShareUrl}`),
+          });
+        }
+      }
     });
   }
 
@@ -84,12 +101,15 @@ class WishlistShare extends React.Component {
    */
   closeWishlistShareModal = () => {
     this.setState({
-      showSharePopup: false,
+      wishlistShareLink: null,
     });
   };
 
   render() {
-    const { wishListItemsCount, showSharePopup } = this.state;
+    const {
+      wishListItemsCount,
+      wishlistShareLink,
+    } = this.state;
 
     // Return if there are no items in wishlist info.
     if (!wishListItemsCount) {
@@ -102,9 +122,9 @@ class WishlistShare extends React.Component {
           <span className="text">{Drupal.t('Share All', {}, { context: 'wishlist' })}</span>
           <span className="icon"><ShareIcon /></span>
         </button>
-        <ConditionalView condition={showSharePopup}>
+        <ConditionalView condition={wishlistShareLink !== null}>
           <SharePopup
-            wishlistShareLink={getWishlistShareLink()}
+            wishlistShareLink={wishlistShareLink}
             closeWishlistShareModal={this.closeWishlistShareModal}
           />
         </ConditionalView>
