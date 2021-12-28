@@ -9,6 +9,7 @@ import {
   prepareAddressDataForShipping,
 } from '../../../utilities/address_util';
 import ConditionalView from '../../../common/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class ShippingMethod extends React.Component {
   constructor(props) {
@@ -17,6 +18,37 @@ export default class ShippingMethod extends React.Component {
     this.state = {
       selectedOption: selected,
     };
+  }
+
+  componentDidMount = () => {
+    document.addEventListener('onShippingAddressUpdate', this.refreshShippingMethodState, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('onShippingAddressUpdate', this.refreshShippingMethodState, false);
+  }
+
+  /**
+   * Handles shipping method update.
+   */
+  refreshShippingMethodState = (e) => {
+    const data = e.detail;
+
+    if (hasValue(data.shipping)
+      && hasValue(data.shipping.methods)
+      && hasValue(data.shipping.method)) {
+      const { selectedOption } = this.state;
+
+      Object.entries(data.shipping.methods).forEach(([, method]) => {
+        if (data.shipping.method.indexOf(method.method_code) !== -1
+          && selectedOption !== method.method_code) {
+          this.setState({
+            selectedOption: method.method_code,
+          });
+          document.getElementById(`shipping-method-${method.method_code}`).checked = true;
+        }
+      });
+    }
   }
 
   /**

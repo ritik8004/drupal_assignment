@@ -5,6 +5,7 @@ import { getFormattedError } from './common';
 import StaticStorage from './staticStorage';
 import { hasValue, isString } from '../../../../js/utilities/conditionsUtility';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
+import { isExpressDeliveryEnabled } from '../../../../js/utilities/expressDeliveryHelper';
 
 /**
  * Format the address array.
@@ -142,7 +143,12 @@ const getHomeDeliveryShippingMethods = async (data) => {
   const key = md5(JSON.stringify(formattedAddress.custom_attributes));
 
   // Get shipping methods from static.
-  const staticShippingMethods = StaticStorage.get('shipping_methods') || {};
+  // Not using static storage when express delivery is enabled because
+  // it might have old data when we change shipping area and that
+  // delivery method might no longer be applicable.
+  const staticShippingMethods = isExpressDeliveryEnabled()
+    ? {}
+    : StaticStorage.get('shipping_methods');
 
   if (!hasValue(staticShippingMethods[key])) {
     staticShippingMethods[key] = [];
