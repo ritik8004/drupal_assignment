@@ -15,3 +15,9 @@ alshaya_egift_topup_purchase:
     dist/egift_topup_purchase.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_egift_check_balance:
+  js:
+    dist/egift_check_balance.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
