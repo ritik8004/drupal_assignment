@@ -143,12 +143,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
   const key = md5(JSON.stringify(formattedAddress.custom_attributes));
 
   // Get shipping methods from static.
-  // Not using static storage when express delivery is enabled because
-  // it might have old data when we change shipping area and that
-  // delivery method might no longer be applicable.
-  const staticShippingMethods = isExpressDeliveryEnabled()
-    ? {}
-    : StaticStorage.get('shipping_methods');
+  const staticShippingMethods = StaticStorage.get('shipping_methods') || {};
 
   if (!hasValue(staticShippingMethods[key])) {
     staticShippingMethods[key] = [];
