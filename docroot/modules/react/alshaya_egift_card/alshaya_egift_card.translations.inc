@@ -15,8 +15,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Check Balance & Validity',
         'context' => 'egift',
       ],
-      'Enter gift card details to check balance and validity.' => [
-        'ar' => 'Enter gift card details to check balance and validity.',
+      'Enter gift card details to check balance & validity.' => [
+        'ar' => 'Enter gift card details to check balance & validity.',
         'context' => 'egift',
       ],
       'eGift Card Number' => [
@@ -27,8 +27,20 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Something went wrong, please try again later.',
         'context' => 'egift',
       ],
+      'Please enter your card otp.' => [
+        'ar' => 'Please enter your card otp.',
+        'context' => 'egift',
+      ],
+      'Please enter your valid card otp.' => [
+        'ar' => 'Please enter your valid card otp.',
+        'context' => 'egift',
+      ],
       'Please enter your card number.' => [
         'ar' => 'Please enter your card number.',
+        'context' => 'egift',
+      ],
+      'Please enter valid card number.' => [
+        'ar' => 'Please enter valid card number.',
         'context' => 'egift',
       ],
       'Terms & Conditions' => [
