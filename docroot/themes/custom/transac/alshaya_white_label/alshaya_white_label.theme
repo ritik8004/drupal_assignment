@@ -1008,6 +1008,16 @@ function alshaya_white_label_preprocess_menu(&$variables) {
       }
     }
   }
+  // Adding GTM label attribute Super Menu link items.
+  elseif ($variables['menu_name'] === 'super-menu') {
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    foreach ($variables['items'] as $item) {
+      $itemEntity = $item['original_link']->getTranslateRoute()->getOption('entity');
+      $attributes = $item['url']->getOption('attributes');
+      $attributes['gtm-menu-title'] = $itemEntity->hasTranslation($langcode) ? $itemEntity->getTranslation($langcode)->getTitle() : $item['original_link']->getTitle();
+      $item['url']->setOption('attributes', $attributes);
+    }   
+  }
 }
 
 /**
