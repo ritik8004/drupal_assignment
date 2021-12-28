@@ -506,6 +506,13 @@ function alshaya_color_split_page_attachments(array &$attachments) {
 }
 
 /**
+ * Implements hook_alshaya_rcs_product_order_build_alter().
+ */
+function alshaya_color_split_alshaya_rcs_product_order_build_alter(array &$build) {
+  _alshaya_color_split_attach_info($build);
+}
+
+/**
  * Attach required information around color split.
  *
  * @param Array $attachments
