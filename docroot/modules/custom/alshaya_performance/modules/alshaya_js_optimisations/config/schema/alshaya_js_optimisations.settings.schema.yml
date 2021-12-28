@@ -12,12 +12,21 @@ alshaya_js_optimisations.settings:
         enabled:
           type: boolean
           label: 'Enable Critical JS'
-        critical:
-          type: string
-          label: 'Critical Scripts'
-        sitewide:
-          type: string
-          label: 'Sitewide Scripts'
         ie_only:
           type: string
           label: 'IE Only Scripts'
+        site_libraries:
+          type: string
+          label: 'Site Basic Scripts'
+        critical:
+          type: string
+          label: 'Critical Scripts'
+        sitewide_1:
+          type: string
+          label: 'Sitewide Scripts 1'
+        sitewide_2:
+          type: string
+          label: 'Sitewide Scripts 2'
+        hidden_data:
+          type: string
+          label: 'Resolved libries data with weights'
