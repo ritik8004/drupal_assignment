@@ -112,7 +112,8 @@ class AlshayaMyWishlistController extends ControllerBase {
     // If context is 'share' wishlist then pass query string data to settings.
     if ($context == 'share') {
       // Get the sharing code if available with query string.
-      $settings['sharingCode'] = $request->query->get('data');
+      $data = json_decode(base64_decode($request->query->get('data')));
+      $settings['sharedCode'] = isset($data->sharedCode) ? $data->sharedCode : '';
     }
 
     $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
@@ -142,7 +143,19 @@ class AlshayaMyWishlistController extends ControllerBase {
   /**
    * Returns page title.
    */
-  public function getWishListTitle() {
+  public function getWishListTitle(Request $request, $context) {
+    // If context is 'share' wishlist then get the username from query string.
+    if ($context == 'share') {
+      // Get the user's name if available with query string.
+      $data = json_decode(base64_decode($request->query->get('data')));
+      $userName = isset($data->sharedUserName) ? ($data->sharedUserName . "'s") : "";
+
+      return $this->t('@userName @wishlist_label', [
+        '@userName' => $userName,
+        '@wishlist_label' => $this->tokenManager->replace('[alshaya_wishlist:wishlist_label]'),
+      ], ['context' => 'wishlist']);
+    }
+
     return $this->t('my @wishlist_label', [
       '@wishlist_label' => $this->tokenManager->replace('[alshaya_wishlist:wishlist_label]'),
     ], ['context' => 'wishlist']);

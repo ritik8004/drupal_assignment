@@ -18,6 +18,7 @@ import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelpe
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { getSharedWishlistFromBackend } from '../../utilities/wishlist-utils';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class WishlistProductList extends React.Component {
   constructor(props) {
@@ -46,6 +47,9 @@ class WishlistProductList extends React.Component {
     // If this is a shared wishlist page, we need to fetch shared wishlist
     // products from the backend via API and show on the page.
     if (isShareWishlistPage()) {
+      // Show full screen loader until we check for data availablity.
+      showFullScreenLoader();
+
       // Get the shared wishlist items from the backend API.
       getSharedWishlistFromBackend().then((response) => {
         if (hasValue(response.data.items)) {
@@ -66,8 +70,10 @@ class WishlistProductList extends React.Component {
             this.setState({ filters, wishListItemsCount });
           }
         }
-      });
 
+        // Removed the loader once API call gets completed.
+        removeFullScreenLoader();
+      });
       // We don't want event listeners for shared wishlist page.
       return;
     }
@@ -159,7 +165,7 @@ class WishlistProductList extends React.Component {
 
     return (
       <>
-        <ConditionalView condition={isAnonymousUser()}>
+        <ConditionalView condition={isAnonymousUser() && !isShareWishlistPage()}>
           <LoginMessage />
         </ConditionalView>
         <NotificationMessage />

@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import {
   isAnonymousUser,
   getWishListData,
@@ -143,9 +142,7 @@ export const getWishlistFromBackend = async () => {
  */
 export const getSharedWishlistFromBackend = async () => {
   // Call magento api to get the wishlist items from sharing code.
-  // @todo: need to replace the request URL with get shared wishlist
-  // api, once available in QA environment.
-  const response = await callMagentoApi('/V1/wishlist/me/items', 'GET');
+  const response = await callMagentoApi(`/V1/wishlist/code/${drupalSettings.wishlist.sharedCode}/items`, 'GET');
   if (hasValue(response.data)) {
     if (hasValue(response.data.error)) {
       logger.warning('Error getting wishlist items. Response: @response', {
@@ -264,54 +261,6 @@ export const getWishlistInfoFromBackend = async () => {
   // Return response to perform necessary operation
   // from where this function called.
   return response;
-};
-
-export const getWishlistShareCode = () => {
-  // First check if the wishlist share code available in cookies.
-  if (Cookies.get('wlsShareCode')) {
-    return Cookies.get('wlsShareCode');
-  }
-
-  // If we don't have one available in cookies, we need to get this
-  // from the backend via API call and set that in cookies.
-  let wlsShareCode = null;
-
-  // Call magento api to get the wishlist details of current logged in user.
-  getWishlistInfoFromBackend().then((response) => {
-    if (hasValue(response.data)) {
-      if (hasValue(response.data.status)
-        && hasValue(response.data.sharing_code)) {
-        wlsShareCode = response.data.sharing_code;
-        Cookies.set('wlsShareCode', wlsShareCode, { expires: 1, path: '/' });
-      }
-    }
-  });
-
-  // Return wlsShareCode, so,
-  // If one is available in backend, that will be returned
-  // else null value will be returned.
-  return wlsShareCode;
-};
-
-/**
- * Helper function to generate the wishlist share link with wishlist data.
- */
-export const getWishlistShareLink = () => {
-  // Return if user is anonymous.
-  if (isAnonymousUser()) {
-    return null;
-  }
-
-  // Get wishlist sharing code.
-  const sharCode = getWishlistShareCode();
-  // Return if sharing code is null.
-  if (!sharCode) {
-    return null;
-  }
-
-  // Prepare the share wishlist url with wishlist sharing code.
-  const encodedShareCode = btoa(sharCode);
-  return Drupal.url.toAbsolute(`wishlist/share?data=${encodedShareCode}`);
 };
 
 /**

@@ -354,7 +354,6 @@ export default class CartItem extends React.Component {
             </div>
             <ConditionalView condition={isWishlistEnabled()}>
               <div className="spc-product-wishlist-link">
-                {/* @todo: we need to move this to proper place. */}
                 <WishlistContainer
                   context="cart"
                   position="cart-item"

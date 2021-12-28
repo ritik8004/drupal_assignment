@@ -1,7 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import connectInfiniteHits from '../../../../alshaya_algolia_react/js/src/components/algolia/connectors/connectInfiniteHits';
 import Teaser from '../../../../alshaya_algolia_react/js/src/components/teaser';
-import { removeLoader } from '../../../../alshaya_algolia_react/js/src/utils';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import {
   getWishlistItemInStockStatus,
@@ -20,15 +19,8 @@ const ProductInfiniteHits = connectInfiniteHits(({
   pageType,
   wishListItemsCount,
 }) => {
-  // Create ref to get element after it gets rendered.
-  const teaserRef = useRef();
-
   useEffect(
     () => {
-      if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
-        removeLoader();
-      }
-
       // Check if we receive less number of products from Algolia and
       // have more data in wishlist storage, we will show a notification
       // to customers and will remove such products from their wishlist.
@@ -59,7 +51,7 @@ const ProductInfiniteHits = connectInfiniteHits(({
 
   return (
     <>
-      <div className="view-content" ref={teaserRef}>
+      <div className="view-content">
         <ConditionalView condition={hits.length > 0}>
           {
             hits.map((hit) => (
