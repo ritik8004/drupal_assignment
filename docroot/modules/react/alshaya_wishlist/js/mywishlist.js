@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import WishlistProductList from './components/wishlist-product-list';
-import { isShareWishlistEnabled } from './utilities/wishlist-utils';
+import { isShareWishlistEnabled } from '../../js/utilities/wishlistHelper';
 import WishlistShare from './components/wishlist-share';
 
 ReactDOM.render(

@@ -28,6 +28,33 @@ export const isWishlistPage = (extraInfo) => {
 };
 
 /**
+ * Helper function to check if curren page is not a wishlist
+ * share page and sharing wishlist is enabled.
+ */
+export const isShareWishlistPage = () => (typeof drupalSettings.wishlist !== 'undefined'
+  && typeof drupalSettings.wishlist.context !== 'undefined'
+  && drupalSettings.wishlist.context === 'share');
+
+/**
+ * Helper function to check sharing wishlist is enabled.
+ */
+export const isShareWishlistEnabled = () => {
+  // Disable share wishlist link if we are on shared wishlist page.
+  if (isShareWishlistPage()) {
+    return false;
+  }
+
+  // Check in the drupal settings if wishlist share is enabled.
+  if (typeof drupalSettings.wishlist !== 'undefined'
+    && typeof drupalSettings.wishlist.config !== 'undefined'
+    && typeof drupalSettings.wishlist.config.enabledShare !== 'undefined') {
+    return drupalSettings.wishlist.config.enabledShare;
+  }
+
+  return false;
+};
+
+/**
  * Returns the wishlist info local storage expiration time for guest users.
  *
  * @returns integer

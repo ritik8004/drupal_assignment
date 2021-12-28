@@ -9,16 +9,28 @@ import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
 import PageEmptyMessage from '../../../../js/utilities/components/page-empty-message';
 import NotificationMessage from '../../../../js/utilities/components/notification-message';
-import { getWishListData, isAnonymousUser } from '../../../../js/utilities/wishlistHelper';
+import {
+  getWishListData,
+  isAnonymousUser,
+  isShareWishlistPage,
+} from '../../../../js/utilities/wishlistHelper';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
+import { getSharedWishlistFromBackend } from '../../utilities/wishlist-utils';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class WishlistProductList extends React.Component {
   constructor(props) {
     super(props);
-    // Get the wishlist items.
-    const wishListItems = getWishListData() || {};
-    const wishListItemsCount = Object.keys(wishListItems).length;
+    let wishListItems = {};
+    let wishListItemsCount = 0;
+    // If the current page is not a shared wishlist page. We
+    // get wishlist data from the local storage.
+    if (!isShareWishlistPage()) {
+      // Get the wishlist items.
+      wishListItems = getWishListData() || {};
+      wishListItemsCount = Object.keys(wishListItems).length;
+    }
 
     const filters = (wishListItemsCount > 0)
       ? this.getFiltersFromWishListItems(wishListItems)
@@ -31,6 +43,35 @@ class WishlistProductList extends React.Component {
   }
 
   componentDidMount() {
+    // If this is a shared wishlist page, we need to fetch shared wishlist
+    // products from the backend via API and show on the page.
+    if (isShareWishlistPage()) {
+      // Get the shared wishlist items from the backend API.
+      getSharedWishlistFromBackend().then((response) => {
+        if (hasValue(response.data.items)) {
+          const wishListItems = {};
+
+          response.data.items.forEach((item) => {
+            wishListItems[item.sku] = {
+              sku: item.sku,
+              options: item.options,
+            };
+          });
+
+          // Update the wishlist items count and filters in state
+          // to show the shared wishlist data.
+          const wishListItemsCount = Object.keys(wishListItems).length;
+          if (wishListItemsCount > 0) {
+            const filters = this.getFiltersFromWishListItems(wishListItems);
+            this.setState({ filters, wishListItemsCount });
+          }
+        }
+      });
+
+      // We don't want event listeners for shared wishlist page.
+      return;
+    }
+
     if (!isAnonymousUser()) {
       // Add event listener for get wishlist load event for logged in user.
       // This will execute when wishlist loaded from the backend
@@ -41,8 +82,18 @@ class WishlistProductList extends React.Component {
     document.addEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
   }
 
+  /**
+   * Remove event listners after component gets unmount.
+   */
   componentWillUnmount() {
-    document.addEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
+    // We don't have event listeners for shared wishlist page.
+    if (isShareWishlistPage()) {
+      return;
+    }
+
+    if (!isAnonymousUser()) {
+      document.removeEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
+    }
     document.removeEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
   }
 

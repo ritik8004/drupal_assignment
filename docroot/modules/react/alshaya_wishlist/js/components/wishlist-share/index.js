@@ -3,14 +3,71 @@ import ShareIcon from './share-icon';
 import SharePopup from './share-popup';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { getWishlistShareLink } from '../../utilities/wishlist-utils';
+import { getWishListData, isAnonymousUser } from '../../../../js/utilities/wishlistHelper';
 
 class WishlistShare extends React.Component {
   constructor(props) {
     super(props);
+
+    // Get the wishlist items.
+    const wishListItems = getWishListData() || {};
+    const wishListItemsCount = Object.keys(wishListItems).length;
+
     this.state = {
       showSharePopup: false,
+      wishListItemsCount,
     };
   }
+
+  /**
+   * We need to listen events from load wishlist data from backend and remove
+   * products from wishlist so we can update the share button status properly.
+   */
+  componentDidMount() {
+    if (!isAnonymousUser()) {
+      // Add event listener for get wishlist load event for logged in user.
+      // This will execute when wishlist loaded from the backend
+      // and page loads before.
+      document.addEventListener('getWishlistFromBackendSuccess', this.toggleShareLink, false);
+    }
+    // Update share link after any product is removed.
+    document.addEventListener('productRemovedFromWishlist', this.toggleShareLink, false);
+  }
+
+  /**
+   * Remove event listners after component gets unmount.
+   */
+  componentWillUnmount() {
+    if (!isAnonymousUser()) {
+      document.removeEventListener('getWishlistFromBackendSuccess', this.updateWisListProductsList, false);
+    }
+    document.removeEventListener('productRemovedFromWishlist', this.updateWisListProductsList, false);
+  }
+
+  /**
+   * Show/Hide the wishlist share link on products data availability.
+   */
+  toggleShareLink = () => {
+    // Get the wishlist items.
+    const wishListItems = getWishListData() || {};
+    const wishListItemsCount = Object.keys(wishListItems).length;
+    this.setState({ wishListItemsCount });
+  };
+
+  /**
+   * On click handler for the share button link. If user is anonymous we
+   * redirect user to login page else the modal popup will open.
+   */
+  onShareAllClick = () => {
+    // Redirect to login page if custom is not logged in.
+    if (isAnonymousUser()) {
+      window.location = Drupal.url(`user/login?destination=${drupalSettings.path.currentPath}`);
+      return;
+    }
+
+    // Open wishlist share modal if custom is logged in.
+    this.openWishListShareModal();
+  };
 
   /**
    * To open the wishlist share popup.
@@ -32,11 +89,16 @@ class WishlistShare extends React.Component {
   };
 
   render() {
-    const { showSharePopup } = this.state;
+    const { wishListItemsCount, showSharePopup } = this.state;
+
+    // Return if there are no items in wishlist info.
+    if (!wishListItemsCount) {
+      return null;
+    }
 
     return (
       <>
-        <button type="button" onClick={this.openWishListShareModal}>
+        <button type="button" onClick={this.onShareAllClick}>
           <span className="text">{Drupal.t('Share All', {}, { context: 'wishlist' })}</span>
           <span className="icon"><ShareIcon /></span>
         </button>
