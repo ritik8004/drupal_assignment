@@ -7,7 +7,7 @@ empty_wishlist_message: 'your [alshaya_wishlist:wishlist_label] is empty.'
 # and logged-in users (default to 5 mins) in seconds.
 local_storage_expiration_guest: 604800
 local_storage_expiration_logged_in: 300
-wishlist_label: 'favourite'
+wishlist_label: 'favorites'
 # Config for removing products from wishlist after it's been
 # added to cart from PDP, PLP, Wishlist or any other pages.
 remove_after_addtocart: true
