@@ -47,7 +47,11 @@ export default class ShippingMethod extends React.Component {
           this.setState({
             selectedOption: method.method_code,
           });
-          document.getElementById(`shipping-method-${method.method_code}`).checked = true;
+          // Add delay to ensure selected shipping method markup is rendered
+          // before setting the radio button as checked.
+          setTimeout(() => {
+            document.getElementById(`shipping-method-${method.method_code}`).checked = true;
+          }, 10);
         }
       });
     }
