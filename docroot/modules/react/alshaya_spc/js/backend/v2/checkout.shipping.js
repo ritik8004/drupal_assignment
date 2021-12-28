@@ -5,7 +5,6 @@ import { getFormattedError } from './common';
 import StaticStorage from './staticStorage';
 import { hasValue, isString } from '../../../../js/utilities/conditionsUtility';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
-import { isExpressDeliveryEnabled } from '../../../../js/utilities/expressDeliveryHelper';
 
 /**
  * Format the address array.
