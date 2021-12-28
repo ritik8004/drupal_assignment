@@ -111,7 +111,7 @@ body.wishlist-enabled {
 
   #wishlist-header-wrapper {
     position: absolute;
-    top: 1.125rem;
+    top: 0.5rem;
     #{$right}: 1.875rem;
 
     @include breakpoint($only-mobile) {
@@ -137,13 +137,15 @@ body.wishlist-enabled {
   }
 
   .sticky-filter-wrapper {
-    .wishlist-icon {
+    .wishlist-icon,
+    .wishlist-notification {
       display: none;
     }
   }
 
   .filter-fixed-top {
     .sticky-filter-wrapper {
+      .wishlist-header.header-wrapper,
       .wishlist-header.sticky-wrapper {
         position: absolute;
         top: 50%;
@@ -163,7 +165,8 @@ body.wishlist-enabled {
         }
       }
 
-      .wishlist-icon {
+      .wishlist-icon,
+      .wishlist-notification {
         display: block;
       }
     }
