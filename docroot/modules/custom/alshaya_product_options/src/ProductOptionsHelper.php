@@ -147,8 +147,11 @@ class ProductOptionsHelper {
 
   /**
    * Synchronize all product options.
+   *
+   * @param bool $sync_facets
+   *   If pretty path facets need to be synced.
    */
-  public function synchronizeProductOptions() {
+  public function synchronizeProductOptions($sync_facets = FALSE) {
     $this->logger->debug('Sync for all product attribute options started.');
     $fields = $this->skuFieldsManager->getFieldAdditions();
 
@@ -168,7 +171,7 @@ class ProductOptionsHelper {
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       foreach ($sync_options as $attribute_code) {
-        $this->syncProductOption($attribute_code, $langcode);
+        $this->syncProductOption($attribute_code, $langcode, $sync_facets);
       }
     }
 
@@ -187,8 +190,10 @@ class ProductOptionsHelper {
    *   Attribute code.
    * @param string $langcode
    *   Language code.
+   * @param bool $sync_facets
+   *   If pretty path facets need to be synced.
    */
-  public function syncProductOption($attribute_code, $langcode) {
+  public function syncProductOption($attribute_code, $langcode, $sync_facets = FALSE) {
     $this->apiWrapper->updateStoreContext($langcode);
 
     $this->logger->debug('Sync for product attribute options started of attribute @attribute_code in language @langcode.', [
@@ -228,7 +233,8 @@ class ProductOptionsHelper {
         $option['label'],
         $attribute['attribute_id'],
         $attribute['attribute_code'],
-        $weight++
+        $weight++,
+        $sync_facets
       );
 
       if (empty($term)) {
