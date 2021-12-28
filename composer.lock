@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc442c0b0c8748b1515540ed798e595d",
+    "content-hash": "ffbf400d9883d1464313d966fca53d52",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6150,7 +6150,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Trigger and event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+                    "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

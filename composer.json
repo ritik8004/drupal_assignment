@@ -343,7 +343,7 @@
                 "Ajax support / Use behaviors": "https://www.drupal.org/files/issues/2021-06-03/recaptcha-ajax-2493183-225.patch"
             },
             "drupal/datalayer": {
-                "Trigger and event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+                "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
             }
         },
         "installer-paths": {
