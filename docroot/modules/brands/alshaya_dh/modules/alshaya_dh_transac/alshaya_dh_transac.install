@@ -104,7 +104,31 @@ function alshaya_dh_transac_install() {
     ],
     'Select your prefered communication channel' => [
       'ar' => 'حدد قناة الاتصال المفضلة لديك'
-    ]
+    ],
+    'Details and care' => [
+      'ar' => 'التفاصيل والعناية'
+    ],
+    'Sleeve Length' => [
+      'ar' => 'طول الكم',
+    ],
+    'Length' => [
+      'ar' => 'الطول',
+    ],
+    'Neckline' => [
+      'ar' => 'الياقة',
+    ],
+    'Detail' => [
+      'ar' => 'التفاصيل',
+    ],
+    'Design' => [
+      'ar' => 'التصميم',
+    ],
+    'Fabric' => [
+      'ar' => 'الخامة',
+    ],
+    'Product Type' => [
+      'ar' => 'نوع المنتج'
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);

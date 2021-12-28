@@ -28,6 +28,10 @@ class TotalLineItems extends React.Component {
     document.addEventListener('applyDynamicPromotions', this.applyDynamicPromotions, false);
   };
 
+  componentWillUnmount = () => {
+    document.removeEventListener('applyDynamicPromotions', this.applyDynamicPromotions, false);
+  }
+
   applyDynamicPromotions = (event) => {
     // If promo contains no data, set to null.
     if (event.detail.cart_labels === null) {

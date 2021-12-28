@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed5a2c8c545f379da6e1d980df2a708b",
+    "content-hash": "455aac77978d775f0855c5c2bfb86a81",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4559,17 +4559,17 @@
         },
         {
             "name": "drupal/better_exposed_filters",
-            "version": "5.0.0-beta3",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/better_exposed_filters.git",
-                "reference": "8.x-5.0-beta3"
+                "reference": "8.x-5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-5.0-beta3.zip",
-                "reference": "8.x-5.0-beta3",
-                "shasum": "23f00fe898cd9e4f2278ef790bc9f1d197312ac3"
+                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-8.x-5.0.zip",
+                "reference": "8.x-5.0",
+                "shasum": "ef575591af202b5c6867841ce58e1f447455e502"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9",
@@ -4581,12 +4581,15 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-5.0-beta3",
-                    "datestamp": "1625665853",
+                    "version": "8.x-5.0",
+                    "datestamp": "1634748760",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Version 5 should enable jQuery dependencies": "https://www.drupal.org/files/issues/2021-12-24/enable_dependencies-3193305-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5822,7 +5825,7 @@
                     "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1",
                     "Add getoriginal method for languageConfigOverride": "https://www.drupal.org/files/issues/2021-11-10/getOriginal-method-for-languageConfigOverride-3248728-3.patch",
                     "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch",
-                    "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2019-12-16/2685749-73.patch",
+                    "Issue 2685749: Add a Machine Name widget to core.": "https://www.drupal.org/files/issues/2020-10-01/2685749-85.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-01-14/3143958-11-subprofile-support-8.9.x.patch",
                     "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch"
@@ -27508,7 +27511,6 @@
     "stability-flags": {
         "acquia/acsf-tools": 20,
         "drupal/acquia_purge": 10,
-        "drupal/better_exposed_filters": 10,
         "drupal/block_field": 15,
         "drupal/captcha": 10,
         "drupal/change_pwd_page": 10,
