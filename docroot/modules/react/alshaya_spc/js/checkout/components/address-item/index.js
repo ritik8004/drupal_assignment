@@ -18,7 +18,8 @@ import {
 import EditAddressSVG from '../../../svg-component/edit-address-svg';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
-import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { getDeliveryAreaStorage, setDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
 export default class AddressItem extends React.Component {
   constructor(props) {
@@ -32,6 +33,10 @@ export default class AddressItem extends React.Component {
   componentDidMount() {
     // Close the modal.
     document.addEventListener('closeAddressListPopup', this.closeModal, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('closeAddressListPopup', this.closeModal, false);
   }
 
   openModal = (e) => {
@@ -59,6 +64,15 @@ export default class AddressItem extends React.Component {
     const data = prepareAddressDataForShipping(addressUpdate);
     data.static.customer_address_id = address.address_mdc_id;
     data.static.customer_id = address.customer_id;
+    // Save area for customer if express delivery feature enabled.
+    if (isExpressDeliveryEnabled()) {
+      const areaSelected = {
+        label: addressUpdate.city,
+        area: parseInt(address.administrative_area, 10),
+        governate: parseInt(address.area_parent, 10),
+      };
+      setDeliveryAreaStorage(areaSelected);
+    }
     return data;
   };
 

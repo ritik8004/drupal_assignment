@@ -5,8 +5,8 @@
     }
   }
 
-  #express-delivery-options {
-    border-bottom: none;
+  .express-delivery-title {
+    letter-spacing: 0.0625rem;
   }
 
   @include breakpoint($only-mobile) {

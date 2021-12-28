@@ -3,6 +3,31 @@
     font-family: $hnm-demibold;
   }
 
+  #delivery-area-list-items {
+    li.area-select-list-item {
+      &.active {
+        .area-select-item-wrapper {
+          @include icon(radio-filled, before) {
+            font-size: 3rem;
+            color: $sameday-express-delivery-radio-button;
+            border: 0;
+          }
+        }
+      }
+    }
+
+    .area-select-item-wrapper {
+      @include icon(radio-empty, before) {
+        font-size: 3rem;
+        width: unset;
+        height: unset;
+        border: 0;
+        margin-#{$left}: 0;
+        margin-#{$right}: 0;
+      }
+    }
+  }
+
   .actions {
     div.select-area-link {
       font-family: $hnm-demibold;

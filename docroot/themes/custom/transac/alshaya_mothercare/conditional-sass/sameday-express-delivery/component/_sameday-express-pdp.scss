@@ -1,0 +1,14 @@
+.magv2-sidebar {
+  .cart-shipping-method {
+    &.sameday,
+    &.express {
+      &::before {
+        width: 3rem;
+
+        @include breakpoint($only-tablet) {
+          width: 4rem;
+        }
+      }
+    }
+  }
+}

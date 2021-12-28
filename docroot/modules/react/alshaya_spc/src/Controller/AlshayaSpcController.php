@@ -195,6 +195,8 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
+    $store_finder_settings = $this->config('alshaya_stores_finder.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $store_finder_settings->getCacheTags());
 
     $build = [
       '#type' => 'markup',
@@ -222,6 +224,9 @@ class AlshayaSpcController extends ControllerBase {
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
+          // This key gets the dynamic area value of the area placeholder
+          // and will be used in SDD/ED delievry area panel on Cart page.
+          'areaBlockFormPlaceholder' => $store_finder_settings->get('store_search_placeholder'),
         ],
       ],
       '#cache' => [
@@ -698,9 +703,6 @@ class AlshayaSpcController extends ControllerBase {
     // Display custom label in description
     // if same day delivery is selected as shipping method.
     $checkout_settings = $this->config('alshaya_acm_checkout.settings');
-    if (isset($orderDetails['shipping_method_code']) && $orderDetails['shipping_method_code'] === $checkout_settings->get('same_day_shipping_method_code')) {
-      $delivery_method_description = $this->t('Same day');
-    }
 
     // Get formatted customer phone number.
     $phone_number = $this->orderHelper->getFormattedMobileNumber($order['shipping']['address']['telephone']);

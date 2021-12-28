@@ -67,9 +67,13 @@ export default class PdpSelectArea extends React.Component {
 
   openModal = () => {
     document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
+    const areaPanelPlaceHolder = typeof (drupalSettings.areaBlockFormPlaceholder) !== 'undefined'
+      ? drupalSettings.areaBlockFormPlaceholder
+      : '';
     return (
       <AreaListBlock
         closeModal={() => this.closeModal()}
+        placeHolderText={areaPanelPlaceHolder}
       />
     );
   };
@@ -84,19 +88,21 @@ export default class PdpSelectArea extends React.Component {
 
   render() {
     const { areaLabel } = this.state;
-    const { getPanelData } = this.props;
+    const { getPanelData, showCheckAreaAvailability } = this.props;
     return (
-      <div id="pdp-area-select">
-        <div className="delivery-area-label">
-          <ConditionalView condition={areaLabel !== null}>
-            <span>{`${Drupal.t('Selected Area')}: `}</span>
-            <span onClick={() => getPanelData(this.openModal())} className="delivery-area-name delivery-loader">{areaLabel}</span>
-          </ConditionalView>
-          <ConditionalView condition={areaLabel === null}>
-            <span className="availability-link delivery-loader" onClick={() => getPanelData(this.openModal())}>{getStringMessage('check_area_availability')}</span>
-          </ConditionalView>
+      <ConditionalView condition={showCheckAreaAvailability === true}>
+        <div id="pdp-area-select">
+          <div className="delivery-area-label">
+            <ConditionalView condition={areaLabel !== null}>
+              <span>{`${Drupal.t('Selected Area')}: `}</span>
+              <span onClick={() => getPanelData(this.openModal())} className="delivery-area-name delivery-loader">{areaLabel}</span>
+            </ConditionalView>
+            <ConditionalView condition={areaLabel === null}>
+              <span className="availability-link delivery-loader" onClick={() => getPanelData(this.openModal())}>{getStringMessage('check_area_availability')}</span>
+            </ConditionalView>
+          </div>
         </div>
-      </div>
+      </ConditionalView>
     );
   }
 }

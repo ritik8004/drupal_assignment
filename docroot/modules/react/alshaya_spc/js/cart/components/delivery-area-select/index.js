@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { getAreaFieldKey, getDeliveryAreaStorage, getDeliveryAreaValue } from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import { setStorageInfo } from '../../../utilities/storage';
@@ -58,10 +59,14 @@ export default class DeliveryAreaSelect extends React.Component {
 
   openModal = () => {
     document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
+    const areaPanelPlaceHolder = typeof (drupalSettings.areaBlockFormPlaceholder) !== 'undefined'
+      ? drupalSettings.areaBlockFormPlaceholder
+      : '';
 
     return (
       <AreaListBlock
         closeModal={() => this.closeModal()}
+        placeHolderText={areaPanelPlaceHolder}
       />
     );
   };
@@ -84,18 +89,20 @@ export default class DeliveryAreaSelect extends React.Component {
 
   render() {
     const { areaLabel } = this.state;
-    const { getPanelData, animationDelayValue } = this.props;
+    const { getPanelData, animationDelayValue, showAreaAvailabilityStatusOnCart } = this.props;
 
     return (
-      <div id="delivery-area-select" className="fadeInUp" style={{ animationDelay: animationDelayValue }}>
-        <div className="delivery-area-label">
-          <span>{`${Drupal.t('Deliver to')}: `}</span>
-          <div onClick={() => getPanelData(this.openModal())}>
-            <span className="delivery-area-name delivery-loader">{areaLabel}</span>
-            <span className="delivery-area-button" />
+      <ConditionalView condition={showAreaAvailabilityStatusOnCart}>
+        <div id="delivery-area-select" className="fadeInUp" style={{ animationDelay: animationDelayValue }}>
+          <div className="delivery-area-label">
+            <span>{`${Drupal.t('Deliver to')}: `}</span>
+            <div onClick={() => getPanelData(this.openModal())}>
+              <span className="delivery-area-name delivery-loader">{areaLabel}</span>
+              <span className="delivery-area-button" />
+            </div>
           </div>
         </div>
-      </div>
+      </ConditionalView>
     );
   }
 }
