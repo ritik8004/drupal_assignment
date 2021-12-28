@@ -10,6 +10,7 @@
           @include icon(radio-filled, before) {
             font-size: 3rem;
             color: $sameday-express-delivery-radio-button;
+            border: 0;
           }
         }
       }
