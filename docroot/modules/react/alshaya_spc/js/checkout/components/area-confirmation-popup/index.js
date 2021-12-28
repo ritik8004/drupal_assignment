@@ -26,7 +26,7 @@ export default class AreaConfirmationPopup extends React.Component {
   componentDidMount() {
     const { areaSelected } = this.state;
     const { cart } = this.props;
-    const cartId = cart.cart.cart_id;
+    const cartId = cart.cart.cart_id_int;
     const { address } = cart.cart.shipping;
     if (cartId && address) {
       // Fetching cart shipping methods to check if SDD/ED is available.
