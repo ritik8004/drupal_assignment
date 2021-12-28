@@ -20,8 +20,7 @@
   RcsEventManager.addListener('rcsUpdateResults', function getProductsInStyle(e) {
     // Return if result is empty.
     if (!Drupal.hasValue(e.detail.result)
-      || !Drupal.hasValue(e.detail.result.style_code)
-      || e.detail.result.style_code === null) {
+      || !Drupal.hasValue(e.detail.result.style_code)) {
       return;
     }
 

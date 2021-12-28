@@ -937,7 +937,10 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
       ]
     ];
 
-    _alshaya_color_split_attach_info($build);
+    // Attach this only if alshaya_color_split module is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_color_split')) {
+      _alshaya_color_split_attach_info($build);
+    }
     _alshaya_rcs_product_get_product_image_config($build);
     _alshaya_rcs_product_get_cnc_config($build);
   }
@@ -985,7 +988,10 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
     ]
   ];
 
-  _alshaya_color_split_attach_info($build);
+  // Attach this only if alshaya_color_split module is enabled.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_color_split')) {
+    _alshaya_color_split_attach_info($build);
+  }
   _alshaya_rcs_product_get_product_image_config($build);
   _alshaya_rcs_product_get_cnc_config($build);
 
