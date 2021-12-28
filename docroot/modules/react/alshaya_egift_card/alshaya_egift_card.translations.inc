@@ -27,16 +27,16 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Something went wrong, please try again later.',
         'context' => 'egift',
       ],
-      'Please enter your card otp.' => [
-        'ar' => 'Please enter your card otp.',
+      'Please enter otp.' => [
+        'ar' => 'Please enter otp.',
         'context' => 'egift',
       ],
-      'Please enter your valid card otp.' => [
-        'ar' => 'Please enter your valid card otp.',
+      'Please enter valid otp.' => [
+        'ar' => 'Please enter valid otp.',
         'context' => 'egift',
       ],
-      'Please enter your card number.' => [
-        'ar' => 'Please enter your card number.',
+      'Please enter card number.' => [
+        'ar' => 'Please enter card number.',
         'context' => 'egift',
       ],
       'Please enter valid card number.' => [

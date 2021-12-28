@@ -3,7 +3,8 @@ import Popup from 'reactjs-popup';
 import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
-import { egiftCardResponse, sendOtp } from '../../../utilities';
+import { sendOtp } from '../../../../../js/utilities/egiftCardHelper';
+import PriceElement from '../../../../../js/utilities/components/price/price-element';
 
 export default class EgiftCheckBalanceStepTwo extends React.Component {
   constructor(props) {
@@ -22,11 +23,11 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     let message = '';
     // Egift card otp validation.
     if (egiftCardOtp.length === 0) {
-      message = Drupal.t('Please enter your card otp.', {}, { context: 'egift' });
+      message = Drupal.t('Please enter otp.', {}, { context: 'egift' });
       errors = true;
     } else if (!egiftCardOtp.match(/^[a-z0-9A-Z]+$/i)) {
       // Check if the otp is valid or not.
-      message = Drupal.t('Please enter your valid card otp.', {}, { context: 'egift' });
+      message = Drupal.t('Please enter valid otp.', {}, { context: 'egift' });
       errors = true;
     } else {
       message = '';
@@ -192,11 +193,22 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                 </form>
               </ConditionalView>
               <ConditionalView condition={initialStep === 3}>
-                {egiftCardResponse({
-                  egiftBalance: parseInt(egiftCardBalance, 10),
-                  egiftCardNumber: cardNumber.slice(-4),
-                  egiftCardValidity: egiftCardvalidity,
-                })}
+                <div className="egift-balance-response">
+                  <p>
+                    {Drupal.t('Here is your current balance', {}, { context: 'egift' })}
+                  </p>
+                  <strong>
+                    <PriceElement amount={parseInt(egiftCardBalance, 10)} />
+                  </strong>
+                  <p>
+                    {Drupal.t('for eGift card ending in ..', {}, { context: 'egift' })}
+                    {cardNumber.slice(-4)}
+                  </p>
+                  <p>
+                    {Drupal.t('Card valid up to ', {}, { context: 'egift' })}
+                    {egiftCardvalidity}
+                  </p>
+                </div>
               </ConditionalView>
             </div>
           </div>

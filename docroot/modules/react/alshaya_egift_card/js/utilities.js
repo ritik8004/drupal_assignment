@@ -1,7 +1,3 @@
-import React from 'react';
-import { callMagentoApi } from '../../js/utilities/requestHelper';
-import PriceElement from '../../js/utilities/components/price/price-element';
-
 /**
  * Get query string for egift list api.
  *
@@ -62,52 +58,4 @@ export {
   getQueryStringForEgiftCards,
   getParamsForTopUpCardSearch,
   getImageUrl,
-};
-
-/**
- * Provides the egift card response.
- *
- * @param {*} egiftBalance
- * @param {*} egiftCardNumber
- * @param {*} egiftCardValidity
- *
- */
-export const egiftCardResponse = ({
-  egiftBalance,
-  egiftCardNumber,
-  egiftCardValidity,
-}) => (
-  <div className="egift-balance-response">
-    <p>
-      {Drupal.t('Here is your current balance', {}, { context: 'egift' })}
-    </p>
-    <strong>
-      <PriceElement amount={egiftBalance} />
-    </strong>
-    <p>
-      {Drupal.t('for eGift card ending in ..', {}, { context: 'egift' })}
-      {egiftCardNumber}
-    </p>
-    <p>
-      {Drupal.t('Card valid up to ', {}, { context: 'egift' })}
-      {egiftCardValidity}
-    </p>
-  </div>
-);
-
-/**
- * Provides the egift send otp api response.
- *
- * @param {*} egiftCardNumber
- *
- */
-export const sendOtp = (egiftCardNumber) => {
-  const data = {
-    accountInfo: {
-      cardNumber: egiftCardNumber,
-      action: 'send_otp',
-    },
-  };
-  // Send OTP to get card balance.
-  return callMagentoApi('/V1/egiftcard/getBalance', 'POST', data);
 };
