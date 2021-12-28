@@ -124,6 +124,7 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "springimport/magento2-api-v1": "^1.0",
         "symfony/lock": "4.3.*"
     },
