@@ -155,7 +155,6 @@ const Teaser = ({
           </a>
           {/* Render the component if the page isn't wishlist listing page. */}
           <ConditionalView condition={!isWishlistPage(extraInfo)}>
-            {/* @todo: we need to move this to proper place. */}
             <WishlistContainer
               context="wishlist"
               position="top-right"
