@@ -886,9 +886,10 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
 
   // For performance testing & debugging purposes adding a quick bypass for
   // escaping GTM JS on a page.
-  // Usage: ?GTM=BLOCK.
+  // Usage: ?GTM=BLOCK (OR) ?external=0
   $param = \Drupal::request()->get('GTM');
-  if ($param === 'BLOCK') {
+  $external = \Drupal::request()->get('external');
+  if ((isset($external) && $external == 0) || $param === 'BLOCK') {
     foreach ($attachments['#attached']['html_head'] ?? [] as $index => $script) {
       if ($script[1] === 'google_tag_script_tag__primary' || $script[1] === 'google_tag_data_layer_tag__primary') {
         unset($attachments['#attached']['html_head'][$index]);

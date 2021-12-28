@@ -17,9 +17,10 @@ use Drupal\Component\Serialization\Json;
 function dynamic_yield_page_attachments(array &$page) {
   // For performance testing & debugging purposes adding a quick bypass for
   // escaping DY JS on a page.
-  // Usage: ?DY=BLOCK
+  // Usage: ?DY=BLOCK (OR) ?external=0
   $param = \Drupal::request()->get('DY');
-  if ($param === 'BLOCK') {
+  $external = \Drupal::request()->get('external');
+  if ((isset($external) && $external == 0) || $param === 'BLOCK') {
     return;
   }
 
