@@ -49,12 +49,15 @@ export default class RedeemEgiftCard extends React.Component {
         egiftCardNumber: cartData.cart.totals.egiftCardNumber,
       });
     }
-    // Update the payment method.
+    // Update the redemption status based on selected payment method.
     if (isEgiftCardEnabled()
       && hasValue(cartData.cart.payment)
       && hasValue(cartData.cart.payment.method)) {
       this.setState({
-        redemptionDisabled: isEgiftUnsupportedPaymentMethod(cartData.cart.payment.method),
+        redemptionDisabled: isEgiftUnsupportedPaymentMethod(
+          cartData.cart.payment.method,
+          cartData.cart,
+        ),
       });
     }
   }
@@ -65,7 +68,10 @@ export default class RedeemEgiftCard extends React.Component {
     if (hasValue(currentCart.payment)
       && hasValue(currentCart.payment.method)) {
       // Updated the state of redemption.
-      const redemptionStatus = isEgiftUnsupportedPaymentMethod(currentCart.payment.method);
+      const redemptionStatus = isEgiftUnsupportedPaymentMethod(
+        currentCart.payment.method,
+        currentCart,
+      );
       this.setState({
         redemptionDisabled: redemptionStatus,
       });
@@ -122,6 +128,8 @@ export default class RedeemEgiftCard extends React.Component {
                 dispatchCustomEvent('updateTotalsInCart', { totals: data.data.totals });
                 // Change the state of redemption once cart is updated.
                 this.setState({ codeValidated: response.data.response_type, codeSent: false });
+                // Remove the loader once state is updated.
+                removeFullScreenLoader();
               }
             }
           });
@@ -131,14 +139,16 @@ export default class RedeemEgiftCard extends React.Component {
           error: true,
           message: response.data.response_message,
         };
+        // Remove the loader once we have the response.
+        removeFullScreenLoader();
       } else {
         result = {
           error: true,
           message: getStringMessage('egift_endpoint_down'),
         };
+        // Remove the loader once we have the response.
+        removeFullScreenLoader();
       }
-      // Remove loader once processing is done.
-      removeFullScreenLoader();
     }
 
     return result;

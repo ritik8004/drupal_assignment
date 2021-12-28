@@ -10,7 +10,6 @@ import {
   performRedemption,
 } from '../../utilities/egift_util';
 import UpdateEgiftCardAmount from './UpdateEgiftCardAmount';
-import logger from '../../../../js/utilities/logger';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import {
   removeFullScreenLoader,
@@ -28,7 +27,7 @@ export default class ValidEgiftCard extends React.Component {
       amount: 0,
       pendingAmount: 0,
       isLinkedCardApplicable: false,
-      cardLinked: false,
+      disableLinkCard: false,
     };
   }
 
@@ -36,9 +35,9 @@ export default class ValidEgiftCard extends React.Component {
     // Calculate the remaining amount and egift card amount to be used.
     const {
       cart,
-      egiftCardNumber,
     } = this.props;
 
+    showFullScreenLoader();
     // Proceed only if redemption is done.
     if (isEgiftRedemptionDone(cart)) {
       this.setState({
@@ -53,34 +52,20 @@ export default class ValidEgiftCard extends React.Component {
       const params = { email: drupalSettings.userDetails.userEmailID };
       // Invoke magento API to check if any egift card is already associated
       // with the user account.
-      const response = callEgiftApi('eGiftHpsSearch', 'GET', {}, params, true);
+      const response = callEgiftApi('eGiftHpsCustomerData', 'GET', {}, params);
       if (response instanceof Promise) {
         response.then((result) => {
-          if (isValidResponse(result)) {
-            // Set linked card applicable to true if card_number is not
-            // available.
-            if (hasValue(result.data.card_number)
-              && !result.data.card_number) {
-              this.setState({
-                isLinkedCardApplicable: true,
-              });
-            }
-            // Updated the card linked state based on the search response.
-            if (hasValue(result.data.card_number)
-              && result.data.card_number === egiftCardNumber) {
-              this.setState({
-                cardLinked: true,
-              });
-            }
-          } else {
-            logger.error('Error while calling the egift HPS Search. EmailId: @emailId. Response: @response', {
-              '@emailId': params.email,
-              '@response': result,
+          if (isValidResponseWithFalseResult(result)) {
+            // Set linkcard applicable as true.
+            this.setState({
+              isLinkedCardApplicable: true,
             });
           }
         });
       }
     }
+    // Remove loader once processing is done.
+    removeFullScreenLoader();
   }
 
   openModal = (e) => {
@@ -120,13 +105,12 @@ export default class ValidEgiftCard extends React.Component {
       if (egiftLinkCard) {
         const response = callEgiftApi('eGiftLinkCard', 'POST', {
           card_number: egiftCardNumber,
-        }, {}, true);
+        });
         if (response instanceof Promise) {
           response.then((result) => {
-            removeFullScreenLoader();
             if (isValidResponse(result)) {
               this.setState({
-                cardLinked: true,
+                disableLinkCard: true,
               });
             } else if (isValidResponseWithFalseResult(result)) {
               // Show the error message when result is false.
@@ -136,24 +120,9 @@ export default class ValidEgiftCard extends React.Component {
             }
           });
         }
-      } else {
-        const response = callEgiftApi('eGiftUnlinkCard', 'POST');
-        if (response instanceof Promise) {
-          response.then((result) => {
-            removeFullScreenLoader();
-            if (isValidResponse(result)) {
-              // Update the card link status once the unlink is successful.
-              this.setState({
-                cardLinked: false,
-              });
-            } else if (isValidResponseWithFalseResult(result)) {
-              document.getElementById('egift_linkcard_error').innerHTML = result.response_message;
-            } else {
-              document.getElementById('egift_linkcard_error').innerHTML = getStringMessage('egift_endpoint_down');
-            }
-          });
-        }
       }
+      // Remove loader once processing is done.
+      removeFullScreenLoader();
     }
 
     return false;
@@ -205,7 +174,7 @@ export default class ValidEgiftCard extends React.Component {
       amount,
       pendingAmount,
       isLinkedCardApplicable,
-      cardLinked,
+      disableLinkCard,
     } = this.state;
 
     const { cart } = this.props;
@@ -242,12 +211,12 @@ export default class ValidEgiftCard extends React.Component {
         <ConditionalView condition={isLinkedCardApplicable}>
           <input
             type="checkbox"
-            id="link-egift-card"
+            id="guest-link-egift-card"
             name="egift_link_card"
             onChange={this.handleCardLink}
-            checked={cardLinked}
+            disabled={disableLinkCard}
           />
-          <label htmlFor="link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
+          <label htmlFor="guest-link-egift-card">{Drupal.t('Link this card for faster payment next time', {}, { context: 'egift' })}</label>
           <div id="egift_linkcard_error" className="error" />
         </ConditionalView>
       </div>

@@ -30,8 +30,8 @@ const handleEgiftDetailValidation = (e, props) => {
 const handleSubmit = async (e, props) => {
   e.preventDefault();
   // Return if paymethod method is disabled.
-  const { paymentMethod } = props;
-  if (hasValue(paymentMethod) && isEgiftUnsupportedPaymentMethod(paymentMethod)) {
+  const { paymentMethod, cart } = props;
+  if (hasValue(paymentMethod) && isEgiftUnsupportedPaymentMethod(paymentMethod, cart)) {
     return;
   }
   // Perform validation.

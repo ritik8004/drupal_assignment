@@ -109,10 +109,6 @@ export const getApiEndpoint = (action, params = {}) => {
       endpoint = '/V1/egiftcard/link';
       break;
 
-    case 'eGiftUnlinkCard':
-      endpoint = '/V1/egiftcard/unlinkcard';
-      break;
-
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
@@ -137,9 +133,9 @@ export const getApiEndpoint = (action, params = {}) => {
  * @returns {object}
  *   Returns the promise object.
  */
-export const callEgiftApi = (action, method, postData, params, useBearerToken = false) => {
+export const callEgiftApi = (action, method, postData, params) => {
   const endpoint = getApiEndpoint(action, params);
-  return callMagentoApi(endpoint, method, postData, useBearerToken);
+  return callMagentoApi(endpoint, method, postData);
 };
 
 /**
@@ -239,15 +235,6 @@ export const cartContainsOnlyVirtualProduct = (cart) => {
 };
 
 /**
- * Utility function to check if given payment method is unsupported with egift.
- */
-export const isEgiftUnsupportedPaymentMethod = (paymentMethod) => {
-  const { notSupportedPaymentMethods } = drupalSettings.egiftCard;
-
-  return paymentMethod in notSupportedPaymentMethods;
-};
-
-/**
  * Checks if redemptions is performed or not.
  *
  * @param {object} cart
@@ -270,6 +257,20 @@ export const isEgiftRedemptionDone = (cart, redemptionType = 'guest') => {
   }
 
   return false;
+};
+
+/**
+ * Utility function to check if given payment method is unsupported with egift.
+ */
+export const isEgiftUnsupportedPaymentMethod = (paymentMethod, cart) => {
+  const { notSupportedPaymentMethods } = drupalSettings.egiftCard;
+
+  // Treating hps_payment with linked as unsupported payment methods.
+  if (isEgiftRedemptionDone(cart, 'linked') && paymentMethod === 'hps_payment') {
+    return true;
+  }
+
+  return paymentMethod in notSupportedPaymentMethods;
 };
 
 /**

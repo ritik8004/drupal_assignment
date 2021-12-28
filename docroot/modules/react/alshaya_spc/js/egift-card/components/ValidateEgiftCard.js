@@ -18,13 +18,10 @@ export default class ValidateEgiftCard extends React.Component {
     }
     if (!errors) {
       const errorResponse = await codeValidation(egiftCode.value);
-      if (errorResponse) {
+      if (errorResponse.error) {
         document.getElementById('egift_verification_code_error').innerHTML = Drupal.t('Something went wrong, please try again later.', {}, { context: 'egift' });
       }
-      return !errorResponse;
     }
-
-    return false;
   }
 
   // Resend the code for egift card verification.
