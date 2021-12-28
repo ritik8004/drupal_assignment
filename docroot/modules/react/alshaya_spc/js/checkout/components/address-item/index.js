@@ -35,6 +35,10 @@ export default class AddressItem extends React.Component {
     document.addEventListener('closeAddressListPopup', this.closeModal, false);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('closeAddressListPopup', this.closeModal, false);
+  }
+
   openModal = (e) => {
     this.setState({
       open: true,
