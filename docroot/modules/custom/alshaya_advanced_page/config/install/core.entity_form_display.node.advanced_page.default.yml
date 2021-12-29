@@ -26,7 +26,7 @@ third_party_settings:
     group_views_reference:
       children: {  }
       parent_name: ''
-      weight: 22
+      weight: 21
       label: 'Views Reference'
       format_type: details
       format_settings:
@@ -108,20 +108,6 @@ third_party_settings:
         description: ''
       label: 'Department page settings'
       region: content
-    group_e_gift_card_page_settings:
-      children:
-        - field_use_as_egift_landing_page
-      parent_name: ''
-      weight: 7
-      format_type: fieldset
-      region: content
-      format_settings:
-        show_empty_fields: false
-        id: ''
-        classes: ''
-        description: ''
-        required_fields: true
-      label: 'E-gift card Page Settings'
 id: node.advanced_page.default
 targetEntityType: node
 bundle: advanced_page
@@ -194,7 +180,7 @@ content:
     region: content
   field_related_info:
     type: entity_reference_paragraphs
-    weight: 22
+    weight: 9
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -206,7 +192,7 @@ content:
     region: content
   field_show_left_menu:
     type: boolean_checkbox
-    weight: 10
+    weight: 9
     region: content
     settings:
       display_label: true
@@ -231,12 +217,12 @@ content:
       display_label: true
     third_party_settings: {  }
   field_use_as_egift_landing_page:
-    type: boolean_checkbox
-    weight: 9
-    region: content
+    weight: 7
     settings:
       display_label: true
     third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   langcode:
     type: language_select
     weight: 1
@@ -244,12 +230,6 @@ content:
       include_locked: true
     third_party_settings: {  }
     region: content
-  moderation_state:
-    type: moderation_state_default
-    weight: 19
-    settings: {  }
-    region: content
-    third_party_settings: {  }
   path:
     type: path
     weight: 6
@@ -263,13 +243,6 @@ content:
     weight: 4
     third_party_settings: {  }
     region: content
-  status:
-    type: boolean_checkbox
-    settings:
-      display_label: true
-    weight: 20
-    region: content
-    third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
@@ -300,9 +273,4 @@ content:
       match_limit: 10
     third_party_settings: {  }
     region: content
-  url_redirects:
-    weight: 18
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden: {  }

@@ -267,9 +267,9 @@ product-category-accordion:
     - core/jquery.once
     - core/drupal
 
-egift-accordion:
+accordion:
   js:
-    js/egift-accordion.js: {}
+    js/accordion.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
