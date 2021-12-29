@@ -117,6 +117,12 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
     return false;
   }
 
+  // Redirect to topup page.
+  handleRedirect = () => {
+    window.location.href = '/gift-card/topup-card';
+    return false;
+  }
+
   render = () => {
     const {
       initialStep,
@@ -128,6 +134,13 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
       closeModal,
       open,
     } = this.props;
+
+    // Add buttons on api success response.
+    const topupName = Drupal.t('TOP UP CARD', {}, { context: 'egift' });
+    const buttonName = Drupal.t('CHECK ANOTHER CARD', {}, { context: 'egift' });
+    const topupButton = React.createElement('button', { type: 'submit', onClick: this.handleRedirect }, topupName);
+    const anotherCardButton = React.createElement('button', { type: 'submit', onClick: this.handleChangeCardNumber }, buttonName);
+
     return (
       <>
         <Popup
@@ -208,6 +221,8 @@ export default class EgiftCheckBalanceStepTwo extends React.Component {
                     {Drupal.t('Card valid up to ', {}, { context: 'egift' })}
                     {egiftCardvalidity}
                   </p>
+                  { topupButton }
+                  { anotherCardButton }
                 </div>
               </ConditionalView>
             </div>
