@@ -9,7 +9,6 @@ import AdvantageCardExcludedItem from '../../../cart/components/advantage-card';
 import { customStockErrorMessage } from '../../../utilities/checkout_util';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
-import { getCardNumberForTopUpItem } from '../../../utilities/egift_util';
 import ConditionalView from '../../../common/components/conditional-view';
 
 export default class CartVirtualItem extends React.Component {
@@ -92,6 +91,7 @@ export default class CartVirtualItem extends React.Component {
         egiftOptions, // other information of product.
         media, // Product image.
         isTopUp, // Is product Top-up card.
+        topupCardNumber, // Card number for top-up sku.
       },
       totalsItems, // totals in the api response consist of adv_card_applicable.
     } = this.props;
@@ -109,8 +109,6 @@ export default class CartVirtualItem extends React.Component {
     const giftCardMessage = (typeof egiftOptions.hps_giftcard_message !== 'undefined')
       ? egiftOptions.hps_giftcard_message
       : '';
-    // Gift card number for top-up.
-    const cardNumberForTopUp = getCardNumberForTopUpItem(egiftOptions);
 
     return (
       <div
@@ -134,7 +132,7 @@ export default class CartVirtualItem extends React.Component {
               <ConditionalView condition={isTopUp}>
                 <div className="spc-cart-product-attributes">
                   <span className="spc-cart-product-attribute-label">{Drupal.t('Card No:', {}, { context: 'egift' })}</span>
-                  <span className="spc-cart-product-attribute-value">{cardNumberForTopUp}</span>
+                  <span className="spc-cart-product-attribute-value">{topupCardNumber}</span>
                 </div>
               </ConditionalView>
               <ConditionalView condition={isTopUp === false}>
