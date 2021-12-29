@@ -13,7 +13,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Invalidate cache for adding new menu item attribute.
  */
 function alshaya_main_menu_update_8405() {
-  \Drupal::cache('product_category_tree')->deleteMultiple(['product_category_tree_en_0', 'product_category_tree_ar_0']);
+  \Drupal::cache('product_category_tree')->deleteAllPermanent();
   \Drupal::service('cache_tags.invalidator')->invalidateTags(['taxonomy_term:acq_product_category']);
 }
 
