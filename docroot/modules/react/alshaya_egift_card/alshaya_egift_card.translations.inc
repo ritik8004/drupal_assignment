@@ -370,6 +370,10 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Please enter a valid verification code.',
         'context' => 'egift',
       ],
+      'You cannot redeem the same card which you\'re trying to topup.' => [
+        'ar' => 'You cannot redeem the same card which you\'re trying to topup.',
+        'context' => 'egift',
+      ],
 
     ],
   ];
