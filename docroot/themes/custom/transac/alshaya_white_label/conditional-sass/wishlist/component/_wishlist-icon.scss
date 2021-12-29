@@ -11,6 +11,10 @@
 
 .wishlist-button-wrapper {
   cursor: pointer;
+
+  &.wishlist-loader {
+    @include componentLoader(transparent, 'after');
+  }
 }
 
 .in-wishlist,

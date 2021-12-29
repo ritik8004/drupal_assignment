@@ -63,5 +63,24 @@
         }
       }
     }
+
+    @include breakpoint($only-mobile) {
+      .wishlist-button-wrapper {
+        &.wishlist-loader {
+          &.loading {
+            position: absolute;
+            top: 0.625rem;
+            z-index: 1;
+            #{$right}: 0.625rem;
+            height: 1.875rem;
+            width: 1.875rem;
+
+            .wishlist-icon {
+              display: none;
+            }
+          }
+        }
+      }
+    }
   }
 }
