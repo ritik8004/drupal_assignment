@@ -366,6 +366,11 @@ class WishlistButton extends React.Component {
       return null;
     }
 
+    // If product is already added into wishlist, button is not required on cart page.
+    if (addedInWishList && context === 'cart') {
+      return null;
+    }
+
     // Display format can be 'link' or 'icon'.
     const formatClass = format || 'icon';
     const classPrefix = `wishlist-${formatClass} ${context} ${position}`;
