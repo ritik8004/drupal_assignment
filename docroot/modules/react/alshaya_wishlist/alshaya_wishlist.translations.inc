@@ -11,43 +11,42 @@
 function _alshaya_wishlist_translations() {
   return [
     'Items are saved for this visit only. To save them for later, sign in to your account or register a new one.' => [
-      'ar' => 'يتم حفظ العناصر لهذه الزيارة فقط. لحفظها في وقت لاحق ، قم بتسجيل الدخول إلى حسابك أو تسجيل حساب جديد.',
-      'context' => 'wishlist',
+      'ar' => 'تم حفظ المنتجات لهذه الزيارة فقط. لحفظهم وتسوقهم لاحقاً، قم بتسجيل الدخول إلى حسابك أو سجّل حساب جديد.',
     ],
     'Add to @wishlist_label' => [
       'ar' => 'أضف إلى @wishlist_label',
       'context' => 'wishlist',
     ],
     'Added to @wishlist_label' => [
-      'ar' => 'مضاف إلى @wishlist_label',
+      'ar' => 'تم الإضافة إلى @wishlist_label',
       'context' => 'wishlist',
     ],
     'Remove' => [
-      'ar' => 'يزيل',
+      'ar' => 'قم بالإزالة',
       'context' => 'wishlist',
     ],
     'Move to @wishlist_label' => [
-      'ar' => 'الانتقال إلى @wishlist_label',
+      'ar' => 'انتقل إلى @wishlist_label',
       'context' => 'wishlist',
     ],
     'Remove from @wishlist_label' => [
-      'ar' => 'حذف من @wishlist_label',
+      'ar' => 'قم بالإزالة من @wishlist_label',
       'context' => 'wishlist',
     ],
     'my @wishlist_label' => [
-      'ar' => 'لي @wishlist_label',
+      'ar' => 'الخاصة بي @wishlist_label',
       'context' => 'wishlist',
     ],
     '@productName saved to your @wishlist_label on this visit' => [
-      'ar' => 'تم حفظ @productName في @wishlist_label في هذه الزيارة',
+      'ar' => '@productName تم الحفظ في قائمتك @wishlist_label في هذه الزيارة',
       'context' => 'wishlist',
     ],
     'Keep it for next time?' => [
-      'ar' => 'احتفظ بها في المرة القادمة؟',
+      'ar' => 'ترغب في الاحتفاظ بها للزيارة القادمة؟',
       'context' => 'wishlist',
     ],
     'Sign in to your account or register a new one.' => [
-      'ar' => 'تسجيل الدخول إلى حسابك أو تسجيل حساب جديد.',
+      'ar' => 'سجّل الدخول إلى حسابك أو سجّل حساب جديد.',
       'context' => 'wishlist',
     ],
     'Sign in' => [
@@ -59,27 +58,27 @@ function _alshaya_wishlist_translations() {
       'context' => 'wishlist',
     ],
     'Do you want to move this item to @wishlist_label?' => [
-      'ar' => 'هل تريد نقل المنتج إلىwishlist_label؟',
+      'ar' => 'هل ترغب في نقل هذا المنتج إلى @wishlist_label؟',
       'context' => 'wishlist',
     ],
     'Move to basket' => [
-      'ar' => 'انتقل إلى السلة',
+      'ar' => 'انقل إلى السلة',
       'context' => 'wishlist',
     ],
     'Share All' => [
-      'ar' => 'شارك الكل',
+      'ar' => 'شارك جميع',
       'context' => 'wishlist',
     ],
     'Share Your List' => [
       'ar' => 'شارك قائمتك',
       'context' => 'wishlist',
     ],
-    'Share all your favourites with friends and family.' => [
-      'ar' => 'شارك كل ما تفضله مع الأصدقاء والعائلة.',
+    'Share all your @wishlist_label with friends and family.' => [
+      'ar' => 'شارك الجميع @wishlist_label مع الأصدقاء والعائلة.',
       'context' => 'wishlist',
     ],
     'Copy Link' => [
-      'ar' => 'نسخ الوصلة',
+      'ar' => 'انسخ الرابط',
       'context' => 'wishlist',
     ],
     'Link Copied' => [
