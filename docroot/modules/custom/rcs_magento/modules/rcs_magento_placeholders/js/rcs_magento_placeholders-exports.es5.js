@@ -231,12 +231,17 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
 
       break;
 
+    case 'order_teaser':
+      // @todo To use graphql query to get the order details.
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;
   }
 
-  if (result !== null) {
+  if ((result && result !== null)
+    || placeholder === 'order_teaser') {
     // Display loader.
     if (loaderOnUpdates) {
       RcsEventManager.fire('startLoader');
@@ -247,6 +252,7 @@ exports.getData = async function getData(placeholder, params, entity, langcode, 
     const updateResult = RcsEventManager.fire('rcsUpdateResults', {
       detail: {
         result: result,
+        params: params,
         placeholder: placeholder,
       }
     });

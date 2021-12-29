@@ -6,6 +6,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Implements hook_theme().
@@ -171,39 +172,24 @@ function _getCncSettings() {
  * Implements hook_alshaya_spc_cart_build_alter().
  */
 function alshaya_rcs_product_alshaya_spc_cart_build_alter(array &$build) {
-  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
-  $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
-
-  $cnc_settings = _getCncSettings();
-  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
-  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+  _alshaya_rcs_product_get_product_image_config($build);
+  _alshaya_rcs_product_get_cnc_config($build);
 }
 
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_rcs_product_alshaya_spc_checkout_build_alter(array &$build) {
-  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
-  $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
-
-  $cnc_settings = _getCncSettings();
-  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
-  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+  _alshaya_rcs_product_get_product_image_config($build);
+  _alshaya_rcs_product_get_cnc_config($build);
 }
 
 /**
  * Implements hook_alshaya_spc_checkout_confirmation_order_build().
  */
 function alshaya_rcs_product_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
-  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
-  $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
-
-  $cnc_settings = _getCncSettings();
-  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
-  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
+  _alshaya_rcs_product_get_product_image_config($build);
+  _alshaya_rcs_product_get_cnc_config($build);
 }
 
 /**
@@ -904,4 +890,154 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       }
     }
   }
+  // Alter the order print library to replace the base JS file with the order
+  // print file provided by this module.
+  if ($extension === 'alshaya_acm_customer'
+    && isset($libraries['order_print'])
+    && isset($libraries['order_print']['js']['js/order-print.js'])) {
+
+    $options = $libraries['order_print']['js']['js/order-print.js'];
+    unset($libraries['order_print']['js']['js/order-print.js']);
+    $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
+    $libraries['order_print']['js']["/$self_module_path/js/alshaya_rcs_order_print.js"] = $options;
+    $libraries['order_print']['dependencies'] = [
+      'rcs_magento_placeholders/rcs_magento_placeholders',
+    ];
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  // Store parent and item skus.
+  $parentSkus = [];
+  $itemSkus = [];
+  // Updated recent order build array.
+  if (array_key_exists('recent_order', $build)) {
+    $orders = $build['recent_order'];
+    $counter = 0;
+    foreach ($orders as $id => $order) {
+      // Iterate over each order item.
+      foreach ($order['#order']['items'] as $key => $item) {
+        $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
+        array_push($parentSkus, $item['extension_attributes']['parent_product_sku']);
+        array_push($itemSkus, $item['sku']);
+      }
+    }
+
+    $build['#theme_wrappers'] = [
+      'container' => [
+        '#attributes' => [
+          'id' => 'rcs-ph-order_teaser',
+          'class' => ['block-alshaya-acm-customer'],
+          'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
+          'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
+        ]
+      ]
+    ];
+
+    // Attach the color split config in the build array using alter hook.
+    \Drupal::moduleHandler()->alter('alshaya_rcs_product_order_build', $build);
+    _alshaya_rcs_product_get_product_image_config($build);
+    _alshaya_rcs_product_get_cnc_config($build);
+  }
+  // Attaching order library.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Add data attributes.
+  $parentSkus = [];
+  $itemSkus = [];
+  // Update the product image with RCS Token.
+  foreach ($build['#products'] as $key => &$item) {
+    // Add name placeholder if the product type is simple.
+    if ($item['type'] === 'simple') {
+      $item['name'] = '#rcs.productItem.name#';
+    }
+    $item['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
+    $parentSkus[$key] = $item['extension_attributes']['parent_product_sku'];
+    // Store the item sku.
+    $itemSkus[$key] = $item['sku'];
+    // Attribute placeholders.
+    $item['attributes'][] = [
+      'label' => '#rcs.productItemAttribute.attr_label#',
+      'value' => '#rcs.productItemAttribute.attr_value#',
+    ];
+    // If 'applied_rule_ids' is set and price is 0, set the free gift label.
+    // Using base_price instead of price here as the price is set as markup.
+    if (isset($item['applied_rule_ids']) && (int) $item['base_price'] == 0) {
+      $item['free_gift_label'] = t('Free Gift with Purchase');
+      $item['price'] = t('Free');
+      $item['total'] = '';
+    }
+  }
+  $build['#theme_wrappers'] = [
+    'container' => [
+      '#attributes' => [
+        'id' => 'rcs-ph-order_teaser',
+        'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
+        'data-param-item-skus' => Json::encode(array_unique($itemSkus))
+      ]
+    ]
+  ];
+
+  // Attach the color split config in the build array using alter hook.
+  \Drupal::moduleHandler()->alter('alshaya_rcs_product_order_build_alter', $build);
+  _alshaya_rcs_product_get_product_image_config($build);
+  _alshaya_rcs_product_get_cnc_config($build);
+
+  // Attaching order library.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
+}
+
+/**
+ * Get order teaser image render array.
+ *
+ * @param array $item.
+ *   An array containing product info.
+ *
+ * @return array
+ *   An render array of image.
+ */
+function _alshaya_rcs_product_get_order_teaser_image(array $item) {
+  return [
+    '#theme' => 'image',
+    '#attributes' => [
+      'src' => '#rcs.productItem.image#',
+      'title' => $item['name'],
+      'alt' => $item['name'],
+      'class' => ['rcs-image'],
+      'data-item-sku' => $item['sku'],
+      '#skip_lazy_loading' => TRUE,
+    ],
+  ];
+}
+
+/**
+ * Attach required information around product images.
+ *
+ * @param Array $build
+ *   An array containing build information.
+ */
+function _alshaya_rcs_product_get_product_image_config(array &$build) {
+  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
+  $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+}
+
+/**
+ * Attach required settings related to CnC.
+ *
+ * @param Array $build
+ *   An array containing build information.
+ */
+function _alshaya_rcs_product_get_cnc_config(array &$build) {
+  $cnc_settings = _getCncSettings();
+  $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
+  $build['#cache'] = array_merge($build['#cache'], $cnc_settings['#cache']);
 }

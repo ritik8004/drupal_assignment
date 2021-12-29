@@ -502,6 +502,23 @@ function alshaya_color_split_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
   }
 
+  _alshaya_color_split_attach_info($attachments);
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_order_build_alter().
+ */
+function alshaya_color_split_alshaya_rcs_product_order_build_alter(array &$build) {
+  _alshaya_color_split_attach_info($build);
+}
+
+/**
+ * Attach required information around color split.
+ *
+ * @param Array $attachments
+ *   An array containing attachment information.
+ */
+function _alshaya_color_split_attach_info(array &$attachments) {
   $attachments['#attached']['library'][] = 'alshaya_color_split/rcs_grouped_products';
 
   $attachments['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');

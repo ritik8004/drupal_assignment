@@ -21,7 +21,7 @@
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    await globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
+    globalThis.rcsPhCommerceBackend.getDataSynchronous('product', {sku: mainSKU});
 
     window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
   };
@@ -217,4 +217,5 @@
     const galleryProduct = getSkuForGallery(product);
     return galleryProduct.media_teaser;
   };
+
 })(Drupal);
