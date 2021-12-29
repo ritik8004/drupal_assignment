@@ -1,15 +1,13 @@
 import React from 'react';
 import {
-  addProductToWishList,
-  removeProductFromWishList,
-  getWishlistLabel,
-  getWishlistFromBackend,
-} from '../../utilities/wishlist-utils';
-import {
   isProductExistInWishList,
   isAnonymousUser,
   addWishListInfoInStorage,
   getWishListData,
+  addProductToWishList,
+  removeProductFromWishList,
+  getWishlistLabel,
+  getWishlistFromBackend,
 } from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';

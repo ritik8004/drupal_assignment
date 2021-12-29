@@ -1,7 +1,10 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { getWishlistNotificationTime } from '../../utilities/wishlist-utils';
+import {
+  getWishlistLabel,
+  getWishlistNotificationTime,
+} from '../../../../js/utilities/wishlistHelper';
 
 export default class SharePopup extends React.Component {
   constructor(props) {
@@ -90,7 +93,7 @@ export default class SharePopup extends React.Component {
             </a>
             <div className="header">{Drupal.t('Share Your List', {}, { context: 'wishlist' })}</div>
             <div className="content">
-              {Drupal.t('Share all your favourites with friends and family.')}
+              {Drupal.t('Share all your @wishlist_label with friends and family.', { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
             </div>
             <div className="actions">
               <button

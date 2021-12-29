@@ -2,15 +2,13 @@ import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import { smoothScrollTo } from '../../../../js/utilities/smoothScroll';
 import {
+  isAnonymousUser,
+  addWishListInfoInStorage,
+  getWishListData,
   getWishlistLabel,
   getWishlistNotificationTime,
   getWishlistFromBackend,
   addRemoveWishlistItemsInBackend,
-} from '../../utilities/wishlist-utils';
-import {
-  isAnonymousUser,
-  addWishListInfoInStorage,
-  getWishListData,
 } from '../../../../js/utilities/wishlistHelper';
 import WishlistNotification from '../wishlist-notification';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
