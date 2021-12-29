@@ -7,12 +7,11 @@
  *   The url key.
  */
 async function handleNoItemsInResponse(request, urlKey) {
-  request.data = JSON.stringify({
-    query: `{urlResolver(url: "${urlKey}") {
+  request.data = prepareQuery(`{urlResolver(url: "${urlKey}") {
       redirectCode
       relative_url
     }}`
-  });
+  );
 
   let response = await rcsCommerceBackend.invokeApi(request);
   let rcs404 = `${drupalSettings.rcs['404Page']}?referer=${rcsWindowLocation().pathname}`;
