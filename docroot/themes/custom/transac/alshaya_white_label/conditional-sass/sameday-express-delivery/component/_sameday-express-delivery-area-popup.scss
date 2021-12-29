@@ -354,7 +354,7 @@ body.overlay-delivery-area {
         position: relative;
         width: 1.5rem;
         height: 1.25rem;
-        background: $primary_bg;
+        background: transparent;
         display: inline-block;
         border-radius: 100%;
         border: 1px solid $primary_radiobtn_empty;
@@ -440,7 +440,7 @@ body.overlay-delivery-area {
       text-align: center;
       font-size: 0.8125rem;
       line-height: 1rem;
-      background-color: $spc-cart-delivery-popup-search-border;
+      background-color: $sameday-express-delivery-drawer-btn;
       padding: 1rem;
       width: 100%;
       margin: 1rem 0;

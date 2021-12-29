@@ -1,11 +1,15 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { checkAreaAvailabilityStatusOnCart } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../common/components/conditional-view';
 import {
   gerAreaLabelById, getAreaParentId, getUserAddressList, updateSelectedAddress,
 } from '../../../utilities/address_util';
 import { showFullScreenLoader } from '../../../utilities/checkout_util';
-import { getAreaFieldKey, getDeliveryAreaStorage, setDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
+import {
+  getAreaFieldKey, getCartShippingMethods, getDeliveryAreaStorage, setDeliveryAreaStorage,
+} from '../../../utilities/delivery_area_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 
@@ -20,22 +24,37 @@ export default class AreaConfirmationPopup extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      cart: { cart: { shipping: { address } } },
-    } = this.props;
     const { areaSelected } = this.state;
+    const { cart } = this.props;
+    const cartId = cart.cart.cart_id_int;
+    const { address } = cart.cart.shipping;
+    if (cartId && address) {
+      // Fetching cart shipping methods to check if SDD/ED is available.
+      getCartShippingMethods(null, null, cartId).then(
+        (response) => {
+          if (response !== null) {
+            // Show area confirmation popup when SDD/ED is available.
+            if (!hasValue(response.error)
+              && response !== null
+              && checkAreaAvailabilityStatusOnCart(response)) {
+              const areaFieldKey = getAreaFieldKey();
+              if (areaSelected !== null && areaFieldKey !== null) {
+                if (areaSelected.value[areaFieldKey] !== parseInt(address[areaFieldKey], 10)) {
+                  this.setState({
+                    open: true,
+                    lastOrderArea: parseInt(address[areaFieldKey], 10),
+                  });
+                }
+              }
+            }
+          }
+        },
+      );
+    }
+
     document.addEventListener('openAreaPopupConfirmation', this.openAreaPopupConfirmation);
 
     document.addEventListener('refreshAreaConfirmationState', this.refreshAreaConfirmationState);
-    const areaFieldKey = getAreaFieldKey();
-    if (areaSelected !== null && areaFieldKey !== null) {
-      if (areaSelected.value[areaFieldKey] !== parseInt(address[areaFieldKey], 10)) {
-        this.setState({
-          open: true,
-          lastOrderArea: parseInt(address[areaFieldKey], 10),
-        });
-      }
-    }
   }
 
   closeModal = () => {

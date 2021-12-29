@@ -208,8 +208,9 @@ export default class CartItem extends React.Component {
         const eventCart = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => cartResult } });
         document.dispatchEvent(eventCart);
 
-        // Update cart shipping methods on cart update.
-        if (isExpressDeliveryEnabled() && action === 'remove item') {
+        // Update cart shipping methods on cart update when item
+        // is removed from the cart and cart still contains items.
+        if (isExpressDeliveryEnabled() && action === 'remove item' && itemsLength > 0) {
           const currentArea = getDeliveryAreaStorage();
           dispatchCustomEvent('displayShippingMethods', currentArea);
         }
