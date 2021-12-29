@@ -40,6 +40,7 @@ export default class PaymentMethods extends React.Component {
   }
 
   componentDidMount = () => {
+    // Dont select default payment method if Egift card enabled.
     if (!isEgiftCardEnabled()) {
       this.selectDefault();
     }
