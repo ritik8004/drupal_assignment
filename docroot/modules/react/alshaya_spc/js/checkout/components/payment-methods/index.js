@@ -40,10 +40,7 @@ export default class PaymentMethods extends React.Component {
   }
 
   componentDidMount = () => {
-    // Dont select default payment method if Egift card enabled.
-    if (!isEgiftCardEnabled()) {
-      this.selectDefault();
-    }
+    this.selectDefault();
 
     // We want this to be executed once all other JS execution is finished.
     // For this we use setTimeout with 1 ms.
