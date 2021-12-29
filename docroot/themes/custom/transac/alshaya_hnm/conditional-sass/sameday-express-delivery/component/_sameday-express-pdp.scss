@@ -5,6 +5,10 @@
     }
   }
 
+  .express-delivery-title {
+    letter-spacing: 0.0625rem;
+  }
+
   @include breakpoint($only-mobile) {
     .simple-swatch-effect + .express-delivery,
     .product-swatch + .express-delivery {
