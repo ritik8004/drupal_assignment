@@ -17,7 +17,7 @@ import {
   getDefaultErrorMessage,
   getProcessedErrorMessage,
 } from '../../../../js/utilities/error';
-import { setStorageInfo } from '../../../../js/utilities/storage';
+import { getStorageInfo, setStorageInfo } from '../../../../js/utilities/storage';
 import logger from '../../../../js/utilities/logger';
 
 export default class EgiftTopPurchase extends React.Component {
@@ -121,6 +121,23 @@ export default class EgiftTopPurchase extends React.Component {
     // else get card-number from field.
     const cardNumber = egiftCardFor === 'self' ? linkedCardNumber : data.get('card_number');
 
+
+    // Check if cart id is present in local store for anonymous user.
+    if (!isUserAuthenticated()) {
+      let cartId = getStorageInfo('cart_id');
+      if (cartId === null) {
+        // Create an empty cart and set cart id in storage.
+        cartId = window.commerceBackend.createCart();
+      }
+
+      // Show error if still cart id is null.
+      if (cartId === null) {
+        document.getElementById('top-up-error').innerHTML = getDefaultErrorMessage();
+        removeFullScreenLoader();
+        return;
+      }
+    }
+
     // Prepare params for add top-up to cart.
     const params = {
       topup: {
@@ -199,7 +216,7 @@ export default class EgiftTopPurchase extends React.Component {
                   handleAmountSelect={this.handleAmountSelect}
                 />
                 <div className="action-buttons">
-                  <div className="error form-error">{displayFormError}</div>
+                  <div className="error form-error" id="top-up-error">{displayFormError}</div>
                   <button
                     type="submit"
                     name="top-up"
