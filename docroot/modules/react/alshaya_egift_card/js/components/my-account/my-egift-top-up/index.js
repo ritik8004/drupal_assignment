@@ -10,7 +10,11 @@ import {
   getDefaultErrorMessage,
   getProcessedErrorMessage,
 } from '../../../../../js/utilities/error';
-import { setStorageInfo } from '../../../../../js/utilities/storage';
+import {
+  getStorageInfo,
+  setStorageInfo,
+} from '../../../../../js/utilities/storage';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 
 export default class MyEgiftTopUp extends React.Component {
   constructor(props) {
@@ -70,6 +74,22 @@ export default class MyEgiftTopUp extends React.Component {
     };
 
     showFullScreenLoader();
+
+    // Check if cart id is present in local store for anonymous user.
+    if (!isUserAuthenticated()) {
+      let cartId = getStorageInfo('cart_id');
+      if (cartId === null) {
+        // Create an empty cart and set cart id in storage.
+        cartId = window.commerceBackend.createCart();
+      }
+
+      // Show error if still cart id is null.
+      if (cartId === null) {
+        document.getElementById('top-up-error').innerHTML = getDefaultErrorMessage();
+        removeFullScreenLoader();
+        return;
+      }
+    }
 
     // Call top-up API to add top-up to cart.
     // Don't use bearer token with top-up add to cart API as it is public API.
@@ -135,7 +155,7 @@ export default class MyEgiftTopUp extends React.Component {
           <div
             className="action-topup"
           >
-            <div id="my-topup-error" className="error form-error">{displayFormError}</div>
+            <div id="top-up-error" className="error form-error">{displayFormError}</div>
             <button
               type="button"
               name="top-up"

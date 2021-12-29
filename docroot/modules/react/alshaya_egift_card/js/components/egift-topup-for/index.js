@@ -101,7 +101,6 @@ export default class EgiftTopupFor extends React.Component {
                 id="card_number"
                 name="card_number"
                 required
-                onBlur={(e) => this.handleEvent(e)}
               />
               <div className="c-input__bar" />
               <label>{Drupal.t('eGift Card number', {}, { context: 'egift' })}</label>

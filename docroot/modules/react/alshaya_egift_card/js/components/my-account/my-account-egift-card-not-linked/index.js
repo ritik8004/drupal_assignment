@@ -49,6 +49,10 @@ class EgiftCardNotLinked extends React.Component {
    */
   handleResendCode = (e) => {
     e.preventDefault();
+    // Empty otp field.
+    document.getElementsByName('otp-code')[0].value = '';
+    // Remove existing success message.
+    document.getElementById('resend-success').innerHTML = '';
     showFullScreenLoader();
     this.getOtpCode().then((response) => {
       if (typeof response !== 'undefined' && response) {
