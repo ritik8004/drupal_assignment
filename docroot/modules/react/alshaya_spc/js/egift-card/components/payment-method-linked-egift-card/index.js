@@ -61,7 +61,6 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               return;
             }
 
-
             // Card Available Balance.
             const currentBalance = result.data.current_balance;
             // Current Time stamp to check for expiry.
