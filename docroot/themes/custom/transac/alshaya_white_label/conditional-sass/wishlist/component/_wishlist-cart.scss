@@ -5,6 +5,15 @@
     color: $wishlist-cart-link;
     margin-top: 1rem;
     cursor: pointer;
+    position: relative;
+
+    .wishlist-loader {
+      &.loading {
+        @include componentLoader(transparent, 'after');
+
+        position: absolute;
+      }
+    }
   }
 
   .wishlist-popup-container {

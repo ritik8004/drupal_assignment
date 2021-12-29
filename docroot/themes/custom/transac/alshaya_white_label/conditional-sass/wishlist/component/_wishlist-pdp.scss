@@ -39,4 +39,15 @@
     top: 0.3125rem;
     #{$right}: 0.3125rem;
   }
+
+  &.nodetype--acq_product {
+    .wishlist-button-wrapper {
+      &.loading {
+        .wishlist-icon,
+        .wishlist-link {
+          opacity: 0.2;
+        }
+      }
+    }
+  }
 }
