@@ -70,7 +70,7 @@ export default class UpdateEgiftCardAmount extends React.Component {
         >
           <div className="egift-amount-update-wrapper">
             <a className="close" onClick={() => closeModal()}> &times; </a>
-            <div className="heading">{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
+            <div className="heading spc-checkout-section-title">{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
             <div className="form-wrapper">
               <form
                 className="egift-get-form"
@@ -88,20 +88,20 @@ export default class UpdateEgiftCardAmount extends React.Component {
                     '@remainingAmount': remainingAmount,
                   }, { context: 'egift' }),
                 })}
-                <span>
-                  {currencyCode}
-                </span>
                 {egiftFormElement({
                   type: 'number',
                   name: 'amount',
                   className: 'amount',
+                  label: 'Amount',
                   value: amount,
                 })}
-                {egiftFormElement({
-                  type: 'submit',
-                  name: 'button',
-                  buttonText: 'Edit Amount',
-                })}
+                <div className="egift-submit-btn-wrapper">
+                  {egiftFormElement({
+                    type: 'submit',
+                    name: 'button',
+                    buttonText: 'Edit Amount',
+                  })}
+                </div>
               </form>
             </div>
           </div>
