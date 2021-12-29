@@ -490,14 +490,10 @@ const getProcessedCartData = async (cartData) => {
             data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
           }
 
-          // If eGift product is to top-up a card add has card number.
-          data.topupCardNumber = (hasValue(item.extension_attributes.topup_card_number))
-            ? item.extension_attributes.topup_card_number
-            : null;
-        }
-        // If any product in cart is for Topup.
-        if (isEgiftCard && typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
-          data.egiftTopup = item.extension_attributes.is_topup;
+          // If item is a top-up card add the card number used for top-up.
+          data.items[itemKey].topupCardNumber = (
+            hasValue(item.extension_attributes.topup_card_number)
+          ) ? item.extension_attributes.topup_card_number : null;
         }
       }
 

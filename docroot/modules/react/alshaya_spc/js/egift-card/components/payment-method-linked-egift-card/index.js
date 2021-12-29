@@ -49,8 +49,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
           if (result.data.card_number !== null && result.data.response_type) {
             // While doing topup of same egift card which is linked to the logged in customer,
             // dont show linked card redemption section in checkout page.
-            if (hasValue(cart.cart.topupCardNumber)
-              && result.data.card_number === cart.cart.topupCardNumber) {
+            if (hasValue(cart.cart.items[0].topupCardNumber)
+              && result.data.card_number === cart.cart.items[0].topupCardNumber) {
               return;
             }
 
