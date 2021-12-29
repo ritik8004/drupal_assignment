@@ -21,6 +21,7 @@ import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollecti
 import isAuraEnabled from '../../../../js/utilities/helper';
 import { callDrupalApi, callMagentoApi } from '../../../../js/utilities/requestHelper';
 import isEgiftCardEnabled from '../../../../js/utilities/egiftCardHelper';
+import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -248,7 +249,11 @@ const formatCart = (cartData) => {
   // to allow users to fill addresses.
   if (shippingMethod === '') {
     data.shipping = {};
-    data.cart.billing_address = {};
+    // Bypass this empty settings of billing address for egift enabled and
+    // containing only virtual item in cart.
+    if (!cartContainsOnlyVirtualProduct(data.cart)) {
+      data.cart.billing_address = {};
+    }
   }
   return data;
 };
@@ -338,7 +343,7 @@ const getProcessedCartData = async (cartData) => {
     },
     items: [],
     ...(collectionPointsEnabled() && hasValue(cartData.shipping))
-      && { collection_charge: cartData.shipping.price_amount || '' },
+    && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
   // Totals.
@@ -348,7 +353,8 @@ const getProcessedCartData = async (cartData) => {
   }
 
   // If Aura enabled, add aura related details.
-  if (isAuraEnabled()) {
+  // If Egift card is enabled get balance_payable.
+  if (isAuraEnabled() || isEgiftCardEnabled()) {
     cartData.totals.total_segments.forEach((element) => {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
@@ -357,19 +363,25 @@ const getProcessedCartData = async (cartData) => {
         data.totals.paidWithAura = element.value;
       }
     });
+  }
+  if (isAuraEnabled()) {
     data.loyaltyCard = cartData.cart.extension_attributes.loyalty_card || '';
   }
 
-  // If egift card enabled, add the hps_redeemed_amount and balance_payble in cart.
+  // If egift card enabled, add the hps_redeemed_amount
+  // add hps_redemption_type to cart.
   if (isEgiftCardEnabled()) {
+    data.totals.egiftRedeemedAmount = 0;
+    data.totals.egiftRedemptionType = '';
+    data.totals.egiftCardNumber = '';
     if (hasValue(cartData.totals.extension_attributes.hps_redeemed_amount)) {
       data.totals.egiftRedeemedAmount = cartData.totals.extension_attributes.hps_redeemed_amount;
     }
     if (hasValue(cartData.totals.extension_attributes.hps_redemption_type)) {
       data.totals.egiftRedemptionType = cartData.totals.extension_attributes.hps_redemption_type;
     }
-    if (typeof cartData.totals.extension_attributes.balance_payble !== 'undefined') {
-      data.totals.eGiftbalancePayable = cartData.totals.extension_attributes.balance_payble;
+    if (hasValue(cartData.cart.extension_attributes.hps_redemption_card_number)) {
+      data.totals.egiftCardNumber = cartData.cart.extension_attributes.hps_redemption_card_number;
     }
   }
 
@@ -472,6 +484,16 @@ const getProcessedCartData = async (cartData) => {
           if (typeof item.extension_attributes.product_media !== 'undefined') {
             data.items[itemKey].media = item.extension_attributes.product_media[0].file;
           }
+
+          // If eGift product is top-up card add check to the product item.
+          if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
+            data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
+          }
+
+          // If item is a top-up card add the card number used for top-up.
+          data.items[itemKey].topupCardNumber = (
+            hasValue(item.extension_attributes.topup_card_number)
+          ) ? item.extension_attributes.topup_card_number : null;
         }
       }
 
@@ -1110,12 +1132,12 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
  * @returns {Promise<object>}
  *  returns list of governates.
  */
-const getProductShippingMethods = async (currentArea, sku = undefined) => {
-  let cartId = null;
-  if (sku === undefined) {
+const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
+  let cartIdInt = cartId;
+  if (sku === undefined && cartId === null) {
     const cartData = window.commerceBackend.getCartDataFromStorage();
     if (cartData.cart.cart_id !== null) {
-      cartId = cartData.cart.cart_id_int;
+      cartIdInt = cartData.cart.cart_id_int;
     }
   }
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
@@ -1132,7 +1154,7 @@ const getProductShippingMethods = async (currentArea, sku = undefined) => {
   try {
     const params = {
       productAndAddressInformation: {
-        cart_id: cartId,
+        cart_id: cartIdInt,
         product_sku: (sku !== undefined) ? sku : null,
         address: {
           custom_attributes: attributes,

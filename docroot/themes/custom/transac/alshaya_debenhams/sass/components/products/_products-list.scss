@@ -43,10 +43,19 @@
     font-size: 0.875rem;
     text-align: $left;
 
+    @include breakpoint($only-mobile) {
+      font-size: 0.8125rem;
+    }
+
     .field--name-name,
     .listing-brand-name,
     .special-price-block {
       padding: 0 0.9375rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 0;
+        padding-#{$left}: 0.8125rem;
+      }
     }
 
     .field--name-name,
@@ -58,7 +67,7 @@
       font-family: $dh-semibold;
       font-size: 0.875rem;
       margin-top: 0;
-      margin-bottom: 0.75rem;
+      line-height: 0.75;
     }
 
     @include breakpoint($desktop) {
@@ -74,6 +83,12 @@
         }
       }
     }
+
+    .promotions {
+      .sku-promotion-item {
+        margin-#{$left}: 0;
+      }
+    }
   }
 
   .c-products-list {
@@ -84,6 +99,7 @@
 
         @include breakpoint($only-mobile) {
           height: 16rem;
+          margin-bottom: 1.625rem;
         }
 
         @include breakpoint($desktop) {
@@ -91,9 +107,32 @@
         }
 
         .alshaya_search_mainimage {
+          @include breakpoint($only-tablet) {
+            height: 21.5rem;
+          }
+
           @include breakpoint($only-mobile) {
             height: 16rem;
           }
+        }
+      }
+    }
+
+    &.product-large {
+      .alshaya_search_gallery {
+        border: 1px solid $primary_border;
+        margin-bottom: 2.25rem;
+
+        @include breakpoint($only-mobile) {
+          height: 33.4375rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          height: 32.375rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 28.25rem;
         }
       }
     }
@@ -114,6 +153,10 @@
     padding: 0 0.875rem;
     display: flex;
     align-items: center;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
 
     & > a {
       .swatch-block {
@@ -140,5 +183,13 @@
 .price--discount {
   @include breakpoint($tablet) {
     font-size: 0.875rem;
+  }
+}
+
+.node--view-mode-search-result {
+  .has--special--price {
+    @include breakpoint($only-mobile) {
+      display: inline-block;
+    }
   }
 }

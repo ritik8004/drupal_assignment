@@ -166,3 +166,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/tabby/tabby.ltr.css: css/conditional-sass/tabby/tabby.ltr.css
+
+  alshaya_white_label/sameday-express-delivery:
+    css:
+      theme:
+        css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css

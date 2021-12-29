@@ -98,3 +98,12 @@ gtm_pdp_default:
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce
+
+gtm_initial_data_push:
+  version: 1.x
+  header: true
+  js:
+    js/alshaya_seo.gtm.initial_data_push.js: { weight: -1 }
+  dependencies:
+    - core/drupal
+    - core/jquery

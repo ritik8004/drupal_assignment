@@ -246,6 +246,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   protected function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
     $language = $this->languageManager->getLanguage($langcode);
+    $defaultLangcode = $this->languageManager->getDefaultLanguage()->getId();
     $uri_options = ['language' => $language];
 
     $data = [];
@@ -269,6 +270,12 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // Initialize the image and image text font/bg color.
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
     foreach ($terms as $term) {
+      // Fetching GTM label in english.
+      if ($langcode != $defaultLangcode) {
+        $termEntity = $this->termStorage->load($term->tid);
+        $translatedEntity = $this->entityRepository->getTranslationFromContext($termEntity, $defaultLangcode);
+        $gtmLabel = $translatedEntity->getName();
+      }
       switch ($cache_name) {
         case 'product_list':
           $lhn = is_null($term->field_show_in_product_list_lhn_value) ? (int) $term->field_show_in_lhn_value : (int) $term->field_show_in_product_list_lhn_value;
@@ -286,6 +293,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       $data[$term->tid] = [
         'label' => $term->name,
+        'gtm_menu_title' => $gtmLabel ?? $term->name,
         'description' => [
           '#markup' => $term->description__value,
         ],

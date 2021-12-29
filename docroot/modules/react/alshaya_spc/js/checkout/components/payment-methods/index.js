@@ -16,7 +16,7 @@ import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import isAuraEnabled, { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import {
   isFullPaymentDoneByAura,
   isPaymentMethodSetAsAura,
@@ -27,7 +27,8 @@ import CheckoutComUpapiApplePay
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isEgiftCardEnabled from '../../../../../js/utilities/egiftCardHelper';
-import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod } from '../../../utilities/egift_util';
+import PaymentMethodLinkedEgiftCard from '../../../egift-card/components/payment-method-linked-egift-card';
+import { isEgiftRedemptionDone, isEgiftUnsupportedPaymentMethod, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -134,6 +135,14 @@ export default class PaymentMethods extends React.Component {
     if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
       this.changePaymentMethod('aura_payment');
       return;
+    }
+
+    // If full payment is being done by egift then change the payment method to
+    // 'hps_payment'.
+    if (isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart)) {
+      // @todo To change payment method to hps_payment.
+      // This will be done once we have default payment method selection disable
+      // in place.
     }
 
     if (!(this.isActive())) {
@@ -284,7 +293,7 @@ export default class PaymentMethods extends React.Component {
 
     // Allow change payment method only if it's allowed for egift.
     if (isEgiftCardEnabled()
-      && isEgiftUnsupportedPaymentMethod(method)
+      && isEgiftUnsupportedPaymentMethod(method, cart.cart)
       && isEgiftRedemptionDone(cart.cart)) {
       return;
     }
@@ -359,7 +368,7 @@ export default class PaymentMethods extends React.Component {
       }
       // Disable the payment method that are not supported by egift.
       if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)) {
-        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code);
+        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code, cart.cart);
       }
 
       this.paymentMethodRefs[method.code] = React.createRef();
@@ -384,8 +393,13 @@ export default class PaymentMethods extends React.Component {
 
     return (
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${activeClass}`} style={{ animationDelay: '0.4s' }}>
+        <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
+        <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
+          <PaymentMethodLinkedEgiftCard
+            cart={cart}
+          />
+        </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>
-          <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
           <div className={`payment-methods ${activeClass}`}>{methods}</div>
         </ConditionalView>
       </div>

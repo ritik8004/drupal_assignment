@@ -887,9 +887,10 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
 
   // For performance testing & debugging purposes adding a quick bypass for
   // escaping GTM JS on a page.
-  // Usage: ?GTM=BLOCK.
+  // Usage: ?GTM=BLOCK (OR) ?external=0
   $param = \Drupal::request()->get('GTM');
-  if ($param === 'BLOCK') {
+  $external = \Drupal::request()->get('external');
+  if ((isset($external) && $external == 0) || $param === 'BLOCK') {
     foreach ($attachments['#attached']['html_head'] ?? [] as $index => $script) {
       if ($script[1] === 'google_tag_script_tag__primary' || $script[1] === 'google_tag_data_layer_tag__primary') {
         unset($attachments['#attached']['html_head'][$index]);
@@ -1012,6 +1013,16 @@ function alshaya_white_label_preprocess_menu(&$variables) {
         }
       }
     }
+  }
+  // Adding GTM label attribute Super Menu link items.
+  elseif ($variables['menu_name'] === 'super-menu') {
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    foreach ($variables['items'] as $item) {
+      $itemEntity = $item['original_link']->getTranslateRoute()->getOption('entity');
+      $attributes = $item['url']->getOption('attributes');
+      $attributes['gtm-menu-title'] = $itemEntity->hasTranslation($langcode) ? $itemEntity->getTranslation($langcode)->getTitle() : $item['original_link']->getTitle();
+      $item['url']->setOption('attributes', $attributes);
+    }   
   }
 }
 

@@ -16,13 +16,13 @@ export default class UpdateEgiftCardAmount extends React.Component {
     if (egiftAmount.length === 0) {
       message = getStringMessage('form_egift_amount');
       errors = true;
-    } else if (egiftAmount > (amount + remainingAmount)) {
+    } else if (remainingAmount && (egiftAmount > (amount + remainingAmount))) {
       message = getStringMessage('egift_insufficient_balance');
       errors = true;
     } else if (egiftAmount <= 0) {
       message = getStringMessage('egift_valid_amount');
       errors = true;
-    } else if (egiftAmount > cart.totals.base_grand_total) {
+    } else if (egiftAmount > cart.cart_total) {
       message = Drupal.t('Redeem amount should be less than or equal to the cart value.');
       errors = true;
     }
@@ -70,7 +70,7 @@ export default class UpdateEgiftCardAmount extends React.Component {
         >
           <div className="egift-amount-update-wrapper">
             <a className="close" onClick={() => closeModal()}> &times; </a>
-            <div className="heading">{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
+            <div className="heading spc-checkout-section-title">{Drupal.t('Edit amount to use', {}, { context: 'egift' })}</div>
             <div className="form-wrapper">
               <form
                 className="egift-get-form"
@@ -83,25 +83,25 @@ export default class UpdateEgiftCardAmount extends React.Component {
                     '@currencyCode': currencyCode,
                     '@amount': amount,
                   }, { context: 'egift' }),
-                  egiftSubHeading: Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
+                  egiftSubHeading: (remainingAmount ? Drupal.t('Remaining Balance - @currencyCode @remainingAmount', {
                     '@currencyCode': currencyCode,
                     '@remainingAmount': remainingAmount,
-                  }, { context: 'egift' }),
+                  }, { context: 'egift' }) : ''),
                 })}
-                <span>
-                  {currencyCode}
-                </span>
                 {egiftFormElement({
                   type: 'number',
                   name: 'amount',
                   className: 'amount',
+                  label: 'Amount',
                   value: amount,
                 })}
-                {egiftFormElement({
-                  type: 'submit',
-                  name: 'button',
-                  buttonText: 'Edit Amount',
-                })}
+                <div className="egift-submit-btn-wrapper">
+                  {egiftFormElement({
+                    type: 'submit',
+                    name: 'button',
+                    buttonText: 'Edit Amount',
+                  })}
+                </div>
               </form>
             </div>
           </div>

@@ -10,6 +10,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Component\Serialization\Json;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_egift_card\Helper\EgiftCardHelper;
 
 /**
  * Provides Balance Check block.
@@ -29,6 +30,13 @@ class AlshayaCheckBalanceBlock extends BlockBase implements ContainerFactoryPlug
   protected $configFactory;
 
   /**
+   * EgiftCardHelper.
+   *
+   * @var \Drupal\alshaya_egift_card\Helper\EgiftCardHelper
+   */
+  protected $egiftCardHelper;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -39,13 +47,17 @@ class AlshayaCheckBalanceBlock extends BlockBase implements ContainerFactoryPlug
    *   The plugin implementation definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\alshaya_egift_card\Helper\EgiftCardHelper $egiftCardHelper
+   *   EgiftCardHelper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              EgiftCardHelper $egiftCardHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
+    $this->egiftCardHelper = $egiftCardHelper;
   }
 
   /**
@@ -57,6 +69,7 @@ class AlshayaCheckBalanceBlock extends BlockBase implements ContainerFactoryPlug
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
+      $container->get('alshaya_egift_card.egift_card_helper'),
     );
   }
 
@@ -110,22 +123,19 @@ class AlshayaCheckBalanceBlock extends BlockBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function build() {
-    $link_url = Url::fromRoute('alshaya_egift_card.check_balance');
-    $link_url->setOptions([
-      'attributes' => [
-        'class' => ['use-ajax', 'button', 'button--small', 'secondary', 'btn', 'btn-secondary'],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
-        'role' => 'button',
-      ]
-    ]);
-
+    $eGift_status = $this->egiftCardHelper->isEgiftCardEnabled();
+    if (!$eGift_status) {
+      return '';
+    }
     return [
       '#theme' => 'egift_balance_check_block',
       '#block_title' => $this->configuration['block_title'],
       '#block_description' => $this->configuration['block_description'],
-      '#check_balance_button' => Link::fromTextAndUrl($this->configuration['button_value'], $link_url)->toString(),
-      '#attached' => ['library' => ['core/drupal.dialog.ajax']]
+      '#attached' => [
+        'library' => [
+          'alshaya_egift_card/alshaya_egift_check_balance',
+        ],
+      ],
     ];
   }
 

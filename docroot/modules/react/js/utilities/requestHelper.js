@@ -4,6 +4,7 @@ import { cartErrorCodes, getDefaultErrorMessage, getProcessedErrorMessage } from
 import { hasValue, isArray } from './conditionsUtility';
 import logger from './logger';
 import { isUserAuthenticated } from './helper';
+import { getStorageInfo } from '../../alshaya_spc/js/utilities/storage';
 
 /**
  * Wrapper to get cart settings.
@@ -280,6 +281,18 @@ const getMagentoApiParams = (url, method = 'GET', data = {}, useBearerToken = tr
       params.params = data;
     } else {
       params.data = data;
+    }
+  }
+
+  // Add digital cart id to the params for get-cart and update-cart api calls
+  // if top-up masked id exists in local storage.
+  const { enabled } = drupalSettings.egiftCard || false;
+  if (enabled && (url.indexOf('getCart') > -1 || url.indexOf('updateCart') > -1)) {
+    const topUpQuote = getStorageInfo('topupQuote');
+    if (topUpQuote !== null) {
+      params.params = {
+        digitalcart_id: topUpQuote.maskedQuoteId,
+      };
     }
   }
 

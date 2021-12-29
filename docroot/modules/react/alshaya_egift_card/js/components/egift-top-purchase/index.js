@@ -184,31 +184,34 @@ export default class EgiftTopPurchase extends React.Component {
     }
 
     return (
-      <div className="egifts-form-wrap">
+      <div className="egifts-form-wrapper">
         <form onSubmit={this.handleSubmit} className="egift-form">
           <ConditionalView condition={wait === true}>
-            <div className="egift-hero-wrap">
+            <div className="step-wrapper step-one-wrapper fadeInUp">
               <HeroImage item={topUpCard} />
-            </div>
-            <div className="egift-topup-fields-wrap">
-              <EgiftTopupFor
-                linkedCardNumber={linkedCardNumber}
-                linkedCardBalance={linkedCardBalance}
-              />
-              <EgiftCardAmount selected={topUpCard} handleAmountSelect={this.handleAmountSelect} />
+              <div className="egift-topup-fields-wrapper">
+                <EgiftTopupFor
+                  linkedCardNumber={linkedCardNumber}
+                  linkedCardBalance={linkedCardBalance}
+                />
+                <EgiftCardAmount
+                  selected={topUpCard}
+                  handleAmountSelect={this.handleAmountSelect}
+                />
+                <div className="action-buttons">
+                  <div className="error form-error">{displayFormError}</div>
+                  <button
+                    type="submit"
+                    name="top-up"
+                    className="btn"
+                    disabled={disableSubmit}
+                  >
+                    {Drupal.t('Top-up', {}, { context: 'egift' })}
+                  </button>
+                </div>
+              </div>
             </div>
           </ConditionalView>
-          <div className="action-buttons">
-            <div className="error form-error">{displayFormError}</div>
-            <button
-              type="submit"
-              name="top-up"
-              className="btn"
-              disabled={disableSubmit}
-            >
-              {Drupal.t('Top-up', {}, { context: 'egift' })}
-            </button>
-          </div>
         </form>
       </div>
     );

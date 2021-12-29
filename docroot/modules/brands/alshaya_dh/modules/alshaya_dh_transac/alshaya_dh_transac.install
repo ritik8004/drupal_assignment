@@ -9,10 +9,10 @@
  * Implements hook_install().
  */
 function alshaya_dh_transac_install() {
-  // Enable algolia as default search index.
-  \Drupal::service('module_installer')->install(['alshaya_search_algolia']);
   // Enable pims module for using v2.
   \Drupal::service('module_installer')->install(['alshaya_pims']);
+  // Enable pretty path for pdp urls.
+  \Drupal::service('module_installer')->install(['alshaya_pdp_pretty_path']);
 
   // Enable and set alshaya_dh as default theme and set the site logo,
   // favicon icon and email logo path.
@@ -104,7 +104,31 @@ function alshaya_dh_transac_install() {
     ],
     'Select your prefered communication channel' => [
       'ar' => 'حدد قناة الاتصال المفضلة لديك'
-    ]
+    ],
+    'Details and care' => [
+      'ar' => 'التفاصيل والعناية'
+    ],
+    'Sleeve Length' => [
+      'ar' => 'طول الكم',
+    ],
+    'Length' => [
+      'ar' => 'الطول',
+    ],
+    'Neckline' => [
+      'ar' => 'الياقة',
+    ],
+    'Detail' => [
+      'ar' => 'التفاصيل',
+    ],
+    'Design' => [
+      'ar' => 'التصميم',
+    ],
+    'Fabric' => [
+      'ar' => 'الخامة',
+    ],
+    'Product Type' => [
+      'ar' => 'نوع المنتج'
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);

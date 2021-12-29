@@ -2,6 +2,7 @@ import React from 'react';
 import {
   placeOrder,
   isDeliveryTypeSameAsInCart,
+  isShippingMethodSet,
 } from '../../../utilities/checkout_util';
 import dispatchCustomEvent from '../../../utilities/events';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
@@ -111,7 +112,7 @@ export default class CompletePurchase extends React.Component {
     // If delivery method selected same as what in cart.
     const deliverSameAsInCart = isDeliveryTypeSameAsInCart(cart);
     // If shipping info set in cart or not.
-    const isShippingSet = (cart.cart.shipping.method !== null);
+    const isShippingSet = isShippingMethodSet(cart);
     // If billing info set in cart or not.
     let isBillingSet = false;
     if (cart.cart.billing_address !== null) {

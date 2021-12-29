@@ -15,8 +15,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Check Balance & Validity',
         'context' => 'egift',
       ],
-      'Enter gift card details to check balance and validity.' => [
-        'ar' => 'Enter gift card details to check balance and validity.',
+      'Enter gift card details to check balance & validity.' => [
+        'ar' => 'Enter gift card details to check balance & validity.',
         'context' => 'egift',
       ],
       'eGift Card Number' => [
@@ -27,8 +27,20 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Something went wrong, please try again later.',
         'context' => 'egift',
       ],
-      'Please enter your card number.' => [
-        'ar' => 'Please enter your card number.',
+      'Please enter otp.' => [
+        'ar' => 'Please enter otp.',
+        'context' => 'egift',
+      ],
+      'Please enter valid otp.' => [
+        'ar' => 'Please enter valid otp.',
+        'context' => 'egift',
+      ],
+      'Please enter card number.' => [
+        'ar' => 'Please enter card number.',
+        'context' => 'egift',
+      ],
+      'Please enter valid card number.' => [
+        'ar' => 'Please enter valid card number.',
         'context' => 'egift',
       ],
       'Terms & Conditions' => [
@@ -115,8 +127,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Link this card for faster payment next time',
         'context' => 'egift',
       ],
-      'Verification code sent to @email' => [
-        'ar' => 'Verification code sent to @email',
+      'Verification code is send to email address registered with the card number.' => [
+        'ar' => 'Verification code is send to email address registered with the card number.',
         'context' => 'egift',
       ],
       'Resend Code' => [
@@ -227,8 +239,8 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Redeem amount should be less than or equal to the cart value.',
         'context' => 'egift',
       ],
-      'Pay @currencyCode @pendingAmount using another payment method to complete purchase' => [
-        'ar' => 'Pay @currencyCode @pendingAmount using another payment method to complete purchase',
+      'Pay using egift card (Available Balance: @currencyCode @amount)' => [
+        'ar' => 'Pay using egift card (Available Balance: @currencyCode @amount)',
         'context' => 'egift',
       ],
       'Paid With eGfit card' => [
@@ -239,6 +251,130 @@ function _alshaya_egift_card_translations() {
         'ar' => 'Balance Payable',
         'context' => 'egift',
       ],
+      'Pay using egift card (Remaining Balance: @currencyCode @amount)' => [
+        'ar' => 'Pay using egift card (Remaining Balance: @currencyCode @amount)',
+        'context' => 'egift',
+      ],
+      'Pay using egift card (Card is expired)' => [
+        'ar' => 'Pay using egift card (Card is expired)',
+        'context' => 'egift',
+      ],
+      'Pay @currencyCode @amount using another payment method to complete purchase' => [
+        'ar' => 'Pay @currencyCode @amount using another payment method to complete purchase',
+        'context' => 'egift',
+      ],
+      'Top-up' => [
+        'ar' => 'Top-up',
+        'context' => 'egift',
+      ],
+      'Top-up for' => [
+        'ar' => 'Top-up for',
+        'context' => 'egift',
+      ],
+      'My Card' => [
+        'ar' => 'My Card',
+        'context' => 'egift',
+      ],
+      'Other\'s Card' => [
+        'ar' => 'Other\'s Card',
+        'context' => 'egift',
+      ],
+      'Card Balance:' => [
+        'ar' => 'Card Balance:',
+        'context' => 'egift',
+      ],
+      'Card No:' => [
+        'ar' => 'Card No:',
+        'context' => 'egift',
+      ],
+      'eGift Card number' => [
+        'ar' => 'eGift Card number',
+        'context' => 'egift',
+      ],
+      'Card Details' => [
+        'ar' => 'Card Details',
+        'context' => 'egift',
+      ],
+      'My eGift Card' => [
+        'ar' => 'My eGift Card',
+      ],
+      'Balanace:' => [
+        'ar' => 'Balanace:',
+        'context' => 'egift',
+      ],
+      'Gift Card number' => [
+        'ar' => 'Gift Card number',
+        'context' => 'egift',
+      ],
+      'Expires on' => [
+        'ar' => 'Expires on',
+        'context' => 'egift',
+      ],
+      'This card has expired.' => [
+        'ar' => 'This card has expired.',
+        'context' => 'egift',
+      ],
+      'Card Type' => [
+        'ar' => 'Card Type',
+        'context' => 'egift',
+      ],
+      'Top up' => [
+        'ar' => 'Top up',
+        'context' => 'egift',
+      ],
+      'Link my egift card' => [
+        'ar' => 'Link my egift card',
+        'context' => 'egift',
+      ],
+      'eGift Card' => [
+        'ar' => 'eGift Card',
+        'context' => 'egift',
+      ],
+      'You dont have any eGift card linked to your account, link card to use it for your purchases' => [
+        'ar' => 'You dont have any eGift card linked to your account, link card to use it for your purchases',
+        'context' => 'egift',
+      ],
+      'We\'ll send a verification code to your email to verify and link eGift card' => [
+        'ar' => 'We\'ll send a verification code to your email to verify and link eGift card',
+        'context' => 'egift',
+      ],
+      'Get Code' => [
+        'ar' => 'Get Code',
+        'context' => 'egift',
+      ],
+      'Enter verification code' => [
+        'ar' => 'Enter verification code',
+        'context' => 'egift',
+      ],
+      'Didn\'t receive?' => [
+        'ar' => 'Didn\'t receive?',
+        'context' => 'egift',
+      ],
+      'Verify' => [
+        'ar' => 'Verify',
+        'context' => 'egift',
+      ],
+      'Please enter an eGift card number.' => [
+        'ar' => 'Please enter an eGift card number.',
+        'context' => 'egift',
+      ],
+      'Please enter a valid eGift card number.' => [
+        'ar' => 'Please enter a valid eGift card number.',
+        'context' => 'egift',
+      ],
+      'Please enter verification code.' => [
+        'ar' => 'Please enter verification code.',
+        'context' => 'egift',
+      ],
+      'Please enter a valid verification code.' => [
+        'ar' => 'Please enter a valid verification code.',
+        'context' => 'egift',
+      ],
+      'You cannot redeem the same card which you\'re trying to topup.' => [
+        'ar' => 'You cannot redeem the same card which you\'re trying to topup.',
+        'context' => 'egift',
+      ],
+
     ],
   ];
 

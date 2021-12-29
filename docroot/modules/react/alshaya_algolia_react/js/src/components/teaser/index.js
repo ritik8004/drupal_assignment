@@ -28,6 +28,7 @@ const Teaser = ({
   const [slider, setSlider] = useState(false);
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
+  const { showBrandName } = drupalSettings.reactTeaserView;
 
   if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
     const { plp_attributes: plpAttributes } = drupalSettings;
@@ -150,10 +151,13 @@ const Teaser = ({
                 </ul>
               </div>
               )}
-            <ConditionalView condition={attribute.attr_brand_name !== undefined}>
+            <ConditionalView condition={showBrandName && attribute.attr_brand_name !== undefined}>
               <div className="listing-brand-name">
                 {attribute.attr_brand_name}
               </div>
+            </ConditionalView>
+            <ConditionalView condition={showBrandName && attribute.attr_brand_name === undefined}>
+              <div className="alignment-placeholder" />
             </ConditionalView>
             <h2 className="field--name-name">
               <a href={attribute.url} className="product-selected-url">
@@ -193,7 +197,18 @@ const Teaser = ({
           <ConditionalView condition={
               isExpressDeliveryEnabled()
               && hit.attr_express_delivery !== undefined
-              && (hit.attr_express_delivery[0] === '1' || hit.attr_express_delivery[currentLanguage][0] === '1')
+              && hit.attr_express_delivery[0] === '1'
+            }
+          >
+            <div className="express_delivery">
+              {Drupal.t('Express Delivery', {}, { context: 'Express Delivery Tag' })}
+            </div>
+          </ConditionalView>
+          <ConditionalView condition={
+              isExpressDeliveryEnabled()
+              && pageType === 'plp'
+              && hit.attr_express_delivery !== undefined
+              && hit.attr_express_delivery[currentLanguage][0] === '1'
             }
           >
             <div className="express_delivery">

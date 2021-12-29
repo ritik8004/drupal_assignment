@@ -67,9 +67,13 @@ export default class PdpSelectArea extends React.Component {
 
   openModal = () => {
     document.addEventListener('openDeliveryAreaPanel', this.openDeliveryAreaPanel);
+    const areaPanelPlaceHolder = typeof (drupalSettings.areaBlockFormPlaceholder) !== 'undefined'
+      ? drupalSettings.areaBlockFormPlaceholder
+      : '';
     return (
       <AreaListBlock
         closeModal={() => this.closeModal()}
+        placeHolderText={areaPanelPlaceHolder}
       />
     );
   };
