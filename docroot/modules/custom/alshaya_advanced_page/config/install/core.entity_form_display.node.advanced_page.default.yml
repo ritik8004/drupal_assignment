@@ -16,6 +16,7 @@ dependencies:
     - node.type.advanced_page
   module:
     - content_moderation
+    - datetime
     - field_group
     - metatag
     - paragraphs
@@ -24,7 +25,8 @@ dependencies:
 third_party_settings:
   field_group:
     group_views_reference:
-      children: {  }
+      children:
+        - field_views
       parent_name: ''
       weight: 21
       label: 'Views Reference'
@@ -56,6 +58,7 @@ third_party_settings:
       label: Related
       format_type: details
       format_settings:
+        label: Related
         element: div
         show_label: true
         label_element: h3
@@ -81,7 +84,8 @@ third_party_settings:
         open: false
       region: content
     group_block_reference:
-      children: {  }
+      children:
+        - field_block
       parent_name: ''
       weight: 13
       label: 'Block Reference'
@@ -120,7 +124,6 @@ content:
       rows: 9
       summary_rows: 3
       placeholder: ''
-      show_summary: false
     third_party_settings: {  }
     region: content
   created:
@@ -155,8 +158,7 @@ content:
     region: content
   field_meta_tags:
     weight: 16
-    settings:
-      sidebar: true
+    settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
     region: content
