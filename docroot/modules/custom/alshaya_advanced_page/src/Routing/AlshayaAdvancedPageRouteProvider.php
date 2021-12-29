@@ -57,7 +57,7 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
       if ($filtered_path) {
         // Get list of department pages.
         $department_node = alshaya_rcs_main_menu_is_department_page($filtered_path);
-        $collection = $this->setRouteOptions($collection, $exploded_path, $department_node);
+        $collection = $this->setRouteOptions($collection, $exploded_path, $department_node, TRUE);
       }
     }
     return $collection;

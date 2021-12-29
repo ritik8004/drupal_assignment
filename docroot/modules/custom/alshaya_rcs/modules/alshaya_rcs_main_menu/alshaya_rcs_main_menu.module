@@ -223,9 +223,11 @@ function alshaya_rcs_main_menu_preprocess_block(&$variables) {
  */
 function alshaya_rcs_main_menu_theme_suggestions_block_alter(array &$suggestions, array $variables) {
   // Add template suggestion based on machine name.
-  switch ($variables['elements']['#id']) {
-    case 'alshayarcsshopby':
-      $suggestions[] = 'block__shopby';
-      break;
+  if (array_key_exists('#id', $variables['elements'])) {
+    switch ($variables['elements']['#id']) {
+      case 'alshayarcsshopby':
+        $suggestions[] = 'block__shopby';
+        break;
+    }
   }
 }
