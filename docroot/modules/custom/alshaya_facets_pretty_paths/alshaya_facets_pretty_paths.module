@@ -320,7 +320,6 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
 * Implements hook_ENTITY_TYPE_insert().
 */
 function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
-
   if ($term->bundle() == 'sku_product_option') {
     $facet_item_value = $term->getName();
     $key = strtolower($facet_item_value);
@@ -337,7 +336,6 @@ function alshaya_facets_pretty_paths_taxonomy_term_insert(TermInterface $term) {
   * Implements hook_ENTITY_TYPE_update().
   */
 function alshaya_facets_pretty_paths_taxonomy_term_update(TermInterface $term) {
-
   if ($term->bundle() == 'sku_product_option') {
     $facet_item_value = $term->getName();
     $key = strtolower($facet_item_value);
@@ -356,13 +354,14 @@ function alshaya_facets_pretty_paths_taxonomy_term_update(TermInterface $term) {
       $old_facet_alias = $term->original->get('field_sku_attribute_code')->getValue()[0]['value'];
       $old_facet_item_value = $term->original->getName();
       $old_key = strtolower($old_facet_item_value);
+      if ($old_facet_item_value == $facet_item_value) {
+        return;
+      }
 
       $query = $database->update('facets_pretty_path')
         ->fields([
           'value' => $facet_item_value,
-          'alias' => $key,
-          'facet_alias' => $facet_alias,
-          'language' => $langcode,
+          'alias' => $key
         ])
         ->condition('alias', $old_key, '=')
         ->condition('facet_alias', $old_facet_alias, '=')
@@ -385,12 +384,15 @@ function alshaya_facets_pretty_paths_taxonomy_term_delete(TermInterface $term) {
     $facet_item_value = $term->getName();
     $key = strtolower($facet_item_value);
     $facet_alias = $term->get('field_sku_attribute_code')->getValue()[0]['value'];
-    // Delete facet alias.
     $database = \Drupal::database();
-    $query = $database->delete('facets_pretty_path')
-      ->condition('alias', $key, '=')
-      ->condition('facet_alias', $facet_alias, '=')
-      ->condition('language', $langcode, '=')
-      ->execute();
+
+    // Delete facet alias.
+    foreach ($term->getTranslationLanguages() as $langcode => $language) {
+      $query = $database->delete('facets_pretty_path')
+        ->condition('alias', $key, '=')
+        ->condition('facet_alias', $facet_alias, '=')
+        ->condition('language', $langcode, '=')
+        ->execute();
+    }
   }
 }
