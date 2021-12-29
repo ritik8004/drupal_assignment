@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "455aac77978d775f0855c5c2bfb86a81",
+    "content-hash": "77dea9d706c04e261310fdd629693667",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -648,7 +648,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -6153,7 +6153,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Trigger and event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+                    "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -17897,6 +17897,18 @@
             "type": "npm-asset",
             "license": [
                 "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/jquery-ui-touch-punch",
+            "version": "0.2.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery-ui-touch-punch/-/jquery-ui-touch-punch-0.2.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "Dual licensed under the MIT or GPL Version 2 licenses."
             ]
         },
         {
