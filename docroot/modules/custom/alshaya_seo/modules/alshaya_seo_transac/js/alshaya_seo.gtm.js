@@ -10,6 +10,8 @@ const GTM_CONSTANTS = {
 };
 
 const productRecommendationsSuffix = 'pr-';
+// Product to push productDetailView event.
+let productOnAlshayaSeoReplaceState = null;
 
 (function ($, Drupal, dataLayer) {
   'use strict';
@@ -43,7 +45,8 @@ const productRecommendationsSuffix = 'pr-';
         product.attr('gtm-price', variantInfo['gtm_price']);
         product.attr('gtm-main-sku', variantInfo['parent_sku']);
 
-        Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange(product);
+        // Set product to push productDetailView event.
+        productOnAlshayaSeoReplaceState = product;
       });
 
       // For simple grouped products.
@@ -57,7 +60,8 @@ const productRecommendationsSuffix = 'pr-';
 
         var variantInfo = drupalSettings[productKey][sku]['group'][variant];
 
-        Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange($(this));
+        // Set product to push productDetailView event.
+        productOnAlshayaSeoReplaceState = $(this);
 
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
@@ -707,60 +711,53 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
-  /**
-   * Gtm event for grouped simple and configurable product
-   *
-   * @param product
-   *   jQuery object which contains all gtm attributes.
-   */
-  Drupal.alshayaSeoGtmPushProductDetailViewOnUrlChange = function (product) {
+  // Simple proxy to dispatch a custom event on window.history.replaceState
+  window.history.replaceState = new Proxy(window.history.replaceState, {
+    apply: (target, thisArg, argArray) => {
+      window.dispatchEvent(new CustomEvent('onAlshayaSeoReplaceState', {detail: { data: () => argArray }}));
+      return target.apply(thisArg, argArray);
+    },
+  });
+
+  // Processes the data and pushes it to gtm layer.
+  window.addEventListener('onAlshayaSeoReplaceState', function (e) {
+    let product = productOnAlshayaSeoReplaceState;
+    productOnAlshayaSeoReplaceState = null;
     // Convert the product to a jQuery object, if not already.
     if (!(product instanceof jQuery) && typeof product !== 'undefined') {
       product = $(product);
     }
+    const lastUrl = location.href;
+    const url = e.detail.data()[2];
 
-    // Datalayer push for product detail view
-    // when url is changed wrt variant.
-    let lastUrl = location.href;
-    const observer = new MutationObserver(() => {
-      const url = location.href;
-      if (url !== lastUrl) {
-        lastUrl = url;
-        var amount = product.attr('gtm-price').replace(/\,/g,'');
-        // Prepare data.
-        var data = {
-          event: 'productDetailView',
-          ecommerce: {
-            currencyCode: drupalSettings.gtm.currency,
-            detail: {
-              products: {
-                name: product.attr('gtm-name'),
-                id: product.attr('gtm-main-sku'),
-                price: parseFloat(amount),
-                category: product.attr('gtm-category'),
-                variant: product.attr('gtm-product-sku'),
-                dimension2: product.attr('gtm-sku-type'),
-                dimension3: product.attr('gtm-dimension3'),
-                dimension4: product.attr('gtm-dimension4')
-              }
+    if (product !== null && !lastUrl.includes(url)) {
+      var amount = product.attr('gtm-price').replace(/\,/g,'');
+      // Prepare data.
+      var data = {
+        event: 'productDetailView',
+        ecommerce: {
+          currencyCode: drupalSettings.gtm.currency,
+          detail: {
+            products: {
+              name: product.attr('gtm-name'),
+              id: product.attr('gtm-main-sku'),
+              price: parseFloat(amount),
+              category: product.attr('gtm-category'),
+              variant: product.attr('gtm-product-sku'),
+              dimension2: product.attr('gtm-sku-type'),
+              dimension3: product.attr('gtm-dimension3'),
+              dimension4: product.attr('gtm-dimension4')
             }
           }
-        };
-        if (product.attr('gtm-brand')) {
-          data.ecommerce.detail.products.brand = product.attr('gtm-brand');
         }
-        // Push into datalayer.
-        dataLayer.push(data);
+      };
+      if (product.attr('gtm-brand')) {
+        data.ecommerce.detail.products.brand = product.attr('gtm-brand');
       }
-    });
-    observer.observe(document, {subtree: true, childList: true});
-
-    // Detach the observer to avoid multiple occurence.
-    setTimeout(function () {
-      observer.disconnect();
-    }, 500);
-
-  }
+      // Push into datalayer.
+      dataLayer.push(data);
+    }
+  });
 
   /**
    * Function to provide product data object.
