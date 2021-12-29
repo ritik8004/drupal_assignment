@@ -6,7 +6,7 @@ import {
   getWishlistItemInStockStatus,
   removeDiffFromWishlist,
   getWishlistLabel,
-} from '../../utilities/wishlist-utils';
+} from '../../../../js/utilities/wishlistHelper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 
 const ProductInfiniteHits = connectInfiniteHits(({

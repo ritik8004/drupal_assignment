@@ -25,7 +25,7 @@ import AdvantageCardExcludedItem from '../advantage-card';
 import CartShippingMethods from '../cart-shipping-methods';
 import { isWishlistEnabled, isProductExistInWishList } from '../../../../../js/utilities/wishlistHelper';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
-import WishlistPopupBlock from '../../../../../alshaya_wishlist/js/components/wishlist-popup-block';
+import WishlistPopupBlock from '../../../wishlist/components/popup-block';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 
@@ -105,7 +105,8 @@ export default class CartItem extends React.Component {
    * Once item is added to wishlist, remove item from cart.
    */
   handleAddToWishList = (e) => {
-    if (e.detail.productInfo.sku) {
+    if (typeof e.detail.productInfo !== 'undefined'
+      && e.detail.productInfo.sku) {
       const { item: { sku, id } } = this.props;
       const { productInfo: { parentSKU } } = this.state;
       // Compare with sku in case of simple sku.

@@ -7,8 +7,8 @@ const LoginMessage = () => {
     <div className="login-message">
       <div className="text">{message}</div>
       <div className="actions">
-        <a href="/user/login">{Drupal.t('Sign in')}</a>
-        <a href="/user/register">{Drupal.t('Register')}</a>
+        <a href={Drupal.url('user/login')}>{Drupal.t('Sign in')}</a>
+        <a href={Drupal.url('user/register')}>{Drupal.t('Register')}</a>
       </div>
     </div>
   );

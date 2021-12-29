@@ -1,18 +1,16 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import CheckoutItemImage from '../../../../alshaya_spc/js/utilities/checkout-item-image';
-import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import {
-  addProductToWishList,
-  getWishlistLabel,
-  getWishlistFromBackend,
-} from '../../utilities/wishlist-utils';
+import CheckoutItemImage from '../../../utilities/checkout-item-image';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import {
   isAnonymousUser,
   addWishListInfoInStorage,
-} from '../../../../js/utilities/wishlistHelper';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import dispatchCustomEvent from '../../../../js/utilities/events';
+  addProductToWishList,
+  getWishlistLabel,
+  getWishlistFromBackend,
+} from '../../../../../js/utilities/wishlistHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export default class WishlistPopupBlock extends React.Component {
   addToWishlist = (addToWishlist) => {

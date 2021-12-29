@@ -13,10 +13,10 @@ import {
   getWishListData,
   isAnonymousUser,
   isShareWishlistPage,
+  getSharedWishlistFromBackend,
 } from '../../../../js/utilities/wishlistHelper';
 import { createConfigurableDrawer } from '../../../../js/utilities/addToBagHelper';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { getSharedWishlistFromBackend } from '../../utilities/wishlist-utils';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 

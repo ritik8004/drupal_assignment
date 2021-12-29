@@ -2,8 +2,11 @@ import React from 'react';
 import ShareIcon from './share-icon';
 import SharePopup from './share-popup';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
-import { getWishlistInfoFromBackend } from '../../utilities/wishlist-utils';
-import { getWishListData, isAnonymousUser } from '../../../../js/utilities/wishlistHelper';
+import {
+  getWishListData,
+  isAnonymousUser,
+  getWishlistInfoFromBackend,
+} from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class WishlistShare extends React.Component {
