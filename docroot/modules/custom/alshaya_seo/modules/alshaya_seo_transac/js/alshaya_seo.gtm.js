@@ -844,8 +844,9 @@ const productRecommendationsSuffix = 'pr-';
    * @param highlights
    * @param gtmPageType
    * @param event
+   * @param promoBlockDetails
    */
-  Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event) {
+  Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event, promoBlockDetails = null) {
     var promotions = [];
     var promo_para_elements = '.paragraph--type--promo-block, .c-slider-promo, .field--name-body > div[class^="rectangle"]:visible';
     var promotion_counter = 0;
@@ -902,6 +903,19 @@ const productRecommendationsSuffix = 'pr-';
           }
         }
       }
+      else if (gtmPageType === 'footer promo panel') {
+        creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+        // Slider behaviour when first item is repeated after last item
+        // turning first item index to number of promotion items plus one.
+        // Taking first position in such case.
+        if ($(highlight).attr('data-slick-index') == promoBlockDetails.promotionItemCount) {
+          position = 1;
+        }
+        else {
+          position = Number($(highlight).attr('data-slick-index')) + 1;
+        }
+        var promoItemName = $(highlight).find('.field--name-field-title').attr('gtm-title').toUpperCase();
+      }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
         if (!creative) {
@@ -919,7 +933,7 @@ const productRecommendationsSuffix = 'pr-';
         }
 
         // Remove file extensions from fileName.
-        if (fileName.lastIndexOf('.') !== -1) {
+        if (fileName.lastIndexOf('.') !== -1 && gtmPageType !== 'footer promo panel') {
           fileName = fileName.substring(0, fileName.lastIndexOf('.'));
         }
         fileName = fileName.toLowerCase();
@@ -929,13 +943,14 @@ const productRecommendationsSuffix = 'pr-';
           (fileName.indexOf('mm') === 0) ||
           (fileName.indexOf('dp') === 0) ||
           (fileName.indexOf('lp') === 0) ||
-          (fileName.indexOf('oth') === 0)
+          (fileName.indexOf('oth') === 0) ||
+          (gtmPageType === 'footer promo panel')
         )) {
           var promotion = {
-            creative: creative.replace(/\/en\/|\/ar\//, ''),
-            id: fileName,
-            name: gtmPageType,
-            position: 'slot' + position
+            creative: (gtmPageType === 'footer promo panel') ? decodeURI(fileName) : creative.replace(/\/en\/|\/ar\//, ''),
+            id: (gtmPageType === 'footer promo panel') ? promoItemName : fileName,
+            name: (gtmPageType === 'footer promo panel') ? promoBlockDetails.promoBlockLabel : gtmPageType,
+            position: (gtmPageType === 'footer promo panel') ? position : 'slot' + position
           };
           if (typeof promotion !== 'undefined') {
             promotion_counter++;
