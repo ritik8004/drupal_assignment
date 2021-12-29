@@ -13,6 +13,7 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { addInlineLoader, removeInlineLoader } from '../../../../js/utilities/showRemoveInlineLoader';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../js/utilities/strings';
 
 class WishlistButton extends React.Component {
   constructor(props) {
@@ -377,17 +378,17 @@ class WishlistButton extends React.Component {
     const wishListButtonClass = addedInWishList ? 'in-wishlist wishlist-button-wrapper' : 'wishlist-button-wrapper';
 
     // Wishlist text for my-wishlist page.
-    let buttonText = addedInWishList ? 'Remove' : 'Add to @wishlist_label';
+    let buttonTextKey = addedInWishList ? 'remove' : 'add_to_wishlist';
 
     // Wishlist text for PDP layouts.
     const viewModes = ['pdp', 'magazinev2', 'modal', 'matchback', 'productDrawer'];
     if (viewModes.includes(context)) {
-      buttonText = addedInWishList ? 'Added to @wishlist_label' : 'Add to @wishlist_label';
+      buttonTextKey = addedInWishList ? 'added_to_wishlist' : 'add_to_wishlist';
     }
 
     // Wishlist text for Basket page.
     if (context === 'cart') {
-      buttonText = addedInWishList ? 'Remove from @wishlist_label' : 'Move to @wishlist_label';
+      buttonTextKey = addedInWishList ? 'remove_from_wishlist' : 'move_to_wishlist';
     }
 
     return (
@@ -396,7 +397,11 @@ class WishlistButton extends React.Component {
         onClick={(e) => this.toggleWishlist(e)}
       >
         <div className={classPrefix}>
-          {Drupal.t(buttonText, { '@wishlist_label': getWishlistLabel() }, { context: 'wishlist' })}
+          {Drupal.t(
+            getStringMessage(buttonTextKey),
+            { '@wishlist_label': getWishlistLabel() },
+            { context: 'wishlist' },
+          )}
         </div>
       </div>
     );
