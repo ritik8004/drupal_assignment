@@ -4,7 +4,7 @@
     {% for key, level3 in data.child %}
       <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
-          <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ data.sub-nav-class }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
+          <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ data.sub-nav-class }}" gtm-menu-title="{{ level3.gtm_menu_title }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
         </div>
 
         {% if level3.child is not empty %}

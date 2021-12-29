@@ -124,6 +124,7 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "springimport/magento2-api-v1": "^1.0",
         "symfony/lock": "4.3.*"
     },
@@ -343,7 +344,7 @@
                 "Ajax support / Use behaviors": "https://www.drupal.org/files/issues/2021-06-03/recaptcha-ajax-2493183-225.patch"
             },
             "drupal/datalayer": {
-                "Trigger and event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
+                "Trigger an event before data push": "https://git.drupalcode.org/project/datalayer/-/merge_requests/2.patch"
             },
             "drupal/config_rewrite": {
                 "Configuration Rewrite module conflicts with s3fs module": "https://www.drupal.org/files/issues/2021-07-20/3203786-4.patch"

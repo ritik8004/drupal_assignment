@@ -244,16 +244,6 @@ exports.render = function render(
       }
       break;
 
-    case 'product_category_list':
-      // Process rcs plp renderer, if available.
-      if (typeof globalThis.renderRcsListing !== 'undefined') {
-        html += globalThis.renderRcsListing.render(
-          entity,
-          innerHtml
-        );
-      }
-      break;
-
     case 'mobile-upsell-products':
     case 'upsell-products':
       // Get upsell products.
