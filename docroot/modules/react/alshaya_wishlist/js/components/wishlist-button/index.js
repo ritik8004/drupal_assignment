@@ -8,6 +8,7 @@ import {
   removeProductFromWishList,
   getWishlistLabel,
   getWishlistFromBackend,
+  getWishlistConfigRemoveAfterAddtocart,
 } from '../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../js/utilities/events';
@@ -51,14 +52,16 @@ class WishlistButton extends React.Component {
       // Handle wishlist state for item when it is added to cart.
       // We call custom event listener defined in wishlist module.
       // This is only for old pdp, modal and matchback.
-      document.addEventListener('onProductAddToCart', this.handleProductAddToCart);
+      if (getWishlistConfigRemoveAfterAddtocart()) {
+        document.addEventListener('onProductAddToCart', this.handleProductAddToCart);
+      }
     }
 
     // Handle wishlist state for item when it is added to cart.
     // This event listener if generic and called directly for new pdp.
     // Defining context array for new pdp and other product layout build in react.
-    const reactContextArray = ['magazinev2', 'magazinev2-related', 'productDrawer'];
-    if (reactContextArray.includes(context)) {
+    const reactContextArray = ['magazinev2', 'magazinev2-related', 'productDrawer', 'wishlist'];
+    if (reactContextArray.includes(context) && getWishlistConfigRemoveAfterAddtocart()) {
       document.addEventListener('product-add-to-cart-success', this.handleProductAddToCart);
     }
 
@@ -127,8 +130,10 @@ class WishlistButton extends React.Component {
    *  Event detail containing product data.
    */
   handleProductAddToCart = (event) => {
-    if (event.detail && event.detail.productData) {
-      this.handleProductRemovalFromWishlist(event.detail.productData.sku);
+    const { skuCode, addedInWishList } = this.state;
+    if (addedInWishList && event.detail && event.detail.productInfo
+      && event.detail.productInfo.sku === skuCode) {
+      this.handleProductRemovalFromWishlist(event.detail.productInfo.sku);
     }
   }
 

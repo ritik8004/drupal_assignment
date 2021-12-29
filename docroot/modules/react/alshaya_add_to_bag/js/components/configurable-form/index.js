@@ -283,9 +283,6 @@ export default class ConfigurableForm extends React.Component {
       // Dispatch add to cart event for product drawer components.
       const productInfo = {
         sku: parentSku,
-        quantity,
-        variant: selectedVariant,
-        options,
       };
       dispatchCustomEvent('product-add-to-cart-success', { productInfo });
     });

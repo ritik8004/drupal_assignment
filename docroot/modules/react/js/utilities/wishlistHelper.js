@@ -488,6 +488,17 @@ export const removeProductFromWishList = (productSku) => {
 export const getWishlistLabel = () => (drupalSettings.wishlist.wishlist_label ? drupalSettings.wishlist.wishlist_label : '');
 
 /**
+ * Utility function to check if config for removing product from
+ * wishlist after product added to cart is set to true.
+ */
+export const getWishlistConfigRemoveAfterAddtocart = () => {
+  if (drupalSettings.wishlist && drupalSettings.wishlist.config.removeAfterAddtocart) {
+    return drupalSettings.wishlist.config.removeAfterAddtocart;
+  }
+  return false;
+};
+
+/**
  * Utility function to get wishlist notification time.
  */
 export const getWishlistNotificationTime = () => (3000);/**
