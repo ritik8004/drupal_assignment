@@ -122,6 +122,7 @@ function alshaya_wishlist_preprocess_page(array &$variables) {
   }
 
   // Add wishlist strings so those are available on front-end.
+  // @todo attach strings with pdp and cart pages only.
   \Drupal::moduleHandler()->loadInclude('alshaya_wishlist', 'inc', 'alshaya_wishlist.static_strings');
   $wishlist_strings = [
     '#strings' => _alshaya_wishlist_strings(),

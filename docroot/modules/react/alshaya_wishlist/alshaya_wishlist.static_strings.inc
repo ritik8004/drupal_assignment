@@ -23,12 +23,8 @@ function _alshaya_wishlist_strings() {
       'value' => t('Move to @wishlist_label', [], ['context' => 'wishlist']),
     ],
     [
-      'key' => 'remove',
-      'value' => t('Remove', [], ['context' => 'wishlist']),
-    ],
-    [
       'key' => 'remove_from_wishlist',
-      'value' => t('Remove from @wishlist_label', [], ['context' => 'wishlist']),
+      'value' => t('Remove', [], ['context' => 'wishlist']),
     ],
   ];
 }
