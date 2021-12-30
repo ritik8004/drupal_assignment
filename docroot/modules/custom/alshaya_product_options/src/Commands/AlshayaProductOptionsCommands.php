@@ -47,7 +47,7 @@ class AlshayaProductOptionsCommands extends DrushCommands {
    * @command alshaya_product_options:sync-options
    *
    * @option force-save
-   *   Sync Pretty Path Facets.
+   *   Force update pretty path facets.
    *
    * @aliases aacspo,sync-options,alshaya-sync-commerce-product-options
    *
