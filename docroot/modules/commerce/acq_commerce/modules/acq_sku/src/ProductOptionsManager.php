@@ -142,13 +142,13 @@ class ProductOptionsManager {
    *   Attribute code.
    * @param string $weight
    *   Term weight.
-   * @param bool $sync_facets
+   * @param bool $force_save
    *   If pretty path facets needs to be synced.
    *
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Term object or null.
    */
-  public function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code, $weight, $sync_facets = FALSE) {
+  public function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code, $weight, $force_save = FALSE) {
     if (strlen($option_value) == 0) {
       $this->logger->warning('Got empty value while syncing production options: @data', [
         '@data' => json_encode([
@@ -164,7 +164,7 @@ class ProductOptionsManager {
 
     // Update the term if already available.
     if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, NULL, FALSE)) {
-      if($sync_facets) {
+      if($force_save) {
         $save_term = TRUE;
       }
       else {

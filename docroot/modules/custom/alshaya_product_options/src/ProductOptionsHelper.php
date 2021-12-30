@@ -148,10 +148,10 @@ class ProductOptionsHelper {
   /**
    * Synchronize all product options.
    *
-   * @param bool $sync_facets
+   * @param bool $force_save
    *   If pretty path facets need to be synced.
    */
-  public function synchronizeProductOptions($sync_facets = FALSE) {
+  public function synchronizeProductOptions($force_save = FALSE) {
     $this->logger->debug('Sync for all product attribute options started.');
     $fields = $this->skuFieldsManager->getFieldAdditions();
 
@@ -171,7 +171,7 @@ class ProductOptionsHelper {
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       foreach ($sync_options as $attribute_code) {
-        $this->syncProductOption($attribute_code, $langcode, $sync_facets);
+        $this->syncProductOption($attribute_code, $langcode, $force_save);
       }
     }
 
@@ -190,10 +190,10 @@ class ProductOptionsHelper {
    *   Attribute code.
    * @param string $langcode
    *   Language code.
-   * @param bool $sync_facets
+   * @param bool $force_save
    *   If pretty path facets need to be synced.
    */
-  public function syncProductOption($attribute_code, $langcode, $sync_facets = FALSE) {
+  public function syncProductOption($attribute_code, $langcode, $force_save = FALSE) {
     $this->apiWrapper->updateStoreContext($langcode);
 
     $this->logger->debug('Sync for product attribute options started of attribute @attribute_code in language @langcode.', [
@@ -234,7 +234,7 @@ class ProductOptionsHelper {
         $attribute['attribute_id'],
         $attribute['attribute_code'],
         $weight++,
-        $sync_facets
+        $force_save
       );
 
       if (empty($term)) {
