@@ -66,22 +66,6 @@ $facets = [
   'field_acq_promotion_label',
 ];
 
-$query_facets = [
-  [
-    'attribute' => 'field_category_name',
-    'amount' => 1,
-  ],
-  [
-    'attribute' => 'field_category_name',
-    'amount' => 1,
-  ],
-];
-
-$query_generate = [
-  ['field_category_name'],
-  ['field_category_name'],
-];
-
 $searchable_attributes = [
   'title.en',
   'title.ar',
