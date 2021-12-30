@@ -5,9 +5,15 @@
  * Contains install, update, uninstall hooks for alshaya_pdp_react module.
  */
 
+/**
+ * Implements hook_update_N().
+ *
+ * New pdp translations for Express Delivery.
+ */
 function alshaya_pdp_react_update_8002() {
   _alshaya_pdp_react_ed_translations();
 }
+
 /**
  * Implements hook_update_N().
  *
