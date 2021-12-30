@@ -13,6 +13,48 @@ use Drupal\user\Entity\Role;
 use Drupal\block\BlockInterface;
 use Drupal\block\Entity\Block;
 use Drupal\search_api\Item\Field;
+use Drupal\facets\Entity\Facet;
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.9.0] Add the config value for the brand name display in plp.
+ */
+function alshaya_acm_product_update_8078() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+    $manager->updateConfigs([
+      'alshaya_acm_product.display_settings',
+    ],
+      'alshaya_acm_product',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING,
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add granularity processor to range_checkbox type Facets.
+ */
+function alshaya_acm_product_update_8077() {
+  foreach (Facet::loadMultiple() as $facet) {
+    $widget = $facet->getWidget();
+    // Checking widget type range_checkbox.
+    if ($widget['type'] === 'range_checkbox') {
+      // Migrate widget to processor settings.
+      $settings = [
+        'granularity' => !empty($widget['config']['granularity']) ? $widget['config']['granularity'] : 5,
+      ];
+      $facet->addProcessor([
+        'processor_id' => 'granularity_item',
+        'weights' => ['build' => 35],
+        'settings' => $settings,
+      ]);
+      $facet->save();
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().

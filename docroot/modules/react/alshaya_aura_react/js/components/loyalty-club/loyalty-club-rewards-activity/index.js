@@ -29,7 +29,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       fromDate: '',
       toDate: '',
       type: '',
-      brand: '',
+      brand: 'all',
       wait: true,
       noStatement: false,
     };
@@ -66,8 +66,6 @@ class LoyaltyClubRewardsActivity extends React.Component {
         this.setState({
           activity: statement,
           wait: false,
-          fromDate,
-          toDate,
           type,
           brand,
           noStatement: !statement.length,

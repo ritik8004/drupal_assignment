@@ -1,0 +1,41 @@
+.vat-text,
+.vat-text-footer {
+  font-size: 0.75rem;
+  color: $vat;
+  font-weight: normal;
+
+  .c-pdp & {
+    margin: 0.5rem 0;
+  }
+
+  .checkout & {
+    margin: 1rem 0;
+  }
+}
+
+.vat-container {
+  @include container(80.25rem);
+
+  .vat-text-footer {
+    margin: 0 1.5rem 1.5rem;
+
+    @include breakpoint($tablet) {
+      text-align: $left;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      margin: 0 0.5rem 1.5rem;
+    }
+  }
+
+  .warm--white {
+    background-color: $vat_dark;
+  }
+}
+
+.nodetype--acq_product {
+  .vat-container {
+    @include container(69.25rem);
+  }
+}

@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_geolocation.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disables geolocation_google_maps module.
+ */
+function alshaya_geolocation_update_8001() {
+  // Disable geolocation_google_maps.
+  if (\Drupal::service('module_handler')->moduleExists('geolocation_google_maps')) {
+    \Drupal::service('module_installer')->uninstall(['geolocation_google_maps']);
+    drupal_flush_all_caches();
+  }
+}

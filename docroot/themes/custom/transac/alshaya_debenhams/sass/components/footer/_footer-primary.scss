@@ -132,6 +132,10 @@
     padding-#{$right}: 0;
     border: 1px solid $primary_input_border;
 
+    html[lang=ar] & {
+      padding-left: 0;
+    }
+
     @include breakpoint($only-tablet) {
       padding-#{$right}: 10%;
 
@@ -141,18 +145,14 @@
 }
 
 .alshaya-newsletter-subscribe {
+  width: 100%;
+
   @include breakpoint($tablet) {
     max-width: 22rem;
   }
 
   @include breakpoint($only-mobile) {
     padding: 0 1.25rem;
-  }
-
-  width: 100%;
-
-  html[lang=ar] & {
-    width: 95%;
   }
 
   @include breakpoint($only-mobile) {
@@ -296,6 +296,14 @@
       li {
         margin-top: 0.25rem;
       }
+    }
+  }
+}
+
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      top: -0.125rem;
     }
   }
 }

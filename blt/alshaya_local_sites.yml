@@ -190,6 +190,10 @@ sites:
     module: alshaya_bp
     type: alshaya_transac
     country: eg
+  bpqa:
+    module: alshaya_qa
+    type: alshaya_transac
+    country: qa
   pbkkw:
     module: alshaya_pbk
     type: alshaya_transac

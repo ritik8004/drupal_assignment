@@ -274,7 +274,11 @@ const getMagentoApiParams = (url, method = 'GET', data = {}) => {
   }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
-    params.data = data;
+    if (method.toUpperCase() === 'GET') {
+      params.params = data;
+    } else {
+      params.data = data;
+    }
   }
 
   params.headers = params.headers || {};

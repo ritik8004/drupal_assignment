@@ -87,14 +87,6 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            height: 22.2rem;
-          }
-        }
-      }
-
-      &.product-large {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
             height: 30rem;
           }
         }
@@ -191,6 +183,7 @@
 
       .alshaya_search_mainimage {
         opacity: 1;
+        display: block;
       }
     }
 

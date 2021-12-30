@@ -17,6 +17,8 @@ git:
     - 'alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git'
     - 'alshaya6tmp2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya6tmp2.git'
     - 'alshaya7tmp@svn-5975.enterprise-g1.hosting.acquia.com:alshaya7tmp.git'
+  hooks:
+    pre-push: false
 deploy:
   tag_source: true
   gitignore_file: '${repo.root}/blt/config/.gitignore'
@@ -73,8 +75,6 @@ command-hooks:
 import: '${repo.root}/blt/setup.local.xml'
 behat:
   web-driver: chrome
-  chrome:
-    args: '--window-size=1920,1080'
 multisite:
   name:
     - g
@@ -85,7 +85,10 @@ validate:
     functions: [alshaya_main_menu, alshaya_secondary_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
-# We must disable security checks for module updates until
-# https://github.com/drush-ops/drush/issues/3748 will be fixed
-# (test with drush pm:security command)
-disable-targets.tests.security.check.updates: true
+disable-targets:
+  tests:
+    behat: { all: true, run: true }
+    security: { check: { updates: true } }
+tests:
+  chrome:
+    args: '--window-size=1920,1080'

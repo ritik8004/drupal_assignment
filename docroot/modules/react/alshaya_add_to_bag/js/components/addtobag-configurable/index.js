@@ -14,6 +14,9 @@ export default class AddToBagConfigurable extends React.Component {
       drawerStatus: 'closed',
       productInfo: null,
     };
+
+    // Store reference to the main container.
+    this.buttonContainerRef = React.createRef();
   }
 
   /**
@@ -71,6 +74,10 @@ export default class AddToBagConfigurable extends React.Component {
     const { drawerStatus } = this.state;
     const nextStatus = (drawerStatus === 'opened') ? 'closed' : 'opened';
 
+    // Trigger Product Details View GTM push.
+    // Sending parameter 'yes' for quick view.
+    Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'), document.querySelector('body').getAttribute('gtm-list-name'), 'yes');
+
     this.setState({
       drawerStatus: nextStatus,
       productInfo: productInfoData,
@@ -111,6 +118,7 @@ export default class AddToBagConfigurable extends React.Component {
             id={`addtobag-button-${sku}`}
             type="button"
             onClick={this.handleOnClick}
+            ref={this.buttonContainerRef}
           >
             {`${getStringMessage('view_options')}`}
           </button>

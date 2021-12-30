@@ -7,7 +7,6 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
 use Drupal\facets\Processor\ProcessorPluginManager;
 use Drupal\facets\QueryType\QueryTypePluginManager;
-use Drupal\facets\Widget\WidgetPluginManager;
 
 /**
  * The facet manager.
@@ -31,11 +30,10 @@ class AlshayaSearchApiFacetsManager extends DefaultFacetManager {
    * {@inheritdoc}
    */
   public function __construct(QueryTypePluginManager $query_type_plugin_manager,
-                              WidgetPluginManager $widget_plugin_manager,
                               FacetSourcePluginManager $facet_source_manager,
                               ProcessorPluginManager $processor_plugin_manager,
                               EntityTypeManagerInterface $entity_type_manager) {
-    parent::__construct($query_type_plugin_manager, $widget_plugin_manager, $facet_source_manager, $processor_plugin_manager, $entity_type_manager);
+    parent::__construct($query_type_plugin_manager, $facet_source_manager, $processor_plugin_manager, $entity_type_manager);
     $this->entityTypeManager = $entity_type_manager;
   }
 

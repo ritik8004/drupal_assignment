@@ -10,7 +10,6 @@ use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Language\LanguageManagerInterface;
 
@@ -37,12 +36,6 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
    */
   protected $menuTree;
   /**
-   * Entity repository.
-   *
-   * @var Drupal\Core\Entity\EntityRepositoryInterface
-   */
-  protected $entityRepository;
-  /**
    * Language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -62,16 +55,13 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
    *   The factory for configuration objects.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_tree
    *   The menu tree service.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
-   *   Entity repository.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, EntityRepositoryInterface $entityRepository, LanguageManagerInterface $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
-    $this->entityRepository = $entityRepository;
     $this->languageManager = $language_manager;
   }
 
@@ -85,7 +75,6 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('menu.link_tree'),
-      $container->get('entity.repository'),
       $container->get('language_manager')
     );
   }
@@ -141,20 +130,21 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
    */
   public function getColumnDataMenuAlgo($menu) {
     $columns_tree = [];
+    $language = $this->languageManager->getCurrentLanguage()->getId();
+    $default_lang = $this->languageManager->getDefaultLanguage()->getId();
     foreach ($menu['#items'] as $l2s) {
       if ($l2s['original_link'] instanceof MenuLinkContent) {
-        $uuid = $l2s['original_link']->getDerivativeId();
-        $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
+        $entity = $l2s['original_link']->getTranslateRoute()->getOption('entity');
         $l2s['highlight_paragraph'] = $entity->get('field_secondary_menu_highlight')->getValue();
-        $language = $this->languageManager->getCurrentLanguage()->getId();
-        $default_lang = $this->languageManager->getDefaultLanguage()->getId();
+        $l2s['gtm_menu_title'] = $entity->hasTranslation($default_lang) ? $entity->getTranslation($default_lang)->getTitle() : $l2s['original_link']->getTitle();
         foreach ($l2s['highlight_paragraph'] as $tr) {
           $paragraph = Paragraph::load($tr['target_id']);
-          $language = ($paragraph->hasTranslation($language)) ? $language : $default_lang;
-          $paragraph = $paragraph->getTranslation($language);
+          if ($language != $default_lang && !($paragraph->hasTranslation($language))) {
+            $paragraph = $paragraph->getTranslation($default_lang);
+          }
           $l2s['highlight_paragraph']['paragraph_type'] = $paragraph->getParagraphType()->id();
           $l2s['highlight_paragraph']['img'] = $paragraph->field_highlight_image->getValue();
-          $l2s['highlight_paragraph']['imageUrl'] = $paragraph->get('field_highlight_image')->entity->uri->value;
+          $l2s['highlight_paragraph']['imageUrl'] = $paragraph->get('field_highlight_image')->entity ? $paragraph->get('field_highlight_image')->entity->uri->value : NULL;
           $l2s['highlight_paragraph']['image_link'] = $paragraph->field_highlight_link->getValue();
           foreach ($l2s['highlight_paragraph']['image_link'] as $himg_link) {
             $l2s['highlight_paragraph']['image_link'] = Url::fromUri($himg_link['uri']);
@@ -164,6 +154,17 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
           $l2s['highlight_paragraph']['ishighlight'] = $entity->get('field_add_highlights');
         }
       }
+
+      // Adding GTM menu title with English label to all children.
+      foreach ($l2s['below'] as &$submenu) {
+        $submenuEntity = $submenu['original_link']->getTranslateRoute()->getOption('entity');
+        $submenu['gtm_menu_title'] = $submenuEntity->hasTranslation($default_lang) ? $submenuEntity->getTranslation($default_lang)->getTitle() : $submenu['original_link']->getTitle();
+        foreach ($submenu['below'] as &$lowestChild) {
+          $lowestChildEntity = $lowestChild['original_link']->getTranslateRoute()->getOption('entity');
+          $lowestChild['gtm_menu_title'] = $lowestChildEntity->hasTranslation($default_lang) ? $lowestChildEntity->getTranslation($default_lang)->getTitle() : $lowestChild['original_link']->getTitle();
+        }
+      }
+
       $max_nb_col = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('max_nb_col');
       $ideal_max_col_length = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('ideal_max_col_length');
       $max_nb_col = $max_nb_col > 0 ? $max_nb_col : 6;

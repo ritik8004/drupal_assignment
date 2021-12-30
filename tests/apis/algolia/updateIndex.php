@@ -58,7 +58,7 @@ foreach ($languages as $language) {
   $query = reset($queries);
   $query['sourceIndices'][0]['facets'] = $sourceQuery['sourceIndices'][0]['facets'];
   $query['sourceIndices'][0]['generate'] = $sourceQuery['sourceIndices'][0]['generate'];
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query['indexName'], json_encode($query));
+  algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
 
   // Clear before creating.
   $index->clearSynonyms(TRUE);
