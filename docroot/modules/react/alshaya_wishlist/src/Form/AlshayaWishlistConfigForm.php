@@ -53,14 +53,6 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#default_value' => $wishlist_config->get('wishlist_label'),
     ];
 
-    $form['alshaya_wishlist']['empty_wishlist_message'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Empty Wishlist Message'),
-      '#description' => $this->t('Provides a static message that will be shown when the Wishlist is empty.'),
-      '#maxlength' => 255,
-      '#default_value' => $wishlist_config->get('empty_wishlist_message'),
-    ];
-
     $form['alshaya_wishlist']['share'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Share your wishlist configurations'),
@@ -78,7 +70,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#title' => $this->t('E-Mail Subject'),
       '#description' => $this->t('Provides a share wishlist email subject.'),
       '#maxlength' => 255,
-      '#default_value' => $wishlist_config->get('empty_wishlist_message'),
+      '#default_value' => $wishlist_config->get('email_subject'),
     ];
 
     $form['alshaya_wishlist']['share']['email_template'] = [
@@ -108,7 +100,6 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
     $this->config('alshaya_wishlist.settings')
       ->set('enabled', $form_state->getValue('enabled'))
       ->set('remove_after_addtocart', $form_state->getValue('remove_after_addtocart'))
-      ->set('empty_wishlist_message', $form_state->getValue('empty_wishlist_message'))
       ->set('wishlist_label', $form_state->getValue('wishlist_label'))
       ->set('email_subject', $form_state->getValue('email_subject'))
       ->set('email_template', $form_state->getValue('email_template'))
