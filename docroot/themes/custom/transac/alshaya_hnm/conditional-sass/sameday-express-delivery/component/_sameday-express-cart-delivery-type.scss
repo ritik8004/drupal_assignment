@@ -30,16 +30,9 @@
         .information-icon {
           &::after {
             html[lang=ar] & {
-              top: -0.0625rem;
-
               @include breakpoint($upto-desktop) {
                 top: 0.1875rem;
               }
-            }
-
-            @include breakpoint($desktop) {
-              top: 0.125rem;
-              transform: none;
             }
           }
         }
