@@ -3,10 +3,11 @@
 
 /**
  * Example of execution:
- * php scripts/cloudflare/clear_cf_specific_url.php www.bathandbodyworks.com.sa/modules/react/alshaya_algolia_react/dist/vendors~atb-4b8779bc4a39b2b56c2e.js
+ * php scripts/cloudflare/clear_prefix.php www.footlocker.ae/modules/react/
  */
 
 require_once 'common.php';
+
 
 $url = $argv[1] ?? '';
 $domain = explode('/', $url)[0];
@@ -20,7 +21,7 @@ if (empty($domain)) {
 $zone = get_zone_for_domain($domain);
 
 if ($zone) {
-  print_r(clear_cache_for_url($zone, $url));
+  print_r(clear_cache_for_prefix($zone, $url));
 }
 else {
   print 'Error occurred';
