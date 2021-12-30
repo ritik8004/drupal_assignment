@@ -8,6 +8,7 @@ import {
   getWishlistLabel,
 } from '../../../../js/utilities/wishlistHelper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
+import { removeFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 const ProductInfiniteHits = connectInfiniteHits(({
   hits,
@@ -46,6 +47,9 @@ const ProductInfiniteHits = connectInfiniteHits(({
         // continued or removed from backend.
         removeDiffFromWishlist(hits);
       }
+
+      // Remove loader after pagination results updated.
+      removeFullScreenLoader();
     }, [hits],
   );
 
