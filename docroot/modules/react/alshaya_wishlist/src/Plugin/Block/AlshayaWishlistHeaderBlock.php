@@ -90,10 +90,8 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function build() {
-    $cache_tags = [];
     $build = [];
 
-    $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
     // Return empty block if wishlist not enabled.
     if (!($this->wishListHelper->isWishListEnabled())) {
       return $build;
@@ -115,16 +113,26 @@ class AlshayaWishlistHeaderBlock extends BlockBase implements ContainerFactoryPl
           'alshaya_wishlist/wishlistheader',
         ],
       ],
-      '#cache' => [
-        'contexts' => [
-          'languages:' . LanguageInterface::TYPE_INTERFACE,
-          'user',
-        ],
-        'tags' => $cache_tags,
-      ],
     ];
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'languages:' . LanguageInterface::TYPE_INTERFACE,
+      'user',
+    ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());
   }
 
 }
