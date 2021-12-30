@@ -495,7 +495,7 @@ export const getWishlistConfigRemoveAfterAddtocart = () => {
   if (drupalSettings.wishlist && drupalSettings.wishlist.config.removeAfterAddtocart) {
     return drupalSettings.wishlist.config.removeAfterAddtocart;
   }
-  return false;
+  return true;
 };
 
 /**

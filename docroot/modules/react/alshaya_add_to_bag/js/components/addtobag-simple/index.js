@@ -250,12 +250,10 @@ export default class AddToBagSimple extends React.Component {
       // Push product values to GTM.
       pushSeoGtmData({ element: this.buttonContainerRef.current, qty, prevQty });
 
-      // Dispatch add to cart event for product drawer components.
+      // Dispatch add to cart event for plp products.
+      // We only dispatch event if item is added or updated in cart.
       if (action === 'add item' || action === 'update item') {
-        const productInfo = {
-          sku,
-        };
-        dispatchCustomEvent('product-add-to-cart-success', { productInfo });
+        dispatchCustomEvent('product-add-to-cart-success', { sku });
       }
     });
   };
