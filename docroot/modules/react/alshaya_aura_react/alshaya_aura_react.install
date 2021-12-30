@@ -8,6 +8,18 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update Aura translation strings.
+ */
+function alshaya_aura_react_update_8001() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  if ($translations = _alshaya_aura_react_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_aura_react_install() {
@@ -36,31 +48,7 @@ function alshaya_aura_react_install() {
 
   // Add translations.
   module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
-  if ($translations = _alshaya_aura_react_translations()) {
+  if ($translations = _alshaya_aura_react_get_translations()) {
     alshaya_i18n_save_translations($translations);
   }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update Aura translation strings.
- */
-function alshaya_aura_react_update_8001() {
-  // Add translations.
-  $strings = [
-    'You are here' => [
-      'ar' => 'أنت هنا',
-    ],
-    'An AURA card is already associated with your email address. Link your card in just one click.' => [
-      'ar' => 'يمكنك ربط برنامج المكافآت أورا بعنوان بريدكالإلكتروني بضغطة واحدة فقط'
-    ],
-    'Your points for this purchase will be added to your account.' => [
-      'ar' => 'سيتم إضافة النقاط الخاصة بك إلى هذاالحساب.',
-    ],
-    'By clicking submit, you agree to have read and accepted our' => [
-      'ar' => 'عند الضغط على إرسال، أنت تقر بأنك قرأت ووافقت على',
-    ],
-  ];
-  alshaya_i18n_save_translations($strings);
 }
