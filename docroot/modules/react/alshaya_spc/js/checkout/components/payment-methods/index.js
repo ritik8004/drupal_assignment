@@ -293,8 +293,8 @@ export default class PaymentMethods extends React.Component {
 
     // Allow change payment method only if it's allowed for egift.
     if (isEgiftCardEnabled()
-      && isEgiftUnsupportedPaymentMethod(method, cart.cart)
-      && isEgiftRedemptionDone(cart.cart)) {
+      && isEgiftUnsupportedPaymentMethod(method)
+      && isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType)) {
       return;
     }
 
@@ -366,9 +366,13 @@ export default class PaymentMethods extends React.Component {
       if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
         disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
       }
+
+      // Check if egift card is already redeemed with linked or guest.
+      const egiftRedeemed = isEgiftRedemptionDone(cart.cart, cart.cart.totals.egiftRedemptionType);
       // Disable the payment method that are not supported by egift.
-      if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)) {
-        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code, cart.cart);
+
+      if (isEgiftCardEnabled() && egiftRedeemed) {
+        disablePaymentMethod = isEgiftUnsupportedPaymentMethod(method.code);
       }
 
       this.paymentMethodRefs[method.code] = React.createRef();
@@ -382,7 +386,7 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
-        {...((isAuraEnabled() || (isEgiftCardEnabled() && isEgiftRedemptionDone(cart.cart)))
+        {...((isAuraEnabled() || (isEgiftCardEnabled() && egiftRedeemed))
           && disablePaymentMethod
           && { disablePaymentMethod }
         )}
@@ -397,6 +401,7 @@ export default class PaymentMethods extends React.Component {
         <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
           <PaymentMethodLinkedEgiftCard
             cart={cart}
+            egiftGuestRedeemed={isEgiftRedemptionDone(cart.cart)}
           />
         </ConditionalView>
         <ConditionalView condition={Object.keys(methods).length > 0}>

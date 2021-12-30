@@ -1,7 +1,12 @@
 import React from 'react';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../js/utilities/strings';
-import { egiftCardHeader, egiftFormElement, isEgiftUnsupportedPaymentMethod } from '../../utilities/egift_util';
+import {
+  egiftCardHeader,
+  egiftFormElement,
+  isEgiftRedemptionDone,
+  isEgiftUnsupportedPaymentMethod,
+} from '../../utilities/egift_util';
 
 // Validation function.
 const handleEgiftDetailValidation = (e, props) => {
@@ -30,8 +35,8 @@ const handleEgiftDetailValidation = (e, props) => {
 const handleSubmit = async (e, props) => {
   e.preventDefault();
   // Return if paymethod method is disabled.
-  const { paymentMethod, cart } = props;
-  if (hasValue(paymentMethod) && isEgiftUnsupportedPaymentMethod(paymentMethod, cart)) {
+  const { paymentMethod } = props;
+  if (hasValue(paymentMethod) && isEgiftUnsupportedPaymentMethod(paymentMethod)) {
     return;
   }
   // Perform validation.
@@ -50,7 +55,7 @@ const handleSubmit = async (e, props) => {
 
 // Provies the egift card form.
 const GetEgiftCard = (props) => {
-  const { egiftCardNumber, redemptionDisabled } = props;
+  const { egiftCardNumber, redemptionDisabled, cart } = props;
   // Check if the payment method is supported or not.
   let additionalClasses = '';
   if (hasValue(redemptionDisabled)) {
@@ -59,6 +64,10 @@ const GetEgiftCard = (props) => {
       ? `${additionalClasses} in-active`
       : `${additionalClasses} active`;
   }
+  // Disable redemption if non supported payment method selected or
+  // linked card redemption checkbox is selected.
+  const disable = (redemptionDisabled || isEgiftRedemptionDone(cart, 'linked'));
+
 
   return (
     <div className={`egift-wrapper ${additionalClasses}`}>
@@ -79,13 +88,13 @@ const GetEgiftCard = (props) => {
             placeholder: 'eGift Card Number',
             className: 'card-number',
             value: egiftCardNumber,
-            disabled: redemptionDisabled,
+            disabled: disable,
           })}
           {egiftFormElement({
             type: 'submit',
             name: 'button',
             buttonText: 'Get Code',
-            disabled: redemptionDisabled,
+            disabled: disable,
           })}
         </form>
       </div>

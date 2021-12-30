@@ -4,7 +4,12 @@ import logger from '../../../../../js/utilities/logger';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import UpdateEgiftCardAmount from '../UpdateEgiftCardAmount';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import { callEgiftApi, performRedemption, updatePriceSummaryBlock } from '../../../utilities/egift_util';
+import {
+  callEgiftApi,
+  isEgiftUnsupportedPaymentMethod,
+  performRedemption,
+  updatePriceSummaryBlock,
+} from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import LinkedEgiftSVG from '../../../svg-component/linked-egift-svg';
 
@@ -334,14 +339,34 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       renderWait,
       apiErrorMessage,
     } = this.state;
+
     // Cart object need to be passed to UpdateGiftCardAmount.
-    const { cart } = this.props;
+    // egiftGuestRedeemed to check if already redeemed using guest.
+    const { cart, egiftGuestRedeemed } = this.props;
     // Return if no linked card and if any api fails.
     if (renderWait && egiftLinkedCardNumber == null) {
       return null;
     }
-    // Disable checkbox when egiftcard balance is 0 or is expired.
-    const disabled = (egiftCardActualBalance === 0 || isEgiftCardExpired);
+
+    // Disable linked card redemption if un supported payment method is selected.
+    let UnsupportedPaymentMethod = false;
+    if (hasValue(cart.cart.payment)
+      && hasValue(cart.cart.payment.method)) {
+      UnsupportedPaymentMethod = isEgiftUnsupportedPaymentMethod(cart.cart.payment.method);
+    }
+
+    // Disable link card checkbox when egiftcard balance is 0 or is expired,
+    // if already redeemed or any unsupported payment method selected.
+    const disabled = (egiftCardActualBalance === 0
+      || isEgiftCardExpired
+      || egiftGuestRedeemed
+      || UnsupportedPaymentMethod
+    );
+
+    // Add `in-active` class if disabled property is true.
+    const additionalClasses = disabled
+      ? 'in-active'
+      : 'active';
 
     // If card redeemed subtract the redeemed amount from card balance and show.
     let cardBlanceAmount = egiftCardActualBalance;
@@ -351,7 +376,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
 
     return (
       <>
-        <div className="payment-method payment-method-checkout_com_egift_linked_card">
+        <div className={`payment-method payment-method-checkout_com_egift_linked_card ${additionalClasses}`}>
           <div className="payment-method-top-panel">
 
             <div className="payment-method-label-wrapper">
