@@ -143,7 +143,7 @@ class ProductOptionsManager {
    * @param string $weight
    *   Term weight.
    * @param bool $force_save
-   *   If pretty path facets needs to be synced.
+   *   Force update pretty path facets.
    *
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Term object or null.
@@ -164,12 +164,7 @@ class ProductOptionsManager {
 
     // Update the term if already available.
     if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, NULL, FALSE)) {
-      if($force_save) {
-        $save_term = TRUE;
-      }
-      else {
-        $save_term = FALSE;
-      }
+      $save_term = $force_save ? TRUE : FALSE;
 
       // Save term even if weight changes.
       if ($term->getWeight() != $weight) {

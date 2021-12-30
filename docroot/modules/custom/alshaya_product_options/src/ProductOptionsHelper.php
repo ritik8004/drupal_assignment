@@ -149,7 +149,7 @@ class ProductOptionsHelper {
    * Synchronize all product options.
    *
    * @param bool $force_save
-   *   If pretty path facets need to be synced.
+   *   Force update pretty path facets.
    */
   public function synchronizeProductOptions($force_save = FALSE) {
     $this->logger->debug('Sync for all product attribute options started.');
@@ -191,7 +191,7 @@ class ProductOptionsHelper {
    * @param string $langcode
    *   Language code.
    * @param bool $force_save
-   *   If pretty path facets need to be synced.
+   *   Force update pretty path facets.
    */
   public function syncProductOption($attribute_code, $langcode, $force_save = FALSE) {
     $this->apiWrapper->updateStoreContext($langcode);
