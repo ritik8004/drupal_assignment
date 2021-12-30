@@ -44,8 +44,6 @@ print $name . PHP_EOL;
 $source_name = $source_index . '_' . $product_list_suffix;
 $indexSource = $clientSource->initIndex($source_name);
 $settingsSource = $indexSource->getSettings();
-$sourceQueries = algolia_get_query_suggestions($app_id, $app_secret_admin, $source_name);
-$sourceQuery = reset($sourceQueries);
 $sourceSynonyms = algolia_get_synonyms($indexSource);
 
 $index = $client->initIndex($name);
@@ -54,12 +52,6 @@ foreach ($settingsSource['replicas'] as $replica) {
   $settingsSourceReplica[$replica] = $replicaIndex->getSettings();
 }
 algolia_update_index($client, $index, $settingsSource, $settingsSourceReplica, algolia_get_rules($indexSource));
-
-$queries = algolia_get_query_suggestions($app_id, $app_secret_admin, $name);
-$query = reset($queries);
-$query['sourceIndices'][0]['facets'] = $sourceQuery['sourceIndices'][0]['facets'];
-$query['sourceIndices'][0]['generate'] = $sourceQuery['sourceIndices'][0]['generate'];
-algolia_add_query_suggestion($app_id, $app_secret_admin, $query['indexName'], json_encode($query));
 
 // Clear before creating.
 $index->clearSynonyms(TRUE);

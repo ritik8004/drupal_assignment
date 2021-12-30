@@ -12,10 +12,11 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 $app_id = 'Q402AB9LJF';
 $app_secret_admin = '0fe92997d79ed56790912b14d3ecbc5f';
 
-$brands = [
-  'bbwkw',
-  'bbwsa',
-  'bbwae',
+$sites = [
+  'vskw',
+  'vssa',
+  'vsae',
+  'vsqa'
 ];
 
 $envs = [
@@ -34,8 +35,8 @@ global $migrate_index;
 $migrate_index = FALSE;
 
 foreach ($envs as $env) {
-  foreach ($brands as $brand) {
-    $prefix = $env . '_' . $brand;
+  foreach ($sites as $site) {
+    $prefix = $env . '_' . $site;
     foreach ($languages as $language) {
       try {
         algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
@@ -47,6 +48,8 @@ foreach ($envs as $env) {
     }
   }
 }
+
+exit;
 
 // Settings for live app.
 $app_id = '6TOQSJY0O6';
