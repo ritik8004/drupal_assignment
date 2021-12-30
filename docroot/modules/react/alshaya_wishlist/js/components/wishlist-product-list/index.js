@@ -132,7 +132,6 @@ class WishlistProductList extends React.Component {
    *  Filters to pass in search widget.
    */
   getFiltersFromWishListItems = (wishListItems) => {
-    const wishListItemsCount = Object.keys(wishListItems).length;
     const filters = [];
     Object.keys(wishListItems).forEach((key, index) => {
       // Prepare filter to pass in search widget. For example,
@@ -141,7 +140,7 @@ class WishlistProductList extends React.Component {
       // OR sku:HM0485540011187007<score=3>".
       // We are using filter scoring to sort the results. So
       // the higher score item will display first.
-      filters.push(`sku: ${key}<score=${wishListItemsCount - index}>`);
+      filters.push(`sku: ${key}<score=${index}>`);
     });
 
     // Prepare the final filter to pass in search widget.

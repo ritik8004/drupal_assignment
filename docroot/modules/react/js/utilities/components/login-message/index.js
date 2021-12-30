@@ -7,8 +7,9 @@ const LoginMessage = () => {
     <div className="login-message">
       <div className="text">{message}</div>
       <div className="actions">
-        <a href={Drupal.url('user/login')}>{Drupal.t('Sign in')}</a>
-        <a href={Drupal.url('user/register')}>{Drupal.t('Register')}</a>
+        {/* @todo: we need to try and remove wishlist contexts. */}
+        <a href={Drupal.url('user/login')}>{Drupal.t('Sign in', {}, { context: 'wishlist' })}</a>
+        <a href={Drupal.url('user/register')}>{Drupal.t('Register', {}, { context: 'wishlist' })}</a>
       </div>
     </div>
   );

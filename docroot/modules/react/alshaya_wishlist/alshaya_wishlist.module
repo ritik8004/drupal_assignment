@@ -21,6 +21,11 @@ function alshaya_wishlist_theme($existing, $type, $theme, $path) {
         'strings' => [],
       ],
     ],
+    'wishlist_strings' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
   ];
 }
 
@@ -111,9 +116,22 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
  */
 function alshaya_wishlist_preprocess_page(array &$variables) {
   $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
-  // Return if wishlist feature is not enabled or current path
-  // doesn't matche with the wishlist product listing page.
-  if (!$wishlist_helper->isWishListEnabled() || !$wishlist_helper->isWishListPage()) {
+  // Return if wishlist feature is not enabled.
+  if (!$wishlist_helper->isWishListEnabled()) {
+    return;
+  }
+
+  // Add wishlist strings so those are available on front-end.
+  // @todo attach strings with pdp and cart pages only.
+  \Drupal::moduleHandler()->loadInclude('alshaya_wishlist', 'inc', 'alshaya_wishlist.static_strings');
+  $wishlist_strings = [
+    '#strings' => _alshaya_wishlist_strings(),
+    '#theme' => 'wishlist_strings',
+  ];
+  $variables['page']['content']['wishlist_strings'] = $wishlist_strings;
+
+  // Check if current path doesn't match with the wishlist product listing page.
+  if (!$wishlist_helper->isWishListPage()) {
     return;
   }
 

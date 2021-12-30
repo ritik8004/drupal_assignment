@@ -18,3 +18,4 @@ email_template:
   format: 'rich_text'
 # Enable or disable wishlist sharing feature.
 enabled_share: true
+langcode: en
