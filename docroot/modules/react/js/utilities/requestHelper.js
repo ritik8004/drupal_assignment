@@ -202,6 +202,10 @@ const handleResponse = (apiResponse) => {
         && apiResponse.data.code === cartErrorCodes.cartCheckoutQuantityMismatch) {
         response.data.code = cartErrorCodes.cartCheckoutQuantityMismatch;
         response.data.error_code = cartErrorCodes.cartCheckoutQuantityMismatch;
+      } else if (apiResponse.status === 400
+        && typeof apiResponse.data.code === 'undefined') {
+        response.data.code = cartErrorCodes.cartHasUserError;
+        response.data.error_code = cartErrorCodes.cartHasUserError;
       } else if (apiResponse.status === 404) {
         response.data.error_code = 404;
       } else {
